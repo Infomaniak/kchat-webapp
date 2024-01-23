@@ -8,7 +8,6 @@ import type {AutocompleteSuggestion} from '@mattermost/types/integrations';
 
 import {Client4} from 'mattermost-redux/client';
 
-import type {Results} from './command_provider';
 import CommandProvider, {CommandSuggestion} from './command_provider';
 
 describe('CommandSuggestion', () => {
@@ -25,6 +24,8 @@ describe('CommandSuggestion', () => {
         isSelection: true,
         term: '/',
         matchedPretext: '',
+        onClick: jest.fn(),
+        onMouseMove: jest.fn(),
     };
 
     test('should match snapshot', () => {
@@ -62,7 +63,7 @@ describe('CommandProvider', () => {
             provider.handlePretextChanged('/jira issue', callback);
             await mockFunc();
 
-            const expected: Results = {
+            const expected = {
                 matchedPretext: '/jira issue',
                 terms: ['/jira issue'],
                 items: [{
@@ -103,7 +104,7 @@ describe('CommandProvider', () => {
             provider.handlePretextChanged('/jira issue', callback);
             await mockFunc();
 
-            const expected: Results = {
+            const expected = {
                 matchedPretext: '/jira issue',
                 terms: ['/jira issue'],
                 items: [{

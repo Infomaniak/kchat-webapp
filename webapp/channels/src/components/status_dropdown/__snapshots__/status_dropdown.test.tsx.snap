@@ -37,7 +37,9 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
@@ -58,7 +60,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
     </MenuHeader>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="out of office"
+        ariaLabel="Out of office"
         extraText="Automatic Replies are enabled"
         onClick={[Function]}
         show={false}
@@ -67,7 +69,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="online"
+        ariaLabel="Online"
         icon={
           <StatusIcon
             className="status-icon"
@@ -78,11 +80,10 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
         onClick={[Function]}
         rightDecorator={false}
         show={true}
-        sibling={false}
         text="Online"
       />
       <MenuItemAction
-        ariaLabel="away"
+        ariaLabel="Away"
         icon={
           <StatusIcon
             className="status-icon"
@@ -92,9 +93,8 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
+          <CheckIcon
+            color="var(--semantic-color-success)"
             size={16}
           />
         }
@@ -102,7 +102,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
         text="Away"
       />
       <SubMenuItem
-        ariaLabel="do not disturb. disables desktop, email and push notifications"
+        ariaLabel="Do not disturb. Disables all notifications"
         direction="left"
         extraText="Disables all notifications"
         icon={
@@ -152,14 +152,14 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
                   className="dndTime-tomorrow_timestamp"
                 >
                   <FormattedDate
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                     weekday="short"
                   />
                   , 
                   <FormattedTime
                     hour12={true}
                     timeStyle="short"
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                   />
                 </span>
               </React.Fragment>,
@@ -176,7 +176,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
         text="Do not disturb"
       />
       <MenuItemAction
-        ariaLabel="offline"
+        ariaLabel="Offline"
         icon={
           <StatusIcon
             className="status-icon"
@@ -191,26 +191,36 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemAction
+      <MenuItemToggleModalRedux
         ariaLabel="Profile"
+        dialogProps={
+          Object {
+            "isContentProductSettings": false,
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
         icon={
-          <Icon
-            glyph="account-outline"
+          <AccountOutlineIcon
             size={16}
           />
         }
         id="accountSettings"
-        onClick={[Function]}
+        modalId="user_settings"
         show={true}
-        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <Icon
-            glyph="exit-to-app"
+          <ExitToAppIcon
             size={16}
           />
         }
@@ -261,7 +271,9 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
@@ -282,7 +294,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
     </MenuHeader>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="out of office"
+        ariaLabel="Out of office"
         extraText="Automatic Replies are enabled"
         onClick={[Function]}
         show={false}
@@ -323,7 +335,6 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
             tooltipDirection="bottom"
           />
           <Text
-            className="custom_status__textContent"
             color="disabled"
             margin="none"
           />
@@ -373,7 +384,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="online"
+        ariaLabel="Online"
         icon={
           <StatusIcon
             className="status-icon"
@@ -384,11 +395,10 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
         onClick={[Function]}
         rightDecorator={false}
         show={true}
-        sibling={false}
         text="Online"
       />
       <MenuItemAction
-        ariaLabel="away"
+        ariaLabel="Away"
         icon={
           <StatusIcon
             className="status-icon"
@@ -398,9 +408,8 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
+          <CheckIcon
+            color="var(--semantic-color-success)"
             size={16}
           />
         }
@@ -408,7 +417,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
         text="Away"
       />
       <SubMenuItem
-        ariaLabel="do not disturb. disables desktop, email and push notifications"
+        ariaLabel="Do not disturb. Disables all notifications"
         direction="left"
         extraText="Disables all notifications"
         icon={
@@ -458,14 +467,14 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
                   className="dndTime-tomorrow_timestamp"
                 >
                   <FormattedDate
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                     weekday="short"
                   />
                   , 
                   <FormattedTime
                     hour12={true}
                     timeStyle="short"
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                   />
                 </span>
               </React.Fragment>,
@@ -482,7 +491,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
         text="Do not disturb"
       />
       <MenuItemAction
-        ariaLabel="offline"
+        ariaLabel="Offline"
         icon={
           <StatusIcon
             className="status-icon"
@@ -497,26 +506,36 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemAction
+      <MenuItemToggleModalRedux
         ariaLabel="Profile"
+        dialogProps={
+          Object {
+            "isContentProductSettings": false,
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
         icon={
-          <Icon
-            glyph="account-outline"
+          <AccountOutlineIcon
             size={16}
           />
         }
         id="accountSettings"
-        onClick={[Function]}
+        modalId="user_settings"
         show={true}
-        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <Icon
-            glyph="exit-to-app"
+          <ExitToAppIcon
             size={16}
           />
         }
@@ -567,7 +586,9 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
@@ -588,7 +609,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
     </MenuHeader>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="out of office"
+        ariaLabel="Out of office"
         extraText="Automatic Replies are enabled"
         onClick={[Function]}
         show={false}
@@ -620,7 +641,6 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
             tooltipDirection="bottom"
           />
           <Text
-            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -631,7 +651,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="online"
+        ariaLabel="Online"
         icon={
           <StatusIcon
             className="status-icon"
@@ -642,11 +662,10 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
         onClick={[Function]}
         rightDecorator={false}
         show={true}
-        sibling={false}
         text="Online"
       />
       <MenuItemAction
-        ariaLabel="away"
+        ariaLabel="Away"
         icon={
           <StatusIcon
             className="status-icon"
@@ -656,9 +675,8 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
+          <CheckIcon
+            color="var(--semantic-color-success)"
             size={16}
           />
         }
@@ -666,7 +684,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
         text="Away"
       />
       <SubMenuItem
-        ariaLabel="do not disturb. disables desktop, email and push notifications"
+        ariaLabel="Do not disturb. Disables all notifications"
         direction="left"
         extraText="Disables all notifications"
         icon={
@@ -716,14 +734,14 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
                   className="dndTime-tomorrow_timestamp"
                 >
                   <FormattedDate
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                     weekday="short"
                   />
                   , 
                   <FormattedTime
                     hour12={true}
                     timeStyle="short"
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                   />
                 </span>
               </React.Fragment>,
@@ -740,7 +758,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
         text="Do not disturb"
       />
       <MenuItemAction
-        ariaLabel="offline"
+        ariaLabel="Offline"
         icon={
           <StatusIcon
             className="status-icon"
@@ -755,26 +773,36 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemAction
+      <MenuItemToggleModalRedux
         ariaLabel="Profile"
+        dialogProps={
+          Object {
+            "isContentProductSettings": false,
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
         icon={
-          <Icon
-            glyph="account-outline"
+          <AccountOutlineIcon
             size={16}
           />
         }
         id="accountSettings"
-        onClick={[Function]}
+        modalId="user_settings"
         show={true}
-        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <Icon
-            glyph="exit-to-app"
+          <ExitToAppIcon
             size={16}
           />
         }
@@ -825,7 +853,9 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
@@ -846,7 +876,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
     </MenuHeader>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="out of office"
+        ariaLabel="Out of office"
         extraText="Automatic Replies are enabled"
         onClick={[Function]}
         show={false}
@@ -878,7 +908,6 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
             tooltipDirection="bottom"
           />
           <Text
-            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -889,7 +918,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="online"
+        ariaLabel="Online"
         icon={
           <StatusIcon
             className="status-icon"
@@ -900,11 +929,10 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
         onClick={[Function]}
         rightDecorator={false}
         show={true}
-        sibling={false}
         text="Online"
       />
       <MenuItemAction
-        ariaLabel="away"
+        ariaLabel="Away"
         icon={
           <StatusIcon
             className="status-icon"
@@ -914,9 +942,8 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
+          <CheckIcon
+            color="var(--semantic-color-success)"
             size={16}
           />
         }
@@ -924,7 +951,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
         text="Away"
       />
       <SubMenuItem
-        ariaLabel="do not disturb. disables desktop, email and push notifications"
+        ariaLabel="Do not disturb. Disables all notifications"
         direction="left"
         extraText="Disables all notifications"
         icon={
@@ -974,14 +1001,14 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
                   className="dndTime-tomorrow_timestamp"
                 >
                   <FormattedDate
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                     weekday="short"
                   />
                   , 
                   <FormattedTime
                     hour12={true}
                     timeStyle="short"
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                   />
                 </span>
               </React.Fragment>,
@@ -998,7 +1025,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
         text="Do not disturb"
       />
       <MenuItemAction
-        ariaLabel="offline"
+        ariaLabel="Offline"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1013,26 +1040,36 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemAction
+      <MenuItemToggleModalRedux
         ariaLabel="Profile"
+        dialogProps={
+          Object {
+            "isContentProductSettings": false,
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
         icon={
-          <Icon
-            glyph="account-outline"
+          <AccountOutlineIcon
             size={16}
           />
         }
         id="accountSettings"
-        onClick={[Function]}
+        modalId="user_settings"
         show={true}
-        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <Icon
-            glyph="exit-to-app"
+          <ExitToAppIcon
             size={16}
           />
         }
@@ -1083,7 +1120,9 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
@@ -1104,7 +1143,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
     </MenuHeader>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="out of office"
+        ariaLabel="Out of office"
         extraText="Automatic Replies are enabled"
         onClick={[Function]}
         show={false}
@@ -1136,7 +1175,6 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
             tooltipDirection="bottom"
           />
           <Text
-            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -1148,7 +1186,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="online"
+        ariaLabel="Online"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1159,11 +1197,10 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
         onClick={[Function]}
         rightDecorator={false}
         show={true}
-        sibling={false}
         text="Online"
       />
       <MenuItemAction
-        ariaLabel="away"
+        ariaLabel="Away"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1173,9 +1210,8 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
+          <CheckIcon
+            color="var(--semantic-color-success)"
             size={16}
           />
         }
@@ -1183,7 +1219,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
         text="Away"
       />
       <SubMenuItem
-        ariaLabel="do not disturb. disables desktop, email and push notifications"
+        ariaLabel="Do not disturb. Disables all notifications"
         direction="left"
         extraText="Disables all notifications"
         icon={
@@ -1233,14 +1269,14 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
                   className="dndTime-tomorrow_timestamp"
                 >
                   <FormattedDate
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                     weekday="short"
                   />
                   , 
                   <FormattedTime
                     hour12={true}
                     timeStyle="short"
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                   />
                 </span>
               </React.Fragment>,
@@ -1257,7 +1293,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
         text="Do not disturb"
       />
       <MenuItemAction
-        ariaLabel="offline"
+        ariaLabel="Offline"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1272,26 +1308,36 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemAction
+      <MenuItemToggleModalRedux
         ariaLabel="Profile"
+        dialogProps={
+          Object {
+            "isContentProductSettings": false,
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
         icon={
-          <Icon
-            glyph="account-outline"
+          <AccountOutlineIcon
             size={16}
           />
         }
         id="accountSettings"
-        onClick={[Function]}
+        modalId="user_settings"
         show={true}
-        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <Icon
-            glyph="exit-to-app"
+          <ExitToAppIcon
             size={16}
           />
         }
@@ -1346,7 +1392,9 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <Memo(Avatar)
         size="lg"
         url="http://localhost:8065/api/v4/users/jsx5jmdiyjyuzp9rzwfaf5pwjo/image?_=1590519110944"
@@ -1371,7 +1419,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
     </MenuHeader>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="out of office"
+        ariaLabel="Out of office"
         extraText="Automatic Replies are enabled"
         onClick={[Function]}
         show={false}
@@ -1380,7 +1428,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="online"
+        ariaLabel="Online"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1391,11 +1439,10 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         onClick={[Function]}
         rightDecorator={false}
         show={true}
-        sibling={false}
         text="Online"
       />
       <MenuItemAction
-        ariaLabel="away"
+        ariaLabel="Away"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1405,9 +1452,8 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
+          <CheckIcon
+            color="var(--semantic-color-success)"
             size={16}
           />
         }
@@ -1415,7 +1461,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         text="Away"
       />
       <SubMenuItem
-        ariaLabel="do not disturb. disables desktop, email and push notifications"
+        ariaLabel="Do not disturb. Disables all notifications"
         direction="left"
         extraText="Disables all notifications"
         icon={
@@ -1465,14 +1511,14 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
                   className="dndTime-tomorrow_timestamp"
                 >
                   <FormattedDate
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                     weekday="short"
                   />
                   , 
                   <FormattedTime
                     hour12={true}
                     timeStyle="short"
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                   />
                 </span>
               </React.Fragment>,
@@ -1489,7 +1535,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         text="Do not disturb"
       />
       <MenuItemAction
-        ariaLabel="offline"
+        ariaLabel="Offline"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1504,26 +1550,36 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemAction
+      <MenuItemToggleModalRedux
         ariaLabel="Profile"
+        dialogProps={
+          Object {
+            "isContentProductSettings": false,
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
         icon={
-          <Icon
-            glyph="account-outline"
+          <AccountOutlineIcon
             size={16}
           />
         }
         id="accountSettings"
-        onClick={[Function]}
+        modalId="user_settings"
         show={true}
-        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <Icon
-            glyph="exit-to-app"
+          <ExitToAppIcon
             size={16}
           />
         }
@@ -1574,7 +1630,9 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
@@ -1595,7 +1653,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
     </MenuHeader>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="out of office"
+        ariaLabel="Out of office"
         extraText="Automatic Replies are enabled"
         onClick={[Function]}
         show={false}
@@ -1604,7 +1662,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="online"
+        ariaLabel="Online"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1615,11 +1673,10 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
         onClick={[Function]}
         rightDecorator={false}
         show={true}
-        sibling={false}
         text="Online"
       />
       <MenuItemAction
-        ariaLabel="away"
+        ariaLabel="Away"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1629,9 +1686,8 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
+          <CheckIcon
+            color="var(--semantic-color-success)"
             size={16}
           />
         }
@@ -1639,7 +1695,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
         text="Away"
       />
       <SubMenuItem
-        ariaLabel="do not disturb. disables desktop, email and push notifications"
+        ariaLabel="Do not disturb. Disables all notifications"
         direction="left"
         extraText="Disables all notifications"
         icon={
@@ -1689,14 +1745,14 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
                   className="dndTime-tomorrow_timestamp"
                 >
                   <FormattedDate
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                     weekday="short"
                   />
                   , 
                   <FormattedTime
                     hour12={true}
                     timeStyle="short"
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                   />
                 </span>
               </React.Fragment>,
@@ -1713,7 +1769,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
         text="Do not disturb"
       />
       <MenuItemAction
-        ariaLabel="offline"
+        ariaLabel="Offline"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1728,26 +1784,36 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemAction
+      <MenuItemToggleModalRedux
         ariaLabel="Profile"
+        dialogProps={
+          Object {
+            "isContentProductSettings": false,
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
         icon={
-          <Icon
-            glyph="account-outline"
+          <AccountOutlineIcon
             size={16}
           />
         }
         id="accountSettings"
-        onClick={[Function]}
+        modalId="user_settings"
         show={true}
-        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <Icon
-            glyph="exit-to-app"
+          <ExitToAppIcon
             size={16}
           />
         }
@@ -1798,7 +1864,9 @@ exports[`components/StatusDropdown should not show clear status button when cust
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
@@ -1819,7 +1887,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
     </MenuHeader>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="out of office"
+        ariaLabel="Out of office"
         extraText="Automatic Replies are enabled"
         onClick={[Function]}
         show={false}
@@ -1851,7 +1919,6 @@ exports[`components/StatusDropdown should not show clear status button when cust
             tooltipDirection="bottom"
           />
           <Text
-            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -1862,7 +1929,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="online"
+        ariaLabel="Online"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1873,11 +1940,10 @@ exports[`components/StatusDropdown should not show clear status button when cust
         onClick={[Function]}
         rightDecorator={false}
         show={true}
-        sibling={false}
         text="Online"
       />
       <MenuItemAction
-        ariaLabel="away"
+        ariaLabel="Away"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1887,9 +1953,8 @@ exports[`components/StatusDropdown should not show clear status button when cust
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
+          <CheckIcon
+            color="var(--semantic-color-success)"
             size={16}
           />
         }
@@ -1897,7 +1962,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
         text="Away"
       />
       <SubMenuItem
-        ariaLabel="do not disturb. disables desktop, email and push notifications"
+        ariaLabel="Do not disturb. Disables all notifications"
         direction="left"
         extraText="Disables all notifications"
         icon={
@@ -1947,14 +2012,14 @@ exports[`components/StatusDropdown should not show clear status button when cust
                   className="dndTime-tomorrow_timestamp"
                 >
                   <FormattedDate
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                     weekday="short"
                   />
                   , 
                   <FormattedTime
                     hour12={true}
                     timeStyle="short"
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                   />
                 </span>
               </React.Fragment>,
@@ -1971,7 +2036,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
         text="Do not disturb"
       />
       <MenuItemAction
-        ariaLabel="offline"
+        ariaLabel="Offline"
         icon={
           <StatusIcon
             className="status-icon"
@@ -1986,26 +2051,36 @@ exports[`components/StatusDropdown should not show clear status button when cust
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemAction
+      <MenuItemToggleModalRedux
         ariaLabel="Profile"
+        dialogProps={
+          Object {
+            "isContentProductSettings": false,
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
         icon={
-          <Icon
-            glyph="account-outline"
+          <AccountOutlineIcon
             size={16}
           />
         }
         id="accountSettings"
-        onClick={[Function]}
+        modalId="user_settings"
         show={true}
-        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <Icon
-            glyph="exit-to-app"
+          <ExitToAppIcon
             size={16}
           />
         }
@@ -2056,7 +2131,9 @@ exports[`components/StatusDropdown should show clear status button when custom s
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
@@ -2077,7 +2154,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
     </MenuHeader>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="out of office"
+        ariaLabel="Out of office"
         extraText="Automatic Replies are enabled"
         onClick={[Function]}
         show={false}
@@ -2118,7 +2195,6 @@ exports[`components/StatusDropdown should show clear status button when custom s
             tooltipDirection="bottom"
           />
           <Text
-            className="custom_status__textContent"
             color="disabled"
             margin="none"
           />
@@ -2168,7 +2244,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
-        ariaLabel="online"
+        ariaLabel="Online"
         icon={
           <StatusIcon
             className="status-icon"
@@ -2179,11 +2255,10 @@ exports[`components/StatusDropdown should show clear status button when custom s
         onClick={[Function]}
         rightDecorator={false}
         show={true}
-        sibling={false}
         text="Online"
       />
       <MenuItemAction
-        ariaLabel="away"
+        ariaLabel="Away"
         icon={
           <StatusIcon
             className="status-icon"
@@ -2193,9 +2268,8 @@ exports[`components/StatusDropdown should show clear status button when custom s
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
+          <CheckIcon
+            color="var(--semantic-color-success)"
             size={16}
           />
         }
@@ -2203,7 +2277,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
         text="Away"
       />
       <SubMenuItem
-        ariaLabel="do not disturb. disables desktop, email and push notifications"
+        ariaLabel="Do not disturb. Disables all notifications"
         direction="left"
         extraText="Disables all notifications"
         icon={
@@ -2253,14 +2327,14 @@ exports[`components/StatusDropdown should show clear status button when custom s
                   className="dndTime-tomorrow_timestamp"
                 >
                   <FormattedDate
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                     weekday="short"
                   />
                   , 
                   <FormattedTime
                     hour12={true}
                     timeStyle="short"
-                    value={2021-11-03T22:48:57.000Z}
+                    value={2021-11-03T09:00:57.000Z}
                   />
                 </span>
               </React.Fragment>,
@@ -2277,7 +2351,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
         text="Do not disturb"
       />
       <MenuItemAction
-        ariaLabel="offline"
+        ariaLabel="Offline"
         icon={
           <StatusIcon
             className="status-icon"
@@ -2292,26 +2366,36 @@ exports[`components/StatusDropdown should show clear status button when custom s
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemAction
+      <MenuItemToggleModalRedux
         ariaLabel="Profile"
+        dialogProps={
+          Object {
+            "isContentProductSettings": false,
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
         icon={
-          <Icon
-            glyph="account-outline"
+          <AccountOutlineIcon
             size={16}
           />
         }
         id="accountSettings"
-        onClick={[Function]}
+        modalId="user_settings"
         show={true}
-        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <Icon
-            glyph="exit-to-app"
+          <ExitToAppIcon
             size={16}
           />
         }

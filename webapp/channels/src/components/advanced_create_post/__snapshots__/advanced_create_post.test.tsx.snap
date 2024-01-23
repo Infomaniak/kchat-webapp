@@ -3,31 +3,48 @@
 exports[`components/advanced_create_post Show tutorial 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={Array []}
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -47,11 +64,9 @@ exports[`components/advanced_create_post Show tutorial 1`] = `
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -59,18 +74,23 @@ exports[`components/advanced_create_post Show tutorial 1`] = `
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
-    showSendTutorialTip={false}
+    showSendTutorialTip={true}
     textboxRef={
       Object {
         "current": null,
@@ -87,31 +107,48 @@ exports[`components/advanced_create_post Show tutorial 1`] = `
 exports[`components/advanced_create_post should match snapshot for center textbox 1`] = `
 <form
   className="center"
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={Array []}
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -131,11 +168,9 @@ exports[`components/advanced_create_post should match snapshot for center textbo
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -143,13 +178,18 @@ exports[`components/advanced_create_post should match snapshot for center textbo
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
@@ -171,31 +211,48 @@ exports[`components/advanced_create_post should match snapshot for center textbo
 exports[`components/advanced_create_post should match snapshot when cannot post 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={Array []}
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={false}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -215,11 +272,9 @@ exports[`components/advanced_create_post should match snapshot when cannot post 
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -227,13 +282,18 @@ exports[`components/advanced_create_post should match snapshot when cannot post 
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
@@ -255,31 +315,48 @@ exports[`components/advanced_create_post should match snapshot when cannot post 
 exports[`components/advanced_create_post should match snapshot when file upload disabled 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={Array []}
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
     canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -299,11 +376,9 @@ exports[`components/advanced_create_post should match snapshot when file upload 
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -311,13 +386,18 @@ exports[`components/advanced_create_post should match snapshot when file upload 
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
@@ -339,31 +419,48 @@ exports[`components/advanced_create_post should match snapshot when file upload 
 exports[`components/advanced_create_post should match snapshot, can post; preview disabled 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={Array []}
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -383,11 +480,9 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -395,13 +490,18 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
@@ -423,31 +523,48 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
 exports[`components/advanced_create_post should match snapshot, can post; preview enabled 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={Array []}
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -467,11 +584,9 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -479,13 +594,18 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
@@ -507,31 +627,48 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
 exports[`components/advanced_create_post should match snapshot, cannot post; preview disabled 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={Array []}
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={false}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -551,11 +688,9 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -563,13 +698,18 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
@@ -591,31 +731,48 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
 exports[`components/advanced_create_post should match snapshot, cannot post; preview enabled 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={Array []}
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={false}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -635,11 +792,9 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -647,13 +802,18 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
@@ -675,31 +835,48 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
 exports[`components/advanced_create_post should match snapshot, init 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={Array []}
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -719,11 +896,9 @@ exports[`components/advanced_create_post should match snapshot, init 1`] = `
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -731,13 +906,18 @@ exports[`components/advanced_create_post should match snapshot, init 1`] = `
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
@@ -759,29 +939,44 @@ exports[`components/advanced_create_post should match snapshot, init 1`] = `
 exports[`components/advanced_create_post should match snapshot, post priority disabled, with priority important 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={Array []}
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
         "metadata": Object {
@@ -789,6 +984,8 @@ exports[`components/advanced_create_post should match snapshot, post priority di
             "priority": "important",
           },
         },
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -808,11 +1005,9 @@ exports[`components/advanced_create_post should match snapshot, post priority di
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -820,13 +1015,18 @@ exports[`components/advanced_create_post should match snapshot, post priority di
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
@@ -848,88 +1048,56 @@ exports[`components/advanced_create_post should match snapshot, post priority di
 exports[`components/advanced_create_post should match snapshot, post priority enabled 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={
       Array [
-        <React.Fragment>
-          <Memo(PostPriorityPickerOverlay)
-            defaultHorizontalPosition="left"
-            onApply={[Function]}
-            onHide={[Function]}
-            show={false}
-            target={[Function]}
-          />
-          <OverlayTrigger
-            defaultOverlayShown={false}
-            delayShow={400}
-            overlay={
-              <Tooltip
-                id="post-priority-picker-tooltip"
-              >
-                <Memo(KeyboardShortcutSequence)
-                  hoistDescription={true}
-                  isInsideTooltip={true}
-                  shortcut={
-                    Object {
-                      "default": Object {
-                        "defaultMessage": "Message priority",
-                        "id": "shortcuts.msgs.formatting_bar.post_priority",
-                      },
-                      "mac": Object {
-                        "defaultMessage": "Message priority",
-                        "id": "shortcuts.msgs.formatting_bar.post_priority",
-                      },
-                    }
-                  }
-                />
-              </Tooltip>
-            }
-            placement="top"
-            trigger={
-              Array [
-                "hover",
-                "focus",
-              ]
-            }
-          >
-            <IconContainer
-              className="control"
-              disabled={false}
-              onClick={[Function]}
-              type="button"
-            >
-              <AlertCircleOutlineIcon
-                color="currentColor"
-                size={18}
-              />
-            </IconContainer>
-          </OverlayTrigger>
-        </React.Fragment>,
+        <Memo(PostPriorityPickerOverlay)
+          disabled={false}
+          onApply={[Function]}
+          onClose={[Function]}
+        />,
       ]
     }
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -949,11 +1117,9 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -961,13 +1127,18 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}
@@ -989,91 +1160,57 @@ exports[`components/advanced_create_post should match snapshot, post priority en
 exports[`components/advanced_create_post should match snapshot, post priority enabled, with priority important 1`] = `
 <form
   className=""
+  data-testid="create-post"
   id="create_post"
   onSubmit={[Function]}
 >
-  <Connect(ScheduledIndicator)
-    channelId="owsyt8n43jfxjpzh9np93mx1wa"
-    type={0}
-  />
   <AdvanceTextEditor
     additionalControls={
       Array [
-        <React.Fragment>
-          <Memo(PostPriorityPickerOverlay)
-            defaultHorizontalPosition="left"
-            onApply={[Function]}
-            onHide={[Function]}
-            settings={
-              Object {
-                "priority": "important",
-              }
+        <Memo(PostPriorityPickerOverlay)
+          disabled={false}
+          onApply={[Function]}
+          onClose={[Function]}
+          settings={
+            Object {
+              "priority": "important",
             }
-            show={false}
-            target={[Function]}
-          />
-          <OverlayTrigger
-            defaultOverlayShown={false}
-            delayShow={400}
-            overlay={
-              <Tooltip
-                id="post-priority-picker-tooltip"
-              >
-                <Memo(KeyboardShortcutSequence)
-                  hoistDescription={true}
-                  isInsideTooltip={true}
-                  shortcut={
-                    Object {
-                      "default": Object {
-                        "defaultMessage": "Message priority",
-                        "id": "shortcuts.msgs.formatting_bar.post_priority",
-                      },
-                      "mac": Object {
-                        "defaultMessage": "Message priority",
-                        "id": "shortcuts.msgs.formatting_bar.post_priority",
-                      },
-                    }
-                  }
-                />
-              </Tooltip>
-            }
-            placement="top"
-            trigger={
-              Array [
-                "hover",
-                "focus",
-              ]
-            }
-          >
-            <IconContainer
-              className="control"
-              disabled={false}
-              onClick={[Function]}
-              type="button"
-            >
-              <AlertCircleOutlineIcon
-                color="currentColor"
-                size={18}
-              />
-            </IconContainer>
-          </OverlayTrigger>
-        </React.Fragment>,
+          }
+        />,
       ]
     }
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
-    canUploadFiles={true}
+    canUploadFiles={false}
+    caretPosition={0}
     channelId="owsyt8n43jfxjpzh9np93mx1wa"
+    ctrlSend={false}
     currentChannel={
       Object {
+        "create_at": 0,
+        "creator_id": "id",
+        "delete_at": 0,
+        "display_name": "name",
+        "group_constrained": false,
+        "header": "header",
         "id": "owsyt8n43jfxjpzh9np93mx1wa",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "DN",
+        "purpose": "purpose",
+        "scheme_id": "id",
+        "team_id": "team_id",
         "type": "O",
+        "update_at": 0,
       }
     }
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
+    disableSend={false}
     draft={
       Object {
+        "channelId": "",
+        "createAt": 0,
         "fileInfos": Array [],
         "message": "",
         "metadata": Object {
@@ -1081,6 +1218,8 @@ exports[`components/advanced_create_post should match snapshot, post priority en
             "priority": "important",
           },
         },
+        "rootId": "",
+        "updateAt": 0,
         "uploadsInProgress": Array [],
       }
     }
@@ -1100,11 +1239,9 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     handleFileUploadChange={[Function]}
     handleFileUploadComplete={[Function]}
     handleGifClick={[Function]}
-    handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
     handleSchedulePost={[Function]}
-    handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
@@ -1113,73 +1250,32 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     isFormattingBarHidden={false}
     isSchedulable={true}
     labels={
-      <div
-        className="AdvancedTextEditor__priority"
-      >
-        <PriorityLabel
-          priority="important"
-          size="xs"
-        />
-        <OverlayTrigger
-          defaultOverlayShown={false}
-          delayShow={400}
-          overlay={
-            <Tooltip
-              id="post-priority-picker-tooltip"
-            >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="Remove {priority}"
-                id="post_priority.remove"
-                values={
-                  Object {
-                    "priority": "important",
-                  }
-                }
-              />
-            </Tooltip>
+      <Memo(PriorityLabels)
+        canRemove={true}
+        hasError={false}
+        onRemove={[Function]}
+        priority="important"
+        specialMentions={
+          Object {
+            "all": false,
+            "channel": false,
+            "here": false,
           }
-          placement="top"
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
-          }
-        >
-          <button
-            className="close"
-            onClick={[Function]}
-            type="button"
-          >
-            <span
-              aria-hidden="true"
-            >
-              ×
-            </span>
-            <span
-              className="sr-only"
-            >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="Remove {priority}"
-                id="post_priority.remove"
-                values={
-                  Object {
-                    "priority": "important",
-                  }
-                }
-              />
-            </span>
-          </button>
-        </OverlayTrigger>
-      </div>
+        }
+      />
     }
+    loadNextMessage={[Function]}
+    loadPrevMessage={[Function]}
     location="CENTER"
     maxPostSize={4000}
     message=""
+    onEditLatestPost={[Function]}
+    onMessageChange={[Function]}
     postId=""
     postMsgKeyPress={[Function]}
     prefillMessage={[Function]}
     removePreview={[Function]}
+    replyToLastPost={[Function]}
     serverError={null}
     setShowPreview={[Function]}
     shouldShowPreview={false}

@@ -233,6 +233,26 @@ export const getProfileSetInCurrentChannel: (state: GlobalState) => Set<UserProf
     },
 );
 
+export type HighlightWithoutNotificationKey = {
+    key: string;
+}
+
+export const getHighlightWithoutNotificationKeys: (state: GlobalState) => HighlightWithoutNotificationKey[] = createSelector(
+    'getHighlightWithoutNotificationKeys',
+    getCurrentUser,
+    (user: UserProfile) => {
+        const highlightKeys: HighlightWithoutNotificationKey[] = [];
+
+        if (user?.notify_props?.highlight_keys?.length > 0) {
+            user.notify_props.highlight_keys.split(',').forEach((key) => {
+                highlightKeys.push({key});
+            });
+        }
+
+        return highlightKeys;
+    },
+);
+
 export const getProfileSetNotInCurrentChannel: (state: GlobalState) => Set<UserProfile['id']> = createSelector(
     'getProfileSetNotInCurrentChannel',
     getCurrentChannelId,

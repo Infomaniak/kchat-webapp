@@ -14,8 +14,8 @@ import NoResultsIndicator from 'components/no_results_indicator/no_results_indic
 import {NoResultsVariant} from 'components/no_results_indicator/types';
 import SuggestionBox from 'components/suggestion/suggestion_box';
 import type SuggestionBoxComponent from 'components/suggestion/suggestion_box/suggestion_box';
-import SuggestionList from 'components/suggestion/suggestion_list.jsx';
-import SwitchChannelProvider from 'components/suggestion/switch_channel_provider.jsx';
+import SuggestionList from 'components/suggestion/suggestion_list';
+import SwitchChannelProvider from 'components/suggestion/switch_channel_provider';
 
 import {getHistory} from 'utils/browser_history';
 import Constants, {RHSStates} from 'utils/constants';

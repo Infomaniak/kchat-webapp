@@ -3,10 +3,8 @@
 
 import {connect} from 'react-redux';
 
-import {makeGetUserTimezone} from 'mattermost-redux/selectors/entities/timezone';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 
-import {areTimezonesEnabledAndSupported} from 'selectors/general';
 import {getCurrentLocale} from 'selectors/i18n';
 
 import {getCurrentDateForTimezone} from 'utils/timezone';
@@ -15,30 +13,15 @@ import type {GlobalState} from 'types/store';
 
 import SearchDateSuggestion from './search_date_suggestion';
 
-function makeMapStateToProps() {
-    const getUserTimezone = makeGetUserTimezone();
+function mapStateToProps(state: GlobalState) {
+    const timezone = getCurrentTimezone(state);
+    const locale = getCurrentLocale(state);
+    const currentDate = getCurrentDateForTimezone(timezone);
 
-    return (state: GlobalState) => {
-        const currentUserId = getCurrentUserId(state);
-        const userTimezone = getUserTimezone(state, currentUserId);
-        const locale = getCurrentLocale(state);
-
-        const enableTimezone = areTimezonesEnabledAndSupported(state);
-
-        let currentDate;
-        if (enableTimezone) {
-            if (userTimezone.useAutomaticTimezone) {
-                currentDate = getCurrentDateForTimezone(userTimezone.automaticTimezone);
-            } else {
-                currentDate = getCurrentDateForTimezone(userTimezone.manualTimezone);
-            }
-        }
-
-        return {
-            currentDate,
-            locale,
-        };
+    return {
+        currentDate,
+        locale,
     };
 }
 
-export default connect(makeMapStateToProps)(SearchDateSuggestion);
+export default connect(mapStateToProps)(SearchDateSuggestion);

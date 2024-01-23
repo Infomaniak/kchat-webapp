@@ -130,12 +130,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
             "mfa_active": false,
             "nickname": "",
             "notify_props": Object {
+              "calls_desktop_sound": "true",
               "channel": "false",
               "comments": "never",
               "desktop": "default",
               "desktop_sound": "false",
               "email": "false",
               "first_name": "false",
+              "highlight_keys": "",
               "mark_unread": "mention",
               "mention_keys": "",
               "push": "none",
@@ -205,12 +207,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
+            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
             "desktop_sound": "false",
             "email": "false",
             "first_name": "false",
+            "highlight_keys": "",
             "mark_unread": "mention",
             "mention_keys": "",
             "push": "none",
@@ -586,6 +590,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
           Object {
             "channelDisplayName": "name",
             "channelId": "test-channel-id",
+            "channelType": "O",
           }
         }
         dialogType={
@@ -600,6 +605,37 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         modalId="convert_channel"
         show={true}
         text="Convert to Private Channel"
+      />
+    </Connect(ChannelPermissionGate)>
+    <Connect(ChannelPermissionGate)
+      channelId="test-channel-id"
+      permissions={
+        Array [
+          "convert_public_channel_to_private",
+        ]
+      }
+      teamId="team_id"
+    >
+      <MenuItemToggleModalRedux
+        dialogProps={
+          Object {
+            "channelDisplayName": "name",
+            "channelId": "test-channel-id",
+            "channelType": "P",
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
+        id="channelConvertToPublic"
+        modalId="convert_channel"
+        show={false}
+        text="Convert to Public Channel"
       />
     </Connect(ChannelPermissionGate)>
     <Connect(ChannelPermissionGate)
@@ -711,12 +747,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
+            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
             "desktop_sound": "false",
             "email": "false",
             "first_name": "false",
+            "highlight_keys": "",
             "mark_unread": "mention",
             "mention_keys": "",
             "push": "none",
@@ -919,12 +957,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
             "mfa_active": false,
             "nickname": "",
             "notify_props": Object {
+              "calls_desktop_sound": "true",
               "channel": "false",
               "comments": "never",
               "desktop": "default",
               "desktop_sound": "false",
               "email": "false",
               "first_name": "false",
+              "highlight_keys": "",
               "mark_unread": "mention",
               "mention_keys": "",
               "push": "none",
@@ -994,12 +1034,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
+            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
             "desktop_sound": "false",
             "email": "false",
             "first_name": "false",
+            "highlight_keys": "",
             "mark_unread": "mention",
             "mention_keys": "",
             "push": "none",
@@ -1375,6 +1417,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
           Object {
             "channelDisplayName": "name",
             "channelId": "test-channel-id",
+            "channelType": "O",
           }
         }
         dialogType={
@@ -1389,6 +1432,37 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         modalId="convert_channel"
         show={true}
         text="Convert to Private Channel"
+      />
+    </Connect(ChannelPermissionGate)>
+    <Connect(ChannelPermissionGate)
+      channelId="test-channel-id"
+      permissions={
+        Array [
+          "convert_public_channel_to_private",
+        ]
+      }
+      teamId="team_id"
+    >
+      <MenuItemToggleModalRedux
+        dialogProps={
+          Object {
+            "channelDisplayName": "name",
+            "channelId": "test-channel-id",
+            "channelType": "P",
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
+        id="channelConvertToPublic"
+        modalId="convert_channel"
+        show={false}
+        text="Convert to Public Channel"
       />
     </Connect(ChannelPermissionGate)>
     <Connect(ChannelPermissionGate)
@@ -1500,12 +1574,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
+            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
             "desktop_sound": "false",
             "email": "false",
             "first_name": "false",
+            "highlight_keys": "",
             "mark_unread": "mention",
             "mention_keys": "",
             "push": "none",

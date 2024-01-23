@@ -2,7 +2,7 @@
 
 exports[`components/TextBox should match snapshot with additional, optional props 1`] = `
 <div
-  className="textarea-wrapper"
+  className="textarea-wrapper textarea-wrapper-preview"
 >
   <div
     className="form-control custom-textarea textbox-preview-area"
@@ -18,21 +18,13 @@ exports[`components/TextBox should match snapshot with additional, optional prop
           "hideUtilities": true,
         }
       }
-      mentionKeys={Array []}
       message="some test text"
     />
   </div>
-</div>
-`;
-
-exports[`components/TextBox should match snapshot with required props 1`] = `
-<div
-  className="textarea-wrapper"
->
   <Connect(SuggestionBox)
-    channelId="channelId"
-    className="form-control custom-textarea"
+    className="form-control custom-textarea textbox-edit-area custom-textarea--emoji-picker bad-connection"
     contextId="channelId"
+    disabled={true}
     id="someid"
     inputComponent={
       Object {
@@ -41,13 +33,16 @@ exports[`components/TextBox should match snapshot with required props 1`] = `
       }
     }
     listComponent={[Function]}
+    listPosition="top"
     onBlur={[Function]}
     onChange={[Function]}
+    onComposition={[Function]}
+    onHeightChange={[Function]}
     onKeyDown={[Function]}
     onKeyPress={[Function]}
     onKeyUp={[Function]}
     onMouseUp={[Function]}
-    onSelect={[Function]}
+    openWhenEmpty={true}
     placeholder="placeholder text"
     providers={
       Array [
@@ -80,6 +75,114 @@ exports[`components/TextBox should match snapshot with required props 1`] = `
         },
         ChannelMentionProvider {
           "autocompleteChannels": [MockFunction],
+          "delayChannelAutocomplete": undefined,
+          "disableDispatches": false,
+          "forceDispatch": false,
+          "lastCompletedWord": "",
+          "lastPrefixTrimmed": "",
+          "lastPrefixWithNoResults": "",
+          "latestComplete": true,
+          "latestPrefix": "",
+          "requestStarted": false,
+          "triggerCharacter": "~",
+        },
+        EmoticonProvider {
+          "disableDispatches": false,
+          "forceDispatch": false,
+          "latestComplete": true,
+          "latestPrefix": "",
+          "requestStarted": false,
+          "triggerCharacter": ":",
+        },
+      ]
+    }
+    renderDividers={
+      Array [
+        "all",
+      ]
+    }
+    spellCheck="true"
+    style={
+      Object {
+        "visibility": "hidden",
+      }
+    }
+    value="some test text"
+  />
+</div>
+`;
+
+exports[`components/TextBox should match snapshot with required props 1`] = `
+<div
+  className="textarea-wrapper"
+>
+  <div
+    className="form-control custom-textarea textbox-preview-area"
+    onBlur={[Function]}
+    onKeyDown={[Function]}
+    onKeyPress={[Function]}
+    tabIndex={0}
+  >
+    <Connect(PostMarkdown)
+      channelId="channelId"
+      imageProps={
+        Object {
+          "hideUtilities": true,
+        }
+      }
+      message="some test text"
+    />
+  </div>
+  <Connect(SuggestionBox)
+    className="form-control custom-textarea textbox-edit-area"
+    contextId="channelId"
+    id="someid"
+    inputComponent={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    listComponent={[Function]}
+    onBlur={[Function]}
+    onChange={[Function]}
+    onKeyDown={[Function]}
+    onKeyPress={[Function]}
+    onKeyUp={[Function]}
+    onMouseUp={[Function]}
+    placeholder="placeholder text"
+    providers={
+      Array [
+        AtMentionProvider {
+          "addLastViewAtToProfiles": [Function],
+          "autocompleteGroups": Array [
+            Object {
+              "id": "gid1",
+            },
+            Object {
+              "id": "gid2",
+            },
+          ],
+          "autocompleteUsersInChannel": [Function],
+          "channelId": "channelId",
+          "currentUserId": "currentUserId",
+          "data": null,
+          "disableDispatches": false,
+          "forceDispatch": false,
+          "getProfilesInChannel": [Function],
+          "lastCompletedWord": "",
+          "lastPrefixWithNoResults": "",
+          "latestComplete": true,
+          "latestPrefix": "",
+          "priorityProfiles": undefined,
+          "requestStarted": false,
+          "searchAssociatedGroupsForReference": [Function],
+          "triggerCharacter": "@",
+          "useChannelMentions": true,
+        },
+        ChannelMentionProvider {
+          "autocompleteChannels": [MockFunction],
+          "delayChannelAutocomplete": undefined,
           "disableDispatches": false,
           "forceDispatch": false,
           "lastCompletedWord": "",
@@ -120,9 +223,25 @@ exports[`components/TextBox should throw error when new property is too long 1`]
 <div
   className="textarea-wrapper"
 >
+  <div
+    className="form-control custom-textarea textbox-preview-area"
+    onBlur={[Function]}
+    onKeyDown={[Function]}
+    onKeyPress={[Function]}
+    tabIndex={0}
+  >
+    <Connect(PostMarkdown)
+      channelId="channelId"
+      imageProps={
+        Object {
+          "hideUtilities": true,
+        }
+      }
+      message="some test text that exceeds char limit"
+    />
+  </div>
   <Connect(SuggestionBox)
-    channelId="channelId"
-    className="form-control custom-textarea"
+    className="form-control custom-textarea textbox-edit-area"
     contextId="channelId"
     id="someid"
     inputComponent={
@@ -138,7 +257,6 @@ exports[`components/TextBox should throw error when new property is too long 1`]
     onKeyPress={[Function]}
     onKeyUp={[Function]}
     onMouseUp={[Function]}
-    onSelect={[Function]}
     placeholder="placeholder text"
     providers={
       Array [
@@ -171,6 +289,7 @@ exports[`components/TextBox should throw error when new property is too long 1`]
         },
         ChannelMentionProvider {
           "autocompleteChannels": [MockFunction],
+          "delayChannelAutocomplete": undefined,
           "disableDispatches": false,
           "forceDispatch": false,
           "lastCompletedWord": "",
@@ -211,9 +330,25 @@ exports[`components/TextBox should throw error when value is too long 1`] = `
 <div
   className="textarea-wrapper"
 >
+  <div
+    className="form-control custom-textarea textbox-preview-area"
+    onBlur={[Function]}
+    onKeyDown={[Function]}
+    onKeyPress={[Function]}
+    tabIndex={0}
+  >
+    <Connect(PostMarkdown)
+      channelId="channelId"
+      imageProps={
+        Object {
+          "hideUtilities": true,
+        }
+      }
+      message="some test text that exceeds char limit"
+    />
+  </div>
   <Connect(SuggestionBox)
-    channelId="channelId"
-    className="form-control custom-textarea"
+    className="form-control custom-textarea textbox-edit-area"
     contextId="channelId"
     id="someid"
     inputComponent={
@@ -229,7 +364,6 @@ exports[`components/TextBox should throw error when value is too long 1`] = `
     onKeyPress={[Function]}
     onKeyUp={[Function]}
     onMouseUp={[Function]}
-    onSelect={[Function]}
     placeholder="placeholder text"
     providers={
       Array [
@@ -262,6 +396,7 @@ exports[`components/TextBox should throw error when value is too long 1`] = `
         },
         ChannelMentionProvider {
           "autocompleteChannels": [MockFunction],
+          "delayChannelAutocomplete": undefined,
           "disableDispatches": false,
           "forceDispatch": false,
           "lastCompletedWord": "",

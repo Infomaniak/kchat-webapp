@@ -3,12 +3,10 @@
 
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import {
-    favoriteChannel,
-    unfavoriteChannel,
     updateChannelNotifyProps,
 } from 'mattermost-redux/actions/channels';
 import {getCustomEmojisInText} from 'mattermost-redux/actions/emojis';
@@ -16,23 +14,19 @@ import {General} from 'mattermost-redux/constants';
 import {
     getCurrentChannel,
     getMyCurrentChannelMembership,
-    isCurrentChannelFavorite,
     isCurrentChannelMuted,
     getCurrentChannelStats,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentRelativeTeamUrl, getCurrentTeamId, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentRelativeTeamUrl, getCurrentTeamId, getMyKSuites, getMyTeams} from 'mattermost-redux/selectors/entities/teams';
 import {
     displayLastActiveLabel,
     getCurrentUser,
     getLastActiveTimestampUnits,
     getLastActivityForUserId,
     getUser,
-    isCurrentUserGuestUser,
     makeGetProfilesInChannel,
 } from 'mattermost-redux/selectors/entities/users';
-import type {Action} from 'mattermost-redux/types/actions';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 
 import {goToLastViewedChannel} from 'actions/views/channel';
@@ -43,21 +37,16 @@ import {
     closeRightHandSide,
     showChannelMembers,
 } from 'actions/views/rhs';
-import {getShowTutorialStep} from 'selectors/onboarding';
 import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
 import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
 import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 'selectors/views/custom_status';
 import {isModalOpen} from 'selectors/views/modals';
-
-import {OnboardingTasksName} from 'components/onboarding_tasks';
-import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours';
 
 import {ModalIdentifiers} from 'utils/constants';
 import {isFileAttachmentsEnabled} from 'utils/file_utils';
 
 import type {GlobalState} from 'types/store';
 
-import type {Props} from './channel_header';
 import ChannelHeader from './channel_header';
 
 const EMPTY_CHANNEL = {};
@@ -74,13 +63,6 @@ function makeMapStateToProps() {
         const teams = getMyKSuites(state);
         const hasMoreThanOneTeam = teams.length > 1;
         const config = getConfig(state);
-
-        const isGuest = isCurrentUserGuestUser(state);
-        const showChannelHeaderTutorialStep = getShowTutorialStep(state, {
-            tourName: isGuest ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP,
-            taskName: OnboardingTasksName.CHANNELS_TOUR,
-            tourStep: isGuest ? OnboardingTourStepsForGuestUsers.CHANNEL_HEADER : OnboardingTourSteps.CHANNEL_HEADER,
-        });
 
         let dmUser;
         let gmMembers;
@@ -113,14 +95,12 @@ function makeMapStateToProps() {
             gmMembers,
             rhsState: getRhsState(state),
             rhsOpen: getIsRhsOpen(state),
-            isFavorite: isCurrentChannelFavorite(state),
             isReadOnly: false,
             isMuted: isCurrentChannelMuted(state),
             isQuickSwitcherOpen: isModalOpen(state, ModalIdentifiers.QUICK_SWITCH),
             hasGuests: stats.guest_count > 0,
             pinnedPostsCount: stats.pinnedpost_count,
             hasMoreThanOneTeam,
-            teammateNameDisplaySetting: getTeammateNameDisplaySetting(state),
             currentRelativeTeamUrl: getCurrentRelativeTeamUrl(state),
             announcementBarCount: getAnnouncementBarCount(state),
             customStatus,
@@ -130,15 +110,13 @@ function makeMapStateToProps() {
             isFileAttachmentsEnabled: isFileAttachmentsEnabled(config),
             isLastActiveEnabled,
             timestampUnits,
-            showChannelHeaderTutorialStep,
+            hideGuestTags: config.HideGuestTags === 'true',
         };
     };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    actions: bindActionCreators<ActionCreatorsMapObject<Action>, Props['actions']>({
-        favoriteChannel,
-        unfavoriteChannel,
+    actions: bindActionCreators({
         showPinnedPosts,
         showChannelFiles,
         closeRightHandSide,

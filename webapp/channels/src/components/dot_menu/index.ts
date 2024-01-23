@@ -8,7 +8,6 @@ import {bindActionCreators} from 'redux';
 
 import type {Post} from '@mattermost/types/posts';
 
-import {translatePost} from 'mattermost-redux/actions/posts';
 import {setThreadFollow} from 'mattermost-redux/actions/threads';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getLicense, getConfig} from 'mattermost-redux/selectors/entities/general';
@@ -161,7 +160,6 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             markPostAsUnread,
             setThreadFollow,
             setGlobalItem,
-            translatePost,
         }, dispatch),
     };
 }

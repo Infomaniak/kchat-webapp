@@ -14,7 +14,7 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {getFullName} from 'mattermost-redux/utils/user_utils';
 
 import ModalSuggestionList from 'components/suggestion/modal_suggestion_list';
-import SearchChannelWithPermissionsProvider from 'components/suggestion/search_channel_with_permissions_provider.jsx';
+import SearchChannelWithPermissionsProvider from 'components/suggestion/search_channel_with_permissions_provider';
 import SuggestionBox from 'components/suggestion/suggestion_box';
 import type SuggestionBoxComponent from 'components/suggestion/suggestion_box/suggestion_box';
 

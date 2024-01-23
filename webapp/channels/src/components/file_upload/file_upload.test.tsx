@@ -1,18 +1,18 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {MouseEvent, DragEvent, ChangeEvent} from 'react';
 import React from 'react';
+import type {MouseEvent, DragEvent, ChangeEvent} from 'react';
 
 import type {FileInfo} from '@mattermost/types/files';
 
 import {General} from 'mattermost-redux/constants';
 
-import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
-import FileUpload from 'components/file_upload/file_upload';
+import FileUpload, {type FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
+
+import {clearFileInput} from 'utils/utils';
 
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-import {clearFileInput} from 'utils/utils';
 
 import type {FilesWillUploadHook} from 'types/store/plugins';
 
@@ -209,7 +209,7 @@ describe('components/FileUpload', () => {
         event.preventDefault = jest.fn();
         const getAsFile = jest.fn().mockReturnValue(new File(['test'], 'test.png'));
         const file = {getAsFile, kind: 'file', name: 'test.png'};
-        (event as any).clipboardData = {items: [file], types: ['image/png']};
+        (event as any).clipboardData = {items: [file], types: ['image/png'], getData: () => {}};
 
         const wrapper = shallowWithIntl(
             <FileUpload
@@ -232,7 +232,11 @@ describe('components/FileUpload', () => {
         const event = new Event('paste');
         event.preventDefault = jest.fn();
         const getAsString = jest.fn();
-        (event as any).clipboardData = {items: [{getAsString, kind: 'string', type: 'text/plain'}], types: ['text/plain']};
+        (event as any).clipboardData = {items: [{getAsString, kind: 'string', type: 'text/plain'}],
+            types: ['text/plain'],
+            getData: () => {
+                return '';
+            }};
 
         const wrapper = shallowWithIntl(
             <FileUpload
@@ -267,7 +271,7 @@ describe('components/FileUpload', () => {
         );
 
         expect(baseProps.onUploadError).toHaveBeenCalledTimes(1);
-        expect(baseProps.onUploadError).toHaveBeenCalledWith('');
+        expect(baseProps.onUploadError).toHaveBeenCalledWith(null);
     });
 
     test('should error max upload files', () => {
@@ -287,7 +291,7 @@ describe('components/FileUpload', () => {
         expect(baseProps.onUploadStart).toBeCalledWith([], props.channelId);
 
         expect(baseProps.onUploadError).toHaveBeenCalledTimes(2);
-        expect(baseProps.onUploadError.mock.calls[0][0]).toEqual('');
+        expect(baseProps.onUploadError.mock.calls[0][0]).toEqual(null);
     });
 
     test('should error max upload files', () => {
@@ -307,7 +311,7 @@ describe('components/FileUpload', () => {
         expect(baseProps.onUploadStart).toBeCalledWith([], props.channelId);
 
         expect(baseProps.onUploadError).toHaveBeenCalledTimes(2);
-        expect(baseProps.onUploadError.mock.calls[0][0]).toEqual('');
+        expect(baseProps.onUploadError.mock.calls[0][0]).toEqual(null);
     });
 
     test('should error max too large files', () => {
@@ -325,7 +329,7 @@ describe('components/FileUpload', () => {
         expect(baseProps.onUploadStart).toBeCalledWith([], baseProps.channelId);
 
         expect(baseProps.onUploadError).toHaveBeenCalledTimes(2);
-        expect(baseProps.onUploadError.mock.calls[0][0]).toEqual('');
+        expect(baseProps.onUploadError.mock.calls[0][0]).toEqual(null);
     });
 
     test('should functions when handleChange is called', () => {
@@ -359,7 +363,7 @@ describe('components/FileUpload', () => {
         instance.handleDrop(e);
 
         expect(baseProps.onUploadError).toBeCalled();
-        expect(baseProps.onUploadError).toHaveBeenCalledWith('');
+        expect(baseProps.onUploadError).toHaveBeenCalledWith(null);
 
         expect(instance.uploadFiles).toBeCalled();
         expect(instance.uploadFiles).toHaveBeenCalledWith(e.dataTransfer.files);
@@ -387,7 +391,7 @@ describe('components/FileUpload', () => {
         expect(baseProps.onUploadStart).toHaveBeenCalledTimes(0);
 
         expect(baseProps.onUploadError).toHaveBeenCalledTimes(1);
-        expect(baseProps.onUploadError).toHaveBeenCalledWith('');
+        expect(baseProps.onUploadError).toHaveBeenCalledWith(null);
     });
 
     test('FilesWillUploadHook - should reject one file and allow one file', () => {
@@ -410,6 +414,6 @@ describe('components/FileUpload', () => {
         expect(baseProps.onUploadStart).toHaveBeenCalledWith([expect.stringMatching(generatedIdRegex)], props.channelId);
 
         expect(baseProps.onUploadError).toHaveBeenCalledTimes(1);
-        expect(baseProps.onUploadError).toHaveBeenCalledWith('');
+        expect(baseProps.onUploadError).toHaveBeenCalledWith(null);
     });
 });

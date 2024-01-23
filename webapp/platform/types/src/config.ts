@@ -203,6 +203,7 @@ InsightsEnabled: string;
     DelayChannelAutocomplete: 'true' | 'false';
     ServiceEnvironment: string;
     FeatureFlagTranslation: string;
+    UniqueEmojiReactionLimitPerPost: string;
 };
 
 export type License = {

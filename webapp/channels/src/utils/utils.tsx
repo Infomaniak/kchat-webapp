@@ -8,6 +8,7 @@ import {getName} from 'country-list';
 import cssVars from 'css-vars-ponyfill';
 import type {Locale} from 'date-fns';
 import {enGB} from 'date-fns/locale';
+import {isNil} from 'lodash';
 import moment from 'moment';
 import type {LinkHTMLAttributes} from 'react';
 import React from 'react';
@@ -63,6 +64,13 @@ import store from 'stores/redux_store';
 
 import {focusPost} from 'components/permalink_view/actions';
 
+import {getHistory} from 'utils/browser_history';
+import type {A11yFocusEventDetail} from 'utils/constants';
+import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as UserAgent from 'utils/user_agent';
+import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
+
 import bing from 'sounds/bing.mp3';
 import crackle from 'sounds/crackle.mp3';
 import down from 'sounds/down.mp3';
@@ -70,12 +78,6 @@ import hello from 'sounds/hello.mp3';
 import ring from 'sounds/ring.mp3';
 import ripple from 'sounds/ripple.mp3';
 import upstairs from 'sounds/upstairs.mp3';
-import {getHistory} from 'utils/browser_history';
-import type {A11yFocusEventDetail} from 'utils/constants';
-import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as UserAgent from 'utils/user_agent';
-import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 
 import {joinPrivateChannelPrompt} from './channel_utils';
 import {isServerVersionGreaterThanOrEqualTo} from './server_version';
@@ -1536,6 +1538,26 @@ export function isValidPassword(password: string, passwordConfig: ReturnType<typ
     }
 
     return {valid, error};
+}
+
+export function isTextSelectedInPostOrReply(e: React.KeyboardEvent | KeyboardEvent) {
+    const {id} = e.target as HTMLElement;
+
+    const isTypingInPost = id === 'post_textbox';
+    const isTypingInReply = id === 'reply_textbox';
+
+    if (!isTypingInPost && !isTypingInReply) {
+        return false;
+    }
+
+    const {
+        selectionStart,
+        selectionEnd,
+    } = e.target as TextboxElement;
+
+    const hasSelection = !isNil(selectionStart) && !isNil(selectionEnd) && selectionStart < selectionEnd;
+
+    return hasSelection;
 }
 
 function isChannelOrPermalink(link: string) {
