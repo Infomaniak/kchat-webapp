@@ -117,6 +117,7 @@ export type ClientConfig = {
     ExperimentalPrimaryTeam: string;
     ExperimentalViewArchivedChannels: string;
     FileLevel: string;
+    FeatureFlagEnableVoiceMessages: string;
     FeatureFlagAppsEnabled: string;
     FeatureFlagCallsEnabled: string;
     ForgotPasswordLink: string;
@@ -129,7 +130,7 @@ export type ClientConfig = {
     IosAppDownloadLink: string;
     IosLatestVersion: string;
     IosMinVersion: string;
-InsightsEnabled: string;
+    InsightsEnabled: string;
     InstallationDate: string;
     IsDefaultMarketplace: string;
     LdapFirstNameAttributeSet: string;
@@ -193,6 +194,8 @@ InsightsEnabled: string;
     ExperimentalSharedChannels: string;
     ExperimentalTimezone: string;
     DisableAppBar: string;
+    ExperimentalEnableVoiceMessage: string;
+    MaxVoiceMessagesDuration: string;
     EnableComplianceExport: string;
     PostPriority: string;
     PostAcknowledgements: string;
@@ -367,6 +370,8 @@ export type ServiceSettings = {
     CollapsedThreads: CollapsedThreads;
     ThreadAutoFollow: boolean;
     PostPriority: boolean;
+    EnableVoiceMessages: boolean;
+    MaxVoiceMessagesDuration: number;
     EnableAPIChannelDeletion: boolean;
     EnableAWSMetering: boolean;
     SplitKey: string;

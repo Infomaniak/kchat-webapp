@@ -8,8 +8,9 @@ import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
 import FileAttachment from 'components/file_attachment';
 import FilePreviewModal from 'components/file_preview_modal';
 import SingleImageView from 'components/single_image_view';
+import VoiceMessageAttachmentPlayer from 'components/voice_message_attachment_player';
 
-import {FileTypes, ModalIdentifiers} from 'utils/constants';
+import Constants, {FileTypes, ModalIdentifiers} from 'utils/constants';
 import {getFileType} from 'utils/utils';
 
 import type {OwnProps, PropsFromRedux} from './index';
@@ -36,10 +37,19 @@ export default function FileAttachmentList(props: Props) {
         fileCount,
         locale,
         isInPermalink,
+        post,
     } = props;
 
     const sortedFileInfos = useMemo(() => sortFileInfos(fileInfos ? [...fileInfos] : [], locale), [fileInfos, locale]);
-    if (fileInfos && fileInfos.length === 1 && !fileInfos[0].archived) {
+    if (post.type === Constants.PostTypes.VOICE && fileInfos.length === 1) {
+        return (
+            <VoiceMessageAttachmentPlayer
+                postId={post.id}
+                fileId={fileInfos?.[0]?.id ?? ''}
+                inPost={true}
+            />
+        );
+    } else if (fileInfos && fileInfos.length === 1 && !fileInfos[0].archived) {
         const fileType = getFileType(fileInfos[0].extension);
 
         if (fileType === FileTypes.IMAGE || (fileType === FileTypes.SVG && enableSVGs)) {

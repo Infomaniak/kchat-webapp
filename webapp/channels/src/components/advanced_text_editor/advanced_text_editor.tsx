@@ -10,6 +10,7 @@ import type {Channel} from '@mattermost/types/channels';
 import type {Emoji} from '@mattermost/types/emojis';
 import type {ServerError} from '@mattermost/types/errors';
 import type {FileInfo} from '@mattermost/types/files';
+import {Post} from '@mattermost/types/posts';
 
 import EmojiPickerOverlay from 'components/emoji_picker/emoji_picker_overlay';
 import FilePreview from 'components/file_preview';
@@ -27,7 +28,8 @@ import {SendMessageTour} from 'components/tours/onboarding_tour';
 
 import Constants, {Locations} from 'utils/constants';
 import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
-import * as Utils from 'utils/utils';
+import {getVoiceMessageStateFromDraft, VoiceMessageStates} from 'utils/post_utils';
+import {localizeMessage, scrollbarWidth as getScrollbarWidth} from 'utils/utils';
 
 import type {PostDraft} from 'types/store/draft';
 
@@ -38,6 +40,8 @@ import SendButton from './send_button';
 import ShowFormat from './show_formatting';
 import TexteditorActions from './texteditor_actions';
 import ToggleFormattingBar from './toggle_formatting_bar/toggle_formatting_bar';
+import VoiceMessageAttachment from './voice_message_attachment';
+import VoiceMessageButton from './voice_message_button';
 
 import AutoHeightSwitcher from '../common/auto_height_switcher';
 import RhsSuggestionList from '../suggestion/rhs_suggestion_list';
@@ -89,7 +93,7 @@ type Props = {
     hideEmojiPicker: () => void;
     toggleAdvanceTextEditor: () => void;
     handleUploadProgress: (filePreviewInfo: FilePreviewInfo) => void;
-    handleUploadError: (err: string | ServerError, clientId?: string, channelId?: string) => void;
+    handleUploadError: (err: string | ServerError, clientId?: string, channelId?: string, rootId?: string) => void;
     handleFileUploadComplete: (fileInfos: FileInfo[], clientIds: string[], channelId: string, rootId?: string) => void;
     handleUploadStart: (clientIds: string[], channelId: string) => void;
     handleFileUploadChange: () => void;
@@ -99,9 +103,12 @@ type Props = {
     channelId: string;
     postId: string;
     textboxRef: React.RefObject<TextboxClass>;
+    voiceMessageClientId: string;
+    handleVoiceMessageUploadStart: (clientId: string, channelOrRootId: Channel['id'] | Post['id']) => void;
     isThreadView?: boolean;
     additionalControls?: React.ReactNodeArray;
     labels?: React.ReactNode;
+    setDraftAsPostType: (channelOrRootId: Channel['id'] | Post['id'], draft: PostDraft, postType?: PostDraft['postType']) => void;
     isSchedulable?: boolean;
     handleSchedulePost: (scheduleUTCTimestamp: number) => void;
 }
@@ -156,6 +163,9 @@ const AdvanceTextEditor = ({
     fileUploadRef,
     prefillMessage,
     textboxRef,
+    voiceMessageClientId,
+    setDraftAsPostType,
+    handleVoiceMessageUploadStart,
     isThreadView,
     additionalControls,
     labels,
@@ -164,7 +174,7 @@ const AdvanceTextEditor = ({
 }: Props) => {
     const readOnlyChannel = !canPost;
     const {formatMessage} = useIntl();
-    const ariaLabelMessageInput = Utils.localizeMessage(
+    const ariaLabelMessageInput = localizeMessage(
         'accessibility.sections.centerFooter',
         'message input complimentary region',
     );
@@ -174,6 +184,8 @@ const AdvanceTextEditor = ({
 
     const [renderScrollbar, setRenderScrollbar] = useState(false);
     const [showFormattingSpacer, setShowFormattingSpacer] = useState(shouldShowPreview);
+
+    const voiceMessageState = getVoiceMessageStateFromDraft(draft);
 
     const input = textboxRef.current?.getInputBox();
 
@@ -197,7 +209,29 @@ const AdvanceTextEditor = ({
     }
 
     let attachmentPreview = null;
-    if (!readOnlyChannel && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0)) {
+    if (!readOnlyChannel && draft.postType === Constants.PostTypes.VOICE) {
+        attachmentPreview = (
+            <div>
+                <VoiceMessageAttachment
+                    channelId={channelId}
+                    rootId={postId}
+                    draft={draft}
+                    location={location}
+                    vmState={voiceMessageState}
+                    setDraftAsPostType={setDraftAsPostType}
+                    uploadingClientId={voiceMessageClientId}
+                    didUploadFail={Boolean(serverError)}
+                    onUploadStart={handleVoiceMessageUploadStart}
+                    uploadProgress={uploadsProgressPercent?.[voiceMessageClientId]?.percent ?? 0}
+                    onUploadProgress={handleUploadProgress}
+                    onUploadComplete={handleFileUploadComplete}
+                    onUploadError={handleUploadError}
+                    onRemoveDraft={removePreview}
+                    onSubmit={handleSubmit}
+                />
+            </div>
+        );
+    } else if (!readOnlyChannel && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0)) {
         attachmentPreview = (
             <FilePreview
                 fileInfos={draft.fileInfos}
@@ -230,6 +264,7 @@ const AdvanceTextEditor = ({
             rootId={postId}
             channelId={channelId}
             postType={postType}
+            disabled={draft.postType === Constants.PostTypes.VOICE}
         />
     );
 
@@ -276,7 +311,7 @@ const AdvanceTextEditor = ({
                         onClick={toggleEmojiPicker}
                         type='button'
                         aria-label={emojiButtonAriaLabel}
-                        disabled={shouldShowPreview}
+                        disabled={shouldShowPreview || draft.postType === Constants.PostTypes.VOICE}
                         className={classNames({active: showEmojiPicker})}
                     >
                         <EmoticonHappyOutlineIcon
@@ -289,17 +324,36 @@ const AdvanceTextEditor = ({
         );
     }
 
-    const disableSendButton = Boolean(readOnlyChannel || (!message.trim().length && !draft.fileInfos.length));
+    const hasDraftMessagesOrFileAttachments = message.trim().length !== 0 || draft.fileInfos.length !== 0 || draft.uploadsInProgress.length !== 0;
+
+    const voiceMessageButton = !readOnlyChannel && (location === Locations.CENTER || location === Locations.RHS_COMMENT) ? (
+        <VoiceMessageButton
+            channelId={channelId}
+            rootId={postId}
+            location={location}
+            draft={draft}
+            disabled={readOnlyChannel ||
+                voiceMessageState === VoiceMessageStates.RECORDING ||
+                voiceMessageState === VoiceMessageStates.UPLOADING || voiceMessageState === VoiceMessageStates.ATTACHED ||
+                hasDraftMessagesOrFileAttachments}
+            onClick={setDraftAsPostType}
+        />
+    ) : null;
+
+    const isSendButtonDisabled = readOnlyChannel ||
+        voiceMessageState === VoiceMessageStates.RECORDING || voiceMessageState === VoiceMessageStates.UPLOADING ||
+        !hasDraftMessagesOrFileAttachments;
+
     const sendButton = readOnlyChannel ? null : (
         <SendButton
-            disabled={disableSendButton}
+            disabled={isSendButtonDisabled}
             isSchedulable={isSchedulable}
             handleSubmit={handleSubmit}
             handleSchedulePost={handleSchedulePost}
         />
     );
 
-    const showFormatJSX = disableSendButton ? null : (
+    const showFormatJSX = isSendButtonDisabled || draft.postType === Constants.PostTypes.VOICE ? null : (
         <ShowFormat
             onClick={handleShowFormat}
             active={shouldShowPreview}
@@ -316,12 +370,12 @@ const AdvanceTextEditor = ({
             {channelDisplayName: currentChannel.display_name},
         );
     } else if (readOnlyChannel) {
-        createMessage = Utils.localizeMessage(
+        createMessage = localizeMessage(
             'create_post.read_only',
             'This channel is read-only. Only members with permission can post here.',
         );
     } else {
-        createMessage = Utils.localizeMessage('create_comment.addComment', 'Reply to this thread...');
+        createMessage = localizeMessage('create_comment.addComment', 'Reply to this thread...');
     }
 
     const messageValue = readOnlyChannel ? '' : message;
@@ -395,7 +449,7 @@ const AdvanceTextEditor = ({
                     applyMarkdown={applyMarkdown}
                     getCurrentMessage={getCurrentValue}
                     getCurrentSelection={getCurrentSelection}
-                    disableControls={shouldShowPreview}
+                    disableControls={shouldShowPreview || draft.postType === Constants.PostTypes.VOICE}
                     additionalControls={additionalControls}
                     location={location}
                 />
@@ -432,7 +486,7 @@ const AdvanceTextEditor = ({
                         role='application'
                         id='advancedTextEditorCell'
                         data-a11y-sort-order='2'
-                        aria-label={Utils.localizeMessage(
+                        aria-label={localizeMessage(
                             'channelView.login.successfull',
                             'Login Successfull',
                         ) + ' ' + ariaLabelMessageInput}
@@ -460,6 +514,7 @@ const AdvanceTextEditor = ({
                             id={textboxId}
                             ref={textboxRef!}
                             disabled={readOnlyChannel}
+                            hidden={draft.postType === Constants.PostTypes.VOICE}
                             characterLimit={maxPostSize}
                             preview={shouldShowPreview}
                             badConnection={badConnection}
@@ -494,6 +549,7 @@ const AdvanceTextEditor = ({
                                 <Separator/>
                                 {fileUploadJSX}
                                 {emojiPicker}
+                                {voiceMessageButton}
                                 {sendButton}
                             </TexteditorActions>
                         )}

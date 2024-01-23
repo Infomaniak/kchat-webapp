@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {FileInfo} from '@mattermost/types/files';
-import type {PostPriority} from '@mattermost/types/posts';
+import type {PostType, PostPriority} from '@mattermost/types/posts';
 
 export type DraftInfo = {
     id: string;
@@ -17,6 +17,7 @@ export type PostDraft = {
     uploadsInProgress: string[];
     props?: any;
     caretPosition?: number;
+    postType?: PostType;
     channelId: string;
     rootId: string;
     createAt: number;

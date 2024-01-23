@@ -21,6 +21,8 @@ jest.mock('react-redux', () => ({
     useDispatch: () => mockDispatch,
 }));
 
+jest.mock('components/advanced_text_editor/voice_message_attachment', () => () => <div/>);
+
 describe('components/RhsThread', () => {
     const post: Post = TestHelper.getPostMock({
         channel_id: 'channel_id',

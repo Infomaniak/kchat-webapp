@@ -58,6 +58,8 @@ import {
     splitMessageBasedOnCaretPosition,
     groupsMentionedInText,
     mentionsMinusSpecialMentionsInText,
+    getVoiceMessageStateFromDraft,
+    VoiceMessageStates,
 } from 'utils/post_utils';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils';
@@ -263,6 +265,7 @@ type State = {
     showFormat: boolean;
     isFormattingBarHidden: boolean;
     showPostPriorityPicker: boolean;
+    voiceMessageClientId: string;
 };
 
 class AdvancedCreatePost extends React.PureComponent<Props, State> {
@@ -316,6 +319,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             showFormat: false,
             isFormattingBarHidden: props.isFormattingBarHidden,
             showPostPriorityPicker: false,
+            voiceMessageClientId: '',
         };
 
         this.topDiv = React.createRef<HTMLFormElement>();
@@ -359,6 +363,14 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         if (prevProps.shouldShowPreview && !this.props.shouldShowPreview) {
             this.focusTextbox();
         }
+
+        // Remove voice message recorder on channel/team switch
+        if (this.props.currentChannel.id !== prevProps.currentChannel.id || this.props.currentTeamId !== prevProps.currentTeamId) {
+            const previousChannelVoiceMessageState = getVoiceMessageStateFromDraft(prevProps.draft);
+            if (previousChannelVoiceMessageState === VoiceMessageStates.RECORDING) {
+                this.setDraftAsPostType(prevProps.currentChannel.id, prevProps.draft);
+            }
+        }
     }
 
     componentWillUnmount() {
@@ -379,6 +391,14 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 actions.searchAssociatedGroupsForReference(mentions[0], this.props.currentTeamId, currentChannel.id);
             } else if (mentions.length > 1) {
                 actions.getChannelMemberCountsByGroup(currentChannel.id, isTimezoneEnabled);
+            }
+        }
+
+        // If the draft is of type voice message, but has no recording then remove the voice message type draft on component mount.
+        if (this.props.currentChannel.id) {
+            const previousChannelVoiceMessageState = getVoiceMessageStateFromDraft(this.props.draft);
+            if (previousChannelVoiceMessageState === VoiceMessageStates.RECORDING) {
+                this.setDraftAsPostType(this.props.currentChannel.id, this.props.draft);
             }
         }
     };
@@ -768,6 +788,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         post.metadata = {
             ...originalPost.metadata,
         } as PostMetadata;
+        post.type = draft?.postType ?? '';
 
         post.props = {
             ...originalPost.props,
@@ -876,6 +897,30 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     emitTypingEvent = () => {
         const channelId = this.props.currentChannel.id;
         GlobalActions.emitLocalUserTypingEvent(channelId, '');
+    };
+
+    setDraftAsPostType = (channelId: Channel['id'], draft: PostDraft, postType?: PostDraft['postType']) => {
+        if (postType) {
+            const updatedDraft: PostDraft = {...draft, postType: Constants.PostTypes.VOICE};
+            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, updatedDraft, channelId);
+            this.draftsForChannel[channelId] = updatedDraft;
+        } else {
+            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
+            this.draftsForChannel[channelId] = null;
+        }
+    };
+
+    handleVoiceMessageUploadStart = (clientId: string, channelId: Channel['id']) => {
+        const uploadsInProgress = [...this.props.draft.uploadsInProgress, clientId];
+        const draft = {
+            ...this.props.draft,
+            uploadsInProgress,
+            postType: Constants.PostTypes.VOICE,
+        };
+
+        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
+        this.setState({voiceMessageClientId: clientId});
+        this.draftsForChannel[channelId] = draft;
     };
 
     handleChange = (e: React.ChangeEvent<TextboxElement>) => {
@@ -1037,6 +1082,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         this.handleDraftChange(draft, channelId, true);
+        this.setState({voiceMessageClientId: ''});
     };
 
     handleUploadError = (err: string | ServerError, clientId?: string, channelId?: string) => {
@@ -1046,7 +1092,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         if (!channelId || !clientId) {
-            this.setState({serverError});
+            this.setState({serverError, voiceMessageClientId: ''});
             return;
         }
 
@@ -1071,6 +1117,11 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     removePreview = (id: string) => {
         let modifiedDraft = {} as PostDraft;
         const draft = {...this.props.draft};
+
+        if (draft.postType === Constants.PostTypes.VOICE) {
+            Reflect.deleteProperty(draft, 'postType');
+            this.setState({voiceMessageClientId: ''});
+        }
 
         // Clear previous errors
         this.setState({serverError: null});
@@ -1713,6 +1764,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     fileUploadRef={this.fileUploadRef}
                     prefillMessage={this.prefillMessage}
                     textboxRef={this.textboxRef}
+                    voiceMessageClientId={this.state.voiceMessageClientId}
+                    handleVoiceMessageUploadStart={this.handleVoiceMessageUploadStart}
+                    setDraftAsPostType={this.setDraftAsPostType}
                     labels={priorityLabels}
                     isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
