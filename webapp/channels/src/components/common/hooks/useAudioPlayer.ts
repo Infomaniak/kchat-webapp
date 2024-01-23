@@ -28,12 +28,20 @@ export function useAudioPlayer(src?: string) {
         }
 
         function onLoadedData() {
+            if (audio.duration === Infinity || isNaN(Number(audio.duration))) {
+                audio.currentTime = 1e101;
+                return;
+            }
             setDuration(audio.duration);
             audio.currentTime = 0;
             setElapsedTime(0);
         }
 
-        function onTimeUpdate() {
+        function onTimeUpdate(event: any) {
+            if (duration !== event.target.duration) {
+                setDuration(event.target.duration);
+                setElapsedTime(0);
+            }
             elapsedTimeRafId = requestAnimationFrame(() => {
                 setElapsedTime(audio.currentTime);
             });
