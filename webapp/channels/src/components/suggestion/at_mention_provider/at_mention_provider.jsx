@@ -72,10 +72,8 @@ export default class AtMentionProvider extends Provider {
             profileSuggestions.push(...usernameSuggestions);
         }
         [profile.first_name, profile.last_name, profile.nickname].forEach((property) => {
-            if (property) {
-                const suggestions = getSuggestionsSplitBy(property.toLowerCase(), ' ');
-                profileSuggestions.push(...suggestions);
-            }
+            const suggestions = getSuggestionsSplitBy(property.toLowerCase(), ' ');
+            profileSuggestions.push(...suggestions);
         });
         profileSuggestions.push(profile.first_name.toLowerCase() + ' ' + profile.last_name.toLowerCase());
 

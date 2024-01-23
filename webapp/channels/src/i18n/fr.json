@@ -3112,6 +3112,7 @@
     "emoji_picker.custom": "Personnalisé",
     "emoji_picker.custom_emoji": "Émoticônes personnalisées",
     "emoji_picker.emojiPicker": "Sélectionnez un émoticône",
+    "emoji_picker.emojiPicker.button.ariaLabel": "Sélectionnez un emoji",
     "emoji_picker.flags": "Drapeaux",
     "emoji_picker.food-drink": "Nourriture et boissons",
     "emoji_picker.header": "Sélection d'émoticônes",

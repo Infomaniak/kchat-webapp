@@ -1,12 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {
-    AppBinding,
-    AppForm} from './app_command_parser_test_dependencies';
 import {
     AppFieldTypes,
 } from './app_command_parser_test_dependencies';
+import type {
+    AppBinding,
+    AppForm} from './app_command_parser_test_dependencies';
 
 export const reduxTestState = {
     entities: {

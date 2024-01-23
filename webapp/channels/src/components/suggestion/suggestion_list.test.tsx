@@ -4,7 +4,7 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
-import SuggestionList from 'components/suggestion/suggestion_list.jsx';
+import SuggestionList from 'components/suggestion/suggestion_list';
 
 describe('components/SuggestionList', () => {
     const baseProps = {
@@ -21,7 +21,7 @@ describe('components/SuggestionList', () => {
     };
 
     test('should not throw error when currentLabel is null and label is generated', () => {
-        const wrapper = shallow(
+        const wrapper = shallow<SuggestionList>(
             <SuggestionList
                 {...baseProps}
                 ariaLiveRef={React.createRef()}

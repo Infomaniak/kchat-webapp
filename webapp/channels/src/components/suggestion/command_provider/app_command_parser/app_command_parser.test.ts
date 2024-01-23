@@ -8,21 +8,21 @@ import {
     ParseState,
     ParsedCommand,
 } from './app_command_parser';
-import type {
-    AutocompleteSuggestion} from './app_command_parser_dependencies';
 import {
     AppCallResponseTypes,
 } from './app_command_parser_dependencies';
+import type {
+    AutocompleteSuggestion} from './app_command_parser_dependencies';
 import {
     reduxTestState,
     testBindings,
 } from './tests/app_command_parser_test_data';
-import type {
-    AppBinding} from './tests/app_command_parser_test_dependencies';
 import {
     Client4,
     checkForExecuteSuggestion,
 } from './tests/app_command_parser_test_dependencies';
+import type {
+    AppBinding} from './tests/app_command_parser_test_dependencies';
 
 const getOpenInModalOption = (command: string) => {
     return {

@@ -14,6 +14,8 @@ import {CustomStatusDuration} from '@mattermost/types/users';
 import Permissions from 'mattermost-redux/constants/permissions';
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
 
+import {t} from 'utils/i18n';
+
 import audioIcon from 'images/icons/audio.svg';
 import codeIcon from 'images/icons/code.svg';
 import excelIcon from 'images/icons/excel.svg';
@@ -29,7 +31,6 @@ import monokaiIcon from 'images/themes/code_themes/monokai.png';
 import solarizedDarkIcon from 'images/themes/code_themes/solarized-dark.png';
 import solarizedLightIcon from 'images/themes/code_themes/solarized-light.png';
 import logoWebhook from 'images/webhook_icon.jpg';
-import {t} from 'utils/i18n';
 
 export const SettingsTypes = {
     TYPE_TEXT: 'text',
@@ -434,6 +435,7 @@ export const ModalIdentifiers = {
     MOBILE_SUBMENU: 'mobile_submenu',
     PLUGIN_MARKETPLACE: 'plugin_marketplace',
     EDIT_CATEGORY: 'edit_category',
+    PERSIST_NOTIFICATION_CONFIRM_MODAL: 'persist_notification_confirm_modal',
     DELETE_CATEGORY: 'delete_category',
     SIDEBAR_WHATS_NEW_MODAL: 'sidebar_whats_new_modal',
     WARN_METRIC_ACK: 'warn_metric_acknowledgement',
@@ -518,6 +520,7 @@ export const ModalIdentifiers = {
     OCCUPIED_CALL: 'call_ringing_occupied_modal',
     START_TRIAL_FORM_MODAL: 'start_trial_form_modal',
     START_TRIAL_FORM_MODAL_RESULT: 'start_trial_form_modal_result',
+    REACTION_LIMIT_REACHED: 'reaction_limit_reached',
 };
 
 export const UserStatuses = {

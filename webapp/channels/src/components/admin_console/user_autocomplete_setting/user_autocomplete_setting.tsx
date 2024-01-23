@@ -9,7 +9,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import Setting from 'components/admin_console/setting';
 import GenericUserProvider from 'components/suggestion/generic_user_provider';
 import SuggestionBox from 'components/suggestion/suggestion_box';
-import SuggestionList from 'components/suggestion/suggestion_list.jsx';
+import SuggestionList from 'components/suggestion/suggestion_list';
 
 export type Props = {
     id: string;
