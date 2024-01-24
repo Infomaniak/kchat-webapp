@@ -70,7 +70,7 @@ require (
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c
 	github.com/yuin/goldmark v1.5.4
 	golang.org/x/crypto v0.12.0
-	golang.org/x/image v0.8.0
+	golang.org/x/image v0.10.0
 	golang.org/x/net v0.14.0
 	golang.org/x/sync v0.3.0
 	golang.org/x/term v0.11.0
