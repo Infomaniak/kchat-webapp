@@ -19,7 +19,6 @@ import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/type
 
 import {setGlobalItem} from 'actions/storage';
 import {makeGetDrafts} from 'selectors/drafts';
-import {getConnectionId} from 'selectors/general';
 import {getGlobalItem} from 'selectors/storage';
 
 import {ActionTypes, StoragePrefixes} from 'utils/constants';
@@ -41,7 +40,6 @@ const updateDraftQueue = new PQueue({concurrency: 1});
  */
 export function getDrafts(teamId: string) {
     const getLocalDrafts = makeGetDrafts(false);
-
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
 
@@ -53,7 +51,17 @@ export function getDrafts(teamId: string) {
         }
 
         const localDrafts = getLocalDrafts(state);
-        const drafts = [...serverDrafts, ...localDrafts];
+
+        const filteredLocalDrafts = localDrafts.filter((localDraft) => {
+            const serverDraft = serverDrafts.find((serverDraft) => serverDraft.value.id === localDraft.value.id);
+            if (localDraft.value.id && !serverDraft) {
+                dispatch(setGlobalItem(localDraft.key, {message: '', fileInfos: [], uploadsInProgress: [], remote: false}));
+                return false;
+            }
+            return true;
+        });
+
+        const drafts = [...serverDrafts, ...filteredLocalDrafts];
 
         // Reconcile drafts and only keep the latest version of a draft.
         const draftsMap = new Map(drafts.map((draft) => [draft.key, draft]));
@@ -76,14 +84,17 @@ export function getDrafts(teamId: string) {
 export function removeDraft(key: string, channelId: string, rootId = '') {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
+        const draft = getGlobalItem(state, key, {});
 
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
         if (syncedDraftsAreAllowedAndEnabled(state)) {
-            const connectionId = getConnectionId(getState() as GlobalState);
-
             try {
-                await Client4.deleteDraft(channelId, rootId, connectionId);
+                if (draft.timestamp) {
+                    await Client4.deleteScheduledDraft(draft.id);
+                } else {
+                    await Client4.deleteDraft(channelId, rootId);
+                }
             } catch (error) {
                 return {
                     data: false,
@@ -94,6 +105,13 @@ export function removeDraft(key: string, channelId: string, rootId = '') {
         return {data: true};
     };
 }
+
+// Assert previous call ended before dispatching the action again to ensure latest draftId is used and prevent multiple draft creation on the same channel
+export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) => {
+    return (dispatch: DispatchFunc) => {
+        return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save, scheduleDelete)));
+    };
+};
 
 export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
@@ -126,7 +144,10 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
                 if (value?.message === '' || value?.message.replace(/\s/g, '').length || (value && value?.fileInfos.length > 0)) {
                     if (value?.message.replace(/\s/g, '').length) {
                         const {id} = await upsertDraft(updatedValue, userId, rootId, scheduleDelete);
-                        updatedValue.id = id;
+                        dispatch(setGlobalDraft(key, {
+                            ...updatedValue,
+                            id,
+                        }, false));
                     } else {
                         //This case is when there is a file attached with no message
                         await upsertDraft({...updatedValue, message: ''}, userId, rootId, scheduleDelete);
@@ -137,6 +158,33 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
             }
         }
 
+        return {data: true};
+    };
+}
+
+export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const state = getState() as GlobalState;
+        if (!syncedDraftsAreAllowedAndEnabled(state)) {
+            return {error: new Error('Drafts are not allowed on the current server')};
+        }
+        const userId = getCurrentUserId(state);
+
+        const activeDraft = getGlobalItem(state, key, null);
+        dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
+
+        try {
+            const {id} = await upsertDraft(value, userId, rootId);
+            dispatch(setGlobalItem(`${key}_${id}`, {
+                ...value,
+                id,
+            }));
+        } catch (error) {
+            if (activeDraft) {
+                dispatch(setGlobalItem(key, activeDraft));
+            }
+            return {error};
+        }
         return {data: true};
     };
 }
@@ -185,7 +233,17 @@ export function setDraftsTourTipPreference(initializationState: Record<string, b
 
 export function setGlobalDraft(key: string, value: PostDraft|null, isRemote: boolean) {
     return (dispatch: DispatchFunc) => {
-        dispatch(setGlobalItem(key, value));
+        if (value && !value.message) {
+            value.message = ''; // prevent message to be null and raise an exception
+        }
+        if (value?.message === '' || (value?.message?.replace(/\s/g, '').length) || (value && value?.fileInfos.length > 0)) {
+            if (value?.message.replace(/\s/g, '').length) {
+                dispatch(setGlobalItem(key, value));
+            } else {
+                //This case is when there is a file attached with no message
+                dispatch(setGlobalItem(key, {...value, message: ''}));
+            }
+        }
         dispatch(setGlobalDraftSource(key, isRemote));
         return {data: true};
     };
@@ -208,6 +266,10 @@ export function transformServerDraft(draft: ServerDraft): Draft {
         key = `${StoragePrefixes.COMMENT_DRAFT}${draft.root_id}`;
     }
 
+    if (draft.timestamp) {
+        key += `_${draft.id}`;
+    }
+
     let fileInfos: FileInfo[] = [];
     if (draft.metadata?.files) {
         fileInfos = draft.metadata.files;
@@ -222,7 +284,9 @@ export function transformServerDraft(draft: ServerDraft): Draft {
         key,
         timestamp: new Date(draft.update_at),
         value: {
+            id: draft.id,
             message: draft.message,
+            timestamp: draft.timestamp,
             fileInfos,
             props: draft.props,
             uploadsInProgress: [],
@@ -235,37 +299,3 @@ export function transformServerDraft(draft: ServerDraft): Draft {
         },
     };
 }
-
-export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) => {
-    return (dispatch: DispatchFunc) => {
-        return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save, scheduleDelete)));
-    };
-};
-
-export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState() as GlobalState;
-        if (!syncedDraftsAreAllowedAndEnabled(state)) {
-            return {error: new Error('Drafts are not allowed on the current server')};
-        }
-        const userId = getCurrentUserId(state);
-
-        const activeDraft = getGlobalItem(state, key, null);
-        dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
-
-        try {
-            const {id} = await upsertDraft(value, userId, rootId);
-            dispatch(setGlobalItem(`${key}_${id}`, {
-                ...value,
-                id,
-            }));
-        } catch (error) {
-            if (activeDraft) {
-                dispatch(setGlobalItem(key, activeDraft));
-            }
-            return {error};
-        }
-        return {data: true};
-    };
-}
-
