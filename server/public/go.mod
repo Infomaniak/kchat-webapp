@@ -24,9 +24,9 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/tinylib/msgp v1.1.8
 	github.com/vmihailenco/msgpack/v5 v5.3.5
-	golang.org/x/crypto v0.10.0
+	golang.org/x/crypto v0.17.0
 	golang.org/x/oauth2 v0.7.0
-	golang.org/x/text v0.10.0
+	golang.org/x/text v0.14.0
 	golang.org/x/tools v0.10.0
 	gopkg.in/yaml.v2 v2.4.0
 )
@@ -59,7 +59,7 @@ require (
 	github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c // indirect
 	golang.org/x/mod v0.11.0 // indirect
 	golang.org/x/net v0.11.0 // indirect
-	golang.org/x/sys v0.9.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230629202037-9506855d4529 // indirect
 	google.golang.org/grpc v1.56.1 // indirect
