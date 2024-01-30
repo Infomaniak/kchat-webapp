@@ -17,10 +17,12 @@ import {trackEvent} from 'actions/telemetry_actions.jsx';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 import Constants from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 type Props = {
     channelDisplayName: string;
     channelId: string;
+    channelType: ChannelType;
 
     /**
      * Function injected by ModalController to be called when the modal can be unmounted
@@ -34,13 +36,17 @@ type Props = {
 
 type State = {
     show: boolean;
+    type: string;
 }
 
 export default class ConvertChannelModal extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        this.state = {show: true};
+        this.state = {
+            show: true,
+            type: localizeMessage(this.props.channelType === Constants.PRIVATE_CHANNEL ? 'admin.channel_list.public' : 'admin.channel_list.private')?.toLocaleLowerCase(),
+        };
     }
 
     handleConvert = () => {
@@ -49,7 +55,7 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
             return;
         }
 
-        actions.updateChannelPrivacy(channelId, General.PRIVATE_CHANNEL, openChannelLimitModalIfNeeded);
+        actions.updateChannelPrivacy(channelId, this.props.channelType === Constants.PRIVATE_CHANNEL ? General.OPEN_CHANNEL : General.PRIVATE_CHANNEL, openChannelLimitModalIfNeeded);
         trackEvent('actions', 'convert_to_private_channel', {channel_id: channelId});
         this.onHide();
     };
@@ -80,9 +86,10 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                     >
                         <FormattedMessage
                             id='convert_channel.title'
-                            defaultMessage='Convert {display_name} to a Private Channel?'
+                            defaultMessage='Convert {display_name} to a {type} Channel?'
                             values={{
                                 display_name: channelDisplayName,
+                                type: this.state.type,
                             }}
                         />
                     </Modal.Title>
@@ -90,25 +97,21 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                 <Modal.Body>
                     <p>
                         <FormattedMarkdownMessage
-                            id='convert_channel.question1'
-                            defaultMessage='When you convert **{display_name}** to a private channel, history and membership are preserved. Membership in a private channel is by invitation only.'
+                            id={this.props.channelType === Constants.PRIVATE_CHANNEL ? 'convert_channel.question1.public' : 'convert_channel.question1'}
+                            defaultMessage='When you convert **{display_name}** to a {type} channel, history and membership are preserved.'
                             values={{
                                 display_name: channelDisplayName,
+                                type: this.state.type,
                             }}
-                        />
-                    </p>
-                    <p>
-                        <FormattedMessage
-                            id='convert_channel.question2'
-                            defaultMessage='The change is permanent and cannot be undone.'
                         />
                     </p>
                     <p>
                         <FormattedMarkdownMessage
                             id='convert_channel.question3'
-                            defaultMessage='Are you sure you want to convert **{display_name}** to a private channel?'
+                            defaultMessage='Are you sure you want to convert **{display_name}** to a {type} channel?'
                             values={{
                                 display_name: channelDisplayName,
+                                type: this.state.type,
                             }}
                         />
                     </p>
@@ -134,7 +137,10 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                     >
                         <FormattedMessage
                             id='convert_channel.confirm'
-                            defaultMessage='Yes, convert to private channel'
+                            defaultMessage='Yes, convert to {type} channel'
+                            values={{
+                                type: this.state.type,
+                            }}
                         />
                     </button>
                 </Modal.Footer>
