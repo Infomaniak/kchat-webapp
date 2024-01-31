@@ -11,8 +11,11 @@ import ExternalLink from 'components/external_link';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import AttachmentIcon from 'components/widgets/icons/attachment_icon';
+import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
 import {trimFilename} from 'utils/file_utils';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {localizeMessage} from 'utils/utils';
 
 type Props = {
@@ -26,6 +29,11 @@ type Props = {
      * Handler for when the thumbnail is clicked passed the index above
      */
     handleImageClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+
+    /*
+     * Handler for saving image to kdrive.
+     */
+    handleKdriveSave: (fileId: string, fileName: string) => void;
 
     /*
      * Display in compact format
@@ -56,6 +64,7 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
             compactDisplay,
             fileInfo,
             handleImageClick,
+            handleKdriveSave,
             iconClass,
         } = this.props;
 
@@ -94,14 +103,32 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                             </Tooltip>
                         }
                     >
-                        <ExternalLink
-                            href={getFileDownloadUrl(fileInfo.id)}
-                            aria-label={localizeMessage('view_image_popover.download', 'Download').toLowerCase()}
-                            download={fileName}
-                            location='filename_overlay'
-                        >
-                            {children || trimmedFilename}
-                        </ExternalLink>
+                        <>
+                            {(!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) && (
+                                <OverlayTrigger
+                                    delayShow={200}
+                                    placement='top'
+                                    overlay={
+                                        <Tooltip id='file-name__tooltip'>
+                                            {localizeMessage('kdrive.save', 'Save file to kDrive')}
+                                        </Tooltip>
+                                    }
+                                >
+                                    <KDriveIcon
+                                        onClick={() => handleKdriveSave(fileInfo.id, fileName)}
+                                        className='icon file-kdrive__icon'
+                                    />
+                                </OverlayTrigger>
+                            )}
+                            <ExternalLink
+                                href={getFileDownloadUrl(fileInfo.id)}
+                                aria-label={localizeMessage('view_image_popover.download', 'Download').toLowerCase()}
+                                download={fileName}
+                                location='filename_overlay'
+                            >
+                                {children || trimmedFilename}
+                            </ExternalLink>
+                        </>
                     </OverlayTrigger>
                 </div>
             );

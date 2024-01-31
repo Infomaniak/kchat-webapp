@@ -5184,5 +5184,8 @@
     "drafts.confirm.send.button": "Oui, envoyer maintenant",
     "drafts.confirm.send.text": "Êtes-vous sûr de vouloir envoyer ce message à <strong>{displayName}</strong> ?",
     "drafts.confirm.send.title": "Envoyer un message",
-    "drafts.actions.openInChannel": "Ouvrir dans le canal"
+    "drafts.actions.openInChannel": "Ouvrir dans le canal",
+    "kdrive.save": "Enregistrer le fichier sur kDrive",
+    "kdrive.upload": "Télécharger depuis kDrive",
+    "kdrive.uploadSuccess": "Votre fichier est enregistré dans kDrive"
 }
