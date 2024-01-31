@@ -87,7 +87,7 @@ exports[`messageHtmlToComponent Inline markdown image 1`] = `
    and a 
   <a
     className="theme markdown__link"
-    href="http://link"
+    href="https://link"
     rel="noreferrer"
     target="_blank"
   >
@@ -102,7 +102,7 @@ exports[`messageHtmlToComponent Inline markdown image where image is link 1`] = 
 >
   <a
     className="theme markdown__link"
-    href="http://images/icon.png"
+    href="https://images/icon.png"
     rel="noreferrer"
     target="_blank"
   >
@@ -150,7 +150,7 @@ exports[`messageHtmlToComponent link with enabled a tooltip plugin 1`] = `
   lorem ipsum 
   <a
     className="theme markdown__link"
-    href="http://www.dolor.com"
+    href="https://www.dolor.com"
     rel="noreferrer"
     target="_blank"
   >
@@ -158,12 +158,12 @@ exports[`messageHtmlToComponent link with enabled a tooltip plugin 1`] = `
       attributes={
         Object {
           "class": "theme markdown__link",
-          "href": "http://www.dolor.com",
+          "href": "https://www.dolor.com",
           "rel": "noreferrer",
           "target": "_blank",
         }
       }
-      href="http://www.dolor.com"
+      href="https://www.dolor.com"
     >
       www.dolor.com
     </LinkTooltip>
@@ -177,7 +177,7 @@ exports[`messageHtmlToComponent link without enabled tooltip plugins 1`] = `
   lorem ipsum 
   <a
     className="theme markdown__link"
-    href="http://www.dolor.com"
+    href="https://www.dolor.com"
     rel="noreferrer"
     target="_blank"
   >

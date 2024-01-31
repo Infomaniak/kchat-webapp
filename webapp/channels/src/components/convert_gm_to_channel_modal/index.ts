@@ -7,6 +7,7 @@ import {bindActionCreators} from 'redux';
 
 import {convertGroupMessageToPrivateChannel} from 'mattermost-redux/actions/channels';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {
     getCurrentUserId,
     makeGetProfilesInChannel,
@@ -28,11 +29,13 @@ function makeMapStateToProps() {
         const allProfilesInChannel = getProfilesInChannel(state, ownProps.channel.id);
         const currentUserId = getCurrentUserId(state);
         const teammateNameDisplaySetting = getTeammateNameDisplaySetting(state);
+        const currentTeam = getCurrentTeam(state);
 
         return {
             profilesInChannel: allProfilesInChannel,
             teammateNameDisplaySetting,
             currentUserId,
+            currentTeam,
         };
     };
 }

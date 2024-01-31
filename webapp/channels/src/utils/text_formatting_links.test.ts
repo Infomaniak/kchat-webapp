@@ -54,27 +54,27 @@ describe('Markdown.Links', () => {
         );
 
         expect(Markdown.format('www.example.com').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www.example.com" rel="noreferrer" target="_blank">www.example.com</a></p>',
+            '<p><a class="theme markdown__link" href="https://www.example.com" rel="noreferrer" target="_blank">www.example.com</a></p>',
         );
 
         expect(Markdown.format('www.example.com/index').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www.example.com/index" rel="noreferrer" target="_blank">www.example.com/index</a></p>',
+            '<p><a class="theme markdown__link" href="https://www.example.com/index" rel="noreferrer" target="_blank">www.example.com/index</a></p>',
         );
 
         expect(Markdown.format('www.example.com/index.html').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www.example.com/index.html" rel="noreferrer" target="_blank">www.example.com/index.html</a></p>',
+            '<p><a class="theme markdown__link" href="https://www.example.com/index.html" rel="noreferrer" target="_blank">www.example.com/index.html</a></p>',
         );
 
         expect(Markdown.format('www.example.com/index/sub').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www.example.com/index/sub" rel="noreferrer" target="_blank">www.example.com/index/sub</a></p>',
+            '<p><a class="theme markdown__link" href="https://www.example.com/index/sub" rel="noreferrer" target="_blank">www.example.com/index/sub</a></p>',
         );
 
         expect(Markdown.format('www1.example.com').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www1.example.com" rel="noreferrer" target="_blank">www1.example.com</a></p>',
+            '<p><a class="theme markdown__link" href="https://www1.example.com" rel="noreferrer" target="_blank">www1.example.com</a></p>',
         );
 
         expect(Markdown.format('example.com/index').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://example.com/index" rel="noreferrer" target="_blank">example.com/index</a></p>',
+            '<p><a class="theme markdown__link" href="https://example.com/index" rel="noreferrer" target="_blank">example.com/index</a></p>',
         );
     });
 
@@ -132,15 +132,15 @@ describe('Markdown.Links', () => {
 
     it('Links with parameters', () => {
         expect(Markdown.format('www.example.com/index?params=1').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www.example.com/index?params=1" rel="noreferrer" target="_blank">www.example.com/index?params=1</a></p>',
+            '<p><a class="theme markdown__link" href="https://www.example.com/index?params=1" rel="noreferrer" target="_blank">www.example.com/index?params=1</a></p>',
         );
 
         expect(Markdown.format('www.example.com/index?params=1&other=2').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www.example.com/index?params=1&amp;other=2" rel="noreferrer" target="_blank">www.example.com/index?params=1&amp;other=2</a></p>',
+            '<p><a class="theme markdown__link" href="https://www.example.com/index?params=1&amp;other=2" rel="noreferrer" target="_blank">www.example.com/index?params=1&amp;other=2</a></p>',
         );
 
         expect(Markdown.format('www.example.com/index?params=1;other=2').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www.example.com/index?params=1;other=2" rel="noreferrer" target="_blank">www.example.com/index?params=1;other=2</a></p>',
+            '<p><a class="theme markdown__link" href="https://www.example.com/index?params=1;other=2" rel="noreferrer" target="_blank">www.example.com/index?params=1;other=2</a></p>',
         );
 
         expect(Markdown.format('http://example.com:8065').trim()).toBe(
@@ -153,12 +153,12 @@ describe('Markdown.Links', () => {
     });
 
     it('Special characters', () => {
-        expect(Markdown.format('http://www.example.com/_/page').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www.example.com/_/page" rel="noreferrer" target="_blank">http://www.example.com/_/page</a></p>',
+        expect(Markdown.format('https://www.example.com/_/page').trim()).toBe(
+            '<p><a class="theme markdown__link" href="https://www.example.com/_/page" rel="noreferrer" target="_blank">https://www.example.com/_/page</a></p>',
         );
 
         expect(Markdown.format('www.example.com/_/page').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www.example.com/_/page" rel="noreferrer" target="_blank">www.example.com/_/page</a></p>',
+            '<p><a class="theme markdown__link" href="https://www.example.com/_/page" rel="noreferrer" target="_blank">www.example.com/_/page</a></p>',
         );
 
         expect(Markdown.format('https://en.wikipedia.org/wiki/🐬').trim()).toBe(
@@ -237,23 +237,23 @@ describe('Markdown.Links', () => {
 
     it('Links with text', () => {
         expect(Markdown.format('[example link](example.com)').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://example.com" rel="noreferrer" target="_blank">example link</a></p>',
+            '<p><a class="theme markdown__link" href="https://example.com" rel="noreferrer" target="_blank">example link</a></p>',
         );
 
         expect(Markdown.format('[example.com](example.com)').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://example.com" rel="noreferrer" target="_blank">example.com</a></p>',
+            '<p><a class="theme markdown__link" href="https://example.com" rel="noreferrer" target="_blank">example.com</a></p>',
         );
 
         expect(Markdown.format('[example.com/other](example.com)').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://example.com" rel="noreferrer" target="_blank">example.com/other</a></p>',
+            '<p><a class="theme markdown__link" href="https://example.com" rel="noreferrer" target="_blank">example.com/other</a></p>',
         );
 
         expect(Markdown.format('[example.com/other_link](example.com/example)').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://example.com/example" rel="noreferrer" target="_blank">example.com/other_link</a></p>',
+            '<p><a class="theme markdown__link" href="https://example.com/example" rel="noreferrer" target="_blank">example.com/other_link</a></p>',
         );
 
         expect(Markdown.format('[link with spaces](example.com/ spaces in the url)').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://example.com/ spaces in the url" rel="noreferrer" target="_blank">link with spaces</a></p>',
+            '<p><a class="theme markdown__link" href="https://example.com/ spaces in the url" rel="noreferrer" target="_blank">link with spaces</a></p>',
         );
 
         expect(Markdown.format('[This whole #sentence should be a link](https://example.com)').trim()).toBe(
@@ -271,14 +271,14 @@ describe('Markdown.Links', () => {
 
     it('Links with tooltips', () => {
         expect(Markdown.format('[link](example.com "catch phrase!")').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://example.com" rel="noreferrer" target="_blank" title="catch phrase!">link</a></p>',
+            '<p><a class="theme markdown__link" href="https://example.com" rel="noreferrer" target="_blank" title="catch phrase!">link</a></p>',
         );
 
         expect(Markdown.format('[link](example.com "title with "quotes"")').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://example.com" rel="noreferrer" target="_blank" title="title with &quot;quotes&quot;">link</a></p>',
+            '<p><a class="theme markdown__link" href="https://example.com" rel="noreferrer" target="_blank" title="title with &quot;quotes&quot;">link</a></p>',
         );
         expect(Markdown.format('[link with spaces](example.com/ spaces in the url "and a title")').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://example.com/ spaces in the url" rel="noreferrer" target="_blank" title="and a title">link with spaces</a></p>',
+            '<p><a class="theme markdown__link" href="https://example.com/ spaces in the url" rel="noreferrer" target="_blank" title="and a title">link with spaces</a></p>',
         );
     });
 
@@ -328,15 +328,15 @@ describe('Markdown.Links', () => {
         );
 
         expect(Markdown.format('(www.example.com)').trim()).toBe(
-            '<p>(<a class="theme markdown__link" href="http://www.example.com" rel="noreferrer" target="_blank">www.example.com</a>)</p>',
+            '<p>(<a class="theme markdown__link" href="https://www.example.com" rel="noreferrer" target="_blank">www.example.com</a>)</p>',
         );
 
         expect(Markdown.format('(see www.example.com)').trim()).toBe(
-            '<p>(see <a class="theme markdown__link" href="http://www.example.com" rel="noreferrer" target="_blank">www.example.com</a>)</p>',
+            '<p>(see <a class="theme markdown__link" href="https://www.example.com" rel="noreferrer" target="_blank">www.example.com</a>)</p>',
         );
 
         expect(Markdown.format('(www.example.com watch this)').trim()).toBe(
-            '<p>(<a class="theme markdown__link" href="http://www.example.com" rel="noreferrer" target="_blank">www.example.com</a> watch this)</p>',
+            '<p>(<a class="theme markdown__link" href="https://www.example.com" rel="noreferrer" target="_blank">www.example.com</a> watch this)</p>',
         );
         expect(Markdown.format('([link](http://example.com))').trim()).toBe(
             '<p>(<a class="theme markdown__link" href="http://example.com" rel="noreferrer" target="_blank">link</a>)</p>',
@@ -469,7 +469,7 @@ describe('Markdown.Links', () => {
                 autolinkedUrlSchemes: [],
             };
 
-            expect(Markdown.format('www.example.com', options).trim()).toBe(`<p>${link('http://www.example.com', 'www.example.com')}</p>`);
+            expect(Markdown.format('www.example.com', options).trim()).toBe(`<p>${link('https://www.example.com', 'www.example.com')}</p>`);
 
             expect(Markdown.format('[link](git://git.example.com)', options).trim()).toBe(`<p>${link('git://git.example.com', 'link')}</p>`);
 

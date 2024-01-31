@@ -95,7 +95,7 @@ describe('TextFormatting.Hashtags with default setting', () => {
         );
 
         expect(TextFormatting.formatText('[this is a link #test](example.com)', {}, emojiMap).trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://example.com" rel="noreferrer" target="_blank">this is a link #test</a></p>',
+            '<p><a class="theme markdown__link" href="https://example.com" rel="noreferrer" target="_blank">this is a link #test</a></p>',
         );
     });
 

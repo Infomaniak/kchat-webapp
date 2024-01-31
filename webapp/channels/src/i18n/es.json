@@ -4543,6 +4543,7 @@
     "sidebar_left.sidebar_channel_menu.unfavoriteChannel": "Quitar de Favorito",
     "sidebar_left.sidebar_channel_menu.unmuteChannel": "Dejar de Silenciar Canal",
     "sidebar_left.sidebar_channel_menu.unmuteConversation": "Dejar de Silenciar Conversación",
+    "sidebar_left.sidebar_channel_menu_convert_to_channel": "Convertir en canal privado",
     "sidebar_left.sidebar_channel_navigator.inviteUsers": "Invitar Usuarios",
     "sidebar_right_menu.console": "Consola de sistema",
     "sidebar_right_menu.flagged": "Mensajes Guardados",
