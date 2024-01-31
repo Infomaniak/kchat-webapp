@@ -5923,5 +5923,6 @@
     "drafts.override_draft.message": "Wenn Sie diesen Entwurf absetzen, wird der folgende Entwurf ersetzt: {message}",
     "drafts.actions.openInChannel": "Im Kanal öffnen",
     "kdrive.save": "Datei auf kDrive speichern",
-    "kdrive.upload": "Hochladen von kDrive"
+    "kdrive.upload": "Hochladen von kDrive",
+    "kdrive.uploadSuccess": "Ihre Datei wurde auf KDrive gespeichert"
 }

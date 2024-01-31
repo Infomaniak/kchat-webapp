@@ -14,16 +14,18 @@ import {isDateLine, isStartOfNewMessages} from 'mattermost-redux/utils/post_list
 import type {updateNewMessagesAtInChannel} from 'actions/global_actions';
 import type {CanLoadMorePosts} from 'actions/views/channel';
 
+import KDriveUploadToast from 'components/kdrive_upload_toast';
 import FloatingTimestamp from 'components/post_view/floating_timestamp';
 import PostListRow from 'components/post_view/post_list_row';
 import ScrollToBottomArrows from 'components/post_view/scroll_to_bottom_arrows';
 import ToastWrapper from 'components/toast_wrapper';
 
-import Pluggable from 'plugins/pluggable';
 import Constants, {PostListRowListIds, EventTypes, PostRequestTypes} from 'utils/constants';
 import DelayedAction from 'utils/delayed_action';
 import {getPreviousPostId, getLatestPostId, getNewMessageIndex} from 'utils/post_utils';
 import * as Utils from 'utils/utils';
+
+import Pluggable from 'plugins/pluggable';
 
 import LatestPostReader from './latest_post_reader';
 
@@ -684,7 +686,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                                             <Pluggable
                                                 pluggableName='ChannelToast'
                                             />
-                                            {/*<ChannelCallToast/>*/}
+                                            <KDriveUploadToast/>
                                             {this.renderToasts(width)}
                                         </div>
 

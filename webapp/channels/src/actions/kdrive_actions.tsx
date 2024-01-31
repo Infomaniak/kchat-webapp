@@ -12,7 +12,7 @@ import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
-import {ActionTypes} from 'utils/constants';
+import {ActionTypes, KDriveActionTypes} from 'utils/constants';
 import {generateId, localizeMessage} from 'utils/utils';
 
 // const fileInfo = {
@@ -57,17 +57,45 @@ interface IDriveSelectionOutput {
     }>;
 }
 
+export function setKDriveToast(message?: string, link?: string) {
+    return async (dispatch: DispatchFunc) => {
+        if (!message) {
+            dispatch({type: KDriveActionTypes.TOAST, toast: null});
+            return;
+        }
+
+        dispatch({
+            type: KDriveActionTypes.TOAST,
+            toast: {
+                message,
+                props: {
+                    link,
+                },
+            },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        dispatch({type: KDriveActionTypes.TOAST, toast: null});
+    };
+}
+
 export function saveFileToKdrive(fileId: string, fileName: string) {
-    return async (_: DispatchFunc, getState: GetStateFunc) => {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
 
         // handle medium
         const color = theme.ikType === 'dark' ? 'dark' : 'light';
         const driveModule = document.querySelector('module-kdrive-component') as HTMLElement &
-        { open: (mode: string, theme: string, fileName?: string) => Promise<{ driveId: number; elementId: number; name: string }> };
+        { open: (mode: string, theme: string, fileName?: string) => Promise<{ driveId: number; elementId: number; name: string; link: string }> };
 
         driveModule.open('save-to-drive', color, fileName).
-            then((data: { driveId: number; elementId: number; name: string }) => Client4.uploadToKdrive(fileId, data.driveId, data.elementId, data.name)).
+            then(async (data: { driveId: number; elementId: number; name: string; link: string }) => {
+                const res = await Client4.uploadToKdrive(fileId, data.driveId, data.elementId, data.name);
+
+                if (!('error' in res)) {
+                    dispatch(setKDriveToast(localizeMessage('kdrive.uploadSuccess', 'Your file has been saved to kDrive'), data.link));
+                }
+            }).
             catch((error: string) => console.warn(error));
 
         return {data: true};

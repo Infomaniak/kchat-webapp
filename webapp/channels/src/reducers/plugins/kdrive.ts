@@ -6,12 +6,12 @@ import {combineReducers} from 'redux';
 import {UserTypes} from 'mattermost-redux/action_types';
 import type {GenericAction} from 'mattermost-redux/types/actions';
 
-import {KdriveActionTypes} from 'utils/constants';
+import {KDriveActionTypes} from 'utils/constants';
 
-function kdrive(state = null, action: GenericAction) {
+function toast(state = null, action: GenericAction) {
     switch (action.type) {
-    // case KdriveActionTypes.STORE_BRIDGE:
-    //     return action.bridge;
+    case KDriveActionTypes.TOAST:
+        return action.toast;
     case UserTypes.LOGOUT_SUCCESS:
         return null;
     default:
@@ -19,5 +19,5 @@ function kdrive(state = null, action: GenericAction) {
     }
 }
 export default combineReducers({
-    kdrive,
+    toast,
 });

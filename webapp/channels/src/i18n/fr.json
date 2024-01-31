@@ -5186,5 +5186,6 @@
     "drafts.confirm.send.title": "Envoyer un message",
     "drafts.actions.openInChannel": "Ouvrir dans le canal",
     "kdrive.save": "Enregistrer le fichier sur kDrive",
-    "kdrive.upload": "Télécharger depuis kDrive"
+    "kdrive.upload": "Télécharger depuis kDrive",
+    "kdrive.uploadSuccess": "Votre fichier est enregistré dans kDrive"
 }

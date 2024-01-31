@@ -5402,5 +5402,6 @@
     "drafts.confirm.send.title": "Invia il messaggio ora",
     "drafts.actions.openInChannel": "Abierto en canal",
     "kdrive.save": "Guardar archivo en kDrive",
-    "kdrive.upload": "Cargar desde kDrive"
+    "kdrive.upload": "Cargar desde kDrive",
+    "kdrive.uploadSuccess": "Su archivo se ha guardado en KDrive"
 }

@@ -5964,5 +5964,6 @@
     "drafts.override_draft.message": "Unscheduling this draft will replace the following draft: {message}",
     "drafts.actions.openInChannel": "Open in channel",
     "kdrive.save": "Save file to kDrive",
-    "kdrive.upload": "Upload from kDrive"
+    "kdrive.upload": "Upload from kDrive",
+    "kdrive.uploadSuccess": "Your file has been saved to kDrive"
 }

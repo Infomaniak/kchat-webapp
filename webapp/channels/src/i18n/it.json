@@ -4111,5 +4111,6 @@
     "drafts.confirm.send.title": "Enviar mensaje ahora",
     "drafts.actions.openInChannel": "Aperto nel canale",
     "kdrive.save": "Salvare il file su kDrive",
-    "kdrive.upload": "Caricare da kDrive"
+    "kdrive.upload": "Caricare da kDrive",
+    "kdrive.uploadSuccess": "Il file è stato salvato in KDrive"
 }
