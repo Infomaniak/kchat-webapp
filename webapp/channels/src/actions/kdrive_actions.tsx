@@ -90,6 +90,7 @@ export function saveFileToKdrive(fileId: string, fileName: string) {
 
         driveModule.open('save-to-drive', color, fileName).
             then(async (data: { driveId: number; elementId: number; name: string; link: string }) => {
+                console.log('kdrive data', data)
                 const res = await Client4.uploadToKdrive(fileId, data.driveId, data.elementId, data.name);
 
                 if (!('error' in res)) {
