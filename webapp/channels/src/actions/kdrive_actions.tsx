@@ -90,7 +90,7 @@ export function saveFileToKdrive(fileId: string, fileName: string) {
 
         driveModule.open('save-to-drive', color, fileName).
             then(async (data: { driveId: number; elementId: number; name: string; link: string }) => {
-                console.log('kdrive data', data)
+                console.log('kdrive data', data);
                 const res = await Client4.uploadToKdrive(fileId, data.driveId, data.elementId, data.name);
 
                 if (!('error' in res)) {
@@ -144,10 +144,14 @@ export function selectFileFromKdrive(
                         console.warn(error);
                     }
                 });
-                data.shareAttachments.forEach((share) => {
-                    const newMessage = message.slice(0, caretPosition) + share.url + message.slice(caretPosition);
-                    handleInputChange({target: {value: newMessage}});
+                let linksConcat = '';
+                const messageStart = message.slice(0, caretPosition);
+                const messageEnd = message.slice(caretPosition);
+                data.shareAttachments.forEach((share, idx) => {
+                    linksConcat += (idx > 0 ? '\n' : '') + share.url;
                 });
+                const newMessage = messageStart + linksConcat + messageEnd;
+                handleInputChange({target: {value: newMessage}});
             }).
             catch((error: string) => console.warn(error));
 
