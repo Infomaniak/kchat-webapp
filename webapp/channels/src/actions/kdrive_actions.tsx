@@ -122,7 +122,7 @@ export function selectFileFromKdrive(
         const driveModule = document.querySelector('module-kdrive-component') as HTMLElement &
         { open: (mode: string, theme: string, limit: number/**in bytes*/) => Promise<IDriveSelectionOutput> };
 
-        driveModule.open('select-from-drive-mail', color, 104800000).
+        driveModule.open('select-from-drive-mail', color, 104900000).
             then((data: IDriveSelectionOutput) => {
                 console.log(data);
                 data.attachments.forEach(async (file) => {
