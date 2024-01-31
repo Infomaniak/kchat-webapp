@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {ChannelTypes, UserTypes, CloudTypes} from 'mattermost-redux/action_types';
+import {UserTypes, CloudTypes} from 'mattermost-redux/action_types';
 import {
     getMentionsAndStatusesForPosts,
     getThreadsForPosts,
@@ -14,10 +14,11 @@ import {syncPostsInChannel} from 'actions/views/channel';
 import {closeRightHandSide} from 'actions/views/rhs';
 import store from 'stores/redux_store';
 
-import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import configureStore from 'tests/test_store';
 import {getHistory} from 'utils/browser_history';
 import Constants, {SocketEvents, UserStatuses, ActionTypes} from 'utils/constants';
+
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
+import configureStore from 'tests/test_store';
 
 import {
     handleChannelUpdatedEvent,
@@ -101,6 +102,20 @@ let mockState = {
             config: {
                 PluginsEnabled: 'true',
             },
+        },
+        groups: {
+            syncables: {},
+            groups: {
+                'group-1': {
+                    id: 'group-1',
+                    name: 'group1',
+                    display_name: 'Group 1',
+                    member_count: 1,
+                    allow_reference: true,
+                },
+            },
+            stats: {},
+            myGroups: {},
         },
         channels: {
             currentChannelId: 'otherChannel',
@@ -560,6 +575,11 @@ describe('handleChannelUpdatedEvent', () => {
         entities: {
             channels: {
                 currentChannelId: 'channel',
+                channels: {
+                    channel: {
+                        id: 'channel',
+                    },
+                },
             },
             teams: {
                 currentTeamId: 'team',
@@ -573,14 +593,26 @@ describe('handleChannelUpdatedEvent', () => {
     test('when a channel is updated', () => {
         const testStore = configureStore(initialState);
 
-        const channel = {id: 'channel'};
+        const channel = {
+            id: 'channel',
+            team_id: 'team',
+        };
         const msg = {data: {channel}};
 
         testStore.dispatch(handleChannelUpdatedEvent(msg));
-
-        expect(testStore.getActions()).toEqual([
-            {type: ChannelTypes.RECEIVED_CHANNEL, data: channel},
-        ]);
+        expect(testStore.getActions()).toEqual([{
+            type: 'BATCHING_REDUCER.BATCH',
+            meta: {batch: true},
+            payload: [
+                {
+                    type: 'RECEIVED_CHANNEL',
+                    data: {
+                        id: 'channel',
+                        team_id: 'team',
+                    },
+                },
+            ],
+        }]);
     });
 
     test('should not change URL when current channel is updated', () => {
@@ -598,7 +630,7 @@ describe('handleChannelUpdatedEvent', () => {
         const testStore = configureStore(initialState);
 
         const channel = {id: 'otherchannel'};
-        const msg = {data: {channel: JSON.stringify(channel)}};
+        const msg = {data: {channel}};
 
         testStore.dispatch(handleChannelUpdatedEvent(msg));
 
