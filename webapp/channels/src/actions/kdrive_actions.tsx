@@ -90,7 +90,7 @@ export function saveFileToKdrive(fileId: string, fileName: string) {
 
         driveModule.open('save-to-drive', color, fileName).
             then(async (data: { driveId: number; elementId: number; name: string; link: string }) => {
-                console.log('kdrive data', data);
+                console.log(data);
                 const res = await Client4.uploadToKdrive(fileId, data.driveId, data.elementId, data.name);
 
                 if (!('error' in res)) {
@@ -107,7 +107,7 @@ export function selectFileFromKdrive(
     channelId: string,
     rootId: string,
     onUpload: Function,
-    uploadStartHandler: Function,
+    uploadStartHandler: (clientIds: string[], channelId: string) => void,
     stateAdd: Function,
     stateRemove: Function,
     handleInputChange: Function,
@@ -125,8 +125,18 @@ export function selectFileFromKdrive(
         driveModule.open('select-from-drive-mail', color, 104900000).
             then((data: IDriveSelectionOutput) => {
                 console.log(data);
-                data.attachments.forEach(async (file) => {
+                const reqs: Array<{
+                    name: string;
+                    size: number;
+                    mime_type: string;
+                    clientId: string;
+                    driveId: number;
+                    id: number;
+                }> = [];
+                const ids: string[] = [];
+                data.attachments.forEach((file) => {
                     const clientId = generateId();
+                    ids.push(clientId);
                     const dummyRequest = stateAdd(clientId, file.name, file.type);
                     const fileInfo = {
                         name: file.name,
@@ -135,11 +145,18 @@ export function selectFileFromKdrive(
                         clientId,
                     };
                     dummyRequest.onProgress(fileInfo);
-                    uploadStartHandler([clientId], channelId);
+                    reqs.push({
+                        ...fileInfo,
+                        driveId: file.driveId,
+                        id: file.id,
+                    });
+                });
+                uploadStartHandler(ids, channelId);
+                reqs.forEach(async (req) => {
                     try {
-                        const {file_infos, client_ids} = await Client4.downloadFromKdrive(channelId, file.driveId, file.id, clientId);
+                        const {file_infos, client_ids} = await Client4.downloadFromKdrive(channelId, req.driveId, req.id, req.clientId);
                         onUpload(file_infos, client_ids, channelId, rootId);
-                        stateRemove(clientId);
+                        stateRemove(req.clientId);
                     } catch (error) {
                         console.warn(error);
                     }
@@ -189,7 +206,7 @@ export function registerInternalKdrivePlugin() {
                 ],
                 action: (
                     onFileUpload: Function,
-                    onUploadStart: Function,
+                    onUploadStart: (clientIds: string[], channelId: string) => void,
                     stateAdd: Function,
                     stateRemove: Function,
                     channelId: string,
