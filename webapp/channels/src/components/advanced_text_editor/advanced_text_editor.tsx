@@ -53,7 +53,6 @@ type Props = {
     location: string;
     currentUserId: string;
     message: string;
-    caretPosition: number;
     showEmojiPicker: boolean;
     uploadsProgressPercent: { [clientID: string]: FilePreviewInfo };
     currentChannel?: Channel;
@@ -110,7 +109,6 @@ type Props = {
 const AdvanceTextEditor = ({
     location,
     message,
-    caretPosition,
     showEmojiPicker,
     uploadsProgressPercent,
     currentChannel,
