@@ -639,10 +639,12 @@
             display: inline-block;
             width: 30px;
             height: 30px;
-            border: 1px solid;
             border-radius: 50%;
-            opacity: 0.7;
             transition: all 0.1s linear;
+            &:not(.file-kdrive__icon--svg) {
+                opacity: 0.7;
+                border: 1px solid;
+            }
 
             &:hover {
                 opacity: 1;
