@@ -15,26 +15,6 @@ import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 import {ActionTypes, KDriveActionTypes} from 'utils/constants';
 import {generateId, localizeMessage} from 'utils/utils';
 
-// const fileInfo = {
-// id: string;
-// user_id: string;
-// create_at: number;
-// update_at: number;
-// delete_at: number;
-// name: file.name,
-// extension: string;
-// size: file.size,
-// mime_type: file.mimetype,
-// width: number;
-// height: number;
-// has_preview_image: boolean;
-// clientId,
-// post_id?: string;
-// mini_preview?: string;
-// archived: boolean;
-// link?: string;
-// };
-
 interface IDriveSelectionOutput {
     attachmentsSize: number;
     attachments: Array<{
