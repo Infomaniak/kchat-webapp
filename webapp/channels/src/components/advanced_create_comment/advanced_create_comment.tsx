@@ -11,6 +11,7 @@ import type {ServerError} from '@mattermost/types/errors';
 import type {FileInfo} from '@mattermost/types/files';
 import {GroupSource} from '@mattermost/types/groups';
 import type {Group} from '@mattermost/types/groups';
+import type {Post} from '@mattermost/types/posts';
 import type {PreferenceType} from '@mattermost/types/preferences';
 
 import {Posts} from 'mattermost-redux/constants';
@@ -42,6 +43,8 @@ import {
     splitMessageBasedOnCaretPosition,
     groupsMentionedInText,
     mentionsMinusSpecialMentionsInText,
+    getVoiceMessageStateFromDraft,
+    VoiceMessageStates,
 } from 'utils/post_utils';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils';
@@ -203,6 +206,7 @@ type State = {
     serverError: (ServerError & {submittedMessage?: string}) | null;
     showFormat: boolean;
     isFormattingBarHidden: boolean;
+    voiceMessageClientId: string;
 };
 
 function isDraftEmpty(draft: PostDraft): boolean {
@@ -269,6 +273,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             showFormat: false,
             isFormattingBarHidden: props.isFormattingBarHidden,
             caretPosition: props.draft.message.length,
+            voiceMessageClientId: '',
             draft: {...props.draft, uploadsInProgress: []},
         };
 
@@ -305,6 +310,13 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.saveDraftOnUnmount();
         if (this.timeoutId !== null) {
             clearTimeout(this.timeoutId);
+        }
+
+        if (this.props.rootId) {
+            const previousChannelVoiceMessageState = getVoiceMessageStateFromDraft(this.props.draft);
+            if (previousChannelVoiceMessageState === VoiceMessageStates.RECORDING) {
+                this.setDraftAsPostType(this.props.rootId, this.props.draft);
+            }
         }
     }
 
@@ -842,6 +854,32 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         });
     };
 
+    setDraftAsPostType = (rootId: Post['id'], draft: PostDraft, postType?: PostDraft['postType']) => {
+        const updatedDraft: PostDraft = {...draft};
+
+        if (postType) {
+            updatedDraft.postType = Constants.PostTypes.VOICE;
+        } else {
+            Reflect.deleteProperty(updatedDraft, 'postType');
+        }
+
+        this.props.updateCommentDraftWithRootId(rootId, updatedDraft);
+        this.draftsForPost[rootId] = updatedDraft;
+    };
+
+    handleVoiceMessageUploadStart = (clientId: string, rootId: Post['id']) => {
+        const uploadsInProgress = [...this.props.draft.uploadsInProgress, clientId];
+        const draft = {
+            ...this.props.draft,
+            uploadsInProgress,
+            postType: Constants.PostTypes.VOICE,
+        };
+
+        this.props.updateCommentDraftWithRootId(rootId, draft);
+        this.setState({voiceMessageClientId: clientId});
+        this.draftsForPost[rootId] = draft;
+    };
+
     handleFileUploadChange = () => {
         this.isDraftEdited = true;
         this.focusTextbox();
@@ -862,6 +900,8 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         // this is a bit redundant with the code that sets focus when the file input is clicked,
         // but this also resets the focus after a drag and drop
         this.focusTextbox();
+
+        this.setState({voiceMessageClientId: ''});
     };
 
     handleUploadProgress = (filePreviewInfo: FilePreviewInfo) => {
@@ -917,10 +957,10 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         if (typeof uploadError === 'string') {
             if (uploadError.length !== 0) {
-                this.setState({serverError: new Error(uploadError)});
+                this.setState({serverError: new Error(uploadError), voiceMessageClientId: ''});
             }
         } else {
-            this.setState({serverError: uploadError});
+            this.setState({serverError: uploadError, voiceMessageClientId: ''});
         }
     };
 
@@ -928,6 +968,11 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         const draft = this.state.draft!;
         const fileInfos = [...draft.fileInfos];
         const uploadsInProgress = [...draft.uploadsInProgress];
+
+        if (draft.postType === Constants.PostTypes.VOICE) {
+            Reflect.deleteProperty(draft, 'postType');
+            this.setState({voiceMessageClientId: ''});
+        }
 
         // Clear previous errors
         this.handleUploadError(null);
@@ -1129,6 +1174,9 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     getFileUploadTarget={this.getFileUploadTarget}
                     fileUploadRef={this.fileUploadRef}
                     isThreadView={this.props.isThreadView}
+                    voiceMessageClientId={this.state.voiceMessageClientId}
+                    handleVoiceMessageUploadStart={this.handleVoiceMessageUploadStart}
+                    setDraftAsPostType={this.setDraftAsPostType}
                     isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
                     additionalControls={pluginItems.filter(Boolean)}

@@ -55,6 +55,7 @@ export type Props = {
     emojiEnabled?: boolean;
     characterLimit: number;
     disabled?: boolean;
+    hidden?: boolean;
     badConnection?: boolean;
     currentUserId: string;
     currentTeamId: string;
@@ -86,6 +87,7 @@ export default class Textbox extends React.PureComponent<Props> {
         supportsCommands: true,
         inputComponent: AutosizeTextarea,
         suggestionList: SuggestionList,
+        hidden: false,
     };
 
     constructor(props: Props) {
@@ -277,7 +279,7 @@ export default class Textbox extends React.PureComponent<Props> {
         return (
             <div
                 ref={this.wrapper}
-                className={classNames('textarea-wrapper', {'textarea-wrapper-preview': this.props.preview})}
+                className={classNames('textarea-wrapper', {'textarea-wrapper-preview': this.props.preview, 'hidden': this.props.hidden})}
             >
                 <div
                     tabIndex={this.props.tabIndex || 0}

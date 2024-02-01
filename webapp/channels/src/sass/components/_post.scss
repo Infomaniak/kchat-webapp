@@ -68,6 +68,10 @@
     .textbox-preview-link {
         margin-right: 8px;
     }
+
+    &.hidden {
+        display: none;
+    }
 }
 
 .textarea-wrapper.textarea-wrapper-preview {

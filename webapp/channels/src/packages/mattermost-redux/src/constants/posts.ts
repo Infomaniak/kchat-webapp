@@ -35,6 +35,7 @@ export const PostTypes = {
     CALL: 'custom_call' as PostType,
     SYSTEM_POST_REMINDER: 'system_post_reminder' as PostType,
     CHANGE_CHANNEL_PRIVACY: 'system_change_chan_privacy' as PostType,
+    VOICE: 'voice' as PostType,
 };
 
 export default {
