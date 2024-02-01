@@ -13,9 +13,11 @@ import BrowserStore from 'stores/browser_store';
 
 import LoadingScreen from 'components/loading_screen';
 
-import WebSocketClient from 'client/web_websocket_client';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getBrowserTimezone} from 'utils/timezone';
 import * as UserAgent from 'utils/user_agent';
+
+import WebSocketClient from 'client/web_websocket_client';
 
 const BACKSPACE_CHAR = 8;
 
@@ -36,6 +38,7 @@ export type Props = {
         autoUpdateTimezone: (deviceTimezone: string) => void;
         getChannelURLAction: (channel: Channel, teamId: string, url: string) => void;
         viewChannel: (channelId: string, prevChannelId?: string) => void;
+        registerInternalKdrivePlugin: () => void;
     };
     location: {
         pathname: string;
@@ -78,6 +81,10 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         if (this.props.enableTimezone && this.props.currentUser) {
             this.props.actions.autoUpdateTimezone(getBrowserTimezone());
+        }
+
+        if (!UserAgent.isDesktopApp() || isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.4.0')) {
+            this.props.actions.registerInternalKdrivePlugin();
         }
 
         // Make sure the websockets close and reset version
