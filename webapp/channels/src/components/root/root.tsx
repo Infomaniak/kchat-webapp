@@ -243,6 +243,10 @@ export default class Root extends React.PureComponent<Props, State> {
     onConfigLoaded = () => {
         const telemetryId = this.props.telemetryId;
 
+        if (!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) {
+            this.props.actions.registerInternalKdrivePlugin();
+        }
+
         let rudderKey: string | null | undefined = Constants.TELEMETRY_RUDDER_KEY;
         let rudderUrl: string | null | undefined = Constants.TELEMETRY_RUDDER_DATAPLANE_URL;
 
@@ -639,9 +643,10 @@ export default class Root extends React.PureComponent<Props, State> {
         // this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
         // this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
         this.props.actions.registerCustomPostRenderer('system_welcome_post', WelcomePostRenderer, 'welcome_post_renderer');
-        if (!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) {
-            this.props.actions.registerInternalKdrivePlugin();
-        }
+
+        // if (!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) {
+        //     this.props.actions.registerInternalKdrivePlugin();
+        // }
 
         if (this.desktopMediaQuery.addEventListener) {
             this.desktopMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
