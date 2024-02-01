@@ -86,15 +86,17 @@ export function saveFileToKdrive(fileId: string, fileName: string) {
         // handle medium
         const color = theme.ikType === 'dark' ? 'dark' : 'light';
         const driveModule = document.querySelector('module-kdrive-component') as HTMLElement &
-        { open: (mode: string, theme: string, fileName?: string) => Promise<{ driveId: number; elementId: number; name: string; link: string }> };
+        { open: (mode: string, theme: string, fileName?: string) => Promise<{ driveId: number; elementId: number; name: string }> };
 
         driveModule.open('save-to-drive', color, fileName).
-            then(async (data: { driveId: number; elementId: number; name: string; link: string }) => {
+            then(async (data: { driveId: number; elementId: number; name: string }) => {
                 console.log(data);
                 const res = await Client4.uploadToKdrive(fileId, data.driveId, data.elementId, data.name);
 
                 if (!('error' in res)) {
-                    dispatch(setKDriveToast(localizeMessage('kdrive.uploadSuccess', 'Your file has been saved to kDrive'), data.link));
+                    // TODO use env for preprod
+                    const link = `https://drive.infomaniak.com/app/drive/${data.driveId}/redirect/${data.elementId}`;
+                    dispatch(setKDriveToast(localizeMessage('kdrive.uploadSuccess', 'Your file has been saved to kDrive'), link));
                 }
             }).
             catch((error: string) => console.warn(error));
