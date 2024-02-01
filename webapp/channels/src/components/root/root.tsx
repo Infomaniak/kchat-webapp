@@ -243,10 +243,6 @@ export default class Root extends React.PureComponent<Props, State> {
     onConfigLoaded = () => {
         const telemetryId = this.props.telemetryId;
 
-        if (!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) {
-            this.props.actions.registerInternalKdrivePlugin();
-        }
-
         let rudderKey: string | null | undefined = Constants.TELEMETRY_RUDDER_KEY;
         let rudderUrl: string | null | undefined = Constants.TELEMETRY_RUDDER_DATAPLANE_URL;
 
@@ -430,6 +426,9 @@ export default class Root extends React.PureComponent<Props, State> {
         const {data: isMeLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isMeLoaded) {
+            if (!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) {
+                this.props.actions.registerInternalKdrivePlugin();
+            }
             const currentUser = getCurrentUser(store.getState());
             if (currentUser) {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
