@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import {cloneDeep} from 'lodash';
-import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {FormattedMessage} from 'react-intl';
@@ -13,50 +12,62 @@ import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 import {Constants} from 'utils/constants';
 import {isEmptyObject} from 'utils/utils';
 
-// When this file is migrated to TypeScript, type definitions for its props already exist in ./suggestion_list.d.ts.
+interface Props {
+    ariaLiveRef?: React.RefObject<HTMLDivElement>;
+    inputRef?: React.RefObject<HTMLDivElement>;
+    open: boolean;
+    position?: 'top' | 'bottom';
+    renderDividers?: string[];
+    renderNoResults?: boolean;
+    onCompleteWord: (term: string, matchedPretext: string, e?: React.KeyboardEventHandler<HTMLDivElement>) => boolean;
+    preventClose?: () => void;
+    onItemHover: (term: string) => void;
+    pretext: string;
+    cleared: boolean;
+    matchedPretext: string[];
+    items: any[];
+    terms: string[];
+    selection: string;
+    components: Array<React.FunctionComponent<any>>;
+    wrapperHeight?: number;
 
-export default class SuggestionList extends React.PureComponent {
-    static propTypes = {
-        ariaLiveRef: PropTypes.object,
-        inputRef: PropTypes.object,
-        open: PropTypes.bool.isRequired,
-        position: PropTypes.oneOf(['top', 'bottom']),
-        renderDividers: PropTypes.arrayOf(PropTypes.string),
-        renderNoResults: PropTypes.bool,
-        onCompleteWord: PropTypes.func.isRequired,
-        preventClose: PropTypes.func,
-        onItemHover: PropTypes.func.isRequired,
-        pretext: PropTypes.string.isRequired,
-        cleared: PropTypes.bool.isRequired,
-        matchedPretext: PropTypes.array.isRequired,
-        items: PropTypes.array.isRequired,
-        terms: PropTypes.array.isRequired,
-        selection: PropTypes.string.isRequired,
-        components: PropTypes.array.isRequired,
-        suggestionBoxAlgn: PropTypes.object,
+    // suggestionBoxAlgn is an optional object that can be passed to align the SuggestionList with the keyboard caret
+    // as the user is typing.
+    suggestionBoxAlgn?: {
+        lineHeight?: number;
+        pixelsToMoveX?: number;
+        pixelsToMoveY?: number;
     };
+}
 
+export default class SuggestionList extends React.PureComponent<Props> {
     static defaultProps = {
         renderDividers: [],
         renderNoResults: false,
     };
+    contentRef: React.RefObject<HTMLDivElement>;
+    wrapperRef: React.RefObject<HTMLDivElement>;
+    itemRefs: Map<string, any>;
+    currentLabel: string | null;
+    currentItem: any;
+    maxHeight: number;
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
 
         this.contentRef = React.createRef();
         this.wrapperRef = React.createRef();
         this.itemRefs = new Map();
-        this.suggestionReadOut = React.createRef();
         this.currentLabel = '';
         this.currentItem = {};
+        this.maxHeight = 0;
     }
 
     componentDidMount() {
         this.updateMaxHeight();
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: Props) {
         if (this.props.selection !== prevProps.selection && this.props.selection) {
             this.scrollToItem(this.props.selection);
         }
@@ -79,7 +90,7 @@ export default class SuggestionList extends React.PureComponent {
             return;
         }
 
-        const inputHeight = this.props.inputRef.current.clientHeight ?? 0;
+        const inputHeight = (this.props.inputRef as React.RefObject<HTMLInputElement>).current?.clientHeight ?? 0;
 
         this.maxHeight = Math.min(
             window.innerHeight - (inputHeight + Constants.POST_MODAL_PADDING),
@@ -87,25 +98,25 @@ export default class SuggestionList extends React.PureComponent {
         );
 
         if (this.contentRef.current) {
-            this.contentRef.current.style['max-height'] = this.maxHeight;
+            this.contentRef.current.style.maxHeight = `${this.maxHeight}px`;
         }
     };
 
     announceLabel() {
-        const suggestionReadOut = this.props.ariaLiveRef.current;
+        const suggestionReadOut = this.props.ariaLiveRef?.current;
         if (suggestionReadOut) {
-            suggestionReadOut.innerHTML = this.currentLabel;
+            suggestionReadOut.textContent = this.currentLabel;
         }
     }
 
     removeLabel() {
-        const suggestionReadOut = this.props.ariaLiveRef.current;
+        const suggestionReadOut = this.props.ariaLiveRef?.current;
         if (suggestionReadOut) {
-            suggestionReadOut.innerHTML = '';
+            suggestionReadOut.textContent = '';
         }
     }
 
-    generateLabel(item) {
+    generateLabel(item: any) {
         if (item.username) {
             this.currentLabel = item.username;
             if ((item.first_name || item.last_name) && item.nickname) {
@@ -131,7 +142,7 @@ export default class SuggestionList extends React.PureComponent {
         return this.contentRef.current;
     };
 
-    scrollToItem = (term) => {
+    scrollToItem = (term: string) => {
         const content = this.getContent();
         if (!content) {
             return;
@@ -150,10 +161,9 @@ export default class SuggestionList extends React.PureComponent {
                 return;
             }
 
-            const itemTop = item.offsetTop - this.getComputedCssProperty(item, 'marginTop');
+            const itemTop = (item as HTMLElement).offsetTop - this.getComputedCssProperty(item, 'marginTop');
             const itemBottomMargin = this.getComputedCssProperty(item, 'marginBottom') + this.getComputedCssProperty(item, 'paddingBottom');
-            const itemBottom = item.offsetTop + this.getComputedCssProperty(item, 'height') + itemBottomMargin;
-
+            const itemBottom = (item as HTMLElement).offsetTop + this.getComputedCssProperty(item, 'height') + itemBottomMargin;
             if (itemTop - contentTopPadding < contentTop) {
                 // the item is off the top of the visible space
                 content.scrollTop = itemTop - contentTopPadding;
@@ -164,8 +174,8 @@ export default class SuggestionList extends React.PureComponent {
         }
     };
 
-    getComputedCssProperty(element, property) {
-        return parseInt(getComputedStyle(element)[property], 10);
+    getComputedCssProperty(element: Element | Text, property: string) {
+        return parseInt(getComputedStyle(element as HTMLElement).getPropertyValue(property) || '0', 10);
     }
 
     getTransform() {
@@ -176,20 +186,25 @@ export default class SuggestionList extends React.PureComponent {
         const {lineHeight, pixelsToMoveX} = this.props.suggestionBoxAlgn;
         let pixelsToMoveY = this.props.suggestionBoxAlgn.pixelsToMoveY;
 
-        if (this.props.position === 'bottom') {
+        if (this.props.position === 'bottom' && pixelsToMoveY) {
             // Add the line height and 4 extra px so it looks less tight
-            pixelsToMoveY += this.props.suggestionBoxAlgn.lineHeight + 4;
+            pixelsToMoveY += (lineHeight || 0) + 4;
         }
 
         // If the suggestion box was invoked from the first line in the post box, stick to the top of the post box
-        pixelsToMoveY = pixelsToMoveY > lineHeight ? pixelsToMoveY : 0;
+        // if the lineHeight is smalller or undefined, then pixelsToMoveY should be 0
+        if (lineHeight && pixelsToMoveY) {
+            pixelsToMoveY = pixelsToMoveY > lineHeight ? pixelsToMoveY : 0;
+        } else {
+            pixelsToMoveY = 0;
+        }
 
         return {
             transform: `translate(${pixelsToMoveX}px, ${pixelsToMoveY}px)`,
         };
     }
 
-    renderDivider(type) {
+    renderDivider(type: string) {
         const id = type ? 'suggestion.' + type : 'suggestion.default';
         return (
             <div
@@ -222,6 +237,8 @@ export default class SuggestionList extends React.PureComponent {
     }
 
     render() {
+        const {renderDividers} = this.props;
+
         if (!this.props.open || this.props.cleared) {
             return null;
         }
@@ -236,6 +253,7 @@ export default class SuggestionList extends React.PureComponent {
             items.push(this.renderNoResults());
         }
 
+        let prevItemType = null;
         for (let i = 0; i < this.props.items.length; i++) {
             const item = this.props.items[i];
             const term = this.props.terms[i];
@@ -243,6 +261,10 @@ export default class SuggestionList extends React.PureComponent {
 
             // ReactComponent names need to be upper case when used in JSX
             const Component = this.props.components[i];
+            if ((renderDividers?.includes('all') || renderDividers?.includes(item.type)) && prevItemType !== item.type) {
+                items.push(this.renderDivider(item.type));
+                prevItemType = item.type;
+            }
 
             if (item.loading) {
                 items.push(<LoadingSpinner key={item.type}/>);
@@ -256,7 +278,7 @@ export default class SuggestionList extends React.PureComponent {
             items.push(
                 <Component
                     key={term}
-                    ref={(ref) => this.itemRefs.set(term, ref)}
+                    ref={(ref: any) => this.itemRefs.set(term, ref)}
                     item={this.props.items[i]}
                     term={term}
                     matchedPretext={this.props.matchedPretext[i]}

@@ -19,6 +19,7 @@ export type UserNotifyProps = {
     first_name: 'true' | 'false';
     channel: 'true' | 'false';
     mention_keys: string;
+    highlight_keys: string;
     desktop_notification_sound?: 'Bing' | 'Crackle' | 'Down' | 'Hello' | 'Ripple' | 'Upstairs';
     desktop_threads?: 'default' | 'all' | 'mention' | 'none';
     email_threads?: 'default' | 'all' | 'mention' | 'none';

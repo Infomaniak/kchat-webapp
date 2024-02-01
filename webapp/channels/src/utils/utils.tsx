@@ -9,6 +9,7 @@ import crypto from 'crypto';
 import cssVars from 'css-vars-ponyfill';
 import type {Locale} from 'date-fns';
 import {enGB} from 'date-fns/locale';
+import {isNil} from 'lodash';
 import moment from 'moment';
 import type {LinkHTMLAttributes} from 'react';
 import React from 'react';
@@ -1539,6 +1540,26 @@ export function isValidPassword(password: string, passwordConfig: ReturnType<typ
     }
 
     return {valid, error};
+}
+
+export function isTextSelectedInPostOrReply(e: React.KeyboardEvent | KeyboardEvent) {
+    const {id} = e.target as HTMLElement;
+
+    const isTypingInPost = id === 'post_textbox';
+    const isTypingInReply = id === 'reply_textbox';
+
+    if (!isTypingInPost && !isTypingInReply) {
+        return false;
+    }
+
+    const {
+        selectionStart,
+        selectionEnd,
+    } = e.target as TextboxElement;
+
+    const hasSelection = !isNil(selectionStart) && !isNil(selectionEnd) && selectionStart < selectionEnd;
+
+    return hasSelection;
 }
 
 function isChannelOrPermalink(link: string) {

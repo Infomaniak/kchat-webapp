@@ -13,13 +13,14 @@ import Avatar from 'components/widgets/users/avatar';
 import Constants from 'utils/constants';
 import {imageURLForUser} from 'utils/utils';
 
-import Suggestion from '../suggestion';
+import {SuggestionContainer} from '../suggestion';
+import type {SuggestionProps} from '../suggestion';
 
-function itemToName(item: Channel, currentUser: string): {icon: React.ReactElement; name: string; description: string} | null {
+function itemToName(item: Channel, currentUserId: string): {icon: React.ReactElement; name: string; description: string} | null {
     if (item.type === Constants.DM_CHANNEL) {
         const profilePicture = (
             <Avatar
-                url={imageURLForUser(getUserIdFromChannelName(currentUser, item.name))}
+                url={imageURLForUser(getUserIdFromChannelName(currentUserId, item.name))}
                 size='sm'
             />
         );
@@ -70,40 +71,38 @@ function itemToName(item: Channel, currentUser: string): {icon: React.ReactEleme
     return null;
 }
 
-export default class SearchChannelSuggestion extends Suggestion {
-    render(): JSX.Element {
-        const {item, isSelection, teammate, currentUser} = this.props;
-
-        let className = 'suggestion-list__item';
-        if (isSelection) {
-            className += ' suggestion--selected';
-        }
-
-        const nameObject = itemToName(item, currentUser);
-        if (!nameObject) {
-            return (<></>);
-        }
-
-        const {icon, name, description} = nameObject;
-
-        const tag = item.type === Constants.DM_CHANNEL && teammate && teammate.is_bot ? <BotTag/> : null;
-
-        return (
-            <div
-                onClick={this.handleClick}
-                onMouseMove={this.handleMouseMove}
-                className={className}
-                {...Suggestion.baseProps}
-            >
-                {icon}
-                <div className='suggestion-list__ellipsis'>
-                    <span className='suggestion-list__main'>
-                        {name}
-                    </span>
-                    {description}
-                </div>
-                {tag}
-            </div>
-        );
-    }
+type Props = SuggestionProps<Channel> & {
+    currentUserId: string;
+    teammateIsBot: boolean;
 }
+
+const SearchChannelSuggestion = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+    const {item, teammateIsBot, currentUserId} = props;
+
+    const nameObject = itemToName(item, currentUserId);
+    if (!nameObject) {
+        return (<></>);
+    }
+
+    const {icon, name, description} = nameObject;
+
+    const tag = item.type === Constants.DM_CHANNEL && teammateIsBot ? <BotTag/> : null;
+
+    return (
+        <SuggestionContainer
+            ref={ref}
+            {...props}
+        >
+            {icon}
+            <div className='suggestion-list__ellipsis'>
+                <span className='suggestion-list__main'>
+                    {name}
+                </span>
+                {description}
+            </div>
+            {tag}
+        </SuggestionContainer>
+    );
+});
+SearchChannelSuggestion.displayName = 'SearchChannelSuggestion';
+export default SearchChannelSuggestion;

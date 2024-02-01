@@ -27,17 +27,13 @@
     .custom-textarea {
         // fix for a miscalculation due to the heavily overwritten custom-textarea class
         height: 0;
-        padding-right: calc(
-            16px + var(--right-padding-for-scrollbar) +
-                var(--right-padding-for-preview-button)
-        );
+        padding-right: calc(16px + var(--right-padding-for-scrollbar) + var(--right-padding-for-preview-button));
         box-shadow: none;
-        overflow:auto;
+
         &:focus {
             box-shadow: none;
         }
 
-        &.custom-textarea--emoji-picker,
         &.textbox-preview-area {
             height: auto;
         }
@@ -81,50 +77,6 @@
         &[disabled] {
             &:hover {
                 border: none;
-            }
-        }
-    }
-
-    &__priority {
-        display: flex;
-        align-items: center;
-        padding: 14px 16px 0;
-        gap: 6px;
-
-        &-ack {
-            display: flex;
-            align-items: center;
-            color: var(--online-indicator);
-
-            > span {
-                margin-left: 4px;
-                font-size: 11px;
-                font-weight: 600;
-            }
-
-            &-tooltip {
-                max-width: 230px;
-            }
-        }
-
-        button.close {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: -1px;
-            color: rgb(var(--center-channel-color));
-            font-size: 17px;
-            opacity: 0.56;
-            visibility: hidden;
-
-            &:hover {
-                opacity: 0.72;
-            }
-        }
-
-        &:hover {
-            button.close {
-                visibility: visible;
             }
         }
     }
@@ -197,7 +149,7 @@
         display: inline-block;
         margin: 8px 0 4px;
         color: rgba(var(--center-channel-color-rgb), 0.64);
-        font-family: "SuisseIntl", sans-serif;
+        font-family: "Open Sans", sans-serif;
     }
 
     &__footer {
@@ -206,9 +158,7 @@
         flex-direction: column;
         padding: 0 24px;
         font-size: 13px;
-        gap: 3px;
-        padding-top: 3px;
-
+        gap: 8px;
 
         .help__text {
             text-align: right;
@@ -219,10 +169,8 @@
             }
         }
 
-        .has-error {
-            > label {
-                margin-bottom: 0px;
-            }
+        &--has-error {
+            padding: 6px 0 0;
             color: var(--error-text);
         }
 
@@ -275,7 +223,7 @@
     overflow: hidden;
     height: 20px;
     margin-bottom: 5px;
-    font-size: 0.95em;
+    font-size: 11px;
     opacity: 0.7;
     text-overflow: ellipsis;
     white-space: nowrap;

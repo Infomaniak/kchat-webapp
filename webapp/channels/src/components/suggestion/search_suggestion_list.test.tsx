@@ -6,6 +6,8 @@ import React from 'react';
 
 import SearchSuggestionList from 'components/suggestion/search_suggestion_list';
 
+import {TestHelper} from 'utils/test_helper';
+
 describe('components/SearchSuggestionList', () => {
     const baseProps = {
         open: true,
@@ -21,6 +23,14 @@ describe('components/SearchSuggestionList', () => {
     };
 
     test('should not throw error when currentLabel is null and label is generated', () => {
+        const userProfile = TestHelper.getUserMock();
+        const item = {
+            ...userProfile,
+            type: 'item_type',
+            display_name: 'item_display_name',
+            name: 'item_name',
+        };
+
         const wrapper = shallow(
             <SearchSuggestionList
                 {...baseProps}
@@ -28,9 +38,9 @@ describe('components/SearchSuggestionList', () => {
             />,
         );
 
-        const instance = wrapper.instance();
-        instance.currentLabel = null;
+        const instance = wrapper.instance() as SearchSuggestionList;
+        instance.currentLabel = null as any;
 
-        instance.generateLabel({});
+        instance.generateLabel(item);
     });
 });

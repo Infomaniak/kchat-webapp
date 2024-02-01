@@ -34,7 +34,8 @@ export const OnboardingTourSteps = {
     // CHANNELS_AND_DIRECT_MESSAGES: 0,
     // CREATE_AND_JOIN_CHANNELS: 1,
     // INVITE_PEOPLE: 2,
-    // SEND_MESSAGE: 3,
+    SEND_MESSAGE: 3,
+
     // CUSTOMIZE_EXPERIENCE: 4,
 
     CHANNELS: 0,
@@ -53,9 +54,8 @@ export const OnboardingTourSteps = {
 
 export const OnboardingTourStepsForGuestUsers = {
 
-    // SEND_MESSAGE: 0,
-    // CUSTOMIZE_EXPERIENCE: 1,
-
+    SEND_MESSAGE: 0,
+    CUSTOMIZE_EXPERIENCE: 1,
     CHANNELS: 0,
     CHANNEL_HEADER: 1,
     DIRECT_MESSAGES: 2,
