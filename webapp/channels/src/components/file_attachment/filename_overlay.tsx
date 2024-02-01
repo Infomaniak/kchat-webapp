@@ -33,7 +33,7 @@ type Props = {
     /*
      * Handler for saving image to kdrive.
      */
-    handleKdriveSave: (fileId: string, fileName: string) => void;
+    handleKdriveSave?: (fileId: string, fileName: string) => void;
 
     /*
      * Display in compact format
