@@ -6,6 +6,7 @@ import React from 'react';
 const KDriveIcon = (props: React.HTMLAttributes<HTMLSpanElement>) => (
     <span {...props}>
         <svg
+            className='file-kdrive__icon--svg'
             width={20}
             height={20}
             viewBox='0 0 80 80'
@@ -14,12 +15,6 @@ const KDriveIcon = (props: React.HTMLAttributes<HTMLSpanElement>) => (
                 fill='none'
                 fillRule='evenodd'
             >
-                <circle
-                    fill='#FFF'
-                    cx={40}
-                    cy={40}
-                    r={40}
-                />
                 <path
                     d='M37.51 17.828l3.853 1.61c.59.247 1.045.735 1.252 1.34l1.532 4.477c.247.721.844 1.267 1.584 1.448l16.032 3.921a2.235 2.235 0 011.704 2.17v18.707a2.235 2.235 0 01-2.893 2.136L35.99 46.073a2.235 2.235 0 01-1.577-2.136V19.89a2.235 2.235 0 013.097-2.062z'
                     fill='#A2BFFF'

@@ -114,10 +114,12 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                                         </Tooltip>
                                     }
                                 >
-                                    <KDriveIcon
-                                        onClick={() => handleKdriveSave(fileInfo.id, fileName)}
-                                        className='icon file-kdrive__icon'
-                                    />
+                                    <span className='file-kdrive__icon--wrapper'>
+                                        <KDriveIcon
+                                            onClick={() => handleKdriveSave(fileInfo.id, fileName)}
+                                            className='icon file-kdrive__icon'
+                                        />
+                                    </span>
                                 </OverlayTrigger>
                             )}
                             <ExternalLink
