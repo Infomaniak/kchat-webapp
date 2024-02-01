@@ -15,7 +15,6 @@ import {shouldShowTermsOfService, getCurrentUserId} from 'mattermost-redux/selec
 import type {Action} from 'mattermost-redux/types/actions';
 
 import {migrateRecentEmojis} from 'actions/emoji_actions';
-import {registerInternalKdrivePlugin} from 'actions/kdrive_actions';
 import {emitBrowserWindowResized} from 'actions/views/browser';
 import {loadConfigAndMe, registerCustomPostRenderer} from 'actions/views/root';
 import {getKSuiteBridge} from 'selectors/ksuite_bridge';
@@ -73,7 +72,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
             getProfiles,
             migrateRecentEmojis,
             registerCustomPostRenderer,
-            registerInternalKdrivePlugin,
             initializeProducts,
         }, dispatch),
     };

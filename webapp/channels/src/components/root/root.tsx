@@ -140,7 +140,6 @@ export type Actions = {
     migrateRecentEmojis: () => void;
     loadConfigAndMe: () => Promise<{data: boolean}>;
     registerCustomPostRenderer: (type: string, component: any, id: string) => Promise<ActionResult>;
-    registerInternalKdrivePlugin: () => void;
     initializeProducts: () => Promise<void[]>;
 }
 
@@ -426,9 +425,6 @@ export default class Root extends React.PureComponent<Props, State> {
         const {data: isMeLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isMeLoaded) {
-            if (!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) {
-                this.props.actions.registerInternalKdrivePlugin();
-            }
             const currentUser = getCurrentUser(store.getState());
             if (currentUser) {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -642,10 +638,6 @@ export default class Root extends React.PureComponent<Props, State> {
         // this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
         // this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
         this.props.actions.registerCustomPostRenderer('system_welcome_post', WelcomePostRenderer, 'welcome_post_renderer');
-
-        // if (!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) {
-        //     this.props.actions.registerInternalKdrivePlugin();
-        // }
 
         if (this.desktopMediaQuery.addEventListener) {
             this.desktopMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
