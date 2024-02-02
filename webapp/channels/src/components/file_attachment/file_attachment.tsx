@@ -341,7 +341,7 @@ export default function FileAttachment(props: Props) {
                 compactDisplay={compactDisplay}
                 canDownload={props.canDownloadFiles}
                 handleImageClick={onAttachmentClick}
-                handleKdriveSave={props.actions.saveFileToKDrive}
+                handleKDriveSave={props.actions.saveFileToKDrive}
                 iconClass={'post-image__download'}
             >
                 <i className='icon icon-download-outline'/>

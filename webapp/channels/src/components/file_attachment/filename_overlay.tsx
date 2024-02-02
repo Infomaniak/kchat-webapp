@@ -33,7 +33,7 @@ type Props = {
     /*
      * Handler for saving image to kdrive.
      */
-    handleKdriveSave?: (fileId: string, fileName: string) => void;
+    handleKDriveSave?: (fileId: string, fileName: string) => void;
 
     /*
      * Display in compact format
@@ -64,7 +64,7 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
             compactDisplay,
             fileInfo,
             handleImageClick,
-            handleKdriveSave,
+            handleKDriveSave,
             iconClass,
         } = this.props;
 
@@ -116,7 +116,7 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                                 >
                                     <span className='file-kdrive__icon--wrapper'>
                                         <KDriveIcon
-                                            onClick={() => handleKdriveSave(fileInfo.id, fileName)}
+                                            onClick={() => handleKDriveSave?.(fileInfo.id, fileName)}
                                             className='icon file-kdrive__icon'
                                         />
                                     </span>

@@ -1731,11 +1731,15 @@
             top: -8px;
             left: 24px;
             width: 68px;
-        }
+            &:nth-child(2) {
+                left: 32px;
+                width: 38px;
+            }
 
-        &--small-image-no-copy-button {
-            left: 32px;
-            width: 38px;
+            &:nth-child(3) {
+                left: 72px;
+                width: 38px;
+            }
         }
 
         &:hover button.size-aware-image__copy_link,
