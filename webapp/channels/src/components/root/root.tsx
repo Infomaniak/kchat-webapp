@@ -52,9 +52,6 @@ import TeamSidebar from 'components/team_sidebar';
 import WelcomePostRenderer from 'components/welcome_post_renderer';
 import WindowSizeObserver from 'components/window_size_observer/WindowSizeObserver';
 
-import webSocketClient from 'client/web_websocket_client';
-import {initializePlugins} from 'plugins';
-import Pluggable from 'plugins/pluggable';
 import A11yController from 'utils/a11y_controller';
 import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
@@ -63,6 +60,10 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
+
+import webSocketClient from 'client/web_websocket_client';
+import {initializePlugins} from 'plugins';
+import Pluggable from 'plugins/pluggable';
 
 import type {ProductComponent, PluginComponent} from 'types/store/plugins';
 

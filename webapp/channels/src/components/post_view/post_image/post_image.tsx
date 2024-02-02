@@ -19,6 +19,7 @@ interface Props {
     post: Post;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
+        saveFileToKDrive: (fileId: string, fileName: string) => void;
     };
 }
 

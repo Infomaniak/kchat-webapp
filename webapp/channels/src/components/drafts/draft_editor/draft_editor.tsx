@@ -856,6 +856,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     handleChange={this.handleChange}
                     prefillMessage={this.prefillMessage}
                     removePreview={this.removePreview}
+                    caretPosition={this.state.caretPosition}
                     additionalControls={[
                         this.props.isPostPriorityEnabled && (
                             <React.Fragment key='PostPriorityPicker'>

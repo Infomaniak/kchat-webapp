@@ -78,7 +78,7 @@ export type Menu = {
     isHeader?: boolean;
 }
 
-export type PluginComponent = {
+export type PluginComponent<T = any> = {
     id: string;
     pluginId: string;
     title?: string;
@@ -98,6 +98,11 @@ export type PluginComponent = {
     filter?: (id: string) => boolean;
     action?: (...args: any) => void; // TODO Add more concrete types?
     shouldRender?: (state: GlobalState) => boolean;
+
+    // ik custom
+    // an array that allows specifying which args the action function wants from the parent component
+    // example in file_upload for kdrive upload
+    customArgs?: Array<keyof T>;
 };
 
 export type AppBarComponent = PluginComponent & {

@@ -14,6 +14,8 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import type {DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
 
+import {registerInternalKdrivePlugin} from 'actions/kdrive_actions';
+
 import {getHistory} from 'utils/browser_history';
 import {isPermalinkURL} from 'utils/url';
 import {getChannelURL} from 'utils/utils';
@@ -49,6 +51,7 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             autoUpdateTimezone,
             getChannelURLAction,
             viewChannel,
+            registerInternalKdrivePlugin,
         }, dispatch),
     };
 }

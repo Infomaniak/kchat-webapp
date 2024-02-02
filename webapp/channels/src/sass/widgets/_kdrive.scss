@@ -1,0 +1,15 @@
+.post-image__details {
+    .post-image__download {
+        .file-kdrive__icon--wrapper {
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 2px;
+            &:hover {
+                background: rgba(v(center-channel-color-rgb), 0.08);
+                color: rgba(v(center-channel-color-rgb), 0.72);
+            }
+        }
+    }
+}

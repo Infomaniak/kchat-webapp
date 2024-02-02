@@ -53,6 +53,7 @@ type Props = {
     location: string;
     currentUserId: string;
     message: string;
+    caretPosition: number;
     showEmojiPicker: boolean;
     uploadsProgressPercent: { [clientID: string]: FilePreviewInfo };
     currentChannel?: Channel;
@@ -109,6 +110,7 @@ type Props = {
 const AdvanceTextEditor = ({
     location,
     message,
+    caretPosition,
     showEmojiPicker,
     uploadsProgressPercent,
     currentChannel,
@@ -230,6 +232,11 @@ const AdvanceTextEditor = ({
             rootId={postId}
             channelId={channelId}
             postType={postType}
+
+            // For drive sharelinks
+            message={message}
+            caretPosition={caretPosition}
+            handleDriveSharelink={handleChange}
         />
     );
 
