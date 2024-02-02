@@ -243,6 +243,7 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
                                     handleSmallImageContainer={true}
                                     enablePublicLink={this.props.enablePublicLink}
                                     getFilePublicLink={this.getFilePublicLink}
+                                    handleKDriveSave={this.props.actions.saveFileToKDrive}
                                 />
                             </div>
                         </div>

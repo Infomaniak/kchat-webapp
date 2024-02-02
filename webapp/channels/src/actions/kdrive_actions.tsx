@@ -15,26 +15,6 @@ import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 import {ActionTypes, KDriveActionTypes} from 'utils/constants';
 import {generateId, localizeMessage} from 'utils/utils';
 
-// const fileInfo = {
-// id: string;
-// user_id: string;
-// create_at: number;
-// update_at: number;
-// delete_at: number;
-// name: file.name,
-// extension: string;
-// size: file.size,
-// mime_type: file.mimetype,
-// width: number;
-// height: number;
-// has_preview_image: boolean;
-// clientId,
-// post_id?: string;
-// mini_preview?: string;
-// archived: boolean;
-// link?: string;
-// };
-
 interface IDriveSelectionOutput {
     attachmentsSize: number;
     attachments: Array<{
@@ -79,22 +59,25 @@ export function setKDriveToast(message?: string, link?: string) {
     };
 }
 
-export function saveFileToKdrive(fileId: string, fileName: string) {
+export function saveFileToKDrive(fileId: string, fileName: string) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
 
         // handle medium
         const color = theme.ikType === 'dark' ? 'dark' : 'light';
         const driveModule = document.querySelector('module-kdrive-component') as HTMLElement &
-        { open: (mode: string, theme: string, fileName?: string) => Promise<{ driveId: number; elementId: number; name: string; link: string }> };
+        { open: (mode: string, theme: string, fileName?: string) => Promise<{ driveId: number; elementId: number; name: string }> };
 
         driveModule.open('save-to-drive', color, fileName).
-            then(async (data: { driveId: number; elementId: number; name: string; link: string }) => {
-                console.log(data);
+            then(async (data: { driveId: number; elementId: number; name: string }) => {
                 const res = await Client4.uploadToKdrive(fileId, data.driveId, data.elementId, data.name);
 
                 if (!('error' in res)) {
-                    dispatch(setKDriveToast(localizeMessage('kdrive.uploadSuccess', 'Your file has been saved to kDrive'), data.link));
+                    const [resDriveId, resElemId] = res.remote_id.split(':');
+
+                    // TODO use env for preprod
+                    const link = `https://kdrive.infomaniak.com/app/drive/${resDriveId}/redirect/${resElemId}`;
+                    dispatch(setKDriveToast(localizeMessage('kdrive.uploadSuccess', 'Your file has been saved to kDrive'), link));
                 }
             }).
             catch((error: string) => console.warn(error));

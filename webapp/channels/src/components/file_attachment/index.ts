@@ -9,7 +9,7 @@ import {bindActionCreators} from 'redux';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import type {GenericAction} from 'mattermost-redux/types/actions';
 
-import {saveFileToKdrive} from 'actions/kdrive_actions';
+import {saveFileToKDrive} from 'actions/kdrive_actions';
 import {openModal} from 'actions/views/modals';
 import {getFilesDropdownPluginMenuItems} from 'selectors/plugins';
 
@@ -34,7 +34,7 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
     return {
         actions: bindActionCreators({
             openModal,
-            saveFileToKdrive,
+            saveFileToKDrive,
         }, dispatch),
     };
 }
