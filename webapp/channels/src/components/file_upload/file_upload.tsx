@@ -15,6 +15,7 @@ import type {UploadFile} from 'actions/file_actions';
 
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
+import type {TextboxElement} from 'components/textbox';
 import Tooltip from 'components/tooltip';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
@@ -157,6 +158,14 @@ export type Props = {
      * Function called when xhr fires progress event.
      */
     onUploadProgress: (filePreviewInfo: FilePreviewInfo) => void;
+
+    /**
+     * For drive sharelinks, recovered via the plugin action hack in {@code selectFileFromKdrive}
+     */
+    message: string;
+    caretPosition: number;
+    handleDriveSharelink: (e: React.ChangeEvent<TextboxElement>) => void;
+
     actions: {
 
         /**
@@ -574,6 +583,37 @@ export class FileUpload extends PureComponent<Props, State> {
         this.fileInput.current?.click();
     };
 
+    addDummyRequest = (clientId: string, fileName: string, fileType: string) => {
+        const request = {
+            file: {},
+            name: fileName,
+            type: fileType,
+            rootId: this.props.rootId || '',
+            channelId: this.props.channelId,
+            clientId,
+            onProgress: this.props.onUploadProgress,
+            onSuccess: this.fileUploadSuccess,
+            onError: this.fileUploadFail,
+        };
+
+        this.setState((prvState) => {
+            return {
+                requests: {
+                    ...prvState.requests,
+                    [clientId]: request,
+                },
+            };
+        });
+
+        return request;
+    };
+
+    removeDummyRequest = (clientId: string) => {
+        const requests = Object.assign({}, this.state.requests);
+        Reflect.deleteProperty(requests, clientId);
+        this.setState({requests});
+    };
+
     render() {
         const {formatMessage} = this.props.intl;
         let multiple = true;
@@ -650,13 +690,32 @@ export class FileUpload extends PureComponent<Props, State> {
                         key={item.pluginId + '_fileuploadpluginmenuitem'}
                         onClick={() => {
                             if (item.action) {
-                                item.action(this.checkPluginHooksAndUploadFiles);
+                                if (item.customArgs) {
+                                    const args: Array<keyof FileUpload | keyof Props> = [];
+
+                                    item.customArgs.forEach((arg) => {
+                                        if (arg in this || arg in this.props) {
+                                            // @ts-expect-error ts can't infer this properly
+                                            args.push(this[arg] || this.props[arg]);
+                                        }
+                                    });
+
+                                    item.action(...args);
+                                } else {
+                                    item.action(this.checkPluginHooksAndUploadFiles);
+                                }
                             }
                             this.setState({menuOpen: false});
                         }}
                     >
-                        <a href='#'>
-                            <span className='mr-2'>
+                        <a
+                            href='#'
+                            style={{display: 'flex', alignItems: 'center'}}
+                        >
+                            <span
+                                className='mr-2'
+                                style={{marginLeft: -3, height: 20}}
+                            >
                                 {item.icon}
                             </span>
                             {item.text}

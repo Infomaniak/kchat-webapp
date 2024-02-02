@@ -1770,6 +1770,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     labels={priorityLabels}
                     isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
+                    caretPosition={this.state.caretPosition}
                     additionalControls={[
                         this.props.isPostPriorityEnabled && (
                             <React.Fragment key='PostPriorityPicker'>

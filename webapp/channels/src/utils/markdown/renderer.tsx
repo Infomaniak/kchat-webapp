@@ -126,7 +126,7 @@ export default class Renderer extends marked.Renderer {
         if (!href.startsWith('/')) {
             const scheme = getScheme(href);
             if (!scheme) {
-                outHref = `http://${outHref}`;
+                outHref = `https://${outHref}`;
             } else if (isUrl && this.formattingOptions.autolinkedUrlSchemes) {
                 const isValidUrl =
           this.formattingOptions.autolinkedUrlSchemes.indexOf(

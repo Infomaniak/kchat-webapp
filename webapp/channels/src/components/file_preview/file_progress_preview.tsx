@@ -55,7 +55,7 @@ export default class FileProgressPreview extends React.PureComponent<Props> {
                                     id='admin.plugin.uploading'
                                     defaultMessage='Uploading...'
                                 />
-                                <span>{percentTxt}</span>
+                                {fileInfo.percent && <span>{percentTxt}</span>}
                             </React.Fragment>
                         )}
                     </span>

@@ -37,7 +37,6 @@ const SchedulePostModal = ({
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const [scheduleTimestamp, setScheduleTimestamp] = useState<Moment>(isScheduledDraft ? timestamp : getRoundedTime(timestamp));
-    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
 
     const handleRemoveSchedule = () => {
@@ -83,7 +82,7 @@ const SchedulePostModal = ({
         defaultMessage: 'Schedule',
     });
 
-    const isConfirmDisabled = isMenuOpen || isDatePickerOpen;
+    const isConfirmDisabled = isDatePickerOpen;
 
     let footer;
     if (isScheduledDraft) {
@@ -136,7 +135,6 @@ const SchedulePostModal = ({
                 time={scheduleTimestamp}
                 handleChange={setScheduleTimestamp}
                 timezone={timezone}
-                onMenuChange={setIsMenuOpen}
                 setIsDatePickerOpen={setIsDatePickerOpen}
             />
         </GenericModal>

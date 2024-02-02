@@ -10,6 +10,7 @@ import {getFilePublicLink} from 'mattermost-redux/actions/files';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import type {GenericAction} from 'mattermost-redux/types/actions';
 
+import {saveFileToKDrive} from 'actions/kdrive_actions';
 import {toggleEmbedVisibility} from 'actions/post_actions';
 import {openModal} from 'actions/views/modals';
 import {getIsRhsOpen} from 'selectors/rhs';
@@ -34,6 +35,7 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             toggleEmbedVisibility,
             openModal,
             getFilePublicLink,
+            saveFileToKDrive,
         }, dispatch),
     };
 }

@@ -4625,6 +4625,29 @@ export default class Client4 {
             {method: 'post', body: JSON.stringify(body)},
         )
     }
+
+    uploadToKdrive = (fileId: string, driveId: number, directoryId: number, fileName: string) => {
+        return this.doFetch(
+            `${this.getFileRoute(fileId)}/drive/upload`,
+            {method: 'POST', body: JSON.stringify({
+                drive_id: driveId,
+                directory_id: directoryId,
+                file_name: fileName,
+            })}
+        )
+    }
+
+    downloadFromKdrive = (channelId: string, driveId: number, driveFileId: number, clientId: string): Promise<{client_ids: string[], file_infos: FileInfo[]}> => {
+        return this.doFetch(
+            `${this.getFilesRoute()}/drive/download`,
+            {method: 'POST', body: JSON.stringify({
+                channel_id: channelId,
+                drive_id: driveId,
+                file_id: driveFileId,
+                client_ids: clientId,
+            })}
+        )
+    }
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {

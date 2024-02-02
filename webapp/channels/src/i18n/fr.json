@@ -2719,6 +2719,7 @@
     "channel_header.channelHasGuests": "Ce canal dispose d'utilisateurs invités",
     "channel_header.channelMembers": "Membres",
     "channel_header.convert": "Convertir en canal privé",
+    "channel_header.convert.public": "Convertir en canal public",
     "channel_header.delete": "Archiver le canal",
     "channel_header.directchannel.you": "{displayname} (vous) ",
     "channel_header.editLink": "Éditer",
@@ -2931,11 +2932,12 @@
     "commercial_support.warning.banner": "Avant de télécharger le paquet de support, réglez **Enregistrer les journaux dans un fichier** sur **oui** et **Niveau de verbosité des journaux** sur **DEBUG** [ici](!/admin_console/environment/logging).",
     "confirm_modal.cancel": "Annuler",
     "convert_channel.cancel": "Non, annuler",
-    "convert_channel.confirm": "Oui, convertir en canal privé",
+    "convert_channel.confirm": "Oui, convertir en canal {type}",
     "convert_channel.question1": "Lorsque vous convertissez **{display_name}** en canal privé, l'historique et l'appartenance des membres sont conservés. Adhérer à un canal privé n'est possible que sur invitation.",
+    "convert_channel.question1.public": "Lorsque vous convertissez **{display_name}** en canal public, l'historique et l'appartenance des membres sont conservés.",
     "convert_channel.question2": "Le changement est permanent et ne peut pas être annulé.",
-    "convert_channel.question3": "Voulez-vous vraiment convertir **{display_name}** en canal privé ?",
-    "convert_channel.title": "Convertir {display_name} en un canal privé ?",
+    "convert_channel.question3": "Voulez-vous vraiment convertir **{display_name}** en canal {type} ?",
+    "convert_channel.title": "Convertir {display_name} en un canal {type} ?",
     "copied.message": "Copié",
     "copy_url_context_menu.getChannelLink": "Copier le lien",
     "copy.code.message": "Copier le code",
@@ -5182,5 +5184,8 @@
     "drafts.confirm.send.button": "Oui, envoyer maintenant",
     "drafts.confirm.send.text": "Êtes-vous sûr de vouloir envoyer ce message à <strong>{displayName}</strong> ?",
     "drafts.confirm.send.title": "Envoyer un message",
-    "drafts.actions.openInChannel": "Ouvrir dans le canal"
+    "drafts.actions.openInChannel": "Ouvrir dans le canal",
+    "kdrive.save": "Enregistrer le fichier sur kDrive",
+    "kdrive.upload": "Télécharger depuis kDrive",
+    "kdrive.uploadSuccess": "Votre fichier est enregistré dans kDrive"
 }

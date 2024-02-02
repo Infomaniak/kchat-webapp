@@ -14,8 +14,11 @@ import {getFileMiniPreviewUrl} from 'mattermost-redux/utils/file_utils';
 import LoadingImagePreview from 'components/loading_image_preview';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
 import {t} from 'utils/i18n';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {localizeMessage, copyToClipboard} from 'utils/utils';
 
 const MIN_IMAGE_SIZE = 48;
@@ -87,6 +90,8 @@ export default class SizeAwareImage extends React.PureComponent {
          * Prevents display of utility buttons when image in a location that makes them inappropriate
          */
         hideUtilities: PropTypes.bool,
+
+        handleKDriveSave: PropTypes.func,
     };
 
     constructor(props) {
@@ -191,6 +196,8 @@ export default class SizeAwareImage extends React.PureComponent {
         if (fileInfo) {
             ariaLabelImage += ` ${fileInfo.name}`.toLowerCase();
         }
+
+        const shouldShowKdriveAction = !isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0');
 
         const image = (
             <img
@@ -298,6 +305,26 @@ export default class SizeAwareImage extends React.PureComponent {
             </OverlayTrigger>
         );
 
+        const kdriveSave = (
+            <OverlayTrigger
+                className='hidden-xs'
+                delayShow={500}
+                placement='top'
+                rootClose={true}
+                overlay={
+                    <Tooltip id='file-name__tooltip'>
+                        {localizeMessage('kdrive.save', 'Save file to kDrive')}
+                    </Tooltip>
+                }
+            >
+                <a className='style--none size-aware-image__download'>
+                    <KDriveIcon
+                        style={{transform: 'scale(1.5)'}}
+                        onClick={() => this.props.handleKDriveSave(fileInfo.id, fileInfo.name)}
+                    />
+                </a>
+            </OverlayTrigger>);
+
         if (this.props.handleSmallImageContainer && this.state.isSmallImage) {
             let className = 'small-image__container cursor--pointer a11y--active';
             if (this.state.imageWidth < MIN_IMAGE_SIZE) {
@@ -342,12 +369,27 @@ export default class SizeAwareImage extends React.PureComponent {
                         })}
                         style={leftStyle}
                     >
+                        {kdriveSave}
                         {enablePublicLink && copyLink}
                         {download}
                     </span>
                 </div>
             );
         }
+
+        const kdriveButtonWrapper = !shouldShowKdriveAction || this.props.hideUtilities || (this.state.isSmallImage && !this.isInternalImage) ? null :
+            (
+                <span
+                    className={classNames('image-preview-utility-buttons-container', {
+
+                        // cases for when image isn't a small image but width is < 100px
+                        'image-preview-utility-buttons-container--small-image': this.state.imageWidth < MIN_IMAGE_SIZE_FOR_INTERNAL_BUTTONS,
+                    })}
+                    style={{right: '50px'}}
+                >
+                    {kdriveSave}
+                </span>
+            );
 
         // handling external small images (OR) handling all large internal / large external images
         const utilityButtonsWrapper = this.props.hideUtilities || (this.state.isSmallImage && !this.isInternalImage) ? null :
@@ -367,6 +409,7 @@ export default class SizeAwareImage extends React.PureComponent {
         return (
             <figure className={classNames('image-loaded-container')}>
                 {image}
+                {kdriveButtonWrapper}
                 {utilityButtonsWrapper}
             </figure>
         );

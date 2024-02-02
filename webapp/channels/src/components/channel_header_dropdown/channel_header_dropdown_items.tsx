@@ -24,9 +24,10 @@ import RenameChannelModal from 'components/rename_channel_modal';
 import UnarchiveChannelModal from 'components/unarchive_channel_modal';
 import Menu from 'components/widgets/menu/menu';
 
-import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
 import {Constants, ModalIdentifiers} from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
+
+import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
 
 import type {PluginComponent} from 'types/store/plugins';
 
@@ -282,8 +283,30 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                             dialogProps={{
                                 channelId: channel.id,
                                 channelDisplayName: channel.display_name,
+                                channelType: Constants.OPEN_CHANNEL,
                             }}
                             text={localizeMessage('channel_header.convert', 'Convert to Private Channel')}
+                        />
+                    </ChannelPermissionGate>
+                    {/*
+                    // Custom implementation to convert private channel to public.
+                     */ }
+                    <ChannelPermissionGate
+                        channelId={channel.id}
+                        teamId={channel.team_id}
+                        permissions={[Permissions.CONVERT_PUBLIC_CHANNEL_TO_PRIVATE]}
+                    >
+                        <Menu.ItemToggleModalRedux
+                            id='channelConvertToPublic'
+                            show={!isArchived && !isDefault && channel.type === Constants.PRIVATE_CHANNEL}
+                            modalId={ModalIdentifiers.CONVERT_CHANNEL}
+                            dialogType={ConvertChannelModal}
+                            dialogProps={{
+                                channelId: channel.id,
+                                channelDisplayName: channel.display_name,
+                                channelType: Constants.PRIVATE_CHANNEL,
+                            }}
+                            text={localizeMessage('channel_header.convert.public', 'Convert to Public Channel')}
                         />
                     </ChannelPermissionGate>
                     <ChannelPermissionGate

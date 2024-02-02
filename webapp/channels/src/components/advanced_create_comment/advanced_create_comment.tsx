@@ -1319,6 +1319,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     setDraftAsPostType={this.setDraftAsPostType}
                     isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
+                    caretPosition={this.state.caretPosition}
                 />
             </form>
         );

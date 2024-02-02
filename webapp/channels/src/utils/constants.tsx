@@ -202,6 +202,10 @@ export const BridgeActionTypes = keyMirror({
     STORE_BRIDGE: null,
 });
 
+export const KDriveActionTypes = keyMirror({
+    TOAST: null,
+});
+
 export const ActionTypes = keyMirror({
     SET_INFOMANIAK_TOKEN: null,
 
