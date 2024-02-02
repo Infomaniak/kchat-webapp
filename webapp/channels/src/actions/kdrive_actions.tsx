@@ -70,12 +70,13 @@ export function saveFileToKdrive(fileId: string, fileName: string) {
 
         driveModule.open('save-to-drive', color, fileName).
             then(async (data: { driveId: number; elementId: number; name: string }) => {
-                console.log(data);
                 const res = await Client4.uploadToKdrive(fileId, data.driveId, data.elementId, data.name);
 
                 if (!('error' in res)) {
+                    const [resDriveId, resElemId] = res.remote_id.split(':');
+
                     // TODO use env for preprod
-                    const link = `https://drive.infomaniak.com/app/drive/${data.driveId}/redirect/${data.elementId}`;
+                    const link = `https://kdrive.infomaniak.com/app/drive/${resDriveId}/redirect/${resElemId}`;
                     dispatch(setKDriveToast(localizeMessage('kdrive.uploadSuccess', 'Your file has been saved to kDrive'), link));
                 }
             }).
