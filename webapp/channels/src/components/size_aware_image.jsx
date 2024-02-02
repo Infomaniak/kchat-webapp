@@ -363,19 +363,13 @@ export default class SizeAwareImage extends React.PureComponent {
                     >
                         {image}
                     </div>
-                    {/* TODO: check this kdrive */}
-                    {/* <span
-                        className={classNames('image-preview-utility-buttons-container', 'image-preview-utility-buttons-container--small-image')}
-                        style={leftStyle}
-                    >
-                        {kdriveSave}
-                    </span> */}
                     <span
                         className={classNames('image-preview-utility-buttons-container', 'image-preview-utility-buttons-container--small-image', {
                             'image-preview-utility-buttons-container--small-image-no-copy-button': !enablePublicLink,
                         })}
                         style={leftStyle}
                     >
+                        {kdriveSave}
                         {enablePublicLink && copyLink}
                         {download}
                     </span>
@@ -409,7 +403,6 @@ export default class SizeAwareImage extends React.PureComponent {
                     })}
                 >
                     {(enablePublicLink || !this.isInternalImage) && copyLink}
-                    {/* {kdriveSave} */}
                     {download}
                 </span>
             );
