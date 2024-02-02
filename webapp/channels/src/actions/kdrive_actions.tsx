@@ -59,7 +59,7 @@ export function setKDriveToast(message?: string, link?: string) {
     };
 }
 
-export function saveFileToKdrive(fileId: string, fileName: string) {
+export function saveFileToKDrive(fileId: string, fileName: string) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
 
