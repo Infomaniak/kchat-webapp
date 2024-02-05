@@ -4045,6 +4045,7 @@
     "more_channels.joined": "Iscritto",
     "joinChannel.JoinButton": "Unirsi",
     "joinChannel.joiningButton": "Unirsi...",
+    "joinChannel.joiningButtonChannel": "Unirsi al canale",
     "more_channels.noArchived": "Nessun canale archiviato",
     "more_channels.noPublic": "Nessun canale pubblico",
     "more_channels.count_zero": "0 Risultati",

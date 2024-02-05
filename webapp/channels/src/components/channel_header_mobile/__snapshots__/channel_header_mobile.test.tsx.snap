@@ -15,9 +15,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
       <Connect(CollapseLhsButton) />
       <div
         className="navbar-brand"
-      >
-        <Connect(injectIntl(MobileChannelHeaderDropdown)) />
-      </div>
+      />
       <div
         className="spacer"
       />
@@ -87,9 +85,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
       <Connect(CollapseLhsButton) />
       <div
         className="navbar-brand"
-      >
-        <Connect(injectIntl(MobileChannelHeaderDropdown)) />
-      </div>
+      />
       <div
         className="spacer"
       />
@@ -159,9 +155,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
       <Connect(CollapseLhsButton) />
       <div
         className="navbar-brand"
-      >
-        <Connect(injectIntl(MobileChannelHeaderDropdown)) />
-      </div>
+      />
       <div
         className="spacer"
       />
@@ -231,9 +225,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
       <Connect(CollapseLhsButton) />
       <div
         className="navbar-brand"
-      >
-        <Connect(injectIntl(MobileChannelHeaderDropdown)) />
-      </div>
+      />
       <div
         className="spacer"
       />

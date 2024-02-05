@@ -3800,6 +3800,7 @@
     "joinChannel.JoinButton": "Unirse",
     "joinChannel.cancelButton": "Cancelar",
     "joinChannel.joiningButton": "Uniéndose...",
+    "joinChannel.joiningButtonChannel": "Únete al canal",
     "joinChannel.title": "¿Unirte al canal?",
     "join_team_group_constrained_denied": "Debes ser miembro de un grupo asociado para unirte a este equipo.",
     "join_team_group_constrained_denied_admin": "Debes ser miembro de un grupo asociado para unirte a este equipo. Puedes agregar grupos a este equipo [aquí]({siteURL}/admin_console/user_management/groups).",
