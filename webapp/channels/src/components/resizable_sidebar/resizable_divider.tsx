@@ -27,7 +27,7 @@ type Props = {
     containerRef: RefObject<HTMLElement>;
 
     // IK: For resizing left controls when lhs is resized since our layout has a split global header
-    headerRef: React.Ref<HTMLDivElement>;
+    headerRef?: React.RefObject<HTMLDivElement>;
 
     onResizeStart?: (startWidth: number) => void;
     onResize?: (width: number, cssVarProperty: string, cssVarValue: string) => void;
@@ -112,7 +112,9 @@ function ResizableDivider({
 
     const defaultOnResizeChange = (width: number, cssVarProp: string, cssVarValue: string) => {
         containerRef.current?.style.setProperty(cssVarProp, cssVarValue);
-        headerRef.current?.style.setProperty(cssVarProp, cssVarValue);
+        if (headerRef) {
+            headerRef.current?.style.setProperty(cssVarProp, cssVarValue);
+        }
         lastWidth.current = width;
     };
 

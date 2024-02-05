@@ -38,7 +38,7 @@ const LeftControlsContainer = styled.div`
     }
 `;
 
-const LeftControls = ({headerRef}: {headerRef: React.Ref<HTMLDivElement>}): JSX.Element => (
+const LeftControls = ({headerRef}: {headerRef: React.RefObject<HTMLDivElement>}): JSX.Element => (
     <LeftControlsContainer ref={headerRef}>
         {/* <ProductMenu/> */}
         <AppNameDisplay/>

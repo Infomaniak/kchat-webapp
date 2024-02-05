@@ -52,7 +52,7 @@ const GlobalHeaderContainer = styled.header`
     }
 `;
 
-const GlobalHeader = ({headerRef}: {headerRef: React.Ref<HTMLDivElement>}): JSX.Element | null => {
+const GlobalHeader = ({headerRef}: {headerRef: React.RefObject<HTMLDivElement>}): JSX.Element | null => {
     const isLoggedIn = useIsLoggedIn();
     const currentProductID = useCurrentProductId();
 

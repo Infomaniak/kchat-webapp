@@ -25,7 +25,7 @@ type Props = {
     shouldRenderCenterChannel: boolean;
 
     // IK: For resizing left controls when lhs is resized since our layout has a split global header
-    headerRef: React.Ref<HTMLDivElement>;
+    headerRef: React.RefObject<HTMLDivElement>;
 }
 
 export default function ChannelController(props: Props) {

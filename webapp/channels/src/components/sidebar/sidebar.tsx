@@ -59,7 +59,7 @@ type Props = {
     isMoreDmsModalOpen: boolean;
 
     // IK: For resizing left controls when lhs is resized since our layout has a split global header
-    headerRef: React.Ref<HTMLDivElement>;
+    headerRef: React.RefObject<HTMLDivElement>;
 };
 
 type State = {

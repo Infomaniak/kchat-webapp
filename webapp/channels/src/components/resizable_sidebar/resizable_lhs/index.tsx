@@ -9,7 +9,7 @@ import ResizableDivider from '../resizable_divider';
 
 interface Props extends HTMLAttributes<'div'> {
     children: React.ReactNode;
-    headerRef: React.Ref<HTMLDivElement>;
+    headerRef: React.RefObject<HTMLDivElement>;
 }
 
 function ResizableLhs({

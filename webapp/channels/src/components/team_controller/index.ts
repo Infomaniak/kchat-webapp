@@ -30,7 +30,7 @@ type Params = {
 export type OwnProps = RouteComponentProps<Params> & {
 
     /** IK: For resizing left controls when lhs is resized since our layout has a split global header */
-    headerRef: React.Ref<HTMLDivElement>;
+    headerRef: React.RefObject<HTMLDivElement>;
 };
 
 function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
