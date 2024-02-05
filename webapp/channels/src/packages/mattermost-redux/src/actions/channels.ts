@@ -1302,6 +1302,13 @@ export function updateChannelPurpose(channelId: string, purpose: string): Action
 export function markChannelAsRead(channelId: string, prevChannelId?: string, updateLastViewedAt = true): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
+
+        // [Preview mode]if an user is not a channel member, we skip the mark as read action.
+        const isMember = state.entities.channels.myMembers[channelId];
+        if (!isMember) {
+            return {data: undefined};
+        }
+
         const prevChanManuallyUnread = isManuallyUnread(state, prevChannelId);
 
         const actions = actionsToMarkChannelAsRead(getState, channelId, prevChannelId);

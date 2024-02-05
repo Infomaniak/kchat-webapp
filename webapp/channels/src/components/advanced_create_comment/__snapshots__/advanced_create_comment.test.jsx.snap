@@ -53,6 +53,7 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -63,6 +64,7 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
     postMsgKeyPress={[Function]}
     removePreview={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -75,6 +77,7 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -126,6 +129,7 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -136,6 +140,7 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
     postMsgKeyPress={[Function]}
     removePreview={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -148,6 +153,7 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -206,6 +212,7 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -216,6 +223,7 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
     postMsgKeyPress={[Function]}
     removePreview={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -228,6 +236,7 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -279,6 +288,7 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -289,6 +299,7 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
     postMsgKeyPress={[Function]}
     removePreview={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -301,6 +312,7 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -359,6 +371,7 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -369,6 +382,7 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
     postMsgKeyPress={[Function]}
     removePreview={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -381,6 +395,7 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;

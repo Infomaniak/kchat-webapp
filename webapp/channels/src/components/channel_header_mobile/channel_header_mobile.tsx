@@ -34,6 +34,7 @@ type Props = {
     isReadOnly?: boolean;
     isRHSOpen?: boolean;
     user: UserProfile;
+    isChannelMember?: boolean;
     actions: {
         closeLhs: () => void;
         closeRhs: () => void;
@@ -66,7 +67,7 @@ export default class ChannelHeaderMobile extends React.PureComponent<Props> {
     };
 
     render() {
-        const {user, channel, isMuted, inGlobalThreads, inDrafts} = this.props;
+        const {user, channel, isMuted, inGlobalThreads, inDrafts, isChannelMember} = this.props;
 
         let heading;
         if (inGlobalThreads) {
@@ -84,7 +85,7 @@ export default class ChannelHeaderMobile extends React.PureComponent<Props> {
                 />
             );
         } else if (channel) {
-            heading = (
+            heading = isChannelMember && ( // display the header features only fro members, not in the preview mode.
                 <>
                     <MobileChannelHeaderDropdown/>
                     {isMuted && (

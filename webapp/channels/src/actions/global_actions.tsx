@@ -55,6 +55,7 @@ import WebSocketClient from 'client/web_websocket_client';
 
 import type {GlobalState} from 'types/store';
 
+import {joinChannelById} from './views/channel';
 import {openModal} from './views/modals';
 
 const dispatch = store.dispatch;
@@ -440,6 +441,10 @@ export async function redirectUserToDefaultTeam() {
     }
 
     getHistory().push('/select_team');
+}
+
+export function joinChannel(channelId: string) {
+    dispatch(joinChannelById(channelId));
 }
 
 export function redirectToManagerDashboard(groupId: number) {

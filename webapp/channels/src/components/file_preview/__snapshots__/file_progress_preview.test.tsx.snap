@@ -72,7 +72,7 @@ exports[`component/file_preview/file_progress_preview should match snapshot 1`] 
     <ProgressBar
       active={false}
       bsClass="progress-bar"
-      className="post-image__progressBar"
+      className="attachments-progress-bar"
       isChild={false}
       max={100}
       min={0}
@@ -137,21 +137,8 @@ exports[`component/file_preview/file_progress_preview snapshot for percent value
             defaultMessage="Uploading..."
             id="admin.plugin.uploading"
           />
-          <span>
-             (0%)
-          </span>
         </span>
       </div>
-    </div>
-    <div>
-      <a
-        className="file-preview__remove"
-        onClick={[Function]}
-      >
-        <i
-          className="icon icon-close"
-        />
-      </a>
     </div>
   </div>
 </div>
