@@ -73,6 +73,7 @@ describe('components/FileUpload', () => {
         rootId: 'root_id',
         pluginFileUploadMethods: [],
         pluginFilesWillUploadHooks: [],
+        disabled: false,
         actions: {
             uploadFile,
         },
@@ -95,7 +96,7 @@ describe('components/FileUpload', () => {
         expect(baseProps.onClick).toHaveBeenCalledTimes(1);
     });
 
-    test('should prevent event default and progogation on call of onTouchEnd on fileInput', () => {
+    test('should prevent event default and propagation on call of onTouchEnd on fileInput', () => {
         const wrapper = shallowWithIntl(
             <FileUpload {...baseProps}/>,
         );
@@ -115,7 +116,7 @@ describe('components/FileUpload', () => {
         expect(instance.handleLocalFileUploaded).toHaveBeenCalled();
     });
 
-    test('should prevent event default and progogation on call of onClick on fileInput', () => {
+    test('should prevent event default and propagation on call of onClick on fileInput', () => {
         const wrapper = shallowWithIntl(
             <FileUpload {...baseProps}/>,
         );
@@ -411,5 +412,15 @@ describe('components/FileUpload', () => {
 
         expect(baseProps.onUploadError).toHaveBeenCalledTimes(1);
         expect(baseProps.onUploadError).toHaveBeenCalledWith('');
+    });
+
+    test('Should disable when disabled prop is passed', () => {
+        const props = {...baseProps, disabled: true};
+        const wrapper = shallowWithIntl(
+            <FileUpload {...props}/>,
+        );
+
+        expect(wrapper.find('button').prop('disabled')).toEqual(true);
+        expect(wrapper.find('input').prop('disabled')).toEqual(true);
     });
 });

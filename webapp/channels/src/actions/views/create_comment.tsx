@@ -92,6 +92,7 @@ export function submitPost(channelId: string, rootId: string, draft: PostDraft) 
             user_id: userId,
             create_at: time,
             metadata: {},
+            type: draft?.postType ?? '',
             props: {...draft.props},
         } as unknown as Post;
 

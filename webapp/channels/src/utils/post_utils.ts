@@ -31,7 +31,7 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {getEmojiMap} from 'selectors/emojis';
 import {getIsMobileView} from 'selectors/views/browser';
 
-import Constants, {PostListRowListIds, Preferences} from 'utils/constants';
+import Constants, {PostListRowListIds, PostTypes, Preferences} from 'utils/constants';
 import {formatWithRenderer} from 'utils/markdown';
 import MentionableRenderer from 'utils/markdown/mentionable_renderer';
 import {allAtMentions} from 'utils/text_formatting';
@@ -39,6 +39,7 @@ import {isMobile} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
+import type {PostDraft} from 'types/store/draft';
 
 import type EmojiMap from './emoji_map';
 import * as Emoticons from './emoticons';
@@ -786,3 +787,22 @@ export function getMentionDetails(usersByUsername: Record<string, UserProfile | 
     return undefined;
 }
 
+export enum VoiceMessageStates {
+    IDLE = 'idle',
+    RECORDING = 'recording',
+    UPLOADING = 'uploading',
+    ATTACHED = 'attached',
+}
+
+export function getVoiceMessageStateFromDraft(draft: PostDraft): VoiceMessageStates {
+    if (draft.postType === PostTypes.VOICE) {
+        if (draft.uploadsInProgress.length !== 0 && draft.fileInfos.length === 0) {
+            return VoiceMessageStates.UPLOADING;
+        }
+        if (draft.uploadsInProgress.length === 0 && draft.fileInfos.length !== 0) {
+            return VoiceMessageStates.ATTACHED;
+        }
+        return VoiceMessageStates.RECORDING;
+    }
+    return VoiceMessageStates.IDLE;
+}

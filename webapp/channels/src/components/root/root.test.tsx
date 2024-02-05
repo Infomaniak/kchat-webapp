@@ -42,6 +42,8 @@ jest.mock('mattermost-redux/actions/general', () => ({
     setUrl: () => {},
 }));
 
+jest.mock('components/advanced_text_editor/voice_message_attachment', () => () => <div/>);
+
 describe('components/Root', () => {
     const baseProps = {
         telemetryEnabled: true,

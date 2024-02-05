@@ -23,6 +23,7 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Constants from 'utils/constants';
 import DelayedAction from 'utils/delayed_action';
 import dragster from 'utils/dragster';
+import {generateDateSpecificFileName} from 'utils/file_utils';
 import {t} from 'utils/i18n';
 import {getTable} from 'utils/paste';
 import {
@@ -105,6 +106,7 @@ export type Props = {
     intl: IntlShape;
 
     locale: string;
+    disabled: boolean;
 
     /**
      * Function to be called when file upload input is clicked
@@ -502,10 +504,6 @@ export class FileUpload extends PureComponent<Props, State> {
                     continue;
                 }
 
-                const now = new Date();
-                const hour = now.getHours().toString().padStart(2, '0');
-                const minute = now.getMinutes().toString().padStart(2, '0');
-
                 let ext = '';
                 if (file.name && file.name.includes('.')) {
                     ext = file.name.substr(file.name.lastIndexOf('.'));
@@ -513,7 +511,7 @@ export class FileUpload extends PureComponent<Props, State> {
                     ext = '.' + items[i].type.split('/')[1].toLowerCase();
                 }
 
-                const name = file.name || formatMessage(holders.pasted) + now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() + ' ' + hour + '-' + minute + ext;
+                const name = file.name || generateDateSpecificFileName(formatMessage(holders.pasted), ext);
 
                 const newFile: File = new File([file], name, {type: file.type});
                 files.push(newFile);
@@ -656,6 +654,7 @@ export class FileUpload extends PureComponent<Props, State> {
                         <button
                             type='button'
                             id='fileUploadButton'
+                            disabled={this.props.disabled}
                             aria-label={buttonAriaLabel}
                             className={classNames('style--none AdvancedTextEditor__action-button', {
                                 disabled: uploadsRemaining <= 0,
@@ -680,6 +679,7 @@ export class FileUpload extends PureComponent<Props, State> {
                         onClick={this.handleLocalFileUploaded}
                         multiple={multiple}
                         accept={accept}
+                        disabled={this.props.disabled}
                     />
                 </div>
             );
@@ -735,6 +735,7 @@ export class FileUpload extends PureComponent<Props, State> {
                         onClick={this.handleLocalFileUploaded}
                         multiple={multiple}
                         accept={accept}
+                        disabled={this.props.disabled}
                     />
                     <MenuWrapper>
                         <OverlayTrigger
@@ -755,6 +756,7 @@ export class FileUpload extends PureComponent<Props, State> {
                                 type='button'
                                 id='fileUploadButton'
                                 aria-label={buttonAriaLabel}
+                                disabled={this.props.disabled}
                                 className='style--none AdvancedTextEditor__action-button'
                             >
                                 <PaperclipIcon
@@ -776,6 +778,7 @@ export class FileUpload extends PureComponent<Props, State> {
                                     href='#'
                                     onClick={this.simulateInputClick}
                                     onTouchEnd={this.simulateInputClick}
+                                    disabled={this.props.disabled}
                                 >
                                     <span className='mr-2'>
                                         <i className='fa fa-laptop'/>

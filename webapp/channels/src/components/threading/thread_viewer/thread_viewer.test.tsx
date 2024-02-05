@@ -16,6 +16,8 @@ import type {FakePost} from 'types/store/rhs';
 import type {Props} from './thread_viewer';
 import ThreadViewer from './thread_viewer';
 
+jest.mock('components/advanced_text_editor/voice_message_attachment', () => () => <div/>);
+
 describe('components/threading/ThreadViewer', () => {
     const post: Post = TestHelper.getPostMock({
         channel_id: 'channel_id',

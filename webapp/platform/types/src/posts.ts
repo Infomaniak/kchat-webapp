@@ -28,6 +28,7 @@ export type PostType = 'system_add_remove' |
 'system_remove_from_channel' |
 'system_combined_user_activity' |
 'system_fake_parent_deleted' |
+'voice' |
 'system_generic' |
 'system_post_reminder' |
 'system_change_chan_privacy' |

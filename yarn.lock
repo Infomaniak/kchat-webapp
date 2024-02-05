@@ -13859,6 +13859,7 @@ __metadata:
     tinycolor2: "npm:1.4.2"
     turndown: "npm:7.1.1"
     typescript: "npm:4.7.4"
+    wasm-media-encoders: "npm:0.6.4"
     webpack: "npm:5.74.0"
     webpack-bundle-analyzer: "npm:4.7.0"
     webpack-cli: "npm:4.10.0"
@@ -19755,6 +19756,15 @@ __metadata:
   dependencies:
     loose-envify: "npm:^1.0.0"
   checksum: e7842aff036e2e07ce7a6cc3225e707775b969fe3d0577ad64bd24660e3a9ce3017f0b8c22a136566dcd3a151f37b8ed1ccee103b3bd82bd8a571bf80b247bc4
+  languageName: node
+  linkType: hard
+
+"wasm-media-encoders@npm:0.6.4":
+  version: 0.6.4
+  resolution: "wasm-media-encoders@npm:0.6.4"
+  dependencies:
+    "@babel/runtime": "npm:^7.12.5"
+  checksum: aff3db3bf873819cb30e69d508a77b6fbf9ed2aab9bd26e49a1d655ac643451147a970ee7c5e88491bccdbbd2691e7a117cd9aaea0b61730e69866a9ac534a9e
   languageName: node
   linkType: hard
 
