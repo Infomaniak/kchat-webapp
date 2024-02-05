@@ -175,6 +175,7 @@ export default class Root extends React.PureComponent<Props, State> {
     private IKLoginCode: string | undefined;
     private loginCodeInterval: NodeJS.Timer | undefined;
     private tokenCheckInterval: NodeJS.Timer | undefined;
+    private headerResizerRef: React.Ref<HTMLDivElement>;
 
     // The constructor adds a bunch of event listeners,
     // so we do need this.
@@ -190,6 +191,8 @@ export default class Root extends React.PureComponent<Props, State> {
         this.IKLoginCode = undefined;
         this.loginCodeInterval = undefined;
         this.tokenCheckInterval = undefined;
+
+        this.headerResizerRef = React.createRef();
 
         // Redux
         setUrl(getSiteURL());
@@ -808,7 +811,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         <ModalController/>
                         <AnnouncementBarController/>
                         <SystemNotice/>
-                        <GlobalHeader/>
+                        <GlobalHeader headerRef={this.headerResizerRef}/>
                         {!this.embeddedInIFrame && <TeamSidebar/>}
                         <Switch>
                             {this.props.products?.map((product) => (
@@ -856,7 +859,12 @@ export default class Root extends React.PureComponent<Props, State> {
                             <LoggedInRoute
                                 theme={this.props.theme}
                                 path={'/:team'}
-                                component={TeamController}
+                                component={(props) => (
+                                    <TeamController
+                                        headerRef={this.headerResizerRef}
+                                        {...props}
+                                    />
+                                )}
                             />
                             <RootRedirect/>
                         </Switch>

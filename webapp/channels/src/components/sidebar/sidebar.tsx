@@ -57,6 +57,9 @@ type Props = {
     rhsOpen?: boolean;
     showWorkTemplateButton: boolean;
     isMoreDmsModalOpen: boolean;
+
+    // IK: For resizing left controls when lhs is resized since our layout has a split global header
+    headerRef: React.Ref<HTMLDivElement>;
 };
 
 type State = {
@@ -228,6 +231,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                     'move--right': this.props.isOpen && this.props.isMobileView,
                     dragging: this.state.isDragging,
                 })}
+                headerRef={this.props.headerRef}
             >
                 {this.props.isMobileView ? <MobileSidebarHeader/> : (
                     <SidebarHeader

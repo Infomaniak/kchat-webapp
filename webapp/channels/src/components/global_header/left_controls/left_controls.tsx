@@ -15,26 +15,31 @@ const LeftControlsContainer = styled.div`
     align-items: center;
     height: 46px;
     flex-shrink: 0;
-    width: 320px;
     background: var(--sidebar-bg);
     border-bottom: solid 1px rgba(var(--sidebar-text-rgb), 0.25);
     padding-left: 10px;
+    width: var(--overrideLhsWidth, 320px);
+    min-width: 240px;
+    max-width: 240px;
+    @media screen and (min-width: 769px) {
+        min-width: 200px;
+        max-width: 264px;
+    }
 
+    @media screen and (min-width: 1201px) {
+        max-width: 304px;
+    }
+
+    @media screen and (min-width: 1681px) {
+        max-width: 440px;
+    }
     > * + * {
         margin-left: 10px;
     }
-
-    .multi-teams & {
-        width: 255px
-    }
-
-    .no-webcomponents & {
-        width: 255px
-    }
 `;
 
-const LeftControls = (): JSX.Element => (
-    <LeftControlsContainer>
+const LeftControls = ({headerRef}: {headerRef: React.Ref<HTMLDivElement>}): JSX.Element => (
+    <LeftControlsContainer ref={headerRef}>
         {/* <ProductMenu/> */}
         <AppNameDisplay/>
         {isDesktopApp() && <HistoryButtons/>}
