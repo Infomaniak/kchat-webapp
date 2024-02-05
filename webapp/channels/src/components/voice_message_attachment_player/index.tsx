@@ -15,6 +15,8 @@ import {useIntl} from 'react-intl';
 import type {FileInfo} from '@mattermost/types/files';
 import type {Post} from '@mattermost/types/posts';
 
+import {getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
+
 import {
     AudioPlayerState,
     useAudioPlayer,
@@ -42,6 +44,10 @@ function VoiceMessageAttachmentPlayer(props: Props) {
 
     function copyLink() {
         copyToClipboard(`${getSiteURL()}/api/v4/files/${props.fileId}`);
+    }
+
+    function downloadFile() {
+        window.location.assign(getFileDownloadUrl(props.fileId));
     }
 
     return (
@@ -114,6 +120,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                                     />
                                 }
                                 text={formatMessage({id: 'voiceMessageAttachment.download', defaultMessage: 'Download'})}
+                                onClick={downloadFile}
                             />
                         </Menu>
                     </MenuWrapper>
