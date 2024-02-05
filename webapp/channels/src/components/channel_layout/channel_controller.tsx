@@ -23,6 +23,9 @@ const BODY_CLASS_FOR_CHANNEL = ['app__body', 'channel-view'];
 
 type Props = {
     shouldRenderCenterChannel: boolean;
+
+    // IK: For resizing left controls when lhs is resized since our layout has a split global header
+    headerRef: React.RefObject<HTMLDivElement>;
 }
 
 export default function ChannelController(props: Props) {
@@ -50,7 +53,7 @@ export default function ChannelController(props: Props) {
 
     return (
         <>
-            <Sidebar/>
+            <Sidebar headerRef={props.headerRef}/>
             <div
                 id='channel_view'
                 className='channel-view'
