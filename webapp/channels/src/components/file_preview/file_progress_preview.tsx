@@ -89,14 +89,16 @@ export default class FileProgressPreview extends React.PureComponent<Props> {
                             {fileNameComponent}
                         </div>
                     </div>
-                    <div>
-                        <a
-                            className='file-preview__remove'
-                            onClick={this.handleRemove}
-                        >
-                            <i className='icon icon-close'/>
-                        </a>
-                    </div>
+                    {Boolean(percent) && (
+                        <div>
+                            <a
+                                className='file-preview__remove'
+                                onClick={this.handleRemove}
+                            >
+                                <i className='icon icon-close'/>
+                            </a>
+                        </div>
+                    )}
                     {progressBar}
                 </div>
             </div>
