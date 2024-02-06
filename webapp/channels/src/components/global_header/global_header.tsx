@@ -52,7 +52,7 @@ const GlobalHeaderContainer = styled.header`
     }
 `;
 
-const GlobalHeader = (): JSX.Element | null => {
+const GlobalHeader = ({headerRef}: {headerRef: React.RefObject<HTMLDivElement>}): JSX.Element | null => {
     const isLoggedIn = useIsLoggedIn();
     const currentProductID = useCurrentProductId();
 
@@ -62,7 +62,7 @@ const GlobalHeader = (): JSX.Element | null => {
 
     return (
         <GlobalHeaderContainer id='global-header'>
-            <LeftControls/>
+            <LeftControls headerRef={headerRef}/>
             <CenterControls/>
             <RightControls productId={currentProductID}/>
         </GlobalHeaderContainer>

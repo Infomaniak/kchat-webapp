@@ -7,6 +7,8 @@ import React from 'react';
 import type {Props} from './channel_view';
 import ChannelView from './channel_view';
 
+jest.mock('components/advanced_text_editor/voice_message_attachment', () => () => <div/>);
+
 describe('components/channel_view', () => {
     const baseProps: Props = {
         channelId: 'channelId',

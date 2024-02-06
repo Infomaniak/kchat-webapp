@@ -23,6 +23,8 @@ jest.mock('utils/exec_commands', () => ({
     execCommandInsertText: jest.fn(),
 }));
 
+jest.mock('components/advanced_text_editor/voice_message_attachment', () => () => <div/>);
+
 describe('components/AdvancedCreateComment', () => {
     jest.useFakeTimers();
     let spy: jest.SpyInstance;

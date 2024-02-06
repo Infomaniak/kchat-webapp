@@ -113,9 +113,10 @@ type LoggedInRouteProps<T> = {
     component: React.ComponentType<T>;
     path: string;
     theme?: Theme; // the routes that send the theme are the ones that will actually need to show the onboarding tasklist
+    headerRef: React.RefObject<HTMLDivElement>; // IK: ref used for resisizng global header left controls when lhs is resized by user.
 };
 function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
-    const {component: Component, theme, ...rest} = props;
+    const {component: Component, theme, headerRef, ...rest} = props;
     return (
         <Route
             {...rest}
@@ -124,7 +125,10 @@ function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
                     {theme && <CompassThemeProvider theme={theme}>
                         <OnBoardingTaskList/>
                     </CompassThemeProvider>}
-                    <Component {...(routeProps as unknown as T)}/>
+                    <Component
+                        {...(routeProps as unknown as T)}
+                        headerRef={headerRef}
+                    />
                 </LoggedIn>
             )}
         />
@@ -175,6 +179,7 @@ export default class Root extends React.PureComponent<Props, State> {
     private IKLoginCode: string | undefined;
     private loginCodeInterval: NodeJS.Timer | undefined;
     private tokenCheckInterval: NodeJS.Timer | undefined;
+    private headerResizerRef: React.RefObject<HTMLDivElement>;
 
     // The constructor adds a bunch of event listeners,
     // so we do need this.
@@ -190,6 +195,8 @@ export default class Root extends React.PureComponent<Props, State> {
         this.IKLoginCode = undefined;
         this.loginCodeInterval = undefined;
         this.tokenCheckInterval = undefined;
+
+        this.headerResizerRef = React.createRef();
 
         // Redux
         setUrl(getSiteURL());
@@ -808,7 +815,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         <ModalController/>
                         <AnnouncementBarController/>
                         <SystemNotice/>
-                        <GlobalHeader/>
+                        <GlobalHeader headerRef={this.headerResizerRef}/>
                         {!this.embeddedInIFrame && <TeamSidebar/>}
                         <Switch>
                             {this.props.products?.map((product) => (
@@ -855,6 +862,7 @@ export default class Root extends React.PureComponent<Props, State> {
                             ))}
                             <LoggedInRoute
                                 theme={this.props.theme}
+                                headerRef={this.headerResizerRef}
                                 path={'/:team'}
                                 component={TeamController}
                             />

@@ -2,36 +2,23 @@
 // See LICENSE.txt for license information.
 
 import type {HTMLAttributes} from 'react';
-import React, {useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
-
-import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import React, {useRef} from 'react';
 
 import {DEFAULT_LHS_WIDTH, CssVarKeyForResizable, ResizeDirection} from '../constants';
 import ResizableDivider from '../resizable_divider';
 
 interface Props extends HTMLAttributes<'div'> {
     children: React.ReactNode;
+    headerRef: React.RefObject<HTMLDivElement>;
 }
 
 function ResizableLhs({
     children,
     id,
     className,
+    headerRef,
 }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const {ikType} = useSelector(getTheme);
-    useEffect(() => {
-        const sidebar: HTMLElement | null = document.getElementById('SidebarContainer');
-        const resizeObserver = new ResizeObserver((entries) => {
-            entries.forEach((entry) => {
-                const newWidth = entry.contentRect.width;
-                const [element] = document.querySelectorAll('[class^="LeftControlsContainer"]');
-                (element as any).style.width = `${newWidth + ((ikType === 'medium') ? 1 : 0)}px`;
-            });
-        });
-        sidebar && resizeObserver.observe(sidebar);
-    }, [ikType]);
 
     return (
         <div
@@ -42,6 +29,7 @@ function ResizableLhs({
             {children}
             <ResizableDivider
                 name={'lhsResizeHandle'}
+                headerRef={headerRef}
                 globalCssVar={CssVarKeyForResizable.LHS}
                 defaultWidth={DEFAULT_LHS_WIDTH}
                 dir={ResizeDirection.LEFT}

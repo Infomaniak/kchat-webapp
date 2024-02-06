@@ -892,6 +892,7 @@ export const PostTypes = {
     EPHEMERAL_ADD_TO_CHANNEL: 'system_ephemeral_add_to_channel',
     REMOVE_LINK_PREVIEW: 'remove_link_preview',
     ME: 'me',
+    VOICE: 'voice',
     REMINDER: 'reminder',
     CUSTOM_CALLS: 'custom_calls',
     CUSTOM_CALLS_RECORDING: 'custom_calls_recording',
@@ -920,6 +921,17 @@ export const StatTypes = keyMirror({
     DAILY_ACTIVE_USERS: null,
     MONTHLY_ACTIVE_USERS: null,
 });
+
+export const AudioFileExtensions = {
+    MP3: 'mp3',
+    WAV: 'wav',
+    OGG: 'ogg',
+    WMA: 'wma',
+    M4A: 'm4a',
+    AAC: 'aac',
+    FLAC: 'flac',
+    M4R: 'm4r',
+};
 
 export const SearchUserTeamFilter = {
     ALL_USERS: '',
@@ -1538,7 +1550,7 @@ export const Constants = {
     IMAGE_TYPE_GIF: 'gif',
     TEXT_TYPES: ['txt', 'rtf', 'vtt'],
     IMAGE_TYPES: ['jpg', 'gif', 'bmp', 'png', 'jpeg', 'tiff', 'tif', 'psd', 'heic', 'HEIC', 'avif'],
-    AUDIO_TYPES: ['mp3', 'wav', 'wma', 'm4a', 'flac', 'aac', 'ogg', 'm4r'],
+    AUDIO_TYPES: [AudioFileExtensions.MP3, AudioFileExtensions.WAV, AudioFileExtensions.WMA, AudioFileExtensions.M4A, AudioFileExtensions.FLAC, AudioFileExtensions.AAC, AudioFileExtensions.OGG, AudioFileExtensions.M4R],
     VIDEO_TYPES: ['mp4', 'avi', 'webm', 'mkv', 'wmv', 'mpg', 'mov', 'flv'],
     PRESENTATION_TYPES: ['ppt', 'pptx'],
     SPREADSHEET_TYPES: ['xlsx', 'csv'],

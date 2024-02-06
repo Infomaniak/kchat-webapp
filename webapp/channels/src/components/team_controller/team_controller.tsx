@@ -231,7 +231,10 @@ function TeamController(props: Props) {
                     )}
                 />
             ))}
-            <ChannelController shouldRenderCenterChannel={initialChannelsLoaded && teamLoaded}/>
+            <ChannelController
+                shouldRenderCenterChannel={initialChannelsLoaded && teamLoaded}
+                headerRef={props.headerRef}
+            />
         </Switch>
     );
 }
