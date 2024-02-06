@@ -279,7 +279,7 @@ export default class Textbox extends React.PureComponent<Props> {
         return (
             <div
                 ref={this.wrapper}
-                className={`textarea-wrapper${this.props.hidden ? ' hidden' : ''}`}
+                className={classNames('textarea-wrapper', {'textarea-wrapper-preview': this.props.preview})}
             >
                 <div
                     tabIndex={this.props.tabIndex || 0}
