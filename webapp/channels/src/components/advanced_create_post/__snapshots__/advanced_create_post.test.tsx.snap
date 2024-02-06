@@ -71,6 +71,7 @@ exports[`components/advanced_create_post Show tutorial 1`] = `
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -87,6 +88,7 @@ exports[`components/advanced_create_post Show tutorial 1`] = `
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -100,6 +102,7 @@ exports[`components/advanced_create_post Show tutorial 1`] = `
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -175,6 +178,7 @@ exports[`components/advanced_create_post should match snapshot for center textbo
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -191,6 +195,7 @@ exports[`components/advanced_create_post should match snapshot for center textbo
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -204,6 +209,7 @@ exports[`components/advanced_create_post should match snapshot for center textbo
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -279,6 +285,7 @@ exports[`components/advanced_create_post should match snapshot when cannot post 
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -295,6 +302,7 @@ exports[`components/advanced_create_post should match snapshot when cannot post 
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -308,6 +316,7 @@ exports[`components/advanced_create_post should match snapshot when cannot post 
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -383,6 +392,7 @@ exports[`components/advanced_create_post should match snapshot when file upload 
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -399,6 +409,7 @@ exports[`components/advanced_create_post should match snapshot when file upload 
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -412,6 +423,7 @@ exports[`components/advanced_create_post should match snapshot when file upload 
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -487,6 +499,7 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -503,6 +516,7 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -516,6 +530,7 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -591,6 +606,7 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -607,6 +623,7 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -620,6 +637,7 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -695,6 +713,7 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -711,6 +730,7 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -724,6 +744,7 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -799,6 +820,7 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -815,6 +837,7 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -828,6 +851,7 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -903,6 +927,7 @@ exports[`components/advanced_create_post should match snapshot, init 1`] = `
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -919,6 +944,7 @@ exports[`components/advanced_create_post should match snapshot, init 1`] = `
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -932,6 +958,7 @@ exports[`components/advanced_create_post should match snapshot, init 1`] = `
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -1012,6 +1039,7 @@ exports[`components/advanced_create_post should match snapshot, post priority di
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -1028,6 +1056,7 @@ exports[`components/advanced_create_post should match snapshot, post priority di
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -1041,6 +1070,7 @@ exports[`components/advanced_create_post should match snapshot, post priority di
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -1124,6 +1154,7 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -1140,6 +1171,7 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -1153,6 +1185,7 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
@@ -1246,6 +1279,7 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     handleUploadError={[Function]}
     handleUploadProgress={[Function]}
     handleUploadStart={[Function]}
+    handleVoiceMessageUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
     isSchedulable={true}
@@ -1277,6 +1311,7 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     removePreview={[Function]}
     replyToLastPost={[Function]}
     serverError={null}
+    setDraftAsPostType={[Function]}
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
@@ -1290,6 +1325,7 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     toggleEmojiPicker={[Function]}
     uploadsProgressPercent={Object {}}
     useChannelMentions={true}
+    voiceMessageClientId=""
   />
 </form>
 `;
