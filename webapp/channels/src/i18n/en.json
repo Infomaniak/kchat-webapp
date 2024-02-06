@@ -3117,7 +3117,7 @@
     "convert_channel.cancel": "No, cancel",
     "convert_channel.confirm": "Yes, convert to {type} channel",
     "convert_channel.question1": "When you convert **{display_name}** to a private channel, history and membership are preserved. Membership in a private channel is by invitation only.",
-    "convert_channel.question1.public": "When you convert **{display_name}** to a public channel, history and membership are preserved.",
+    "convert_channel.question1.public": "The channel will become accessible to all kChat **{display_name}** users, except for external users who will have to be invited manually. Message history and members who have already accessed the channel will be retained.",
     "convert_channel.question2": "The change is permanent and cannot be undone.",
     "convert_channel.question3": "Are you sure you want to convert **{display_name}** to a {type} channel?",
     "convert_channel.title": "Convert {display_name} to a {type} Channel?",

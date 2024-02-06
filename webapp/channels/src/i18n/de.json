@@ -3115,6 +3115,7 @@
     "convert_channel.cancel": "Nein, abbrechen",
     "convert_channel.confirm": "Ja, in privaten Kanal umwandeln",
     "convert_channel.question1": "Wenn du **{display_name}** in einen privaten Kanal umwandelst, bleiben Verlauf und Mitgliedschaft erhalten. Mitgliedschaft zu privaten Kanälen erfolgt nur auf Einladung.",
+    "convert_channel.question1.public": "Der Channel wird für alle Benutzer des kChat **{display_name}** zugänglich sein, mit Ausnahme von Externen, die manuell eingeladen werden müssen. Der Nachrichtenverlauf und die Mitglieder, die bereits Zugang zu diesem Channel hatten, bleiben erhalten.",
     "convert_channel.question2": "Diese Änderung ist permanent und kann nicht rückgängig gemacht werden.",
     "convert_channel.question3": "Bist du sicher, dass du **{display_name}** in einen privaten Kanal umwandeln möchtest?",
     "convert_channel.title": "{display_name} in privaten Kanal umwandeln?",

@@ -2306,6 +2306,7 @@
     "convert_channel.cancel": "No, annulla",
     "convert_channel.confirm": "Sì, converti a canale privato",
     "convert_channel.question1": "Quando si converte **{display_name}** a canale privato, la storia e i membri vengono conservati. L'ingresso in un canale privato avviene solo previo invito.",
+    "convert_channel.question1.public": "Il canale diventerà accessibile a tutti gli utenti di kChat **{display_name}**, ad eccezione degli utenti esterni che dovranno essere invitati manualmente. La cronologia dei messaggi e i membri che hanno già avuto accesso a questo canale saranno conservati.",
     "convert_channel.question2": "Questa modifica è permanente e non può essere cancellata.",
     "convert_channel.question3": "Procedere con la conversione di **{display_name}** a canale privato?",
     "convert_channel.title": "Convertire {display_name} a canale privato?",
