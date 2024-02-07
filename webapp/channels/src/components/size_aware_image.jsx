@@ -1,8 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-/* eslint-disable mattermost/use-external-link */
-
 import {DownloadOutlineIcon, LinkVariantIcon, CheckIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -305,7 +303,7 @@ export default class SizeAwareImage extends React.PureComponent {
             </OverlayTrigger>
         );
 
-        const kdriveSave = (
+        const kdriveSave = fileInfo ? (
             <OverlayTrigger
                 className='hidden-xs'
                 delayShow={500}
@@ -323,7 +321,7 @@ export default class SizeAwareImage extends React.PureComponent {
                         onClick={() => this.props.handleKDriveSave(fileInfo.id, fileInfo.name)}
                     />
                 </a>
-            </OverlayTrigger>);
+            </OverlayTrigger>) : null;
 
         if (this.props.handleSmallImageContainer && this.state.isSmallImage) {
             let className = 'small-image__container cursor--pointer a11y--active';
