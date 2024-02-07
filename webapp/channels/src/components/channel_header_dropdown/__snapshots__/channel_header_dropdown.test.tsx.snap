@@ -457,6 +457,43 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
       show={false}
       text="Edit Conversation Header"
     />
+    <MenuItemToggleModalRedux
+      dialogProps={
+        Object {
+          "channel": Object {
+            "create_at": 0,
+            "creator_id": "id",
+            "delete_at": 0,
+            "display_name": "name",
+            "group_constrained": false,
+            "header": "header",
+            "id": "test-channel-id",
+            "last_post_at": 0,
+            "last_root_post_at": 0,
+            "name": "DN",
+            "purpose": "purpose",
+            "scheme_id": "id",
+            "team_id": "team_id",
+            "type": "O",
+            "update_at": 0,
+          },
+        }
+      }
+      dialogType={
+        Object {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "type": [Function],
+        }
+      }
+      id="convertGMPrivateChannel"
+      modalId="convert_gm_to_channel"
+      show={false}
+      text="Convert to Private Channel"
+    />
+  </MenuGroup>
+  <MenuGroup>
     <Connect(ChannelPermissionGate)
       channelId="test-channel-id"
       permissions={
@@ -586,6 +623,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
           Object {
             "channelDisplayName": "name",
             "channelId": "test-channel-id",
+            "channelType": "O",
           }
         }
         dialogType={
@@ -600,6 +638,37 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         modalId="convert_channel"
         show={true}
         text="Convert to Private Channel"
+      />
+    </Connect(ChannelPermissionGate)>
+    <Connect(ChannelPermissionGate)
+      channelId="test-channel-id"
+      permissions={
+        Array [
+          "convert_public_channel_to_private",
+        ]
+      }
+      teamId="team_id"
+    >
+      <MenuItemToggleModalRedux
+        dialogProps={
+          Object {
+            "channelDisplayName": "name",
+            "channelId": "test-channel-id",
+            "channelType": "P",
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
+        id="channelConvertToPublic"
+        modalId="convert_channel"
+        show={false}
+        text="Convert to Public Channel"
       />
     </Connect(ChannelPermissionGate)>
     <Connect(ChannelPermissionGate)
@@ -649,30 +718,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         text="Archive Channel"
       />
     </Connect(ChannelPermissionGate)>
-    <Connect(LeaveChannel)
-      channel={
-        Object {
-          "create_at": 0,
-          "creator_id": "id",
-          "delete_at": 0,
-          "display_name": "name",
-          "group_constrained": false,
-          "header": "header",
-          "id": "test-channel-id",
-          "last_post_at": 0,
-          "last_root_post_at": 0,
-          "name": "DN",
-          "purpose": "purpose",
-          "scheme_id": "id",
-          "team_id": "team_id",
-          "type": "O",
-          "update_at": 0,
-        }
-      }
-      id="channelLeaveChannel"
-      isDefault={false}
-      isGuestUser={false}
-    />
     <Connect(CloseMessage)
       channel={
         Object {
@@ -1246,6 +1291,43 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
       show={false}
       text="Edit Conversation Header"
     />
+    <MenuItemToggleModalRedux
+      dialogProps={
+        Object {
+          "channel": Object {
+            "create_at": 0,
+            "creator_id": "id",
+            "delete_at": 0,
+            "display_name": "name",
+            "group_constrained": false,
+            "header": "header",
+            "id": "test-channel-id",
+            "last_post_at": 0,
+            "last_root_post_at": 0,
+            "name": "DN",
+            "purpose": "purpose",
+            "scheme_id": "id",
+            "team_id": "team_id",
+            "type": "O",
+            "update_at": 0,
+          },
+        }
+      }
+      dialogType={
+        Object {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "type": [Function],
+        }
+      }
+      id="convertGMPrivateChannel"
+      modalId="convert_gm_to_channel"
+      show={false}
+      text="Convert to Private Channel"
+    />
+  </MenuGroup>
+  <MenuGroup>
     <Connect(ChannelPermissionGate)
       channelId="test-channel-id"
       permissions={
@@ -1375,6 +1457,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
           Object {
             "channelDisplayName": "name",
             "channelId": "test-channel-id",
+            "channelType": "O",
           }
         }
         dialogType={
@@ -1389,6 +1472,37 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         modalId="convert_channel"
         show={true}
         text="Convert to Private Channel"
+      />
+    </Connect(ChannelPermissionGate)>
+    <Connect(ChannelPermissionGate)
+      channelId="test-channel-id"
+      permissions={
+        Array [
+          "convert_public_channel_to_private",
+        ]
+      }
+      teamId="team_id"
+    >
+      <MenuItemToggleModalRedux
+        dialogProps={
+          Object {
+            "channelDisplayName": "name",
+            "channelId": "test-channel-id",
+            "channelType": "P",
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
+        id="channelConvertToPublic"
+        modalId="convert_channel"
+        show={false}
+        text="Convert to Public Channel"
       />
     </Connect(ChannelPermissionGate)>
     <Connect(ChannelPermissionGate)
@@ -1438,30 +1552,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         text="Archive Channel"
       />
     </Connect(ChannelPermissionGate)>
-    <Connect(LeaveChannel)
-      channel={
-        Object {
-          "create_at": 0,
-          "creator_id": "id",
-          "delete_at": 0,
-          "display_name": "name",
-          "group_constrained": false,
-          "header": "header",
-          "id": "test-channel-id",
-          "last_post_at": 0,
-          "last_root_post_at": 0,
-          "name": "DN",
-          "purpose": "purpose",
-          "scheme_id": "id",
-          "team_id": "team_id",
-          "type": "O",
-          "update_at": 0,
-        }
-      }
-      id="channelLeaveChannel"
-      isDefault={false}
-      isGuestUser={false}
-    />
     <Connect(CloseMessage)
       channel={
         Object {
