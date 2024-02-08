@@ -5,6 +5,7 @@
 
 import * as Sentry from '@sentry/react';
 import {getName} from 'country-list';
+import crypto from 'crypto';
 import cssVars from 'css-vars-ponyfill';
 import type {Locale} from 'date-fns';
 import {enGB} from 'date-fns/locale';
@@ -19,6 +20,7 @@ import type {Channel} from '@mattermost/types/channels';
 import type {Address} from '@mattermost/types/cloud';
 import type {ClientConfig} from '@mattermost/types/config';
 import type {FileInfo} from '@mattermost/types/files';
+import type {Group} from '@mattermost/types/groups';
 import type {Post} from '@mattermost/types/posts';
 import type {GlobalState} from '@mattermost/types/store';
 import type {Team} from '@mattermost/types/teams';
@@ -766,9 +768,9 @@ export function resetTheme() {
 
 export function injectWebcomponentInit() {
     // eslint-disable-next-line no-process-env, @typescript-eslint/no-unused-vars
-    window.WEB_COMPONENT_API_ENDPOINT = process.env.WEBCOMPONENT_API_ENDPOINT;
+    (window as any).WEB_COMPONENT_API_ENDPOINT = process.env.WEBCOMPONENT_API_ENDPOINT;
     // eslint-disable-next-line no-process-env, @typescript-eslint/no-unused-vars
-    window.WEBCOMPONENT_API_ENDPOINT = process.env.WEBCOMPONENT_API_ENDPOINT;
+    (window as any).WEBCOMPONENT_API_ENDPOINT = process.env.WEBCOMPONENT_API_ENDPOINT;
 
     // @ts-expect-error for webcomponents
     window.CURRENT_PROJECT = 'kchat';
@@ -2031,6 +2033,26 @@ export function getBlankAddressWithCountry(country?: string): Address {
         postal_code: '',
         state: '',
     };
+}
+
+export function generateSlug(): string {
+    return crypto.randomBytes(16).toString('hex');
+}
+export function sortUsersAndGroups(a: UserProfile | Group, b: UserProfile | Group) {
+    let aSortString = '';
+    let bSortString = '';
+    if ('username' in a) {
+        aSortString = a.username;
+    } else {
+        aSortString = a.name;
+    }
+    if ('username' in b) {
+        bSortString = b.username;
+    } else {
+        bSortString = b.name;
+    }
+
+    return aSortString.localeCompare(bSortString);
 }
 
 export const lazyWithRetries: typeof React.lazy = (importer) => {

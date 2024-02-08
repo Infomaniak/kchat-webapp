@@ -153,8 +153,8 @@ describe('Markdown.Links', () => {
     });
 
     it('Special characters', () => {
-        expect(Markdown.format('http://www.example.com/_/page').trim()).toBe(
-            '<p><a class="theme markdown__link" href="http://www.example.com/_/page" rel="noreferrer" target="_blank">http://www.example.com/_/page</a></p>',
+        expect(Markdown.format('https://www.example.com/_/page').trim()).toBe(
+            '<p><a class="theme markdown__link" href="https://www.example.com/_/page" rel="noreferrer" target="_blank">https://www.example.com/_/page</a></p>',
         );
 
         expect(Markdown.format('www.example.com/_/page').trim()).toBe(
