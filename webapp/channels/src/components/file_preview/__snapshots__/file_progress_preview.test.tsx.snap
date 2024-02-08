@@ -140,16 +140,6 @@ exports[`component/file_preview/file_progress_preview snapshot for percent value
         </span>
       </div>
     </div>
-    <div>
-      <a
-        className="file-preview__remove"
-        onClick={[Function]}
-      >
-        <i
-          className="icon icon-close"
-        />
-      </a>
-    </div>
   </div>
 </div>
 `;
