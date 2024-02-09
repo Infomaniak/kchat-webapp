@@ -95,7 +95,7 @@ import {setGlobalItem} from 'actions/storage';
 import {loadProfilesForDM, loadProfilesForGM, loadProfilesForSidebar} from 'actions/user_actions';
 import {syncPostsInChannel} from 'actions/views/channel';
 import {getDrafts, setGlobalDraft, transformServerDraft} from 'actions/views/drafts';
-import {openModal} from 'actions/views/modals';
+import {closeModal, openModal} from 'actions/views/modals';
 import {closeRightHandSide} from 'actions/views/rhs';
 import {incrementWsErrorCount, resetWsErrorCount} from 'actions/views/system';
 import {updateThreadLastOpened} from 'actions/views/threads';
@@ -111,6 +111,7 @@ import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, StoragePrefixes} from 'utils/constants';
+import {stopRing} from 'utils/notification_sounds';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -1867,8 +1868,15 @@ function handleThreadFollowChanged(msg) {
     };
 }
 
-function handleConferenceUserDenied() {
+function handleConferenceUserDenied(msg) {
     return async (doDispatch) => {
+        const currentUserId = getCurrentUserId(getState());
+
+        if (currentUserId === msg?.data?.user_id) {
+            stopRing();
+            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+        }
+
         doDispatch({
             type: ActionTypes.CALL_HANGUP,
             data: {isRinging: false},
@@ -1880,15 +1888,22 @@ function handleConferenceUserConnected(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
+        const currentUserId = getCurrentUserId(getState());
+
+        if (currentUserId === msg?.data?.user_id) {
+            stopRing();
+            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+        }
 
         if (msg.data.channel_id in calls && calls[msg.data.channel_id].length) {
             const keys = Object.keys(calls[msg.data.channel_id]);
+
             doDispatch({
                 type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
                 data: {
                     channelID: msg.data.channel_id,
                     userID: msg.data.user_id,
-                    currentUserID: getCurrentUserId(getState()),
+                    currentUserID: currentUserId,
                     url: msg.data.url,
                     id: keys[0],
                 },
