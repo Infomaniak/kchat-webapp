@@ -79,6 +79,10 @@
     vertical-align: middle;
 }
 
+.emoticon-suggestion__image-container {
+    margin-right: 8px;
+}
+
 .emoji-picker {
     position: absolute;
     z-index: 1100;
@@ -456,6 +460,7 @@
             outline: none;
         }
     }
+
     .gif-attribution {
         padding: 5px 0 5px 5px;
         margin-inline-start: 8px;
@@ -470,7 +475,7 @@
 $emoji-picker-footer-margin: 12px;
 $emoji-footer-border-width: 1px;
 $emoji-half-height: 33px;
-$emoji-footer-height: $emoji-footer-border-width + $emoji-half-height + $emoji-picker-footer-margin * 2;
+$emoji-footer-height:  $emoji-footer-border-width + $emoji-half-height + $emoji-picker-footer-margin * 2;
 
 .emoji-picker__items {
     position: relative;
@@ -539,6 +544,17 @@ $emoji-footer-height: $emoji-footer-border-width + $emoji-half-height + $emoji-p
     &.selected,
     &:hover {
         background-color: rgba(var(--center-channel-color-rgb), 0.16);
+
+        img {
+            -moz-transform: scale(0.45);
+            zoom: 0.45;
+
+            &.emoji-category--custom {
+                -moz-transform: scale(1);
+                transform: scale(1.25);
+                zoom: 1;
+            }
+        }
     }
 
     &:active {
@@ -551,6 +567,7 @@ $emoji-footer-height: $emoji-footer-border-width + $emoji-half-height + $emoji-p
 
     img {
         position: relative;
+        transition: transform 0.2s ease-in-out;
 
         &.emoji-category--custom {
             top: auto;
@@ -559,7 +576,6 @@ $emoji-footer-height: $emoji-footer-border-width + $emoji-half-height + $emoji-p
             max-width: 22px;
             height: auto;
             max-height: 22px;
-            transform: scale(1);
         }
     }
 }
