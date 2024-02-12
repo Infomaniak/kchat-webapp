@@ -465,7 +465,7 @@ if (targetIsDevServer) {
                 xfwd: true,
                 ws: false,
             }],
-            port: 9005,
+            port: 443,
             devMiddleware: {
                 writeToDisk: false,
             },

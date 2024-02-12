@@ -1873,8 +1873,17 @@ function handleConferenceUserDenied(msg) {
         const currentUserId = getCurrentUserId(getState());
 
         if (currentUserId === msg?.data?.user_id) {
-            stopRing();
-            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+            if (isDesktopApp()) {
+                window.postMessage(
+                    {
+                        type: 'call-declined',
+                    },
+                    window.origin,
+                );
+            } else {
+                stopRing();
+                dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+            }
         }
 
         doDispatch({
@@ -1891,8 +1900,19 @@ function handleConferenceUserConnected(msg) {
         const currentUserId = getCurrentUserId(getState());
 
         if (currentUserId === msg?.data?.user_id) {
-            stopRing();
-            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+            if (currentUserId === msg?.data?.user_id) {
+                if (isDesktopApp()) {
+                    window.postMessage(
+                        {
+                            type: 'call-joined',
+                        },
+                        window.origin,
+                    );
+                } else {
+                    stopRing();
+                    dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+                }
+            }
         }
 
         if (msg.data.channel_id in calls && calls[msg.data.channel_id].length) {
