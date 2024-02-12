@@ -211,6 +211,8 @@ var config = {
                 {from: 'src/images/only_office_cell_logo.png', to: 'images'},
                 {from: 'src/images/only_office_slide_logo.png', to: 'images'},
                 {from: 'src/images/only_office_word_logo.png', to: 'images'},
+                {from: 'src/images/bot_default_icon.png', to: 'images'},
+                {from: 'src/images/chat_gpt.png', to: 'images'},
                 {from: '../../node_modules/pdfjs-dist/cmaps', to: 'cmaps'},
             ],
         }),

@@ -3,7 +3,7 @@
 
 import {FilterVariantIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
@@ -21,6 +21,7 @@ type Props = {
 };
 
 export default function FilesFilterMenu(props: Props): JSX.Element {
+    const {formatMessage} = useIntl();
     const toolTip = (
         <Tooltip
             id='files-filter-tooltip'
@@ -59,50 +60,50 @@ export default function FilesFilterMenu(props: Props): JSX.Element {
                     openLeft={true}
                 >
                     <Menu.ItemAction
-                        ariaLabel={'All file types'}
-                        text={'All file types'}
+                        ariaLabel={formatMessage({id: 'fileTypes.label', defaultMessage: 'All file types'})}
+                        text={formatMessage({id: 'fileTypes.label', defaultMessage: 'All file types'})}
                         onClick={() => props.onFilter('all')}
                         icon={props.selectedFilter === 'all' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
-                        ariaLabel={'Documents'}
-                        text={'Documents'}
+                        ariaLabel={formatMessage({id: 'fileTypes.Documents', defaultMessage: 'Documents'})}
+                        text={formatMessage({id: 'fileTypes.Documents', defaultMessage: 'Documents'})}
                         onClick={() => props.onFilter('documents')}
                         icon={props.selectedFilter === 'documents' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
-                        ariaLabel={'Spreadsheets'}
-                        text={'Spreadsheets'}
+                        ariaLabel={formatMessage({id: 'fileTypes.Spreadsheets', defaultMessage: 'Spreadsheets'})}
+                        text={formatMessage({id: 'fileTypes.Spreadsheets', defaultMessage: 'Spreadsheets'})}
                         onClick={() => props.onFilter('spreadsheets')}
                         icon={props.selectedFilter === 'spreadsheets' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
-                        ariaLabel={'Presentations'}
-                        text={'Presentations'}
+                        ariaLabel={formatMessage({id: 'fileTypes.Presentations', defaultMessage: 'Presentations'})}
+                        text={formatMessage({id: 'fileTypes.Presentations', defaultMessage: 'Presentations'})}
                         onClick={() => props.onFilter('presentations')}
                         icon={props.selectedFilter === 'presentations' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
-                        ariaLabel={'Code'}
-                        text={'Code'}
+                        ariaLabel={formatMessage({id: 'fileTypes.Code', defaultMessage: 'Code'})}
+                        text={formatMessage({id: 'fileTypes.Code', defaultMessage: 'Code'})}
                         onClick={() => props.onFilter('code')}
                         icon={props.selectedFilter === 'code' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
-                        ariaLabel={'Images'}
-                        text={'Images'}
+                        ariaLabel={formatMessage({id: 'fileTypes.Images', defaultMessage: 'Images'})}
+                        text={formatMessage({id: 'fileTypes.Images', defaultMessage: 'Images'})}
                         onClick={() => props.onFilter('images')}
                         icon={props.selectedFilter === 'images' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
-                        ariaLabel={'Audio'}
-                        text={'Audio'}
+                        ariaLabel={formatMessage({id: 'fileTypes.Audio', defaultMessage: 'Audio'})}
+                        text={formatMessage({id: 'fileTypes.Audio', defaultMessage: 'Audio'})}
                         onClick={() => props.onFilter('audio')}
                         icon={props.selectedFilter === 'audio' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
-                        ariaLabel={'Videos'}
-                        text={'Videos'}
+                        ariaLabel={formatMessage({id: 'fileTypes.Videos', defaultMessage: 'Videos'})}
+                        text={formatMessage({id: 'fileTypes.Videos', defaultMessage: 'Videos'})}
                         onClick={() => props.onFilter('video')}
                         icon={props.selectedFilter === 'video' ? <i className='icon icon-check'/> : null}
                     />

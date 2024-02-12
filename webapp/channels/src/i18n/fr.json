@@ -5190,5 +5190,13 @@
     "drafts.actions.openInChannel": "Ouvrir dans le canal",
     "kdrive.save": "Enregistrer le fichier sur kDrive",
     "kdrive.upload": "Télécharger depuis kDrive",
-    "kdrive.uploadSuccess": "Votre fichier est enregistré dans kDrive"
+    "kdrive.uploadSuccess": "Votre fichier est enregistré dans kDrive",
+    "fileTypes.label": "Tous les types de fichiers",
+    "fileTypes.Documents": "Documents",
+    "fileTypes.Spreadsheets": "Feuilles de calcul",
+    "fileTypes.Presentations": "Présentations",
+    "fileTypes.Code": "Code",
+    "fileTypes.Images": "Images",
+    "fileTypes.Audio": "Audio",
+    "fileTypes.Videos": "Videos"
 }
