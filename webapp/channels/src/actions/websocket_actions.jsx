@@ -1900,18 +1900,16 @@ function handleConferenceUserConnected(msg) {
         const currentUserId = getCurrentUserId(getState());
 
         if (currentUserId === msg?.data?.user_id) {
-            if (currentUserId === msg?.data?.user_id) {
-                if (isDesktopApp()) {
-                    window.postMessage(
-                        {
-                            type: 'call-joined',
-                        },
-                        window.origin,
-                    );
-                } else {
-                    stopRing();
-                    dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-                }
+            if (isDesktopApp()) {
+                window.postMessage(
+                    {
+                        type: 'call-joined-browser',
+                    },
+                    window.origin,
+                );
+            } else {
+                stopRing();
+                dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
         }
 
