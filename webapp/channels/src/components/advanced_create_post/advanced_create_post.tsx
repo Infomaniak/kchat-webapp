@@ -405,6 +405,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 this.draftsForChannel[channelId] = {
                     ...draft,
                     show: !isDraftEmpty(draft),
+                    remote: false,
                 } as PostDraft;
             }
         }
@@ -607,7 +608,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
     handleNotifyAllConfirmation = (isSchedule = false, scheduleUTCTimestamp?: number) => this.doSubmit(undefined, isSchedule, scheduleUTCTimestamp);
 
-    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number) => {
+    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number, isSchedule = false, scheduleUTCTimestamp?: number) => {
         this.props.actions.openModal({
             modalId: ModalIdentifiers.NOTIFY_CONFIRM_MODAL,
             dialogType: NotifyConfirmModal,
@@ -720,7 +721,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             this.isDraftSubmitting = false;
             return;
         } else if (memberNotifyCount > 0) {
-            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount);
+            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp);
             return;
         }
 
@@ -767,7 +768,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             return;
         }
 
-        await this.doSubmit(e);
+        await this.doSubmit(e, isSchedule, scheduleUTCTimestamp);
     };
 
     sendMessage = async (originalPost: Post): Promise<ActionResult> => {
@@ -949,6 +950,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     };
 
     handleDraftChange = (draft: PostDraft, channelId = this.props.currentChannel.id, instant = false) => {
+        this.props.actions.setGlobalDraft(StoragePrefixes.DRAFT + channelId, draft, false);
+
         if (this.saveDraftFrame) {
             clearTimeout(this.saveDraftFrame);
         }
@@ -1531,7 +1534,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     fileUploadRef={this.fileUploadRef}
                     prefillMessage={this.prefillMessage}
                     textboxRef={this.textboxRef}
-                    disableSend={!this.isValidPersistentNotifications()}
                     labels={this.hasPrioritySet() ? (
                         <PriorityLabels
                             canRemove={!this.props.shouldShowPreview}

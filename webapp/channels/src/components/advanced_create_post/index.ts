@@ -37,7 +37,7 @@ import {runMessageWillBePostedHooks, runSlashCommandWillBePostedHooks} from 'act
 import {addReaction, createPost, setEditingPost, emitShortcutReactToLastPostFrom, submitReaction} from 'actions/post_actions';
 import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
 import {scrollPostListToBottom} from 'actions/views/channel';
-import {removeDraft, updateDraft} from 'actions/views/drafts';
+import {removeDraft, updateDraft, upsertScheduleDraft, setGlobalDraft} from 'actions/views/drafts';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
 import {openModal} from 'actions/views/modals';
 import {selectPostFromRightHandSideSearchByPostId} from 'actions/views/rhs';
@@ -178,6 +178,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             addReaction,
             removeReaction,
             setDraft,
+            setGlobalDraft,
             clearDraftUploads,
             selectPostFromRightHandSideSearchByPostId,
             setEditingPost,
@@ -188,6 +189,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             runMessageWillBePostedHooks,
             runSlashCommandWillBePostedHooks,
             scrollPostListToBottom,
+            upsertScheduleDraft,
             setShowPreview: setShowPreviewOnCreatePost,
             getChannelMemberCountsByGroup,
             savePreferences,
