@@ -51,7 +51,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     }
 
     return (
-        <div className='post-image__column'>
+        <div className='post-image__column post-image__column--audio'>
             <div className='post-image__thumbnail'>
                 <div
                     className='post-image__icon-background'
