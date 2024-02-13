@@ -13,17 +13,17 @@
 * npm run make-emojis -- --help
 */
 
-import path from 'node:path';
-import * as fsPromise from 'node:fs/promises';
 import * as fs from 'node:fs';
+import * as fsPromise from 'node:fs/promises';
+import path from 'node:path';
 import * as url from 'node:url';
 
-import yargs from 'yargs';
 import chalk from 'chalk';
-import jsonData from 'emoji-datasource/emoji.json';
-import jsonCategories from 'emoji-datasource/categories.json';
+import jsonCategories from 'emoji-datasource/categories.json' assert {type: 'json'};
+import jsonData from 'emoji-datasource/emoji.json' assert {type: 'json'};
+import yargs from 'yargs';
 
-import additionalShortnames from './additional_shortnames.json';
+import additionalShortnames from './additional_shortnames.json' assert {type: 'json'};
 
 const EMOJI_SIZE = 64;
 const EMOJI_SIZE_PADDED = EMOJI_SIZE + 2; // 1px per side
@@ -99,7 +99,8 @@ function normalizeCategoryName(category) {
 }
 
 // Copy emoji images from 'emoji-datasource-apple'
-const emojiDataSourceDir = path.resolve(webappRootDir, `node_modules/emoji-datasource-apple/img/apple/${EMOJI_SIZE}/`);
+// use rootdir because of yarn hoisting
+const emojiDataSourceDir = path.resolve(rootDir, `node_modules/emoji-datasource-apple/img/apple/${EMOJI_SIZE}/`);
 const emojiImagesDir = path.resolve(webappRootDir, 'channels', 'src', 'images', 'emoji');
 const readDirPromise = fsPromise.readdir(emojiDataSourceDir);
 endResults.push(readDirPromise);
@@ -114,7 +115,8 @@ readDirPromise.then((images) => {
 const missingEmojis = ['2640-fe0f', '2642-fe0f', '2695-fe0f'];
 
 // Copy the missing from google emoji set
-const missingEmojiDataSourceDir = path.resolve(webappRootDir, `node_modules/emoji-datasource-google/img/google/${EMOJI_SIZE}/`);
+// use rootdir because of yarn hoisting
+const missingEmojiDataSourceDir = path.resolve(rootDir, `node_modules/emoji-datasource-google/img/google/${EMOJI_SIZE}/`);
 const readMissingDirPromise = fsPromise.readdir(missingEmojiDataSourceDir);
 endResults.push(readMissingDirPromise);
 readMissingDirPromise.then(() => {
@@ -128,7 +130,8 @@ readMissingDirPromise.then(() => {
 const webappImagesDir = path.resolve(webappRootDir, 'channels', 'src', 'images');
 endResults.push(copyFileAndPrint(path.resolve(webappImagesDir, 'icon64x64.png'), path.resolve(webappImagesDir, 'emoji/mattermost.png'), 'mattermost-emoji'));
 
-const sheetSource = path.resolve(webappRootDir, `node_modules/emoji-datasource-apple/img/apple/sheets/${EMOJI_SIZE}.png`);
+// use rootdir because of yarn hoisting
+const sheetSource = path.resolve(rootDir, `node_modules/emoji-datasource-apple/img/apple/sheets/${EMOJI_SIZE}.png`);
 const sheetAbsoluteFile = path.resolve(webappRootDir, 'channels', 'src', 'images/emoji-sheets/apple-sheet.png');
 const sheetFile = 'images/emoji-sheets/apple-sheet.png';
 
