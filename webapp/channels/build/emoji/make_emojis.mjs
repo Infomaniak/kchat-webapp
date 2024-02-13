@@ -128,7 +128,7 @@ readMissingDirPromise.then(() => {
 
 // Copy mattermost emoji image
 const webappImagesDir = path.resolve(webappRootDir, 'channels', 'src', 'images');
-endResults.push(copyFileAndPrint(path.resolve(webappImagesDir, 'icon64x64.png'), path.resolve(webappImagesDir, 'emoji/mattermost.png'), 'mattermost-emoji'));
+endResults.push(copyFileAndPrint(path.resolve(webappImagesDir, 'icon64x64.png'), path.resolve(webappImagesDir, 'emoji/kchat.png'), 'kchat'));
 
 // use rootdir because of yarn hoisting
 const sheetSource = path.resolve(rootDir, `node_modules/emoji-datasource-apple/img/apple/sheets/${EMOJI_SIZE}.png`);
@@ -216,12 +216,12 @@ fullEmoji.forEach((emoji) => {
 
 // add built-in custom emojis
 fullEmoji.push({
-    id: 'mattermost',
-    name: 'Mattermost',
+    id: 'kchat',
+    name: 'kChat',
     unified: '',
-    image: 'mattermost.png',
-    short_name: 'mattermost',
-    short_names: ['mattermost'],
+    image: 'kchat.png',
+    short_name: 'kchat',
+    short_names: ['kchat'],
     category: 'custom',
 });
 
