@@ -639,13 +639,15 @@ export default class Root extends React.PureComponent<Props, State> {
 
         Utils.injectWebcomponentInit();
 
-        // TODO: remove
-        setTimeout(() => {
-            // Provide token to webcomponents via injected function
-            (window as Window & typeof globalThis & {
-                setWCToken?: (token: string) => void;
-            }).setWCToken?.(token!);
-        }, 1000);
+        if (isDesktopApp()) {
+            // TODO: remove
+            setTimeout(() => {
+                // Provide token to webcomponents via injected function
+                (window as Window & typeof globalThis & {
+                    setWCToken?: (token: string) => void;
+                }).setWCToken?.(token!);
+            }, 1000);
+        }
 
         this.initiateMeRequests();
 
