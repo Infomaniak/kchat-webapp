@@ -586,10 +586,8 @@ export default class Root extends React.PureComponent<Props, State> {
                     getChallengeAndRedirectToLogin(true);
                 }
 
-                // Provide token to webcomponents via injected function
-                (window as Window & typeof globalThis & {
-                    setWCToken?: (token: string) => void;
-                }).setWCToken?.(token!);
+                // Webcomponents oauth v2
+                window.WC_TOKEN = token;
 
                 // migration from 2.0
                 if (token && (tokenExpire || refreshToken)) {
@@ -638,6 +636,18 @@ export default class Root extends React.PureComponent<Props, State> {
 
         const ksuiteBridge = new KSuiteBridge({debug: true}); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch);
+
+        Utils.injectWebcomponentInit();
+
+        if (isDesktopApp()) {
+            // TODO: remove
+            setTimeout(() => {
+                // Provide token to webcomponents via injected function
+                (window as Window & typeof globalThis & {
+                    setWCToken?: (token: string) => void;
+                }).setWCToken?.(token!);
+            }, 1000);
+        }
 
         this.initiateMeRequests();
 
