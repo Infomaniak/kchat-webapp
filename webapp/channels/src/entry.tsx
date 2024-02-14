@@ -12,7 +12,7 @@ import App from 'components/app';
 
 import {AnnouncementBarTypes} from 'utils/constants';
 import sentry from 'utils/sentry';
-import {injectWebcomponentInit, setCSRFFromCookie} from 'utils/utils';
+import {setCSRFFromCookie} from 'utils/utils';
 
 // Import our styles
 import './sass/styles.scss';
@@ -32,7 +32,6 @@ declare global {
 // This is for anything that needs to be done for ALL react components.
 // This runs before we start to render anything.
 function preRenderSetup(callwhendone: () => void) {
-    injectWebcomponentInit();
     window.onerror = (msg, url, line, column, error) => {
         // Ignore exceptions raised by ResizeObserver like:
         // - ResizeObserver loop limit exceeded.

@@ -24,6 +24,12 @@ MANAGER_ENDPOINT=https://manager.infomaniak.com
 LOGIN_ENDPOINT=https://login.infomaniak.com
 ```
 
+### Hosts
+
+Modify your hosts file located at `/etc/hosts` and add this line : `127.0.0.1 infomaniak.local.preprod.dev.infomaniak.ch`
+
+> Must be done, otherwise your application won't be able to read cookies set to infomaniak.com
+
 ### Installing and building dependencies
 
 We are using yarn berry with workspace tools for monorepo support building and better module caching between builds
