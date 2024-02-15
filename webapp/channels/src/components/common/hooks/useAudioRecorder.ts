@@ -143,7 +143,7 @@ export function useAudioRecorder(props: Props) {
                 audio: true,
             });
 
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 48000});
 
             const audioAnalyzer = audioContext.createAnalyser();
             audioAnalyzer.fftSize = props.audioAnalyzerFFTSize;
