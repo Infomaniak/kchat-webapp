@@ -987,6 +987,33 @@
                 display: none;
             }
 
+            // Infomaniak
+            &--audio {
+                .post-image__thumbnail {
+                    display: flex;
+                    width: auto;
+                    overflow: hidden;
+
+                    .post-image__icon-background {
+                        border-radius: unset;
+                    }
+                }
+
+                .dropdown-menu__dotmenu {
+                    height: 100%;
+
+                    .post-image__end-button {
+                        height: 100%;
+                        margin: 0;
+                        border-radius: unset;
+
+                        svg {
+                            top: unset;
+                        }
+                    }
+                }
+            }
+
             .post-image__details {
                 width: 100%;
                 padding: 0;
