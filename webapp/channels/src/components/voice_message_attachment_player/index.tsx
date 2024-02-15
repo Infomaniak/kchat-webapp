@@ -10,7 +10,7 @@ import {
     DownloadOutlineIcon,
 } from '@infomaniak/compass-icons/components';
 import React from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {FileInfo} from '@mattermost/types/files';
 import type {Post} from '@mattermost/types/posts';
@@ -21,8 +21,7 @@ import {
     AudioPlayerState,
     useAudioPlayer,
 } from 'components/common/hooks/useAudioPlayer';
-import Menu from 'components/widgets/menu/menu';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+import * as Menu from 'components/menu';
 
 import {convertSecondsToMSS} from 'utils/datetime';
 import {getSiteURL} from 'utils/url';
@@ -85,45 +84,55 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                     {playerState === AudioPlayerState.Playing || playerState === AudioPlayerState.Paused ? convertSecondsToMSS(elapsed) : convertSecondsToMSS(duration)}
                 </div>
                 {props.inPost && (
-                    <MenuWrapper
-                        className={'dropdown-menu__dotmenu'}
+                    <Menu.Container
+                        menu={{id: 'dropdown-menu-dotmenu',
+                            transformOrigin: {
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            },
+                            anchorOrigin: {
+                                vertical: 'top',
+                                horizontal: 'left',
+                            },
+                        }}
+                        menuButton={{
+                            id: 'post-image-end-button',
+                            'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}),
+                            class: 'post-image__end-button',
+                            children: (
+                                <DotsVerticalIcon
+                                    size={18}
+                                    color='currentColor'
+                                />),
+                        }}
                     >
-                        <button className='post-image__end-button'>
-                            <DotsVerticalIcon
-                                size={18}
-                                color='currentColor'
-                            />
-                        </button>
-                        <Menu
-                            openUp={true}
-                            className={'Menu__content dropdown-menu'}
-                            ariaLabel={formatMessage({id: 'voiceMessageAttachment.dropdownAriaLabel', defaultMessage: 'Voice message post options'})}
-                        >
-                            <Menu.ItemAction
-                                id={`permalink_${props.postId}`}
-                                className={'MenuItem'}
-                                icon={
-                                    <LinkVariantIcon
-                                        size={18}
-                                        color='currentColor'
-                                    />
-                                }
-                                text={formatMessage({id: 'voiceMessageAttachment.copyLink', defaultMessage: 'Copy link'})}
-                                onClick={copyLink}
-                            />
-                            <Menu.ItemAction
-                                id={`download_${props.postId}`}
-                                icon={
-                                    <DownloadOutlineIcon
-                                        size={18}
-                                        color='currentColor'
-                                    />
-                                }
-                                text={formatMessage({id: 'voiceMessageAttachment.download', defaultMessage: 'Download'})}
-                                onClick={downloadFile}
-                            />
-                        </Menu>
-                    </MenuWrapper>
+                        <Menu.Item
+                            id={`permalink_${props.postId}`}
+                            leadingElement={<LinkVariantIcon size={18}/>}
+                            labels={(
+                                <FormattedMessage
+                                    id='single_image_view.copy_link_tooltip'
+                                    defaultMessage='Copy link'
+                                />
+                            )}
+                            onClick={copyLink}
+                        />
+                        <Menu.Item
+                            id={`download_${props.postId}`}
+                            leadingElement={(
+                                <DownloadOutlineIcon
+                                    size={18}
+                                    color='currentColor'
+                                />)}
+                            labels={(
+                                <FormattedMessage
+                                    id='single_image_view.download_tooltip'
+                                    defaultMessage='Download'
+                                />
+                            )}
+                            onClick={downloadFile}
+                        />
+                    </Menu.Container>
                 )}
                 {!props.inPost && (
                     <button

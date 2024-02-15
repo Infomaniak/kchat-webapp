@@ -63,6 +63,22 @@ type MenuProps = {
     closeMenuManually?: boolean;
     onKeyDown?: KeyboardEventHandler<HTMLDivElement>;
     width?: string;
+
+    /**
+     * Infomaniak custom prop (added for audio messages menu)
+     */
+    anchorOrigin?: {
+        vertical: string;
+        horizontal: string;
+    };
+
+    /**
+     * Infomaniak custom prop (added for audio message menu)
+     */
+    transformOrigin?: {
+        vertical: string;
+        horizontal: string;
+    };
 }
 
 interface Props {
@@ -221,6 +237,10 @@ export function Menu(props: Props) {
             {renderMenuButton()}
             <MuiMenuStyled
                 anchorEl={anchorElement}
+                anchorOrigin={props?.menu?.anchorOrigin ?? {
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
                 open={isMenuOpen}
                 onClose={handleMenuClose}
                 onClick={handleMenuClick}
@@ -230,6 +250,10 @@ export function Menu(props: Props) {
                 MenuListProps={{
                     id: props.menu.id,
                     'aria-label': props.menu?.['aria-label'] ?? '',
+                }}
+                transformOrigin={props?.menu?.transformOrigin ?? {
+                    vertical: 'top',
+                    horizontal: 'left',
                 }}
                 TransitionComponent={Fade}
                 TransitionProps={{
