@@ -999,17 +999,13 @@
                     }
                 }
 
-                .dropdown-menu__dotmenu {
+                #post-image-end-button {
                     height: 100%;
+                    margin: 0;
+                    border-radius: unset;
 
-                    .post-image__end-button {
-                        height: 100%;
-                        margin: 0;
-                        border-radius: unset;
-
-                        svg {
-                            top: unset;
-                        }
+                    svg {
+                        top: unset;
                     }
                 }
             }
