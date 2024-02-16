@@ -2,7 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {useEffect, useState, useMemo} from 'react';
-import { isIosWeb } from 'utils/user_agent';
+
+import {isIosWeb} from 'utils/user_agent';
 
 export enum AudioPlayerState {
     Playing = 'PLAYING',
