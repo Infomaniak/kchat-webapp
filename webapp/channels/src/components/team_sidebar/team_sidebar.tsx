@@ -89,7 +89,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
                 team = teams[newPos];
             }
 
-            this.props.actions.switchTeam(`/${team.name}`);
+            window.location.href = team.url;
             return true;
         }
         return false;
@@ -118,7 +118,8 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
                     return false;
                 }
                 const team = teams[idx];
-                this.props.actions.switchTeam(`/${team.name}`);
+
+                window.location.href = team.url;
                 return true;
             }
         }
@@ -148,16 +149,16 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         }
     };
 
-    // componentDidMount() {
-    //     this.props.actions.getTeams(0, 200);
-    //     document.addEventListener('keydown', this.handleKeyDown);
-    //     document.addEventListener('keyup', this.handleKeyUp);
-    // }
+    componentDidMount() {
+        this.props.actions.getTeams(0, 200);
+        document.addEventListener('keydown', this.handleKeyDown);
+        document.addEventListener('keyup', this.handleKeyUp);
+    }
 
-    // componentWillUnmount() {
-    //     document.removeEventListener('keydown', this.handleKeyDown);
-    //     document.removeEventListener('keyup', this.handleKeyUp);
-    // }
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
+        document.removeEventListener('keyup', this.handleKeyUp);
+    }
 
     onDragEnd = (result: DropResult) => {
         const {
