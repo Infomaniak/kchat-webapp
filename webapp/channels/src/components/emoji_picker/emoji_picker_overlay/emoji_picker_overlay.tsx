@@ -11,9 +11,11 @@ import type {Emoji} from '@mattermost/types/emojis';
 import {Constants} from 'utils/constants';
 import {popOverOverlayPosition} from 'utils/position_utils';
 
-import EmojiPickerTabs from './emoji_picker_tabs';
+import EmojiPickerTabs from '../emoji_picker_tabs';
 
-type Props = {
+import type {PropsFromRedux} from './index';
+
+export interface Props extends PropsFromRedux {
     show: boolean;
     container?: () => ReactNode;
     target: () => ReactNode;
@@ -80,16 +82,15 @@ export default class EmojiPickerOverlay extends React.PureComponent<Props> {
     });
 
     render() {
-        const {target, rightOffset, spaceRequiredAbove, spaceRequiredBelow, defaultHorizontalPosition, show} = this.props;
+        const {target, rightOffset, spaceRequiredAbove, spaceRequiredBelow, defaultHorizontalPosition, show, isMobileView} = this.props;
 
         const calculatedRightOffset = typeof rightOffset === 'undefined' ? this.emojiPickerPosition(target(), show) : rightOffset;
         const placement = this.getPlacement(target(), spaceRequiredAbove, spaceRequiredBelow, defaultHorizontalPosition, show);
-
         return (
             <Overlay
                 show={show}
                 placement={placement}
-                rootClose={true}
+                rootClose={!isMobileView}
                 container={this.props.container}
                 onHide={this.props.onHide}
                 target={target}
