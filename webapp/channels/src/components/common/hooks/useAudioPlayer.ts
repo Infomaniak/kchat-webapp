@@ -3,6 +3,8 @@
 
 import {useEffect, useState, useMemo} from 'react';
 
+import {isIosWeb} from 'utils/user_agent';
+
 export enum AudioPlayerState {
     Playing = 'PLAYING',
     Paused = 'PAUSED',
@@ -60,7 +62,7 @@ export function useAudioPlayer(src?: string) {
     }, [audio]);
 
     function togglePlayPause() {
-        if (audio && audio.readyState === 4) {
+        if (audio && (audio.readyState === 4 || (isIosWeb() && audio.readyState === 1))) {
             const isPlaying = audio.currentTime > 0 && !audio.paused && !audio.ended;
             if (isPlaying) {
                 audio.pause();
