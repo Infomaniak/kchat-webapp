@@ -51,7 +51,6 @@ import VoiceMessageButton from './voice_message_button';
 import AutoHeightSwitcher from '../common/auto_height_switcher';
 import RhsSuggestionList from '../suggestion/rhs_suggestion_list';
 import Tooltip from '../tooltip';
-
 import './advanced_text_editor.scss';
 
 type Props = {
@@ -117,6 +116,7 @@ type Props = {
     setDraftAsPostType: (channelOrRootId: Channel['id'] | Post['id'], draft: PostDraft, postType?: PostDraft['postType']) => void;
     isSchedulable?: boolean;
     handleSchedulePost: (scheduleUTCTimestamp: number) => void;
+    isMember: boolean;
 }
 
 const AdvanceTextEditor = ({
@@ -178,6 +178,7 @@ const AdvanceTextEditor = ({
     labels,
     isSchedulable,
     handleSchedulePost,
+    isMember,
 }: Props) => {
     const readOnlyChannel = !canPost;
     const {formatMessage} = useIntl();
@@ -473,7 +474,7 @@ const AdvanceTextEditor = ({
     return (
         <>
             {
-                readOnlyChannel && !isGuest ? (
+                !isMember && !isGuest ? (
                     <div
                         className='post-create__container'
                         id='post-create'
