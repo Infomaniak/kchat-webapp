@@ -168,6 +168,9 @@ export function goToChannelByChannelName(match: Match, history: History): Action
         let channel = getChannelsNameMapInTeam(state, teamObj!.id)[channelName];
         if (!channel) {
             const getChannelDispatchResult = await dispatch(getChannelByNameAndTeamName(team, channelName, true));
+            if ('error' in getChannelDispatchResult) {
+                handleChannelJoinError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
+            }
             if ('data' in getChannelDispatchResult) {
                 channel = getChannelDispatchResult.data;
             }
@@ -197,7 +200,9 @@ export function goToChannelByChannelName(match: Match, history: History): Action
                 }
             }
 
-            const joinChannelDispatchResult = await dispatch(joinChannel(getCurrentUserId(state), teamObj!.id, '', channelName));
+            // [Preview mode feature]: if an user is not a channel member, we skip the direct join action.
+            // We weant to let the user press the button 'Join the channel'.
+            /*const joinChannelDispatchResult = await dispatch(joinChannel(getCurrentUserId(state), teamObj!.id, '', channelName));
             if ('error' in joinChannelDispatchResult) {
                 if (!channel) {
                     const getChannelDispatchResult = await dispatch(getChannelByNameAndTeamName(team, channelName, true));
@@ -210,7 +215,7 @@ export function goToChannelByChannelName(match: Match, history: History): Action
                 }
             } else {
                 channel = joinChannelDispatchResult.data.channel;
-            }
+            }*/
         }
 
         if (channel.type === Constants.DM_CHANNEL) {

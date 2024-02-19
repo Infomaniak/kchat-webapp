@@ -6,7 +6,7 @@ import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import {getTotalUsersStats} from 'mattermost-redux/actions/users';
-import {getCurrentChannel, getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentChannel, getDirectTeammate, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
@@ -30,6 +30,8 @@ function mapStateToProps(state: GlobalState) {
     const channel = getCurrentChannel(state) || {};
     const teammate = getDirectTeammate(state, channel.id);
     const creator = getUser(state, channel.creator_id);
+    const myChannelMemberships = getMyChannelMemberships(state);
+    const isChannelMember = Boolean(myChannelMemberships[channel.id]);
 
     const usersLimit = 10;
 
@@ -49,6 +51,7 @@ function mapStateToProps(state: GlobalState) {
         teammateName: getDisplayNameByUser(state, teammate),
         stats,
         usersLimit,
+        isChannelMember,
     };
 }
 

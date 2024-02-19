@@ -42,6 +42,7 @@ type Props = {
     teammateName?: string;
     stats: any;
     usersLimit: number;
+    isChannelMember?: boolean;
     actions: {
         getTotalUsersStats: () => any;
     };
@@ -68,6 +69,7 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
             teammateName,
             stats,
             usersLimit,
+            isChannelMember,
         } = this.props;
 
         let centeredIntro = '';
@@ -84,7 +86,7 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
         } else if (channel.name === Constants.OFFTOPIC_CHANNEL) {
             return createOffTopicIntroMessage(channel, centeredIntro, stats, usersLimit);
         } else if (channel.type === Constants.OPEN_CHANNEL || channel.type === Constants.PRIVATE_CHANNEL) {
-            return createStandardIntroMessage(channel, centeredIntro, stats, usersLimit, locale, creatorName);
+            return createStandardIntroMessage(channel, centeredIntro, stats, usersLimit, locale, creatorName, isChannelMember);
         }
         return null;
     }
@@ -421,11 +423,30 @@ export function createDefaultIntroMessage(
     );
 }
 
-function createStandardIntroMessage(channel: Channel, centeredIntro: string, stats: any, usersLimit: number, locale: string, creatorName: string) {
+function createStandardIntroMessage(channel: Channel, centeredIntro: string, stats: any, usersLimit: number, locale: string, creatorName: string, isChannelMember = true) {
     const uiName = channel.display_name;
     let memberMessage;
     const channelIsArchived = channel.delete_at !== 0;
     const totalUsers = stats.total_users_count;
+
+    if (!isChannelMember) { // [Preview mode] if the user is not a member, we change the standard message and remove the add users action.
+        return (
+            <div
+                id='channelIntro'
+                className={'channel-intro ' + centeredIntro}
+            >
+                <h2 className='channel-intro__title'>
+                    <FormattedMessage
+                        id='intro_messages.preview'
+                        defaultMessage='Preview of {name}'
+                        values={{
+                            name: (uiName),
+                        }}
+                    />
+                </h2>
+            </div>
+        );
+    }
 
     if (channelIsArchived) {
         memberMessage = '';

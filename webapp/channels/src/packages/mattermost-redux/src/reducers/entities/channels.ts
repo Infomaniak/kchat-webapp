@@ -449,7 +449,7 @@ export function myMembers(state: RelationOneToOne<Channel, ChannelMembership> = 
         const {data} = action;
         let member = state[data.channel_id];
 
-        if (member.last_viewed_at === data.last_viewed_at) {
+        if (member?.last_viewed_at === data.last_viewed_at) {
             return state;
         }
 

@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import type {Channel, ChannelMemberCountsByGroup} from '@mattermost/types/channels';
+import type {Channel, ChannelMemberCountsByGroup, ChannelMembership} from '@mattermost/types/channels';
 import type {Emoji} from '@mattermost/types/emojis';
 import type {ServerError} from '@mattermost/types/errors';
 import type {FileInfo} from '@mattermost/types/files';
@@ -17,6 +17,7 @@ import {GroupSource} from '@mattermost/types/groups';
 import type {CommandArgs} from '@mattermost/types/integrations';
 import type {Post, PostMetadata, PostPriorityMetadata} from '@mattermost/types/posts';
 import type {PreferenceType} from '@mattermost/types/preferences';
+import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import {Posts} from 'mattermost-redux/constants';
 import type {ActionResult} from 'mattermost-redux/types/actions';
@@ -248,6 +249,7 @@ type Props = {
     channelMemberCountsByGroup: ChannelMemberCountsByGroup;
     useLDAPGroupMentions: boolean;
     useCustomGroupMentions: boolean;
+    myChannelMemberships: RelationOneToOne<Channel, ChannelMembership>;
 }
 
 type State = {
@@ -1771,6 +1773,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
                     caretPosition={this.state.caretPosition}
+                    isMember={Boolean(this.props.myChannelMemberships[this.props.currentChannel.id])}
                     additionalControls={[
                         this.props.isPostPriorityEnabled && (
                             <React.Fragment key='PostPriorityPicker'>

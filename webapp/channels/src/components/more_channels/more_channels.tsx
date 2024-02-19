@@ -156,11 +156,11 @@ export default class MoreChannels extends React.PureComponent<Props, State> {
         channelArr.slice(statsStartIdx, channelArr.length - 1).filter((f) => !this.props.allChannelStats[f.id]).forEach((channel) => this.props.actions.getChannelStats(channel.id));
     };
 
-    handleJoin = async (channel: Channel, done: () => void) => {
+    handleJoin = async (channel: Channel, done: () => void, skipJoinCHannel = false) => {
         const {actions, currentUserId, teamId, teamName} = this.props;
         let result;
 
-        if (!this.isMemberOfChannel(channel.id)) {
+        if (!this.isMemberOfChannel(channel.id) && !skipJoinCHannel) {
             result = await actions.joinChannel(currentUserId, teamId, channel.id);
         }
 
