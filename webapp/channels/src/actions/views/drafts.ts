@@ -90,12 +90,15 @@ export function removeDraft(key: string, channelId: string, rootId = '') {
 
         if (syncedDraftsAreAllowedAndEnabled(state)) {
             try {
+                console.log(`@debug_draft removing draft from api ~ key: ${key}, channelId: ${channelId}, rootId: ${rootId}`);
+
                 if (draft.timestamp) {
                     await Client4.deleteScheduledDraft(draft.id);
                 } else {
                     await Client4.deleteDraft(channelId, rootId);
                 }
             } catch (error) {
+                console.log('@debug_draft Could not delete draft from api', key);
                 return {
                     data: false,
                     error,
@@ -132,10 +135,10 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
         if (scheduleDelete) {
             const newValue = {...updatedValue};
             Reflect.deleteProperty(newValue, 'timestamp');
-            console.log('@debug_draft updateDraft (scheduled)', `id: ${newValue?.id}`, `updatedAt: ${newValue?.updateAt}`, `createdAt: ${newValue?.createAt}`);
+            console.log('@debug_draft updateDraft (scheduled)', `key: ${key}`, `id: ${newValue?.id}`, `updatedAt: ${newValue?.updateAt}`, `createdAt: ${newValue?.createAt}`);
             dispatch(setGlobalDraft(key, newValue as PostDraft, false));
         } else {
-            console.log('@debug_draft updateDraft', `id: ${updatedValue?.id}`, `updatedAt: ${updatedValue?.updateAt}`, `createdAt: ${updatedValue?.createAt}`);
+            console.log('@debug_draft updateDraft', `key: ${key}`, `id: ${updatedValue?.id}`, `updatedAt: ${updatedValue?.updateAt}`, `createdAt: ${updatedValue?.createAt}`);
             dispatch(setGlobalDraft(key, updatedValue, false));
         }
 
@@ -252,7 +255,7 @@ export function setGlobalDraft(key: string, value: PostDraft|null, isRemote: boo
                 dispatch(setGlobalItem(key, {...value, message: ''}));
             }
         }
-        console.log('@debug_draft setGlobalDraftSource', `id: ${value?.id}`, `updatedAt: ${value?.updateAt}`, `createdAt: ${value?.createAt}`);
+        console.log('@debug_draft setGlobalDraftSource', `key: ${key}`, `id: ${value?.id}`, `updatedAt: ${value?.updateAt}`, `createdAt: ${value?.createAt}`);
         dispatch(setGlobalDraftSource(key, isRemote));
         return {data: true};
     };
