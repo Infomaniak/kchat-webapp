@@ -1,3 +1,17 @@
+## 2.5.0-rc.5 (2024-02-19)
+
+### Added (1 change)
+
+- [Log added on create thread fail](kchat/webapp@d555cbf9fdc27ecf396808af692947bad1ce062c) by @philippe.karle ([merge request](kchat/webapp!632))
+
+### Fixed (1 change)
+
+- [Fix time floating underneath flags on compact mode](kchat/webapp@9c82413959de728c27a5757d4786a18459fcac21) by @philippe.karle ([merge request](kchat/webapp!634))
+
+### Changed (1 change)
+
+- [Link to see built-in slash commands updated](kchat/webapp@b3fd521ca5f37c7c727d54cf083752c3258be831) by @philippe.karle ([merge request](kchat/webapp!633))
+
 ## 2.5.0-rc.4 (2024-02-19)
 
 ### Chore (1 change)
