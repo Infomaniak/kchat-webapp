@@ -75,7 +75,7 @@ end
 # @return [String] The name of the last tag before the current tag. Throws an error if it fails to fetch the tags.
 =end
 def get_last_tag(current_tag)
-  all_tags = get_all_tags.select { |tag| tag["name"] =~ /\A\d+\.\d+\.\d+(-next\.\d+)?\z/ && tag["name"] < current_tag }
+  all_tags = get_all_tags.select { |tag| tag["name"] =~ /\A\d+\.\d+\.\d+(-next\.\d+|-rc\.\d+)?\z/ && tag["name"] < current_tag }
 
   if all_tags.empty?
     raise "No previous tags found that meet the criteria."
@@ -96,11 +96,12 @@ def create_changelog(tag, branch)
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
   commit_sha = get_commit_sha(last_tag)
+  bot_message = "Add changelog for version #{tag} [skip ci]"
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Post.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
   # "branch" => branch,
-  request.set_form_data("version" => tag, "from" => commit_sha)
+  request.set_form_data("version" => tag, "from" => commit_sha, "message" => bot_message)
 
   response = get_http(uri).request(request)
   response.body if response.code.to_i == 201
@@ -199,19 +200,6 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
-  # mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
-
-  # Labels
-  # mr_numbers.each do |mr_number|
-  #   mr = get_merge_request(mr_number)
-  #   labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::prod"]
-  #   if mr["labels"].any? { |label| label.start_with?("trello::") }
-  #     labels = mr["labels"].reject { |label| label.start_with?("trello::") } + ["trello::All - Done", "trello-sync"]
-  #     update_merge_request_labels(mr["iid"], labels)
-  #     puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
-  #   end
-  # end
-
   # Release
   create_release(changelog)
   puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
@@ -226,20 +214,27 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
-  # mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
-
-  # mr_numbers.each do |mr_number|
-  #   mr = get_merge_request(mr_number)
-  #   labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::next"]
-  #   update_merge_request_labels(mr["iid"], labels)
-  #   puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
-  # end
   create_release(changelog)
   puts "Creating release for canary tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
 
-# [stable + next] Notify
-if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG) || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+# [preprod] Update labels and changelog
+if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
+  # TODO: clean, not used by function
+  branch = NEXT_BRANCH
+
+  puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
+  # Creates the changelog entry on gitlab
+  create_changelog(GIT_RELEASE_TAG, branch)
+  # Get the relevant entries to update labels and create release
+  changelog = get_changelog(GIT_RELEASE_TAG)
+
+  create_release(changelog)
+  puts "Creating release for preprod tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
+end
+
+# [stable + next + preprod] Notify
+if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG) || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/ || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
   commit_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/commit/"
   mr_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/"
   formatted_changelog = changelog.gsub(/kchat\/webapp@/, commit_url).gsub(/kchat\/webapp!/, mr_url)
