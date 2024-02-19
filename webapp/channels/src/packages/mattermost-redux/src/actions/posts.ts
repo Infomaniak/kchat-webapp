@@ -273,6 +273,7 @@ export function createPost(post: Post, files: any[] = []) {
                     failed: true,
                     update_at: Date.now(),
                 };
+                console.log('@debug_305452 post ~ failed', `id: ${data.id}`, `update_at: ${data.update_at}`);
                 actions = [{type: PostTypes.CREATE_POST_FAILURE, error}];
 
                 // If the failure was because: the root post was deleted or
