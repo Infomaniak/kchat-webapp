@@ -20,13 +20,11 @@ workflow:
     - if: "$CI_COMMIT_TAG =~ /\\-rc.*/"
       variables:
         DEPLOY_VARIABLE: preprod
-        # NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
-        NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/998e74a5-86f9-40ca-99bc-75fd53387bae
+        NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
     - if: "$CI_COMMIT_TAG =~ /\\-next.*/"
       variables:
         DEPLOY_VARIABLE: canary
-        # NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
-        NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/998e74a5-86f9-40ca-99bc-75fd53387bae
+        NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
     - if: "$CI_COMMIT_TAG"
       variables:
         DEPLOY_VARIABLE: prod
@@ -95,32 +93,31 @@ build_front:
     expire_in: 1 days
     when: always
 
-publish_packages:
-  stage: build
-  image: node:18.15.0
-  tags:
-    - kubernetes
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-      when: never
-    - if: $DEPLOY_VARIABLE == "prodsec"
-      when: on_success
-    - when: never
-  environment:
-    name: "$DEPLOY_VARIABLE"
-  script:
-    - yarn --silent
-    - yarn workspace @infomaniak/mattermost-types build
-    - yarn workspace @infomaniak/mattermost-client build
-    - yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch
-    - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken' "$VERDACCIO_TOKEN"
-    - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAlwaysAuth' true
-    - yarn config set npmScopes.infomaniak.npmRegistryServer https://verdaccio.dev.infomaniak.ch
-    - yarn config set npmScopes.infomaniak.npmPublishRegistry https://verdaccio.dev.infomaniak.ch
-    - yarn config set npmScopes.infomaniak.npmAuthToken "$VERDACCIO_TOKEN"
-    - yarn workspace @infomaniak/mattermost-types npm publish
-    - yarn workspace @infomaniak/mattermost-client npm publish
-
+# publish_packages:
+#   stage: build
+#   image: node:18.15.0
+#   tags:
+#     - kubernetes
+#   rules:
+#     - if: '$CI_PIPELINE_SOURCE == "schedule"'
+#       when: never
+#     - if: $DEPLOY_VARIABLE == "prodsec"
+#       when: on_success
+#     - when: never
+#   environment:
+#     name: "$DEPLOY_VARIABLE"
+#   script:
+#     - yarn --silent
+#     - yarn workspace @infomaniak/mattermost-types build
+#     - yarn workspace @infomaniak/mattermost-client build
+#     - yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch
+#     - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken' "$VERDACCIO_TOKEN"
+#     - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAlwaysAuth' true
+#     - yarn config set npmScopes.infomaniak.npmRegistryServer https://verdaccio.dev.infomaniak.ch
+#     - yarn config set npmScopes.infomaniak.npmPublishRegistry https://verdaccio.dev.infomaniak.ch
+#     - yarn config set npmScopes.infomaniak.npmAuthToken "$VERDACCIO_TOKEN"
+#     - yarn workspace @infomaniak/mattermost-types npm publish
+#     - yarn workspace @infomaniak/mattermost-client npm publish
 
 publish_front:
   stage: release
