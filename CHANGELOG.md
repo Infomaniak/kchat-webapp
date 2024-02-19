@@ -1,3 +1,9 @@
+## 2.5.0-rc.4 (2024-02-19)
+
+### Chore (1 change)
+
+- [test changelog](kchat/webapp@d729c988ff661103e7952e3194ac9c04107cdc6f) by @antonbuksa
+
 ## 2.4.0 (2024-02-16)
 
 No changes.
