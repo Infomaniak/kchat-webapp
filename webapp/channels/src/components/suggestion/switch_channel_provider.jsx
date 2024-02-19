@@ -225,10 +225,11 @@ class SwitchChannelSuggestion extends Suggestion {
             );
         }
 
-        let teamName = null;
-        if (channel.team_id && team) {
-            teamName = (<span className='ml-2 suggestion-list__team-name'>{team.display_name}</span>);
-        }
+        const teamName = null;
+
+        // if (channel.team_id && team) {
+        //     teamName = (<span className='ml-2 suggestion-list__team-name'>{team.display_name}</span>);
+        // }
         const showSlug = (isPartOfOnlyOneTeam || channel.type === Constants.DM_CHANNEL) && channel.type !== Constants.THREADS;
 
         return (
