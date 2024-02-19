@@ -499,7 +499,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     };
 
     doSubmit = async (e?: React.FormEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
+        console.log(`@debug_draft AdvancedCreatePost ~ doSubmit: isSchedule: ${isSchedule}, scheduleUTCTimestamp: ${scheduleUTCTimestamp}`);
         const channelId = this.props.currentChannel.id;
+        console.log(`@debug_draft AdvancedCreatePost ~ doSubmit: channelId: ${channelId}`);
+
         if (e) {
             e.preventDefault();
         }
@@ -617,6 +620,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             clearTimeout(this.saveDraftFrame);
         }
 
+        console.log('@debug_draft AdvancedCreatePost ~ doSubmit: removeDraft', channelId);
         this.isDraftSubmitting = false;
         this.removeDraft(channelId);
     };
@@ -963,6 +967,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     };
 
     removeDraft = (channelId = this.props.currentChannel.id) => {
+        console.log('@debug_draft advanced_create_post ~ removeDraft ~', StoragePrefixes.DRAFT + channelId);
         this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
         this.draftsForChannel[channelId] = null;
     };
