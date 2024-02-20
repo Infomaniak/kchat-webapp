@@ -10,6 +10,7 @@ import {getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {makePrepareReplyIdsForThreadViewer, makeGetThreadLastViewedAt} from 'selectors/views/threads';
 
@@ -24,6 +25,7 @@ type OwnProps = {
     selected: Post | FakePost;
     useRelativeTimestamp: boolean;
     onCardClick: (post: Post) => void;
+    isMember: boolean;
 }
 
 function makeMapStateToProps() {
@@ -52,6 +54,8 @@ function makeMapStateToProps() {
             lastPost,
             replyListIds,
             teamId: channel.team_id,
+            isMember: Boolean(state.entities.channels.myMembers[channel?.id]),
+            isGuest: isCurrentUserGuestUser(state),
         };
     };
 }

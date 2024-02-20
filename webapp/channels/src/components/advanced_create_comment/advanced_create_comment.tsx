@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import type {Channel, ChannelMemberCountsByGroup, ChannelMembership} from '@mattermost/types/channels';
+import type {ChannelMemberCountsByGroup} from '@mattermost/types/channels';
 import type {Emoji} from '@mattermost/types/emojis';
 import type {ServerError} from '@mattermost/types/errors';
 import type {FileInfo} from '@mattermost/types/files';
@@ -13,7 +13,6 @@ import type {Group} from '@mattermost/types/groups';
 import {GroupSource} from '@mattermost/types/groups';
 import type {Post} from '@mattermost/types/posts';
 import type {PreferenceType} from '@mattermost/types/preferences';
-import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
@@ -193,7 +192,6 @@ type Props = {
     emojiMap: EmojiMap;
     isFormattingBarHidden: boolean;
     searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined) => Promise<{ data: any }>;
-    myChannelMemberships: RelationOneToOne<Channel, ChannelMembership>;
 }
 
 type State = {
@@ -1321,8 +1319,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     setDraftAsPostType={this.setDraftAsPostType}
                     isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
-                    caretPosition={this.state.caretPosition}
-                    isMember={Boolean(this.props.myChannelMemberships[this.props.channelId])}
+                    caretPosition={this.state.caretPosition ?? 0}
                 />
             </form>
         );

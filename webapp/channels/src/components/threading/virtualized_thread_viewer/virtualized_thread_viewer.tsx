@@ -1,10 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {debug} from 'console';
+
 import type {OnScrollArgs, OnItemsRenderedArgs} from 'dynamic-virtualized-list';
 import {DynamicSizeList} from 'dynamic-virtualized-list';
 import type {RefObject} from 'react';
 import React, {PureComponent} from 'react';
+import {FormattedMessage} from 'react-intl';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -12,6 +15,8 @@ import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {isDateLine, isStartOfNewMessages, isCreateComment} from 'mattermost-redux/utils/post_list';
+
+import * as GlobalActions from 'actions/global_actions';
 
 import NewRepliesBanner from 'components/new_replies_banner';
 import FloatingTimestamp from 'components/post_view/floating_timestamp';
@@ -40,6 +45,8 @@ type Props = {
     teamId: string;
     useRelativeTimestamp: boolean;
     isThreadView: boolean;
+    isMember: boolean;
+    isGuest: boolean;
 }
 
 type State = {
@@ -54,6 +61,8 @@ type State = {
     visibleStopIndex?: number;
     overscanStartIndex?: number;
     overscanStopIndex?: number;
+    isMember: boolean;
+    isGuest: boolean;
 }
 
 const virtListStyles = {
@@ -123,6 +132,8 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             visibleStopIndex: undefined,
             overscanStartIndex: undefined,
             overscanStopIndex: undefined,
+            isMember: props.isMember,
+            isGuest: props.isGuest,
         };
     }
 
@@ -378,6 +389,29 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         }
 
         if (isCreateComment(itemId)) {
+            if (!this.props.isMember && !this.props.isGuest) {
+                return (
+                    <div
+                        className='post-create__container'
+                        id='post-create'
+                    >
+                        <div
+                            id='channelArchivedMessage'
+                            className='channel-archived__message'
+                        >
+                            <button
+                                className='btn btn-primary channel-archived__close-btn'
+                                onClick={() => GlobalActions.joinChannel(this.props.channel.id)}
+                            >
+                                <FormattedMessage
+                                    id='joinChannel.joiningButtonChannel'
+                                    defaultMessage='Join Channel'
+                                />
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
             return (
                 <CreateComment
                     focusOnMount={!this.props.isThreadView && (this.state.userScrolledToBottom || (!this.state.userScrolled && this.getInitialPostIndex() === 0))}
@@ -450,7 +484,6 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
 
     render() {
         const {isMobile, topRhsPostId} = this.state;
-
         return (
             <>
                 {isMobile && topRhsPostId && !this.props.useRelativeTimestamp && (
@@ -490,7 +523,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                                     width={width}
                                     className={'post-list__dynamic--RHS'}
                                 >
-                                    {this.renderRow}
+                                    {(data) => this.renderRow(data)}
                                 </DynamicSizeList>
                                 {this.renderToast(width)}
                             </>
