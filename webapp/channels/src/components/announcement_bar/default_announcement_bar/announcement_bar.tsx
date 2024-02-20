@@ -138,6 +138,8 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
             barClass = 'announcement-bar announcement-bar-infomaniak';
         } else if (this.props.type === AnnouncementBarTypes.INFOMANIAK_MOBILE) {
             barClass = 'announcement-bar announcement-bar-infomaniak-mobile';
+        } else if (this.props.type === AnnouncementBarTypes.INFOMANIAK_ADVISOR) {
+            barClass = 'announcement-bar announcement-bar-infomaniak-advisor';
         }
 
         let closeButton;

@@ -136,6 +136,21 @@
     background-color: #3d3c40;
 }
 
+.announcement-bar-infomaniak-advisor {
+    background: linear-gradient(0deg, #F4F6FD, #F4F6FD);
+    color: #333333;
+    border-bottom: 1px solid #E0E0E0;
+    .announcement-bar__text {
+        > span {
+            font-weight: 400;
+        }
+    }
+    .advisor-icon {
+        width: unset;
+        height: unset;
+    }
+}
+
 .announcement-bar.announcement-bar-infomaniak {
     max-height: $ik-announcement-bar-height;
     min-height: $ik-announcement-bar-height;

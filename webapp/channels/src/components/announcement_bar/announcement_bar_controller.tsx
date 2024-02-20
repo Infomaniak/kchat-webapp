@@ -20,6 +20,7 @@ import AutoStartTrialModal from './show_start_trial_modal/show_start_trial_modal
 import ShowThreeDaysLeftTrialModal from './show_tree_days_left_trial_modal/show_three_days_left_trial_modal';
 import TextDismissableBar from './text_dismissable_bar';
 import VersionBar from './version_bar';
+import MASMigrationBar from './mas_migration_bar';
 
 import withGetCloudSubscription from '../common/hocs/cloud/with_get_cloud_subscription';
 
@@ -113,6 +114,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
                 {autoStartTrialModal}
                 <ShowThreeDaysLeftTrialModal/>
                 <VersionBar/>
+                <MASMigrationBar/>
                 <ConfigurationAnnouncementBar
                     config={this.props.config}
                     license={this.props.license}
