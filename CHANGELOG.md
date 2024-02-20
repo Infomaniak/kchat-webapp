@@ -1,3 +1,21 @@
+## 2.5.0-rc.6 (2024-02-20)
+
+### Added (2 changes)
+
+- [Assign the responsability to display the preview component outside the text editor](kchat/webapp@ed1acca606e3ef905d621791010319d782ceb516) by @benoit.nau ([merge request](kchat/webapp!640))
+- [Handle join channel without a member registration.](kchat/webapp@bedfb6998b10a49cb6889a8c9fdcf4f1fb88828c) by @benoit.nau ([merge request](kchat/webapp!608))
+
+### Fixed (3 changes)
+
+- [Fix: AnnouncementBar logic condition updated](kchat/webapp@6006bfee57c6aece94144ba5a107dd3859e1e83d) by @philippe.karle ([merge request](kchat/webapp!642))
+- [Fix: file item taking full width when expend mode is activated on file search modal](kchat/webapp@866056a4ca023e15ec1a263eafb2fc6d46d95245) by @philippe.karle ([merge request](kchat/webapp!638))
+- [fix draft code discrepancy between post and pre monorepo draft actions](kchat/webapp@704ad5649aa072ab3289de7ae18788eed652fd04) by @antonbuksa ([merge request](kchat/webapp!631))
+
+### Changed (2 changes)
+
+- [Back button changed displayed app name](kchat/webapp@a5647f4ebb2071645caa40a97b3b8acc547d0b63) by @philippe.karle ([merge request](kchat/webapp!641))
+- [Channel private to public question translation updated](kchat/webapp@a6bdba5972010af01b595afa441ecc0b2c6b0bca) by @philippe.karle ([merge request](kchat/webapp!637))
+
 ## 2.5.0-rc.5 (2024-02-19)
 
 ### Added (1 change)
