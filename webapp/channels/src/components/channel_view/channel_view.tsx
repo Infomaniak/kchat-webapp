@@ -5,6 +5,8 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
+import * as GlobalActions from 'actions/global_actions';
+
 import AdvancedCreatePost from 'components/advanced_create_post';
 import ChannelHeader from 'components/channel_header';
 import deferComponentRender from 'components/deferComponentRender';
@@ -25,6 +27,8 @@ type State = {
     url: string;
     focusedPostId?: string;
     deferredPostView: any;
+    isMember: boolean;
+    isGuest: boolean;
 };
 
 export default class ChannelView extends React.PureComponent<Props, State> {
@@ -74,6 +78,8 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             channelId: props.channelId,
             focusedPostId: props.match.params.postid,
             deferredPostView: ChannelView.createDeferredPostView(),
+            isMember: props.isMember,
+            isGuest: props.isGuest,
         };
 
         this.channelViewRef = React.createRef();
@@ -123,6 +129,28 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                             <FormattedMessage
                                 id='center_panel.archived.closeChannel'
                                 defaultMessage='Close Channel'
+                            />
+                        </button>
+                    </div>
+                </div>
+            );
+        } else if (!this.props.isMember && !this.props.isGuest) {
+            createPost = (
+                <div
+                    className='post-create__container'
+                    id='post-create'
+                >
+                    <div
+                        id='channelArchivedMessage'
+                        className='channel-archived__message'
+                    >
+                        <button
+                            className='btn btn-primary channel-archived__close-btn'
+                            onClick={() => GlobalActions.joinChannel(this.props.channelId)}
+                        >
+                            <FormattedMessage
+                                id='joinChannel.joiningButtonChannel'
+                                defaultMessage='Join Channel'
                             />
                         </button>
                     </div>

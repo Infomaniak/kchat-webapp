@@ -19,7 +19,7 @@ import {
 } from 'mattermost-redux/actions/posts';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions, Posts, Preferences as PreferencesRedux} from 'mattermost-redux/constants';
-import {getCurrentChannelId, getCurrentChannel, getCurrentChannelStats, getChannelMemberCountsByGroup as selectChannelMemberCountsByGroup, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentChannelId, getCurrentChannel, getCurrentChannelStats, getChannelMemberCountsByGroup as selectChannelMemberCountsByGroup} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getAssociatedGroupsForReferenceByMention} from 'mattermost-redux/selectors/entities/groups';
 import {
@@ -92,7 +92,6 @@ function makeMapStateToProps() {
         const groupsWithAllowReference = useLDAPGroupMentions || useCustomGroupMentions ? getAssociatedGroupsForReferenceByMention(state, currentTeamId, currentChannel.id) : null;
         const enableTutorial = config.EnableTutorial === 'true';
         const tutorialStep = getInt(state, TutorialTourName.ONBOARDING_TUTORIAL_STEP, currentUserId, 0);
-        const myChannelMemberships = getMyChannelMemberships(state);
 
         // guest validation to see which point the messaging tour tip starts
         const isGuestUser = isCurrentUserGuestUser(state);
@@ -138,7 +137,6 @@ function makeMapStateToProps() {
             isLDAPEnabled,
             useCustomGroupMentions,
             isPostPriorityEnabled: isPostPriorityEnabled(state),
-            myChannelMemberships,
         };
     };
 }

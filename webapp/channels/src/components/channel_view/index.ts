@@ -8,7 +8,7 @@ import {withRouter} from 'react-router-dom';
 import {getCurrentChannel, getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
-import {isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {isCurrentUserGuestUser, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import {goToLastViewedChannel} from 'actions/views/channel';
 
@@ -46,6 +46,8 @@ function mapStateToProps(state: GlobalState) {
         isCloud: getLicense(state).Cloud === 'true',
         teamUrl: getCurrentRelativeTeamUrl(state),
         isFirstAdmin: isFirstAdmin(state),
+        isMember: Boolean(state.entities.channels.myMembers[channel?.id]),
+        isGuest: isCurrentUserGuestUser(state),
     };
 }
 
