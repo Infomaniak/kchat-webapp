@@ -27,6 +27,7 @@ describe('components/logged_in/LoggedIn', () => {
             autoUpdateTimezone: jest.fn(),
             getChannelURLAction: jest.fn(),
             viewChannel: jest.fn(),
+            registerInternalKdrivePlugin: jest.fn(),
         },
         location: {
             pathname: '/',

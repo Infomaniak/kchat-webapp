@@ -36,7 +36,6 @@ import Popover from 'components/widgets/popover';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
 
-import ChannelHeaderPlug from 'plugins/channel_header_plug';
 import {
     Constants,
     ModalIdentifiers,
@@ -45,6 +44,8 @@ import {
 } from 'utils/constants';
 import {t} from 'utils/i18n';
 import {handleFormattedTextClick, localizeMessage, isEmptyObject, toTitleCase} from 'utils/utils';
+
+import ChannelHeaderPlug from 'plugins/channel_header_plug';
 
 import type {ModalData} from 'types/actions';
 import type {RhsState} from 'types/store/rhs';
@@ -313,6 +314,35 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             );
         }
 
+        if (isEmptyObject(channelMember) && !isGuest(dmUser?.roles ?? '')) { // light header for the preview mode feature
+            return (
+                <div
+                    id='channel-header'
+                    aria-label={ariaLabelChannelHeader}
+                    role='banner'
+                    tabIndex={-1}
+                    data-channelid={`${channel.id}`}
+                    className='channel-header alt a11y__region'
+                    data-a11y-sort-order='8'
+                >
+                    <div
+                        className='flex-parent'
+                        style={{alignItems: 'center'}}
+                    >
+                        <strong
+                            role='heading'
+                            aria-level={2}
+                            id='channelHeaderTitle'
+                            className='heading'
+                        >
+                            <span>
+                                {channel.name}
+                            </span>
+                        </strong>
+                    </div>
+                </div>
+            );
+        }
         const channelIsArchived = channel.delete_at !== 0;
         if (isEmptyObject(channel) ||
             isEmptyObject(channelMember) ||

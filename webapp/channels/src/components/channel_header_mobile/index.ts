@@ -10,6 +10,7 @@ import {bindActionCreators} from 'redux';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {
     getCurrentChannel,
+    getMyChannelMemberships,
     getMyCurrentChannelMembership,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
@@ -36,14 +37,18 @@ type OwnProps = {
     location: Location;
 }
 
-const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => ({
-    user: getCurrentUser(state),
-    channel: getCurrentChannel(state),
-    isMobileView: getIsMobileView(state),
-    isMuted: isCurrentChannelMuted(state),
-    inGlobalThreads: Boolean(matchPath(ownProps.location.pathname, {path: '/:team/threads/:threadIdentifier?'})),
-    inDrafts: Boolean(matchPath(ownProps.location.pathname, {path: '/:team/drafts'})),
-});
+const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
+    const channel = getCurrentChannel(state);
+    return {
+        user: getCurrentUser(state),
+        channel,
+        isMobileView: getIsMobileView(state),
+        isMuted: isCurrentChannelMuted(state),
+        inGlobalThreads: Boolean(matchPath(ownProps.location.pathname, {path: '/:team/threads/:threadIdentifier?'})),
+        inDrafts: Boolean(matchPath(ownProps.location.pathname, {path: '/:team/drafts'})),
+        isChannelMember: channel && Boolean(getMyChannelMemberships(state)[channel.id]),
+    };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     actions: bindActionCreators({
