@@ -49,7 +49,7 @@ export default class VersionBar extends React.PureComponent <Props, State> {
             return null;
         }
 
-        if (buildHashOnAppLoad !== buildHash && (!isNewVersionCanaryOnly || isCanary)) {
+        if (buildHashOnAppLoad !== buildHash && ((isNewVersionCanaryOnly && isCanary) || (!isNewVersionCanaryOnly && !isCanary))) {
             return (
                 <AnnouncementBar
                     type={AnnouncementBarTypes.ANNOUNCEMENT}
