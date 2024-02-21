@@ -101,13 +101,11 @@ export function ding(name: string) {
 }
 
 export function tryNotificationSound(name: string) {
-    if (document.hasFocus()) {
-        const audio = new Audio(notificationSounds.get(name) ?? notificationSounds.get('Bing'));
-        try {
-            audio.play();
-        } catch {
+    const audio = new Audio(notificationSounds.get(name) ?? notificationSounds.get('Bing'));
+    try {
+        audio.play();
+    } catch {
         // Prevent the issue "DOMException: play() failed because the user didn't interact with the document first."
         // Due to user gesture permissions: https://developer.chrome.com/blog/autoplay/
-        }
     }
 }
