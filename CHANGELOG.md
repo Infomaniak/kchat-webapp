@@ -56,6 +56,25 @@ No changes.
 
 - [test changelog](kchat/webapp@d729c988ff661103e7952e3194ac9c04107cdc6f) by @antonbuksa
 
+## 2.5.0-next.5 (2024-02-21)
+
+### Added (1 change)
+
+- [implement announcement banner for mas migration](kchat/webapp@df10b761dfcd8c370b74bf246faa9b78ed06e739) by @antonbuksa ([merge request](kchat/webapp!639))
+
+### Fixed (2 changes)
+
+- [fix mas banner flag type is string](kchat/webapp@47f6424d245ee3c983b6f10796b61229bbe3b218) by @antonbuksa ([merge request](kchat/webapp!639))
+- [Fix: deleting focus condition to trigger notification when current tab is not focused](kchat/webapp@42d5e7115d778549502571de66457760f0ba7ac6) by @philippe.karle ([merge request](kchat/webapp!643))
+
+### Changed (1 change)
+
+- [Modal invitation limit increased to 10 users at the same time](kchat/webapp@947db16b9ebdd409daf0e8c9fd67b72252621421) by @philippe.karle ([merge request](kchat/webapp!644))
+
+### Removed (1 change)
+
+- [Revert "Assign the responsability to display the preview component outside the text editor"](kchat/webapp@3a6806ca7f0007f7cf22e8943a47770df6207ded) by @antonbuksa
+
 ## 2.5.0-next.4 (2024-02-20)
 
 ### Added (2 changes)
