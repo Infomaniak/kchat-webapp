@@ -1,3 +1,9 @@
+## 2.5.0-rc.8 (2024-02-21)
+
+### Fixed (1 change)
+
+- [fix mas banner flag type is string](kchat/webapp@47f6424d245ee3c983b6f10796b61229bbe3b218) by @antonbuksa ([merge request](kchat/webapp!639))
+
 ## 2.5.0-rc.7 (2024-02-21)
 
 ### Fixed (1 change)
