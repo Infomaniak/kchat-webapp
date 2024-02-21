@@ -1,3 +1,13 @@
+## 2.5.0-rc.7 (2024-02-21)
+
+### Fixed (1 change)
+
+- [Fix: deleting focus condition to trigger notification when current tab is not focused](kchat/webapp@42d5e7115d778549502571de66457760f0ba7ac6) by @philippe.karle ([merge request](kchat/webapp!643))
+
+### Changed (1 change)
+
+- [Modal invitation limit increased to 10 users at the same time](kchat/webapp@947db16b9ebdd409daf0e8c9fd67b72252621421) by @philippe.karle ([merge request](kchat/webapp!644))
+
 ## 2.5.0-rc.6 (2024-02-20)
 
 ### Added (2 changes)
