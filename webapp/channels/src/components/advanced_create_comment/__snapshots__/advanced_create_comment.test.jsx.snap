@@ -13,7 +13,6 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
     badConnection={false}
     canPost={false}
     canUploadFiles={true}
-    caretPosition={0}
     channelId="g6139tbospd18cmxroesdk3kkc"
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
     draft={
@@ -96,7 +95,6 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
     badConnection={false}
     canPost={true}
     canUploadFiles={true}
-    caretPosition={0}
     channelId="g6139tbospd18cmxroesdk3kkc"
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
     draft={
@@ -174,7 +172,6 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
     badConnection={false}
     canPost={true}
     canUploadFiles={true}
-    caretPosition={0}
     channelId="g6139tbospd18cmxroesdk3kkc"
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
     draft={
@@ -257,7 +254,6 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
     badConnection={false}
     canPost={true}
     canUploadFiles={true}
-    caretPosition={0}
     channelId="g6139tbospd18cmxroesdk3kkc"
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
     draft={
@@ -335,7 +331,6 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
     badConnection={false}
     canPost={true}
     canUploadFiles={true}
-    caretPosition={0}
     channelId="g6139tbospd18cmxroesdk3kkc"
     currentUserId="zaktnt8bpbgu8mb6ez9k64r7sa"
     draft={

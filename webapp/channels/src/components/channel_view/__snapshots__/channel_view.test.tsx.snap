@@ -38,13 +38,17 @@ exports[`components/channel_view Should match snapshot if channel is archived 1`
       className="channel-archived__message"
       id="channelArchivedMessage"
     >
+      <FormattedMarkdownMessage
+        defaultMessage="You are viewing an **archived channel**. New messages cannot be posted."
+        id="archivedChannelMessage"
+      />
       <button
         className="btn btn-primary channel-archived__close-btn"
         onClick={[Function]}
       >
         <MemoizedFormattedMessage
-          defaultMessage="Join Channel"
-          id="joinChannel.joiningButtonChannel"
+          defaultMessage="Close Channel"
+          id="center_panel.archived.closeChannel"
         />
       </button>
     </div>
@@ -88,15 +92,18 @@ exports[`components/channel_view Should match snapshot if channel is deactivated
   >
     <div
       className="channel-archived__message"
-      id="channelArchivedMessage"
     >
+      <FormattedMarkdownMessage
+        defaultMessage="You are viewing an archived channel with a **deactivated user**. New messages cannot be posted."
+        id="create_post.deactivated"
+      />
       <button
         className="btn btn-primary channel-archived__close-btn"
         onClick={[Function]}
       >
         <MemoizedFormattedMessage
-          defaultMessage="Join Channel"
-          id="joinChannel.joiningButtonChannel"
+          defaultMessage="Close Channel"
+          id="center_panel.archived.closeChannel"
         />
       </button>
     </div>
@@ -135,23 +142,12 @@ exports[`components/channel_view Should match snapshot with base props 1`] = `
     channelId="channelId"
   />
   <div
-    className="post-create__container"
+    className="post-create__container AdvancedTextEditor__ctr"
     id="post-create"
   >
-    <div
-      className="channel-archived__message"
-      id="channelArchivedMessage"
-    >
-      <button
-        className="btn btn-primary channel-archived__close-btn"
-        onClick={[Function]}
-      >
-        <MemoizedFormattedMessage
-          defaultMessage="Join Channel"
-          id="joinChannel.joiningButtonChannel"
-        />
-      </button>
-    </div>
+    <Connect(AdvancedCreatePost)
+      getChannelView={[Function]}
+    />
   </div>
 </div>
 `;
