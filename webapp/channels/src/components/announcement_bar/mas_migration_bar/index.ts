@@ -10,7 +10,7 @@ import MASMigrationBar from './mas_migration_bar';
 function mapStateToProps(state: GlobalState) {
     const {ShowMASBanner} = state.entities.general.config;
     return {
-        showMASBanner: ShowMASBanner,
+        showMASBanner: ShowMASBanner === 'true',
     };
 }
 
