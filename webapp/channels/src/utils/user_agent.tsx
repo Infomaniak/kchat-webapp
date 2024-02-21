@@ -134,8 +134,8 @@ export function isMacApp(): boolean {
     return isDesktopApp() && isMac();
 }
 
-export function isMacMas(): boolean {
-    return isMacApp() && userAgent().indexOf('Mas') !== -1;
+export function isNotMacMas(): boolean {
+    return isMacApp() && userAgent().indexOf('Mas') === -1;
 }
 
 export function isWindows(): boolean {

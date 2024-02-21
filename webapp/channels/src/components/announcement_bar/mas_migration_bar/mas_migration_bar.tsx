@@ -7,7 +7,7 @@ import {FormattedMessage} from 'react-intl';
 import ExternalLink from 'components/external_link';
 
 import {AnnouncementBarTypes} from 'utils/constants';
-import {isMacMas} from 'utils/user_agent';
+import {isNotMacMas} from 'utils/user_agent';
 
 import informationIcon from 'images/icons/information-blue.svg';
 
@@ -21,7 +21,7 @@ export default class MASMigrationBar extends React.PureComponent <Props> {
     render() {
         const {showMASBanner} = this.props;
 
-        if (showMASBanner && !isMacMas()) {
+        if (showMASBanner && !isNotMacMas()) {
             return (
                 <AnnouncementBar
                     type={AnnouncementBarTypes.INFOMANIAK_ADVISOR}
