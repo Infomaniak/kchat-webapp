@@ -12,7 +12,7 @@ import {resetCreatePostRequest, resetHistoryIndex} from 'mattermost-redux/action
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions, Preferences, Posts} from 'mattermost-redux/constants';
 import {getAllChannelStats, getChannelMemberCountsByGroup as selectChannelMemberCountsByGroup} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentUserId, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getAssociatedGroupsForReferenceByMention} from 'mattermost-redux/selectors/entities/groups';
 import {makeGetMessageInHistoryItem} from 'mattermost-redux/selectors/entities/posts';
@@ -84,6 +84,7 @@ function makeMapStateToProps() {
         const groupsWithAllowReference = useLDAPGroupMentions || useCustomGroupMentions ? getAssociatedGroupsForReferenceByMention(state, channel.team_id, channel.id) : null;
         const isFormattingBarHidden = getBool(state, Constants.Preferences.ADVANCED_TEXT_EDITOR, AdvancedTextEditor.COMMENT);
         const currentTeamId = getCurrentTeamId(state);
+        const myChannelMemberships = getMyChannelMemberships(state);
 
         return {
             currentTeamId,
@@ -114,6 +115,7 @@ function makeMapStateToProps() {
             useCustomGroupMentions,
             emojiMap: getEmojiMap(state),
             canUploadFiles: canUploadFiles(config),
+            myChannelMemberships,
         };
     };
 }
