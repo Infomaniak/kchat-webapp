@@ -5199,5 +5199,6 @@
     "fileTypes.Code": "Code",
     "fileTypes.Images": "Images",
     "fileTypes.Audio": "Audio",
-    "fileTypes.Videos": "Videos"
+    "fileTypes.Videos": "Videos",
+    "masBar.migrate": "L'application kChat est désormais disponible sur l'App Store. <link>Téléchargez-la</link> pour bénéficier automatiquement des futures mises à jour."
 }

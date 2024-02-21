@@ -178,6 +178,7 @@ export type ClientConfig = {
     SendEmailNotifications: string;
     SendPushNotifications: string;
     ShowEmailAddress: string;
+    ShowMASBanner: string;
     SiteName: string;
     SiteURL: string;
     SQLDriverName: string;
