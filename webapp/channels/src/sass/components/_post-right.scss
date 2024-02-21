@@ -156,7 +156,7 @@
         .msg-typing {
             display: block;
             min-width: 1px;
-            max-width: 300px;
+            max-width: 100%; // Infomaniak
             height: 20px;
             margin-top: 4px;
             margin-bottom: 10px;
