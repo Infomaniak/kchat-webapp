@@ -35,7 +35,7 @@ import './invitation_modal.scss';
 // false means no backdrop
 type Backdrop = 'static' | boolean
 
-const MAX_VALUES = 1;
+const MAX_VALUES = 10;
 
 export type Props = {
     actions: {
