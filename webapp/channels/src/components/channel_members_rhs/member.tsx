@@ -248,6 +248,7 @@ export default styled(Member)`
         align-items: center;
         margin-right: auto;
         overflow: hidden;
+        padding: 4px 0px;
     }
 
     .MenuWrapper {
