@@ -1,3 +1,38 @@
+## 2.5.0-rc.10 (2024-02-22)
+
+### Added (3 changes)
+
+- [implement announcement banner for mas migration](kchat/webapp@df10b761dfcd8c370b74bf246faa9b78ed06e739) by @antonbuksa ([merge request](kchat/webapp!639))
+- [Handle join channel without a member registration.](kchat/webapp@bedfb6998b10a49cb6889a8c9fdcf4f1fb88828c) by @benoit.nau ([merge request](kchat/webapp!608))
+- [Log added on create thread fail](kchat/webapp@d555cbf9fdc27ecf396808af692947bad1ce062c) by @philippe.karle ([merge request](kchat/webapp!632))
+
+### Fixed (8 changes)
+
+- [Status partially hidden fixed](kchat/webapp@937d88e008bda0a9ed270631db2f76fcfd13cc92) by @philippe.karle ([merge request](kchat/webapp!647))
+- [fix mas banner flag type is string](kchat/webapp@47f6424d245ee3c983b6f10796b61229bbe3b218) by @antonbuksa ([merge request](kchat/webapp!639))
+- [Fix: is typing... message is not shorteneted anymore when enough space to display](kchat/webapp@c80701e2fc5a048594316dd1a76de53de7788f04) by @philippe.karle ([merge request](kchat/webapp!645))
+- [Fix: deleting focus condition to trigger notification when current tab is not focused](kchat/webapp@42d5e7115d778549502571de66457760f0ba7ac6) by @philippe.karle ([merge request](kchat/webapp!643))
+- [Fix: AnnouncementBar logic condition updated](kchat/webapp@6006bfee57c6aece94144ba5a107dd3859e1e83d) by @philippe.karle ([merge request](kchat/webapp!642))
+- [Fix: file item taking full width when expend mode is activated on file search modal](kchat/webapp@866056a4ca023e15ec1a263eafb2fc6d46d95245) by @philippe.karle ([merge request](kchat/webapp!638))
+- [Fix time floating underneath flags on compact mode](kchat/webapp@9c82413959de728c27a5757d4786a18459fcac21) by @philippe.karle ([merge request](kchat/webapp!634))
+- [fix draft code discrepancy between post and pre monorepo draft actions](kchat/webapp@704ad5649aa072ab3289de7ae18788eed652fd04) by @antonbuksa ([merge request](kchat/webapp!631))
+
+### Changed (4 changes)
+
+- [Modal invitation limit increased to 10 users at the same time](kchat/webapp@947db16b9ebdd409daf0e8c9fd67b72252621421) by @philippe.karle ([merge request](kchat/webapp!644))
+- [Back button changed displayed app name](kchat/webapp@a5647f4ebb2071645caa40a97b3b8acc547d0b63) by @philippe.karle ([merge request](kchat/webapp!641))
+- [Channel private to public question translation updated](kchat/webapp@a6bdba5972010af01b595afa441ecc0b2c6b0bca) by @philippe.karle ([merge request](kchat/webapp!637))
+- [Link to see built-in slash commands updated](kchat/webapp@b3fd521ca5f37c7c727d54cf083752c3258be831) by @philippe.karle ([merge request](kchat/webapp!633))
+
+### Removed (2 changes)
+
+- [Revert "Assign the responsability to display the preview component outside the text editor"](kchat/webapp@3a6806ca7f0007f7cf22e8943a47770df6207ded) by @antonbuksa
+- [Team name removed from channel search pannel](kchat/webapp@2272a0cd71a9673062cc92b5136a62a700f2a216) by @philippe.karle ([merge request](kchat/webapp!636))
+
+### Chore (1 change)
+
+- [test changelog](kchat/webapp@d729c988ff661103e7952e3194ac9c04107cdc6f) by @antonbuksa
+
 ## 2.5.0-rc.9 (2024-02-21)
 
 No changes.
