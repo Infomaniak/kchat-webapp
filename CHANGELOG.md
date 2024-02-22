@@ -122,6 +122,26 @@ No changes.
 
 - [test changelog](kchat/webapp@d729c988ff661103e7952e3194ac9c04107cdc6f) by @antonbuksa
 
+## 2.5.0-next.6 (2024-02-22)
+
+### Fixed (6 changes)
+
+- [fix mas banner condition](kchat/webapp@99850e5fa6d26a911a41d5ad28d25adb910d1906) by @antonbuksa
+- [Fix: cannot invite poeple that are already in the channel group](kchat/webapp@d403477b942fffc9566489bac822ee03269e4e33) by @philippe.karle ([merge request](kchat/webapp!650))
+- [fix mas banner showing on web](kchat/webapp@c586fa064506f1021bdfe20bea99f099a05d4dd5) by @antonbuksa
+- [temp fix for floating input clear button in create category dialog](kchat/webapp@5de8415b5c4c764e1ce8fa53eb1d5989ad1ea8c1) by @antonbuksa ([merge request](kchat/webapp!649))
+- [Status partially hidden fixed](kchat/webapp@937d88e008bda0a9ed270631db2f76fcfd13cc92) by @philippe.karle ([merge request](kchat/webapp!647))
+- [Fix: is typing... message is not shorteneted anymore when enough space to display](kchat/webapp@c80701e2fc5a048594316dd1a76de53de7788f04) by @philippe.karle ([merge request](kchat/webapp!645))
+
+### Removed (1 change)
+
+- [Team name removed from channel search pannel](kchat/webapp@2272a0cd71a9673062cc92b5136a62a700f2a216) by @philippe.karle ([merge request](kchat/webapp!636))
+
+### Chore (2 changes)
+
+- [handle rc tags in changelog parse_version](kchat/webapp@9e2879cf1d4d2bb4edb946a22be94faee049a0a1) by @antonbuksa
+- [improve last version parser in release script](kchat/webapp@2b49ce995f1f0ab36d370182d4135b41d0fc63bf) by @antonbuksa
+
 ## 2.5.0-next.5 (2024-02-21)
 
 ### Added (1 change)
