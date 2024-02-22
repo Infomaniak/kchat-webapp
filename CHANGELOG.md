@@ -1,3 +1,9 @@
+## 2.5.0-rc.15 (2024-02-22)
+
+### Fixed (1 change)
+
+- [Fix: cannot invite poeple that are already in the channel group](kchat/webapp@d403477b942fffc9566489bac822ee03269e4e33) by @philippe.karle ([merge request](kchat/webapp!650))
+
 ## 2.5.0-rc.14 (2024-02-22)
 
 ### Fixed (1 change)
