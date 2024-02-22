@@ -231,7 +231,7 @@ export default styled(Member)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 8px 16px;
+    padding: 4px 16px;
     border-radius: 4px;
 
     &:hover {
