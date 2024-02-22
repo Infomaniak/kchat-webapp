@@ -136,18 +136,22 @@ export default class EditCategoryModal extends React.PureComponent<Props, State>
                 isConfirmDisabled={this.isConfirmDisabled()}
                 enforceFocus={false}
             >
-                <QuickInput
-                    inputComponent={MaxLengthInput}
-                    autoFocus={true}
-                    className='form-control filter-textbox'
-                    type='text'
-                    value={this.state.categoryName}
-                    placeholder={localizeMessage('edit_category_modal.placeholder', 'Name your category')}
-                    clearable={true}
-                    onClear={this.handleClear}
-                    onChange={this.handleChange}
-                    maxLength={MAX_LENGTH}
-                />
+                {/* TODO: infomaniak remove when updating from upstream */}
+                {/* fixes floating clear button */}
+                <div style={{position: 'relative'}}>
+                    <QuickInput
+                        inputComponent={MaxLengthInput}
+                        autoFocus={true}
+                        className='form-control filter-textbox'
+                        type='text'
+                        value={this.state.categoryName}
+                        placeholder={localizeMessage('edit_category_modal.placeholder', 'Name your category')}
+                        clearable={true}
+                        onClear={this.handleClear}
+                        onChange={this.handleChange}
+                        maxLength={MAX_LENGTH}
+                    />
+                </div>
                 {Boolean(helpText) && <span className='edit-category__helpText'>
                     {helpText}
                 </span>}
