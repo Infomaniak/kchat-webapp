@@ -8,8 +8,17 @@ import {bindActionCreators} from 'redux';
 import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {toggleMenu as toggleRhsMenu} from 'actions/views/rhs';
+import {getKSuiteBridgeStatus} from 'selectors/ksuite_bridge';
+
+import type {GlobalState} from 'types/store';
 
 import CollapseRhsButton from './collapse_rhs_button';
+
+const mapStateToProps = (state: GlobalState) => {
+    return {
+        isBridgeActive: getKSuiteBridgeStatus(state),
+    };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<GenericAction>) => ({
     actions: bindActionCreators({
@@ -17,4 +26,4 @@ const mapDispatchToProps = (dispatch: Dispatch<GenericAction>) => ({
     }, dispatch),
 });
 
-export default connect(null, mapDispatchToProps)(CollapseRhsButton);
+export default connect(mapStateToProps, mapDispatchToProps)(CollapseRhsButton);

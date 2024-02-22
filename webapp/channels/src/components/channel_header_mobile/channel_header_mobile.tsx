@@ -9,6 +9,7 @@ import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {MobileChannelHeaderDropdown} from 'components/channel_header_dropdown';
+import CloseSuiteSidepanel from 'components/close_suite_sidepanel';
 import FlagNext from 'components/flag_next';
 
 import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
@@ -124,6 +125,7 @@ export default class ChannelHeaderMobile extends React.PureComponent<Props> {
                             />
                         )}
                         <CollapseRhsButton/>
+                        <CloseSuiteSidepanel/>
                         <FlagNext/>
                     </div>
                 </div>

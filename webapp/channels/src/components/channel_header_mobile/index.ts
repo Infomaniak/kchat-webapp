@@ -21,6 +21,7 @@ import {
     closeRightHandSide as closeRhs,
     closeMenu as closeRhsMenu,
 } from 'actions/views/rhs';
+import {getKSuiteBridgeStatus} from 'selectors/ksuite_bridge';
 import {getIsMobileView} from 'selectors/views/browser';
 
 import type {GlobalState} from 'types/store';
@@ -47,6 +48,9 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
         inGlobalThreads: Boolean(matchPath(ownProps.location.pathname, {path: '/:team/threads/:threadIdentifier?'})),
         inDrafts: Boolean(matchPath(ownProps.location.pathname, {path: '/:team/drafts'})),
         isChannelMember: channel && Boolean(getMyChannelMemberships(state)[channel.id]),
+
+        // infomaniak
+        isBridgeConnected: getKSuiteBridgeStatus(state),
     };
 };
 

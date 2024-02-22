@@ -9,3 +9,7 @@ import type {GlobalState} from 'types/store';
 export function getKSuiteBridge(state: GlobalState): KSuiteBridge {
     return state.ksuite_bridge.bridge;
 }
+
+export function getKSuiteBridgeStatus(state: GlobalState): boolean {
+    return state.ksuite_bridge.isConnected;
+}
