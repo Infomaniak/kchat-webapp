@@ -98,16 +98,20 @@ end
 
 =begin
 # Parses a version string into an array of integers for comparison.
-# The version string is expected to be in the format 'X.Y.Z' or 'X.Y.Z-next.W'.
+# The version string is expected to be in the format 'X.Y.Z', 'X.Y.Z-next.WW' or 'X.Y.Z-rc.WW'.
 # Standard versions (without a 'next' part) are represented with -1 as the last element.
 #
 # @param version [String] The version string to parse.
 # @return [Array<Integer>] An array representing the parsed version number.
 =end
 def parse_version(version)
-  main, pre_release = version.split('-next.')
-  parts = main.split('.').map(&:to_i)
-  pre_release_part = pre_release ? pre_release.to_i : -1  # Use -1 for standard versions
+  # Split the version by '-next.' or '-rc.', whichever comes first
+  pre_release_delimiter = version.include?('-rc.') ? '-rc.' : '-next.'
+  main, pre_release = version.split(pre_release_delimiter)
+  parts = main.split('.').map(&:to_i)  # Parse the main version parts
+
+  # Parse the pre-release part, use -1 for standard versions
+  pre_release_part = pre_release ? pre_release.to_i : -1
   parts << pre_release_part
   parts
 end
