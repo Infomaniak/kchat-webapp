@@ -1,3 +1,9 @@
+## 2.5.0-rc.14 (2024-02-22)
+
+### Fixed (1 change)
+
+- [fix mas banner condition](kchat/webapp@99850e5fa6d26a911a41d5ad28d25adb910d1906) by @antonbuksa
+
 ## 2.5.0-rc.13 (2024-02-22)
 
 ### Fixed (1 change)
