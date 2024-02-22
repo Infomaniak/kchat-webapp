@@ -21,7 +21,7 @@ export default class MASMigrationBar extends React.PureComponent <Props> {
     render() {
         const {showMASBanner} = this.props;
 
-        if (showMASBanner && !isNotMacMas()) {
+        if (showMASBanner && isNotMacMas()) {
             return (
                 <AnnouncementBar
                     type={AnnouncementBarTypes.INFOMANIAK_ADVISOR}
