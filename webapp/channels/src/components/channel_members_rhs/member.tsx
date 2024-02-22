@@ -231,7 +231,7 @@ export default styled(Member)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 8px 16px;
+    padding: 4px 16px;
     border-radius: 4px;
 
     &:hover {
@@ -248,6 +248,7 @@ export default styled(Member)`
         align-items: center;
         margin-right: auto;
         overflow: hidden;
+        padding: 4px 0px;
     }
 
     .MenuWrapper {
