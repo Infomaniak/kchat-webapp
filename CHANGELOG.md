@@ -1,3 +1,10 @@
+## 2.5.0-rc.11 (2024-02-22)
+
+### Chore (2 changes)
+
+- [handle rc tags in changelog parse_version](kchat/webapp@9e2879cf1d4d2bb4edb946a22be94faee049a0a1) by @antonbuksa
+- [improve last version parser in release script](kchat/webapp@2b49ce995f1f0ab36d370182d4135b41d0fc63bf) by @antonbuksa
+
 ## 2.5.0-rc.10 (2024-02-22)
 
 ### Added (3 changes)
