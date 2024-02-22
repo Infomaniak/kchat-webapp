@@ -1,3 +1,9 @@
+## 2.5.0-rc.13 (2024-02-22)
+
+### Fixed (1 change)
+
+- [fix mas banner showing on web](kchat/webapp@c586fa064506f1021bdfe20bea99f099a05d4dd5) by @antonbuksa
+
 ## 2.5.0-rc.12 (2024-02-22)
 
 ### Fixed (1 change)
