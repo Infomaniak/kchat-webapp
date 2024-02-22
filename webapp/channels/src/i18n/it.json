@@ -2178,6 +2178,7 @@
     "channel_header.viewMembers": "Mostra membri",
     "channel_invite.addNewMembers": "Aggiungi nuovi membri a {channel}",
     "channel_invite.invite_guest": "Invitare un nuovo ospite",
+    "channel_invite.already_in_channel": "Già nel canale",
     "channel_limitation.messages": "I messaggi e i file più vecchi di 3 mesi sono nascosti. Per visualizzare altri messaggi, {isAdmin, select, true {sottoscriversi a un'offerta superiore. <modifyOffer>Cambia la mia offerta</modifyOffer>} other {contatta un amministratore per iscriverti a un'offerta superiore}}.",
     "channel_loader.posted": "Pubblicato",
     "channel_loader.postedImage": " ha caricato un'immagine",

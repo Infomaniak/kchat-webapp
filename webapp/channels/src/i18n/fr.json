@@ -2765,6 +2765,7 @@
     "channel_info_rhs.top_buttons.muted": "En sourdine",
     "channel_invite.addNewMembers": "Ajouter des nouveaux membres à {channel}",
     "channel_invite.invite_guest": "Ajouter un nouvel utilisateur externe",
+    "channel_invite.already_in_channel": "Déjà dans le canal",
     "channel_invite.no_options_message": "Aucun résultat trouvé - <InvitationModalLink>Invitez-les dans l'équipe</InvitationModalLink>",
     "channel_limitation.messages": "Les messages et fichiers datant de plus de 3 mois sont masqués. Pour afficher plus de messages, {isAdmin, select, true {souscrivez à une offre supérieure. <modifyOffer>Modifier mon offre</modifyOffer>} other {contactez un administrateur pour qu’il souscrive à une offre supérieure.}}",
     "channel_loader.posted": "Publié",
