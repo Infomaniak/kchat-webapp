@@ -26,6 +26,7 @@ export type Value = {
     label: string;
     scheme_id?: string;
     value: string;
+    disabled?: boolean;
 };
 
 export type Props<T extends Value> = {
@@ -171,6 +172,10 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
     };
 
     private onAdd = (value: T) => {
+        if ('disabled' in value && value.disabled) {
+            return;
+        }
+
         if (this.props.maxValues && this.props.values.length >= this.props.maxValues) {
             return;
         }
