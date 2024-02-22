@@ -1,3 +1,9 @@
+## 2.5.0-rc.12 (2024-02-22)
+
+### Fixed (1 change)
+
+- [temp fix for floating input clear button in create category dialog](kchat/webapp@5de8415b5c4c764e1ce8fa53eb1d5989ad1ea8c1) by @antonbuksa ([merge request](kchat/webapp!649))
+
 ## 2.5.0-rc.11 (2024-02-22)
 
 ### Chore (2 changes)
