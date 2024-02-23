@@ -130,6 +130,14 @@ No changes.
 
 - [test changelog](kchat/webapp@d729c988ff661103e7952e3194ac9c04107cdc6f) by @antonbuksa
 
+## 2.5.0-next.7 (2024-02-23)
+
+### Fixed (3 changes)
+
+- [Banner join channel logic extracted from TextEditor component & planned draft issue fixed](kchat/webapp@71d956cee3e523f8fba910f8b90f3d9e2d29452a) by @philippe.karle ([merge request](kchat/webapp!655))
+- [Missing forward modal translations added](kchat/webapp@b516e83e03145677bc3a7e7430cc893e82547496) by @philippe.karle ([merge request](kchat/webapp!653))
+- [Missing markdown translations added for main languages](kchat/webapp@5a87a9fcdd275b4a8863762a51bd7ee72ad37548) by @philippe.karle ([merge request](kchat/webapp!652))
+
 ## 2.5.0-next.6 (2024-02-22)
 
 ### Fixed (6 changes)
