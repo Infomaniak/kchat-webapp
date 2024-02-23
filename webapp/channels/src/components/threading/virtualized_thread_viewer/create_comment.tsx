@@ -12,7 +12,10 @@ import {Posts} from 'mattermost-redux/constants';
 import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getPost, getLimitedViews} from 'mattermost-redux/selectors/entities/posts';
 
+import * as GlobalActions from 'actions/global_actions';
+
 import AdvancedCreateComment from 'components/advanced_create_comment';
+import {BannerJoinChannel} from 'components/banner_join_channel';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import BasicSeparator from 'components/widgets/separator/basic-separator';
 
@@ -27,6 +30,8 @@ type Props = {
     threadId: string;
     latestPostId: Post['id'];
     isThreadView?: boolean;
+    isMember: boolean;
+    channelId: string;
 };
 
 const CreateComment = forwardRef<HTMLDivElement, Props>(({
@@ -36,6 +41,8 @@ const CreateComment = forwardRef<HTMLDivElement, Props>(({
     threadId,
     latestPostId,
     isThreadView,
+    isMember,
+    channelId,
 }: Props, ref) => {
     const getChannel = useMemo(makeGetChannel, []);
     const rootPost = useSelector((state: GlobalState) => getPost(state, threadId));
@@ -87,6 +94,14 @@ const CreateComment = forwardRef<HTMLDivElement, Props>(({
                     />
                 </div>
             </div>
+        );
+    }
+
+    if (!isMember) {
+        return (
+            <BannerJoinChannel
+                onButtonClick={() => GlobalActions.joinChannel(channelId)}
+            />
         );
     }
 

@@ -7,7 +7,7 @@ import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 
 import {getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentUserId, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
@@ -46,12 +46,18 @@ function makeMapStateToProps() {
             lastViewedAt: collapsedThreads ? lastViewedAt : undefined,
         });
 
+        const myChannelMemberships = getMyChannelMemberships(state);
+        const isMember = channel ? Boolean(myChannelMemberships[channel.id]) : false;
+        const channelId = channel ? channel.id : '';
+
         return {
             currentUserId,
             directTeammate,
             lastPost,
             replyListIds,
             teamId: channel.team_id,
+            channelId,
+            isMember,
         };
     };
 }

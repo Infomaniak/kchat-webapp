@@ -5,7 +5,10 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
+import * as GlobalActions from 'actions/global_actions';
+
 import AdvancedCreatePost from 'components/advanced_create_post';
+import {BannerJoinChannel} from 'components/banner_join_channel';
 import ChannelHeader from 'components/channel_header';
 import deferComponentRender from 'components/deferComponentRender';
 import FileUploadOverlay from 'components/file_upload_overlay';
@@ -25,6 +28,7 @@ type State = {
     url: string;
     focusedPostId?: string;
     deferredPostView: any;
+    isMember: boolean;
 };
 
 export default class ChannelView extends React.PureComponent<Props, State> {
@@ -154,7 +158,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                     </div>
                 </div>
             );
-        } else {
+        } else if (this.props.isMember) {
             createPost = (
                 <div
                     className='post-create__container AdvancedTextEditor__ctr'
@@ -162,6 +166,12 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                 >
                     <AdvancedCreatePost getChannelView={this.getChannelView}/>
                 </div>
+            );
+        } else {
+            createPost = (
+                <BannerJoinChannel
+                    onButtonClick={() => GlobalActions.joinChannel(this.props.channelId)}
+                />
             );
         }
 

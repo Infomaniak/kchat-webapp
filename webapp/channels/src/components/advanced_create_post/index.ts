@@ -92,7 +92,6 @@ function makeMapStateToProps() {
         const groupsWithAllowReference = useLDAPGroupMentions || useCustomGroupMentions ? getAssociatedGroupsForReferenceByMention(state, currentTeamId, currentChannel.id) : null;
         const enableTutorial = config.EnableTutorial === 'true';
         const tutorialStep = getInt(state, TutorialTourName.ONBOARDING_TUTORIAL_STEP, currentUserId, 0);
-        const myChannelMemberships = getMyChannelMemberships(state);
 
         // guest validation to see which point the messaging tour tip starts
         const isGuestUser = isCurrentUserGuestUser(state);
@@ -138,7 +137,6 @@ function makeMapStateToProps() {
             isLDAPEnabled,
             useCustomGroupMentions,
             isPostPriorityEnabled: isPostPriorityEnabled(state),
-            myChannelMemberships,
         };
     };
 }

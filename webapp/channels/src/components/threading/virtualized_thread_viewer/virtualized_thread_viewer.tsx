@@ -40,6 +40,7 @@ type Props = {
     teamId: string;
     useRelativeTimestamp: boolean;
     isThreadView: boolean;
+    isMember: boolean;
 }
 
 type State = {
@@ -137,7 +138,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props) {
-        const {highlightedPostId, selectedPostFocusedAt, lastPost, currentUserId, directTeammate} = this.props;
+        const {highlightedPostId, selectedPostFocusedAt, lastPost, currentUserId, directTeammate, isMember} = this.props;
 
         // In case the user is being deactivated, we need to trigger a re-render
         if (directTeammate?.delete_at !== prevProps.directTeammate?.delete_at) {
@@ -151,6 +152,8 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             prevProps.lastPost.id !== lastPost.id &&
             (lastPost.user_id === currentUserId || this.state.userScrolledToBottom)
         ) {
+            this.scrollToBottom();
+        } else if (prevProps.isMember !== isMember) {
             this.scrollToBottom();
         }
     }
@@ -387,6 +390,8 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                     ref={this.postCreateContainerRef}
                     teammate={this.props.directTeammate}
                     threadId={this.props.selected.id}
+                    isMember={this.props.isMember}
+                    channelId={this.props.channel.id}
                 />
             );
         }
