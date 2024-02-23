@@ -84,7 +84,6 @@ function makeMapStateToProps() {
         const groupsWithAllowReference = useLDAPGroupMentions || useCustomGroupMentions ? getAssociatedGroupsForReferenceByMention(state, channel.team_id, channel.id) : null;
         const isFormattingBarHidden = getBool(state, Constants.Preferences.ADVANCED_TEXT_EDITOR, AdvancedTextEditor.COMMENT);
         const currentTeamId = getCurrentTeamId(state);
-        const myChannelMemberships = getMyChannelMemberships(state);
 
         return {
             currentTeamId,
@@ -115,7 +114,6 @@ function makeMapStateToProps() {
             useCustomGroupMentions,
             emojiMap: getEmojiMap(state),
             canUploadFiles: canUploadFiles(config),
-            myChannelMemberships,
         };
     };
 }

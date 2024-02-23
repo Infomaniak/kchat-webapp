@@ -5,7 +5,7 @@ import type {ConnectedProps} from 'react-redux';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
-import {getCurrentChannel, getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentChannel, getDirectTeammate, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
@@ -35,6 +35,8 @@ function mapStateToProps(state: GlobalState) {
 
     const viewArchivedChannels = config.ExperimentalViewArchivedChannels === 'true';
     const enableOnboardingFlow = config.EnableOnboardingFlow === 'true';
+    const myChannelMemberships = getMyChannelMemberships(state);
+    const isMember = channel ? Boolean(myChannelMemberships[channel.id]) : false;
 
     return {
         channelId: channel ? channel.id : '',
@@ -46,6 +48,7 @@ function mapStateToProps(state: GlobalState) {
         isCloud: getLicense(state).Cloud === 'true',
         teamUrl: getCurrentRelativeTeamUrl(state),
         isFirstAdmin: isFirstAdmin(state),
+        isMember,
     };
 }
 
