@@ -4909,6 +4909,7 @@
     "shortcuts.team_nav.prev.mac": "Vorheriges Team:\t⌘|⌥|Pfeil nach oben",
     "shortcuts.team_nav.switcher": "Zu Team wechseln:\tStrg|Alt|[1-9]",
     "shortcuts.team_nav.switcher.mac": "Zu Team wechseln:\t⌘|⌥|[1-9]",
+    "advanceTextEditor.voiceMessageButton.tooltip": "Sprachnachricht",
     "sidebar.allDirectMessages": "Alle Direktnachrichten",
     "sidebar.createDirectMessage": "Eine Direktnachricht erstellen",
     "sidebar.createUserGroup": "Erstelle neue Benutzergruppe",

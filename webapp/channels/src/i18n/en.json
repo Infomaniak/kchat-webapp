@@ -4944,6 +4944,7 @@
     "shortcuts.team_nav.prev.mac": "Previous team:\t⌘|⌥|Up",
     "shortcuts.team_nav.switcher": "Navigate to a specific team:\tCtrl|Alt|[1-9]",
     "shortcuts.team_nav.switcher.mac": "Navigate to a specific team:\t⌘|⌥|[1-9]",
+    "advanceTextEditor.voiceMessageButton.tooltip": "Voice message",
     "sidebar_left.add_channel_dropdown.browseChannels": "Browse Channels",
     "sidebar_left.add_channel_dropdown.browseOrCreateChannels": "Browse or create channels",
     "sidebar_left.add_channel_dropdown.createCategory": "Create New Category",
