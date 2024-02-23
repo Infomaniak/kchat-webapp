@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import IconButton from '@infomaniak/compass-components/components/icon-button';
+import Button from '@infomaniak/compass-components/components/button';
 import * as React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
@@ -136,19 +136,17 @@ function DialingModal({toneTimeOut}: PropsType) {
                 <div
                     className='content-actions'
                 >
-                    <IconButton
+                    <Button
                         className='decline'
                         size={'md'}
-                        icon={'close'}
                         onClick={onHandleDecline}
                         inverted={true}
                         aria-label='Decline'
                         label={textButtonDecline}
                     />
-                    <IconButton
+                    <Button
                         className='accept'
                         size={'md'}
-                        icon={'check'}
                         onClick={onHandleAccept}
                         inverted={true}
                         aria-label='Accept'
