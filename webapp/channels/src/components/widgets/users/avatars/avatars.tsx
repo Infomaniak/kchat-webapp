@@ -12,7 +12,7 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {getMissingProfilesByIds} from 'mattermost-redux/actions/users';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
-import {getUser as selectUser, makeDisplayNameGetter} from 'mattermost-redux/selectors/entities/users';
+import {getUser as selectUser, makeDisplayNameGetter, getUsers} from 'mattermost-redux/selectors/entities/users';
 
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
 import OverlayTrigger from 'components/overlay_trigger';
@@ -36,6 +36,7 @@ type Props = {
     disableProfileOverlay?: boolean;
     disablePopover?: boolean;
     disableButton?: boolean;
+    showDeleted?: boolean;
 };
 
 interface MMOverlayTrigger extends BaseOverlayTrigger {
@@ -135,11 +136,19 @@ function Avatars({
     fetchMissingUsers = true,
     disableProfileOverlay = false,
     disablePopover = false,
+    showDeleted = true,
 }: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
+    const ids = useSelector((state: GlobalState) => {
+        if (!showDeleted) {
+            const users = getUsers(state);
+            return userIds.reduce((acc, next) => [...acc as string[], ...(users?.[next].delete_at === 0 ? [next] : [])], [] as string[]);
+        }
+        return userIds;
+    });
     const [overlayProps, setImmediate] = useSynchronizedImmediate();
-    const [displayUserIds, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(userIds, totalUsers);
+    const [displayUserIds, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(ids, totalUsers);
     const overflowNames = useSelector((state: GlobalState) => {
         return overflowUserIds.map((userId) => displayNameGetter(state, true)(selectUser(state, userId))).join(', ');
     });
@@ -151,9 +160,9 @@ function Avatars({
 
     useEffect(() => {
         if (fetchMissingUsers) {
-            dispatch(getMissingProfilesByIds(userIds));
+            dispatch(getMissingProfilesByIds(ids));
         }
-    }, [fetchMissingUsers, userIds]);
+    }, [fetchMissingUsers, ids]);
 
     return (
         <div
