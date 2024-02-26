@@ -203,6 +203,7 @@
     padding: 5px 15px;
     border: 1px solid $light-gray;
     background-color: $white;
+    overflow: auto;
 }
 
 .backstage-list__help {
@@ -398,6 +399,15 @@
 
     .backstage-list__item {
         display: table-row;
+
+        td {
+            white-space: nowrap;
+        }
+
+
+        & td:not(:last-child) {
+            padding-right: 10px;
+        }
     }
 
     .backstage-list__empty td {
