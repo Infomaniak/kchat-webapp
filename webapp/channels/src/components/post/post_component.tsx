@@ -531,7 +531,7 @@ const PostComponent = (props: Props): JSX.Element => {
                             <div className='col d-flex align-items-center'>
                                 {
                                     <PostTime
-                                        isPermalink={!(Posts.POST_DELETED === post.state || isPostPendingOrFailed(post))}
+                                        isPermalink={!(Posts.POST_DELETED === post.state || isPostPendingOrFailed(post) || post.id.startsWith('user-activity'))}
                                         eventTime={post.create_at}
                                         postId={post.id}
                                         location={props.location}
