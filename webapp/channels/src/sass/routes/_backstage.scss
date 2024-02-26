@@ -203,7 +203,7 @@
     padding: 5px 15px;
     border: 1px solid $light-gray;
     background-color: $white;
-    overflow: auto;
+    overflow: auto; // Infomaniak
 }
 
 .backstage-list__help {
@@ -400,6 +400,7 @@
     .backstage-list__item {
         display: table-row;
 
+        // Infomaniak
         td {
             white-space: nowrap;
         }
