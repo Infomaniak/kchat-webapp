@@ -103,6 +103,7 @@
     "add_command.trigger.helpExamples": "Ejemplos: cliente, empleado, paciente, clima",
     "add_command.trigger.helpReserved": "Reservado: {link}",
     "add_command.trigger.helpReservedLinkText": "Ver los comandos de barra del sistema",
+    "add_command.trigger.help.link": "https://www.infomaniak.com/es/asistencia/faq/admin2",
     "add_command.trigger.placeholder": "Disparador del Comando ej. \"hola\" sin incluir la barra",
     "add_command.triggerInvalidLength": "La palabra que dispara el comando debe tener entre {min} y {max} caracteres",
     "add_command.triggerInvalidSlash": "La palabra que dispara el comando no puede comenzar con /",

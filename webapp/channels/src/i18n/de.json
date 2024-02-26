@@ -103,6 +103,7 @@
     "add_command.trigger.helpExamples": "Beispiele: Kunde, Mitarbeiter, Patient, Wetter",
     "add_command.trigger.helpReserved": "Reserviert: {link}",
     "add_command.trigger.helpReservedLinkText": "Eingebaute Slash-Befehle anzeigen",
+    "add_command.trigger.help.link": "https://www.infomaniak.com/en/support/faq/admin2",
     "add_command.trigger.placeholder": "Befehlsauslöser, z.B. \"hallo\" ohne Schrägstrich",
     "add_command.triggerInvalidLength": "Ein Auslösewort muss aus mindestens {min} und maximal {max} Buchstaben bestehen",
     "add_command.triggerInvalidSlash": "Ein Triggerwort darf nicht mit / anfangen",

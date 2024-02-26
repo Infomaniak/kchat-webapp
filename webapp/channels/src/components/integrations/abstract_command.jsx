@@ -437,7 +437,7 @@ export default class AbstractCommand extends React.PureComponent {
                                         values={{
                                             link: (
                                                 <ExternalLink
-                                                    href='https://docs.mattermost.com/integrations/cloud-slash-commands.html'
+                                                    href={Utils.localizeMessage('add_command.trigger.help.link')}
                                                     location='abstract_command'
                                                 >
                                                     <FormattedMessage

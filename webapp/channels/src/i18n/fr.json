@@ -103,6 +103,7 @@
     "add_command.trigger.helpExamples": "Exemples : client, employé, patient, météo",
     "add_command.trigger.helpReserved": "Réservé : {link}",
     "add_command.trigger.helpReservedLinkText": "Afficher les commandes slash intégrées",
+    "add_command.trigger.help.link": "https://www.infomaniak.com/fr/support/faq/2134/utiliser-les-commandes-slash-de-kchat?noCache=1",
     "add_command.trigger.placeholder": "Déclencheur de commande par exemple « hello » sans inclure le slash",
     "add_command.triggerInvalidLength": "Un mot-clé déclencheur doit contenir de {min} à {max} caractères",
     "add_command.triggerInvalidSlash": "Un mot-clé déclencheur ne peut commencer par un /",
