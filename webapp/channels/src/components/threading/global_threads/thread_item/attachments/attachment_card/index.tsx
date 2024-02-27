@@ -24,9 +24,11 @@ function AttachmentCard({
 }: Props) {
     return (
         <div>
-            <div className='attachment__truncated'>
-                {`${authorName}: ${title}`}
-            </div>
+            {(authorName || title) && (
+                <div className='attachment__truncated'>
+                    {authorName} {authorName && title ? ':' : ''} {title}
+                </div>
+            )}
             <div className='attachment__truncated'>
                 {stripMarkdown(text || pretext || fallback)}
             </div>
