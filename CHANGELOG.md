@@ -1,3 +1,9 @@
+## 2.5.0-rc.19 (2024-02-27)
+
+### Added (1 change)
+
+- [wip implement ksuite header](kchat/webapp@0696b080f7ca8a8fdce245099cf3965c3a327d62) by @antonbuksa ([merge request](kchat/webapp!654))
+
 ## 2.5.0-rc.18 (2024-02-27)
 
 ### Fixed (1 change)
