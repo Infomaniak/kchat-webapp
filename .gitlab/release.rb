@@ -362,17 +362,16 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
-  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
-
   # Redmine
-  mr_numbers.each do |mr_number|
-    mr = get_merge_request(mr_number)
-    redmine_links = extract_redmine_links(mr["description"])
-    redmine_links.each do |issue_id|
-      leave_comment_on_redmine_ticket(issue_id, "fix deployed in preprod version #{GIT_RELEASE_TAG}", true)
-      puts "Commented redmine ##{issue_id} to notify about preprod deploy"
-    end
-  end
+  # mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+  # mr_numbers.each do |mr_number|
+  #   mr = get_merge_request(mr_number)
+  #   redmine_links = extract_redmine_links(mr["description"])
+  #   redmine_links.each do |issue_id|
+  #     leave_comment_on_redmine_ticket(issue_id, "fix deployed in preprod version #{GIT_RELEASE_TAG}", true)
+  #     puts "Commented redmine ##{issue_id} to notify about preprod deploy"
+  #   end
+  # end
 
   create_release(changelog)
   puts "Creating release for preprod tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
