@@ -18,7 +18,6 @@ export type GlobalState = BaseGlobalState & {
     plugins: PluginsState;
     ksuite_bridge: {
         bridge: KSuiteBridge;
-        isConnected: boolean;
     };
     kdrive: {
         toast: {

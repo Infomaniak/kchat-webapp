@@ -7,12 +7,11 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 type Props = {
-    isBridgeConnected: boolean;
     bridge: KSuiteBridge;
 }
 
 const CollapseLhsButton: React.FunctionComponent<Props> = (props: Props) => {
-    if (!props.isBridgeConnected) {
+    if (!props.bridge.isConnected) {
         return null;
     }
 

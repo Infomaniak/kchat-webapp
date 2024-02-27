@@ -4,7 +4,7 @@
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
-import {getKSuiteBridge, getKSuiteBridgeStatus} from 'selectors/ksuite_bridge';
+import {getKSuiteBridge} from 'selectors/ksuite_bridge';
 
 import type {GlobalState} from 'types/store';
 
@@ -13,7 +13,6 @@ import CloseSuiteSidepanel from './close_suite_sidepanel';
 const mapStateToProps = (state: GlobalState) => {
     return {
         bridge: getKSuiteBridge(state),
-        isBridgeConnected: getKSuiteBridgeStatus(state),
     };
 };
 

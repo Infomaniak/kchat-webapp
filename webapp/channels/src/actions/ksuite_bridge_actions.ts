@@ -13,7 +13,6 @@ export function storeBridge(bridge: KSuiteBridge) {
         dispatch({
             type: BridgeActionTypes.STORE_BRIDGE,
             bridge,
-            isConnected: bridge.isConnected,
         });
 
         bridge.sendMessage({

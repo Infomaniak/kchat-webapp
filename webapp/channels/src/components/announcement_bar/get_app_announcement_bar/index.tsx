@@ -6,7 +6,7 @@ import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {openModal} from 'actions/views/modals';
-import {getKSuiteBridgeStatus} from 'selectors/ksuite_bridge';
+import {getKSuiteBridge} from 'selectors/ksuite_bridge';
 import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
 
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
@@ -26,7 +26,7 @@ const COOLDOWN = 172800000; // 48h
 const GetAppAnnoucementBar = () => {
     const dispatch = useDispatch();
     const announcementBarCount = useSelector(getAnnouncementBarCount);
-    const isBridgeConnected = useSelector(getKSuiteBridgeStatus);
+    const {isConnected: isBridgeConnected} = useSelector(getKSuiteBridge);
     const {formatMessage} = useIntl();
     const os = useGetOperatingSystem();
     const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT) || 1;

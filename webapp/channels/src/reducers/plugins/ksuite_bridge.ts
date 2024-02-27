@@ -20,16 +20,6 @@ function bridge(state = null, action: GenericAction) {
     }
 }
 
-function isConnected(state = false, action: GenericAction) {
-    switch (action.type) {
-    case BridgeActionTypes.STORE_BRIDGE:
-        return action.isConnected;
-    default:
-        return state;
-    }
-}
-
 export default combineReducers({
     bridge,
-    isConnected,
 });

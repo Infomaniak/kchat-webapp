@@ -21,7 +21,7 @@ import {
     closeRightHandSide as closeRhs,
     closeMenu as closeRhsMenu,
 } from 'actions/views/rhs';
-import {getKSuiteBridgeStatus} from 'selectors/ksuite_bridge';
+import {getKSuiteBridge} from 'selectors/ksuite_bridge';
 import {getIsMobileView} from 'selectors/views/browser';
 
 import type {GlobalState} from 'types/store';
@@ -50,7 +50,7 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
         isChannelMember: channel && Boolean(getMyChannelMemberships(state)[channel.id]),
 
         // infomaniak
-        isBridgeConnected: getKSuiteBridgeStatus(state),
+        isBridgeConnected: getKSuiteBridge(state)?.isConnected,
     };
 };
 
