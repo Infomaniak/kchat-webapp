@@ -158,6 +158,12 @@ No changes.
 
 - [test changelog](kchat/webapp@d729c988ff661103e7952e3194ac9c04107cdc6f) by @antonbuksa
 
+## 2.5.0-next.9 (2024-02-27)
+
+### Added (1 change)
+
+- [wip implement ksuite header](kchat/webapp@0696b080f7ca8a8fdce245099cf3965c3a327d62) by @antonbuksa ([merge request](kchat/webapp!654))
+
 ## 2.5.0-next.8 (2024-02-27)
 
 ### Added (1 change)
