@@ -1,3 +1,14 @@
+## 2.5.0-rc.17 (2024-02-27)
+
+### Added (1 change)
+
+- [add redmine automation to release script](kchat/webapp@69f482e7cf2310259344afdc2c8f159bbb05ef40) by @antonbuksa
+
+### Fixed (2 changes)
+
+- [Emoji list response fixed on small devices](kchat/webapp@179bb1c45081fad7c01bc0c02ffaa35c91cef700) by @philippe.karle ([merge request](kchat/webapp!660))
+- [Fix: threads notifications are only received if the user has choosen to follow the conversation](kchat/webapp@bf9a8c1dcb178f85d87cb5c0d886f9194a9066cc) by @philippe.karle ([merge request](kchat/webapp!657))
+
 ## 2.5.0-rc.16 (2024-02-23)
 
 ### Fixed (3 changes)
