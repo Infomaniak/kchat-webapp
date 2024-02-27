@@ -152,6 +152,23 @@ No changes.
 
 - [test changelog](kchat/webapp@d729c988ff661103e7952e3194ac9c04107cdc6f) by @antonbuksa
 
+## 2.5.0-next.8 (2024-02-27)
+
+### Added (1 change)
+
+- [add redmine automation to release script](kchat/webapp@69f482e7cf2310259344afdc2c8f159bbb05ef40) by @antonbuksa
+
+### Fixed (3 changes)
+
+- [Emoji list response fixed on small devices](kchat/webapp@179bb1c45081fad7c01bc0c02ffaa35c91cef700) by @philippe.karle ([merge request](kchat/webapp!660))
+- [Post time link are disabled on system message](kchat/webapp@7a7c907d00de943fb4c8d6ffb3a699655291cee4) by @philippe.karle ([merge request](kchat/webapp!658))
+- [Fix: threads notifications are only received if the user has choosen to follow the conversation](kchat/webapp@bf9a8c1dcb178f85d87cb5c0d886f9194a9066cc) by @philippe.karle ([merge request](kchat/webapp!657))
+
+### Changed (2 changes)
+
+- [Mattermost link updated with kChat links](kchat/webapp@9e98887ad1905710a2daa1b43be328bb7d8ad9fe) by @philippe.karle ([merge request](kchat/webapp!661))
+- [Call modal design up to date, buttons are now identical to desktop app](kchat/webapp@cd20e73b6f997e81ca23975957e67a3beeb6df52) by @philippe.karle ([merge request](kchat/webapp!656))
+
 ## 2.5.0-next.7 (2024-02-23)
 
 ### Fixed (3 changes)
