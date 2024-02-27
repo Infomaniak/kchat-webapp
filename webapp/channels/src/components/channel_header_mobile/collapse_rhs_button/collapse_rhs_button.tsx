@@ -10,6 +10,7 @@ type Actions = {
 }
 
 type Props = {
+    isBridgeActive: boolean;
     actions: Actions;
 }
 
@@ -21,6 +22,7 @@ const CollapseRhsButton: React.FunctionComponent<Props> = (props: Props) => (
         data-toggle='collapse'
         data-target='#sidebar-nav'
         onClick={props.actions.toggleRhsMenu}
+        style={{marginRight: props.isBridgeActive ? 0 : 16}}
     >
         <MenuIcon/>
     </button>

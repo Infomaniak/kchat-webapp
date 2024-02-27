@@ -19,6 +19,7 @@ function bridge(state = null, action: GenericAction) {
         return state;
     }
 }
+
 export default combineReducers({
     bridge,
 });

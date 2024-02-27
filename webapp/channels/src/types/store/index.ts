@@ -16,7 +16,9 @@ export type DraggingState = {
 
 export type GlobalState = BaseGlobalState & {
     plugins: PluginsState;
-    ksuite_bridge: KSuiteBridge;
+    ksuite_bridge: {
+        bridge: KSuiteBridge;
+    };
     kdrive: {
         toast: {
             message: string;

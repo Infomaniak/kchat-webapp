@@ -61,6 +61,7 @@
         position: absolute;
         min-height: 50px;
         border: none;
+        border-bottom: 1px solid #E0E0E0;
         background: var(--sidebar-teambar-bg);
 
         .navbar-nav {
@@ -102,7 +103,7 @@
                 justify-content: center;
                 padding: 0;
                 margin: 9px 10px 0 0;
-                background: rgba(var(--sidebar-header-text-color-rgb), 0.2);
+                // background: rgba(var(--sidebar-header-text-color-rgb), 0.2);
                 border-radius: 50px;
                 line-height: 0;
 
@@ -112,9 +113,11 @@
                 }
             }
 
-            &.menu-toggle {
-                margin-right: 16px;
-            }
+            // Infomaniak: this is conditioned in the component because its not the last item when bridge
+            // is active
+            // &.menu-toggle {
+            //     margin-right: 16px;
+            // }
 
             .icon-bar {
                 width: 21px;
