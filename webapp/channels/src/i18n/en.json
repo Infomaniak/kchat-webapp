@@ -103,6 +103,7 @@
     "add_command.trigger.helpExamples": "Examples: client, employee, patient, weather",
     "add_command.trigger.helpReserved": "Reserved: {link}",
     "add_command.trigger.helpReservedLinkText": "See built-in slash commands",
+    "add_command.trigger.help.link": "https://www.infomaniak.com/fr/support/faq/2134/utiliser-les-commandes-slash-de-kchat?noCache=1",
     "add_command.trigger.placeholder": "Command trigger e.g. \"hello\" not including the slash",
     "add_command.triggerInvalidLength": "A trigger word must contain between {min} and {max} characters",
     "add_command.triggerInvalidSlash": "A trigger word cannot begin with a /",

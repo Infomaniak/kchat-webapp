@@ -103,6 +103,7 @@
     "add_command.trigger.helpExamples": "Esempi: cliente, impiegato, paziente, tempo",
     "add_command.trigger.helpReserved": "Riservato: {link}",
     "add_command.trigger.helpReservedLinkText": "Vedi i comandi slash integrati",
+    "add_command.trigger.help.link": "https://www.infomaniak.com/fr/support/faq/2134/utiliser-les-commandes-slash-de-kchat?noCache=1",
     "add_command.trigger.placeholder": "Comando innesco e.s. \"ciao\" senza includere la barra",
     "add_command.triggerInvalidLength": "La parola chiave deve contenere tra {min} e {max} caratteri",
     "add_command.triggerInvalidSlash": "Una parola chiave non può iniziare con /",
