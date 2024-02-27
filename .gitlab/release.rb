@@ -1,9 +1,12 @@
 require 'json'
 require 'net/http'
 
-GITLAB_API_BASE = ENV['CI_API_V4_URL']
+GITLAB_BASE_URL = ENV['GITLAB_BASE_URL']
+GITLAB_API_BASE = "#{GITLAB_BASE_URL}/api/v4"
 GITLAB_PROJECT_ID = ENV['CI_PROJECT_ID']
 GITLAB_ACCESS_TOKEN = ENV['GITLAB_API_TOKEN']
+REDMINE_DOMAIN = ENV['REDMINE_DOMAIN']
+REDMINE_API_KEY = ENV['REDMINE_API_KEY']
 GIT_RELEASE_TAG = ARGV[0]
 MILESTONE = ARGV[1]
 NOTIFY_CHANNEL = ARGV[2]
@@ -241,6 +244,57 @@ def update_merge_request_labels(mr_iid, labels)
   response.code.to_i == 200
 end
 
+def extract_redmine_links(description)
+  description.scan(/https:\/\/#{Regexp.escape(REDMINE_DOMAIN)}\/issues\/(\d+)/).flatten
+end
+
+def update_redmine_ticket_status(issue_id, new_status_id)
+  uri = URI.parse("https://#{REDMINE_DOMAIN}/issues/#{issue_id}.json")
+  request = Net::HTTP::Put.new(uri)
+  request.content_type = "application/json"
+  request['X-Redmine-API-Key'] = REDMINE_API_KEY
+  request.body = JSON.dump({
+    "issue" => {
+      "status_id" => new_status_id
+    }
+  })
+
+  response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
+    http.request(request)
+  end
+
+  # Check if the request was successful
+  if response.is_a?(Net::HTTPSuccess)
+    puts "Issue ##{issue_id} updated successfully."
+  else
+    puts "Failed to update issue ##{issue_id}. Response: #{response.body}"
+  end
+end
+
+def leave_comment_on_redmine_ticket(issue_id, comment, is_private = false)
+  uri = URI.parse("https://#{REDMINE_DOMAIN}/issues/#{issue_id}.json")
+  request = Net::HTTP::Put.new(uri)
+  request.content_type = "application/json"
+  request['X-Redmine-API-Key'] = REDMINE_API_KEY
+  request.body = JSON.dump({
+    "issue" => {
+      "notes" => comment,
+      "private_notes" => is_private
+    }
+  })
+
+  response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
+    http.request(request)
+  end
+
+  # Handle response
+  if response.is_a?(Net::HTTPSuccess)
+    puts "Comment added to issue ##{issue_id}."
+  else
+    puts "Failed to add comment to issue ##{issue_id}. Response: #{response.body}"
+  end
+end
+
 # main
 
 # [stable] Update labels and changelog
@@ -251,6 +305,21 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   create_changelog(GIT_RELEASE_TAG, branch)
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
+
+  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+
+  # Redmine
+  mr_numbers.each do |mr_number|
+    mr = get_merge_request(mr_number)
+    redmine_links = extract_redmine_links(mr.description)
+    redmine_links.each do |issue_id|
+      leave_comment_on_redmine_ticket(issue_id, "fix released in stable version #{GIT_RELEASE_TAG}")
+      puts "Commented redmine ##{issue_id} to notify about stable deploy"
+      # status_id 3 -> Resolved
+      update_redmine_ticket_status(issue_id, 3)
+      puts "Updated redmine ##{issue_id} status to 3"
+    end
+  end
 
   # Release
   create_release(changelog)
@@ -265,6 +334,18 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   create_changelog(GIT_RELEASE_TAG, branch)
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
+
+  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+
+  # Redmine
+  mr_numbers.each do |mr_number|
+    mr = get_merge_request(mr_number)
+    redmine_links = extract_redmine_links(mr.description)
+    redmine_links.each do |issue_id|
+      leave_comment_on_redmine_ticket(issue_id, "fix deployed in next version #{GIT_RELEASE_TAG}")
+      puts "Commented redmine ##{issue_id} to notify about canary deploy"
+    end
+  end
 
   create_release(changelog)
   puts "Creating release for canary tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
@@ -281,14 +362,26 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
+  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+
+  # Redmine
+  mr_numbers.each do |mr_number|
+    mr = get_merge_request(mr_number)
+    redmine_links = extract_redmine_links(mr.description)
+    redmine_links.each do |issue_id|
+      leave_comment_on_redmine_ticket(issue_id, "fix deployed in preprod version #{GIT_RELEASE_TAG}", true)
+      puts "Commented redmine ##{issue_id} to notify about preprod deploy"
+    end
+  end
+
   create_release(changelog)
   puts "Creating release for preprod tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
 
 # [stable + next + preprod] Notify
 if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG) || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/ || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
-  commit_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/commit/"
-  mr_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/"
+  commit_url = "#{GITLAB_BASE_URL}/kchat/webapp/-/commit/"
+  mr_url = "#{GITLAB_BASE_URL}/kchat/webapp/-/merge_requests/"
   formatted_changelog = changelog.gsub(/kchat\/webapp@/, commit_url).gsub(/kchat\/webapp!/, mr_url)
   data = { "text" => formatted_changelog }.to_json
   notify_uri = URI.parse(NOTIFY_CHANNEL)

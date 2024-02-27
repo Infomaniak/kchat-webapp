@@ -5,10 +5,7 @@ A description of what this merge request does.
 
 #### Ticket Link
 <!--
-If this merge request addresses a Trello or Gitlab ticket, please link it here, e.g.
-
-[Related Trello](https://trello.com/c/5jJgvUo1)
-
+If this merge request addresses a redmine ticket, please link it here
 -->
 
 #### Screenshots
