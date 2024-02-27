@@ -1,3 +1,14 @@
+## 2.5.0-rc.18 (2024-02-27)
+
+### Fixed (1 change)
+
+- [Post time link are disabled on system message](kchat/webapp@7a7c907d00de943fb4c8d6ffb3a699655291cee4) by @philippe.karle ([merge request](kchat/webapp!658))
+
+### Changed (2 changes)
+
+- [Mattermost link updated with kChat links](kchat/webapp@9e98887ad1905710a2daa1b43be328bb7d8ad9fe) by @philippe.karle ([merge request](kchat/webapp!661))
+- [Call modal design up to date, buttons are now identical to desktop app](kchat/webapp@cd20e73b6f997e81ca23975957e67a3beeb6df52) by @philippe.karle ([merge request](kchat/webapp!656))
+
 ## 2.5.0-rc.17 (2024-02-27)
 
 ### Added (1 change)
