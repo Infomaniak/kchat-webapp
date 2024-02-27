@@ -82,12 +82,14 @@ exports[`components/channel_invite_modal should match snapshot for channel_invit
           Array [
             Object {
               "delete_at": 0,
+              "disabled": false,
               "id": "user-1",
               "label": "user-1",
               "value": "user-1",
             },
             Object {
               "delete_at": 0,
+              "disabled": false,
               "id": "user-2",
               "label": "user-2",
               "value": "user-2",
@@ -194,12 +196,14 @@ exports[`components/channel_invite_modal should match snapshot for channel_invit
           Array [
             Object {
               "delete_at": 0,
+              "disabled": false,
               "id": "user-1",
               "label": "user-1",
               "value": "user-1",
             },
             Object {
               "delete_at": 0,
+              "disabled": false,
               "id": "user-2",
               "label": "user-2",
               "value": "user-2",
@@ -352,12 +356,14 @@ exports[`components/channel_invite_modal should match snapshot with exclude and 
           Array [
             Object {
               "delete_at": 0,
+              "disabled": false,
               "id": "user-2",
               "label": "user-2",
               "value": "user-2",
             },
             Object {
               "delete_at": 0,
+              "disabled": false,
               "id": "user-3",
               "label": "user-3",
               "value": "user-3",

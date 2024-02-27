@@ -64,6 +64,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <withRouter(Connect(CollapseLhsButton)) />
       <FlagNext />
     </div>
   </div>
@@ -134,6 +135,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <withRouter(Connect(CollapseLhsButton)) />
       <FlagNext />
     </div>
   </div>
@@ -204,6 +206,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <withRouter(Connect(CollapseLhsButton)) />
       <FlagNext />
     </div>
   </div>
@@ -274,6 +277,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <withRouter(Connect(CollapseLhsButton)) />
       <FlagNext />
     </div>
   </div>
