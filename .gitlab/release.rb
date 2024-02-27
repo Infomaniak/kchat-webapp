@@ -311,7 +311,7 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   # Redmine
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
-    redmine_links = extract_redmine_links(mr.description)
+    redmine_links = extract_redmine_links(mr["description"])
     redmine_links.each do |issue_id|
       leave_comment_on_redmine_ticket(issue_id, "fix released in stable version #{GIT_RELEASE_TAG}")
       puts "Commented redmine ##{issue_id} to notify about stable deploy"
@@ -340,7 +340,7 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   # Redmine
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
-    redmine_links = extract_redmine_links(mr.description)
+    redmine_links = extract_redmine_links(mr["description"])
     redmine_links.each do |issue_id|
       leave_comment_on_redmine_ticket(issue_id, "fix deployed in next version #{GIT_RELEASE_TAG}")
       puts "Commented redmine ##{issue_id} to notify about canary deploy"
@@ -367,7 +367,7 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
   # Redmine
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
-    redmine_links = extract_redmine_links(mr.description)
+    redmine_links = extract_redmine_links(mr["description"])
     redmine_links.each do |issue_id|
       leave_comment_on_redmine_ticket(issue_id, "fix deployed in preprod version #{GIT_RELEASE_TAG}", true)
       puts "Commented redmine ##{issue_id} to notify about preprod deploy"
