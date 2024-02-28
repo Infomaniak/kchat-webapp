@@ -363,6 +363,29 @@ $sidebarOpacityAnimationDuration: 0.15s;
                 line-height: 16px;
             }
         }
+
+        &.isWebApp {
+            height: auto;
+            width: 100%;
+
+            .AddChannelDropdown_dropdownButton {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #0088B2;
+                height: 44px;
+                width: 100%;
+                padding: 0;
+                border: none;
+                color: #FFF;
+                border-radius: 4px;
+                font-size: 14px;
+                border-radius: 4px;
+                gap: 5px;
+                line-height: 1;
+                margin-top: 16px;
+            }
+        }
     }
 
     .AddChannelDropdown_dropdownButton,

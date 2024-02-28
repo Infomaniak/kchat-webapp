@@ -3,6 +3,7 @@
 
 import Heading from '@infomaniak/compass-components/components/heading';
 import Flex from '@infomaniak/compass-components/utilities/layout/Flex';
+import classNames from 'classnames';
 import React, {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
@@ -21,6 +22,7 @@ import {useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
 import Constants from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
 
@@ -50,6 +52,11 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
     #SidebarContainer & .AddChannelDropdown_dropdownButton {
         border-radius: 16px;
         font-size: 18px;
+    }
+
+    &.isWebApp {
+        flex-direction: column;
+        height: auto;
     }
 `;
 
@@ -121,28 +128,31 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
         <>
             <SidebarHeaderContainer
                 id={'sidebar-header-container'}
+                className={classNames({isWebApp: !isDesktopApp()})}
             >
-                <OverlayTrigger
+                {isDesktopApp() && (
+                    <OverlayTrigger
 
-                    delayShow={Constants.OVERLAY_TIME_DELAY}
-                    placement='bottom'
-                    overlay={currentTeam.description?.length ? (
-                        <Tooltip id='team-name__tooltip'>{currentTeam.description}</Tooltip>
-                    ) : <></>}
-                >
-                    <MenuWrapper
-                        onToggle={handleMenuToggle}
-                        className='SidebarHeaderMenuWrapper test-team-header'
+                        delayShow={Constants.OVERLAY_TIME_DELAY}
+                        placement='bottom'
+                        overlay={currentTeam.description?.length ? (
+                            <Tooltip id='team-name__tooltip'>{currentTeam.description}</Tooltip>
+                        ) : <></>}
                     >
-                        <SidebarHeading>
-                            <button className='style--none sidebar-header'>
-                                <span className='title'>{currentTeam.display_name}</span>
-                                <i className='icon icon-chevron-down'/>
-                            </button>
-                        </SidebarHeading>
-                        <MainMenu id='sidebarDropdownMenu'/>
-                    </MenuWrapper>
-                </OverlayTrigger>
+                        <MenuWrapper
+                            onToggle={handleMenuToggle}
+                            className='SidebarHeaderMenuWrapper test-team-header'
+                        >
+                            <SidebarHeading>
+                                <button className='style--none sidebar-header'>
+                                    <span className='title'>{currentTeam.display_name}</span>
+                                    <i className='icon icon-chevron-down'/>
+                                </button>
+                            </SidebarHeading>
+                            <MainMenu id='sidebarDropdownMenu'/>
+                        </MenuWrapper>
+                    </OverlayTrigger>
+                )}
                 <AddChannelDropdown
                     showNewChannelModal={props.showNewChannelModal}
                     showMoreChannelsModal={props.showMoreChannelsModal}

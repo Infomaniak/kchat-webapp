@@ -102,6 +102,7 @@ import {updateThreadLastOpened} from 'actions/views/threads';
 import {voiceConnectedChannels} from 'selectors/calls';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
+import {getOtherServers} from 'selectors/views/servers';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
 import store from 'stores/redux_store';
 
@@ -110,7 +111,7 @@ import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 
 import {getHistory} from 'utils/browser_history';
-import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, StoragePrefixes} from 'utils/constants';
+import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, StoragePrefixes, Servers} from 'utils/constants';
 import {stopRing} from 'utils/notification_sounds';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
@@ -119,6 +120,8 @@ import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, receivedCall} from './calls';
+import {handleServerEvent} from './servers_actions';
+import {addNewServer} from './views/servers';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -197,6 +200,12 @@ export function initialize() {
     WebSocketClient.addReconnectListener(reconnect);
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
+    WebSocketClient.addOtherServerMessageListener(handleServerEvent);
+
+    if (!isDesktopApp()) {
+        const servers = getOtherServers(getState());
+        WebSocketClient.setOthersTeams(servers.map((o) => ({userId: o.user_id, teamId: o.id})));
+    }
 
     WebSocketClient.initialize(
         connUrl,
@@ -215,6 +224,7 @@ export function close() {
     WebSocketClient.removeReconnectListener(reconnect);
     WebSocketClient.removeMissedMessageListener(restart);
     WebSocketClient.removeCloseListener(handleClose);
+    WebSocketClient.removeOtherServerMessageListener(handleServerEvent);
 }
 
 const pluginReconnectHandlers = {};
@@ -941,6 +951,12 @@ function handleKSuiteAdded(msg) {
             );
         }
         doDispatch({type: TeamTypes.RECEIVED_TEAM, data: msg.data.team});
+
+        if (!isDesktopApp()) {
+            const currentTeamId = getCurrentTeamId(doGetState());
+            dispatch(addNewServer(msg.data.team, msg.data.user_id));
+            WebSocketClient.addNewTeam(msg.data.user_id, msg.data.team.id, currentTeamId);
+        }
     };
 }
 
@@ -948,6 +964,7 @@ function handleKSuiteDeleted(msg) {
     return (doDispatch, doGetState) => {
         const currentTeams = getMyKSuites(doGetState());
         const newTeams = currentTeams.filter((team) => team.id !== msg.data.team.id);
+        const currentTeamId = getCurrentTeamId(doGetState());
 
         if (isDesktopApp()) {
             window.postMessage(
@@ -963,6 +980,11 @@ function handleKSuiteDeleted(msg) {
 
         doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}});
         doDispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
+
+        if (!isDesktopApp() && currentTeamId !== msg.data.team.id) {
+            doDispatch({type: Servers.RECEIVED_SERVER_DELETED, data: {id: msg.data.team.id}});
+            WebSocketClient.removeTeam(msg.data.team.id);
+        }
 
         if (!isDesktopApp()) {
             if (newTeams.length === 0) {
