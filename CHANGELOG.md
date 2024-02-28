@@ -4,6 +4,12 @@
 
 - [Websocket logs added to bind and unbind methods](kchat/webapp@9cc1bfdd4d3237ce61aa27f0f120f36f56ee0395) by @philippe.karle ([merge request](kchat/webapp!664))
 
+## 2.5.1-next.1 (2024-02-28)
+
+### Changed (1 change)
+
+- [Websocket logs added to bind and unbind methods](kchat/webapp@9cc1bfdd4d3237ce61aa27f0f120f36f56ee0395) by @philippe.karle ([merge request](kchat/webapp!664))
+
 ## 2.5.0-rc.19 (2024-02-27)
 
 ### Added (1 change)
