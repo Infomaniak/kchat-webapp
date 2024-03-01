@@ -342,7 +342,7 @@ export default class ChannelInviteModal extends React.PureComponent<Props, State
         ].
             slice(0, MAX_USERS).map(((u) => {
                 if (idsInGroup.includes(u.id)) {
-                    return {...u, disabled: idsInGroup.includes(u.id)}
+                    return {...u, disabled: true}
                 }
                 return u
             }));
