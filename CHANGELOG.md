@@ -1,3 +1,9 @@
+## 2.5.1-rc.3 (2024-03-01)
+
+### Fixed (1 change)
+
+- [fix map logic when disabling users already in chan when inviting](kchat/webapp@178567d0e5a50751641823e1b3e0f3ba6489aa29) by @antonbuksa ([merge request](kchat/webapp!668))
+
 ## 2.5.1-rc.2 (2024-03-01)
 
 ### Fixed (1 change)
