@@ -372,8 +372,6 @@ export default class ChannelInviteModal extends React.PureComponent<Props, State
             );
         };
 
-        console.log('users', users);
-
         const content = (
             <MultiSelect
                 key='addUsersToChannelKey'
