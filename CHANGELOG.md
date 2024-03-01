@@ -1,3 +1,9 @@
+## 2.5.1-rc.2 (2024-03-01)
+
+### Fixed (1 change)
+
+- [Fix: Users appearing twice within the invite modal search input](kchat/webapp@d862a4ee99aec08138c9fc5782c014f091260cc0) by @philippe.karle ([merge request](kchat/webapp!666))
+
 ## 2.5.1-rc.1 (2024-02-28)
 
 ### Changed (1 change)
