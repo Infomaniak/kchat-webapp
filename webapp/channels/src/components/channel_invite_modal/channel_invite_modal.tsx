@@ -333,16 +333,19 @@ export default class ChannelInviteModal extends React.PureComponent<Props, State
             const includeUsers = Object.values(this.props.includeUsers);
             users = [...users, ...includeUsers];
         }
-        const ids = users.map((u) => u.id);
-        const profilesFromRecentDMs = this.props.profilesFromRecentDMs.filter((p) => ids.includes(p.id) === false);
         users = [
             ...this.filterOutDeletedAndExcludedAndNotInTeamUsers(
-                filterProfilesStartingWithTerm(profilesFromRecentDMs, this.state.term),
+                filterProfilesStartingWithTerm(this.props.profilesFromRecentDMs, this.state.term),
                 excludedAndNotInTeamUserIds).
                 slice(0, USERS_FROM_DMS) as UserProfileValue[],
             ...users,
         ].
-            slice(0, MAX_USERS).map(((u) => ({...u, disabled: idsInGroup.includes(u.id)})));
+            slice(0, MAX_USERS).map(((u) => {
+                if (idsInGroup.includes(u.id)) {
+                    return {...u, disabled: idsInGroup.includes(u.id)}
+                }
+                return u
+            }));
 
         users = Array.from(new Set(users));
 
