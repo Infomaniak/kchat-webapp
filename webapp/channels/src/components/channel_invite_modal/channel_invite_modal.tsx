@@ -333,9 +333,11 @@ export default class ChannelInviteModal extends React.PureComponent<Props, State
             const includeUsers = Object.values(this.props.includeUsers);
             users = [...users, ...includeUsers];
         }
+        const ids = users.map((u) => u.id);
+        const profilesFromRecentDMs = this.props.profilesFromRecentDMs.filter((p) => ids.includes(p.id) === false);
         users = [
             ...this.filterOutDeletedAndExcludedAndNotInTeamUsers(
-                filterProfilesStartingWithTerm(this.props.profilesFromRecentDMs, this.state.term),
+                filterProfilesStartingWithTerm(profilesFromRecentDMs, this.state.term),
                 excludedAndNotInTeamUserIds).
                 slice(0, USERS_FROM_DMS) as UserProfileValue[],
             ...users,
@@ -369,6 +371,8 @@ export default class ChannelInviteModal extends React.PureComponent<Props, State
                 </ToggleModalButton>
             );
         };
+
+        console.log('users', users);
 
         const content = (
             <MultiSelect
