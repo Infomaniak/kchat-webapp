@@ -16,6 +16,13 @@
 
 - [Websocket logs added to bind and unbind methods](kchat/webapp@9cc1bfdd4d3237ce61aa27f0f120f36f56ee0395) by @philippe.karle ([merge request](kchat/webapp!664))
 
+## 2.5.1-next.2 (2024-03-01)
+
+### Fixed (2 changes)
+
+- [fix map logic when disabling users already in chan when inviting](kchat/webapp@178567d0e5a50751641823e1b3e0f3ba6489aa29) by @antonbuksa ([merge request](kchat/webapp!668))
+- [Fix: Users appearing twice within the invite modal search input](kchat/webapp@d862a4ee99aec08138c9fc5782c014f091260cc0) by @philippe.karle ([merge request](kchat/webapp!666))
+
 ## 2.5.1-next.1 (2024-02-28)
 
 ### Changed (1 change)
