@@ -4,13 +4,14 @@
 import {CloseIcon} from '@infomaniak/compass-icons/components';
 import {CloseSidePanelMessageKey, type KSuiteBridge} from '@infomaniak/ksuite-bridge';
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+
+// import {FormattedMessage} from 'react-intl';
 
 type Props = {
     bridge: KSuiteBridge;
 }
 
-const CollapseLhsButton: React.FunctionComponent<Props> = (props: Props) => {
+const CollapseKsuiteSidepanel: React.FunctionComponent<Props> = (props: Props) => {
     if (!props.bridge.isConnected) {
         return null;
     }
@@ -29,15 +30,18 @@ const CollapseLhsButton: React.FunctionComponent<Props> = (props: Props) => {
             data-target='#suite-sidebar-toggle'
             onClick={closeSidepanel}
         >
-            <span className='sr-only'>
+            {/* <span className='sr-only'>
                 <FormattedMessage
                     id='navbar.toggle2'
                     defaultMessage='Close sidebar'
                 />
-            </span>
-            <CloseIcon className='style--none icon icon__menu icon--sidebarHeaderTextColor'/>
+            </span> */}
+            <CloseIcon
+                color='white'
+                className='style--none icon icon__menu icon--sidebarHeaderTextColor'
+            />
         </button>
     );
 };
 
-export default CollapseLhsButton;
+export default CollapseKsuiteSidepanel;
