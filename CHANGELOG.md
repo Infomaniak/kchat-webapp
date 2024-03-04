@@ -1,3 +1,9 @@
+## 2.5.1-rc.4 (2024-03-04)
+
+### Fixed (1 change)
+
+- [fix sidebar close icon fill](kchat/webapp@c9fba4fbf6fa7d176ebfdc7030c456bb019ce6da) by @antonbuksa ([merge request](kchat/webapp!670))
+
 ## 2.5.1-rc.3 (2024-03-01)
 
 ### Fixed (1 change)
