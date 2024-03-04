@@ -22,6 +22,12 @@
 
 - [Websocket logs added to bind and unbind methods](kchat/webapp@9cc1bfdd4d3237ce61aa27f0f120f36f56ee0395) by @philippe.karle ([merge request](kchat/webapp!664))
 
+## 2.5.1-next.3 (2024-03-04)
+
+### Fixed (1 change)
+
+- [fix sidebar close icon fill](kchat/webapp@c9fba4fbf6fa7d176ebfdc7030c456bb019ce6da) by @antonbuksa ([merge request](kchat/webapp!670))
+
 ## 2.5.1-next.2 (2024-03-01)
 
 ### Fixed (2 changes)
