@@ -19,7 +19,7 @@ const isEligibleForClick = makeIsEligibleForClick('.hljs, code');
 function Panel({isInvalid, children, onClick}: Props) {
     const [hover, setHover] = useState(false);
 
-    const handleMouseEnter = () => {
+    const handleMouseOver = () => {
         setHover(true);
     };
 
@@ -36,7 +36,7 @@ function Panel({isInvalid, children, onClick}: Props) {
     return (
         <article
             className={classNames('Panel', {Pannel__dangerous: isInvalid})}
-            onMouseOver={handleMouseEnter}
+            onMouseOver={handleMouseOver}
             onClick={handleOnClick}
             onMouseLeave={handleMouseLeave}
             role='button'

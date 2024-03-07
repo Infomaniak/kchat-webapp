@@ -244,9 +244,6 @@ export function getCollapsedThreadsPreference(state: GlobalState): string {
         preferenceDefault,
     );
 }
-export function getIsOnboardingFlowEnabled(state: GlobalState): boolean {
-    return getConfig(state).EnableOnboardingFlow === 'true';
-}
 
 export function isCollapsedThreadsAllowed(state: GlobalState): boolean {
     return Boolean(getConfig(state)) && getConfig(state).CollapsedThreads !== undefined && getConfig(state).CollapsedThreads !== CollapsedThreads.DISABLED;
@@ -259,20 +256,12 @@ export function isCollapsedThreadsEnabled(state: GlobalState): boolean {
     return isAllowed && (userPreference === Preferences.COLLAPSED_REPLY_THREADS_ON || getConfig(state).CollapsedThreads === CollapsedThreads.ALWAYS_ON);
 }
 
-export function getIsPostForwardingEnabled(state: GlobalState): boolean {
-    return getFeatureFlagValue(state, 'PostForwarding') === 'true';
-}
-
 export function isGroupChannelManuallyVisible(state: GlobalState, channelId: string): boolean {
     return getBool(state, Preferences.CATEGORY_GROUP_CHANNEL_SHOW, channelId, false);
 }
 
 export function isCustomGroupsEnabled(state: GlobalState): boolean {
     return getConfig(state).EnableCustomGroups === 'true';
-}
-
-export function getUseCaseOnboarding(state: GlobalState): boolean {
-    return getFeatureFlagValue(state, 'UseCaseOnboarding') === 'true' && getLicense(state)?.Cloud === 'true';
 }
 
 export function insightsAreEnabled(state: GlobalState): boolean {
@@ -282,8 +271,8 @@ export function insightsAreEnabled(state: GlobalState): boolean {
     return featureIsEnabled && isConfiguredForFeature && currentUserIsAdmin;
 }
 
-export function isGraphQLEnabled(state: GlobalState): boolean {
-    return getFeatureFlagValue(state, 'GraphQL') === 'true';
+export function getIsOnboardingFlowEnabled(state: GlobalState): boolean {
+    return getConfig(state).EnableOnboardingFlow === 'true';
 }
 
 export function getHasDismissedSystemConsoleLimitReached(state: GlobalState): boolean {
@@ -291,26 +280,17 @@ export function getHasDismissedSystemConsoleLimitReached(state: GlobalState): bo
 }
 
 export function syncedDraftsAreAllowed(state: GlobalState): boolean {
-    const isFeatureEnabled = getFeatureFlagValue(state, 'GlobalDrafts') === 'true';
-    const isConfiguredForFeature = getConfig(state).AllowSyncedDrafts === 'true';
-
-    return isFeatureEnabled && isConfiguredForFeature;
+    return getConfig(state).AllowSyncedDrafts === 'true';
 }
 
 export function syncedDraftsAreAllowedAndEnabled(state: GlobalState): boolean {
-    const isFeatureEnabled = getFeatureFlagValue(state, 'GlobalDrafts') === 'true';
     const isConfiguredForFeature = getConfig(state).AllowSyncedDrafts === 'true';
     const isConfiguredForUser = getBool(state, Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_SYNC_DRAFTS, true);
-
-    return isFeatureEnabled && isConfiguredForFeature && isConfiguredForUser;
+    return isConfiguredForFeature && isConfiguredForUser;
 }
 
 export function localDraftsAreEnabled(state: GlobalState): boolean {
     return getFeatureFlagValue(state, 'GlobalDrafts') === 'true';
-}
-
-export function isReduceOnBoardingTaskList(state: GlobalState): boolean {
-    return getFeatureFlagValue(state, 'ReduceOnBoardingTaskList') === 'true';
 }
 
 export function getVisibleDmGmLimit(state: GlobalState) {
@@ -318,12 +298,24 @@ export function getVisibleDmGmLimit(state: GlobalState) {
     return getInt(state, Preferences.CATEGORY_SIDEBAR_SETTINGS, Preferences.LIMIT_VISIBLE_DMS_GMS, defaultLimit);
 }
 
-export function autoShowLinkedBoardFFEnabled(state: GlobalState): boolean {
-    return getFeatureFlagValue(state, 'OnboardingAutoShowLinkedBoard') === 'true';
-}
-
 export function onboardingTourTipsEnabled(state: GlobalState): boolean {
     return getFeatureFlagValue(state, 'OnboardingTourTips') === 'true';
+}
+
+export function deprecateCloudFree(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'DeprecateCloudFree') === 'true';
+}
+
+export function cloudReverseTrial(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'CloudReverseTrial') === 'true';
+}
+
+export function moveThreadsEnabled(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'MoveThreadsEnabled') === 'true' && getLicense(state).IsLicensed === 'true';
+}
+
+export function streamlinedMarketplaceEnabled(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'StreamlinedMarketplace') === 'true';
 }
 
 // Infomaniak custom

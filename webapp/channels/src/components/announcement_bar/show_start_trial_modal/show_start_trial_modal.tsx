@@ -10,14 +10,12 @@ import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions';
-import {openModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
 import useGetTotalUsersNoBots from 'components/common/hooks/useGetTotalUsersNoBots';
-import StartTrialModal from 'components/start_trial_modal';
+import useOpenStartTrialFormModal from 'components/common/hooks/useOpenStartTrialFormModal';
 
 import {
     Preferences,
@@ -30,8 +28,9 @@ import type {GlobalState} from 'types/store';
 
 const ShowStartTrialModal = () => {
     const isUserAdmin = useSelector((state: GlobalState) => isCurrentUserSystemAdmin(state));
+    const openStartTrialFormModal = useOpenStartTrialFormModal();
 
-    const dispatch = useDispatch<DispatchFunc>();
+    const dispatch = useDispatch();
     const getCategory = makeGetCategory();
 
     const userThreshold = 10;
@@ -80,11 +79,7 @@ const ShowStartTrialModal = () => {
         const hasEnvMoreThan10Users = Number(totalUsers) > userThreshold;
         const hadAdminDismissedModal = preferences.some((pref: PreferenceType) => pref.name === Constants.TRIAL_MODAL_AUTO_SHOWN && pref.value === TRUE);
         if (isUserAdmin && !isBenefitsModalOpened && hasEnvMoreThan10Users && hasEnvMoreThan6Hours && !hadAdminDismissedModal && !isLicensedOrPreviousLicensed) {
-            dispatch(openModal({
-                modalId: ModalIdentifiers.START_TRIAL_MODAL,
-                dialogType: StartTrialModal,
-                dialogProps: {onClose: handleOnClose},
-            }));
+            openStartTrialFormModal({trackingLocation: 'show_start_trial_modal'}, handleOnClose);
             trackEvent(
                 TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_AUTO_MODAL,
                 'trigger_start_trial_auto_modal',

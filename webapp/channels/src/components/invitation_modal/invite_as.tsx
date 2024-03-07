@@ -9,7 +9,6 @@ import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {getSubscriptionProduct, checkHadPriorTrial} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {closeModal, openModal} from 'actions/views/modals';
 
@@ -39,7 +38,9 @@ export type Props = {
 export default function InviteAs(props: Props) {
     const {formatMessage} = useIntl();
     const license = useSelector(getLicense);
-    const dispatch = useDispatch<DispatchFunc>();
+
+    // const cloudFreeDeprecated = useSelector(deprecateCloudFree);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getPrevTrialLicense());

@@ -18,6 +18,7 @@ import hostedCustomer from './hosted_customer';
 import insights from './insights';
 import integrations from './integrations';
 import jobs from './jobs';
+import limits from './limits';
 import posts from './posts';
 import preferences from './preferences';
 import roles from './roles';
@@ -28,11 +29,11 @@ import threads from './threads';
 import typing from './typing';
 import usage from './usage';
 import users from './users';
-import worktemplates from './work_templates';
 
 export default combineReducers({
     general,
     users,
+    limits,
     teams,
     channels,
     posts,
@@ -56,5 +57,4 @@ export default combineReducers({
     insights,
     usage,
     hostedCustomer,
-    worktemplates,
 });

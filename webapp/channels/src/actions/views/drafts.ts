@@ -10,14 +10,15 @@ import type {PostMetadata, PostPriorityMetadata} from '@mattermost/types/posts';
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {getPost} from 'mattermost-redux/actions/posts';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Client4} from 'mattermost-redux/client';
 import Preferences from 'mattermost-redux/constants/preferences';
 import {syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import type {ActionFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 
-import {setGlobalItem} from 'actions/storage';
+import {removeGlobalItem, setGlobalItem} from 'actions/storage';
 import {makeGetDrafts} from 'selectors/drafts';
 import {getGlobalItem} from 'selectors/storage';
 
@@ -38,30 +39,48 @@ const updateDraftQueue = new PQueue({concurrency: 1});
  * Gets drafts stored on the server and reconciles them with any locally stored drafts.
  * @param teamId Only drafts for the given teamId will be fetched.
  */
-export function getDrafts(teamId: string) {
+export function getDrafts(teamId: string): ActionFuncAsync<boolean, GlobalState> {
     const getLocalDrafts = makeGetDrafts(false);
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState() as GlobalState;
+
+    return async (dispatch, getState) => {
+        const state = getState();
 
         let serverDrafts: Draft[] = [];
         try {
-            serverDrafts = (await Client4.getUserDrafts(teamId)).map((draft) => transformServerDraft(draft));
+            const response = await Client4.getUserDrafts(teamId);
+
+            // check if response is an array
+            if (Array.isArray(response)) {
+                serverDrafts = response.map((draft) => transformServerDraft(draft));
+            }
         } catch (error) {
             return {data: false, error};
         }
 
+        const drafts = [...serverDrafts];
         const localDrafts = getLocalDrafts(state);
 
-        const filteredLocalDrafts = localDrafts.filter((localDraft) => {
-            const serverDraft = serverDrafts.find((serverDraft) => serverDraft.value.id === localDraft.value.id);
-            if (localDraft.value.id && !serverDraft) {
-                dispatch(setGlobalItem(localDraft.key, {message: '', fileInfos: [], uploadsInProgress: [], remote: false}));
-                return false;
-            }
-            return true;
+        // drafts that are not on server, but on local storage
+        const localOnlyDrafts = localDrafts.filter((localDraft) => {
+            return !serverDrafts.find((serverDraft) => serverDraft.key === localDraft.key);
         });
 
-        const drafts = [...serverDrafts, ...filteredLocalDrafts];
+        // check if drafts are still valid
+        await Promise.all(localOnlyDrafts.map(async (draft) => {
+            if (draft.value.rootId) {
+                // get post from server to check if it exists
+                const {error} = await dispatch(getPost(draft.value.rootId));
+
+                // remove locally stored draft if post does not exist
+                if (error.status_code === 404) {
+                    await dispatch(setGlobalItem(draft.key, {message: '', fileInfos: [], uploadsInProgress: []}));
+                    await dispatch(removeGlobalItem(draft.key));
+                    return;
+                }
+            }
+
+            drafts.push(draft);
+        }));
 
         // Reconcile drafts and only keep the latest version of a draft.
         const draftsMap = new Map(drafts.map((draft) => [draft.key, draft]));
@@ -81,14 +100,20 @@ export function getDrafts(teamId: string) {
     };
 }
 
-export function removeDraft(key: string, channelId: string, rootId = '') {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState() as GlobalState;
+export function removeDraft(key: string, channelId: string, rootId = ''): ActionFuncAsync<boolean, GlobalState> {
+    return async (dispatch, getState) => {
+        const state = getState();
         const draft = getGlobalItem(state, key, {});
 
-        dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
+        // set draft to empty to re-render the component
+        await dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
+
+        // remove draft from storage
+        await dispatch(removeGlobalItem(key));
 
         if (syncedDraftsAreAllowedAndEnabled(state)) {
+            // const connectionId = getConnectionId(getState());
+
             try {
                 console.log(`@debug_draft removing draft from api ~ key: ${key}, channelId: ${channelId}, rootId: ${rootId}`);
 
@@ -110,15 +135,15 @@ export function removeDraft(key: string, channelId: string, rootId = '') {
 }
 
 // Assert previous call ended before dispatching the action again to ensure latest draftId is used and prevent multiple draft creation on the same channel
-export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) => {
-    return (dispatch: DispatchFunc) => {
+export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false): ActionFuncAsync<boolean, GlobalState> => {
+    return (dispatch) => {
         return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save, scheduleDelete)));
     };
 };
 
-export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState() as GlobalState;
+export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false): ActionFuncAsync<boolean, GlobalState> {
+    return async (dispatch, getState) => {
+        const state = getState();
         const activeDraft = getGlobalItem(state, key, {});
         let updatedValue: PostDraft|null = null;
         if (value) {
@@ -224,8 +249,8 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', s
     return Client4.upsertDraft(newDraft);
 }
 
-export function setDraftsTourTipPreference(initializationState: Record<string, boolean>): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function setDraftsTourTipPreference(initializationState: Record<string, boolean>): ActionFuncAsync {
+    return async (dispatch, getState) => {
         const state = getState();
         const currentUserId = getCurrentUserId(state);
         const preference: PreferenceType = {
@@ -239,20 +264,9 @@ export function setDraftsTourTipPreference(initializationState: Record<string, b
     };
 }
 
-export function setGlobalDraft(key: string, value: PostDraft|null, isRemote: boolean) {
-    return (dispatch: DispatchFunc) => {
-        if (value && !value.message) {
-            value.message = ''; // prevent message to be null and raise an exception
-        }
-        if (value?.message === '' || (value?.message?.replace(/\s/g, '').length) || (value && value?.fileInfos.length > 0)) {
-            if (value?.message.replace(/\s/g, '').length) {
-                dispatch(setGlobalItem(key, value));
-            } else {
-                //This case is when there is a file attached with no message
-                dispatch(setGlobalItem(key, {...value, message: ''}));
-            }
-        }
-        console.log('@debug_draft setGlobalDraftSource', `key: ${key}`, `id: ${value?.id}`, `updatedAt: ${value?.updateAt}`, `createdAt: ${value?.createAt}`);
+export function setGlobalDraft(key: string, value: PostDraft|null, isRemote: boolean): ActionFunc {
+    return (dispatch) => {
+        dispatch(setGlobalItem(key, value));
         dispatch(setGlobalDraftSource(key, isRemote));
         return {data: true};
     };

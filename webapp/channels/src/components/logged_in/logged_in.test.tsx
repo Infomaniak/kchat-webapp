@@ -9,8 +9,8 @@ import type {UserProfile} from '@mattermost/types/users';
 import * as GlobalActions from 'actions/global_actions';
 import BrowserStore from 'stores/browser_store';
 
-import type {Props} from 'components/logged_in/logged_in';
 import LoggedIn from 'components/logged_in/logged_in';
+import type {Props} from 'components/logged_in/logged_in';
 
 jest.mock('actions/websocket_actions.jsx', () => ({
     initialize: jest.fn(),
@@ -22,13 +22,16 @@ describe('components/logged_in/LoggedIn', () => {
     const children = <span>{'Test'}</span>;
     const baseProps: Props = {
         currentUser: {} as UserProfile,
-        enableTimezone: false,
+        mfaRequired: false,
         actions: {
             autoUpdateTimezone: jest.fn(),
             getChannelURLAction: jest.fn(),
-            viewChannel: jest.fn(),
+            markChannelAsViewedOnServer: jest.fn(),
+            updateApproximateViewTime: jest.fn(),
             registerInternalKdrivePlugin: jest.fn(),
         },
+        isCurrentChannelManuallyUnread: false,
+        showTermsOfService: false,
         location: {
             pathname: '/',
             search: '',
@@ -46,9 +49,116 @@ describe('components/logged_in/LoggedIn', () => {
         expect(wrapper).toMatchInlineSnapshot('<LoadingScreen />');
     });
 
+    it('should redirect to mfa when required and not on /mfa/setup', () => {
+        const props = {
+            ...baseProps,
+            mfaRequired: true,
+        };
+
+        const wrapper = shallow(<LoggedIn {...props}>{children}</LoggedIn>);
+
+        expect(wrapper).toMatchInlineSnapshot(`
+            <Redirect
+              to="/mfa/setup"
+            />
+        `);
+    });
+
+    it('should render children when mfa required and already on /mfa/setup', () => {
+        const props = {
+            ...baseProps,
+            mfaRequired: true,
+            location: {
+                pathname: '/mfa/setup',
+                search: '',
+            },
+        };
+
+        const wrapper = shallow(<LoggedIn {...props}>{children}</LoggedIn>);
+
+        expect(wrapper).toMatchInlineSnapshot(`
+            <span>
+              Test
+            </span>
+        `);
+    });
+
+    it('should render children when mfa is not required and on /mfa/confirm', () => {
+        const props = {
+            ...baseProps,
+            mfaRequired: false,
+            location: {
+                pathname: '/mfa/confirm',
+                search: '',
+            },
+        };
+
+        const wrapper = shallow(<LoggedIn {...props}>{children}</LoggedIn>);
+
+        expect(wrapper).toMatchInlineSnapshot(`
+            <span>
+              Test
+            </span>
+        `);
+    });
+
+    it('should redirect to terms of service when mfa not required and terms of service required but not on /terms_of_service', () => {
+        const props = {
+            ...baseProps,
+            mfaRequired: false,
+            showTermsOfService: true,
+        };
+
+        const wrapper = shallow(<LoggedIn {...props}>{children}</LoggedIn>);
+
+        expect(wrapper).toMatchInlineSnapshot(`
+            <Redirect
+              to="/terms_of_service?redirect_to=%2F"
+            />
+        `);
+    });
+
+    it('should render children when mfa is not required and terms of service required and on /terms_of_service', () => {
+        const props = {
+            ...baseProps,
+            mfaRequired: false,
+            showTermsOfService: true,
+            location: {
+                pathname: '/terms_of_service',
+                search: '',
+            },
+        };
+
+        const wrapper = shallow(<LoggedIn {...props}>{children}</LoggedIn>);
+
+        expect(wrapper).toMatchInlineSnapshot(`
+            <span>
+              Test
+            </span>
+        `);
+    });
+
+    it('should render children when neither mfa nor terms of service required', () => {
+        const props = {
+            ...baseProps,
+            mfaRequired: false,
+            showTermsOfService: false,
+        };
+
+        const wrapper = shallow(<LoggedIn {...props}>{children}</LoggedIn>);
+
+        expect(wrapper).toMatchInlineSnapshot(`
+            <span>
+              Test
+            </span>
+        `);
+    });
+
     it('should signal to other tabs when login is successful', () => {
         const props = {
             ...baseProps,
+            mfaRequired: false,
+            showTermsOfService: true,
         };
 
         shallow(<LoggedIn {...props}>{children}</LoggedIn>);
@@ -64,6 +174,8 @@ describe('components/logged_in/LoggedIn', () => {
 
         const props = {
             ...baseProps,
+            mfaRequired: false,
+            showTermsOfService: true,
         };
 
         shallow(<LoggedIn {...props}>{children}</LoggedIn>);

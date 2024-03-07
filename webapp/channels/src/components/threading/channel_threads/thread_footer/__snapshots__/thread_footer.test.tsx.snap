@@ -55,7 +55,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
             defaultOverlayShown={false}
             disabled={false}
             overlay={
-              <Memo(Connect(injectIntl(ProfilePopover)))
+              <Memo(ProfilePopover)
                 className="user-profile-popover"
                 hide={[Function]}
                 src="/api/v4/users/5/image?_=0"
@@ -129,7 +129,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                 <OverlayTrigger
                   animation={true}
                   defaultOverlayShown={false}
-                  delayShow={500}
+                  delayShow={100}
                   onClick={[Function]}
                   onEntered={[Function]}
                   overlay={
@@ -152,7 +152,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   <OverlayTrigger
                     animation={true}
                     defaultOverlayShown={false}
-                    delayShow={500}
+                    delayShow={100}
                     onClick={[Function]}
                     onEntered={[Function]}
                     overlay={
@@ -220,7 +220,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-duhHHt YhKZY style--none"
+                        className="RoundButton-dvlhqG gHOQXq style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -282,7 +282,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
             defaultOverlayShown={false}
             disabled={false}
             overlay={
-              <Memo(Connect(injectIntl(ProfilePopover)))
+              <Memo(ProfilePopover)
                 className="user-profile-popover"
                 hide={[Function]}
                 src="/api/v4/users/4/image?_=0"
@@ -356,7 +356,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                 <OverlayTrigger
                   animation={true}
                   defaultOverlayShown={false}
-                  delayShow={500}
+                  delayShow={100}
                   onClick={[Function]}
                   onEntered={[Function]}
                   overlay={
@@ -379,7 +379,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   <OverlayTrigger
                     animation={true}
                     defaultOverlayShown={false}
-                    delayShow={500}
+                    delayShow={100}
                     onClick={[Function]}
                     onEntered={[Function]}
                     overlay={
@@ -447,7 +447,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-duhHHt YhKZY style--none"
+                        className="RoundButton-dvlhqG gHOQXq style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -509,7 +509,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
             defaultOverlayShown={false}
             disabled={false}
             overlay={
-              <Memo(Connect(injectIntl(ProfilePopover)))
+              <Memo(ProfilePopover)
                 className="user-profile-popover"
                 hide={[Function]}
                 src="/api/v4/users/3/image?_=0"
@@ -583,7 +583,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                 <OverlayTrigger
                   animation={true}
                   defaultOverlayShown={false}
-                  delayShow={500}
+                  delayShow={100}
                   onClick={[Function]}
                   onEntered={[Function]}
                   overlay={
@@ -606,7 +606,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   <OverlayTrigger
                     animation={true}
                     defaultOverlayShown={false}
-                    delayShow={500}
+                    delayShow={100}
                     onClick={[Function]}
                     onEntered={[Function]}
                     overlay={
@@ -674,7 +674,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-duhHHt YhKZY style--none"
+                        className="RoundButton-dvlhqG gHOQXq style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -722,7 +722,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           <OverlayTrigger
             animation={true}
             defaultOverlayShown={false}
-            delayShow={500}
+            delayShow={100}
             onEntered={[Function]}
             overlay={
               <Tooltip
@@ -744,7 +744,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
             <OverlayTrigger
               animation={true}
               defaultOverlayShown={false}
-              delayShow={500}
+              delayShow={100}
               onEntered={[Function]}
               overlay={
                 <OverlayWrapper
@@ -1065,7 +1065,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
     >
       <OverlayTrigger
         defaultOverlayShown={false}
-        delayShow={500}
+        delayShow={100}
         overlay={
           <Tooltip
             className="hidden-xs"
@@ -1093,7 +1093,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
       >
         <OverlayTrigger
           defaultOverlayShown={false}
-          delayShow={500}
+          delayShow={100}
           overlay={
             <OverlayWrapper
               className="hidden-xs"
@@ -1213,7 +1213,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
             defaultOverlayShown={false}
             disabled={false}
             overlay={
-              <Memo(Connect(injectIntl(ProfilePopover)))
+              <Memo(ProfilePopover)
                 className="user-profile-popover"
                 hide={[Function]}
                 src="/api/v4/users/5/image?_=0"
@@ -1287,7 +1287,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                 <OverlayTrigger
                   animation={true}
                   defaultOverlayShown={false}
-                  delayShow={500}
+                  delayShow={100}
                   onClick={[Function]}
                   onEntered={[Function]}
                   overlay={
@@ -1310,7 +1310,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   <OverlayTrigger
                     animation={true}
                     defaultOverlayShown={false}
-                    delayShow={500}
+                    delayShow={100}
                     onClick={[Function]}
                     onEntered={[Function]}
                     overlay={
@@ -1378,7 +1378,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-duhHHt YhKZY style--none"
+                        className="RoundButton-dvlhqG gHOQXq style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -1440,7 +1440,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
             defaultOverlayShown={false}
             disabled={false}
             overlay={
-              <Memo(Connect(injectIntl(ProfilePopover)))
+              <Memo(ProfilePopover)
                 className="user-profile-popover"
                 hide={[Function]}
                 src="/api/v4/users/4/image?_=0"
@@ -1514,7 +1514,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                 <OverlayTrigger
                   animation={true}
                   defaultOverlayShown={false}
-                  delayShow={500}
+                  delayShow={100}
                   onClick={[Function]}
                   onEntered={[Function]}
                   overlay={
@@ -1537,7 +1537,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   <OverlayTrigger
                     animation={true}
                     defaultOverlayShown={false}
-                    delayShow={500}
+                    delayShow={100}
                     onClick={[Function]}
                     onEntered={[Function]}
                     overlay={
@@ -1605,7 +1605,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-duhHHt YhKZY style--none"
+                        className="RoundButton-dvlhqG gHOQXq style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -1667,7 +1667,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
             defaultOverlayShown={false}
             disabled={false}
             overlay={
-              <Memo(Connect(injectIntl(ProfilePopover)))
+              <Memo(ProfilePopover)
                 className="user-profile-popover"
                 hide={[Function]}
                 src="/api/v4/users/3/image?_=0"
@@ -1741,7 +1741,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                 <OverlayTrigger
                   animation={true}
                   defaultOverlayShown={false}
-                  delayShow={500}
+                  delayShow={100}
                   onClick={[Function]}
                   onEntered={[Function]}
                   overlay={
@@ -1764,7 +1764,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   <OverlayTrigger
                     animation={true}
                     defaultOverlayShown={false}
-                    delayShow={500}
+                    delayShow={100}
                     onClick={[Function]}
                     onEntered={[Function]}
                     overlay={
@@ -1832,7 +1832,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-duhHHt YhKZY style--none"
+                        className="RoundButton-dvlhqG gHOQXq style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -1880,7 +1880,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           <OverlayTrigger
             animation={true}
             defaultOverlayShown={false}
-            delayShow={500}
+            delayShow={100}
             onEntered={[Function]}
             overlay={
               <Tooltip
@@ -1902,7 +1902,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
             <OverlayTrigger
               animation={true}
               defaultOverlayShown={false}
-              delayShow={500}
+              delayShow={100}
               onEntered={[Function]}
               overlay={
                 <OverlayWrapper

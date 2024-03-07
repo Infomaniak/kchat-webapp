@@ -2,30 +2,20 @@
 // See LICENSE.txt for license information.
 
 import type {ConnectedProps} from 'react-redux';
-import {connect} from 'react-redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import type {ClientConfig} from '@mattermost/types/config';
-import type {ProductNotices} from '@mattermost/types/product_notices';
 
 import {getInProductNotices, updateNoticesAsViewed} from 'mattermost-redux/actions/teams';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import {getSocketStatus} from 'selectors/views/websocket';
 
 import type {GlobalState} from 'types/store';
 
 import ProductNoticesModal from './product_notices_modal';
-
-type Actions = {
-    getInProductNotices: (teamId: string, client: string, clientVersion: string) => Promise<{
-        data: ProductNotices;
-    }>;
-    updateNoticesAsViewed: (noticeIds: string[]) => Promise<Record<string, unknown>>;
-}
 
 function mapStateToProps(state: GlobalState) {
     const config: Partial<ClientConfig> = getConfig(state);
@@ -41,7 +31,7 @@ function mapStateToProps(state: GlobalState) {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc>, Actions>({
+        actions: bindActionCreators({
             getInProductNotices,
             updateNoticesAsViewed,
         }, dispatch),

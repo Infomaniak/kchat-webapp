@@ -8,9 +8,72 @@ import store from 'stores/redux_store';
 
 import EmojiMap from 'utils/emoji_map';
 import LinkOnlyRenderer from 'utils/markdown/link_only_renderer';
-import {formatText, autolinkAtMentions, highlightSearchTerms, handleUnicodeEmoji, parseSearchTerms} from 'utils/text_formatting';
+import {
+    formatText,
+    autolinkAtMentions,
+    highlightSearchTerms,
+    handleUnicodeEmoji,
+    highlightCurrentMentions,
+    highlightWithoutNotificationKeywords,
+    parseSearchTerms,
+    autolinkChannelMentions,
+    Tokens,
+    isFormatTokenLimitError,
+    doFormatText,
+    replaceTokens,
+} from 'utils/text_formatting';
+import type {ChannelNamesMap} from 'utils/text_formatting';
 
 const emptyEmojiMap = new EmojiMap(new Map());
+
+describe('tokens', () => {
+    test('should throw an error when too many elements are added to the map', () => {
+        const tokens = new Tokens();
+        const testValue = {value: 'test', originalText: 'test'};
+        for (let i = 0; i < 999; i++) {
+            tokens.set(`${i}`, testValue);
+        }
+        expect(() => tokens.set('999', testValue)).not.toThrow();
+        expect(() => tokens.set('0', testValue)).not.toThrow();
+        expect(() => tokens.set('1000', testValue)).toThrow('maximum number of tokens reached');
+    });
+});
+
+describe('isFormatTokenLimitError', () => {
+    const ttcc = [
+        {
+            name: 'undefined',
+            error: undefined,
+            expected: false,
+        },
+        {
+            name: 'string',
+            error: 'some error',
+            expected: false,
+        },
+        {
+            name: 'object',
+            error: {someProperty: 'foo'},
+            expected: false,
+        },
+        {
+            name: 'other error',
+            error: new Error('foo'),
+            expected: false,
+        },
+        {
+            name: 'correct error',
+            error: new Error('maximum number of tokens reached'),
+            expected: true,
+        },
+    ];
+
+    for (const tc of ttcc) {
+        test(`should return ${tc.expected} when the error is ${tc.name}`, () => {
+            expect(isFormatTokenLimitError(tc.error)).toEqual(tc.expected);
+        });
+    }
+});
 
 describe('formatText', () => {
     test('jumbo emoji should be able to handle up to 3 spaces before the emoji character', () => {
@@ -176,6 +239,26 @@ describe('highlightSearchTerms', () => {
     });
 });
 
+describe('autolink channel mentions', () => {
+    test('link a channel mention', () => {
+        const mention = '~test-channel';
+        const leadingText = 'pre blah blah ';
+        const trailingText = ' post blah blah';
+        const text = `${leadingText}${mention}${trailingText}`;
+        const tokens = new Map();
+        const channelNamesMap: ChannelNamesMap = {
+            'test-channel': {
+                team_name: 'ad-1',
+                display_name: 'Test Channel',
+            },
+        };
+
+        const output = autolinkChannelMentions(text, tokens, channelNamesMap);
+        expect(output).toBe(`${leadingText}$MM_CHANNELMENTION0$${trailingText}`);
+        expect(tokens.get('$MM_CHANNELMENTION0$').value).toBe('<a class="mention-link" href="/ad-1/channels/test-channel" data-channel-mention-team="ad-1" data-channel-mention="test-channel">~Test Channel</a>');
+    });
+});
+
 describe('handleUnicodeEmoji', () => {
     const emojiMap = getEmojiMap(store.getState());
     const UNICODE_EMOJI_REGEX = emojiRegex();
@@ -253,6 +336,121 @@ describe('linkOnlyMarkdown', () => {
         expect(output).toBe(
             'Do you like <a class="theme markdown__link" href="https://www.mattermost.com" target="_blank">' +
             'Mattermost</a>?');
+    });
+});
+
+describe('highlightCurrentMentions', () => {
+    const tokens = new Map();
+    const mentionKeys = [
+        {key: '메터모스트'}, // Korean word
+        {key: 'マッターモスト'}, // Japanese word
+        {key: 'маттермост'}, // Russian word
+        {key: 'Mattermost'}, // Latin word
+    ];
+
+    it('should find and match Korean, Japanese, latin and Russian words', () => {
+        const text = '메터모스트, notinkeys, マッターモスト, маттермост!, Mattermost, notinkeys';
+        const highlightedText = highlightCurrentMentions(text, tokens, mentionKeys);
+
+        const expectedOutput = '$MM_SELFMENTION0$, notinkeys, $MM_SELFMENTION1$, $MM_SELFMENTION2$!, $MM_SELFMENTION3$, notinkeys';
+
+        // note that the string output $MM_SELFMENTION{idx} will be used by doFormatText to add the highlight later in the format process
+        expect(highlightedText).toContain(expectedOutput);
+    });
+});
+
+describe('highlightWithoutNotificationKeywords', () => {
+    test('should replace highlight keywords with tokens', () => {
+        const text = 'This is a test message with some keywords';
+        const tokens = new Map();
+        const highlightKeys = [
+            {key: 'test message'},
+            {key: 'keywords'},
+        ];
+
+        const expectedOutput = 'This is a $MM_HIGHLIGHTKEYWORD0$ with some $MM_HIGHLIGHTKEYWORD1$';
+        const expectedTokens = new Map([
+            ['$MM_HIGHLIGHTKEYWORD0$', {
+                value: '<span class="non-notification-highlight">test message</span>',
+                originalText: 'test message',
+            }],
+            ['$MM_HIGHLIGHTKEYWORD1$', {
+                value: '<span class="non-notification-highlight">keywords</span>',
+                originalText: 'keywords',
+            }],
+        ]);
+
+        const output = highlightWithoutNotificationKeywords(text, tokens, highlightKeys);
+
+        expect(output).toBe(expectedOutput);
+        expect(tokens).toEqual(expectedTokens);
+    });
+
+    test('should handle empty highlightKeys array', () => {
+        const text = 'This is a test message';
+        const tokens = new Map();
+        const highlightKeys = [] as Array<{key: string}>;
+
+        const expectedOutput = 'This is a test message';
+        const expectedTokens = new Map();
+
+        const output = highlightWithoutNotificationKeywords(text, tokens, highlightKeys);
+
+        expect(output).toBe(expectedOutput);
+        expect(tokens).toEqual(expectedTokens);
+    });
+
+    test('should handle empty text', () => {
+        const text = '';
+        const tokens = new Map();
+        const highlightKeys = [
+            {key: 'test'},
+            {key: 'keywords'},
+        ];
+
+        const expectedOutput = '';
+        const expectedTokens = new Map();
+
+        const output = highlightWithoutNotificationKeywords(text, tokens, highlightKeys);
+
+        expect(output).toBe(expectedOutput);
+        expect(tokens).toEqual(expectedTokens);
+    });
+
+    test('should handle Chinese, Korean, Russian, and Japanese words', () => {
+        const text = 'This is a test message with some keywords: привет, こんにちは, 안녕하세요, 你好';
+        const tokens = new Map();
+        const highlightKeys = [
+            {key: 'こんにちは'}, // Japanese hello
+            {key: '안녕하세요'}, // Korean hello
+            {key: 'привет'}, // Russian hello
+            {key: '你好'}, // Chinese hello
+        ];
+
+        const expectedOutput = 'This is a test message with some keywords: $MM_HIGHLIGHTKEYWORD0$, $MM_HIGHLIGHTKEYWORD1$, $MM_HIGHLIGHTKEYWORD2$, $MM_HIGHLIGHTKEYWORD3$';
+        const expectedTokens = new Map([
+            ['$MM_HIGHLIGHTKEYWORD0$', {
+                value: '<span class="non-notification-highlight">привет</span>',
+                originalText: 'привет',
+            }],
+            ['$MM_HIGHLIGHTKEYWORD1$', {
+                value: '<span class="non-notification-highlight">こんにちは</span>',
+                originalText: 'こんにちは',
+            }],
+            ['$MM_HIGHLIGHTKEYWORD2$', {
+                value: '<span class="non-notification-highlight">안녕하세요</span>',
+                originalText: '안녕하세요',
+            }],
+            ['$MM_HIGHLIGHTKEYWORD3$', {
+                value: '<span class="non-notification-highlight">你好</span>',
+                originalText: '你好',
+            }],
+        ]);
+
+        const output = highlightWithoutNotificationKeywords(text, tokens, highlightKeys);
+
+        expect(output).toBe(expectedOutput);
+        expect(tokens).toEqual(expectedTokens);
     });
 });
 
@@ -346,4 +544,35 @@ describe('parseSearchTerms', () => {
             expect(output).toStrictEqual(t.expected);
         });
     }
+});
+
+describe('doFormatText', () => {
+    test('too many tokens results in returning the same input string', () => {
+        let originalText = '@sysadmin '.repeat(501);
+        let result = doFormatText(originalText, {atMentions: true}, emptyEmojiMap);
+        expect(result).not.toEqual(originalText);
+
+        originalText = originalText.repeat(2);
+        result = doFormatText(originalText, {atMentions: true}, emptyEmojiMap);
+        expect(result).toEqual(originalText);
+    });
+});
+
+describe('replaceTokens', () => {
+    describe('properly escape especial replace patterns', () => {
+        const ttcc = [
+            'foo$&foo',
+            'foo$`foo',
+            'foo$\'foo',
+        ];
+
+        for (const tc of ttcc) {
+            test(tc, () => {
+                const tokens = new Tokens([['$alias$', {originalText: 'foo', value: tc}]]);
+
+                const result = replaceTokens('$alias$', tokens);
+                expect(result).toEqual(tc);
+            });
+        }
+    });
 });

@@ -18,6 +18,7 @@ import HostedCustomerTypes from './hosted_customer';
 import InsightTypes from './insights';
 import IntegrationTypes from './integrations';
 import JobTypes from './jobs';
+import LimitsTypes from './limits';
 import PlaybookType from './playbooks';
 import PluginTypes from './plugins';
 import PostTypes from './posts';
@@ -44,6 +45,7 @@ export {
     GifTypes,
     AdminTypes,
     JobTypes,
+    LimitsTypes,
     SearchTypes,
     RoleTypes,
     SchemeTypes,

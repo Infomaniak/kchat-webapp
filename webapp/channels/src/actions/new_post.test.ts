@@ -1,9 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-// import thunk from 'redux-thunk';
-// import configureStore from 'redux-mock-store';
-
 import type {Post} from '@mattermost/types/posts';
 import type {GlobalState} from '@mattermost/types/store';
 
@@ -174,7 +171,7 @@ describe('actions/new_post', () => {
                     },
                 },
                 {
-                    type: ChannelTypes.RECEIVED_MY_CHANNEL_MEMBER,
+                    type: ChannelTypes.RECEIVED_LAST_VIEWED_AT,
                     data: {
                         channel_id: channelId,
                     },
@@ -377,7 +374,7 @@ describe('actions/new_post', () => {
                     },
                 },
                 {
-                    type: ChannelTypes.RECEIVED_MY_CHANNEL_MEMBER,
+                    type: ChannelTypes.RECEIVED_LAST_VIEWED_AT,
                     data: {
                         channel_id: channelId,
                     },

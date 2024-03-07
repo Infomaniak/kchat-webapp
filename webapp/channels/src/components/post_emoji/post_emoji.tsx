@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-interface PostEmojiProps {
+interface Props {
     name: string;
     imageUrl: string;
 }
@@ -13,23 +13,24 @@ declare module 'react' {
     }
 }
 
-export default class PostEmoji extends React.PureComponent<PostEmojiProps> {
-    public render() {
-        const emojiText = ':' + this.props.name + ':';
+const PostEmoji = ({name, imageUrl}: Props) => {
+    const emojiText = `:${name}:`;
+    const backgroundImageUrl = `url(${imageUrl})`;
 
-        if (!this.props.imageUrl) {
-            return emojiText;
-        }
-        const emojiUrl = this.props.imageUrl;
-        return (
-            <span
-                alt={emojiText}
-                className='emoticon'
-                title={emojiText}
-                style={{backgroundImage: 'url(' + emojiUrl + ')'}}
-            >
-                {emojiText}
-            </span>
-        );
+    if (!imageUrl) {
+        return <>{emojiText}</>;
     }
-}
+
+    return (
+        <span
+            alt={emojiText}
+            className='emoticon'
+            title={emojiText}
+            style={{backgroundImage: backgroundImageUrl}}
+        >
+            {emojiText}
+        </span>
+    );
+};
+
+export default React.memo(PostEmoji);

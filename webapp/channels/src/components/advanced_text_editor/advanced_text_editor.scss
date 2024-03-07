@@ -140,13 +140,13 @@
         border: none;
         background: transparent;
         border-radius: 4px;
-        color: rgba(var(--center-channel-color-rgb), 0.56);
+        color: rgba(var(--center-channel-color-rgb), 0.75);
         cursor: pointer;
         fill: currentColor;
 
         &:hover:not(:disabled) {
             background: rgba(var(--center-channel-color-rgb), 0.08);
-            color: rgba(var(--center-channel-color-rgb), 0.72);
+            color: rgba(var(--center-channel-color-rgb), 0.8);
             fill: currentColor;
             text-decoration: none;
         }
@@ -211,7 +211,7 @@
     &__helper-text {
         display: inline-block;
         margin: 8px 0 4px;
-        color: rgba(var(--center-channel-color-rgb), 0.64);
+        color: rgba(var(--center-channel-color-rgb), 0.75);
         font-family: "SuisseIntl", sans-serif;
     }
 

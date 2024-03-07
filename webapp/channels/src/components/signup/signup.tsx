@@ -4,20 +4,20 @@
 import classNames from 'classnames';
 import throttle from 'lodash/throttle';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
+import type {FocusEvent} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-import {useLocation, useHistory} from 'react-router-dom';
+import {useLocation, useHistory, Route} from 'react-router-dom';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {getTeamInviteInfo} from 'mattermost-redux/actions/teams';
-import {createUser, loadMe, loadMeREST} from 'mattermost-redux/actions/users';
+import {createUser, loadMe} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
-import {getUseCaseOnboarding, isGraphQLEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 import {isEmail} from 'mattermost-redux/utils/helpers';
 
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
@@ -27,12 +27,15 @@ import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {loginById} from 'actions/views/login';
 import {getGlobalItem} from 'selectors/storage';
 
-import type {ModeType, AlertBannerProps} from 'components/alert_banner';
 import AlertBanner from 'components/alert_banner';
+import type {ModeType, AlertBannerProps} from 'components/alert_banner';
+import useCWSAvailabilityCheck, {CSWAvailabilityCheckTypes} from 'components/common/hooks/useCWSAvailabilityCheck';
 import LaptopAlertSVG from 'components/common/svg_images_components/laptop_alert_svg';
 import ManWithLaptopSVG from 'components/common/svg_images_components/man_with_laptop_svg';
-import type {ExternalLoginButtonType} from 'components/external_login_button/external_login_button';
+import DesktopAuthToken from 'components/desktop_auth_token';
+import ExternalLink from 'components/external_link';
 import ExternalLoginButton from 'components/external_login_button/external_login_button';
+import type {ExternalLoginButtonType} from 'components/external_login_button/external_login_button';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import AlternateLinkLayout from 'components/header_footer_route/content_layouts/alternate_link';
 import ColumnLayout from 'components/header_footer_route/content_layouts/column';
@@ -45,11 +48,13 @@ import LoginGitlabIcon from 'components/widgets/icons/login_gitlab_icon';
 import LoginGoogleIcon from 'components/widgets/icons/login_google_icon';
 import LoginOffice365Icon from 'components/widgets/icons/login_office_365_icon';
 import LoginOpenIDIcon from 'components/widgets/icons/login_openid_icon';
-import type {CustomMessageInputType} from 'components/widgets/inputs/input/input';
+import CheckInput from 'components/widgets/inputs/check';
 import Input, {SIZE} from 'components/widgets/inputs/input/input';
+import type {CustomMessageInputType} from 'components/widgets/inputs/input/input';
 import PasswordInput from 'components/widgets/inputs/password_input/password_input';
 
-import {Constants, ItemStatus, ValidationErrors} from 'utils/constants';
+import {Constants, HostedCustomerLinks, ItemStatus, ValidationErrors} from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
 import {isValidUsername, isValidPassword, getPasswordConfig, getRoleFromTrackFlow, getMediumFromTrackFlow} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
@@ -65,7 +70,7 @@ type SignupProps = {
 const Signup = ({onCustomizeHeader}: SignupProps) => {
     const intl = useIntl();
     const {formatMessage} = intl;
-    const dispatch = useDispatch<DispatchFunc>();
+    const dispatch = useDispatch();
     const history = useHistory();
     const {search} = useLocation();
 
@@ -102,9 +107,8 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
     } = config;
     const {IsLicensed} = useSelector(getLicense);
     const loggedIn = Boolean(useSelector(getCurrentUserId));
-    const useCaseOnboarding = useSelector(getUseCaseOnboarding);
+    const onboardingFlowEnabled = useSelector(getIsOnboardingFlowEnabled);
     const usedBefore = useSelector((state: GlobalState) => (!inviteId && !loggedIn && token ? getGlobalItem(state, token, null) : undefined));
-    const graphQLEnabled = useSelector(isGraphQLEnabled);
 
     const emailInput = useRef<HTMLInputElement>(null);
     const nameInput = useRef<HTMLInputElement>(null);
@@ -137,11 +141,25 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
     const [teamName, setTeamName] = useState(parsedTeamName ?? '');
     const [alertBanner, setAlertBanner] = useState<AlertBannerProps | null>(null);
     const [isMobileView, setIsMobileView] = useState(false);
+    const [subscribeToSecurityNewsletter, setSubscribeToSecurityNewsletter] = useState(false);
+
+    const cwsAvailability = useCWSAvailabilityCheck();
 
     const enableExternalSignup = enableSignUpWithGitLab || enableSignUpWithOffice365 || enableSignUpWithGoogle || enableSignUpWithOpenId || enableLDAP || enableSAML;
     const hasError = Boolean(emailError || nameError || passwordError || serverError || alertBanner);
     const canSubmit = Boolean(email && name && password) && !hasError && !loading;
     const {error: passwordInfo} = isValidPassword('', getPasswordConfig(config), intl);
+
+    const [desktopLoginLink, setDesktopLoginLink] = useState('');
+
+    const subscribeToSecurityNewsletterFunc = () => {
+        try {
+            Client4.subscribeToNewsletter({email, subscribed_content: 'security_newsletter'});
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+        }
+    };
 
     const getExternalSignupOptions = () => {
         const externalLoginOptions: ExternalLoginButtonType[] = [];
@@ -151,40 +169,48 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
         }
 
         if (enableSignUpWithGitLab) {
+            const url = `${Client4.getOAuthRoute()}/gitlab/signup${search}`;
             externalLoginOptions.push({
                 id: 'gitlab',
-                url: `${Client4.getOAuthRoute()}/gitlab/signup${search}`,
+                url,
                 icon: <LoginGitlabIcon/>,
                 label: GitLabButtonText || formatMessage({id: 'login.gitlab', defaultMessage: 'GitLab'}),
                 style: {color: GitLabButtonColor, borderColor: GitLabButtonColor},
+                onClick: desktopExternalAuth(url),
             });
         }
 
         if (isLicensed && enableSignUpWithGoogle) {
+            const url = `${Client4.getOAuthRoute()}/google/signup${search}`;
             externalLoginOptions.push({
                 id: 'google',
-                url: `${Client4.getOAuthRoute()}/google/signup${search}`,
+                url,
                 icon: <LoginGoogleIcon/>,
                 label: formatMessage({id: 'login.google', defaultMessage: 'Google'}),
+                onClick: desktopExternalAuth(url),
             });
         }
 
         if (isLicensed && enableSignUpWithOffice365) {
+            const url = `${Client4.getOAuthRoute()}/office365/signup${search}`;
             externalLoginOptions.push({
                 id: 'office365',
-                url: `${Client4.getOAuthRoute()}/office365/signup${search}`,
+                url,
                 icon: <LoginOffice365Icon/>,
                 label: formatMessage({id: 'login.office365', defaultMessage: 'Office 365'}),
+                onClick: desktopExternalAuth(url),
             });
         }
 
         if (isLicensed && enableSignUpWithOpenId) {
+            const url = `${Client4.getOAuthRoute()}/openid/signup${search}`;
             externalLoginOptions.push({
                 id: 'openid',
-                url: `${Client4.getOAuthRoute()}/openid/signup${search}`,
+                url,
                 icon: <LoginOpenIDIcon/>,
                 label: OpenIdButtonText || formatMessage({id: 'login.openid', defaultMessage: 'Open ID'}),
                 style: {color: OpenIdButtonColor, borderColor: OpenIdButtonColor},
+                onClick: desktopExternalAuth(url),
             });
         }
 
@@ -197,6 +223,7 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
                 url: `${Client4.getUrl()}/login?${newSearchParam.toString()}`,
                 icon: <LockIcon/>,
                 label: LdapLoginFieldName || formatMessage({id: 'signup.ldap', defaultMessage: 'AD/LDAP Credentials'}),
+                onClick: () => {},
             });
         }
 
@@ -204,11 +231,13 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
             const newSearchParam = new URLSearchParams(search);
             newSearchParam.set('action', 'signup');
 
+            const url = `${Client4.getUrl()}/login/sso/saml?${newSearchParam.toString()}`;
             externalLoginOptions.push({
                 id: 'saml',
-                url: `${Client4.getUrl()}/login/sso/saml?${newSearchParam.toString()}`,
+                url,
                 icon: <LockIcon/>,
                 label: SamlLoginButtonText || formatMessage({id: 'login.saml', defaultMessage: 'SAML'}),
+                onClick: desktopExternalAuth(url),
             });
         }
 
@@ -281,6 +310,17 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
         setIsMobileView(window.innerWidth < MOBILE_SCREEN_WIDTH);
     }, 100);
 
+    const desktopExternalAuth = (href: string) => {
+        return (event: React.MouseEvent) => {
+            if (isDesktopApp()) {
+                event.preventDefault();
+
+                setDesktopLoginLink(href);
+                history.push(`/signup_user_complete/desktop${search}`);
+            }
+        };
+    };
+
     useEffect(() => {
         dispatch(removeGlobalItem('team'));
         trackEvent('signup', 'signup_user_01_welcome', {...getRoleFromTrackFlow(), ...getMediumFromTrackFlow()});
@@ -295,7 +335,7 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
             } else if (inviteId) {
                 getInviteInfo(inviteId);
             } else if (loggedIn) {
-                if (useCaseOnboarding) {
+                if (onboardingFlowEnabled) {
                     // need info about whether admin or not,
                     // and whether admin has already completed
                     // first tiem onboarding. Instead of fetching and orchestrating that here,
@@ -434,11 +474,13 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
             return;
         }
 
-        if (graphQLEnabled) {
-            await dispatch(loadMe());
-        } else {
-            await dispatch(loadMeREST());
-        }
+        await postSignupSuccess();
+    };
+
+    const postSignupSuccess = async () => {
+        const redirectTo = (new URLSearchParams(search)).get('redirect_to');
+
+        await dispatch(loadMe());
 
         if (token) {
             setGlobalItem(token, JSON.stringify({usedBefore: true}));
@@ -446,7 +488,7 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
 
         if (redirectTo) {
             history.push(redirectTo);
-        } else if (useCaseOnboarding) {
+        } else if (onboardingFlowEnabled) {
             // need info about whether admin or not,
             // and whether admin has already completed
             // first tiem onboarding. Instead of fetching and orchestrating that here,
@@ -457,16 +499,25 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
         }
     };
 
+    function sendSignUpTelemetryEvents(telemetryId: string, props?: any) {
+        trackEvent('signup', telemetryId, props);
+    }
+
+    type TelemetryErrorList = {errors: Array<{field: string; rule: string}>; success: boolean};
+
     const isUserValid = () => {
         let isValid = true;
 
         const providedEmail = emailInput.current?.value.trim();
+        const telemetryEvents: TelemetryErrorList = {errors: [], success: true};
 
         if (!providedEmail) {
             setEmailError(formatMessage({id: 'signup_user_completed.required', defaultMessage: 'This field is required'}));
+            telemetryEvents.errors.push({field: 'email', rule: 'not_provided'});
             isValid = false;
         } else if (!isEmail(providedEmail)) {
             setEmailError(formatMessage({id: 'signup_user_completed.validEmail', defaultMessage: 'Please enter a valid email address'}));
+            telemetryEvents.errors.push({field: 'email', rule: 'invalid_email'});
             isValid = false;
         }
 
@@ -476,10 +527,11 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
             const usernameError = isValidUsername(providedUsername);
 
             if (usernameError) {
-                setNameError(usernameError.id === ValidationErrors.RESERVED_NAME ? (
-                    formatMessage({id: 'signup_user_completed.reserved', defaultMessage: 'This username is reserved, please choose a new one.'})
-                ) : (
-                    formatMessage(
+                let nameError = '';
+                if (usernameError.id === ValidationErrors.RESERVED_NAME) {
+                    nameError = formatMessage({id: 'signup_user_completed.reserved', defaultMessage: 'This username is reserved, please choose a new one.'});
+                } else {
+                    nameError = formatMessage(
                         {
                             id: 'signup_user_completed.usernameLength',
                             defaultMessage: 'Usernames have to begin with a lowercase letter and be {min}-{max} characters long. You can use lowercase letters, numbers, periods, dashes, and underscores.',
@@ -488,22 +540,32 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
                             min: Constants.MIN_USERNAME_LENGTH,
                             max: Constants.MAX_USERNAME_LENGTH,
                         },
-                    )
-                ));
+                    );
+                }
+                telemetryEvents.errors.push({field: 'username', rule: usernameError.id.toLowerCase()});
+                setNameError(nameError);
                 isValid = false;
             }
         } else {
             setNameError(formatMessage({id: 'signup_user_completed.required', defaultMessage: 'This field is required'}));
+            telemetryEvents.errors.push({field: 'username', rule: 'not_provided'});
             isValid = false;
         }
 
         const providedPassword = passwordInput.current?.value ?? '';
-        const {error} = isValidPassword(providedPassword, getPasswordConfig(config), intl);
+        const {error, telemetryErrorIds} = isValidPassword(providedPassword, getPasswordConfig(config), intl);
 
         if (error) {
             setPasswordError(error as string);
+            telemetryEvents.errors = [...telemetryEvents.errors, ...telemetryErrorIds];
             isValid = false;
         }
+
+        if (telemetryEvents.errors.length) {
+            telemetryEvents.success = false;
+        }
+
+        sendSignUpTelemetryEvents('validate_user', telemetryEvents);
 
         return isValid;
     };
@@ -514,7 +576,7 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
 
     const handleSubmit = async (e: React.MouseEvent | React.KeyboardEvent) => {
         e.preventDefault();
-        trackEvent('signup_email', 'click_create_account', getRoleFromTrackFlow());
+        sendSignUpTelemetryEvents('click_create_account', getRoleFromTrackFlow());
         setIsWaiting(true);
 
         if (isUserValid()) {
@@ -544,13 +606,86 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
                 return;
             }
 
-            await handleSignupSuccess(user, data as UserProfile);
+            await handleSignupSuccess(user, data!);
+            if (subscribeToSecurityNewsletter) {
+                subscribeToSecurityNewsletterFunc();
+            }
         } else {
             setIsWaiting(false);
         }
     };
 
     const handleReturnButtonOnClick = () => history.replace('/');
+
+    const getNewsletterCheck = () => {
+        if (cwsAvailability === CSWAvailabilityCheckTypes.Available) {
+            return (
+                <CheckInput
+                    id='signup-body-card-form-check-newsletter'
+                    ariaLabel={formatMessage({id: 'newsletter_optin.checkmark.box', defaultMessage: 'newsletter checkbox'})}
+                    name='newsletter'
+                    onChange={() => setSubscribeToSecurityNewsletter(!subscribeToSecurityNewsletter)}
+                    text={
+                        formatMessage(
+                            {id: 'newsletter_optin.checkmark.text', defaultMessage: '<span>I would like to receive Mattermost security updates via newsletter.</span> By subscribing, I consent to receive emails from Mattermost with product updates, promotions, and company news. I have read the <a>Privacy Policy</a> and understand that I can <aa>unsubscribe</aa> at any time'},
+                            {
+                                a: (chunks: React.ReactNode | React.ReactNodeArray) => (
+                                    <ExternalLink
+                                        location='signup-newsletter-checkmark'
+                                        href={HostedCustomerLinks.PRIVACY}
+                                    >
+                                        {chunks}
+                                    </ExternalLink>
+                                ),
+                                aa: (chunks: React.ReactNode | React.ReactNodeArray) => (
+                                    <ExternalLink
+                                        location='signup-newsletter-checkmark'
+                                        href={HostedCustomerLinks.NEWSLETTER_UNSUBSCRIBE_LINK}
+                                    >
+                                        {chunks}
+                                    </ExternalLink>
+                                ),
+                                span: (chunks: React.ReactNode | React.ReactNodeArray) => (
+                                    <span className='header'>{chunks}</span>
+                                ),
+                            },
+                        )}
+                    checked={subscribeToSecurityNewsletter}
+                />
+            );
+        }
+        return (
+            <div className='newsletter'>
+                <span className='interested'>
+                    {formatMessage({id: 'newsletter_optin.title', defaultMessage: 'Interested in receiving Mattermost security, product, promotions, and company updates updates via newsletter?'})}
+                </span>
+                <span className='link'>
+                    {formatMessage(
+                        {id: 'newsletter_optin.desc', defaultMessage: 'Sign up at <a>{link}</a>.'},
+                        {
+                            link: HostedCustomerLinks.SECURITY_UPDATES,
+                            a: (chunks: React.ReactNode | React.ReactNodeArray) => (
+                                <ExternalLink
+                                    location='signup'
+                                    href={HostedCustomerLinks.SECURITY_UPDATES}
+                                >
+                                    {chunks}
+                                </ExternalLink>
+                            ),
+                        },
+                    )}
+                </span>
+            </div>
+        );
+    };
+
+    const handleOnBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>, inputId: string) => {
+        const text = e.target.value;
+        if (!text) {
+            return;
+        }
+        sendSignUpTelemetryEvents(`typed_input_${inputId}`);
+    };
 
     const getContent = () => {
         if (!enableSignUpWithEmail && !enableExternalSignup) {
@@ -584,6 +719,20 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
                                 {formatMessage({id: 'signup_user_completed.return', defaultMessage: 'Return to log in'})}
                             </button>
                         </div>
+                    )}
+                />
+            );
+        }
+
+        if (desktopLoginLink) {
+            return (
+                <Route
+                    path={'/signup_user_complete/desktop'}
+                    render={() => (
+                        <DesktopAuthToken
+                            href={desktopLoginLink}
+                            onLogin={postSignupSuccess}
+                        />
                     )}
                 />
             );
@@ -673,6 +822,7 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
                                         disabled={isWaiting || Boolean(parsedEmail)}
                                         autoFocus={true}
                                         customMessage={emailCustomLabelForInput}
+                                        onBlur={(e) => handleOnBlur(e, 'email')}
                                     />
                                     <Input
                                         ref={nameInput}
@@ -694,6 +844,7 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
                                                 value: formatMessage({id: 'signup_user_completed.userHelp', defaultMessage: 'You can use lowercase letters, numbers, periods, dashes, and underscores.'}),
                                             }
                                         }
+                                        onBlur={(e) => handleOnBlur(e, 'username')}
                                     />
                                     <PasswordInput
                                         ref={passwordInput}
@@ -705,7 +856,9 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
                                         createMode={true}
                                         info={passwordInfo as string}
                                         error={passwordError}
+                                        onBlur={(e) => handleOnBlur(e, 'password')}
                                     />
+                                    {getNewsletterCheck()}
                                     <SaveButton
                                         extraClasses='signup-body-card-form-button-submit large'
                                         saving={isWaiting}
@@ -756,7 +909,6 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
 
     return (
         <div className='signup-body'>
-            {!isMobileView && getAlternateLink()}
             <div className='signup-body-content'>
                 {getContent()}
             </div>

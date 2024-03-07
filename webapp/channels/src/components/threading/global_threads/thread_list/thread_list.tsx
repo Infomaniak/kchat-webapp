@@ -2,9 +2,9 @@
 // See LICENSE.txt for license information.
 
 import {PlaylistCheckIcon} from '@infomaniak/compass-icons/components';
-import {isEmpty} from 'lodash';
-import type {PropsWithChildren} from 'react';
+import isEmpty from 'lodash/isEmpty';
 import React, {memo, useCallback, useEffect} from 'react';
+import type {PropsWithChildren} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -26,7 +26,7 @@ import Header from 'components/widgets/header';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 
 import {A11yClassNames, Constants, CrtTutorialSteps, ModalIdentifiers, Preferences} from 'utils/constants';
-import * as Utils from 'utils/utils';
+import * as Keyboard from 'utils/keyboard';
 
 import type {GlobalState} from 'types/store';
 
@@ -35,8 +35,8 @@ import VirtualizedThreadList from './virtualized_thread_list';
 import BalloonIllustration from '../../common/balloon_illustration';
 import Button from '../../common/button';
 import {useThreadRouting} from '../../hooks';
-import type {MarkAllThreadsAsReadModalProps} from '../mark_all_threads_as_read_modal';
 import MarkAllThreadsAsReadModal from '../mark_all_threads_as_read_modal';
+import type {MarkAllThreadsAsReadModalProps} from '../mark_all_threads_as_read_modal';
 
 import './thread_list.scss';
 
@@ -88,7 +88,7 @@ const ThreadList = ({
             return;
         }
         const comboKeyPressed = e.altKey || e.metaKey || e.shiftKey || e.ctrlKey;
-        if (comboKeyPressed || (!Utils.isKeyPressed(e, Constants.KeyCodes.DOWN) && !Utils.isKeyPressed(e, Constants.KeyCodes.UP))) {
+        if (comboKeyPressed || (!Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN) && !Keyboard.isKeyPressed(e, Constants.KeyCodes.UP))) {
             return;
         }
 
@@ -102,7 +102,7 @@ const ThreadList = ({
         let threadIdToSelect = 0;
         if (selectedThreadId) {
             const selectedThreadIndex = data.indexOf(selectedThreadId);
-            if (Utils.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
+            if (Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
                 if (selectedThreadIndex < data.length - 1) {
                     threadIdToSelect = selectedThreadIndex + 1;
                 }
@@ -112,7 +112,7 @@ const ThreadList = ({
                 }
             }
 
-            if (Utils.isKeyPressed(e, Constants.KeyCodes.UP)) {
+            if (Keyboard.isKeyPressed(e, Constants.KeyCodes.UP)) {
                 if (selectedThreadIndex > 0) {
                     threadIdToSelect = selectedThreadIndex - 1;
                 } else {
@@ -241,7 +241,6 @@ const ThreadList = ({
                         >
                             <Button
                                 id={'threads-list__mark-all-as-read'}
-                                disabled={!someUnread}
                                 className={'Button___large Button___icon'}
                                 onClick={handleOpenMarkAllAsReadModal}
                                 marginTop={true}

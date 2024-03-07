@@ -5,32 +5,28 @@ import React from 'react';
 
 import type {ClientLicense, ClientConfig, WarnMetricStatus} from '@mattermost/types/config';
 
-import {ToYearlyNudgeBannerDismissable} from 'components/admin_console/billing/billing_subscriptions/to_yearly_nudge_banner';
+import {ToPaidPlanBannerDismissable} from 'components/admin_console/billing/billing_subscriptions/to_paid_plan_nudge_banner';
+import withGetCloudSubscription from 'components/common/hocs/cloud/with_get_cloud_subscription';
 
+import CloudAnnualRenewalAnnouncementBar from './cloud_annual_renewal';
 import CloudDelinquencyAnnouncementBar from './cloud_delinquency';
 import CloudTrialAnnouncementBar from './cloud_trial_announcement_bar';
 import CloudTrialEndAnnouncementBar from './cloud_trial_ended_announcement_bar';
 import ConfigurationAnnouncementBar from './configuration_bar';
 import AnnouncementBar from './default_announcement_bar';
-import GetAppAnnoucementBar from './get_app_announcement_bar';
-import NotifyAdminDowngradeDelinquencyBar from './notify_admin_downgrade_delinquency_bar';
 import OverageUsersBanner from './overage_users_banner';
 import PaymentAnnouncementBar from './payment_announcement_bar';
 import AutoStartTrialModal from './show_start_trial_modal/show_start_trial_modal';
 import ShowThreeDaysLeftTrialModal from './show_tree_days_left_trial_modal/show_three_days_left_trial_modal';
 import TextDismissableBar from './text_dismissable_bar';
+import UsersLimitsAnnouncementBar from './users_limits_announcement_bar';
 import VersionBar from './version_bar';
-import MASMigrationBar from './mas_migration_bar';
-
-import withGetCloudSubscription from '../common/hocs/cloud/with_get_cloud_subscription';
 
 type Props = {
     license?: ClientLicense;
     config?: Partial<ClientConfig>;
     canViewSystemErrors: boolean;
-    isCloud: boolean;
     userIsAdmin: boolean;
-    subscription?: Subscription;
     latestError?: {
         error: any;
     };
@@ -72,8 +68,10 @@ class AnnouncementBarController extends React.PureComponent<Props> {
         let cloudTrialAnnouncementBar = null;
         let cloudTrialEndAnnouncementBar = null;
         let cloudDelinquencyAnnouncementBar = null;
-        let notifyAdminDowngradeDelinquencyBar = null;
-        let toYearlyNudgeBannerDismissable = null;
+        let cloudRenewalAnnouncementBar = null;
+        const notifyAdminDowngradeDelinquencyBar = null;
+        const toYearlyNudgeBannerDismissable = null;
+        let toPaidPlanNudgeBannerDismissable = null;
         if (this.props.license?.Cloud === 'true') {
             paymentAnnouncementBar = (
                 <PaymentAnnouncementBar/>
@@ -87,10 +85,10 @@ class AnnouncementBarController extends React.PureComponent<Props> {
             cloudDelinquencyAnnouncementBar = (
                 <CloudDelinquencyAnnouncementBar/>
             );
-            notifyAdminDowngradeDelinquencyBar = (
-                <NotifyAdminDowngradeDelinquencyBar/>
+            cloudRenewalAnnouncementBar = (
+                <CloudAnnualRenewalAnnouncementBar/>
             );
-            toYearlyNudgeBannerDismissable = (<ToYearlyNudgeBannerDismissable/>);
+            toPaidPlanNudgeBannerDismissable = (<ToPaidPlanBannerDismissable/>);
         }
 
         let autoStartTrialModal = null;
@@ -104,24 +102,28 @@ class AnnouncementBarController extends React.PureComponent<Props> {
             <>
                 {adminConfiguredAnnouncementBar}
                 {errorBar}
+                <UsersLimitsAnnouncementBar
+                    license={this.props.license}
+                    userIsAdmin={this.props.userIsAdmin}
+                />
                 {paymentAnnouncementBar}
                 {cloudTrialAnnouncementBar}
                 {cloudTrialEndAnnouncementBar}
                 {cloudDelinquencyAnnouncementBar}
+                {cloudRenewalAnnouncementBar}
                 {notifyAdminDowngradeDelinquencyBar}
                 {toYearlyNudgeBannerDismissable}
+                {toPaidPlanNudgeBannerDismissable}
                 {this.props.license?.Cloud !== 'true' && <OverageUsersBanner/>}
                 {autoStartTrialModal}
                 <ShowThreeDaysLeftTrialModal/>
                 <VersionBar/>
-                <MASMigrationBar/>
                 <ConfigurationAnnouncementBar
                     config={this.props.config}
                     license={this.props.license}
                     canViewSystemErrors={this.props.canViewSystemErrors}
                     warnMetricsStatus={this.props.warnMetricsStatus}
                 />
-                <GetAppAnnoucementBar/>
             </>
         );
     }

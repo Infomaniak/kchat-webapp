@@ -17,14 +17,13 @@ import type {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
 import {hideExpandedView, showExpandedView, updateAudioStatus, updateCameraStatus, updateScreenSharingStatus} from 'actions/calls';
 import {connectedCallID, connectedChannelID, expandedView, voiceChannelCallStartAt, voiceConnectedChannels, voiceConnectedProfilesInChannel, voiceUsersStatuses} from 'selectors/calls';
+import {getChannelURL} from 'selectors/urls';
 
 import {ActionTypes} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
 import CallWidget from './component';
-
-import {getChannelURL} from '../utils';
 
 const mapStateToProps = (state: GlobalState) => {
     const channel = getChannel(state, connectedChannelID(state));

@@ -3,14 +3,14 @@
 
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
-import type {CSSProperties} from 'react';
 import React from 'react';
-import type {DropResult, DragStart, BeforeCapture} from 'react-beautiful-dnd';
+import type {CSSProperties} from 'react';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
+import type {DropResult, DragStart, BeforeCapture} from 'react-beautiful-dnd';
 import Scrollbars from 'react-custom-scrollbars';
 import {FormattedMessage} from 'react-intl';
-import type {Spring} from 'rebound';
 import {SpringSystem} from 'rebound';
+import type {Spring} from 'rebound';
 
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import type {Channel} from '@mattermost/types/channels';
@@ -22,11 +22,13 @@ import {trackEvent} from 'actions/telemetry_actions';
 
 import ActivityAndInsightsLink
     from 'components/activity_and_insights/activity_and_insights_link/activity_and_insights_link';
+import ConfirmModalRedux from 'components/confirm_modal_redux';
 import DraftsLink from 'components/drafts/drafts_link/drafts_link';
 import GlobalThreadsLink from 'components/threading/global_threads_link';
 
 import * as ChannelUtils from 'utils/channel_utils';
 import {Constants, DraggingStates, DraggingStateTypes, ModalIdentifiers} from 'utils/constants';
+import * as Keyboard from 'utils/keyboard';
 import * as Utils from 'utils/utils';
 
 import type {DraggingState} from 'types/store';
@@ -160,12 +162,6 @@ export default class SidebarList extends React.PureComponent<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props) {
-        // TODO: Copying over so it doesn't get lost, but we don't have a design for the sidebar on mobile yet
-        // close the LHS on mobile when you change channels
-        if (this.props.currentChannelId !== prevProps.currentChannelId || this.props.currentStaticPageId !== prevProps.currentStaticPageId) {
-            this.props.actions.close();
-        }
-
         if (!this.props.currentChannelId || !prevProps.currentChannelId) {
             return;
         }
@@ -179,6 +175,12 @@ export default class SidebarList extends React.PureComponent<Props, State> {
         if (this.props.currentChannelId !== prevProps.currentChannelId) {
             // This will be re-enabled when we can avoid animating the scroll on first load and team switch
             // this.scrollToChannel(this.props.currentChannelId);
+        }
+
+        // TODO: Copying over so it doesn't get lost, but we don't have a design for the sidebar on mobile yet
+        // close the LHS on mobile when you change channels
+        if (this.props.currentChannelId !== prevProps.currentChannelId) {
+            this.props.actions.close();
         }
 
         this.updateUnreadIndicators();
@@ -322,7 +324,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
     };
 
     navigateChannelShortcut = (e: KeyboardEvent) => {
-        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && (Utils.isKeyPressed(e, Constants.KeyCodes.UP) || Utils.isKeyPressed(e, Constants.KeyCodes.DOWN))) {
+        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && (Keyboard.isKeyPressed(e, Constants.KeyCodes.UP) || Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN))) {
             e.preventDefault();
 
             const staticPageIds = this.getDisplayedStaticPageIds();
@@ -332,7 +334,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             const curIndex = allIds.indexOf(curSelectedId);
 
             let nextIndex;
-            if (Utils.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
+            if (Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
                 nextIndex = curIndex + 1;
             } else {
                 nextIndex = curIndex - 1;
@@ -343,13 +345,13 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             if (nextIndex >= staticPageIds.length) {
                 this.scrollToChannel(nextId);
             }
-        } else if (Utils.cmdOrCtrlPressed(e) && e.shiftKey && Utils.isKeyPressed(e, Constants.KeyCodes.K)) {
+        } else if (Keyboard.cmdOrCtrlPressed(e) && e.shiftKey && Keyboard.isKeyPressed(e, Constants.KeyCodes.K)) {
             this.props.handleOpenMoreDirectChannelsModal(e);
         }
     };
 
     navigateUnreadChannelShortcut = (e: KeyboardEvent) => {
-        if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && (Utils.isKeyPressed(e, Constants.KeyCodes.UP) || Utils.isKeyPressed(e, Constants.KeyCodes.DOWN))) {
+        if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && (Keyboard.isKeyPressed(e, Constants.KeyCodes.UP) || Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN))) {
             e.preventDefault();
 
             const allChannelIds = this.getDisplayedChannelIds();
@@ -364,7 +366,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             }
 
             let direction = 0;
-            if (Utils.isKeyPressed(e, Constants.KeyCodes.UP)) {
+            if (Keyboard.isKeyPressed(e, Constants.KeyCodes.UP)) {
                 direction = -1;
             } else {
                 direction = 1;
@@ -386,7 +388,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
     };
 
     markAllAsRead = (e: KeyboardEvent) => {
-        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && Utils.isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
+        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && Keyboard.isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
             e.preventDefault();
             if (this.props.unreadChannelIds.length <= 0) {
                 return;
@@ -418,7 +420,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             };
             this.props.actions.openModal({
                 modalId: ModalIdentifiers.MARK_ALL_AS_READ_MODAL,
-                dialogType: ConfirmModal,
+                dialogType: ConfirmModalRedux,
                 dialogProps: {
                     show: true,
                     title,

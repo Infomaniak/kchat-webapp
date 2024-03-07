@@ -26,7 +26,7 @@
             &:focus,
             &:active:focus {
                 background-color: rgba(var(--center-channel-color-rgb), 0.08);
-                color: rgba(var(--center-channel-color-rgb), 0.72);
+                color: rgba(var(--center-channel-color-rgb), 0.75);
                 opacity: 1;
             }
 
@@ -35,16 +35,16 @@
             width: 24px;
             height: 24px;
             border-radius: 4px;
-            color: rgba(var(--center-channel-color-rgb), 0.56) !important;
+            color: rgba(var(--center-channel-color-rgb), 0.75) !important;
             font-family:
-                'SuisseIntl',
+                'Open Sans',
                 sans-serif;
             font-size: 32px;
             font-weight: 400;
         }
 
         .title {
-            font-family: SuisseIntl, sans-serif;
+            font-family: Metropolis, sans-serif;
             font-size: 22px;
             font-style: normal;
             font-weight: 600;
@@ -55,8 +55,8 @@
         .description {
             margin: 0 auto;
             margin-top: 8px;
-            color: rgba(var(--center-channel-color-rgb), 0.72);
-            font-family: 'SuisseIntl';
+            color: rgba(var(--center-channel-color-rgb), 0.75);
+            font-family: 'Open Sans';
             font-size: 14px;
             font-style: normal;
             font-weight: normal;
@@ -91,8 +91,8 @@
             margin: 0;
             margin-top: 36px;
             margin-bottom: 32px;
-            color: rgba(var(--center-channel-color-rgb), 0.72);
-            font-family: 'SuisseIntl';
+            color: rgba(var(--center-channel-color-rgb), 0.75);
+            font-family: 'Open Sans';
             font-size: 12px;
             font-style: normal;
             font-weight: normal;

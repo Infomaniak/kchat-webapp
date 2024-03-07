@@ -2,21 +2,30 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import {makeGetChannelUnreadCount} from 'mattermost-redux/selectors/entities/channels';
-import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {getCurrentUserId, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getInt} from 'mattermost-redux/selectors/entities/preferences';
 import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 
 import {markMostRecentPostInChannelAsUnread, unsetEditingPost} from 'actions/post_actions';
 import {clearChannelSelection, multiSelectChannelAdd, multiSelectChannelTo} from 'actions/views/channel_sidebar';
 import {closeRightHandSide} from 'actions/views/rhs';
+import {getFirstChannelName} from 'selectors/onboarding';
 import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
 import {isChannelSelected} from 'selectors/views/channel_sidebar';
+
+import {
+    GenericTaskSteps,
+    OnboardingTaskCategory,
+    OnboardingTasksName,
+} from 'components/onboarding_tasks';
+import {FINISHED, OnboardingTourSteps, TutorialTourName} from 'components/tours';
 
 import type {GlobalState} from 'types/store';
 
@@ -46,7 +55,7 @@ function makeMapStateToProps() {
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
             markMostRecentPostInChannelAsUnread,

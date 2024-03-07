@@ -2,42 +2,8 @@
     overflow: hidden;
     height: 100%;
 
-    .shipping-address-section {
-        display: flex;
-        align-content: center;
-        padding: 0 96px;
-        padding-bottom: 28px;
-        font-weight: normal;
-
-        button.no-style {
-            padding-left: 0;
-            background: transparent;
-            outline: unset;
-
-            &:focus {
-                outline: unset;
-            }
-        }
-
-        #address-same-than-billing-address {
-            width: 20px;
-            height: 20px;
-            margin-top: auto;
-            margin-bottom: auto;
-        }
-
-        .Form-checkbox-label {
-            padding-left: 12px;
-            cursor: default;
-            font-family: 'SuisseIntl', sans-serif;
-            vertical-align: middle;
-        }
-
-        .billing_address_btn_text {
-            color: var(--center-channel-color);
-            font-family: 'SuisseIntl', sans-serif;
-            font-weight: normal;
-        }
+    & &__purchase-body {
+        overflow-y: auto;
     }
 
     >div {
@@ -56,13 +22,13 @@
         justify-content: center;
         padding: 40px 107px;
         color: var(--center-channel-color);
-        font-family: "SuisseIntl";
+        font-family: "Open Sans";
         font-size: 16px;
         font-weight: 600;
 
         .footer-text {
             .normal-payment-text {
-                color: rgba(var(--center-channel-color-rgb), 0.72);
+                color: rgba(var(--center-channel-color-rgb), 0.75);
                 font-size: 14px;
             }
 
@@ -82,7 +48,7 @@
 
         .fineprint-text {
             margin-top: 24px;
-            color: rgba(var(--center-channel-color-rgb), 0.72);
+            color: rgba(var(--center-channel-color-rgb), 0.75);
             font-size: 12px;
             line-height: 16px;
         }
@@ -231,7 +197,7 @@
                     justify-content: center;
                     padding: 14px;
                     border-radius: 13px 13px 0 0;
-                    font-family: 'SuisseIntl';
+                    font-family: 'Open Sans';
                     font-size: 12px;
                     font-style: normal;
                     font-weight: 600;
@@ -289,7 +255,7 @@
 
                     .button-description {
                         margin-top: 8px;
-                        font-family: 'SuisseIntl';
+                        font-family: 'Open Sans';
                         font-size: 14px;
                         font-style: normal;
                         font-weight: 400;
@@ -309,7 +275,7 @@
                         .summary-section {
                             background-color: rgba(var(--denim-button-bg-rgb), 0.08);
                             border-radius: 4px;
-                            font-family: 'SuisseIntl';
+                            font-family: 'Metropolis';
 
                             .summary-title {
                                 padding-top: 12px;
@@ -333,7 +299,7 @@
                                 padding-top: 12px;
                                 padding-bottom: 12px;
                                 color: var(--denim-button-bg);
-                                font-family: 'SuisseIntl';
+                                font-family: 'Metropolis';
                                 font-size: 14px;
                                 font-style: normal;
                                 font-weight: 400;
@@ -343,7 +309,7 @@
 
                         h1 {
                             color: var(--center-channel-color);
-                            font-family: 'SuisseIntl';
+                            font-family: 'Metropolis';
                             font-size: 52px;
                             font-style: normal;
                             font-weight: 700;
@@ -355,8 +321,8 @@
                         }
 
                         p {
-                            color: rgba(var(--center-channel-color-rgb), 0.72);
-                            font-family: 'SuisseIntl';
+                            color: rgba(var(--center-channel-color-rgb), 0.75);
+                            font-family: 'Metropolis';
                             font-size: 18px;
                             font-style: normal;
                             line-height: 20px;
@@ -372,8 +338,8 @@
                         text-align: center;
 
                         h4 {
-                            color: rgba(var(--center-channel-color-rgb), 0.72);
-                            font-family: 'SuisseIntl';
+                            color: rgba(var(--center-channel-color-rgb), 0.75);
+                            font-family: 'Metropolis';
                             font-size: 20px;
                             font-style: normal;
                             line-height: 30px;
@@ -387,7 +353,7 @@
                         h1 {
                             margin: 0;
                             color: var(--center-channel-color);
-                            font-family: 'SuisseIntl';
+                            font-family: 'Metropolis';
                             font-size: 52px;
                             font-style: normal;
                             font-weight: 700;
@@ -399,8 +365,8 @@
                         }
 
                         p {
-                            color: rgba(var(--center-channel-color-rgb), 0.72);
-                            font-family: 'SuisseIntl';
+                            color: rgba(var(--center-channel-color-rgb), 0.75);
+                            font-family: 'Metropolis';
                             font-size: 18px;
                             font-style: normal;
                             line-height: 20px;
@@ -428,7 +394,7 @@
 
                         margin-top: 16px;
                         margin-bottom: 24px;
-                        color: rgba(var(--center-channel-color-rgb), 0.72);
+                        color: rgba(var(--center-channel-color-rgb), 0.75);
                         font-size: 12px;
                         font-style: normal;
                         font-weight: 400;
@@ -443,7 +409,7 @@
                             padding-top: 12px;
                             padding-bottom: 12px;
                             color: var(--denim-status-online);
-                            font-family: 'SuisseIntl';
+                            font-family: 'Open Sans';
                             font-size: 14px;
                             font-style: normal;
                             font-weight: 700;
@@ -452,7 +418,7 @@
 
                         .total_price {
                             color: var(--sys-denim-center-channel-text);
-                            font-family: 'SuisseIntl';
+                            font-family: 'Open Sans';
                             font-size: 14px;
                             font-style: normal;
                             font-weight: 700;
@@ -461,7 +427,7 @@
 
                         .monthly_price {
                             color: var(--sys-denim-center-channel-text);
-                            font-family: 'SuisseIntl';
+                            font-family: 'Open Sans';
                             font-size: 14px;
                             font-style: normal;
                             font-weight: 400;
@@ -499,7 +465,7 @@
 
                             .icon-information-outline {
                                 margin: 0;
-                                color: rgba(var(--sys-denim-center-channel-text-rgb), 0.72);
+                                color: rgba(var(--sys-denim-center-channel-text-rgb), 0.75);
                             }
                         }
 
@@ -524,7 +490,7 @@
                     display: flex;
                     flex-direction: column;
                     margin-top: 24px;
-                    color: rgba(var(--center-channel-color-rgb), 0.72);
+                    color: rgba(var(--center-channel-color-rgb), 0.75);
                     font-size: 12px;
                     font-style: normal;
                     font-weight: 400;

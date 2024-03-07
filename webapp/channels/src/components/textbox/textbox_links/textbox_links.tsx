@@ -1,14 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {MouseEvent} from 'react';
 import React from 'react';
+import type {MouseEvent, ReactNode} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
 
 type Props = {
     showPreview?: boolean;
-    previewMessageLink?: string;
+    previewMessageLink?: ReactNode;
     hasText?: boolean;
     hasExceededCharacterLimit?: boolean;
     isMarkdownPreviewEnabled: boolean;
@@ -39,11 +39,7 @@ function TextboxLinks({
     }
 
     if (previewMessageLink) {
-        editHeader = (
-            <span>
-                {previewMessageLink}
-            </span>
-        );
+        editHeader = previewMessageLink;
     } else {
         editHeader = (
             <FormattedMessage

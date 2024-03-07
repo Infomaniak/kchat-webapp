@@ -8,7 +8,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import {GenericModal} from '@mattermost/components';
 
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
+
+// import {deprecateCloudFree} from 'mattermost-redux/selectors/entities/preferences';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {closeModal} from 'actions/views/modals';
@@ -26,8 +27,6 @@ import type {LearnMoreTrialModalStepProps} from './learn_more_trial_modal_step';
 import LearnMoreTrialModalStep from './learn_more_trial_modal_step';
 import StartTrialBtn from './start_trial_btn';
 
-import './learn_more_trial_modal.scss';
-
 type Props = {
     onClose?: () => void;
     onExited: () => void;
@@ -42,7 +41,7 @@ const LearnMoreTrialModal = (
     }: Props): JSX.Element | null => {
     const {formatMessage} = useIntl();
     const [embargoed, setEmbargoed] = useState(false);
-    const dispatch = useDispatch<DispatchFunc>();
+    const dispatch = useDispatch();
 
     // Cloud conditions
     const license = useSelector(getLicense);
@@ -170,6 +169,7 @@ const LearnMoreTrialModal = (
 
     return (
         <GenericModal
+            compassDesign={true}
             className='LearnMoreTrialModal'
             id='learnMoreTrialModal'
             onExited={handleOnClose}

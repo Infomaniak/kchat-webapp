@@ -8,8 +8,8 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {getCloudSubscription, getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
+import {deprecateCloudFree} from 'mattermost-redux/selectors/entities/preferences';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {openModal} from 'actions/views/modals';
 
@@ -31,7 +31,8 @@ const MenuCloudTrial = ({id}: Props): JSX.Element | null => {
     const subscription = useSelector(getCloudSubscription);
     const subscriptionProduct = useSelector(getSubscriptionProduct);
     const license = useSelector(getLicense);
-    const dispatch = useDispatch<DispatchFunc>();
+    const cloudFreeDeprecated = useSelector(deprecateCloudFree);
+    const dispatch = useDispatch();
 
     const isCloud = license?.Cloud === 'true';
     const isFreeTrial = subscription?.is_free_trial === 'true';
@@ -108,7 +109,7 @@ const MenuCloudTrial = ({id}: Props): JSX.Element | null => {
     );
 
     // menu option displayed when the workspace is not running any trial
-    const noFreeTrialContent = noPriorTrial ? (
+    const noFreeTrialContent = (noPriorTrial && !cloudFreeDeprecated) ? (
         <FormattedMessage
             id='menu.cloudFree.priorTrial.tryEnterprise'
             defaultMessage='Interested in a limitless plan with high-security features? <openModalLink>Try Enterprise free for 30 days</openModalLink>'

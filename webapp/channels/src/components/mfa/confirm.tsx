@@ -9,7 +9,7 @@ import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 import Constants from 'utils/constants';
-import {isKeyPressed} from 'utils/utils';
+import {isKeyPressed} from 'utils/keyboard';
 
 const KeyCodes = Constants.KeyCodes;
 

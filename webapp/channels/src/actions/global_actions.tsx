@@ -11,7 +11,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import {ChannelTypes} from 'mattermost-redux/action_types';
 import {fetchAppBindings} from 'mattermost-redux/actions/apps';
 import {
-    fetchMyChannelsAndMembersREST,
+    fetchChannelsAndMembers,
     getChannelByNameAndTeamName,
     getChannelStats,
     selectChannel,
@@ -21,14 +21,13 @@ import {Preferences} from 'mattermost-redux/constants';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedirectChannelNameForTeam, getChannelsNameMapInTeam, getAllDirectChannels, getChannelMessageCount} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
-import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getBool, getIsOnboardingFlowEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getTeam, getMyTeamMember, getTeamMemberships, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import {getCurrentUser, getCurrentUserId, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import type {ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
 import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
 import {handleNewPost} from 'actions/post_actions';
-import {stopPeriodicStatusUpdates} from 'actions/status_actions';
 import {loadProfilesForSidebar} from 'actions/user_actions';
 import {clearUserCookie} from 'actions/views/cookie';
 import {close as closeLhs} from 'actions/views/lhs';
@@ -175,8 +174,8 @@ export function showMobileSubMenuModal(elements: any[]) { // TODO Use more speci
     dispatch(openModal(submenuModalData));
 }
 
-export function sendEphemeralPost(message: string, channelId?: string, parentId?: string, userId?: string): ActionFunc {
-    return (doDispatch: DispatchFunc, doGetState: GetStateFunc) => {
+export function sendEphemeralPost(message: string, channelId?: string, parentId?: string, userId?: string): ActionFuncAsync<boolean, GlobalState> {
+    return (doDispatch, doGetState) => {
         const timestamp = Utils.getTimestamp();
         const post = {
             id: Utils.generateId(),
@@ -184,25 +183,6 @@ export function sendEphemeralPost(message: string, channelId?: string, parentId?
             channel_id: channelId || getCurrentChannelId(doGetState()),
             message,
             type: PostTypes.EPHEMERAL,
-            create_at: timestamp,
-            update_at: timestamp,
-            root_id: parentId || '',
-            props: {},
-        } as Post;
-
-        return doDispatch(handleNewPost(post));
-    };
-}
-
-export function sendGenericPostMessage(message: string, channelId?: string, parentId?: string, userId?: string): ActionFunc {
-    return (doDispatch: DispatchFunc, doGetState: GetStateFunc) => {
-        const timestamp = Utils.getTimestamp();
-        const post = {
-            id: Utils.generateId(),
-            user_id: userId || '0',
-            channel_id: channelId || getCurrentChannelId(doGetState()),
-            message,
-            type: PostTypes.SYSTEM_GENERIC,
             create_at: timestamp,
             update_at: timestamp,
             root_id: parentId || '',
@@ -235,7 +215,7 @@ export function sendAddToChannelEphemeralPost(user: UserProfile, addedUsername: 
 
 let lastTimeTypingSent = 0;
 export function emitLocalUserTypingEvent(channelId: string, parentPostId: string) {
-    const userTyping = async (actionDispatch: DispatchFunc, actionGetState: GetStateFunc) => {
+    const userTyping: ActionFuncAsync = async (actionDispatch, actionGetState) => {
         const state = actionGetState();
         const config = getConfig(state);
 
@@ -284,7 +264,6 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             (window as any).authManager.logout();
         }
 
-        stopPeriodicStatusUpdates();
         WebsocketActions.close();
 
         clearUserCookie();
@@ -321,8 +300,8 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
     });
 }
 
-export function toggleSideBarRightMenuAction() {
-    return (doDispatch: DispatchFunc) => {
+export function toggleSideBarRightMenuAction(): ThunkActionFunc<void> {
+    return (doDispatch) => {
         doDispatch(closeRightHandSide());
         doDispatch(closeLhs());
         doDispatch(closeRhsMenu());
@@ -348,7 +327,7 @@ export async function getTeamRedirectChannelIfIsAccesible(user: UserProfile, tea
     let teamChannels = getChannelsNameMapInTeam(state, team.id);
     if (!teamChannels || Object.keys(teamChannels).length === 0) {
         // This should be executed in pretty limited scenarios (empty teams)
-        await dispatch(fetchMyChannelsAndMembersREST(team.id)); // eslint-disable-line no-await-in-loop
+        await dispatch(fetchChannelsAndMembers(team.id)); // eslint-disable-line no-await-in-loop
         state = getState();
         teamChannels = getChannelsNameMapInTeam(state, team.id);
     }
@@ -393,6 +372,7 @@ export async function redirectUserToDefaultTeam() {
     // Assume we need to load the user if they don't have any team memberships loaded or the user loaded
     let user = getCurrentUser(state);
     const shouldLoadUser = Utils.isEmptyObject(getTeamMemberships(state)) || !user;
+    // const onboardingFlowEnabled = getIsOnboardingFlowEnabled(state);
 
     if (shouldLoadUser) {
         await dispatch(loadMe());
@@ -409,8 +389,10 @@ export async function redirectUserToDefaultTeam() {
 
     let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
-        getHistory().push('/error?type=no_ksuite');
-        return;
+        // if (isUserFirstAdmin && onboardingFlowEnabled) {
+            getHistory().push('/error?type=no_ksuite');
+            return;
+        // }
     }
 
     let team: Team | undefined;

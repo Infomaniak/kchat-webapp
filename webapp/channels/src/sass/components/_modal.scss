@@ -17,7 +17,7 @@
 .modal-body {
     overflow: auto;
     max-height: calc(90vh - 80px);
-    padding: 32px 40px 0;
+    padding: 2px 32px;
 
     &.overflow--visible {
         overflow: visible;
@@ -41,91 +41,12 @@
 
 .app__body {
     .modal {
+        color: rgb(var(--center-channel-color-rgb));
+
         .modal-content {
-            // border-color: rgba(var(--center-channel-color-rgb), 0.16);
-            background: v(center-channel-bg);
-            color: v(center-channel-color);
-            border: unset;
-            border-radius: 12px 12px;
-        }
-
-        .modal-header {
-            background: var(--ik-modal-header);
-            border-radius: 12px 12px 0 0;
-            padding: 16px 40px 16px;
-            align-items: center;
-
-            .modal-title {
-                font-weight: 400;
-            }
-        }
-        .modal-footer {
-            border-radius: 0 0 12px 12px;
-            padding: 18px 32px 32px 32px;
-            display: flex;
-            justify-content: space-between;
-            & > :only-child {
-                // align element to the right if it is the only child
-                margin-left: auto;
-            }
-            &::before,
-            &::after {
-                display: none;
-            }
-            .btn-link {
-                // remove text underline on all modals
-                text-decoration: none;
-            }
-        }
-        .modal-body .filter-row .save-button {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 0;
-            border-radius: 4px;
-            color: var(--button-color);
-            font-weight: 600;
-            transition: all 0.15s ease-out;
-            height: 40px;
-            padding: 0 20px;
-            padding-top: 0px;
-            padding-right: 20px;
-            padding-bottom: 0px;
-            padding-left: 20px;
-            font-size: 14px;
-            line-height: 14px;
-        }
-        .modal-footer,
-        // .modal-header,
-        .filter-controls {
-            button:not(.close) {
-                position: relative;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                border: 0;
-                border-radius: 4px;
-                font-weight: 600;
-                transition: all 0.15s ease-out;
-                height: 40px;
-                padding: 0 20px;
-                padding-top: 0px;
-                padding-right: 20px;
-                padding-bottom: 0px;
-                padding-left: 20px;
-                font-size: 14px;
-                line-height: 14px;
-                &:not(.btn-danger) {
-                    color: var(--button-color);
-                    background-color: var(--button-bg);
-                }
-            }
-            button.secondary:not(.close) {
-                margin-right: 8px;
-                background: var(--ik-btn-secondary);
-                color: var(--ik-btn-secondary-color);
-            }
+            border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+            background: var(--center-channel-bg);
+            border-radius: 12px;
         }
     }
 
@@ -149,6 +70,16 @@
             }
         }
 
+        .textarea-wrapper-preview {
+            .custom-textarea.textbox-preview-area {
+                display: block;
+            }
+
+            .textbox-edit-area {
+                display: none;
+            }
+        }
+
         .edit-post-footer {
             position: relative;
             display: inline-block;
@@ -160,7 +91,7 @@
                 margin-bottom: 0;
                 font-size: 0.85em;
                 font-weight: normal;
-                opacity: 0.55;
+                opacity: 0.75;
             }
         }
     }
@@ -196,7 +127,7 @@
 
 .modal {
     width: 100%;
-    color: alpha-color($black, 0.9);
+    color: v(center-channel-color);
 
     .modal--overflow {
         .modal-body {
@@ -209,8 +140,16 @@
     }
 
     .modal-footer {
-        background: var(--center-channel-bg);
-        border-top: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: end;
+        padding: 24px 32px;
+        border: none;
+        grid-row-gap: 8px;
+
+        &.divider {
+            border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+        }
 
         &.modal-footer--invisible {
             overflow: hidden;
@@ -248,7 +187,7 @@
         margin-bottom: 3px;
         font-size: 0.9em;
         font-weight: 600;
-        opacity: 0.5;
+        opacity: 0.75;
     }
 
     .info__value {
@@ -278,7 +217,6 @@
 
     .modal-dialog {
         max-width: 95%;
-        margin-top: calc(50vh - 240px);
         margin-right: auto;
         margin-bottom: 0;
         margin-left: auto;
@@ -316,88 +254,75 @@
 
     .modal-header {
         display: flex;
-        min-height: 56px;
-        padding: 14px 48px 11px 15px;
-        // border: 1px solid $light-gray;
-        background: #333;
-        border-radius: 0;
-        border-radius: 3px 3px 0 0;
-        color: $white;
+        min-height: 76px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 64px 16px 32px;
+        border: none;
+        background: transparent;
 
-        @include clearfix;
-
-        .modal-title {
-            overflow: hidden;
-            max-width: calc(100% - 40px);
-            flex: 0.9;
-            color: var(--center-channel-color);
-            font-size: 20px;
-            line-height: 27px;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-weight: 400;
-
-            .name {
-                font-weight: 600;
-            }
-
-            .shared-channel-icon {
-                width: 16px;
-                height: 16px;
-                margin: 0 8px;
-                color: #3d3c40;
-                font-size: 16px;
-                line-height: 16px;
-
-                &::before {
-                    margin: 0;
-                }
-            }
+        &.divider {
+            border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
         }
 
-        .modal-action {
-            padding: 0;
-            margin: 0;
+        &::before,
+        &::after {
+            content: none;
+        }
+
+        .btn {
+            position: relative;
+            top: -2px;
         }
 
         .close {
             position: absolute;
-            z-index: 5;
-            width: 18px;
-            height: 18px;
-            top: 18px;
-            right: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            color: rgba(var(--center-channel-color-rgb), 0.56);
-            font-size: 32px;
-            line-height: 18px;
-            font-weight: 400;
-            text-shadow: none;
-            opacity: 0.7;
-            &:hover {
-                opacity: 0.7;
-            }
-            .sr-only {
-                display: none;
-            }
+
+            // Infomaniak
             span {
                 font-family: "SuisseIntl", sans-serif;
                 line-height: 10px;
             }
+
+            top: 18px;
+            right: 18px;
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            color: rgba(var(--center-channel-color-rgb), 0.64);
+            font-size: 30px;
+            font-weight: 400;
+            opacity: 1;
+            text-shadow: none;
+
+            &.icon-close {
+                font-size: 24px;
+            }
+
+            &:hover {
+                background: rgba(var(--center-channel-color-rgb), 0.08);
+                color: rgba(var(--center-channel-color-rgb), 0.8);
+            }
+
+            &:active {
+                background: rgba(var(--button-bg-rgb), 0.08);
+                color: v(button-bg);
+            }
+
+            .modal-title {
+                width: 100%;
+                background: transparent;
+                color: v(center-channel-color);
+                font-size: 22px;
+                line-height: 28px;
+            }
         }
 
-        .btn {
-            &.btn-primary {
-                position: relative;
-                margin-top: -4px;
-
-                i {
-                    margin-right: 5px;
-                }
-            }
+        .modal-title {
+            background: transparent;
+            color: v(center-channel-color);
+            font-size: 22px;
+            line-height: 28px;
         }
     }
 
@@ -412,10 +337,9 @@
     }
 
     .modal-content {
-        // border: 1px solid #777;
-        background: #fff;
-        border-radius: 4px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        border: 1px solid rgba(var(--sys-center-channel-color-rgb), 0.16);
+        background: var(--sys-center-channel-bg);
+        border-radius: 12px;
     }
 
     .modal-chevron-icon {
@@ -561,20 +485,6 @@
                 max-height: 100%;
             }
 
-            .modal-close {
-                position: absolute;
-                z-index: 9999;
-                top: -13px;
-                right: -13px;
-                width: 37px;
-                height: 37px;
-                background-image: url("../images/close.png");
-                background-size: 100% 100%;
-                cursor: pointer;
-                opacity: 1;
-                transition: opacity 0.6s;
-            }
-
             .modal-zoom-btn {
                 margin-right: 6px;
                 margin-left: 6px;
@@ -639,21 +549,6 @@
             border: none;
             background: alpha-color($black, 0);
             box-shadow: none;
-        }
-
-        .image-control {
-            position: relative;
-            top: 50%;
-            width: 50px;
-            height: 45px;
-            margin-top: -23px;
-            background: url("../images/prev.png") left no-repeat;
-            float: left;
-
-            &.image-next {
-                background: url("../images/next.png") left no-repeat;
-                float: right;
-            }
         }
 
         .loader-image {
@@ -771,13 +666,18 @@
     }
 
     .modal-body {
-        padding: 10px 0 15px;
-        overflow: hidden;
+        padding: 0;
+        overflow-x: hidden;
     }
 
     .filter-row {
-        width: 400px;
+        padding: 0 16px;
         margin: 5px 0 10px;
+
+        .form-control {
+            height: 40px;
+            padding: 0 16px;
+        }
 
         &.filter-row--full {
             width: 100%;
@@ -943,7 +843,7 @@
             height: 16px;
             margin-top: 0;
             margin-left: 8px;
-            color: rgba(61, 60, 64, 0.72);
+            color: rgba(61, 60, 64, 0.75);
             font-size: 16px;
             line-height: 16px;
 
@@ -963,12 +863,12 @@
 
             .more-modal__name_sub {
                 font-weight: 500;
-                opacity: 0.5;
+                opacity: 0.75;
             }
 
             .more-modal__name_count {
                 font-weight: 400;
-                opacity: 0.6;
+                opacity: 0.75;
             }
 
             svg {
@@ -1028,8 +928,8 @@
         display: flex;
         min-height: 65px;
         align-items: center;
-        padding: 10px 15px;
-        border-bottom: 1px solid $light-gray;
+        padding: 10px 32px;
+        border-top: 1px solid $light-gray;
 
         &.clickable {
             cursor: pointer;
@@ -1052,7 +952,7 @@
         }
 
         .more-modal__shared-actions {
-            color: rgba(61, 60, 64, 0.72);
+            color: rgba(61, 60, 64, 0.75);
 
             .shared-user-icon {
                 width: 16px;
@@ -1092,7 +992,7 @@
         width: 32px;
         height: 32px;
         line-height: 32px;
-        opacity: 0.5;
+        opacity: 0.75;
         text-align: center;
     }
 
@@ -1161,7 +1061,37 @@
     }
 
     .filter-controls {
-        padding: 1em 1.5em 0;
+        padding: 24px 32px;
+        border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+
+        // infomaniak
+        button:not(.close) {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.15s ease-out;
+            height: 40px;
+            padding: 0 20px;
+            padding-top: 0px;
+            padding-right: 20px;
+            padding-bottom: 0px;
+            padding-left: 20px;
+            font-size: 14px;
+            line-height: 14px;
+            &:not(.btn-danger) {
+                color: var(--button-color);
+                background-color: var(--button-bg);
+            }
+        }
+        button.secondary:not(.close) {
+            margin-right: 8px;
+            background: var(--ik-btn-secondary);
+            color: var(--ik-btn-secondary-color);
+        }
 
         .filter-control__next {
             float: right;

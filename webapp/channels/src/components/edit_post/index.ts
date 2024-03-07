@@ -2,10 +2,10 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
-import {addMessageIntoHistory, getPostEditHistory} from 'mattermost-redux/actions/posts';
+import {addMessageIntoHistory} from 'mattermost-redux/actions/posts';
 import {Preferences, Permissions} from 'mattermost-redux/constants';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
@@ -14,21 +14,20 @@ import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles'
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
+import {runMessageWillBeUpdatedHooks} from 'actions/hooks';
 import {unsetEditingPost} from 'actions/post_actions';
+import {setGlobalItem} from 'actions/storage';
 import {scrollPostListToBottom} from 'actions/views/channel';
 import {openModal} from 'actions/views/modals';
 import {editPost} from 'actions/views/posts';
 import {getEditingPost} from 'selectors/posts';
+import {getIsRhsOpen, getPostDraft, getRhsState} from 'selectors/rhs';
 
 import Constants, {RHSStates, StoragePrefixes} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
-import type {Actions} from './edit_post';
 import EditPost from './edit_post';
-
-import {setGlobalItem} from '../../actions/storage';
-import {getIsRhsOpen, getPostDraft, getRhsState} from '../../selectors/rhs';
 
 function mapStateToProps(state: GlobalState) {
     const config = getConfig(state);
@@ -65,14 +64,14 @@ function mapStateToProps(state: GlobalState) {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<any>, Actions>({
+        actions: bindActionCreators({
             scrollPostListToBottom,
             addMessageIntoHistory,
             editPost,
             setDraft: setGlobalItem,
             unsetEditingPost,
             openModal,
-            getPostEditHistory,
+            runMessageWillBeUpdatedHooks,
         }, dispatch),
     };
 }

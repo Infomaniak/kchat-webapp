@@ -2,20 +2,19 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, defineMessages} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import type {GlobalState} from '@mattermost/types/store';
 
 import {getCloudCustomer} from 'mattermost-redux/actions/cloud';
 import {getCloudErrors} from 'mattermost-redux/selectors/entities/cloud';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {pageVisited} from 'actions/telemetry_actions';
 
 import AlertBanner from 'components/alert_banner';
 import CloudFetchError from 'components/cloud_fetch_error';
-import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
+import AdminHeader from 'components/widgets/admin_console/admin_header';
 
 import PaymentInfoDisplay from './payment_info_display';
 
@@ -23,8 +22,16 @@ import './payment_info.scss';
 
 type Props = Record<string, never>;
 
+const messages = defineMessages({
+    title: {id: 'admin.billing.payment_info.title', defaultMessage: 'Payment Information'},
+});
+
+export const searchableStrings = [
+    messages.title,
+];
+
 const PaymentInfo: React.FC<Props> = () => {
-    const dispatch = useDispatch<DispatchFunc>();
+    const dispatch = useDispatch();
     const {customer: customerError} = useSelector(getCloudErrors);
 
     const isCardAboutToExpire = useSelector((state: GlobalState) => {
@@ -58,10 +65,9 @@ const PaymentInfo: React.FC<Props> = () => {
 
     return (
         <div className='wrapper--fixed PaymentInfo'>
-            <FormattedAdminHeader
-                id='admin.billing.payment_info.title'
-                defaultMessage='Payment Information'
-            />
+            <AdminHeader>
+                <FormattedMessage {...messages.title}/>
+            </AdminHeader>
             <div className='admin-console__wrapper'>
                 <div className='admin-console__content'>
                     {showCreditCardBanner && isCardAboutToExpire && (

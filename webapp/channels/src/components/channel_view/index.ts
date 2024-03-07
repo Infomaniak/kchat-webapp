@@ -37,6 +37,7 @@ function mapStateToProps(state: GlobalState) {
     const enableOnboardingFlow = config.EnableOnboardingFlow === 'true';
     const myChannelMemberships = getMyChannelMemberships(state);
     const isMember = channel ? Boolean(myChannelMemberships[channel.id]) : false;
+    const enableWebSocketEventScope = config.FeatureFlagWebSocketEventScope === 'true';
 
     return {
         channelId: channel ? channel.id : '',
@@ -49,6 +50,7 @@ function mapStateToProps(state: GlobalState) {
         teamUrl: getCurrentRelativeTeamUrl(state),
         isFirstAdmin: isFirstAdmin(state),
         isMember,
+        enableWebSocketEventScope,
     };
 }
 

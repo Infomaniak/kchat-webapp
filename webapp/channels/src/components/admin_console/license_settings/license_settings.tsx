@@ -2,10 +2,12 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 import type {StatusOK} from '@mattermost/types/client4';
 import type {ClientLicense} from '@mattermost/types/config';
 import type {ServerError} from '@mattermost/types/errors';
+import type {UsersLimits} from '@mattermost/types/limits';
 import type {GetFilteredUsersStatsOpts, UsersStats} from '@mattermost/types/users';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
@@ -13,20 +15,20 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import ExternalLink from 'components/external_link';
-import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
+import AdminHeader from 'components/widgets/admin_console/admin_header';
 
 import {AboutLinks, CloudLinks, ModalIdentifiers} from 'utils/constants';
 import {isLicenseExpired, isLicenseExpiring, isTrialLicense, isEnterpriseOrE20License, licenseSKUWithFirstLetterCapitalized} from 'utils/license_utils';
 
 import type {ModalData} from 'types/actions';
 
-import EnterpriseEditionLeftPanel from './enterprise_edition/enterprise_edition_left_panel';
+import EnterpriseEditionLeftPanel, {messages as enterpriseEditionLeftPanelMessages} from './enterprise_edition/enterprise_edition_left_panel';
 import EnterpriseEditionRightPanel from './enterprise_edition/enterprise_edition_right_panel';
 import ConfirmLicenseRemovalModal from './modals/confirm_license_removal_modal';
 import EELicenseModal from './modals/ee_license_modal';
 import UploadLicenseModal from './modals/upload_license_modal';
 import RenewLinkCard from './renew_license_card/renew_license_card';
-import StarterLeftPanel from './starter_edition/starter_left_panel';
+import StarterLeftPanel, {messages as licenseSettingsStarterEditionMessages} from './starter_edition/starter_left_panel';
 import StarterRightPanel from './starter_edition/starter_right_panel';
 import TeamEditionLeftPanel from './team_edition/team_edition_left_panel';
 import TeamEditionRightPanel from './team_edition/team_edition_right_panel';
@@ -45,20 +47,31 @@ type Props = {
     actions: {
         getLicenseConfig: () => void;
         uploadLicense: (file: File) => Promise<ActionResult>;
-        removeLicense: () => Promise<ActionResult>;
+        removeLicense: () => Promise<ActionResult<boolean, ServerError>>;
         getPrevTrialLicense: () => void;
         upgradeToE0: () => Promise<StatusOK>;
-        upgradeToE0Status: () => Promise<{percentage: number; error: string | JSX.Element}>;
+        upgradeToE0Status: () => Promise<{percentage: number; error: string | JSX.Element | null}>;
         restartServer: () => Promise<StatusOK>;
         ping: () => Promise<{status: string}>;
         requestTrialLicense: (users: number, termsAccepted: boolean, receiveEmailsAccepted: boolean, featureName: string) => Promise<ActionResult>;
         openModal: <P>(modalData: ModalData<P>) => void;
+        getUsersLimits: () => Promise<ActionResult<UsersLimits, ServerError>>;
         getFilteredUsersStats: (filters: GetFilteredUsersStatsOpts) => Promise<{
             data?: UsersStats;
             error?: ServerError;
         }>;
     };
 }
+
+const messages = defineMessages({
+    title: {id: 'admin.license.title', defaultMessage: 'Edition and License'},
+});
+
+export const searchableStrings = [
+    licenseSettingsStarterEditionMessages.key,
+    enterpriseEditionLeftPanelMessages.keyRemove,
+    messages.title,
+];
 
 type State = {
     fileSelected: boolean;
@@ -178,8 +191,13 @@ export default class LicenseSettings extends React.PureComponent<Props, State> {
             return;
         }
 
-        this.props.actions.getPrevTrialLicense();
-        await this.props.actions.getLicenseConfig();
+        await Promise.all([
+            this.props.actions.getPrevTrialLicense(),
+            this.props.actions.getLicenseConfig(),
+        ]);
+
+        await this.props.actions.getUsersLimits();
+
         this.setState({serverError: null, removing: false});
     };
 
@@ -198,23 +216,6 @@ export default class LicenseSettings extends React.PureComponent<Props, State> {
             trackEvent('api', 'upgrade_to_e0_failed', {error: error.message as string});
             this.setState({upgradeError: error.message, upgradingPercentage: 0});
         }
-    };
-
-    requestLicense = async (e?: React.MouseEvent<HTMLButtonElement>) => {
-        if (e) {
-            e.preventDefault();
-        }
-        if (this.state.gettingTrial) {
-            return;
-        }
-        this.setState({gettingTrial: true, gettingTrialError: null});
-        const requestedUsers = Math.max(this.props.totalUsers, 30) || 30;
-        const {error, data} = await this.props.actions.requestTrialLicense(requestedUsers, true, true, 'license');
-        if (error) {
-            this.setState({gettingTrialError: error});
-        }
-        this.setState({gettingTrial: false, gettingTrialResponseCode: data?.status});
-        await this.props.actions.getLicenseConfig();
     };
 
     checkRestarted = () => {
@@ -347,11 +348,9 @@ export default class LicenseSettings extends React.PureComponent<Props, State> {
 
         return (
             <div className='wrapper--fixed'>
-                <FormattedAdminHeader
-                    id='admin.license.title'
-                    defaultMessage='Edition and License'
-                />
-
+                <AdminHeader>
+                    <FormattedMessage {...messages.title}/>
+                </AdminHeader>
                 <div className='admin-console__wrapper'>
                     <div className='admin-console__content'>
                         <div className='admin-console__banner_section'>
@@ -361,7 +360,6 @@ export default class LicenseSettings extends React.PureComponent<Props, State> {
                                     isDisabled={isDisabled}
                                     gettingTrialResponseCode={this.state.gettingTrialResponseCode}
                                     gettingTrialError={this.state.gettingTrialError}
-                                    requestLicense={this.requestLicense}
                                     gettingTrial={this.state.gettingTrial}
                                     enterpriseReady={this.props.enterpriseReady}
                                     upgradingPercentage={this.state.upgradingPercentage}

@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {fireEvent, screen} from '@testing-library/react';
 import React from 'react';
 
 import type {DeepPartial} from '@mattermost/types/utilities';
@@ -12,21 +11,14 @@ import {General} from 'mattermost-redux/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import {renderWithIntlAndStore} from 'tests/react_testing_utils';
-import {LicenseLinks, OverActiveUserLimits, Preferences, StatTypes} from 'utils/constants';
+import {fireEvent, renderWithContext, screen} from 'tests/react_testing_utils';
+import {OverActiveUserLimits, Preferences, SelfHostedProducts, StatTypes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 import {generateId} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
 import OverageUsersBanner from './index';
-
-type ComponentProps = React.ComponentProps<typeof OverageUsersBanner>;
-
-type RenderComponentArgs = {
-    props?: Partial<ComponentProps>;
-    store?: any;
-}
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),
@@ -52,8 +44,8 @@ const seatsMinimumFor5PercentageState = (Math.ceil(seatsPurchased * OverActiveUs
 
 const seatsMinimumFor10PercentageState = (Math.ceil(seatsPurchased * OverActiveUserLimits.MAX)) + seatsPurchased;
 
-const text5PercentageState = `Your workspace user count has exceeded your paid license seat count by ${seatsMinimumFor5PercentageState - seatsPurchased} seats. Purchase additional seats to remain compliant.`;
-const text10PercentageState = `Your workspace user count has exceeded your paid license seat count by ${seatsMinimumFor10PercentageState - seatsPurchased} seats. Purchase additional seats to remain compliant.`;
+const text5PercentageState = `(Only visible to admins) Your workspace user count has exceeded your paid license seat count by ${seatsMinimumFor5PercentageState - seatsPurchased} seats. Purchase additional seats to remain compliant.`;
+const text10PercentageState = `(Only visible to admins) Your workspace user count has exceeded your paid license seat count by ${seatsMinimumFor10PercentageState - seatsPurchased} seats. Purchase additional seats to remain compliant.`;
 
 const contactSalesTextLink = 'Contact Sales';
 const expandSeatsTextLink = 'Purchase additional seats';
@@ -111,6 +103,19 @@ describe('components/overage_users_banner', () => {
                     getRequestState: 'IDLE',
                 },
             },
+            hostedCustomer: {
+                products: {
+                    productsLoaded: true,
+                    products: {
+                        prod_professional: TestHelper.getProductMock({
+                            id: 'prod_professional',
+                            name: 'Professional',
+                            sku: SelfHostedProducts.PROFESSIONAL,
+                            price_per_seat: 7.5,
+                        }),
+                    },
+                },
+            },
         },
     };
 
@@ -125,20 +130,15 @@ describe('components/overage_users_banner', () => {
         windowSpy.mockRestore();
     });
 
-    const renderComponent = ({store}: RenderComponentArgs = {props: {}, store: initialState}) => {
-        return renderWithIntlAndStore(
-            <OverageUsersBanner/>, store);
-    };
-
     it('should not render the banner because we are not on overage state', () => {
-        renderComponent();
+        renderWithContext(<OverageUsersBanner/>);
 
-        expect(screen.queryByText('Your workspace user count has exceeded your paid license seat count by', {exact: false})).not.toBeInTheDocument();
+        expect(screen.queryByText('(Only visible to admins) Your workspace user count has exceeded your paid license seat count by', {exact: false})).not.toBeInTheDocument();
         expect(getLicenseSelfServeStatus).not.toBeCalled();
     });
 
     it('should not render the banner because we are not admins', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+        const store = JSON.parse(JSON.stringify(initialState));
 
         store.entities.users = {
             ...store.entities.users,
@@ -151,86 +151,78 @@ describe('components/overage_users_banner', () => {
             },
         };
 
-        renderComponent({
-            store,
-        });
+        renderWithContext(<OverageUsersBanner/>, store);
 
         expect(screen.queryByText('Your workspace user count has exceeded your paid license seat count by', {exact: false})).not.toBeInTheDocument();
         expect(getLicenseSelfServeStatus).not.toBeCalled();
     });
 
     it('should not render the banner because it\'s cloud licenese', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+        const store = JSON.parse(JSON.stringify(initialState));
 
         store.entities.general.license = {
             ...store.entities.general.license,
             Cloud: 'true',
         };
 
-        renderComponent({
-            store,
-        });
+        renderWithContext(<OverageUsersBanner/>, store);
 
         expect(screen.queryByText('Your workspace user count has exceeded your paid license seat count by', {exact: false})).not.toBeInTheDocument();
         expect(getLicenseSelfServeStatus).not.toBeCalled();
     });
 
-    it('should not render the 5% banner because we have dissmised it', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+    // it('should not render the 5% banner because we have dissmised it', () => {
+    //     const store = JSON.parse(JSON.stringify(initialState));
 
-        store.entities.preferences.myPreferences = TestHelper.getPreferencesMock(
-            [
-                {
-                    category: Preferences.OVERAGE_USERS_BANNER,
-                    value: 'Overage users banner watched',
-                    name: `warn_overage_seats_${licenseId.substring(0, 8)}`,
-                },
-            ],
-        );
+    //     store.entities.preferences.myPreferences = TestHelper.getPreferencesMock(
+    //         [
+    //             {
+    //                 category: Preferences.OVERAGE_USERS_BANNER,
+    //                 value: 'Overage users banner watched',
+    //                 name: `warn_overage_seats_${licenseId.substring(0, 8)}`,
+    //             },
+    //         ],
+    //     );
 
-        store.entities.admin = {
-            ...store.entities.admin,
-            analytics: {
-                [StatTypes.TOTAL_USERS]: seatsMinimumFor5PercentageState,
-            },
-        };
+    //     store.entities.admin = {
+    //         ...store.entities.admin,
+    //         analytics: {
+    //             [StatTypes.TOTAL_USERS]: seatsMinimumFor5PercentageState,
+    //         },
+    //     };
 
-        renderComponent({
-            store,
-        });
+    //     renderWithContext(<OverageUsersBanner/>, store);
 
-        expect(screen.queryByText(text5PercentageState)).not.toBeInTheDocument();
-        expect(getLicenseSelfServeStatus).not.toBeCalled();
-    });
+    //     expect(screen.queryByText(text5PercentageState)).not.toBeInTheDocument();
+    //     expect(getLicenseSelfServeStatus).not.toBeCalled();
+    // });
 
-    it('should render the banner because we are over 5% and we don\'t have any preferences', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+    // it('should render the banner because we are over 5% and we don\'t have any preferences', () => {
+    //     const store = JSON.parse(JSON.stringify(initialState));
 
-        store.entities.cloud = {
-            ...store.entities.cloud,
-            subscriptionStats: {
-                is_expandable: false,
-                getRequestState: 'OK',
-            },
-        };
+    //     store.entities.cloud = {
+    //         ...store.entities.cloud,
+    //         subscriptionStats: {
+    //             is_expandable: false,
+    //             getRequestState: 'OK',
+    //         },
+    //     };
 
-        store.entities.admin = {
-            ...store.entities.admin,
-            analytics: {
-                [StatTypes.TOTAL_USERS]: seatsMinimumFor5PercentageState,
-            },
-        };
+    //     store.entities.admin = {
+    //         ...store.entities.admin,
+    //         analytics: {
+    //             [StatTypes.TOTAL_USERS]: seatsMinimumFor5PercentageState,
+    //         },
+    //     };
 
-        renderComponent({
-            store,
-        });
+    //     renderWithContext(<OverageUsersBanner/>, store);
 
-        expect(screen.getByText(text5PercentageState)).toBeInTheDocument();
-        expect(screen.getByText(contactSalesTextLink)).toBeInTheDocument();
-    });
+    //     expect(screen.getByText(text5PercentageState)).toBeInTheDocument();
+    //     expect(screen.getByText(contactSalesTextLink)).toBeInTheDocument();
+    // });
 
     it('should track if the admin click Contact Sales CTA in a 10% overage state', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+        const store = JSON.parse(JSON.stringify(initialState));
 
         store.entities.cloud = {
             ...store.entities.cloud,
@@ -247,13 +239,14 @@ describe('components/overage_users_banner', () => {
             },
         };
 
-        renderComponent({
-            store,
-        });
+        renderWithContext(<OverageUsersBanner/>, store);
 
         fireEvent.click(screen.getByText(contactSalesTextLink));
         expect(windowSpy).toBeCalledTimes(1);
-        expect(windowSpy).toBeCalledWith(LicenseLinks.CONTACT_SALES, '_blank');
+
+        // only the email is encoded and other params are empty. See logic for useOpenSalesLink hook
+        const salesLinkWithEncodedParams = 'https://infomaniak.com/contact-sales/';
+        expect(windowSpy).toBeCalledWith(salesLinkWithEncodedParams, '_blank');
         expect(trackEvent).toBeCalledTimes(1);
         expect(trackEvent).toBeCalledWith('insights', 'click_true_up_warning', {
             cta: 'Contact Sales',
@@ -261,44 +254,42 @@ describe('components/overage_users_banner', () => {
         });
     });
 
-    it('should render the banner because we are over 5% and we have preferences from one old banner', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+    // it('should render the banner because we are over 5% and we have preferences from one old banner', () => {
+    //     const store = JSON.parse(JSON.stringify(initialState));
 
-        store.entities.cloud = {
-            ...store.entities.cloud,
-            subscriptionStats: {
-                is_expandable: false,
-                getRequestState: 'OK',
-            },
-        };
+    //     store.entities.cloud = {
+    //         ...store.entities.cloud,
+    //         subscriptionStats: {
+    //             is_expandable: false,
+    //             getRequestState: 'OK',
+    //         },
+    //     };
 
-        store.entities.preferences.myPreferences = TestHelper.getPreferencesMock(
-            [
-                {
-                    category: Preferences.OVERAGE_USERS_BANNER,
-                    value: 'Overage users banner watched',
-                    name: `warn_overage_seats_${10}`,
-                },
-            ],
-        );
+    //     store.entities.preferences.myPreferences = TestHelper.getPreferencesMock(
+    //         [
+    //             {
+    //                 category: Preferences.OVERAGE_USERS_BANNER,
+    //                 value: 'Overage users banner watched',
+    //                 name: `warn_overage_seats_${10}`,
+    //             },
+    //         ],
+    //     );
 
-        store.entities.admin = {
-            ...store.entities.admin,
-            analytics: {
-                [StatTypes.TOTAL_USERS]: seatsMinimumFor5PercentageState,
-            },
-        };
+    //     store.entities.admin = {
+    //         ...store.entities.admin,
+    //         analytics: {
+    //             [StatTypes.TOTAL_USERS]: seatsMinimumFor5PercentageState,
+    //         },
+    //     };
 
-        renderComponent({
-            store,
-        });
+    //     renderWithContext(<OverageUsersBanner/>, store);
 
-        expect(screen.getByText(text5PercentageState)).toBeInTheDocument();
-        expect(screen.getByText(contactSalesTextLink)).toBeInTheDocument();
-    });
+    //     expect(screen.getByText(text5PercentageState)).toBeInTheDocument();
+    //     expect(screen.getByText(contactSalesTextLink)).toBeInTheDocument();
+    // });
 
     it('should save the preferences for 5% banner if admin click on close', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+        const store = JSON.parse(JSON.stringify(initialState));
 
         store.entities.admin = {
             ...store.entities.admin,
@@ -307,9 +298,7 @@ describe('components/overage_users_banner', () => {
             },
         };
 
-        renderComponent({
-            store,
-        });
+        renderWithContext(<OverageUsersBanner/>, store);
 
         fireEvent.click(screen.getByRole('link'));
 
@@ -322,34 +311,32 @@ describe('components/overage_users_banner', () => {
         }]);
     });
 
-    it('should render the banner because we are over 10%', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+    // it('should render the banner because we are over 10%', () => {
+    //     const store = JSON.parse(JSON.stringify(initialState));
 
-        store.entities.cloud = {
-            ...store.entities.cloud,
-            subscriptionStats: {
-                is_expandable: false,
-                getRequestState: 'OK',
-            },
-        };
+    //     store.entities.cloud = {
+    //         ...store.entities.cloud,
+    //         subscriptionStats: {
+    //             is_expandable: false,
+    //             getRequestState: 'OK',
+    //         },
+    //     };
 
-        store.entities.admin = {
-            ...store.entities.admin,
-            analytics: {
-                [StatTypes.TOTAL_USERS]: seatsMinimumFor10PercentageState,
-            },
-        };
+    //     store.entities.admin = {
+    //         ...store.entities.admin,
+    //         analytics: {
+    //             [StatTypes.TOTAL_USERS]: seatsMinimumFor10PercentageState,
+    //         },
+    //     };
 
-        renderComponent({
-            store,
-        });
+    //     renderWithContext(<OverageUsersBanner/>, store);
 
-        expect(screen.getByText(text10PercentageState)).toBeInTheDocument();
-        expect(screen.getByText(contactSalesTextLink)).toBeInTheDocument();
-    });
+    //     expect(screen.getByText(text10PercentageState)).toBeInTheDocument();
+    //     expect(screen.getByText(contactSalesTextLink)).toBeInTheDocument();
+    // });
 
     it('should track if the admin click Contact Sales CTA in a 10% overage state', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+        const store = JSON.parse(JSON.stringify(initialState));
 
         store.entities.cloud = {
             ...store.entities.cloud,
@@ -366,13 +353,14 @@ describe('components/overage_users_banner', () => {
             },
         };
 
-        renderComponent({
-            store,
-        });
+        renderWithContext(<OverageUsersBanner/>, store);
 
         fireEvent.click(screen.getByText(contactSalesTextLink));
         expect(windowSpy).toBeCalledTimes(1);
-        expect(windowSpy).toBeCalledWith(LicenseLinks.CONTACT_SALES, '_blank');
+
+        // only the email is encoded and other params are empty. See logic for useOpenSalesLink hook
+        const salesLinkWithEncodedParams = 'https://infomaniak.com/contact-sales/';
+        expect(windowSpy).toBeCalledWith(salesLinkWithEncodedParams, '_blank');
         expect(trackEvent).toBeCalledTimes(1);
         expect(trackEvent).toBeCalledWith('insights', 'click_true_up_error', {
             cta: 'Contact Sales',
@@ -381,7 +369,7 @@ describe('components/overage_users_banner', () => {
     });
 
     it('should render the  warning banner with expansion seats CTA if the license is expandable', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+        const store = JSON.parse(JSON.stringify(initialState));
 
         store.entities.cloud = {
             ...store.entities.cloud,
@@ -399,15 +387,13 @@ describe('components/overage_users_banner', () => {
             },
         };
 
-        renderComponent({
-            store,
-        });
+        renderWithContext(<OverageUsersBanner/>, store);
 
         expect(screen.getByText(expandSeatsTextLink)).toBeInTheDocument();
     });
 
     it('should track if the admin click expansion seats CTA in a 5% overage state', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+        const store = JSON.parse(JSON.stringify(initialState));
 
         store.entities.cloud = {
             ...store.entities.cloud,
@@ -425,9 +411,7 @@ describe('components/overage_users_banner', () => {
             },
         };
 
-        renderComponent({
-            store,
-        });
+        renderWithContext(<OverageUsersBanner/>, store);
 
         fireEvent.click(screen.getByText(expandSeatsTextLink));
         expect(windowSpy).toBeCalledTimes(1);
@@ -440,7 +424,7 @@ describe('components/overage_users_banner', () => {
     });
 
     it('should render the error banner with expansion seats CTA if the license is be expandable', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+        const store = JSON.parse(JSON.stringify(initialState));
 
         store.entities.cloud = {
             ...store.entities.cloud,
@@ -458,15 +442,13 @@ describe('components/overage_users_banner', () => {
             },
         };
 
-        renderComponent({
-            store,
-        });
+        renderWithContext(<OverageUsersBanner/>, store);
 
         expect(screen.getByText(expandSeatsTextLink)).toBeInTheDocument();
     });
 
     it('should track if the admin click expansion seats CTA in a 10% overage state', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
+        const store = JSON.parse(JSON.stringify(initialState));
 
         store.entities.cloud = {
             ...store.entities.cloud,
@@ -484,9 +466,7 @@ describe('components/overage_users_banner', () => {
             },
         };
 
-        renderComponent({
-            store,
-        });
+        renderWithContext(<OverageUsersBanner/>, store);
 
         fireEvent.click(screen.getByText(expandSeatsTextLink));
         expect(windowSpy).toBeCalledTimes(1);

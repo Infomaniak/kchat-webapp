@@ -48,6 +48,7 @@ const RestorePostModal = ({post, postHeader, actions, onExited}: Props) => {
 
     return (
         <GenericModal
+            compassDesign={true}
             onExited={onHide}
             enforceFocus={false}
             id='restorePostModal'

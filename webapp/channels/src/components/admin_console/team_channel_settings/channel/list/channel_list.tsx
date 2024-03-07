@@ -2,18 +2,18 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, defineMessages} from 'react-intl';
 import {Link} from 'react-router-dom';
 
 import type {ChannelWithTeamData, ChannelSearchOpts} from '@mattermost/types/channels';
 
 import {debounce} from 'mattermost-redux/actions/helpers';
-import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
-import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
 import DataGrid from 'components/admin_console/data_grid/data_grid';
+import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
 import type {FilterOptions} from 'components/admin_console/filter/filter';
 import TeamFilterDropdown from 'components/admin_console/filter/team_filter_dropdown';
 import {PAGE_SIZE} from 'components/admin_console/team_channel_settings/abstract_list';
@@ -27,17 +27,14 @@ import {isArchivedChannel} from 'utils/channel_utils';
 import {Constants} from 'utils/constants';
 
 import './channel_list.scss';
-interface ChannelListProps {
+
+export interface ChannelListProps {
     actions: {
-        searchAllChannels: (term: string, opts: ChannelSearchOpts) => Promise<{ data: any }>;
-        getData: (page: number, perPage: number, notAssociatedToGroup?: string, excludeDefaultChannels?: boolean, includeDeleted?: boolean) => ActionFunc | ActionResult | Promise<ChannelWithTeamData[]>;
+        searchAllChannels: (term: string, opts: ChannelSearchOpts) => Promise<ActionResult>;
+        getData: (page: number, perPage: number, notAssociatedToGroup?: string, excludeDefaultChannels?: boolean, includeDeleted?: boolean) => Promise<ActionResult>;
     };
     data: ChannelWithTeamData[];
     total: number;
-    removeGroup?: () => void;
-    emptyListTextId?: string;
-    emptyListTextDefaultMessage?: string;
-    isDisabled?: boolean;
 }
 
 interface ChannelListState {
@@ -51,6 +48,17 @@ interface ChannelListState {
 }
 
 const ROW_HEIGHT = 40;
+
+const messages = defineMessages({
+    group: {
+        id: 'admin.channel_settings.channel_row.managementMethod.group',
+        defaultMessage: 'Group Sync',
+    },
+    manual: {
+        id: 'admin.channel_settings.channel_row.managementMethod.manual',
+        defaultMessage: 'Manual Invites',
+    },
+});
 
 export default class ChannelList extends React.PureComponent<ChannelListProps, ChannelListState> {
     constructor(props: ChannelListProps) {
@@ -225,10 +233,7 @@ export default class ChannelList extends React.PureComponent<ChannelListProps, C
                     ),
                     management: (
                         <span className='group-description adjusted row-content'>
-                            <FormattedMessage
-                                id={`admin.channel_settings.channel_row.managementMethod.${channel.group_constrained ? 'group' : 'manual'}`}
-                                defaultMessage={channel.group_constrained ? 'Group Sync' : 'Manual Invites'}
-                            />
+                            <FormattedMessage {...(channel.group_constrained ? messages.group : messages.manual)}/>
                         </span>
                     ),
                     edit: (

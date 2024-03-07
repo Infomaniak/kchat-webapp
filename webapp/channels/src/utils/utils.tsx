@@ -8,19 +8,18 @@ import {getName} from 'country-list';
 import crypto from 'crypto';
 import cssVars from 'css-vars-ponyfill';
 import type {Locale} from 'date-fns';
-import {enGB} from 'date-fns/locale';
+import isNil from 'lodash/isNil';
 import moment from 'moment';
-import type {LinkHTMLAttributes} from 'react';
 import React from 'react';
-import type {IntlShape} from 'react-intl';
+import type {LinkHTMLAttributes} from 'react';
 import {FormattedMessage} from 'react-intl';
+import type {IntlShape} from 'react-intl';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Address} from '@mattermost/types/cloud';
 import type {ClientConfig} from '@mattermost/types/config';
 import type {FileInfo} from '@mattermost/types/files';
 import type {Group} from '@mattermost/types/groups';
-import type {Post} from '@mattermost/types/posts';
 import type {GlobalState} from '@mattermost/types/store';
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
@@ -34,21 +33,16 @@ import {
 import {getPost as getPostAction} from 'mattermost-redux/actions/posts';
 import {getTeamByName as getTeamByNameAction} from 'mattermost-redux/actions/teams';
 import {Client4} from 'mattermost-redux/client';
-import {Posts, Preferences, General} from 'mattermost-redux/constants';
+import {Preferences, General} from 'mattermost-redux/constants';
 import {
     getChannel,
     getChannelsNameMapInTeam,
     getMyChannelMemberships,
-    getRedirectChannelNameForTeam,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
-import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {getBool, getTeammateNameDisplaySetting, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {
-    getCurrentRelativeTeamUrl,
-    getCurrentTeam,
-    getCurrentTeamId,
-    getTeam,
     getTeamByName,
     getTeamMemberships,
     isTeamSameWithCurrentTeam,
@@ -60,15 +54,16 @@ import {displayUsername, isSystemAdmin} from 'mattermost-redux/utils/user_utils'
 import {searchForTerm} from 'actions/post_actions';
 import {addUserToTeam} from 'actions/team_actions';
 import {getCurrentLocale, getTranslations} from 'selectors/i18n';
-import {getIsMobileView} from 'selectors/views/browser';
 import store from 'stores/redux_store';
 
 import {focusPost} from 'components/permalink_view/actions';
+import type {TextboxElement} from 'components/textbox';
 
 import {getHistory} from 'utils/browser_history';
-import type {A11yFocusEventDetail} from 'utils/constants';
 import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes} from 'utils/constants';
+import type {A11yFocusEventDetail} from 'utils/constants';
 import {t} from 'utils/i18n';
+import * as Keyboard from 'utils/keyboard';
 import * as UserAgent from 'utils/user_agent';
 import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 
@@ -83,7 +78,6 @@ import upstairs from 'sounds/upstairs.mp3';
 import {joinPrivateChannelPrompt} from './channel_utils';
 import {isServerVersionGreaterThanOrEqualTo} from './server_version';
 
-import type {TextboxElement} from '../components/textbox';
 
 const CLICKABLE_ELEMENTS = [
     'a',
@@ -93,7 +87,6 @@ const CLICKABLE_ELEMENTS = [
     'audio',
     'video',
 ];
-
 const MS_PER_SECOND = 1000;
 const MS_PER_MINUTE = 60 * MS_PER_SECOND;
 const MS_PER_HOUR = 60 * MS_PER_MINUTE;
@@ -112,18 +105,6 @@ export enum TimeInformation {
 export type TimeUnit = Exclude<TimeInformation, TimeInformation.FUTURE | TimeInformation.PAST>;
 export type TimeDirection = TimeInformation.FUTURE | TimeInformation.PAST;
 
-export function isMac() {
-    return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-}
-
-export function isLinux() {
-    return navigator.platform.toUpperCase().indexOf('LINUX') >= 0;
-}
-
-export function registerDevice(deviceId: string) {
-    return Client4.registerDevice(deviceId);
-}
-
 export function createSafeId(prop: {props: {defaultMessage: string}} | string): string | undefined {
     let str = '';
 
@@ -136,68 +117,14 @@ export function createSafeId(prop: {props: {defaultMessage: string}} | string): 
     return str.replace(new RegExp(' ', 'g'), '_');
 }
 
-export function cmdOrCtrlPressed(e: React.KeyboardEvent | KeyboardEvent, allowAlt = false) {
-    if (allowAlt) {
-        return (isMac() && e.metaKey) || (!isMac() && e.ctrlKey);
-    }
-    return (isMac() && e.metaKey) || (!isMac() && e.ctrlKey && !e.altKey);
-}
-
-export function isKeyPressed(event: React.KeyboardEvent | KeyboardEvent, key: [string, number]) {
-    // There are two types of keyboards
-    // 1. English with different layouts(Ex: Dvorak)
-    // 2. Different language keyboards(Ex: Russian)
-
-    if (event.keyCode === Constants.KeyCodes.COMPOSING[1]) {
-        return false;
-    }
-
-    // checks for event.key for older browsers and also for the case of different English layout keyboards.
-    if (typeof event.key !== 'undefined' && event.key !== 'Unidentified' && event.key !== 'Dead') {
-        const isPressedByCode = event.key === key[0] || event.key === key[0].toUpperCase();
-        if (isPressedByCode) {
-            return true;
-        }
-    }
-
-    // used for different language keyboards to detect the position of keys
-    return event.keyCode === key[1];
-}
-
-export function addTimeToTimestamp(timestamp: number, type: TimeUnit, diff: number, timeline: TimeDirection) {
-    let modifier = 1;
-    switch (type) {
-    case TimeInformation.SECONDS:
-        modifier = MS_PER_SECOND;
-        break;
-    case TimeInformation.MINUTES:
-        modifier = MS_PER_MINUTE;
-        break;
-    case TimeInformation.HOURS:
-        modifier = MS_PER_HOUR;
-        break;
-    case TimeInformation.DAYS:
-        modifier = MS_PER_DAY;
-        break;
-    }
-
-    return timeline === TimeInformation.FUTURE ? timestamp + (diff * modifier) : timestamp - (diff * modifier);
-}
-
-export function isDateWithinDaysRange(timestamp: number, days: number, timeline: TimeDirection): boolean {
-    const today = new Date().getTime();
-    const daysSince = Math.round((today - timestamp) / MS_PER_DAY);
-    return timeline === TimeInformation.PAST ? daysSince <= days : daysSince >= days;
-}
-
 /**
  * check keydown event for line break combo. Should catch alt/option + enter not all browsers except Safari
  */
 export function isUnhandledLineBreakKeyCombo(e: React.KeyboardEvent | KeyboardEvent): boolean {
     return Boolean(
-        isKeyPressed(e, Constants.KeyCodes.ENTER) &&
+        Keyboard.isKeyPressed(e, Constants.KeyCodes.ENTER) &&
         !e.shiftKey && // shift + enter is already handled everywhere, so don't handle again
-        (e.altKey && !UserAgent.isSafari() && !cmdOrCtrlPressed(e)), // alt/option + enter is already handled in Safari, so don't handle again
+        (e.altKey && !UserAgent.isSafari() && !Keyboard.cmdOrCtrlPressed(e)), // alt/option + enter is already handled in Safari, so don't handle again
     );
 }
 
@@ -220,53 +147,6 @@ export function insertLineBreakFromKeyEvent(e: KeyboardEvent): string {
     return newValue;
 }
 
-export function isInRole(roles: string, inRole: string): boolean {
-    if (roles) {
-        const parts = roles.split(' ');
-        for (let i = 0; i < parts.length; i++) {
-            if (parts[i] === inRole) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-export function getTeamRelativeUrl(team: Team) {
-    if (!team) {
-        return '';
-    }
-
-    return '/' + team.name;
-}
-
-export function getPermalinkURL(state: GlobalState, teamId: Team['id'], postId: Post['id']): string {
-    let team = getTeam(state, teamId);
-    if (!team) {
-        team = getCurrentTeam(state);
-    }
-    return `${getTeamRelativeUrl(team)}/pl/${postId}`;
-}
-
-export function getChannelURL(state: GlobalState, channel: Channel, teamId: string): string {
-    let notificationURL;
-    if (channel && (channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL)) {
-        notificationURL = getCurrentRelativeTeamUrl(state) + '/channels/' + channel.name;
-    } else if (channel) {
-        const team = getTeam(state, teamId);
-        notificationURL = getTeamRelativeUrl(team) + '/channels/' + channel.name;
-    } else if (teamId) {
-        const team = getTeam(state, teamId);
-        const redirectChannel = getRedirectChannelNameForTeam(state, teamId);
-        notificationURL = getTeamRelativeUrl(team) + `/channels/${redirectChannel}`;
-    } else {
-        const currentTeamId = getCurrentTeamId(state);
-        const redirectChannel = getRedirectChannelNameForTeam(state, currentTeamId);
-        notificationURL = getCurrentRelativeTeamUrl(state) + `/channels/${redirectChannel}`;
-    }
-    return notificationURL;
-}
 
 export const notificationSounds = new Map([
     ['Bing', bing],
@@ -313,13 +193,45 @@ export function getTimestamp(): number {
 }
 
 export function getRemainingDaysFromFutureTimestamp(timestamp?: number): number {
-    const MS_PER_DAY = 24 * 60 * 60 * 1000;
     const futureDate = new Date(timestamp as number);
     const utcFuture = Date.UTC(futureDate.getFullYear(), futureDate.getMonth(), futureDate.getDate());
     const today = new Date();
     const utcToday = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
 
     return Math.floor((utcFuture - utcToday) / MS_PER_DAY);
+}
+
+export function addTimeToTimestamp(timestamp: number, type: TimeUnit, diff: number, timeline: TimeDirection) {
+    let modifier = 1;
+    switch (type) {
+    case TimeInformation.SECONDS:
+        modifier = MS_PER_SECOND;
+        break;
+    case TimeInformation.MINUTES:
+        modifier = MS_PER_MINUTE;
+        break;
+    case TimeInformation.HOURS:
+        modifier = MS_PER_HOUR;
+        break;
+    case TimeInformation.DAYS:
+        modifier = MS_PER_DAY;
+        break;
+    }
+
+    return timeline === TimeInformation.FUTURE ? timestamp + (diff * modifier) : timestamp - (diff * modifier);
+}
+
+/**
+ * Verifies if a date is in a particular given range of days from today
+ * @param timestamp date you want to check is in the range of the provided number of days from today
+ * @param days number of days you want to check your date against to
+ * @param timeline 'f' represents future, 'p' represents past
+ * @returns boolean, true if your date is in the range of the provided number of days
+ */
+export function isDateWithinDaysRange(timestamp: number, days: number, timeline: TimeDirection): boolean {
+    const today = new Date().getTime();
+    const daysSince = Math.round((today - timestamp) / MS_PER_DAY);
+    return timeline === TimeInformation.PAST ? daysSince <= days : daysSince >= days;
 }
 
 export function getLocaleDateFromUTC(timestamp: number, format = 'YYYY/MM/DD HH:mm:ss', userTimezone = '') {
@@ -440,13 +352,6 @@ export function getIconClassName(fileTypeIn: string) {
     return 'generic';
 }
 
-export function getMenuItemIcon(name: string, dangerous?: boolean) {
-    const colorClass = dangerous ? 'MenuItem__compass-icon-dangerous' : 'MenuItem__compass-icon';
-    return (
-        <span className={`${name} ${colorClass}`}/>
-    );
-}
-
 export function toTitleCase(str: string): string {
     function doTitleCase(txt: string) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -466,36 +371,11 @@ export function toRgbValues(hexStr: string): string {
 
 export function applyTheme(theme: Theme) {
     if (theme.centerChannelColor) {
-        changeCss('.app__body .bg-text-200', 'background:' + changeOpacity(theme.centerChannelColor, 0.2));
-        changeCss('.app__body .user-popover__role', 'background:' + changeOpacity(theme.centerChannelColor, 0.3));
-        changeCss('.app__body .svg-text-color', 'fill:' + theme.centerChannelColor);
-        changeCss('.app__body .suggestion-list__icon .status.status--group, .app__body .multi-select__note', 'background:' + changeOpacity(theme.centerChannelColor, 0.12));
-        changeCss('.app__body .modal-tabs .nav-tabs > li, .app__body .system-notice, .app__body .file-view--single .file__image .image-loaded, .app__body .post .MenuWrapper .dropdown-menu button, .app__body .member-list__popover .more-modal__body, .app__body .alert.alert-transparent, .app__body .table > thead > tr > th, .app__body .table > tbody > tr > td', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.12));
-        changeCss('.app__body .post-list__arrows', 'fill:' + changeOpacity(theme.centerChannelColor, 0.3));
-        changeCss('.app__body .post .card-icon__container', 'color:' + changeOpacity(theme.centerChannelColor, 0.3));
-        changeCss('.app__body .post-image__details .post-image__download svg', 'stroke:' + changeOpacity(theme.centerChannelColor, 0.4));
-        changeCss('.app__body .post-image__details .post-image__download svg', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.35));
-        changeCss('.app__body .channel-header__links .icon, .app__body .sidebar--right .sidebar--right__subheader .usage__icon, .app__body .more-modal__header svg, .app__body .icon--body', 'fill:' + theme.centerChannelColor);
-        changeCss('@media(min-width: 768px){.app__body .post:hover .post__header .post-menu, .app__body .post.post--hovered .post__header .post-menu, .app__body .post.a11y--active .post__header .post-menu', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
-        changeCss('.app__body .help-text, .app__body .post .post-waiting, .app__body .post.post--system .post__body', 'color:' + changeOpacity(theme.centerChannelColor, 0.6));
-        changeCss('.app__body .nav-tabs, .app__body .nav-tabs > li.active > a, pp__body .input-group-addon, .app__body .app__content, .app__body .post-create__container .post-create-body .btn-file, .app__body .post-create__container .post-create-footer .msg-typing, .app__body .dropdown-menu, .app__body .popover, .app__body .suggestion-list__item .suggestion-list__ellipsis .suggestion-list__main, .app__body .tip-overlay, .app__body .form-control[disabled], .app__body .form-control[readonly], .app__body fieldset[disabled] .form-control', 'color:' + theme.centerChannelColor);
-        changeCss('.app__body .post .post__link', 'color:' + changeOpacity(theme.centerChannelColor, 0.65));
-        changeCss('.app__body #archive-link-home, .video-div .video-thumbnail__error', 'background:' + changeOpacity(theme.centerChannelColor, 0.15));
-        changeCss('.app__body #post-create', 'color:' + theme.centerChannelColor);
-        changeCss('.app__body .mentions--top', 'box-shadow:' + changeOpacity(theme.centerChannelColor, 0.2) + ' 1px -3px 12px');
-        changeCss('.app__body .mentions--top', '-webkit-box-shadow:' + changeOpacity(theme.centerChannelColor, 0.2) + ' 1px -3px 12px');
-        changeCss('.app__body .mentions--top', '-moz-box-shadow:' + changeOpacity(theme.centerChannelColor, 0.2) + ' 1px -3px 12px');
-        changeCss('.app__body .shadow--2', 'box-shadow: 0 20px 30px 0' + changeOpacity(theme.centerChannelColor, 0.1) + ', 0 14px 20px 0 ' + changeOpacity(theme.centerChannelColor, 0.1));
-        changeCss('.app__body .shadow--2', '-moz-box-shadow: 0  20px 30px 0 ' + changeOpacity(theme.centerChannelColor, 0.1) + ', 0 14px 20px 0 ' + changeOpacity(theme.centerChannelColor, 0.1));
-        changeCss('.app__body .shadow--2', '-webkit-box-shadow: 0  20px 30px 0 ' + changeOpacity(theme.centerChannelColor, 0.1) + ', 0 14px 20px 0 ' + changeOpacity(theme.centerChannelColor, 0.1));
-        changeCss('.app__body .shortcut-key, .app__body .post__body hr, .app__body .loading-screen .loading__content .round, .app__body .tutorial__circles .circle', 'background:' + theme.centerChannelColor);
-        changeCss('.app__body .channel-header .heading', 'color:' + theme.centerChannelColor);
         changeCss('.app__body .markdown__table tbody tr:nth-child(2n)', 'background:' + changeOpacity(theme.centerChannelColor, 0.07));
-        changeCss('.app__body .channel-header__info .header-dropdown__icon', 'color:' + changeOpacity(theme.centerChannelColor, 0.8));
-        changeCss('.app__body .post-create__container .post-create-body .send-button.disabled i', 'color:' + changeOpacity(theme.centerChannelColor, 0.4));
-        changeCss('.app__body .channel-header .pinned-posts-button svg', 'fill:' + changeOpacity(theme.centerChannelColor, 0.6));
-        changeCss('.app__body .channel-header .channel-header_plugin-dropdown svg', 'fill:' + changeOpacity(theme.centerChannelColor, 0.6));
-        changeCss('.app__body .file-preview, .app__body .post-image__details, .app__body .markdown__table th, .app__body .markdown__table td, .app__body .modal .settings-modal .settings-table .settings-content .divider-light, .app__body .webhooks__container, .app__body .dropdown-menu, .app__body .modal .modal-header', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
+        changeCss('.app__body .channel-header__info .header-dropdown__icon', 'color:' + changeOpacity(theme.centerChannelColor, 0.75));
+        changeCss('.app__body .channel-header .pinned-posts-button svg', 'fill:' + changeOpacity(theme.centerChannelColor, 0.75));
+        changeCss('.app__body .channel-header .channel-header_plugin-dropdown svg', 'fill:' + changeOpacity(theme.centerChannelColor, 0.75));
+        changeCss('.app__body .file-preview, .app__body .post-image__details, .app__body .markdown__table th, .app__body .markdown__table td, .app__body .webhooks__container, .app__body .dropdown-menu', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('.emoji-picker .emoji-picker__header', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('.app__body .popover.bottom>.arrow', 'border-bottom-color:' + changeOpacity(theme.centerChannelColor, 0.25));
         changeCss('.app__body .btn.btn-transparent', 'color:' + changeOpacity(theme.centerChannelColor, 0.7));
@@ -516,14 +396,14 @@ export function applyTheme(theme: Theme) {
         changeCss('.app__body .date-separator .separator__hr, .app__body .modal-footer, .app__body .modal .custom-textarea', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('.app__body .search-item-container', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.1));
         changeCss('.app__body .modal .custom-textarea:focus', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.3));
-        changeCss('.app__body .channel-intro, .app__body .modal .settings-modal .settings-table .settings-content .divider-dark, .app__body hr, .app__body .modal .settings-modal .settings-table .settings-links, .app__body .modal .settings-modal .settings-table .settings-content .appearance-section .theme-elements__header, .app__body .user-settings .authorized-app:not(:last-child)', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
+        changeCss('.app__body .channel-intro, .app__body hr, .app__body .modal .settings-modal .settings-table .settings-content .appearance-section .theme-elements__header, .app__body .user-settings .authorized-app:not(:last-child)', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('.app__body .post.post--comment.other--root.current--user .post-comment, .app__body pre', 'background:' + changeOpacity(theme.centerChannelColor, 0.05));
         changeCss('.app__body .post.post--comment.other--root.current--user .post-comment, .app__body .more-modal__list .more-modal__row, .app__body .member-div:first-child, .app__body .member-div, .app__body .access-history__table .access__report, .app__body .activity-log__table', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.1));
         changeCss('@media(max-width: 1800px){.app__body .inner-wrap.move--left .post.post--comment.same--root', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.07));
         changeCss('.app__body .post.post--hovered', 'background:' + changeOpacity(theme.centerChannelColor, 0.08));
         changeCss('.app__body .attachment__body__wrap.btn-close', 'background:' + changeOpacity(theme.centerChannelColor, 0.08));
         changeCss('.app__body .attachment__body__wrap.btn-close', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
-        changeCss('@media(min-width: 768px){.app__body .post.a11y--active, .app__body .modal .settings-modal .settings-table .settings-content .section-min:hover', 'background:' + changeOpacity(theme.centerChannelColor, 0.08));
+        changeCss('@media(min-width: 768px){.app__body .post.a11y--active, .app__body .modal .settings-modal .settings-table .settings-content .section-min:hover', 'background:' + changeOpacity(theme.centerChannelColor, 0.04));
         changeCss('@media(min-width: 768px){.app__body .post.post--editing', 'background:' + changeOpacity(theme.buttonBg, 0.08));
         changeCss('@media(min-width: 768px){.app__body .post.current--user:hover .post__body ', 'background: transparent;');
         changeCss('.app__body .more-modal__row.more-modal__row--selected, .app__body .date-separator.hovered--before:after, .app__body .date-separator.hovered--after:before, .app__body .new-separator.hovered--after:before, .app__body .new-separator.hovered--before:after', 'background:' + changeOpacity(theme.centerChannelColor, 0.07));
@@ -531,13 +411,9 @@ export function applyTheme(theme: Theme) {
         changeCss('.app__body .form-control[disabled], .app__body .form-control[readonly], .app__body fieldset[disabled] .form-control', 'background:' + changeOpacity(theme.centerChannelColor, 0.1));
         changeCss('.app__body .sidebar--right', 'color:' + theme.centerChannelColor);
         changeCss('.app__body .modal .settings-modal .settings-table .settings-content .appearance-section .theme-elements__body', 'background:' + changeOpacity(theme.centerChannelColor, 0.05));
-        if (!UserAgent.isFirefox() && !UserAgent.isInternetExplorer() && !UserAgent.isEdge()) {
-            changeCss('body.app__body ::-webkit-scrollbar-thumb', 'background:' + changeOpacity(theme.centerChannelColor, 0.4));
-        }
         changeCss('body', 'scrollbar-arrow-color:' + theme.centerChannelColor);
-        changeCss('.app__body .post-create__container .post-create-body .btn-file svg, .app__body .post.post--compact .post-image__column .post-image__details svg, .app__body .modal .about-modal .about-modal__logo svg, .app__body .status svg, .app__body .edit-post__actions .icon svg', 'fill:' + theme.centerChannelColor);
+        changeCss('.app__body .post.post--compact .post-image__column .post-image__details svg, .app__body .modal .about-modal .about-modal__logo svg, .app__body .status svg, .app__body .edit-post__actions .icon svg', 'fill:' + theme.centerChannelColor);
         changeCss('.app__body .post-list__new-messages-below', 'background:' + changeColor(theme.centerChannelColor, 0.5));
-        changeCss('.app__body .post.post--comment .post__body', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('@media(min-width: 768px){.app__body .post.post--compact.same--root.post--comment .post__content', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('.app__body .post.post--comment.current--user .post__body', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('.app__body .emoji-picker', 'color:' + theme.centerChannelColor);
@@ -558,16 +434,15 @@ export function applyTheme(theme: Theme) {
     }
 
     if (theme.linkColor) {
-        changeCss('.app__body .more-modal__list .a11y--focused, .app__body .post.a11y--focused, .app__body .channel-header.a11y--focused, .app__body .post-create.a11y--focused, .app__body .user-popover.a11y--focused, .app__body .post-message__text.a11y--focused, #archive-link-home>a.a11y--focused', 'box-shadow: inset 0 0 1px 3px ' + changeOpacity(theme.linkColor, 0.5) + ', inset 0 0 0 1px ' + theme.linkColor);
+        changeCss('.app__body .more-modal__list .a11y--focused, .app__body .post.a11y--focused, .app__body .channel-header.a11y--focused, .app__body .post-create.a11y--focused, .app__body .user-popover.a11y--focused, .app__body .post-message__text.a11y--focused', 'box-shadow: inset 0 0 1px 3px ' + changeOpacity(theme.linkColor, 0.5) + ', inset 0 0 0 1px ' + theme.linkColor);
         changeCss('.app__body .a11y--focused', 'box-shadow: 0 0 1px 3px ' + changeOpacity(theme.linkColor, 0.5) + ', 0 0 0 1px ' + theme.linkColor);
-        changeCss('.app__body .channel-header .channel-header__favorites.inactive:hover, .app__body .channel-header__links > a.active, .app__body a, .app__body a:focus, .app__body a:hover, .app__body .channel-header__links > .color--link.active, .app__body .color--link, .app__body a:focus, .app__body .color--link:hover, .app__body .btn, .app__body .btn:focus, .app__body .btn:hover', 'color:' + theme.linkColor);
+        changeCss('.app__body .channel-header .channel-header__favorites.inactive:hover, .app__body a, .app__body a:focus, .app__body a:hover, .app__body .color--link, .app__body a:focus, .app__body .color--link:hover', 'color:' + theme.linkColor);
         changeCss('.app__body .attachment .attachment__container', 'border-left-color:' + changeOpacity(theme.linkColor, 0.5));
-        changeCss('.app__body .channel-header .channel-header_plugin-dropdown a:hover, .app__body .member-list__popover .more-modal__list .more-modal__row:hover', 'background:' + changeOpacity(theme.linkColor, 0.08));
-        changeCss('.app__body .channel-header__links .icon:hover, .app__body .channel-header__links > a.active .icon, .app__body .post .post__reply', 'fill:' + theme.linkColor);
-        changeCss('.app__body .channel-header__links .icon:hover, .app__body .post .card-icon__container.active svg, .app__body .post .post__reply', 'fill:' + theme.linkColor);
+        changeCss('.app__body .channel-header .channel-header_plugin-dropdown a:hover', 'background:' + changeOpacity(theme.linkColor, 0.08));
+        changeCss('.app__body .post .post__reply', 'fill:' + theme.linkColor);
+        changeCss('.app__body .post .card-icon__container.active svg, .app__body .post .post__reply', 'fill:' + theme.linkColor);
         changeCss('.app__body .channel-header .pinned-posts-button:hover svg', 'fill:' + changeOpacity(theme.linkColor, 0.6));
-        changeCss('.app__body .member-list__popover .more-modal__actions svg', 'fill:' + theme.linkColor);
-        changeCss('.app__body .modal-tabs .nav-tabs > li.active, .app__body .channel-header .channel-header_plugin-dropdown a:hover, .app__body .member-list__popover .more-modal__list .more-modal__row:hover', 'border-color:' + theme.linkColor);
+        changeCss('.app__body .channel-header .channel-header_plugin-dropdown a:hover', 'border-color:' + theme.linkColor);
         changeCss('.app__body .channel-header .channel-header_plugin-dropdown a:hover svg', 'fill:' + theme.linkColor);
         changeCss('.app__body .channel-header .dropdown-toggle:hover .heading, .app__body .channel-header .dropdown-toggle:hover .header-dropdown__icon, .app__body .channel-header__title .open .heading, .app__body .channel-header__info .channel-header__title .open .header-dropdown__icon, .app__body .channel-header__title .open .heading, .app__body .channel-header__info .channel-header__title .open .heading', 'color:' + theme.linkColor);
         changeCss('.emoji-picker__container .icon--emoji.active svg', 'fill:' + theme.linkColor);
@@ -591,6 +466,8 @@ export function applyTheme(theme: Theme) {
         changeCss('.app__body .btn.btn-primary:hover, .app__body .btn.btn-primary:active, .app__body .btn.btn-primary:focus', 'background:' + changeColor(theme.buttonBg, -0.15));
         changeCss('.app__body .emoji-picker .nav-tabs li.active a, .app__body .emoji-picker .nav-tabs li a:hover', 'fill:' + theme.buttonBg);
         changeCss('.app__body .emoji-picker .nav-tabs > li.active > a', 'border-bottom-color:' + theme.buttonBg + '!important;');
+        changeCss('.app__body .btn-primary:hover', 'background:' + blendColors(theme.buttonBg, '#000000', 0.1));
+        changeCss('.app__body .btn-primary:active', 'background:' + blendColors(theme.buttonBg, '#000000', 0.2));
     }
 
     if (theme.buttonColor) {
@@ -601,12 +478,16 @@ export function applyTheme(theme: Theme) {
 
     if (theme.errorTextColor) {
         changeCss('.app__body .error-text, .app__body .modal .settings-modal .settings-table .settings-content .has-error, .app__body .modal .input__help.error, .app__body .color--error, .app__body .has-error .help-block, .app__body .has-error .control-label, .app__body .has-error .radio, .app__body .has-error .checkbox, .app__body .has-error .radio-inline, .app__body .has-error .checkbox-inline, .app__body .has-error.radio label, .app__body .has-error.checkbox label, .app__body .has-error.radio-inline label, .app__body .has-error.checkbox-inline label', 'color:' + theme.errorTextColor);
+        changeCss('.app__body .btn-danger:hover', 'background:' + blendColors(theme.errorTextColor, '#000000', 0.1));
+        changeCss('.app__body .btn-danger:active', 'background:' + blendColors(theme.errorTextColor, '#000000', 0.2));
     }
 
     if (theme.mentionHighlightBg) {
         changeCss('.app__body .search-highlight', 'background:' + theme.mentionHighlightBg);
-        changeCss('.app__body .post.post--comment .post__body.mention-comment', 'border-color:' + theme.mentionHighlightBg);
         changeCss('.app__body .post.post--highlight', 'background:' + changeOpacity(theme.mentionHighlightBg, 0.5));
+
+        // TODO: check if need
+        changeCss('.app__body .post.post--comment .post__body.mention-comment', 'border-color:' + theme.mentionHighlightBg);
     }
 
     if (theme.mentionHighlightLink) {
@@ -819,12 +700,12 @@ function changeCss(className: string, classValue: string) {
     }
 }
 
-function updateCodeTheme(userTheme: string) {
+function updateCodeTheme(codeTheme: string) {
     let cssPath = '';
     Constants.THEME_ELEMENTS.forEach((element) => {
         if (element.id === 'codeTheme') {
-            (element.themes as any).forEach((theme: Theme) => {
-                if (userTheme === theme.id) {
+            element.themes?.forEach((theme) => {
+                if (codeTheme === theme.id) {
                     cssPath = theme.cssURL!;
                 }
             });
@@ -1035,10 +916,6 @@ export function setCaretPosition(input: HTMLInputElement, pos: number) {
     setSelectionRange(input, pos, pos);
 }
 
-export function scrollbarWidth(el: HTMLElement) {
-    return el.offsetWidth - el.clientWidth;
-}
-
 export function isValidUsername(name: string) {
     let error;
     if (!name) {
@@ -1084,10 +961,6 @@ export function isValidBotUsername(name: string) {
     }
 
     return error;
-}
-
-export function isMobile() {
-    return getIsMobileView(store.getState());
 }
 
 export function loadImage(
@@ -1269,16 +1142,16 @@ export function displayFullAndNicknameForUser(user: UserProfile) {
     return displayName;
 }
 
-export function imageURLForUser(userId: string, lastPictureUpdate = 0) {
+export function imageURLForUser(userId: UserProfile['id'], lastPictureUpdate = 0) {
     return Client4.getUsersRoute() + '/' + userId + '/image?_=' + lastPictureUpdate;
 }
 
-export function defaultImageURLForUser(userId: string) {
+export function defaultImageURLForUser(userId: UserProfile['id']) {
     return Client4.getUsersRoute() + '/' + userId + '/image/default';
 }
 
 // in contrast to Client4.getTeamIconUrl, for ui logic this function returns null if last_team_icon_update is unset
-export function imageURLForTeam(team: Team & {last_team_icon_update?: number}) {
+export function imageURLForTeam(team: Team) {
     return team.last_team_icon_update ? Client4.getTeamIconUrl(team.id, team.last_team_icon_update) : null;
 }
 
@@ -1418,18 +1291,9 @@ export function clearFileInput(elm: HTMLInputElement) {
     }
 }
 
-export function isPostEphemeral(post: Post) {
-    return post.type === Constants.PostTypes.EPHEMERAL || post.state === Posts.POST_DELETED;
-}
-
-export function getRootId(post: Post) {
-    return post.root_id === '' ? post.id : post.root_id;
-}
-
-export function getRootPost(postList: Post[]) {
-    return postList.find((post) => post.root_id === '');
-}
-
+/**
+ * @deprecated Use react-intl instead, only place its usage can be justified is in the redux actions
+ */
 export function localizeMessage(id: string, defaultMessage?: string) {
     const state = store.getState();
 
@@ -1443,6 +1307,9 @@ export function localizeMessage(id: string, defaultMessage?: string) {
     return translations[id];
 }
 
+/**
+ * @deprecated If possible, use intl.formatMessage instead. If you have to use this, remember to mark the id using `t`
+ */
 export function localizeAndFormatMessage(id: string, defaultMessage: string, template: { [name: string]: any } | undefined) {
     const base = localizeMessage(id, defaultMessage);
 
@@ -1474,11 +1341,13 @@ export function getPasswordConfig(config: Partial<ClientConfig>) {
 
 export function isValidPassword(password: string, passwordConfig: ReturnType<typeof getPasswordConfig>, intl?: IntlShape) {
     let errorId = t('user.settings.security.passwordError');
+    const telemetryErrorIds = [];
     let valid = true;
     const minimumLength = passwordConfig.minimumLength || Constants.MIN_PASSWORD_LENGTH;
 
     if (password.length < minimumLength || password.length > Constants.MAX_PASSWORD_LENGTH) {
         valid = false;
+        telemetryErrorIds.push({field: 'password', rule: 'error_length'});
     }
 
     if (passwordConfig.requireLowercase) {
@@ -1487,6 +1356,7 @@ export function isValidPassword(password: string, passwordConfig: ReturnType<typ
         }
 
         errorId += 'Lowercase';
+        telemetryErrorIds.push({field: 'password', rule: 'lowercase'});
     }
 
     if (passwordConfig.requireUppercase) {
@@ -1495,6 +1365,7 @@ export function isValidPassword(password: string, passwordConfig: ReturnType<typ
         }
 
         errorId += 'Uppercase';
+        telemetryErrorIds.push({field: 'password', rule: 'uppercase'});
     }
 
     if (passwordConfig.requireNumber) {
@@ -1503,6 +1374,7 @@ export function isValidPassword(password: string, passwordConfig: ReturnType<typ
         }
 
         errorId += 'Number';
+        telemetryErrorIds.push({field: 'password', rule: 'number'});
     }
 
     if (passwordConfig.requireSymbol) {
@@ -1511,6 +1383,7 @@ export function isValidPassword(password: string, passwordConfig: ReturnType<typ
         }
 
         errorId += 'Symbol';
+        telemetryErrorIds.push({field: 'password', rule: 'symbol'});
     }
 
     let error;
@@ -1538,11 +1411,11 @@ export function isValidPassword(password: string, passwordConfig: ReturnType<typ
         );
     }
 
-    return {valid, error};
+    return {valid, error, telemetryErrorIds};
 }
 
 function isChannelOrPermalink(link: string) {
-    let match = (/\/([^/]+)\/channels\/(\S+)/).exec(link);
+    let match = (/\/([a-z0-9\-_]+)\/channels\/([a-z0-9\-__][a-z0-9\-__.]+)/).exec(link);
     if (match) {
         return {
             type: 'channel',
@@ -1550,7 +1423,7 @@ function isChannelOrPermalink(link: string) {
             channelName: match[2],
         };
     }
-    match = (/\/([^/]+)\/pl\/([0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})/).exec(link);
+    match = (/\/([a-z0-9\-__]+)\/pl\/([a-z0-9]+)/).exec(link);
     if (match) {
         return {
             type: 'permalink',
@@ -1629,7 +1502,7 @@ export async function handleFormattedTextClick(e: React.MouseEvent, currentRelat
                                 }
                             }
                             if (!member) {
-                                const {data} = await store.dispatch(joinPrivateChannelPrompt(team, channel, false));
+                                const {data} = await store.dispatch(joinPrivateChannelPrompt(team, channel.display_name, false));
                                 if (data.join) {
                                     let error = false;
                                     if (!getTeamMemberships(state)[team.id]) {
@@ -1651,7 +1524,7 @@ export async function handleFormattedTextClick(e: React.MouseEvent, currentRelat
             e.stopPropagation();
 
             if (match && match.type === 'permalink' && isTeamSameWithCurrentTeam(state, match.teamName) && isReply && crtEnabled) {
-                focusPost(match.postId ?? '', linkAttribute.value, user.id, {skipRedirectReplyPermalink: true})(store.dispatch, store.getState);
+                store.dispatch(focusPost(match.postId ?? '', linkAttribute.value, user.id, {skipRedirectReplyPermalink: true}));
             } else {
                 getHistory().push(linkAttribute.value);
             }
@@ -1723,19 +1596,6 @@ export function moveCursorToEnd(e: React.MouseEvent | React.FocusEvent) {
     }
 }
 
-export function compareChannels(a: Channel, b: Channel) {
-    const aDisplayName = a.display_name.toUpperCase();
-    const bDisplayName = b.display_name.toUpperCase();
-    const result = aDisplayName.localeCompare(bDisplayName);
-    if (result !== 0) {
-        return result;
-    }
-
-    const aName = a.name.toUpperCase();
-    const bName = b.name.toUpperCase();
-    return aName.localeCompare(bName);
-}
-
 export function setCSRFFromCookie() {
     if (typeof document !== 'undefined' && typeof document.cookie !== 'undefined') {
         const cookies = document.cookie.split(';');
@@ -1746,68 +1606,6 @@ export function setCSRFFromCookie() {
                 break;
             }
         }
-    }
-}
-
-/**
- * Get closest parent which match selector
- */
-export function getClosestParent(elem: HTMLElement, selector: string) {
-    // Element.matches() polyfill
-    if (!Element.prototype.matches) {
-        Element.prototype.matches =
-            (Element.prototype as any).matchesSelector ||
-            (Element.prototype as any).mozMatchesSelector ||
-            (Element.prototype as any).msMatchesSelector ||
-            (Element.prototype as any).oMatchesSelector ||
-            (Element.prototype as any).webkitMatchesSelector ||
-            ((s) => {
-                // @ts-expect-error // TODO: resolve this typing and see if using function this is necessary
-                const matches = (this.document || this.ownerDocument).querySelectorAll(s);
-                let i = matches.length - 1;
-
-                // @ts-expect-error // TODO: resolve this typing and see if using function this is necessary
-                while (i >= 0 && matches.item(i) !== this) {
-                    i--;
-                }
-                return i > -1;
-            });
-    }
-
-    // Get the closest matching element
-    let currentElem = elem;
-
-    // @ts-expect-error // TODO: resolve this typing and see if using function this is necessary
-    for (; currentElem && currentElem !== document; currentElem = currentElem.parentNode) {
-        if (currentElem.matches(selector)) {
-            return currentElem;
-        }
-    }
-    return null;
-}
-
-/**
- * Adjust selection to correct text when there is Italic markdown (_) around selected text.
- */
-export function adjustSelection(inputBox: HTMLInputElement, e: React.SyntheticEvent<TextboxElement>) {
-    const el = e.target as TextboxElement;
-    const {selectionEnd, selectionStart, value} = el;
-
-    if (selectionStart === selectionEnd) {
-        // nothing selected.
-        return;
-    }
-
-    e.preventDefault();
-
-    const firstUnderscore = value.charAt(selectionStart!) === '_';
-    const lastUnderscore = value.charAt(selectionEnd! - 1) === '_';
-
-    const spaceBefore = value.charAt(selectionStart! - 1) === ' ';
-    const spaceAfter = value.charAt(selectionEnd!) === ' ';
-
-    if (firstUnderscore && lastUnderscore && (spaceBefore || spaceAfter)) {
-        setSelectionRange(inputBox, selectionStart! + 1, selectionEnd! - 1);
     }
 }
 
@@ -1834,6 +1632,26 @@ export function deleteKeysFromObject(value: Record<string, any>, keys: string[])
 function isSelection() {
     const selection = window.getSelection();
     return selection!.type === 'Range';
+}
+
+export function isTextSelectedInPostOrReply(e: React.KeyboardEvent | KeyboardEvent) {
+    const {id} = e.target as HTMLElement;
+
+    const isTypingInPost = id === 'post_textbox';
+    const isTypingInReply = id === 'reply_textbox';
+
+    if (!isTypingInPost && !isTypingInReply) {
+        return false;
+    }
+
+    const {
+        selectionStart,
+        selectionEnd,
+    } = e.target as TextboxElement;
+
+    const hasSelection = !isNil(selectionStart) && !isNil(selectionEnd) && selectionStart < selectionEnd;
+
+    return hasSelection;
 }
 
 /*
@@ -1936,26 +1754,27 @@ export function getRoleForTrackFlow() {
     return {started_by_role: startedByRole};
 }
 
-export function getRoleFromTrackFlow() {
+export function getSbr() {
     const params = new URLSearchParams(window.location.search);
     const sbr = params.get('sbr') ?? '';
+    return sbr;
+}
+
+export function getRoleFromTrackFlow() {
+    const sbr = getSbr();
     const startedByRole = TrackFlowRoles[sbr] ?? '';
 
     return {started_by_role: startedByRole};
 }
 
 export function getDatePickerLocalesForDateFns(locale: string, loadedLocales: Record<string, Locale>) {
-    if (locale && !loadedLocales[locale]) {
-        if (locale === 'en') {
-            loadedLocales[locale] = enGB;
-        } else {
-            try {
-                /* eslint-disable global-require */
-                loadedLocales[locale] = require(`date-fns/locale/${locale}/index.js`);
-                /* eslint-disable global-require */
-            } catch (e) {
-                console.log(e); // eslint-disable-line no-console
-            }
+    if (locale && locale !== 'en' && !loadedLocales[locale]) {
+        try {
+            /* eslint-disable global-require */
+            loadedLocales[locale] = require(`date-fns/locale/${locale}/index.js`);
+            /* eslint-disable global-require */
+        } catch (e) {
+            console.log(e); // eslint-disable-line no-console
         }
     }
 
@@ -1976,9 +1795,9 @@ const TrackFlowSources: Record<string, string> = {
 };
 
 function getTrackFlowSource() {
-    if (isMobile()) {
+    if (UserAgent.isMobile()) {
         return TrackFlowSources.wm;
-    } else if (isDesktopApp()) {
+    } else if (UserAgent.isDesktopApp()) {
         return TrackFlowSources.d;
     }
     return TrackFlowSources.wd;

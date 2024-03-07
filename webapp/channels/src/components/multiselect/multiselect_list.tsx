@@ -8,7 +8,7 @@ import type {getOptionValue} from 'react-select/src/builtins';
 import LoadingScreen from 'components/loading_screen';
 
 import Constants from 'utils/constants';
-import {cmdOrCtrlPressed} from 'utils/utils';
+import {cmdOrCtrlPressed} from 'utils/keyboard';
 
 import type {Value} from './multiselect';
 

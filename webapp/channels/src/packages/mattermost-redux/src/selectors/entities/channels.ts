@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {max} from 'lodash';
+import max from 'lodash/max';
 
 import type {
     Channel,
@@ -17,7 +17,6 @@ import type {Team} from '@mattermost/types/teams';
 import type {UserProfile, UsersState} from '@mattermost/types/users';
 import type {
     IDMappedObjects,
-    RelationOneToMany,
     RelationOneToManyUnique,
     RelationOneToOne,
 } from '@mattermost/types/utilities';
@@ -95,7 +94,11 @@ export function getAllChannelStats(state: GlobalState): RelationOneToOne<Channel
     return state.entities.channels.stats;
 }
 
-export function getChannelsInTeam(state: GlobalState): RelationOneToMany<Team, Channel> {
+export function getChannelsMemberCount(state: GlobalState): Record<string, number> {
+    return state.entities.channels.channelsMemberCount;
+}
+
+export function getChannelsInTeam(state: GlobalState): RelationOneToManyUnique<Team, Channel> {
     return state.entities.channels.channelsInTeam;
 }
 
@@ -127,7 +130,7 @@ export function getChannelsInPolicy() {
 export const getDirectChannelsSet: (state: GlobalState) => Set<string> = createSelector(
     'getDirectChannelsSet',
     getChannelsInTeam,
-    (channelsInTeam: RelationOneToMany<Team, Channel>): Set<string> => {
+    (channelsInTeam: RelationOneToManyUnique<Team, Channel>): Set<string> => {
         if (!channelsInTeam) {
             return new Set();
         }
@@ -138,6 +141,10 @@ export const getDirectChannelsSet: (state: GlobalState) => Set<string> = createS
 
 export function getChannelMembersInChannels(state: GlobalState): RelationOneToOne<Channel, Record<string, ChannelMembership>> {
     return state.entities.channels.membersInChannel;
+}
+
+export function getChannelMember(state: GlobalState, channelId: string, userId: string): ChannelMembership | undefined {
+    return getChannelMembersInChannels(state)[channelId]?.[userId];
 }
 
 // makeGetChannel returns a selector that returns a channel from the store with the following filled in for DM/GM channels:
@@ -346,7 +353,7 @@ export function makeGetChannelUnreadCount(): (state: GlobalState, channelId: str
     );
 }
 
-export function getChannelByName(state: GlobalState, channelName: string): Channel | undefined | null {
+export function getChannelByName(state: GlobalState, channelName: string): Channel | undefined {
     return getChannelByNameHelper(getAllChannels(state), channelName);
 }
 
@@ -356,12 +363,12 @@ export function getChannelByTeamIdAndChannelName(state: GlobalState, teamId: str
     );
 }
 
-export const getChannelSetInCurrentTeam: (state: GlobalState) => string[] = createSelector(
+export const getChannelSetInCurrentTeam: (state: GlobalState) => Set<string> = createSelector(
     'getChannelSetInCurrentTeam',
     getCurrentTeamId,
     getChannelsInTeam,
-    (currentTeamId: string, channelsInTeam: RelationOneToMany<Team, Channel>): string[] => {
-        return (channelsInTeam && channelsInTeam[currentTeamId]) || [];
+    (currentTeamId: string, channelsInTeam: RelationOneToManyUnique<Team, Channel>) => {
+        return (channelsInTeam && channelsInTeam[currentTeamId]) || new Set();
     },
 );
 
@@ -379,7 +386,7 @@ export const getChannelSetForAllTeams: (state: GlobalState) => string[] = create
     },
 );
 
-function sortAndInjectChannels(channels: IDMappedObjects<Channel>, channelSet: string[], locale: string): Channel[] {
+function sortAndInjectChannels(channels: IDMappedObjects<Channel>, channelSet: string[] | Set<string>, locale: string): Channel[] {
     const currentChannels: Channel[] = [];
 
     if (typeof channelSet === 'undefined') {
@@ -398,7 +405,7 @@ export const getChannelsInCurrentTeam: (state: GlobalState) => Channel[] = creat
     getAllChannels,
     getChannelSetInCurrentTeam,
     getCurrentUser,
-    (channels: IDMappedObjects<Channel>, currentTeamChannelSet: string[], currentUser: UserProfile): Channel[] => {
+    (channels: IDMappedObjects<Channel>, currentTeamChannelSet: Set<string>, currentUser: UserProfile): Channel[] => {
         let locale = General.DEFAULT_LOCALE;
 
         if (currentUser && currentUser.locale) {
@@ -425,8 +432,8 @@ export const getChannelsNameMapInTeam: (state: GlobalState, teamId: string) => R
     getAllChannels,
     getChannelsInTeam,
     (state: GlobalState, teamId: string): string => teamId,
-    (channels: IDMappedObjects<Channel>, channelsInTeams: RelationOneToMany<Team, Channel>, teamId: string): Record<string, Channel> => {
-        const channelsInTeam = channelsInTeams[teamId] || [];
+    (channels: IDMappedObjects<Channel>, channelsInTeams: RelationOneToManyUnique<Team, Channel>, teamId: string): Record<string, Channel> => {
+        const channelsInTeam = channelsInTeams[teamId] || new Set();
         const channelMap: Record<string, Channel> = {};
         channelsInTeam.forEach((id) => {
             const channel = channels[id];
@@ -440,7 +447,7 @@ export const getChannelsNameMapInCurrentTeam: (state: GlobalState) => Record<str
     'getChannelsNameMapInCurrentTeam',
     getAllChannels,
     getChannelSetInCurrentTeam,
-    (channels: IDMappedObjects<Channel>, currentTeamChannelSet: string[]): Record<string, Channel> => {
+    (channels: IDMappedObjects<Channel>, currentTeamChannelSet: Set<string>): Record<string, Channel> => {
         const channelMap: Record<string, Channel> = {};
         currentTeamChannelSet.forEach((id) => {
             const channel = channels[id];
@@ -454,7 +461,7 @@ export const getChannelNameToDisplayNameMap: (state: GlobalState) => Record<stri
     'getChannelNameToDisplayNameMap',
     getAllChannels,
     getChannelSetInCurrentTeam,
-    (channels: IDMappedObjects<Channel>, currentTeamChannelSet: string[]) => {
+    (channels: IDMappedObjects<Channel>, currentTeamChannelSet: Set<string>) => {
         const channelMap: Record<string, string> = {};
         for (const id of currentTeamChannelSet) {
             const channel = channels[id];
@@ -940,7 +947,7 @@ export const getChannelIdsInCurrentTeam: (state: GlobalState) => string[] = crea
     'getChannelIdsInCurrentTeam',
     getCurrentTeamId,
     getChannelsInTeam,
-    (currentTeamId: string, channelsInTeam: RelationOneToMany<Team, Channel>): string[] => {
+    (currentTeamId: string, channelsInTeam: RelationOneToManyUnique<Team, Channel>): string[] => {
         return Array.from(channelsInTeam[currentTeamId] || []);
     },
 );

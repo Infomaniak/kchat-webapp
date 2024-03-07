@@ -30,11 +30,11 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
 <div
   className="wrapper--fixed"
 >
-  <div
-    className="admin-console__header with-back"
+  <AdminHeader
+    withBackButton={true}
   >
     <div>
-      <Connect(BlockableLink)
+      <Connect(Component)
         className="fa fa-angle-left back"
         to="/admin_console/user_management/permissions"
       />
@@ -43,7 +43,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         id="admin.permissions.teamScheme"
       />
     </div>
-  </div>
+  </AdminHeader>
   <div
     className="admin-console__wrapper"
   >
@@ -71,11 +71,18 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         </div>
       </div>
       <AdminPanel
-        className=""
-        subtitleDefault="Set the name and description for this scheme."
-        subtitleId="admin.permissions.teamScheme.schemeDetailsDescription"
-        titleDefault="Scheme Details"
-        titleId="admin.permissions.teamScheme.schemeDetailsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Set the name and description for this scheme.",
+            "id": "admin.permissions.teamScheme.schemeDetailsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Scheme Details",
+            "id": "admin.permissions.teamScheme.schemeDetailsTitle",
+          }
+        }
       >
         <div
           className="team-scheme-details"
@@ -92,17 +99,12 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
                 id="admin.permissions.teamScheme.schemeNameLabel"
               />
             </label>
-            <LocalizedInput
+            <input
               className="form-control"
               disabled={false}
               id="scheme-name"
               onChange={[Function]}
-              placeholder={
-                Object {
-                  "defaultMessage": "Scheme Name",
-                  "id": "admin.permissions.teamScheme.schemeNamePlaceholder",
-                }
-              }
+              placeholder="Scheme Name"
               type="text"
               value="Test scheme"
             />
@@ -132,15 +134,27 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         </div>
       </AdminPanel>
       <AdminPanelWithButton
-        buttonTextDefault="Add Teams"
-        buttonTextId="admin.permissions.teamScheme.addTeams"
+        buttonText={
+          Object {
+            "defaultMessage": "Add Teams",
+            "id": "admin.permissions.teamScheme.addTeams",
+          }
+        }
         className="permissions-block"
         disabled={false}
         onButtonClick={[Function]}
-        subtitleDefault="Select teams where permission exceptions are required."
-        subtitleId="admin.permissions.teamScheme.selectTeamsDescription"
-        titleDefault="Select teams to override permissions"
-        titleId="admin.permissions.teamScheme.selectTeamsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Select teams where permission exceptions are required.",
+            "id": "admin.permissions.teamScheme.selectTeamsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Select teams to override permissions",
+            "id": "admin.permissions.teamScheme.selectTeamsTitle",
+          }
+        }
       >
         <div
           className="teams-list"
@@ -158,13 +172,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       <AdminPanelTogglable
         className="permissions-block all_users"
         id="all_users"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to all members, including administrators and newly created users."
-        subtitleId="admin.permissions.systemScheme.allMembersDescription"
-        titleDefault="All Members"
-        titleId="admin.permissions.systemScheme.allMembersTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to all members, including administrators and newly created users.",
+            "id": "admin.permissions.systemScheme.allMembersDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "All Members",
+            "id": "admin.permissions.systemScheme.allMembersTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -182,13 +203,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block channel_admin"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to channel creators and any users promoted to Channel Administrator."
-        subtitleId="admin.permissions.systemScheme.channelAdminsDescription"
-        titleDefault="Channel Administrators"
-        titleId="admin.permissions.systemScheme.channelAdminsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to channel creators and any users promoted to Channel Administrator.",
+            "id": "admin.permissions.systemScheme.channelAdminsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Channel Administrators",
+            "id": "admin.permissions.systemScheme.channelAdminsTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -211,13 +239,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to administrators of a playbook."
-        subtitleId="admin.permissions.systemScheme.playbookAdminSubtitle"
-        titleDefault="Playbook Administrator"
-        titleId="admin.permissions.systemScheme.playbookAdmin"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to administrators of a playbook.",
+            "id": "admin.permissions.systemScheme.playbookAdminSubtitle",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Playbook Administrator",
+            "id": "admin.permissions.systemScheme.playbookAdmin",
+          }
+        }
       >
         <PermissionsTreePlaybooks
           license={
@@ -247,13 +282,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block team_admin"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to team creators and any users promoted to Team Administrator."
-        subtitleId="admin.permissions.systemScheme.teamAdminsDescription"
-        titleDefault="Team Administrators"
-        titleId="admin.permissions.systemScheme.teamAdminsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to team creators and any users promoted to Team Administrator.",
+            "id": "admin.permissions.systemScheme.teamAdminsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Team Administrators",
+            "id": "admin.permissions.systemScheme.teamAdminsTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -293,7 +335,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       saving={false}
       savingMessage="Saving Config..."
     />
-    <Connect(BlockableLink)
+    <Connect(Component)
       className="cancel-button"
       to="/admin_console/user_management/permissions"
     >
@@ -301,7 +343,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         defaultMessage="Cancel"
         id="admin.permissions.permissionSchemes.cancel"
       />
-    </Connect(BlockableLink)>
+    </Connect(Component)>
     <div
       className="error-message"
     >
@@ -360,11 +402,11 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
 <div
   className="wrapper--fixed"
 >
-  <div
-    className="admin-console__header with-back"
+  <AdminHeader
+    withBackButton={true}
   >
     <div>
-      <Connect(BlockableLink)
+      <Connect(Component)
         className="fa fa-angle-left back"
         to="/admin_console/user_management/permissions"
       />
@@ -373,7 +415,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         id="admin.permissions.teamScheme"
       />
     </div>
-  </div>
+  </AdminHeader>
   <div
     className="admin-console__wrapper"
   >
@@ -401,11 +443,18 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         </div>
       </div>
       <AdminPanel
-        className=""
-        subtitleDefault="Set the name and description for this scheme."
-        subtitleId="admin.permissions.teamScheme.schemeDetailsDescription"
-        titleDefault="Scheme Details"
-        titleId="admin.permissions.teamScheme.schemeDetailsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Set the name and description for this scheme.",
+            "id": "admin.permissions.teamScheme.schemeDetailsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Scheme Details",
+            "id": "admin.permissions.teamScheme.schemeDetailsTitle",
+          }
+        }
       >
         <div
           className="team-scheme-details"
@@ -422,17 +471,12 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
                 id="admin.permissions.teamScheme.schemeNameLabel"
               />
             </label>
-            <LocalizedInput
+            <input
               className="form-control"
               disabled={false}
               id="scheme-name"
               onChange={[Function]}
-              placeholder={
-                Object {
-                  "defaultMessage": "Scheme Name",
-                  "id": "admin.permissions.teamScheme.schemeNamePlaceholder",
-                }
-              }
+              placeholder="Scheme Name"
               type="text"
               value="Test scheme"
             />
@@ -462,15 +506,27 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         </div>
       </AdminPanel>
       <AdminPanelWithButton
-        buttonTextDefault="Add Teams"
-        buttonTextId="admin.permissions.teamScheme.addTeams"
+        buttonText={
+          Object {
+            "defaultMessage": "Add Teams",
+            "id": "admin.permissions.teamScheme.addTeams",
+          }
+        }
         className="permissions-block"
         disabled={false}
         onButtonClick={[Function]}
-        subtitleDefault="Select teams where permission exceptions are required."
-        subtitleId="admin.permissions.teamScheme.selectTeamsDescription"
-        titleDefault="Select teams to override permissions"
-        titleId="admin.permissions.teamScheme.selectTeamsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Select teams where permission exceptions are required.",
+            "id": "admin.permissions.teamScheme.selectTeamsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Select teams to override permissions",
+            "id": "admin.permissions.teamScheme.selectTeamsTitle",
+          }
+        }
       >
         <div
           className="teams-list"
@@ -488,13 +544,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       <AdminPanelTogglable
         className="permissions-block"
         id="guests"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to guest users."
-        subtitleId="admin.permissions.systemScheme.GuestsDescription"
-        titleDefault="Guests"
-        titleId="admin.permissions.systemScheme.GuestsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to guest users.",
+            "id": "admin.permissions.systemScheme.GuestsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Guests",
+            "id": "admin.permissions.systemScheme.GuestsTitle",
+          }
+        }
       >
         <Connect(GuestPermissionsTree)
           onToggle={[Function]}
@@ -513,13 +576,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       <AdminPanelTogglable
         className="permissions-block all_users"
         id="all_users"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to all members, including administrators and newly created users."
-        subtitleId="admin.permissions.systemScheme.allMembersDescription"
-        titleDefault="All Members"
-        titleId="admin.permissions.systemScheme.allMembersTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to all members, including administrators and newly created users.",
+            "id": "admin.permissions.systemScheme.allMembersDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "All Members",
+            "id": "admin.permissions.systemScheme.allMembersTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -537,13 +607,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block channel_admin"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to channel creators and any users promoted to Channel Administrator."
-        subtitleId="admin.permissions.systemScheme.channelAdminsDescription"
-        titleDefault="Channel Administrators"
-        titleId="admin.permissions.systemScheme.channelAdminsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to channel creators and any users promoted to Channel Administrator.",
+            "id": "admin.permissions.systemScheme.channelAdminsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Channel Administrators",
+            "id": "admin.permissions.systemScheme.channelAdminsTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -566,13 +643,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to administrators of a playbook."
-        subtitleId="admin.permissions.systemScheme.playbookAdminSubtitle"
-        titleDefault="Playbook Administrator"
-        titleId="admin.permissions.systemScheme.playbookAdmin"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to administrators of a playbook.",
+            "id": "admin.permissions.systemScheme.playbookAdminSubtitle",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Playbook Administrator",
+            "id": "admin.permissions.systemScheme.playbookAdmin",
+          }
+        }
       >
         <PermissionsTreePlaybooks
           license={
@@ -600,13 +684,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block team_admin"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to team creators and any users promoted to Team Administrator."
-        subtitleId="admin.permissions.systemScheme.teamAdminsDescription"
-        titleDefault="Team Administrators"
-        titleId="admin.permissions.systemScheme.teamAdminsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to team creators and any users promoted to Team Administrator.",
+            "id": "admin.permissions.systemScheme.teamAdminsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Team Administrators",
+            "id": "admin.permissions.systemScheme.teamAdminsTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -646,7 +737,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       saving={false}
       savingMessage="Saving Config..."
     />
-    <Connect(BlockableLink)
+    <Connect(Component)
       className="cancel-button"
       to="/admin_console/user_management/permissions"
     >
@@ -654,7 +745,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         defaultMessage="Cancel"
         id="admin.permissions.permissionSchemes.cancel"
       />
-    </Connect(BlockableLink)>
+    </Connect(Component)>
     <div
       className="error-message"
     >
@@ -713,11 +804,11 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
 <div
   className="wrapper--fixed"
 >
-  <div
-    className="admin-console__header with-back"
+  <AdminHeader
+    withBackButton={true}
   >
     <div>
-      <Connect(BlockableLink)
+      <Connect(Component)
         className="fa fa-angle-left back"
         to="/admin_console/user_management/permissions"
       />
@@ -726,7 +817,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         id="admin.permissions.teamScheme"
       />
     </div>
-  </div>
+  </AdminHeader>
   <div
     className="admin-console__wrapper"
   >
@@ -754,11 +845,18 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         </div>
       </div>
       <AdminPanel
-        className=""
-        subtitleDefault="Set the name and description for this scheme."
-        subtitleId="admin.permissions.teamScheme.schemeDetailsDescription"
-        titleDefault="Scheme Details"
-        titleId="admin.permissions.teamScheme.schemeDetailsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Set the name and description for this scheme.",
+            "id": "admin.permissions.teamScheme.schemeDetailsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Scheme Details",
+            "id": "admin.permissions.teamScheme.schemeDetailsTitle",
+          }
+        }
       >
         <div
           className="team-scheme-details"
@@ -775,17 +873,12 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
                 id="admin.permissions.teamScheme.schemeNameLabel"
               />
             </label>
-            <LocalizedInput
+            <input
               className="form-control"
               disabled={false}
               id="scheme-name"
               onChange={[Function]}
-              placeholder={
-                Object {
-                  "defaultMessage": "Scheme Name",
-                  "id": "admin.permissions.teamScheme.schemeNamePlaceholder",
-                }
-              }
+              placeholder="Scheme Name"
               type="text"
               value="Test scheme"
             />
@@ -815,15 +908,27 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         </div>
       </AdminPanel>
       <AdminPanelWithButton
-        buttonTextDefault="Add Teams"
-        buttonTextId="admin.permissions.teamScheme.addTeams"
+        buttonText={
+          Object {
+            "defaultMessage": "Add Teams",
+            "id": "admin.permissions.teamScheme.addTeams",
+          }
+        }
         className="permissions-block"
         disabled={false}
         onButtonClick={[Function]}
-        subtitleDefault="Select teams where permission exceptions are required."
-        subtitleId="admin.permissions.teamScheme.selectTeamsDescription"
-        titleDefault="Select teams to override permissions"
-        titleId="admin.permissions.teamScheme.selectTeamsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Select teams where permission exceptions are required.",
+            "id": "admin.permissions.teamScheme.selectTeamsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Select teams to override permissions",
+            "id": "admin.permissions.teamScheme.selectTeamsTitle",
+          }
+        }
       >
         <div
           className="teams-list"
@@ -841,13 +946,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       <AdminPanelTogglable
         className="permissions-block"
         id="guests"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to guest users."
-        subtitleId="admin.permissions.systemScheme.GuestsDescription"
-        titleDefault="Guests"
-        titleId="admin.permissions.systemScheme.GuestsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to guest users.",
+            "id": "admin.permissions.systemScheme.GuestsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Guests",
+            "id": "admin.permissions.systemScheme.GuestsTitle",
+          }
+        }
       >
         <Connect(GuestPermissionsTree)
           onToggle={[Function]}
@@ -866,13 +978,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       <AdminPanelTogglable
         className="permissions-block all_users"
         id="all_users"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to all members, including administrators and newly created users."
-        subtitleId="admin.permissions.systemScheme.allMembersDescription"
-        titleDefault="All Members"
-        titleId="admin.permissions.systemScheme.allMembersTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to all members, including administrators and newly created users.",
+            "id": "admin.permissions.systemScheme.allMembersDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "All Members",
+            "id": "admin.permissions.systemScheme.allMembersTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -890,13 +1009,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block channel_admin"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to channel creators and any users promoted to Channel Administrator."
-        subtitleId="admin.permissions.systemScheme.channelAdminsDescription"
-        titleDefault="Channel Administrators"
-        titleId="admin.permissions.systemScheme.channelAdminsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to channel creators and any users promoted to Channel Administrator.",
+            "id": "admin.permissions.systemScheme.channelAdminsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Channel Administrators",
+            "id": "admin.permissions.systemScheme.channelAdminsTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -919,13 +1045,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to administrators of a playbook."
-        subtitleId="admin.permissions.systemScheme.playbookAdminSubtitle"
-        titleDefault="Playbook Administrator"
-        titleId="admin.permissions.systemScheme.playbookAdmin"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to administrators of a playbook.",
+            "id": "admin.permissions.systemScheme.playbookAdminSubtitle",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Playbook Administrator",
+            "id": "admin.permissions.systemScheme.playbookAdmin",
+          }
+        }
       >
         <PermissionsTreePlaybooks
           license={
@@ -955,13 +1088,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block team_admin"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to team creators and any users promoted to Team Administrator."
-        subtitleId="admin.permissions.systemScheme.teamAdminsDescription"
-        titleDefault="Team Administrators"
-        titleId="admin.permissions.systemScheme.teamAdminsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to team creators and any users promoted to Team Administrator.",
+            "id": "admin.permissions.systemScheme.teamAdminsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Team Administrators",
+            "id": "admin.permissions.systemScheme.teamAdminsTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -1001,7 +1141,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       saving={false}
       savingMessage="Saving Config..."
     />
-    <Connect(BlockableLink)
+    <Connect(Component)
       className="cancel-button"
       to="/admin_console/user_management/permissions"
     >
@@ -1009,7 +1149,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         defaultMessage="Cancel"
         id="admin.permissions.permissionSchemes.cancel"
       />
-    </Connect(BlockableLink)>
+    </Connect(Component)>
     <div
       className="error-message"
     >
@@ -1134,11 +1274,11 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
 <div
   className="wrapper--fixed"
 >
-  <div
-    className="admin-console__header with-back"
+  <AdminHeader
+    withBackButton={true}
   >
     <div>
-      <Connect(BlockableLink)
+      <Connect(Component)
         className="fa fa-angle-left back"
         to="/admin_console/user_management/permissions"
       />
@@ -1147,7 +1287,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         id="admin.permissions.teamScheme"
       />
     </div>
-  </div>
+  </AdminHeader>
   <div
     className="admin-console__wrapper"
   >
@@ -1175,11 +1315,18 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         </div>
       </div>
       <AdminPanel
-        className=""
-        subtitleDefault="Set the name and description for this scheme."
-        subtitleId="admin.permissions.teamScheme.schemeDetailsDescription"
-        titleDefault="Scheme Details"
-        titleId="admin.permissions.teamScheme.schemeDetailsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Set the name and description for this scheme.",
+            "id": "admin.permissions.teamScheme.schemeDetailsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Scheme Details",
+            "id": "admin.permissions.teamScheme.schemeDetailsTitle",
+          }
+        }
       >
         <div
           className="team-scheme-details"
@@ -1196,17 +1343,12 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
                 id="admin.permissions.teamScheme.schemeNameLabel"
               />
             </label>
-            <LocalizedInput
+            <input
               className="form-control"
               disabled={false}
               id="scheme-name"
               onChange={[Function]}
-              placeholder={
-                Object {
-                  "defaultMessage": "Scheme Name",
-                  "id": "admin.permissions.teamScheme.schemeNamePlaceholder",
-                }
-              }
+              placeholder="Scheme Name"
               type="text"
               value=""
             />
@@ -1236,15 +1378,27 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         </div>
       </AdminPanel>
       <AdminPanelWithButton
-        buttonTextDefault="Add Teams"
-        buttonTextId="admin.permissions.teamScheme.addTeams"
+        buttonText={
+          Object {
+            "defaultMessage": "Add Teams",
+            "id": "admin.permissions.teamScheme.addTeams",
+          }
+        }
         className="permissions-block"
         disabled={false}
         onButtonClick={[Function]}
-        subtitleDefault="Select teams where permission exceptions are required."
-        subtitleId="admin.permissions.teamScheme.selectTeamsDescription"
-        titleDefault="Select teams to override permissions"
-        titleId="admin.permissions.teamScheme.selectTeamsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Select teams where permission exceptions are required.",
+            "id": "admin.permissions.teamScheme.selectTeamsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Select teams to override permissions",
+            "id": "admin.permissions.teamScheme.selectTeamsTitle",
+          }
+        }
       >
         <div
           className="teams-list"
@@ -1262,13 +1416,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       <AdminPanelTogglable
         className="permissions-block"
         id="guests"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to guest users."
-        subtitleId="admin.permissions.systemScheme.GuestsDescription"
-        titleDefault="Guests"
-        titleId="admin.permissions.systemScheme.GuestsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to guest users.",
+            "id": "admin.permissions.systemScheme.GuestsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Guests",
+            "id": "admin.permissions.systemScheme.GuestsTitle",
+          }
+        }
       >
         <Connect(GuestPermissionsTree)
           onToggle={[Function]}
@@ -1287,13 +1448,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       <AdminPanelTogglable
         className="permissions-block all_users"
         id="all_users"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to all members, including administrators and newly created users."
-        subtitleId="admin.permissions.systemScheme.allMembersDescription"
-        titleDefault="All Members"
-        titleId="admin.permissions.systemScheme.allMembersTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to all members, including administrators and newly created users.",
+            "id": "admin.permissions.systemScheme.allMembersDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "All Members",
+            "id": "admin.permissions.systemScheme.allMembersTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -1311,13 +1479,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block channel_admin"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to channel creators and any users promoted to Channel Administrator."
-        subtitleId="admin.permissions.systemScheme.channelAdminsDescription"
-        titleDefault="Channel Administrators"
-        titleId="admin.permissions.systemScheme.channelAdminsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to channel creators and any users promoted to Channel Administrator.",
+            "id": "admin.permissions.systemScheme.channelAdminsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Channel Administrators",
+            "id": "admin.permissions.systemScheme.channelAdminsTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -1340,13 +1515,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to administrators of a playbook."
-        subtitleId="admin.permissions.systemScheme.playbookAdminSubtitle"
-        titleDefault="Playbook Administrator"
-        titleId="admin.permissions.systemScheme.playbookAdmin"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to administrators of a playbook.",
+            "id": "admin.permissions.systemScheme.playbookAdminSubtitle",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Playbook Administrator",
+            "id": "admin.permissions.systemScheme.playbookAdmin",
+          }
+        }
       >
         <PermissionsTreePlaybooks
           license={
@@ -1376,13 +1558,20 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       </AdminPanelTogglable>
       <AdminPanelTogglable
         className="permissions-block team_admin"
-        isDisabled={false}
         onToggle={[Function]}
         open={true}
-        subtitleDefault="Permissions granted to team creators and any users promoted to Team Administrator."
-        subtitleId="admin.permissions.systemScheme.teamAdminsDescription"
-        titleDefault="Team Administrators"
-        titleId="admin.permissions.systemScheme.teamAdminsTitle"
+        subtitle={
+          Object {
+            "defaultMessage": "Permissions granted to team creators and any users promoted to Team Administrator.",
+            "id": "admin.permissions.systemScheme.teamAdminsDescription",
+          }
+        }
+        title={
+          Object {
+            "defaultMessage": "Team Administrators",
+            "id": "admin.permissions.systemScheme.teamAdminsTitle",
+          }
+        }
       >
         <Connect(PermissionsTree)
           onToggle={[Function]}
@@ -1422,7 +1611,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
       saving={false}
       savingMessage="Saving Config..."
     />
-    <Connect(BlockableLink)
+    <Connect(Component)
       className="cancel-button"
       to="/admin_console/user_management/permissions"
     >
@@ -1430,7 +1619,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         defaultMessage="Cancel"
         id="admin.permissions.permissionSchemes.cancel"
       />
-    </Connect(BlockableLink)>
+    </Connect(Component)>
     <div
       className="error-message"
     >

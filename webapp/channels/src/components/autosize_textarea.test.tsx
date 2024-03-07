@@ -4,9 +4,7 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
-import {AutosizeTextarea} from 'components/autosize_textarea';
-
-global.ResizeObserver = require('resize-observer-polyfill');
+import AutosizeTextarea from 'components/autosize_textarea';
 
 describe('components/AutosizeTextarea', () => {
     test('should match snapshot, init', () => {

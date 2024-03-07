@@ -12,11 +12,15 @@ import {mark, trackEvent} from 'actions/telemetry_actions';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+import {ChannelsAndDirectMessagesTour} from 'components/tours/onboarding_tour';
 
-import Pluggable from 'plugins/pluggable';
 import Constants, {RHSStates} from 'utils/constants';
 import {wrapEmojis} from 'utils/emoji_utils';
-import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
+import {cmdOrCtrlPressed} from 'utils/keyboard';
+import {isDesktopApp} from 'utils/user_agent';
+import {localizeMessage} from 'utils/utils';
+
+import Pluggable from 'plugins/pluggable';
 
 import type {RhsState} from 'types/store/rhs';
 
@@ -51,6 +55,10 @@ type Props = {
     isChannelSelected: boolean;
 
     teammateId?: string;
+
+    // firstChannelName?: string;
+
+    // showChannelsTutorialStep: boolean;
 
     hasUrgent: boolean;
     rhsState?: RhsState;
@@ -176,8 +184,19 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
             label,
             link,
             unreadMentions,
+
+            // firstChannelName,
+            // showChannelsTutorialStep,
             hasUrgent,
         } = this.props;
+
+        // let channelsTutorialTip: JSX.Element | null = null;
+
+        // firstChannelName is based on channel.name,
+        // but we want to display `display_name` to the user, so we check against `.name` for channel equality but pass in the .display_name value
+        // if (firstChannelName === channel.name || (!firstChannelName && showChannelsTutorialStep && channel.name === Constants.DEFAULT_CHANNEL)) {
+        //     channelsTutorialTip = firstChannelName ? (<ChannelsAndDirectMessagesTour firstChannelName={channel.display_name}/>) : <ChannelsAndDirectMessagesTour/>;
+        // }
 
         let labelElement: JSX.Element = (
             <span className='SidebarChannelLinkLabel'>
@@ -291,6 +310,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 tabIndex={0}
             >
                 {content}
+                {/* {channelsTutorialTip} */}
             </Link>
         );
 

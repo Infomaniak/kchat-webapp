@@ -31,12 +31,13 @@ import {UsersState} from './users';
 import {AppsState} from './apps';
 import {InsightsState} from './insights';
 import {GifsState} from './gifs';
-import {WorkTemplatesState} from './work_templates';
+import {LimitsState} from './limits';
 
 export type GlobalState = {
     entities: {
         general: GeneralState;
         users: UsersState;
+        limits: LimitsState;
         teams: TeamsState;
         channels: ChannelsState;
         posts: PostsState;
@@ -71,7 +72,6 @@ export type GlobalState = {
         hostedCustomer: HostedCustomerState;
         usage: CloudUsage;
         insights: InsightsState;
-        worktemplates: WorkTemplatesState;
     };
     errors: any[];
     requests: {

@@ -7,6 +7,7 @@ import type {ChangeEvent, ElementType, FocusEvent, KeyboardEvent, MouseEvent} fr
 import {FormattedMessage} from 'react-intl';
 
 import type {Channel} from '@mattermost/types/channels';
+import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
@@ -17,11 +18,11 @@ import AtMentionProvider from 'components/suggestion/at_mention_provider';
 import ChannelMentionProvider from 'components/suggestion/channel_mention_provider';
 import AppCommandProvider from 'components/suggestion/command_provider/app_provider';
 import CommandProvider from 'components/suggestion/command_provider/command_provider';
-import EmoticonProvider from 'components/suggestion/emoticon_provider.jsx';
+import EmoticonProvider from 'components/suggestion/emoticon_provider';
 import type Provider from 'components/suggestion/provider';
 import SuggestionBox from 'components/suggestion/suggestion_box';
 import type SuggestionBoxComponent from 'components/suggestion/suggestion_box/suggestion_box';
-import SuggestionList from 'components/suggestion/suggestion_list.jsx';
+import SuggestionList from 'components/suggestion/suggestion_list';
 
 import * as Utils from 'utils/utils';
 
@@ -42,10 +43,10 @@ export type Props = {
     onWidthChange?: (width: number) => void;
     createMessage: string;
     onKeyDown?: (e: KeyboardEvent<TextboxElement>) => void;
-    onSelect?: (e: React.SyntheticEvent<TextboxElement>) => void;
     onMouseUp?: (e: React.MouseEvent<TextboxElement>) => void;
     onKeyUp?: (e: React.KeyboardEvent<TextboxElement>) => void;
     onBlur?: (e: FocusEvent<TextboxElement>) => void;
+    onFocus?: (e: FocusEvent<TextboxElement>) => void;
     supportsCommands?: boolean;
     handlePostError?: (message: JSX.Element | null) => void;
     onPaste?: (e: ClipboardEvent) => void;
@@ -55,12 +56,12 @@ export type Props = {
     emojiEnabled?: boolean;
     characterLimit: number;
     disabled?: boolean;
-    hidden?: boolean;
     badConnection?: boolean;
     currentUserId: string;
     currentTeamId: string;
     preview?: boolean;
-    autocompleteGroups: Array<{ id: string }> | null;
+    autocompleteGroups: Group[] | null;
+    delayChannelAutocomplete: boolean;
     actions: {
         autocompleteUsersInChannel: (prefix: string, channelId: string) => Promise<ActionResult>;
         autocompleteChannels: (term: string, success: (channels: Channel[]) => void, error: () => void) => Promise<ActionResult>;
@@ -92,7 +93,6 @@ export default class Textbox extends React.PureComponent<Props> {
         supportsCommands: true,
         inputComponent: AutosizeTextarea,
         suggestionList: SuggestionList,
-        hidden: false,
     };
 
     constructor(props: Props) {
@@ -118,7 +118,7 @@ export default class Textbox extends React.PureComponent<Props> {
                 searchAssociatedGroupsForReference: (prefix: string) => this.props.actions.searchAssociatedGroupsForReference(prefix, this.props.currentTeamId, this.props.channelId),
                 priorityProfiles: this.props.priorityProfiles,
             }),
-            new ChannelMentionProvider(props.actions.autocompleteChannels),
+            new ChannelMentionProvider(props.actions.autocompleteChannels, props.delayChannelAutocomplete),
             new EmoticonProvider(),
         );
 
@@ -185,6 +185,16 @@ export default class Textbox extends React.PureComponent<Props> {
             }
         }
 
+        if (this.props.delayChannelAutocomplete !== prevProps.delayChannelAutocomplete) {
+            for (const provider of this.suggestionProviders) {
+                if (provider instanceof ChannelMentionProvider) {
+                    provider.setProps({
+                        delayChannelAutocomplete: this.props.delayChannelAutocomplete,
+                    });
+                }
+            }
+        }
+
         if (prevProps.value !== this.props.value) {
             this.checkMessageLength(this.props.value);
         }
@@ -222,8 +232,6 @@ export default class Textbox extends React.PureComponent<Props> {
         // since we do only handle the sending when in preview mode this is fine to be casted
         this.props.onKeyDown?.(e as KeyboardEvent<TextboxElement>);
     };
-
-    handleSelect = (e: React.SyntheticEvent<TextboxElement>) => this.props.onSelect?.(e);
 
     handleMouseUp = (e: MouseEvent<TextboxElement>) => this.props.onMouseUp?.(e);
 
@@ -267,7 +275,7 @@ export default class Textbox extends React.PureComponent<Props> {
     };
 
     render() {
-        let textboxClassName = 'form-control custom-textarea';
+        let textboxClassName = 'form-control custom-textarea textbox-edit-area';
         if (this.props.emojiEnabled) {
             textboxClassName += ' custom-textarea--emoji-picker';
         }
@@ -278,50 +286,42 @@ export default class Textbox extends React.PureComponent<Props> {
         if (this.props.hasLabels) {
             textboxClassName += ' textarea--has-labels';
         }
-        if (this.props.preview) {
-            return (
-                <div
-                    ref={this.wrapper}
-                    className='textarea-wrapper'
-                >
-                    <div
-                        tabIndex={this.props.tabIndex || 0}
-                        ref={this.preview}
-                        className={classNames('form-control custom-textarea textbox-preview-area', {'textarea--has-labels': this.props.hasLabels})}
-                        onKeyPress={this.props.onKeyPress}
-                        onKeyDown={this.handleKeyDown}
-                        onBlur={this.handleBlur}
-                    >
-                        <PostMarkdown
-                            message={this.props.value}
-                            mentionKeys={[]}
-                            channelId={this.props.channelId}
-                            imageProps={{hideUtilities: true}}
-                        />
-                    </div>
-                </div>
-            );
-        }
 
         return (
             <div
                 ref={this.wrapper}
-                className={`textarea-wrapper${this.props.hidden ? ' hidden' : ''}`}
+                className={classNames('textarea-wrapper', {'textarea-wrapper-preview': this.props.preview})}
             >
+                <div
+                    tabIndex={this.props.tabIndex || 0}
+                    ref={this.preview}
+                    className={classNames('form-control custom-textarea textbox-preview-area', {'textarea--has-labels': this.props.hasLabels})}
+                    onKeyPress={this.props.onKeyPress}
+                    onKeyDown={this.handleKeyDown}
+                    onBlur={this.handleBlur}
+                >
+                    <PostMarkdown
+                        message={this.props.value}
+                        channelId={this.props.channelId}
+                        imageProps={{hideUtilities: true}}
+                    />
+                </div>
                 <SuggestionBox
-                    id={this.props.id}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     ref={this.message}
+                    id={this.props.id}
                     className={textboxClassName}
                     spellCheck='true'
                     placeholder={this.props.createMessage}
                     onChange={this.handleChange}
                     onKeyPress={this.props.onKeyPress}
-                    onSelect={this.handleSelect}
                     onKeyDown={this.handleKeyDown}
                     onMouseUp={this.handleMouseUp}
                     onKeyUp={this.handleKeyUp}
                     onComposition={this.props.onComposition}
                     onBlur={this.handleBlur}
+                    onFocus={this.props.onFocus}
                     onHeightChange={this.props.onHeightChange}
                     onWidthChange={this.props.onWidthChange}
                     onPaste={this.props.onPaste}
@@ -330,7 +330,6 @@ export default class Textbox extends React.PureComponent<Props> {
                     listComponent={this.props.suggestionList}
                     listPosition={this.props.suggestionListPosition}
                     providers={this.suggestionProviders}
-                    channelId={this.props.channelId}
                     value={this.props.value}
                     renderDividers={ALL}
                     disabled={this.props.disabled}

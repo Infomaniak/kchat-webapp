@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedDate, FormattedMessage, FormattedNumber} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
+import {CheckCircleOutlineIcon, CheckIcon, ClockOutlineIcon} from '@mattermost/compass-icons/components';
 import type {Invoice, InvoiceLineItem, Product} from '@mattermost/types/cloud';
 
 import {Client4} from 'mattermost-redux/client';
@@ -55,7 +55,7 @@ export const noBillingHistory = (
     </div>
 );
 
-export const freeTrial = (onUpgradeMattermostCloud: (callerInfo: string) => void, daysLeftOnTrial: number) => (
+export const freeTrial = (onUpgradeMattermostCloud: (callerInfo: string) => void, daysLeftOnTrial: number, reverseTrial: boolean) => (
     <div className='UpgradeMattermostCloud'>
         <div className='UpgradeMattermostCloud__image'>
             <UpgradeSvg
@@ -104,44 +104,66 @@ export const freeTrial = (onUpgradeMattermostCloud: (callerInfo: string) => void
             onClick={() => onUpgradeMattermostCloud('billing_summary_free_trial_upgrade_button')}
             className='UpgradeMattermostCloud__upgradeButton'
         >
-            <FormattedMessage
-                id='admin.billing.subscription.cloudTrial.subscribeButton'
-                defaultMessage='Upgrade Now'
-            />
+            {
+                reverseTrial ? (
+                    <FormattedMessage
+                        id='admin.billing.subscription.cloudTrial.purchaseButton'
+                        defaultMessage='Purchase Now'
+                    />
+
+                ) : (
+                    <FormattedMessage
+                        id='admin.billing.subscription.cloudTrial.subscribeButton'
+                        defaultMessage='Upgrade Now'
+                    />
+                )
+
+            }
         </button>
     </div>
 );
 
-export const getPaymentStatus = (status: string) => {
+export const getPaymentStatus = (status: string, willRenew?: boolean) => {
+    if (willRenew) {
+        return (
+            <div className='BillingSummary__lastInvoice-headerStatus paid'>
+                <CheckIcon/> {' '}
+                <FormattedMessage
+                    id='admin.billing.subscriptions.billing_summary.lastInvoice.approved'
+                    defaultMessage='Approved'
+                />
+            </div>
+        );
+    }
     switch (status.toLowerCase()) {
     case 'failed':
         return (
             <div className='BillingSummary__lastInvoice-headerStatus failed'>
+                <i className='icon icon-alert-outline'/> {' '}
                 <FormattedMessage
                     id='admin.billing.subscriptions.billing_summary.lastInvoice.failed'
                     defaultMessage='Failed'
                 />
-                <i className='icon icon-alert-outline'/>
             </div>
         );
     case 'paid':
         return (
             <div className='BillingSummary__lastInvoice-headerStatus paid'>
+                <CheckCircleOutlineIcon/> {' '}
                 <FormattedMessage
                     id='admin.billing.subscriptions.billing_summary.lastInvoice.paid'
                     defaultMessage='Paid'
                 />
-                <CheckCircleOutlineIcon/>
             </div>
         );
     default:
         return (
             <div className='BillingSummary__lastInvoice-headerStatus pending'>
+                <ClockOutlineIcon/> {' '}
                 <FormattedMessage
                     id='admin.billing.subscriptions.billing_summary.lastInvoice.pending'
                     defaultMessage='Pending'
                 />
-                <CheckCircleOutlineIcon/>
             </div>
         );
     }
@@ -153,9 +175,10 @@ type InvoiceInfoProps = {
     fullCharges: InvoiceLineItem[];
     partialCharges: InvoiceLineItem[];
     hasMore?: number;
+    willRenew?: boolean;
 }
 
-export const InvoiceInfo = ({invoice, product, fullCharges, partialCharges, hasMore}: InvoiceInfoProps) => {
+export const InvoiceInfo = ({invoice, product, fullCharges, partialCharges, hasMore, willRenew}: InvoiceInfoProps) => {
     const dispatch = useDispatch();
     const isUpcomingInvoice = invoice?.status.toLowerCase() === 'upcoming';
     const openInvoicePreview = () => {
@@ -191,7 +214,7 @@ export const InvoiceInfo = ({invoice, product, fullCharges, partialCharges, hasM
                 <div className='BillingSummary__lastInvoice-headerTitle'>
                     {title()}
                 </div>
-                {getPaymentStatus(invoice.status)}
+                {getPaymentStatus(invoice.status, willRenew)}
             </div>
             <div className='BillingSummary__lastInvoice-date'>
                 <FormattedDate
@@ -226,9 +249,9 @@ export const InvoiceInfo = ({invoice, product, fullCharges, partialCharges, hasM
                                     currency='USD'
                                 />
                                 <FormattedMessage
-                                    id='admin.billing.subscriptions.billing_summary.lastInvoice.userCount'
-                                    defaultMessage=' x {users} users'
-                                    values={{users: charge.quantity}}
+                                    id='admin.billing.subscriptions.billing_summary.lastInvoice.seatCount'
+                                    defaultMessage=' x {seats} seats'
+                                    values={{seats: charge.quantity}}
                                 />
                             </>
                         )}
@@ -309,9 +332,9 @@ export const InvoiceInfo = ({invoice, product, fullCharges, partialCharges, hasM
                         >
                             <div className='BillingSummary__lastInvoice-chargeDescription'>
                                 <FormattedMessage
-                                    id='admin.billing.subscriptions.billing_summary.lastInvoice.userCountPartial'
-                                    defaultMessage='{users} users'
-                                    values={{users: charge.quantity}}
+                                    id='admin.billing.subscriptions.billing_summary.lastInvoice.seatCountPartial'
+                                    defaultMessage='{seats} seats'
+                                    values={{seats: charge.quantity}}
                                 />
                             </div>
                             <div className='BillingSummary__lastInvoice-chargeAmount'>

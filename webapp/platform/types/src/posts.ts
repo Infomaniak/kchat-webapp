@@ -5,6 +5,7 @@ import {Channel, ChannelType} from './channels';
 import {CustomEmoji} from './emojis';
 import {FileInfo} from './files';
 import {Reaction} from './reactions';
+import { TeamType } from './teams';
 import {UserProfile} from './users';
 import {
     RelationOneToOne,
@@ -33,6 +34,7 @@ export type PostType = 'system_add_remove' |
 'system_post_reminder' |
 'system_change_chan_privacy' |
 'reminder' |
+'system_wrangler' |
 '';
 
 export type PostEmbedType = 'image' | 'link' | 'message_attachment' | 'opengraph' | 'permalink';
@@ -67,7 +69,7 @@ export type PostMetadata = {
     emojis: CustomEmoji[];
     files: FileInfo[];
     images: Record<string, PostImage>;
-    reactions: Reaction[];
+    reactions?: Reaction[];
     priority?: PostPriorityMetadata;
     acknowledgements?: PostAcknowledgement[];
 };
@@ -147,7 +149,6 @@ export type PostsState = {
     reactions: RelationOneToOne<Post, Record<string, Reaction>>;
     openGraph: RelationOneToOne<Post, Record<string, OpenGraphMetadata>>;
     pendingPostIds: string[];
-    selectedPostId: string;
     postEditHistory: Post[];
     currentFocusedPostId: string;
     messagesHistory: MessageHistory;
@@ -217,3 +218,20 @@ export type Call = {
     participants: string [];
 }
 
+export type ActivityEntry = {
+    postType: Post['type'];
+    actorId: string[];
+    userIds: string[];
+    usernames: string[];
+}
+
+export type PostInfo = {
+    channel_id: string;
+    channel_type: ChannelType;
+    channel_display_name: string;
+    has_joined_channel: boolean;
+    team_id: string;
+    team_type: TeamType;
+    team_display_name: string;
+    has_joined_team: boolean;
+}

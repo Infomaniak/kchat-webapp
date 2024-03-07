@@ -22,8 +22,6 @@ import {setProductMenuSwitcherOpen} from 'actions/views/product_menu';
 import {showRHSPlugin} from 'actions/views/rhs';
 import {setStatusDropdown} from 'actions/views/status_dropdown';
 
-import {useGetRHSPluggablesIds} from 'components/work_templates/hooks';
-
 import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
 import {getHistory} from 'utils/browser_history';
 import {suitePluginIds} from 'utils/constants';
@@ -35,19 +33,18 @@ import {
     ExploreOtherToolsTourSteps,
     FINISHED,
     OnboardingTourSteps,
-    OnboardingTourStepsForGuestUsers,
     TTNameMapToTourSteps,
     TutorialTourName,
-    WorkTemplateTourSteps,
 } from './constant';
 
 import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from '../onboarding_tasks';
 
 export const useGetTourSteps = (tourCategory: string) => {
-    const workTemplatesLinkedItems = useSelector(getWorkTemplatesLinkedProducts);
+    const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
+
     let tourSteps: Record<string, number> = TTNameMapToTourSteps[tourCategory];
 
-    const {playbooksPlugin, playbooksProductEnabled, boardsPlugin, boardsProductEnabled} = useGetPluginsActivationState();
+    const {playbooksPlugin, playbooksProductEnabled} = useGetPluginsActivationState();
 
     if (tourCategory === TutorialTourName.EXPLORE_OTHER_TOOLS) {
         const steps: Record<string, number> = tourSteps as typeof ExploreOtherToolsTourSteps;
@@ -78,7 +75,6 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
     const currentUserId = useSelector(getCurrentUserId);
     const defaultChannelId = useSelector(getCurrentTeamDefaultChannelId);
     const teamUrl = useSelector((state: GlobalState) => getCurrentRelativeTeamUrl(state));
-    const {pluggableId, rhsPluggableIds} = useGetRHSPluggablesIds();
     const pluggableIds = [rhsPluggableIds.get(suitePluginIds.boards), rhsPluggableIds.get(suitePluginIds.playbooks)];
 
     const channelLinkedItems = useSelector(getWorkTemplatesLinkedProducts);
@@ -204,26 +200,6 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
                 break;
             }
             default:
-            }
-        } else if (tourCategory === TutorialTourName.WORK_TEMPLATE_TUTORIAL) {
-            const navigationPluggableId = without(pluggableIds, pluggableId)[0];
-            const stepMatches = step === WorkTemplateTourSteps.BOARDS_TOUR_TIP || step === WorkTemplateTourSteps.PLAYBOOKS_TOUR_TIP;
-            const multiStep = Boolean(boardsCount && playbooksCount);
-
-            if (!multiStep) {
-                const preferences = [
-                    {
-                        user_id: currentUserId,
-                        category: TutorialTourName.WORK_TEMPLATE_TUTORIAL,
-                        name: currentUserId,
-                        value: FINISHED.toString(),
-                    },
-                ];
-                dispatch(savePreferences(currentUserId, preferences));
-                return;
-            }
-            if (navigationPluggableId && stepMatches) {
-                dispatch(showRHSPlugin(navigationPluggableId));
             }
         }
     }, [currentUserId, teamUrl, tourCategory]);

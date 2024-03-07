@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {act} from '@testing-library/react';
 import type {ReactWrapper} from 'enzyme';
 import {shallow} from 'enzyme';
 import React from 'react';
@@ -12,14 +11,14 @@ import type {ClientConfig} from '@mattermost/types/config';
 
 import {RequestStatus} from 'mattermost-redux/constants';
 
-import * as global_actions from 'actions/global_actions';
-
+import * as useCWSAvailabilityCheckAll from 'components/common/hooks/useCWSAvailabilityCheck';
 import SaveButton from 'components/save_button';
 import Signup from 'components/signup/signup';
 import Input from 'components/widgets/inputs/input/input';
 import PasswordInput from 'components/widgets/inputs/password_input/password_input';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import {act, renderWithContext, screen} from 'tests/react_testing_utils';
 import {WindowSizes} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
@@ -27,7 +26,7 @@ import type {GlobalState} from 'types/store';
 let mockState: GlobalState;
 let mockLocation = {pathname: '', search: '', hash: ''};
 const mockHistoryPush = jest.fn();
-let mockLicense = {IsLicensed: 'true'};
+let mockLicense = {IsLicensed: 'true', Cloud: 'false'};
 let mockConfig: Partial<ClientConfig>;
 let mockDispatch = jest.fn();
 
@@ -99,7 +98,7 @@ describe('components/signup/Signup', () => {
     beforeEach(() => {
         mockLocation = {pathname: '', search: '', hash: ''};
 
-        mockLicense = {IsLicensed: 'true'};
+        mockLicense = {IsLicensed: 'true', Cloud: 'false'};
 
         mockState = {
             entities: {
@@ -181,7 +180,7 @@ describe('components/signup/Signup', () => {
     });
 
     it('should match snapshot for all signup options enabled with isLicensed disabled', () => {
-        mockLicense = {IsLicensed: 'false'};
+        mockLicense = {IsLicensed: 'false', Cloud: 'false'};
 
         const wrapper = shallow(
             <Signup/>,
@@ -198,9 +197,6 @@ describe('components/signup/Signup', () => {
             mockResolvedValueOnce({data: {id: 'userId', password: 'password', email: 'jdoe@mm.com}'}}). // createUser
             mockResolvedValueOnce({error: {server_error_id: 'api.user.login.not_verified.app_error'}}); // loginById
 
-        const mockRedirectUserToDefaultTeam = jest.fn();
-        jest.spyOn(global_actions, 'redirectUserToDefaultTeam').mockImplementation(mockRedirectUserToDefaultTeam);
-
         const wrapper = mountWithIntl(
             <IntlProvider {...intlProviderProps}>
                 <BrowserRouter>
@@ -229,7 +225,6 @@ describe('components/signup/Signup', () => {
         expect(wrapper.find('#input_name').first().props().disabled).toEqual(true);
         expect(wrapper.find(PasswordInput).first().props().disabled).toEqual(true);
 
-        expect(mockRedirectUserToDefaultTeam).not.toHaveBeenCalled();
         expect(mockHistoryPush).toHaveBeenCalledWith('/should_verify_email?email=jdoe%40mm.com&teamname=teamName');
     });
 
@@ -239,9 +234,6 @@ describe('components/signup/Signup', () => {
             mockResolvedValueOnce({data: {id: 'userId', password: 'password', email: 'jdoe@mm.com}'}}). // createUser
             mockResolvedValueOnce({}); // loginById
 
-        const mockRedirectUserToDefaultTeam = jest.fn();
-        jest.spyOn(global_actions, 'redirectUserToDefaultTeam').mockImplementation(mockRedirectUserToDefaultTeam);
-
         const wrapper = mountWithIntl(
             <IntlProvider {...intlProviderProps}>
                 <BrowserRouter>
@@ -269,8 +261,6 @@ describe('components/signup/Signup', () => {
         expect(wrapper.find(Input).first().props().disabled).toEqual(true);
         expect(wrapper.find('#input_name').first().props().disabled).toEqual(true);
         expect(wrapper.find(PasswordInput).first().props().disabled).toEqual(true);
-
-        expect(mockRedirectUserToDefaultTeam).toHaveBeenCalled();
     });
 
     it('should add user to team and redirect when team invite valid and logged in', async () => {
@@ -297,5 +287,47 @@ describe('components/signup/Signup', () => {
             expect(mockHistoryPush).not.toHaveBeenCalled();
             expect(wrapper.find('.content-layout-column-title').text()).toEqual('This invite link is invalid');
         });
+    });
+
+    it('should show newsletter check box opt-in for self-hosted non airgapped workspaces', async () => {
+        jest.spyOn(useCWSAvailabilityCheckAll, 'default').mockImplementation(() => useCWSAvailabilityCheckAll.CSWAvailabilityCheckTypes.Available);
+        mockLicense = {IsLicensed: 'true', Cloud: 'false'};
+
+        const {container: signupContainer} = renderWithContext(
+            <Signup/>,
+        );
+
+        screen.getByTestId('signup-body-card-form-check-newsletter');
+        const checkInput = screen.getByTestId('signup-body-card-form-check-newsletter');
+        expect(checkInput).toHaveAttribute('type', 'checkbox');
+
+        expect(signupContainer).toHaveTextContent('I would like to receive Mattermost security updates via newsletter. By subscribing, I consent to receive emails from Mattermost with product updates, promotions, and company news. I have read the Privacy Policy and understand that I can unsubscribe at any time');
+    });
+
+    it('should NOT show newsletter check box opt-in for self-hosted AND airgapped workspaces', async () => {
+        jest.spyOn(useCWSAvailabilityCheckAll, 'default').mockImplementation(() => useCWSAvailabilityCheckAll.CSWAvailabilityCheckTypes.Unavailable);
+        mockLicense = {IsLicensed: 'true', Cloud: 'false'};
+
+        const {container: signupContainer} = renderWithContext(
+            <Signup/>,
+        );
+
+        expect(() => screen.getByTestId('signup-body-card-form-check-newsletter')).toThrow();
+        expect(signupContainer).toHaveTextContent('Interested in receiving Mattermost security, product, promotions, and company updates updates via newsletter?Sign up at https://mattermost.com/security-updates/.');
+    });
+
+    it('should show newsletter related opt-in or text for cloud', async () => {
+        jest.spyOn(useCWSAvailabilityCheckAll, 'default').mockImplementation(() => useCWSAvailabilityCheckAll.CSWAvailabilityCheckTypes.Available);
+        mockLicense = {IsLicensed: 'true', Cloud: 'true'};
+
+        const {container: signupContainer} = renderWithContext(
+            <Signup/>,
+        );
+
+        screen.getByTestId('signup-body-card-form-check-newsletter');
+        const checkInput = screen.getByTestId('signup-body-card-form-check-newsletter');
+        expect(checkInput).toHaveAttribute('type', 'checkbox');
+
+        expect(signupContainer).toHaveTextContent('I would like to receive Mattermost security updates via newsletter. By subscribing, I consent to receive emails from Mattermost with product updates, promotions, and company news. I have read the Privacy Policy and understand that I can unsubscribe at any time');
     });
 });

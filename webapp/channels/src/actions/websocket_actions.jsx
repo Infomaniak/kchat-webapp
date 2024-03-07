@@ -31,6 +31,7 @@ import {
     viewChannel,
     markChannelAsRead,
     getChannelMemberCountsByGroup,
+    markMultipleChannelsAsRead,
 } from 'mattermost-redux/actions/channels';
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
@@ -91,7 +92,7 @@ import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
-import {setGlobalItem} from 'actions/storage';
+import {removeGlobalItem, setGlobalItem} from 'actions/storage';
 import {loadProfilesForDM, loadProfilesForGM, loadProfilesForSidebar} from 'actions/user_actions';
 import {syncPostsInChannel} from 'actions/views/channel';
 import {getDrafts, setGlobalDraft, transformServerDraft} from 'actions/views/drafts';
@@ -307,6 +308,10 @@ export async function reconnect(socketId) {
                 syncThreads(team.id, currentUserId);
             }
         }
+
+        // Re-syncing the current channel and team ids.
+        WebSocketClient.updateActiveChannel(currentChannelId);
+        WebSocketClient.updateActiveTeam(currentTeamId);
     }
 
     loadPluginsIfNecessary();
@@ -533,8 +538,8 @@ export function handleEvent(msg) {
         handleAddEmoji(msg);
         break;
 
-    case SocketEvents.CHANNEL_VIEWED:
-        handleChannelViewedEvent(msg);
+    case SocketEvents.MULTIPLE_CHANNELS_VIEWED:
+        handleMultipleChannelsViewedEvent(msg);
         break;
 
     case SocketEvents.PLUGIN_ENABLED:
@@ -591,14 +596,6 @@ export function handleEvent(msg) {
 
     case SocketEvents.RECEIVED_GROUP_NOT_ASSOCIATED_TO_CHANNEL:
         handleGroupNotAssociatedToChannelEvent(msg);
-        break;
-
-    case SocketEvents.WARN_METRIC_STATUS_RECEIVED:
-        handleWarnMetricStatusReceivedEvent(msg);
-        break;
-
-    case SocketEvents.WARN_METRIC_STATUS_REMOVED:
-        handleWarnMetricStatusRemovedEvent(msg);
         break;
 
     case SocketEvents.SIDEBAR_CATEGORY_CREATED:
@@ -859,15 +856,6 @@ export function handlePostEditEvent(msg) {
     dispatch(receivedPost(post, crtEnabled));
 
     getMentionsAndStatusesForPosts([post], dispatch, getState);
-    const currentChannelId = getCurrentChannelId(getState());
-
-    // Update channel state
-    if (currentChannelId === msg.data.channel_id) {
-        dispatch(getChannelStats(currentChannelId));
-        if (window.isActive) {
-            dispatch(viewChannel(currentChannelId));
-        }
-    }
 }
 
 async function handlePostDeleteEvent(msg) {
@@ -886,6 +874,19 @@ async function handlePostDeleteEvent(msg) {
     }
 
     dispatch(postDeleted(post));
+
+    // remove draft associated with this post from store
+    const draftKey = `${StoragePrefixes.COMMENT_DRAFT}${post.id}`;
+
+    // update the draft first to re-render
+    await dispatch(setGlobalItem(draftKey, {
+        message: '',
+        fileInfos: [],
+        uploadsInProgress: [],
+    }));
+
+    // then remove it
+    await dispatch(removeGlobalItem(draftKey));
 
     // update thread when a comment is deleted and CRT is on
     if (post.root_id && collapsedThreads) {
@@ -1145,7 +1146,6 @@ function handleUserAddedEvent(msg) {
         const state = doGetState();
         const config = getConfig(state);
         const license = getLicense(state);
-        const isTimezoneEnabled = config.ExperimentalTimezone === 'true';
         const currentChannelId = getCurrentChannelId(state);
         if (currentChannelId === msg.data.channel_id) {
             doDispatch(getChannelStats(currentChannelId));
@@ -1154,7 +1154,7 @@ function handleUserAddedEvent(msg) {
                 data: {id: msg.data.channel_id, user_id: msg.data.user_id},
             });
             if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
-                doDispatch(getChannelMemberCountsByGroup(currentChannelId, isTimezoneEnabled));
+                doDispatch(getChannelMemberCountsByGroup(currentChannelId));
             }
         }
 
@@ -1389,7 +1389,6 @@ function handlePreferenceChangedEvent(msg) {
     dispatch({type: PreferenceTypes.RECEIVED_PREFERENCES, data: [preference]});
 
     if (addedNewDmUser(preference)) {
-        loadProfilesForSidebar();
         loadProfilesForDM();
     }
 
@@ -1403,7 +1402,6 @@ function handlePreferencesChangedEvent(msg) {
     dispatch({type: PreferenceTypes.RECEIVED_PREFERENCES, data: preferences});
 
     if (preferences.findIndex(addedNewDmUser) !== -1) {
-        loadProfilesForSidebar();
         loadProfilesForDM();
     }
 
@@ -1433,7 +1431,7 @@ function handleStatusChangedEvent(msg) {
 }
 
 function handleHelloEvent(msg) {
-    setServerVersion(msg.data.server_version)(dispatch, getState);
+    dispatch(setServerVersion(msg.data.server_version));
     dispatch(setConnectionId(msg.data.connection_id));
 }
 
@@ -1473,11 +1471,9 @@ function handleReactionRemovedEvent(msg) {
     });
 }
 
-function handleChannelViewedEvent(msg) {
-    // Useful for when multiple devices have the app open to different channels
-    if ((!window.isActive || getCurrentChannelId(getState()) !== msg.data.channel_id) &&
-        getCurrentUserId(getState()) === msg.data.user_id) {
-        dispatch(markChannelAsRead(msg.data.channel_id, '', false));
+function handleMultipleChannelsViewedEvent(msg) {
+    if (getCurrentUserId(getState()) === msg.data.user_id) {
+        dispatch(markMultipleChannelsAsRead(msg.data.channel_times));
     }
 }
 
@@ -1611,30 +1607,6 @@ function handleGroupNotAssociatedToChannelEvent(msg) {
         type: GroupTypes.RECEIVED_GROUP_NOT_ASSOCIATED_TO_CHANNEL,
         data: {channelID: msg.data.channel_id, groups: [{id: msg.data.group_id}]},
     });
-}
-
-function handleWarnMetricStatusReceivedEvent(msg) {
-    var receivedData = msg.data.warnMetricStatus;
-    let bannerData;
-    if (receivedData.id === WarnMetricTypes.SYSTEM_WARN_METRIC_NUMBER_OF_ACTIVE_USERS_500) {
-        bannerData = AnnouncementBarMessages.WARN_METRIC_STATUS_NUMBER_OF_USERS;
-    } else if (receivedData.id === WarnMetricTypes.SYSTEM_WARN_METRIC_NUMBER_OF_POSTS_2M) {
-        bannerData = AnnouncementBarMessages.WARN_METRIC_STATUS_NUMBER_OF_POSTS;
-    }
-    store.dispatch(batchActions([
-        {
-            type: GeneralTypes.WARN_METRIC_STATUS_RECEIVED,
-            data: receivedData,
-        },
-        {
-            type: ActionTypes.SHOW_NOTICE,
-            data: [bannerData],
-        },
-    ]));
-}
-
-function handleWarnMetricStatusRemovedEvent(msg) {
-    store.dispatch({type: GeneralTypes.WARN_METRIC_STATUS_REMOVED, data: {id: msg.data.warnMetricId}});
 }
 
 function handleSidebarCategoryCreated(msg) {
@@ -2036,11 +2008,15 @@ function handleDeleteDraftEvent(msg) {
             return;
         }
 
-        doDispatch(setGlobalItem(key, {
+        // update the draft first to re-render
+        await doDispatch(setGlobalItem(key, {
             message: '',
             fileInfos: [],
             uploadsInProgress: [],
         }));
+
+        // then remove it
+        await doDispatch(removeGlobalItem(key));
     };
 }
 

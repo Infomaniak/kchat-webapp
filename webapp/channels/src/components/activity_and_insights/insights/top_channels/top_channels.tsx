@@ -11,9 +11,9 @@ import type {TopChannel, TopChannelGraphData} from '@mattermost/types/insights';
 
 import {getMyTopChannels, getTopChannelsForTeam} from 'mattermost-redux/actions/insights';
 import {getCurrentRelativeTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 
 import {trackEvent} from 'actions/telemetry_actions';
-import {getCurrentUserTimezone} from 'selectors/general';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
@@ -37,7 +37,7 @@ const TopChannels = (props: WidgetHocProps) => {
 
     const currentTeamId = useSelector(getCurrentTeamId);
     const currentTeamUrl = useSelector(getCurrentRelativeTeamUrl);
-    const timeZone = useSelector(getCurrentUserTimezone);
+    const timeZone = useSelector(getCurrentTimezone);
 
     const getTopTeamChannels = useCallback(async () => {
         if (props.filterType === InsightsScopes.TEAM) {

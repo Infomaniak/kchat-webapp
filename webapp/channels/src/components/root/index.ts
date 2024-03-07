@@ -3,7 +3,7 @@
 
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
 
 import {getFirstAdminSetupComplete} from 'mattermost-redux/actions/general';
 import {getProfiles} from 'mattermost-redux/actions/users';
@@ -12,12 +12,9 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {shouldShowTermsOfService, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {Action} from 'mattermost-redux/types/actions';
 
 import {migrateRecentEmojis} from 'actions/emoji_actions';
-import {emitBrowserWindowResized} from 'actions/views/browser';
 import {loadConfigAndMe, registerCustomPostRenderer} from 'actions/views/root';
-import {getKSuiteBridge} from 'selectors/ksuite_bridge';
 import {getShowLaunchingWorkspace} from 'selectors/onboarding';
 import {shouldShowAppBar} from 'selectors/plugins';
 import {
@@ -31,7 +28,6 @@ import {initializeProducts} from 'plugins/products';
 
 import type {GlobalState} from 'types/store/index';
 
-import type {Actions} from './root';
 import Root from './root';
 
 function mapStateToProps(state: GlobalState) {
@@ -49,6 +45,9 @@ function mapStateToProps(state: GlobalState) {
         telemetryEnabled: config.DiagnosticsEnabled === 'true',
         noAccounts: config.NoAccounts === 'true',
         telemetryId: config.DiagnosticId,
+        iosDownloadLink: config.IosAppDownloadLink,
+        androidDownloadLink: config.AndroidAppDownloadLink,
+        appDownloadLink: config.AppDownloadLink,
         permalinkRedirectTeamName: permalinkRedirectTeam ? permalinkRedirectTeam.name : '',
         showTermsOfService,
         plugins,
@@ -59,15 +58,13 @@ function mapStateToProps(state: GlobalState) {
         rhsState: getRhsState(state),
         shouldShowAppBar: shouldShowAppBar(state),
         isCloud: isCurrentLicenseCloud(state),
-        ksuiteBridge: getKSuiteBridge(state),
     };
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<Action>, Actions>({
+        actions: bindActionCreators({
             loadConfigAndMe,
-            emitBrowserWindowResized,
             getFirstAdminSetupComplete,
             getProfiles,
             migrateRecentEmojis,

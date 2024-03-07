@@ -2,10 +2,10 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {AnyAction, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {AnyAction, Dispatch} from 'redux';
 
-import {unfavoriteChannel, favoriteChannel} from 'mattermost-redux/actions/channels';
+import {unfavoriteChannel, favoriteChannel, getChannelStats} from 'mattermost-redux/actions/channels';
 import {Permissions} from 'mattermost-redux/constants';
 import {getCurrentChannel, isCurrentChannelFavorite, isCurrentChannelMuted, isCurrentChannelArchived, getCurrentChannelStats} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
@@ -25,8 +25,8 @@ import {getDisplayNameByUser, getUserIdFromChannelId} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
-import type {Props} from './channel_info_rhs';
 import RHS from './channel_info_rhs';
+import type {Props} from './channel_info_rhs';
 
 const EMPTY_CHANNEL_STATS = {
     member_count: 0,
@@ -92,6 +92,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             showChannelFiles,
             showPinnedPosts,
             showChannelMembers,
+            getChannelStats,
         }, dispatch),
     };
 }

@@ -11,8 +11,8 @@ import configureStore from 'store';
 import {shallowWithIntl, mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {TestHelper} from 'utils/test_helper';
 
-import type {UserSettingsGeneralTab} from './user_settings_general';
 import UserSettingsGeneral from './user_settings_general';
+import type {UserSettingsGeneralTab} from './user_settings_general';
 
 describe('components/user_settings/general/UserSettingsGeneral', () => {
     const user: UserProfile = TestHelper.getUserMock({
@@ -35,6 +35,7 @@ describe('components/user_settings/general/UserSettingsGeneral', () => {
         activeSection: '',
         closeModal: jest.fn(),
         collapseModal: jest.fn(),
+        isMobileView: false,
         actions: {
             logError: jest.fn(),
             clearErrors: jest.fn(),

@@ -1,16 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {render, screen} from '@testing-library/react';
 import React from 'react';
 import {IntlProvider} from 'react-intl';
 
-import EmojiPicker from 'components/emoji_picker/emoji_picker';
+import type {SystemEmoji} from '@mattermost/types/emojis';
 
+import {render, screen} from 'tests/react_testing_utils';
 import EmojiMap from 'utils/emoji_map';
+
+import EmojiPicker from './emoji_picker';
 
 jest.mock('components/emoji_picker/components/emoji_picker_skin', () => () => (
     <div/>
+));
+jest.mock('components/emoji_picker/components/emoji_picker_preview', () => ({emoji}: {emoji?: SystemEmoji}) => (
+    <div className='emoji-picker__preview'>{`Preview for ${emoji?.short_name} emoji`}</div>
 ));
 
 describe('components/emoji_picker/EmojiPicker', () => {
@@ -72,5 +77,20 @@ describe('components/emoji_picker/EmojiPicker', () => {
         );
 
         expect(screen.queryByLabelText('emoji_picker.recent')).not.toBeNull();
+    });
+
+    test('First emoji should be selected on search', () => {
+        const props = {
+            ...baseProps,
+            filter: 'wave',
+        };
+
+        render(
+            <IntlProvider {...intlProviderProps}>
+                <EmojiPicker {...props}/>
+            </IntlProvider>,
+        );
+
+        expect(screen.queryByText('Preview for wave emoji')).not.toBeNull();
     });
 });

@@ -1,6 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import React, {useRef, memo} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
+
 import {
     MarkAsUnreadIcon,
     StarIcon,
@@ -12,9 +15,6 @@ import {
     DotsVerticalIcon,
     ExitToAppIcon,
 } from '@infomaniak/compass-icons/components';
-import type {MouseEvent, KeyboardEvent} from 'react';
-import React, {useRef, memo} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -36,10 +36,8 @@ const SidebarChannelMenu = (props: Props) => {
 
     let markAsReadUnreadMenuItem: JSX.Element | null = null;
     if (props.isUnread) {
-        function handleMarkAsRead(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
-            props.markChannelAsRead(props.channel.id);
+        function handleMarkAsRead() {
+            props.markChannelAsRead(props.channel.id, true);
             trackEvent('ui', 'ui_sidebar_channel_menu_markAsRead');
         }
 
@@ -58,9 +56,7 @@ const SidebarChannelMenu = (props: Props) => {
 
         );
     } else {
-        function handleMarkAsUnread(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
+        function handleMarkAsUnread() {
             props.markMostRecentPostInChannelAsUnread(props.channel.id);
             trackEvent('ui', 'ui_sidebar_channel_menu_markAsUnread');
         }
@@ -82,9 +78,7 @@ const SidebarChannelMenu = (props: Props) => {
 
     let favoriteUnfavoriteMenuItem: JSX.Element | null = null;
     if (props.isFavorite) {
-        function handleUnfavoriteChannel(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
+        function handleUnfavoriteChannel() {
             props.unfavoriteChannel(props.channel.id);
             trackEvent('ui', 'ui_sidebar_channel_menu_unfavorite');
         }
@@ -103,9 +97,7 @@ const SidebarChannelMenu = (props: Props) => {
             />
         );
     } else {
-        function handleFavoriteChannel(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
+        function handleFavoriteChannel() {
             props.favoriteChannel(props.channel.id);
             trackEvent('ui', 'ui_sidebar_channel_menu_favorite');
         }
@@ -143,9 +135,7 @@ const SidebarChannelMenu = (props: Props) => {
             );
         }
 
-        function handleUnmuteChannel(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
+        function handleUnmuteChannel() {
             props.unmuteChannel(props.currentUserId, props.channel.id);
         }
 
@@ -173,9 +163,7 @@ const SidebarChannelMenu = (props: Props) => {
             );
         }
 
-        function handleMuteChannel(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
+        function handleMuteChannel() {
             props.muteChannel(props.currentUserId, props.channel.id);
         }
 
@@ -191,9 +179,7 @@ const SidebarChannelMenu = (props: Props) => {
 
     let copyLinkMenuItem: JSX.Element | null = null;
     if (props.channel.type === Constants.OPEN_CHANNEL || props.channel.type === Constants.PRIVATE_CHANNEL) {
-        function handleCopyLink(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
+        function handleCopyLink() {
             copyToClipboard(props.channelLink);
         }
 
@@ -256,9 +242,7 @@ const SidebarChannelMenu = (props: Props) => {
             );
         }
 
-        function handleLeaveChannel(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
+        function handleLeaveChannel() {
             if (isLeaving.current || !props.channelLeaveHandler) {
                 return;
             }
@@ -282,8 +266,6 @@ const SidebarChannelMenu = (props: Props) => {
         );
     }
 
-    const menuId = `SidebarChannelMenu-MenuList-${props.channel.id}`;
-
     return (
         <Menu.Container
             menuButton={{
@@ -298,20 +280,16 @@ const SidebarChannelMenu = (props: Props) => {
                 text: formatMessage({id: 'sidebar_left.sidebar_channel_menu.editChannel', defaultMessage: 'Channel options'}),
             }}
             menu={{
-                id: menuId,
+                id: `SidebarChannelMenu-MenuList-${props.channel.id}`,
                 'aria-label': formatMessage({id: 'sidebar_left.sidebar_channel_menu.dropdownAriaLabel', defaultMessage: 'Edit channel menu'}),
                 onToggle: props.onMenuToggle,
             }}
-            menuButtonRef={props.menuTriggerRef}
         >
             {markAsReadUnreadMenuItem}
             {favoriteUnfavoriteMenuItem}
             {muteUnmuteChannelMenuItem}
             <Menu.Separator/>
-            <ChannelMoveToSubmenu
-                channel={props.channel}
-                parentMenuId={menuId}
-            />
+            <ChannelMoveToSubmenu channel={props.channel}/>
             {(copyLinkMenuItem || addMembersMenuItem) && <Menu.Separator/>}
             {copyLinkMenuItem}
             {addMembersMenuItem}

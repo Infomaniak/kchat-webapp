@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -14,7 +14,6 @@ import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getMembersInCurrentChannel, getCurrentChannelStats, getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getMembersInCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {searchProfilesInCurrentChannel, getProfilesInCurrentChannel} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {sortByUsername} from 'mattermost-redux/utils/user_utils';
 
 import {loadStatusesForProfilesList} from 'actions/status_actions';
@@ -26,7 +25,6 @@ import {setModalSearchTerm} from 'actions/views/search';
 
 import type {GlobalState} from 'types/store';
 
-import type {Props} from './member_list_channel';
 import MemberListChannel from './member_list_channel';
 
 const getUsersAndActionsToDisplay = createSelector(
@@ -89,7 +87,7 @@ function mapStateToProps(state: GlobalState) {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc | GenericAction>, Props['actions']>({
+        actions: bindActionCreators({
             getChannelMembers,
             searchProfiles,
             getChannelStats,

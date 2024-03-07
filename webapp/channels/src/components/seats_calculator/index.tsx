@@ -1,9 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useIntl, FormattedMessage, FormattedNumber} from 'react-intl';
+
+import {InformationOutlineIcon} from '@mattermost/compass-icons/components';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
@@ -19,6 +20,7 @@ interface Props {
     existingUsers: number;
     isCloud: boolean;
     onChange: (seats: Seats) => void;
+    excludeTotal?: boolean;
 }
 
 export interface Seats {
@@ -40,6 +42,12 @@ export const errorInvalidNumber = (
         defaultMessage='Enter a valid number of seats'
     />
 );
+export const errorMinSeats = (
+    <FormattedMessage
+        id='cloud_upgrade.error_min_seats'
+        defaultMessage='Minimum of 10 seats required'
+    />
+);
 
 function validateSeats(seats: string, annualPricePerSeat: number, minSeats: number, cloud: boolean): Seats {
     if (seats === '') {
@@ -54,6 +62,13 @@ function validateSeats(seats: string, annualPricePerSeat: number, minSeats: numb
         return {
             quantity: seats,
             error: errorInvalidNumber,
+        };
+    }
+
+    if (seatsNumber < 10) {
+        return {
+            quantity: seats,
+            error: errorMinSeats,
         };
     }
 
@@ -87,7 +102,7 @@ function validateSeats(seats: string, annualPricePerSeat: number, minSeats: numb
             {errorPrefix}
             <FormattedMessage
                 id='self_hosted_signup.error_max_seats'
-                defaultMessage=' license purchase only supports purchases up to {num} users'
+                defaultMessage=' license purchase only supports purchases up to {num} seats'
                 values={{
                     num: <FormattedNumber value={maxSeats}/>,
                 }}
@@ -133,6 +148,10 @@ export default function SeatsCalculator(props: Props) {
         props.onChange(validateSeats(value, annualPricePerSeat, props.existingUsers, props.isCloud));
     };
 
+    useEffect(() => {
+        props.onChange(validateSeats(props.seats.quantity, annualPricePerSeat, props.existingUsers, props.isCloud));
+    }, []);
+
     const maxSeats = calculateMaxUsers(annualPricePerSeat);
     const total = '$' + intl.formatNumber((parseFloat(props.seats.quantity) || 0) * annualPricePerSeat, {maximumFractionDigits: 2});
     const userCountTooltip = (
@@ -166,7 +185,7 @@ export default function SeatsCalculator(props: Props) {
                             type='text'
                             value={props.seats.quantity}
                             onChange={onChange}
-                            placeholder={intl.formatMessage({id: 'self_hosted_signup.seats', defaultMessage: 'User seats'})}
+                            placeholder={intl.formatMessage({id: 'self_hosted_signup.seats', defaultMessage: 'Seats'})}
                             wrapperClassName='user_seats'
                             inputClassName='user_seats'
                             maxLength={maxSeats.toString().length + 1}
@@ -186,37 +205,41 @@ export default function SeatsCalculator(props: Props) {
                             >
                                 <InformationOutlineIcon
                                     size={18}
-                                    color={'rgba(var(--center-channel-text-rgb), 0.72)'}
+                                    color={'rgba(var(--center-channel-text-rgb), 0.75)'}
                                 />
                             </OverlayTrigger>
                         </div>
                     </div>
                 </div>
-                <div className='SeatsCalculator__seats-item'>
-                    <div className='SeatsCalculator__seats-label'>
-                        <FormattedMessage
-                            id='self_hosted_signup.line_item_subtotal'
-                            defaultMessage='{num} users × 12 mo.'
-                            values={{
-                                num: props.seats.quantity || '0',
-                            }}
-                        />
-                    </div>
-                    <div className='SeatsCalculator__seats-value'>
-                        {total}
-                    </div>
-                </div>
-                <div className='SeatsCalculator__total'>
-                    <div className='SeatsCalculator__total-label'>
-                        <FormattedMessage
-                            id='self_hosted_signup.total'
-                            defaultMessage='Total'
-                        />
-                    </div>
-                    <div className='SeatsCalculator__total-value'>
-                        {total}
-                    </div>
-                </div>
+                {!props.excludeTotal && (
+                    <>
+                        <div className='SeatsCalculator__seats-item'>
+                            <div className='SeatsCalculator__seats-label'>
+                                <FormattedMessage
+                                    id='self_hosted_signup.line_item_subtotal'
+                                    defaultMessage='{num} seats × 12 mo.'
+                                    values={{
+                                        num: props.seats.quantity || '0',
+                                    }}
+                                />
+                            </div>
+                            <div className='SeatsCalculator__seats-value'>
+                                {total}
+                            </div>
+                        </div>
+                        <div className='SeatsCalculator__total'>
+                            <div className='SeatsCalculator__total-label'>
+                                <FormattedMessage
+                                    id='self_hosted_signup.total'
+                                    defaultMessage='Total'
+                                />
+                            </div>
+                            <div className='SeatsCalculator__total-value'>
+                                {total}
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
 

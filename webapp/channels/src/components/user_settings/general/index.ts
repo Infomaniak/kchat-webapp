@@ -2,10 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
 import {bindActionCreators} from 'redux';
-
-import type {GlobalState} from '@mattermost/types/store';
+import type {Dispatch} from 'redux';
 
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
 import {
@@ -15,9 +13,11 @@ import {
     uploadProfileImage,
 } from 'mattermost-redux/actions/users';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
 
-import type {Props} from './user_settings_general';
+import {getIsMobileView} from 'selectors/views/browser';
+
+import type {GlobalState} from 'types/store';
+
 import UserSettingsGeneralTab from './user_settings_general';
 
 function mapStateToProps(state: GlobalState) {
@@ -36,6 +36,7 @@ function mapStateToProps(state: GlobalState) {
     const ldapPictureAttributeSet = config.LdapPictureAttributeSet === 'true';
 
     return {
+        isMobileView: getIsMobileView(state),
         requireEmailVerification,
         maxFileSize,
         ldapFirstNameAttributeSet,
@@ -52,7 +53,7 @@ function mapStateToProps(state: GlobalState) {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc>, Props['actions']>({
+        actions: bindActionCreators({
             logError,
             clearErrors,
             updateMe,

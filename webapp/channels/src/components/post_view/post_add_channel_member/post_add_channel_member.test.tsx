@@ -9,8 +9,8 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {sendAddToChannelEphemeralPost} from 'actions/global_actions';
 
-import type {Props} from 'components/post_view/post_add_channel_member/post_add_channel_member';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member/post_add_channel_member';
+import type {Props} from 'components/post_view/post_add_channel_member/post_add_channel_member';
 
 import {TestHelper} from 'utils/test_helper';
 

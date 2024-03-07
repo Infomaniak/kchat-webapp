@@ -12,7 +12,7 @@ import {GenericTaskSteps, OnboardingTaskCategory, OnboardingTaskList} from 'comp
 import {FINISHED} from 'components/tours';
 
 import {RecommendedNextStepsLegacy, Preferences} from 'utils/constants';
-import {isMobile} from 'utils/utils';
+import {isMobile} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
 
@@ -29,12 +29,8 @@ const getFirstChannelNamePref = createSelector(
     },
 );
 
-export function getFirstChannelNameViews(state: GlobalState) {
-    return state.views.channelSidebar.firstChannelName;
-}
-
 export function getFirstChannelName(state: GlobalState) {
-    return getFirstChannelNameViews(state) || getFirstChannelNamePref(state)?.value || '';
+    return getFirstChannelNamePref(state)?.value || '';
 }
 
 export function getShowLaunchingWorkspace(state: GlobalState) {

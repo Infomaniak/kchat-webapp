@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
@@ -9,59 +8,64 @@ import * as Utils from 'utils/utils';
 
 import Setting from './setting';
 
-export default class FileUploadSetting extends Setting {
-    static get propTypes() {
-        return {
-            id: PropTypes.string.isRequired,
-            label: PropTypes.node.isRequired,
-            helpText: PropTypes.node,
-            uploadingText: PropTypes.node,
-            onSubmit: PropTypes.func.isRequired,
-            disabled: PropTypes.bool,
-            fileType: PropTypes.string.isRequired,
-            error: PropTypes.string,
-        };
-    }
+type Props = {
+    id: string;
+    label: React.ReactNode;
+    helpText?: React.ReactNode;
+    uploadingText?: React.ReactNode;
+    onSubmit: (id: string, file: File, errorCallback: (error?: string) => void) => void;
+    disabled: boolean;
+    fileType: string;
+    error?: string;
+}
 
-    constructor(props) {
+type State = {
+    fileName: null|string;
+    fileSelected: boolean;
+    serverError?: string;
+    uploading: boolean;
+}
+
+export default class FileUploadSetting extends React.PureComponent<Props, State> {
+    fileInputRef = React.createRef<HTMLInputElement>();
+
+    constructor(props: Props) {
         super(props);
 
         this.state = {
             fileName: null,
             serverError: props.error,
             uploading: false,
+            fileSelected: false,
         };
-        this.fileInputRef = React.createRef();
     }
 
     handleChange = () => {
-        const files = this.fileInputRef.current.files;
+        const files = this.fileInputRef.current?.files;
         if (files && files.length > 0) {
             this.setState({fileSelected: true, fileName: files[0].name});
         }
     };
 
-    handleSubmit = (e) => {
+    handleSubmit = (e: React.MouseEvent) => {
         e.preventDefault();
 
         this.setState({uploading: true});
-        this.props.onSubmit(this.props.id, this.fileInputRef.current.files[0], (error) => {
-            this.setState({uploading: false});
-            if (error) {
-                Utils.clearFileInput(this.fileInputRef.current);
-            }
-        });
+        const file = this.fileInputRef.current?.files?.[0];
+        if (file) {
+            this.props.onSubmit(this.props.id, file, (error) => {
+                this.setState({uploading: false});
+                if (error && this.fileInputRef.current) {
+                    Utils.clearFileInput(this.fileInputRef.current);
+                }
+            });
+        }
     };
 
     render() {
         let serverError;
         if (this.state.serverError) {
             serverError = <div className='form-group has-error'><label className='control-label'>{this.state.serverError}</label></div>;
-        }
-
-        let btnClass = 'btn';
-        if (this.state.fileSelected) {
-            btnClass = 'btn btn-primary';
         }
 
         let fileName;
@@ -86,7 +90,7 @@ export default class FileUploadSetting extends Setting {
                     <div className='file__upload'>
                         <button
                             type='button'
-                            className='btn btn-default'
+                            className='btn btn-tertiary'
                             disabled={this.props.disabled}
                         >
                             <FormattedMessage
@@ -104,7 +108,7 @@ export default class FileUploadSetting extends Setting {
                     </div>
                     <button
                         type='button'
-                        className={btnClass}
+                        className='btn btn-primary'
                         disabled={!this.state.fileSelected}
                         onClick={this.handleSubmit}
                     >

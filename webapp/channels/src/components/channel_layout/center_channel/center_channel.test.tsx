@@ -46,7 +46,7 @@ describe('components/channel_layout/CenterChannel', () => {
         insightsAreEnabled: true,
         isMobileView: false,
         actions: {
-            getProfiles: jest.fn,
+            getProfiles: jest.fn(),
         },
     };
     test('should call update returnTo on props change', () => {

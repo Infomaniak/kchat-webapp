@@ -9,10 +9,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import type {GlobalState} from '@mattermost/types/store';
 
-import {
-    isCurrentLicenseCloud,
-} from 'mattermost-redux/selectors/entities/cloud';
-import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
+import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
+import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {
     getSelfHostedErrors,
     getTrueUpReviewProfile as trueUpReviewProfileSelector,
@@ -23,20 +21,21 @@ import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/user
 import {submitTrueUpReview, getTrueUpReviewStatus} from 'actions/hosted_customer';
 import {pageVisited} from 'actions/telemetry_actions';
 
-import useCWSAvailabilityCheck from 'components/common/hooks/useCWSAvailabilityCheck';
-import CheckMarkSvg from 'components/widgets/icons/check_mark_icon';
-
-import './true_up_review.scss';
-import WarningIcon from 'components/widgets/icons/fa_warning_icon';
+import useCWSAvailabilityCheck, {CSWAvailabilityCheckTypes} from 'components/common/hooks/useCWSAvailabilityCheck';
 import ExternalLink from 'components/external_link';
+import CheckMarkSvg from 'components/widgets/icons/check_mark_icon';
+import WarningIcon from 'components/widgets/icons/fa_warning_icon';
 
 import {DocLinks, TELEMETRY_CATEGORIES} from 'utils/constants';
 import {getIsStarterLicense, getIsGovSku} from 'utils/license_utils';
 
+import './true_up_review.scss';
+
 const TrueUpReview: React.FC = () => {
     const dispatch = useDispatch();
     const isCloud = useSelector(isCurrentLicenseCloud);
-    const isAirGapped = !useCWSAvailabilityCheck();
+    const cwsAvailability = useCWSAvailabilityCheck();
+    const isAirGapped = cwsAvailability !== CSWAvailabilityCheckTypes.Available;
     const reviewProfile = useSelector(trueUpReviewProfileSelector);
     const reviewStatus = useSelector(trueUpReviewStatusSelector);
     const isSystemAdmin = useSelector(isCurrentUserSystemAdmin);
@@ -51,7 +50,6 @@ const TrueUpReview: React.FC = () => {
     // * are not on starter/free
     // * are not a government sku
     const licenseIsTrueUpEligible = isLicensed && !isCloud && !isStarter && !isGovSku;
-    const telemetryEnabled = useSelector(getConfig).EnableDiagnostics === 'true';
     const trueUpReviewError = useSelector((state: GlobalState) => {
         const errors = getSelfHostedErrors(state);
         return Boolean(errors.trueUpReview);
@@ -71,7 +69,7 @@ const TrueUpReview: React.FC = () => {
             return;
         }
 
-        if (reviewProfile.getRequestState === 'OK' && isAirGapped && !trueUpReviewError && reviewProfile.content.length > 0) {
+        if (reviewProfile.getRequestState === 'OK' && !reviewStatus.complete && isAirGapped && !trueUpReviewError && reviewProfile.content.length > 0) {
             // Create the bundle as a blob containing base64 encoded json data and assign it to a link element.
             const blob = new Blob([reviewProfile.content], {type: 'application/text'});
             const href = URL.createObjectURL(blob);
@@ -86,6 +84,7 @@ const TrueUpReview: React.FC = () => {
             // Remove link and revoke object url to avoid memory leaks.
             document.body.removeChild(link);
             URL.revokeObjectURL(href);
+            dispatch(getTrueUpReviewStatus());
         }
     }, [isAirGapped, reviewProfile, reviewProfile.getRequestState, trueUpReviewError]);
 
@@ -122,14 +121,17 @@ const TrueUpReview: React.FC = () => {
             className={classNames('btn btn-primary TrueUpReview__submit', {'TrueUpReview__submit--error': trueUpReviewError})}
             onClick={handleSubmitReview}
         >
-            {isAirGapped ? <FormattedMessage
-                id='admin.billing.trueUpReview.button_download'
-                defaultMessage='Download Data'
-            /> : <FormattedMessage
-                               id='admin.billing.trueUpReview.button_share'
-                               defaultMessage='Share to Mattermost'
-                                />
-            }
+            {isAirGapped ? (
+                <FormattedMessage
+                    id='admin.billing.trueUpReview.button_download'
+                    defaultMessage='Download Data'
+                />
+            ) : (
+                <FormattedMessage
+                    id='admin.billing.trueUpReview.button_share'
+                    defaultMessage='Share to Mattermost'
+                />
+            )}
         </button>
     );
 
@@ -216,10 +218,6 @@ const TrueUpReview: React.FC = () => {
 
     // If the review has already been submitted, don't show anything.
     if (reviewStatus.complete) {
-        return null;
-    }
-
-    if (telemetryEnabled) {
         return null;
     }
 

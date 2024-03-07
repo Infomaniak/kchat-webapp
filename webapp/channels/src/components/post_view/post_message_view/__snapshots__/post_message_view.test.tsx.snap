@@ -20,7 +20,6 @@ exports[`components/post_view/PostAttachment should match snapshot 1`] = `
           "onImageLoaded": [Function],
         }
       }
-      mentionKeys={Array []}
       message="post message"
       options={Object {}}
       post={
@@ -59,7 +58,6 @@ exports[`components/post_view/PostAttachment should match snapshot, on Show Less
           "onImageLoaded": [Function],
         }
       }
-      mentionKeys={Array []}
       message="post message"
       options={Object {}}
       post={
@@ -98,7 +96,6 @@ exports[`components/post_view/PostAttachment should match snapshot, on Show More
           "onImageLoaded": [Function],
         }
       }
-      mentionKeys={Array []}
       message="post message"
       options={Object {}}
       post={
@@ -155,7 +152,6 @@ exports[`components/post_view/PostAttachment should match snapshot, on edited po
           "onImageLoaded": [Function],
         }
       }
-      mentionKeys={Array []}
       message="post message"
       options={Object {}}
       post={
@@ -195,7 +191,6 @@ exports[`components/post_view/PostAttachment should match snapshot, on ephemeral
           "onImageLoaded": [Function],
         }
       }
-      mentionKeys={Array []}
       message="post message"
       options={Object {}}
       post={

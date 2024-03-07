@@ -2,7 +2,19 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
+
+import {openModal} from 'actions/views/modals';
 
 import SettingsButton from './settings_button';
 
-export default connect(null, null)(SettingsButton);
+function mapDispatchToProps(dispatch: Dispatch) {
+    return {
+        actions: bindActionCreators({
+            openModal,
+        }, dispatch),
+    };
+}
+
+export default connect(null, mapDispatchToProps)(SettingsButton);

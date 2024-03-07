@@ -65,6 +65,7 @@ export interface Props {
         showChannelFiles: (channelId: string) => void;
         showPinnedPosts: (channelId: string | undefined) => void;
         showChannelMembers: (channelId: string) => void;
+        getChannelStats: (channelId: string) => Promise<{data: ChannelStats}>;
     };
 }
 
@@ -193,6 +194,7 @@ const ChannelInfoRhs = ({
                     showChannelFiles: actions.showChannelFiles,
                     showPinnedPosts: actions.showPinnedPosts,
                     showChannelMembers: actions.showChannelMembers,
+                    getChannelStats: actions.getChannelStats,
                 }}
             />
         </div>

@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {screen} from '@testing-library/react';
 import {mount} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
-import type {DeepPartial} from 'redux';
 
-import {renderWithIntlAndStore} from 'tests/react_testing_utils';
+import type {DeepPartial} from '@mattermost/types/utilities';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
@@ -56,12 +56,11 @@ describe('components/external_link', () => {
                 },
             },
         };
-        const store: GlobalState = JSON.parse(JSON.stringify(state));
-        renderWithIntlAndStore(
+        renderWithContext(
             <ExternalLink href='https://infomaniak.com'>
                 {'Click Me'}
             </ExternalLink>,
-            store,
+            state,
         );
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
@@ -83,12 +82,11 @@ describe('components/external_link', () => {
                 },
             },
         };
-        const store: GlobalState = JSON.parse(JSON.stringify(state));
-        renderWithIntlAndStore(
+        renderWithContext(
             <ExternalLink href='https://infomaniak.com?test=true'>
                 {'Click Me'}
             </ExternalLink>,
-            store,
+            state,
         );
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
@@ -112,12 +110,11 @@ describe('components/external_link', () => {
                 },
             },
         };
-        const store: GlobalState = JSON.parse(JSON.stringify(state));
-        renderWithIntlAndStore(
+        renderWithContext(
             <ExternalLink href='https://google.com'>
                 {'Click Me'}
             </ExternalLink>,
-            store,
+            state,
         );
 
         expect(screen.queryByText('Click Me')).not.toHaveAttribute(
@@ -139,14 +136,13 @@ describe('components/external_link', () => {
                 },
             },
         };
-        const store: GlobalState = JSON.parse(JSON.stringify(state));
-        renderWithIntlAndStore(
+        renderWithContext(
             <ExternalLink
                 target='test'
                 rel='test'
                 href='https://google.com'
             >{'Click Me'}</ExternalLink>,
-            store,
+            state,
         );
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
@@ -158,6 +154,34 @@ describe('components/external_link', () => {
         expect(screen.queryByText('Click Me')).toHaveAttribute(
             'rel',
             expect.stringMatching('test'),
+        );
+    });
+
+    it('renders href correctly when url contains anchor by setting anchor at the end', () => {
+        const state = {
+            ...initialState,
+            entities: {
+                ...initialState.entities,
+                general: {
+                    ...initialState?.entities?.general,
+                    config: {
+                        DiagnosticsEnabled: 'true',
+                    },
+                },
+            },
+        };
+        renderWithContext(
+            <ExternalLink
+                href='https://infomaniak.com#desktop'
+            >
+                {'Click Me'}
+            </ExternalLink>,
+            state,
+        );
+
+        expect(screen.queryByText('Click Me')).toHaveAttribute(
+            'href',
+            'https://infomaniak.com#desktop',
         );
     });
 });

@@ -3,8 +3,8 @@
 
 import type {ComponentProps} from 'react';
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import type {Post} from '@mattermost/types/posts';
 
@@ -16,8 +16,8 @@ import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {makeGetThreadOrSynthetic} from 'mattermost-redux/selectors/entities/threads';
+import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 import {getCurrentUserId, getCurrentUserMentionKeys} from 'mattermost-redux/selectors/entities/users';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 import {isSystemMessage} from 'mattermost-redux/utils/post_utils';
 
 import {
@@ -29,7 +29,7 @@ import {
     markPostAsUnread,
 } from 'actions/post_actions';
 import {openModal} from 'actions/views/modals';
-import {getCurrentUserTimezone} from 'selectors/general';
+import {makeCanWrangler} from 'selectors/posts';
 import {getIsMobileView} from 'selectors/views/browser';
 
 import {isArchivedChannel} from 'utils/channel_utils';
@@ -39,7 +39,6 @@ import {matchUserMentionTriggersWithMessageMentions} from 'utils/post_utils';
 import {allAtMentions} from 'utils/text_formatting';
 import {getSiteURL} from 'utils/url';
 
-import type {ModalData} from 'types/actions';
 import type {GlobalState} from 'types/store';
 
 import DotMenu from './dot_menu';
@@ -62,6 +61,7 @@ type Props = {
 
 function makeMapStateToProps() {
     const getThreadOrSynthetic = makeGetThreadOrSynthetic();
+    const canWrangler = makeCanWrangler();
 
     return function mapStateToProps(state: GlobalState, ownProps: Props) {
         const {post} = ownProps;
@@ -109,15 +109,12 @@ function makeMapStateToProps() {
             }
         }
 
-        const showForwardPostNewLabel = getGlobalItem(state, Preferences.FORWARD_POST_VIEWED, true);
-
         return {
             channelIsArchived: isArchivedChannel(channel),
             components: state.plugins.components,
             postEditTimeLimit: config.PostEditTimeLimit,
             isLicensed: license.IsLicensed === 'true',
             teamId: getCurrentTeamId(state),
-            pluginMenuItems: state.plugins.components.PostDropdownMenu,
             canEdit: PostUtils.canEditPost(state, post, license, config, channel, userId),
             canDelete: PostUtils.canDeletePost(state, post, channel),
             teamUrl,
@@ -128,30 +125,17 @@ function makeMapStateToProps() {
             isCollapsedThreadsEnabled: collapsedThreads,
             threadReplyCount,
             isMobileView: getIsMobileView(state),
-            showForwardPostNewLabel,
-            timezone: getCurrentUserTimezone(state),
+            timezone: getCurrentTimezone(state),
             isMilitaryTime,
             postTranslationEnabled: config.FeatureFlagTranslation === 'true',
+            canMove: canWrangler(state, channel.type, threadReplyCount),
         };
     };
 }
 
-type Actions = {
-    flagPost: (postId: string) => void;
-    unflagPost: (postId: string) => void;
-    setEditingPost: (postId?: string, refocusId?: string, title?: string, isRHS?: boolean) => void;
-    pinPost: (postId: string) => void;
-    unpinPost: (postId: string) => void;
-    openModal: <P>(modalData: ModalData<P>) => void;
-    markPostAsUnread: (post: Post) => void;
-    setThreadFollow: (userId: string, teamId: string, threadId: string, newState: boolean) => void;
-    setGlobalItem: (name: string, value: any) => void;
-    translatePost: (postId: string) => void;
-}
-
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject, Actions>({
+        actions: bindActionCreators({
             flagPost,
             unflagPost,
             setEditingPost,

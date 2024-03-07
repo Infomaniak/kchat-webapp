@@ -3,12 +3,12 @@
 
 import React from 'react';
 
-import type {Invoice} from '@mattermost/types/cloud';
 import {InvoiceLineItemType} from '@mattermost/types/cloud';
+import type {Invoice} from '@mattermost/types/cloud';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import InvoiceUserCount from './invoice_user_count';
-
-import {mountWithIntl} from '../../../tests/helpers/intl-test-helper';
 
 function makeInvoice(...lines: Array<[number, typeof InvoiceLineItemType[keyof typeof InvoiceLineItemType]]>): Invoice {
     return {
@@ -32,6 +32,8 @@ function makeInvoice(...lines: Array<[number, typeof InvoiceLineItemType[keyof t
                 description: '',
                 type,
                 metadata: {} as Record<string, string>,
+                period_end: 1642330466000,
+                period_start: 1643540066000,
             };
             if (type === InvoiceLineItemType.Full || type === InvoiceLineItemType.Partial) {
                 lineItem.metadata.type = type;
@@ -52,28 +54,28 @@ describe('InvoiceUserCount', () => {
                 [1, InvoiceLineItemType.Full],
                 [1, InvoiceLineItemType.Partial],
             ),
-            expected: '1 metered users, 1 users at full rate, 1 users with partial charges',
+            expected: '1 metered seats, 1 seats at full rate, 1 seats with partial charges',
         },
         {
             name: 'Supports cloud invoices with only metered line items',
             invoice: makeInvoice(
                 [12.34, InvoiceLineItemType.Metered],
             ),
-            expected: '12.34 users',
+            expected: '12.34 seats',
         },
         {
             name: 'Shows minimum decimal necessary',
             invoice: makeInvoice(
                 [12.499, InvoiceLineItemType.Metered],
             ),
-            expected: '12.5 users',
+            expected: '12.5 seats',
         },
         {
             name: 'hides insignificant decimals',
             invoice: makeInvoice(
                 [12.002, InvoiceLineItemType.Metered],
             ),
-            expected: '12 users',
+            expected: '12 seats',
         },
         {
             name: 'Supports cloud invoices with only non-metered line items',
@@ -81,7 +83,7 @@ describe('InvoiceUserCount', () => {
                 [1, InvoiceLineItemType.Full],
                 [249, InvoiceLineItemType.Partial],
             ),
-            expected: '1 users at full rate, 249 users with partial charges',
+            expected: '1 seats at full rate, 249 seats with partial charges',
         },
         {
             name: 'Shows default of 0 full users, 0 partial users when there are no users',
@@ -90,19 +92,19 @@ describe('InvoiceUserCount', () => {
                 [0, InvoiceLineItemType.Full],
                 [0, InvoiceLineItemType.Partial],
             ),
-            expected: '0 users at full rate, 0 users with partial charges',
+            expected: '0 seats at full rate, 0 seats with partial charges',
         },
         {
             name: 'Shows default of 0 full users, 0 partial users when there are no line items in invoice',
             invoice: makeInvoice(),
-            expected: '0 users at full rate, 0 users with partial charges',
+            expected: '0 seats at full rate, 0 seats with partial charges',
         },
         {
             name: 'Shows 3 full userswhen there are on prem users',
             invoice: makeInvoice(
                 [3, InvoiceLineItemType.OnPremise],
             ),
-            expected: '3 users',
+            expected: '3 seats',
         },
     ];
 

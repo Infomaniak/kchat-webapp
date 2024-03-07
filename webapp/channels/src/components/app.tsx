@@ -18,20 +18,18 @@ const LazyRoot = Utils.lazyWithRetries(() => import('components/root'));
 
 const Root = makeAsyncComponent('Root', LazyRoot);
 
-class App extends React.PureComponent {
-    render() {
-        return (
-            <Provider store={store}>
-                <CRTPostsChannelResetWatcher/>
-                <Router history={getHistory()}>
-                    <Route
-                        path='/'
-                        component={Root}
-                    />
-                </Router>
-            </Provider>
-        );
-    }
-}
+const App = () => {
+    return (
+        <Provider store={store}>
+            <CRTPostsChannelResetWatcher/>
+            <Router history={getHistory()}>
+                <Route
+                    path='/'
+                    component={Root}
+                />
+            </Router>
+        </Provider>
+    );
+};
 
-export default hot(App);
+export default hot(React.memo(App));

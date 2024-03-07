@@ -16,7 +16,7 @@ export type ValueType = {
     value: string;
 }
 
-type Props<T> = Omit<SelectProps<T>, 'onChange'> & {
+type Props<T extends ValueType> = Omit<SelectProps<T>, 'onChange'> & {
     value?: T;
     legend?: string;
     error?: string;
@@ -39,6 +39,14 @@ const baseStyles = {
     indicatorSeparator: (provided: CSSProperties) => ({
         ...provided,
         display: 'none',
+    }),
+    menu: (provided: CSSProperties) => ({
+        ...provided,
+        zIndex: 100,
+    }),
+    menuPortal: (provided: CSSProperties) => ({
+        ...provided,
+        zIndex: 100,
     }),
 };
 

@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {ArchiveOutlineIcon, CheckIcon, ChevronDownIcon, GlobeIcon, LockOutlineIcon, MagnifyIcon, AccountOutlineIcon} from '@infomaniak/compass-icons/components';
+import {ArchiveOutlineIcon, CheckIcon, ChevronDownIcon, GlobeIcon, LockOutlineIcon, AccountOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage, injectIntl, type WrappedComponentProps} from 'react-intl';
@@ -368,7 +368,7 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
             if (channelsToDisplay.length >= this.props.channelsPerPage && pageEnd < this.props.channels.length) {
                 nextButton = (
                     <button
-                        className='btn filter-control filter-control__next outlineButton'
+                        className='btn btn-sm filter-control filter-control__next outlineButton'
                         onClick={this.nextPage}
                         disabled={this.state.nextDisabled}
                         aria-label={localizeMessage('more_channels.next', 'Next')}
@@ -384,7 +384,7 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
             if (this.state.page > 0) {
                 previousButton = (
                     <button
-                        className='btn filter-control filter-control__prev outlineButton'
+                        className='btn btn-sm filter-control filter-control__prev outlineButton'
                         onClick={this.previousPage}
                         aria-label={localizeMessage('more_channels.prev', 'Previous')}
                     >
@@ -403,7 +403,7 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
                     id='searchIcon'
                     aria-hidden='true'
                 >
-                    <MagnifyIcon size={18}/>
+                    <i className='icon icon-magnify'/>
                 </span>
                 <QuickInput
                     id='searchChannelsTextbox'

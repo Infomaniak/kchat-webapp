@@ -2,29 +2,43 @@
 // See LICENSE.txt for license information.
 
 import type {Bot} from '@mattermost/types/bots';
-import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import {CategorySorting} from '@mattermost/types/channel_categories';
+import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import type {Channel, ChannelMembership, ChannelNotifyProps, ChannelWithTeamData} from '@mattermost/types/channels';
 import type {Invoice, Product, Subscription, CloudCustomer} from '@mattermost/types/cloud';
 import type {ClientLicense} from '@mattermost/types/config';
 import type {SystemEmoji, CustomEmoji} from '@mattermost/types/emojis';
 import type {FileInfo} from '@mattermost/types/files';
 import type {Group} from '@mattermost/types/groups';
-import type {Command, IncomingWebhook} from '@mattermost/types/integrations';
+import type {Command, IncomingWebhook, OutgoingWebhook} from '@mattermost/types/integrations';
 import type {Post} from '@mattermost/types/posts';
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {Reaction} from '@mattermost/types/reactions';
 import type {Role} from '@mattermost/types/roles';
 import type {Session} from '@mattermost/types/sessions';
 import type {Team, TeamMembership} from '@mattermost/types/teams';
-import type {UserProfile, UserAccessToken} from '@mattermost/types/users';
+import {CustomStatusDuration} from '@mattermost/types/users';
+import type {UserProfile, UserAccessToken, UserCustomStatus} from '@mattermost/types/users';
 
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
 import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
+import type {PostDraft} from 'types/store/draft';
 import type {ProductComponent} from 'types/store/plugins';
 
 export class TestHelper {
+    public static getPostDraftMock(override?: Partial<PostDraft>): PostDraft {
+        const defaultPostDraft: PostDraft = {
+            message: 'Test message',
+            fileInfos: [],
+            uploadsInProgress: [],
+            channelId: '',
+            rootId: '',
+            createAt: 0,
+            updateAt: 0,
+        };
+        return Object.assign({}, defaultPostDraft, override);
+    }
     public static getUserMock(override: Partial<UserProfile> = {}): UserProfile {
         const defaultUser: UserProfile = {
             id: 'user_id',
@@ -50,10 +64,12 @@ export class TestHelper {
                 comments: 'never',
                 desktop: 'default',
                 desktop_sound: 'false',
+                calls_desktop_sound: 'true',
                 email: 'false',
                 first_name: 'false',
                 mark_unread: 'mention',
                 mention_keys: '',
+                highlight_keys: '',
                 push: 'none',
                 push_status: 'offline',
             },
@@ -64,6 +80,16 @@ export class TestHelper {
             bot_description: '',
         };
         return Object.assign({}, defaultUser, override);
+    }
+
+    public static getCustomStatusMock(override?: Partial<UserCustomStatus>): UserCustomStatus {
+        const defaultCustomStatus: UserCustomStatus = {
+            emoji: 'neutral_face',
+            text: 'text',
+            duration: CustomStatusDuration.DONT_CLEAR,
+        };
+
+        return Object.assign({}, defaultCustomStatus, override);
     }
 
     public static getUserAccessTokenMock(override?: Partial<UserAccessToken>): UserAccessToken {
@@ -158,6 +184,7 @@ export class TestHelper {
             mark_unread: 'all',
             push: 'default',
             ignore_channel_mentions: 'default',
+            channel_auto_follow_threads: 'off',
         };
         const notifyProps = Object.assign({}, defaultNotifyProps, overrideNotifyProps);
 
@@ -270,7 +297,29 @@ export class TestHelper {
         return Object.assign({}, defaultIncomingWebhook, override);
     }
 
-    public static getPostMock(override: Partial<Post> = {}): Post {
+    public static getOutgoingWebhookMock(override: Partial<OutgoingWebhook> = {}): OutgoingWebhook {
+        const defaultOutgoingWebhook: OutgoingWebhook = {
+            id: 'id',
+            token: 'hook_token',
+            create_at: 0,
+            update_at: 0,
+            delete_at: 0,
+            creator_id: 'creator_id',
+            channel_id: '',
+            team_id: '',
+            trigger_words: [],
+            trigger_when: 0,
+            callback_urls: [],
+            display_name: '',
+            description: '',
+            content_type: '',
+            username: '',
+            icon_url: '',
+        };
+        return Object.assign({}, defaultOutgoingWebhook, override);
+    }
+
+    public static getPostMock(override: Omit<Partial<Post>, 'metadata'> & {metadata?: Partial<Post['metadata']>} = {}): Post {
         const defaultPost: Post = {
             edit_at: 0,
             original_id: '',
@@ -296,7 +345,15 @@ export class TestHelper {
             update_at: 0,
             user_id: 'user_id',
         };
-        return Object.assign({}, defaultPost, override);
+
+        return {
+            ...defaultPost,
+            ...override,
+            metadata: {
+                ...defaultPost.metadata,
+                ...override.metadata,
+            },
+        };
     }
 
     public static getFileInfoMock(override: Partial<FileInfo> = {}): FileInfo {
@@ -374,6 +431,7 @@ export class TestHelper {
             showTeamSidebar: false,
             showAppBar: false,
             wrapped: true,
+            publicComponent: null,
         };
     }
 
@@ -520,5 +578,16 @@ export class TestHelper {
             create_at: 0,
             ...override,
         };
+    }
+
+    public static getMockMouseButtonEvent() {
+        return {
+            preventDefault: jest.fn(),
+            stopPropagation: jest.fn(),
+            currentTarget: {
+                click: jest.fn(),
+                value: 'test value',
+            },
+        } as unknown as React.MouseEvent<HTMLButtonElement>;
     }
 }

@@ -3,8 +3,8 @@
 
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import type {Dispatch} from 'redux';
 import {bindActionCreators, compose} from 'redux';
+import type {Dispatch} from 'redux';
 
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 import {getKSuites} from 'mattermost-redux/actions/teams';

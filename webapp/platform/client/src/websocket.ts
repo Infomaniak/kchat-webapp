@@ -536,7 +536,7 @@ export default class WebSocketClient {
         }
     }
 
-    sendMessage(action: string, data: any, responseCallback?: () => void) {
+    sendMessage(action: string, data: any, responseCallback?: (msg: any) => void) {
         const msg = {
             action,
             seq: this.responseSequence++,
@@ -604,6 +604,28 @@ export default class WebSocketClient {
             user_id: userId,
         };
         this.sendPresenceMessage('client-user_typing', data, callback);
+    }
+
+    updateActiveChannel(channelId: string, callback?: (msg: any) => void) {
+        const data = {
+            channel_id: channelId,
+        };
+        this.sendMessage('presence', data, callback);
+    }
+
+    updateActiveTeam(teamId: string, callback?: (msg: any) => void) {
+        const data = {
+            team_id: teamId,
+        };
+        this.sendMessage('presence', data, callback);
+    }
+
+    updateActiveThread(isThreadView: boolean, channelId: string, callback?: (msg: any) => void) {
+        const data = {
+            thread_channel_id: channelId,
+            is_thread_view: isThreadView,
+        };
+        this.sendMessage('presence', data, callback);
     }
 
     userUpdateActiveStatus(userIsActive: boolean, manual: boolean, callback?: () => void) {

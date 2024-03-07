@@ -7,10 +7,10 @@ import {useIntl} from 'react-intl';
 
 import {ShortcutKeyVariant, ShortcutKey} from 'components/shortcut_key';
 
-import {isMac} from 'utils/utils';
+import {isMac} from 'utils/user_agent';
 
-import type {KeyboardShortcutDescriptor} from './keyboard_shortcuts';
 import {isMessageDescriptor} from './keyboard_shortcuts';
+import type {KeyboardShortcutDescriptor} from './keyboard_shortcuts';
 
 import './keyboard_shortcuts_sequence.scss';
 

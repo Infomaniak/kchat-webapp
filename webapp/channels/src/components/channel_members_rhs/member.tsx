@@ -50,7 +50,8 @@ const DisplayName = styled.span`
 `;
 
 const Username = styled.span`
-    margin-left: 8px;
+    margin-left: 4px;
+    color: rgba(var(--center-channel-color-rgb), 0.75);
     font-size: 12px;
     line-height: 18px;
     color: rgba(var(--center-channel-color-rgb), 0.56);
@@ -68,6 +69,7 @@ const SendMessage = styled.button`
         background-color: rgba(var(--center-channel-color-rgb), 0.12);
     }
     .icon {
+        color: rgba(var(--center-channel-color-rgb), 0.64);
         font-size: 14.4px;
         color: rgba(var(--center-channel-color-rgb), 0.56);
     };
@@ -266,7 +268,23 @@ const StyledPendingGuest = styled.div`
 
     &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.08);
-        color: rgba(var(--center-channel-color-rgb), 0.56);
+        color: rgba(var(--center-channel-color-rgb), 0.75);
+
+        ${SendMessage} {
+            display: block;
+            flex: 0 0 auto;
+        }
+    }
+
+    .ProfileSpan {
+        display: flex;
+        overflow: hidden;
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        // This padding is to make sure the status icon doesnt get clipped off because of the overflow
+        padding: 4px 0;
+        margin-right: auto;
     }
 
     .MenuWrapper {

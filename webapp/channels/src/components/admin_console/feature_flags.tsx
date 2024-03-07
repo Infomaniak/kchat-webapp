@@ -2,15 +2,19 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 import type {AdminConfig} from '@mattermost/types/config';
 
-import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
+import AdminHeader from 'components/widgets/admin_console/admin_header';
 
 type Props = {
     config: AdminConfig;
 };
+
+export const messages = defineMessages({
+    title: {id: 'admin.feature_flags.title', defaultMessage: 'Features Flags'},
+});
 
 const FeatureFlags: React.FC<Props> = (props: Props) => {
     const flags = props.config.FeatureFlags;
@@ -27,10 +31,9 @@ const FeatureFlags: React.FC<Props> = (props: Props) => {
 
     return (
         <div className='wrapper--admin'>
-            <FormattedAdminHeader
-                id='admin.feature_flags.title'
-                defaultMessage='Feature Flags'
-            />
+            <AdminHeader>
+                <FormattedMessage {...messages.title}/>
+            </AdminHeader>
             <div className='admin-console__wrapper'>
                 <div className='admin-logs-content admin-console__content'>
                     <div className={'banner info'}>

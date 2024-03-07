@@ -1,8 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import ColorContrastChecker from 'color-contrast-checker';
-import ColorHash from 'color-hash';
 import React, {PureComponent} from 'react';
 
 import type {UserProfile as UserProfileType} from '@mattermost/types/users';
@@ -10,46 +8,42 @@ import type {UserProfile as UserProfileType} from '@mattermost/types/users';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
-import type {BaseOverlayTrigger} from 'components/overlay_trigger';
 import OverlayTrigger from 'components/overlay_trigger';
+import type {BaseOverlayTrigger} from 'components/overlay_trigger';
 import ProfilePopover from 'components/profile_popover';
 import SharedUserIndicator from 'components/shared_user_indicator';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
 
-import {imageURLForUser, isMobile} from 'utils/utils';
+import {imageURLForUser} from 'utils/utils';
 
 import {generateColor} from './utils';
 
-export type UserProfileProps = {
+export type Props = {
+    user?: UserProfileType;
     userId: string;
     displayName?: string;
-    isBusy?: boolean;
     isShared?: boolean;
-    overwriteName?: React.ReactNode;
+    overwriteName?: string;
     overwriteIcon?: string;
-    user?: UserProfileType;
     disablePopover?: boolean;
     displayUsername?: boolean;
     colorize?: boolean;
-    hasMention?: boolean;
     hideStatus?: boolean;
+    isMobileView: boolean;
     isRHS?: boolean;
-    overwriteImage?: React.ReactNode;
     channelId?: string;
     theme?: Theme;
 }
 
-export default class UserProfile extends PureComponent<UserProfileProps> {
+export default class UserProfile extends PureComponent<Props> {
     private overlay?: BaseOverlayTrigger;
 
-    static defaultProps: Partial<UserProfileProps> = {
+    static defaultProps: Partial<Props> = {
         disablePopover: false,
         displayUsername: false,
-        hasMention: false,
         hideStatus: false,
         isRHS: false,
-        overwriteImage: '',
         overwriteName: '',
         colorize: false,
     };
@@ -64,38 +58,14 @@ export default class UserProfile extends PureComponent<UserProfileProps> {
         this.overlay = ref;
     };
 
-    generateColor = (username: string, background: string): string => {
-        const cacheKey = `${username}-${background}`;
-        const cachedColor = LocalStorageStore.getItem(cacheKey);
-        if (cachedColor !== null) {
-            return cachedColor;
-        }
-
-        let userColor = background;
-        let userAndSalt = username;
-        const checker = new ColorContrastChecker();
-        const colorHash = new ColorHash();
-
-        let tries = 3;
-        while (!checker.isLevelCustom(userColor, background, 4.5) && tries > 0) {
-            userColor = colorHash.hex(userAndSalt);
-            userAndSalt += 'salt';
-            tries--;
-        }
-
-        LocalStorageStore.setItem(cacheKey, userColor);
-        return userColor;
-    };
-
     render(): React.ReactNode {
         const {
             disablePopover,
             displayName,
             displayUsername,
-            isBusy,
+            isMobileView,
             isRHS,
             isShared,
-            hasMention,
             hideStatus,
             overwriteName,
             overwriteIcon,
@@ -115,7 +85,7 @@ export default class UserProfile extends PureComponent<UserProfileProps> {
 
         const ariaName: string = typeof name === 'string' ? name.toLowerCase() : '';
 
-        let userColor = '#000000';
+        let userColor = theme?.centerChannelColor;
         if (user && theme) {
             userColor = generateColor(user.username, theme.centerChannelBg);
         }
@@ -135,7 +105,7 @@ export default class UserProfile extends PureComponent<UserProfileProps> {
         }
 
         let placement = 'right';
-        if (isRHS && !isMobile()) {
+        if (isRHS && !isMobileView) {
             placement = 'left';
         }
 
@@ -155,7 +125,7 @@ export default class UserProfile extends PureComponent<UserProfileProps> {
         }
 
         return (
-            <React.Fragment>
+            <>
                 <OverlayTrigger
                     ref={this.setOverlaynRef}
                     trigger={['click']}
@@ -167,10 +137,8 @@ export default class UserProfile extends PureComponent<UserProfileProps> {
                             userId={userId}
                             channelId={channelId}
                             src={profileImg}
-                            isBusy={isBusy}
                             hide={this.hideProfilePopover}
                             hideStatus={hideStatus}
-                            hasMention={hasMention}
                             overwriteName={overwriteName}
                             overwriteIcon={overwriteIcon}
                         />
@@ -187,7 +155,7 @@ export default class UserProfile extends PureComponent<UserProfileProps> {
                 {sharedIcon}
                 {(user && user.is_bot) && <BotTag/>}
                 {(user && isGuest(user.roles)) && <GuestTag/>}
-            </React.Fragment>
+            </>
         );
     }
 }

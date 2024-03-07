@@ -7,7 +7,6 @@ exports[`components/PostProfilePicture should match snapshot, no status and post
   fromWebhook={false}
   hasMention={true}
   isBot={false}
-  isBusy={true}
   isEmoji={false}
   popoverPlacement="right"
   profileSrc="/api/v4/users/defaultuser/image?_=0"
@@ -27,7 +26,6 @@ exports[`components/PostProfilePicture should match snapshot, status and post ic
   fromWebhook={false}
   hasMention={true}
   isBot={false}
-  isBusy={true}
   isEmoji={false}
   popoverPlacement="right"
   profileSrc="/api/v4/users/defaultuser/image?_=0"

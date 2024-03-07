@@ -1,30 +1,29 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import React from 'react';
+import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import {GenericModal} from '@mattermost/components';
+import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import type MultiSelect from 'components/multiselect/multiselect';
 
 import {getHistory} from 'utils/browser_history';
-import Constants, {ModalIdentifiers} from 'utils/constants';
+import Constants from 'utils/constants';
 
 import List from './list';
 import {USERS_PER_PAGE} from './list/list';
-import type {
-    OptionValue} from './types';
 import {
     isGroupChannel,
     optionValue,
 } from './types';
-
-import './more_direct_channels.scss';
+import type {
+    OptionValue} from './types';
 
 export type Props = {
     currentUserId: string;
@@ -51,25 +50,23 @@ export type Props = {
     onModalDismissed?: () => void;
     onExited?: () => void;
     actions: {
-        getProfiles: (page?: number | undefined, perPage?: number | undefined, options?: any) => Promise<any>;
-        getProfilesInTeam: (teamId: string, page: number, perPage?: number | undefined, sort?: string | undefined, options?: any) => Promise<any>;
+        getProfiles: (page?: number | undefined, perPage?: number | undefined, options?: any) => Promise<ActionResult>;
+        getProfilesInTeam: (teamId: string, page: number, perPage?: number | undefined, sort?: string | undefined, options?: any) => Promise<ActionResult>;
         loadProfilesMissingStatus: (users: UserProfile[]) => void;
         getTotalUsersStats: () => void;
-        loadStatusesForProfilesList: (users: any) => {
-            data: boolean;
-        };
-        loadProfilesForGroupChannels: (groupChannels: any) => void;
-        openDirectChannelToUserId: (userId: any) => Promise<any>;
-        openGroupChannelToUserIds: (userIds: any) => Promise<any>;
-        searchProfiles: (term: string, options?: any) => Promise<any>;
-        searchGroupChannels: (term: string) => Promise<any>;
-        setModalSearchTerm: (term: any) => GenericAction;
-        closeModal: (modalId: string) => void;
+        loadStatusesForProfilesList: (users: UserProfile[]) => void;
+        loadProfilesForGroupChannels: (groupChannels: Channel[]) => void;
+        openDirectChannelToUserId: (userId: string) => Promise<ActionResult>;
+        openGroupChannelToUserIds: (userIds: string[]) => Promise<ActionResult>;
+        searchProfiles: (term: string, options: any) => Promise<ActionResult<UserProfile[]>>;
+        searchGroupChannels: (term: string) => Promise<ActionResult<Channel[]>>;
+        setModalSearchTerm: (term: string) => void;
     };
 }
 
 type State = {
     values: OptionValue[];
+    show: boolean;
     search: boolean;
     saving: boolean;
     loadingUsers: boolean;
@@ -103,6 +100,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
         this.state = {
             values,
+            show: true,
             search: false,
             saving: false,
             loadingUsers: true,
@@ -153,13 +151,14 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         }
     }
 
-    componentDidMount() {
-        this.loadModalData();
-    }
-
     componentDidUpdate(prevProps: Props) {
         this.updateFromProps(prevProps);
     }
+
+    handleHide = () => {
+        this.props.actions.setModalSearchTerm('');
+        this.setState({show: false});
+    };
 
     setUsersLoadingState = (loadingState: boolean) => {
         this.setState({
@@ -168,10 +167,10 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
     };
 
     handleExit = () => {
-        this.props.actions.closeModal(ModalIdentifiers.CREATE_DM_CHANNEL);
         if (this.exitToChannel) {
             getHistory().push(this.exitToChannel);
         }
+
         this.props.onModalDismissed?.();
         this.props.onExited?.();
     };
@@ -195,8 +194,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
             if (!error) {
                 this.exitToChannel = '/' + this.props.currentTeamName + '/channels/' + data.name;
-                this.props.actions.setModalSearchTerm('');
-                this.handleExit();
+                this.handleHide();
             }
         };
 
@@ -235,7 +233,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
     };
 
     getUserProfiles = (page?: number) => {
-        const pageNum = page || 0;
+        const pageNum = page ? page + 1 : 0;
         if (this.props.restrictDirectMessage === 'any') {
             this.props.actions.getProfiles(pageNum, USERS_PER_PAGE * 2).then(() => {
                 this.setUsersLoadingState(false);
@@ -286,20 +284,45 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         );
 
         return (
-            <GenericModal
-                id={ModalIdentifiers.CREATE_DM_CHANNEL}
-                className='more-modal more-direct-channels'
+            <Modal
+                dialogClassName='a11y__modal more-modal more-direct-channels'
+                show={this.state.show}
+                onHide={this.handleHide}
                 onExited={this.handleExit}
-                autoCloseOnConfirmButton={false}
-                modalHeaderText={
-                    <FormattedMessage
-                        id='more_direct_channels.title'
-                        defaultMessage='Direct Messages'
-                    />
-                }
+                onEntered={this.loadModalData}
+                role='dialog'
+                aria-labelledby='moreDmModalLabel'
+                id='moreDmModal'
             >
-                {body}
-            </GenericModal>
+                <Modal.Header closeButton={true}>
+                    <Modal.Title
+                        componentClass='h1'
+                        id='moreDmModalLabel'
+                    >
+                        <FormattedMessage
+                            id='more_direct_channels.title'
+                            defaultMessage='Direct Messages'
+                        />
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body
+                    role='application'
+                >
+                    {body}
+                </Modal.Body>
+                <Modal.Footer className='modal-footer--invisible'>
+                    <button
+                        id='closeModalButton'
+                        type='button'
+                        className='btn btn-tertiary'
+                    >
+                        <FormattedMessage
+                            id='general_button.close'
+                            defaultMessage='Close'
+                        />
+                    </button>
+                </Modal.Footer>
+            </Modal>
         );
     }
 }

@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import {isEmpty} from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';

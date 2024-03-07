@@ -6,7 +6,7 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 
-import {renderWithIntl} from 'tests/react_testing_utils';
+import {renderWithContext} from 'tests/react_testing_utils';
 import mockStore from 'tests/test_store';
 
 import InsightsTitle from './insights_title';
@@ -51,7 +51,7 @@ describe('components/activity_and_insights/insights/insights_title', () => {
     test('should match snapshot with My insights', async () => {
         const store = await mockStore(initialState);
 
-        renderWithIntl(
+        renderWithContext(
             <Provider store={store}>
                 <BrowserRouter>
                     <InsightsTitle
@@ -68,7 +68,7 @@ describe('components/activity_and_insights/insights/insights_title', () => {
     test('should match snapshot with Team insights', async () => {
         const store = await mockStore(initialState);
 
-        renderWithIntl(
+        renderWithContext(
             <Provider store={store}>
                 <BrowserRouter>
                     <InsightsTitle

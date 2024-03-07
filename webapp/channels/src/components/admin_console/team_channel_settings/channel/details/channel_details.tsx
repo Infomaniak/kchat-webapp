@@ -1,26 +1,26 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {cloneDeep} from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import type {Channel, ChannelModeration as ChannelPermissions, ChannelModerationPatch} from '@mattermost/types/channels';
-import type {ServerError} from '@mattermost/types/errors';
-import type {SyncablePatch, Group} from '@mattermost/types/groups';
 import {SyncableType} from '@mattermost/types/groups';
+import type {SyncablePatch, Group} from '@mattermost/types/groups';
 import type {Scheme} from '@mattermost/types/schemes';
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Permissions} from 'mattermost-redux/constants';
-import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import BlockableLink from 'components/admin_console/blockable_link';
 import ConfirmModal from 'components/confirm_modal';
 import FormError from 'components/form_error';
+import AdminHeader from 'components/widgets/admin_console/admin_header';
 
 import {getHistory} from 'utils/browser_history';
 import Constants from 'utils/constants';
@@ -85,17 +85,17 @@ interface ChannelDetailsState {
 
 export type ChannelDetailsActions = {
     getGroups: (channelID: string, q?: string, page?: number, perPage?: number, filterAllowReference?: boolean) => Promise<ActionResult>;
-    linkGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType, patch: SyncablePatch) => ActionResult;
-    unlinkGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType) => ActionFunc;
-    membersMinusGroupMembers: (channelID: string, groupIDs: string[], page?: number, perPage?: number) => ActionResult;
+    linkGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType, patch: SyncablePatch) => Promise<ActionResult>;
+    unlinkGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType) => Promise<ActionResult>;
+    membersMinusGroupMembers: (channelID: string, groupIDs: string[], page?: number, perPage?: number) => Promise<ActionResult>;
     setNavigationBlocked: (blocked: boolean) => {type: 'SET_NAVIGATION_BLOCKED'; blocked: boolean};
-    getChannel: (channelId: string) => ActionFunc;
+    getChannel: (channelId: string) => void;
     getTeam: (teamId: string) => Promise<ActionResult>;
     getChannelModerations: (channelId: string) => Promise<ActionResult>;
-    patchChannel: (channelId: string, patch: Channel) => ActionFunc;
+    patchChannel: (channelId: string, patch: Channel) => Promise<ActionResult>;
     updateChannelPrivacy: (channelId: string, privacy: string) => Promise<ActionResult>;
-    patchGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType, patch: Partial<SyncablePatch>) => ActionFunc;
-    patchChannelModerations: (channelID: string, patch: ChannelModerationPatch[]) => {data: Channel; error: ServerError};
+    patchGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType, patch: Partial<SyncablePatch>) => Promise<ActionResult>;
+    patchChannelModerations: (channelID: string, patch: ChannelModerationPatch[]) => Promise<ActionResult>;
     loadScheme: (schemeID: string) => Promise<ActionResult>;
     addChannelMember: (channelId: string, userId: string, postRootId?: string) => Promise<ActionResult>;
     removeChannelMember: (channelId: string, userId: string) => Promise<ActionResult>;
@@ -640,7 +640,8 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
 
     private addUsersToAdd = (users: UserProfile[]) => {
         let {usersToRemoveCount} = this.state;
-        const {usersToAdd, usersToRemove} = this.state;
+        const usersToRemove = {...this.state.usersToRemove};
+        const usersToAdd = {...this.state.usersToAdd};
         users.forEach((user) => {
             if (usersToRemove[user.id]?.id === user.id) {
                 delete usersToRemove[user.id];
@@ -781,7 +782,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
         );
         return (
             <div className='wrapper--fixed'>
-                <div className='admin-console__header with-back'>
+                <AdminHeader withBackButton={true}>
                     <div>
                         <BlockableLink
                             to='/admin_console/user_management/channels'
@@ -792,7 +793,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
                             defaultMessage='Channel Configuration'
                         />
                     </div>
-                </div>
+                </AdminHeader>
                 <div className='admin-console__wrapper'>
                     <div className='admin-console__content'>
                         <ChannelProfile

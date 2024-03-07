@@ -42,8 +42,8 @@ type MetricsInterface interface {
 	IncrementMemCacheHitCounterSession()
 	IncrementMemCacheInvalidationCounterSession()
 
-	IncrementWebsocketEvent(eventType string)
-	IncrementWebSocketBroadcast(eventType string)
+	IncrementWebsocketEvent(eventType model.WebsocketEventType)
+	IncrementWebSocketBroadcast(eventType model.WebsocketEventType)
 	IncrementWebSocketBroadcastBufferSize(hub string, amount float64)
 	DecrementWebSocketBroadcastBufferSize(hub string, amount float64)
 	IncrementWebSocketBroadcastUsersRegistered(hub string, amount float64)
@@ -78,6 +78,14 @@ type MetricsInterface interface {
 	ObserveRemoteClusterPingDuration(remoteID string, elapsed float64)
 	ObserveRemoteClusterClockSkew(remoteID string, skew float64)
 	IncrementRemoteClusterConnStateChangeCounter(remoteID string, online bool)
+
+	IncrementSharedChannelsSyncCounter(remoteID string)
+	ObserveSharedChannelsTaskInQueueDuration(elapsed float64)
+	ObserveSharedChannelsQueueSize(size int64)
+	ObserveSharedChannelsSyncCollectionDuration(remoteID string, elapsed float64)
+	ObserveSharedChannelsSyncSendDuration(remoteID string, elapsed float64)
+	ObserveSharedChannelsSyncCollectionStepDuration(remoteID string, step string, elapsed float64)
+	ObserveSharedChannelsSyncSendStepDuration(remoteID string, step string, elapsed float64)
 
 	IncrementJobActive(jobType string)
 	DecrementJobActive(jobType string)

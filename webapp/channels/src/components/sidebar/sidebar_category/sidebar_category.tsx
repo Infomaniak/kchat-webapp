@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import type {MouseEvent, KeyboardEvent} from 'react';
 import React from 'react';
+import type {MouseEvent, KeyboardEvent} from 'react';
 import {Draggable, Droppable} from 'react-beautiful-dnd';
 import {FormattedMessage} from 'react-intl';
 
@@ -21,17 +21,17 @@ import KeyboardShortcutSequence, {
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import {ChannelsTour, DirectMessagesTour} from 'components/tours/onboarding_tour';
 
-import Constants, {A11yCustomEventTypes, DraggingStateTypes, DraggingStates, Preferences, Touched} from 'utils/constants';
+import Constants, {A11yCustomEventTypes, DraggingStateTypes, DraggingStates} from 'utils/constants';
 import {t} from 'utils/i18n';
-import {isKeyPressed} from 'utils/utils';
+import {isKeyPressed} from 'utils/keyboard';
 
 import type {DraggingState} from 'types/store';
 
 import SidebarCategoryMenu from './sidebar_category_menu';
 import SidebarCategorySortingMenu from './sidebar_category_sorting_menu';
 
+import AddChannelsCtaButton from '../add_channels_cta_button';
 import InviteMembersButton from '../invite_members_button';
 import {SidebarCategoryHeader} from '../sidebar_category_header';
 import SidebarChannel from '../sidebar_channel';
@@ -39,17 +39,13 @@ import SidebarChannel from '../sidebar_channel';
 type Props = {
     category: ChannelCategory;
     categoryIndex: number;
-    isLastCategory: boolean;
     channelIds: string[];
     setChannelRef: (channelId: string, ref: HTMLLIElement) => void;
     handleOpenMoreDirectChannelsModal: (e: Event) => void;
     isNewCategory: boolean;
     draggingState: DraggingState;
     currentUserId: string;
-    touchedInviteMembersButton: boolean;
     isAdmin: boolean;
-    showDirectMessagesTutorialStep: boolean;
-    showChannelsTutorialStep: boolean;
     actions: {
         setCategoryCollapsed: (categoryId: string, collapsed: boolean) => void;
         setCategorySorting: (categoryId: string, sorting: CategorySorting) => void;
@@ -247,8 +243,6 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
             categoryIndex,
             channelIds,
             isNewCategory,
-            showDirectMessagesTutorialStep,
-            showChannelsTutorialStep,
         } = this.props;
 
         if (!category) {
@@ -349,22 +343,15 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                         inviteMembersButton = (
                             <InviteMembersButton
                                 className='followingSibling'
-                                touchedInviteMembersButton={this.props.touchedInviteMembersButton}
                                 isAdmin={this.props.isAdmin}
-                                onClick={() => {
-                                    if (!this.props.touchedInviteMembersButton) {
-                                        this.props.actions.savePreferences(
-                                            this.props.currentUserId,
-                                            [{
-                                                category: Preferences.TOUCHED,
-                                                user_id: this.props.currentUserId,
-                                                name: Touched.INVITE_MEMBERS,
-                                                value: 'true',
-                                            }],
-                                        );
-                                    }
-                                }}
                             />
+                        );
+                    }
+
+                    let addChannelsCtaButton = null;
+                    if (category.type === 'channels' && !category.collapsed) {
+                        addChannelsCtaButton = (
+                            <AddChannelsCtaButton/>
                         );
                     }
 
@@ -377,11 +364,8 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                 isCollapsed: category.collapsed,
                             })}
                             ref={provided.innerRef}
-                            id={`sidebar-droppable-category-${category.type === CategoryTypes.CUSTOM ? category.id : category.type}`}
                             {...provided.draggableProps}
                         >
-                            {category.type === CategoryTypes.CHANNELS && showChannelsTutorialStep && <ChannelsTour/>}
-                            {category.type === CategoryTypes.DIRECT_MESSAGES && showDirectMessagesTutorialStep && <DirectMessagesTour/>}
                             <Droppable
                                 droppableId={category.id}
                                 type='SIDEBAR_CHANNEL'
@@ -413,6 +397,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                                     }
                                                 }}
                                             >
+                                                {newLabel}
                                                 {directMessagesModalButton}
                                                 {categoryMenu}
                                             </SidebarCategoryHeader>
@@ -433,6 +418,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                 }}
                             </Droppable>
                             {inviteMembersButton}
+                            {addChannelsCtaButton}
                         </div>
                     );
                 }}

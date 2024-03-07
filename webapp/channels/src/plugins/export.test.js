@@ -5,6 +5,10 @@ import messageHtmlToComponent from 'utils/message_html_to_component';
 
 import './export';
 
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(),
+}));
+
 jest.mock('utils/message_html_to_component');
 
 describe('messageHtmlToComponent wrapper', () => {

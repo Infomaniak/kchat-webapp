@@ -5,12 +5,11 @@ import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import deepEqual from 'fast-deep-equal';
-import throttle from 'lodash/throttle';
 import React from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
-import 'plugins/export.js';
+import {ServiceEnvironment} from '@mattermost/types/config';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
@@ -20,7 +19,8 @@ import {rudderAnalytics, RudderTelemetryHandler} from 'mattermost-redux/client/r
 import {General} from 'mattermost-redux/constants';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
-import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
+import {getIsOnboardingFlowEnabled, getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
+import {getActiveTeamsList} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, isCurrentUserSystemAdmin, checkIsFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
@@ -28,7 +28,7 @@ import {setCallListeners} from 'actions/calls';
 import {loadRecentlyUsedCustomEmojis} from 'actions/emoji_actions';
 import * as GlobalActions from 'actions/global_actions';
 import {storeBridge} from 'actions/ksuite_bridge_actions';
-import {measurePageLoadTelemetry, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
+import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
 import {close, initialize} from 'actions/websocket_actions';
 import LocalStorageStore from 'stores/local_storage_store';
@@ -39,9 +39,12 @@ import AnnouncementBarController from 'components/announcement_bar';
 import AppBar from 'components/app_bar/app_bar';
 import {makeAsyncComponent} from 'components/async_load';
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
+import OpenPluginInstallPost from 'components/custom_open_plugin_install_post_renderer';
+import OpenPricingModalPost from 'components/custom_open_pricing_modal_post_renderer';
 import GlobalHeader from 'components/global_header/global_header';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
 import {HFTRoute} from 'components/header_footer_template_route';
+import MobileViewWatcher from 'components/mobile_view_watcher';
 import ModalController from 'components/modal_controller';
 import LaunchingWorkspace, {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_workspace/launching_workspace';
 import {Animations} from 'components/preparing_workspace/steps';
@@ -49,16 +52,16 @@ import SidebarRight from 'components/sidebar_right';
 import SidebarRightMenu from 'components/sidebar_right_menu';
 import SystemNotice from 'components/system_notice';
 import TeamSidebar from 'components/team_sidebar';
-import WelcomePostRenderer from 'components/welcome_post_renderer';
 import WindowSizeObserver from 'components/window_size_observer/WindowSizeObserver';
 
 import A11yController from 'utils/a11y_controller';
-import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
+import {PageLoadContext, StoragePrefixes} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import {EmojiIndicesByAlias} from 'utils/emoji';
+import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
-import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 
 import webSocketClient from 'client/web_websocket_client';
@@ -73,22 +76,34 @@ import RootRedirect from './root_redirect';
 
 import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
-const LazyErrorPage = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */ 'components/error_page'));
-const LazyLogin = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/login/login'));
-const LazyLoggedIn = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/logged_in'));
-const LazyHelpController = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/help/help_controller'));
+import 'plugins/export.js';
 
-// const LazyLinkingLandingPage = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/linking_landing_page'));
-const LazyPreparingWorkspace = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/preparing_workspace'));
-const LazyTeamController = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/team_controller'));
-const LazyOnBoardingTaskList = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/onboarding_tasklist'));
+const LazyErrorPage = React.lazy(() => import('components/error_page'));
+const LazyLogin = React.lazy(() => import('components/login/login'));
+
+// const LazyAdminConsole = React.lazy(() => import('components/admin_console'));
+const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
+
+// const LazyPasswordResetSendLink = React.lazy(() => import('components/password_reset_send_link'));
+// const LazyPasswordResetForm = React.lazy(() => import('components/password_reset_form'));
+// const LazySignup = React.lazy(() => import('components/signup/signup'));
+// const LazyTermsOfService = React.lazy(() => import('components/terms_of_service'));
+// const LazyShouldVerifyEmail = React.lazy(() => import('components/should_verify_email/should_verify_email'));
+// const LazyDoVerifyEmail = React.lazy(() => import('components/do_verify_email/do_verify_email'));
+// const LazyClaimController = React.lazy(() => import('components/claim'));
+// const LazyLinkingLandingPage = React.lazy(() => import('components/linking_landing_page'));
+// const LazySelectTeam = React.lazy(() => import('components/select_team'));
+// const LazyAuthorize = React.lazy(() => import('components/authorize'));
+// const LazyCreateTeam = React.lazy(() => import('components/create_team'));
+// const LazyMfa = React.lazy(() => import('components/mfa/mfa_controller'));
+const LazyPreparingWorkspace = React.lazy(() => import('components/preparing_workspace'));
+const LazyTeamController = React.lazy(() => import('components/team_controller'));
+const LazyOnBoardingTaskList = React.lazy(() => import('components/onboarding_tasklist'));
 
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const Login = makeAsyncComponent('LoginController', LazyLogin);
 const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
-const HelpController = makeAsyncComponent('HelpController', LazyHelpController);
 
-// const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', LazyLinkingLandingPage);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
 const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
@@ -109,24 +124,25 @@ const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
 // const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
 // const DelinquencyModalController = makeAsyncComponent('DelinquencyModalController', LazyDelinquencyModalController);
 
-type LoggedInRouteProps<T> = {
-    component: React.ComponentType<T>;
-    path: string;
+type LoggedInRouteProps = {
+    component: React.ComponentType<RouteComponentProps<any>>;
+    path: string | string[];
     theme?: Theme; // the routes that send the theme are the ones that will actually need to show the onboarding tasklist
     headerRef: React.RefObject<HTMLDivElement>; // IK: ref used for resisizng global header left controls when lhs is resized by user.
 };
-function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
+
+function LoggedInRoute(props: LoggedInRouteProps) {
     const {component: Component, theme, headerRef, ...rest} = props;
     return (
         <Route
             {...rest}
-            render={(routeProps: RouteComponentProps) => (
+            render={(routeProps) => (
                 <LoggedIn {...routeProps}>
                     {theme && <CompassThemeProvider theme={theme}>
                         <OnBoardingTaskList/>
                     </CompassThemeProvider>}
                     <Component
-                        {...(routeProps as unknown as T)}
+                        {...(routeProps)}
                         headerRef={headerRef}
                     />
                 </LoggedIn>
@@ -138,19 +154,21 @@ function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
 const noop = () => {};
 
 export type Actions = {
-    emitBrowserWindowResized: (size?: string) => void;
     getFirstAdminSetupComplete: () => Promise<ActionResult>;
     getProfiles: (page?: number, pageSize?: number, options?: Record<string, any>) => Promise<ActionResult>;
     migrateRecentEmojis: () => void;
-    loadConfigAndMe: () => Promise<{data: boolean}>;
+    loadConfigAndMe: () => Promise<ActionResult>;
     registerCustomPostRenderer: (type: string, component: any, id: string) => Promise<ActionResult>;
-    initializeProducts: () => Promise<void[]>;
+    initializeProducts: () => Promise<unknown>;
 }
 
 type Props = {
     theme: Theme;
     telemetryEnabled: boolean;
     telemetryId?: string;
+    iosDownloadLink?: string;
+    androidDownloadLink?: string;
+    appDownloadLink?: string;
     noAccounts: boolean;
     showTermsOfService: boolean;
     permalinkRedirectTeamName: string;
@@ -170,10 +188,6 @@ interface State {
 }
 
 export default class Root extends React.PureComponent<Props, State> {
-    private desktopMediaQuery: MediaQueryList;
-    private smallDesktopMediaQuery: MediaQueryList;
-    private tabletMediaQuery: MediaQueryList;
-    private mobileMediaQuery: MediaQueryList;
     private mounted: boolean;
     private retryGetToken: number;
     private IKLoginCode: string | undefined;
@@ -201,7 +215,7 @@ export default class Root extends React.PureComponent<Props, State> {
         // Redux
         setUrl(getSiteURL());
 
-        if (!isDesktopApp()) {
+        if (!UserAgent.isDesktopApp()) {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
 
@@ -233,31 +247,27 @@ export default class Root extends React.PureComponent<Props, State> {
 
         this.a11yController = new A11yController();
 
-        // set initial window size state
-        this.desktopMediaQuery = window.matchMedia(`(min-width: ${Constants.DESKTOP_SCREEN_WIDTH + 1}px)`);
-        this.smallDesktopMediaQuery = window.matchMedia(`(min-width: ${Constants.TABLET_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.DESKTOP_SCREEN_WIDTH}px)`);
-        this.tabletMediaQuery = window.matchMedia(`(min-width: ${Constants.MOBILE_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.TABLET_SCREEN_WIDTH}px)`);
-        this.mobileMediaQuery = window.matchMedia(`(max-width: ${Constants.MOBILE_SCREEN_WIDTH}px)`);
-
-        this.updateWindowSize();
-
         store.subscribe(() => applyLuxonDefaults(store.getState()));
-
-        this.embeddedInIFrame = window.self !== window.top;
     }
 
     onConfigLoaded = () => {
+        const config = getConfig(store.getState());
         const telemetryId = this.props.telemetryId;
 
-        let rudderKey: string | null | undefined = Constants.TELEMETRY_RUDDER_KEY;
-        let rudderUrl: string | null | undefined = Constants.TELEMETRY_RUDDER_DATAPLANE_URL;
-
-        if (rudderKey.startsWith('placeholder') && rudderUrl.startsWith('placeholder')) {
-            rudderKey = process.env.RUDDER_KEY; //eslint-disable-line no-process-env
-            rudderUrl = process.env.RUDDER_DATAPLANE_URL; //eslint-disable-line no-process-env
+        const rudderUrl = 'https://pdat.matterlytics.com';
+        let rudderKey = '';
+        switch (config.ServiceEnvironment) {
+        case ServiceEnvironment.PRODUCTION:
+            rudderKey = '1aoejPqhgONMI720CsBSRWzzRQ9';
+            break;
+        case ServiceEnvironment.TEST:
+            rudderKey = '1aoeoCDeh7OCHcbW2kseWlwUFyq';
+            break;
+        case ServiceEnvironment.DEV:
+            break;
         }
 
-        if (rudderKey != null && rudderKey !== '' && this.props.telemetryEnabled) {
+        if (rudderKey !== '' && this.props.telemetryEnabled) {
             const rudderCfg: {setCookieDomain?: string} = {};
             const siteURL = getConfig(store.getState()).SiteURL;
             if (siteURL !== '') {
@@ -317,30 +327,67 @@ export default class Root extends React.PureComponent<Props, State> {
         });
 
         this.props.actions.migrateRecentEmojis();
-        loadRecentlyUsedCustomEmojis()(store.dispatch, store.getState);
+        store.dispatch(loadRecentlyUsedCustomEmojis());
 
-        // const iosDownloadLink = getConfig(store.getState()).IosAppDownloadLink;
-        // const androidDownloadLink = getConfig(store.getState()).AndroidAppDownloadLink;
-        // const desktopAppDownloadLink = getConfig(store.getState()).AppDownloadLink;
-
-        // const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
-
-        // redirect to the mobile landing page if the user hasn't seen it before
-        // let landing;
-        // if (UserAgent.isAndroidWeb()) {
-        //     landing = androidDownloadLink;
-        // } else if (UserAgent.isIosWeb()) {
-        //     landing = iosDownloadLink;
-        // } else {
-        //     landing = desktopAppDownloadLink;
-        // }
-
-        // if (landing && !this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
-        //     this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
-        //     BrowserStore.setLandingPageSeen(true);
-        // }
+        this.showLandingPageIfNecessary();
 
         Utils.applyTheme(this.props.theme);
+    };
+
+    private showLandingPageIfNecessary = () => {
+        // We have nothing to redirect to if we're already on Desktop App
+        // Chromebook has no Desktop App to switch to
+        if (UserAgent.isDesktopApp() || UserAgent.isChromebook()) {
+            return;
+        }
+
+        // Nothing to link to if we've removed the Android App download link
+        if (UserAgent.isAndroidWeb() && !this.props.androidDownloadLink) {
+            return;
+        }
+
+        // Nothing to link to if we've removed the iOS App download link
+        if (UserAgent.isIosWeb() && !this.props.iosDownloadLink) {
+            return;
+        }
+
+        // Nothing to link to if we've removed the Desktop App download link
+        if (!this.props.appDownloadLink) {
+            return;
+        }
+
+        // Only show the landing page once
+        if (BrowserStore.hasSeenLandingPage()) {
+            return;
+        }
+
+        // We don't want to show when resetting the password
+        if (this.props.location.pathname === '/reset_password_complete') {
+            return;
+        }
+
+        // We don't want to show when we're doing Desktop App external login
+        if (this.props.location.pathname === '/login/desktop') {
+            return;
+        }
+
+        // Stop this infinitely redirecting
+        if (this.props.location.pathname.includes('/landing')) {
+            return;
+        }
+
+        // Disabled to avoid breaking the CWS flow
+        if (this.props.isCloud) {
+            return;
+        }
+
+        // Disable for Rainforest tests
+        if (window.location.hostname?.endsWith('.test.mattermost.com')) {
+            return;
+        }
+
+        this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
+        BrowserStore.setLandingPageSeen(true);
     };
 
     componentDidUpdate(prevProps: Props) {
@@ -371,8 +418,11 @@ export default class Root extends React.PureComponent<Props, State> {
             return;
         }
 
-        const useCaseOnboarding = getUseCaseOnboarding(storeState);
-        if (!useCaseOnboarding) {
+        const teams = getActiveTeamsList(storeState);
+
+        const onboardingFlowEnabled = getIsOnboardingFlowEnabled(storeState);
+
+        if (teams.length > 0 || !onboardingFlowEnabled) {
             GlobalActions.redirectUserToDefaultTeam();
             return;
         }
@@ -457,7 +507,9 @@ export default class Root extends React.PureComponent<Props, State> {
     };
 
     componentDidMount() {
-        if (isDesktopApp()) {
+        temporarilySetPageLoadContext(PageLoadContext.PAGE_LOAD);
+
+        if (UserAgent.isDesktopApp()) {
             // Rely on initial client calls to 401 for the first redirect to login,
             // we dont need to do it manually.
             // Login will send us back here with a code after we give it the challange.
@@ -578,8 +630,8 @@ export default class Root extends React.PureComponent<Props, State> {
         const refreshToken = localStorage.getItem('IKRefreshToken');
 
         // Validate infinite token or setup token keepalive for older tokens
-        if (isDesktopApp()) {
-            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+        if (UserAgent.isDesktopApp()) {
+            if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.1.0')) {
                 // TODO: find a way to clean this if into an else below, since its counterintuitive
                 // The reset teams will retrigger this func
                 if (isDefaultAuthServer() && !token) {
@@ -619,7 +671,7 @@ export default class Root extends React.PureComponent<Props, State> {
         // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
-            if (!isDesktopApp()) {
+            if (!UserAgent.isDesktopApp()) {
                 window.location.href = data.uri;
             } else {
                 const lsToken = localStorage.getItem('IKToken');
@@ -642,23 +694,8 @@ export default class Root extends React.PureComponent<Props, State> {
         this.initiateMeRequests();
 
         // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
-        // this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
-        // this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
-        this.props.actions.registerCustomPostRenderer('system_welcome_post', WelcomePostRenderer, 'welcome_post_renderer');
-
-        if (this.desktopMediaQuery.addEventListener) {
-            this.desktopMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
-            this.smallDesktopMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
-            this.tabletMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
-            this.mobileMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
-        } else if (this.desktopMediaQuery.addListener) {
-            this.desktopMediaQuery.addListener(this.handleMediaQueryChangeEvent);
-            this.smallDesktopMediaQuery.addListener(this.handleMediaQueryChangeEvent);
-            this.tabletMediaQuery.addListener(this.handleMediaQueryChangeEvent);
-            this.mobileMediaQuery.addListener(this.handleMediaQueryChangeEvent);
-        } else {
-            window.addEventListener('resize', this.handleWindowResizeEvent);
-        }
+        this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
+        this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
 
         measurePageLoadTelemetry();
         trackSelectorMetrics();
@@ -677,20 +714,6 @@ export default class Root extends React.PureComponent<Props, State> {
         if (this.loginCodeInterval) {
             console.log('[components/root] destroy login with code interval'); // eslint-disable-line no-console
             clearInterval(this.loginCodeInterval);
-        }
-
-        if (this.desktopMediaQuery.removeEventListener) {
-            this.desktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
-            this.smallDesktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
-            this.tabletMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
-            this.mobileMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
-        } else if (this.desktopMediaQuery.removeListener) {
-            this.desktopMediaQuery.removeListener(this.handleMediaQueryChangeEvent);
-            this.smallDesktopMediaQuery.removeListener(this.handleMediaQueryChangeEvent);
-            this.tabletMediaQuery.removeListener(this.handleMediaQueryChangeEvent);
-            this.mobileMediaQuery.removeListener(this.handleMediaQueryChangeEvent);
-        } else {
-            window.removeEventListener('resize', this.handleWindowResizeEvent);
         }
     }
 
@@ -719,16 +742,6 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     };
 
-    handleWindowResizeEvent = throttle(() => {
-        this.props.actions.emitBrowserWindowResized();
-    }, 100);
-
-    handleMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
-        if (e.matches) {
-            this.updateWindowSize();
-        }
-    };
-
     setRootMeta = () => {
         const root = document.getElementById('root')!;
 
@@ -738,23 +751,6 @@ export default class Root extends React.PureComponent<Props, State> {
             'rhs-open-expanded': this.props.rhsIsExpanded,
         })) {
             root.classList.toggle(className, enabled);
-        }
-    };
-
-    updateWindowSize = () => {
-        switch (true) {
-        case this.desktopMediaQuery.matches:
-            this.props.actions.emitBrowserWindowResized(WindowSizes.DESKTOP_VIEW);
-            break;
-        case this.smallDesktopMediaQuery.matches:
-            this.props.actions.emitBrowserWindowResized(WindowSizes.SMALL_DESKTOP_VIEW);
-            break;
-        case this.tabletMediaQuery.matches:
-            this.props.actions.emitBrowserWindowResized(WindowSizes.TABLET_VIEW);
-            break;
-        case this.mobileMediaQuery.matches:
-            this.props.actions.emitBrowserWindowResized(WindowSizes.MOBILE_VIEW);
-            break;
         }
     };
 
@@ -768,12 +764,13 @@ export default class Root extends React.PureComponent<Props, State> {
 
         return (
             <RootProvider>
+                <MobileViewWatcher/>
                 <Switch>
                     <Route
                         path={'/error'}
                         component={ErrorPage}
                     />
-                    <Route
+                    <HFRoute
                         path={'/login'}
                         component={Login}
                     />
@@ -781,14 +778,15 @@ export default class Root extends React.PureComponent<Props, State> {
                         path={'/access_problem'}
                         component={AccessProblem}
                     />
-                    <HFTRoute
+                    {/* <HFTRoute
                         path={'/help'}
                         component={HelpController}
-                    />
+                    /> */}
                     {/* <Route
                         path={'/landing'}
                         component={LinkingLandingPage}
                     /> */}
+
                     <LoggedInRoute
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
@@ -817,7 +815,26 @@ export default class Root extends React.PureComponent<Props, State> {
                         <SystemNotice/>
                         <GlobalHeader headerRef={this.headerResizerRef}/>
                         {!this.embeddedInIFrame && <TeamSidebar/>}
+                        {/* <CloudEffects/>
+                        <TeamSidebar/> */}
                         <Switch>
+                            {this.props.products?.filter((product) => Boolean(product.publicComponent)).map((product) => (
+                                <Route
+                                    key={`${product.id}-public`}
+                                    path={`${product.baseURL}/public`}
+                                    render={(props) => {
+                                        return (
+                                            <Pluggable
+                                                pluggableName={'Product'}
+                                                subComponentName={'publicComponent'}
+                                                pluggableId={product.id}
+                                                css={{gridArea: 'center'}}
+                                                {...props}
+                                            />
+                                        );
+                                    }}
+                                />
+                            ))}
                             {this.props.products?.map((product) => (
                                 <Route
                                     key={product.id}
@@ -863,7 +880,7 @@ export default class Root extends React.PureComponent<Props, State> {
                             <LoggedInRoute
                                 theme={this.props.theme}
                                 headerRef={this.headerResizerRef}
-                                path={'/:team'}
+                                path={`/:team(${TEAM_NAME_PATH_PATTERN})`}
                                 component={TeamController}
                             />
                             <RootRedirect/>

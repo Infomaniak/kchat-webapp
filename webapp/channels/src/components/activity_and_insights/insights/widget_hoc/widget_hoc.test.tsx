@@ -8,9 +8,10 @@ import {Provider} from 'react-redux';
 
 import {CardSizes, InsightsWidgetTypes, TimeFrames} from '@mattermost/types/insights';
 
-import {renderWithIntl} from 'tests/react_testing_utils';
-import mockStore from 'tests/test_store';
 import {InsightsScopes} from 'utils/constants';
+
+import {renderWithContext} from 'tests/react_testing_utils';
+import mockStore from 'tests/test_store';
 
 import widgetHoc from './widget_hoc';
 
@@ -34,7 +35,7 @@ describe('components/activity_and_insights/insights/widget_hoc', () => {
     test('should display my top reactions', () => {
         const EnhancedComponent = widgetHoc(TestComponent);
 
-        renderWithIntl(
+        renderWithContext(
             <Provider store={store}>
                 <EnhancedComponent
                     {...props}
@@ -49,7 +50,7 @@ describe('components/activity_and_insights/insights/widget_hoc', () => {
     test('should display team top reactions', () => {
         const EnhancedComponent = widgetHoc(TestComponent);
 
-        renderWithIntl(
+        renderWithContext(
             <Provider store={store}>
                 <EnhancedComponent
                     {...props}

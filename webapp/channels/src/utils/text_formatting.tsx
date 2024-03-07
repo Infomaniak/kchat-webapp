@@ -1,12 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-/* eslint-disable max-lines */
-
 import emojiRegex from 'emoji-regex';
 import type {Renderer} from 'marked';
 
 import type {SystemEmoji} from '@mattermost/types/emojis';
+
+import type {HighlightWithoutNotificationKey} from 'mattermost-redux/selectors/entities/users';
 
 import {formatWithRenderer} from 'utils/markdown';
 
@@ -19,8 +19,13 @@ const punctuationRegex = /[^\p{L}\d]/u;
 const AT_MENTION_PATTERN = /(?:\B|\b_+)@([a-z0-9.\-_]+)/gi;
 const UNICODE_EMOJI_REGEX = emojiRegex();
 const htmlEmojiPattern = /^<p>\s*(?:<img class="emoticon"[^>]*>|<span data-emoticon[^>]*>[^<]*<\/span>\s*|<span class="emoticon emoticon--unicode">[^<]*<\/span>\s*)+<\/p>$/;
-// eslint-disable-next-line no-misleading-character-class
-export const cjkrPattern = /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf\uac00-\ud7a3\u1100-\u11ff\u3130-\u318f\u0400-\u04ff\u0500-\u052f\u2de0-\u2dff]/;
+
+const FORMAT_TOKEN_LIMIT = 1000;
+const FORMAT_TOKEN_LIMIT_ERROR = 'maximum number of tokens reached';
+
+export function isFormatTokenLimitError(error: unknown) {
+    return Boolean(error && typeof error === 'object' && 'message' in error && (error as Record<string, string>).message === FORMAT_TOKEN_LIMIT_ERROR);
+}
 
 // Performs formatting of user posts including highlighting mentions and search terms and converting urls, hashtags,
 // @mentions and ~channels to links by taking a user's message and returning a string of formatted html. Also takes
@@ -31,11 +36,6 @@ export type ChannelNamesMap = {
         team_name?: string;
     } | string;
 };
-
-export type Tokens = Map<
-string,
-{ value: string; originalText: string; hashtag?: string }
->;
 
 export type SearchPattern = {
     pattern: RegExp;
@@ -91,6 +91,11 @@ export interface TextFormattingOptionsBase {
      * A list of mention keys for the current user to highlight.
      */
     mentionKeys: MentionKey[];
+
+    /**
+     * A list of highlight keys for the current user to highlight without notification.
+     */
+    highlightKeys: HighlightWithoutNotificationKey[];
 
     /**
      * Specifies whether or not to remove newlines.
@@ -195,9 +200,26 @@ export interface TextFormattingOptionsBase {
      * Defaults to `false`.
      */
     atPlanMentions: boolean;
+
+    /**
+     * If true, the renderer will assume links are not safe.
+     *
+     * Defaults to `false`.
+     */
+    unsafeLinks: boolean;
 }
 
 export type TextFormattingOptions = Partial<TextFormattingOptionsBase>;
+
+export class Tokens extends Map<string, {value: string; originalText: string; hashtag?: string}> {
+    set(key: string, value: {value: string; originalText: string; hashtag?: string}) {
+        super.set(key, value);
+        if (this.size > FORMAT_TOKEN_LIMIT) {
+            throw new Error(FORMAT_TOKEN_LIMIT_ERROR);
+        }
+        return this;
+    }
+}
 
 const DEFAULT_OPTIONS: TextFormattingOptions = {
     mentionHighlight: true,
@@ -212,6 +234,7 @@ const DEFAULT_OPTIONS: TextFormattingOptions = {
     proxyImages: false,
     editedAt: 0,
     postId: '',
+    unsafeLinks: false,
 };
 
 /**
@@ -231,7 +254,7 @@ const DEFAULT_OPTIONS: TextFormattingOptions = {
 * Additional CJK and Hangul compatibility characters: \u2de0-\u2dff
 **/
 // eslint-disable-next-line no-misleading-character-class
-export const cjkPattern = /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf\uac00-\ud7a3\u1100-\u11ff\u3130-\u318f\u0400-\u04ff\u0500-\u052f\u2de0-\u2dff]/;
+export const cjkrPattern = /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf\uac00-\ud7a3\u1100-\u11ff\u3130-\u318f\u0400-\u04ff\u0500-\u052f\u2de0-\u2dff]/;
 
 export function formatText(
     text: string,
@@ -325,53 +348,64 @@ export function formatText(
 export function doFormatText(text: string, options: TextFormattingOptions, emojiMap: EmojiMap): string {
     let output = text;
 
-    const tokens = new Map();
+    const tokens = new Tokens();
 
-    // replace important words and phrases with tokens
-    if (options.atMentions) {
-        output = autolinkAtMentions(output, tokens);
+    try {
+        // replace important words and phrases with tokens
+        if (options.atMentions) {
+            output = autolinkAtMentions(output, tokens);
+        }
+
+        if (options.atSumOfMembersMentions) {
+            output = autoLinkSumOfMembersMentions(output, tokens);
+        }
+
+        if (options.atPlanMentions) {
+            output = autoPlanMentions(output, tokens);
+        }
+
+        if (options.channelNamesMap) {
+            output = autolinkChannelMentions(
+                output,
+                tokens,
+                options.channelNamesMap,
+                options.team,
+            );
+        }
+
+        output = autolinkEmails(output, tokens);
+        output = autolinkHashtags(output, tokens, options.minimumHashtagLength);
+
+        if (!('emoticons' in options) || options.emoticons) {
+            output = Emoticons.handleEmoticons(output, tokens);
+        }
+
+        if (options.searchPatterns) {
+            output = highlightSearchTerms(output, tokens, options.searchPatterns);
+        }
+
+        if (!('mentionHighlight' in options) || options.mentionHighlight) {
+            output = highlightCurrentMentions(output, tokens, options.mentionKeys);
+        }
+
+        if (options.highlightKeys && options.highlightKeys.length > 0) {
+            output = highlightWithoutNotificationKeywords(output, tokens, options.highlightKeys);
+        }
+
+        if (!('emoticons' in options) || options.emoticons) {
+            output = handleUnicodeEmoji(output, emojiMap, UNICODE_EMOJI_REGEX);
+        }
+
+        // reinsert tokens with formatted versions of the important words and phrases
+        output = replaceTokens(output, tokens) || text;
+        return output;
+    } catch (error) {
+        if (isFormatTokenLimitError(error)) {
+            return text;
+        }
+
+        throw error;
     }
-
-    if (options.atSumOfMembersMentions) {
-        output = autoLinkSumOfMembersMentions(output, tokens);
-    }
-
-    if (options.atPlanMentions) {
-        output = autoPlanMentions(output, tokens);
-    }
-
-    if (options.channelNamesMap) {
-        output = autolinkChannelMentions(
-            output,
-            tokens,
-            options.channelNamesMap,
-            options.team,
-        );
-    }
-
-    output = autolinkEmails(output, tokens);
-    output = autolinkHashtags(output, tokens, options.minimumHashtagLength);
-
-    if (!('emoticons' in options) || options.emoticons) {
-        output = Emoticons.handleEmoticons(output, tokens);
-    }
-
-    if (options.searchPatterns) {
-        output = highlightSearchTerms(output, tokens, options.searchPatterns);
-    }
-
-    if (!('mentionHighlight' in options) || options.mentionHighlight) {
-        output = highlightCurrentMentions(output, tokens, options.mentionKeys);
-    }
-
-    if (!('emoticons' in options) || options.emoticons) {
-        output = handleUnicodeEmoji(output, emojiMap, UNICODE_EMOJI_REGEX);
-    }
-
-    // reinsert tokens with formatted versions of the important words and phrases
-    output = replaceTokens(output, tokens);
-
-    return output;
 }
 
 export function sanitizeHtml(text: string): string {
@@ -496,11 +530,11 @@ export function autolinkAtMentions(text: string, tokens: Tokens): string {
     return output;
 }
 
-export function allAtMentions(text: string): RegExpMatchArray | [] {
+export function allAtMentions(text: string): string[] {
     return text.match(Constants.SPECIAL_MENTIONS_REGEX && AT_MENTION_PATTERN) || [];
 }
 
-function autolinkChannelMentions(
+export function autolinkChannelMentions(
     text: string,
     tokens: Tokens,
     channelNamesMap: ChannelNamesMap,
@@ -517,7 +551,7 @@ function autolinkChannelMentions(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             href = ((window as any).basename || '') + '/' + teamName + '/channels/' + channelName;
             tokens.set(alias, {
-                value: `<a class="mention-link" href="${href}" data-channel-mention-team="${teamName}" "data-channel-mention="${channelName}">~${displayName}</a>`,
+                value: `<a class="mention-link" href="${href}" data-channel-mention-team="${teamName}" data-channel-mention="${channelName}">~${displayName}</a>`,
                 originalText: mention,
             });
         } else if (team) {
@@ -611,6 +645,10 @@ export function escapeRegex(text?: string): string {
     return text?.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') || '';
 }
 
+export function escapeReplaceSpecialPatterns(text?: string): string {
+    return text?.replace(/[$]/g, '$$$$') || '';
+}
+
 const htmlEntities = {
     '&': '&amp;',
     '<': '&lt;',
@@ -635,7 +673,7 @@ export function convertEntityToCharacter(text: string): string {
         replace(/&amp;/g, '&');
 }
 
-function highlightCurrentMentions(
+export function highlightCurrentMentions(
     text: string,
     tokens: Tokens,
     mentionKeys: MentionKey[] = [],
@@ -693,7 +731,7 @@ function highlightCurrentMentions(
         }
 
         let pattern;
-        if (cjkPattern.test(mention.key)) {
+        if (cjkrPattern.test(mention.key)) {
             // In the case of CJK mention key, even if there's no delimiters (such as spaces) at both ends of a word, it is recognized as a mention key
             pattern = new RegExp(`()(${escapeRegex(mention.key)})()`, flags);
         } else {
@@ -704,6 +742,79 @@ function highlightCurrentMentions(
         }
         output = output.replace(pattern, replaceCurrentMentionWithToken);
     }
+
+    return output;
+}
+
+export function highlightWithoutNotificationKeywords(
+    text: string,
+    tokens: Tokens,
+    highlightKeys: HighlightWithoutNotificationKey[] = [],
+) {
+    let output = text;
+
+    // Store the new tokens in a separate map since we can't add objects to a map during iteration
+    const newTokens = new Map();
+
+    // Look for highlighting keywords in the tokens
+    tokens.forEach((token, alias) => {
+        const tokenOriginalText = token.originalText.toLowerCase();
+
+        if (highlightKeys.findIndex((highlightKey) => highlightKey.key.toLowerCase() === tokenOriginalText) !== -1) {
+            const newIndex = tokens.size + newTokens.size;
+            const newAlias = `$MM_HIGHLIGHTKEYWORD${newIndex}$`;
+
+            newTokens.set(newAlias, {
+                value: `<span class="non-notification-highlight">${alias}</span>`,
+                originalText: token.originalText,
+            });
+            output = output.replace(alias, newAlias);
+        }
+    });
+
+    // Copy the new tokens to the tokens map
+    newTokens.forEach((newToken, newAlias) => {
+        tokens.set(newAlias, newToken);
+    });
+
+    // Look for highlighting keywords in the text
+    function replaceHighlightKeywordsWithToken(
+        _: string,
+        prefix: string,
+        highlightKey: string,
+        suffix = '',
+    ) {
+        const index = tokens.size;
+        const alias = `$MM_HIGHLIGHTKEYWORD${index}$`;
+
+        // Set the token map with the replacement value so that it can be replaced back later
+        tokens.set(alias, {
+            value: `<span class="non-notification-highlight">${highlightKey}</span>`,
+            originalText: highlightKey,
+        });
+
+        return prefix + alias + suffix;
+    }
+
+    highlightKeys.
+        sort((a, b) => b.key.length - a.key.length).
+        forEach(({key}) => {
+            if (!key) {
+                return;
+            }
+
+            let pattern;
+            if (cjkrPattern.test(key)) {
+            // If the key contains Chinese, Japanese, Korean or Russian characters, don't mark word boundaries
+                pattern = new RegExp(`()(${escapeRegex(key)})()`, 'gi');
+            } else {
+            // If the key contains only English characters, mark word boundaries
+                pattern = new RegExp(`(^|\\W)(${escapeRegex(key)})(\\b|_+\\b)`, 'gi');
+            }
+
+            // Replace the key with the token for each occurrence of the key
+            output = output.replace(pattern, replaceHighlightKeywordsWithToken);
+        });
 
     return output;
 }
@@ -838,7 +949,7 @@ export function parseSearchTerms(searchTerm: string): string[] {
 function convertSearchTermToRegex(term: string): SearchPattern {
     let pattern;
 
-    if (cjkPattern.test(term)) {
+    if (cjkrPattern.test(term)) {
         // term contains Chinese, Japanese, or Korean characters so don't mark word boundaries
         pattern = '()(' + escapeRegex(term.replace(/\*/g, '')) + ')';
     } else if ((/[^\s][*]$/).test(term)) {
@@ -942,7 +1053,7 @@ export function replaceTokens(text: string, tokens: Tokens): string {
     for (let i = aliases.length - 1; i >= 0; i--) {
         const alias = aliases[i];
         const token = tokens.get(alias);
-        output = output.replace(alias, token ? token.value : '');
+        output = output.replace(alias, escapeReplaceSpecialPatterns(token?.value || ''));
     }
 
     return output;
@@ -1016,10 +1127,4 @@ function fixedCharCodeAt(str: string, idx = 0) {
     }
 
     return code;
-}
-
-export function fixedEncodeURIComponent(str: string) {
-    return str.replace(/[-._~:/?#[\]@!$&'()*+,;=]/g, (c: string) => {
-        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
-    });
 }

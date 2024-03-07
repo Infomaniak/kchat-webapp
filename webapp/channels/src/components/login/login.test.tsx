@@ -8,7 +8,6 @@ import {FormattedMessage, IntlProvider} from 'react-intl';
 import type {ClientConfig} from '@mattermost/types/config';
 
 import {RequestStatus} from 'mattermost-redux/constants';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import LocalStorageStore from 'stores/local_storage_store';
 
@@ -37,7 +36,7 @@ jest.mock('@sentry/react', () => ({captureException: () => jest.fn()}));
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux') as typeof import('react-redux'),
     useSelector: (selector: (state: typeof mockState) => unknown) => selector(mockState),
-    useDispatch: jest.fn(() => (action: ActionFunc) => action),
+    useDispatch: jest.fn(() => (action: unknown) => action),
 }));
 
 jest.mock('react-router-dom', () => ({

@@ -47,8 +47,8 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
     inHeaderDropdown={true}
     openUp={false}
   />
-  <MenuGroup>
-    <Connect(ToggleFavoriteChannel)
+  <Memo(MenuGroup)>
+    <Connect(Component)
       channel={
         Object {
           "create_at": 0,
@@ -71,7 +71,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
       isFavorite={false}
       show={false}
     />
-    <Connect(ViewPinnedPosts)
+    <Connect(Component)
       channel={
         Object {
           "create_at": 0,
@@ -130,12 +130,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
             "mfa_active": false,
             "nickname": "",
             "notify_props": Object {
+              "calls_desktop_sound": "true",
               "channel": "false",
               "comments": "never",
               "desktop": "default",
               "desktop_sound": "false",
               "email": "false",
               "first_name": "false",
+              "highlight_keys": "",
               "mark_unread": "mention",
               "mention_keys": "",
               "push": "none",
@@ -205,12 +207,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
+            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
             "desktop_sound": "false",
             "email": "false",
             "first_name": "false",
+            "highlight_keys": "",
             "mark_unread": "mention",
             "mention_keys": "",
             "push": "none",
@@ -227,9 +231,9 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         }
       }
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(ChannelPermissionGate)
+  </Memo(MenuGroup)>
+  <Memo(MenuGroup)>
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -292,7 +296,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         show={false}
         text="Add Members"
       />
-    </Connect(ChannelPermissionGate)>
+    </Connect(Component)>
     <Connect(ToggleChannelMembersRHS)
       channel={
         Object {
@@ -317,7 +321,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
       show={false}
       text="View Members"
     />
-    <Connect(ChannelPermissionGate)
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -384,8 +388,8 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         show={true}
         text="Manage Members"
       />
-    </Connect(ChannelPermissionGate)>
-    <Connect(ChannelPermissionGate)
+    </Connect(Component)>
+    <Connect(Component)
       channelId="test-channel-id"
       invert={true}
       permissions={
@@ -419,9 +423,9 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         show={true}
         text="View Members"
       />
-    </Connect(ChannelPermissionGate)>
-  </MenuGroup>
-  <MenuGroup>
+    </Connect(Component)>
+  </Memo(MenuGroup)>
+  <Memo(MenuGroup)>
     <MenuItemToggleModalRedux
       dialogProps={
         Object {
@@ -492,9 +496,9 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
       show={false}
       text="Convert to Private Channel"
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(ChannelPermissionGate)
+  </Memo(MenuGroup)>
+  <Memo(MenuGroup)>
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -608,8 +612,8 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         show={true}
         text="Rename Channel"
       />
-    </Connect(ChannelPermissionGate)>
-    <Connect(ChannelPermissionGate)
+    </Connect(Component)>
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -639,8 +643,8 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         show={true}
         text="Convert to Private Channel"
       />
-    </Connect(ChannelPermissionGate)>
-    <Connect(ChannelPermissionGate)
+    </Connect(Component)>
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -670,7 +674,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         show={false}
         text="Convert to Public Channel"
       />
-    </Connect(ChannelPermissionGate)>
+    </Connect(Component)>
     <Connect(LeaveChannel)
       channel={
         Object {
@@ -695,7 +699,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
       isDefault={false}
       isGuestUser={false}
     />
-    <Connect(ChannelPermissionGate)
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -741,7 +745,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         show={true}
         text="Archive Channel"
       />
-    </Connect(ChannelPermissionGate)>
+    </Connect(Component)>
     <Connect(CloseMessage)
       channel={
         Object {
@@ -780,12 +784,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
+            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
             "desktop_sound": "false",
             "email": "false",
             "first_name": "false",
+            "highlight_keys": "",
             "mark_unread": "mention",
             "mention_keys": "",
             "push": "none",
@@ -806,10 +812,10 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
     <Connect(CloseChannel)
       isArchived={false}
     />
-  </MenuGroup>
-  <MenuGroup />
-  <MenuGroup>
-    <Connect(ChannelPermissionGate)
+  </Memo(MenuGroup)>
+  <Memo(MenuGroup) />
+  <Memo(MenuGroup)>
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -853,8 +859,8 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         show={false}
         text="Unarchive Channel"
       />
-    </Connect(ChannelPermissionGate)>
-  </MenuGroup>
+    </Connect(Component)>
+  </Memo(MenuGroup)>
 </Fragment>
 `;
 
@@ -905,8 +911,8 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
     inHeaderDropdown={true}
     openUp={false}
   />
-  <MenuGroup>
-    <Connect(ToggleFavoriteChannel)
+  <Memo(MenuGroup)>
+    <Connect(Component)
       channel={
         Object {
           "create_at": 0,
@@ -929,7 +935,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
       isFavorite={false}
       show={false}
     />
-    <Connect(ViewPinnedPosts)
+    <Connect(Component)
       channel={
         Object {
           "create_at": 0,
@@ -988,12 +994,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
             "mfa_active": false,
             "nickname": "",
             "notify_props": Object {
+              "calls_desktop_sound": "true",
               "channel": "false",
               "comments": "never",
               "desktop": "default",
               "desktop_sound": "false",
               "email": "false",
               "first_name": "false",
+              "highlight_keys": "",
               "mark_unread": "mention",
               "mention_keys": "",
               "push": "none",
@@ -1063,12 +1071,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
+            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
             "desktop_sound": "false",
             "email": "false",
             "first_name": "false",
+            "highlight_keys": "",
             "mark_unread": "mention",
             "mention_keys": "",
             "push": "none",
@@ -1085,9 +1095,9 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         }
       }
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(ChannelPermissionGate)
+  </Memo(MenuGroup)>
+  <Memo(MenuGroup)>
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -1150,7 +1160,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         show={false}
         text="Add Members"
       />
-    </Connect(ChannelPermissionGate)>
+    </Connect(Component)>
     <Connect(ToggleChannelMembersRHS)
       channel={
         Object {
@@ -1175,7 +1185,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
       show={false}
       text="View Members"
     />
-    <Connect(ChannelPermissionGate)
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -1242,8 +1252,8 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         show={true}
         text="Manage Members"
       />
-    </Connect(ChannelPermissionGate)>
-    <Connect(ChannelPermissionGate)
+    </Connect(Component)>
+    <Connect(Component)
       channelId="test-channel-id"
       invert={true}
       permissions={
@@ -1277,9 +1287,9 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         show={true}
         text="View Members"
       />
-    </Connect(ChannelPermissionGate)>
-  </MenuGroup>
-  <MenuGroup>
+    </Connect(Component)>
+  </Memo(MenuGroup)>
+  <Memo(MenuGroup)>
     <MenuItemToggleModalRedux
       dialogProps={
         Object {
@@ -1350,9 +1360,9 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
       show={false}
       text="Convert to Private Channel"
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(ChannelPermissionGate)
+  </Memo(MenuGroup)>
+  <Memo(MenuGroup)>
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -1466,8 +1476,8 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         show={true}
         text="Rename Channel"
       />
-    </Connect(ChannelPermissionGate)>
-    <Connect(ChannelPermissionGate)
+    </Connect(Component)>
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -1497,8 +1507,8 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         show={true}
         text="Convert to Private Channel"
       />
-    </Connect(ChannelPermissionGate)>
-    <Connect(ChannelPermissionGate)
+    </Connect(Component)>
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -1528,7 +1538,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         show={false}
         text="Convert to Public Channel"
       />
-    </Connect(ChannelPermissionGate)>
+    </Connect(Component)>
     <Connect(LeaveChannel)
       channel={
         Object {
@@ -1553,7 +1563,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
       isDefault={false}
       isGuestUser={false}
     />
-    <Connect(ChannelPermissionGate)
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -1599,7 +1609,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         show={true}
         text="Archive Channel"
       />
-    </Connect(ChannelPermissionGate)>
+    </Connect(Component)>
     <Connect(CloseMessage)
       channel={
         Object {
@@ -1638,12 +1648,14 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
+            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
             "desktop_sound": "false",
             "email": "false",
             "first_name": "false",
+            "highlight_keys": "",
             "mark_unread": "mention",
             "mention_keys": "",
             "push": "none",
@@ -1664,8 +1676,8 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
     <Connect(CloseChannel)
       isArchived={false}
     />
-  </MenuGroup>
-  <MenuGroup>
+  </Memo(MenuGroup)>
+  <Memo(MenuGroup)>
     <MenuItemAction
       id="plugin-1_pluginmenuitem"
       key="plugin-1_pluginmenuitem"
@@ -1680,9 +1692,9 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
       show={true}
       text="plugin-2-text"
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(ChannelPermissionGate)
+  </Memo(MenuGroup)>
+  <Memo(MenuGroup)>
+    <Connect(Component)
       channelId="test-channel-id"
       permissions={
         Array [
@@ -1726,7 +1738,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         show={false}
         text="Unarchive Channel"
       />
-    </Connect(ChannelPermissionGate)>
-  </MenuGroup>
+    </Connect(Component)>
+  </Memo(MenuGroup)>
 </Fragment>
 `;

@@ -5,7 +5,7 @@ import {Client4} from 'mattermost-redux/client';
 import {Posts, Preferences} from 'mattermost-redux/constants';
 import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
-import {setGlobalItem} from 'actions/storage';
+import {removeGlobalItem, setGlobalItem} from 'actions/storage';
 
 import mockStore from 'tests/test_store';
 import {StoragePrefixes} from 'utils/constants';
@@ -139,7 +139,7 @@ describe('draft actions', () => {
         const draft = {message: 'test', channelId, fileInfos: [{id: 1}], uploadsInProgress: [2, 3]} as unknown as PostDraft;
 
         it('calls setGlobalItem action correctly', async () => {
-            jest.useFakeTimers('modern');
+            jest.useFakeTimers();
             jest.setSystemTime(42);
 
             await store.dispatch(addToUpdateDraftQueue(key, draft, '', false));
@@ -176,6 +176,8 @@ describe('draft actions', () => {
                 fileInfos: [],
                 uploadsInProgress: [],
             }));
+
+            testStore.dispatch(removeGlobalItem(StoragePrefixes.DRAFT + channelId));
 
             expect(store.getActions()).toEqual(testStore.getActions());
         });

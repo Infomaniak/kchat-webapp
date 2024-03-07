@@ -31,10 +31,6 @@ export const isCloudLicense: (state: GlobalState) => boolean = createSelector(
     (license: ClientLicense) => license?.Cloud === 'true',
 );
 
-export function warnMetricsStatus(state: GlobalState): any {
-    return state.entities.general.warnMetricsStatus;
-}
-
 export function isCompatibleWithJoinViewTeamPermissions(state: GlobalState): boolean {
     const version = state.entities.general.serverVersion;
     return isMinimumServerVersion(version, 5, 10, 0) ||
@@ -126,5 +122,3 @@ export const getGiphyFetchInstance: (state: GlobalState) => GiphyFetch | null = 
         return null;
     },
 );
-
-export const getWorkTemplatesLinkedProducts = (state: GlobalState) => state.entities.worktemplates.linkedProducts;

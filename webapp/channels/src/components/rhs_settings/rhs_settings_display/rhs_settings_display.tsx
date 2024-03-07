@@ -216,14 +216,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         };
     }
 
-    componentDidMount() {
-        const {actions, enableTimezone, shouldAutoUpdateTimezone} = this.props;
-
-        if (enableTimezone && shouldAutoUpdateTimezone) {
-            actions.autoUpdateTimezone(getBrowserTimezone());
-        }
-    }
-
     trackChangeIfNecessary(preference: PreferenceType, oldValue: any): void {
         const props = {
             field: 'display.' + preference.name,
