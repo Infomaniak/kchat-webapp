@@ -2,7 +2,6 @@
     width: 100%;
     overflow: hidden;
     align-items: center;
-    padding: 0 12px;
     margin-top: 16px;
 
     & .team-label{
@@ -27,6 +26,7 @@
 
     @media screen and (max-width: 768px) {
         margin-top: 16px;
+        padding: 0 14px;
     }
 
     @media screen and (min-width: 768px) {
