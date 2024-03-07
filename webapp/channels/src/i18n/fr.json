@@ -5232,5 +5232,7 @@
     "fileTypes.Images": "Images",
     "fileTypes.Audio": "Audio",
     "fileTypes.Videos": "Videos",
-    "masBar.migrate": "L'application kChat est désormais disponible sur l'App Store. <link>Téléchargez-la</link> pour bénéficier automatiquement des futures mises à jour."
+    "masBar.migrate": "L'application kChat est désormais disponible sur l'App Store. <link>Téléchargez-la</link> pour bénéficier automatiquement des futures mises à jour.",
+    "switch_server.tooltip.locked": "Le produit kSuite {product} a expiré. Veuillez le renouveler pour continuer à communiquer au sein de votre organisation avec kChat.",
+    "switch_server.tooltip.maintenance": "Le kChat {product} est actuellement en maintenance. Une mise à jour est en cours pour améliorer kChat. Ce processus peut durer quelques minutes. Merci pour votre patience."
 }
