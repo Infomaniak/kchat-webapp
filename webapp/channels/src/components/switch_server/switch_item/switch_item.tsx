@@ -69,6 +69,14 @@ const SwitchItem: FC<Props> = ({server, isCurrentServer, unreadCounts, displayAr
                     menu={{
                         id: 'integrations',
                         'aria-label': localizeMessage('sidebar_left.sidebar_category_menu.dropdownAriaLabel', 'Integrations'),
+                        anchorOrigin: {
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        },
+                        transformOrigin: {
+                            vertical: 'top',
+                            horizontal: 'left',
+                        },
                     }}
                 >
                     <Menu.Item
