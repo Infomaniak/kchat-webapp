@@ -33,7 +33,7 @@ type Props = PropsFromRedux & {
     onClick?: () => void;
 }
 
-const SwitchItem: FC<Props> = ({server, isCurrentServer, unreadCounts, displayArrowIcon, displayUnreadDot, isDropdownOpen, disabled, onClick, actions}) => {
+const SwitchItem: FC<Props> = ({server, isCurrentServer, unreadCounts, displayArrowIcon, displayUnreadDot, isDropdownOpen, disabled, actions, onClick}) => {
     const goToIntegration = () => getHistory().push(`/${server.name}/integrations`);
 
     const handleSwitchTeam = () => {

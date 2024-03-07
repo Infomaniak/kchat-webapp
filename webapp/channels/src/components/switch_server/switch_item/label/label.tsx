@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classNames from 'classnames';
 import React from 'react';
 import type {FC} from 'react';
 
@@ -30,13 +31,13 @@ const Label: FC<Props> = ({name, isCurrentTeam, displayUnreadDot, status}) => {
         case Boolean(isCurrentTeam && displayUnreadDot):
             return <ChatUnreadIcon/>;
         default:
-            return <ChatIcon color={isCurrentTeam ? '#4CB7FF' : '#FAFAFA'}/>;
+            return <ChatIcon color={isCurrentTeam ? '#4CB7FF' : ''}/>;
         }
     };
 
     return (
         <span
-            className='team-label'
+            className={classNames('team-label', {hasDot: isCurrentTeam && displayUnreadDot})}
         >
             {renderIcon()}
             {name}</span>

@@ -3,6 +3,7 @@
     overflow: hidden;
     align-items: center;
     margin-top: 16px;
+    padding: 0 16px;
 
     & .team-label{
         width: 100%;
@@ -41,13 +42,13 @@
     padding: 0 12px;
     height: 40px;
     width: 100%;
-    color: white;
-    background: #000;
+    color: var(--switch-server-text-color);
+    background: var(--switch-server-background);
     transition: background-color .3s ease;
 
     &:not(.isCurrent) {
         &:hover {
-            background-color: rgb(63, 67, 89);
+            background: var(--switch-server-hover-background);
         }
     }
 
@@ -57,13 +58,13 @@
 
     .icons {
         svg {
-            fill: white;
+            color: var(--switch-server-icon-color);
         }
     }
 
     .icons +  {
         svg {
-            fill: white;
+            fill: var(--switch-server-icon-color);
         }
     }
 
@@ -89,12 +90,16 @@
         & > .icon {
             margin-right: 8px;
         }
+
+        &.hasDot > span {
+            margin-right: 3px;
+        }
     }
 }
 
 .switch-counter {
     height: fit-content;
-    padding: 4px;
+    padding: 4px 6px;
     background-color: #E91E63;
     border-radius: 18px;
     font-size: 10px;
@@ -102,4 +107,6 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    margin-right: 2px;
+    color: #FFFFFF;
 }

@@ -677,6 +677,10 @@ export function applyTheme(theme: Theme) {
             'mention-highlight-link': theme.mentionHighlightLink,
             'code-color': theme.codeColor,
             'code-block-color': theme.codeBlockColor,
+            'switch-server-text-color': theme.switchServerTextColor,
+            'switch-server-background': theme.switchServerBackground,
+            'switch-server-icon-color': theme.switchServerIconColor,
+            'switch-server-hover-background': theme.switchServerHoverBackground,
 
             // Legacy variables with baked in opacity, do not use!
             'sidebar-text-08': changeOpacity(theme.sidebarText, 0.08),
