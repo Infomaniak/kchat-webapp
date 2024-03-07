@@ -3,24 +3,12 @@
 
 import {Servers} from 'utils/constants';
 
-import type {Server} from 'types/store/servers';
-
 export function setBadges(serverId: string, badges: number) {
     return {
         type: Servers.BADGE_UPDATED,
         data: {
             serverId,
             badges,
-        },
-    };
-}
-
-export function addNewServer(server: Server, userId: string) {
-    return {
-        type: Servers.RECEIVED_SERVER_ADDED,
-        data: {
-            server,
-            userId,
         },
     };
 }

@@ -711,7 +711,7 @@ export default class WebSocketClient {
     }
 
     setOthersTeams(teams: OtherTeam[]) {
-        this.otherTeams = [...this.otherTeams, ...teams]
+        this.otherTeams = teams
     }
 
     subscribeToOtherTeams(teams?: OtherTeam[], currentTeamId?: string) {
@@ -748,7 +748,7 @@ export default class WebSocketClient {
 
     addNewTeam(userId: string, teamId: string, currentTeamId: string) {
         const newTeam = { userId, teamId }
-        this.setOthersTeams([newTeam])
+        this.otherTeams.push(newTeam)
         this.subscribeToOtherTeams([newTeam], currentTeamId)
     }
 
@@ -758,7 +758,7 @@ export default class WebSocketClient {
         const newChannels = {...this.otherTeamsChannel}
         Reflect.deleteProperty(newChannels, teamId)
 
-        if (this.conn?.connection.state === 'connected') {
+        if (channelsToUnbind && Array.isArray(channelsToUnbind) && this.conn?.connection.state === 'connected') {
             this.unsubscribeChannels(channelsToUnbind)
         }
 
