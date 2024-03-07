@@ -134,6 +134,7 @@ const Preferences = {
             ikModalHeader: '#FFFFFF',
             ikBtnSecondary: '#F1F1F1',
             ikBtnSecondaryColor: '#666666',
+            guestBannerBackground: '#F4F6FD',
         },
         ik: {
             type: 'Infomaniak',
@@ -185,6 +186,7 @@ const Preferences = {
             ikModalHeader: '#FFFFFF',
             ikBtnSecondary: '#F1F1F1',
             ikBtnSecondaryColor: '#666666',
+            guestBannerBackground: '#F4F6FD',
         },
         indigo: {
             type: 'Indigo',
@@ -236,6 +238,7 @@ const Preferences = {
             ikModalHeader: '#333333',
             ikBtnSecondary: '#333333',
             ikBtnSecondaryColor: '#DDDFE4',
+            guestBannerBackground: '#1B1D22',
         },
         onyx: {
             type: 'Onyx',
@@ -287,6 +290,7 @@ const Preferences = {
             ikModalHeader: '#333333',
             ikBtnSecondary: '#333333',
             ikBtnSecondaryColor: '#DDDFE4',
+            guestBannerBackground: '#1B1D22',
         },
     } as unknown as Record<ThemeKey, Theme>,
     RECENT_EMOJIS: 'recent_emojis',

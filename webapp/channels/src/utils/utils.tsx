@@ -677,6 +677,7 @@ export function applyTheme(theme: Theme) {
             'mention-highlight-link': theme.mentionHighlightLink,
             'code-color': theme.codeColor,
             'code-block-color': theme.codeBlockColor,
+            'guest-banner-background': theme.guestBannerBackground,
 
             // Legacy variables with baked in opacity, do not use!
             'sidebar-text-08': changeOpacity(theme.sidebarText, 0.08),

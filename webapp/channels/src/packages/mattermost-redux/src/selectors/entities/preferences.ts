@@ -164,6 +164,7 @@ export type Theme = {
     ikBtnSecondaryColor: string;
     codeColor: string;
     codeBlockColor: string;
+    guestBannerBackground: string;
 };
 
 const getDefaultTheme = createSelector('getDefaultTheme', getConfig, (config): Theme => {
