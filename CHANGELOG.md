@@ -1,3 +1,9 @@
+## 2.5.2-rc.1 (2024-03-11)
+
+### Fixed (1 change)
+
+- [Fix: Loading & deleting deleted messages on web-socket reconnection](kchat/webapp@d16c983cc975832d0951518953d06b2793af56f2) by @philippe.karle ([merge request](kchat/webapp!673))
+
 ## 2.5.1-rc.4 (2024-03-04)
 
 ### Fixed (1 change)
