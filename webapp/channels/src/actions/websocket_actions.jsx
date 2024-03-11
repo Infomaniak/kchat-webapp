@@ -83,7 +83,7 @@ import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/sel
 import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
-import {loadChannelsForCurrentUser} from 'actions/channel_actions';
+import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_actions';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
@@ -280,7 +280,6 @@ export async function reconnect(socketId) {
         // if (appsFeatureFlagEnabled(state)) {
         //     dispatch(handleRefreshAppsBindings());
         // }
-
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
@@ -322,6 +321,7 @@ export async function reconnect(socketId) {
         console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
         dispatch(checkForModifiedUsers(true));
         dispatch(TeamActions.getMyKSuites());
+        dispatch(loadDeletedPosts(state.websocket.lastDisconnectAt));
     }
 
     dispatch(resetWsErrorCount());
