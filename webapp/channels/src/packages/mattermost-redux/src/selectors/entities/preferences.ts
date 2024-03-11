@@ -14,6 +14,8 @@ import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 import {setThemeDefaults} from 'mattermost-redux/utils/theme_utils';
 import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
+import {getStoredTheme} from 'selectors/views/theme';
+
 export function getMyPreferences(state: GlobalState): { [x: string]: PreferenceType } {
     return state.entities.preferences.myPreferences;
 }
@@ -182,8 +184,9 @@ export const getTheme: (state: GlobalState) => Theme = createShallowSelector(
     'getTheme',
     getThemePreference,
     getDefaultTheme,
-    (themePreference, defaultTheme): Theme => {
-        const themeValue: Theme | string = themePreference?.value ?? defaultTheme;
+    getStoredTheme,
+    (themePreference, defaultTheme, storedTheme): Theme => {
+        const themeValue: Theme | string = storedTheme ?? themePreference?.value ?? defaultTheme;
 
         // A custom theme will be a JSON-serialized object stored in a preference
         // At this point, the theme should be a plain object

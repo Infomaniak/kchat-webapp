@@ -30,6 +30,7 @@ import settings from './settings';
 import statusDropdown from './status_dropdown';
 import system from './system';
 import textbox from './textbox';
+import theme from './theme';
 import threads from './threads';
 
 export default combineReducers({
@@ -61,4 +62,5 @@ export default combineReducers({
     drafts,
     calls,
     kmeetCalls,
+    theme,
 });

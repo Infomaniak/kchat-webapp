@@ -51,6 +51,10 @@ export const SettingsTypes = {
     TYPE_CUSTOM: 'custom',
 };
 
+export const ThemeTypes = {
+    RECEIVED_THEME: 'received_theme',
+};
+
 export const InviteTypes = {
     INVITE_MEMBER: 'member',
     INVITE_GUEST: 'guest',

@@ -85,7 +85,7 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
                     message: {
                         type: theme.type,
                         ikType: theme.ikType,
-                        isAuto: theme.isAuto,
+                        isAuto: Boolean(theme.isAuto),
                     },
                 },
                 window.origin,
