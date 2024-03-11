@@ -18,3 +18,12 @@ export function setTheme(theme: Theme) {
         },
     };
 }
+
+export function setThemePreference(theme: 'light' | 'dark') {
+    return {
+        type: ThemeTypes.RECEIVED_THEME_PREFERENCE,
+        data: {
+            theme,
+        },
+    };
+}

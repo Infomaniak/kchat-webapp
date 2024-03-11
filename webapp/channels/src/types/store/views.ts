@@ -240,5 +240,6 @@ export type ViewsState = {
     };
     theme: {
         storedTheme: Theme | null;
+        themePreference: 'light' | 'dark' | null;
     };
 };

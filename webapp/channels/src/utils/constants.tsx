@@ -53,6 +53,7 @@ export const SettingsTypes = {
 
 export const ThemeTypes = {
     RECEIVED_THEME: 'received_theme',
+    RECEIVED_THEME_PREFERENCE: 'received_theme_preference',
 };
 
 export const InviteTypes = {

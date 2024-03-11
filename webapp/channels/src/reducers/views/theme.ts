@@ -18,6 +18,16 @@ function storedTheme(state: ViewsState['theme']['storedTheme'] = null, action: G
     }
 }
 
+function themePreference(state: ViewsState['theme']['themePreference'] = null, action: GenericAction) {
+    switch (action.type) {
+    case ThemeTypes.RECEIVED_THEME_PREFERENCE:
+        return action.data.theme;
+    default:
+        return state;
+    }
+}
+
 export default combineReducers({
     storedTheme,
+    themePreference,
 });
