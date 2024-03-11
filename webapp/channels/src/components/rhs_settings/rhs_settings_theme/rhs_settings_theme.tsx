@@ -6,6 +6,7 @@ import React from 'react';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {Constants} from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
 import {applyTheme} from 'utils/utils';
 
 import PremadeThemeChooser from './premade_theme_chooser';
@@ -71,16 +72,31 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
         };
     }
 
-    submitTheme = async (): Promise<void> => {
-        const teamId = this.props.currentTeamId;
+    submitTheme = async (theme: Theme): Promise<void> => {
+        // const teamId = this.props.currentTeamId;
 
-        this.setState({isSaving: true});
-        await this.props.actions.saveTheme(teamId, this.state.theme);
+        // this.setState({isSaving: true});
+        // await this.props.actions.saveTheme(teamId, this.state.theme);
+
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'theme-changed',
+                    message: {
+                        type: theme.type,
+                        ikType: theme.ikType,
+                        isAuto: theme.isAuto,
+                    },
+                },
+                window.origin,
+            );
+        }
 
         this.props.setRequireConfirm?.(false);
         this.originalTheme = Object.assign({}, this.state.theme);
         this.props.updateSection('');
-        this.setState({isSaving: false});
+
+        // this.setState({isSaving: false});
     };
 
     updateTheme = (theme: Theme): void => {
@@ -99,7 +115,7 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
         this.props.setRequireConfirm?.(themeChanged);
 
         this.setState({theme}, () => {
-            this.submitTheme();
+            this.submitTheme(theme);
         });
         applyTheme(theme);
     };

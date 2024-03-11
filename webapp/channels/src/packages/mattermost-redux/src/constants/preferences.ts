@@ -292,6 +292,7 @@ const Preferences = {
         auto: {
             type: 'Auto',
             ikType: 'auto',
+            isAuto: true,
         },
     } as unknown as Record<ThemeKey, Theme>,
     RECENT_EMOJIS: 'recent_emojis',
