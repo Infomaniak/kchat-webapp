@@ -1512,3 +1512,16 @@ export function translatePost(postId: string) {
         ],
     });
 }
+
+export function fetchDeletedPostsIds(channelId: string, since?: number) {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        try {
+            const data = await Client4.getDeletedPostsIds(channelId, since);
+            return {data, error: null};
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {data: null, error};
+        }
+    };
+}

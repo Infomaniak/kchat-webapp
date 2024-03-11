@@ -2145,6 +2145,13 @@ export default class Client4 {
         );
     };
 
+    getDeletedPostsIds = async (channelId: string, since?: number): Promise<Array<string>> => {
+        return this.doFetch(
+            `${this.getChannelRoute(channelId)}/deleted_posts${buildQueryString({since})}`,
+            {method: 'get'},
+        );
+    };
+
     getPostsAfter = (channelId: string, postId: string, page = 0, perPage = PER_PAGE_DEFAULT, fetchThreads = true, collapsedThreads = false, collapsedThreadsExtended = false) => {
         return this.doFetch<PostList>(
             `${this.getChannelRoute(channelId)}/posts${buildQueryString({after: postId, page, per_page: perPage, skipFetchThreads: !fetchThreads, collapsedThreads, collapsedThreadsExtended})}`,
