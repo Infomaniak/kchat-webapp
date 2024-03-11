@@ -5462,6 +5462,7 @@
     "user.settings.display.theme.themeLight": "Light Theme",
     "user.settings.display.theme.themeMedium": "Medium Theme",
     "user.settings.display.theme.themeDark": "Dark Theme",
+    "user.settings.display.theme.themeAuto": "Automatic Theme",
     "user.settings.display.timezone": "Timezone",
     "user.settings.display.title": "Display Settings",
     "user.settings.general.close": "Close",

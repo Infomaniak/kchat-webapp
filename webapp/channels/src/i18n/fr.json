@@ -4735,6 +4735,7 @@
     "user.settings.display.theme.themeLight": "Thème Clair",
     "user.settings.display.theme.themeMedium": "Thème Medium",
     "user.settings.display.theme.themeDark": "Thème Sombre",
+    "user.settings.display.theme.themeAuto": "Thème automatique",
     "user.settings.display.timezone": "Fuseau horaire",
     "user.settings.display.title": "Paramètres d'affichage",
     "user.settings.general.close": "Fermer",

@@ -9,7 +9,6 @@ import type {Theme, ThemeKey} from 'mattermost-redux/selectors/entities/preferen
 
 import SvgDarkThemeIcon from '../assets/SvgDarkIcon';
 import SvgLightThemeIcon from '../assets/SvgLightIcon';
-import SvgMediumThemeIcon from '../assets/SvgMediumIcon';
 
 type Props = {
     theme: Theme;
@@ -20,7 +19,7 @@ type Props = {
 const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) => {
     const premadeThemes = [];
     const hasAllowedThemes = allowedThemes.length > 1 || (allowedThemes[0] && allowedThemes[0].trim().length > 0);
-    const ikAllowedThemes = ['Quartz', 'Infomaniak', 'Onyx'];
+    const ikAllowedThemes = ['Infomaniak', 'Onyx', 'Auto'];
 
     // eslint-disable-next-line consistent-return
     const getThemeLabel = (theme: Theme) => {
@@ -33,19 +32,19 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
                 />
             );
         }
-        case 'medium': {
-            return (
-                <FormattedMessage
-                    id='user.settings.display.theme.themeMedium'
-                    defaultMessage='Medium theme'
-                />
-            );
-        }
         case 'dark': {
             return (
                 <FormattedMessage
                     id='user.settings.display.theme.themeDark'
                     defaultMessage='Dark theme'
+                />
+            );
+        }
+        case 'auto': {
+            return (
+                <FormattedMessage
+                    id='user.settings.display.theme.themeAuto'
+                    defaultMessage='Auto theme'
                 />
             );
         }
@@ -82,7 +81,8 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
                         <label>
                             {(premadeTheme.type === 'Indigo' || premadeTheme.type === 'Onyx') && (<SvgDarkThemeIcon/>)}
                             {premadeTheme.type === 'Quartz' && (<SvgLightThemeIcon/>)}
-                            {premadeTheme.type === 'Infomaniak' && (<SvgMediumThemeIcon/>)}
+                            {premadeTheme.type === 'Infomaniak' && (<SvgLightThemeIcon/>)}
+                            {premadeTheme.type === 'Auto' && (<SvgLightThemeIcon/>)}
                             <div className='rhs-custom-btn-label'>{
                                 getThemeLabel(premadeTheme)
                             }</div>

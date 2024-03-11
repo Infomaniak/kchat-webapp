@@ -4892,6 +4892,7 @@
     "user.settings.display.theme.themeLight": "Tema Claro",
     "user.settings.display.theme.themeMedium": "Tema Medium",
     "user.settings.display.theme.themeDark": "Tema Oscuro",
+    "user.settings.display.theme.themeAuto": "Tema Automático",
     "user.settings.display.timezone": "Zona horaria",
     "user.settings.display.title": "Configuración de Visualización",
     "user.settings.general.close": "Cerrar",

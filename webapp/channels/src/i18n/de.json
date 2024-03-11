@@ -5369,6 +5369,7 @@
     "user.settings.display.theme.themeLight": "Thema Hell",
     "user.settings.display.theme.themeMedium": "Thema Medium",
     "user.settings.display.theme.themeDark": "Thema Dunkel",
+    "user.settings.display.theme.themeAuto": "Automatisches Thema",
     "user.settings.display.theme.title": "Motiv",
     "user.settings.display.timezone": "Zeitzone",
     "user.settings.display.title": "Anzeigeeinstellungen",

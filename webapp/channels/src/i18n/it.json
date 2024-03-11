@@ -3734,6 +3734,7 @@
     "user.settings.display.theme.themeLight": "Tema Chiaro",
     "user.settings.display.theme.themeMedium": "Tema Medium",
     "user.settings.display.theme.themeDark": "Tema Scuro",
+    "user.settings.display.theme.themeAuto": "Tema Automatico",
     "user.settings.display.timezone": "Fuso orario",
     "user.settings.display.title": "Impostazioni aspetto",
     "user.settings.general.close": "Chiudi",
