@@ -280,6 +280,7 @@ export async function reconnect(socketId) {
         // if (appsFeatureFlagEnabled(state)) {
         //     dispatch(handleRefreshAppsBindings());
         // }
+
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
