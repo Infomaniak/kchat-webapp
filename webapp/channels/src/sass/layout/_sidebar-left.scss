@@ -341,16 +341,15 @@ $sidebarOpacityAnimationDuration: 0.15s;
         height: 30px;
 
         .dropdown-menu {
-            min-width: 250px;
+            // Infomaniak
+            min-width: 0;
+            max-width: 100%;
+            width: 100%;
             margin-top: 0;
             line-height: 19px;
 
             span {
                 color: rgba(var(--center-channel-color-rgb), 0.9);
-
-                &:not(.MenuItem__help-text) {
-                    white-space: nowrap;
-                }
             }
 
             button {
