@@ -32,6 +32,7 @@ import {measurePageLoadTelemetry, trackEvent, trackSelectorMetrics} from 'action
 import {clearUserCookie} from 'actions/views/cookie';
 import {setThemePreference} from 'actions/views/theme';
 import {close, initialize} from 'actions/websocket_actions';
+import theme from 'reducers/views/theme';
 import LocalStorageStore from 'stores/local_storage_store';
 import store from 'stores/redux_store';
 
@@ -243,6 +244,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
         this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
+        this.updateThemePreference(this.themeMediaQuery.matches);
         this.updateWindowSize();
 
         store.subscribe(() => applyLuxonDefaults(store.getState()));
@@ -737,17 +739,12 @@ export default class Root extends React.PureComponent<Props, State> {
 
     handleMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
         if (e.matches) {
-            store.dispatch(setThemePreference(DesktopThemePreferences.DARK));
-            return;
+            this.updateWindowSize();
         }
-
-        store.dispatch(setThemePreference(DesktopThemePreferences.LIGHT));
     };
 
     handleThemeMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
-        if (e.matches) {
-            this.updateWindowSize();
-        }
+        this.updateThemePreference(e.matches);
     };
 
     setRootMeta = () => {
@@ -777,6 +774,15 @@ export default class Root extends React.PureComponent<Props, State> {
             this.props.actions.emitBrowserWindowResized(WindowSizes.MOBILE_VIEW);
             break;
         }
+    };
+
+    updateThemePreference = (isDark: boolean) => {
+        if (isDark) {
+            store.dispatch(setThemePreference(DesktopThemePreferences.DARK));
+            return;
+        }
+
+        store.dispatch(setThemePreference(DesktopThemePreferences.LIGHT));
     };
 
     render() {

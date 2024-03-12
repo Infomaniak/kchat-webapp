@@ -14,8 +14,6 @@ import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 import {setThemeDefaults} from 'mattermost-redux/utils/theme_utils';
 import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
-import {getDesktopThemePreference, getStoredTheme} from 'selectors/views/theme'; // @todo refractor that part
-
 export function getMyPreferences(state: GlobalState): { [x: string]: PreferenceType } {
     return state.entities.preferences.myPreferences;
 }
@@ -184,13 +182,10 @@ export const getTheme: (state: GlobalState) => Theme = createShallowSelector(
     'getTheme',
     getThemePreference,
     getDefaultTheme,
-    getStoredTheme,
-    getDesktopThemePreference,
+    (state: any) => state.views.theme.storedTheme,
+    (state: any) => state.views.theme.themePreference,
     (themePreference, defaultTheme, storedTheme, desktopThemePreference): Theme => {
         const themeValue: Theme | string = storedTheme ?? themePreference?.value ?? defaultTheme;
-
-        console.log('theme', themeValue);
-        console.log('getDesktopThemePreference', desktopThemePreference);
 
         // A custom theme will be a JSON-serialized object stored in a preference
         // At this point, the theme should be a plain object
