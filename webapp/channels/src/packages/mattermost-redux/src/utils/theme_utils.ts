@@ -139,6 +139,8 @@ export function setThemeDefaults(theme: Partial<Theme>, preference?: DesktopThem
 
     const processedTheme = {...theme};
 
+    console.log('theme', theme);
+
     if (theme.type === 'Auto' && preference) {
         if (preference === 'dark') {
             return Preferences.THEMES.onyx;
