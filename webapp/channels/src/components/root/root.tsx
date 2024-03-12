@@ -665,7 +665,6 @@ export default class Root extends React.PureComponent<Props, State> {
         }
 
         if (this.themeMediaQuery.addEventListener) {
-            this.handleMediaQueryChangeEvent(this.themeMediaQuery);
             this.themeMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
         }
 
@@ -739,6 +738,7 @@ export default class Root extends React.PureComponent<Props, State> {
     handleMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
         if (e.matches) {
             store.dispatch(setThemePreference('dark'));
+            return;
         }
 
         store.dispatch(setThemePreference('light'));

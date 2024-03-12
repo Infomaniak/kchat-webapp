@@ -5,6 +5,9 @@ import React from 'react';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
+import {setTheme} from 'actions/views/theme';
+import store from 'stores/redux_store';
+
 import {Constants} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 import {applyTheme} from 'utils/utils';
@@ -90,6 +93,8 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
                 },
                 window.origin,
             );
+
+            store.dispatch(setTheme(theme));
         }
 
         this.props.setRequireConfirm?.(false);

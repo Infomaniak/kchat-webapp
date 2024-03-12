@@ -7,16 +7,18 @@ import {FormattedMessage} from 'react-intl';
 import {Preferences} from 'mattermost-redux/constants';
 import type {Theme, ThemeKey} from 'mattermost-redux/selectors/entities/preferences';
 
+import SvgAutoThemeIcon from '../assets/SvgAutoIcon';
 import SvgDarkThemeIcon from '../assets/SvgDarkIcon';
 import SvgLightThemeIcon from '../assets/SvgLightIcon';
 
 type Props = {
     theme: Theme;
+    storedTheme: Theme | null;
     updateTheme: (theme: Theme) => void;
     allowedThemes: string[];
 }
 
-const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) => {
+const PremadeThemeChooser = ({theme, storedTheme, updateTheme, allowedThemes = []}: Props) => {
     const premadeThemes = [];
     const hasAllowedThemes = allowedThemes.length > 1 || (allowedThemes[0] && allowedThemes[0].trim().length > 0);
     const ikAllowedThemes = ['Infomaniak', 'Onyx', 'Auto'];
@@ -64,7 +66,7 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
             }
 
             let activeClass = '';
-            if (premadeTheme.type === theme.type) {
+            if ((!storedTheme && premadeTheme.type === theme.type) || (storedTheme && storedTheme.type === premadeTheme.type)) {
                 activeClass = 'active';
             }
 
@@ -82,7 +84,7 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
                             {(premadeTheme.type === 'Indigo' || premadeTheme.type === 'Onyx') && (<SvgDarkThemeIcon/>)}
                             {premadeTheme.type === 'Quartz' && (<SvgLightThemeIcon/>)}
                             {premadeTheme.type === 'Infomaniak' && (<SvgLightThemeIcon/>)}
-                            {premadeTheme.type === 'Auto' && (<SvgLightThemeIcon/>)}
+                            {premadeTheme.type === 'Auto' && (<SvgAutoThemeIcon/>)}
                             <div className='rhs-custom-btn-label'>{
                                 getThemeLabel(premadeTheme)
                             }</div>
