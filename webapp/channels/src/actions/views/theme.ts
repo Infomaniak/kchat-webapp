@@ -5,6 +5,8 @@ import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {ThemeTypes} from 'utils/constants';
 
+import type {DesktopThemePreference} from 'types/theme';
+
 export type CloseModalType = {
     type: string;
     modalId: string;
@@ -19,7 +21,7 @@ export function setTheme(theme: Theme) {
     };
 }
 
-export function setThemePreference(theme: 'light' | 'dark') {
+export function setThemePreference(theme: DesktopThemePreference) {
     return {
         type: ThemeTypes.RECEIVED_THEME_PREFERENCE,
         data: {

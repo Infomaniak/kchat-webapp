@@ -4,6 +4,8 @@
 import {Preferences} from 'mattermost-redux/constants';
 import type {LegacyThemeType, Theme, ThemeKey, ThemeType} from 'mattermost-redux/selectors/entities/preferences';
 
+import type {DesktopThemePreference} from 'types/theme';
+
 export function makeStyleFromTheme(getStyleFromTheme: (a: any) => any): (a: any) => any {
     let lastTheme: any;
     let style: any;
@@ -132,7 +134,7 @@ const themeTypeMap: ThemeTypeMap = {
 };
 
 // setThemeDefaults will set defaults on the theme for any unset properties.
-export function setThemeDefaults(theme: Partial<Theme>, preference?: 'light' | 'dark' | null): Theme {
+export function setThemeDefaults(theme: Partial<Theme>, preference?: DesktopThemePreference): Theme {
     const defaultTheme = Preferences.THEMES.ik;
 
     const processedTheme = {...theme};

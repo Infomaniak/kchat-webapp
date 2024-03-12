@@ -9,6 +9,8 @@ import {saveTheme, deleteTeamSpecificThemes} from 'mattermost-redux/actions/pref
 import {getTheme, makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getMyTeamsCount} from 'mattermost-redux/selectors/entities/teams';
 
+import {getDesktopThemePreference} from 'selectors/views/theme';
+
 import {Preferences} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
@@ -22,6 +24,7 @@ function makeMapStateToProps() {
         return {
             currentTeamId: getCurrentTeamId(state),
             theme: getTheme(state),
+            desktopThemePreference: getDesktopThemePreference(state),
             applyToAllTeams: getThemeCategory(state, Preferences.CATEGORY_THEME).length <= 1,
             showAllTeamsCheckbox: getMyTeamsCount(state) > 1,
         };

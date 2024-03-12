@@ -4,6 +4,7 @@
 import React from 'react';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+import {setThemeDefaults} from 'mattermost-redux/utils/theme_utils';
 
 import {setTheme} from 'actions/views/theme';
 import store from 'stores/redux_store';
@@ -12,11 +13,14 @@ import {Constants} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 import {applyTheme} from 'utils/utils';
 
+import type {DesktopThemePreference} from 'types/theme';
+
 import PremadeThemeChooser from './premade_theme_chooser';
 
 type Props = {
     currentTeamId: string;
     theme: Theme;
+    desktopThemePreference: DesktopThemePreference;
     selected: boolean;
     updateSection: (section: string) => void;
     setRequireConfirm?: (requireConfirm: boolean) => void;
@@ -122,7 +126,7 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
         this.setState({theme}, () => {
             this.submitTheme(theme);
         });
-        applyTheme(theme);
+        applyTheme(setThemeDefaults(theme, this.props.desktopThemePreference));
     };
 
     resetFields = (): void => {

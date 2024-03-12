@@ -14,7 +14,7 @@ import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 import {setThemeDefaults} from 'mattermost-redux/utils/theme_utils';
 import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
-import {getDesktopThemePreference, getStoredTheme} from 'selectors/views/theme';
+import {getDesktopThemePreference, getStoredTheme} from 'selectors/views/theme'; // @todo refractor that part
 
 export function getMyPreferences(state: GlobalState): { [x: string]: PreferenceType } {
     return state.entities.preferences.myPreferences;

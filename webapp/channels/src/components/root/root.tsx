@@ -54,7 +54,7 @@ import WelcomePostRenderer from 'components/welcome_post_renderer';
 import WindowSizeObserver from 'components/window_size_observer/WindowSizeObserver';
 
 import A11yController from 'utils/a11y_controller';
-import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
+import Constants, {DesktopThemePreferences, StoragePrefixes, WindowSizes} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
@@ -737,11 +737,11 @@ export default class Root extends React.PureComponent<Props, State> {
 
     handleMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
         if (e.matches) {
-            store.dispatch(setThemePreference('dark'));
+            store.dispatch(setThemePreference(DesktopThemePreferences.DARK));
             return;
         }
 
-        store.dispatch(setThemePreference('light'));
+        store.dispatch(setThemePreference(DesktopThemePreferences.LIGHT));
     };
 
     handleThemeMediaQueryChangeEvent = (e: MediaQueryListEvent) => {

@@ -202,6 +202,10 @@ export default class LoggedIn extends React.PureComponent<Props> {
             this.props.actions.getChannelURLAction(channel, teamId, url);
             break;
         }
+        case 'theme-changed-global': {
+            dispatch(setTheme((desktopMessage.data as any).theme as Theme));
+            break;
+        }
         }
     };
 

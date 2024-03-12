@@ -161,6 +161,12 @@ export const Preferences = {
     TO_PAID_PLAN_NUDGE: 'to_paid_plan_nudge',
 };
 
+export const DesktopThemePreferences = {
+    LIGHT: 'light',
+    DARK: 'dark',
+    AUTO: null,
+} as const;
+
 // For one off things that have a special, attention-grabbing UI until you interact with them
 export const Touched = {
     INVITE_MEMBERS: 'invite_members',
