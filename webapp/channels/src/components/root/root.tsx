@@ -667,7 +667,7 @@ export default class Root extends React.PureComponent<Props, State> {
         }
 
         if (this.themeMediaQuery.addEventListener) {
-            this.themeMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
+            this.themeMediaQuery.addEventListener('change', this.handleThemeMediaQueryChangeEvent);
         }
 
         measurePageLoadTelemetry();
