@@ -12,6 +12,10 @@ No changes.
 
 - [Fix: Loading & deleting deleted messages on web-socket reconnection](kchat/webapp@d16c983cc975832d0951518953d06b2793af56f2) by @philippe.karle ([merge request](kchat/webapp!673))
 
+## 2.5.2-next.2 (2024-03-13)
+
+No changes.
+
 ## 2.5.2-next.1 (2024-03-13)
 
 ### Added (1 change)
