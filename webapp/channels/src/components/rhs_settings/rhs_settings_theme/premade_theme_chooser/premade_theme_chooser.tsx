@@ -21,11 +21,11 @@ type Props = {
 const PremadeThemeChooser = ({theme, storedTheme, updateTheme, allowedThemes = []}: Props) => {
     const premadeThemes = [];
     const hasAllowedThemes = allowedThemes.length > 1 || (allowedThemes[0] && allowedThemes[0].trim().length > 0);
-    const ikAllowedThemes = ['Infomaniak', 'Onyx', 'Auto'];
+    const ikAllowedThemes = ['Infomaniak', 'Onyx', 'Quartz'];
 
     // eslint-disable-next-line consistent-return
     const getThemeLabel = (theme: Theme) => {
-        switch (theme.ikType) {
+        switch (theme.ksuiteTheme) {
         case 'light': {
             return (
                 <FormattedMessage
@@ -61,12 +61,12 @@ const PremadeThemeChooser = ({theme, storedTheme, updateTheme, allowedThemes = [
 
             const premadeTheme: Theme = Object.assign({}, Preferences.THEMES[k as ThemeKey]);
 
-            if (!ikAllowedThemes.includes(premadeTheme.type)) {
+            if (premadeTheme.type && !ikAllowedThemes.includes(premadeTheme.type)) {
                 continue;
             }
 
             let activeClass = '';
-            if ((!storedTheme && premadeTheme.type === theme.type) || (storedTheme && storedTheme.type === premadeTheme.type)) {
+            if ((!storedTheme && premadeTheme.ksuiteTheme === theme.ksuiteTheme) || (storedTheme && storedTheme.ksuiteTheme === premadeTheme.ksuiteTheme)) {
                 activeClass = 'active';
             }
 
@@ -81,10 +81,10 @@ const PremadeThemeChooser = ({theme, storedTheme, updateTheme, allowedThemes = [
                         onClick={() => updateTheme(premadeTheme)}
                     >
                         <label>
-                            {(premadeTheme.type === 'Indigo' || premadeTheme.type === 'Onyx') && (<SvgDarkThemeIcon/>)}
-                            {premadeTheme.type === 'Quartz' && (<SvgLightThemeIcon/>)}
-                            {premadeTheme.type === 'Infomaniak' && (<SvgLightThemeIcon/>)}
-                            {premadeTheme.type === 'Auto' && (<SvgAutoThemeIcon/>)}
+                            {/* {(premadeTheme.type === 'Indigo' || premadeTheme.type === 'Onyx') && (<SvgDarkThemeIcon/>)} */}
+                            {premadeTheme.ksuiteTheme === 'light' && (<SvgLightThemeIcon/>)}
+                            {premadeTheme.ksuiteTheme === 'dark' && (<SvgDarkThemeIcon/>)}
+                            {premadeTheme.ksuiteTheme === 'auto' && (<SvgAutoThemeIcon/>)}
                             <div className='rhs-custom-btn-label'>{
                                 getThemeLabel(premadeTheme)
                             }</div>

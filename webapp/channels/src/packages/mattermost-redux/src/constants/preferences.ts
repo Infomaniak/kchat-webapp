@@ -84,10 +84,10 @@ const Preferences = {
 
     CATEGORY_THEME: 'theme',
     THEMES: {
-
         quartz: {
             type: 'Quartz',
             ikType: 'light',
+            ksuiteTheme: 'auto',
             sidebarBg: '#292E3D',
             sidebarText: '#e0e0e0',
             sidebarUnreadText: '#ffffff',
@@ -138,7 +138,8 @@ const Preferences = {
         },
         ik: {
             type: 'Infomaniak',
-            ikType: 'light',
+            ikType: 'medium',
+            ksuiteTheme: 'light',
             sidebarBg: '#292E3D',
             sidebarText: '#e0e0e0',
             sidebarUnreadText: '#ffffff',
@@ -190,6 +191,7 @@ const Preferences = {
         indigo: {
             type: 'Indigo',
             ikType: 'dark',
+            ksuiteTheme: 'dark',
             sidebarBg: '#0f1a2e',
             sidebarText: '#ffffff',
             sidebarUnreadText: '#ffffff',
@@ -241,6 +243,7 @@ const Preferences = {
         onyx: {
             type: 'Onyx',
             ikType: 'dark',
+            ksuiteTheme: 'dark',
             sidebarBg: '#121317',
             sidebarText: '#ffffff',
             sidebarUnreadText: '#ffffff',
@@ -288,11 +291,6 @@ const Preferences = {
             ikModalHeader: '#333333',
             ikBtnSecondary: '#333333',
             ikBtnSecondaryColor: '#DDDFE4',
-        },
-        auto: {
-            type: 'Auto',
-            ikType: 'auto',
-            isAuto: true,
         },
     } as unknown as Record<ThemeKey, Theme>,
     RECENT_EMOJIS: 'recent_emojis',

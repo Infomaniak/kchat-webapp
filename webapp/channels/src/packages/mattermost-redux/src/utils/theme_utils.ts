@@ -139,7 +139,7 @@ export function setThemeDefaults(theme: Partial<Theme>, preference?: DesktopThem
 
     const processedTheme = {...theme};
 
-    if (theme.type === 'Auto' && preference) {
+    if (theme.ksuiteTheme === 'auto' && preference) {
         if (preference === 'dark') {
             return Preferences.THEMES.onyx;
         }
