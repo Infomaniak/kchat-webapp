@@ -14,6 +14,7 @@ import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
 import Constants, {RHSStates} from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
 
@@ -32,7 +33,9 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
 
     const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        if (rhsState === RHSStates.SETTINGS) {
+        if (!isDesktopApp()) {
+            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-chat']}));
+        } else if (rhsState === RHSStates.SETTINGS) {
             dispatch(closeRightHandSide());
         } else {
             dispatch(showSettings(tab));

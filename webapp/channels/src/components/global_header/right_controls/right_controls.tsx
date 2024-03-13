@@ -183,12 +183,10 @@ const RightControls = (): JSX.Element => {
                     <module-news-component/>
                 </NewsWrapper>
             )}
-            {isDesktopApp && (
-                <ButtonWrapper>
-                    {showSettingsTutorialStep && <SettingsTour/>}
-                    <SettingsButton/>
-                </ButtonWrapper>
-            )}
+            <ButtonWrapper>
+                {showSettingsTutorialStep && <SettingsTour/>}
+                <SettingsButton/>
+            </ButtonWrapper>
             {!isDesktopApp && (
                 <div style={{position: 'relative'}}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
