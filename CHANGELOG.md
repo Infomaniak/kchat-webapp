@@ -8,6 +8,16 @@ No changes.
 
 - [Fix: Loading & deleting deleted messages on web-socket reconnection](kchat/webapp@d16c983cc975832d0951518953d06b2793af56f2) by @philippe.karle ([merge request](kchat/webapp!673))
 
+## 2.5.2-next.1 (2024-03-13)
+
+### Added (1 change)
+
+- [implement ksuite bridge send notification method](kchat/webapp@d151555cd3c2b2d75c07e642b9757ab342b8f1b2) by @antonbuksa
+
+### Fixed (1 change)
+
+- [Fix: Loading & deleting deleted messages on web-socket reconnection](kchat/webapp@d16c983cc975832d0951518953d06b2793af56f2) by @philippe.karle ([merge request](kchat/webapp!673))
+
 ## 2.5.1-rc.4 (2024-03-04)
 
 ### Fixed (1 change)
