@@ -7,7 +7,7 @@ import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 
 import type {MarkdownMode} from 'utils/markdown/apply_markdown';
 
-type WideMode = 'wide' | 'normal' | 'narrow' | 'min';
+type WideMode = 'wide' | 'normal' | 'narrow' | 'small' | 'min';
 
 export function useGetLatest<T>(val: T) {
     const ref = React.useRef<T>(val);
@@ -24,11 +24,15 @@ const useResponsiveFormattingBar = (ref: React.RefObject<HTMLDivElement>): WideM
         if (ref.current?.clientWidth > 640) {
             setWideMode('wide');
         }
-        if (ref.current?.clientWidth >= 424 && ref.current?.clientWidth <= 640) {
+        if (ref.current?.clientWidth >= 470 && ref.current?.clientWidth <= 640) {
             setWideMode('normal');
         }
-        if (ref.current?.clientWidth >= 374 && ref.current?.clientWidth < 424) {
+        if (ref.current?.clientWidth >= 406 && ref.current?.clientWidth < 470) {
             setWideMode('narrow');
+        }
+
+        if (ref.current?.clientWidth >= 374 && ref.current?.clientWidth < 406) {
+            setWideMode('small');
         }
 
         if (ref.current?.clientWidth < 374) {
@@ -58,6 +62,7 @@ const MAP_WIDE_MODE_TO_CONTROLS_QUANTITY: {[key in WideMode]: number} = {
     wide: 9,
     normal: 5,
     narrow: 3,
+    small: 2,
     min: 1,
 };
 
