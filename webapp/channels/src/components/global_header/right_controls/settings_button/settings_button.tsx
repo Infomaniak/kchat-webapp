@@ -24,9 +24,10 @@ type Props = {
     icon?: TIconGlyph;
     tooltipPlacement?: string;
     tooltipContent?: string;
+    currentTeamId: string;
 }
 
-const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, tooltipContent}: Props): JSX.Element | null => {
+const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, tooltipContent, currentTeamId}: Props): JSX.Element | null => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
@@ -34,7 +35,7 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
     const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (!isDesktopApp()) {
-            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-chat']}));
+            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-chat', 'ksuite-chat-personalization', {product_id: currentTeamId}]}));
         } else if (rhsState === RHSStates.SETTINGS) {
             dispatch(closeRightHandSide());
         } else {
