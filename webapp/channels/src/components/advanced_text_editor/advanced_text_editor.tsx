@@ -22,6 +22,7 @@ import FilePreview from 'components/file_preview';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import FileUpload from 'components/file_upload';
 import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
+import GuestBanner from 'components/guest_banner';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import MessageSubmitError from 'components/message_submit_error';
 import MsgTyping from 'components/msg_typing';
@@ -491,6 +492,7 @@ const AdvanceTextEditor = ({
                     className={'AdvancedTextEditor__body'}
                     disabled={readOnlyChannel}
                 >
+                    <GuestBanner/>
                     <div
                         ref={editorBodyRef}
                         role='application'

@@ -5430,5 +5430,6 @@
     "fileTypes.Images": "Imágenes",
     "fileTypes.Audio": "Audio",
     "fileTypes.Videos": "Videos",
-    "masBar.migrate": "La aplicación kChat ya está disponible en la App Store. <link>Descárgala</link> para beneficiarte automáticamente de futuras actualizaciones."
+    "masBar.migrate": "La aplicación kChat ya está disponible en la App Store. <link>Descárgala</link> para beneficiarte automáticamente de futuras actualizaciones.",
+    "guest_banner.text": "Hay {count} {count, plural, one {usuario externo} other {usuarios externos}} en esta conversación."
 }
