@@ -20,6 +20,14 @@ No changes.
 
 - [Fix: Loading & deleting deleted messages on web-socket reconnection](kchat/webapp@d16c983cc975832d0951518953d06b2793af56f2) by @philippe.karle ([merge request](kchat/webapp!673))
 
+## 2.5.2-next.3 (2024-03-14)
+
+### Fixed (3 changes)
+
+- [Fix: using channel id passed as props to determine channel stats.](kchat/webapp@a17db968a44b2cbc5ac85fe99d224a4fbcee0b48) by @philippe.karle ([merge request](kchat/webapp!678))
+- [Fix: action bar icons overlapping on small devices](kchat/webapp@b518893811d91ec96160fb4e280a55d637d16cf4) by @philippe.karle ([merge request](kchat/webapp!675))
+- [Fix: Direct message from new person not showing up after websocket reconnection](kchat/webapp@880d46d3cf8a2d6bc8f868933fe7b80438c4c840) by @philippe.karle ([merge request](kchat/webapp!663))
+
 ## 2.5.2-next.2 (2024-03-13)
 
 No changes.
