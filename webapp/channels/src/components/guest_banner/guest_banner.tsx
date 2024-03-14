@@ -7,7 +7,9 @@ import './guest_banner.scss';
 
 import InfoIconFilled from 'components/widgets/icons/info_icon_filled';
 
-type Props = {
+import type {GuestBannerConnectorProps} from '.';
+
+type Props = GuestBannerConnectorProps & {
     count: number;
     isGuest: boolean;
 }

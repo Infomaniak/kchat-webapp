@@ -492,7 +492,7 @@ const AdvanceTextEditor = ({
                     className={'AdvancedTextEditor__body'}
                     disabled={readOnlyChannel}
                 >
-                    <GuestBanner/>
+                    <GuestBanner channelId={channelId}/>
                     <div
                         ref={editorBodyRef}
                         role='application'
