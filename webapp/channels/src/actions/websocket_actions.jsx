@@ -102,6 +102,7 @@ import {updateThreadLastOpened} from 'actions/views/threads';
 import {voiceConnectedChannels} from 'selectors/calls';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
+import {getCategoriesForCurrentTeam} from 'selectors/views/channel_sidebar';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
 import store from 'stores/redux_store';
 
@@ -281,6 +282,7 @@ export async function reconnect(socketId) {
         //     dispatch(handleRefreshAppsBindings());
         // }
 
+        dispatch(fetchMyCategories(currentTeamId));
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
