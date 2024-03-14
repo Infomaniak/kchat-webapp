@@ -686,6 +686,32 @@ export function getChannelMembers(channelId: string, page = 0, perPage: number =
     };
 }
 
+export function getChannelGuestMembers(channelId: string): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let channelGuestMembers: ChannelMembership[];
+
+        try {
+            const channelGuestMembersRequest = Client4.getChannelGuestMembers(channelId);
+
+            channelGuestMembers = await channelGuestMembersRequest;
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error};
+        }
+
+        const userIds = channelGuestMembers.map((cm) => cm.user_id);
+        getMissingProfilesByIds(userIds)(dispatch, getState);
+
+        dispatch({
+            type: ChannelTypes.RECEIVED_CHANNEL_GUEST_MEMBERS,
+            data: channelGuestMembers,
+        });
+
+        return {data: channelGuestMembers};
+    };
+}
+
 export function leaveChannel(channelId: string): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
