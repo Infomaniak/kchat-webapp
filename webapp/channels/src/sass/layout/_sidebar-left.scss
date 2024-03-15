@@ -340,11 +340,16 @@ $sidebarOpacityAnimationDuration: 0.15s;
     .AddChannelDropdown {
         height: 30px;
 
+        &.isWebApp {
+            .dropdown-menu {
+                // Infomaniak
+                min-width: 0;
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+
         .dropdown-menu {
-            // Infomaniak
-            min-width: 0;
-            max-width: 100%;
-            width: 100%;
             margin-top: 0;
             line-height: 19px;
 
