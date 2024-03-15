@@ -14,6 +14,20 @@
 
 - [Dark theme contract and colors updated](kchat/webapp@7f1ddb1aeb7f6c4d34e4ab686a35b5f790a41bb6) by @philippe.karle ([merge request](kchat/webapp!677))
 
+## 2.6.0-next.1 (2024-03-15)
+
+### Added (1 change)
+
+- [Dropdown switch server implemented](kchat/webapp@35e59f2dc775f6519454755852bf3999689e1867) by @philippe.karle ([merge request](kchat/webapp!665))
+
+### Fixed (1 change)
+
+- [Fix: Desktop app add dropdown channel design fixed](kchat/webapp@35fe8d63f8f0ba04e298a95b7b705bf2b22a9a35) by @philippe.karle ([merge request](kchat/webapp!680))
+
+### Changed (1 change)
+
+- [Dark theme contract and colors updated](kchat/webapp@7f1ddb1aeb7f6c4d34e4ab686a35b5f790a41bb6) by @philippe.karle ([merge request](kchat/webapp!677))
+
 ## 2.5.2-rc.5 (2024-03-15)
 
 ### Added (1 change)
