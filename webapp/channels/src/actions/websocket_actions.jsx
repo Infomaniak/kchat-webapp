@@ -120,6 +120,7 @@ import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, receivedCall} from './calls';
+import {handleServerEvent} from './servers_actions';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -198,6 +199,7 @@ export function initialize() {
     WebSocketClient.addReconnectListener(reconnect);
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
+    WebSocketClient.addOtherServerMessageListener(handleServerEvent);
 
     WebSocketClient.initialize(
         connUrl,
@@ -216,6 +218,7 @@ export function close() {
     WebSocketClient.removeReconnectListener(reconnect);
     WebSocketClient.removeMissedMessageListener(restart);
     WebSocketClient.removeCloseListener(handleClose);
+    WebSocketClient.removeOtherServerMessageListener(handleServerEvent);
 }
 
 const pluginReconnectHandlers = {};
@@ -943,7 +946,8 @@ function handleKSuiteAdded(msg) {
                 window.origin,
             );
         }
-        doDispatch({type: TeamTypes.RECEIVED_TEAM, data: msg.data.team});
+        const currentTeamId = getCurrentTeamId(doGetState());
+        doDispatch({type: TeamTypes.RECEIVED_TEAM, data: msg.data.team, userId: msg.data.user_id, currentTeamId});
     };
 }
 
@@ -951,6 +955,7 @@ function handleKSuiteDeleted(msg) {
     return (doDispatch, doGetState) => {
         const currentTeams = getMyKSuites(doGetState());
         const newTeams = currentTeams.filter((team) => team.id !== msg.data.team.id);
+        const currentTeamId = getCurrentTeamId(doGetState());
 
         if (isDesktopApp()) {
             window.postMessage(
@@ -964,7 +969,7 @@ function handleKSuiteDeleted(msg) {
             );
         }
 
-        doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}});
+        doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id, currentTeamId}});
         doDispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
 
         if (!isDesktopApp()) {

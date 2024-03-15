@@ -85,7 +85,7 @@ interface Props {
     menuButton: MenuButtonProps;
     menuButtonTooltip?: MenuButtonTooltipProps;
     menu: MenuProps;
-    children: ReactNode[];
+    children: ReactNode[] | React.ReactNode;
     menuButtonRef?: React.RefObject<HTMLButtonElement>;
 }
 

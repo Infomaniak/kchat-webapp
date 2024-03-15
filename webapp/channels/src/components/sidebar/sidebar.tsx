@@ -14,6 +14,7 @@ import MoreChannels from 'components/more_channels';
 import MoreDirectChannels from 'components/more_direct_channels';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import ResizableLhs from 'components/resizable_sidebar/resizable_lhs';
+import SwitchServer from 'components/switch_server';
 
 import Pluggable from 'plugins/pluggable';
 import Constants, {ModalIdentifiers, RHSStates} from 'utils/constants';
@@ -249,6 +250,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                         showWorkTemplateButton={this.props.showWorkTemplateButton}
                     />
                 )}
+                {!isDesktopApp() && <SwitchServer/>}
                 <div
                     id='lhsNavigator'
                     role='application'

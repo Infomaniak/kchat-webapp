@@ -164,6 +164,10 @@ export type Theme = {
     ikBtnSecondaryColor: string;
     codeColor: string;
     codeBlockColor: string;
+    switchServerTextColor: string;
+    switchServerBackground: string;
+    switchServerIconColor: string;
+    switchServerHoverBackground: string;
     guestBannerBackground: string;
 };
 

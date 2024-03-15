@@ -1392,9 +1392,9 @@ export default class Client4 {
         );
     };
 
-    getMyKSuites = () => {
+    getMyKSuites = (getParams = false) => {
         return this.doFetch<Team[]>(
-            `${this.getUserRoute('me')}/servers`,
+            `${this.getUserRoute('me')}/servers${getParams ? buildQueryString({user: true, status: true}) : ''}`,
             {method: 'get'},
         );
     }
