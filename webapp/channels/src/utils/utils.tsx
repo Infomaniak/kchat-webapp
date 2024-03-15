@@ -681,6 +681,7 @@ export function applyTheme(theme: Theme) {
             'switch-server-background': theme.switchServerBackground,
             'switch-server-icon-color': theme.switchServerIconColor,
             'switch-server-hover-background': theme.switchServerHoverBackground,
+            'guest-banner-background': theme.guestBannerBackground,
 
             // Legacy variables with baked in opacity, do not use!
             'sidebar-text-08': changeOpacity(theme.sidebarText, 0.08),

@@ -4167,5 +4167,8 @@
     "fileTypes.Videos": "Video",
     "masBar.migrate": "L'applicazione kChat è ora disponibile sull'App Store. <link>Scaricatela</link> per beneficiare automaticamente dei futuri aggiornamenti.",
     "switch_server.tooltip.locked": "Il prodotto kSuite {product} è scaduto. Si prega di rinnovarlo per continuare a comunicare all'interno della vostra organizzazione con kChat.",
-    "switch_server.tooltip.maintenance": "Il kChat {product} è attualmente in manutenzione. È in corso un aggiornamento per migliorare kChat. Questo processo potrebbe richiedere alcuni minuti. Grazie per la vostra pazienza."
+    "switch_server.tooltip.maintenance": "Il kChat {product} è attualmente in manutenzione. È in corso un aggiornamento per migliorare kChat. Questo processo potrebbe richiedere alcuni minuti. Grazie per la vostra pazienza.",
+    "guest_banner.text": "{count, plural, one {C'è {slot} in questa conversazione.} other {Ci sono {slot} in questa conversazione.}}",
+    "guest_banner.inner": "{count, plural, one {1 utente esterno} other {# utenti esterni}}",
+    "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {utente esterno} other {utenti esterni}}"
 }

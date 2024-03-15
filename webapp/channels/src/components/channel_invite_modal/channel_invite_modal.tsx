@@ -340,7 +340,12 @@ export default class ChannelInviteModal extends React.PureComponent<Props, State
                 slice(0, USERS_FROM_DMS) as UserProfileValue[],
             ...users,
         ].
-            slice(0, MAX_USERS).map(((u) => ({...u, disabled: idsInGroup.includes(u.id)})));
+            slice(0, MAX_USERS).map(((u) => {
+                if (idsInGroup.includes(u.id)) {
+                    return {...u, disabled: true}
+                }
+                return u
+            }));
 
         users = Array.from(new Set(users));
 

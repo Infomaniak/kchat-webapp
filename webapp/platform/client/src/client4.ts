@@ -1836,6 +1836,13 @@ export default class Client4 {
         );
     };
 
+    getChannelGuestMembers = (channelId: string) => {
+        return this.doFetch<ChannelMembership[]>(
+            `${this.getChannelMembersRoute(channelId)}/list_guest`,
+            {method: 'get'},
+        );
+    };
+
     getChannelTimezones = (channelId: string) => {
         return this.doFetch<string[]>(
             `${this.getChannelRoute(channelId)}/timezones`,
@@ -2141,6 +2148,13 @@ export default class Client4 {
     getPostsBefore = (channelId: string, postId: string, page = 0, perPage = PER_PAGE_DEFAULT, fetchThreads = true, collapsedThreads = false, collapsedThreadsExtended = false) => {
         return this.doFetch<PostList>(
             `${this.getChannelRoute(channelId)}/posts${buildQueryString({before: postId, page, per_page: perPage, skipFetchThreads: !fetchThreads, collapsedThreads, collapsedThreadsExtended})}`,
+            {method: 'get'},
+        );
+    };
+
+    getDeletedPostsIds = async (channelId: string, since?: number): Promise<Array<string>> => {
+        return this.doFetch(
+            `${this.getChannelRoute(channelId)}/deleted_posts${buildQueryString({since})}`,
             {method: 'get'},
         );
     };

@@ -168,6 +168,7 @@ export type Theme = {
     switchServerBackground: string;
     switchServerIconColor: string;
     switchServerHoverBackground: string;
+    guestBannerBackground: string;
 };
 
 const getDefaultTheme = createSelector('getDefaultTheme', getConfig, (config): Theme => {

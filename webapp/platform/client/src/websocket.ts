@@ -122,6 +122,7 @@ export default class WebSocketClient {
     }
 
     unbindGlobalsAndReset() {
+        console.log('unbindGlobalsAndReset')
         this.teamChannel?.unbind_global();
         this.userChannel?.unbind_global();
         this.userTeamChannel?.unbind_global();
@@ -324,21 +325,25 @@ export default class WebSocketClient {
     }
 
     subscribeToTeamChannel(teamId: string) {
+        console.log(`subscribeToTeamChannel ~ private-team.${teamId}`)
         this.currentTeam = teamId;
         this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
     }
 
     subscribeToUserChannel(userId: number) {
+        console.log(`subscribeToUserChannel ~ presence-user.${userId}`)
         this.currentUser = userId;
         this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
     }
 
     subscribeToUserTeamScopedChannel(teamUserId: string) {
+        console.log(`subscribeToUserTeamScopedChannel ~ presence-teamUser.${teamUserId}`)
         this.currentTeamUser = teamUserId;
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
     }
 
     bindPresenceChannel(channelID: string) {
+        console.log(`bindPresenceChannel ~ presence-channel.${channelID}`)
         this.currentPresence = channelID;
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
         if (this.presenceChannel) {
@@ -347,6 +352,7 @@ export default class WebSocketClient {
     }
 
     unbindPresenceChannel(channelID: string) {
+        console.log(`unbindPresenceChannel ~ presence-channel.${channelID}`)
         this.conn?.unsubscribe(`presence-channel.${channelID}`);
 
         if (this.presenceChannel) {
