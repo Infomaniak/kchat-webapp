@@ -1,3 +1,9 @@
+## 2.6.0-rc.2 (2024-03-15)
+
+### Fixed (1 change)
+
+- [Fix: Desktop app add dropdown channel design fixed](kchat/webapp@35fe8d63f8f0ba04e298a95b7b705bf2b22a9a35) by @philippe.karle ([merge request](kchat/webapp!680))
+
 ## 2.6.0-rc.1 (2024-03-15)
 
 ### Added (1 change)
