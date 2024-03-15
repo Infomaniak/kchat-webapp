@@ -26,6 +26,16 @@ No changes.
 
 - [Fix: Loading & deleting deleted messages on web-socket reconnection](kchat/webapp@d16c983cc975832d0951518953d06b2793af56f2) by @philippe.karle ([merge request](kchat/webapp!673))
 
+## 2.5.2-next.4 (2024-03-15)
+
+### Added (1 change)
+
+- [Guest banner popover modal added](kchat/webapp@675d885892531efe0ca9d7bfd49b9cbec0358e27) by @philippe.karle ([merge request](kchat/webapp!679))
+
+### Changed (1 change)
+
+- [Dark theme contract and colors updated](kchat/webapp@7f1ddb1aeb7f6c4d34e4ab686a35b5f790a41bb6) by @philippe.karle ([merge request](kchat/webapp!677))
+
 ## 2.5.2-next.3 (2024-03-14)
 
 ### Fixed (3 changes)
