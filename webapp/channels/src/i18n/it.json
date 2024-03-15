@@ -4166,5 +4166,7 @@
     "fileTypes.Audio": "Audio",
     "fileTypes.Videos": "Video",
     "masBar.migrate": "L'applicazione kChat è ora disponibile sull'App Store. <link>Scaricatela</link> per beneficiare automaticamente dei futuri aggiornamenti.",
-    "guest_banner.text": "{count, plural, one {C'è 1 utente esterno in questa conversazione.} other {Ci sono # utenti esterni in questa conversazione.}}"
+    "guest_banner.text": "{count, plural, one {C'è {slot} in questa conversazione.} other {Ci sono {slot} in questa conversazione.}}",
+    "guest_banner.inner": "{count, plural, one {1 utente esterno} other {# utenti esterni}}",
+    "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {utente esterno} other {utenti esterni}}"
 }

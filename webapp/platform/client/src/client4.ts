@@ -1836,6 +1836,13 @@ export default class Client4 {
         );
     };
 
+    getChannelGuestMembers = (channelId: string) => {
+        return this.doFetch<ChannelMembership[]>(
+            `${this.getChannelMembersRoute(channelId)}/list_guest`,
+            {method: 'get'},
+        );
+    };
+
     getChannelTimezones = (channelId: string) => {
         return this.doFetch<string[]>(
             `${this.getChannelRoute(channelId)}/timezones`,

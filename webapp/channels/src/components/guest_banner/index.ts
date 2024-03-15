@@ -2,14 +2,17 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
+import {bindActionCreators, type ActionCreatorsMapObject, type Dispatch} from 'redux';
 
-import {getAllChannelStats} from 'mattermost-redux/selectors/entities/channels';
+import {getChannelGuestMembers} from 'mattermost-redux/actions/channels';
+import {getChannelGuestMembersCount} from 'mattermost-redux/selectors/entities/channels';
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
+import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 
 import type {GlobalState} from 'types/store/index';
 
+import type {Props} from './guest_banner';
 import GuestBanner from './guest_banner';
-const EMPTY_CHANNEL_STATS = {member_count: 0, guest_count: 0, pinnedpost_count: 0, files_count: 0};
 
 export type GuestBannerConnectorProps = {
     channelId: string;
@@ -17,15 +20,21 @@ export type GuestBannerConnectorProps = {
 
 function makeMapStateToProps() {
     return function mapStateToProps(state: GlobalState, ownProps: GuestBannerConnectorProps) {
-        const allChannelStats = getAllChannelStats(state);
-        const stats = allChannelStats?.[ownProps.channelId] || EMPTY_CHANNEL_STATS;
         const isGuest = isCurrentUserGuestUser(state);
 
         return {
-            count: stats.guest_count,
+            count: getChannelGuestMembersCount(state, ownProps.channelId),
             isGuest,
         };
     };
 }
 
-export default connect(makeMapStateToProps, {})(GuestBanner);
+function mapDispatchToProps(dispatch: Dispatch) {
+    return {
+        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc | GenericAction>, Props['actions']>({
+            getChannelGuestMembers,
+        }, dispatch),
+    };
+}
+
+export default connect(makeMapStateToProps, mapDispatchToProps)(GuestBanner);

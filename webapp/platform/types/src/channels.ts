@@ -147,6 +147,7 @@ export type ChannelsState = {
     myMembers: RelationOneToOne<Channel, ChannelMembership>;
     roles: RelationOneToOne<Channel, Set<string>>;
     membersInChannel: RelationOneToOne<Channel, Record<string, ChannelMembership>>;
+    guestMembersInChannel: RelationOneToOne<Channel, Record<string, ChannelMembership>>;
     stats: RelationOneToOne<Channel, ChannelStats>;
     groupsAssociatedToChannel: any;
     totalCount: number;
