@@ -1,3 +1,9 @@
+## 2.5.2-rc.5 (2024-03-15)
+
+### Added (1 change)
+
+- [Guest banner popover modal added](kchat/webapp@675d885892531efe0ca9d7bfd49b9cbec0358e27) by @philippe.karle ([merge request](kchat/webapp!679))
+
 ## 2.5.2-rc.4 (2024-03-14)
 
 ### Fixed (3 changes)
