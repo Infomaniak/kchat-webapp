@@ -140,6 +140,56 @@ export function getChannelMembersInChannels(state: GlobalState): RelationOneToOn
     return state.entities.channels.membersInChannel;
 }
 
+export function getGuestMembersInChannel(state: GlobalState, channelId: string) {
+    return state.entities.channels.guestMembersInChannel[channelId];
+}
+
+export const getGuestMembersIdsInChannel = createSelector(
+    'getGuestMembersIdsInChannel',
+    getUsers,
+    (state: GlobalState, channelId: string) => getGuestMembersInChannel(state, channelId),
+    (profiles, guestsInChannel) => {
+        if (!guestsInChannel) {
+            return [];
+        }
+
+        return Object.keys(guestsInChannel).reduce((acc: string[], next) => {
+            if (next in profiles && profiles[next].delete_at === 0) {
+                acc.push(next);
+            }
+
+            return acc;
+        }, []);
+    },
+);
+
+export const getChannelGuestMembersCount = createSelector(
+    'getChannelGuestMembersCount',
+    getGuestMembersIdsInChannel,
+    (guestsInChannel) => {
+        if (!guestsInChannel) {
+            return 0;
+        }
+
+        return guestsInChannel.length;
+    },
+);
+
+export const getChannelGuestProfiles: (state: GlobalState, channelId: string) => UserProfile[] = createSelector(
+    'getProfilesInCurrentChannel',
+    getUsers,
+    getGuestMembersIdsInChannel,
+    (profiles, guestIds): UserProfile[] => {
+        return guestIds.reduce((acc: UserProfile[], next) => {
+            if (next in profiles && profiles[next].delete_at === 0) {
+                acc.push(profiles[next]);
+            }
+
+            return acc;
+        }, []);
+    },
+);
+
 // makeGetChannel returns a selector that returns a channel from the store with the following filled in for DM/GM channels:
 // - The display_name set to the other user(s) names, following the Teammate Name Display setting
 // - The teammate_id for DM channels

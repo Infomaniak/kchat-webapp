@@ -26,6 +26,7 @@ import productMenu from './product_menu';
 import rhs from './rhs';
 import rhsSuppressed from './rhs_suppressed';
 import search from './search';
+import servers from './servers';
 import settings from './settings';
 import statusDropdown from './status_dropdown';
 import system from './system';
@@ -63,4 +64,5 @@ export default combineReducers({
     calls,
     kmeetCalls,
     theme,
+    servers,
 });

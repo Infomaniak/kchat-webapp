@@ -117,7 +117,7 @@ function makeMapStateToProps() {
             isReadOnly: false,
             isMuted: isCurrentChannelMuted(state),
             isQuickSwitcherOpen: isModalOpen(state, ModalIdentifiers.QUICK_SWITCH),
-            hasGuests: stats.guest_count > 0,
+            hasGuests: false,
             pinnedPostsCount: stats.pinnedpost_count,
             hasMoreThanOneTeam,
             teammateNameDisplaySetting: getTeammateNameDisplaySetting(state),

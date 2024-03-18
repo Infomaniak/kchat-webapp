@@ -24,6 +24,7 @@ export type ReconnectListener = (socketId?: string) => void;
 export type MissedMessageListener = () => void;
 export type ErrorListener = (event: Event) => void;
 export type CloseListener = (connectFailCount: number) => void;
+export type OtherTeam = { userId: string, teamId: string }
 
 export default class WebSocketClient {
     private conn: Pusher | null;
@@ -37,6 +38,8 @@ export default class WebSocketClient {
     private currentUser: number | null;
     private currentTeamUser: string;
     private currentTeam: string;
+    private otherTeams: OtherTeam[];
+    private otherTeamsChannel: Record<string, Array<Channel>>
 
     // responseSequence is the number to track a response sent
     // via the websocket. A response will always have the same sequence number
@@ -86,6 +89,7 @@ export default class WebSocketClient {
     private missedMessageListeners = new Set<MissedMessageListener>();
     private errorListeners = new Set<ErrorListener>();
     private closeListeners = new Set<CloseListener>();
+    private otherServersMessageListeners = new Set<MessageListener>();
 
     private connectionId: string | null;
 
@@ -107,6 +111,8 @@ export default class WebSocketClient {
         this.currentUser = null;
         this.currentTeamUser = '';
         this.currentTeam = '';
+        this.otherTeams = []
+        this.otherTeamsChannel = {}
     }
 
     unbindPusherEvents() {
@@ -121,10 +127,12 @@ export default class WebSocketClient {
         this.userChannel?.unbind_global();
         this.userTeamChannel?.unbind_global();
         this.presenceChannel?.unbind_global();
+        Object.values(this.otherTeamsChannel)?.forEach(team => team.forEach(channel => channel.unbind_all()))
         this.teamChannel = null;
         this.userChannel = null;
         this.userTeamChannel = null;
         this.presenceChannel = null;
+        this.otherTeamsChannel = {}
     }
 
     // on connect, only send auth cookie and blank state.
@@ -267,6 +275,7 @@ export default class WebSocketClient {
             this.subscribeToTeamChannel(teamId as string);
             this.subscribeToUserChannel(userId || currentUserId);
             this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId);
+            this.subscribeToOtherTeams(this.otherTeams, teamId)
 
             const presenceChannel = presenceChannelId || currentPresenceChannelId;
             if (presenceChannel) {
@@ -408,6 +417,30 @@ export default class WebSocketClient {
         });
     }
 
+    bindChannelToEvent(channel: Channel, eventName: string, callback?: (data: any) => void) {
+        channel.bind(eventName, (data: any) => {
+            if (!data) {
+                return;
+            }
+            if (data.seq_reply) {
+                if (data.error) {
+                    console.log(data); //eslint-disable-line no-console
+                }
+
+                if (this.responseCallbacks[data.seq_reply]) {
+                    this.responseCallbacks[data.seq_reply](data);
+                    Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
+                }
+            } else if (callback) {
+                // @ts-ignore
+                this.serverSequence = data.seq + 1;
+
+                // @ts-ignore
+                callback?.(data)
+            }
+        })
+    }
+
     /**
      * @deprecated Use addMessageListener instead
      */
@@ -426,6 +459,19 @@ export default class WebSocketClient {
 
     removeMessageListener(listener: MessageListener) {
         this.messageListeners.delete(listener);
+    }
+
+    addOtherServerMessageListener(listener: MessageListener) {
+        this.otherServersMessageListeners.add(listener);
+
+        if (this.otherServersMessageListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.messageListeners.size} message listeners registered`);
+        }
+    }
+
+    removeOtherServerMessageListener(listener: MessageListener) {
+        this.otherServersMessageListeners.delete(listener);
     }
 
     /**
@@ -572,6 +618,36 @@ export default class WebSocketClient {
         }
     }
 
+    sendUserTeamMessage(action: string, data: any, responseCallback?: () => void) {
+        const msg = {
+            action,
+            seq: this.responseSequence++,
+            data,
+        };
+
+        if (responseCallback) {
+            this.responseCallbacks[msg.seq] = responseCallback;
+        }
+
+        if (this.conn && this.conn.connection.state === 'connected') {
+            this.userTeamChannel?.trigger(action, msg);
+        } else if (!this.conn || this.conn.connection.state === 'disconnected') {
+            console.log('[websocket] tried to send message but connection unavailable');
+
+            this.conn?.disconnect();
+            this.conn = null;
+
+            this.initialize(
+                this.connectionUrl,
+                this.currentUser as number,
+                this.currentTeamUser,
+                this.currentTeam,
+                localStorage.getItem('IKToken') as string,
+                this.currentPresence,
+            );
+        }
+    }
+
     sendPresenceMessage(action: string, data: any, responseCallback?: () => void) {
         const msg = {
             action,
@@ -629,6 +705,78 @@ export default class WebSocketClient {
             user_ids: userIds,
         };
         this.sendMessage('client-get_statuses_by_ids', data, callback);
+    }
+
+    sendRemoveUnread(unreadMessagesCount: number, serverId: string) {
+        const data = {
+            unreadMessagesCount,
+            serverId
+        };
+
+        this.sendUserTeamMessage('client-unread_channel', data)
+    }
+
+    setOthersTeams(teams: OtherTeam[]) {
+        this.otherTeams = teams
+    }
+
+    subscribeToOtherTeams(teams?: OtherTeam[], currentTeamId?: string) {
+        if (!teams) {
+            return
+        }
+
+        for (const team of teams) {
+            const { teamId: teamId, userId } = team
+
+            if (teamId === currentTeamId || !userId) {
+                continue
+            }
+
+            const presenceTeamUserChannel = this.conn?.subscribe(`presence-teamUser.${userId}`) as Channel
+            const privateTeamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel
+
+            presenceTeamUserChannel.callbacks.remove('badge_updated')
+            privateTeamChannel.callbacks.remove('team_status_changed')
+
+            this.bindChannelToEvent(presenceTeamUserChannel, 'badge_updated', (data) => {
+                // @ts-ignore
+                this.otherServersMessageListeners.forEach((listener) => listener({event: 'badge_updated', data, serverId: teamId }));
+            })
+
+            this.bindChannelToEvent(privateTeamChannel, 'team_status_changed', (data) => {
+                // @ts-ignore
+                this.otherServersMessageListeners.forEach((listener) => listener({event: 'team_status_changed', data, serverId: teamId }));
+            })
+
+            Reflect.set(this.otherTeamsChannel, teamId, [presenceTeamUserChannel, privateTeamChannel])
+        }
+    }
+
+    addNewTeam(userId: string, teamId: string, currentTeamId: string) {
+        const newTeam = { userId, teamId }
+        this.otherTeams.push(newTeam)
+        this.subscribeToOtherTeams([newTeam], currentTeamId)
+    }
+
+    removeTeam(teamId: string) {
+        const newTeams = this.otherTeams.filter(team => team.teamId !== teamId)
+        const channelsToUnbind = Reflect.get(this.otherTeamsChannel, teamId)
+        const newChannels = {...this.otherTeamsChannel}
+        Reflect.deleteProperty(newChannels, teamId)
+
+        if (channelsToUnbind && Array.isArray(channelsToUnbind) && this.conn?.connection.state === 'connected') {
+            this.unsubscribeChannels(channelsToUnbind)
+        }
+
+        this.otherTeams = newTeams
+        this.otherTeamsChannel = newChannels
+    }
+
+    unsubscribeChannels(channels: Array<Channel>) {
+        channels.forEach(channel => {
+            this.conn?.unsubscribe(channel.name)
+            channel.unbind_all()
+        })
     }
 }
 

@@ -340,17 +340,21 @@ $sidebarOpacityAnimationDuration: 0.15s;
     .AddChannelDropdown {
         height: 30px;
 
+        &.isWebApp {
+            .dropdown-menu {
+                // Infomaniak
+                min-width: 0;
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+
         .dropdown-menu {
-            min-width: 250px;
             margin-top: 0;
             line-height: 19px;
 
             span {
                 color: rgba(var(--center-channel-color-rgb), 0.9);
-
-                &:not(.MenuItem__help-text) {
-                    white-space: nowrap;
-                }
             }
 
             button {
@@ -361,6 +365,29 @@ $sidebarOpacityAnimationDuration: 0.15s;
                 color: rgba(var(--center-channel-color-rgb), 0.72);
                 font-size: 16px;
                 line-height: 16px;
+            }
+        }
+
+        &.isWebApp {
+            height: auto;
+            width: 100%;
+
+            .AddChannelDropdown_dropdownButton {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #0088B2;
+                height: 44px;
+                width: 100%;
+                padding: 0;
+                border: none;
+                color: #FFF;
+                border-radius: 4px;
+                font-size: 14px;
+                border-radius: 4px;
+                gap: 5px;
+                line-height: 1;
+                margin-top: 16px;
             }
         }
     }

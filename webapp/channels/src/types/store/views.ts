@@ -16,6 +16,7 @@ import type {DesktopThemePreference} from 'types/theme';
 import type {I18nState} from './i18n';
 import type {LhsViewState} from './lhs';
 import type {RhsViewState} from './rhs';
+import type {Server} from './servers';
 
 import type {DraggingState} from '.';
 
@@ -243,5 +244,8 @@ export type ViewsState = {
     theme: {
         storedTheme: Theme | null;
         themePreference: DesktopThemePreference;
+    };
+    servers: {
+        servers: Record<string, Server>;
     };
 };

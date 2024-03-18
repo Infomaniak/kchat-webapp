@@ -843,7 +843,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         <AnnouncementBarController/>
                         <SystemNotice/>
                         <GlobalHeader headerRef={this.headerResizerRef}/>
-                        {!this.embeddedInIFrame && <TeamSidebar/>}
+                        {!this.embeddedInIFrame && isDesktopApp() && <TeamSidebar/>}
                         <Switch>
                             {this.props.products?.map((product) => (
                                 <Route

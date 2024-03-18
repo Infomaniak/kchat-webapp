@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
@@ -9,11 +10,13 @@ import {trackEvent} from 'actions/telemetry_actions';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import {CreateChannelsTour, InvitePeopleTour, JoinChannelsTour} from 'components/tours/onboarding_tour';
+import PlusFilledIcon from 'components/widgets/icons/plus_filled_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import WorkTemplateModal from 'components/work_templates';
 
 import {ModalIdentifiers} from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
 
 type Props = {
     canCreateChannel: boolean;
@@ -184,7 +187,7 @@ const AddChannelDropdown = ({
 
     return (
         <MenuWrapper
-            className='AddChannelDropdown'
+            className={classNames('AddChannelDropdown', {isWebApp: !isDesktopApp()})}
             onToggle={trackOpen}
             open={isAddChannelOpen}
         >
@@ -198,7 +201,16 @@ const AddChannelDropdown = ({
                         className={'AddChannelDropdown_dropdownButton'}
                         aria-label={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channel Dropdown'})}
                     >
-                        <i className='icon-plus'/>
+
+                        {isDesktopApp() ? <i className='icon-plus'/> : (
+                            <>
+                                <PlusFilledIcon/>
+                                <FormattedMessage
+                                    id={'admin.user_grid.new'}
+                                    defaultMessage='New'
+                                />
+                            </>
+                        )}
                     </button>
                 </>
             </OverlayTrigger>

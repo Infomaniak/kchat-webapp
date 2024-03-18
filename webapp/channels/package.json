@@ -14,7 +14,7 @@
     "@infomaniak/compass-components": "0.17.0",
     "@infomaniak/compass-icons": "0.13.0",
     "@infomaniak/font-suisse": "https://verdaccio.dev.infomaniak.ch/@infomaniak/font-suisse/-/font-suisse-1.0.0.tgz",
-    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.2.4.tgz",
+    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.2.7.tgz",
     "@infomaniak/marked": "^0.2.0",
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client",
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types",

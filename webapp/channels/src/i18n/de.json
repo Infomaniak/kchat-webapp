@@ -5942,5 +5942,10 @@
     "fileTypes.Images": "Bilder",
     "fileTypes.Audio": "Audio",
     "fileTypes.Videos": "Videos",
-    "masBar.migrate": "Die kChat-App ist ab sofort im App Store erhältlich. <link>Laden Sie</link> sie herunter, um automatisch von zukünftigen Updates zu profitieren."
+    "masBar.migrate": "Die kChat-App ist ab sofort im App Store erhältlich. <link>Laden Sie</link> sie herunter, um automatisch von zukünftigen Updates zu profitieren.",
+    "switch_server.tooltip.locked": "Das Produkt kSuite {product} ist abgelaufen. Bitte erneuern Sie es, um die Kommunikation innerhalb Ihrer Organisation mit kChat fortzusetzen.",
+    "switch_server.tooltip.maintenance": "Der kChat {product} wird derzeit gewartet. Ein Update wird durchgeführt, um kChat zu verbessern. Dieser Prozess kann einige Minuten dauern. Vielen Dank für Ihre Geduld.",
+    "guest_banner.text": "Es gibt {slot} in diesem Gespräch.",
+    "guest_banner.inner": "{count} externe Benutzer",
+    "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {externer Benutzer} other {externe Benutzer}}"
 }

@@ -644,7 +644,7 @@
     word-wrap: break-word;
 
     &:not(.post--editing):not(.post--editing):hover {
-        background-color: rgba(v(center-channel-color-rgb), 0.04);
+        background-color: rgba(v(center-channel-color-rgb), 0.06);
 
         .PostAttachmentOpenGraph .remove-button {
             display: flex;

@@ -1,0 +1,112 @@
+.switch-server-dropdown {
+    width: 100%;
+    overflow: hidden;
+    align-items: center;
+    margin-top: 16px;
+    padding: 0 16px;
+
+    & .team-label{
+        width: 100%;
+    }
+
+    & .icons{
+        display: flex;
+        & .rotate{
+            rotate: 180deg;
+        }
+    }
+
+    & .icons + .icon-chevron-down {
+        line-height: 40px;
+    }
+
+    & .bordered {
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    @media screen and (max-width: 768px) {
+        margin-top: 16px;
+        padding: 0 14px;
+    }
+
+    @media screen and (min-width: 768px) {
+        margin-bottom: 16px;
+    }
+}
+
+.switch-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    height: 40px;
+    width: 100%;
+    color: var(--switch-server-text-color);
+    background: var(--switch-server-background);
+    transition: background-color .3s ease;
+
+    &:not(.isCurrent) {
+        &:hover {
+            background: var(--switch-server-hover-background);
+        }
+    }
+
+    & .rotate {
+        rotate: 180deg;
+    }
+
+    .icons {
+        svg {
+            color: var(--switch-server-icon-color);
+        }
+    }
+
+    .icons +  {
+        svg {
+            fill: var(--switch-server-icon-color);
+        }
+    }
+
+    &:not(.disabled) {
+        cursor: pointer;
+    }
+
+    &.disabled {
+        pointer-events: none;
+        .team-label {
+            color: #9F9F9F;
+        }
+    }
+
+
+    .team-label {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        & > .icon {
+            margin-right: 8px;
+        }
+
+        &.hasDot > span {
+            margin-right: 3px;
+        }
+    }
+}
+
+.switch-counter {
+    height: fit-content;
+    padding: 4px 6px;
+    background-color: #E91E63;
+    border-radius: 18px;
+    font-size: 10px;
+    line-height: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2px;
+    color: #FFFFFF;
+}

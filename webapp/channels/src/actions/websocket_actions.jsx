@@ -83,7 +83,7 @@ import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/sel
 import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
-import {loadChannelsForCurrentUser} from 'actions/channel_actions';
+import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_actions';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
@@ -102,6 +102,7 @@ import {updateThreadLastOpened} from 'actions/views/threads';
 import {voiceConnectedChannels} from 'selectors/calls';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
+import {getCategoriesForCurrentTeam} from 'selectors/views/channel_sidebar';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
 import store from 'stores/redux_store';
 
@@ -119,6 +120,7 @@ import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, receivedCall} from './calls';
+import {handleServerEvent} from './servers_actions';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -197,6 +199,7 @@ export function initialize() {
     WebSocketClient.addReconnectListener(reconnect);
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
+    WebSocketClient.addOtherServerMessageListener(handleServerEvent);
 
     WebSocketClient.initialize(
         connUrl,
@@ -215,6 +218,7 @@ export function close() {
     WebSocketClient.removeReconnectListener(reconnect);
     WebSocketClient.removeMissedMessageListener(restart);
     WebSocketClient.removeCloseListener(handleClose);
+    WebSocketClient.removeOtherServerMessageListener(handleServerEvent);
 }
 
 const pluginReconnectHandlers = {};
@@ -281,6 +285,7 @@ export async function reconnect(socketId) {
         //     dispatch(handleRefreshAppsBindings());
         // }
 
+        dispatch(fetchMyCategories(currentTeamId));
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
@@ -322,6 +327,7 @@ export async function reconnect(socketId) {
         console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
         dispatch(checkForModifiedUsers(true));
         dispatch(TeamActions.getMyKSuites());
+        dispatch(loadDeletedPosts(state.websocket.lastDisconnectAt));
     }
 
     dispatch(resetWsErrorCount());
@@ -940,7 +946,8 @@ function handleKSuiteAdded(msg) {
                 window.origin,
             );
         }
-        doDispatch({type: TeamTypes.RECEIVED_TEAM, data: msg.data.team});
+        const currentTeamId = getCurrentTeamId(doGetState());
+        doDispatch({type: TeamTypes.RECEIVED_TEAM, data: msg.data.team, userId: msg.data.user_id, currentTeamId});
     };
 }
 
@@ -948,6 +955,7 @@ function handleKSuiteDeleted(msg) {
     return (doDispatch, doGetState) => {
         const currentTeams = getMyKSuites(doGetState());
         const newTeams = currentTeams.filter((team) => team.id !== msg.data.team.id);
+        const currentTeamId = getCurrentTeamId(doGetState());
 
         if (isDesktopApp()) {
             window.postMessage(
@@ -961,7 +969,7 @@ function handleKSuiteDeleted(msg) {
             );
         }
 
-        doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}});
+        doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id, currentTeamId}});
         doDispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
 
         if (!isDesktopApp()) {

@@ -5982,5 +5982,10 @@
     "fileTypes.Images": "Images",
     "fileTypes.Audio": "Audio",
     "fileTypes.Videos": "Videos",
-    "masBar.migrate": "The kChat application is now available on the App Store. <link>Download it</link> to benefit automatically from future updates."
+    "masBar.migrate": "The kChat application is now available on the App Store. <link>Download it</link> to benefit automatically from future updates.",
+    "switch_server.tooltip.locked": "The kSuite product {product} has expired. Please renew it to continue communicating within your organization with kChat.",
+    "switch_server.tooltip.maintenance": "The kChat {product} is currently undergoing maintenance. An update is in progress to improve kChat. This process may take a few minutes. Thank you for your patience.",
+    "guest_banner.text": "There {slot} in this conversation.",
+    "guest_banner.inner": "{count, plural, one {is} other {are}} {count} external {count, plural, one {user} other {users}}",
+    "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {external user} other {external users}}"
 }

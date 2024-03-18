@@ -24,8 +24,10 @@ import type {
 import {AdminTypes, ChannelTypes, UserTypes, SchemeTypes, GroupTypes, PostTypes} from 'mattermost-redux/action_types';
 import {General} from 'mattermost-redux/constants';
 import {MarkUnread} from 'mattermost-redux/constants/channels';
+import GeneralConstants from 'mattermost-redux/constants/general';
 import type {GenericAction} from 'mattermost-redux/types/actions';
 import {channelListToMap, splitRoles} from 'mattermost-redux/utils/channel_utils';
+import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import messageCounts from './channels/message_counts';
 
@@ -610,6 +612,67 @@ function membersInChannel(state: RelationOneToOne<Channel, Record<string, Channe
     }
 }
 
+function guestMembersInChannel(state: RelationOneToOne<Channel, Record<string, ChannelMembership>> = {}, action: GenericAction) {
+    switch (action.type) {
+    case ChannelTypes.RECEIVED_CHANNEL_GUEST_MEMBERS: {
+        const nextState = {...state};
+        const remove = action.remove as string[];
+        const currentUserId = action.currentUserId;
+        if (remove && currentUserId) {
+            remove.forEach((id) => {
+                if (nextState[id]) {
+                    Reflect.deleteProperty(nextState[id], currentUserId);
+                }
+            });
+        }
+
+        for (const cm of action.data) {
+            if (nextState[cm.channel_id]) {
+                nextState[cm.channel_id] = {...nextState[cm.channel_id]};
+            } else {
+                nextState[cm.channel_id] = {};
+            }
+            nextState[cm.channel_id][cm.user_id] = cm;
+        }
+        return nextState;
+    }
+
+    case ChannelTypes.RECEIVED_CHANNEL_MEMBER: {
+        const member = action.data;
+        const members = {...(state[member.channel_id] || {})};
+
+        if (!members[member.user_id] && member?.roles && (isGuest(member.roles) || member.roles === GeneralConstants.CHANNEL_GUEST_ROLE)) {
+            members[member.user_id] = member;
+
+            return {
+                ...state,
+                [member.channel_id]: members,
+            };
+        }
+        return {
+            ...state,
+        };
+    }
+    case UserTypes.RECEIVED_PROFILE_NOT_IN_CHANNEL: {
+        const channelId = action.data.id;
+        const userId = action.data.user_id;
+        const members = {...(state[channelId] || {})};
+
+        if (members[userId]) {
+            Reflect.deleteProperty(members, userId);
+            return {
+                ...state,
+                [channelId]: members,
+            };
+        }
+
+        return state;
+    }
+    default:
+        return state;
+    }
+}
+
 function stats(state: RelationOneToOne<Channel, ChannelStats> = {}, action: GenericAction) {
     switch (action.type) {
     case ChannelTypes.RECEIVED_CHANNEL_STATS: {
@@ -1015,4 +1078,7 @@ export default combineReducers({
     messageCounts,
 
     pendingGuests,
+
+    // object where every key is the channel id.
+    guestMembersInChannel,
 });

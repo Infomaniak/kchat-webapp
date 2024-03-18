@@ -1,3 +1,93 @@
+## 2.6.0-rc.2 (2024-03-15)
+
+### Fixed (1 change)
+
+- [Fix: Desktop app add dropdown channel design fixed](kchat/webapp@35fe8d63f8f0ba04e298a95b7b705bf2b22a9a35) by @philippe.karle ([merge request](kchat/webapp!680))
+
+## 2.6.0-rc.1 (2024-03-15)
+
+### Added (1 change)
+
+- [Dropdown switch server implemented](kchat/webapp@35e59f2dc775f6519454755852bf3999689e1867) by @philippe.karle ([merge request](kchat/webapp!665))
+
+### Changed (1 change)
+
+- [Dark theme contract and colors updated](kchat/webapp@7f1ddb1aeb7f6c4d34e4ab686a35b5f790a41bb6) by @philippe.karle ([merge request](kchat/webapp!677))
+
+## 2.6.0-next.1 (2024-03-15)
+
+### Added (1 change)
+
+- [Dropdown switch server implemented](kchat/webapp@35e59f2dc775f6519454755852bf3999689e1867) by @philippe.karle ([merge request](kchat/webapp!665))
+
+### Fixed (1 change)
+
+- [Fix: Desktop app add dropdown channel design fixed](kchat/webapp@35fe8d63f8f0ba04e298a95b7b705bf2b22a9a35) by @philippe.karle ([merge request](kchat/webapp!680))
+
+### Changed (1 change)
+
+- [Dark theme contract and colors updated](kchat/webapp@7f1ddb1aeb7f6c4d34e4ab686a35b5f790a41bb6) by @philippe.karle ([merge request](kchat/webapp!677))
+
+## 2.5.2-rc.5 (2024-03-15)
+
+### Added (1 change)
+
+- [Guest banner popover modal added](kchat/webapp@675d885892531efe0ca9d7bfd49b9cbec0358e27) by @philippe.karle ([merge request](kchat/webapp!679))
+
+## 2.5.2-rc.4 (2024-03-14)
+
+### Fixed (3 changes)
+
+- [Fix: using channel id passed as props to determine channel stats.](kchat/webapp@a17db968a44b2cbc5ac85fe99d224a4fbcee0b48) by @philippe.karle ([merge request](kchat/webapp!678))
+- [Fix: action bar icons overlapping on small devices](kchat/webapp@b518893811d91ec96160fb4e280a55d637d16cf4) by @philippe.karle ([merge request](kchat/webapp!675))
+- [Fix: Direct message from new person not showing up after websocket reconnection](kchat/webapp@880d46d3cf8a2d6bc8f868933fe7b80438c4c840) by @philippe.karle ([merge request](kchat/webapp!663))
+
+## 2.5.2-rc.3 (2024-03-13)
+
+No changes.
+
+## 2.5.2-rc.2 (2024-03-13)
+
+No changes.
+
+## 2.5.2-rc.1 (2024-03-11)
+
+### Fixed (1 change)
+
+- [Fix: Loading & deleting deleted messages on web-socket reconnection](kchat/webapp@d16c983cc975832d0951518953d06b2793af56f2) by @philippe.karle ([merge request](kchat/webapp!673))
+
+## 2.5.2-next.4 (2024-03-15)
+
+### Added (1 change)
+
+- [Guest banner popover modal added](kchat/webapp@675d885892531efe0ca9d7bfd49b9cbec0358e27) by @philippe.karle ([merge request](kchat/webapp!679))
+
+### Changed (1 change)
+
+- [Dark theme contract and colors updated](kchat/webapp@7f1ddb1aeb7f6c4d34e4ab686a35b5f790a41bb6) by @philippe.karle ([merge request](kchat/webapp!677))
+
+## 2.5.2-next.3 (2024-03-14)
+
+### Fixed (3 changes)
+
+- [Fix: using channel id passed as props to determine channel stats.](kchat/webapp@a17db968a44b2cbc5ac85fe99d224a4fbcee0b48) by @philippe.karle ([merge request](kchat/webapp!678))
+- [Fix: action bar icons overlapping on small devices](kchat/webapp@b518893811d91ec96160fb4e280a55d637d16cf4) by @philippe.karle ([merge request](kchat/webapp!675))
+- [Fix: Direct message from new person not showing up after websocket reconnection](kchat/webapp@880d46d3cf8a2d6bc8f868933fe7b80438c4c840) by @philippe.karle ([merge request](kchat/webapp!663))
+
+## 2.5.2-next.2 (2024-03-13)
+
+No changes.
+
+## 2.5.2-next.1 (2024-03-13)
+
+### Added (1 change)
+
+- [implement ksuite bridge send notification method](kchat/webapp@d151555cd3c2b2d75c07e642b9757ab342b8f1b2) by @antonbuksa
+
+### Fixed (1 change)
+
+- [Fix: Loading & deleting deleted messages on web-socket reconnection](kchat/webapp@d16c983cc975832d0951518953d06b2793af56f2) by @philippe.karle ([merge request](kchat/webapp!673))
+
 ## 2.5.1-rc.4 (2024-03-04)
 
 ### Fixed (1 change)

@@ -41,6 +41,7 @@ export type Team = {
     group_constrained: boolean;
     policy_id?: string | null;
     url: string;
+    user_id?: string;
 };
 
 export type TeamsState = {
