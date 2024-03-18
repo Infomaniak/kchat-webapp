@@ -4,8 +4,6 @@
 import {Preferences} from 'mattermost-redux/constants';
 import type {LegacyThemeType, Theme, ThemeKey, ThemeType} from 'mattermost-redux/selectors/entities/preferences';
 
-import type {DesktopThemePreference} from 'types/theme';
-
 export function makeStyleFromTheme(getStyleFromTheme: (a: any) => any): (a: any) => any {
     let lastTheme: any;
     let style: any;
@@ -134,22 +132,21 @@ const themeTypeMap: ThemeTypeMap = {
 };
 
 // setThemeDefaults will set defaults on the theme for any unset properties.
-export function setThemeDefaults(theme: Partial<Theme>, preference?: DesktopThemePreference): Theme {
+export function setThemeDefaults(theme: Partial<Theme>, preference?: string): Theme {
     const defaultTheme = Preferences.THEMES.ik;
 
     const processedTheme = {...theme};
 
-    if (theme.ksuiteTheme === 'auto' && preference) {
-        if (preference === 'dark') {
-            return Preferences.THEMES.onyx;
-        }
-
-        return Preferences.THEMES.ik;
-    }
-
     // If this is a system theme, return the source theme object matching the theme preference type
     if (theme.type && theme.type !== 'custom' && Object.keys(themeTypeMap).includes(theme.type)) {
-        return Preferences.THEMES[themeTypeMap[theme.type]];
+        const systemTheme = Preferences.THEMES[themeTypeMap[theme.type]];
+
+        if (systemTheme.ksuiteTheme === 'auto' && preference) {
+            const preferredTheme = preference === 'dark' ? Preferences.THEMES.onyx : Preferences.THEMES.ik;
+            return {...preferredTheme, ksuiteTheme: 'auto', type: theme.type};
+        }
+
+        return systemTheme;
     }
 
     for (const key of Object.keys(defaultTheme)) {
