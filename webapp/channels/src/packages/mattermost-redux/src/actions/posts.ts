@@ -1517,7 +1517,7 @@ export function fetchDeletedPostsIds(channelId: string, since?: number) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         try {
             const data = await Client4.getDeletedPostsIds(channelId, since);
-            return {data, error: null};
+            return {data};
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
