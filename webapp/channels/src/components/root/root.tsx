@@ -93,9 +93,6 @@ const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparin
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
 const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
 
-const MAX_GET_TOKEN_FAILS = 5;
-const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
-
 // const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 // const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
 // const ClaimController = makeAsyncComponent('ClaimController', LazyClaimController);
@@ -175,9 +172,7 @@ export default class Root extends React.PureComponent<Props, State> {
     private tabletMediaQuery: MediaQueryList;
     private mobileMediaQuery: MediaQueryList;
     private mounted: boolean;
-    private retryGetToken: number;
     private IKLoginCode: string | undefined;
-    private loginCodeInterval: NodeJS.Timer | undefined;
     private tokenCheckInterval: NodeJS.Timer | undefined;
     private headerResizerRef: React.RefObject<HTMLDivElement>;
 
@@ -191,9 +186,7 @@ export default class Root extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.mounted = false;
-        this.retryGetToken = 0;
         this.IKLoginCode = undefined;
-        this.loginCodeInterval = undefined;
         this.tokenCheckInterval = undefined;
 
         this.headerResizerRef = React.createRef();
@@ -485,7 +478,7 @@ export default class Root extends React.PureComponent<Props, State> {
     tryGetNewToken = async () => {
         const challenge = JSON.parse(localStorage.getItem('challenge') as string);
         const loginCode = this.IKLoginCode;
-        console.log('[component/root] try get token count', this.retryGetToken); // eslint-disable-line no-console
+        console.log('[component/root] try get token'); // eslint-disable-line no-console
         try { // Get new token
             const response: {
                 expires_in?: number;
@@ -530,28 +523,16 @@ export default class Root extends React.PureComponent<Props, State> {
                 window.origin,
             );
 
-            this.retryGetToken = 0;
-            clearInterval(this.loginCodeInterval as NodeJS.Timer);
-
-            // Allow through initial requests anyway to receive new errors.
+            // Allow through initial requests anyway to receive new errors
             this.runMounted();
         } catch (error) {
             console.log('[components/root] post token fail ', error); // eslint-disable-line no-console
 
-            if (this.retryGetToken < MAX_GET_TOKEN_FAILS) {
-                console.log('[components/root] will retry token post with fail count: ', this.retryGetToken); // eslint-disable-line no-console
-                this.retryGetToken += 1;
-                const retryTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken;
-                clearInterval(this.loginCodeInterval as NodeJS.Timer);
-                this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), retryTime);
-            } else {
-                console.log('[components/root] max retry count reached, continuing with mount to reach login'); // eslint-disable-line no-console
-                clearInterval(this.loginCodeInterval as NodeJS.Timer);
-                this.IKLoginCode = undefined;
+            Sentry.captureException(new Error('Get token max error count. Redirect to login'));
+            this.IKLoginCode = undefined;
 
-                Sentry.captureException(new Error('Get token max error count. Redirect to login'));
-                this.runMounted();
-            }
+            // Allow through initial requests anyway to receive new errors
+            this.runMounted();
         }
     };
 
@@ -629,12 +610,11 @@ export default class Root extends React.PureComponent<Props, State> {
                     clearLocalStorageToken();
                     clearUserCookie();
                     await window.authManager.logout();
-                    window.authManager.resetToken();
                 }
             }
         });
 
-        const ksuiteBridge = new KSuiteBridge({debug: true}); // eslint-disable-line no-process-env
+        const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch);
 
         Utils.injectWebcomponentInit();
@@ -666,17 +646,11 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentWillUnmount() {
         this.mounted = false;
-        this.retryGetToken = 0;
         this.IKLoginCode = undefined;
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
         if (this.tokenCheckInterval) {
             console.log('[components/root] destroy token interval check'); // eslint-disable-line no-console
             clearInterval(this.tokenCheckInterval);
-        }
-
-        if (this.loginCodeInterval) {
-            console.log('[components/root] destroy login with code interval'); // eslint-disable-line no-console
-            clearInterval(this.loginCodeInterval);
         }
 
         if (this.desktopMediaQuery.removeEventListener) {
