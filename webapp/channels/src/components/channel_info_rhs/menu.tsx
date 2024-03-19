@@ -100,9 +100,6 @@ interface MenuProps {
 const Menu = ({channel, channelStats, isArchived, className, actions}: MenuProps) => {
     const {formatMessage} = useIntl();
 
-    const {member_count: memberCount, guest_count: guestCount} = channelStats;
-    const totalMemberCount = memberCount + guestCount;
-
     const showNotificationPreferences = channel.type !== Constants.DM_CHANNEL && !isArchived;
     const showMembers = channel.type !== Constants.DM_CHANNEL;
 
@@ -123,7 +120,7 @@ const Menu = ({channel, channelStats, isArchived, className, actions}: MenuProps
                     icon={<i className='icon icon-account-outline'/>}
                     text={formatMessage({id: 'channel_info_rhs.menu.members', defaultMessage: 'Members'})}
                     opensSubpanel={true}
-                    badge={totalMemberCount}
+                    badge={channelStats.member_count}
                     onClick={() => actions.showChannelMembers(channel.id)}
                 />
             )}
