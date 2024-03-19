@@ -1,3 +1,13 @@
+## 2.6.0-rc.4 (2024-03-19)
+
+### Fixed (1 change)
+
+- [test proactive retry for code login](kchat/webapp@a4419ac026b5e8cfff53da7ab98e3f6bf43b5a84) by @antonbuksa
+
+### Changed (1 change)
+
+- [Update: Kdrive icon hover](kchat/webapp@ee3aba5015015a4e9ce95809deffeb239264dd75) by @philippe.karle ([merge request](kchat/webapp!681))
+
 ## 2.6.0-rc.3 (2024-03-19)
 
 No changes.
