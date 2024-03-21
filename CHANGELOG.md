@@ -1,3 +1,10 @@
+## 2.6.0-rc.5 (2024-03-21)
+
+### Fixed (2 changes)
+
+- [Fix: Dutch translations that should be German](kchat/webapp@281e2e7d4a240a25d2b3a9e0db4ac24f295d26bb) by @philippe.karle ([merge request](kchat/webapp!688))
+- [Remove insight new team members position columns due to empty values](kchat/webapp@02547a652412eb9f5a3c4710fbf78706338ce846) by @philippe.karle ([merge request](kchat/webapp!687))
+
 ## 2.6.0-rc.4 (2024-03-19)
 
 ### Fixed (1 change)
