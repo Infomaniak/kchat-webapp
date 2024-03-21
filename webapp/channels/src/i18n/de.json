@@ -2511,7 +2511,7 @@
     "admin.user_grid.channel_admin": "Kanaladministrator",
     "admin.user_grid.guest": "Gast",
     "admin.user_grid.name": "Name",
-    "admin.user_grid.new": "Neue(r)",
+    "admin.user_grid.new": "Neu",
     "admin.user_grid.notFound": "Keine Benutzer gefunden",
     "admin.user_grid.remove": "Entfernen",
     "admin.user_grid.role": "Rolle",
