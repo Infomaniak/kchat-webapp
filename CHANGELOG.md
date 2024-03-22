@@ -1,3 +1,14 @@
+## 2.6.0-rc.6 (2024-03-22)
+
+No changes.
+
+## 2.6.0-rc.5 (2024-03-21)
+
+### Fixed (2 changes)
+
+- [Fix: Dutch translations that should be German](kchat/webapp@281e2e7d4a240a25d2b3a9e0db4ac24f295d26bb) by @philippe.karle ([merge request](kchat/webapp!688))
+- [Remove insight new team members position columns due to empty values](kchat/webapp@02547a652412eb9f5a3c4710fbf78706338ce846) by @philippe.karle ([merge request](kchat/webapp!687))
+
 ## 2.6.0-rc.4 (2024-03-19)
 
 ### Fixed (1 change)
@@ -27,6 +38,18 @@ No changes.
 ### Changed (1 change)
 
 - [Dark theme contract and colors updated](kchat/webapp@7f1ddb1aeb7f6c4d34e4ab686a35b5f790a41bb6) by @philippe.karle ([merge request](kchat/webapp!677))
+
+## 2.6.0-next.2 (2024-03-21)
+
+### Fixed (3 changes)
+
+- [Fix: Dutch translations that should be German](kchat/webapp@281e2e7d4a240a25d2b3a9e0db4ac24f295d26bb) by @philippe.karle ([merge request](kchat/webapp!688))
+- [Remove insight new team members position columns due to empty values](kchat/webapp@02547a652412eb9f5a3c4710fbf78706338ce846) by @philippe.karle ([merge request](kchat/webapp!687))
+- [test proactive retry for code login](kchat/webapp@a4419ac026b5e8cfff53da7ab98e3f6bf43b5a84) by @antonbuksa
+
+### Changed (1 change)
+
+- [Update: Kdrive icon hover](kchat/webapp@ee3aba5015015a4e9ce95809deffeb239264dd75) by @philippe.karle ([merge request](kchat/webapp!681))
 
 ## 2.6.0-next.1 (2024-03-15)
 
