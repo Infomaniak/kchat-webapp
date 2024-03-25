@@ -149,7 +149,10 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
                 if (value?.message === '' || value?.message.replace(/\s/g, '').length || (value && value?.fileInfos.length > 0)) {
                     if (value?.message.replace(/\s/g, '').length) {
                         const {id} = await upsertDraft(updatedValue, userId, rootId, scheduleDelete);
-                        updatedValue.id = id;
+                        dispatch(setGlobalDraft(key, {
+                            ...updatedValue,
+                            id,
+                        }, false));
                     } else {
                         //This case is when there is a file attached with no message
                         await upsertDraft({...updatedValue, message: ''}, userId, rootId, scheduleDelete);
