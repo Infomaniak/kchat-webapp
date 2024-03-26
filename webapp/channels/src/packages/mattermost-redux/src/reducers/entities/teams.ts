@@ -53,11 +53,25 @@ function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
     case TeamTypes.PATCHED_TEAM:
     case TeamTypes.REGENERATED_TEAM_INVITE_ID:
     case TeamTypes.RECEIVED_TEAM:
-        return {
+        // eslint-disable-next-line no-case-declarations
+        const newTeams = {
             ...state,
             [action.data.id]: action.data,
         };
 
+        if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams: Object.values(newTeams),
+                    },
+                },
+                window.origin,
+            );
+        }
+
+        return newTeams;
     case TeamTypes.RECEIVED_TEAM_DELETED: {
         const nextState = {...state};
         const teamId = action.data.id;
