@@ -3265,6 +3265,7 @@
     "post_info.unpin": "Sblocca dal canale",
     "post_info.unread": "Segna con Non letto",
     "post_info.translate": "Tradurre",
+    "post_message_preview.channel": "In ~{channel}",
     "post_message_view.edited": "(modificato)",
     "post_pre_header.pinned": "Bloccato",
     "post_priority.acknowledgements.title": "Conferma di ricezione",
