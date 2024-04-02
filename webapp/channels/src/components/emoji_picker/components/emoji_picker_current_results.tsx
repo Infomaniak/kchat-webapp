@@ -30,9 +30,10 @@ interface Props {
     onEmojiMouseOver: (cursor: EmojiCursor) => void;
     incrementEmojiPickerPage: () => void;
     getCustomEmojis: (page?: number, perPage?: number, sort?: string, loadUsers?: boolean) => Promise<ActionResult<CustomEmoji[]>>;
+    onMouseLeave: () => void;
 }
 
-const EmojiPickerCurrentResults = forwardRef<InfiniteLoader, Props>(({categoryOrEmojisRows, isFiltering, activeCategory, cursorRowIndex, cursorEmojiId, customEmojisEnabled, customEmojiPage, setActiveCategory, onEmojiClick, onEmojiMouseOver, getCustomEmojis, incrementEmojiPickerPage}: Props, ref) => {
+const EmojiPickerCurrentResults = forwardRef<InfiniteLoader, Props>(({categoryOrEmojisRows, isFiltering, activeCategory, cursorRowIndex, cursorEmojiId, customEmojisEnabled, customEmojiPage, setActiveCategory, onEmojiClick, onEmojiMouseOver, getCustomEmojis, onMouseLeave, incrementEmojiPickerPage}: Props, ref) => {
     // Function to create unique key for each row
     const listRef = useRef<FixedSizeList<CategoryOrEmojiRow[]> | null>(null);
     const scrollPositionRef = useRef(0);
@@ -138,6 +139,7 @@ const EmojiPickerCurrentResults = forwardRef<InfiniteLoader, Props>(({categoryOr
                                             cursorEmojiId={cursorEmojiId}
                                             onEmojiClick={onEmojiClick}
                                             onEmojiMouseOver={onEmojiMouseOver}
+                                            onMouseLeave={onMouseLeave}
                                         />
                                     )}
                                 </FixedSizeList>

@@ -63,6 +63,7 @@ const EmojiPicker = ({
 }: Props) => {
     const getInitialActiveCategory = () => (recentEmojis.length ? RECENT : SMILEY_EMOTION);
     const [activeCategory, setActiveCategory] = useState<EmojiCategory>(getInitialActiveCategory);
+    const [isHovered, setIsHovered] = useState(false);
 
     const [cursor, setCursor] = useState<EmojiCursor>({
         rowIndex: -1,
@@ -122,10 +123,6 @@ const EmojiPicker = ({
 
         const [updatedCategoryOrEmojisRows, updatedEmojiPositions] = createCategoryAndEmojiRows(allEmojis, categories, filter, userSkinTone);
 
-        if (activeCategory !== 'custom') {
-            selectFirstEmoji(updatedEmojiPositions);
-        }
-
         setCategoryOrEmojisRows(updatedCategoryOrEmojisRows);
         setEmojiPositionsArray(updatedEmojiPositions);
         throttledSearchCustomEmoji.current(filter, customEmojisEnabled);
@@ -156,22 +153,6 @@ const EmojiPicker = ({
         }
         const emoji = allEmojis[emojiId] || allEmojis[emojiId.toUpperCase()] || allEmojis[emojiId.toLowerCase()];
         return emoji;
-    };
-
-    const selectFirstEmoji = (emojiPositions: EmojiPosition[]) => {
-        if (!emojiPositions[0]) {
-            return;
-        }
-
-        const {rowIndex, emojiId} = emojiPositions[0];
-        const cursorEmoji = getEmojiById(emojiId);
-        if (cursorEmoji) {
-            setCursor({
-                rowIndex,
-                emojiId,
-                emoji: cursorEmoji,
-            });
-        }
     };
 
     const handleCategoryClick = useCallback((categoryRowIndex: CategoryOrEmojiRow['index'], categoryName: EmojiCategory, emojiId: string) => {
@@ -356,9 +337,20 @@ const EmojiPicker = ({
     }, [cursor.emojiId]);
 
     const handleEmojiOnMouseOver = (mouseOverCursor: EmojiCursor) => {
+        setIsHovered(true);
         if (mouseOverCursor.emojiId !== cursor.emojiId || cursor.emojiId === '') {
             setCursor(mouseOverCursor);
         }
+    };
+
+    const handleContainerMouseLeave = () => {
+        // IK Changes : Reset the cursor when mouse leaves the emoji picker
+        setCursor({
+            rowIndex: -1,
+            emojiId: '',
+            emoji: undefined,
+        });
+        setIsHovered(false);
     };
 
     const cursorEmojiName = useMemo(() => {
@@ -373,6 +365,21 @@ const EmojiPicker = ({
     }, [cursor.emojiId]);
 
     const areSearchResultsEmpty = filter.length !== 0 && categoryOrEmojisRows.length === 1 && categoryOrEmojisRows?.[0]?.items?.[0]?.categoryName === SEARCH_RESULTS;
+
+    let footerContent;
+    if (areSearchResultsEmpty) {
+        footerContent = <div/>;
+    } else if (isHovered) {
+        footerContent = <EmojiPickerPreview emoji={cursor.emoji}/>;
+    } else {
+        footerContent = (
+            <EmojiPickerCustomEmojiButton
+                currentTeamName={currentTeamName}
+                customEmojisEnabled={customEmojisEnabled}
+                onClick={onAddCustomEmojiClickInner}
+            />
+        );
+    }
 
     return (
         <>
@@ -419,6 +426,7 @@ const EmojiPicker = ({
                     titleValues={{channelName: `${filter}`}}
                 />
             ) : (
+
                 <EmojiPickerCurrentResults
                     ref={infiniteLoaderRef}
                     isFiltering={filter.length > 0}
@@ -433,15 +441,13 @@ const EmojiPicker = ({
                     customEmojiPage={customEmojiPage}
                     incrementEmojiPickerPage={incrementEmojiPickerPage}
                     customEmojisEnabled={customEmojisEnabled}
+                    onMouseLeave={handleContainerMouseLeave}
                 />
             )}
-            <div className='emoji-picker__footer'>
-                {areSearchResultsEmpty ? <div/> : <EmojiPickerPreview emoji={cursor.emoji}/>}
-                <EmojiPickerCustomEmojiButton
-                    currentTeamName={currentTeamName}
-                    customEmojisEnabled={customEmojisEnabled}
-                    onClick={onAddCustomEmojiClickInner}
-                />
+            <div
+                className='emoji-picker__footer'
+            >
+                {footerContent}
             </div>
         </>
     );
