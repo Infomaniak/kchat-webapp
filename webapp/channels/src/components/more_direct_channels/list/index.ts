@@ -2,12 +2,16 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
+import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import type {UserProfile} from '@mattermost/types/users';
 
+import {getProfilesInGroupChannels} from 'mattermost-redux/actions/users';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getAllChannels, getChannelsWithUserProfiles} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 import {filterProfilesStartingWithTerm} from 'mattermost-redux/utils/user_utils';
 
@@ -15,9 +19,10 @@ import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
+import type {Props} from './list';
 import List from './list';
 
-import type {Option, OptionValue} from '../types';
+import {isGroupChannel, type Option, type OptionValue} from '../types';
 
 type OwnProps = {
     users: UserProfile[];
@@ -127,14 +132,34 @@ export function makeGetOptions(): (state: GlobalState, users: UserProfile[], val
     );
 }
 
+export function makeGetEmptyGroupChannelsIds(): (state: GlobalState) => string[] {
+    return createSelector(
+        'getEmptyGroupChannels',
+        getChannelsWithUserProfiles,
+        (channelsWithProfiles) => {
+            return channelsWithProfiles.filter((channel) => isGroupChannel(channel) && !channel.profiles.length).map((c) => c.id);
+        },
+    );
+}
+
 function makeMapStateToProps() {
     const getOptions = makeGetOptions();
+    const getEmptyGroupChannelsIds = makeGetEmptyGroupChannelsIds();
 
     return (state: GlobalState, ownProps: OwnProps) => {
         return {
             options: getOptions(state, ownProps.users, ownProps.values),
+            emptyGroupChannelsIds: getEmptyGroupChannelsIds(state),
         };
     };
 }
 
-export default connect(makeMapStateToProps)(List);
+function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+    return {
+        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc | GenericAction>, Props['actions']>({
+            getProfilesInGroupChannels,
+        }, dispatch),
+    };
+}
+
+export default connect(makeMapStateToProps, mapDispatchToProps)(List);
