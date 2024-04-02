@@ -1,3 +1,17 @@
+## 2.6.1-rc.1 (2024-04-02)
+
+### Fixed (5 changes)
+
+- [Fix: Preview list extra white space removed](kchat/webapp@8edde5e68e377d9cdc2b1b46c4e74e69b687c8b1) by @philippe.karle ([merge request](kchat/webapp!697))
+- [Fix: post_preview footer removed](kchat/webapp@547f7a2e7c448581006f182887d6b3f0bfc1db31) by @philippe.karle ([merge request](kchat/webapp!696))
+- [Fix: empty groups channels on direct message modal solved](kchat/webapp@6cd69b1e1f77db141570b8fe56663729605ea205) by @philippe.karle ([merge request](kchat/webapp!686))
+- [Fix: channel info sidebar with  wrong members total](kchat/webapp@6657a9ddd15ee561e0c0a0be625721eb67a9f7be) by @philippe.karle ([merge request](kchat/webapp!685))
+- [Fix: filter duplicates within add user to channel modal](kchat/webapp@445363a40eabbe43670a8afe59e4d552ec3ffd92) by @philippe.karle ([merge request](kchat/webapp!682))
+
+### Changed (1 change)
+
+- [Neue(r) translation changed to Neu](kchat/webapp@9d4aaa98a571c9fcb61369b7776b18be6db4da38) by @philippe.karle ([merge request](kchat/webapp!689))
+
 ## 2.6.0-rc.7 (2024-03-22)
 
 No changes.
