@@ -1,3 +1,9 @@
+## 2.6.1-rc.2 (2024-04-02)
+
+### Chore (1 change)
+
+- [Revert "Merge branch 'rm/320644' into 'master'"](kchat/webapp@64f0e5c0cf98fb49f3d1524ad8cd2d3f17d81524) by @antonbuksa
+
 ## 2.6.1-rc.1 (2024-04-02)
 
 ### Fixed (5 changes)
