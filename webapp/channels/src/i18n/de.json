@@ -4003,7 +4003,7 @@
     "joinChannel.cancelButton": "Abbrechen",
     "joinChannel.desciption": "Du must Mitglied im Kanal {channel} werden um diese Unterhaltung zu lesen. Möchtest du jetzt {channel} beitreten?",
     "joinChannel.joiningButton": "Beitreten...",
-    "joinChannel.joiningButtonChannel": "Den Kanal erreichen",
+    "joinChannel.joiningButtonChannel": "Dem Kanal beitreten",
     "joinChannel.title": "Kanal beitreten?",
     "join_team_group_constrained_denied": "Du musst Mitglied einer verknüpften Gruppe sein, um diesem Team beitreten zu können.",
     "join_team_group_constrained_denied_admin": "Du musst Mitglied einer verknüpften Gruppe sein, um diesem Team beitreten zu können. Du kannst [hier]({siteURL}admin_consoleuser_managementgroups) eine Gruppe zu diesem Team hinzufügen.",
