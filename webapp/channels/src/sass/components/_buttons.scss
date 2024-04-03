@@ -55,6 +55,10 @@ button {
     &.btn-danger {
         color: $white;
 
+        &:focus {
+            outline: none;
+        }
+
         .app__body & {
             color: $white;
 
