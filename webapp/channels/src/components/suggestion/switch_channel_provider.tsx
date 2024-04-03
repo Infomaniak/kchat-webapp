@@ -15,6 +15,7 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 import {UserTypes} from 'mattermost-redux/action_types';
 import {fetchAllMyTeamsChannelsAndChannelMembersREST, searchAllChannels} from 'mattermost-redux/actions/channels';
 import {logError} from 'mattermost-redux/actions/errors';
+import {getStatusesByIds} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {Preferences} from 'mattermost-redux/constants';
 import {
@@ -49,6 +50,7 @@ import {sortChannelsByTypeAndDisplayName, isChannelMuted} from 'mattermost-redux
 import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
+import {loadProfilesMissingStatus} from 'actions/status_actions';
 import {getPostDraft} from 'selectors/rhs';
 import globalStore from 'stores/redux_store';
 
@@ -262,7 +264,7 @@ const SwitchChannelSuggestion = React.forwardRef<HTMLDivElement, Props>((props, 
         );
     }
 
-    let teamName = null;
+    const teamName = null;
 
     // Infomaniak obsolete since always same team
     // if (isRealChannel(channel) && channel.team_id && team) {
@@ -532,10 +534,13 @@ export default class SwitchChannelProvider extends Provider {
 
         const remoteUserData = usersFromServer.users || [];
         const remoteFormattedData = this.formatList(channelPrefix, remoteChannelData, remoteUserData, false);
+        const users = [...localUserData.filter((user) => user.id !== currentUserId), ...remoteUserData.filter((user) => user.id !== currentUserId)];
+
+        store.dispatch(loadProfilesMissingStatus(users));
 
         this.store.dispatch({
             type: UserTypes.RECEIVED_PROFILES_LIST,
-            data: [...localUserData.filter((user) => user.id !== currentUserId), ...remoteUserData.filter((user) => user.id !== currentUserId)],
+            data: users,
         });
         const combinedTerms = [...localFormattedData.terms, ...remoteFormattedData.terms.filter((term) => !localFormattedData.terms.includes(term))];
         const combinedItems = [...localFormattedData.items, ...remoteFormattedData.items.filter((item: any) => !localFormattedData.terms.includes((item.channel as FakeDirectChannel).userId || item.channel.id))];
@@ -744,6 +749,9 @@ export default class SwitchChannelProvider extends Provider {
         const state = this.store.getState();
         let recentChannels = getChannelsInAllTeams(state).concat(getDirectAndGroupChannels(state));
         recentChannels = this.removeChannelsFromArchivedTeams(recentChannels);
+        const usersIds = recentChannels.filter((c) => c.type === Constants.DM_CHANNEL).map((c) => Utils.getUserIdFromChannelName(c));
+        const users = usersIds.map((id) => ({id})) as UserProfile[];
+        this.store.dispatch(loadProfilesMissingStatus(users));
         const wrappedRecentChannels = this.wrapChannels(recentChannels, Constants.MENTION_RECENT_CHANNELS);
         const unreadChannels = getSortedAllTeamsUnreadChannels(state);
         const myMembers = getMyChannelMemberships(state);

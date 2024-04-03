@@ -3,10 +3,12 @@
 
 import React from 'react';
 import type {ReactNode} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage, injectIntl, useIntl} from 'react-intl';
+import {connect} from 'react-redux';
 
 import type {UserProfile} from '@mattermost/types/users';
 
+import {getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
@@ -20,6 +22,8 @@ import Avatar from 'components/widgets/users/avatar';
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
+import type {GlobalState} from 'types/store';
+
 import {SuggestionContainer} from '../suggestion';
 import type {SuggestionProps} from '../suggestion';
 
@@ -28,13 +32,14 @@ export interface Item extends UserProfile {
     name: string;
     isCurrentUser: boolean;
     type: string;
+    status?: string;
 }
 
-interface Group extends Item {
-    member_count: number;
+interface AtMentionSuggestionProps extends SuggestionProps<Item> {
+    status?: string;
 }
 
-const AtMentionSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<Item>>((props, ref) => {
+const AtMentionSuggestion = React.forwardRef<HTMLDivElement, AtMentionSuggestionProps>((props, ref) => {
     const {item} = props;
 
     const intl = useIntl();
@@ -124,7 +129,7 @@ const AtMentionSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<Ite
                         url={Utils.imageURLForUser(item.id, item.last_picture_update)}
                     />
                 </span>
-                <StatusIcon status={item && item.status}/>
+                <StatusIcon status={props.status || (item && item.status)}/>
             </span>
         );
 
@@ -188,5 +193,21 @@ const AtMentionSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<Ite
     );
 });
 
-AtMentionSuggestion.displayName = 'AtMentionSuggestion';
-export default AtMentionSuggestion;
+type OwnProps = {
+    item: {
+        user_id?: string;
+        id?: string;
+    };
+}
+
+function mapStateToPropsForAtMentionSuggestion(state: GlobalState, ownProps: OwnProps) {
+    const status = ownProps.item?.user_id && ownProps.item?.id ? getStatusForUserId(state, ownProps.item.id) : undefined;
+
+    return {
+        status,
+    };
+}
+
+const ConnectedAtMentionSuggestion = connect(mapStateToPropsForAtMentionSuggestion, null, null, {forwardRef: true})(injectIntl(AtMentionSuggestion));
+
+export default ConnectedAtMentionSuggestion;
