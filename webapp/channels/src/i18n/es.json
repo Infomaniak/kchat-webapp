@@ -4217,6 +4217,7 @@
     "post_info.unpin": "No Destacar",
     "post_info.unread": "Marcar como no leído",
     "post_info.translate": "Traducir",
+    "post_message_preview.channel": "~{channel}",
     "post_message_view.edited": "Editado",
     "post_pre_header.flagged": "Guardado",
     "post_pre_header.pinned": "Destacado",

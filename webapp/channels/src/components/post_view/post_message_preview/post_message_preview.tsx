@@ -138,6 +138,22 @@ const PostMessagePreview = (props: Props) => {
         teamUrl = currentTeamUrl;
     }
 
+    const previewFooter = channelDisplayName || previewFooterMessage ? (
+        <div className='post__preview-footer'>
+            <p>
+                {previewFooterMessage || (
+                    <FormattedMessage
+                        id='post_message_preview.channel'
+                        defaultMessage='~{channel}'
+                        values={{
+                            channel: channelDisplayName,
+                        }}
+                    />
+                )}
+            </p>
+        </div>
+    ) : null;
+
     return (
         <PostAttachmentContainer
             className='permalink'
@@ -188,6 +204,7 @@ const PostMessagePreview = (props: Props) => {
                 />
                 {urlPreview}
                 {fileAttachmentPreview}
+                {previewFooter}
             </div>
         </PostAttachmentContainer>
     );
