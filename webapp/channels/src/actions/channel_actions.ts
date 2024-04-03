@@ -9,8 +9,11 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {PreferenceTypes} from 'mattermost-redux/action_types';
 import * as ChannelActions from 'mattermost-redux/actions/channels';
+import {fetchDeletedPostsIds, postDeleted} from 'mattermost-redux/actions/posts';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getChannelByName, getUnreadChannelIds, getChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentChannelId, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
+import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
@@ -92,6 +95,47 @@ export function loadChannelsForCurrentUser(): ActionFuncAsync {
 
         loadProfilesForSidebar();
         return {data: true};
+    };
+}
+
+export function loadDeletedPosts(lastDisconnectAt: number): ActionFuncAsync {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const channelId = getCurrentChannelId(state);
+
+        const results = await dispatch(fetchDeletedPostsIds(channelId, lastDisconnectAt));
+
+        if (results.data && Array.isArray(results.data)) {
+            results.data.forEach((postId) => {
+                const post = getPost(state, postId);
+
+                if (post) {
+                    dispatch(postDeleted(post));
+                }
+            });
+        }
+
+        return {data: true};
+    };
+}
+
+export function searchMoreChannels(term: string, showArchivedChannels: boolean, hideJoinedChannels: boolean): ActionFunc<Channel[], ServerError> {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const teamId = getCurrentTeamId(state);
+
+        if (!teamId) {
+            throw new Error('No team id');
+        }
+
+        const {data, error} = await dispatch(ChannelActions.searchChannels(teamId, term, showArchivedChannels));
+        if (data) {
+            const myMembers = getMyChannelMemberships(state);
+            const channels = hideJoinedChannels ? (data as Channel[]).filter((channel) => !myMembers[channel.id]) : data;
+            return {data: channels};
+        }
+
+        return {error};
     };
 }
 

@@ -8,7 +8,7 @@ import type {ServerError} from '@mattermost/types/errors';
 import type {Team, TeamMembership, TeamMemberWithError, GetTeamMembersOpts, TeamsWithCount, TeamSearchOpts, NotPagedTeamSearchOpts, PagedTeamSearchOpts} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
-import {ChannelTypes, TeamTypes, UserTypes} from 'mattermost-redux/action_types';
+import {ChannelTypes, ServerTypes, TeamTypes, UserTypes} from 'mattermost-redux/action_types';
 import {selectChannel} from 'mattermost-redux/actions/channels';
 import {logError} from 'mattermost-redux/actions/errors';
 import {bindClientFunc, forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
@@ -21,6 +21,9 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult, DispatchFunc, GetStateFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 import EventEmitter from 'mattermost-redux/utils/event_emitter';
+
+import {Servers} from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
 
 async function getProfilesAndStatusesForMembers(userIds: string[], dispatch: DispatchFunc, getState: GetStateFunc) {
     const state = getState();
@@ -76,8 +79,9 @@ export function getMyKSuites(): ActionFunc {
     return bindClientFunc({
         clientFunc: Client4.getMyKSuites,
         onRequest: TeamTypes.MY_TEAMS_REQUEST,
-        onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, TeamTypes.MY_TEAMS_SUCCESS],
+        onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, TeamTypes.MY_TEAMS_SUCCESS, Servers.RECEIVED_SERVERS],
         onFailure: TeamTypes.MY_TEAMS_FAILURE,
+        params: [!isDesktopApp()],
     });
 }
 

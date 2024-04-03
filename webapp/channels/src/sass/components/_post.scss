@@ -32,9 +32,8 @@
     min-height: 37px;
 
     .textbox-preview-area {
-        ul {
-            white-space: normal;
-        }
+        // Infomaniak
+        white-space: normal;
 
         position: relative;
         z-index: 2;
@@ -55,6 +54,7 @@
             margin-top: 0.6em;
         }
 
+        p + p,
         p + ul,
         p + ol {
             margin-top: 0.6em;
@@ -660,7 +660,7 @@
     word-wrap: break-word;
 
     &:not(.post--editing):not(.post--editing):hover {
-        background-color: rgba(v(center-channel-color-rgb), 0.04);
+        background-color: rgba(v(center-channel-color-rgb), 0.06);
 
         .PostAttachmentOpenGraph .remove-button {
             display: flex;

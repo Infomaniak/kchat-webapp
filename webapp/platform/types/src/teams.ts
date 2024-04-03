@@ -42,6 +42,7 @@ export type Team = {
     policy_id?: string | null;
     url: string;
     last_team_icon_update?: number;
+    user_id?: string;
 };
 
 export type TeamsState = {

@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ShowNotificationMessageKey} from '@infomaniak/ksuite-bridge';
+
 import {logError} from 'mattermost-redux/actions/errors';
 import {getProfilesByIds} from 'mattermost-redux/actions/users';
 import {getCurrentChannel, getMyChannelMember, makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -15,6 +17,7 @@ import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 import {isSystemMessage, isUserAddedInChannel} from 'mattermost-redux/utils/post_utils';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
+import {getKSuiteBridge} from 'selectors/ksuite_bridge';
 import {getChannelURL, getPermalinkURL} from 'selectors/urls';
 import {isThreadOpen} from 'selectors/views/threads';
 
@@ -29,6 +32,8 @@ import {showNotification} from 'utils/notifications';
 import {cjkrPattern, escapeRegex} from 'utils/text_formatting';
 import {isDesktopApp, isMobileApp, isWindowsApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
+
+import icon50 from 'images/icon50x50.png';
 
 import {runDesktopNotificationHooks} from './hooks';
 
@@ -60,6 +65,7 @@ export function sendDesktopNotification(post, msgProps) {
     return async (dispatch, getState) => {
         const state = getState();
         const currentUserId = getCurrentUserId(state);
+        const bridge = getKSuiteBridge(state);
 
         if ((currentUserId === post.user_id && post.props.from_webhook !== 'true')) {
             return;
@@ -303,6 +309,16 @@ export function sendDesktopNotification(post, msgProps) {
         ({title, body, silent, soundName, url, notify} = hookResult.args);
 
         if (notify) {
+            if (bridge.isConnected) {
+                bridge.sendMessage({
+                    type: ShowNotificationMessageKey,
+                    title,
+                    body,
+                    icon: icon50,
+                    duration: 3000,
+                    data: {url},
+                });
+            }
             dispatch(notifyMe(title, body, channel, teamId, silent, soundName, url));
 
             //Don't add extra sounds on native desktop clients

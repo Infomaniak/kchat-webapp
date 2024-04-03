@@ -13,6 +13,7 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 import type {I18nState} from './i18n';
 import type {LhsViewState} from './lhs';
 import type {RhsViewState} from './rhs';
+import type {Server} from './servers';
 
 import type {DraggingState} from '.';
 
@@ -230,6 +231,10 @@ export type ViewsState = {
         isOpen: boolean;
     };
 
+    addChannelCtaDropdown: {
+        isOpen: boolean;
+    };
+
     onboardingTasks: {
         isShowOnboardingTaskCompletion: boolean;
         isShowOnboardingCompleteProfileTour: boolean;
@@ -248,5 +253,9 @@ export type ViewsState = {
         shouldShowPreviewOnCreatePost: boolean;
         shouldShowPreviewOnEditChannelHeaderModal: boolean;
         shouldShowPreviewOnEditPostModal: boolean;
+    };
+
+    servers: {
+        servers: Record<string, Server>;
     };
 };

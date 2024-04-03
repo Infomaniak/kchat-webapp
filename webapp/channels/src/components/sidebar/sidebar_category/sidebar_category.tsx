@@ -397,7 +397,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                                     }
                                                 }}
                                             >
-                                                {newLabel}
+                                                {/* {newLabel} */}
                                                 {directMessagesModalButton}
                                                 {categoryMenu}
                                             </SidebarCategoryHeader>

@@ -746,6 +746,8 @@ export const SocketEvents = {
     HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED: 'hosted_customer_signup_progress_updated',
     KSUITE_ADDED: 'ksuite_added',
     KSUITE_DELETED: 'ksuite_deleted',
+    BADGE_UPDATED: 'badge_updated',
+    TEAM_STATUS_CHANGED: 'team_status_changed',
 };
 
 export const TutorialSteps = {
@@ -817,6 +819,22 @@ export const Threads = {
     CHANGED_LAST_VIEWED_AT: 'changed_last_viewed_at',
     MANUALLY_UNREAD_THREAD: 'manually_unread_thread',
 };
+
+export const Servers = {
+    RECEIVED_SERVERS: 'received_servers',
+    RECEIVED_SERVER_DELETED: 'received_server_deleted',
+    RECEIVED_SERVER_ADDED: 'received_server_added',
+    BADGE_UPDATED: 'badge_updated',
+    STATUS_UPDATED: 'status_updated',
+};
+
+export const ServerStatus = {
+    OK: 'ok',
+    LOCKED: 'locked',
+    MAINTENANCE: 'maintenance',
+} as const;
+
+export const ServerDefaultBadgeValue = 0;
 
 export const CloudBanners = {
     HIDE: 'hide',

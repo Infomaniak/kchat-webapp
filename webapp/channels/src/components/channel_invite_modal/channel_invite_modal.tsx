@@ -456,6 +456,41 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
 
         const buttonSubmitText = localizeMessage('multiselect.add', 'Add');
         const buttonSubmitLoadingText = localizeMessage('multiselect.adding', 'Adding...');
+        const idsInGroup = this.props.profilesInCurrentChannel.map((user) => user.id);
+        let excludedAndNotInTeamUserIds: Set<string>;
+        if (this.props.excludeUsers) {
+            excludedAndNotInTeamUserIds = new Set(...this.props.profilesNotInCurrentTeam.map((user) => user.id), Object.values(this.props.excludeUsers).map((user) => user.id));
+        } else {
+            excludedAndNotInTeamUserIds = new Set(this.props.profilesNotInCurrentTeam.map((user) => user.id));
+        }
+        // let users = this.filterOutDeletedAndExcludedAndNotInTeamUsers(
+        //     filterProfilesStartingWithTerm(
+        //         this.props.profilesNotInCurrentChannel.concat(this.props.profilesInCurrentChannel),
+        //         this.state.term),
+        //     excludedAndNotInTeamUserIds);
+        // if (this.props.includeUsers) {
+        //     const includeUsers = Object.values(this.props.includeUsers);
+        //     users = [...users, ...includeUsers];
+        // }
+        // users = [
+        //     ...this.filterOutDeletedAndExcludedAndNotInTeamUsers(
+        //         filterProfilesStartingWithTerm(this.props.profilesFromRecentDMs, this.state.term),
+        //         excludedAndNotInTeamUserIds).
+        //         slice(0, USERS_FROM_DMS) as UserProfileValue[],
+        //     ...users,
+        // ].filter((v, index, self) => {
+        //     return index === self.findIndex((t) => (
+        //         t.id === v.id
+        //     ));
+        // }).
+        //     slice(0, MAX_USERS).map(((u) => {
+        //         if (idsInGroup.includes(u.id)) {
+        //             return {...u, disabled: true};
+        //         }
+        //         return u;
+        //     }));
+
+        // users = Array.from(new Set(users));
 
         const closeMembersInviteModal = () => {
             this.props.actions.closeModal(ModalIdentifiers.CHANNEL_INVITE);

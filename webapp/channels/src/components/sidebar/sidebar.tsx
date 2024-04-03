@@ -15,12 +15,14 @@ import KeyboardShortcutsModal from 'components/keyboard_shortcuts/keyboard_short
 import MoreDirectChannels from 'components/more_direct_channels';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import ResizableLhs from 'components/resizable_sidebar/resizable_lhs';
-import UserSettingsModal from 'components/user_settings/modal';
+import SwitchServer from 'components/switch_server';
 
-import Pluggable from 'plugins/pluggable';
 import Constants, {ModalIdentifiers, RHSStates} from 'utils/constants';
 import * as Keyboard from 'utils/keyboard';
+import {isDesktopApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
+
+import Pluggable from 'plugins/pluggable';
 
 import type {ModalData} from 'types/actions';
 import type {RhsState} from 'types/store/rhs';
@@ -250,6 +252,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                         canCreateCustomGroups={this.props.canCreateCustomGroups}
                     />
                 )}
+                {!isDesktopApp() && <SwitchServer/>}
                 <div
                     id='lhsNavigator'
                     role='application'

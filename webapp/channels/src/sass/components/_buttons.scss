@@ -305,6 +305,10 @@ button {
         background: var(--error-text);
         color: $white;
 
+        &:focus {
+            outline: none;
+        }
+
         .app__body & {
             color: $white;
 

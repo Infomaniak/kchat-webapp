@@ -88,16 +88,6 @@ const NewMembersTable = (props: Props) => {
             {
                 name: (
                     <FormattedMessage
-                        id='insights.newMembers.position'
-                        defaultMessage='Position'
-                    />
-                ),
-                field: 'position',
-                width: 0.4,
-            },
-            {
-                name: (
-                    <FormattedMessage
                         id='insights.newMembers.joined'
                         defaultMessage='Date joined'
                     />
@@ -127,11 +117,6 @@ const NewMembersTable = (props: Props) => {
                                 <span className='display-name'>{displayUsername(member as UserProfile, teammateNameDisplaySetting)}</span>
                             </Link>
 
-                        ),
-                        position: (
-                            <span className='role'>
-                                {member.position}
-                            </span>
                         ),
                         joined: (
                             <span className='cell-text'>

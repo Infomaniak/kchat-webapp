@@ -1,7 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useMemo} from 'react';
+import _ from 'lodash';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
@@ -10,6 +11,8 @@ import MultiSelect from 'components/multiselect/multiselect';
 
 import Constants from 'utils/constants';
 
+import {usePrevious} from './hooks';
+
 import ListItem from '../list_item';
 import type {Option, OptionValue} from '../types';
 import {optionValue} from '../types';
@@ -17,7 +20,7 @@ import {optionValue} from '../types';
 const MAX_SELECTABLE_VALUES = Constants.MAX_USERS_IN_GM - 1;
 export const USERS_PER_PAGE = 50;
 
-type Props = {
+export type Props = {
     addValue: (value: OptionValue) => void;
     currentUserId: string;
     handleDelete: (values: OptionValue[]) => void;
@@ -31,11 +34,16 @@ type Props = {
     selectedItemRef: React.RefObject<HTMLDivElement>;
     totalCount: number;
     users: UserProfile[];
+    emptyGroupChannelsIds: string[];
 
     /**
      * An array of values that have been selected by the user in the multiselect.
      */
     values: OptionValue[];
+
+    actions: {
+        getProfilesInGroupChannels: (ids: string[]) => object;
+    };
 }
 
 const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionValue>>) => {
@@ -62,6 +70,7 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
     }, [props.currentUserId]);
 
     const intl = useIntl();
+    const previousEmptyGroupIds = usePrevious(props.emptyGroupChannelsIds);
 
     let note;
     if (props.isExistingChannel) {
@@ -85,6 +94,12 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
     const options = useMemo(() => {
         return props.options.map(optionValue);
     }, [props.options]);
+
+    useEffect(() => {
+        if (props.emptyGroupChannelsIds.length > 0 && !_.isEqual(previousEmptyGroupIds, props.emptyGroupChannelsIds)) {
+            props.actions.getProfilesInGroupChannels?.(props.emptyGroupChannelsIds);
+        }
+    }, [props.emptyGroupChannelsIds, props.actions, previousEmptyGroupIds]);
 
     return (
         <MultiSelect<OptionValue>
