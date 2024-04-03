@@ -4517,7 +4517,7 @@
     "post_info.unpin": "Vom Kanal abheften",
     "post_info.unread": "Als ungelesen markieren",
     "post_info.translate": "Übersetzen",
-    "post_message_preview.channel": "In ~{channel}",
+    "post_message_preview.channel": "~{channel}",
     "post_message_view.edited": "Bearbeitet",
     "post_message_view.view_post_edit_history": "Klicke, um den Verlauf zu sehen",
     "post_pre_header.flagged": "Gespeichert",
