@@ -37,6 +37,17 @@ No changes.
 
 - [Neue(r) translation changed to Neu](kchat/webapp@9d4aaa98a571c9fcb61369b7776b18be6db4da38) by @philippe.karle ([merge request](kchat/webapp!689))
 
+## 2.6.1-next.2 (2024-04-03)
+
+### Fixed (2 changes)
+
+- [fix traduction DE](kchat/webapp@8519a0bf55e9c8b53b60eb16ce9fe9c65b8fe2f9) by  ([merge request](kchat/webapp!702))
+- [Fix: message delete modal button focus state issue fixed](kchat/webapp@2f3c3c4f069ad097e0068f0163c2d2c94fb4dc13) by @philippe.karle ([merge request](kchat/webapp!701))
+
+### Changed (1 change)
+
+- [Shared message banner translation updated](kchat/webapp@4eceba050d2ec9ece83dd2935383a8a2572bcc54) by @philippe.karle ([merge request](kchat/webapp!700))
+
 ## 2.6.1-next.1 (2024-04-02)
 
 ### Fixed (5 changes)
