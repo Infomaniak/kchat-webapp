@@ -90,15 +90,17 @@ export function removeDraft(key: string, channelId: string, rootId = '') {
 
         if (syncedDraftsAreAllowedAndEnabled(state)) {
             try {
-                console.log(`[actions/drafts] removing draft from api ~ key: ${key}, channelId: ${channelId}, rootId: ${rootId}`);
-
                 if (draft.timestamp) {
+                    console.log(`[actions/drafts] removeDraft.deleteScheduledDraft key: ${key}, channelId: ${channelId}, rootId: ${rootId}`);
                     await Client4.deleteScheduledDraft(draft.id);
                 } else {
+                    console.log(`[actions/drafts] removeDraft.deleteDraft key: ${key}, channelId: ${channelId}, rootId: ${rootId}`);
                     await Client4.deleteDraft(channelId, rootId);
                 }
             } catch (error) {
-                console.log('[actions/drafts] Could not delete draft from api', key);
+                console.log(`[actions/drafts] removeDraft.deleteDraft:error key: ${key}`,
+                    `error: ${JSON.stringify(error)}`,
+                );
                 return {
                     data: false,
                     error,
@@ -135,7 +137,7 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
         if (scheduleDelete) {
             const newValue = {...updatedValue};
             Reflect.deleteProperty(newValue, 'timestamp');
-            console.log('[actions/drafts] updateDraft setGlobalDraft (scheduled)',
+            console.log('[actions/drafts] updateDraft.setGlobalDraft (scheduled)',
                 `key: ${key}`,
                 `id: ${newValue?.id}`,
                 `updatedAt: ${newValue?.updateAt}`,
@@ -144,7 +146,7 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
 
             dispatch(setGlobalDraft(key, newValue as PostDraft, false));
         } else {
-            console.log('[actions/drafts] updateDraft setGlobalDraft',
+            console.log('[actions/drafts] updateDraft.setGlobalDraft',
                 `key: ${key}`,
                 `id: ${updatedValue?.id}`,
                 `updatedAt: ${updatedValue?.updateAt}`,
@@ -180,8 +182,7 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
         try {
-            console.log(
-                '[actions/drafts] upsertScheduleDraft -> upsertDraft',
+            console.log('[actions/drafts] upsertScheduleDraft.upsertDraft',
                 `id: ${value?.id}`,
                 `updatedAt: ${value?.updateAt}`,
                 `createdAt: ${value?.createAt}`,
@@ -193,13 +194,14 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
                 id,
             }));
         } catch (error) {
-            console.log('[actions/drafts] upsertScheduleDraft Error',
+            console.log('[actions/drafts] upsertScheduleDraft.upsertDraft:error',
                 `id: ${value?.id}`,
                 `updatedAt: ${value?.updateAt}`,
                 `createdAt: ${value?.createAt}`,
+                `error: ${JSON.stringify(error)}`,
             );
             if (activeDraft) {
-                console.log('[actions/drafts] upsertScheduleDraft Error -> setGlobalItem',
+                console.log('[actions/drafts] upsertScheduleDraft.upsertDraft:error setGlobalItem',
                     `id: ${value?.id}`,
                     `updatedAt: ${value?.updateAt}`,
                     `createdAt: ${value?.createAt}`,
@@ -235,7 +237,7 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', s
             Reflect.deleteProperty(newDraft, 'timestamp');
         }
 
-        console.log('[actions/drafts] upsertDraft (scheduleDrat)',
+        console.log('[actions/drafts] upsertDraft.updateScheduledDraft',
             `id: ${newDraft?.id}`,
             `updatedAt: ${draft?.updateAt}`,
             `createdAt: ${draft?.createAt}`,
@@ -244,7 +246,7 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', s
         return Client4.updateScheduledDraft(newDraft);
     }
 
-    console.log('[actions/drafts] upsertDraft',
+    console.log('[actions/drafts] upsertDraft.upsertDraft',
         `id: ${newDraft?.id}`,
         `updatedAt: ${draft?.updateAt}`,
         `createdAt: ${draft?.createAt}`,
@@ -281,7 +283,6 @@ export function setGlobalDraft(key: string, value: PostDraft|null, isRemote: boo
                 dispatch(setGlobalItem(key, {...value, message: ''}));
             }
         }
-        console.log('[actions/drafts] setGlobalDraftSource', `key: ${key}`, `id: ${value?.id}`, `updatedAt: ${value?.updateAt}`, `createdAt: ${value?.createAt}`);
         dispatch(setGlobalDraftSource(key, isRemote));
         return {data: true};
     };

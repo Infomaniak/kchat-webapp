@@ -198,6 +198,7 @@ function setDraft(key: string, value: PostDraft, draftChannelId: string, save = 
             `updatedAt: ${value?.updateAt}`,
             `createdAt: ${value?.createAt}`,
         );
+
         return dispatch(removeDraft(key, channelId));
     };
 }

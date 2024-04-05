@@ -555,6 +555,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 channelId,
                 remote: false,
             };
+            console.log('[advanced_create_post ~ draft] doSubmit.scheduleDraft id: ', updatedDraft.id);
             this.scheduleDraft(updatedDraft);
             return;
         } else if (post.message.indexOf('/') === 0 && !ignoreSlash) {
