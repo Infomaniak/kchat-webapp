@@ -1,3 +1,9 @@
+## 2.6.1-rc.5 (2024-04-05)
+
+### Fixed (1 change)
+
+- [fix logout on mobile](kchat/webapp@ce117615f1b7b36d1ee4113ca672da4142bcd679) by @antonbuksa ([merge request](kchat/webapp!705))
+
 ## 2.6.1-rc.4 (2024-04-03)
 
 ### Fixed (2 changes)
