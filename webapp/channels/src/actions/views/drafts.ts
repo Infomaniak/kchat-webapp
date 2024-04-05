@@ -135,10 +135,22 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
         if (scheduleDelete) {
             const newValue = {...updatedValue};
             Reflect.deleteProperty(newValue, 'timestamp');
-            console.log('[actions/drafts] updateDraft setGlobalDraft (scheduled)', `key: ${key}`, `id: ${newValue?.id}`, `updatedAt: ${newValue?.updateAt}`, `createdAt: ${newValue?.createAt}`);
+            console.log('[actions/drafts] updateDraft setGlobalDraft (scheduled)',
+                `key: ${key}`,
+                `id: ${newValue?.id}`,
+                `updatedAt: ${newValue?.updateAt}`,
+                `createdAt: ${newValue?.createAt}`,
+            );
+
             dispatch(setGlobalDraft(key, newValue as PostDraft, false));
         } else {
-            console.log('[actions/drafts] updateDraft setGlobalDraft', `key: ${key}`, `id: ${updatedValue?.id}`, `updatedAt: ${updatedValue?.updateAt}`, `createdAt: ${updatedValue?.createAt}`);
+            console.log('[actions/drafts] updateDraft setGlobalDraft',
+                `key: ${key}`,
+                `id: ${updatedValue?.id}`,
+                `updatedAt: ${updatedValue?.updateAt}`,
+                `createdAt: ${updatedValue?.createAt}`,
+            );
+
             dispatch(setGlobalDraft(key, updatedValue, false));
         }
 
@@ -168,16 +180,31 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
         try {
-            console.log('[actions/drafts] upsertScheduleDraft -> upsertDraft', `id: ${value?.id}`, `updatedAt: ${value?.updateAt}`, `createdAt: ${value?.createAt}`);
+            console.log(
+                '[actions/drafts] upsertScheduleDraft -> upsertDraft',
+                `id: ${value?.id}`,
+                `updatedAt: ${value?.updateAt}`,
+                `createdAt: ${value?.createAt}`,
+            );
+
             const {id} = await upsertDraft(value, userId, rootId);
             dispatch(setGlobalItem(`${key}_${id}`, {
                 ...value,
                 id,
             }));
         } catch (error) {
-            console.log('[actions/drafts] upsertScheduleDraft Error', `id: ${value?.id}`, `updatedAt: ${value?.updateAt}`, `createdAt: ${value?.createAt}`);
+            console.log('[actions/drafts] upsertScheduleDraft Error',
+                `id: ${value?.id}`,
+                `updatedAt: ${value?.updateAt}`,
+                `createdAt: ${value?.createAt}`,
+            );
             if (activeDraft) {
-                console.log('[actions/drafts] upsertScheduleDraft Error -> setGlobalItem', `id: ${value?.id}`, `updatedAt: ${value?.updateAt}`, `createdAt: ${value?.createAt}`);
+                console.log('[actions/drafts] upsertScheduleDraft Error -> setGlobalItem',
+                    `id: ${value?.id}`,
+                    `updatedAt: ${value?.updateAt}`,
+                    `createdAt: ${value?.createAt}`,
+                );
+
                 dispatch(setGlobalItem(key, activeDraft));
             }
             return {error};
@@ -208,11 +235,20 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', s
             Reflect.deleteProperty(newDraft, 'timestamp');
         }
 
-        console.log('[actions/drafts] upsertDraft (scheduleDrat)', `id: ${newDraft?.id}`, `updatedAt: ${draft?.updateAt}`, `createdAt: ${draft?.createAt}`);
+        console.log('[actions/drafts] upsertDraft (scheduleDrat)',
+            `id: ${newDraft?.id}`,
+            `updatedAt: ${draft?.updateAt}`,
+            `createdAt: ${draft?.createAt}`,
+        );
+
         return Client4.updateScheduledDraft(newDraft);
     }
 
-    console.log('[actions/drafts] upsertDraft', `id: ${newDraft?.id}`, `updatedAt: ${draft?.updateAt}`, `createdAt: ${draft?.createAt}`);
+    console.log('[actions/drafts] upsertDraft',
+        `id: ${newDraft?.id}`,
+        `updatedAt: ${draft?.updateAt}`,
+        `createdAt: ${draft?.createAt}`,
+    );
 
     return Client4.upsertDraft(newDraft);
 }
