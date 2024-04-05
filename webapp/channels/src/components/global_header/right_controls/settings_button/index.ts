@@ -3,7 +3,7 @@
 
 import {connect} from 'react-redux';
 
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import type {GlobalState} from 'types/store';
 
@@ -11,7 +11,7 @@ import SettingsButton from './settings_button';
 
 function mapStateToProps(state: GlobalState) {
     return {
-        currentTeamId: getCurrentTeamId(state),
+        currentTeam: getCurrentTeam(state),
     };
 }
 

@@ -7,6 +7,8 @@ import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
+import type {Team} from '@mattermost/types/teams';
+
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
@@ -24,10 +26,10 @@ type Props = {
     icon?: TIconGlyph;
     tooltipPlacement?: string;
     tooltipContent?: string;
-    currentTeamId: string;
+    currentTeam: Team;
 }
 
-const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, tooltipContent, currentTeamId}: Props): JSX.Element | null => {
+const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, tooltipContent, currentTeam}: Props): JSX.Element | null => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
@@ -35,7 +37,7 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
     const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (!isDesktopApp()) {
-            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-kchat', 'ksuite-kchat-personalization', {product_id: currentTeamId}]}));
+            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-kchat', 'ksuite-kchat-personalization', {selectedId: currentTeam.product_id}]}));
         } else if (rhsState === RHSStates.SETTINGS) {
             dispatch(closeRightHandSide());
         } else {
