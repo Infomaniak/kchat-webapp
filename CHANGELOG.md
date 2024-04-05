@@ -1,3 +1,9 @@
+## 2.6.1-rc.6 (2024-04-05)
+
+### Fixed (1 change)
+
+- [Fix: drafts duplication & scheduled thread drafts not saved](kchat/webapp@d4bb616705c69870976f23463c38020efbb57911) by @philippe.karle ([merge request](kchat/webapp!694))
+
 ## 2.6.1-rc.5 (2024-04-05)
 
 ### Fixed (1 change)
