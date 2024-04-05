@@ -95,7 +95,7 @@ export class MainMenu extends React.PureComponent<Props> {
     };
 
     handleEmitUserLoggedOutEvent = (): void => {
-        GlobalActions.emitUserLoggedOutEvent();
+        GlobalActions.emitUserLoggedOutEvent('ikLogout');
     };
 
     handleEmitUserGoToDashboard = (e: Event): void => {
