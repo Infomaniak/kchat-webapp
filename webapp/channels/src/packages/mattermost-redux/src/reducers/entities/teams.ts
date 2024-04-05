@@ -11,6 +11,9 @@ import {AdminTypes, ChannelTypes, TeamTypes, UserTypes, SchemeTypes, GroupTypes}
 import type {GenericAction} from 'mattermost-redux/types/actions';
 import {teamListToMap} from 'mattermost-redux/utils/team_utils';
 
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+
 function currentTeamId(state = '', action: GenericAction) {
     switch (action.type) {
     case TeamTypes.SELECT_TEAM:
@@ -59,7 +62,7 @@ function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
             [action.data.id]: action.data,
         };
 
-        if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
             window.postMessage(
                 {
                     type: 'update-teams',

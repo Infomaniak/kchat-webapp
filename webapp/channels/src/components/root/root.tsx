@@ -338,7 +338,7 @@ export default class Root extends React.PureComponent<Props, State> {
         //     BrowserStore.setLandingPageSeen(true);
         // }
 
-        if (isDesktopApp()) {
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
             window.postMessage({
                 type: 'preferred-theme',
                 data: {
@@ -370,7 +370,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
             }
 
-            if (isDesktopApp()) {
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
                 window.postMessage({
                     type: 'preferred-theme',
                     data: {
@@ -382,16 +382,14 @@ export default class Root extends React.PureComponent<Props, State> {
 
             Utils.applyTheme(this.props.theme);
         }
-        if (!deepEqual(prevProps.teamsOrderPreference, this.props.teamsOrderPreference)) {
-            if (isDesktopApp()) {
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
+            if (!deepEqual(prevProps.teamsOrderPreference, this.props.teamsOrderPreference)) {
                 window.postMessage({
                     type: 'teams-order-preference',
                     data: this.props.teamsOrderPreference?.value,
                 }, window.origin);
             }
-        }
-        if (!deepEqual(prevProps.userLocale, this.props.userLocale)) {
-            if (isDesktopApp()) {
+            if (!deepEqual(prevProps.userLocale, this.props.userLocale)) {
                 window.postMessage({
                     type: 'teams-order-preference',
                     data: this.props.teamsOrderPreference?.value,
