@@ -182,11 +182,17 @@ function setDraft(key: string, value: PostDraft, draftChannelId: string, save = 
             updatedValue = {...value, channelId};
         }
         if (updatedValue) {
-            console.log('@debug_draft addToUpdateDraftQueue', `key: ${key}`, `id: ${value?.id}`, `updatedAt: ${value?.updateAt}`, `createdAt: ${value?.createAt}`);
+            console.log('[advanced_create_post/idx ~ draft] setDraft.addToUpdateDraftQueue', `key: ${key}`, `id: ${value?.id}`, `updatedAt: ${value?.updateAt}`, `createdAt: ${value?.createAt}`);
             return dispatch(addToUpdateDraftQueue(key, updatedValue, '', save));
         }
 
-        console.log('@debug_draft setDraft (remove_draft)', `key: ${key}`, `id: ${value?.id}`, `updatedAt: ${value?.updateAt}`, `createdAt: ${value?.createAt}`);
+        console.log(
+            '[advanced_create_post/idx ~ draft] setDraft.removeDraft',
+            `key: ${key}`,
+            `id: ${value?.id}`,
+            `updatedAt: ${value?.updateAt}`,
+            `createdAt: ${value?.createAt}`,
+        );
         return dispatch(removeDraft(key, channelId));
     };
 }
