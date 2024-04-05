@@ -43,6 +43,12 @@ No changes.
 
 - [Neue(r) translation changed to Neu](kchat/webapp@9d4aaa98a571c9fcb61369b7776b18be6db4da38) by @philippe.karle ([merge request](kchat/webapp!689))
 
+## 2.6.1-next.3 (2024-04-05)
+
+### Fixed (1 change)
+
+- [fix logout on mobile](kchat/webapp@ce117615f1b7b36d1ee4113ca672da4142bcd679) by @antonbuksa ([merge request](kchat/webapp!705))
+
 ## 2.6.1-next.2 (2024-04-03)
 
 ### Fixed (2 changes)
