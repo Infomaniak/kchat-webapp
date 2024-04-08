@@ -55,8 +55,7 @@ function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
     case TeamTypes.UPDATED_TEAM:
     case TeamTypes.PATCHED_TEAM:
     case TeamTypes.REGENERATED_TEAM_INVITE_ID:
-    case TeamTypes.RECEIVED_TEAM:
-        // eslint-disable-next-line no-case-declarations
+    case TeamTypes.RECEIVED_TEAM: {
         const newTeams = {
             ...state,
             [action.data.id]: action.data,
@@ -75,6 +74,7 @@ function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
         }
 
         return newTeams;
+    }
     case TeamTypes.RECEIVED_TEAM_DELETED: {
         const nextState = {...state};
         const teamId = action.data.id;
