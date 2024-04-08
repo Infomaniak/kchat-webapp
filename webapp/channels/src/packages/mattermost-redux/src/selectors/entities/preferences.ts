@@ -108,6 +108,26 @@ const getThemePreference = createSelector(
     },
 );
 
+export const getTeamsOrderPreference = createSelector(
+    'getTeamsOrderPreference',
+    getMyPreferences,
+    (state) => state.entities.teams.currentTeamId,
+    (myPreferences, currentTeamId) => {
+        // Prefer the user's current team-specific theme over the user's current global theme
+        let themePreference;
+
+        if (currentTeamId) {
+            themePreference = myPreferences[getPreferenceKey(Preferences.CATEGORY_TEAMS_ORDER, currentTeamId)];
+        }
+
+        if (!themePreference) {
+            themePreference = myPreferences[getPreferenceKey(Preferences.CATEGORY_TEAMS_ORDER, '')];
+        }
+
+        return themePreference;
+    },
+);
+
 export type ThemeKey = 'denim' | 'sapphire' | 'quartz' | 'indigo' | 'onyx' | 'ik';
 
 export type LegacyThemeType = 'Mattermost' | 'Organization' | 'Mattermost Dark' | 'Windows Dark';

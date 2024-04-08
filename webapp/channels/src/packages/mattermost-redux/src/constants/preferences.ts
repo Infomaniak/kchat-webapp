@@ -82,6 +82,8 @@ const Preferences = {
     CATEGORY_DRAFTS: 'drafts',
     DRAFTS_TOUR_TIP_SHOWED: 'drafts_tour_tip_showed',
 
+    CATEGORY_TEAMS_ORDER: 'teams_order',
+
     CATEGORY_THEME: 'theme',
     THEMES: {
         ik: {

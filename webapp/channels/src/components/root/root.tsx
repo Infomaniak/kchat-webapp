@@ -11,6 +11,8 @@ import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
 import 'plugins/export.js';
+import type {PreferenceType} from '@mattermost/types/preferences';
+import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
@@ -148,6 +150,8 @@ export type Actions = {
 
 type Props = {
     theme: Theme;
+    currentTeam: Team;
+    teamsOrderPreference: PreferenceType;
     telemetryEnabled: boolean;
     telemetryId?: string;
     noAccounts: boolean;
@@ -162,6 +166,7 @@ type Props = {
     rhsIsOpen: boolean;
     shouldShowAppBar: boolean;
     ksuiteBridge: KSuiteBridge;
+    userLocale: string;
 } & RouteComponentProps
 
 interface State {
@@ -339,6 +344,26 @@ export default class Root extends React.PureComponent<Props, State> {
         //     BrowserStore.setLandingPageSeen(true);
         // }
 
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
+            window.postMessage({
+                type: 'preferred-theme',
+                data: {
+                    theme: this.props.theme,
+                    teamName: this.props.currentTeam.display_name,
+                },
+            }, window.origin);
+
+            window.postMessage({
+                type: 'teams-order-preference',
+                data: this.props.teamsOrderPreference?.value,
+            }, window.origin);
+
+            window.postMessage({
+                type: 'user-locale',
+                data: this.props.userLocale,
+            }, window.origin);
+        }
+
         Utils.applyTheme(this.props.theme);
     };
 
@@ -351,7 +376,31 @@ export default class Root extends React.PureComponent<Props, State> {
                 document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
             }
 
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
+                window.postMessage({
+                    type: 'preferred-theme',
+                    data: {
+                        theme: this.props.theme,
+                        teamName: this.props.currentTeam.display_name,
+                    },
+                }, window.origin);
+            }
+
             Utils.applyTheme(this.props.theme);
+        }
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
+            if (!deepEqual(prevProps.teamsOrderPreference, this.props.teamsOrderPreference)) {
+                window.postMessage({
+                    type: 'teams-order-preference',
+                    data: this.props.teamsOrderPreference?.value,
+                }, window.origin);
+            }
+            if (!deepEqual(prevProps.userLocale, this.props.userLocale)) {
+                window.postMessage({
+                    type: 'teams-order-preference',
+                    data: this.props.teamsOrderPreference?.value,
+                }, window.origin);
+            }
         }
         if (
             this.props.shouldShowAppBar !== prevProps.shouldShowAppBar ||
@@ -817,7 +866,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         <AnnouncementBarController/>
                         <SystemNotice/>
                         <GlobalHeader headerRef={this.headerResizerRef}/>
-                        {!this.embeddedInIFrame && isDesktopApp() && <TeamSidebar/>}
+                        {!this.embeddedInIFrame && isDesktopApp() && !isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0') && <TeamSidebar/>}
                         <Switch>
                             {this.props.products?.map((product) => (
                                 <Route

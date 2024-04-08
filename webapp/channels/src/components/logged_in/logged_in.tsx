@@ -7,10 +7,11 @@ import semver from 'semver';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
-import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import * as GlobalActions from 'actions/global_actions';
-import {setTheme} from 'actions/views/theme';
+import {updateTeamsOrderForUser} from 'actions/team_actions';
 import * as WebSocketActions from 'actions/websocket_actions.jsx';
 import BrowserStore from 'stores/browser_store';
 import store from 'stores/redux_store';
@@ -65,9 +66,13 @@ type DesktopMessage = {
             channel: Channel;
             teamId: string;
             url: string;
+            teamsOrder?: string[];
         };
     };
 }
+
+const dispatch = store.dispatch;
+const getState = store.getState;
 
 export default class LoggedIn extends React.PureComponent<Props> {
     constructor(props: Props) {
@@ -188,10 +193,32 @@ export default class LoggedIn extends React.PureComponent<Props> {
         case 'user-activity-update': {
             const {userIsActive, manual} = desktopMessage.data.message;
 
-            // update the server with the users current away status
             if (userIsActive === true || userIsActive === false) {
                 WebSocketClient.userUpdateActiveStatus(userIsActive, manual);
             }
+            break;
+        }
+        case 'teams-order-updated': {
+            const {teamsOrder} = desktopMessage.data.message;
+            if (teamsOrder) {
+                updateTeamsOrderForUser(teamsOrder)(dispatch, getState);
+            }
+            break;
+        }
+        case 'get-server-theme': {
+            const preferredTheme = getTheme(store.getState());
+            const currentTeam = getCurrentTeam(store.getState());
+
+            window.postMessage(
+                {
+                    type: 'preferred-theme',
+                    data: {
+                        theme: preferredTheme,
+                        teamName: currentTeam.display_name,
+                    },
+                },
+                window.origin,
+            );
             break;
         }
         case 'notification-clicked': {

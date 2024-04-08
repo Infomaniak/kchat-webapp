@@ -9,8 +9,9 @@ import {getFirstAdminSetupComplete} from 'mattermost-redux/actions/general';
 import {getProfiles} from 'mattermost-redux/actions/users';
 import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
-import {getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUserLocale} from 'mattermost-redux/selectors/entities/i18n';
+import {getTeamsOrderPreference, getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {shouldShowTermsOfService, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {Action} from 'mattermost-redux/types/actions';
 
@@ -46,6 +47,9 @@ function mapStateToProps(state: GlobalState) {
 
     return {
         theme: getTheme(state),
+        currentTeam: getCurrentTeam(state),
+        userLocale: getCurrentUserLocale(state),
+        teamsOrderPreference: getTeamsOrderPreference(state),
         telemetryEnabled: config.DiagnosticsEnabled === 'true',
         noAccounts: config.NoAccounts === 'true',
         telemetryId: config.DiagnosticId,
