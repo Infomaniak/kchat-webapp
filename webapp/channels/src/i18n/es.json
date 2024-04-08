@@ -4449,7 +4449,7 @@
     "shortcuts.msgs.markdown.italic": "Cursiva:\tCtrl|I",
     "shortcuts.msgs.markdown.italic.mac": "Cursiva:\t⌘|I",
     "shortcuts.msgs.markdown.link": "Enlace:\tCtrl|Alt|K",
-    "shortcuts.msgs.markdown.link.mac": "Enlace:\t⌘|Alt|K",
+    "shortcuts.msgs.markdown.link.mac": "Enlace:\t⌘|⌥|K",
     "shortcuts.msgs.markdown.quote": "Citar:\tShift|Alt|9",
     "shortcuts.msgs.markdown.quote.mac": "Citar:\tShift|⌥|9",
     "shortcuts.msgs.markdown.strike": "Tachar:\tShift|Alt|X",
