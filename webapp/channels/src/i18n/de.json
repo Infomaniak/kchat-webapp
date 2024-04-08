@@ -5284,6 +5284,7 @@
     "user.settings.advance.title": "Erweiterte Einstellungen",
     "user.settings.advance.unreadScrollPositionDesc": "Wähle deine Scroll Position, wenn du einen ungelesenen Kanal betrachtest. Kanäle werden immer als Gelesen markiert, wenn sie betrachtet wurden.",
     "user.settings.advance.unreadScrollPositionTitle": "Scroll Position, wenn ein ungelesener Kanal betrachtet wird",
+    "user.settings.tokens.botId": "Bot ID: ",
     "user.settings.custom_theme.awayIndicator": "Abwesend-Anzeige",
     "user.settings.custom_theme.buttonBg": "Button Hintergrund",
     "user.settings.custom_theme.buttonColor": "Button-Text",
