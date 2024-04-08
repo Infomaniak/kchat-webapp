@@ -26,8 +26,6 @@ import WebSocketClient from 'client/web_websocket_client';
 
 const BACKSPACE_CHAR = 8;
 
-const dispatch = store.dispatch;
-
 declare global {
     interface Window {
         desktop: {
