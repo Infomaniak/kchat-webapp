@@ -11,6 +11,9 @@ import {AdminTypes, ChannelTypes, TeamTypes, UserTypes, SchemeTypes, GroupTypes}
 import type {GenericAction} from 'mattermost-redux/types/actions';
 import {teamListToMap} from 'mattermost-redux/utils/team_utils';
 
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+
 function currentTeamId(state = '', action: GenericAction) {
     switch (action.type) {
     case TeamTypes.SELECT_TEAM:
@@ -52,12 +55,26 @@ function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
     case TeamTypes.UPDATED_TEAM:
     case TeamTypes.PATCHED_TEAM:
     case TeamTypes.REGENERATED_TEAM_INVITE_ID:
-    case TeamTypes.RECEIVED_TEAM:
-        return {
+    case TeamTypes.RECEIVED_TEAM: {
+        const newTeams = {
             ...state,
             [action.data.id]: action.data,
         };
 
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams: Object.values(newTeams),
+                    },
+                },
+                window.origin,
+            );
+        }
+
+        return newTeams;
+    }
     case TeamTypes.RECEIVED_TEAM_DELETED: {
         const nextState = {...state};
         const teamId = action.data.id;
