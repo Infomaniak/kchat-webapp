@@ -12,7 +12,7 @@ import * as ChannelActions from 'mattermost-redux/actions/channels';
 import {fetchDeletedPostsIds, postDeleted} from 'mattermost-redux/actions/posts';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getChannelByName, getUnreadChannelIds, getChannel} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentChannelId, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
+import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
@@ -98,10 +98,9 @@ export function loadChannelsForCurrentUser(): ActionFunc {
     };
 }
 
-export function loadDeletedPosts(lastDisconnectAt: number): ActionFunc {
+export function loadDeletedPosts(channelId: string, lastDisconnectAt: number): ActionFunc {
     return async (dispatch, getState) => {
         const state = getState();
-        const channelId = getCurrentChannelId(state);
 
         const results = await dispatch(fetchDeletedPostsIds(channelId, lastDisconnectAt));
 
