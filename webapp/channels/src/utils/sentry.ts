@@ -24,7 +24,7 @@ export default function init({SENTRY_DSN}: Args) {
     }
 
     const logIntegrations = [
-        true && 'bt',
+        isCanaryOrPreprod && 'bt',
         isCanaryOrPreprod && 'replay',
     ].filter(bool);
 
@@ -37,7 +37,7 @@ export default function init({SENTRY_DSN}: Args) {
         environment: host.split('.').splice(1).join('.'),
         normalizeDepth: 5,
         integrations: [
-            true && new Sentry.BrowserTracing(),
+            isCanaryOrPreprod && new Sentry.BrowserTracing(),
             isCanaryOrPreprod && new Sentry.Replay(),
         ].filter(bool),
         tracesSampleRate: 0.1,
