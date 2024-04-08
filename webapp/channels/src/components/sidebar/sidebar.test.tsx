@@ -34,6 +34,7 @@ describe('components/sidebar', () => {
         isKeyBoardShortcutModalOpen: false,
         userGroupsEnabled: false,
         canCreateCustomGroups: true,
+        headerRef: jest.fn(),
         actions: {
             createCategory: jest.fn(),
             fetchMyCategories: jest.fn(),
@@ -188,6 +189,18 @@ describe('components/sidebar', () => {
                             },
                         },
                     },
+                    teams: {
+                        currentTeamId: 'team_1',
+                    },
+                },
+                views: {
+                    servers: {
+                        servers: {
+                            team_1: {
+                                id: 'team_1',
+                            },
+                        },
+                    },
                 },
             };
 
@@ -222,6 +235,18 @@ describe('components/sidebar', () => {
                             },
                         },
                     },
+                    teams: {
+                        currentTeamId: 'team_1',
+                    },
+                },
+                views: {
+                    servers: {
+                        servers: {
+                            team_1: {
+                                id: 'team_1',
+                            },
+                        },
+                    },
                 },
             };
 
@@ -248,6 +273,18 @@ describe('components/sidebar', () => {
                             [currentUserId]: {
                                 id: currentUserId,
                                 roles: 'system_admin',
+                            },
+                        },
+                    },
+                    teams: {
+                        currentTeamId: 'team_1',
+                    },
+                },
+                views: {
+                    servers: {
+                        servers: {
+                            team_1: {
+                                id: 'team_1',
                             },
                         },
                     },
@@ -280,10 +317,23 @@ describe('components/sidebar', () => {
                             },
                         },
                     },
+                    teams: {
+                        currentTeamId,
+                        teams: {
+                            [currentTeamId]: {id: currentTeamId},
+                        },
+                    },
                 },
                 views: {
                     channel: {
                         lastUnreadChannel: {id: channel1.id} as any,
+                    },
+                    servers: {
+                        servers: {
+                            [currentTeamId]: {
+                                id: currentTeamId,
+                            },
+                        },
                     },
                 },
             };

@@ -5,6 +5,7 @@ exports[`components/sidebar should match empty div snapshot when teamId is missi
 exports[`components/sidebar should match snapshot 1`] = `
 <ResizableLhs
   className=""
+  headerRef={[MockFunction]}
   id="SidebarContainer"
 >
   <SidebarHeader
@@ -20,6 +21,7 @@ exports[`components/sidebar should match snapshot 1`] = `
     unreadFilterEnabled={false}
     userGroupsEnabled={false}
   />
+  <withRouter(Connect(Component)) />
   <div
     aria-label="channel navigator region"
     className="a11y__region"
@@ -48,6 +50,7 @@ exports[`components/sidebar should match snapshot 1`] = `
 exports[`components/sidebar should match snapshot when direct channels modal is open 1`] = `
 <ResizableLhs
   className=""
+  headerRef={[MockFunction]}
   id="SidebarContainer"
 >
   <SidebarHeader
@@ -63,6 +66,7 @@ exports[`components/sidebar should match snapshot when direct channels modal is 
     unreadFilterEnabled={false}
     userGroupsEnabled={false}
   />
+  <withRouter(Connect(Component)) />
   <div
     aria-label="channel navigator region"
     className="a11y__region"
@@ -95,6 +99,7 @@ exports[`components/sidebar should match snapshot when direct channels modal is 
 exports[`components/sidebar should match snapshot when more channels modal is open 1`] = `
 <ResizableLhs
   className=""
+  headerRef={[MockFunction]}
   id="SidebarContainer"
 >
   <SidebarHeader
@@ -110,6 +115,7 @@ exports[`components/sidebar should match snapshot when more channels modal is op
     unreadFilterEnabled={false}
     userGroupsEnabled={false}
   />
+  <withRouter(Connect(Component)) />
   <div
     aria-label="channel navigator region"
     className="a11y__region"

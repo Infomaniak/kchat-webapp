@@ -337,7 +337,7 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
                     </Tooltip>
                 }
             >
-                <a className='style--none size-aware-image__download'>
+                <a className='style--none size-aware-image__download--kdrive'>
                     <KDriveIcon
                         style={{transform: 'scale(1.5)'}}
                         onClick={() => this.props.handleKDriveSave(fileInfo.id, fileInfo.name)}

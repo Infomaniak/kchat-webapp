@@ -20,6 +20,8 @@ import {MarkUnread} from '../constants/channels';
 
 const OK_RESPONSE = {status: 'OK'};
 
+const openLimitModalIfNeededMock = jest.fn(() => () => Promise.resolve({data: true}));
+
 describe('Actions.Channels', () => {
     let store = configureStore();
     beforeAll(() => {
@@ -57,7 +59,7 @@ describe('Actions.Channels', () => {
             post('/channels').
             reply(201, TestHelper.fakeChannelWithId(TestHelper.basicTeam!.id));
 
-        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), TestHelper.basicUser!.id));
+        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), TestHelper.basicUser!.id, openLimitModalIfNeededMock));
 
         const createRequest = store.getState().requests.channels.createChannel;
 
@@ -274,7 +276,7 @@ describe('Actions.Channels', () => {
 
         expect(publicChannel.type).toEqual(General.OPEN_CHANNEL);
 
-        await store.dispatch(Actions.updateChannelPrivacy(publicChannel.id, General.PRIVATE_CHANNEL));
+        await store.dispatch(Actions.updateChannelPrivacy(publicChannel.id, General.PRIVATE_CHANNEL, openLimitModalIfNeededMock));
 
         const {channels} = store.getState().entities.channels;
         const channelId = Object.keys(channels)[0];
@@ -589,7 +591,7 @@ describe('Actions.Channels', () => {
             delete(`/channels/${secondChannel.id}`).
             reply(200, OK_RESPONSE);
 
-        await store.dispatch(Actions.unarchiveChannel(secondChannel.id));
+        await store.dispatch(Actions.unarchiveChannel(secondChannel.id, openLimitModalIfNeededMock));
 
         const {incomingHooks, outgoingHooks} = store.getState().entities.integrations;
 
@@ -1805,7 +1807,7 @@ describe('Actions.Channels', () => {
             post('/channels').
             reply(201, TestHelper.fakeChannelWithId(TestHelper.basicTeam!.id));
 
-        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), TestHelper.basicUser!.id));
+        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), TestHelper.basicUser!.id, openLimitModalIfNeededMock));
 
         const createRequest = store.getState().requests.channels.createChannel;
 
@@ -1840,7 +1842,7 @@ describe('Actions.Channels', () => {
 
         const userId = 'asdf';
 
-        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), userId));
+        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), userId, openLimitModalIfNeededMock));
 
         const {channels} = store.getState().entities.channels;
         const channelId = channels[Object.keys(channels)[0]].id;

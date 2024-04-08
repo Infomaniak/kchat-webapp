@@ -14,11 +14,13 @@ import type {ServerError} from '@mattermost/types/errors';
 
 import {setNewChannelWithBoardPreference} from 'mattermost-redux/actions/boards';
 import {createChannel} from 'mattermost-redux/actions/channels';
+import {General} from 'mattermost-redux/constants';
 import Permissions from 'mattermost-redux/constants/permissions';
 import Preferences from 'mattermost-redux/constants/preferences';
 import {get as getPreference} from 'mattermost-redux/selectors/entities/preferences';
 import {haveICurrentChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {localizeMessage} from 'mattermost-redux/utils/i18n_utils';
 
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 import {switchToChannel} from 'actions/views/channel';
@@ -26,6 +28,7 @@ import {closeModal, openModal} from 'actions/views/modals';
 
 import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
 import ChannelLimitIndicator from 'components/limits/channel_limit_indicator';
+import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
 

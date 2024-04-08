@@ -128,7 +128,7 @@ export function subscribeCloudSubscription(
     };
 }
 
-export function getUsage(): ActionFunc {
+export function getUsage(): ThunkActionFunc<Promise<any>> {
     return async (dispatch) => {
         try {
             const result = await Client4.getUsage();
@@ -145,7 +145,7 @@ export function getUsage(): ActionFunc {
     };
 }
 
-export function openChannelLimitModalIfNeeded(error: ServerError, type: ChannelType) {
+export function openChannelLimitModalIfNeeded(error: ServerError, type: ChannelType): ThunkActionFunc<{data: boolean}> {
     return (dispatch, getState) => {
         if (isLimitExceeded(error)) {
             if (isModalOpen(getState(), ModalIdentifiers.NEW_CHANNEL_MODAL)) {
@@ -325,8 +325,8 @@ export function retryFailedCloudFetches(): ActionFunc<boolean, GlobalState> {
     };
 }
 
-export function openExternalLimitModalIfNeeded(error: ServerError) {
-    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function openExternalLimitModalIfNeeded(error: ServerError): ActionFunc<boolean, GlobalState> {
+    return (dispatch, getState) => {
         if (isLimitExceeded(error)) {
             if (isModalOpen(getState(), ModalIdentifiers.INVITATION)) {
                 dispatch(closeModal(ModalIdentifiers.INVITATION));

@@ -499,11 +499,28 @@ function renderReminderACKMessage(post: Post, currentTeam: Team, isMilitaryTime:
     );
 }
 
-export function renderReminderSystemBotMessage(post: Post, currentTeam: Team): ReactNode {
+// Mattermost
+// export function renderReminderSystemBotMessage(post: Post, currentTeam: Team): ReactNode {
+//     const username = post.props.username ? renderUsername(post.props.username) : '';
+//     const teamUrl = `${getSiteURL()}/${post.props.team_name || currentTeam.name}`;
+//     const link = `${teamUrl}/pl/${post.props.post_id}`;
+//     const permaLink = renderFormattedText(`[${link}](${link})`);
+//     return (
+//         <FormattedMessage
+//             id={'post.reminder.systemBot'}
+//             defaultMessage="Hi there, here's your reminder about this message from {username}: {permaLink}"
+//             values={{
+//                 username,
+//                 permaLink,
+//             }}
+//         />
+//     );
+// }
+
+// Infomaniak
+function renderReminderSystemBotMessage(post: Post): ReactNode {
     const username = post.props.username ? renderUsername(post.props.username) : '';
-    const teamUrl = `${getSiteURL()}/${post.props.team_name || currentTeam.name}`;
-    const link = `${teamUrl}/pl/${post.props.post_id}`;
-    const permaLink = renderFormattedText(`[${link}](${link})`);
+    const permaLink = renderFormattedText(`[${post.props.link}](${post.props.link})`);
     return (
         <FormattedMessage
             id={'post.reminder.systemBot'}

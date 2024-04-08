@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {ArchiveOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {memo, forwardRef, useMemo} from 'react';
 import {useSelector} from 'react-redux';
 
+import {ArchiveOutlineIcon} from '@mattermost/compass-icons/components';
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -12,10 +12,7 @@ import {Posts} from 'mattermost-redux/constants';
 import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getPost, getLimitedViews} from 'mattermost-redux/selectors/entities/posts';
 
-import * as GlobalActions from 'actions/global_actions';
-
 import AdvancedCreateComment from 'components/advanced_create_comment';
-import {BannerJoinChannel} from 'components/banner_join_channel';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import BasicSeparator from 'components/widgets/separator/basic-separator';
 
@@ -25,24 +22,20 @@ import type {GlobalState} from 'types/store';
 
 type Props = {
     focusOnMount: boolean;
-    onHeightChange: (height: number, maxHeight: number) => void;
     teammate?: UserProfile;
     threadId: string;
     latestPostId: Post['id'];
     isThreadView?: boolean;
-    isMember: boolean;
-    channelId: string;
+    placeholder?: string;
 };
 
 const CreateComment = forwardRef<HTMLDivElement, Props>(({
     focusOnMount,
-    onHeightChange,
     teammate,
     threadId,
     latestPostId,
     isThreadView,
-    isMember,
-    channelId,
+    placeholder,
 }: Props, ref) => {
     const getChannel = useMemo(makeGetChannel, []);
     const rootPost = useSelector((state: GlobalState) => getPost(state, threadId));
@@ -97,24 +90,17 @@ const CreateComment = forwardRef<HTMLDivElement, Props>(({
         );
     }
 
-    if (!isMember) {
-        return (
-            <BannerJoinChannel
-                onButtonClick={() => GlobalActions.joinChannel(channelId)}
-            />
-        );
-    }
-
     return (
         <div
             className='post-create__container'
             ref={ref}
+            data-testid='comment-create'
         >
             <AdvancedCreateComment
+                placeholder={placeholder}
                 focusOnMount={focusOnMount}
                 channelId={channel.id}
                 latestPostId={latestPostId}
-                onHeightChange={onHeightChange}
                 rootDeleted={rootDeleted}
                 rootId={threadId}
                 isThreadView={isThreadView}

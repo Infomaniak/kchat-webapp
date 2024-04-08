@@ -80,7 +80,10 @@ function UrlInput({
     };
 
     const urlInputLabel = (
-        <span className='url-input-label'>
+        <span
+            className='url-input-label'
+            data-testid='urlInputLabel'
+        >
             {formatMessage({id: 'url_input.label.url', defaultMessage: 'URL: '})}
             {isShortenedURL ? getShortenedURL(fullURL, shortenLength) : fullURL}
         </span>
@@ -106,6 +109,7 @@ function UrlInput({
                 )}
                 {(editing || hasError) && (
                     <Input
+                        data-testid='channelURLInput'
                         name='url-input'
                         type='text'
                         containerClassName='url-input-editable-container'

@@ -64,7 +64,7 @@ describe('components/feature_discovery', () => {
             expect(featureLink).toBeInTheDocument();
             expect(featureLink).toHaveAttribute('href', 'https://test.mattermost.com/secondary/');
             expect(featureLink).toHaveTextContent('Learn more');
-            expect(screen.getByText('Mattermost Software and Services License Agreement')).toHaveAttribute('href', 'https://mattermost.com/pl/software-and-services-license-agreement');
+            expect(screen.getByText('Mattermost Software and Services License Agreement')).toHaveAttribute('href', 'https://infomaniak.com/pl/software-and-services-license-agreement');
             expect(screen.getByText('Privacy Policy')).toHaveAttribute('href', AboutLinks.PRIVACY_POLICY);
 
             expect(getPrevTrialLicense).toHaveBeenCalled();
@@ -116,14 +116,14 @@ describe('components/feature_discovery', () => {
             expect(screen.getByRole('button', {name: 'Try free for 30 days'})).toBeInTheDocument();
             expect(screen.getAllByText('Try free for 30 days')).toHaveLength(2);
 
-            expect(screen.getByTestId('featureDiscovery_secondaryCallToAction')).toHaveAttribute('href', 'https://test.mattermost.com/secondary/?utm_source=mattermost&utm_medium=in-product&utm_content=feature_discovery&uid=&sid=');
+            expect(screen.getByTestId('featureDiscovery_secondaryCallToAction')).toHaveAttribute('href', 'https://test.mattermost.com/secondary/');
 
-            expect(screen.getByText('Privacy Policy')).toHaveAttribute('href', 'https://mattermost.com/pl/privacy-policy/?utm_source=mattermost&utm_medium=in-product&utm_content=feature_discovery&uid=&sid=');
+            expect(screen.getByText('Privacy Policy')).toHaveAttribute('href', 'https://infomaniak.com/pl/privacy-policy/');
 
             const featureLink = screen.getByTestId('featureDiscovery_secondaryCallToAction');
 
             expect(featureLink).toBeInTheDocument();
-            expect(featureLink).toHaveAttribute('href', 'https://test.mattermost.com/secondary/?utm_source=mattermost&utm_medium=in-product&utm_content=feature_discovery&uid=&sid=');
+            expect(featureLink).toHaveAttribute('href', 'https://test.mattermost.com/secondary/');
             expect(featureLink).toHaveTextContent('Learn more');
 
             expect(getPrevTrialLicense).toHaveBeenCalled();

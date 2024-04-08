@@ -11,8 +11,9 @@ import type {GetStateFunc} from 'mattermost-redux/types/actions';
 
 import * as NewPostActions from 'actions/new_post';
 
-import mockStore from 'tests/test_store';
 import {Constants} from 'utils/constants';
+
+import mockStore from 'tests/test_store';
 
 jest.mock('mattermost-redux/actions/channels', () => ({
     ...jest.requireActual('mattermost-redux/actions/channels'),
@@ -89,6 +90,12 @@ describe('actions/new_post', () => {
         views: {
             posts: {
                 editingPost: {},
+            },
+        },
+        ksuite_bridge: {
+            bridge: {
+                sendMessage: jest.fn(),
+                on: jest.fn(),
             },
         },
     } as unknown as GlobalState;
