@@ -19,6 +19,7 @@ import GuestTag from 'components/widgets/tag/guest_tag';
 
 import {imageURLForUser, isMobile} from 'utils/utils';
 
+import {MAX_NAME_LENGTH} from './constants';
 import {generateColor} from './utils';
 
 export type UserProfileProps = {
@@ -114,6 +115,7 @@ export default class UserProfile extends PureComponent<UserProfileProps> {
         }
 
         const ariaName: string = typeof name === 'string' ? name.toLowerCase() : '';
+        const nameLength = typeof name === 'string' ? name.length : 0;
 
         let userColor = '#000000';
         if (user && theme) {
@@ -134,7 +136,7 @@ export default class UserProfile extends PureComponent<UserProfileProps> {
             );
         }
 
-        let placement = 'right';
+        let placement = !isMobile() && nameLength > MAX_NAME_LENGTH ? 'left' : 'right';
         if (isRHS && !isMobile()) {
             placement = 'left';
         }
