@@ -1,3 +1,14 @@
+## 2.6.2-rc.2 (2024-04-09)
+
+### Added (1 change)
+
+- [Ajout de l'id du bot lors de la création d'un bot account](kchat/webapp@512ffed65c6eb1944ba53014e201282cde37e0ad) by  ([merge request](kchat/webapp!710))
+
+### Fixed (2 changes)
+
+- [add cast for desktop status isSystemEvent param](kchat/webapp@67ec225aa58a14e56668189716891d1c1f5d1b59) by @antonbuksa ([merge request](kchat/webapp!715))
+- [Fix: Wrong markdown shortcuts displayed](kchat/webapp@a28b0a9754b69e04649ef42708df9880adfe611f) by @philippe.karle ([merge request](kchat/webapp!711))
+
 ## 2.6.2-rc.1 (2024-04-08)
 
 ### Added (1 change)
@@ -7,6 +18,17 @@
 ### Changed (1 change)
 
 - [limit sentry bt by env](kchat/webapp@7886c51cf5ac0a4f529e3d967b08f4e1bb796545) by @antonbuksa ([merge request](kchat/webapp!707))
+
+## 2.6.2-next.2 (2024-04-09)
+
+### Added (1 change)
+
+- [Ajout de l'id du bot lors de la création d'un bot account](kchat/webapp@512ffed65c6eb1944ba53014e201282cde37e0ad) by  ([merge request](kchat/webapp!710))
+
+### Fixed (2 changes)
+
+- [add cast for desktop status isSystemEvent param](kchat/webapp@67ec225aa58a14e56668189716891d1c1f5d1b59) by @antonbuksa ([merge request](kchat/webapp!715))
+- [Fix: Wrong markdown shortcuts displayed](kchat/webapp@a28b0a9754b69e04649ef42708df9880adfe611f) by @philippe.karle ([merge request](kchat/webapp!711))
 
 ## 2.6.2-next.1 (2024-04-05)
 
