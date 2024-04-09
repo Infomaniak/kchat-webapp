@@ -1,3 +1,13 @@
+## 2.6.2-rc.1 (2024-04-08)
+
+### Added (1 change)
+
+- [Event to communicate between desktop & webapp implemented](kchat/webapp@34fea5398d9290b1ca3735b58b987dd3d72a512f) by @philippe.karle ([merge request](kchat/webapp!695))
+
+### Changed (1 change)
+
+- [limit sentry bt by env](kchat/webapp@7886c51cf5ac0a4f529e3d967b08f4e1bb796545) by @antonbuksa ([merge request](kchat/webapp!707))
+
 ## 2.6.2-next.1 (2024-04-05)
 
 No changes.

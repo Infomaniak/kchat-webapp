@@ -192,7 +192,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
             const {userIsActive, manual} = desktopMessage.data.message;
 
             if (userIsActive === true || userIsActive === false) {
-                WebSocketClient.userUpdateActiveStatus(userIsActive, manual);
+                WebSocketClient.userUpdateActiveStatus(userIsActive, Boolean(manual));
             }
             break;
         }

@@ -283,6 +283,15 @@ export default class Bot extends React.PureComponent<Props, State> {
                                 </b>
                                 {token.id}
                             </div>
+                            <div className='setting-box__token-id whitespace--nowrap overflow--ellipsis'>
+                                <b>
+                                    <FormattedMessage
+                                        id='user.settings.tokens.botId'
+                                        defaultMessage='Bot ID: '
+                                    />
+                                </b>
+                                {this.props.bot.user_id}
+                            </div>
                         </div>
                         <div>
                             {disabledText}
