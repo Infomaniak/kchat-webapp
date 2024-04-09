@@ -26,8 +26,9 @@
     vertical-align: middle;
 
     &--unicode {
+        line-height: 1;
         font-size: 21px;
-
+    
         .os--windows & {
             font-size: 16px;
             line-height: 1.3;
