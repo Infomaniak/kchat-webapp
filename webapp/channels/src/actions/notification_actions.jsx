@@ -114,7 +114,9 @@ export function sendDesktopNotification(post, msgProps) {
             notifyLevel = NotificationLevels.ALL;
         }
 
-        if (notifyLevel === NotificationLevels.NONE) {
+        if (window.location.search.includes('dnd=true')) {
+            return;
+        } else if (notifyLevel === NotificationLevels.NONE) {
             return;
         } else if (channel.type === 'G' && notifyLevel === NotificationLevels.MENTION) {
             // Compose the whole text in the message, including interactive messages.

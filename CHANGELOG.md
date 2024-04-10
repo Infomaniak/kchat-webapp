@@ -1,3 +1,9 @@
+## 2.6.2-rc.3 (2024-04-09)
+
+### Fixed (1 change)
+
+- [Fix: redirect to default channel on websocket reconnect](kchat/webapp@7c791594808ae4054da3258a184dec31ae9cb3ed) by @philippe.karle ([merge request](kchat/webapp!684))
+
 ## 2.6.2-rc.2 (2024-04-09)
 
 ### Added (1 change)
@@ -18,6 +24,12 @@
 ### Changed (1 change)
 
 - [limit sentry bt by env](kchat/webapp@7886c51cf5ac0a4f529e3d967b08f4e1bb796545) by @antonbuksa ([merge request](kchat/webapp!707))
+
+## 2.6.2-next.3 (2024-04-09)
+
+### Fixed (1 change)
+
+- [Fix: redirect to default channel on websocket reconnect](kchat/webapp@7c791594808ae4054da3258a184dec31ae9cb3ed) by @philippe.karle ([merge request](kchat/webapp!684))
 
 ## 2.6.2-next.2 (2024-04-09)
 
