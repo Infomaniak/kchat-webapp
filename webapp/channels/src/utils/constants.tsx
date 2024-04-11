@@ -212,6 +212,7 @@ export const suitePluginIds = {
 
 export const BridgeActionTypes = keyMirror({
     STORE_BRIDGE: null,
+    DND_CHANGE: null,
 });
 
 export const KDriveActionTypes = keyMirror({
