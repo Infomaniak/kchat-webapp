@@ -54,6 +54,10 @@
 
 - [limit sentry bt by env](kchat/webapp@7886c51cf5ac0a4f529e3d967b08f4e1bb796545) by @antonbuksa ([merge request](kchat/webapp!707))
 
+## 2.6.2-next.5 (2024-04-11)
+
+No changes.
+
 ## 2.6.2-next.4 (2024-04-11)
 
 ### Added (4 changes)
