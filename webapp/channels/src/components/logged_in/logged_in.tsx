@@ -186,8 +186,10 @@ export default class LoggedIn extends React.PureComponent<Props> {
                 window.desktop = {};
             }
             window.desktop.version = semver.valid(semver.coerce(version));
-            window.desktop.theme = theme;
-            dispatch(setTheme(window.desktop.theme as Theme));
+            if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.1.0')) {
+                window.desktop.theme = theme;
+                dispatch(setTheme(window.desktop.theme as Theme));
+            }
             break;
         }
         case 'user-activity-update': {
