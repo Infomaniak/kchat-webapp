@@ -81,20 +81,18 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
     }
 
     submitTheme = async (theme: Theme): Promise<void> => {
-        const isUnifiedThemeActivated = isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0');
+        const isUnifiedThemeActivatedForDesktop = isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0');
 
-        if (isUnifiedThemeActivated) {
-            if (isDesktopApp()) {
-                window.postMessage(
-                    {
-                        type: 'theme-changed',
-                        message: theme,
-                    },
-                    window.origin,
-                );
+        if (isUnifiedThemeActivatedForDesktop) {
+            window.postMessage(
+                {
+                    type: 'theme-changed',
+                    message: theme,
+                },
+                window.origin,
+            );
 
-                store.dispatch(setTheme(theme));
-            }
+            store.dispatch(setTheme(theme));
         } else {
             const teamId = this.props.currentTeamId;
             this.setState({isSaving: true});
@@ -105,7 +103,7 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
         this.originalTheme = Object.assign({}, this.state.theme);
         this.props.updateSection('');
 
-        if (!isUnifiedThemeActivated) {
+        if (!isUnifiedThemeActivatedForDesktop) {
             this.setState({isSaving: false});
         }
     };
