@@ -7,11 +7,13 @@ import semver from 'semver';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import * as GlobalActions from 'actions/global_actions';
 import {updateTeamsOrderForUser} from 'actions/team_actions';
+import {setTheme} from 'actions/views/theme';
 import * as WebSocketActions from 'actions/websocket_actions.jsx';
 import BrowserStore from 'stores/browser_store';
 import store from 'stores/redux_store';
