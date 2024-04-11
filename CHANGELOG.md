@@ -54,6 +54,19 @@
 
 - [limit sentry bt by env](kchat/webapp@7886c51cf5ac0a4f529e3d967b08f4e1bb796545) by @antonbuksa ([merge request](kchat/webapp!707))
 
+## 2.6.2-next.4 (2024-04-11)
+
+### Added (4 changes)
+
+- [Update: onboarding channels tour learn more link added](kchat/webapp@8186cdb713671b78ad225ce7a54061b10ce79c6a) by @philippe.karle ([merge request](kchat/webapp!722))
+- [add log for successful subscriptions to ws channels](kchat/webapp@fe32a7bbabbe2acb41bdcc6bd797e15db045b00e) by @antonbuksa ([merge request](kchat/webapp!721))
+- [handle bridge dnd event](kchat/webapp@ead342b52dc6727fe8f3f96f0e7aa8b61273ef5c) by @antonbuksa ([merge request](kchat/webapp!719))
+- [add url param for disabling browser notifications on current session](kchat/webapp@3106f9fa0bef0c582388bcbcb51f079581b369ba) by @antonbuksa ([merge request](kchat/webapp!716))
+
+### Changed (1 change)
+
+- [change new sidebar condition version](kchat/webapp@b3a865030fcc15fc304c463a21079eef85bb5cca) by @antonbuksa
+
 ## 2.6.2-next.3 (2024-04-09)
 
 ### Fixed (1 change)
