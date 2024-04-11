@@ -1,3 +1,10 @@
+## 2.6.2-rc.6 (2024-04-11)
+
+### Added (2 changes)
+
+- [Update: onboarding channels tour learn more link added](kchat/webapp@8186cdb713671b78ad225ce7a54061b10ce79c6a) by @philippe.karle ([merge request](kchat/webapp!722))
+- [handle bridge dnd event](kchat/webapp@ead342b52dc6727fe8f3f96f0e7aa8b61273ef5c) by @antonbuksa ([merge request](kchat/webapp!719))
+
 ## 2.6.2-rc.5 (2024-04-11)
 
 ### Added (1 change)
