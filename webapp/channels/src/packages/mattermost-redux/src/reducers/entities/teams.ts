@@ -61,7 +61,7 @@ function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
             [action.data.id]: action.data,
         };
 
-        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
             window.postMessage(
                 {
                     type: 'update-teams',

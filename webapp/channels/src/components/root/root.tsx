@@ -344,7 +344,7 @@ export default class Root extends React.PureComponent<Props, State> {
         //     BrowserStore.setLandingPageSeen(true);
         // }
 
-        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
             window.postMessage({
                 type: 'preferred-theme',
                 data: {
@@ -376,7 +376,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
             }
 
-            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
                 window.postMessage({
                     type: 'preferred-theme',
                     data: {
@@ -388,7 +388,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
             Utils.applyTheme(this.props.theme);
         }
-        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0')) {
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
             if (!deepEqual(prevProps.teamsOrderPreference, this.props.teamsOrderPreference)) {
                 window.postMessage({
                     type: 'teams-order-preference',
@@ -866,7 +866,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         <AnnouncementBarController/>
                         <SystemNotice/>
                         <GlobalHeader headerRef={this.headerResizerRef}/>
-                        {!this.embeddedInIFrame && isDesktopApp() && !isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0') && <TeamSidebar/>}
+                        {!this.embeddedInIFrame && isDesktopApp() && !isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0') && <TeamSidebar/>}
                         <Switch>
                             {this.props.products?.map((product) => (
                                 <Route
