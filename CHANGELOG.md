@@ -1,3 +1,9 @@
+## 2.6.2-rc.4 (2024-04-10)
+
+### Added (1 change)
+
+- [add url param for disabling browser notifications on current session](kchat/webapp@3106f9fa0bef0c582388bcbcb51f079581b369ba) by @antonbuksa ([merge request](kchat/webapp!716))
+
 ## 2.6.2-rc.3 (2024-04-09)
 
 ### Fixed (1 change)
