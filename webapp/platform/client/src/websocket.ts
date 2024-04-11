@@ -123,8 +123,11 @@ export default class WebSocketClient {
 
     unbindGlobalsAndReset() {
         console.log('unbindGlobalsAndReset')
+        this.teamChannel?.unbind('pusher:subscription_succeeded')
         this.teamChannel?.unbind_global();
+        this.userChannel?.unbind('pusher:subscription_succeeded')
         this.userChannel?.unbind_global();
+        this.userTeamChannel?.unbind('pusher:subscription_succeeded')
         this.userTeamChannel?.unbind_global();
         this.presenceChannel?.unbind_global();
         Object.values(this.otherTeamsChannel)?.forEach(team => team.forEach(channel => channel.unbind_all()))
@@ -328,18 +331,27 @@ export default class WebSocketClient {
         console.log(`subscribeToTeamChannel ~ private-team.${teamId}`)
         this.currentTeam = teamId;
         this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
+        this.teamChannel.bind('pusher:subscription_succeeded', () => {
+            console.log(`[websocket] subscribed successfully to private-team.${teamId}`)
+        })
     }
 
     subscribeToUserChannel(userId: number) {
         console.log(`subscribeToUserChannel ~ presence-user.${userId}`)
         this.currentUser = userId;
         this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
+        this.userChannel.bind('pusher:subscription_succeeded', () => {
+            console.log(`[websocket] subscribed successfully to presence-user.${userId}`)
+        })
     }
 
     subscribeToUserTeamScopedChannel(teamUserId: string) {
         console.log(`subscribeToUserTeamScopedChannel ~ presence-teamUser.${teamUserId}`)
         this.currentTeamUser = teamUserId;
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
+        this.userTeamChannel.bind('pusher:subscription_succeeded', () => {
+            console.log(`[websocket] subscribed successfully to presence-teamUser.${teamUserId}`)
+        })
     }
 
     bindPresenceChannel(channelID: string) {
