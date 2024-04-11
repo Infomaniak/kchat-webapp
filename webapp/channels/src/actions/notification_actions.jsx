@@ -17,7 +17,7 @@ import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 import {isSystemMessage, isUserAddedInChannel} from 'mattermost-redux/utils/post_utils';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
-import {getKSuiteBridge} from 'selectors/ksuite_bridge';
+import {getKSuiteBridge, getKSuiteDnd} from 'selectors/ksuite_bridge';
 import {getChannelURL, getPermalinkURL} from 'selectors/urls';
 import {isThreadOpen} from 'selectors/views/threads';
 
@@ -98,6 +98,7 @@ export function sendDesktopNotification(post, msgProps) {
         const userStatus = getStatusForUserId(state, user.id);
         const member = getMyChannelMember(state, post.channel_id);
         const isCrtReply = isCollapsedThreadsEnabled(state) && post.root_id !== '';
+        const ksuiteDnd = getKSuiteDnd(state);
 
         if (!member || isChannelMuted(member) || userStatus === UserStatuses.DND || userStatus === UserStatuses.OUT_OF_OFFICE) {
             return;
@@ -114,9 +115,7 @@ export function sendDesktopNotification(post, msgProps) {
             notifyLevel = NotificationLevels.ALL;
         }
 
-        if (window.location.search.includes('dnd=true')) {
-            return;
-        } else if (notifyLevel === NotificationLevels.NONE) {
+        if (ksuiteDnd || window.location.search.includes('dnd=true') || notifyLevel === NotificationLevels.NONE) {
             return;
         } else if (channel.type === 'G' && notifyLevel === NotificationLevels.MENTION) {
             // Compose the whole text in the message, including interactive messages.
