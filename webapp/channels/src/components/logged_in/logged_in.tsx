@@ -181,13 +181,15 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         switch (desktopMessage.data.type) {
         case 'register-desktop': {
-            const {version, theme} = desktopMessage.data.message;
+            const {version} = desktopMessage.data.message;
             if (!window.desktop) {
                 window.desktop = {};
             }
             window.desktop.version = semver.valid(semver.coerce(version));
-            window.desktop.theme = theme;
-            dispatch(setTheme(window.desktop.theme as Theme));
+            if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.1.0')) {
+                window.desktop.theme = desktopMessage.data.message.theme;
+                dispatch(setTheme(window.desktop.theme as Theme));
+            }
             break;
         }
         case 'user-activity-update': {
