@@ -1,3 +1,9 @@
+## 2.6.2-rc.5 (2024-04-11)
+
+### Added (1 change)
+
+- [add log for successful subscriptions to ws channels](kchat/webapp@fe32a7bbabbe2acb41bdcc6bd797e15db045b00e) by @antonbuksa ([merge request](kchat/webapp!721))
+
 ## 2.6.2-rc.4 (2024-04-10)
 
 ### Added (1 change)
