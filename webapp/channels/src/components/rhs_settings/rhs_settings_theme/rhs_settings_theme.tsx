@@ -10,7 +10,8 @@ import {setTheme} from 'actions/views/theme';
 import store from 'stores/redux_store';
 
 import {Constants} from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {applyTheme} from 'utils/utils';
 
 import type {DesktopThemePreference} from 'types/theme';
@@ -80,28 +81,33 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
     }
 
     submitTheme = async (theme: Theme): Promise<void> => {
-        // const teamId = this.props.currentTeamId;
+        const isUnifiedThemeActivated = isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0');
 
-        // this.setState({isSaving: true});
-        // await this.props.actions.saveTheme(teamId, this.state.theme);
+        if (isUnifiedThemeActivated) {
+            if (isDesktopApp()) {
+                window.postMessage(
+                    {
+                        type: 'theme-changed',
+                        message: theme,
+                    },
+                    window.origin,
+                );
 
-        if (isDesktopApp()) {
-            window.postMessage(
-                {
-                    type: 'theme-changed',
-                    message: theme,
-                },
-                window.origin,
-            );
-
-            store.dispatch(setTheme(theme));
+                store.dispatch(setTheme(theme));
+            }
+        } else {
+            const teamId = this.props.currentTeamId;
+            this.setState({isSaving: true});
+            await this.props.actions.saveTheme(teamId, this.state.theme);
         }
 
         this.props.setRequireConfirm?.(false);
         this.originalTheme = Object.assign({}, this.state.theme);
         this.props.updateSection('');
 
-        // this.setState({isSaving: false});
+        if (!isUnifiedThemeActivated) {
+            this.setState({isSaving: false});
+        }
     };
 
     updateTheme = (theme: Theme): void => {
@@ -122,7 +128,7 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
         this.setState({theme}, () => {
             this.submitTheme(theme);
         });
-        applyTheme(setThemeDefaults(theme, this.props.desktopThemePreference));
+        applyTheme(setThemeDefaults(theme, this.props.desktopThemePreference as string));
     };
 
     resetFields = (): void => {
