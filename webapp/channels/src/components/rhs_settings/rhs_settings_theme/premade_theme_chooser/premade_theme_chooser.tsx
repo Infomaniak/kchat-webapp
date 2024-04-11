@@ -7,24 +7,25 @@ import {FormattedMessage} from 'react-intl';
 import {Preferences} from 'mattermost-redux/constants';
 import type {Theme, ThemeKey} from 'mattermost-redux/selectors/entities/preferences';
 
+import SvgAutoThemeIcon from '../assets/SvgAutoIcon';
 import SvgDarkThemeIcon from '../assets/SvgDarkIcon';
 import SvgLightThemeIcon from '../assets/SvgLightIcon';
-import SvgMediumThemeIcon from '../assets/SvgMediumIcon';
 
 type Props = {
     theme: Theme;
+    storedTheme: Theme | null;
     updateTheme: (theme: Theme) => void;
     allowedThemes: string[];
 }
 
-const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) => {
+const PremadeThemeChooser = ({theme, storedTheme, updateTheme, allowedThemes = []}: Props) => {
     const premadeThemes = [];
     const hasAllowedThemes = allowedThemes.length > 1 || (allowedThemes[0] && allowedThemes[0].trim().length > 0);
-    const ikAllowedThemes = ['Quartz', 'Infomaniak', 'Onyx'];
+    const ikAllowedThemes = ['Infomaniak', 'Onyx', 'Quartz'];
 
     // eslint-disable-next-line consistent-return
     const getThemeLabel = (theme: Theme) => {
-        switch (theme.ikType) {
+        switch (theme.ksuiteTheme) {
         case 'light': {
             return (
                 <FormattedMessage
@@ -33,19 +34,19 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
                 />
             );
         }
-        case 'medium': {
-            return (
-                <FormattedMessage
-                    id='user.settings.display.theme.themeMedium'
-                    defaultMessage='Medium theme'
-                />
-            );
-        }
         case 'dark': {
             return (
                 <FormattedMessage
                     id='user.settings.display.theme.themeDark'
                     defaultMessage='Dark theme'
+                />
+            );
+        }
+        case 'auto': {
+            return (
+                <FormattedMessage
+                    id='user.settings.display.theme.themeAuto'
+                    defaultMessage='Auto theme'
                 />
             );
         }
@@ -60,12 +61,12 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
 
             const premadeTheme: Theme = Object.assign({}, Preferences.THEMES[k as ThemeKey]);
 
-            if (!ikAllowedThemes.includes(premadeTheme.type)) {
+            if (premadeTheme.type && !ikAllowedThemes.includes(premadeTheme.type)) {
                 continue;
             }
 
             let activeClass = '';
-            if (premadeTheme.type === theme.type) {
+            if ((!storedTheme && premadeTheme.ksuiteTheme === theme.ksuiteTheme) || (storedTheme && storedTheme.ksuiteTheme === premadeTheme.ksuiteTheme)) {
                 activeClass = 'active';
             }
 
@@ -80,9 +81,10 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
                         onClick={() => updateTheme(premadeTheme)}
                     >
                         <label>
-                            {(premadeTheme.type === 'Indigo' || premadeTheme.type === 'Onyx') && (<SvgDarkThemeIcon/>)}
-                            {premadeTheme.type === 'Quartz' && (<SvgLightThemeIcon/>)}
-                            {premadeTheme.type === 'Infomaniak' && (<SvgMediumThemeIcon/>)}
+                            {/* {(premadeTheme.type === 'Indigo' || premadeTheme.type === 'Onyx') && (<SvgDarkThemeIcon/>)} */}
+                            {premadeTheme.ksuiteTheme === 'light' && (<SvgLightThemeIcon/>)}
+                            {premadeTheme.ksuiteTheme === 'dark' && (<SvgDarkThemeIcon/>)}
+                            {premadeTheme.ksuiteTheme === 'auto' && (<SvgAutoThemeIcon/>)}
                             <div className='rhs-custom-btn-label'>{
                                 getThemeLabel(premadeTheme)
                             }</div>

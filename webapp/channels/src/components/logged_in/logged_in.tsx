@@ -7,11 +7,13 @@ import semver from 'semver';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import * as GlobalActions from 'actions/global_actions';
 import {updateTeamsOrderForUser} from 'actions/team_actions';
+import {setTheme} from 'actions/views/theme';
 import * as WebSocketActions from 'actions/websocket_actions.jsx';
 import BrowserStore from 'stores/browser_store';
 import store from 'stores/redux_store';
@@ -30,6 +32,7 @@ declare global {
     interface Window {
         desktop: {
             version?: string | null;
+            theme?: object | null;
         };
     }
 }
@@ -57,6 +60,7 @@ type DesktopMessage = {
         type: string;
         message: {
             version: string;
+            theme: object | null;
             userIsActive: boolean;
             manual: boolean;
             channel: Channel;
@@ -177,11 +181,13 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         switch (desktopMessage.data.type) {
         case 'register-desktop': {
-            const {version} = desktopMessage.data.message;
+            const {version, theme} = desktopMessage.data.message;
             if (!window.desktop) {
                 window.desktop = {};
             }
             window.desktop.version = semver.valid(semver.coerce(version));
+            window.desktop.theme = theme;
+            dispatch(setTheme(window.desktop.theme as Theme));
             break;
         }
         case 'user-activity-update': {
@@ -221,6 +227,10 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
             // navigate to the appropriate channel
             this.props.actions.getChannelURLAction(channel, teamId, url);
+            break;
+        }
+        case 'theme-changed-global': {
+            dispatch(setTheme((desktopMessage.data as any).theme as Theme));
             break;
         }
         }

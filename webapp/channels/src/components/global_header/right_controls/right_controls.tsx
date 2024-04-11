@@ -23,9 +23,10 @@ import {
     useShowOnboardingTutorialStep,
 } from 'components/tours/onboarding_tour';
 
-import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 import Constants from 'utils/constants';
 import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
+
+import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 
 import type {GlobalState} from 'types/store';
 

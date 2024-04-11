@@ -32,7 +32,9 @@ import * as GlobalActions from 'actions/global_actions';
 import {storeBridge} from 'actions/ksuite_bridge_actions';
 import {measurePageLoadTelemetry, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
+import {setThemePreference} from 'actions/views/theme';
 import {close, initialize} from 'actions/websocket_actions';
+import theme from 'reducers/views/theme';
 import LocalStorageStore from 'stores/local_storage_store';
 import store from 'stores/redux_store';
 
@@ -55,7 +57,7 @@ import WelcomePostRenderer from 'components/welcome_post_renderer';
 import WindowSizeObserver from 'components/window_size_observer/WindowSizeObserver';
 
 import A11yController from 'utils/a11y_controller';
-import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
+import Constants, {DesktopThemePreferences, StoragePrefixes, WindowSizes} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
@@ -172,6 +174,7 @@ interface State {
 }
 
 export default class Root extends React.PureComponent<Props, State> {
+    private themeMediaQuery: MediaQueryList;
     private desktopMediaQuery: MediaQueryList;
     private smallDesktopMediaQuery: MediaQueryList;
     private tabletMediaQuery: MediaQueryList;
@@ -237,6 +240,9 @@ export default class Root extends React.PureComponent<Props, State> {
         this.tabletMediaQuery = window.matchMedia(`(min-width: ${Constants.MOBILE_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.TABLET_SCREEN_WIDTH}px)`);
         this.mobileMediaQuery = window.matchMedia(`(max-width: ${Constants.MOBILE_SCREEN_WIDTH}px)`);
 
+        this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        this.updateThemePreference(this.themeMediaQuery.matches);
         this.updateWindowSize();
 
         store.subscribe(() => applyLuxonDefaults(store.getState()));
@@ -689,6 +695,10 @@ export default class Root extends React.PureComponent<Props, State> {
             window.addEventListener('resize', this.handleWindowResizeEvent);
         }
 
+        if (this.themeMediaQuery.addEventListener) {
+            this.themeMediaQuery.addEventListener('change', this.handleThemeMediaQueryChangeEvent);
+        }
+
         measurePageLoadTelemetry();
         trackSelectorMetrics();
     };
@@ -714,6 +724,10 @@ export default class Root extends React.PureComponent<Props, State> {
             this.mobileMediaQuery.removeListener(this.handleMediaQueryChangeEvent);
         } else {
             window.removeEventListener('resize', this.handleWindowResizeEvent);
+        }
+
+        if (this.themeMediaQuery.removeEventListener) {
+            this.themeMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
         }
     }
 
@@ -752,6 +766,10 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     };
 
+    handleThemeMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
+        this.updateThemePreference(e.matches);
+    };
+
     setRootMeta = () => {
         const root = document.getElementById('root')!;
 
@@ -779,6 +797,15 @@ export default class Root extends React.PureComponent<Props, State> {
             this.props.actions.emitBrowserWindowResized(WindowSizes.MOBILE_VIEW);
             break;
         }
+    };
+
+    updateThemePreference = (isDark: boolean) => {
+        if (isDark) {
+            store.dispatch(setThemePreference(DesktopThemePreferences.DARK));
+            return;
+        }
+
+        store.dispatch(setThemePreference(DesktopThemePreferences.LIGHT));
     };
 
     render() {

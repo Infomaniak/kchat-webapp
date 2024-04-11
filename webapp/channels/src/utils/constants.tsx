@@ -51,6 +51,11 @@ export const SettingsTypes = {
     TYPE_CUSTOM: 'custom',
 };
 
+export const ThemeTypes = {
+    RECEIVED_THEME: 'received_theme',
+    RECEIVED_THEME_PREFERENCE: 'received_theme_preference',
+};
+
 export const InviteTypes = {
     INVITE_MEMBER: 'member',
     INVITE_GUEST: 'guest',
@@ -155,6 +160,12 @@ export const Preferences = {
     TO_CLOUD_YEARLY_PLAN_NUDGE: 'to_cloud_yearly_plan_nudge',
     TO_PAID_PLAN_NUDGE: 'to_paid_plan_nudge',
 };
+
+export const DesktopThemePreferences = {
+    LIGHT: 'light',
+    DARK: 'dark',
+    AUTO: null,
+} as const;
 
 // For one off things that have a special, attention-grabbing UI until you interact with them
 export const Touched = {

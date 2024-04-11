@@ -133,10 +133,12 @@ export type ThemeKey = 'denim' | 'sapphire' | 'quartz' | 'indigo' | 'onyx' | 'ik
 export type LegacyThemeType = 'Mattermost' | 'Organization' | 'Mattermost Dark' | 'Windows Dark';
 
 export type ThemeType = 'Denim' | 'Sapphire' | 'Quartz' | 'Indigo' | 'Onyx' | 'Infomaniak';
+export type KsuiteThemeType = 'light' | 'dark' | 'auto';
 
 export type Theme = {
     [key: string]: string | undefined;
     type?: ThemeType | 'custom';
+    ksuiteTheme: KsuiteThemeType;
     sidebarBg: string;
     sidebarText: string;
     sidebarUnreadText: string;
@@ -207,14 +209,16 @@ export const getTheme: (state: GlobalState) => Theme = createShallowSelector(
     'getTheme',
     getThemePreference,
     getDefaultTheme,
-    (themePreference, defaultTheme): Theme => {
-        const themeValue: Theme | string = themePreference?.value ?? defaultTheme;
+    (state: any) => state.views.theme.storedTheme,
+    (state: any) => state.views.theme.themePreference,
+    (themePreference, defaultTheme, storedTheme, desktopThemePreference): Theme => {
+        const themeValue: Theme | string = storedTheme ?? themePreference?.value ?? defaultTheme;
 
         // A custom theme will be a JSON-serialized object stored in a preference
         // At this point, the theme should be a plain object
         const theme: Theme = typeof themeValue === 'string' ? JSON.parse(themeValue) : themeValue;
 
-        return setThemeDefaults(theme);
+        return setThemeDefaults(theme, desktopThemePreference);
     },
 );
 
