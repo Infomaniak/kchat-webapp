@@ -1,3 +1,13 @@
+## 2.6.2-rc.7 (2024-04-11)
+
+### Added (1 change)
+
+- [handle bridge dnd event](kchat/webapp@ead342b52dc6727fe8f3f96f0e7aa8b61273ef5c) by @antonbuksa ([merge request](kchat/webapp!719))
+
+### Changed (1 change)
+
+- [change new sidebar condition version](kchat/webapp@b3a865030fcc15fc304c463a21079eef85bb5cca) by @antonbuksa
+
 ## 2.6.2-rc.6 (2024-04-11)
 
 ### Added (2 changes)
