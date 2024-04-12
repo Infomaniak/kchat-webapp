@@ -77,12 +77,12 @@ export default class SearchableChannelList extends React.PureComponent {
         this.props.handleJoin(
             channel,
             () => {
+                if (this.isMemberOfChannel(channel.id)) {
+                    this.props.closeModal(ModalIdentifiers.MORE_CHANNELS);
+                }
                 this.setState({joiningChannel: ''});
             },
         );
-        if (this.isMemberOfChannel(channel.id)) {
-            this.props.closeModal(ModalIdentifiers.MORE_CHANNELS);
-        }
     };
 
     handleView = (channel, e) => {
