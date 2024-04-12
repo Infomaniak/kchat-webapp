@@ -1,3 +1,9 @@
+## 2.6.3-rc.3 (2024-04-12)
+
+### Fixed (1 change)
+
+- [Fix: Servers sidebar events runtime error due to missing value](kchat/webapp@e42e1504f955168a3af4994f395915ff51b2eb5d) by @philippe.karle ([merge request](kchat/webapp!724))
+
 ## 2.6.3-rc.2 (2024-04-12)
 
 ### Fixed (2 changes)
