@@ -40,6 +40,7 @@ import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
 
 import {General, Preferences} from '../constants';
+import display from 'components/user_settings/display';
 
 export function selectChannel(channelId: string) {
     return {
@@ -1212,11 +1213,25 @@ export function getChannelStats(channelId: string): ActionFunc {
     };
 }
 
+export function notifyChannelMember(channelId: string, userIds: string[]): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let member;
+        try {
+            member = await Client4.notifyMember(channelId, userIds);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error}
+        }
+        return {data: member};
+    };
+}
+
 export function addChannelMember(channelId: string, userId: string, postRootId = ''): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let member;
         try {
-            member = await Client4.addToChannel(userId, channelId, postRootId);
+             member = await Client4.addToChannel(userId, channelId, postRootId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -1762,6 +1777,7 @@ export default {
     searchGroupChannels,
     getChannelStats,
     addChannelMember,
+    notifyChannelMember,
     removeChannelMember,
     updateChannelHeader,
     updateChannelPurpose,

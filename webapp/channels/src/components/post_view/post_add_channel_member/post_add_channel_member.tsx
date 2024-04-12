@@ -15,6 +15,7 @@ import {Constants} from 'utils/constants';
 import {t} from 'utils/i18n';
 
 interface Actions {
+    notifyChannelMember:(channelId: string, userIds: string[]) => void;
     addChannelMember: (channelId: string, userId: string, rootId: string) => void;
     removePost: (post: Post) => void;
 }
@@ -57,6 +58,17 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
             this.props.actions.removePost(post);
         }
     };
+
+    handleNotifyChannelMember = () => {
+        const {post, userIds} = this.props;
+
+        if (post && post.channel_id){ 
+            this.props.actions.notifyChannelMember(post.channel_id,userIds);
+            this.props.actions.removePost(post);
+        } 
+    }
+
+  
 
     expand = () => {
         this.setState({expanded: true});
@@ -202,6 +214,26 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                             defaultMessage={linkText}
                         />
                     </a>
+
+
+
+                    <FormattedMessage
+                            id={'post_body.check_for_out_of_channel_groups_mentions_choice.message'}
+                            defaultMessage={'or '}
+                    />
+                    <a
+                        className='PostBody_addChannelMemberLink'
+                        onClick={this.handleNotifyChannelMember}
+                    >
+                        <FormattedMessage
+                            id={'post_body.check_for_out_of_channel_groups_mentions_notify.message'}
+                            defaultMessage={'notify them'}
+                        />
+                    </a>
+
+
+
+
                     <FormattedMessage
                         id={'post_body.check_for_out_of_channel_mentions.message_last'}
                         defaultMessage={'? They will have access to all message history.'}

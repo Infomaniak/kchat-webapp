@@ -1874,6 +1874,14 @@ export default class Client4 {
         );
     };
 
+    notifyMember = (channelId: string, userIds: string[], ) => {
+        return this.doFetch<StatusOK>(
+            `${this.getChannelMembersRoute(channelId)}/invite`,
+            {method: 'post', body: JSON.stringify(userIds)},
+        );
+        
+    };
+
     removeFromChannel = (userId: string, channelId: string) => {
         this.trackEvent('api', 'api_channels_remove_member', {channel_id: channelId});
 
@@ -4053,7 +4061,7 @@ export default class Client4 {
 
     notifyAdmin = (req: NotifyAdminRequest) => {
         return this.doFetchWithResponse<StatusOK>(
-            `${this.getUsersRoute()}/notify-admin`,
+            `${this.getUsersRoute()}/members/notify`,
             {method: 'post', body: JSON.stringify(req)},
         );
     }
