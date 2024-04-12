@@ -34,7 +34,6 @@ import {measurePageLoadTelemetry, trackEvent, trackSelectorMetrics} from 'action
 import {clearUserCookie} from 'actions/views/cookie';
 import {setThemePreference} from 'actions/views/theme';
 import {close, initialize} from 'actions/websocket_actions';
-import theme from 'reducers/views/theme';
 import LocalStorageStore from 'stores/local_storage_store';
 import store from 'stores/redux_store';
 
@@ -349,7 +348,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 type: 'preferred-theme',
                 data: {
                     theme: this.props.theme,
-                    teamName: this.props.currentTeam.display_name,
+                    teamName: this.props.currentTeam?.display_name,
                 },
             }, window.origin);
 
@@ -368,7 +367,7 @@ export default class Root extends React.PureComponent<Props, State> {
     };
 
     componentDidUpdate(prevProps: Props) {
-        if (!deepEqual(prevProps.theme, this.props.theme)) {
+        if (!deepEqual(prevProps.theme, this.props.theme) || !deepEqual(prevProps.currentTeam, this.props.currentTeam)) {
             // add body class for webcomponents theming
             if (document.body.className.match(/kchat-.+-theme/)) {
                 document.body.className = document.body.className.replace(/kchat-.+-theme/, `kchat-${this.props.theme.ikType}-theme`);
@@ -381,7 +380,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     type: 'preferred-theme',
                     data: {
                         theme: this.props.theme,
-                        teamName: this.props.currentTeam.display_name,
+                        teamName: this.props.currentTeam?.display_name,
                     },
                 }, window.origin);
             }
