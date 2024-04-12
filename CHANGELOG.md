@@ -1,3 +1,10 @@
+## 2.6.3-rc.4 (2024-04-12)
+
+### Fixed (2 changes)
+
+- [Fix: themes buttons not displaying properly on small devices](kchat/webapp@76681f69098cc7f549e947989b6a2eba5fb0ce9a) by @philippe.karle ([merge request](kchat/webapp!725))
+- [Fix: Insights hide deleted users](kchat/webapp@7a68d7cbd284e8ad11ae263a40cdb6df8d2f2346) by @philippe.karle ([merge request](kchat/webapp!659))
+
 ## 2.6.3-rc.3 (2024-04-12)
 
 ### Fixed (1 change)
