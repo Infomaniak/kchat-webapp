@@ -12,6 +12,7 @@ import type {Action} from 'mattermost-redux/types/actions';
 import {memoizeResult} from 'mattermost-redux/utils/helpers';
 import {makePreparePostIdsForPostList} from 'mattermost-redux/utils/post_list';
 
+import {loadDeletedPosts} from 'actions/channel_actions';
 import {updateNewMessagesAtInChannel} from 'actions/global_actions';
 import {
     loadPosts,
@@ -112,6 +113,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             loadPosts,
             loadLatestPosts,
             loadPostsAround,
+            loadDeletedPosts,
             checkAndSetMobileView,
             syncPostsInChannel,
             markChannelAsViewed,

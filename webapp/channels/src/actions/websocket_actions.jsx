@@ -291,6 +291,7 @@ export async function reconnect(socketId) {
             // eslint-disable-next-line no-console
             console.log('[websocket_actions] dispatch syncPostsInChannel');
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
+            dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
             // if network timed-out the first time when loading a channel
             // we can request for getPosts again when socket is connected
@@ -326,7 +327,6 @@ export async function reconnect(socketId) {
         console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
         dispatch(checkForModifiedUsers(true));
         dispatch(TeamActions.getMyKSuites());
-        dispatch(loadDeletedPosts(state.websocket.lastDisconnectAt));
     }
 
     dispatch(resetWsErrorCount());
