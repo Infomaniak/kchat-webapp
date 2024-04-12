@@ -27,6 +27,19 @@
 - [Fix: responsive sidebar link item overflowing](kchat/webapp@7029c421a0f0b5fdfc6defd3e83db7cff78b5485) by @philippe.karle ([merge request](kchat/webapp!712))
 - [Fix: load deleted posts on channel switch](kchat/webapp@97c2c95de6a22298d0d8e940258759abdc3d77b6) by @philippe.karle ([merge request](kchat/webapp!706))
 
+## 2.6.3-next.1 (2024-04-12)
+
+### Fixed (8 changes)
+
+- [Fix: themes buttons not displaying properly on small devices](kchat/webapp@76681f69098cc7f549e947989b6a2eba5fb0ce9a) by @philippe.karle ([merge request](kchat/webapp!725))
+- [Fix: Servers sidebar events runtime error due to missing value](kchat/webapp@e42e1504f955168a3af4994f395915ff51b2eb5d) by @philippe.karle ([merge request](kchat/webapp!724))
+- [Fix: Insights hide deleted users](kchat/webapp@7a68d7cbd284e8ad11ae263a40cdb6df8d2f2346) by @philippe.karle ([merge request](kchat/webapp!659))
+- [Fix: group channels members not loaded when category is collapsed](kchat/webapp@9e934c2c28b695d01eda422d7d3034acb8860fb5) by @philippe.karle ([merge request](kchat/webapp!693))
+- [Fix: Remove unwanted paramterers from file extension coming from giphy](kchat/webapp@57c600a361278e213fa3fc4b1dbf0eb727ee70fa) by @philippe.karle ([merge request](kchat/webapp!714))
+- [Fix: responsive sidebar link item overflowing](kchat/webapp@7029c421a0f0b5fdfc6defd3e83db7cff78b5485) by @philippe.karle ([merge request](kchat/webapp!712))
+- [Fix: load deleted posts on channel switch](kchat/webapp@97c2c95de6a22298d0d8e940258759abdc3d77b6) by @philippe.karle ([merge request](kchat/webapp!706))
+- [Fix threads attachement displaying undefined](kchat/webapp@92fd0ab8d5bbb494e72441906e788dae47a55d18) by @philippe.karle ([merge request](kchat/webapp!662))
+
 ## 2.6.2-rc.7 (2024-04-11)
 
 ### Added (1 change)
