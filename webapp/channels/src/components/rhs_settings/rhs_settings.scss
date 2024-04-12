@@ -60,6 +60,12 @@
             .rhs-custom-btn-label, label {
                 margin: 0;
             }
+
+            &[id^="rhsTheme"] {
+                svg {
+                    width: 100%;
+                }
+            }
         }
     }
 
