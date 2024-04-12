@@ -132,14 +132,21 @@ const themeTypeMap: ThemeTypeMap = {
 };
 
 // setThemeDefaults will set defaults on the theme for any unset properties.
-export function setThemeDefaults(theme: Partial<Theme>): Theme {
+export function setThemeDefaults(theme: Partial<Theme>, preference?: string): Theme {
     const defaultTheme = Preferences.THEMES.ik;
 
     const processedTheme = {...theme};
 
     // If this is a system theme, return the source theme object matching the theme preference type
     if (theme.type && theme.type !== 'custom' && Object.keys(themeTypeMap).includes(theme.type)) {
-        return Preferences.THEMES[themeTypeMap[theme.type]];
+        const systemTheme = Preferences.THEMES[themeTypeMap[theme.type]];
+
+        if (systemTheme.ksuiteTheme === 'auto' && preference) {
+            const preferredTheme = preference === 'dark' ? Preferences.THEMES.onyx : Preferences.THEMES.ik;
+            return {...preferredTheme, ksuiteTheme: 'auto', type: theme.type};
+        }
+
+        return systemTheme;
     }
 
     for (const key of Object.keys(defaultTheme)) {

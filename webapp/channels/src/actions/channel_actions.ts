@@ -11,10 +11,10 @@ import {PreferenceTypes} from 'mattermost-redux/action_types';
 import * as ChannelActions from 'mattermost-redux/actions/channels';
 import {fetchDeletedPostsIds, postDeleted} from 'mattermost-redux/actions/posts';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
-import {getChannelByName, getUnreadChannelIds, getChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getChannelByName, getUnreadChannelIds, getChannel, getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
 import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
-import {getCurrentTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTeamUrl, getCurrentTeamId, getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
@@ -103,6 +103,13 @@ export function loadDeletedPosts(channelId: string, lastDisconnectAt: number): A
         const state = getState();
 
         const results = await dispatch(fetchDeletedPostsIds(channelId, lastDisconnectAt));
+
+        if ('error' in results) {
+            const currentTeamId = getCurrentTeamId(state);
+            const redirectChannel = getRedirectChannelNameForTeam(state, currentTeamId);
+            const teamUrl = getCurrentRelativeTeamUrl(state);
+            getHistory().push(`${teamUrl}/channels/${redirectChannel}`);
+        }
 
         if (results.data && Array.isArray(results.data)) {
             results.data.forEach((postId) => {

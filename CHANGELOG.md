@@ -1,3 +1,93 @@
+## 2.6.2-rc.7 (2024-04-11)
+
+### Added (1 change)
+
+- [handle bridge dnd event](kchat/webapp@ead342b52dc6727fe8f3f96f0e7aa8b61273ef5c) by @antonbuksa ([merge request](kchat/webapp!719))
+
+### Changed (1 change)
+
+- [change new sidebar condition version](kchat/webapp@b3a865030fcc15fc304c463a21079eef85bb5cca) by @antonbuksa
+
+## 2.6.2-rc.6 (2024-04-11)
+
+### Added (2 changes)
+
+- [Update: onboarding channels tour learn more link added](kchat/webapp@8186cdb713671b78ad225ce7a54061b10ce79c6a) by @philippe.karle ([merge request](kchat/webapp!722))
+- [handle bridge dnd event](kchat/webapp@ead342b52dc6727fe8f3f96f0e7aa8b61273ef5c) by @antonbuksa ([merge request](kchat/webapp!719))
+
+## 2.6.2-rc.5 (2024-04-11)
+
+### Added (1 change)
+
+- [add log for successful subscriptions to ws channels](kchat/webapp@fe32a7bbabbe2acb41bdcc6bd797e15db045b00e) by @antonbuksa ([merge request](kchat/webapp!721))
+
+## 2.6.2-rc.4 (2024-04-10)
+
+### Added (1 change)
+
+- [add url param for disabling browser notifications on current session](kchat/webapp@3106f9fa0bef0c582388bcbcb51f079581b369ba) by @antonbuksa ([merge request](kchat/webapp!716))
+
+## 2.6.2-rc.3 (2024-04-09)
+
+### Fixed (1 change)
+
+- [Fix: redirect to default channel on websocket reconnect](kchat/webapp@7c791594808ae4054da3258a184dec31ae9cb3ed) by @philippe.karle ([merge request](kchat/webapp!684))
+
+## 2.6.2-rc.2 (2024-04-09)
+
+### Added (1 change)
+
+- [Ajout de l'id du bot lors de la création d'un bot account](kchat/webapp@512ffed65c6eb1944ba53014e201282cde37e0ad) by  ([merge request](kchat/webapp!710))
+
+### Fixed (2 changes)
+
+- [add cast for desktop status isSystemEvent param](kchat/webapp@67ec225aa58a14e56668189716891d1c1f5d1b59) by @antonbuksa ([merge request](kchat/webapp!715))
+- [Fix: Wrong markdown shortcuts displayed](kchat/webapp@a28b0a9754b69e04649ef42708df9880adfe611f) by @philippe.karle ([merge request](kchat/webapp!711))
+
+## 2.6.2-rc.1 (2024-04-08)
+
+### Added (1 change)
+
+- [Event to communicate between desktop & webapp implemented](kchat/webapp@34fea5398d9290b1ca3735b58b987dd3d72a512f) by @philippe.karle ([merge request](kchat/webapp!695))
+
+### Changed (1 change)
+
+- [limit sentry bt by env](kchat/webapp@7886c51cf5ac0a4f529e3d967b08f4e1bb796545) by @antonbuksa ([merge request](kchat/webapp!707))
+
+## 2.6.2-next.5 (2024-04-11)
+
+No changes.
+
+## 2.6.2-next.4 (2024-04-11)
+
+### Added (4 changes)
+
+- [Update: onboarding channels tour learn more link added](kchat/webapp@8186cdb713671b78ad225ce7a54061b10ce79c6a) by @philippe.karle ([merge request](kchat/webapp!722))
+- [add log for successful subscriptions to ws channels](kchat/webapp@fe32a7bbabbe2acb41bdcc6bd797e15db045b00e) by @antonbuksa ([merge request](kchat/webapp!721))
+- [handle bridge dnd event](kchat/webapp@ead342b52dc6727fe8f3f96f0e7aa8b61273ef5c) by @antonbuksa ([merge request](kchat/webapp!719))
+- [add url param for disabling browser notifications on current session](kchat/webapp@3106f9fa0bef0c582388bcbcb51f079581b369ba) by @antonbuksa ([merge request](kchat/webapp!716))
+
+### Changed (1 change)
+
+- [change new sidebar condition version](kchat/webapp@b3a865030fcc15fc304c463a21079eef85bb5cca) by @antonbuksa
+
+## 2.6.2-next.3 (2024-04-09)
+
+### Fixed (1 change)
+
+- [Fix: redirect to default channel on websocket reconnect](kchat/webapp@7c791594808ae4054da3258a184dec31ae9cb3ed) by @philippe.karle ([merge request](kchat/webapp!684))
+
+## 2.6.2-next.2 (2024-04-09)
+
+### Added (1 change)
+
+- [Ajout de l'id du bot lors de la création d'un bot account](kchat/webapp@512ffed65c6eb1944ba53014e201282cde37e0ad) by  ([merge request](kchat/webapp!710))
+
+### Fixed (2 changes)
+
+- [add cast for desktop status isSystemEvent param](kchat/webapp@67ec225aa58a14e56668189716891d1c1f5d1b59) by @antonbuksa ([merge request](kchat/webapp!715))
+- [Fix: Wrong markdown shortcuts displayed](kchat/webapp@a28b0a9754b69e04649ef42708df9880adfe611f) by @philippe.karle ([merge request](kchat/webapp!711))
+
 ## 2.6.2-next.1 (2024-04-05)
 
 No changes.

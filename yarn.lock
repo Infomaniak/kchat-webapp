@@ -2107,12 +2107,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.2.7.tgz":
-  version: 0.2.7
-  resolution: "@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.2.7.tgz"
+"@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.3.1.tgz":
+  version: 0.3.1
+  resolution: "@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.3.1.tgz"
   dependencies:
     emittery: "npm:^1.0.1"
-  checksum: b289e6acdd9fd0251de09c53e80cda86794d3b04d8f807a1dc592d6ff8a77b65ad8e78036560ff3d79f2908d60aa9023856549823d73fe76e3efc14a97c36c46
+  checksum: 5d69e5f042602a4c31c31492dfbb7153c4accd2bdfbe36b2f889863977f7ed05feda1d9f3f1872144ed124451d88234c4f0a1215e9ca203dd24e0d74eb5b854f
   languageName: node
   linkType: hard
 
@@ -13676,7 +13676,7 @@ __metadata:
     "@infomaniak/compass-components": "npm:0.17.0"
     "@infomaniak/compass-icons": "npm:0.13.0"
     "@infomaniak/font-suisse": "https://verdaccio.dev.infomaniak.ch/@infomaniak/font-suisse/-/font-suisse-1.0.0.tgz"
-    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.2.7.tgz"
+    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.3.1.tgz"
     "@infomaniak/marked": "npm:^0.2.0"
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client"
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types"

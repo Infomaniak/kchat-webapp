@@ -7,9 +7,16 @@ import semver from 'semver';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+
 import * as GlobalActions from 'actions/global_actions';
+import {updateTeamsOrderForUser} from 'actions/team_actions';
+import {setTheme} from 'actions/views/theme';
 import * as WebSocketActions from 'actions/websocket_actions.jsx';
 import BrowserStore from 'stores/browser_store';
+import store from 'stores/redux_store';
 
 import LoadingScreen from 'components/loading_screen';
 
@@ -25,6 +32,7 @@ declare global {
     interface Window {
         desktop: {
             version?: string | null;
+            theme?: object | null;
         };
     }
 }
@@ -52,14 +60,19 @@ type DesktopMessage = {
         type: string;
         message: {
             version: string;
+            theme: object | null;
             userIsActive: boolean;
             manual: boolean;
             channel: Channel;
             teamId: string;
             url: string;
+            teamsOrder?: string[];
         };
     };
 }
+
+const dispatch = store.dispatch;
+const getState = store.getState;
 
 export default class LoggedIn extends React.PureComponent<Props> {
     constructor(props: Props) {
@@ -173,15 +186,41 @@ export default class LoggedIn extends React.PureComponent<Props> {
                 window.desktop = {};
             }
             window.desktop.version = semver.valid(semver.coerce(version));
+            if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.1.0')) {
+                window.desktop.theme = desktopMessage.data.message.theme;
+                dispatch(setTheme(window.desktop.theme as Theme));
+            }
             break;
         }
         case 'user-activity-update': {
             const {userIsActive, manual} = desktopMessage.data.message;
 
-            // update the server with the users current away status
             if (userIsActive === true || userIsActive === false) {
-                WebSocketClient.userUpdateActiveStatus(userIsActive, manual);
+                WebSocketClient.userUpdateActiveStatus(userIsActive, Boolean(manual));
             }
+            break;
+        }
+        case 'teams-order-updated': {
+            const {teamsOrder} = desktopMessage.data.message;
+            if (teamsOrder) {
+                updateTeamsOrderForUser(teamsOrder)(dispatch, getState);
+            }
+            break;
+        }
+        case 'get-server-theme': {
+            const preferredTheme = getTheme(store.getState());
+            const currentTeam = getCurrentTeam(store.getState());
+
+            window.postMessage(
+                {
+                    type: 'preferred-theme',
+                    data: {
+                        theme: preferredTheme,
+                        teamName: currentTeam.display_name,
+                    },
+                },
+                window.origin,
+            );
             break;
         }
         case 'notification-clicked': {
@@ -190,6 +229,10 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
             // navigate to the appropriate channel
             this.props.actions.getChannelURLAction(channel, teamId, url);
+            break;
+        }
+        case 'theme-changed-global': {
+            dispatch(setTheme((desktopMessage.data as any).theme as Theme));
             break;
         }
         }

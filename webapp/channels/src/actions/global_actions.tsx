@@ -21,8 +21,8 @@ import {Preferences} from 'mattermost-redux/constants';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedirectChannelNameForTeam, getChannelsNameMapInTeam, getAllDirectChannels, getChannelMessageCount} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
-import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTeamId, getTeam, getMyTeamMember, getTeamMemberships, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
+import {getBool, getTeamsOrderPreference, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeamId, getTeam, getMyTeamMember, getTeamMemberships, getMyKSuites, getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
@@ -441,6 +441,29 @@ export async function redirectUserToDefaultTeam() {
     }
 
     getHistory().push('/select_team');
+}
+
+export async function redirectDesktopUserToDefaultTeam() {
+    const state = getState();
+    const locale = getCurrentLocale(state);
+    const teams = getMyKSuites(state);
+    const activeTeams = teams.filter((team) => team.delete_at === 0);
+
+    const orderPreference = getTeamsOrderPreference(state);
+    const orderedTeams = filterAndSortTeamsByDisplayName(activeTeams, locale, orderPreference.value);
+    const newCurrentTeam = orderedTeams[0];
+
+    if (newCurrentTeam) {
+        window.postMessage(
+            {
+                type: 'switch-server',
+                data: newCurrentTeam.display_name,
+            },
+            window.origin,
+        );
+    } else {
+        getHistory().push('/error?type=page_not_found');
+    }
 }
 
 export function joinChannel(channelId: string) {

@@ -88,7 +88,7 @@ import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
-import {redirectUserToDefaultTeam} from 'actions/global_actions';
+import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
 import {setGlobalItem} from 'actions/storage';
@@ -971,13 +971,18 @@ function handleKSuiteDeleted(msg) {
         doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id, currentTeamId}});
         doDispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
 
-        if (!isDesktopApp()) {
-            if (newTeams.length === 0) {
+        if (newTeams.length === 0) {
+            if (!isDesktopApp()) {
                 getHistory().push('/error?type=no_ksuite');
-
-                return;
             }
+            return;
+        }
 
+        if (isDesktopApp()) {
+            redirectDesktopUserToDefaultTeam();
+        }
+
+        if (!isDesktopApp()) {
             redirectUserToDefaultTeam();
         }
     };
