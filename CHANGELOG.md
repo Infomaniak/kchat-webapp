@@ -1,3 +1,10 @@
+## 2.6.3-rc.2 (2024-04-12)
+
+### Fixed (2 changes)
+
+- [Fix: Remove unwanted paramterers from file extension coming from giphy](kchat/webapp@57c600a361278e213fa3fc4b1dbf0eb727ee70fa) by @philippe.karle ([merge request](kchat/webapp!714))
+- [Fix threads attachement displaying undefined](kchat/webapp@92fd0ab8d5bbb494e72441906e788dae47a55d18) by @philippe.karle ([merge request](kchat/webapp!662))
+
 ## 2.6.3-rc.1 (2024-04-12)
 
 ### Fixed (4 changes)
