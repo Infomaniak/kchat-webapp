@@ -1495,9 +1495,11 @@ export function checkForModifiedUsers(includeCurrentUser = false) {
         const state = getState();
         const users = getUsers(state);
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
+        const userIds = Object.keys(users);
         console.log('checking for modified users with lastDisconnect:', lastDisconnectAt);
+        console.log('fetch profile count:', userIds.length);
 
-        await dispatch(getProfilesByIds(Object.keys(users), {since: lastDisconnectAt}, includeCurrentUser));
+        await dispatch(getProfilesByIds(userIds, {since: lastDisconnectAt}, includeCurrentUser));
         return {data: true};
     };
 }
