@@ -38,6 +38,17 @@
 - [Fix: responsive sidebar link item overflowing](kchat/webapp@7029c421a0f0b5fdfc6defd3e83db7cff78b5485) by @philippe.karle ([merge request](kchat/webapp!712))
 - [Fix: load deleted posts on channel switch](kchat/webapp@97c2c95de6a22298d0d8e940258759abdc3d77b6) by @philippe.karle ([merge request](kchat/webapp!706))
 
+## 2.6.3-next.2 (2024-04-15)
+
+### Added (1 change)
+
+- [log count of fetched profiles when fetching statuses](kchat/webapp@54b11e799d6432abdea0a0e22f439bdf001caf96) by @antonbuksa
+
+### Fixed (2 changes)
+
+- [Fix: option + esc shortcut error due to missing import](kchat/webapp@03e5972dd86b5f9dd120e474cf83c075c4a3a332) by @philippe.karle ([merge request](kchat/webapp!728))
+- [Fix: close modal after joining channel](kchat/webapp@4eaa2304a43a41c7c5d0ec617de0ccb832380350) by @philippe.karle ([merge request](kchat/webapp!726))
+
 ## 2.6.3-next.1 (2024-04-12)
 
 ### Fixed (8 changes)
