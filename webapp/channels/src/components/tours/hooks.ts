@@ -35,8 +35,6 @@ import {
     TutorialTourName,
 } from './constant';
 
-import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from '../onboarding_tasks';
-
 export const useGetTourSteps = (tourCategory: string) => {
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
 
