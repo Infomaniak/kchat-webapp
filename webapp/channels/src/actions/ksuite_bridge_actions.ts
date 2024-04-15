@@ -1,15 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {KSuiteBridge} from '@infomaniak/ksuite-bridge';
-import {AppReadyMessageKey} from '@infomaniak/ksuite-bridge';
+import type {DoNotDisturbMessage, KSuiteBridge} from '@infomaniak/ksuite-bridge';
+import {AppReadyMessageKey, DoNotDisturbMessageKey} from '@infomaniak/ksuite-bridge';
 
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
+import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {BridgeActionTypes} from 'utils/constants';
 
 export function storeBridge(bridge: KSuiteBridge) {
-    return async (dispatch: DispatchFunc) => {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         dispatch({
             type: BridgeActionTypes.STORE_BRIDGE,
             bridge,
@@ -17,6 +17,15 @@ export function storeBridge(bridge: KSuiteBridge) {
 
         bridge.sendMessage({
             type: AppReadyMessageKey,
+        });
+
+        bridge.on(DoNotDisturbMessageKey, (doNotDisturbMessage: DoNotDisturbMessage) => {
+            if (doNotDisturbMessage.enabled !== getState().ksuite_bridge.dnd) {
+                dispatch({
+                    type: BridgeActionTypes.DND_CHANGE,
+                    dnd: doNotDisturbMessage.enabled,
+                });
+            }
         });
 
         return {data: true};

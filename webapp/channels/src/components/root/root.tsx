@@ -10,6 +10,8 @@ import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
 import {ServiceEnvironment} from '@mattermost/types/config';
+import type {PreferenceType} from '@mattermost/types/preferences';
+import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
@@ -30,6 +32,7 @@ import * as GlobalActions from 'actions/global_actions';
 import {storeBridge} from 'actions/ksuite_bridge_actions';
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
+import {setThemePreference} from 'actions/views/theme';
 import {close, initialize} from 'actions/websocket_actions';
 import BrowserStore from 'stores/browser_store';
 import LocalStorageStore from 'stores/local_storage_store';
@@ -56,7 +59,7 @@ import TeamSidebar from 'components/team_sidebar';
 import WindowSizeObserver from 'components/window_size_observer/WindowSizeObserver';
 
 import A11yController from 'utils/a11y_controller';
-import {PageLoadContext, StoragePrefixes} from 'utils/constants';
+import Constants, {DesktopThemePreferences, PageLoadContext, StoragePrefixes, WindowSizes} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
@@ -162,6 +165,8 @@ export type Actions = {
 
 type Props = {
     theme: Theme;
+    currentTeam: Team;
+    teamsOrderPreference: PreferenceType;
     telemetryEnabled: boolean;
     telemetryId?: string;
     iosDownloadLink?: string;
@@ -179,6 +184,7 @@ type Props = {
     rhsIsOpen: boolean;
     shouldShowAppBar: boolean;
     ksuiteBridge: KSuiteBridge;
+    userLocale: string;
 } & RouteComponentProps
 
 interface State {
@@ -186,6 +192,11 @@ interface State {
 }
 
 export default class Root extends React.PureComponent<Props, State> {
+    private themeMediaQuery: MediaQueryList;
+    private desktopMediaQuery: MediaQueryList;
+    private smallDesktopMediaQuery: MediaQueryList;
+    private tabletMediaQuery: MediaQueryList;
+    private mobileMediaQuery: MediaQueryList;
     private mounted: boolean;
     private IKLoginCode: string | undefined;
     private tokenCheckInterval: NodeJS.Timer | undefined;
@@ -240,6 +251,17 @@ export default class Root extends React.PureComponent<Props, State> {
         };
 
         this.a11yController = new A11yController();
+
+        // set initial window size state
+        this.desktopMediaQuery = window.matchMedia(`(min-width: ${Constants.DESKTOP_SCREEN_WIDTH + 1}px)`);
+        this.smallDesktopMediaQuery = window.matchMedia(`(min-width: ${Constants.TABLET_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.DESKTOP_SCREEN_WIDTH}px)`);
+        this.tabletMediaQuery = window.matchMedia(`(min-width: ${Constants.MOBILE_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.TABLET_SCREEN_WIDTH}px)`);
+        this.mobileMediaQuery = window.matchMedia(`(max-width: ${Constants.MOBILE_SCREEN_WIDTH}px)`);
+
+        this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        this.updateThemePreference(this.themeMediaQuery.matches);
+        this.updateWindowSize();
 
         store.subscribe(() => applyLuxonDefaults(store.getState()));
     }
@@ -329,6 +351,26 @@ export default class Root extends React.PureComponent<Props, State> {
 
         this.showLandingPageIfNecessary();
 
+        if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.2.0')) {
+            window.postMessage({
+                type: 'preferred-theme',
+                data: {
+                    theme: this.props.theme,
+                    teamName: this.props.currentTeam?.display_name,
+                },
+            }, window.origin);
+
+            window.postMessage({
+                type: 'teams-order-preference',
+                data: this.props.teamsOrderPreference?.value,
+            }, window.origin);
+
+            window.postMessage({
+                type: 'user-locale',
+                data: this.props.userLocale,
+            }, window.origin);
+        }
+
         Utils.applyTheme(this.props.theme);
     };
 
@@ -389,7 +431,7 @@ export default class Root extends React.PureComponent<Props, State> {
     };
 
     componentDidUpdate(prevProps: Props) {
-        if (!deepEqual(prevProps.theme, this.props.theme)) {
+        if (!deepEqual(prevProps.theme, this.props.theme) || !deepEqual(prevProps.currentTeam, this.props.currentTeam)) {
             // add body class for webcomponents theming
             if (document.body.className.match(/kchat-.+-theme/)) {
                 document.body.className = document.body.className.replace(/kchat-.+-theme/, `kchat-${this.props.theme.ikType}-theme`);
@@ -397,7 +439,31 @@ export default class Root extends React.PureComponent<Props, State> {
                 document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
             }
 
+            if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.2.0')) {
+                window.postMessage({
+                    type: 'preferred-theme',
+                    data: {
+                        theme: this.props.theme,
+                        teamName: this.props.currentTeam?.display_name,
+                    },
+                }, window.origin);
+            }
+
             Utils.applyTheme(this.props.theme);
+        }
+        if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.2.0')) {
+            if (!deepEqual(prevProps.teamsOrderPreference, this.props.teamsOrderPreference)) {
+                window.postMessage({
+                    type: 'teams-order-preference',
+                    data: this.props.teamsOrderPreference?.value,
+                }, window.origin);
+            }
+            if (!deepEqual(prevProps.userLocale, this.props.userLocale)) {
+                window.postMessage({
+                    type: 'teams-order-preference',
+                    data: this.props.teamsOrderPreference?.value,
+                }, window.origin);
+            }
         }
         if (
             this.props.shouldShowAppBar !== prevProps.shouldShowAppBar ||
@@ -682,6 +748,10 @@ export default class Root extends React.PureComponent<Props, State> {
         this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
         this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
 
+        if (this.themeMediaQuery.addEventListener) {
+            this.themeMediaQuery.addEventListener('change', this.handleThemeMediaQueryChangeEvent);
+        }
+
         measurePageLoadTelemetry();
         trackSelectorMetrics();
     };
@@ -698,6 +768,10 @@ export default class Root extends React.PureComponent<Props, State> {
         if (this.loginCodeInterval) {
             console.log('[components/root] destroy login with code interval'); // eslint-disable-line no-console
             clearInterval(this.loginCodeInterval);
+        }
+
+        if (this.themeMediaQuery.removeEventListener) {
+            this.themeMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
         }
     }
 
@@ -726,6 +800,20 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     };
 
+    // handleWindowResizeEvent = throttle(() => {
+    //     this.props.actions.emitBrowserWindowResized();
+    // }, 100);
+
+    handleMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
+        if (e.matches) {
+            this.updateWindowSize();
+        }
+    };
+
+    handleThemeMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
+        this.updateThemePreference(e.matches);
+    };
+
     setRootMeta = () => {
         const root = document.getElementById('root')!;
 
@@ -736,6 +824,32 @@ export default class Root extends React.PureComponent<Props, State> {
         })) {
             root.classList.toggle(className, enabled);
         }
+    };
+
+    updateWindowSize = () => {
+        switch (true) {
+        case this.desktopMediaQuery.matches:
+            this.props.actions.emitBrowserWindowResized(WindowSizes.DESKTOP_VIEW);
+            break;
+        case this.smallDesktopMediaQuery.matches:
+            this.props.actions.emitBrowserWindowResized(WindowSizes.SMALL_DESKTOP_VIEW);
+            break;
+        case this.tabletMediaQuery.matches:
+            this.props.actions.emitBrowserWindowResized(WindowSizes.TABLET_VIEW);
+            break;
+        case this.mobileMediaQuery.matches:
+            this.props.actions.emitBrowserWindowResized(WindowSizes.MOBILE_VIEW);
+            break;
+        }
+    };
+
+    updateThemePreference = (isDark: boolean) => {
+        if (isDark) {
+            store.dispatch(setThemePreference(DesktopThemePreferences.DARK));
+            return;
+        }
+
+        store.dispatch(setThemePreference(DesktopThemePreferences.LIGHT));
     };
 
     render() {
@@ -798,7 +912,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         <AnnouncementBarController/>
                         <SystemNotice/>
                         <GlobalHeader headerRef={this.headerResizerRef}/>
-                        {!this.embeddedInIFrame && UserAgent.isDesktopApp() && <TeamSidebar/>}
+                        {!this.embeddedInIFrame && UserAgent.isDesktopApp() && !isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.2.0') && <TeamSidebar/>}
                         <Switch>
                             {this.props.products?.filter((product) => Boolean(product.publicComponent)).map((product) => (
                                 <Route

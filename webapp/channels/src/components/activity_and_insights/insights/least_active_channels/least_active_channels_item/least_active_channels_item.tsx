@@ -94,6 +94,7 @@ const LeastActiveChannelsItem = ({channel, actionCallback}: Props) => {
                 userIds={channel.participants}
                 size='xs'
                 disableProfileOverlay={true}
+                showDeleted={false}
             />
             <ChannelActionsMenu
                 channel={channel}

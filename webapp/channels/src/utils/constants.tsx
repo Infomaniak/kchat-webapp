@@ -52,6 +52,11 @@ export const SettingsTypes = {
     TYPE_ROLES: 'roles' as const,
 };
 
+export const ThemeTypes = {
+    RECEIVED_THEME: 'received_theme',
+    RECEIVED_THEME_PREFERENCE: 'received_theme_preference',
+};
+
 export const InviteTypes = {
     INVITE_MEMBER: 'member',
     INVITE_GUEST: 'guest',
@@ -157,6 +162,12 @@ export const Preferences = {
     CLOUD_ANNUAL_RENEWAL_BANNER: 'cloud_annual_renewal_banner',
 };
 
+export const DesktopThemePreferences = {
+    LIGHT: 'light',
+    DARK: 'dark',
+    AUTO: null,
+} as const;
+
 // For one off things that have a special, attention-grabbing UI until you interact with them
 export const Touched = {
     ADD_CHANNELS_CTA: 'add_channels_cta',
@@ -190,6 +201,7 @@ export const suitePluginIds = {
 
 export const BridgeActionTypes = keyMirror({
     STORE_BRIDGE: null,
+    DND_CHANGE: null,
 });
 
 export const KDriveActionTypes = keyMirror({

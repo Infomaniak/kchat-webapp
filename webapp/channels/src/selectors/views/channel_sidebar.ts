@@ -21,6 +21,7 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {shouldShowUnreadsCategory, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {isGroupChannel} from 'mattermost-redux/utils/channel_utils';
 import {memoizeResult} from 'mattermost-redux/utils/helpers';
 
 import type {DraggingState, GlobalState} from 'types/store';
@@ -99,6 +100,17 @@ export const getChannelsInCategoryOrder = (() => {
                     return true;
                 });
             }).flat();
+        },
+    );
+})();
+
+export const getAllChannelsInCategoryOrder = (() => {
+    return createSelector(
+        'getAllChannelsInCategoryOrder',
+        getCategoriesForCurrentTeam,
+        getChannelsByCategoryForCurrentTeam,
+        (categories, channelsByCategory) => {
+            return categories.map((category) => channelsByCategory[category.id]).flat();
         },
     );
 })();
@@ -185,6 +197,14 @@ export const getDisplayedChannels = createSelector(
         }
 
         return channelsInCategoryOrder;
+    },
+);
+
+export const getSidebarGroupChannels = createSelector(
+    'getSidebarGroupChannels',
+    getAllChannelsInCategoryOrder,
+    (allChannels) => {
+        return allChannels.filter(isGroupChannel);
     },
 );
 

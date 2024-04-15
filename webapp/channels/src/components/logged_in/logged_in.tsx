@@ -2,17 +2,24 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Redirect} from 'react-router-dom';
+import semver from 'semver';
 
+import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+
 import * as GlobalActions from 'actions/global_actions';
+import {updateTeamsOrderForUser} from 'actions/team_actions';
+import {setTheme} from 'actions/views/theme';
 import * as WebSocketActions from 'actions/websocket_actions.jsx';
 import BrowserStore from 'stores/browser_store';
+import store from 'stores/redux_store';
 
 import LoadingScreen from 'components/loading_screen';
 
-import WebSocketClient from 'client/web_websocket_client';
 import Constants from 'utils/constants';
 import DesktopApp from 'utils/desktop_api';
 import {isKeyPressed} from 'utils/keyboard';
@@ -20,10 +27,13 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getBrowserTimezone} from 'utils/timezone';
 import * as UserAgent from 'utils/user_agent';
 
+import WebSocketClient from 'client/web_websocket_client';
+
 declare global {
     interface Window {
         desktop: {
             version?: string | null;
+            theme?: object | null;
         };
     }
 }
@@ -47,6 +57,26 @@ export type Props = {
         search: string;
     };
 }
+
+type DesktopMessage = {
+    origin: string;
+    data: {
+        type: string;
+        message: {
+            version: string;
+            theme: object | null;
+            userIsActive: boolean;
+            manual: boolean;
+            channel: Channel;
+            teamId: string;
+            url: string;
+            teamsOrder?: string[];
+        };
+    };
+}
+
+const dispatch = store.dispatch;
+const getState = store.getState;
 
 export default class LoggedIn extends React.PureComponent<Props> {
     private cleanupDesktopListeners?: () => void;
@@ -91,6 +121,17 @@ export default class LoggedIn extends React.PureComponent<Props> {
             offNotificationClicked();
         };
 
+        // Listen for messages from the desktop app
+        window.addEventListener('message', this.onDesktopMessageListener);
+
+        // Tell the desktop app the webapp is ready
+        window.postMessage(
+            {
+                type: 'webapp-ready',
+            },
+            window.location.origin,
+        );
+
         // Device tracking setup
         if (UserAgent.isIos()) {
             document.body.classList.add('ios');
@@ -123,6 +164,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
         window.removeEventListener('blur', this.onBlurListener);
 
         this.cleanupDesktopListeners?.();
+        window.removeEventListener('message', this.onDesktopMessageListener);
     }
 
     public render(): React.ReactNode {
@@ -140,6 +182,74 @@ export default class LoggedIn extends React.PureComponent<Props> {
     private onBlurListener(): void {
         GlobalActions.emitBrowserFocus(false);
     }
+
+    // listen for messages from the desktop app
+    private onDesktopMessageListener = (desktopMessage: DesktopMessage) => {
+        if (!this.props.currentUser) {
+            return;
+        }
+        if (desktopMessage.origin !== window.location.origin) {
+            return;
+        }
+
+        switch (desktopMessage.data.type) {
+        case 'register-desktop': {
+            const {version} = desktopMessage.data.message;
+            if (!window.desktop) {
+                window.desktop = {};
+            }
+            window.desktop.version = semver.valid(semver.coerce(version));
+            if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.1.0')) {
+                window.desktop.theme = desktopMessage.data.message.theme;
+                dispatch(setTheme(window.desktop.theme as Theme));
+            }
+            break;
+        }
+        case 'user-activity-update': {
+            const {userIsActive, manual} = desktopMessage.data.message;
+
+            if (userIsActive === true || userIsActive === false) {
+                WebSocketClient.userUpdateActiveStatus(userIsActive, Boolean(manual));
+            }
+            break;
+        }
+        case 'teams-order-updated': {
+            const {teamsOrder} = desktopMessage.data.message;
+            if (teamsOrder) {
+                updateTeamsOrderForUser(teamsOrder)(dispatch, getState);
+            }
+            break;
+        }
+        case 'get-server-theme': {
+            const preferredTheme = getTheme(store.getState());
+            const currentTeam = getCurrentTeam(store.getState());
+
+            window.postMessage(
+                {
+                    type: 'preferred-theme',
+                    data: {
+                        theme: preferredTheme,
+                        teamName: currentTeam.display_name,
+                    },
+                },
+                window.origin,
+            );
+            break;
+        }
+        case 'notification-clicked': {
+            const {channel, teamId, url} = desktopMessage.data.message;
+            window.focus();
+
+            // navigate to the appropriate channel
+            this.props.actions.getChannelURLAction(channel, teamId, url);
+            break;
+        }
+        case 'theme-changed-global': {
+            dispatch(setTheme((desktopMessage.data as any).theme as Theme));
+            break;
+        }
+        }
+    };
 
     private updateActiveStatus = (userIsActive: boolean, idleTime: number, manual: boolean) => {
         if (!this.props.currentUser) {

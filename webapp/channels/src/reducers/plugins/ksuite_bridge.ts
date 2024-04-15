@@ -20,6 +20,16 @@ function bridge(state = null, action: GenericAction) {
     }
 }
 
+function dnd(state = false, action: GenericAction) {
+    switch (action.type) {
+    case BridgeActionTypes.DND_CHANGE:
+        return action.dnd;
+    default:
+        return state;
+    }
+}
+
 export default combineReducers({
     bridge,
+    dnd,
 });

@@ -261,7 +261,7 @@ export function isGIFImage(extin: string): boolean {
 }
 
 const removeQuerystringOrHash = (extin: string): string => {
-    return extin.split(/[?#]/)[0];
+    return extin.split(/[?#%]/)[0];
 };
 
 export const getFileType = (extin: string): typeof FileTypes[keyof typeof FileTypes] => {

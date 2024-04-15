@@ -10,6 +10,10 @@ import type {UserThread} from '@mattermost/types/threads';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+
+import type {DesktopThemePreference} from 'types/theme';
+
 import type {I18nState} from './i18n';
 import type {LhsViewState} from './lhs';
 import type {RhsViewState} from './rhs';
@@ -254,7 +258,10 @@ export type ViewsState = {
         shouldShowPreviewOnEditChannelHeaderModal: boolean;
         shouldShowPreviewOnEditPostModal: boolean;
     };
-
+    theme: {
+        storedTheme: Theme | null;
+        themePreference: DesktopThemePreference;
+    };
     servers: {
         servers: Record<string, Server>;
     };

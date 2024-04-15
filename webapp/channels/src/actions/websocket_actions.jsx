@@ -89,7 +89,7 @@ import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
-import {redirectUserToDefaultTeam} from 'actions/global_actions';
+import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
 import {removeGlobalItem, setGlobalItem} from 'actions/storage';
@@ -103,7 +103,6 @@ import {updateThreadLastOpened} from 'actions/views/threads';
 import {voiceConnectedChannels} from 'selectors/calls';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
-import {getCategoriesForCurrentTeam} from 'selectors/views/channel_sidebar';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
 import store from 'stores/redux_store';
 
@@ -293,6 +292,7 @@ export async function reconnect(socketId) {
             // eslint-disable-next-line no-console
             console.log('[websocket_actions] dispatch syncPostsInChannel');
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
+            dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
             // if network timed-out the first time when loading a channel
             // we can request for getPosts again when socket is connected
@@ -332,7 +332,6 @@ export async function reconnect(socketId) {
         console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
         dispatch(checkForModifiedUsers(true));
         dispatch(TeamActions.getMyKSuites());
-        dispatch(loadDeletedPosts(state.websocket.lastDisconnectAt));
     }
 
     dispatch(resetWsErrorCount());
@@ -973,13 +972,18 @@ function handleKSuiteDeleted(msg) {
         doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id, currentTeamId}});
         doDispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
 
-        if (!isDesktopApp()) {
-            if (newTeams.length === 0) {
+        if (newTeams.length === 0) {
+            if (!isDesktopApp()) {
                 getHistory().push('/error?type=no_ksuite');
-
-                return;
             }
+            return;
+        }
 
+        if (isDesktopApp()) {
+            redirectDesktopUserToDefaultTeam();
+        }
+
+        if (!isDesktopApp()) {
             redirectUserToDefaultTeam();
         }
     };

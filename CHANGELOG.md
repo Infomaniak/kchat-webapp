@@ -1,3 +1,151 @@
+## 2.6.3-rc.4 (2024-04-12)
+
+### Fixed (2 changes)
+
+- [Fix: themes buttons not displaying properly on small devices](kchat/webapp@76681f69098cc7f549e947989b6a2eba5fb0ce9a) by @philippe.karle ([merge request](kchat/webapp!725))
+- [Fix: Insights hide deleted users](kchat/webapp@7a68d7cbd284e8ad11ae263a40cdb6df8d2f2346) by @philippe.karle ([merge request](kchat/webapp!659))
+
+## 2.6.3-rc.3 (2024-04-12)
+
+### Fixed (1 change)
+
+- [Fix: Servers sidebar events runtime error due to missing value](kchat/webapp@e42e1504f955168a3af4994f395915ff51b2eb5d) by @philippe.karle ([merge request](kchat/webapp!724))
+
+## 2.6.3-rc.2 (2024-04-12)
+
+### Fixed (2 changes)
+
+- [Fix: Remove unwanted paramterers from file extension coming from giphy](kchat/webapp@57c600a361278e213fa3fc4b1dbf0eb727ee70fa) by @philippe.karle ([merge request](kchat/webapp!714))
+- [Fix threads attachement displaying undefined](kchat/webapp@92fd0ab8d5bbb494e72441906e788dae47a55d18) by @philippe.karle ([merge request](kchat/webapp!662))
+
+## 2.6.3-rc.1 (2024-04-12)
+
+### Fixed (4 changes)
+
+- [Fix: group channels members not loaded when category is collapsed](kchat/webapp@9e934c2c28b695d01eda422d7d3034acb8860fb5) by @philippe.karle ([merge request](kchat/webapp!693))
+- [Fix: Remove unwanted paramterers from file extension coming from giphy](kchat/webapp@57c600a361278e213fa3fc4b1dbf0eb727ee70fa) by @philippe.karle ([merge request](kchat/webapp!714))
+- [Fix: responsive sidebar link item overflowing](kchat/webapp@7029c421a0f0b5fdfc6defd3e83db7cff78b5485) by @philippe.karle ([merge request](kchat/webapp!712))
+- [Fix: load deleted posts on channel switch](kchat/webapp@97c2c95de6a22298d0d8e940258759abdc3d77b6) by @philippe.karle ([merge request](kchat/webapp!706))
+
+## 2.6.3-next.1 (2024-04-12)
+
+### Fixed (8 changes)
+
+- [Fix: themes buttons not displaying properly on small devices](kchat/webapp@76681f69098cc7f549e947989b6a2eba5fb0ce9a) by @philippe.karle ([merge request](kchat/webapp!725))
+- [Fix: Servers sidebar events runtime error due to missing value](kchat/webapp@e42e1504f955168a3af4994f395915ff51b2eb5d) by @philippe.karle ([merge request](kchat/webapp!724))
+- [Fix: Insights hide deleted users](kchat/webapp@7a68d7cbd284e8ad11ae263a40cdb6df8d2f2346) by @philippe.karle ([merge request](kchat/webapp!659))
+- [Fix: group channels members not loaded when category is collapsed](kchat/webapp@9e934c2c28b695d01eda422d7d3034acb8860fb5) by @philippe.karle ([merge request](kchat/webapp!693))
+- [Fix: Remove unwanted paramterers from file extension coming from giphy](kchat/webapp@57c600a361278e213fa3fc4b1dbf0eb727ee70fa) by @philippe.karle ([merge request](kchat/webapp!714))
+- [Fix: responsive sidebar link item overflowing](kchat/webapp@7029c421a0f0b5fdfc6defd3e83db7cff78b5485) by @philippe.karle ([merge request](kchat/webapp!712))
+- [Fix: load deleted posts on channel switch](kchat/webapp@97c2c95de6a22298d0d8e940258759abdc3d77b6) by @philippe.karle ([merge request](kchat/webapp!706))
+- [Fix threads attachement displaying undefined](kchat/webapp@92fd0ab8d5bbb494e72441906e788dae47a55d18) by @philippe.karle ([merge request](kchat/webapp!662))
+
+## 2.6.2-rc.7 (2024-04-11)
+
+### Added (1 change)
+
+- [handle bridge dnd event](kchat/webapp@ead342b52dc6727fe8f3f96f0e7aa8b61273ef5c) by @antonbuksa ([merge request](kchat/webapp!719))
+
+### Changed (1 change)
+
+- [change new sidebar condition version](kchat/webapp@b3a865030fcc15fc304c463a21079eef85bb5cca) by @antonbuksa
+
+## 2.6.2-rc.6 (2024-04-11)
+
+### Added (2 changes)
+
+- [Update: onboarding channels tour learn more link added](kchat/webapp@8186cdb713671b78ad225ce7a54061b10ce79c6a) by @philippe.karle ([merge request](kchat/webapp!722))
+- [handle bridge dnd event](kchat/webapp@ead342b52dc6727fe8f3f96f0e7aa8b61273ef5c) by @antonbuksa ([merge request](kchat/webapp!719))
+
+## 2.6.2-rc.5 (2024-04-11)
+
+### Added (1 change)
+
+- [add log for successful subscriptions to ws channels](kchat/webapp@fe32a7bbabbe2acb41bdcc6bd797e15db045b00e) by @antonbuksa ([merge request](kchat/webapp!721))
+
+## 2.6.2-rc.4 (2024-04-10)
+
+### Added (1 change)
+
+- [add url param for disabling browser notifications on current session](kchat/webapp@3106f9fa0bef0c582388bcbcb51f079581b369ba) by @antonbuksa ([merge request](kchat/webapp!716))
+
+## 2.6.2-rc.3 (2024-04-09)
+
+### Fixed (1 change)
+
+- [Fix: redirect to default channel on websocket reconnect](kchat/webapp@7c791594808ae4054da3258a184dec31ae9cb3ed) by @philippe.karle ([merge request](kchat/webapp!684))
+
+## 2.6.2-rc.2 (2024-04-09)
+
+### Added (1 change)
+
+- [Ajout de l'id du bot lors de la création d'un bot account](kchat/webapp@512ffed65c6eb1944ba53014e201282cde37e0ad) by  ([merge request](kchat/webapp!710))
+
+### Fixed (2 changes)
+
+- [add cast for desktop status isSystemEvent param](kchat/webapp@67ec225aa58a14e56668189716891d1c1f5d1b59) by @antonbuksa ([merge request](kchat/webapp!715))
+- [Fix: Wrong markdown shortcuts displayed](kchat/webapp@a28b0a9754b69e04649ef42708df9880adfe611f) by @philippe.karle ([merge request](kchat/webapp!711))
+
+## 2.6.2-rc.1 (2024-04-08)
+
+### Added (1 change)
+
+- [Event to communicate between desktop & webapp implemented](kchat/webapp@34fea5398d9290b1ca3735b58b987dd3d72a512f) by @philippe.karle ([merge request](kchat/webapp!695))
+
+### Changed (1 change)
+
+- [limit sentry bt by env](kchat/webapp@7886c51cf5ac0a4f529e3d967b08f4e1bb796545) by @antonbuksa ([merge request](kchat/webapp!707))
+
+## 2.6.2-next.5 (2024-04-11)
+
+No changes.
+
+## 2.6.2-next.4 (2024-04-11)
+
+### Added (4 changes)
+
+- [Update: onboarding channels tour learn more link added](kchat/webapp@8186cdb713671b78ad225ce7a54061b10ce79c6a) by @philippe.karle ([merge request](kchat/webapp!722))
+- [add log for successful subscriptions to ws channels](kchat/webapp@fe32a7bbabbe2acb41bdcc6bd797e15db045b00e) by @antonbuksa ([merge request](kchat/webapp!721))
+- [handle bridge dnd event](kchat/webapp@ead342b52dc6727fe8f3f96f0e7aa8b61273ef5c) by @antonbuksa ([merge request](kchat/webapp!719))
+- [add url param for disabling browser notifications on current session](kchat/webapp@3106f9fa0bef0c582388bcbcb51f079581b369ba) by @antonbuksa ([merge request](kchat/webapp!716))
+
+### Changed (1 change)
+
+- [change new sidebar condition version](kchat/webapp@b3a865030fcc15fc304c463a21079eef85bb5cca) by @antonbuksa
+
+## 2.6.2-next.3 (2024-04-09)
+
+### Fixed (1 change)
+
+- [Fix: redirect to default channel on websocket reconnect](kchat/webapp@7c791594808ae4054da3258a184dec31ae9cb3ed) by @philippe.karle ([merge request](kchat/webapp!684))
+
+## 2.6.2-next.2 (2024-04-09)
+
+### Added (1 change)
+
+- [Ajout de l'id du bot lors de la création d'un bot account](kchat/webapp@512ffed65c6eb1944ba53014e201282cde37e0ad) by  ([merge request](kchat/webapp!710))
+
+### Fixed (2 changes)
+
+- [add cast for desktop status isSystemEvent param](kchat/webapp@67ec225aa58a14e56668189716891d1c1f5d1b59) by @antonbuksa ([merge request](kchat/webapp!715))
+- [Fix: Wrong markdown shortcuts displayed](kchat/webapp@a28b0a9754b69e04649ef42708df9880adfe611f) by @philippe.karle ([merge request](kchat/webapp!711))
+
+## 2.6.2-next.1 (2024-04-05)
+
+No changes.
+
+## 2.6.1-rc.6 (2024-04-05)
+
+### Fixed (1 change)
+
+- [Fix: drafts duplication & scheduled thread drafts not saved](kchat/webapp@d4bb616705c69870976f23463c38020efbb57911) by @philippe.karle ([merge request](kchat/webapp!694))
+
+## 2.6.1-rc.5 (2024-04-05)
+
+### Fixed (1 change)
+
+- [fix logout on mobile](kchat/webapp@ce117615f1b7b36d1ee4113ca672da4142bcd679) by @antonbuksa ([merge request](kchat/webapp!705))
+
 ## 2.6.1-rc.4 (2024-04-03)
 
 ### Fixed (2 changes)
@@ -36,6 +184,12 @@ No changes.
 ### Changed (1 change)
 
 - [Neue(r) translation changed to Neu](kchat/webapp@9d4aaa98a571c9fcb61369b7776b18be6db4da38) by @philippe.karle ([merge request](kchat/webapp!689))
+
+## 2.6.1-next.3 (2024-04-05)
+
+### Fixed (1 change)
+
+- [fix logout on mobile](kchat/webapp@ce117615f1b7b36d1ee4113ca672da4142bcd679) by @antonbuksa ([merge request](kchat/webapp!705))
 
 ## 2.6.1-next.2 (2024-04-03)
 

@@ -2,19 +2,22 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch} from 'redux';
 
-import {openModal} from 'actions/views/modals';
+// import {bindActionCreators} from 'redux';
+// import type {Dispatch} from 'redux';
+
+// import {openModal} from 'actions/views/modals';
+
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+
+import type {GlobalState} from 'types/store';
 
 import SettingsButton from './settings_button';
 
-function mapDispatchToProps(dispatch: Dispatch) {
+function mapStateToProps(state: GlobalState) {
     return {
-        actions: bindActionCreators({
-            openModal,
-        }, dispatch),
+        currentTeam: getCurrentTeam(state),
     };
 }
 
-export default connect(null, mapDispatchToProps)(SettingsButton);
+export default connect(mapStateToProps, null)(SettingsButton);

@@ -128,6 +128,11 @@ export interface Props {
         loadPosts: (parameters: LoadPostsParameters) => Promise<LoadPostsReturnValue>;
 
         /*
+         * Used to loading deleted posts since a timestamp to sync the posts
+         */
+        loadDeletedPosts: (channelId: string, since: number) => Promise<void>;
+
+        /*
          * Used to loading posts since a timestamp to sync the posts
          */
         syncPostsInChannel: (channelId: string, since: number, prefetch: boolean) => Promise<ActionResult>;
@@ -218,6 +223,7 @@ export default class PostList extends React.PureComponent<Props, State> {
             }
         } else if (latestPostTimeStamp) {
             await actions.syncPostsInChannel(channelId, latestPostTimeStamp, false);
+            await actions.loadDeletedPosts(channelId, latestPostTimeStamp);
         } else {
             await actions.loadLatestPosts(channelId);
         }
