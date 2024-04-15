@@ -11,6 +11,7 @@ import PostComponent from 'components/post';
 import CombinedUserActivityPost from 'components/post_view/combined_user_activity_post';
 import DateSeparator from 'components/post_view/date_separator';
 import NewMessageSeparator from 'components/post_view/new_message_separator/new_message_separator';
+import RootPostDivider from 'components/root_post_divider/root_post_divider';
 import type {Props as TimestampProps} from 'components/timestamp/timestamp';
 
 import {Locations} from 'utils/constants';
@@ -58,15 +59,18 @@ function ThreadViewerRow({
 
     case isRootPost:
         return (
-            <PostComponent
-                postId={listId}
-                isLastPost={isLastPost}
-                handleCardClick={onCardClick}
-                teamId={teamId}
-                timestampProps={timestampProps}
-                location={Locations.RHS_ROOT}
-                disableConsecutive={true}
-            />
+            <>
+                <PostComponent
+                    postId={listId}
+                    isLastPost={isLastPost}
+                    handleCardClick={onCardClick}
+                    teamId={teamId}
+                    timestampProps={timestampProps}
+                    location={Locations.RHS_ROOT}
+                    disableConsecutive={true}
+                />
+                <RootPostDivider postId={listId}/>
+            </>
         );
     case PostListUtils.isCombinedUserActivityPost(listId): {
         return (
