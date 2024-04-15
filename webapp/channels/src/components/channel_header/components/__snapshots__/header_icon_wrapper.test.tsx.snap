@@ -34,6 +34,15 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
       />
     </button>
   </OverlayTrigger>
+  <NewChannelWithBoardTourTip
+    pulsatingDotPlacement="start"
+    pulsatingDotTranslate={
+      Object {
+        "x": 0,
+        "y": -22,
+      }
+    }
+  />
 </div>
 `;
 
@@ -72,6 +81,15 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
       />
     </button>
   </OverlayTrigger>
+  <NewChannelWithBoardTourTip
+    pulsatingDotPlacement="start"
+    pulsatingDotTranslate={
+      Object {
+        "x": 0,
+        "y": -22,
+      }
+    }
+  />
 </div>
 `;
 
@@ -126,6 +144,15 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
       />
     </button>
   </OverlayTrigger>
+  <NewChannelWithBoardTourTip
+    pulsatingDotPlacement="start"
+    pulsatingDotTranslate={
+      Object {
+        "x": 0,
+        "y": -22,
+      }
+    }
+  />
 </div>
 `;
 
@@ -164,6 +191,15 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
       />
     </button>
   </OverlayTrigger>
+  <NewChannelWithBoardTourTip
+    pulsatingDotPlacement="start"
+    pulsatingDotTranslate={
+      Object {
+        "x": 0,
+        "y": -22,
+      }
+    }
+  />
 </div>
 `;
 
@@ -200,6 +236,15 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
       />
     </button>
   </OverlayTrigger>
+  <NewChannelWithBoardTourTip
+    pulsatingDotPlacement="start"
+    pulsatingDotTranslate={
+      Object {
+        "x": 0,
+        "y": -22,
+      }
+    }
+  />
 </div>
 `;
 
@@ -218,6 +263,15 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
       />
     </button>
   </div>
+  <NewChannelWithBoardTourTip
+    pulsatingDotPlacement="start"
+    pulsatingDotTranslate={
+      Object {
+        "x": 0,
+        "y": -22,
+      }
+    }
+  />
 </Fragment>
 `;
 
@@ -256,5 +310,14 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
       />
     </button>
   </OverlayTrigger>
+  <NewChannelWithBoardTourTip
+    pulsatingDotPlacement="start"
+    pulsatingDotTranslate={
+      Object {
+        "x": 0,
+        "y": -22,
+      }
+    }
+  />
 </div>
 `;
