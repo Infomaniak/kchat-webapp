@@ -5950,5 +5950,10 @@
     "switch_server.tooltip.maintenance": "Der kChat {product} wird derzeit gewartet. Ein Update wird durchgeführt, um kChat zu verbessern. Dieser Prozess kann einige Minuten dauern. Vielen Dank für Ihre Geduld.",
     "guest_banner.text": "Es gibt {slot} in diesem Gespräch.",
     "guest_banner.inner": "{count} externe Benutzer",
-    "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {externer Benutzer} other {externe Benutzer}}"
+    "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {externer Benutzer} other {externe Benutzer}}",
+    "kmeet_call_modal.title": "Starten Sie einen Anruf im Kanal {name}",
+    "kmeet_call_modal.message": "{count} Personen werden benachrichtigt, um an diesem Anruf teilzunehmen. Möchten Sie wirklich einen Anruf im Kanal {name} starten?",
+    "kmeet_call_modal.confirm": "Anruf starten",
+    "kmeet_call_modal.cancel": "Abbrechen"
+
 }

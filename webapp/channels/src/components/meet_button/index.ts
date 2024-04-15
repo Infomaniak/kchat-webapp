@@ -5,10 +5,11 @@ import {connect} from 'react-redux';
 import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
-import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentChannel, getCurrentChannelMembersCount} from 'mattermost-redux/selectors/entities/channels';
 import type {Action} from 'mattermost-redux/types/actions';
 
 import {startOrJoinCallInChannelV2} from 'actions/calls';
+import {closeModal, openModal} from 'actions/views/modals';
 
 import type {GlobalState} from 'types/store';
 
@@ -17,18 +18,22 @@ import MeetButton from './meet_button';
 import {connectedKmeetCallUrl} from '../../selectors/kmeet_calls';
 
 function mapStateToProps(state: GlobalState) {
-    const currentChannelID = getCurrentChannelId(state);
-    const connectedKmeetUrl = connectedKmeetCallUrl(state, currentChannelID);
+    const channel = getCurrentChannel(state);
+    const connectedKmeetUrl = connectedKmeetCallUrl(state, channel.id);
+    const membersCount = getCurrentChannelMembersCount(state);
 
     return {
-        currentChannelID,
+        channel,
         hasCall: connectedKmeetUrl != null,
+        membersCount,
     };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     actions: bindActionCreators<ActionCreatorsMapObject<Action>, any>({
         startOrJoinCallInChannelV2,
+        openModal,
+        closeModal,
     }, dispatch),
 });
 

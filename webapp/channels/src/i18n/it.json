@@ -4175,5 +4175,9 @@
     "switch_server.tooltip.maintenance": "Il kChat {product} è attualmente in manutenzione. È in corso un aggiornamento per migliorare kChat. Questo processo potrebbe richiedere alcuni minuti. Grazie per la vostra pazienza.",
     "guest_banner.text": "{count, plural, one {C'è {slot} in questa conversazione.} other {Ci sono {slot} in questa conversazione.}}",
     "guest_banner.inner": "{count, plural, one {1 utente esterno} other {# utenti esterni}}",
-    "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {utente esterno} other {utenti esterni}}"
+    "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {utente esterno} other {utenti esterni}}",
+    "kmeet_call_modal.title": "Avviare una chiamata nel canale {name}",
+    "kmeet_call_modal.message": "{count} persone verranno avvisate per unirsi a questa chiamata. Vuoi davvero avviare una chiamata nel canale {name}?",
+    "kmeet_call_modal.confirm": "Avvia chiamata",
+    "kmeet_call_modal.cancel": "Annulla"
 }

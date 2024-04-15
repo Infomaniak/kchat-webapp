@@ -512,6 +512,7 @@ export const ModalIdentifiers = {
     DELINQUENCY_MODAL_DOWNGRADE: 'delinquency_modal_downgrade',
     CLOUD_LIMITS_DOWNGRADE: 'cloud_limits_downgrade',
     MARK_ALL_AS_READ_MODAL: 'mark_all_as_read',
+    KMEET_CALL_MODAL: 'kmeet_call_modal',
     AIR_GAPPED_SELF_HOSTED_PURCHASE: 'air_gapped_self_hosted_purchase',
     WORK_TEMPLATE: 'work_template',
     DOWNGRADE_MODAL: 'downgrade_modal',
@@ -2166,6 +2167,7 @@ export const Constants = {
     FIRST_ADMIN_ROLE: 'first_admin',
     MAX_PURCHASE_SEATS: 1000000,
     MIN_PURCHASE_SEATS: 10,
+    MIN_MEMBERS_FOR_CALL_CONFIRM_MODAL: 2,
 };
 
 export const ValidationErrors = {
