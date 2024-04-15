@@ -1,3 +1,14 @@
+## 2.6.3-rc.5 (2024-04-15)
+
+### Added (1 change)
+
+- [log count of fetched profiles when fetching statuses](kchat/webapp@54b11e799d6432abdea0a0e22f439bdf001caf96) by @antonbuksa
+
+### Fixed (2 changes)
+
+- [Fix: option + esc shortcut error due to missing import](kchat/webapp@03e5972dd86b5f9dd120e474cf83c075c4a3a332) by @philippe.karle ([merge request](kchat/webapp!728))
+- [Fix: close modal after joining channel](kchat/webapp@4eaa2304a43a41c7c5d0ec617de0ccb832380350) by @philippe.karle ([merge request](kchat/webapp!726))
+
 ## 2.6.3-rc.4 (2024-04-12)
 
 ### Fixed (2 changes)
