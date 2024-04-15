@@ -22,6 +22,7 @@ import {trackEvent} from 'actions/telemetry_actions';
 
 import ActivityAndInsightsLink
     from 'components/activity_and_insights/activity_and_insights_link/activity_and_insights_link';
+import ConfirmModal from 'components/confirm_modal';
 import DraftsLink from 'components/drafts/drafts_link/drafts_link';
 import GlobalThreadsLink from 'components/threading/global_threads_link';
 
