@@ -15,7 +15,9 @@ import {getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams
 import {shouldShowTermsOfService, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {migrateRecentEmojis} from 'actions/emoji_actions';
+import {emitBrowserWindowResized} from 'actions/views/browser';
 import {loadConfigAndMe, registerCustomPostRenderer} from 'actions/views/root';
+import {getKSuiteBridge} from 'selectors/ksuite_bridge';
 import {getShowLaunchingWorkspace} from 'selectors/onboarding';
 import {shouldShowAppBar} from 'selectors/plugins';
 import {
@@ -62,6 +64,7 @@ function mapStateToProps(state: GlobalState) {
         rhsState: getRhsState(state),
         shouldShowAppBar: shouldShowAppBar(state),
         isCloud: isCurrentLicenseCloud(state),
+        ksuiteBridge: getKSuiteBridge(state),
     };
 }
 
@@ -69,6 +72,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
             loadConfigAndMe,
+            emitBrowserWindowResized,
             getFirstAdminSetupComplete,
             getProfiles,
             migrateRecentEmojis,

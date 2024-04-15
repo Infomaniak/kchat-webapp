@@ -161,6 +161,9 @@ export type Actions = {
     loadConfigAndMe: () => Promise<ActionResult>;
     registerCustomPostRenderer: (type: string, component: any, id: string) => Promise<ActionResult>;
     initializeProducts: () => Promise<unknown>;
+
+    // IK
+    emitBrowserWindowResized: (size?: string) => void;
 }
 
 type Props = {
