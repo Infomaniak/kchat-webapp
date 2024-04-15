@@ -2167,7 +2167,7 @@ export const Constants = {
     FIRST_ADMIN_ROLE: 'first_admin',
     MAX_PURCHASE_SEATS: 1000000,
     MIN_PURCHASE_SEATS: 10,
-    MIN_MEMBERS_FOR_CALL_CONFIRM_MODAL: 2,
+    MIN_MEMBERS_FOR_CALL_CONFIRM_MODAL: 10,
 };
 
 export const ValidationErrors = {
