@@ -643,8 +643,8 @@ export function setEditChannelMembers(active: boolean) {
     };
 }
 
-export function showSettings(tab = 'display') {
-    return (dispatch: DispatchFunc) => {
+export function showSettings(tab = 'display'): ThunkActionFunc<unknown, GlobalState> {
+    return (dispatch) => {
         dispatch({
             type: ActionTypes.UPDATE_RHS_STATE,
             state: RHSStates.SETTINGS,

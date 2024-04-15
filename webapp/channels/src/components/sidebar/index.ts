@@ -13,14 +13,14 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import {clearChannelSelection} from 'actions/views/channel_sidebar';
 import {closeModal, openModal} from 'actions/views/modals';
-import {closeRightHandSide} from 'actions/views/rhs';
+import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 import {getIsLhsOpen} from 'selectors/lhs';
 import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
 import {getIsMobileView} from 'selectors/views/browser';
 import {isUnreadFilterEnabled} from 'selectors/views/channel_sidebar';
 import {isModalOpen} from 'selectors/views/modals';
 
-import {ModalIdentifiers} from 'utils/constants';
+import {ModalIdentifiers, RHSStates} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -30,6 +30,7 @@ function mapStateToProps(state: GlobalState) {
     const currentTeam = getCurrentTeam(state);
     const unreadFilterEnabled = isUnreadFilterEnabled(state);
     const userGroupsEnabled = isCustomGroupsEnabled(state);
+    const rhsState = getRhsState(state);
 
     let canCreatePublicChannel = false;
     let canCreatePrivateChannel = false;
@@ -42,6 +43,8 @@ function mapStateToProps(state: GlobalState) {
     }
 
     const canCreateCustomGroups = haveISystemPermission(state, {permission: Permissions.CREATE_CUSTOM_GROUP}) && isCustomGroupsEnabled(state);
+
+    const isRhsSettings = rhsState === RHSStates.SETTINGS;
 
     return {
         teamId: currentTeam ? currentTeam.id : '',
@@ -56,6 +59,7 @@ function mapStateToProps(state: GlobalState) {
         canCreateCustomGroups,
         rhsState: getRhsState(state),
         rhsOpen: getIsRhsOpen(state),
+        isRhsSettings,
     };
 }
 
@@ -67,6 +71,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             openModal,
             closeModal,
             closeRightHandSide,
+            showSettings,
         }, dispatch),
     };
 }

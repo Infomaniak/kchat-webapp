@@ -17,6 +17,7 @@ import LoadingScreen from 'components/loading_screen';
 import PostEditHistory from 'components/post_edit_history';
 import ResizableRhs from 'components/resizable_sidebar/resizable_rhs';
 import RhsCard from 'components/rhs_card';
+import RhsSettings from 'components/rhs_settings';
 import RhsThread from 'components/rhs_thread';
 import Search from 'components/search/index';
 
@@ -44,6 +45,7 @@ export type Props = {
     isChannelMembers: boolean;
     isPluginView: boolean;
     isPostEditHistory: boolean;
+    isSettings: boolean;
     previousRhsState: RhsState;
     rhsChannel: Channel;
     selectedPostId: string;
@@ -57,6 +59,7 @@ export type Props = {
         updateSearchTerms: (terms: string) => void;
         showChannelFiles: (channelId: string) => void;
         showChannelInfo: (channelId: string) => void;
+        showSettings: () => void;
     };
 }
 
@@ -94,6 +97,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             isChannelInfo: this.props.isChannelInfo,
             isChannelMembers: this.props.isChannelMembers,
             isPostEditHistory: this.props.isPostEditHistory,
+            isSettings: this.props.isSettings,
             selectedPostId: this.props.selectedPostId,
             selectedPostCardId: this.props.selectedPostCardId,
             previousRhsState: this.props.previousRhsState,
@@ -217,6 +221,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             previousRhsState,
             searchVisible,
             isPluginView,
+            isSettings,
             isOpen,
             isChannelInfo,
             isChannelMembers,
@@ -256,6 +261,8 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             content = <ChannelMembersRhs/>;
         } else if (isPostEditHistory) {
             content = <PostEditHistory/>;
+        } else if (isSettings) {
+            content = <RhsSettings/>;
         }
 
         const isRHSLoading = Boolean(
@@ -270,6 +277,17 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         const containerClassName = classNames('sidebar--right', 'move--left is-open', {
             'sidebar--right--expanded expanded': isSidebarRightExpanded,
         });
+
+        const rhs = isSettings ? content : (
+            <Search
+                isSideBarRight={true}
+                isSideBarRightOpen={true}
+                getFocus={this.getSearchBarFocus}
+                channelDisplayName={channelDisplayName}
+            >
+                {content}
+            </Search>
+        );
 
         return (
             <>
@@ -292,16 +310,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                                 {/* Sometimes the channel/team is not loaded yet, so we need to wait for it */}
                                 <LoadingScreen centered={true}/>
                             </div>
-                        ) : (
-                            <Search
-                                isSideBarRight={true}
-                                isSideBarRightOpen={true}
-                                getFocus={this.getSearchBarFocus}
-                                channelDisplayName={channelDisplayName}
-                            >
-                                {content}
-                            </Search>
-                        )}
+                        ) : rhs}
                     </div>
                 </ResizableRhs>
             </>

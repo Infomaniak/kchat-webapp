@@ -1,5 +1,7 @@
 @charset "utf-8";
 
+@use 'sass:color';
+
 .browser--ie {
     .modal {
         .modal-dialog {
@@ -45,8 +47,8 @@
 
         .modal-content {
             border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-            background: var(--center-channel-bg);
             border-radius: 12px;
+            background: var(--center-channel-bg);
         }
     }
 
@@ -179,10 +181,6 @@
         padding: 12px 30px 12px 15px;
     }
 
-    .btn {
-        font-size: 13px;
-    }
-
     .info__label {
         margin-bottom: 3px;
         font-size: 0.9em;
@@ -270,6 +268,10 @@
             content: none;
         }
 
+        .modal-header-back-button {
+            margin-left: -12px;
+        }
+
         .btn {
             position: relative;
             top: -2px;
@@ -338,8 +340,8 @@
 
     .modal-content {
         border: 1px solid rgba(var(--sys-center-channel-color-rgb), 0.16);
-        background: var(--sys-center-channel-bg);
         border-radius: 12px;
+        background: var(--sys-center-channel-bg);
     }
 
     .modal-chevron-icon {
@@ -472,8 +474,8 @@
                 width: auto;
                 height: auto;
                 max-height: 85vh;
-                margin: 0 auto;
                 border-radius: 8px;
+                margin: 0 auto;
             }
 
             video {
@@ -501,7 +503,7 @@
                 color: gray;
             }
 
-            > div {
+            >div {
                 position: relative;
                 display: inline-block;
                 min-width: 300px;
@@ -525,7 +527,7 @@
                 max-height: calc(100vh - 80px);
             }
 
-            img:not(.image_preview) {
+            img {
                 max-width: 100%;
                 max-height: calc(100vh - 168px);
             }
@@ -592,7 +594,6 @@
             }
 
             .modal-column {
-                height: 48px;
                 flex: 1;
             }
         }
@@ -639,7 +640,7 @@
     }
 
     .Select-input {
-        > input {
+        >input {
             padding: 8px 0;
         }
     }
@@ -656,6 +657,7 @@
         align-items: center;
         justify-content: center;
         border-radius: 50%;
+        background: rgba(var(--center-channel-color-rgb), 0.2);
     }
 
     .user-list {
@@ -715,67 +717,6 @@
     }
 }
 
-.modal-tabs {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-
-    .tab-content {
-        display: flex;
-        height: auto;
-        flex: 1 1 auto;
-        flex-direction: column;
-    }
-
-    .tab-pane {
-        display: none;
-        height: auto;
-        flex: 1 1 auto;
-
-        &.active {
-            display: flex;
-        }
-    }
-
-    .nav-tabs {
-        margin: 0 0 16px;
-
-        > li {
-            width: 50%;
-            border: none;
-            border-bottom: 2px $light-gray solid;
-            margin-right: 0;
-            text-align: center;
-
-            &.active {
-                border-bottom: 2px $primary-color solid;
-
-                a {
-                    opacity: 1;
-                }
-            }
-
-            > a {
-                display: flex;
-                height: 40px;
-                align-items: center;
-                justify-content: center;
-                padding-bottom: 12px;
-                border: none;
-                background: var(--center-channel-bg);
-                color: inherit;
-                font-weight: 900;
-                opacity: 0.5;
-                outline: none;
-
-                &:active {
-                    opacity: 1;
-                }
-            }
-        }
-    }
-}
-
 .more-modal__button {
     .btn {
         width: 100%;
@@ -809,7 +750,7 @@
         flex: 20;
     }
 
-    > div {
+    >div {
         overflow: auto;
         min-height: 100%;
     }
@@ -826,8 +767,8 @@
         max-width: none;
         flex-grow: 0;
         flex-shrink: 0;
-        margin-top: 2px;
         border-radius: 60px;
+        margin-top: 2px;
     }
 
     .more-modal__details {
@@ -856,6 +797,7 @@
             display: flex;
             overflow: hidden;
             min-width: 0;
+            align-items: center;
             margin: 5px 0;
             gap: 4px;
             text-overflow: ellipsis;
@@ -889,15 +831,9 @@
         font-weight: 600;
         white-space: nowrap;
 
-        .Tag {
-            span {
-                max-width: 100%;
-            }
-        }
-
         span {
             overflow: hidden;
-            max-width: 95%;
+            max-width: 100%;
             text-overflow: ellipsis;
         }
     }
@@ -948,6 +884,12 @@
 
             .more-modal__lastPostAt {
                 display: none;
+            }
+
+            .more-modal__details {
+                .add-group-members {
+                    display: flex;
+                }
             }
         }
 
@@ -1031,11 +973,10 @@
 .filtered-user-list {
     display: flex;
     width: 100%;
-    height: 70vh;
+    height: calc(90vh - 120px);
     flex-direction: column;
-    max-height: 800px;
 
-    > div {
+    >div {
         flex: 1 1 auto;
     }
 
@@ -1127,7 +1068,7 @@
         }
 
         .more-modal__row--selected {
-            background-color: lighten($primary-color, 40%);
+            background-color: color.adjust($primary-color, $lightness: 40%);
 
             .more-modal__actions--round {
                 display: block;
@@ -1172,53 +1113,5 @@
 .more-public-direct-channels {
     .filtered-user-list {
         height: calc(90vh - 180px);
-    }
-}
-
-.insights-modal,
-.user-groups-modal-create,
-.user-groups-modal-update,
-.view-user-groups-modal,
-.user-groups-modal {
-    .modal-content {
-        border-radius: 8px;
-
-        .modal-header {
-            display: flex;
-            min-height: 0;
-            align-items: center;
-            padding: 24px 24px;
-            border: none;
-            background: transparent;
-            color: inherit;
-
-            button.modal-header-back-button {
-                position: absolute;
-                left: 18px;
-                width: 4rem;
-                height: 4rem;
-                color: rgba(var(--center-channel-color-rgb), 0.56);
-                float: left;
-
-                &:hover {
-                    color: rgba(var(--center-channel-color-rgb), 0.72);
-                }
-
-                &:active {
-                    background-color: rgba(var(--button-bg-rgb), 0.08);
-                    color: var(--button-bg);
-                }
-
-                i {
-                    display: inline;
-                    font-size: 24px;
-                    line-height: 24px;
-                }
-            }
-
-            .modal-title {
-                color: inherit;
-            }
-        }
     }
 }

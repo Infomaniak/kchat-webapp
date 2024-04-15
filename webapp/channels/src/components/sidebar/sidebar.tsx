@@ -44,6 +44,9 @@ type Props = {
         closeModal: (modalId: string) => void;
         clearChannelSelection: () => void;
         closeRightHandSide: () => void;
+
+        // IK: custom settings
+        showSettings: () => void;
     };
     unreadFilterEnabled: boolean;
     isMobileView: boolean;
@@ -55,6 +58,9 @@ type Props = {
 
     // IK: For resizing left controls when lhs is resized since our layout has a split global header
     headerRef: React.RefObject<HTMLDivElement>;
+
+    // IK: Custom settings
+    isRhsSettings?: boolean;
 
 };
 
@@ -122,13 +128,11 @@ export default class Sidebar extends React.PureComponent<Props, State> {
             } else if (Keyboard.isKeyPressed(event, Constants.KeyCodes.A) && event.shiftKey) {
                 event.preventDefault();
 
-                this.props.actions.openModal({
-                    modalId: ModalIdentifiers.USER_SETTINGS,
-                    dialogType: UserSettingsModal,
-                    dialogProps: {
-                        isContentProductSettings: true,
-                    },
-                });
+                if (this.props.isRhsSettings) {
+                    this.props.actions.closeRightHandSide();
+                } else {
+                    this.props.actions.showSettings();
+                }
             }
         }
     };
