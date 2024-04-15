@@ -4469,6 +4469,7 @@
     "post_body.check_for_out_of_channel_mentions.others": "{numOthers} andere",
     "post_body.commentedOn": "Kommentierte auf die Nachricht von {name}: ",
     "post_body.deleted": "(Nachricht gelöscht)",
+    "post_body.notify_message": "hat Ihren Namen im Kanal",
     "post_body.plusMore": " plus {count, number} weitere {count, plural, one {Datei} other {Dateien}}",
     "post_delete.notPosted": "Kommentar soll nicht geschrieben werden",
     "post_delete.okay": "OK",

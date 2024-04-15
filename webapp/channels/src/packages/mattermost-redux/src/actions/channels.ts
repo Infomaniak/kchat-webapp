@@ -1213,11 +1213,11 @@ export function getChannelStats(channelId: string): ActionFunc {
     };
 }
 
-export function notifyChannelMember(channelId: string, userIds: string[]): ActionFunc {
+export function notifyChannelMember(channelId: string, userIds: string[], postId: string): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let member;
         try {
-            member = await Client4.notifyMember(channelId, userIds);
+            member = await Client4.notifyMember(channelId, userIds, postId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));

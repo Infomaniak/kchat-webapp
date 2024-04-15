@@ -4182,6 +4182,7 @@
     "post_body.check_for_out_of_channel_mentions.others": "{numOthers} otros",
     "post_body.commentedOn": "Comento en el mensaje de {name}: ",
     "post_body.deleted": "(mensaje eliminado)",
+    "post_body.notify_message": "mencionó tu nombre en el canal",
     "post_body.plusMore": " más {count, number} {count, plural, one {archivo} other {archivos}}",
     "post_delete.notPosted": "No se pudo enviar el comentario",
     "post_delete.okay": "Aceptar",

@@ -4067,6 +4067,7 @@
     "post_body.check_for_out_of_channel_mentions.others": "{numOthers} autres",
     "post_body.commentedOn": "a commenté le message de {name} : ",
     "post_body.deleted": "(message supprimé)",
+    "post_body.notify_message": "a mentionné votre nom dans le canal",
     "post_body.plusMore": " plus {count, number} other {count, plural, one {fichier} other {fichiers}}",
     "post_delete.notPosted": "Le commentaire n'a pu être envoyé",
     "post_delete.okay": "OK",

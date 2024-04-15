@@ -1874,10 +1874,11 @@ export default class Client4 {
         );
     };
 
-    notifyMember = (channelId: string, userIds: string[], ) => {
+    notifyMember = (channelId: string, userIds: string[], postId: string) => {
+        const body = {post_id: postId, user_ids: userIds}
         return this.doFetch<StatusOK>(
             `${this.getChannelMembersRoute(channelId)}/invite`,
-            {method: 'post', body: JSON.stringify(userIds)},
+            {method: 'post', body: JSON.stringify(body)},
         );
         
     };

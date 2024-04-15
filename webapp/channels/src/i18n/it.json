@@ -3238,6 +3238,7 @@
     "post_body.check_for_out_of_channel_mentions.others": "{numOthers} altri",
     "post_body.commentedOn": "Ha commentato il messaggio di {name}: ",
     "post_body.deleted": "(messaggio cancellato)",
+    "post_body.notify_message": "ha menzionato il tuo nome nel canale",
     "post_body.plusMore": " più {count, number} other {count, plural, one {file} other {files}}",
     "post_delete.notPosted": "Il commento non può essere pubblicato",
     "post_delete.okay": "Okay",
