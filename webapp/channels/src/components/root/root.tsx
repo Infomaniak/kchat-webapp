@@ -90,11 +90,13 @@ const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const Login = makeAsyncComponent('LoginController', LazyLogin);
 const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
 const HelpController = makeAsyncComponent('HelpController', LazyHelpController);
+const LazyKmeetRoute = React.lazy(() => import('components/kmeet_route/kmeet_route'));
 
 // const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', LazyLinkingLandingPage);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
 const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
+const KmeetRoute = makeAsyncComponent('KmeetRoute', LazyKmeetRoute);
 
 // const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 // const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
@@ -914,6 +916,12 @@ export default class Root extends React.PureComponent<Props, State> {
                                 headerRef={this.headerResizerRef}
                                 path={'/:team'}
                                 component={TeamController}
+                            />
+                            <LoggedInRoute
+                                theme={this.props.theme}
+                                headerRef={this.headerResizerRef}
+                                path={'/:conference'}
+                                component={KmeetRoute}
                             />
                             <RootRedirect/>
                         </Switch>

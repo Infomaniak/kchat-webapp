@@ -8,6 +8,9 @@ export const ID_PATH_PATTERN = '[a-z0-9]{26}';
 // - Two ids separated by __ (userID__userID)
 export const TEAM_NAME_PATH_PATTERN = '[a-z0-9\\-_]+';
 
+// Infomaniak
+export const CALL_ID_PATTERN = '[a-z0-9\\-_]+';
+
 // This should cover:
 // - Channel name
 // - Channel ID
