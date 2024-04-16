@@ -1,14 +1,9 @@
 
 import React from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Switch} from 'react-router-dom';
 
 const KmeetController = () => {
-    return (<Switch>
-        <Route
-            path={'/:conference'}
-            component={<div/>}
-        />
-    </Switch>);
+    return (<Switch/>);
 };
 
 export default KmeetController;

@@ -844,12 +844,12 @@ export default class Root extends React.PureComponent<Props, State> {
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
                     />
-                    <LoggedInRoute
+                    {/* <LoggedInRoute
                         theme={this.props.theme}
                         headerRef={this.headerResizerRef}
                         path={'/kmeet'}
                         component={KmeetController}
-                    />
+                    /> */}
                     <Redirect
                         from={'/_redirect/integrations/:subpath*'}
                         to={`/${this.props.permalinkRedirectTeamName}/integrations/:subpath*`}
