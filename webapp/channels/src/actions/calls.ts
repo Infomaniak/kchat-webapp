@@ -161,18 +161,25 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             if (kmeetUrl) {
                 console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
 
-                // window.open(kmeetUrl.href, '_blank', 'noopener');
-                window.open(`/kmeet/calls/${data.id}`, '_blank', 'top=500,left=200,frame=false,nodeIntegration=no');
+                if (isDesktopApp()) {
+                    window.open(`/kmeet/calls/${channelID}`, '_blank', 'top=500,left=200,frame=false,nodeIntegration=no');
+                } else {
+                    window.open(kmeetUrl.href, '_blank', 'noopener');
+                }
             }
         } catch {
-            const url = connectedKmeetCallUrl(getState(), channelID);
-            const id = connectedKmeetCallId(getState(), channelID);
-            if (url) {
-                window.open(`/kmeet/calls/${id}`, '_blank', 'top=500,left=200,frame=false,nodeIntegration=no');
+            if (isDesktopApp()) {
+                window.open(`/kmeet/calls/${channelID}`, '_blank', 'top=500,left=200,frame=false,nodeIntegration=no');
+            } else {
+                const url = connectedKmeetCallUrl(getState(), channelID);
 
-                // window.open(url, '_blank', 'noopener');
+                if (!url) {
+                    return;
+                }
+
+                window.open(url, '_blank', 'noopener');
+                console.log(`[calls]: Call user back. connected url: ${url}`);
             }
-            console.log(`[calls]: Call user back. connected url: ${url}`);
         }
     };
 }

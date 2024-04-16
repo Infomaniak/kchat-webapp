@@ -6,10 +6,6 @@ export const connectedKmeetCallUrl = (state: GlobalState, channelID: string) => 
     return state.views.kmeetCalls.connectedKmeetUrls[channelID]?.url;
 };
 
-export const connectedKmeetCallId = (state: GlobalState, channelID: string) => {
-    return state.views.kmeetCalls.connectedKmeetUrls[channelID]?.id;
-};
-
 export const connectedKmeetChannels = (state: GlobalState) => {
     return state.views.kmeetCalls.connectedKmeetUrls;
 };
