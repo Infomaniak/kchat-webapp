@@ -1,3 +1,11 @@
+## 2.6.3-rc.6 (2024-04-16)
+
+### Fixed (3 changes)
+
+- [fix ksuite bridge dnd register](kchat/webapp@00b8726876e5b4ce2b8863b603965007a1709674) by @antonbuksa
+- [Fix: User profile popover going off screen when name length is too long](kchat/webapp@0cee0ea41565a6b632de5c43d7c9ff55d11ffe7c) by @philippe.karle ([merge request](kchat/webapp!713))
+- [Fix: Change SuggestionBox placement based on textbox with rather than viewport width](kchat/webapp@502fb9399fe07e8ce9629e579993b32818b1e2e1) by @philippe.karle ([merge request](kchat/webapp!692))
+
 ## 2.6.3-rc.5 (2024-04-15)
 
 ### Added (1 change)
