@@ -4497,6 +4497,7 @@
   "user.settings.advance.unreadScrollPositionDesc": "Choisissez votre position de défilement lorsque vous visualisez un canal non lu. Les canaux sont toujours marquées comme étant lues lorsqu'ils sont consultés.",
   "user.settings.advance.startFromLeftOff": "Commencer là où je me suis arrêté",
   "user.settings.advance.startFromNewest": "Commencer par le message le plus récent",
+  "user.settings.tokens.botId": "Bot ID: ",
   "user.settings.custom_theme.awayIndicator": "Indicateur « absent »",
   "user.settings.custom_theme.buttonBg": "Arrière-plan du bouton",
   "user.settings.custom_theme.buttonColor": "Texte de bouton",

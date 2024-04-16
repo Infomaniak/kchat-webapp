@@ -5611,6 +5611,7 @@
   "user.settings.advance.title": "Advanced Settings",
   "user.settings.advance.unreadScrollPositionDesc": "Choose your scroll position when you view an unread channel. Channels will always be marked as read when viewed.",
   "user.settings.advance.unreadScrollPositionTitle": "Scroll position when viewing an unread channel",
+  "user.settings.tokens.botId": "Bot ID: ",
   "user.settings.custom_theme.awayIndicator": "Away Indicator",
   "user.settings.custom_theme.buttonBg": "Button BG",
   "user.settings.custom_theme.buttonColor": "Button Text",
