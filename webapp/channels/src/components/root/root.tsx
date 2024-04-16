@@ -85,18 +85,18 @@ const LazyHelpController = Utils.lazyWithRetries(() => import(/* webpackPrefetch
 const LazyPreparingWorkspace = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/preparing_workspace'));
 const LazyTeamController = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/team_controller'));
 const LazyOnBoardingTaskList = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/onboarding_tasklist'));
+const LazyKmeetController = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/kmeet_controller'));
 
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const Login = makeAsyncComponent('LoginController', LazyLogin);
 const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
 const HelpController = makeAsyncComponent('HelpController', LazyHelpController);
-const LazyKmeetRoute = React.lazy(() => import('components/kmeet_route/kmeet_route'));
 
 // const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', LazyLinkingLandingPage);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
 const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
-const KmeetRoute = makeAsyncComponent('KmeetRoute', LazyKmeetRoute);
+const KmeetController = makeAsyncComponent('KmeetRoute', LazyKmeetController);
 
 // const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 // const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
@@ -844,6 +844,12 @@ export default class Root extends React.PureComponent<Props, State> {
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
                     />
+                    <LoggedInRoute
+                        theme={this.props.theme}
+                        headerRef={this.headerResizerRef}
+                        path={'/kmeet'}
+                        component={KmeetController}
+                    />
                     <Redirect
                         from={'/_redirect/integrations/:subpath*'}
                         to={`/${this.props.permalinkRedirectTeamName}/integrations/:subpath*`}
@@ -916,12 +922,6 @@ export default class Root extends React.PureComponent<Props, State> {
                                 headerRef={this.headerResizerRef}
                                 path={'/:team'}
                                 component={TeamController}
-                            />
-                            <LoggedInRoute
-                                theme={this.props.theme}
-                                headerRef={this.headerResizerRef}
-                                path={'/:conference'}
-                                component={KmeetRoute}
                             />
                             <RootRedirect/>
                         </Switch>
