@@ -4156,8 +4156,6 @@
   "shortcuts.msgs.markdown.formatting.hide.mac": "Masquer la mise en forme:\t⌘|⌥|T",
   "shortcuts.msgs.markdown.formatting.show": "Afficher la mise en forme:\tCtrl|Alt|T",
   "shortcuts.msgs.markdown.formatting.show.mac": "Afficher la mise en forme:\t⌘|⌥|T",
-  "shortcuts.msgs.markdown.h3": "Titre",
-  "shortcuts.msgs.markdown.h3.mac": "Titre",
   "shortcuts.msgs.markdown.ordered": "Liste numérotée:\tShift|Alt|7",
   "shortcuts.msgs.markdown.ordered.mac": "Liste numérotée:\tShift|⌥|7",
   "shortcuts.msgs.markdown.preview": "Afficher/Masquer l'aperçu:\tCtrl|Alt|P",
