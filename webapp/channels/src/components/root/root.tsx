@@ -669,7 +669,7 @@ export default class Root extends React.PureComponent<Props, State> {
         });
 
         const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
-        storeBridge(ksuiteBridge)(store.dispatch);
+        storeBridge(ksuiteBridge)(store.dispatch, store.getState);
 
         Utils.injectWebcomponentInit();
 
