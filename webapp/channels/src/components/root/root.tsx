@@ -96,7 +96,7 @@ const HelpController = makeAsyncComponent('HelpController', LazyHelpController);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
 const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
-const KmeetController = makeAsyncComponent('KmeetRoute', LazyKmeetController);
+const KmeetController = makeAsyncComponent('KmeetController', LazyKmeetController);
 
 // const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 // const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
@@ -841,15 +841,14 @@ export default class Root extends React.PureComponent<Props, State> {
                         component={LinkingLandingPage}
                     /> */}
                     <LoggedInRoute
+                        headerRef={this.headerResizerRef}
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
                     />
-                    {/* <LoggedInRoute
-                        theme={this.props.theme}
-                        headerRef={this.headerResizerRef}
+                    <Route
                         path={'/kmeet'}
                         component={KmeetController}
-                    /> */}
+                    />
                     <Redirect
                         from={'/_redirect/integrations/:subpath*'}
                         to={`/${this.props.permalinkRedirectTeamName}/integrations/:subpath*`}

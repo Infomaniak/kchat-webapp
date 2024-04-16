@@ -52,7 +52,11 @@ if (DEV) {
 const buildTimestamp = Date.now();
 
 var config = {
-    entry: ['./src/root.tsx'],
+    entry: {
+        app: './src/root.tsx',
+
+        // kmeet: './src/components/kmeet_conference_iframe/index.tsx',
+    },
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
@@ -62,6 +66,7 @@ var config = {
         path: path.resolve(__dirname, '../../dist'),
     },
     module: {
+        noParse: /external_api\\.js/,
         rules: [
             {
                 test: /\.(js|jsx|ts|tsx)$/,
@@ -178,6 +183,13 @@ var config = {
                 },
             },
         }),
+
+        // new HtmlWebpackPlugin({
+        //     template: 'src/components/kmeet_conference_iframe/kmeet_conference.html',
+        //     filename: 'kmeet_conference.html',
+        //     minify: false,
+        //     chunks: ['kmeet'],
+        // }),
         new CopyWebpackPlugin({
             patterns: [
                 {from: 'src/images/emoji', to: 'emoji'},
