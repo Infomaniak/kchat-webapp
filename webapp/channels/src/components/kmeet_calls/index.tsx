@@ -14,6 +14,7 @@ function mapStateToProps(state: GlobalState) {
 
     return {
         user,
+        locale,
     };
 }
 

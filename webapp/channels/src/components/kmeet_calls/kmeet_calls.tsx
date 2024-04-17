@@ -40,13 +40,21 @@ class KmeetCalls extends React.Component<Props> {
             },
             configOverwrite: {
                 defaultLanguage: this.props.locale,
-                prejoinPageEnabled: false,
+                prejoinPageEnabled: true,
             },
         };
 
-        const api = new JitsiApi('kmeet.preprod.dev.infomaniak.ch', options) as JitsiMeetExternalAPI;
+        console.log('options', options);
 
-        api.executeCommand('avatarUrl', Client4.getProfilePictureUrl(this.props.user.id, this.props.user.last_picture_update));
+        // const api = new JitsiApi('kmeet.preprod.dev.infomaniak.ch', options) as JitsiMeetExternalAPI;
+
+        // console.log('api', api);
+
+        window.jitsiNodeAPI!.setupRenderer(options);
+
+        // window.desktop!.initializeJitsi(api);
+
+        // api.executeCommand('avatarUrl', Client4.getProfilePictureUrl(this.props.user.id, this.props.user.last_picture_update));
     }
 
     render() {
