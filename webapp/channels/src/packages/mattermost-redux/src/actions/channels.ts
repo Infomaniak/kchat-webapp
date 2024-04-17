@@ -29,9 +29,6 @@ import type {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'matterm
 import {getChannelsIdForTeam, getChannelByName} from 'mattermost-redux/utils/channel_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 
-// eslint-disable-next-line no-restricted-imports
-import display from 'components/user_settings/display';
-
 import {ActionTypes} from 'utils/constants';
 
 import {addChannelToInitialCategory, addChannelToCategory} from './channel_categories';
@@ -42,6 +39,7 @@ import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
 
 import {General, Preferences} from '../constants';
+import display from 'components/user_settings/display';
 
 export function selectChannel(channelId: string) {
     return {
