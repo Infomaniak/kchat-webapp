@@ -29,6 +29,7 @@ import type {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'matterm
 import {getChannelsIdForTeam, getChannelByName} from 'mattermost-redux/utils/channel_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 
+// eslint-disable-next-line no-restricted-imports
 import {ActionTypes} from 'utils/constants';
 
 import {addChannelToInitialCategory, addChannelToCategory} from './channel_categories';
