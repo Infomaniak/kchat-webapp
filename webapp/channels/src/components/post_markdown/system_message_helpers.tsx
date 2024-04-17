@@ -15,11 +15,11 @@ import CallNotificationMessage from 'components/kmeet_conference/post_type';
 import Markdown from 'components/markdown';
 import CombinedSystemMessage from 'components/post_view/combined_system_message';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member';
+import PostNotifyChannelMember from 'components/post_view/post_notify_channel_member/post_notify_channel_member';
 
 import type {TextFormattingOptions} from 'utils/text_formatting';
 import {getSiteURL} from 'utils/url';
 import * as Utils from 'utils/utils';
-import PostNotifyChannelMember from 'components/post_view/post_notify_channel_member/post_notify_channel_member';
 
 function renderUsername(value: string): ReactNode {
     const username = (value[0] === '@') ? value : `@${value}`;
@@ -444,19 +444,18 @@ export function renderSystemMessage(post: Post, currentTeam: Team, channel: Chan
         }
 
         return null;
-    } else if(post.props && post.type == Posts.POST_TYPES.SYSTEM_MENTIONED_CHANNEL){
+    } else if (post.props && post.type === Posts.POST_TYPES.SYSTEM_MENTIONED_CHANNEL) {
         if (channel && (channel.type === General.DM_CHANNEL) &&
             isUserCanManageMembers
         ) {
             return (
                 <PostNotifyChannelMember
-                        channelId={post.channel_id}
-                        username = {post.props.username}
-                        channelName = {post.props.channel_name}  
-                        postLink = {post.props.post_link}
-                /> 
+                    username={post.props.username}
+                    channelName={post.props.channel_name}
+                    postLink={post.props.post_link}
+                />
             );
-        } 
+        }
         return null;
     } else if (systemMessageRenderers[post.type]) {
         return systemMessageRenderers[post.type](post);

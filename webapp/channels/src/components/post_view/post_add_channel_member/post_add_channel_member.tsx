@@ -15,7 +15,7 @@ import {Constants} from 'utils/constants';
 import {t} from 'utils/i18n';
 
 interface Actions {
-    notifyChannelMember:(channelId: string, userIds: string[], postId: string) => void;
+    notifyChannelMember: (channelId: string, userIds: string[], postId: string) => void;
     addChannelMember: (channelId: string, userId: string, rootId: string) => void;
     removePost: (post: Post) => void;
 }
@@ -63,10 +63,10 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
     handleNotifyChannelMember = () => {
         const {post, userIds, latestPostId} = this.props;
 
-        if (post && post.channel_id){ 
+        if (post && post.channel_id) {
             this.props.actions.notifyChannelMember(post.channel_id, userIds, latestPostId);
             this.props.actions.removePost(post);
-        } 
+        }
     };
 
     expand = () => {
@@ -183,15 +183,15 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
         if (usernames.length === 1) {
             outOfChannelMessageID = t('post_body.check_for_out_of_channel_mentions.message.one');
             outOfChannelMessageText = 'did not get notified by this mention because they are not in the channel. Would you like to ';
-            notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message'
-            notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message'
-            historyMessageId = 'post_body.check_for_out_of_channel_mentions.message_last'
+            notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message';
+            notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message';
+            historyMessageId = 'post_body.check_for_out_of_channel_mentions.message_last';
         } else if (usernames.length > 1) {
             outOfChannelMessageID = t('post_body.check_for_out_of_channel_mentions.message.multiple');
             outOfChannelMessageText = 'did not get notified by this mention because they are not in the channel. Would you like to ';
-            notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple'
-            notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message.multiple'
-            historyMessageId = 'post_body.check_for_out_of_channel_mentions.message_last.multiple'
+            notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple';
+            notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message.multiple';
+            historyMessageId = 'post_body.check_for_out_of_channel_mentions.message_last.multiple';
         }
 
         let outOfGroupsMessageID;
@@ -206,7 +206,7 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
         let outOfGroupsMessage = null;
 
         if (usernames.length) {
-            if(channelType === Constants.OPEN_CHANNEL){
+            if (channelType === Constants.OPEN_CHANNEL) {
                 outOfChannelMessage = (
                     <p>
                         {outOfChannelAtMentions}
@@ -225,8 +225,8 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                             />
                         </a>
                         <FormattedMessage
-                                id={notificationOrMessageTextId}
-                                defaultMessage={'or '}
+                            id={notificationOrMessageTextId}
+                            defaultMessage={'or '}
                         />
                         <a
                             className='PostBody_addChannelMemberLink'

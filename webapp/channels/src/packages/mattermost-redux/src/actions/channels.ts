@@ -30,6 +30,8 @@ import {getChannelsIdForTeam, getChannelByName} from 'mattermost-redux/utils/cha
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 
 // eslint-disable-next-line no-restricted-imports
+import display from 'components/user_settings/display';
+
 import {ActionTypes} from 'utils/constants';
 
 import {addChannelToInitialCategory, addChannelToCategory} from './channel_categories';
@@ -40,7 +42,6 @@ import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
 
 import {General, Preferences} from '../constants';
-import display from 'components/user_settings/display';
 
 export function selectChannel(channelId: string) {
     return {
@@ -1221,7 +1222,7 @@ export function notifyChannelMember(channelId: string, userIds: string[], postId
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
-            return {error}
+            return {error};
         }
         return {data: member};
     };

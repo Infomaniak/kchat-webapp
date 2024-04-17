@@ -11,14 +11,9 @@ export interface Props {
     username: string;
     channelName: string;
     postLink: string;
-    channelId: string;
 }
 
 export default class PostNotifyChannelMember extends React.PureComponent<Props> {
-    constructor(props: Props) {
-        super(props);
-    }
-
     generateAtMentions(username: string) {
         return (
             <AtMention
@@ -30,9 +25,9 @@ export default class PostNotifyChannelMember extends React.PureComponent<Props> 
     render() {
         const {username, channelName, postLink} = this.props;
         const outOfChannelAtMentions = this.generateAtMentions(username);
-        let relativePath = new URL(postLink).pathname;
+        const relativePath = new URL(postLink).pathname;
         let notifyMessage = null;
-        let notifyTextMessage = 'mentioned your name in the channel';
+        const notifyTextMessage = 'mentioned your name in the channel';
 
         notifyMessage = (
             <p>
@@ -52,7 +47,7 @@ export default class PostNotifyChannelMember extends React.PureComponent<Props> 
                     {postLink}
                 </Link>
             </p>
-        )
+        );
 
         return (
             <>
@@ -60,5 +55,4 @@ export default class PostNotifyChannelMember extends React.PureComponent<Props> 
             </>
         );
     }
-    
 }
