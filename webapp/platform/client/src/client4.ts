@@ -4062,7 +4062,7 @@ export default class Client4 {
 
     notifyAdmin = (req: NotifyAdminRequest) => {
         return this.doFetchWithResponse<StatusOK>(
-            `${this.getUsersRoute()}/members/notify`,
+            `${this.getUsersRoute()}/notify-admin`,
             {method: 'post', body: JSON.stringify(req)},
         );
     }

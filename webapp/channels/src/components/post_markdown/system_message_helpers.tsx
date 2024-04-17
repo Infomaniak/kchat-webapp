@@ -444,8 +444,7 @@ export function renderSystemMessage(post: Post, currentTeam: Team, channel: Chan
         }
 
         return null;
-    } 
-    else if(post.props && post.type == Posts.POST_TYPES.SYSTEM_MENTIONED_CHANNEL){
+    } else if(post.props && post.type == Posts.POST_TYPES.SYSTEM_MENTIONED_CHANNEL){
         if (channel && (channel.type === General.DM_CHANNEL) &&
             isUserCanManageMembers
         ) {
@@ -459,8 +458,7 @@ export function renderSystemMessage(post: Post, currentTeam: Team, channel: Chan
             );
         } 
         return null;
-    }
-    else if (systemMessageRenderers[post.type]) {
+    } else if (systemMessageRenderers[post.type]) {
         return systemMessageRenderers[post.type](post);
     } else if (post.type === Posts.POST_TYPES.EPHEMERAL_ADD_TO_CHANNEL) {
         return renderAddToChannelMessage(post);

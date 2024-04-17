@@ -1231,7 +1231,7 @@ export function addChannelMember(channelId: string, userId: string, postRootId =
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let member;
         try {
-             member = await Client4.addToChannel(userId, channelId, postRootId);
+            member = await Client4.addToChannel(userId, channelId, postRootId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
