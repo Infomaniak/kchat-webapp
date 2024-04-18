@@ -1997,6 +1997,13 @@ export default class Client4 {
         );
     };
 
+    readMultipleChannels = (channelIds: string[]) => {
+        return this.doFetch<ChannelViewResponse>(
+            `${this.getChannelsRoute()}/members/me/mark_read`,
+            {method: 'post', body: JSON.stringify(channelIds)},
+        );
+    };
+
     autocompleteChannels = (teamId: string, name: string) => {
         return this.doFetch<Channel[]>(
             `${this.getTeamRoute(teamId)}/channels/autocomplete${buildQueryString({name})}`,
