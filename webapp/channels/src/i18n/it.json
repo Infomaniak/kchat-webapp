@@ -3238,7 +3238,7 @@
     "post_body.check_for_out_of_channel_mentions.link.public": "aggiungerli al canale",
     "post_body.check_for_out_of_channel_mentions.message.one": "non è stato notificato da questa menzione, perché l'utente non è nel canale. Vuoi ",
     "post_body.check_for_out_of_channel_mentions.message.multiple": "non sono stati notificati da questa menzione, perché gli utenti non sono nel canale. Vuoi ",
-    "post_body.check_for_out_of_channel_mentions.message_las.multiple": " ? Avranno accesso a tutta la cronologia dei messaggi.",
+    "post_body.check_for_out_of_channel_mentions.message_last.multiple": " ? Avranno accesso a tutta la cronologia dei messaggi.",
     "post_body.check_for_out_of_channel_mentions.message_last": " ? Lui avrà quindi accesso a tutto lo storico dei messaggi per questo canale.",
     "post_body.check_for_out_of_channel_mentions.others": "{numOthers} altri",
     "post_body.commentedOn": "Ha commentato il messaggio di {name}: ",
