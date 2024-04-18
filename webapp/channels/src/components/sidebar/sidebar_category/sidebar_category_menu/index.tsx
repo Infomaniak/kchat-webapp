@@ -40,12 +40,14 @@ import SidebarCategoryGenericMenu from './sidebar_category_generic_menu';
 
 type Props = {
     category: ChannelCategory;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
 };
 
 const getUnreadsIdsForCategory = makeGetUnreadIdsForCategory();
 
 const SidebarCategoryMenu = ({
     category,
+    menuTriggerRef,
 }: Props) => {
     const dispatch = useDispatch();
     const showUnreadsCategory = useSelector(shouldShowUnreadsCategory);
@@ -224,18 +226,19 @@ const SidebarCategoryMenu = ({
         trackEvent('ui', 'ui_sidebar_category_menu_viewCategory');
     }, [dispatch, unreadsIds]);
 
-    const markAsReadMenuItem = showUnreadsCategory ?
-        null :
-        (
-            <MarkAsReadMenuItem
-                id={category.id}
-                handleViewCategory={handleViewCategory}
-                numChannels={unreadsIds.length}
-            />
-        );
+    const markAsReadMenuItem = showUnreadsCategory ? null : (
+        <MarkAsReadMenuItem
+            id={category.id}
+            handleViewCategory={handleViewCategory}
+            numChannels={unreadsIds.length}
+        />
+    );
 
     return (
-        <SidebarCategoryGenericMenu id={category.id}>
+        <SidebarCategoryGenericMenu
+            id={category.id}
+            menuTriggerRef={menuTriggerRef}
+        >
             {markAsReadMenuItem}
             {markAsReadMenuItem && <Menu.Separator/>}
             {muteUnmuteCategoryMenuItem}

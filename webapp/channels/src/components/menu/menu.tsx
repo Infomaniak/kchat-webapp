@@ -87,6 +87,7 @@ interface Props {
     menuButtonTooltip?: MenuButtonTooltipProps;
     menu: MenuProps;
     children: ReactNode[] | React.ReactNode;
+    menuButtonRef?: React.RefObject<HTMLButtonElement>;
 }
 
 /**
@@ -209,6 +210,7 @@ export function Menu(props: Props) {
                 className={props.menuButton?.class ?? ''}
                 onClick={handleMenuButtonClick}
                 onMouseDown={handleMenuButtonMouseDown}
+                ref={props.menuButtonRef}
             >
                 {props.menuButton.children}
             </MenuButtonComponent>

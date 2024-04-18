@@ -13,11 +13,13 @@ import * as Menu from 'components/menu';
 
 type Props = {
     id: string;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
     children: React.ReactNode[];
 };
 
 const SidebarCategoryGenericMenu = ({
     id,
+    menuTriggerRef,
     children,
 }: Props) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -56,6 +58,7 @@ const SidebarCategoryGenericMenu = ({
                     'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.dropdownAriaLabel', defaultMessage: 'Edit category menu'}),
                     onToggle: handleMenuToggle,
                 }}
+                menuButtonRef={menuTriggerRef}
             >
                 {children}
             </Menu.Container>

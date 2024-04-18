@@ -1,9 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useRef, memo} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
-
 import {
     MarkAsUnreadIcon,
     StarIcon,
@@ -15,6 +12,8 @@ import {
     DotsVerticalIcon,
     ExitToAppIcon,
 } from '@infomaniak/compass-icons/components';
+import React, {useRef, memo} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -266,6 +265,8 @@ const SidebarChannelMenu = (props: Props) => {
         );
     }
 
+    const menuId = `SidebarChannelMenu-MenuList-${props.channel.id}`;
+
     return (
         <Menu.Container
             menuButton={{
@@ -284,12 +285,16 @@ const SidebarChannelMenu = (props: Props) => {
                 'aria-label': formatMessage({id: 'sidebar_left.sidebar_channel_menu.dropdownAriaLabel', defaultMessage: 'Edit channel menu'}),
                 onToggle: props.onMenuToggle,
             }}
+            menuButtonRef={props.menuTriggerRef}
         >
             {markAsReadUnreadMenuItem}
             {favoriteUnfavoriteMenuItem}
             {muteUnmuteChannelMenuItem}
             <Menu.Separator/>
-            <ChannelMoveToSubmenu channel={props.channel}/>
+            <ChannelMoveToSubmenu
+                channel={props.channel}
+                parentMenuId={menuId}
+            />
             {(copyLinkMenuItem || addMembersMenuItem) && <Menu.Separator/>}
             {copyLinkMenuItem}
             {addMembersMenuItem}
