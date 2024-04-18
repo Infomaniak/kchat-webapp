@@ -10,6 +10,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
 import * as GlobalActions from 'actions/global_actions';
 import {updateTeamsOrderForUser} from 'actions/team_actions';
@@ -67,6 +68,7 @@ type DesktopMessage = {
             teamId: string;
             url: string;
             teamsOrder?: string[];
+            serverId?: string;
         };
     };
 }
@@ -221,6 +223,12 @@ export default class LoggedIn extends React.PureComponent<Props> {
                 },
                 window.origin,
             );
+            break;
+        }
+        case 'switch-server-sidebar': {
+            if (desktopMessage.data.message?.serverId) {
+                setLastKSuiteSeenCookie(desktopMessage.data.message.serverId);
+            }
             break;
         }
         case 'notification-clicked': {

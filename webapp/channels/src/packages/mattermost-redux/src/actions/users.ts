@@ -103,6 +103,13 @@ export function loadMeREST(): ActionFunc {
                 });
                 const lastKSuiteSeen = sortedSuites[0];
 
+                if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                    window.postMessage({
+                        type: 'switch-server',
+                        data: lastKSuiteSeen.display_name,
+                    }, window.origin);
+                }
+
                 // don't redirect to the error page if it is a testing environment
                 if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
                     const bridge = getKSuiteBridge(getState());
