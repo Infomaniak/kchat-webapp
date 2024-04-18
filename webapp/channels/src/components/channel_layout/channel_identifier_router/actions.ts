@@ -168,6 +168,9 @@ export function goToChannelByChannelName(match: Match, history: History): Action
         let channel = getChannelsNameMapInTeam(state, teamObj!.id)[channelName];
         if (!channel) {
             const getChannelDispatchResult = await dispatch(getChannelByNameAndTeamName(team, channelName, true));
+            if ('error' in getChannelDispatchResult) {
+                handleChannelJoinError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
+            }
             if ('data' in getChannelDispatchResult) {
                 channel = getChannelDispatchResult.data!;
             }

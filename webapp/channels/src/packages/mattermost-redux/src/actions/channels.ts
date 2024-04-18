@@ -1104,6 +1104,12 @@ export function removeChannelMember(channelId: string, userId: string): ActionFu
 
 export function markChannelAsRead(channelId: string, skipUpdateViewTime = false): ActionFunc {
     return (dispatch, getState) => {
+        // [IK Preview mode] if an user is not a channel member, we skip the mark as read action.
+        const isMember = getState().entities.channels.myMembers[channelId];
+        if (!isMember) {
+            return {data: undefined};
+        }
+
         if (skipUpdateViewTime) {
             dispatch(updateApproximateViewTime(channelId));
         }

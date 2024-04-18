@@ -112,7 +112,9 @@ export function focusPost(postId: string, returnTo = '', currentUserId: string, 
                     return;
                 }
             }
-            await dispatch(joinChannel(currentUserId, '', postInfo.channel_id));
+
+            // [Preview feature] disabling join channel when focusing a post.
+            // await dispatch(joinChannel(currentUserId, '', postInfo.channel_id));
         }
 
         const {data: threadData} = await dispatch(getPostThread(postId));

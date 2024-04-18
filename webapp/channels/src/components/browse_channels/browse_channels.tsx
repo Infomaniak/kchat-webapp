@@ -166,11 +166,11 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
         });
     };
 
-    handleJoin = async (channel: Channel, done: () => void) => {
+    handleJoin = async (channel: Channel, done: () => void, preview = false) => {
         const {actions, currentUserId, teamId, teamName} = this.props;
         let result;
 
-        if (!this.isMemberOfChannel(channel.id)) {
+        if (!this.isMemberOfChannel(channel.id) && !preview) {
             result = await actions.joinChannel(currentUserId, teamId, channel.id);
         }
 

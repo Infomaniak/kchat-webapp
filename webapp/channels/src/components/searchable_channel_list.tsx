@@ -36,7 +36,7 @@ interface Props extends WrappedComponentProps {
     nextPage: (page: number) => void;
     isSearch: boolean;
     search: (term: string) => void;
-    handleJoin: (channel: Channel, done: () => void) => void;
+    handleJoin: (channel: Channel, done: () => void, preview?: boolean) => void;
     noResultsText: JSX.Element;
     changeFilter: (filter: FilterType) => void;
     filter: FilterType;
@@ -119,6 +119,19 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
         }
     };
 
+    handleView = (channel: Channel, e: React.MouseEvent) => {
+        e.stopPropagation();
+        this.setState({joiningChannel: channel.id});
+        this.props.handleJoin(
+            channel,
+            () => {
+                this.setState({joiningChannel: ''});
+            },
+            true
+        );
+        this.props.closeModal(ModalIdentifiers.MORE_CHANNELS);
+    };
+
     isMemberOfChannel(channelId: string) {
         return this.props.myChannelMemberships[channelId];
     }
@@ -177,24 +190,40 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
             'btn-primary primaryButton': !this.isMemberOfChannel(channel.id),
         });
 
-        const joinViewChannelButton = (
+        const joinViewChannelButton = !this.isMemberOfChannel(channel.id) && (
             <button
                 id='joinViewChannelButton'
                 onClick={(e) => this.handleJoin(channel, e)}
                 className={joinViewChannelButtonClass}
                 disabled={Boolean(this.state.joiningChannel)}
                 tabIndex={-1}
-                aria-label={this.isMemberOfChannel(channel.id) ? localizeMessage('more_channels.view', 'View') : localizeMessage('joinChannel.JoinButton', 'Join')}
+                aria-label={localizeMessage('joinChannel.JoinButton', 'Join')}
             >
                 <LoadingWrapper
                     loading={this.state.joiningChannel === channel.id}
                     text={localizeMessage('joinChannel.joiningButton', 'Joining...')}
                 >
                     <FormattedMessage
-                        id={this.isMemberOfChannel(channel.id) ? 'more_channels.view' : 'joinChannel.JoinButton'}
-                        defaultMessage={this.isMemberOfChannel(channel.id) ? 'View' : 'Join'}
+                        id={'joinChannel.JoinButton'}
+                        defaultMessage={'Join'}
                     />
                 </LoadingWrapper>
+            </button>
+        );
+
+        const viewChannelButton = (
+            <button
+                id='joinViewChannelButton'
+                onClick={(e) => this.handleView(channel, e)}
+                className={joinViewChannelButtonClass}
+                disabled={this.state.joiningChannel}
+                tabIndex={-1}
+                aria-label={localizeMessage('more_channels.view', 'View')}
+            >
+                <FormattedMessage
+                    id={'more_channels.view'}
+                    defaultMessage={'View'}
+                />
             </button>
         );
 
@@ -216,7 +245,7 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
                     {channelPurposeContainer}
                 </div>
                 <div className='more-modal__actions'>
-                    {joinViewChannelButton}
+                    {viewChannelButton}{' '}{joinViewChannelButton}
                 </div>
             </div>
         );
