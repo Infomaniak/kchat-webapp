@@ -11,7 +11,7 @@ class KmeetCall extends React.Component {
     }
 
     componentDidMount() {
-        const api = window.jitsiNodeAPI.setupRenderer(this.containerRef.current);
+        const api = (window as any).jitsiNodeAPI.setupRenderer(this.containerRef.current);
     }
 
     render() {
