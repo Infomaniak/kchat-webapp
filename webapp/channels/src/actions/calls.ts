@@ -162,14 +162,14 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
 
                 if (isDesktopApp()) {
-                    window.open(`/kmeet/calls/${channelID}`, '_blank', 'top=500,left=200');
+                    window.open('/static/kmeet.js', '_blank', 'top=500,left=200');
                 } else {
                     window.open(kmeetUrl.href, '_blank', 'noopener');
                 }
             }
         } catch {
             if (isDesktopApp()) {
-                window.open(`/kmeet/calls/${channelID}`, '_blank', 'top=500,left=200');
+                window.open('/static/kmeet.js', '_blank', 'top=500,left=200');
             } else {
                 const url = connectedKmeetCallUrl(getState(), channelID);
 
