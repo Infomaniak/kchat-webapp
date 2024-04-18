@@ -51,18 +51,49 @@ if (DEV) {
 // entries are guaranteed to have expired.
 const buildTimestamp = Date.now();
 
+var kmeetConfig = {
+    entry: {
+        kmeet: './src/components/kmeet_conference_iframe/index.tsx',
+    },
+    output: {
+        publicPath,
+        filename: '[name].js',
+        chunkFilename: '[name].js',
+        clean: true,
+        path: path.resolve(__dirname, '../../dist'),
+    },
+    module: {
+        noParse: /external_api\\.js/,
+        rules: [
+            {
+                test: /\.(js|jsx|ts|tsx)$/,
+                exclude: STANDARD_EXCLUDE,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+
+                        // Babel configuration is in .babelrc because jest requires it to be there.
+                    },
+                },
+            },
+        ],
+    },
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    },
+    target: 'web',
+};
+
 var config = {
     entry: {
         app: './src/root.tsx',
-
-        // kmeet: './src/components/kmeet_conference_iframe/index.tsx',
     },
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
         chunkFilename: '[name].[contenthash].js',
         assetModuleFilename: 'files/[contenthash][ext]',
-        clean: true,
         path: path.resolve(__dirname, '../../dist'),
     },
     module: {
@@ -408,10 +439,14 @@ if (DEV) {
     // Development mode configuration
     config.mode = 'development';
     config.devtool = 'eval-cheap-module-source-map';
+    kmeetConfig.mode = 'development';
+    kmeetConfig.devtool = 'eval-cheap-module-source-map';
 } else {
     // Production mode configuration
     config.mode = 'production';
     config.devtool = 'source-map';
+    kmeetConfig.mode = 'production';
+    kmeetConfig.devtool = 'source-map';
 }
 
 const env = {};
@@ -449,47 +484,60 @@ config.plugins.push(new webpack.DefinePlugin({
 }));
 
 if (targetIsDevServer) {
+    const devServer = {
+        server: 'https',
+        allowedHosts: 'all',
+        liveReload: true,
+        proxy: [{
+            context: () => true,
+            bypass(req) {
+                if (req.url.indexOf('/api') === 0 ||
+                    req.url.indexOf('/plugins') === 0 ||
+                    req.url.indexOf('/static/plugins/') === 0 ||
+                    req.url.indexOf('/broadcasting/auth') === 0 ||
+                    req.url.indexOf('/sockjs-node/') !== -1) {
+                    return null; // send through proxy to the server
+                }
+                if (req.url.indexOf('/static/') === 0) {
+                    return path; // return the webpacked asset
+                }
+
+                // redirect (root, team routes, etc)
+                return '/static/root.html';
+            },
+            logLevel: 'silent',
+            target: process.env.BASE_URL || 'https://infomaniak.kchat.preprod.dev.infomaniak.ch/', //eslint-disable-line no-process-env
+            changeOrigin: true,
+            xfwd: true,
+            ws: false,
+        }],
+        port: 443,
+        devMiddleware: {
+            writeToDisk: false,
+        },
+        historyApiFallback: {
+            index: '/static/root.html',
+        },
+        client: {
+            overlay: false,
+        },
+    };
+
+    // kmeetConfig = {
+    //     ...kmeetConfig,
+    //     devtool: 'eval-cheap-module-source-map',
+    //     devServer,
+    //     performance: false,
+    //     optimization: {
+    //         ...config.optimization,
+    //         splitChunks: false,
+    //     },
+    // };
+
     config = {
         ...config,
         devtool: 'eval-cheap-module-source-map',
-        devServer: {
-            server: 'https',
-            allowedHosts: 'all',
-            liveReload: true,
-            proxy: [{
-                context: () => true,
-                bypass(req) {
-                    if (req.url.indexOf('/api') === 0 ||
-                        req.url.indexOf('/plugins') === 0 ||
-                        req.url.indexOf('/static/plugins/') === 0 ||
-                        req.url.indexOf('/broadcasting/auth') === 0 ||
-                        req.url.indexOf('/sockjs-node/') !== -1) {
-                        return null; // send through proxy to the server
-                    }
-                    if (req.url.indexOf('/static/') === 0) {
-                        return path; // return the webpacked asset
-                    }
-
-                    // redirect (root, team routes, etc)
-                    return '/static/root.html';
-                },
-                logLevel: 'silent',
-                target: process.env.BASE_URL || 'https://infomaniak.kchat.preprod.dev.infomaniak.ch/', //eslint-disable-line no-process-env
-                changeOrigin: true,
-                xfwd: true,
-                ws: false,
-            }],
-            port: 9005,
-            devMiddleware: {
-                writeToDisk: false,
-            },
-            historyApiFallback: {
-                index: '/static/root.html',
-            },
-            client: {
-                overlay: false,
-            },
-        },
+        devServer,
         performance: false,
         optimization: {
             ...config.optimization,
@@ -529,6 +577,6 @@ if (targetIsEslint) {
         // Do this asynchronously so we can determine whether which remote modules are available
         await initializeModuleFederation();
 
-        return config;
+        return [config, kmeetConfig];
     };
 }
