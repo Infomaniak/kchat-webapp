@@ -143,7 +143,7 @@ function Avatars({
     const ids = useSelector((state: GlobalState) => {
         if (!showDeleted) {
             const users = getUsers(state);
-            return userIds.reduce((acc, next) => [...acc as string[], ...(users?.[next].delete_at === 0 ? [next] : [])], [] as string[]);
+            return userIds.reduce((acc, next) => [...acc as string[], ...(users?.[next] && users?.[next].delete_at === 0 ? [next] : [])], [] as string[]);
         }
         return userIds;
     });
