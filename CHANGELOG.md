@@ -30,6 +30,13 @@ No changes.
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
 
+## 2.7.0-next.2 (2024-04-19)
+
+### Fixed (2 changes)
+
+- [fix profile action](kchat/webapp@8f7fc1c05b95c05adc139cbf70cc7a2672ac71e2) by @antonbuksa
+- [restore mas migration banner](kchat/webapp@7c245a78759263070f036cc17e576c5c7537828f) by @antonbuksa
+
 ## 2.7.0-next.1 (2024-04-19)
 
 ### Fixed (1 change)
