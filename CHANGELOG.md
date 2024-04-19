@@ -1,3 +1,9 @@
+## 2.7.0-rc.3 (2024-04-19)
+
+### Fixed (1 change)
+
+- [restore mas migration banner](kchat/webapp@7c245a78759263070f036cc17e576c5c7537828f) by @antonbuksa
+
 ## 2.7.0-rc.2 (2024-04-19)
 
 No changes.
