@@ -7042,7 +7042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^8.0.0, commander@npm:^8.3.0":
+"commander@npm:^8.3.0":
   version: 8.3.0
   resolution: "commander@npm:8.3.0"
   checksum: 6b7b5d334483ce24bd73c5dac2eab901a7dbb25fd983ea24a1eeac6e7166bb1967f641546e8abf1920afbde86a45fbfe5812fbc69d0dc451bb45ca416a12a3a3
@@ -12886,14 +12886,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:0.16.3":
-  version: 0.16.3
-  resolution: "katex@npm:0.16.3"
+"katex@npm:0.16.10":
+  version: 0.16.10
+  resolution: "katex@npm:0.16.10"
   dependencies:
-    commander: "npm:^8.0.0"
+    commander: "npm:^8.3.0"
   bin:
     katex: cli.js
-  checksum: f91c714745a9b9a8fd22039ff54ee0256d322f3f2a541f4f03b8690f07c7cc90f478363a3148b6482b4f162e803ad468cf83627fbd2d3842f70003435c2aa76d
+  checksum: 367034012311c695791de4553b3e4c7a9f36d126a0cae17b97f4e8832ced2559961f9fa6d39e0116e1374013e12ac8af159eb014678f06b4acf5e547292ea3e5
   languageName: node
   linkType: hard
 
@@ -13566,7 +13566,7 @@ __metadata:
     jest-junit: "npm:16.0.0"
     jest-styled-components: "npm:7.2.0"
     jest-watch-typeahead: "npm:2.2.2"
-    katex: "npm:0.16.3"
+    katex: "npm:0.16.10"
     key-mirror: "npm:1.0.1"
     localforage: "npm:1.10.0"
     localforage-observable: "npm:2.1.1"
