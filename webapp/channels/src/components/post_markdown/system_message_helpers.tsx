@@ -416,9 +416,10 @@ const systemMessageRenderers = {
 
 export function renderSystemMessage(post: Post, currentTeam: Team, channel: Channel, hideGuestTags: boolean, isUserCanManageMembers?: boolean, isMilitaryTime?: boolean, timezone?: string): ReactNode {
     const isEphemeral = isPostEphemeral(post);
-    if (isEphemeral && post.props?.type === Posts.POST_TYPES.REMINDER) {
-        return renderReminderACKMessage(post, currentTeam, Boolean(isMilitaryTime), timezone);
-    }
+
+    // if (isEphemeral && post.props?.type === Posts.POST_TYPES.REMINDER) {
+    //     return renderReminderACKMessage(post, currentTeam, Boolean(isMilitaryTime), timezone);
+    // }
     if (post.props && post.props.add_channel_member) {
         if (channel && (channel.type === General.PRIVATE_CHANNEL || channel.type === General.OPEN_CHANNEL) &&
             isUserCanManageMembers &&
@@ -518,7 +519,7 @@ function renderReminderACKMessage(post: Post, currentTeam: Team, isMilitaryTime:
 // }
 
 // Infomaniak
-function renderReminderSystemBotMessage(post: Post): ReactNode {
+export function renderReminderSystemBotMessage(post: Post): ReactNode {
     const username = post.props.username ? renderUsername(post.props.username) : '';
     const permaLink = renderFormattedText(`[${post.props.link}](${post.props.link})`);
     return (
