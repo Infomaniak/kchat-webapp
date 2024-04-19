@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import type {ColorResult} from 'react-color';
 import {ChromePicker} from 'react-color';
+import type {ColorResult} from 'react-color';
 import tinycolor from 'tinycolor2';
 
 type Props = {
@@ -147,6 +147,7 @@ export default class ColorInput extends React.PureComponent<Props, State> {
                     onKeyDown={this.onKeyDown}
                     maxLength={7}
                     disabled={this.props.isDisabled}
+                    data-testid='color-inputColorValue'
 
                 />
                 {!this.props.isDisabled &&

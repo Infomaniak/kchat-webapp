@@ -2,18 +2,16 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import type {GlobalState} from '@mattermost/types/store';
 
 import {switchLdapToEmail} from 'mattermost-redux/actions/users';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 
 import {getPasswordConfig} from 'utils/utils';
 
-import type {Props} from './claim_controller';
 import ClaimController from './claim_controller';
 
 function mapStateToProps(state: GlobalState) {
@@ -28,9 +26,9 @@ function mapStateToProps(state: GlobalState) {
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc>, Props['actions']>({
+        actions: bindActionCreators({
             switchLdapToEmail,
         }, dispatch),
     };

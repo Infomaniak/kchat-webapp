@@ -63,7 +63,7 @@ const CodeBlock: React.FC<Props> = ({code, language, searchedContent}: Props) =>
 
     let htmlContent = content;
     if (searchedContent) {
-        htmlContent = `${searchedContent} ${content}`;
+        htmlContent = searchedContent + content;
     }
 
     return (

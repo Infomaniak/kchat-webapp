@@ -6,16 +6,11 @@ import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {matchPath, useHistory, useLocation} from 'react-router-dom';
 
-import type {ChannelCategory} from '@mattermost/types/channel_categories';
-
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCurrentTeamDefaultChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
-import {
-    isReduceOnBoardingTaskList,
-    makeGetCategory,
-} from 'mattermost-redux/selectors/entities/preferences';
+import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
 import {isCurrentUserGuestUser, isCurrentUserSystemAdmin, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import {trackEvent as trackEventAction} from 'actions/telemetry_actions';
@@ -24,20 +19,18 @@ import {open as openLhs} from 'actions/views/lhs';
 import {openModal} from 'actions/views/modals';
 import {
     openInvitationsModal,
-    openWorkTemplateModal,
     setShowOnboardingCompleteProfileTour,
     setShowOnboardingVisitConsoleTour,
     switchToChannels,
 } from 'actions/views/onboarding_tasks';
 import {setProductMenuSwitcherOpen} from 'actions/views/product_menu';
 import {setStatusDropdown} from 'actions/views/status_dropdown';
-import {areWorkTemplatesEnabled} from 'selectors/work_template';
 
-import BullsEye from 'components/common/svg_images_components/bulls_eye_svg';
+// import BullsEye from 'components/common/svg_images_components/bulls_eye_svg';
+// import Newspaper from 'components/common/svg_images_components/newspaper_svg';
 import Clipboard from 'components/common/svg_images_components/clipboard_svg';
 import Gears from 'components/common/svg_images_components/gears_svg';
 import Handshake from 'components/common/svg_images_components/handshake_svg';
-import Newspaper from 'components/common/svg_images_components/newspaper_svg';
 import Security from 'components/common/svg_images_components/security_svg';
 import Sunglasses from 'components/common/svg_images_components/sunglasses_svg';
 import Wrench from 'components/common/svg_images_components/wrench_svg';
@@ -63,27 +56,11 @@ const getCategory = makeGetCategory();
 const useGetTaskDetails = () => {
     const {formatMessage} = useIntl();
     return {
-        [OnboardingTasksName.CREATE_FROM_WORK_TEMPLATE]: {
-            id: 'task_create_from_work_template',
-            svg: Newspaper,
-            message: formatMessage({
-                id: 'onboardingTask.checklist.task_create_from_work_template',
-                defaultMessage: 'Create from a template - set up a channel with linked boards and playbooks.',
-            }),
-        },
         [OnboardingTasksName.CHANNELS_TOUR]: {
             id: 'task_learn_more_about_messaging',
             message: formatMessage({
                 id: 'onboardingTask.taskList.introduction',
                 defaultMessage: 'Take a tour of Channels.',
-            }),
-        },
-        [OnboardingTasksName.BOARDS_TOUR]: {
-            id: 'task_plan_sprint_with_kanban_style_boards',
-            svg: BullsEye,
-            message: formatMessage({
-                id: 'onboardingTask.checklist.task_plan_sprint_with_kanban_style_boards',
-                defaultMessage: 'Manage tasks with your first board.',
             }),
         },
         [OnboardingTasksName.PLAYBOOKS_TOUR]: {
@@ -149,17 +126,14 @@ const useGetTaskDetails = () => {
 
 export const useTasksList = () => {
     const pluginsList = useSelector((state: GlobalState) => state.plugins.plugins);
-    const prevTrialLicense = useSelector((state: GlobalState) => state.entities.admin.prevTrialLicense);
-    const license = useSelector(getLicense);
-    const isPrevLicensed = prevTrialLicense?.IsLicensed;
-    const isCurrentLicensed = license?.IsLicensed;
-    const isUserAdmin = useSelector((state: GlobalState) => isCurrentUserSystemAdmin(state));
-    const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
+
+    // const prevTrialLicense = useSelector((state: GlobalState) => state.entities.admin.prevTrialLicense);
+    // const license = useSelector(getLicense);
+    // const isPrevLicensed = prevTrialLicense?.IsLicensed;
+    // const isCurrentLicensed = license?.IsLicensed;
+    // const isUserAdmin = useSelector((state: GlobalState) => isCurrentUserSystemAdmin(state));
+    // const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const isUserFirstAdmin = useSelector(isFirstAdmin);
-    const isThinOnBoardingTaskList = useSelector((state: GlobalState) => {
-        return isReduceOnBoardingTaskList(state);
-    });
-    const workTemplateEnabled = useSelector(areWorkTemplatesEnabled);
 
     // Cloud conditions
     // const subscription = useSelector((state: GlobalState) => state.entities.cloud.subscription);
@@ -176,7 +150,6 @@ export const useTasksList = () => {
 
     const list: Record<string, string> = {...OnboardingTasksName};
 
-    delete list.BOARDS_TOUR;
     delete list.PLAYBOOKS_TOUR;
     delete list.START_TRIAL;
 
@@ -196,16 +169,8 @@ export const useTasksList = () => {
 
     delete list.INVITE_PEOPLE;
 
-    if (isThinOnBoardingTaskList) {
-        delete list.DOWNLOAD_APP;
-    }
-
     delete list.COMPLETE_YOUR_PROFILE;
     delete list.VISIT_SYSTEM_CONSOLE;
-
-    if (!workTemplateEnabled) {
-        delete list.CREATE_FROM_WORK_TEMPLATE;
-    }
 
     return Object.values(list);
 };
@@ -280,20 +245,12 @@ export const useHandleOnBoardingTaskTrigger = () => {
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const inAdminConsole = matchPath(pathname, {path: '/admin_console'}) != null;
     const inChannels = matchPath(pathname, {path: '/:team/channels/:chanelId'}) != null;
-    const pluginsList = useSelector((state: GlobalState) => state.plugins.plugins);
-    const boards = pluginsList.focalboard;
 
     return (taskName: string) => {
         switch (taskName) {
-        case OnboardingTasksName.CREATE_FROM_WORK_TEMPLATE: {
-            localStorage.setItem(OnboardingTaskCategory, 'true');
-            dispatch(openWorkTemplateModal(inAdminConsole));
-            handleSaveData(taskName, TaskNameMapToSteps[taskName].FINISHED, true);
-            break;
-        }
         case OnboardingTasksName.CHANNELS_TOUR: {
             handleSaveData(taskName, TaskNameMapToSteps[taskName].STARTED, true);
-            const tourCategory = isGuestUser ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP;
+            const tourCategory = TutorialTourName.ONBOARDING_TUTORIAL_STEP;
             const preferences = [
                 {
                     user_id: currentUserId,
@@ -301,8 +258,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
                     name: currentUserId,
 
                     // use SEND_MESSAGE when user is guest (channel creation and invitation are restricted), so only message box and the configure tips are shown
-                    // value: isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE.toString() : OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES.toString(),
-                    value: OnboardingTourSteps.CHANNELS.toString(),
+                    value: isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE.toString() : OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES.toString(),
                 },
                 {
                     user_id: currentUserId,
@@ -317,12 +273,6 @@ export const useHandleOnBoardingTaskTrigger = () => {
             }
             dispatch(openLhs());
             dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => !category.channel_ids.includes(currentTeamDefaultChannelId)));
-            break;
-        }
-        case OnboardingTasksName.BOARDS_TOUR: {
-            history.push('/boards');
-            localStorage.setItem(OnboardingTaskCategory, 'true');
-            handleSaveData(taskName, TaskNameMapToSteps[taskName].FINISHED, true);
             break;
         }
         case OnboardingTasksName.PLAYBOOKS_TOUR: {
@@ -349,7 +299,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
                     user_id: currentUserId,
                     category: tourCategory,
                     name: currentUserId,
-                    value: boards ? ExploreOtherToolsTourSteps.BOARDS_TOUR.toString() : ExploreOtherToolsTourSteps.PLAYBOOKS_TOUR.toString(),
+                    value: ExploreOtherToolsTourSteps.PLAYBOOKS_TOUR.toString(),
                 },
                 {
                     user_id: currentUserId,
@@ -413,4 +363,3 @@ export const useHandleOnBoardingTaskTrigger = () => {
         }
     };
 };
-

@@ -1,11 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import testConfigureStore from 'tests/test_store';
 import {getHistory} from 'utils/browser_history';
 import Constants, {NotificationLevels, UserStatuses} from 'utils/constants';
 import * as NotificationSounds from 'utils/notification_sounds';
 import * as utils from 'utils/notifications';
+
+import testConfigureStore from 'tests/test_store';
 
 import {sendDesktopNotification} from './notification_actions';
 
@@ -182,6 +183,9 @@ describe('notification_actions', () => {
                     components: {
                         DesktopNotificationHooks: [],
                     },
+                },
+                ksuite_bridge: {
+                    bridge: {},
                 },
             };
         });

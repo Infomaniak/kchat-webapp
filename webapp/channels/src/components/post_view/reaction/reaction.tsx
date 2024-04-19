@@ -209,6 +209,13 @@ export default class Reaction extends React.PureComponent<Props, State> {
             ariaLabelEmoji = `${Utils.localizeMessage('reaction.removeReact.ariaLabel', 'remove reaction')} ${emojiNameWithSpaces}`;
         }
 
+        const emojiIcon = (
+            <img
+                className='Reaction__emoji emoticon'
+                src={this.props.emojiImageUrl}
+            />
+        );
+
         return (
             <OverlayTrigger
                 delayShow={500}
@@ -224,6 +231,7 @@ export default class Reaction extends React.PureComponent<Props, State> {
                             canRemoveReactions={canRemoveReactions}
                             currentUserReacted={currentUserReacted}
                             emojiName={emojiName}
+                            emojiIcon={emojiIcon}
                             reactions={reactions}
                         />
                     </Tooltip>
@@ -238,10 +246,7 @@ export default class Reaction extends React.PureComponent<Props, State> {
                     ref={this.reactionButtonRef}
                 >
                     <span className='d-flex align-items-center'>
-                        <img
-                            className='Reaction__emoji emoticon'
-                            src={this.props.emojiImageUrl}
-                        />
+                        {emojiIcon}
                         <span
                             ref={this.reactionCountRef}
                             className='Reaction__count'

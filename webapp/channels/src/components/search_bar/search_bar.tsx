@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import type {ChangeEvent, CSSProperties, FormEvent} from 'react';
 import React, {useEffect, useRef} from 'react';
+import type {ChangeEvent, CSSProperties, FormEvent} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import type Provider from 'components/suggestion/provider';
@@ -14,7 +14,7 @@ import SuggestionDate from 'components/suggestion/suggestion_date';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
 import Constants from 'utils/constants';
-import * as Utils from 'utils/utils';
+import * as Keyboard from 'utils/keyboard';
 
 const {KeyCodes} = Constants;
 
@@ -72,27 +72,27 @@ const SearchBar: React.FunctionComponent<Props> = (props: Props): JSX.Element =>
     }, [searchTerms]);
 
     const handleKeyDown = (e: ChangeEvent<HTMLInputElement>): void => {
-        if (Utils.isKeyPressed(e as any, KeyCodes.ESCAPE)) {
+        if (Keyboard.isKeyPressed(e as any, KeyCodes.ESCAPE)) {
             searchRef.current?.blur();
             e.stopPropagation();
             e.preventDefault();
         }
 
-        if (Utils.isKeyPressed(e as any, KeyCodes.DOWN)) {
+        if (Keyboard.isKeyPressed(e as any, KeyCodes.DOWN)) {
             e.preventDefault();
             props.updateHighlightedSearchHint(1, true);
         }
 
-        if (Utils.isKeyPressed(e as any, KeyCodes.UP)) {
+        if (Keyboard.isKeyPressed(e as any, KeyCodes.UP)) {
             e.preventDefault();
             props.updateHighlightedSearchHint(-1, true);
         }
 
-        if (Utils.isKeyPressed(e as any, KeyCodes.ENTER)) {
+        if (Keyboard.isKeyPressed(e as any, KeyCodes.ENTER)) {
             props.handleEnterKey(e);
         }
 
-        if (Utils.isKeyPressed(e as any, KeyCodes.BACKSPACE) && !searchTerms) {
+        if (Keyboard.isKeyPressed(e as any, KeyCodes.BACKSPACE) && !searchTerms) {
             if (props.clearSearchType) {
                 props.clearSearchType();
             }
@@ -112,7 +112,7 @@ const SearchBar: React.FunctionComponent<Props> = (props: Props): JSX.Element =>
             className='search-form__container'
         >
             <form
-                role='application'
+                role='search'
                 className={classNames(['search__form', {'search__form--focused': isFocused}])}
                 onSubmit={props.handleSubmit}
                 style={style.searchForm}
@@ -150,6 +150,8 @@ const SearchBar: React.FunctionComponent<Props> = (props: Props): JSX.Element =>
                     </div>
                 )}
                 <SuggestionBox
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     ref={getSearch}
                     id={props.isSideBarRight ? 'sbrSearchBox' : 'searchBox'}
                     tabIndex='0'

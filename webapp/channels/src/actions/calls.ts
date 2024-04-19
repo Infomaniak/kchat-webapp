@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Dispatch} from 'redux';
 
 import type {ChannelType} from '@mattermost/types/channels';
 import type {Call} from '@mattermost/types/posts';
@@ -10,7 +9,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-import type {DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
+import type {ActionFunc, ActionFuncAsync, DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {
     callConferenceId,
@@ -36,35 +35,49 @@ import type {GlobalState} from 'types/store';
 
 import {closeModal, openModal} from './views/modals';
 
-export const showExpandedView = () => (dispatch: Dispatch<GenericAction>) => {
-    dispatch({
-        type: ActionTypes.SHOW_EXPANDED_VIEW,
-    });
-};
+export function showExpandedView(): ActionFunc {
+    return (dispatch) => {
+        dispatch({
+            type: ActionTypes.SHOW_EXPANDED_VIEW,
+        });
 
-export const hideExpandedView = () => (dispatch: Dispatch<GenericAction>) => {
-    dispatch({
-        type: ActionTypes.HIDE_EXPANDED_VIEW,
-    });
-};
+        return {data: true};
+    };
+}
+export function hideExpandedView(): ActionFunc {
+    return (dispatch) => {
+        dispatch({
+            type: ActionTypes.HIDE_EXPANDED_VIEW,
+        });
 
-export const showSwitchCallModal = (targetID?: string) => (dispatch: Dispatch<GenericAction>) => {
-    dispatch({
-        type: ActionTypes.SHOW_SWITCH_CALL_MODAL,
-        data: {
-            targetID,
-        },
-    });
-};
+        return {data: true};
+    };
+}
+export function showSwitchCallModal(targetID?: string): ActionFunc {
+    return (dispatch) => {
+        dispatch({
+            type: ActionTypes.SHOW_SWITCH_CALL_MODAL,
+            data: {
+                targetID,
+            },
+        });
 
-export const hideSwitchCallModal = () => (dispatch: Dispatch<GenericAction>) => {
-    dispatch({
-        type: ActionTypes.HIDE_SWITCH_CALL_MODAL,
-    });
-};
+        return {data: true};
+    };
+}
 
-export function leaveCallInChannel(channelID: string, dialingID: string) {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+export function hideSwitchCallModal(): ActionFunc {
+    return (dispatch) => {
+        dispatch({
+            type: ActionTypes.HIDE_SWITCH_CALL_MODAL,
+        });
+
+        return {data: true};
+    };
+}
+
+export function leaveCallInChannel(channelID: string, dialingID: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         Client4.leaveMeet(dialingID);
         dispatch({
             type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
@@ -75,12 +88,14 @@ export function leaveCallInChannel(channelID: string, dialingID: string) {
                 callID: dialingID,
             },
         });
+
+        return {data: true};
     };
 }
 
 //used only to answer last call brought by the dialing modal
-export function joinCallInChannel() {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+export function joinCallInChannel(): ActionFuncAsync {
+    return async (dispatch, getState) => {
         const state = getState();
         const conferenceId = callConferenceId(state);
         await Client4.acceptIncomingMeetCall(conferenceId);
@@ -94,13 +109,15 @@ export function joinCallInChannel() {
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
         });
+
+        return {data: true};
     };
 }
 
 // old simplified code for calls that just opens the link and fills store with the url.
 // only used if FeatureFlagIkCallDialing is set to false.
-export function startOrJoinCallInChannel(channelID: string) {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+export function startOrJoinCallInChannel(channelID: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         const state = getState();
         const channels = voiceConnectedChannels(state);
 
@@ -130,6 +147,8 @@ export function startOrJoinCallInChannel(channelID: string) {
             const kmeetUrl = new URL(connectedCallUrl(state));
             window.open(kmeetUrl.href, '_blank', 'noopener');
         }
+
+        return {data: true};
     };
 }
 

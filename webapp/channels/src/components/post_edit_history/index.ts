@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ConnectedProps} from 'react-redux';
 import {connect} from 'react-redux';
+import type {ConnectedProps} from 'react-redux';
 
 import {getChannel, getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 
-import {getPostEditHistory} from 'selectors/posts';
 import {getSelectedPostId} from 'selectors/rhs';
 
 import type {GlobalState} from 'types/store';
@@ -22,7 +21,6 @@ function mapStateToProps(state: GlobalState) {
     return {
         channelDisplayName,
         originalPost,
-        postEditHistory: getPostEditHistory(state),
     };
 }
 

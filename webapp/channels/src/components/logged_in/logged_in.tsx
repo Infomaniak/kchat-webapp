@@ -21,13 +21,14 @@ import store from 'stores/redux_store';
 
 import LoadingScreen from 'components/loading_screen';
 
+import Constants from 'utils/constants';
+import DesktopApp from 'utils/desktop_api';
+import {isKeyPressed} from 'utils/keyboard';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getBrowserTimezone} from 'utils/timezone';
 import * as UserAgent from 'utils/user_agent';
 
 import WebSocketClient from 'client/web_websocket_client';
-
-const BACKSPACE_CHAR = 8;
 
 declare global {
     interface Window {
@@ -41,14 +42,17 @@ declare global {
 export type Props = {
     currentUser?: UserProfile;
     currentChannelId?: string;
+    isCurrentChannelManuallyUnread: boolean;
     children?: React.ReactNode;
-    enableTimezone: boolean;
+    mfaRequired: boolean;
     actions: {
         autoUpdateTimezone: (deviceTimezone: string) => void;
-        getChannelURLAction: (channel: Channel, teamId: string, url: string) => void;
-        viewChannel: (channelId: string, prevChannelId?: string) => void;
+        getChannelURLAction: (channelId: string, teamId: string, url: string) => void;
+        markChannelAsViewedOnServer: (channelId: string) => void;
+        updateApproximateViewTime: (channelId: string) => void;
         registerInternalKdrivePlugin: () => void;
     };
+    showTermsOfService: boolean;
     location: {
         pathname: string;
         search: string;
@@ -77,6 +81,8 @@ const dispatch = store.dispatch;
 const getState = store.getState;
 
 export default class LoggedIn extends React.PureComponent<Props> {
+    private cleanupDesktopListeners?: () => void;
+
     constructor(props: Props) {
         super(props);
 
@@ -94,13 +100,10 @@ export default class LoggedIn extends React.PureComponent<Props> {
         // Initialize websocket
         WebSocketActions.initialize();
 
-        if (this.props.enableTimezone && this.props.currentUser) {
-            this.props.actions.autoUpdateTimezone(getBrowserTimezone());
-        }
-
         if (!UserAgent.isDesktopApp() || isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.4.0')) {
             this.props.actions.registerInternalKdrivePlugin();
         }
+        this.props.actions.autoUpdateTimezone(getBrowserTimezone());
 
         // Make sure the websockets close and reset version
         window.addEventListener('beforeunload', this.handleBeforeUnload);
@@ -111,6 +114,14 @@ export default class LoggedIn extends React.PureComponent<Props> {
         if (!document.hasFocus()) {
             GlobalActions.emitBrowserFocus(false);
         }
+
+        // Listen for user activity and notifications from the Desktop App (if applicable)
+        const offUserActivity = DesktopApp.onUserActivityUpdate(this.updateActiveStatus);
+        const offNotificationClicked = DesktopApp.onNotificationClicked(this.clickNotification);
+        this.cleanupDesktopListeners = () => {
+            offUserActivity();
+            offNotificationClicked();
+        };
 
         // Listen for messages from the desktop app
         window.addEventListener('message', this.onDesktopMessageListener);
@@ -153,6 +164,8 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         window.removeEventListener('focus', this.onFocusListener);
         window.removeEventListener('blur', this.onBlurListener);
+
+        this.cleanupDesktopListeners?.();
         window.removeEventListener('message', this.onDesktopMessageListener);
     }
 
@@ -246,10 +259,40 @@ export default class LoggedIn extends React.PureComponent<Props> {
         }
     };
 
+    private updateActiveStatus = (userIsActive: boolean, idleTime: number, manual: boolean) => {
+        if (!this.props.currentUser) {
+            return;
+        }
+
+        // update the server with the users current away status
+        if (userIsActive === true || userIsActive === false) {
+            WebSocketClient.userUpdateActiveStatus(userIsActive, manual);
+        }
+    };
+
+    private clickNotification = (channelId: string, teamId: string, url: string) => {
+        window.focus();
+
+        // navigate to the appropriate channel
+        this.props.actions.getChannelURLAction(channelId, teamId, url);
+    };
+
     private handleBackSpace = (e: KeyboardEvent): void => {
         const excludedElements = ['input', 'textarea', 'module-reporting-tools-component'];
+        const targetElement = e.target as HTMLElement;
 
-        if (e.which === BACKSPACE_CHAR && !(excludedElements.includes((e.target as HTMLElement).tagName.toLowerCase()))) {
+        if (!targetElement) {
+            return;
+        }
+
+        const targetsTagName = targetElement.tagName.toLowerCase();
+        const isTargetNotContentEditable = targetElement.getAttribute?.('contenteditable') !== 'true';
+
+        if (
+            isKeyPressed(e, Constants.KeyCodes.BACKSPACE) &&
+            !(excludedElements.includes(targetsTagName)) &&
+            isTargetNotContentEditable
+        ) {
             e.preventDefault();
         }
     };
@@ -257,7 +300,10 @@ export default class LoggedIn extends React.PureComponent<Props> {
     private handleBeforeUnload = (): void => {
         // remove the event listener to prevent getting stuck in a loop
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
-        this.props.actions.viewChannel('', this.props.currentChannelId || '');
+        if (this.props.currentChannelId && !this.props.isCurrentChannelManuallyUnread) {
+            this.props.actions.updateApproximateViewTime(this.props.currentChannelId);
+            this.props.actions.markChannelAsViewedOnServer(this.props.currentChannelId);
+        }
         WebSocketActions.close();
     };
 }
