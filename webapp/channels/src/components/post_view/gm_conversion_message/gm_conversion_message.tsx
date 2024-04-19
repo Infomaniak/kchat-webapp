@@ -19,7 +19,10 @@ export type Props = {
 }
 function GMConversionMessage(props: Props): JSX.Element {
     const convertedByUserId = props.post.props.convertedByUserId;
-    const gmMembersDuringConversionIDs = props.post.props.gmMembersDuringConversionIDs as string[];
+
+    // Infomaniak change due to an api constraint for this prop
+    const gmMembersDuringConversionIDsString = props.post.props.gmMembersDuringConversionIDs as string;
+    const gmMembersDuringConversionIDs = props.post.props.gmMembersDuringConversionIDs.includes(',') ? gmMembersDuringConversionIDsString.split(',') : [gmMembersDuringConversionIDsString];
 
     const dispatch = useDispatch();
     const intl = useIntl();
