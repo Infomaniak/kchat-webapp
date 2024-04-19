@@ -201,6 +201,7 @@ export default class WebSocketClient {
                 forceTLS: true,
             });
         } else {
+            Pusher.logToConsole = true;
             this.conn = new Pusher('kchat-key', {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,
@@ -233,45 +234,11 @@ export default class WebSocketClient {
             this.errorCount++;
             this.connectFailCount++;
 
-            // Unbind any Pusher event listeners before disconnecting Pusher instance
-            this.unbindPusherEvents();
-            this.unbindGlobalsAndReset();
-
-            this.conn?.disconnect();
-            this.conn = null;
-
             console.log('websocket closed');
             console.log('[websocket] calling close callbacks');
 
             this.closeCallback?.(this.connectFailCount);
             this.closeListeners.forEach((listener) => listener(this.connectFailCount));
-
-            let retryTime = MIN_WEBSOCKET_RETRY_TIME;
-
-            // If we've failed a bunch of connections then start backing off
-            if (this.connectFailCount > MAX_WEBSOCKET_FAILS) {
-                retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount * this.connectFailCount;
-                if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
-                    retryTime = MAX_WEBSOCKET_RETRY_TIME;
-                }
-            }
-
-            // Applying jitter to avoid thundering herd problems.
-            retryTime += Math.random() * JITTER_RANGE;
-
-            setTimeout(
-                () => {
-                    this.initialize(
-                        connectionUrl,
-                        this.currentUser as number,
-                        this.currentTeamUser,
-                        this.currentTeam,
-                        authToken,
-                        this.currentPresence,
-                    );
-                },
-                retryTime,
-            );
         });
 
         this.conn.connection.bind('connected', () => {
@@ -591,11 +558,8 @@ export default class WebSocketClient {
         this.responseSequence = 1;
 
         if (this.conn && this.conn.connection.state === 'connected') {
-            // Unbind any Pusher event listeners before disconnecting Pusher instance
-            this.unbindPusherEvents();
-            this.unbindGlobalsAndReset();
             this.conn.disconnect();
-            this.conn = null;
+            // this.conn = null;
             console.log('websocket closed'); //eslint-disable-line no-console
         }
     }
