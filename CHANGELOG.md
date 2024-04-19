@@ -1,3 +1,9 @@
+## 2.7.0-rc.5 (2024-04-19)
+
+### Fixed (1 change)
+
+- [fix profile action](kchat/webapp@8f7fc1c05b95c05adc139cbf70cc7a2672ac71e2) by @antonbuksa
+
 ## 2.7.0-rc.4 (2024-04-19)
 
 ### Fixed (1 change)
