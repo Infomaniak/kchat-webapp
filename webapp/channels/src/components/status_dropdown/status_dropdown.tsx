@@ -398,8 +398,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
         const setOffline = needsConfirm ? () => this.showStatusChangeConfirmation('offline') : this.setOffline;
         const setCustomTimedDnd = needsConfirm ? () => this.showStatusChangeConfirmation('dnd') : this.setCustomTimedDnd;
 
-        const redirectToManagerProfile = (e: Event): void => {
-            e.preventDefault();
+        const redirectToManagerProfile = (): void => {
             window.open('https://manager.infomaniak.com/v3/ng/profile/user/dashboard', '_blank');
         };
 
@@ -617,7 +616,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                         />
                     </Menu.Group>
                     <Menu.Group>
-                        <Menu.ItemToggleModalRedux
+                        <Menu.ItemAction
                             id='accountSettings'
                             ariaLabel='Profile'
                             modalId={ModalIdentifiers.USER_SETTINGS}
@@ -642,7 +641,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                                     <CompleteYourProfileTour/>
                                 </div>
                             )}
-                        </Menu.ItemToggleModalRedux>
+                        </Menu.ItemAction>
                         {showNextSwitch &&
                             <Menu.ItemToggleModalRedux
                                 className='status-dropdown-menu__next-switch'
