@@ -150,11 +150,13 @@ export function MenuItem(props: Props) {
                     onClick(event);
                 } else {
                     // Clone the event since we delay the click handler until after the menu has closed.
-                    const clonedEvent = cloneDeep(event);
+                    // const clonedEvent = cloneDeep(event);
 
-                    menuContext.addOnClosedListener(() => {
-                        onClick(clonedEvent);
-                    });
+                    // menuContext.addOnClosedListener(() => {
+                    //     onClick(clonedEvent);
+                    // });
+
+                    onClick(event);
                 }
             }
         }

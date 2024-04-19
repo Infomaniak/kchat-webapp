@@ -46,7 +46,7 @@ const SchedulePostModal = ({
 
     const handleExit = () => dispatch(closeModal(ModalIdentifiers.SCHEDULE_POST));
 
-    const handleConfirm = (close?: boolean) => {
+    const handleConfirm = (close = true) => {
         const currentMoment = getCurrentMomentForTimezone(timezone).add(1, 'minute');
         const scheduleMoment = scheduleTimestamp.isBefore(currentMoment) ? currentMoment : scheduleTimestamp;
         onConfirm(toUTCUnix(scheduleMoment.toDate()));
@@ -124,12 +124,12 @@ const SchedulePostModal = ({
             modalHeaderText={modalHeaderText}
             confirmButtonText={confirmButtonText}
             isConfirmDisabled={isConfirmDisabled}
-            autoCloseOnEnterKeyDown={false}
+            autoCloseOnConfirmButton={false}
             enforceFocus={false}
             handleConfirm={handleConfirm}
             handleCancel={handleExit}
             onExited={handleExit}
-            footer={footer}
+            footerContent={footer}
         >
             <DateTimeInput
                 time={scheduleTimestamp}
