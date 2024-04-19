@@ -29,7 +29,6 @@ export interface Props {
     usernames: string[];
     noGroupsUsernames: string[];
     actions: Actions;
-    latestPostId: string;
 }
 
 interface State {
@@ -61,10 +60,9 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
     };
 
     handleNotifyChannelMember = () => {
-        const {post, userIds, latestPostId} = this.props;
-
+        const {post, userIds} = this.props;
         if (post && post.channel_id) {
-            this.props.actions.notifyChannelMember(post.channel_id, userIds, latestPostId);
+            this.props.actions.notifyChannelMember(post.channel_id, userIds, this.props.post.props.add_channel_member.original_post_id);
             this.props.actions.removePost(post);
         }
     };
