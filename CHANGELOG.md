@@ -18,6 +18,20 @@ No changes.
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
 
+## 2.7.0-next.1 (2024-04-19)
+
+### Fixed (1 change)
+
+- [restore mas migration banner](kchat/webapp@7c245a78759263070f036cc17e576c5c7537828f) by @antonbuksa
+
+### Changed (1 change)
+
+- [Fix: switch-server event triggering on webapp](kchat/webapp@edffba3e44fe953213a5ad2dbc7c858a8f253700) by @philippe.karle ([merge request](kchat/webapp!731))
+
+### Chore (1 change)
+
+- [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
+
 ## 2.6.3-rc.6 (2024-04-16)
 
 ### Fixed (3 changes)
