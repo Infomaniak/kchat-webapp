@@ -21,6 +21,7 @@ import ShowThreeDaysLeftTrialModal from './show_tree_days_left_trial_modal/show_
 import TextDismissableBar from './text_dismissable_bar';
 import UsersLimitsAnnouncementBar from './users_limits_announcement_bar';
 import VersionBar from './version_bar';
+import MASMigrationBar from './mas_migration_bar';
 
 type Props = {
     license?: ClientLicense;
@@ -118,6 +119,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
                 {autoStartTrialModal}
                 <ShowThreeDaysLeftTrialModal/>
                 <VersionBar/>
+                <MASMigrationBar/>
                 <ConfigurationAnnouncementBar
                     config={this.props.config}
                     license={this.props.license}
