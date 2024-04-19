@@ -10,6 +10,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import type {DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
 
 import {
@@ -162,14 +163,18 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
 
                 if (isDesktopApp()) {
-                    window.open('/static/kmeet.js', '_blank', 'top=500,left=200');
+                    const user = getCurrentUser(getState());
+                    const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
+                    (window as any).desktopAPI.openKmeetCallWindow(`${window.location.origin}/static/kmeet.js`, {avatar, user, channelID});
                 } else {
                     window.open(kmeetUrl.href, '_blank', 'noopener');
                 }
             }
         } catch {
             if (isDesktopApp()) {
-                window.open('/static/kmeet.js', '_blank', 'top=500,left=200');
+                const user = getCurrentUser(getState());
+                const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
+                (window as any).desktopAPI.openKmeetCallWindow(`${window.location.origin}/static/kmeet.js`, {avatar, user, channelID});
             } else {
                 const url = connectedKmeetCallUrl(getState(), channelID);
 
