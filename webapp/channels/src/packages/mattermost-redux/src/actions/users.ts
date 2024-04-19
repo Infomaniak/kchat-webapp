@@ -1344,16 +1344,11 @@ export function checkForModifiedUsers(): ActionFuncAsync {
         const state = getState();
         const users = getUsers(state);
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
+        const userIds = Object.keys(users);
         console.log('checking for modified users with lastDisconnect:', lastDisconnectAt);
+        console.log('fetch profile count:', userIds.length);
 
-        // TODO: check this
-        // const serverVersion = getServerVersion(state);
-
-        // if (!isMinimumServerVersion(serverVersion, 5, 14)) {
-        //     return {data: true};
-        // }
-
-        await dispatch(getProfilesByIds(Object.keys(users), {since: lastDisconnectAt}));
+        await dispatch(getProfilesByIds(userIds, {since: lastDisconnectAt}));
         return {data: true};
     };
 }

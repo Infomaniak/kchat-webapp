@@ -15,6 +15,7 @@ import SharedUserIndicator from 'components/shared_user_indicator';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
 
+import Constants from 'utils/constants';
 import {imageURLForUser} from 'utils/utils';
 
 import {generateColor} from './utils';
@@ -84,6 +85,7 @@ export default class UserProfile extends PureComponent<Props> {
         }
 
         const ariaName: string = typeof name === 'string' ? name.toLowerCase() : '';
+        const nameLength = typeof name === 'string' ? name.length : 0;
 
         let userColor = theme?.centerChannelColor;
         if (user && theme) {
@@ -104,8 +106,8 @@ export default class UserProfile extends PureComponent<Props> {
             );
         }
 
-        let placement = 'right';
-        if (isRHS && !isMobileView) {
+        let placement = isMobileView && nameLength > Constants.MAX_USERNAME_LENGTH ? 'left' : 'right';
+        if (isRHS && isMobileView) {
             placement = 'left';
         }
 

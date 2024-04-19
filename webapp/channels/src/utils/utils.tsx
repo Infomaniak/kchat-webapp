@@ -855,24 +855,24 @@ export function getSuggestionBoxAlgn(textArea: HTMLTextAreaElement, pxToSubstrac
     }
 
     const {x: caretXCoordinateInTxtArea, y: caretYCoordinateInTxtArea} = getCaretXYCoordinate(textArea);
-    const {w: viewportWidth, h: viewportHeight} = getViewportSize();
+    const {h: viewportHeight} = getViewportSize();
     const {offsetWidth: textAreaWidth} = textArea;
 
     const suggestionBoxWidth = Math.min(textAreaWidth, Constants.SUGGESTION_LIST_MAXWIDTH);
 
     // value in pixels for the offsetLeft for the textArea
-    const {top: txtAreaOffsetTop, left: txtAreaOffsetLft} = offsetTopLeft(textArea);
+    const {top: txtAreaOffsetTop} = offsetTopLeft(textArea);
 
     // how many pixels to the right should be moved the suggestion box
     let pxToTheRight = (caretXCoordinateInTxtArea) - (pxToSubstract);
 
     // the x coordinate in the viewport of the suggestion box border-right
-    const xBoxRightCoordinate = caretXCoordinateInTxtArea + txtAreaOffsetLft + suggestionBoxWidth;
+    const xBoxRightCoordinate = caretXCoordinateInTxtArea + suggestionBoxWidth;
 
     if (alignWithTextBox) {
         // when the list should be aligned with the textbox just set this value to 0
         pxToTheRight = 0;
-    } else if (xBoxRightCoordinate > viewportWidth) {
+    } else if (xBoxRightCoordinate > textAreaWidth) {
         // if the right-border edge of the suggestion box will overflow the x-axis viewport
         // stick the suggestion list to the very right of the TextArea
         pxToTheRight = textAreaWidth - suggestionBoxWidth;
