@@ -195,8 +195,6 @@ export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SI
         let currentFetch: UserProfile[];
         let currentPage = page;
 
-        console.log('loading everybody');
-
         try {
             while (true) {
                 // eslint-disable-next-line no-await-in-loop
