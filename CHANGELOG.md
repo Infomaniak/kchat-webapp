@@ -1,3 +1,16 @@
+## 2.7.0-rc.6 (2024-04-22)
+
+### Fixed (4 changes)
+
+- [fix audio recording module](kchat/webapp@4744c26f7b0531d21a4ae4cb5921eadf23e1efc7) by @antonbuksa
+- [fix login loading template](kchat/webapp@a86d97b9ce8622984c6e21142a7d9c1edf517da8) by @antonbuksa
+- [fix buttons status reset dialog](kchat/webapp@b990800e045a50277f5e6f432296acc820cd66f7) by @antonbuksa
+- [fix margin in emoji autocomplete](kchat/webapp@4eb40d4037da844a1b3328414a8491ad8b425213) by @antonbuksa
+
+### Changed (1 change)
+
+- [hard update notification actions](kchat/webapp@e8be15119678b41f2ee0121bbf94bc236fe46b01) by @antonbuksa
+
 ## 2.7.0-rc.5 (2024-04-19)
 
 ### Fixed (1 change)
