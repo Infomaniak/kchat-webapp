@@ -871,7 +871,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         path={'/error'}
                         component={ErrorPage}
                     />
-                    <HFRoute
+                    <Route
                         path={'/login'}
                         component={Login}
                     />
