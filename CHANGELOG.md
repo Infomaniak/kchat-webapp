@@ -60,6 +60,10 @@ No changes.
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
 
+## 2.7.0-next.5 (2024-04-22)
+
+No changes.
+
 ## 2.7.0-next.4 (2024-04-22)
 
 ### Fixed (2 changes)
