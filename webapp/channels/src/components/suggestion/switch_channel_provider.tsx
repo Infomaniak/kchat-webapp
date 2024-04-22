@@ -792,7 +792,7 @@ export default class SwitchChannelProvider extends Provider {
     }
 
     getInsightsItem() {
-        const state = getState();
+        const state = this.store.getState();
         const insightsEnabled = insightsAreEnabled(state);
 
         // adding last viewed at equal to Date.now() to push it to the top of the list
