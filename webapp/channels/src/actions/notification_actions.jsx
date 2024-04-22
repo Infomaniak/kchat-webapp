@@ -197,7 +197,7 @@ export function sendDesktopNotification(post, msgProps) {
             }
         } else if (notifyLevel === NotificationLevels.MENTION && mentions.indexOf(user.id) === -1 && msgProps.channel_type !== Constants.DM_CHANNEL) {
             return;
-        } else if (isCrtReply && [NotificationLevels.ALL, NotificationLevels.MENTION].includes(notifyLevel) && followers.indexOf(currentUserId) === -1) {
+        } else if (isCrtReply && notifyLevel === NotificationLevels.ALL && followers.indexOf(currentUserId) === -1) {
             // if user is not following the thread don't notify
             return;
         }
@@ -248,7 +248,7 @@ export function sendDesktopNotification(post, msgProps) {
                     attachment.pretext ||
                     attachment.text;
             }
-            image |= attachment.image_url?.length > 0;
+            image |= attachment.image_url.length > 0;
         });
 
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);
