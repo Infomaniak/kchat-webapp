@@ -1,3 +1,9 @@
+## 2.7.0-rc.7 (2024-04-22)
+
+### Fixed (1 change)
+
+- [fix audio recording module](kchat/webapp@4744c26f7b0531d21a4ae4cb5921eadf23e1efc7) by @antonbuksa
+
 ## 2.7.0-rc.6 (2024-04-22)
 
 ### Fixed (4 changes)
