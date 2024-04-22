@@ -56,6 +56,13 @@ No changes.
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
 
+## 2.7.0-next.4 (2024-04-22)
+
+### Fixed (2 changes)
+
+- [Fix: red banner on quick channel switch](kchat/webapp@ae3502acd0d3a18a0418b849471f57438f3d2468) by @philippe.karle ([merge request](kchat/webapp!736))
+- [Fix: dark theme user modal design broken](kchat/webapp@be3db93cf2cc2033bd8fdd0726b524fa292352b5) by @philippe.karle ([merge request](kchat/webapp!735))
+
 ## 2.7.0-next.3 (2024-04-22)
 
 ### Fixed (4 changes)
