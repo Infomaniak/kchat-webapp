@@ -34,7 +34,7 @@ const STANDARD_EXCLUDE = [
 
 const CSP_UNSAFE_EVAL_IF_DEV = ' \'unsafe-eval\'';
 const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
-const CSP_WORKER_SRC = ' \'worker-src\'';
+const CSP_WORKER_SRC = ' sentry-kchat.infomaniak.com/ sentry-kchat.preprod.dev.infomaniak.ch/';
 
 let publicPath = '/static/';
 
