@@ -9,10 +9,14 @@ import {markChannelAsViewedOnServer, updateApproximateViewTime} from 'mattermost
 import {autoUpdateTimezone} from 'mattermost-redux/actions/timezone';
 import {getChannel, getCurrentChannelId, isManuallyUnread} from 'mattermost-redux/selectors/entities/channels';
 import {getLicense, getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, shouldShowTermsOfService} from 'mattermost-redux/selectors/entities/users';
 import type {ThunkActionFunc} from 'mattermost-redux/types/actions';
 
 import {registerInternalKdrivePlugin} from 'actions/kdrive_actions';
+import {updateTeamsOrderForUser} from 'actions/team_actions';
+import {setTheme} from 'actions/views/theme';
 import {getChannelURL} from 'selectors/urls';
 
 import {getHistory} from 'utils/browser_history';
@@ -34,8 +38,12 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
     const config = getConfig(state);
     const showTermsOfService = shouldShowTermsOfService(state);
     const currentChannelId = getCurrentChannelId(state);
+    const currentTeam = getCurrentTeam(state);
+    const theme = getTheme(state);
 
     return {
+        theme,
+        currentTeam,
         currentUser: getCurrentUser(state),
         currentChannelId,
         isCurrentChannelManuallyUnread: isManuallyUnread(state, currentChannelId),
@@ -64,6 +72,8 @@ function mapDispatchToProps(dispatch: Dispatch) {
             markChannelAsViewedOnServer,
             updateApproximateViewTime,
             registerInternalKdrivePlugin,
+            setTheme,
+            updateTeamsOrderForUser,
         }, dispatch),
     };
 }

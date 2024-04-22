@@ -4,7 +4,11 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 
+import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
+
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
 import * as GlobalActions from 'actions/global_actions';
 import * as WebSocketActions from 'actions/websocket_actions.jsx';
@@ -25,11 +29,14 @@ declare global {
     interface Window {
         desktop: {
             version?: string | null;
+            theme?: object | null;
         };
     }
 }
 
 export type Props = {
+    currentTeam: Team;
+    theme: Theme;
     currentUser?: UserProfile;
     currentChannelId?: string;
     isCurrentChannelManuallyUnread: boolean;
@@ -41,6 +48,8 @@ export type Props = {
         markChannelAsViewedOnServer: (channelId: string) => void;
         updateApproximateViewTime: (channelId: string) => void;
         registerInternalKdrivePlugin: () => void;
+        setTheme: (theme: Theme) => void;
+        updateTeamsOrderForUser: (teamsOrder: string[]) => void;
     };
     showTermsOfService: boolean;
     location: {
@@ -87,9 +96,17 @@ export default class LoggedIn extends React.PureComponent<Props> {
         // Listen for user activity and notifications from the Desktop App (if applicable)
         const offUserActivity = DesktopApp.onUserActivityUpdate(this.updateActiveStatus);
         const offNotificationClicked = DesktopApp.onNotificationClicked(this.clickNotification);
+        const offThemeChangedGlobal = DesktopApp.onThemeChangedGlobal(this.changeGlobalTheme);
+        const offGetServerTheme = DesktopApp.onGetServerTheme(this.getServerTheme);
+        const offUpdateTeamsOrder = DesktopApp.onTeamsOrderUpdated(this.updateTeamsOrder);
+        const offSwitchServerSidebar = DesktopApp.onSwitchServerSidebar(this.switchServerSidebar);
         this.cleanupDesktopListeners = () => {
             offUserActivity();
             offNotificationClicked();
+            offThemeChangedGlobal();
+            offGetServerTheme();
+            offUpdateTeamsOrder();
+            offSwitchServerSidebar();
         };
 
         // Device tracking setup
@@ -158,6 +175,40 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         // navigate to the appropriate channel
         this.props.actions.getChannelURLAction(channelId, teamId, url);
+    };
+
+    changeGlobalTheme = (theme?: Theme) => {
+        if (theme) {
+            this.props.actions.setTheme(theme as Theme);
+        }
+    };
+
+    getServerTheme = () => {
+        const preferredTheme = this.props.theme;
+        const currentTeam = this.props.currentTeam;
+
+        window.postMessage(
+            {
+                type: 'preferred-theme',
+                data: {
+                    theme: preferredTheme,
+                    teamName: currentTeam.display_name,
+                },
+            },
+            window.origin,
+        );
+    };
+
+    updateTeamsOrder = (teamsOrder: string[]) => {
+        if (teamsOrder) {
+            this.props.actions.updateTeamsOrderForUser(teamsOrder);
+        }
+    };
+
+    switchServerSidebar = (serverId: string) => {
+        if (serverId) {
+            setLastKSuiteSeenCookie(serverId);
+        }
     };
 
     private handleBackSpace = (e: KeyboardEvent): void => {
