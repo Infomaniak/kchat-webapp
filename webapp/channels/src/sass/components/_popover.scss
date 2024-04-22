@@ -23,6 +23,7 @@
     .app__body & {
         border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        color: rgb(var(--center-channel-color-rgb));
 
         .user-profile-popover {
             border: 1px solid rgba(var(--center-channel-color-rgb), 0.2);
