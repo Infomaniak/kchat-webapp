@@ -1,3 +1,10 @@
+## 2.7.0-rc.8 (2024-04-22)
+
+### Fixed (2 changes)
+
+- [Fix: red banner on quick channel switch](kchat/webapp@ae3502acd0d3a18a0418b849471f57438f3d2468) by @philippe.karle ([merge request](kchat/webapp!736))
+- [Fix: dark theme user modal design broken](kchat/webapp@be3db93cf2cc2033bd8fdd0726b524fa292352b5) by @philippe.karle ([merge request](kchat/webapp!735))
+
 ## 2.7.0-rc.7 (2024-04-22)
 
 ### Fixed (1 change)
