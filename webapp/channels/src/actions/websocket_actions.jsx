@@ -1316,8 +1316,8 @@ export async function handleUserUpdatedEvent(msg) {
         const guestsIdsInChannel = getGuestMembersIdsInChannel(state, currentChannel.id);
 
         if (guestsIdsInChannel.includes(user.id) && isGuest(storedUser.roles) !== isGuest(user.roles)) {
-            getChannelStats(currentChannel.id);
-            getChannelGuestMembers(currentChannel.id);
+            dispatch(getChannelStats(currentChannel.id));
+            dispatch(getChannelGuestMembers(currentChannel.id));
         }
     }
 

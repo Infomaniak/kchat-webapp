@@ -587,24 +587,19 @@ function guestMembersInChannel(state: RelationOneToOne<Channel, Record<string, C
     switch (action.type) {
     case ChannelTypes.RECEIVED_CHANNEL_GUEST_MEMBERS: {
         const nextState = {...state};
-        const remove = action.remove as string[];
-        const currentUserId = action.currentUserId;
-        if (remove && currentUserId) {
-            remove.forEach((id) => {
-                if (nextState[id]) {
-                    Reflect.deleteProperty(nextState[id], currentUserId);
-                }
-            });
-        }
+        const guests = action.data.channelGuestMembers;
+        const channelId = action.data.channelId;
 
-        for (const cm of action.data) {
-            if (nextState[cm.channel_id]) {
-                nextState[cm.channel_id] = {...nextState[cm.channel_id]};
-            } else {
+        Reflect.set(nextState, channelId, {});
+
+        for (const cm of guests) {
+            if (!nextState[cm.channel_id]) {
                 nextState[cm.channel_id] = {};
             }
+
             nextState[cm.channel_id][cm.user_id] = cm;
         }
+
         return nextState;
     }
 

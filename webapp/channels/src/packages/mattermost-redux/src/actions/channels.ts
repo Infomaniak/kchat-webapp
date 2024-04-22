@@ -575,7 +575,10 @@ export function getChannelGuestMembers(channelId: string): ActionFuncAsync {
 
         dispatch({
             type: ChannelTypes.RECEIVED_CHANNEL_GUEST_MEMBERS,
-            data: channelGuestMembers,
+            data: {
+                channelGuestMembers,
+                channelId,
+            },
         });
 
         return {data: channelGuestMembers};
