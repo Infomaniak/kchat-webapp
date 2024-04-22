@@ -196,6 +196,7 @@ export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SI
         let currentPage = page;
 
         try {
+            // eslint-disable-next-line no-constant-condition
             while (true) {
                 // eslint-disable-next-line no-await-in-loop
                 currentFetch = await Client4.getProfiles(currentPage, perPage, options);
