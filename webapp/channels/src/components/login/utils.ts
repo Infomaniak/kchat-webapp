@@ -106,7 +106,20 @@ export function getChallengeAndRedirectToLogin(infinite = false) {
         // TODO: store in redux instead of localstorage
         localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
 
-        window.location.assign(`${IKConstants.LOGIN_URL}authorize?code_challenge=${codeChallenge}${infinite ? '' : '&access_type=offline'}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
+        // Construct redirect URL
+        const params = new URLSearchParams();
+        params.set('code_challenge_method', 'S256');
+        params.set('code_challenge', codeChallenge);
+        if (infinite) {
+            params.set('access_type', 'offline');
+        }
+        params.set('client_id', IKConstants.CLIENT_ID);
+        params.set('response_type', 'code');
+        params.set('redirect_uri', redirectTo);
+        const url = `${IKConstants.LOGIN_URL}authorize?${params}`;
+
+        // Redirect
+        window.location.assign(url);
     }).catch(() => {
         console.log('[login/utils > getChallengeAndRedirectToLogin] error redirect');
     });
