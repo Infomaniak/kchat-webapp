@@ -1,3 +1,9 @@
+## 2.7.0-rc.10 (2024-04-22)
+
+### Added (1 change)
+
+- [Feature: listen to settings navigation events](kchat/webapp@9c788e419324fc20b07e1efdf3eda2b0e167f6e8) by @philippe.karle
+
 ## 2.7.0-rc.9 (2024-04-22)
 
 No changes.
