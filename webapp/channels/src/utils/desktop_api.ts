@@ -18,7 +18,12 @@ import {isServerVersionGreaterThanOrEqualTo} from './server_version';
 declare global {
     interface Window {
         desktopAPI?: Partial<DesktopAPI & {
-            openKmeetCallWindow: (serverUrl: string, params: object) => void;
+            openKmeetCallWindow: (params: object) => void;
+        }>;
+        callManager?: Partial<{
+            onCallJoined: (callback: (_: any, props: {conferenceId: string}) => void) => void;
+            onCallDeclined: (callback: (_: any, props: {conferenceId: string}) => void) => void;
+            onCallEnded: (callback: (_: any, props: {conferenceId: string}) => void) => void;
         }>;
     }
 }

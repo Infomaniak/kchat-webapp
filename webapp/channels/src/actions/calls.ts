@@ -19,7 +19,7 @@ import {
     connectedChannelID,
     voiceConnectedChannels,
 } from 'selectors/calls';
-import {connectedKmeetCallId, connectedKmeetCallUrl} from 'selectors/kmeet_calls';
+import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
 import DialingModal from 'components/kmeet_conference/ringing_dialog';
@@ -157,6 +157,8 @@ export function startOrJoinCallInChannelV2(channelID: string) {
         try {
             let kmeetUrl;
             const data = await Client4.startMeet(channelID);
+            console.log('DATA', data);
+            console.log('channelId', channelID);
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
             });
@@ -180,12 +182,13 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
 
                 if (isDesktopApp()) {
-                    dispatch(startKmeetWindow());
+                    dispatch(startKmeetWindow(data.id));
                 } else {
                     window.open(kmeetUrl.href, '_blank', 'noopener');
                 }
             }
-        } catch {
+        } catch (error) {
+            console.log('ERROROOOR', error);
             if (isDesktopApp()) {
                 dispatch(startKmeetWindow());
             } else {
@@ -316,6 +319,44 @@ export function joinCall(conferenceId: string, meetingUrl: string) {
     };
 }
 
+export function notifyJoinCall(conferenceId: string) {
+    return async () => {
+        console.log('NOTIFY JOIN CALL');
+        console.log('conferenceId', conferenceId);
+        await Client4.declineIncomingMeetCall(conferenceId);
+    };
+}
+
+export function notifyDeclineCall(conferenceId: string) {
+    return async () => {
+        console.log('NOTIFY JOIN CALL');
+        console.log('conferenceId', conferenceId);
+        await Client4.declineIncomingMeetCall(conferenceId);
+    };
+}
+
+export function leaveCall(conferenceId: string) {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const state = getState();
+        const callParams = callParameters(state);
+        const currentUserId = getCurrentUserId(getState());
+
+        await Client4.leaveMeet(conferenceId);
+
+        dispatch({
+            type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
+            data: {
+                channelID: callParams.channel.id,
+                userID: currentUserId,
+                currentUserID: currentUserId,
+                callID: conferenceId,
+            },
+        });
+
+        return {data: true};
+    };
+}
+
 export function hangUpCall() {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
@@ -327,13 +368,14 @@ export function hangUpCall() {
     };
 }
 
-export function startKmeetWindow() {
+export function startKmeetWindow(conferenceId?: string) {
     return async (_: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const user = getCurrentUser(state);
         const channelID = getCurrentChannelId(state);
         const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
-        window.desktopAPI?.openKmeetCallWindow?.(`${window.location.origin}/static/kmeet.js`, {avatar, user, channelID});
+
+        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID, conferenceId});
     };
 }
 
@@ -365,20 +407,6 @@ export function getCallingChannel(channelId: string) {
             channelId,
         ],
     });
-}
-export function setCallListeners() {
-    if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
-        (window as any).callManager?.onCallJoined((_: any, props: { conferenceId: string }) => {
-            return Client4.acceptIncomingMeetCall(props.conferenceId);
-        });
-
-        (window as any).callManager?.onCallDeclined((_: any, props: { conferenceId: string }) => {
-            return Client4.declineIncomingMeetCall(props.conferenceId);
-        });
-        (window as any).callManager?.onKmeetApiAvailable((_: any, api: any) => {
-            console.log('API IS AVAILABLE');
-        });
-    }
 }
 
 type Users = UserProfile & {avatar: string}

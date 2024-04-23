@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Redirect} from 'react-router-dom';
 
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
@@ -50,6 +49,9 @@ export type Props = {
         registerInternalKdrivePlugin: () => void;
         setTheme: (theme: Theme) => void;
         updateTeamsOrderForUser: (teamsOrder: string[]) => void;
+        notifyJoinCall: (conferenceId: string) => void;
+        notifyDeclineCall: (conferenceId: string) => void;
+        leaveCall: (conferenceId: string) => void;
     };
     showTermsOfService: boolean;
     location: {
@@ -108,6 +110,8 @@ export default class LoggedIn extends React.PureComponent<Props> {
             offUpdateTeamsOrder();
             offSwitchServerSidebar();
         };
+
+        this.setCallListeners();
 
         // Device tracking setup
         if (UserAgent.isIos()) {
@@ -230,6 +234,14 @@ export default class LoggedIn extends React.PureComponent<Props> {
             e.preventDefault();
         }
     };
+
+    private setCallListeners() {
+        if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.2.0')) {
+            window?.callManager?.onCallJoined?.((_: any, {conferenceId}) => this.props.actions.notifyJoinCall(conferenceId));
+            window?.callManager?.onCallDeclined?.((_: any, {conferenceId}) => this.props.actions.notifyDeclineCall(conferenceId));
+            window?.callManager?.onCallEnded?.((_: any, {conferenceId}) => this.props.actions.leaveCall(conferenceId));
+        }
+    }
 
     private handleBeforeUnload = (): void => {
         // remove the event listener to prevent getting stuck in a loop

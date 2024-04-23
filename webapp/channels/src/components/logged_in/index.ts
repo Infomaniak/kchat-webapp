@@ -14,6 +14,7 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, shouldShowTermsOfService} from 'mattermost-redux/selectors/entities/users';
 import type {ThunkActionFunc} from 'mattermost-redux/types/actions';
 
+import {notifyDeclineCall, notifyJoinCall, leaveCall} from 'actions/calls';
 import {registerInternalKdrivePlugin} from 'actions/kdrive_actions';
 import {updateTeamsOrderForUser} from 'actions/team_actions';
 import {setTheme} from 'actions/views/theme';
@@ -74,6 +75,9 @@ function mapDispatchToProps(dispatch: Dispatch) {
             registerInternalKdrivePlugin,
             setTheme,
             updateTeamsOrderForUser,
+            notifyJoinCall,
+            notifyDeclineCall,
+            leaveCall,
         }, dispatch),
     };
 }
