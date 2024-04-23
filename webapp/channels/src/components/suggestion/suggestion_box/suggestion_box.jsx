@@ -259,7 +259,6 @@ export default class SuggestionBox extends React.PureComponent {
     handleEmitClearSuggestions = (delay = 0) => {
         setTimeout(() => {
             this.clear();
-            this.handlePretextChanged('');
         }, delay);
     };
 
@@ -466,7 +465,6 @@ export default class SuggestionBox extends React.PureComponent {
         }
 
         this.clear();
-        this.handlePretextChanged('');
 
         if (openCommandInModal) {
             const appProvider = this.props.providers.find((p) => p.openAppsModalFromCommand);
@@ -558,6 +556,7 @@ export default class SuggestionBox extends React.PureComponent {
                 selection: '',
                 suggestionBoxAlgn: undefined,
             });
+            this.handlePretextChanged('');
         }
     };
 
