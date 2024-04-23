@@ -15,6 +15,10 @@ import type {PostDraft} from 'types/store/draft';
 
 import PanelBody from './panel_body';
 
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(),
+}));
+
 describe('components/drafts/panel/panel_body', () => {
     const baseProps = {
         channelId: 'channel_id',
@@ -113,7 +117,7 @@ describe('components/drafts/panel/panel_body', () => {
                     {...baseProps}
                     priority={{
                         priority: PostPriority.IMPORTANT,
-                        requested_ack: true,
+                        requested_ack: false,
                     }}
                 />
             </Provider>,

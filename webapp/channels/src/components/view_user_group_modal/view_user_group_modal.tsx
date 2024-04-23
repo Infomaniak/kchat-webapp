@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {RefObject} from 'react';
 import React, {createRef} from 'react';
+import type {RefObject} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
@@ -10,7 +10,6 @@ import type {Group} from '@mattermost/types/groups';
 import {GroupSource} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
-import './view_user_group_modal.scss';
 import {debounce} from 'mattermost-redux/actions/helpers';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
@@ -25,6 +24,8 @@ import * as Utils from 'utils/utils';
 import ViewUserGroupListItem from './view_user_group_list_item';
 import ViewUserGroupModalHeader from './view_user_group_modal_header';
 
+import './view_user_group_modal.scss';
+
 const USERS_PER_PAGE = 60;
 
 export type Props = {
@@ -36,8 +37,8 @@ export type Props = {
     backButtonCallback: () => void;
     backButtonAction: () => void;
     actions: {
-        getGroup: (groupId: string, includeMemberCount: boolean) => Promise<{data: Group}>;
-        getUsersInGroup: (groupId: string, page: number, perPage: number) => Promise<{data: UserProfile[]}>;
+        getGroup: (groupId: string, includeMemberCount: boolean) => Promise<ActionResult<Group>>;
+        getUsersInGroup: (groupId: string, page: number, perPage: number) => Promise<ActionResult<UserProfile[]>>;
         setModalSearchTerm: (term: string) => void;
         searchProfiles: (term: string, options: any) => Promise<ActionResult>;
     };
@@ -211,59 +212,62 @@ export default class ViewUserGroupModal extends React.PureComponent<Props, State
                 />
                 <Modal.Body>
                     {this.mentionName()}
-                    {((users.length === 0 && !this.props.searchTerm && !this.state.loading) || !group) ? <NoResultsIndicator
-                        variant={NoResultsVariant.UserGroupMembers}
-                                                                                                         /> : <>
-                        <div className='user-groups-search'>
-                                                                                                                 <Input
-                                type='text'
-                                placeholder={Utils.localizeMessage('search_bar.searchGroupMembers', 'Search group members')}
-                                onChange={this.handleSearch}
-                                value={this.props.searchTerm}
-                                data-testid='searchInput'
-                                className={'user-group-search-input'}
-                                inputPrefix={<i className={'icon icon-magnify'}/>}
-                            />
-                                                                                                             </div>
-                        <div
-                                                                                                                 className='user-groups-modal__content group-member-list'
-                                                                                                                 onScroll={this.onScroll}
-                                                                                                                 ref={this.divScrollRef}
-                                                                                                             >
-                                                                                                                 {(users.length !== 0) &&
-                            <h2 className='group-member-count'>
-                                                                                                                     <FormattedMessage
-                                                                                                                         id='view_user_group_modal.memberCount'
-                                                                                                                         defaultMessage='{member_count} {member_count, plural, one {Member} other {Members}}'
-                                                                                                                         values={{
-                                                                                                                             member_count: this.state.memberCount,
-                                                                                                                         }}
-                                                                                                                     />
-                                                                                                                 </h2>
-                            }
-                                                                                                                 {(users.length === 0 && this.props.searchTerm) &&
-                            <NoResultsIndicator
-                                                                                                                     variant={NoResultsVariant.ChannelSearch}
-                                                                                                                     titleValues={{channelName: `"${this.props.searchTerm}"`}}
-                                                                                                                 />
-                            }
-                                                                                                                 {users.map((user) => {
-                                return (
-                                    <ViewUserGroupListItem
-                                        groupId={groupId}
-                                        user={user}
-                                        decrementMemberCount={this.decrementMemberCount}
-                                        key={user.id}
+                    {((users.length === 0 && !this.props.searchTerm && !this.state.loading) || !group) ? (
+                        <NoResultsIndicator
+                            variant={NoResultsVariant.UserGroupMembers}
+                        />
+                    ) : (
+                        <>
+                            <div className='user-groups-search'>
+                                <Input
+                                    type='text'
+                                    placeholder={Utils.localizeMessage('search_bar.searchGroupMembers', 'Search group members')}
+                                    onChange={this.handleSearch}
+                                    value={this.props.searchTerm}
+                                    data-testid='searchInput'
+                                    className={'user-group-search-input'}
+                                    inputPrefix={<i className={'icon icon-magnify'}/>}
+                                />
+                            </div>
+                            <div
+                                className='user-groups-modal__content group-member-list'
+                                onScroll={this.onScroll}
+                                ref={this.divScrollRef}
+                            >
+                                {(users.length !== 0) &&
+                                <h2 className='group-member-count'>
+                                    <FormattedMessage
+                                        id='view_user_group_modal.memberCount'
+                                        defaultMessage='{member_count} {member_count, plural, one {Member} other {Members}}'
+                                        values={{
+                                            member_count: this.state.memberCount,
+                                        }}
                                     />
-                                );
-                            })}
-                                                                                                                 {
-                                this.state.loading &&
+                                </h2>
+                                }
+                                {(users.length === 0 && this.props.searchTerm) &&
+                                <NoResultsIndicator
+                                    variant={NoResultsVariant.Search}
+                                    titleValues={{channelName: `${this.props.searchTerm}`}}
+                                />
+                                }
+                                {users.map((user) => {
+                                    return (
+                                        <ViewUserGroupListItem
+                                            groupId={groupId}
+                                            user={user}
+                                            decrementMemberCount={this.decrementMemberCount}
+                                            key={user.id}
+                                        />
+                                    );
+                                })}
+                                {
+                                    this.state.loading &&
                                     <LoadingScreen/>
-                            }
-                                                                                                             </div>
-                    </>
-                    }
+                                }
+                            </div>
+                        </>
+                    )}
                 </Modal.Body>
             </Modal>
         );

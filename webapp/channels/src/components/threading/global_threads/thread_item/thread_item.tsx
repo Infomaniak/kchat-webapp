@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
-import type {MouseEvent} from 'react';
 import React, {memo, useCallback, useEffect, useMemo} from 'react';
+import type {MouseEvent} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import {PostPriority} from '@mattermost/types/posts';
@@ -65,7 +65,7 @@ type Props = {
 const markdownPreviewOptions = {
     singleline: true,
     mentionHighlight: false,
-    atMentions: true,
+    atMentions: false,
 };
 
 function ThreadItem({
@@ -169,9 +169,6 @@ function ThreadItem({
         is_following: isFollowing,
     } = thread;
 
-    // Makes the space a little bit bigger for quote blocks
-    const spacingClassName = post.message.startsWith('>') ? 'preview quote' : 'preview normalText';
-
     // if we have the whole thread, get the posts in it, sorted from newest to oldest.
     // First post is latest reply. Use that timestamp
     if (postsInThread.length > 1) {
@@ -253,7 +250,7 @@ function ThreadItem({
             </div>
             <div
                 aria-readonly='true'
-                className={spacingClassName}
+                className='preview'
                 dir='auto'
                 tabIndex={0}
                 onClick={handleFormattedTextClick}

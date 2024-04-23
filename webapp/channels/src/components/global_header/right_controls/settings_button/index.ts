@@ -3,6 +3,11 @@
 
 import {connect} from 'react-redux';
 
+// import {bindActionCreators} from 'redux';
+// import type {Dispatch} from 'redux';
+
+// import {openModal} from 'actions/views/modals';
+
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import type {GlobalState} from 'types/store';

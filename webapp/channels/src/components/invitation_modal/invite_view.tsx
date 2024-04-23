@@ -140,11 +140,11 @@ export default function InviteView(props: Props) {
 
     return (
         <>
-            <Modal.Header
-                closeButton={true}
-                className={props.headerClass}
-            >
-                <h1 id='invitation_modal_title'>
+            <Modal.Header className={props.headerClass}>
+                <h1
+                    id='invitation_modal_title'
+                    className='modal-title'
+                >
                     <FormattedMessage
                         id='invite_modal.title'
                         defaultMessage={'Invite {inviteType} to {team_name}'}
@@ -156,8 +156,15 @@ export default function InviteView(props: Props) {
                         }}
                     />
                 </h1>
+                <button
+                    id='closeIcon'
+                    className='icon icon-close close'
+                    aria-label='Close'
+                    title='Close'
+                    onClick={props.onClose}
+                />
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className='overflow-visible'>
                 <div className='InviteView__sectionTitle InviteView__sectionTitle--first'>
                     <FormattedMessage
                         id='invite_modal.to'
@@ -220,6 +227,7 @@ export default function InviteView(props: Props) {
                     onClick={props.invite}
                     className={'btn btn-primary'}
                     id={props.inviteType === InviteType.MEMBER ? 'inviteMembersButton' : 'inviteGuestButton'}
+                    data-testid={'inviteButton'}
                 >
                     <FormattedMessage
                         id='invite_modal.invite'

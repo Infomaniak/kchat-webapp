@@ -22,7 +22,7 @@
             &:focus,
             &:active:focus {
                 background-color: rgba(var(--center-channel-color-rgb), 0.08);
-                color: rgba(var(--center-channel-color-rgb), 0.72);
+                color: rgba(var(--center-channel-color-rgb), 0.8);
                 opacity: 1;
             }
 
@@ -31,14 +31,14 @@
             width: 24px;
             height: 24px;
             border-radius: 4px;
-            color: rgba(var(--center-channel-color-rgb), 0.56) !important;
-            font-family: 'SuisseIntl', sans-serif;
+            color: rgba(var(--center-channel-color-rgb), 0.75) !important;
+            font-family: 'Open Sans', sans-serif;
             font-size: 32px;
             font-weight: 400;
         }
 
         .title {
-            font-family: SuisseIntl, sans-serif;
+            font-family: Metropolis, sans-serif;
             font-size: 22px;
             font-style: normal;
             font-weight: 600;
@@ -71,7 +71,7 @@
             margin: 0 auto;
             margin-top: 8px;
             color: rgb(var(--center-channel-color-rgb));
-            font-family: 'SuisseIntl';
+            font-family: 'Open Sans';
             font-size: 14px;
             font-style: normal;
             font-weight: 400;

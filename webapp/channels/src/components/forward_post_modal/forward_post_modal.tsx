@@ -14,20 +14,21 @@ import {General, Permissions} from 'mattermost-redux/constants';
 import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import type {ActionResult} from 'mattermost-redux/types/actions';
+
+import {getPermalinkURL} from 'selectors/urls';
 
 import NotificationBox from 'components/notification_box';
 import PostMessagePreview from 'components/post_view/post_message_preview';
 
 import Constants from 'utils/constants';
+import {getSiteURL} from 'utils/url';
 
 import type {GlobalState} from 'types/store';
 
-import type {ChannelOption} from './forward_post_channel_select';
 import ForwardPostChannelSelect, {makeSelectedChannelOption} from './forward_post_channel_select';
+import type {ChannelOption} from './forward_post_channel_select';
 import ForwardPostCommentInput from './forward_post_comment_input';
-
-import {getSiteURL} from '../../utils/url';
-import * as Utils from '../../utils/utils';
 
 import type {ActionProps, OwnProps, PropsFromRedux} from './index';
 
@@ -45,7 +46,7 @@ const ForwardPostModal = ({onExited, post, actions}: Props) => {
     const channel = useSelector((state: GlobalState) => getChannel(state, {id: post.channel_id}));
     const currentTeam = useSelector(getCurrentTeam);
 
-    const relativePermaLink = useSelector((state: GlobalState) => Utils.getPermalinkURL(state, currentTeam.id, post.id));
+    const relativePermaLink = useSelector((state: GlobalState) => getPermalinkURL(state, currentTeam.id, post.id));
     const permaLink = `${getSiteURL()}${relativePermaLink}`;
 
     const isPrivateConversation = channel.type !== Constants.OPEN_CHANNEL;
@@ -190,7 +191,7 @@ const ForwardPostModal = ({onExited, post, actions}: Props) => {
             if (type === Constants.DM_CHANNEL && userId) {
                 return actions.openDirectChannelToUserId(userId);
             }
-            return {data: false};
+            return {data: false} as ActionResult;
         }).then(({data}) => {
             if (data) {
                 channelToForward.details.id = data.id;
@@ -223,7 +224,7 @@ const ForwardPostModal = ({onExited, post, actions}: Props) => {
 
     const postPreviewFooterMessage = formatMessage({
         id: 'forward_post_modal.preview.footer_message',
-        defaultMessage: 'Originally posted in ~{channelName}',
+        defaultMessage: 'Originally posted in ~{channel}',
     },
     {
         channel: channel.display_name,
@@ -286,7 +287,6 @@ const ForwardPostModal = ({onExited, post, actions}: Props) => {
                     >
                         <PostMessagePreview
                             metadata={previewMetaData}
-                            previewPost={previewMetaData.post}
                             handleFileDropdownOpened={noop}
                             preventClickAction={true}
                             previewFooterMessage={postPreviewFooterMessage}

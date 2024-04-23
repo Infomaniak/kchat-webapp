@@ -12,10 +12,11 @@ import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile} from '@mattermost/types/users';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
+import {localizeMessage} from 'mattermost-redux/utils/i18n_utils';
 
 import Constants, {Preferences} from 'utils/constants';
 import {t} from 'utils/i18n';
-import {isMac, localizeMessage} from 'utils/utils';
+import {isLinux, isMac} from 'utils/user_agent';
 
 import * as Utils from '../../../utils/utils';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from '../../keyboard_shortcuts/keyboard_shortcuts_sequence';
@@ -132,7 +133,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
         };
     };
 
-    isLinux = Utils.isLinux();
+    isLinux = isLinux();
 
     handleSubmit = async (settings: string[]): Promise<void> => {
         const preferences: PreferenceType[] = [];

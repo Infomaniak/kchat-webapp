@@ -12,7 +12,6 @@ import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {checkHadPriorTrial} from 'mattermost-redux/selectors/entities/cloud';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
@@ -34,8 +33,8 @@ import {ModalIdentifiers, AboutLinks, LicenseLinks} from 'utils/constants';
 type FeatureRestrictedModalProps = {
     titleAdminPreTrial: string;
     messageAdminPreTrial: string;
-    titleAdminPostTrial: string;
-    messageAdminPostTrial: string;
+    titleAdminPostTrial?: string;
+    messageAdminPostTrial?: string;
     titleEndUser?: string;
     messageEndUser?: string;
     customSecondaryButton?: {msg: string; action: () => void};
@@ -55,7 +54,7 @@ const FeatureRestrictedModal = ({
     minimumPlanRequiredForFeature,
 }: FeatureRestrictedModalProps) => {
     const {formatMessage} = useIntl();
-    const dispatch = useDispatch<DispatchFunc>();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getPrevTrialLicense());

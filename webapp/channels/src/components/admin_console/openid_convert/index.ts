@@ -2,23 +2,16 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
 import {bindActionCreators} from 'redux';
-
-import type {AdminConfig} from '@mattermost/types/config';
+import type {Dispatch} from 'redux';
 
 import {updateConfig} from 'mattermost-redux/actions/admin';
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 
 import OpenIdConvert from './openid_convert';
 
-type Actions = {
-    updateConfig: (config: AdminConfig) => ActionFunc;
-}
-
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc>, Actions>({
+        actions: bindActionCreators({
             updateConfig,
         }, dispatch),
     };

@@ -4,12 +4,12 @@
 import classNames from 'classnames';
 import type {ReactNode} from 'react';
 import React from 'react';
+import type {IntlShape} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
 import ReactSelect, {components} from 'react-select';
 import type {getOptionValue} from 'react-select/src/builtins';
 import type {InputActionMeta} from 'react-select/src/types';
 
-import LocalizedIcon from 'components/localized_icon';
 import SaveButton from 'components/save_button';
 import CloseCircleSolidIcon from 'components/widgets/icons/close_circle_solid_icon';
 import Avatar from 'components/widgets/users/avatar';
@@ -41,6 +41,7 @@ export type Props<T extends Value> = {
     handleInput: (input: string, multiselect: MultiSelect<T>) => void;
     handlePageChange?: (newPage: number, currentPage: number) => void;
     handleSubmit: (value?: T[]) => void;
+    intl: IntlShape;
     loading?: boolean;
     saveButtonPosition?: string;
     maxValues?: number;
@@ -77,7 +78,7 @@ export type State = {
 
 const KeyCodes = Constants.KeyCodes;
 
-export default class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, State> {
+export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, State> {
     private listRef = React.createRef<MultiSelectList<T>>();
     private reactSelectRef = React.createRef<ReactSelect>();
     private selected: T | null = null;
@@ -339,9 +340,9 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
             noteTextContainer = (
                 <div className='multi-select__note'>
                     <div className='note__icon'>
-                        <LocalizedIcon
+                        <i
                             className='fa fa-info'
-                            title={{id: 'generic_icons.info', defaultMessage: 'Info Icon'}}
+                            title={this.props.intl.formatMessage({id: 'generic_icons.info', defaultMessage: 'Info Icon'})}
                         />
                     </div>
                     <div>{this.props.noteText}</div>
@@ -368,7 +369,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                 if (options.length > pageEnd) {
                     nextButton = (
                         <button
-                            className='btn btn-link filter-control filter-control__next'
+                            className='btn btn-sm btn-tertiary filter-control filter-control__next'
                             onClick={this.nextPage}
                         >
                             <FormattedMessage
@@ -382,7 +383,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                 if (this.state.page > 0) {
                     previousButton = (
                         <button
-                            className='btn btn-link filter-control filter-control__prev'
+                            className='btn btn-sm btn-tertiary filter-control filter-control__prev'
                             onClick={this.prevPage}
                         >
                             <FormattedMessage
@@ -520,7 +521,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                     }
                 </div>
                 {this.props.saveButtonPosition === 'bottom' &&
-                    <div className='multi-select__footer'>
+                    <div className='multi-select__footer modal-footer'>
                         {
                             this.props.backButtonClick &&
                             <button
@@ -578,3 +579,5 @@ const styles = {
         };
     },
 };
+
+export default MultiSelect;

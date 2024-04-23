@@ -8,7 +8,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"testing"
@@ -141,7 +140,7 @@ func (s *MmctlUnitTestSuite) TestConfigGetCmd() {
 		s.Require().Len(printer.GetErrorLines(), 0)
 	})
 
-	s.Run("Get error if the key doesn't exists", func() {
+	s.Run("Get error if the key doesn't exist", func() {
 		printer.Clean()
 		args := []string{"SqlSettings.WrongKey"}
 		outputConfig := &model.Config{}
@@ -444,7 +443,7 @@ func (s *MmctlUnitTestSuite) TestConfigSetCmd() {
 		s.Require().Len(printer.GetLines(), 0)
 	})
 
-	s.Run("Get error if the key doesn't exists", func() {
+	s.Run("Get error if the key doesn't exist", func() {
 		printer.Clean()
 		defaultConfig := &model.Config{}
 		defaultConfig.SetDefaults()
@@ -589,10 +588,10 @@ func (s *MmctlUnitTestSuite) TestConfigSetCmd() {
 }
 
 func (s *MmctlUnitTestSuite) TestConfigPatchCmd() {
-	tmpFile, err := ioutil.TempFile(os.TempDir(), "config_*.json")
+	tmpFile, err := os.CreateTemp(os.TempDir(), "config_*.json")
 	s.Require().Nil(err)
 
-	invalidFile, err := ioutil.TempFile(os.TempDir(), "invalid_config_*.json")
+	invalidFile, err := os.CreateTemp(os.TempDir(), "invalid_config_*.json")
 	s.Require().Nil(err)
 
 	_, err = tmpFile.Write([]byte(configFilePayload))
@@ -714,7 +713,7 @@ func (s *MmctlUnitTestSuite) TestConfigResetCmd() {
 		s.Require().Len(printer.GetErrorLines(), 0)
 	})
 
-	s.Run("Should fail if the key doesn't exists", func() {
+	s.Run("Should fail if the key doesn't exist", func() {
 		printer.Clean()
 		args := []string{"WrongKey"}
 		defaultConfig := &model.Config{}

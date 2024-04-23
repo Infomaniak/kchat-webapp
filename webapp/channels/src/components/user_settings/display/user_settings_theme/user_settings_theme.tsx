@@ -9,8 +9,8 @@ import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
 import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
-import type SettingItemMinComponent from 'components/setting_item_min/setting_item_min';
-import ImportThemeModal from 'components/user_settings/import_theme_modal';
+import type SettingItemMinComponent from 'components/setting_item_min';
+import ImportThemeModal from 'components/user_settings/display/user_settings_theme/import_theme_modal';
 
 import {Constants, ModalIdentifiers} from 'utils/constants';
 import {applyTheme} from 'utils/utils';

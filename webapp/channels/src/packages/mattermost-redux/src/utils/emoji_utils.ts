@@ -22,10 +22,15 @@ export function getEmojiImageUrl(emoji: Emoji): string {
     if (isSystemEmoji(emoji)) {
         const emojiUnified = emoji?.unified?.toLowerCase() ?? '';
         const filename = emojiUnified || emoji.short_names[0];
+
         return Client4.getSystemEmojiImageUrl(filename);
     }
 
     return Client4.getEmojiRoute(emoji.id) + '/image';
+}
+
+export function getEmojiName(emoji: Emoji): string {
+    return isSystemEmoji(emoji) ? emoji.short_name : emoji.name;
 }
 
 export function parseEmojiNamesFromText(text: string): string[] {

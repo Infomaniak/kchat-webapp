@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/actions_menu/ActionsMenu has actions - end user - should not show actions and app marketplace 1`] = `
+exports[`components/actions_menu/ActionsMenu has actions - marketplace disabled or user not having SYSCONSOLE_WRITE_PLUGINS - should not show actions and app marketplace 1`] = `
 <MenuWrapper
   animationComponent={[Function]}
   className=""
@@ -39,7 +39,6 @@ exports[`components/actions_menu/ActionsMenu has actions - end user - should not
       className="post-menu__item post-menu__item--active"
       id="center_actions_button_post_id_1"
       key="more-actions-button"
-      onClick={[Function]}
       type="button"
     >
       <i
@@ -68,7 +67,7 @@ exports[`components/actions_menu/ActionsMenu has actions - end user - should not
 </MenuWrapper>
 `;
 
-exports[`components/actions_menu/ActionsMenu has actions - sysadmin - should show actions and app marketplace 1`] = `
+exports[`components/actions_menu/ActionsMenu has actions - marketplace enabled and user has SYSCONSOLE_WRITE_PLUGINS - should show actions and app marketplace 1`] = `
 <MenuWrapper
   animationComponent={[Function]}
   className=""
@@ -107,7 +106,6 @@ exports[`components/actions_menu/ActionsMenu has actions - sysadmin - should sho
       className="post-menu__item post-menu__item--active"
       id="center_actions_button_post_id_1"
       key="more-actions-button"
-      onClick={[Function]}
       type="button"
     >
       <i
@@ -139,8 +137,8 @@ exports[`components/actions_menu/ActionsMenu has actions - sysadmin - should sho
     />
     <MenuItemAction
       icon={
-        <span
-          className="icon-view-grid-plus-outline MenuItem__compass-icon"
+        <ActionsMenuIcon
+          name="icon-view-grid-plus-outline"
         />
       }
       id="marketplace_icon_post_id_1"
@@ -194,7 +192,6 @@ exports[`components/actions_menu/ActionsMenu no actions - sysadmin - menu should
       className="post-menu__item post-menu__item--active"
       id="center_actions_button_post_id_1"
       key="more-actions-button"
-      onClick={[Function]}
       type="button"
     >
       <i
@@ -233,8 +230,8 @@ exports[`components/actions_menu/ActionsMenu no actions - sysadmin - menu should
           id="marketPlaceButton"
           onClick={[Function]}
         >
-          <span
-            className="icon-view-grid-plus-outline visit-marketplace-button-icon MenuItem__compass-icon"
+          <ActionsMenuIcon
+            name="icon-view-grid-plus-outline visit-marketplace-button-icon"
           />
           <span
             className="visit-marketplace-button-text"

@@ -8,7 +8,7 @@ import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {makeGetThreadOrSynthetic} from 'mattermost-redux/selectors/entities/threads';
 
-import {getChannelURL} from 'utils/utils';
+import {getChannelURL} from 'selectors/urls';
 
 import type {GlobalState} from 'types/store';
 import type {PostDraft} from 'types/store/draft';

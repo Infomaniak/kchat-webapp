@@ -15,6 +15,7 @@ import type {IDMappedObjects} from '@mattermost/types/utilities';
 
 import type {NewPostMessageProps} from 'actions/new_post';
 
+import type {PluginConfiguration} from 'types/plugins/user_settings';
 import type {GlobalState} from 'types/store';
 
 export type PluginSiteStatsHandler = () => Promise<Record<string, PluginAnalyticsRow>>;
@@ -63,6 +64,10 @@ export type PluginsState = {
     siteStatsHandlers: {
         [pluginId: string]: PluginSiteStatsHandler;
     };
+
+    userSettings: {
+        [pluginId: string]: PluginConfiguration;
+    };
 };
 
 export type Menu = {
@@ -103,6 +108,7 @@ export type PluginComponent<T = any> = {
     // an array that allows specifying which args the action function wants from the parent component
     // example in file_upload for kdrive upload
     customArgs?: Array<keyof T>;
+    hook?: (post: Post, message?: string) => string;
 };
 
 export type AppBarComponent = PluginComponent & {

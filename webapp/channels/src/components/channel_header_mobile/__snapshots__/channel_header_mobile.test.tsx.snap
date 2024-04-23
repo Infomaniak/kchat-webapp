@@ -40,7 +40,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
           }
         }
       />
-      <Connect(ShowSearchButton) />
+      <Connect(Component) />
       <Connect(injectIntl(MobileChannelHeaderPlug))
         channel={
           Object {
@@ -64,7 +64,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
-      <withRouter(Connect(CollapseLhsButton)) />
+      <withRouter(Connect(CollapseKsuiteSidepanel)) />
       <FlagNext />
     </div>
   </div>
@@ -111,7 +111,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
           }
         }
       />
-      <Connect(ShowSearchButton) />
+      <Connect(Component) />
       <Connect(injectIntl(MobileChannelHeaderPlug))
         channel={
           Object {
@@ -135,7 +135,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
-      <withRouter(Connect(CollapseLhsButton)) />
+      <withRouter(Connect(CollapseKsuiteSidepanel)) />
       <FlagNext />
     </div>
   </div>
@@ -182,7 +182,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
           }
         }
       />
-      <Connect(ShowSearchButton) />
+      <Connect(Component) />
       <Connect(injectIntl(MobileChannelHeaderPlug))
         channel={
           Object {
@@ -206,7 +206,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
-      <withRouter(Connect(CollapseLhsButton)) />
+      <withRouter(Connect(CollapseKsuiteSidepanel)) />
       <FlagNext />
     </div>
   </div>
@@ -253,7 +253,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
           }
         }
       />
-      <Connect(ShowSearchButton) />
+      <Connect(Component) />
       <Connect(injectIntl(MobileChannelHeaderPlug))
         channel={
           Object {
@@ -277,7 +277,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
-      <withRouter(Connect(CollapseLhsButton)) />
+      <withRouter(Connect(CollapseKsuiteSidepanel)) />
       <FlagNext />
     </div>
   </div>

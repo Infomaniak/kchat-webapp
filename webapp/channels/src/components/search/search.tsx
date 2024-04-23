@@ -1,8 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-/* eslint-disable max-lines */
-
 import classNames from 'classnames';
 import React, {useEffect, useState, useRef} from 'react';
 import type {ChangeEvent, MouseEvent, FormEvent} from 'react';
@@ -26,9 +24,9 @@ import SearchIcon from 'components/widgets/icons/search_icon';
 import Popover from 'components/widgets/popover';
 
 import Constants, {searchHintOptions, RHSStates, searchFilesHintOptions} from 'utils/constants';
+import * as Keyboard from 'utils/keyboard';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {isDesktopApp, getDesktopVersion, isMacApp} from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import type {SearchType} from 'types/store/rhs';
 
@@ -57,11 +55,21 @@ const determineVisibleSearchHintOptions = (searchTerms: string, searchType: Sear
     const pretext = pretextArray[pretextArray.length - 1];
     const penultimatePretext = pretextArray[pretextArray.length - 2];
 
-    const shouldShowHintOptions = penultimatePretext ? !options.some(({searchTerm}) => penultimatePretext.toLowerCase().endsWith(searchTerm.toLowerCase())) : !options.some(({searchTerm}) => searchTerms.toLowerCase().endsWith(searchTerm.toLowerCase()));
+    let shouldShowHintOptions: boolean;
+
+    if (penultimatePretext) {
+        shouldShowHintOptions = !(options.some(({searchTerm}) => penultimatePretext.toLowerCase().endsWith(searchTerm.toLowerCase())) && penultimatePretext !== '@');
+    } else {
+        shouldShowHintOptions = !options.some(({searchTerm}) => searchTerms.toLowerCase().endsWith(searchTerm.toLowerCase())) || searchTerms === '@';
+    }
 
     if (shouldShowHintOptions) {
         try {
             newVisibleSearchHintOptions = options.filter((option) => {
+                if (pretext === '@' && option.searchTerm === 'From:') {
+                    return true;
+                }
+
                 return new RegExp(pretext, 'ig').
                     test(option.searchTerm) && option.searchTerm.toLowerCase() !== pretext.toLowerCase();
             });
@@ -112,7 +120,7 @@ const Search: React.FC<Props> = (props: Props): JSX.Element => {
         }
 
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (Utils.cmdOrCtrlPressed(e) && Utils.isKeyPressed(e, Constants.KeyCodes.F)) {
+            if (Keyboard.cmdOrCtrlPressed(e) && Keyboard.isKeyPressed(e, Constants.KeyCodes.F)) {
                 if (!isDesktop && !e.shiftKey) {
                     return;
                 }
@@ -252,9 +260,7 @@ const Search: React.FC<Props> = (props: Props): JSX.Element => {
         } else if (indexChangedViaKeyPress) {
             e.preventDefault();
             setKeepInputFocused(true);
-            if (visibleSearchHintOptions[highlightedSearchHintIndex]?.searchTerm) {
-                handleAddSearchTerm(visibleSearchHintOptions[highlightedSearchHintIndex].searchTerm);
-            }
+            handleAddSearchTerm(visibleSearchHintOptions[highlightedSearchHintIndex].searchTerm);
         }
 
         if (props.isMentionSearch) {
@@ -279,7 +285,7 @@ const Search: React.FC<Props> = (props: Props): JSX.Element => {
             return;
         }
 
-        const {error} = await actions.showSearchResults(Boolean(props.isMentionSearch));
+        const {error} = await actions.showSearchResults(Boolean(props.isMentionSearch)) as any;
 
         if (!error) {
             handleSearchOnSuccess();

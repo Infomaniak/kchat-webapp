@@ -34,7 +34,8 @@ const config = {
         '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
         '^.*i18n.*\\.(json)$': '<rootDir>/src/tests/i18n_mock.json',
         '^@mattermost/compass-icons/(.*)$': '<rootDir>/../../node_modules/@infomaniak/compass-icons/$1',
-        '^@mattermost/compass-components/(.*)$': '<rootDir>/../../node_modules/@infomaniak/compass-components/$1'
+        '^@mattermost/compass-components/(.*)$': '<rootDir>/../../node_modules/@infomaniak/compass-components/$1',
+        '^wasm-media-encoders/(.*)$': '<rootDir>/../../node_modules/wasm-media-encoders/$1',
     },
     moduleDirectories: ['src', 'node_modules'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
@@ -43,17 +44,23 @@ const config = {
         ['jest-junit', {outputDirectory: 'build', outputName: 'test-results.xml'}],
     ],
     transformIgnorePatterns: [
-        'node_modules/(?!react-native|react-router|p-queue|p-timeout|@infomaniak/compass-components|@infomaniak/compass-icons)',
+        'node_modules/(?!react-native|react-router|p-queue|p-timeout|@infomaniak/compass-components|@infomaniak/compass-icons|cidr-regex|ip-regex|wasm-media-encoders)',
     ],
     setupFiles: ['jest-canvas-mock'],
-    setupFilesAfterEnv: ['<rootDir>/src/tests/setup.ts'],
+    setupFilesAfterEnv: ['<rootDir>/src/tests/setup_jest.ts'],
     testEnvironment: 'jsdom',
     testTimeout: 60000,
-    testURL: 'http://localhost:8065',
+    testEnvironmentOptions: {
+        url: 'http://localhost:8065',
+    },
     watchPlugins: [
         'jest-watch-typeahead/filename',
         'jest-watch-typeahead/testname',
     ],
+    snapshotFormat: {
+        escapeString: true,
+        printBasicPrototype: true,
+    },
 };
 
 module.exports = config;

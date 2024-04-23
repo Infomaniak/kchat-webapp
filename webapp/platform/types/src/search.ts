@@ -16,9 +16,6 @@ export type SearchState = {
     isSearchingTerm: boolean;
     isSearchGettingMore: boolean;
     isLimitedResults: number;
-    recent: {
-        [x: string]: Search[];
-    };
     matches: {
         [x: string]: string[];
     };

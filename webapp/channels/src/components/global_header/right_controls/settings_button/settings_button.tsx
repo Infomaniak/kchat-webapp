@@ -3,9 +3,10 @@
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
 import type {TIconGlyph} from '@infomaniak/compass-components/foundations/icon';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
+import {useHistory} from 'react-router-dom';
 
 import type {Team} from '@mattermost/types/teams';
 
@@ -33,6 +34,7 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
+    const history = useHistory();
 
     const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -55,6 +57,19 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
             )}
         </Tooltip>
     );
+
+    useEffect(() => {
+        const handleWcNavigate = (e: any) => {
+            if ('detail' in e) {
+                history.push(e.detail);
+            }
+        };
+
+        window.addEventListener('wcSettingsKChatNavigateTo', handleWcNavigate);
+        return () => {
+            window.removeEventListener('wcSettingsKChatNavigateTo', handleWcNavigate);
+        };
+    }, [history]);
 
     return (
         <OverlayTrigger
