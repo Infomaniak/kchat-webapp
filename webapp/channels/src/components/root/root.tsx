@@ -463,8 +463,8 @@ export default class Root extends React.PureComponent<Props, State> {
             }
             if (!deepEqual(prevProps.userLocale, this.props.userLocale)) {
                 window.postMessage({
-                    type: 'teams-order-preference',
-                    data: this.props.teamsOrderPreference?.value,
+                    type: 'user-locale',
+                    data: this.props.userLocale,
                 }, window.origin);
             }
         }
