@@ -99,6 +99,14 @@ No changes.
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
 
+## 2.7.0-next.7 (2024-04-23)
+
+### Fixed (3 changes)
+
+- [Reloading guest members on current channel on user roles changes](kchat/webapp@5867269fb722f957cd509790f287244514ff1fa7) by @philippe.karle ([merge request](kchat/webapp!733))
+- [Fix: loading all users profiles available](kchat/webapp@34734451b771b90c6af6007c7410297528f4804d) by @philippe.karle ([merge request](kchat/webapp!739))
+- [fix: Replaced worker-src placeholder for sentry CSP](kchat/webapp@3c2bee906b1383951914b3d60f8bac2d57d2b7e2) by  ([merge request](kchat/webapp!738))
+
 ## 2.7.0-next.6 (2024-04-22)
 
 ### Added (1 change)
