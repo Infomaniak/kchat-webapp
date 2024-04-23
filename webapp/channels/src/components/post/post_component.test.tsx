@@ -5,11 +5,12 @@ import React from 'react';
 
 import type {DeepPartial} from '@mattermost/types/utilities';
 
-import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 import {getHistory} from 'utils/browser_history';
 import {Locations} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
+import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -22,7 +23,6 @@ describe('PostComponent', () => {
 
     const baseProps: Props = {
         center: false,
-        currentTeam,
         currentUserId: 'currentUserId',
         displayName: '',
         hasReplies: false,
@@ -36,8 +36,6 @@ describe('PostComponent', () => {
         post: TestHelper.getPostMock({channel_id: channel.id}),
         recentEmojis: [],
         replyCount: 0,
-        team: currentTeam,
-        pluginActions: [],
         actions: {
             markPostAsUnread: jest.fn(),
             emitShortcutReactToLastPostFrom: jest.fn(),
@@ -49,6 +47,9 @@ describe('PostComponent', () => {
             selectPostCard: jest.fn(),
             setRhsExpanded: jest.fn(),
         },
+        teamId: currentTeam.id,
+        shouldShowDotMenu: false,
+        tourTipsEnabled: false,
     };
 
     describe('reactions', () => {
