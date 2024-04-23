@@ -17,7 +17,9 @@ import {isServerVersionGreaterThanOrEqualTo} from './server_version';
 
 declare global {
     interface Window {
-        desktopAPI?: Partial<DesktopAPI>;
+        desktopAPI?: Partial<DesktopAPI & {
+            openKmeetCallWindow: (serverUrl: string, params: object) => void;
+        }>;
     }
 }
 

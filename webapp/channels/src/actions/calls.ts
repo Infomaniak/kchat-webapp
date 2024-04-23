@@ -7,7 +7,7 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
-import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentChannelId, getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import type {ActionFunc, ActionFuncAsync, DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {
@@ -180,18 +180,14 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
 
                 if (isDesktopApp()) {
-                    const user = getCurrentUser(getState());
-                    const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
-                    (window as any).desktopAPI.openKmeetCallWindow(`${window.location.origin}/static/kmeet.js`, {avatar, user, channelID});
+                    dispatch(startKmeetWindow());
                 } else {
                     window.open(kmeetUrl.href, '_blank', 'noopener');
                 }
             }
         } catch {
             if (isDesktopApp()) {
-                const user = getCurrentUser(getState());
-                const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
-                (window as any).desktopAPI.openKmeetCallWindow(`${window.location.origin}/static/kmeet.js`, {avatar, user, channelID});
+                dispatch(startKmeetWindow());
             } else {
                 const url = connectedKmeetCallUrl(getState(), channelID);
 
@@ -313,6 +309,17 @@ export function hangUpCall() {
         console.log('[calls: hangUpCall]', conferenceId);
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         stopRing();
+    };
+}
+
+export function startKmeetWindow() {
+    return async (_: DispatchFunc, getState: () => GlobalState) => {
+        console.log('START KMEET CALL');
+        const state = getState();
+        const user = getCurrentUser(state);
+        const channelID = getCurrentChannelId(state);
+        const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
+        window.desktopAPI?.openKmeetCallWindow?.(`${window.location.origin}/static/kmeet.js`, {avatar, user, channelID});
     };
 }
 
