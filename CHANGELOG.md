@@ -1,3 +1,9 @@
+## 2.7.0-rc.13 (2024-04-23)
+
+### Fixed (1 change)
+
+- [Fix: Locale post message for servers sidebar](kchat/webapp@5c26dc09aeb0a09825510f44b0c9f621fe9c1035) by @philippe.karle ([merge request](kchat/webapp!741))
+
 ## 2.7.0-rc.12 (2024-04-23)
 
 ### Added (1 change)
