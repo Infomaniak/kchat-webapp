@@ -47,6 +47,11 @@ jest.mock('@mui/styled-engine', () => {
     return styledEngineSc;
 });
 
+// Mock import.meta.url
+jest.mock('utils/import_meta_url', () => ({
+    importMetaUrl: () => 'http://localhost:8065',
+}));
+
 // isDependencyWarning returns true when the given console.warn message is coming from a dependency using deprecated
 // React lifecycle methods.
 function isDependencyWarning(params: string[]) {
