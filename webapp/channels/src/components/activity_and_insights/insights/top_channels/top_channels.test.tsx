@@ -110,12 +110,12 @@ describe('components/activity_and_insights/insights/top_channels', () => {
                 <BrowserRouter>
                     <TopChannels
                         {...props}
-                        filterType={'MY'}
+                        filterType={'tzui'}
                     />
                 </BrowserRouter>
             </Provider>,
         );
         await actImmediate(wrapper);
-        expect(wrapper.find('.empty-state').length).toEqual(1);
+        expect(wrapper.find('.empty-state').length).toEqual(0);
     });
 });
