@@ -528,6 +528,9 @@ export default class Root extends React.PureComponent<Props, State> {
                 if (this.embeddedInIFrame && window.top) {
                     window.top.location.href = window.location.href;
                 } else {
+                    const searchParams = new URLSearchParams(window.location.search);
+                    localStorage.setItem('IKRedirectUri', searchParams.get('redirect_to') || `${window.location.pathname}${window.location.search}`);
+
                     window.location.href = data.uri;
                 }
             } else {

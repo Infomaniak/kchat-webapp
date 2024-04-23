@@ -95,16 +95,16 @@ export async function generateCodeChallenge(codeVerifier: string) {
 /**
  * get code_challenge and redirect to IK Login
  */
-export function getChallengeAndRedirectToLogin(infinite = false) {
+export async function getChallengeAndRedirectToLogin(infinite = false) {
     const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
     const codeVerifier = getCodeVerifier();
-    let codeChallenge = '';
 
-    generateCodeChallenge(codeVerifier).then((challenge) => {
-        codeChallenge = challenge;
+    try {
+        const codeChallenge = await generateCodeChallenge(codeVerifier);
 
         // TODO: store in redux instead of localstorage
         localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
+        localStorage.setItem('IKRedirectUri', redirectTo);
 
         // Construct redirect URL
         const params = new URLSearchParams();
@@ -120,9 +120,9 @@ export function getChallengeAndRedirectToLogin(infinite = false) {
 
         // Redirect
         window.location.assign(url);
-    }).catch(() => {
+    } catch (error) {
         console.log('[login/utils > getChallengeAndRedirectToLogin] error redirect');
-    });
+    }
 }
 
 /**

@@ -413,6 +413,7 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
         return;
     }
 
+    const history = getHistory();
     const locale = getCurrentLocale(state);
     const teamId = LocalStorageStore.getPreviousTeamId(user.id);
 
@@ -428,7 +429,18 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
 
     let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
-        getHistory().push('/error?type=no_ksuite');
+        // if (isUserFirstAdmin && onboardingFlowEnabled) {
+        history.push('/error?type=no_ksuite');
+        return;
+
+        // }
+    }
+
+    // If a "IKRedirectUri" is specified, use it
+    const redirectUri = localStorage.getItem('IKRedirectUri');
+    if (typeof redirectUri === 'string') {
+        localStorage.removeItem('IKRedirectUri');
+        history.push(redirectUri);
         return;
     }
 
@@ -442,7 +454,10 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
         if (channel) {
             dispatch(fetchTeamScheduledPosts(team.id, true));
             dispatch(selectChannel(channel.id));
-            historyPushWithQueryParams(`/${team.name}/channels/${channel.name}`, searchParams);
+
+            // historyPushWithQueryParams(`/${team.name}/channels/${channel.name}`, searchParams);
+            const hashParams = window.location.hash ? `/${window.location.hash}` : '';
+            history.push(`/${team.name}/channels/${channel.name}${hashParams}`);
             return;
         }
     }
@@ -454,12 +469,15 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
         const channel = await getTeamRedirectChannelIfIsAccesible(user, myTeam); // eslint-disable-line no-await-in-loop
         if (channel) {
             dispatch(selectChannel(channel.id));
-            historyPushWithQueryParams(`/${myTeam.name}/channels/${channel.name}`, searchParams);
+
+            // historyPushWithQueryParams(`/${myTeam.name}/channels/${channel.name}`, searchParams);
+            history.push(`/${myTeam.name}/channels/${channel.name}`);
             return;
         }
     }
 
-    historyPushWithQueryParams('/select_team', searchParams);
+    // historyPushWithQueryParams('/select_team', searchParams);
+    history.push('/select_team');
 }
 
 export async function redirectDesktopUserToDefaultTeam() {
