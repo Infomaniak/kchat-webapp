@@ -105,6 +105,12 @@ No changes.
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
 
+## 2.7.0-next.8 (2024-04-23)
+
+### Fixed (1 change)
+
+- [Fix: Locale post message for servers sidebar](kchat/webapp@5c26dc09aeb0a09825510f44b0c9f621fe9c1035) by @philippe.karle ([merge request](kchat/webapp!741))
+
 ## 2.7.0-next.7 (2024-04-23)
 
 ### Fixed (3 changes)
