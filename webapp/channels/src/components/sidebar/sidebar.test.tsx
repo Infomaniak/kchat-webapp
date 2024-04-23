@@ -34,14 +34,15 @@ describe('components/sidebar', () => {
         isKeyBoardShortcutModalOpen: false,
         userGroupsEnabled: false,
         canCreateCustomGroups: true,
-        headerRef: jest.fn(),
+        headerRef: {current: null},
         actions: {
+            clearChannelSelection: jest.fn(),
+            closeModal: jest.fn(),
+            closeRightHandSide: jest.fn(),
             createCategory: jest.fn(),
             fetchMyCategories: jest.fn(),
             openModal: jest.fn(),
-            closeModal: jest.fn(),
-            clearChannelSelection: jest.fn(),
-            closeRightHandSide: jest.fn(),
+            showSettings: jest.fn(),
         },
     };
 
