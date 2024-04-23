@@ -6,10 +6,11 @@ import React from 'react';
 import type {PostType} from '@mattermost/types/posts';
 import type {DeepPartial} from '@mattermost/types/utilities';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-import {fireEvent, renderWithContext, screen} from 'tests/react_testing_utils';
 import {Locations} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import {fireEvent, renderWithContext, screen} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -123,17 +124,18 @@ describe('components/dot_menu/DotMenu', () => {
         channelIsArchived: false,
         currentTeamUrl: '',
         actions: {
-            flagPost: jest.fn(),
-            unflagPost: jest.fn(),
-            setEditingPost: jest.fn(),
-            pinPost: jest.fn(),
-            unpinPost: jest.fn(),
-            openModal: jest.fn(),
-            markPostAsUnread: jest.fn(),
-            postEphemeralCallResponseForPost: jest.fn(),
-            setThreadFollow: jest.fn(),
             addPostReminder: jest.fn(),
+            flagPost: jest.fn(),
+            markPostAsUnread: jest.fn(),
+            openModal: jest.fn(),
+            pinPost: jest.fn(),
+            postEphemeralCallResponseForPost: jest.fn(),
+            setEditingPost: jest.fn(),
             setGlobalItem: jest.fn(),
+            setThreadFollow: jest.fn(),
+            translatePost: jest.fn(),
+            unflagPost: jest.fn(),
+            unpinPost: jest.fn(),
         },
         canEdit: false,
         canDelete: false,
@@ -147,6 +149,7 @@ describe('components/dot_menu/DotMenu', () => {
         userId: 'user_id_1',
         isMilitaryTime: false,
         canMove: true,
+        postTranslationEnabled: false,
     };
 
     test('should match snapshot, on Center', () => {
