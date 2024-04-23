@@ -1,12 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {KSuiteBridge} from '@infomaniak/ksuite-bridge';
 import {shallow} from 'enzyme';
 import React from 'react';
 import type {RouteComponentProps} from 'react-router-dom';
 import rudderAnalytics from 'rudder-sdk-js';
 
 import {ServiceEnvironment} from '@mattermost/types/config';
+import type {PreferenceType} from '@mattermost/types/preferences';
+import type {Team} from '@mattermost/types/teams';
 
 import {GeneralTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
@@ -86,6 +89,7 @@ describe('components/Root', () => {
             savePreferences: jest.fn(),
             registerCustomPostRenderer: jest.fn(),
             initializeProducts: jest.fn(),
+            emitBrowserWindowResized: jest.fn(),
         },
         permalinkRedirectTeamName: 'myTeam',
         showLaunchingWorkspace: false,
@@ -100,6 +104,10 @@ describe('components/Root', () => {
         rhsIsExpanded: false,
         rhsIsOpen: false,
         shouldShowAppBar: false,
+        currentTeam: {} as Team,
+        ksuiteBridge: {sendMessage: jest.fn()} as unknown as KSuiteBridge,
+        teamsOrderPreference: {} as PreferenceType,
+        userLocale: 'fr',
     };
 
     test('should load config and license on mount and redirect to sign-up page', () => {
