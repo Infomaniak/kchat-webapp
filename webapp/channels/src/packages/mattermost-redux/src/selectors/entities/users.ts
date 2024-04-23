@@ -134,6 +134,24 @@ export function getUserByEmail(state: GlobalState, email: UserProfile['email']):
     return getUsersByEmail(state)[email];
 }
 
+export const getUsersById: (a: GlobalState) => Record<string, UserProfile> = createSelector(
+    'getUsersById',
+    getUsers,
+    (users) => {
+        const usersById: Record<string, UserProfile> = {};
+
+        for (const user of Object.keys(users).map((key) => users[key])) {
+            usersById[user.id] = user;
+        }
+
+        return usersById;
+    },
+);
+
+export function getUserById(state: GlobalState, id: UserProfile['id']): UserProfile {
+    return getUsersById(state)[id];
+}
+
 export const isCurrentUserSystemAdmin: (state: GlobalState) => boolean = createSelector(
     'isCurrentUserSystemAdmin',
     getCurrentUser,
