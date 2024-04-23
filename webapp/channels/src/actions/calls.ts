@@ -301,6 +301,21 @@ export function callNoLongerExist(endMsg: any) {
         }
     };
 }
+
+export function joinCall(conferenceId: string, meetingUrl: string) {
+    return async (dispatch: DispatchFunc) => {
+        Client4.acceptIncomingMeetCall(conferenceId);
+
+        if (isDesktopApp()) {
+            dispatch(startKmeetWindow());
+            return;
+        }
+
+        const kmeetUrl = new URL(meetingUrl);
+        window.open(kmeetUrl.href, '_blank', 'noopener');
+    };
+}
+
 export function hangUpCall() {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
@@ -314,7 +329,6 @@ export function hangUpCall() {
 
 export function startKmeetWindow() {
     return async (_: DispatchFunc, getState: () => GlobalState) => {
-        console.log('START KMEET CALL');
         const state = getState();
         const user = getCurrentUser(state);
         const channelID = getCurrentChannelId(state);
@@ -360,6 +374,9 @@ export function setCallListeners() {
 
         (window as any).callManager?.onCallDeclined((_: any, props: { conferenceId: string }) => {
             return Client4.declineIncomingMeetCall(props.conferenceId);
+        });
+        (window as any).callManager?.onKmeetApiAvailable((_: any, api: any) => {
+            console.log('API IS AVAILABLE');
         });
     }
 }

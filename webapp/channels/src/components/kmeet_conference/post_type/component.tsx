@@ -4,11 +4,12 @@
 import moment from 'moment-timezone';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
 
 import type {Post} from '@mattermost/types/posts';
 
-import {Client4} from 'mattermost-redux/client';
+import {joinCall} from 'actions/calls';
 
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
@@ -21,13 +22,12 @@ interface Props {
 
 const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInChannelV2}: Props) => {
     const intl = useIntl();
+    const dispatch = useDispatch();
 
     const meetingUrl = connectedKmeetUrl ?? post.props.url;
 
     const onJoinCallClick = () => {
-        Client4.acceptIncomingMeetCall(post.props.conference_id);
-        const kmeetUrl = new URL(meetingUrl);
-        window.open(kmeetUrl.href, '_blank', 'noopener');
+        dispatch(joinCall(post.props.conference_id, meetingUrl));
     };
 
     const onStartOrJoinCall = () => {
