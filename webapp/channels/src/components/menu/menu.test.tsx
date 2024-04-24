@@ -100,8 +100,7 @@ describe('menu click handlers', () => {
         userEvent.click(screen.getByText('Open modal from submenu'));
 
         // Wait for the menu and submenu to close before the modal will be opened
-        await waitForElementToBeRemoved(() => screen.queryByText('Open modal from submenu'));
-        await waitForElementToBeRemoved(() => screen.queryByText('Open submenu'));
+        await waitForElementToBeRemoved(() => screen.queryAllByText(/Open( modal from)? submenu/));
 
         expect(screen.getByText('A Modal')).toBeInTheDocument();
     });
