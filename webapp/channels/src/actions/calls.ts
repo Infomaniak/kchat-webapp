@@ -19,6 +19,7 @@ import {
     connectedChannelID,
     voiceConnectedChannels,
 } from 'selectors/calls';
+import {getCurrentLocale} from 'selectors/i18n';
 import {connectedKmeetCallId, connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
@@ -369,8 +370,9 @@ export function startKmeetWindow(conferenceId?: string) {
         const user = getCurrentUser(state);
         const channelID = getCurrentChannelId(state);
         const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
+        const locale = getCurrentLocale(state);
 
-        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID, conferenceId});
+        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID, conferenceId, locale});
     };
 }
 
