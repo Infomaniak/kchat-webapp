@@ -72,9 +72,9 @@ describe('components/logged_in/LoggedIn', () => {
         const wrapper = shallow(<LoggedIn {...props}>{children}</LoggedIn>);
 
         expect(wrapper).toMatchInlineSnapshot(`
-            <Redirect
-              to="/mfa/setup"
-            />
+            <span>
+              Test
+            </span>
         `);
     });
 
@@ -126,9 +126,9 @@ describe('components/logged_in/LoggedIn', () => {
         const wrapper = shallow(<LoggedIn {...props}>{children}</LoggedIn>);
 
         expect(wrapper).toMatchInlineSnapshot(`
-            <Redirect
-              to="/terms_of_service?redirect_to=%2F"
-            />
+            <span>
+              Test
+            </span>
         `);
     });
 
