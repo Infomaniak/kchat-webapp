@@ -23,6 +23,7 @@ import Root from 'components/root/root';
 import {StoragePrefixes} from 'utils/constants';
 
 import type {ProductComponent} from 'types/store/plugins';
+import 'tests/helpers/match_media.mock';
 
 jest.mock('@infomaniak/ksuite-bridge', () => ({
     KSuiteBridge: jest.fn().mockImplementation(() => ({
