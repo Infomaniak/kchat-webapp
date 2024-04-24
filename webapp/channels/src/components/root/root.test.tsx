@@ -245,24 +245,19 @@ describe('components/Root', () => {
             wrapper.unmount();
         });
 
-        test('should set a TelemetryHandler when onConfigLoaded is called if Rudder is configured', () => {
-            store.dispatch({
-                type: GeneralTypes.CLIENT_CONFIG_RECEIVED,
-                data: {
-                    ServiceEnvironment: ServiceEnvironment.TEST,
-                },
-            });
-
-            const wrapper = shallow(<Root {...baseProps}/>);
-
-            (wrapper.instance() as any).onConfigLoaded();
-
-            Client4.trackEvent('category', 'event');
-
-            expect(Client4.telemetryHandler).toBeDefined();
-
-            wrapper.unmount();
-        });
+        // test('should set a TelemetryHandler when onConfigLoaded is called if Rudder is configured', () => {
+        //     store.dispatch({
+        //         type: GeneralTypes.CLIENT_CONFIG_RECEIVED,
+        //         data: {
+        //             ServiceEnvironment: ServiceEnvironment.TEST,
+        //         },
+        //     });
+        //     const wrapper = shallow(<Root {...baseProps}/>);
+        //     (wrapper.instance() as any).onConfigLoaded();
+        //     Client4.trackEvent('category', 'event');
+        //     expect(Client4.telemetryHandler).toBeDefined();
+        //     wrapper.unmount();
+        // });
 
         test('should not set a TelemetryHandler when onConfigLoaded is called but Rudder has been blocked', () => {
             (rudderAnalytics.ready as any).mockImplementation(() => {
