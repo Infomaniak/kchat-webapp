@@ -118,7 +118,7 @@ describe('components/feature_discovery', () => {
 
             expect(screen.getByTestId('featureDiscovery_secondaryCallToAction')).toHaveAttribute('href', 'https://test.mattermost.com/secondary/');
 
-            expect(screen.getByText('Privacy Policy')).toHaveAttribute('href', 'https://infomaniak.com/pl/privacy-policy/');
+            expect(screen.getByText('Privacy Policy')).toHaveAttribute('href', 'https://infomaniak.com/privacy-policy/');
 
             const featureLink = screen.getByTestId('featureDiscovery_secondaryCallToAction');
 
