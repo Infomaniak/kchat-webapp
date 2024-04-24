@@ -33,6 +33,7 @@ import {imageURLForUser} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
+import {openRingingModal} from './kmeet_calls';
 import {closeModal, openModal} from './views/modals';
 
 export function showExpandedView(): ActionFunc {
@@ -182,7 +183,9 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
 
                 if (isDesktopApp()) {
-                    dispatch(startKmeetWindow(data.id));
+                    openRingingModal(channelID);
+
+                    // dispatch(startKmeetWindow(data.id));
                 } else {
                     window.open(kmeetUrl.href, '_blank', 'noopener');
                 }
@@ -310,7 +313,7 @@ export function joinCall(conferenceId: string, meetingUrl: string) {
         Client4.acceptIncomingMeetCall(conferenceId);
 
         if (isDesktopApp()) {
-            dispatch(startKmeetWindow());
+            dispatch(startKmeetWindow(conferenceId));
             return;
         }
 
@@ -319,9 +322,15 @@ export function joinCall(conferenceId: string, meetingUrl: string) {
     };
 }
 
+export function declineCall(conferenceId: string) {
+    return async () => {
+        Client4.declineIncomingMeetCall(conferenceId);
+    };
+}
+
 export function notifyJoinCall(conferenceId: string) {
     return async () => {
-        await Client4.declineIncomingMeetCall(conferenceId);
+        await Client4.acceptIncomingMeetCall(conferenceId);
     };
 }
 

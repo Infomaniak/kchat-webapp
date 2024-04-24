@@ -29,7 +29,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         user,
         locale,
         call,
-        channel: {type: 'D', display_name: 'Philippe'},
+        channel,
         conference,
         users,
         caller,

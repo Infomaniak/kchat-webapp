@@ -1,15 +1,12 @@
-import Button from '@infomaniak/compass-components/components/button';
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import type {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch, useSelector} from 'react-redux';
-import type {RouteComponentProps} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users.js';
 
-import {hangUpCall, joinCallInChannel} from 'actions/calls';
-import {callParameters} from 'selectors/calls';
+import {joinCall, declineCall, leaveCall} from 'actions/kmeet_calls';
 
 import Avatars from 'components/widgets/users/avatars';
 
@@ -18,29 +15,27 @@ import type {Conference} from 'types/conference';
 
 type Props = {
     user: UserProfile;
-    locale: string;
     channel: Channel;
     conference: Conference;
     caller: UserProfile;
     users: UserProfile[];
 }
 
-const KmeetModal: FC<Props> = ({user, locale, channel, conference, caller, users}) => {
+const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     const dispatch = useDispatch();
-    const modalRef = React.useRef<HTMLDivElement>(null);
     const {formatMessage} = useIntl();
 
-    console.log('channel', channel);
-    console.log('caller', caller);
-    console.log('users', users);
-
     const onHandleAccept = React.useCallback(() => {
-        dispatch(joinCallInChannel());
-    }, [dispatch]);
+        dispatch(joinCall(channel.id));
+    }, [dispatch, channel]);
 
     const onHandleDecline = React.useCallback(() => {
-        dispatch(hangUpCall());
-    }, [dispatch]);
+        dispatch(declineCall(conference.id));
+    }, [dispatch, conference]);
+
+    const onHandleCancel = React.useCallback(() => {
+        dispatch(leaveCall(channel.id));
+    }, [dispatch, channel]);
 
     useEffect(() => {
         window.addEventListener('offline', () => {
@@ -108,50 +103,60 @@ const KmeetModal: FC<Props> = ({user, locale, channel, conference, caller, users
                 </>
             );
         default:
-            return 'Hello world';
+            return '';
         }
     };
 
+    const isCallerCurrentUser = useMemo(() => caller.id === user.id, [caller, user]);
     const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
     const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
+    const textButtonCancel = formatMessage({id: 'calling_modal.button.cancel', defaultMessage: 'Cancel'});
 
     return (
-        <div ref={modalRef}>
-            <div
-                className='content-body'
-            >
-                {/* <Avatars
-                    userIds={getUsersForOverlay().map((usr) => usr.id)}
-                    size='xl'
-                    totalUsers={users.length}
-                    disableProfileOverlay={true}
-                    disablePopover={true}
-                    disableButton={true}
-                /> */}
-            </div>
-            <div className='content-calling'>
-                {text()}
-            </div>
-            <div className='content-calling'/>
-            <div
-                className='content-actions'
-            >
-                {/* <Button
-                    className='decline'
-                    size={'md'}
-                    onClick={onHandleDecline}
-                    inverted={true}
-                    aria-label='Decline'
-                    label={textButtonDecline}
-                />
-                <Button
-                    className='accept'
-                    size={'md'}
-                    onClick={onHandleAccept}
-                    inverted={true}
-                    aria-label='Accept'
-                    label={textButtonAccept}
-                /> */}
+        <div
+            className='call-modal'
+        >
+            <div>
+                <div
+                    className='call-modal__header'
+                >
+                    <Avatars
+                        userIds={conference.participants}
+                        size='xl'
+                        totalUsers={users.length}
+                        disableProfileOverlay={true}
+                        disablePopover={true}
+                        fetchMissingUsers={false}
+                        disableButton={true}
+                    />
+                </div>
+                <div className='call-modal__text'>
+                    {text()}
+                </div>
+                <div
+                    className='call-modal__actions'
+                >
+                    {isCallerCurrentUser === false ? (
+                        <>
+                            <button
+                                className='btn btn-tertiary decline'
+                                onClick={onHandleDecline}
+                                aria-label={textButtonDecline}
+                            >{textButtonDecline}</button>
+                            <button
+                                className='btn btn-primary accept'
+                                onClick={onHandleAccept}
+                                aria-label={textButtonAccept}
+                            >{textButtonAccept}</button>
+                        </>
+                    ) : (
+                        <button
+                            className='btn btn-tertiary decline'
+                            onClick={onHandleCancel}
+                            aria-label={textButtonCancel}
+                        >{textButtonCancel}</button>
+                    )}
+                </div>
             </div>
         </div>
     );

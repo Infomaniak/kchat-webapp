@@ -19,6 +19,7 @@ declare global {
     interface Window {
         desktopAPI?: Partial<DesktopAPI & {
             openKmeetCallWindow: (params: object) => void;
+            closeRingCallWindow: () => void;
         }>;
         callManager?: Partial<{
             onCallJoined: (callback: (_: any, props: {conferenceId: string}) => void) => void;
