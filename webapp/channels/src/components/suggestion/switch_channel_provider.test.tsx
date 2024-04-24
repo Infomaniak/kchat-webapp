@@ -970,6 +970,7 @@ describe('components/SwitchChannelProvider', () => {
                             last_viewed_at: 3,
                             type: 'G',
                             name: 'insight_gm_channel',
+display_name: 'insight_gm_channel',
                         },
                     },
                     channelsInTeam: {
@@ -987,13 +988,7 @@ describe('components/SwitchChannelProvider', () => {
 
         switchProvider.startNewRequest(searchText);
         await switchProvider.fetchUsersAndChannels(searchText, resultsCallback);
-        const expectedOrder = [
-
-            // 'insights',
-            'insight_gm_channel',
-            'threads',
-            'thread_gm_channel',
-        ];
+        const expectedOrder = ['threads', 'thread_gm_channel'];
 
         expect(resultsCallback).toBeCalledWith(expect.objectContaining({
             terms: expectedOrder,
