@@ -163,6 +163,7 @@ function MenuWithModal() {
         modal = (
             <GenericModal
                 show={showModal}
+                enforceFocus={false}
                 confirmButtonText='Confirm button'
                 modalHeaderText='A Modal'
                 onExited={() => setShowModal(false)}
@@ -204,6 +205,7 @@ function MenuWithSubMenuModal() {
         modal = (
             <GenericModal
                 show={showModal}
+                enforceFocus={false}
                 confirmButtonText='Confirm button'
                 modalHeaderText='A Modal'
                 onExited={() => setShowModal(false)}
