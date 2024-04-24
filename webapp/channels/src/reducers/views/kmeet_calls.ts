@@ -2,13 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {combineReducers} from 'redux';
+import type {AnyAction} from 'redux';
 
 import {PostTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {ActionTypes} from 'utils/constants';
 
-const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: GenericAction) => {
+import type {ViewsState} from 'types/store/views';
+
+const connectedKmeetUrls = (state: ViewsState['kmeetCalls']['connectedKmeetUrls'] = {}, action: AnyAction) => {
     switch (action.type) {
     case PostTypes.RECEIVED_NEW_POST:
         if (action.data.type && action.data.type === 'custom_call') {
@@ -44,6 +46,15 @@ const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: Generic
                 id: action.data.id,
             },
         };
+    case ActionTypes.VOICE_CHANNELS_RECEIVED: {
+        const nextState = {};
+
+        for (const call of action.data) {
+            Reflect.set(nextState, call.channel_id, {id: call.id, url: call.url});
+        }
+
+        return nextState;
+    }
     case ActionTypes.VOICE_CHANNEL_DELETED:
         if (state[action.data.channelID]) {
             const filteredCalls = Object.entries(state).filter(([key]) => key !== action.data.channelID);
@@ -55,13 +66,31 @@ const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: Generic
     }
 };
 
-export interface ConnectedKmeetUrlsState {
-    [channelID: string]: {
-        url: string;
-        id: string;
-    };
-}
+const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action: AnyAction) => {
+    switch (action.type) {
+    case ActionTypes.VOICE_CHANNELS_RECEIVED: {
+        const nextState = {};
+
+        for (const call of action.data) {
+            Reflect.set(nextState, call.channel_id, call);
+        }
+
+        console.log('nextState', nextState);
+
+        return nextState;
+    }
+    case ActionTypes.VOICE_CHANNEL_DELETED:
+        if (state[action.data.channelID]) {
+            const filteredCalls = Object.entries(state).filter(([key]) => key !== action.data.channelID);
+            return filteredCalls.length > 0 ? Object.fromEntries(filteredCalls) : {};
+        }
+        return state;
+    default:
+        return state;
+    }
+};
 
 export default combineReducers({
     connectedKmeetUrls,
+    conferences,
 });

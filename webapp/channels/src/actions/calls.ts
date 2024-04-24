@@ -465,3 +465,10 @@ export function putChannelActiveConf(channelID: string, id: string, url: string)
         });
     };
 }
+
+export function getMyMeets() {
+    return bindClientFunc({
+        clientFunc: Client4.getMeets,
+        onSuccess: ActionTypes.VOICE_CHANNELS_RECEIVED,
+    });
+}

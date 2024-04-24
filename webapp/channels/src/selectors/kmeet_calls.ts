@@ -14,3 +14,8 @@ export const connectedKmeetCallUrl = (state: GlobalState, channelID: string) => 
 export const connectedKmeetChannels = (state: GlobalState) => {
     return state.views.kmeetCalls.connectedKmeetUrls;
 };
+
+export const getConferenceByChannelId = (state: GlobalState, channelId: string) => {
+    console.log('state.views.kmeetCalls.conferences', state.views.kmeetCalls.conferences);
+    return state.views.kmeetCalls.conferences[channelId];
+};

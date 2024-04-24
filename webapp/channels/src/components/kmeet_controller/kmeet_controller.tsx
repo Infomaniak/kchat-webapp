@@ -2,7 +2,7 @@
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router-dom';
 
-import KmeetCalls from 'components/kmeet_calls';
+import Ringing from './ringing/ringing';
 
 const KmeetController = () => {
     const {path} = useRouteMatch();
@@ -10,8 +10,8 @@ const KmeetController = () => {
     return (
         <Switch>
             <Route
-                path={`${path}/calls/:conference`}
-                component={KmeetCalls}
+                path={`${path}/calls/:channelId/modal`}
+                component={Ringing}
             />
         </Switch>
     );

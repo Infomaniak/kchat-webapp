@@ -26,6 +26,7 @@ import {getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/us
 import type {DispatchFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
+import {getMyMeets} from 'actions/calls';
 import {getKSuiteBridge} from 'selectors/ksuite_bridge';
 
 import {getHistory} from 'utils/browser_history';
@@ -114,6 +115,7 @@ export function loadMe(): ActionFuncAsync<boolean> {
                         dispatch(getMe()),
                         dispatch(getMyPreferences()),
                         dispatch(getMyTeamMembers()),
+                        dispatch(getMyMeets()),
                     ]);
 
                     const isCollapsedThreads = isCollapsedThreadsEnabled(getState());

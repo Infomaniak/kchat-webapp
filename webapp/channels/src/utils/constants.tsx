@@ -364,6 +364,7 @@ export const ActionTypes = keyMirror({
     VOICE_CHANNEL_ADDED: null,
     VOICE_CHANNEL_PUT: null,
     VOICE_CHANNEL_DELETED: null,
+    VOICE_CHANNELS_RECEIVED: null,
 
     SHOW_EXPANDED_VIEW: null,
     HIDE_EXPANDED_VIEW: null,
