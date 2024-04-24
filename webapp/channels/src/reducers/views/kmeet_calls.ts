@@ -36,6 +36,14 @@ const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: Generic
                 id: action.data.id,
             },
         };
+    case ActionTypes.VOICE_CHANNEL_PUT:
+        return {
+            ...state,
+            [action.data.channelID]: {
+                url: action.data.url,
+                id: action.data.id,
+            },
+        };
     case ActionTypes.VOICE_CHANNEL_DELETED:
         if (state[action.data.channelID]) {
             const filteredCalls = Object.entries(state).filter(([key]) => key !== action.data.channelID);

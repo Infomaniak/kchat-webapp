@@ -2,6 +2,11 @@
 // See LICENSE.txt for license information.
 
 import type {GlobalState} from 'types/store';
+
+export const connectedKmeetCallId = (state: GlobalState, channelID: string) => {
+    return state.views.kmeetCalls.connectedKmeetUrls[channelID]?.id;
+};
+
 export const connectedKmeetCallUrl = (state: GlobalState, channelID: string) => {
     return state.views.kmeetCalls.connectedKmeetUrls[channelID]?.url;
 };

@@ -2,14 +2,14 @@
 // See LICENSE.txt for license information.
 
 import moment from 'moment-timezone';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
 
 import type {Post} from '@mattermost/types/posts';
 
-import {joinCall} from 'actions/calls';
+import {joinCall, putChannelActiveConf} from 'actions/calls';
 
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
@@ -34,6 +34,12 @@ const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInC
         startOrJoinCallInChannelV2(post.channel_id);
     };
     moment.locale(String(intl.locale));
+
+    useEffect(() => {
+        if (post.props.conference_id && meetingUrl && post.channel_id) {
+            dispatch(putChannelActiveConf(post.channel_id, post.props.conference_id, meetingUrl));
+        }
+    }, [dispatch, post.props.conference_id, meetingUrl, post.channel_id]);
 
     // M: missed
     // S: started

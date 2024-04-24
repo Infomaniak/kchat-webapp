@@ -19,7 +19,7 @@ import {
     connectedChannelID,
     voiceConnectedChannels,
 } from 'selectors/calls';
-import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
+import {connectedKmeetCallId, connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
 import DialingModal from 'components/kmeet_conference/ringing_dialog';
@@ -157,8 +157,7 @@ export function startOrJoinCallInChannelV2(channelID: string) {
         try {
             let kmeetUrl;
             const data = await Client4.startMeet(channelID);
-            console.log('DATA', data);
-            console.log('channelId', channelID);
+
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
             });
@@ -188,9 +187,9 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 }
             }
         } catch (error) {
-            console.log('ERROROOOR', error);
             if (isDesktopApp()) {
-                dispatch(startKmeetWindow());
+                const id = connectedKmeetCallId(getState(), channelID);
+                dispatch(startKmeetWindow(id));
             } else {
                 const url = connectedKmeetCallUrl(getState(), channelID);
 
@@ -454,4 +453,17 @@ function replacePreviousAddedConference(dispatch: DispatchFunc, call: Call, glob
             id: call.id,
         },
     });
+}
+
+export function putChannelActiveConf(channelID: string, id: string, url: string) {
+    return async (dispatch: DispatchFunc) => {
+        dispatch({
+            type: ActionTypes.VOICE_CHANNEL_PUT,
+            data: {
+                channelID,
+                url,
+                id,
+            },
+        });
+    };
 }
