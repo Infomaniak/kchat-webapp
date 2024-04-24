@@ -320,16 +320,12 @@ export function joinCall(conferenceId: string, meetingUrl: string) {
 
 export function notifyJoinCall(conferenceId: string) {
     return async () => {
-        console.log('NOTIFY JOIN CALL');
-        console.log('conferenceId', conferenceId);
         await Client4.declineIncomingMeetCall(conferenceId);
     };
 }
 
 export function notifyDeclineCall(conferenceId: string) {
     return async () => {
-        console.log('NOTIFY JOIN CALL');
-        console.log('conferenceId', conferenceId);
         await Client4.declineIncomingMeetCall(conferenceId);
     };
 }
