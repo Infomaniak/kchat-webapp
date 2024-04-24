@@ -75,8 +75,13 @@ const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action
             Reflect.set(nextState, call.channel_id, call);
         }
 
-        console.log('nextState', nextState);
+        return nextState;
+    }
+    case ActionTypes.CALL_RECEIVED: {
+        const nextState = {...state};
+        const call = action.data.msg;
 
+        Reflect.set(nextState, call.channel_id, call);
         return nextState;
     }
     case ActionTypes.VOICE_CHANNEL_DELETED:

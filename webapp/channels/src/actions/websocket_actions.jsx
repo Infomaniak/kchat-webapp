@@ -120,6 +120,7 @@ import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, receivedCall} from './calls';
+import {externalJoinCall} from './kmeet_calls';
 import {handleServerEvent} from './servers_actions';
 
 const dispatch = store.dispatch;
@@ -1883,6 +1884,8 @@ function handleConferenceUserConnected(msg) {
         const calls = voiceConnectedChannels(state);
         const currentUserId = getCurrentUserId(getState());
 
+        console.log('msg', msg);
+
         if (currentUserId === msg?.data?.user_id) {
             if (isDesktopApp()) {
                 window.postMessage(
@@ -1910,6 +1913,8 @@ function handleConferenceUserConnected(msg) {
                     id: keys[0],
                 },
             });
+
+            doDispatch(externalJoinCall(msg));
         }
     };
 }

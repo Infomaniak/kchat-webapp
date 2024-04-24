@@ -17,16 +17,22 @@ export function openRingingModal(channelId: string) {
     window.open(`${window.location.origin}/kmeet/calls/${channelId}/modal`, '_blank', 'top=500,left=200,frame=false,nodeIntegration=no');
 }
 
+export function externalJoinCall(msg: any) {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        console.log('msg', msg);
+    };
+}
+
 export function joinCall(channelId: string) {
-    return async (dispatch: DispatchFunc, state: GlobalState) => {
-        Client4.acceptIncomingMeetCall(channelId);
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const conference = getConferenceByChannelId(getState(), channelId);
+        Client4.acceptIncomingMeetCall(conference.id);
 
         if (isDesktopApp()) {
             dispatch(startKmeetWindow(channelId));
             return;
         }
 
-        const conference = getConferenceByChannelId(state, channelId);
         window.open(conference.url, '_blank', 'noopener');
     };
 }

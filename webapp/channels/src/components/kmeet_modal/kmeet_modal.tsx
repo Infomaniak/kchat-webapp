@@ -1,8 +1,10 @@
+import classNames from 'classnames';
 import React, {useEffect, useMemo} from 'react';
 import type {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users.js';
 
@@ -11,6 +13,8 @@ import {joinCall, declineCall, leaveCall} from 'actions/kmeet_calls';
 import Avatars from 'components/widgets/users/avatars';
 
 import './kmeet_modal.scss';
+import {isDesktopApp} from 'utils/user_agent';
+
 import type {Conference} from 'types/conference';
 
 type Props = {
@@ -41,11 +45,12 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         window.addEventListener('offline', () => {
             onHandleDecline();
         });
-        const timeout = setTimeout(() => {
-            onHandleDecline();
-        }, 30000);
+
+        // const timeout = setTimeout(() => {
+        //     onHandleDecline();
+        // }, 30000);
         return () => {
-            clearTimeout(timeout);
+            // clearTimeout(timeout);
         };
     }, [onHandleDecline]);
 
@@ -112,9 +117,16 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
     const textButtonCancel = formatMessage({id: 'calling_modal.button.cancel', defaultMessage: 'Cancel'});
 
+    const Container = isDesktopApp() === false ? GenericModal : 'div';
+
     return (
-        <div
-            className='call-modal'
+        <Container
+            className={classNames('call-modal', {
+                desktop: isDesktopApp(),
+            })}
+            aria-labelledby='contained-modal-title-vcenter'
+            headerButton={null}
+            footerContent={null}
         >
             <div>
                 <div
@@ -158,7 +170,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                     )}
                 </div>
             </div>
-        </div>
+        </Container>
     );
 };
 

@@ -23,7 +23,7 @@ import {getCurrentLocale} from 'selectors/i18n';
 import {connectedKmeetCallId, connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
-import DialingModal from 'components/kmeet_conference/ringing_dialog';
+import kmeetModal from 'components/kmeet_modal';
 
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {ringing, stopRing} from 'utils/notification_sounds';
@@ -286,9 +286,11 @@ export function receivedCall(call: Call, currentUserId: string) {
             dispatch(openModal(
                 {
                     modalId: ModalIdentifiers.INCOMING_CALL,
-                    dialogType: DialingModal,
+                    dialogType: kmeetModal,
                     dialogProps: {
-                        toneTimeOut: 30000,
+                        channelId: call.channel_id,
+
+                        // toneTimeOut: 30000,
                     },
                 },
             ));

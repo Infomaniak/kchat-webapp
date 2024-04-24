@@ -17,7 +17,6 @@ const Ringing = () => {
     const channel = useSelector((state: GlobalState) => getChannelSelector(state, params.channelId));
 
     useEffect(() => {
-        console.log('DISPATCHING GET CHANNEL');
         dispatch(getChannel(params.channelId));
     }, [dispatch, params.channelId]);
 
