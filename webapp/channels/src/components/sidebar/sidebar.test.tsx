@@ -19,7 +19,7 @@ import type {GlobalState} from 'types/store';
 import Sidebar from './sidebar';
 
 describe('components/sidebar', () => {
-    const currentTeamId = 'fake_team_id';
+    const currentTeamId = 'team_1';
 
     const baseProps = {
         canCreatePublicChannel: true,
