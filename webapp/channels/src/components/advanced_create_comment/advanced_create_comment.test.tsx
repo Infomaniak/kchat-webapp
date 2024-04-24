@@ -46,6 +46,7 @@ describe('components/AdvancedCreateComment', () => {
 
     const emptyDraft: PostDraft = TestHelper.getPostDraftMock({message: ''});
     const defaultFileInfo: FileInfo = TestHelper.getFileInfoMock();
+const mockEmoji = TestHelper.getSystemEmojiMock({name: 'smile', short_name: 'smile'});
 
     const baseProps: Props = {
         channelId,
@@ -243,7 +244,7 @@ describe('components/AdvancedCreateComment', () => {
 
         (wrapper.instance() as any).textboxRef.current = {getInputBox: jest.fn(mockImpl), getBoundingClientRect: jest.fn(), focus: jest.fn()};
 
-        wrapper.instance().handleEmojiClick({name: 'smile'} as any);
+        wrapper.instance().handleEmojiClick(mockEmoji);
 
         jest.advanceTimersByTime(Constants.SAVE_DRAFT_TIMEOUT);
         expect(onUpdateCommentDraft).toHaveBeenCalled();
@@ -257,7 +258,7 @@ describe('components/AdvancedCreateComment', () => {
         wrapper.setState({draft: TestHelper.getPostDraftMock({message: 'test', uploadsInProgress: [], fileInfos: []}),
             caretPosition: 'test'.length, // cursor is at the end
         });
-        wrapper.instance().handleEmojiClick({name: 'smile'} as any);
+        wrapper.instance().handleEmojiClick(mockEmoji);
 
         // Message with no space at the end
         jest.advanceTimersByTime(Constants.SAVE_DRAFT_TIMEOUT);
@@ -269,7 +270,7 @@ describe('components/AdvancedCreateComment', () => {
         wrapper.setState({draft: TestHelper.getPostDraftMock({message: 'test ', uploadsInProgress: [], fileInfos: []}),
             caretPosition: 'test '.length, // cursor is at the end
         });
-        wrapper.instance().handleEmojiClick({name: 'smile'} as any);
+        wrapper.instance().handleEmojiClick(mockEmoji);
 
         // Message with space at the end
         jest.advanceTimersByTime(Constants.SAVE_DRAFT_TIMEOUT);
