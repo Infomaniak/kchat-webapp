@@ -190,7 +190,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
       />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
         icon={
           <AccountOutlineIcon
@@ -499,7 +499,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
       />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
         icon={
           <AccountOutlineIcon
@@ -760,7 +760,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
       />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
         icon={
           <AccountOutlineIcon
@@ -1021,7 +1021,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
       />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
         icon={
           <AccountOutlineIcon
@@ -1283,7 +1283,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
       />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
         icon={
           <AccountOutlineIcon
@@ -1520,7 +1520,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
       />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
         icon={
           <AccountOutlineIcon
@@ -1749,7 +1749,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
       />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
         icon={
           <AccountOutlineIcon
@@ -2010,7 +2010,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
       />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
         icon={
           <AccountOutlineIcon
@@ -2319,7 +2319,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
       />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
         icon={
           <AccountOutlineIcon
