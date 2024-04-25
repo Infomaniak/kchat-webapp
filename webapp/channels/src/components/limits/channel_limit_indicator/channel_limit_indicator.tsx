@@ -40,8 +40,8 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
     const privateChannelLimitReached = privateChannelsUsageDelta >= 0;
 
     const loadUsage = useCallback(async () => {
-        const {data} = await dispatch(getUsage());
-        if (data) {
+        const result = await dispatch(getUsage());
+        if (result?.data) {
             setLoaded(true);
         }
     }, [dispatch]);

@@ -209,8 +209,8 @@ export const getTheme: (state: GlobalState) => Theme = createShallowSelector(
     'getTheme',
     getThemePreference,
     getDefaultTheme,
-    (state: any) => state.views.theme.storedTheme,
-    (state: any) => state.views.theme.themePreference,
+    (state: any) => state.views?.theme?.storedTheme,
+    (state: any) => state.views?.theme?.themePreference,
     (themePreference, defaultTheme, storedTheme, desktopThemePreference): Theme => {
         const themeValue: Theme | string = storedTheme ?? themePreference?.value ?? defaultTheme;
 

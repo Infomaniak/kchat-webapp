@@ -7,8 +7,9 @@ import React from 'react';
 import type {Channel, ChannelType} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
-import {renderWithContext, screen} from 'tests/react_testing_utils';
 import {Constants} from 'utils/constants';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import ChannelIntroMessage from './channel_intro_message';
 
@@ -52,10 +53,11 @@ describe('components/post_view/ChannelIntroMessages', () => {
 
     describe('test Open Channel', () => {
         test('should match component state, without boards', () => {
-            renderWithContext(
+            const initialState = {};
+            const {container} = renderWithContext(
                 <ChannelIntroMessage{...baseProps}/>, initialState,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
     });
 
@@ -70,22 +72,22 @@ describe('components/post_view/ChannelIntroMessages', () => {
         };
 
         test('should match component state, no profiles', () => {
-            renderWithContext(
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
 
         test('should match component state, with profiles', () => {
-            renderWithContext(
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     channelProfiles={users}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
     });
 
@@ -100,23 +102,23 @@ describe('components/post_view/ChannelIntroMessages', () => {
         };
 
         test('should match component state, without teammate', () => {
-            renderWithContext(
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
 
         test('should match component state, with teammate', () => {
-            renderWithContext(
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     teammate={user1 as UserProfile}
                     teammateName='my teammate'
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
     });
 
@@ -132,23 +134,23 @@ describe('components/post_view/ChannelIntroMessages', () => {
         };
 
         test('should match component state, readonly', () => {
-            renderWithContext(
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     isReadOnly={true}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
 
         test('should match component state without any permission', () => {
-            renderWithContext(
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     teamIsGroupConstrained={true}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
 
         test('should match snapshot, with enableUserCreation', () => {
@@ -185,12 +187,12 @@ describe('components/post_view/ChannelIntroMessages', () => {
         };
 
         test('should match component state', () => {
-            renderWithContext(
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
     });
 });

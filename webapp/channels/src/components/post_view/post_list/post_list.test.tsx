@@ -11,6 +11,7 @@ import {PostRequestTypes} from 'utils/constants';
 import PostList, {MAX_EXTRA_PAGES_LOADED} from './post_list';
 
 const actionsProp = {
+    loadDeletedPosts: jest.fn().mockImplementation(() => Promise.resolve()),
     loadPostsAround: jest.fn().mockImplementation(() => Promise.resolve({atLatestMessage: true, atOldestmessage: true})),
     loadUnreads: jest.fn().mockImplementation(() => Promise.resolve({atLatestMessage: true, atOldestmessage: true})),
     loadPosts: jest.fn().mockImplementation(() => Promise.resolve({moreToLoad: false})),

@@ -8,7 +8,7 @@ exports[`components/Root Routes Should mount public product routes 1`] = `
       component={[Function]}
       path="/error"
     />
-    <HFRoute
+    <Route
       component={[Function]}
       path="/login"
     />

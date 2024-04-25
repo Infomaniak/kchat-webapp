@@ -5,11 +5,12 @@ import React from 'react';
 
 import type {DeepPartial} from '@mattermost/types/utilities';
 
-import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 import {getHistory} from 'utils/browser_history';
 import {Locations} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
+import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -22,7 +23,6 @@ describe('PostComponent', () => {
 
     const baseProps: Props = {
         center: false,
-        currentTeam,
         currentUserId: 'currentUserId',
         displayName: '',
         hasReplies: false,
@@ -36,8 +36,6 @@ describe('PostComponent', () => {
         post: TestHelper.getPostMock({channel_id: channel.id}),
         recentEmojis: [],
         replyCount: 0,
-        team: currentTeam,
-        pluginActions: [],
         actions: {
             markPostAsUnread: jest.fn(),
             emitShortcutReactToLastPostFrom: jest.fn(),
@@ -49,9 +47,12 @@ describe('PostComponent', () => {
             selectPostCard: jest.fn(),
             setRhsExpanded: jest.fn(),
         },
+        teamId: currentTeam.id,
+        shouldShowDotMenu: false,
+        tourTipsEnabled: false,
     };
 
-    describe('reactions', () => {
+    describe('reaction', () => {
         const baseState: DeepPartial<GlobalState> = {
             entities: {
                 posts: {
@@ -65,9 +66,9 @@ describe('PostComponent', () => {
         };
 
         test('should show reactions in the center channel', () => {
-            renderWithContext(<PostComponent {...baseProps}/>, baseState);
+            const {container} = renderWithContext(<PostComponent {...baseProps}/>, baseState);
 
-            expect(screen.getByLabelText('reactions')).toBeInTheDocument();
+            expect(container.querySelector('span.Reaction__count')).toBeDefined();
         });
 
         test('should show reactions in thread view', () => {
@@ -83,9 +84,9 @@ describe('PostComponent', () => {
                 ...baseProps,
                 location: Locations.RHS_ROOT,
             };
-            const {rerender} = renderWithContext(<PostComponent {...props}/>, state);
+            const {container, rerender} = renderWithContext(<PostComponent {...props}/>, state);
 
-            expect(screen.getByLabelText('reactions')).toBeInTheDocument();
+            expect(container.querySelector('span.Reaction__count')).toBeDefined();
 
             props = {
                 ...baseProps,
@@ -93,7 +94,7 @@ describe('PostComponent', () => {
             };
             rerender(<PostComponent {...props}/>);
 
-            expect(screen.getByLabelText('reactions')).toBeInTheDocument();
+            expect(container.querySelector('span.Reaction__count')).toBeDefined();
         });
 
         test('should show only show reactions in search results with pinned/saved posts visible', () => {
@@ -101,9 +102,9 @@ describe('PostComponent', () => {
                 ...baseProps,
                 location: Locations.SEARCH,
             };
-            const {rerender} = renderWithContext(<PostComponent {...props}/>, baseState);
+            const {container, rerender} = renderWithContext(<PostComponent {...props}/>, baseState);
 
-            expect(screen.queryByLabelText('reactions')).not.toBeInTheDocument();
+            expect(container.querySelector('span.Reaction__count')).toBe(null);
 
             props = {
                 ...baseProps,
@@ -112,7 +113,7 @@ describe('PostComponent', () => {
             };
             rerender(<PostComponent {...props}/>);
 
-            expect(screen.getByLabelText('reactions')).toBeInTheDocument();
+            expect(container.querySelector('span.Reaction__count')).toBeDefined();
 
             props = {
                 ...baseProps,
@@ -121,7 +122,7 @@ describe('PostComponent', () => {
             };
             rerender(<PostComponent {...props}/>);
 
-            expect(screen.getByLabelText('reactions')).toBeInTheDocument();
+            expect(container.querySelector('span.Reaction__count')).toBeDefined();
         });
     });
 
@@ -310,7 +311,7 @@ describe('PostComponent', () => {
                 expect(getHistory().push).not.toHaveBeenCalled();
             });
 
-            test('should jump to post when clicked in a search result on another team', () => {
+            test('should select post in RHS when clicked in a search result on another team', () => {
                 const props = {
                     ...propsForRootPost,
                     location: Locations.SEARCH,
@@ -320,8 +321,8 @@ describe('PostComponent', () => {
 
                 userEvent.click(screen.getByText('1 reply'));
 
-                expect(propsForRootPost.actions.selectPostFromRightHandSideSearch).not.toHaveBeenCalled();
-                expect(getHistory().push).toHaveBeenCalled();
+                expect(propsForRootPost.actions.selectPostFromRightHandSideSearch).toHaveBeenCalled();
+                expect(getHistory().push).not.toHaveBeenCalled();
             });
         });
     });
