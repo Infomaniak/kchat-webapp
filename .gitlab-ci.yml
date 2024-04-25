@@ -179,7 +179,7 @@ unit_test:
       coverage_report:
         coverage_format: cobertura
         path: webapp/channels/coverage/cobertura-coverage.xml
-  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+  coverage: /Lines\s*:\s*(\d+.?\d*)%/
   cache:
     paths:
       - .jestcache
