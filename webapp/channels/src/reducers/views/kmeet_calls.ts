@@ -101,15 +101,14 @@ const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action
         }
         return state;
     case ActionTypes.KMEET_CALL_USER_CONNECTED: {
-        return {
-            ...state,
-            [action.data.channelId]: {
-                joined: [
-                    ...state[action.data.channelId].joined || [],
-                    action.data.connectedUserId,
-                ],
-            },
-        };
+        const nextState = {...state};
+        const conference = Reflect.get(nextState, action.data.channelId);
+        const newSet = new Set([action.data.connectedUserId, ...conference.joined]);
+        const joined = Array.from(newSet);
+
+        Reflect.set(nextState, action.data.channelId, {...conference, joined});
+
+        return nextState;
     }
     default:
         return state;

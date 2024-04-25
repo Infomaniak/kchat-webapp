@@ -6,7 +6,7 @@ import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entit
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
-import {getConferenceByChannelId} from 'selectors/kmeet_calls';
+import {getConferenceByChannelId, getIsUserInConference, getTotalJoinedUserInConference} from 'selectors/kmeet_calls';
 
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
@@ -21,21 +21,22 @@ export function openRingingModal(channelId: string) {
 
 export function externalJoinCall(msg: any) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
-        const conference = getConferenceByChannelId(getState(), msg.data.channel_id);
-        const currentUserId = getCurrentUserId(getState());
+        const state = getState();
+        const conference = getConferenceByChannelId(state, msg.data.channel_id);
+        const currentUserId = getCurrentUserId(state);
+        const isUserInConference = getIsUserInConference(state, msg.data.channel_id, msg.data.user_id);
+        const totalJoinedUserInConference = getTotalJoinedUserInConference(state, msg.data.channel_id);
 
-        console.log('conference', conference);
-        console.log('currentUserId', currentUserId);
-        if (!conference) {
+        if (!conference || isUserInConference) {
             return;
         }
 
-        if (conference.user_id === currentUserId) {
+        if (conference.user_id === currentUserId && totalJoinedUserInConference === 0 && msg.data.user_id !== currentUserId) {
             if (isDesktopApp()) {
                 dispatch(startKmeetWindow(msg.data.channel_id));
             } else {
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-                window.open(msg.data.url, '_blank', 'noopener');
+                window.open(conference.url, '_blank', 'noopener');
             }
         }
 
@@ -82,13 +83,13 @@ export function leaveCall(channelId: string) {
         const conference = getConferenceByChannelId(state, channelId);
         const currentUserId = getCurrentUserId(getState());
 
+        await Client4.leaveMeet(conference.id);
+
         if (isDesktopApp()) {
             window.desktopAPI?.closeRingCallWindow?.();
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         }
-
-        await Client4.leaveMeet(conference.id);
 
         dispatch({
             type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
