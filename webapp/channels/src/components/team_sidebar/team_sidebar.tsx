@@ -17,13 +17,16 @@ import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import TeamButton from 'components/team_sidebar/components/team_button';
 
-import Pluggable from 'plugins/pluggable';
 import {Constants} from 'utils/constants';
+import {isKeyPressed} from 'utils/keyboard';
 import {getCurrentProduct} from 'utils/products';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
+
+import WebSocketClient from 'client/web_websocket_client';
+import Pluggable from 'plugins/pluggable';
 
 import type {PropsFromRedux} from './index';
 
@@ -74,9 +77,9 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
     }
 
     switchToPrevOrNextTeam = (e: KeyboardEvent, currentTeamId: string, teams: Team[]) => {
-        if (Utils.isKeyPressed(e, Constants.KeyCodes.UP) || Utils.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
+        if (isKeyPressed(e, Constants.KeyCodes.UP) || isKeyPressed(e, Constants.KeyCodes.DOWN)) {
             e.preventDefault();
-            const delta = Utils.isKeyPressed(e, Constants.KeyCodes.DOWN) ? 1 : -1;
+            const delta = isKeyPressed(e, Constants.KeyCodes.DOWN) ? 1 : -1;
             const pos = teams.findIndex((team: Team) => team.id === currentTeamId);
             const newPos = pos + delta;
 
@@ -110,7 +113,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         ];
 
         for (const idx in digits) {
-            if (Utils.isKeyPressed(e, digits[idx]) && parseInt(idx, 10) < teams.length) {
+            if (isKeyPressed(e, digits[idx]) && parseInt(idx, 10) < teams.length) {
                 e.preventDefault();
 
                 // prevents reloading the current team, while still capturing the keyboard shortcut
@@ -148,6 +151,13 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
             this.setState({showOrder: false});
         }
     };
+
+    componentDidUpdate(prevProps: Props) {
+        // TODO: debounce
+        if (prevProps.currentTeamId !== this.props.currentTeamId && this.props.enableWebSocketEventScope) {
+            WebSocketClient.updateActiveTeam(this.props.currentTeamId);
+        }
+    }
 
     componentDidMount() {
         // this.props.actions.getTeams(0, 200);

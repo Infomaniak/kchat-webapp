@@ -6,7 +6,8 @@ import {useSelector} from 'react-redux';
 
 import {CustomStatusDuration} from '@mattermost/types/users';
 
-import {getCurrentUserTimezone} from 'selectors/general';
+import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
+
 import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 'selectors/views/custom_status';
 
 import RenderEmoji from 'components/emoji/render_emoji';
@@ -43,12 +44,11 @@ function CustomStatusEmoji({
     const getCustomStatus = useMemo(makeGetCustomStatus, []);
     const customStatus = useSelector((state: GlobalState) => getCustomStatus(state, userID));
 
-    const timezone = useSelector(getCurrentUserTimezone);
+    const timezone = useSelector(getCurrentTimezone);
 
     const customStatusExpired = useSelector((state: GlobalState) => isCustomStatusExpired(state, customStatus));
     const customStatusEnabled = useSelector(isCustomStatusEnabled);
-    const isCustomStatusSet = Boolean(customStatusEnabled && customStatus?.emoji && !customStatusExpired);
-    if (!isCustomStatusSet) {
+    if (!customStatusEnabled || !customStatus?.emoji || customStatusExpired) {
         return null;
     }
 

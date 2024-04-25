@@ -264,7 +264,7 @@ const PostComponent = (props: Props): JSX.Element => {
             'post--comment same--root': fromAutoResponder,
             'post--pinned-or-flagged': (post.is_pinned || props.isFlagged) && props.location === Locations.CENTER,
             'mention-comment': props.isCommentMention,
-            'post--thread': props.location === Locations.RHS_COMMENT || Locations.RHS_ROOT,
+            'post--thread': isRHS,
         });
     };
 
@@ -480,7 +480,7 @@ const PostComponent = (props: Props): JSX.Element => {
                 onMouseOver={handleMouseOver}
                 onMouseLeave={handleMouseLeave}
             >
-                {(Boolean(isSearchResultItem) || (props.location !== Locations.CENTER && props.isFlagged)) &&
+                {(Boolean(isSearchResultItem) || (props.location !== Locations.CENTER && props.isPinnedPosts && props.isFlagged)) &&
                     <div
                         className='search-channel__name__container'
                         aria-hidden='true'

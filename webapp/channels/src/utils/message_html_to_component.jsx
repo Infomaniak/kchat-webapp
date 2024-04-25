@@ -101,7 +101,6 @@ export function messageHtmlToComponent(html, options = {}) {
                 const callAtMention = (
                     <AtMention
                         mentionName={mentionName}
-                        hasMention={true}
                         disableHighlight={!mentionHighlight}
                         disableGroupHighlight={disableGroupHighlight}
                         channelId={options.channelId}

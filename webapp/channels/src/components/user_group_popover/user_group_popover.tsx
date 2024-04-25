@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {CloseIcon, MagnifyIcon} from '@infomaniak/compass-icons/components';
-import {debounce} from 'lodash';
+import {MagnifyIcon} from '@infomaniak/compass-icons/components';
+import debounce from 'lodash/debounce';
 import React, {useEffect, useCallback, useState, useRef} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import styled from 'styled-components';
@@ -20,19 +20,15 @@ import Popover from 'components/widgets/popover';
 
 import Constants, {A11yClassNames, A11yCustomEventTypes, ModalIdentifiers} from 'utils/constants';
 import type {A11yFocusEventDetail} from 'utils/constants';
+import * as Keyboard from 'utils/keyboard';
 import {shouldFocusMainTextbox} from 'utils/post_utils';
-import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 
+import {Load} from './constants';
 import useShouldClose from './useShouldClose';
-import './user_group_popover.scss';
 
-export enum Load {
-    DONE,
-    LOADING,
-    FAILED,
-}
+import './user_group_popover.scss';
 
 export type Props = {
 
@@ -171,7 +167,7 @@ const UserGroupPopover = (props: Props) => {
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (shouldFocusMainTextbox(e, document.activeElement)) {
             hide();
-        } else if (Utils.isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
+        } else if (Keyboard.isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
             returnFocus();
         }
     };
@@ -206,17 +202,19 @@ const UserGroupPopover = (props: Props) => {
                             {group.display_name}
                         </Title>
                         <CloseButton
-                            className='btn-icon'
+                            className='btn btn-sm btn-compact btn-icon'
                             aria-label={formatMessage({id: 'user_group_popover.close', defaultMessage: 'Close'})}
                             onClick={handleClose}
                             ref={closeRef}
                         >
-                            <CloseIcon/>
+                            <i
+                                className='icon icon-close'
+                            />
                         </CloseButton>
                     </Heading>
                     <Subtitle>
                         <span className='overflow--ellipsis text-nowrap'>{'@'}{group.name}</span>
-                        <Dot>{' • '}</Dot>
+                        <Dot>{'•'}</Dot>
                         <FormattedMessage
                             id='user_group_popover.memberCount'
                             defaultMessage='{member_count} {member_count, plural, one {Member} other {Members}}'
@@ -304,7 +302,7 @@ const CloseButton = styled.button`
     z-index: 9;
 
     svg {
-        width: 14px;
+        width: 18px;
     }
 `;
 
@@ -313,12 +311,12 @@ const Heading = styled.div`
     font-size: 16px;
     display: flex;
     align-items: center;
-    font-family: 'SuisseIntl', sans-serif;
+    font-family: 'Metropolis', sans-serif;
 `;
 
 const Subtitle = styled.div`
     font-size: 12px;
-    color: rgba(var(--center-channel-color-rgb), 0.64);
+    color: rgba(var(--center-channel-color-rgb), 0.75);
     display: flex;
 `;
 

@@ -47,10 +47,9 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
           <OverlayTrigger
             defaultOverlayShown={false}
             overlay={
-              <Memo(Connect(injectIntl(ProfilePopover)))
+              <Memo(ProfilePopover)
                 channelId="channel_id"
                 className="user-profile-popover"
-                hasMention={false}
                 hide={[Function]}
                 src="/api/v4/users/user_id/image?_=0"
                 userId="user_id"
@@ -70,7 +69,6 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                 <OverlayWrapper
                   channelId="channel_id"
                   className="user-profile-popover"
-                  hasMention={false}
                   hide={[Function]}
                   intl={
                     Object {
@@ -132,7 +130,7 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                   size="md"
                 >
                   <button
-                    className="RoundButton-jiaLDG gwQnbV style--none"
+                    className="RoundButton-jiiGed hRdoFj style--none"
                     size="md"
                   >
                     <span
@@ -156,9 +154,7 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                     </span>
                   </button>
                 </RoundButton>
-                <StatusIcon
-                  button={false}
-                  className=""
+                <Memo(StatusIcon)
                   status="status"
                 >
                   <StatusOfflineIcon
@@ -189,7 +185,7 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                       </svg>
                     </span>
                   </StatusOfflineIcon>
-                </StatusIcon>
+                </Memo(StatusIcon)>
               </span>
             </OverlayTrigger>
           </OverlayTrigger>
@@ -236,7 +232,6 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                 }
                 channelNamesMap={Object {}}
                 dispatch={[Function]}
-                editedAt={0}
                 emojiMap={
                   EmojiMap {
                     "customEmojis": Map {},
@@ -245,7 +240,6 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                 }
                 enableFormatting={true}
                 hasImageProxy={false}
-                imagesMetadata={Object {}}
                 managedResourcePaths={Array []}
                 mentionKeys={Array []}
                 message="message"
@@ -256,8 +250,6 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                     "mentionHighlight": false,
                   }
                 }
-                postId=""
-                proxyImages={true}
                 siteURL="http://localhost:8065"
                 team={
                   Object {
@@ -329,10 +321,9 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
           <OverlayTrigger
             defaultOverlayShown={false}
             overlay={
-              <Memo(Connect(injectIntl(ProfilePopover)))
+              <Memo(ProfilePopover)
                 channelId="channel_id"
                 className="user-profile-popover"
-                hasMention={false}
                 hide={[Function]}
                 src="/api/v4/users/user_id/image?_=0"
                 userId="user_id"
@@ -352,7 +343,6 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                 <OverlayWrapper
                   channelId="channel_id"
                   className="user-profile-popover"
-                  hasMention={false}
                   hide={[Function]}
                   intl={
                     Object {
@@ -414,7 +404,7 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                   size="md"
                 >
                   <button
-                    className="RoundButton-jiaLDG gwQnbV style--none"
+                    className="RoundButton-jiiGed hRdoFj style--none"
                     size="md"
                   >
                     <span
@@ -438,9 +428,7 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                     </span>
                   </button>
                 </RoundButton>
-                <StatusIcon
-                  button={false}
-                  className=""
+                <Memo(StatusIcon)
                   status="status"
                 >
                   <StatusOfflineIcon
@@ -471,7 +459,7 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                       </svg>
                     </span>
                   </StatusOfflineIcon>
-                </StatusIcon>
+                </Memo(StatusIcon)>
               </span>
             </OverlayTrigger>
           </OverlayTrigger>
@@ -518,7 +506,6 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                 }
                 channelNamesMap={Object {}}
                 dispatch={[Function]}
-                editedAt={0}
                 emojiMap={
                   EmojiMap {
                     "customEmojis": Map {},
@@ -527,7 +514,6 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                 }
                 enableFormatting={true}
                 hasImageProxy={false}
-                imagesMetadata={Object {}}
                 managedResourcePaths={Array []}
                 mentionKeys={Array []}
                 message="message"
@@ -538,8 +524,6 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                     "mentionHighlight": false,
                   }
                 }
-                postId=""
-                proxyImages={true}
                 siteURL="http://localhost:8065"
                 team={
                   Object {
@@ -587,7 +571,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
     priority={
       Object {
         "priority": "important",
-        "requested_ack": true,
+        "requested_ack": false,
       }
     }
     setIsEditing={[Function]}
@@ -617,10 +601,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
           <OverlayTrigger
             defaultOverlayShown={false}
             overlay={
-              <Memo(Connect(injectIntl(ProfilePopover)))
+              <Memo(ProfilePopover)
                 channelId="channel_id"
                 className="user-profile-popover"
-                hasMention={false}
                 hide={[Function]}
                 src="/api/v4/users/user_id/image?_=0"
                 userId="user_id"
@@ -640,7 +623,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                 <OverlayWrapper
                   channelId="channel_id"
                   className="user-profile-popover"
-                  hasMention={false}
                   hide={[Function]}
                   intl={
                     Object {
@@ -702,7 +684,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                   size="md"
                 >
                   <button
-                    className="RoundButton-jiaLDG gwQnbV style--none"
+                    className="RoundButton-jiiGed hRdoFj style--none"
                     size="md"
                   >
                     <span
@@ -726,9 +708,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                     </span>
                   </button>
                 </RoundButton>
-                <StatusIcon
-                  button={false}
-                  className=""
+                <Memo(StatusIcon)
                   status="status"
                 >
                   <StatusOfflineIcon
@@ -759,7 +739,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                       </svg>
                     </span>
                   </StatusOfflineIcon>
-                </StatusIcon>
+                </Memo(StatusIcon)>
               </span>
             </OverlayTrigger>
           </OverlayTrigger>
@@ -800,7 +780,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                     uppercase={true}
                   >
                     <div
-                      className="TagWrapper-kePjec kBGwxg Tag Tag--info Tag--xs"
+                      className="TagWrapper-keYggn iVAsXk Tag Tag--info Tag--xs"
                     >
                       <AlertCircleOutlineIcon
                         size={10}
@@ -820,7 +800,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                       </AlertCircleOutlineIcon>
                       <TagText>
                         <span
-                          className="TagText-bVYZZa fCxrqJ"
+                          className="TagText-bWgUzx kzWPbz"
                         >
                           IMPORTANT
                         </span>
@@ -829,26 +809,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                   </TagWrapper>
                 </Memo(Tag)>
               </PriorityLabel>
-              <div
-                className="DraftPanelBody__priority-ack"
-              >
-                <CheckCircleOutlineIcon
-                  size={14}
-                >
-                  <svg
-                    fill="currentColor"
-                    height={14}
-                    version="1.1"
-                    viewBox="0 0 24 24"
-                    width={14}
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
-                    />
-                  </svg>
-                </CheckCircleOutlineIcon>
-              </div>
             </div>
           </div>
           <div
@@ -876,7 +836,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                 }
                 channelNamesMap={Object {}}
                 dispatch={[Function]}
-                editedAt={0}
                 emojiMap={
                   EmojiMap {
                     "customEmojis": Map {},
@@ -885,7 +844,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                 }
                 enableFormatting={true}
                 hasImageProxy={false}
-                imagesMetadata={Object {}}
                 managedResourcePaths={Array []}
                 mentionKeys={Array []}
                 message="message"
@@ -896,8 +854,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                     "mentionHighlight": false,
                   }
                 }
-                postId=""
-                proxyImages={true}
                 siteURL="http://localhost:8065"
                 team={
                   Object {
@@ -975,10 +931,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
           <OverlayTrigger
             defaultOverlayShown={false}
             overlay={
-              <Memo(Connect(injectIntl(ProfilePopover)))
+              <Memo(ProfilePopover)
                 channelId="channel_id"
                 className="user-profile-popover"
-                hasMention={false}
                 hide={[Function]}
                 src="/api/v4/users/user_id/image?_=0"
                 userId="user_id"
@@ -998,7 +953,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                 <OverlayWrapper
                   channelId="channel_id"
                   className="user-profile-popover"
-                  hasMention={false}
                   hide={[Function]}
                   intl={
                     Object {
@@ -1060,7 +1014,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                   size="md"
                 >
                   <button
-                    className="RoundButton-jiaLDG gwQnbV style--none"
+                    className="RoundButton-jiiGed hRdoFj style--none"
                     size="md"
                   >
                     <span
@@ -1084,9 +1038,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                     </span>
                   </button>
                 </RoundButton>
-                <StatusIcon
-                  button={false}
-                  className=""
+                <Memo(StatusIcon)
                   status="status"
                 >
                   <StatusOfflineIcon
@@ -1117,7 +1069,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                       </svg>
                     </span>
                   </StatusOfflineIcon>
-                </StatusIcon>
+                </Memo(StatusIcon)>
               </span>
             </OverlayTrigger>
           </OverlayTrigger>
@@ -1196,7 +1148,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                 }
                 channelNamesMap={Object {}}
                 dispatch={[Function]}
-                editedAt={0}
                 emojiMap={
                   EmojiMap {
                     "customEmojis": Map {},
@@ -1205,7 +1156,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                 }
                 enableFormatting={true}
                 hasImageProxy={false}
-                imagesMetadata={Object {}}
                 managedResourcePaths={Array []}
                 mentionKeys={Array []}
                 message="message"
@@ -1216,8 +1166,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                     "mentionHighlight": false,
                   }
                 }
-                postId=""
-                proxyImages={true}
                 siteURL="http://localhost:8065"
                 team={
                   Object {

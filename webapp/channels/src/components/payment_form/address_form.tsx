@@ -37,7 +37,7 @@ const AddressForm = (props: AddressFormProps) => {
     const handleInputChange = (key: keyof Address) => (
         event:
         | React.ChangeEvent<HTMLInputElement>
-        | React.ChangeEvent<HTMLSelectElement>,
+        | React.ChangeEvent<HTMLTextAreaElement>,
     ) => {
         const target = event.target;
         const value = target.value;

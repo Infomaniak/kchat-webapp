@@ -4,53 +4,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -58,16 +33,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -85,8 +57,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={true}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={
           <SettingItemMax
             containerStyle=""
@@ -161,7 +131,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
             updateSection={[Function]}
           />
         }
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -179,10 +148,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -204,53 +170,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -258,16 +199,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -285,10 +223,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -306,10 +241,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -331,53 +263,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -385,16 +292,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -412,10 +316,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -433,10 +334,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -458,53 +356,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -512,16 +385,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -539,10 +409,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -560,10 +427,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -585,53 +449,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -639,16 +478,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -666,10 +502,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -687,10 +520,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -712,53 +542,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -766,16 +571,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -793,10 +595,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -814,10 +613,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -839,53 +635,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -893,16 +664,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -920,10 +688,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -941,10 +706,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -966,53 +728,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -1020,16 +757,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1047,10 +781,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1068,10 +799,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1093,53 +821,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -1147,16 +850,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={true}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1174,10 +874,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={true}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1195,10 +892,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={true}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1220,53 +914,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -1274,16 +943,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1301,10 +967,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1322,10 +985,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1347,53 +1007,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -1401,16 +1036,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1428,10 +1060,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1449,10 +1078,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1474,53 +1100,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -1541,16 +1142,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1568,10 +1166,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1589,10 +1184,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1614,53 +1206,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -1668,16 +1235,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1695,10 +1259,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1716,10 +1277,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       <SettingItem
         active={false}
         areAllSectionsInactive={false}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1741,53 +1299,28 @@ exports[`components/user_settings/display/UserSettingsDisplay should not show la
 <div
   id="displaySettings"
 >
-  <div
-    className="modal-header"
-  >
-    <button
-      aria-label="Close"
-      className="close"
-      data-dismiss="modal"
-      id="closeButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      <span
-        aria-hidden="true"
-      >
-        ×
-      </span>
-    </button>
-    <h4
-      className="modal-title"
-    >
-      <div
-        className="modal-back"
-      >
-        <span
-          onClick={[MockFunction]}
-        >
-          <BackIcon />
-        </span>
-      </div>
-      <MemoizedFormattedMessage
+  <SettingMobileHeader
+    closeModal={[MockFunction]}
+    collapseModal={[MockFunction]}
+    text={
+      <Memo(MemoizedFormattedMessage)
         defaultMessage="Display Settings"
         id="user.settings.display.title"
       />
-    </h4>
-  </div>
+    }
+  />
   <div
     className="user-settings"
   >
-    <h3
-      className="tab-header"
+    <SettingDesktopHeader
       id="displaySettingsTitle"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Display Settings"
-        id="user.settings.display.title"
-      />
-    </h3>
+      text={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Display Settings"
+          id="user.settings.display.title"
+        />
+      }
+    />
     <div
       className="divider-dark first"
     />
@@ -1795,10 +1328,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should not show la
       <SettingItem
         active={false}
         areAllSectionsInactive={true}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1816,10 +1346,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should not show la
       <SettingItem
         active={false}
         areAllSectionsInactive={true}
-        containerStyle=""
-        infoPosition="bottom"
         max={null}
-        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)

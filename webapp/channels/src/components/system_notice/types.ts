@@ -3,7 +3,8 @@
 
 import type React from 'react';
 
-import type {AnalyticsRow} from '@mattermost/types/admin';
+import type {AnalyticsState} from '@mattermost/types/admin';
+import type {Channel} from '@mattermost/types/channels';
 
 export type Notice = {
     name: string;
@@ -16,5 +17,7 @@ export type Notice = {
         serverVersion: string,
         config: any,
         license: any,
-        analytics?: Record<string, number | AnalyticsRow[]>): boolean;
+        analytics?: AnalyticsState,
+        currentChannel?: Channel,
+    ): boolean;
 }

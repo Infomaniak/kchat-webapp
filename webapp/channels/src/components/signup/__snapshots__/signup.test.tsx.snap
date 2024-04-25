@@ -4,12 +4,6 @@ exports[`components/signup/Signup should match snapshot for all signup options e
 <div
   className="signup-body"
 >
-  <AlternateLink
-    alternateLinkLabel="Log in"
-    alternateLinkPath="/login"
-    alternateMessage="Already have an account?"
-    className="signup-body-alternate-link"
-  />
   <div
     className="signup-body-content"
   >
@@ -64,6 +58,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               disabled={false}
               inputSize="large"
               name="email"
+              onBlur={[Function]}
               onChange={[Function]}
               placeholder="Email address"
               type="text"
@@ -81,6 +76,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               disabled={false}
               inputSize="large"
               name="name"
+              onBlur={[Function]}
               onChange={[Function]}
               placeholder="Choose a Username"
               type="text"
@@ -93,9 +89,32 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               error=""
               info="Must be 5-64 characters long."
               inputSize="large"
+              onBlur={[Function]}
               onChange={[Function]}
               value=""
             />
+            <div
+              className="newsletter"
+            >
+              <span
+                className="interested"
+              >
+                Interested in receiving Mattermost security, product, promotions, and company updates updates via newsletter?
+              </span>
+              <span
+                className="link"
+              >
+                Sign up at 
+                <ExternalLink
+                  href="https://mattermost.com/security-updates/"
+                  key=".1"
+                  location="signup"
+                >
+                  https://mattermost.com/security-updates/
+                </ExternalLink>
+                .
+              </span>
+            </div>
             <SaveButton
               btnClass="btn-primary"
               defaultMessage="Create account"
@@ -123,6 +142,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               id="gitlab"
               key="gitlab"
               label="GitLab"
+              onClick={[Function]}
               style={
                 Object {
                   "borderColor": "",
@@ -158,12 +178,6 @@ exports[`components/signup/Signup should match snapshot for all signup options e
 <div
   className="signup-body"
 >
-  <AlternateLink
-    alternateLinkLabel="Log in"
-    alternateLinkPath="/login"
-    alternateMessage="Already have an account?"
-    className="signup-body-alternate-link"
-  />
   <div
     className="signup-body-content"
   >
@@ -218,6 +232,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               disabled={false}
               inputSize="large"
               name="email"
+              onBlur={[Function]}
               onChange={[Function]}
               placeholder="Email address"
               type="text"
@@ -235,6 +250,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               disabled={false}
               inputSize="large"
               name="name"
+              onBlur={[Function]}
               onChange={[Function]}
               placeholder="Choose a Username"
               type="text"
@@ -247,9 +263,32 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               error=""
               info="Must be 5-64 characters long."
               inputSize="large"
+              onBlur={[Function]}
               onChange={[Function]}
               value=""
             />
+            <div
+              className="newsletter"
+            >
+              <span
+                className="interested"
+              >
+                Interested in receiving Mattermost security, product, promotions, and company updates updates via newsletter?
+              </span>
+              <span
+                className="link"
+              >
+                Sign up at 
+                <ExternalLink
+                  href="https://mattermost.com/security-updates/"
+                  key=".1"
+                  location="signup"
+                >
+                  https://mattermost.com/security-updates/
+                </ExternalLink>
+                .
+              </span>
+            </div>
             <SaveButton
               btnClass="btn-primary"
               defaultMessage="Create account"
@@ -277,6 +316,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               id="gitlab"
               key="gitlab"
               label="GitLab"
+              onClick={[Function]}
               style={
                 Object {
                   "borderColor": "",
@@ -290,6 +330,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               id="google"
               key="google"
               label="Google"
+              onClick={[Function]}
               url="/oauth/google/signup"
             />
             <ExternalLoginButton
@@ -297,6 +338,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               id="office365"
               key="office365"
               label="Office 365"
+              onClick={[Function]}
               url="/oauth/office365/signup"
             />
             <ExternalLoginButton
@@ -304,6 +346,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               id="openid"
               key="openid"
               label="Open ID"
+              onClick={[Function]}
               style={
                 Object {
                   "borderColor": "",
@@ -317,6 +360,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               id="ldap"
               key="ldap"
               label="AD/LDAP Credentials"
+              onClick={[Function]}
               url="/login?extra=create_ldap"
             />
             <ExternalLoginButton
@@ -324,6 +368,7 @@ exports[`components/signup/Signup should match snapshot for all signup options e
               id="saml"
               key="saml"
               label="SAML"
+              onClick={[Function]}
               url="/login/sso/saml?action=signup"
             />
           </div>

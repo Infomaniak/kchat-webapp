@@ -4,8 +4,8 @@
 import classNames from 'classnames';
 import React, {useEffect, useRef, useState} from 'react';
 import Scrollbars from 'react-custom-scrollbars';
-import type {MessageDescriptor} from 'react-intl';
 import {useIntl, FormattedMessage} from 'react-intl';
+import type {MessageDescriptor} from 'react-intl';
 import {useSelector} from 'react-redux';
 
 import type {FileSearchResultItem as FileSearchResultItemType} from '@mattermost/types/files';
@@ -18,24 +18,19 @@ import {getFilesDropdownPluginMenuItems} from 'selectors/plugins';
 
 import FileSearchResultItem from 'components/file_search_results';
 import NoResultsIndicator from 'components/no_results_indicator/no_results_indicator';
-
-// Todo: delete, use mattermost version
-
 import {NoResultsVariant} from 'components/no_results_indicator/types';
-import PostComponent from 'components/post';
-import ChannelMessageLimitationBanner from 'components/post_view/channel_message_limitation_banner/channel_message_limitation_banner';
 import SearchHint from 'components/search_hint/search_hint';
 import SearchResultsHeader from 'components/search_results_header';
-import FlagIcon from 'components/widgets/icons/flag_icon';
 import LoadingSpinner from 'components/widgets/loading/loading_wrapper';
 
-import {searchHintOptions, DataSearchTypes, Locations} from 'utils/constants';
+import {searchHintOptions, DataSearchTypes} from 'utils/constants';
 import {isFileAttachmentsEnabled} from 'utils/file_utils';
 import {t} from 'utils/i18n';
 import * as Utils from 'utils/utils';
 
 import FilesFilterMenu from './files_filter_menu';
 import MessageOrFileSelector from './messages_or_files_selector';
+import PostSearchResultsItem from './post_search_results_item';
 import SearchLimitsBanner from './search_limits_banner';
 import type {Props} from './types';
 
@@ -150,7 +145,6 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
     );
 
     const {
-        hasLimitDate,
         results,
         fileResults,
         searchTerms,
@@ -181,7 +175,6 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
 
     let contentItems;
     let loadingMorePostsComponent;
-    let limitationFooter;
 
     let sortedResults: any = results;
 
@@ -197,26 +190,26 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
         titleDescriptor.defaultMessage = 'Recent Mentions';
     } else if (isFlaggedPosts) {
         noResultsProps.variant = NoResultsVariant.FlaggedPosts;
-        noResultsProps.subtitleValues = {icon: <FlagIcon className='icon  no-results__mini_icon'/>};
-
+        noResultsProps.subtitleValues = {buttonText: <strong>{
+            intl.formatMessage({
+                id: 'flag_post.flag',
+                defaultMessage: 'Save Message'},
+            )}</strong>};
         titleDescriptor.id = t('search_header.title3');
-        titleDescriptor.defaultMessage = 'Saved Posts';
+        titleDescriptor.defaultMessage = 'Saved messages';
     } else if (isPinnedPosts) {
         noResultsProps.variant = NoResultsVariant.PinnedPosts;
-        noResultsProps.subtitleValues = {text: (
-            <strong>
-                <FormattedMessage
-                    id='post_info.pin'
-                    defaultMessage='Pin'
-                />
-            </strong>
-        )};
+        noResultsProps.subtitleValues = {text: <strong>{
+            intl.formatMessage({
+                id: 'post_info.pin',
+                defaultMessage: 'Pin to Channel',
+            })}</strong>};
 
         sortedResults = [...results];
         sortedResults.sort((postA: Post|FileSearchResultItemType, postB: Post|FileSearchResultItemType) => postB.create_at - postA.create_at);
 
-        titleDescriptor.id = t('search_header.pinnedPosts');
-        titleDescriptor.defaultMessage = 'Pinned Posts';
+        titleDescriptor.id = t('search_header.pinnedMessages');
+        titleDescriptor.defaultMessage = 'Pinned messages';
     } else if (isChannelFiles) {
         if (searchFilterType === 'all') {
             noResultsProps.variant = NoResultsVariant.ChannelFiles;
@@ -232,8 +225,13 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
     } else if (!searchTerms && noResults && noFileResults) {
         titleDescriptor.id = t('search_header.search');
         titleDescriptor.defaultMessage = 'Search';
+    } else if (searchType === DataSearchTypes.FILES_SEARCH_TYPE && !isChannelFiles) {
+        noResultsProps.variant = NoResultsVariant.Files;
+        noResultsProps.titleValues = {searchTerm: `${searchTerms}`};
+        titleDescriptor.id = t('search_header.results');
+        titleDescriptor.defaultMessage = 'Search Results';
     } else {
-        noResultsProps.titleValues = {channelName: `"${searchTerms}"`};
+        noResultsProps.titleValues = {channelName: `${searchTerms}`};
 
         titleDescriptor.id = t('search_header.results');
         titleDescriptor.defaultMessage = 'Search Results';
@@ -266,21 +264,6 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
             </div>
         );
         break;
-
-    // Todo: delete, use mattermost version
-    case noResults && (searchType === DataSearchTypes.MESSAGES_SEARCH_TYPE && !isChannelFiles && hasLimitDate !== null):
-        contentItems = (
-            <div
-                className={classNames([
-                    'sidebar--right__limitation-noresult a11y__section',
-                    {'sidebar-expanded': isSideBarExpanded},
-                ])}
-            >
-                <ChannelMessageLimitationBanner olderMessagesDate={hasLimitDate}/>
-                <NoResultsIndicator {...noResultsProps}/>
-            </div>
-        );
-        break;
     case noResults && (searchType === DataSearchTypes.MESSAGES_SEARCH_TYPE && !isChannelFiles):
         contentItems = (
             <div
@@ -289,7 +272,10 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                     {'sidebar-expanded': isSideBarExpanded},
                 ])}
             >
-                <NoResultsIndicator {...noResultsProps}/>
+                <NoResultsIndicator
+                    style={{padding: '48px'}}
+                    {...noResultsProps}
+                />
             </div>
         );
         break;
@@ -301,7 +287,10 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                     {'sidebar-expanded': isSideBarExpanded},
                 ])}
             >
-                <NoResultsIndicator {...noResultsProps}/>
+                <NoResultsIndicator
+                    style={{padding: '48px'}}
+                    {...noResultsProps}
+                />
             </div>
         );
         break;
@@ -310,31 +299,18 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
             sortedResults = fileResults;
         }
 
-        if (hasLimitDate !== null && isSearchAtEnd && !noResults) {
-            limitationFooter = (
-                <>
-                    <br/>
-                    <div>
-                        <ChannelMessageLimitationBanner
-                            olderMessagesDate={hasLimitDate}
-                        />
-                    </div>
-                    <br/>
-                </>
-            );
-        }
-
         contentItems = sortedResults.map((item: Post|FileSearchResultItemType, index: number) => {
             if (searchType === DataSearchTypes.MESSAGES_SEARCH_TYPE && !props.isChannelFiles) {
                 return (
-                    <PostComponent
+                    <PostSearchResultsItem
                         key={item.id}
                         post={item as Post}
                         matches={props.matches[item.id]}
-                        term={(!props.isFlaggedPosts && !props.isPinnedPosts && !props.isMentionSearch) ? searchTerms : ''}
+                        searchTerm={searchTerms}
+                        isFlaggedPosts={props.isFlaggedPosts}
                         isMentionSearch={props.isMentionSearch}
+                        isPinnedPosts={props.isPinnedPosts}
                         a11yIndex={index}
-                        location={Locations.SEARCH}
                     />
                 );
             }
@@ -427,7 +403,6 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                 >
                     {contentItems}
                     {loadingMorePostsComponent}
-                    {limitationFooter}
                 </div>
             </Scrollbars>
         </div>

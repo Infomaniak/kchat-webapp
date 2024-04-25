@@ -1,19 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ConnectedProps} from 'react-redux';
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import type {ConnectedProps} from 'react-redux';
 import {bindActionCreators} from 'redux';
-
-import type {PluginsResponse} from '@mattermost/types/plugins';
+import type {Dispatch} from 'redux';
 
 import {getPlugins} from 'mattermost-redux/actions/admin';
 import {getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import {getAdminDefinition, getConsoleAccess} from 'selectors/admin_console';
 import {getNavigationBlocked} from 'selectors/views/admin';
@@ -54,13 +51,9 @@ function mapStateToProps(state: GlobalState) {
     };
 }
 
-type Actions = {
-    getPlugins: () => Promise<{data: PluginsResponse}>;
-}
-
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc>, Actions>({
+        actions: bindActionCreators({
             getPlugins,
         }, dispatch),
     };

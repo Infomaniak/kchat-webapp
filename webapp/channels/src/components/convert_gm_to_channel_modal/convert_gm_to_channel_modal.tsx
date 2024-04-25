@@ -18,8 +18,13 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
-import type {Actions} from 'components/convert_gm_to_channel_modal/index';
-import WarningTextSection from 'components/convert_gm_to_channel_modal/warning_text_section/warning_text_section';
+
+// import NoCommonTeamsError from './no_common_teams/no_common_teams';
+// import TeamSelector from './team_selector/team_selector';
+
+import WarningTextSection from './warning_text_section/warning_text_section';
+
+import type {Actions} from './index';
 
 const enum ServerErrorId {
     CHANNEL_NAME_EXISTS = 'store.sql_channel.save_channel.exists.app_error',

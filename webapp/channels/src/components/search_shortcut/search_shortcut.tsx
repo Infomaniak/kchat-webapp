@@ -6,8 +6,7 @@ import React from 'react';
 
 import {ShortcutKey, ShortcutKeyVariant} from 'components/shortcut_key';
 
-import {isDesktopApp} from 'utils/user_agent';
-import {isMac} from 'utils/utils';
+import {isDesktopApp, isMac} from 'utils/user_agent';
 
 import './search_shortcut.scss';
 

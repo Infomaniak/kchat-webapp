@@ -2,12 +2,14 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import type {IntlShape} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
+import type {IntlShape} from 'react-intl';
 
-import type {Group, SyncablePatch} from '@mattermost/types/groups';
 import {SyncableType} from '@mattermost/types/groups';
-import type {Team, TeamMembership} from '@mattermost/types/teams';
+import type {Group, SyncablePatch} from '@mattermost/types/groups';
+import type {Team} from '@mattermost/types/teams';
+
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
 import ConfirmModal from 'components/confirm_modal';
@@ -26,24 +28,12 @@ type Props = {
     intl: IntlShape;
     team: Team;
     actions: {
-        getGroupsAssociatedToTeam: (teamID: string, q: string, page: number, perPage: number, filterAllowReference: boolean) => Promise<{
-            data: {
-                groups: Group[];
-                totalGroupCount: number;
-                teamID: string;
-            };
-        }>;
+        getGroupsAssociatedToTeam: (teamID: string, q: string, page: number, perPage: number, filterAllowReference: boolean) => Promise<ActionResult<{groups: Group[]; totalGroupCount: number}>>;
         closeModal: (modalId: string) => void;
         openModal: <P>(modalData: ModalData<P>) => void;
-        unlinkGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType) => Promise<{
-            data: boolean;
-        }>;
-        patchGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType, patch: Partial<SyncablePatch>) => Promise<{
-            data: boolean;
-        }>;
-        getMyTeamMembers: () => Promise<{
-            data: TeamMembership[];
-        }>;
+        unlinkGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType) => Promise<ActionResult>;
+        patchGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType, patch: Partial<SyncablePatch>) => Promise<ActionResult>;
+        getMyTeamMembers: () => void;
     };
 };
 
@@ -65,8 +55,8 @@ class TeamGroupsManageModal extends React.PureComponent<Props, State> {
         const {data} = await this.props.actions.getGroupsAssociatedToTeam(this.props.team.id, searchTerm, pageNumber, DEFAULT_NUM_PER_PAGE, true);
 
         return {
-            items: data.groups,
-            totalCount: data.totalGroupCount,
+            items: data!.groups,
+            totalCount: data!.totalGroupCount,
         };
     };
 
@@ -193,7 +183,7 @@ class TeamGroupsManageModal extends React.PureComponent<Props, State> {
             <>
                 <ListModal
                     show={!this.state.showConfirmModal}
-                    titleText={formatMessage({id: 'groups', defaultMessage: '{team} Groups'}, {team: this.props.team.display_name})}
+                    titleText={formatMessage({id: 'team_groups', defaultMessage: '{team} Groups'}, {team: this.props.team.display_name})}
                     searchPlaceholderText={formatMessage({id: 'manage_team_groups_modal.search_placeholder', defaultMessage: 'Search groups'})}
                     renderRow={this.renderRow}
                     loadItems={this.loadItems}

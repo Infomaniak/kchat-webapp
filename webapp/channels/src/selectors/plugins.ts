@@ -6,14 +6,19 @@ import type {AppBinding} from '@mattermost/types/apps';
 import {Preferences} from 'mattermost-redux/constants';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {appBarEnabled, getAppBarAppBindings} from 'mattermost-redux/selectors/entities/apps';
-import {autoShowLinkedBoardFFEnabled, get, getBool} from 'mattermost-redux/selectors/entities/preferences';
+import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {createShallowSelector} from 'mattermost-redux/utils/helpers';
 
-import {OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
-
 import type {GlobalState} from 'types/store';
+import type {FileDropdownPluginComponent, PluginComponent} from 'types/store/plugins';
 
-import type {FileDropdownPluginComponent, PluginComponent} from '../types/store/plugins';
+export const getPluginUserSettings = createSelector(
+    'getPluginUserSettings',
+    (state: GlobalState) => state.plugins.userSettings,
+    (settings) => {
+        return settings || {};
+    },
+);
 
 export const getFilesDropdownPluginMenuItems = createSelector(
     'getFilesDropdownPluginMenuItems',
@@ -103,12 +108,3 @@ export function showNewChannelWithBoardPulsatingDot(state: GlobalState): boolean
     const showPulsatingDot = pulsatingDotState !== '' && JSON.parse(pulsatingDotState)[Preferences.NEW_CHANNEL_WITH_BOARD_TOUR_SHOWED] === false;
     return showPulsatingDot;
 }
-
-export const shouldShowAutoLinkedBoard = createSelector(
-    'shouldShowAutoLinkedBoard',
-    (state: GlobalState) => getBool(state, OnboardingTaskCategory, OnboardingTaskList.ONBOARDING_LINKED_BOARD_AUTO_SHOWN),
-    (state: GlobalState) => autoShowLinkedBoardFFEnabled(state),
-    (showAutoLinkedBoardPref: boolean, showAutoLinkedBoardFFEnabled: boolean) => {
-        return !showAutoLinkedBoardPref && showAutoLinkedBoardFFEnabled;
-    },
-);

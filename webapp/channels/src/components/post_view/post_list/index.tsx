@@ -2,13 +2,12 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
-import {markChannelAsRead, markChannelAsViewed} from 'mattermost-redux/actions/channels';
+import {markChannelAsRead} from 'mattermost-redux/actions/channels';
 import {RequestStatus} from 'mattermost-redux/constants';
 import {getRecentPostsChunkInChannel, makeGetPostsChunkAroundPost, getUnreadPostsChunk, getPost, isPostsChunkIncludingUnreadsPosts, getLimitedViews} from 'mattermost-redux/selectors/entities/posts';
-import type {Action} from 'mattermost-redux/types/actions';
 import {memoizeResult} from 'mattermost-redux/utils/helpers';
 import {makePreparePostIdsForPostList} from 'mattermost-redux/utils/post_list';
 
@@ -20,7 +19,6 @@ import {
     loadPostsAround,
     syncPostsInChannel,
     loadLatestPosts,
-    checkAndSetMobileView,
 } from 'actions/views/channel';
 import {getIsMobileView} from 'selectors/views/browser';
 
@@ -28,7 +26,6 @@ import {getLatestPostId} from 'utils/post_utils';
 
 import type {GlobalState} from 'types/store';
 
-import type {Props as PostListProps} from './post_list';
 import PostList from './post_list';
 
 const isFirstLoad = (state: GlobalState, channelId: string) => !state.entities.posts.postsInChannel[channelId];
@@ -40,7 +37,7 @@ const memoizedGetLatestPostId = memoizeResult((postIds: string[]) => getLatestPo
 
 interface Props {
     focusedPostId?: string;
-    unreadChunkTimeStamp: number | undefined;
+    unreadChunkTimeStamp?: number;
     changeUnreadChunkTimeStamp: (lastViewedAt: number) => void;
     channelId: string;
 }
@@ -79,7 +76,10 @@ function makeMapStateToProps() {
             atOldestPost = Boolean(chunk.oldest);
         }
 
-        const shouldHideNewMessageIndicator = shouldStartFromBottomWhenUnread && !isPostsChunkIncludingUnreadsPosts(state, chunk!, unreadChunkTimeStamp);
+        let shouldHideNewMessageIndicator = false;
+        if (unreadChunkTimeStamp != null) {
+            shouldHideNewMessageIndicator = shouldStartFromBottomWhenUnread && !isPostsChunkIncludingUnreadsPosts(state, chunk!, unreadChunkTimeStamp);
+        }
 
         if (postIds) {
             formattedPostIds = preparePostIdsForPostList(state, {postIds, lastViewedAt, indicateNewMessages: !shouldHideNewMessageIndicator});
@@ -108,15 +108,13 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<Action>, PostListProps['actions']>({
+        actions: bindActionCreators({
             loadUnreads,
             loadPosts,
             loadLatestPosts,
             loadPostsAround,
             loadDeletedPosts,
-            checkAndSetMobileView,
             syncPostsInChannel,
-            markChannelAsViewed,
             markChannelAsRead,
             updateNewMessagesAtInChannel,
         }, dispatch),

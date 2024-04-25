@@ -46,11 +46,9 @@ func (a *App) SaveAcknowledgementForPost(c request.CTX, postID, userID string) (
 	}
 
 	// The post is always modified since the UpdateAt always changes
-	a.invalidateCacheForChannelPosts(channel.Id)
+	a.Srv().Store().Post().InvalidateLastPostTimeCache(channel.Id)
 
-	a.Srv().Go(func() {
-		a.sendAcknowledgementEvent(model.WebsocketEventAcknowledgementAdded, acknowledgement, post)
-	})
+	a.sendAcknowledgementEvent(model.WebsocketEventAcknowledgementAdded, acknowledgement, post)
 
 	return acknowledgement, nil
 }
@@ -92,11 +90,9 @@ func (a *App) DeleteAcknowledgementForPost(c request.CTX, postID, userID string)
 	}
 
 	// The post is always modified since the UpdateAt always changes
-	a.invalidateCacheForChannelPosts(channel.Id)
+	a.Srv().Store().Post().InvalidateLastPostTimeCache(channel.Id)
 
-	a.Srv().Go(func() {
-		a.sendAcknowledgementEvent(model.WebsocketEventAcknowledgementRemoved, oldAck, post)
-	})
+	a.sendAcknowledgementEvent(model.WebsocketEventAcknowledgementRemoved, oldAck, post)
 
 	return nil
 }
@@ -126,7 +122,7 @@ func (a *App) GetAcknowledgementsForPostList(postList *model.PostList) (map[stri
 	return acknowledgementsMap, nil
 }
 
-func (a *App) sendAcknowledgementEvent(event string, acknowledgement *model.PostAcknowledgement, post *model.Post) {
+func (a *App) sendAcknowledgementEvent(event model.WebsocketEventType, acknowledgement *model.PostAcknowledgement, post *model.Post) {
 	// send out that a acknowledgement has been added/removed
 	message := model.NewWebSocketEvent(event, "", post.ChannelId, "", nil, "")
 

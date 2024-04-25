@@ -4,10 +4,10 @@
 import type {GlobalState} from 'types/store';
 
 export function getStoredTheme(state: GlobalState) {
-    return state.views.theme.storedTheme;
+    return state.views?.theme?.storedTheme;
 }
 
 export function getDesktopThemePreference(state: GlobalState) {
-    return state.views.theme.themePreference;
+    return state.views?.theme?.themePreference;
 }
 
