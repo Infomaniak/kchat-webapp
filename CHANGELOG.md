@@ -1,3 +1,11 @@
+## 2.7.0-rc.14 (2024-04-25)
+
+### Fixed (3 changes)
+
+- [fix: disabled enable/disable join leave messages preference](kchat/webapp@ae7b72b5178b44df7f6c5c12b65ee87bfaaa19a1) by @tim.dewinter ([merge request](kchat/webapp!748))
+- [fix: channel display name appearing in saved thread](kchat/webapp@49faf78645a3cfa085d5264b9b4216ad375b8a84) by @tim.dewinter ([merge request](kchat/webapp!746))
+- [fix: re-added user popover profile copy button](kchat/webapp@387743764b6a8ef4da2ed281b0b5f766d8b0e36e) by @tim.dewinter ([merge request](kchat/webapp!744))
+
 ## 2.7.0-rc.13 (2024-04-23)
 
 ### Fixed (1 change)
