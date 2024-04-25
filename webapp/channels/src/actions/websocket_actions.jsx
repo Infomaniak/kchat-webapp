@@ -32,6 +32,7 @@ import {
     markChannelAsRead,
     getChannelMemberCountsByGroup,
     markMultipleChannelsAsRead,
+    getChannelGuestMembers,
 } from 'mattermost-redux/actions/channels';
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
@@ -73,6 +74,8 @@ import {
     getChannelsInTeam,
     getCurrentChannel,
     getCurrentChannelId,
+    getGuestMembersIdsInChannel,
+    getMembersInCurrentChannel,
     getRedirectChannelNameForTeam,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
@@ -81,7 +84,7 @@ import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/se
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getMyKSuites, getRelativeTeamUrl, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
-import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, getUserById} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_actions';
@@ -93,7 +96,7 @@ import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actio
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
 import {removeGlobalItem, setGlobalItem} from 'actions/storage';
-import {loadProfilesForDM, loadProfilesForGM, loadProfilesForSidebar} from 'actions/user_actions';
+import {loadProfilesForDM, loadProfilesForGM} from 'actions/user_actions';
 import {syncPostsInChannel} from 'actions/views/channel';
 import {getDrafts, setGlobalDraft, transformServerDraft} from 'actions/views/drafts';
 import {closeModal, openModal} from 'actions/views/modals';
@@ -1305,6 +1308,18 @@ export async function handleUserUpdatedEvent(msg) {
     if (user && user.props) {
         const customStatus = user.props.customStatus ? user.props.customStatus : undefined;
         dispatch(loadCustomEmojisIfNeeded([customStatus?.emoji]));
+    }
+
+    const currentChannel = getCurrentChannel(state);
+    const storedUser = getUserById(state, user.id);
+
+    if (currentChannel && storedUser) {
+        const guestsIdsInChannel = getGuestMembersIdsInChannel(state, currentChannel.id);
+
+        if (guestsIdsInChannel.includes(user.id) && isGuest(storedUser.roles) !== isGuest(user.roles)) {
+            dispatch(getChannelStats(currentChannel.id));
+            dispatch(getChannelGuestMembers(currentChannel.id));
+        }
     }
 
     if (currentUser.id === user.id) {

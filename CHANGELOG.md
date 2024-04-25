@@ -1,3 +1,38 @@
+## 2.7.0-rc.13 (2024-04-23)
+
+### Fixed (1 change)
+
+- [Fix: Locale post message for servers sidebar](kchat/webapp@5c26dc09aeb0a09825510f44b0c9f621fe9c1035) by @philippe.karle ([merge request](kchat/webapp!741))
+
+## 2.7.0-rc.12 (2024-04-23)
+
+### Added (1 change)
+
+- [Feature: listen to settings navigation events](kchat/webapp@9c788e419324fc20b07e1efdf3eda2b0e167f6e8) by @philippe.karle
+
+### Fixed (11 changes)
+
+- [Reloading guest members on current channel on user roles changes](kchat/webapp@5867269fb722f957cd509790f287244514ff1fa7) by @philippe.karle ([merge request](kchat/webapp!733))
+- [Fix: loading all users profiles available](kchat/webapp@34734451b771b90c6af6007c7410297528f4804d) by @philippe.karle ([merge request](kchat/webapp!739))
+- [fix: Replaced worker-src placeholder for sentry CSP](kchat/webapp@3c2bee906b1383951914b3d60f8bac2d57d2b7e2) by  ([merge request](kchat/webapp!738))
+- [Fix: red banner on quick channel switch](kchat/webapp@ae3502acd0d3a18a0418b849471f57438f3d2468) by @philippe.karle ([merge request](kchat/webapp!736))
+- [Fix: dark theme user modal design broken](kchat/webapp@be3db93cf2cc2033bd8fdd0726b524fa292352b5) by @philippe.karle ([merge request](kchat/webapp!735))
+- [fix audio recording module](kchat/webapp@4744c26f7b0531d21a4ae4cb5921eadf23e1efc7) by @antonbuksa
+- [fix login loading template](kchat/webapp@a86d97b9ce8622984c6e21142a7d9c1edf517da8) by @antonbuksa
+- [fix buttons status reset dialog](kchat/webapp@b990800e045a50277f5e6f432296acc820cd66f7) by @antonbuksa
+- [fix margin in emoji autocomplete](kchat/webapp@4eb40d4037da844a1b3328414a8491ad8b425213) by @antonbuksa
+- [fix profile action](kchat/webapp@8f7fc1c05b95c05adc139cbf70cc7a2672ac71e2) by @antonbuksa
+- [restore mas migration banner](kchat/webapp@7c245a78759263070f036cc17e576c5c7537828f) by @antonbuksa
+
+### Changed (2 changes)
+
+- [hard update notification actions](kchat/webapp@e8be15119678b41f2ee0121bbf94bc236fe46b01) by @antonbuksa
+- [Fix: switch-server event triggering on webapp](kchat/webapp@edffba3e44fe953213a5ad2dbc7c858a8f253700) by @philippe.karle ([merge request](kchat/webapp!731))
+
+### Chore (1 change)
+
+- [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
+
 ## 2.7.0-rc.11 (2024-04-22)
 
 No changes.
@@ -69,6 +104,20 @@ No changes.
 ### Chore (1 change)
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
+
+## 2.7.0-next.8 (2024-04-23)
+
+### Fixed (1 change)
+
+- [Fix: Locale post message for servers sidebar](kchat/webapp@5c26dc09aeb0a09825510f44b0c9f621fe9c1035) by @philippe.karle ([merge request](kchat/webapp!741))
+
+## 2.7.0-next.7 (2024-04-23)
+
+### Fixed (3 changes)
+
+- [Reloading guest members on current channel on user roles changes](kchat/webapp@5867269fb722f957cd509790f287244514ff1fa7) by @philippe.karle ([merge request](kchat/webapp!733))
+- [Fix: loading all users profiles available](kchat/webapp@34734451b771b90c6af6007c7410297528f4804d) by @philippe.karle ([merge request](kchat/webapp!739))
+- [fix: Replaced worker-src placeholder for sentry CSP](kchat/webapp@3c2bee906b1383951914b3d60f8bac2d57d2b7e2) by  ([merge request](kchat/webapp!738))
 
 ## 2.7.0-next.6 (2024-04-22)
 
