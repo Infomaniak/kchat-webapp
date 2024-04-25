@@ -1,3 +1,14 @@
+## 2.7.0-rc.15 (2024-04-25)
+
+### Added (1 change)
+
+- [feat: allowed collapsing gifs](kchat/webapp@49ab5e2c476870043f62bad52cf7172d0c07ddaf) by @tim.dewinter ([merge request](kchat/webapp!750))
+
+### Fixed (2 changes)
+
+- [Fix: Numbered table list content overflowing parent element](kchat/webapp@4a40462d9850ce8dc1fd67e9c90a2e4d58fe3467) by @philippe.karle ([merge request](kchat/webapp!732))
+- [fix: compact post header alignment](kchat/webapp@b7452a09bb66b7b53453b9461e540dac3582bf01) by @tim.dewinter ([merge request](kchat/webapp!745))
+
 ## 2.7.0-rc.14 (2024-04-25)
 
 ### Fixed (3 changes)
