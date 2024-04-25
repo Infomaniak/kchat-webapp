@@ -124,7 +124,6 @@
     "@types/bootstrap": "4.5.0",
     "@types/country-list": "2.1.0",
     "@types/enzyme": "3.10.11",
-    "@types/jitsi-meet": "2.0.5",
     "@types/jest": "28.1.8",
     "@types/katex": "0.11.0",
     "@types/lodash": "4.14.202",

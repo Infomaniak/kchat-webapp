@@ -4138,13 +4138,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jitsi-meet@npm:2.0.5":
-  version: 2.0.5
-  resolution: "@types/jitsi-meet@npm:2.0.5"
-  checksum: 7d81277de71528f37128371aba16ebb1795f8490a3999837e969dea4971666f9af75610ddbc4013ef34ab9f454b53b1983ae031123c8d4cd377931e4d65666cc
-  languageName: node
-  linkType: hard
-
 "@types/jquery@npm:*":
   version: 3.5.29
   resolution: "@types/jquery@npm:3.5.29"
@@ -13480,7 +13473,6 @@ __metadata:
     "@types/color-hash": "npm:1.0.2"
     "@types/country-list": "npm:2.1.0"
     "@types/enzyme": "npm:3.10.11"
-    "@types/jitsi-meet": "npm:2.0.5"
     "@types/jest": "npm:28.1.8"
     "@types/katex": "npm:0.11.0"
     "@types/lodash": "npm:4.14.202"
