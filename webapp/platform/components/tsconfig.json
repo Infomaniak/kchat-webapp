@@ -13,9 +13,14 @@
         "noEmit": true,
         "declaration": true,
         "outDir": "dist",
+        "rootDir": "src",
+        "composite": true,
         "paths": {
             "mattermost-redux/*": ["./node_modules/mattermost-redux/src/*"],
             "@mattermost/types/*": ["./node_modules/@mattermost/types/src/*"]
         }
-    }
+    },
+    "include": [
+        "./src/**/*"
+    ],
 }

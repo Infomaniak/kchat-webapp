@@ -5,13 +5,23 @@ import semver from 'semver';
 
 import type {DesktopAPI} from '@mattermost/desktop-api';
 
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+
+import {setTheme} from 'actions/views/theme';
+import store from 'stores/redux_store';
+
 import {isDesktopApp} from 'utils/user_agent';
+import * as UserAgent from 'utils/user_agent';
+
+import {isServerVersionGreaterThanOrEqualTo} from './server_version';
 
 declare global {
     interface Window {
         desktopAPI?: Partial<DesktopAPI>;
     }
 }
+
+const dispatch = store.dispatch;
 
 class DesktopAppAPI {
     private name?: string;
@@ -21,7 +31,7 @@ class DesktopAppAPI {
     /**
      * @deprecated
      */
-    private postMessageListeners?: Map<string, Set<(message: unknown) => void>>;
+    private postMessageListeners?: Map<string, Set<(message: unknown, rest: unknown) => void>>;
 
     constructor() {
         // Check the user agent string first
@@ -29,7 +39,7 @@ class DesktopAppAPI {
             return;
         }
 
-        this.getDesktopAppInfo().then(({name, version}) => {
+        this.getDesktopAppInfo().then(({name, version, ...rest}) => {
             this.name = name;
             this.version = semver.valid(semver.coerce(version));
 
@@ -37,7 +47,12 @@ class DesktopAppAPI {
             if (!window.desktop) {
                 window.desktop = {};
             }
+
             window.desktop.version = semver.valid(semver.coerce(version));
+            if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.1.0') && 'theme' in rest) {
+                window.desktop.theme = rest.theme as Theme;
+                dispatch(setTheme(window.desktop.theme as Theme));
+            }
         });
         window.desktopAPI?.isDev?.().then((isDev) => {
             this.dev = isDev;
@@ -68,11 +83,11 @@ class DesktopAppAPI {
     };
 
     private getDesktopAppInfo = () => {
-        if (window.desktopAPI?.getAppInfo) {
-            return window.desktopAPI.getAppInfo();
-        }
+        // if (window.desktopAPI?.getAppInfo) {
+        //     return window.desktopAPI.getAppInfo();
+        // }
 
-        return this.invokeWithMessaging<void, {name: string; version: string}>(
+        return this.invokeWithMessaging<void, {name: string; version: string; theme?: object}>(
             'webapp-ready',
             undefined,
             'register-desktop',
@@ -152,6 +167,34 @@ class DesktopAppAPI {
         return () => this.removePostMessageListener('history-button-return', legacyListener);
     };
 
+    onThemeChangedGlobal = (listener: (theme: Theme) => void) => {
+        const legacyListener = (_: any, {theme}: {theme: Theme}) => listener(theme);
+        this.addPostMessageListener('theme-changed-global', legacyListener);
+
+        return () => this.removePostMessageListener('theme-changed-global', legacyListener);
+    };
+
+    onGetServerTheme = (listener: () => void) => {
+        const legacyListener = () => listener();
+        this.addPostMessageListener('get-server-theme', legacyListener);
+
+        return () => this.removePostMessageListener('get-server-theme', legacyListener);
+    };
+
+    onTeamsOrderUpdated = (listener: (teamsOrder: string[]) => void) => {
+        const legacyListener = ({teamsOrder}: {teamsOrder: string[]}) => listener(teamsOrder);
+        this.addPostMessageListener('teams-order-updated', legacyListener);
+
+        return () => this.removePostMessageListener('teams-order-updated', legacyListener);
+    };
+
+    onSwitchServerSidebar = (listener: (serverId: string) => void) => {
+        const legacyListener = ({serverId}: {serverId: string}) => listener(serverId);
+        this.addPostMessageListener('switch-server-sidebar', legacyListener);
+
+        return () => this.removePostMessageListener('switch-server-sidebar', legacyListener);
+    };
+
     /**
      * One-ways
      */
@@ -215,7 +258,7 @@ class DesktopAppAPI {
     /**
      * @deprecated
      */
-    private postMessageListener = ({origin, data: {type, message}}: {origin: string; data: {type: string; message: unknown}}) => {
+    private postMessageListener = ({origin, data: {type, message, ...rest}}: {origin: string; data: {type: string; message: unknown}}) => {
         if (origin !== window.location.origin) {
             return;
         }
@@ -226,14 +269,14 @@ class DesktopAppAPI {
         }
 
         listeners.forEach((listener) => {
-            listener(message);
+            listener(message, rest);
         });
     };
 
     /**
      * @deprecated
      */
-    private addPostMessageListener = (channel: string, listener: (message: any) => void) => {
+    private addPostMessageListener = (channel: string, listener: (message: any, rest: any) => void) => {
         if (this.postMessageListeners?.has(channel)) {
             this.postMessageListeners.set(channel, this.postMessageListeners.get(channel)!.add(listener));
         } else {
@@ -244,7 +287,7 @@ class DesktopAppAPI {
     /**
      * @deprecated
      */
-    private removePostMessageListener = (channel: string, listener: (message: any) => void) => {
+    private removePostMessageListener = (channel: string, listener: (message: any, rest: any) => void) => {
         const set = this.postMessageListeners?.get(channel);
         set?.delete(listener);
         if (set?.size) {

@@ -143,6 +143,11 @@ export const getCurrentRelativeTeamUrl: (state: GlobalState) => string = createS
     },
 );
 
+export function getRelativeTeamUrl(state: GlobalState, teamId: string): string {
+    const team = getTeam(state, teamId);
+    return `/${team.name}`;
+}
+
 export const getCurrentTeamStats: (state: GlobalState) => TeamStats = createSelector(
     'getCurrentTeamStats',
     getCurrentTeamId,
@@ -197,13 +202,17 @@ export const getMembersInCurrentTeam: (state: GlobalState) => RelationOneToOne<U
     },
 );
 
-export function getTeamMember(state: GlobalState, teamId: string, userId: string) {
-    const members = getMembersInTeams(state)[teamId];
-    if (members) {
-        return members[userId];
-    }
+export const getMembersInTeam: (state: GlobalState, teamId: string) => RelationOneToOne<UserProfile, TeamMembership> = createSelector(
+    'getMembersInTeam',
+    (state: GlobalState, teamId: string) => teamId,
+    getMembersInTeams,
+    (teamId, teamMembers) => {
+        return teamMembers[teamId];
+    },
+);
 
-    return null;
+export function getTeamMember(state: GlobalState, teamId: string, userId: string): TeamMembership | undefined {
+    return getMembersInTeams(state)[teamId]?.[userId];
 }
 
 export const getListableTeamIds: (state: GlobalState) => Array<Team['id']> = createIdsSelector(
@@ -223,15 +232,6 @@ export const getListableTeamIds: (state: GlobalState) => Array<Team['id']> = cre
             }
             return team.delete_at === 0 && canList && !member;
         });
-    },
-);
-
-export const getListableTeams: (state: GlobalState) => Team[] = createSelector(
-    'getListableTeams',
-    getTeams,
-    getListableTeamIds,
-    (teams, listableTeamIds) => {
-        return listableTeamIds.map((id) => teams[id]);
     },
 );
 
@@ -384,8 +384,3 @@ export const getCurrentTeamAccountId = createSelector(
     getCurrentTeam,
     (currentTeam: Team) => currentTeam.account_id,
 );
-
-export function getRelativeTeamUrl(state: GlobalState, teamId: string): string {
-    const team = getTeam(state, teamId);
-    return `/${team.name}`;
-}

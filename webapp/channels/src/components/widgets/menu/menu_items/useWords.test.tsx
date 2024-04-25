@@ -1,14 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {screen} from '@testing-library/react';
 import React from 'react';
-import {Provider} from 'react-redux';
 
 import type {LimitSummary} from 'components/common/hooks/useGetHighestThresholdCloudLimit';
 
-import {renderWithIntl} from 'tests/react_testing_utils';
-import mockStore from 'tests/test_store';
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 import {FileSizes} from 'utils/file_utils';
 import {LimitTypes} from 'utils/limits';
 
@@ -159,7 +156,7 @@ describe('useWords', () => {
         },
     ];
 
-    const store = mockStore({
+    const initialState = {
         entities: {
             general: {
                 license: {
@@ -167,13 +164,12 @@ describe('useWords', () => {
                 },
             },
         },
-    });
+    };
     tests.forEach((t: Test) => {
         test(t.label, () => {
-            renderWithIntl(
-                <Provider store={store}>
-                    <TestEl {...t.props}/>
-                </Provider>,
+            renderWithContext(
+                <TestEl {...t.props}/>,
+                initialState,
             );
             if (t.expects.empty) {
                 screen.getByText(emptyText);

@@ -13,6 +13,10 @@ import mockStore from 'tests/test_store';
 
 import DraftRow from './draft_row';
 
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(),
+}));
+
 describe('components/drafts/drafts_row', () => {
     const baseProps = {
         draft: {

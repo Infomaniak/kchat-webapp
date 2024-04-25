@@ -58,6 +58,9 @@ const getNotificationSoundFromChannelMemberAndUser = (member, user) => {
     return user.notify_props?.desktop_notification_sound ? user.notify_props.desktop_notification_sound : 'Bing';
 };
 
+/**
+ * @returns {import('mattermost-redux/types/actions').ThunkActionFunc<void>}
+ */
 export function sendDesktopNotification(post, msgProps) {
     return async (dispatch, getState) => {
         const state = getState();
@@ -194,7 +197,7 @@ export function sendDesktopNotification(post, msgProps) {
             }
         } else if (notifyLevel === NotificationLevels.MENTION && mentions.indexOf(user.id) === -1 && msgProps.channel_type !== Constants.DM_CHANNEL) {
             return;
-        } else if (isCrtReply && [NotificationLevels.ALL, NotificationLevels.MENTION].includes(notifyLevel) && followers.indexOf(currentUserId) === -1) {
+        } else if (isCrtReply && notifyLevel === NotificationLevels.ALL && followers.indexOf(currentUserId) === -1) {
             // if user is not following the thread don't notify
             return;
         }
@@ -245,7 +248,7 @@ export function sendDesktopNotification(post, msgProps) {
                     attachment.pretext ||
                     attachment.text;
             }
-            image |= attachment.image_url?.length > 0;
+            image |= attachment.image_url.length > 0;
         });
 
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);
@@ -330,24 +333,7 @@ export function sendDesktopNotification(post, msgProps) {
 export const notifyMe = (title, body, channel, teamId, silent, soundName, url) => (dispatch) => {
     // handle notifications in desktop app
     if (isDesktopApp()) {
-        const msg = {
-            title,
-            body,
-            channel,
-            teamId,
-            silent,
-        };
-        msg.data = {soundName};
-        msg.url = url;
-
-        // get the desktop app to trigger the notification
-        window.postMessage(
-            {
-                type: 'dispatch-notification',
-                message: msg,
-            },
-            window.location.origin,
-        );
+        DesktopApp.dispatchNotification(title, body, channel.id, teamId, silent, soundName, url);
     } else {
         showNotification({
             title,

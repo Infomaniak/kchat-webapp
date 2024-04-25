@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
@@ -15,7 +15,6 @@ import {canUploadFiles} from 'utils/file_utils';
 import type {GlobalState} from 'types/store';
 import type {FilesWillUploadHook} from 'types/store/plugins';
 
-import type {Props} from './file_upload';
 import FileUpload from './file_upload';
 
 function mapStateToProps(state: GlobalState) {
@@ -33,7 +32,7 @@ function mapStateToProps(state: GlobalState) {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<any>, Props['actions']>({
+        actions: bindActionCreators({
             uploadFile,
         }, dispatch),
     };

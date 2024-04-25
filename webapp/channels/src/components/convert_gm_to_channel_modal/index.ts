@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import {convertGroupMessageToPrivateChannel} from 'mattermost-redux/actions/channels';
@@ -12,7 +12,7 @@ import {
     getCurrentUserId,
     makeGetProfilesInChannel,
 } from 'mattermost-redux/selectors/entities/users';
-import type {Action, ActionResult} from 'mattermost-redux/types/actions';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {moveChannelsInSidebar} from 'actions/views/channel_sidebar';
 import {closeModal} from 'actions/views/modals';
@@ -48,7 +48,7 @@ export type Actions = {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<Action>, Actions>({
+        actions: bindActionCreators({
             closeModal,
             convertGroupMessageToPrivateChannel,
             moveChannelsInSidebar,

@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -17,6 +17,7 @@ import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
 import Constants from 'utils/constants';
+import DesktopApp from 'utils/desktop_api';
 import * as Utils from 'utils/utils';
 
 const HistoryButtonsContainer = styled.nav`
@@ -48,45 +49,29 @@ const HistoryButtons = (): JSX.Element => {
     const goBack = () => {
         trackEvent('ui', 'ui_history_back');
         history.goBack();
-        window.postMessage(
-            {
-                type: 'history-button',
-            },
-            window.location.origin,
-        );
+        requestButtons();
     };
 
     const goForward = () => {
         trackEvent('ui', 'ui_history_forward');
         history.goForward();
-        window.postMessage(
-            {
-                type: 'history-button',
-            },
-            window.location.origin,
-        );
+        requestButtons();
     };
 
-    const handleButtonMessage = useCallback((message: {origin: string; data: {type: string; message: {enableBack: boolean; enableForward: boolean}}}) => {
-        if (message.origin !== window.location.origin) {
-            return;
-        }
+    const requestButtons = async () => {
+        const {canGoBack, canGoForward} = await DesktopApp.getBrowserHistoryStatus();
+        updateButtons(canGoBack, canGoForward);
+    };
 
-        switch (message.data.type) {
-        case 'history-button-return': {
-            setCanGoBack(message.data.message.enableBack);
-            setCanGoForward(message.data.message.enableForward);
-            break;
-        }
-        }
-    }, []);
+    const updateButtons = (enableBack: boolean, enableForward: boolean) => {
+        setCanGoBack(enableBack);
+        setCanGoForward(enableForward);
+    };
 
     useEffect(() => {
-        window.addEventListener('message', handleButtonMessage);
-        return () => {
-            window.removeEventListener('message', handleButtonMessage);
-        };
-    }, [handleButtonMessage]);
+        const off = DesktopApp.onBrowserHistoryStatusUpdated(updateButtons);
+        return off;
+    }, []);
 
     return (
         <HistoryButtonsContainer>

@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import type {IntlShape} from 'react-intl';
 
 import {SelfHostedSignupProgress} from '@mattermost/types/cloud';
 import type {ExperimentalSettings, PluginSettings, SSOSettings, Office365Settings} from '@mattermost/types/config';
@@ -11,7 +10,7 @@ import {RESOURCE_KEYS} from 'mattermost-redux/constants/permissions_sysconsole';
 
 import AdminDefinition from 'components/admin_console/admin_definition';
 import AdminSidebar from 'components/admin_console/admin_sidebar/admin_sidebar';
-import type {Props} from 'components/admin_console/admin_sidebar/admin_sidebar';
+import type {Props as OriginalProps} from 'components/admin_console/admin_sidebar/admin_sidebar';
 
 import {samplePlugin1} from 'tests/helpers/admin_console_plugin_index_sample_pluings';
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
@@ -27,8 +26,10 @@ jest.mock('utils/utils', () => {
 
 jest.mock('utils/admin_console_index');
 
+type Props = Omit<OriginalProps, 'intl'>;
+
 describe('components/AdminSidebar', () => {
-    const defaultProps: Props = {
+    const defaultProps: Omit<Props, 'intl'> = {
         license: {},
         config: {
             ExperimentalSettings: {
@@ -40,7 +41,6 @@ describe('components/AdminSidebar', () => {
             } as PluginSettings,
             FeatureFlags: {},
         },
-        intl: {} as IntlShape,
         adminDefinition: AdminDefinition,
         buildEnterpriseReady: false,
         navigationBlocked: false,
@@ -61,7 +61,7 @@ describe('components/AdminSidebar', () => {
                 webapp: {bundle_path: 'webapp/dist/main.js'},
             },
         },
-        onFilterChange: jest.fn(),
+        onSearchChange: jest.fn(),
         actions: {
             getPlugins: jest.fn(),
         },
@@ -161,7 +161,6 @@ describe('components/AdminSidebar', () => {
                     EnableUploads: true,
                 } as PluginSettings,
             },
-            intl: {} as IntlShape,
             adminDefinition: AdminDefinition,
             buildEnterpriseReady: false,
             siteName: 'test snap',
@@ -182,7 +181,7 @@ describe('components/AdminSidebar', () => {
                     webapp: {bundle_path: 'webapp/dist/main.js'},
                 },
             },
-            onFilterChange: jest.fn(),
+            onSearchChange: jest.fn(),
             actions: {
                 getPlugins: jest.fn(),
             },
@@ -208,7 +207,6 @@ describe('components/AdminSidebar', () => {
                     EnableUploads: true,
                 } as PluginSettings,
             },
-            intl: {} as IntlShape,
             adminDefinition: AdminDefinition,
             buildEnterpriseReady: false,
             siteName: 'test snap',
@@ -229,7 +227,7 @@ describe('components/AdminSidebar', () => {
                     webapp: {bundle_path: 'webapp/dist/main.js'},
                 },
             },
-            onFilterChange: jest.fn(),
+            onSearchChange: jest.fn(),
             actions: {
                 getPlugins: jest.fn(),
             },
@@ -257,7 +255,6 @@ describe('components/AdminSidebar', () => {
                     EnableUploads: true,
                 } as PluginSettings,
             },
-            intl: {} as IntlShape,
             adminDefinition: AdminDefinition,
             buildEnterpriseReady: true,
             navigationBlocked: false,
@@ -278,7 +275,7 @@ describe('components/AdminSidebar', () => {
                     webapp: {bundle_path: 'webapp/dist/main.js'},
                 },
             },
-            onFilterChange: jest.fn(),
+            onSearchChange: jest.fn(),
             actions: {
                 getPlugins: jest.fn(),
             },
@@ -334,7 +331,6 @@ describe('components/AdminSidebar', () => {
                     Scope: 'scope',
                 } as Office365Settings,
             },
-            intl: {} as IntlShape,
             adminDefinition: AdminDefinition,
             buildEnterpriseReady: true,
             navigationBlocked: false,
@@ -355,7 +351,7 @@ describe('components/AdminSidebar', () => {
                     webapp: {bundle_path: 'webapp/dist/main.js'},
                 },
             },
-            onFilterChange: jest.fn(),
+            onSearchChange: jest.fn(),
             actions: {
                 getPlugins: jest.fn(),
             },
@@ -381,7 +377,6 @@ describe('components/AdminSidebar', () => {
                     EnableUploads: true,
                 } as PluginSettings,
             },
-            intl: {} as IntlShape,
             adminDefinition: AdminDefinition,
             buildEnterpriseReady: true,
             navigationBlocked: false,
@@ -390,7 +385,7 @@ describe('components/AdminSidebar', () => {
             plugins: {
                 'mattermost-autolink': samplePlugin1,
             },
-            onFilterChange: jest.fn(),
+            onSearchChange: jest.fn(),
             actions: {
                 getPlugins: jest.fn(),
             },
@@ -470,7 +465,6 @@ describe('components/AdminSidebar', () => {
                     EnableUploads: true,
                 } as PluginSettings,
             },
-            intl: {} as IntlShape,
             adminDefinition: AdminDefinition,
             buildEnterpriseReady: true,
             navigationBlocked: false,
@@ -479,7 +473,7 @@ describe('components/AdminSidebar', () => {
             plugins: {
                 'mattermost-autolink': samplePlugin1,
             },
-            onFilterChange: jest.fn(),
+            onSearchChange: jest.fn(),
             actions: {
                 getPlugins: jest.fn(),
             },

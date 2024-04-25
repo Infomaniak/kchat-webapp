@@ -16,7 +16,7 @@ import {Preferences} from 'mattermost-redux/constants';
 import ConvertGmToChannelModal from 'components/convert_gm_to_channel_modal/convert_gm_to_channel_modal';
 
 import TestHelper from 'packages/mattermost-redux/test/test_helper';
-import {renderWithFullContext, screen} from 'tests/react_testing_utils';
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -62,7 +62,7 @@ describe('component/ConvertGmToChannelModal', () => {
             },
         });
 
-        renderWithFullContext(
+        renderWithContext(
             <ConvertGmToChannelModal
                 currentTeam={team}
                 {...baseProps}

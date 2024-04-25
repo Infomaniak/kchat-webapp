@@ -19,7 +19,7 @@ import {isAnyModalOpen} from 'selectors/views/modals';
 import CompassDesignProvider from 'components/compass_design_provider';
 
 import Constants, {A11yClassNames} from 'utils/constants';
-import {isKeyPressed} from 'utils/utils';
+import {isKeyPressed} from 'utils/keyboard';
 
 import type {Props as MenuItemProps} from './menu_item';
 import {MenuItem as ParentMenuItem} from './menu_item';

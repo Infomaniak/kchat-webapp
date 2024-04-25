@@ -12,12 +12,12 @@ import {getCloudCustomer, updateCloudCustomer, updateCloudCustomerAddress} from 
 import {setNavigationBlocked} from 'actions/admin_actions.jsx';
 
 import BlockableLink from 'components/admin_console/blockable_link';
-import DropdownInput from 'components/dropdown_input';
+import CountrySelector from 'components/payment_form/country_selector';
 import StateSelector from 'components/payment_form/state_selector';
 import SaveButton from 'components/save_button';
+import AdminHeader from 'components/widgets/admin_console/admin_header';
 import Input from 'components/widgets/inputs/input/input';
 
-import {COUNTRIES} from 'utils/countries';
 import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
@@ -137,16 +137,12 @@ const CompanyInfoEdit: React.FC<Props> = () => {
 
     const companyAddressInput = (
         <>
-            <DropdownInput
+            <CountrySelector
                 onChange={(option) => {
                     setCountry(option.value);
                     setContentChanged(true);
                 }}
-                value={country ? {value: country, label: country} : undefined}
-                options={COUNTRIES.map((c) => ({value: c.name, label: c.name}))}
-                legend={Utils.localizeMessage('admin.billing.company_info.country', 'Country')}
-                placeholder={Utils.localizeMessage('admin.billing.company_info.country', 'Country')}
-                name={'country_dropdown'}
+                value={country || undefined}
             />
             <div className='form-row'>
                 <Input
@@ -204,7 +200,7 @@ const CompanyInfoEdit: React.FC<Props> = () => {
 
     return (
         <div className='wrapper--fixed CompanyInfoEdit'>
-            <div className='admin-console__header with-back'>
+            <AdminHeader withBackButton={true}>
                 <div>
                     <BlockableLink
                         to='/admin_console/billing/company_info'
@@ -215,7 +211,7 @@ const CompanyInfoEdit: React.FC<Props> = () => {
                         defaultMessage='Edit Company Information'
                     />
                 </div>
-            </div>
+            </AdminHeader>
             <div className='admin-console__wrapper'>
                 <div className='admin-console__content'>
                     <div className='CompanyInfoEdit__card'>

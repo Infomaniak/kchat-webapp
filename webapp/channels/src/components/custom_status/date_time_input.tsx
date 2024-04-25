@@ -15,6 +15,8 @@ import {components} from 'react-select';
 import type {ActionMeta, ValueType, ControlProps, OptionsType} from 'react-select';
 import Creatable from 'react-select/creatable';
 
+import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
+
 import {getCurrentLocale} from 'selectors/i18n';
 
 import DatePicker from 'components/date_picker';
@@ -22,9 +24,9 @@ import Timestamp from 'components/timestamp';
 import Input from 'components/widgets/inputs/input/input';
 
 import Constants from 'utils/constants';
+import {isKeyPressed} from 'utils/keyboard';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
-import {isKeyPressed, localizeMessage} from 'utils/utils';
-
+import {localizeMessage} from 'utils/utils';
 import './date_time_input.scss';
 
 const CUSTOM_STATUS_TIME_PICKER_INTERVALS_IN_MINUTES = 30;
@@ -124,7 +126,8 @@ type Props = {
     setIsDatePickerOpen?: (isDatePickerOpen: boolean) => void;
 }
 
-const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, setIsDatePickerOpen}: Props) => {
+const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, setIsDatePickerOpen}: Props) => {
+    const timezone = useSelector(getCurrentTimezone);
     const locale = useSelector(getCurrentLocale);
     const [timeOptions, setTimeOptions] = useState<CreatableOption[]>([]);
     const [selectedValue, setSelectedValue] = useState<ValueType<CreatableOption>>(null);

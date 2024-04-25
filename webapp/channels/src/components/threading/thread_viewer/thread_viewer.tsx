@@ -2,19 +2,20 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import type {HTMLAttributes} from 'react';
 import React from 'react';
+import type {HTMLAttributes} from 'react';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import type {UserThread} from '@mattermost/types/threads';
 
-import type {ExtendedPost} from 'mattermost-redux/actions/posts';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import deferComponentRender from 'components/deferComponentRender';
 import FileUploadOverlay from 'components/file_upload_overlay';
 import LoadingScreen from 'components/loading_screen';
+
+import WebSocketClient from 'client/web_websocket_client';
 
 import type {FakePost} from 'types/store/rhs';
 
@@ -22,7 +23,7 @@ import ThreadViewerVirtualized from '../virtualized_thread_viewer';
 
 import './thread_viewer.scss';
 
-const DeferredThreadViewerVirt = deferComponentRender(ThreadViewerVirtualized); // where this is called is causing issues
+const DeferredThreadViewerVirt = deferComponentRender(ThreadViewerVirtualized);
 
 type Attrs = Pick<HTMLAttributes<HTMLDivElement>, 'className' | 'id'>;
 
@@ -31,17 +32,15 @@ export type Props = Attrs & {
     appsEnabled: boolean;
     userThread?: UserThread | null;
     channel: Channel | null;
-    selected: Post | FakePost;
-    previousRhsState?: string;
+    selected?: Post | FakePost;
     currentUserId: string;
     currentTeamId: string;
     socketConnectionStatus: boolean;
     actions: {
         fetchRHSAppsBindings: (channelId: string, rootID: string) => unknown;
-        getNewestPostThread: (rootId: string) => Promise<any>|ActionFunc;
-        getPostThread: (rootId: string, fetchThreads: boolean) => Promise<any>|ActionFunc;
-        getThread: (userId: string, teamId: string, threadId: string, extended: boolean) => Promise<any>|ActionFunc;
-        removePost: (post: ExtendedPost) => void;
+        getNewestPostThread: (rootId: string) => Promise<ActionResult>;
+        getPostThread: (rootId: string, fetchThreads: boolean) => Promise<ActionResult>;
+        getThread: (userId: string, teamId: string, threadId: string, extended: boolean) => Promise<ActionResult>;
         selectPostCard: (post: Post) => void;
         updateThreadLastOpened: (threadId: string, lastViewedAt: number) => unknown;
         updateThreadRead: (userId: string, teamId: string, threadId: string, timestamp: number) => unknown;
@@ -50,7 +49,11 @@ export type Props = Attrs & {
     postIds: string[];
     highlightedPostId?: Post['id'];
     selectedPostFocusedAt?: number;
-    isThreadView?: boolean;
+    isThreadView: boolean;
+    inputPlaceholder?: string;
+    rootPostId: string;
+    fromSuppressed?: boolean;
+    enableWebSocketEventScope: boolean;
 };
 
 type State = {
@@ -74,7 +77,13 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
         this.onInit();
 
         if (this.props.appsEnabled) {
-            this.props.actions.fetchRHSAppsBindings(this.props.channel?.id || '', this.props.selected.id);
+            this.props.actions.fetchRHSAppsBindings(this.props.channel?.id || '', this.props.selected?.id || this.props.rootPostId);
+        }
+    }
+
+    public componentWillUnmount() {
+        if (this.props.enableWebSocketEventScope) {
+            WebSocketClient.updateActiveThread(this.props.isThreadView, '');
         }
     }
 
@@ -85,7 +94,7 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
             return;
         }
 
-        const selectedChanged = this.props.selected.id !== prevProps.selected.id;
+        const selectedChanged = this.props.selected.id !== prevProps.selected?.id;
 
         if (reconnected || selectedChanged) {
             this.onInit(reconnected);
@@ -99,7 +108,7 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
         }
 
         if (this.props.appsEnabled && (
-            this.props.channel?.id !== prevProps.channel?.id || this.props.selected.id !== prevProps.selected.id
+            this.props.channel?.id !== prevProps.channel?.id || this.props.selected.id !== prevProps.selected?.id
         )) {
             this.props.actions.fetchRHSAppsBindings(this.props.channel?.id || '', this.props.selected.id);
         }
@@ -107,7 +116,7 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
 
     public morePostsToFetch(): boolean {
         const replyCount = this.getReplyCount();
-        return this.props.selected && this.props.postIds.length < (replyCount + 1);
+        return Boolean(this.props.selected) && this.props.postIds.length < (replyCount + 1);
     }
 
     public getReplyCount(): number {
@@ -152,7 +161,7 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
                 this.props.actions.updateThreadRead(
                     this.props.currentUserId,
                     this.props.currentTeamId,
-                    this.props.selected.id,
+                    this.props.selected?.id || this.props.rootPostId,
                     Date.now(),
                 );
             }
@@ -164,11 +173,7 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
     // scrolls to either bottom or new messages line
     private onInit = async (reconnected = false): Promise<void> => {
         this.setState({isLoading: !reconnected});
-        if (reconnected || this.morePostsToFetch()) {
-            await this.props.actions.getPostThread(this.props.selected.id, !reconnected);
-        } else {
-            await this.props.actions.getNewestPostThread(this.props.selected.id);
-        }
+        await this.props.actions.getPostThread(this.props.selected?.id || this.props.rootPostId, !reconnected);
 
         if (
             this.props.isCollapsedThreadsEnabled &&
@@ -177,6 +182,9 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
             await this.fetchThread();
         }
 
+        if (this.props.channel && this.props.enableWebSocketEventScope) {
+            WebSocketClient.updateActiveThread(this.props.isThreadView, this.props.channel?.id);
+        }
         this.setState({isLoading: false});
     };
 
@@ -215,6 +223,7 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
                             <FileUploadOverlay overlayType='right'/>
                             {this.props.selected && (
                                 <DeferredThreadViewerVirt
+                                    inputPlaceholder={this.props.inputPlaceholder}
                                     key={this.props.selected.id}
                                     channel={this.props.channel}
                                     onCardClick={this.handleCardClick}
@@ -224,6 +233,7 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
                                     highlightedPostId={this.props.highlightedPostId}
                                     selectedPostFocusedAt={this.props.selectedPostFocusedAt}
                                     isThreadView={Boolean(this.props.isCollapsedThreadsEnabled && this.props.isThreadView)}
+                                    fromSuppressed={this.props.fromSuppressed}
                                 />
                             )}
                         </>

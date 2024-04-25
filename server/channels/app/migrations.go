@@ -555,20 +555,27 @@ func (s *Server) doPostPriorityConfigDefaultTrueMigration() {
 }
 
 func (s *Server) doElasticsearchFixChannelIndex(c request.CTX) {
+	s.AddLicenseListener(func(oldLicense, newLicense *model.License) {
+		s.elasticsearchFixChannelIndex(c, newLicense)
+	})
+
+	s.elasticsearchFixChannelIndex(c, s.License())
+}
+
+func (s *Server) elasticsearchFixChannelIndex(c request.CTX, license *model.License) {
+	if model.BuildEnterpriseReady != "true" || license == nil || !*license.Features.Elasticsearch {
+		mlog.Debug("Skipping triggering Elasticsearch channel index fix job as build is not Enterprise ready")
+		return
+	}
+
 	// If the migration is already marked as completed, don't do it again.
 	if _, err := s.Store().System().GetByName(model.MigrationKeyElasticsearchFixChannelIndex); err == nil {
+		mlog.Debug("Skipping triggering Elasticsearch channel index fix job as it is already marked completed in database")
 		return
 	}
 
-	license := s.License()
-	if model.BuildEnterpriseReady != "true" || license == nil || !*license.Features.Elasticsearch {
-		mlog.Info("Skipping triggering Elasticsearch channel index fix job as build is not Enterprise ready")
-		return
-	}
-
-	if _, appErr := s.Jobs.CreateJob(c, model.JobTypeElasticsearchFixChannelIndex, nil); appErr != nil {
+	if _, appErr := s.Jobs.CreateJobOnce(c, model.JobTypeElasticsearchFixChannelIndex, nil); appErr != nil {
 		mlog.Fatal("failed to start job for fixing Elasticsearch channels index", mlog.Err(appErr))
-		return
 	}
 }
 
@@ -621,6 +628,27 @@ func (s *Server) doDeleteEmptyDraftsMigration(c request.CTX) {
 	}
 }
 
+func (s *Server) doDeleteOrphanDraftsMigration(c request.CTX) {
+	// If the migration is already marked as completed, don't do it again.
+	if _, err := s.Store().System().GetByName(model.MigrationKeyDeleteOrphanDrafts); err == nil {
+		return
+	}
+
+	jobs, err := s.Store().Job().GetAllByTypeAndStatus(c, model.JobTypeDeleteOrphanDraftsMigration, model.JobStatusPending)
+	if err != nil {
+		mlog.Fatal("failed to get jobs by type and status", mlog.Err(err))
+		return
+	}
+	if len(jobs) > 0 {
+		return
+	}
+
+	if _, appErr := s.Jobs.CreateJobOnce(c, model.JobTypeDeleteOrphanDraftsMigration, nil); appErr != nil {
+		mlog.Fatal("failed to start job for deleting orphan drafts", mlog.Err(appErr))
+		return
+	}
+}
+
 func (a *App) DoAppMigrations() {
 	a.Srv().doAppMigrations()
 }
@@ -647,4 +675,5 @@ func (s *Server) doAppMigrations() {
 	s.doElasticsearchFixChannelIndex(c)
 	s.doCloudS3PathMigrations(c)
 	s.doDeleteEmptyDraftsMigration(c)
+	s.doDeleteOrphanDraftsMigration(c)
 }

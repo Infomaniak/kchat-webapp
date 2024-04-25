@@ -19,7 +19,6 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {trackEvent} from 'actions/telemetry_actions';
 import {showRHSPlugin} from 'actions/views/rhs';
 import {getShowTaskListBool} from 'selectors/onboarding';
-import {shouldShowAutoLinkedBoard} from 'selectors/plugins';
 
 import {useFirstAdminUser, useIsCurrentUserSystemAdmin} from 'components/global_header/hooks';
 import {
@@ -67,7 +66,7 @@ const TaskItems = styled.div`
 
     p {
         font-size: 12px;
-        color: rgba(var(--center-channel-color-rgb), 0.72);
+        color: rgba(var(--center-channel-color-rgb), 0.75);
         padding: 4px 24px;
     }
 
@@ -99,17 +98,17 @@ const Button = styled.button<{open: boolean}>(({open}) => {
         background: var(--center-channel-bg);
         border: solid 1px rgba(var(--center-channel-color-rgb), 0.16);
         box-shadow: var(--elevation-3);
-
+        color: rgba(var(--center-channel-color-rgb), 0.75);
         i {
-            color: rgba(var(--center-channel-color-rgb), 0.56);
+            color: rgba(var(--center-channel-color-rgb), 0.75);
         }
 
         &:hover {
             border-color: rgba(var(--center-channel-color-rgb), 0.24);
             box-shadow: var(--elevation-4);
-
+            color: rgba(var(--center-channel-color-rgb), 0.75)
             i {
-                color: rgba(var(--center-channel-color-rgb), 0.72)
+                color: rgba(var(--center-channel-color-rgb), 0.75)
             }
         }
 
@@ -161,7 +160,6 @@ const OnBoardingTaskList = (): JSX.Element | null => {
     const [showTaskList, firstTimeOnboarding] = useSelector(getShowTaskListBool);
 
     // a/b test auto show linked boards
-    const autoShowLinkedBoard = useSelector((state: GlobalState) => shouldShowAutoLinkedBoard(state));
     const pluginsComponentsList = useSelector((state: GlobalState) => state.plugins.components);
 
     const startTask = (taskName: string) => {

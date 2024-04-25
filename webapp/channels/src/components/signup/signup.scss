@@ -37,7 +37,7 @@
 
             .signup-body-no-login-title {
                 color: var(--title-color-indigo-500);
-                font-family: SuisseIntl;
+                font-family: Metropolis;
                 font-size: 40px;
                 font-weight: 600;
                 letter-spacing: -0.02em;
@@ -46,7 +46,7 @@
             }
 
             .signup-body-no-login-subtitle {
-                color: rgba(var(--center-channel-color-rgb), 0.72);
+                color: rgba(var(--center-channel-color-rgb), 0.75);
                 font-size: 18px;
                 font-weight: 400;
                 line-height: 28px;
@@ -56,7 +56,7 @@
 
         .signup-body-message-subtitle {
             padding-right: 170px;
-            color: rgba(var(--center-channel-color-rgb), 0.72);
+            color: rgba(var(--center-channel-color-rgb), 0.75);
             font-size: 18px;
             font-weight: 400;
             line-height: 28px;
@@ -71,7 +71,7 @@
             .signup-body-message-title {
                 padding-right: 60px;
                 color: var(--title-color-indigo-500);
-                font-family: SuisseIntl;
+                font-family: Metropolis;
                 font-size: 80px;
                 font-weight: 600;
                 letter-spacing: -0.01em;
@@ -143,7 +143,7 @@
 
                 .signup-body-card-title {
                     color: var(--center-channel-color);
-                    font-family: 'SuisseIntl';
+                    font-family: 'Metropolis';
                     font-size: 22px;
                     font-style: normal;
                     font-weight: 600;
@@ -166,6 +166,22 @@
                         margin-top: 22px;
                     }
 
+                    .newsletter {
+                        margin-top: 24px;
+                        margin-bottom: 32px;
+                        color: rgba(var(--center-channel-color-rgb), 0.75);
+                        font-family: 'Open Sans';
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 16px;
+
+                        .interested {
+                            display: block;
+                            color: var(--center-channel-color);
+                        }
+                    }
+
                     .signup-body-card-form-button-submit {
                         @include primary-button;
                         @include button-large;
@@ -186,7 +202,7 @@
                     .signup-body-card-form-divider-label {
                         padding: 0 10px;
                         background-color: var(--center-channel-bg);
-                        color: rgba(var(--center-channel-color-rgb), 0.56);
+                        color: rgba(var(--center-channel-color-rgb), 0.75);
                         font-size: 12px;
                         line-height: 0;
                     }
@@ -209,7 +225,7 @@
 
                 .signup-body-card-agreement {
                     margin-top: 32px;
-                    color: rgba(var(--center-channel-color-rgb), 0.56);
+                    color: rgba(var(--center-channel-color-rgb), 0.75);
                     font-size: 11px;
                     line-height: 16px;
 
@@ -242,7 +258,7 @@
             p {
                 width: 100%;
                 margin: 0;
-                color: rgba(var(--center-channel-color-rgb), 0.72);
+                color: rgba(var(--center-channel-color-rgb), 0.75);
                 font-size: 18px;
                 font-weight: 400;
                 line-height: 28px;

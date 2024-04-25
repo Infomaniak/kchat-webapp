@@ -106,6 +106,7 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
             ref={ref}
             options={options}
             optionRenderer={renderOptionValue}
+            intl={intl}
             selectedItemRef={props.selectedItemRef}
             values={props.values}
             valueRenderer={renderValue}
@@ -148,6 +149,7 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
         />
     );
 });
+
 export default List;
 
 function renderValue(props: {data: OptionValue}) {

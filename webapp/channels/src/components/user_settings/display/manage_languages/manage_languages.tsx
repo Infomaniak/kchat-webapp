@@ -14,9 +14,10 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import ExternalLink from 'components/external_link';
 import SettingItemMax from 'components/setting_item_max';
 
-import * as I18n from 'i18n/i18n.jsx';
 import Constants from 'utils/constants';
-import {isKeyPressed} from 'utils/utils';
+import {isKeyPressed} from 'utils/keyboard';
+
+import * as I18n from 'i18n/i18n.jsx';
 
 type Actions = {
     updateMe: (user: UserProfile) => Promise<ActionResult>;

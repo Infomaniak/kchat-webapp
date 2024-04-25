@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux';
 
 import {getSubscriptionProduct, checkHadPriorTrial, getCloudSubscription} from 'mattermost-redux/selectors/entities/cloud';
 
+import {buildInvoiceSummaryPropsFromLineItems} from 'utils/cloud_utils';
 import {CloudProducts} from 'utils/constants';
 
 import {
@@ -55,16 +56,7 @@ const BillingSummary = ({isFreeTrial, daysLeftOnTrial, onUpgradeMattermostCloud}
         );
     } else if (subscription?.upcoming_invoice) {
         const invoice = subscription.upcoming_invoice;
-        let fullCharges = invoice.line_items.filter((item) => item.type === 'full');
-        const partialCharges = invoice.line_items.filter((item) => item.type === 'partial');
-        if (!partialCharges.length && !fullCharges.length) {
-            fullCharges = invoice.line_items;
-        }
-        let hasMoreLineItems = 0;
-        if (fullCharges.length > 5) {
-            hasMoreLineItems = fullCharges.length - 5;
-            fullCharges = fullCharges.slice(0, 5);
-        }
+        const {fullCharges, partialCharges, hasMore} = buildInvoiceSummaryPropsFromLineItems(invoice.line_items);
 
         body = (
             <InvoiceInfo
@@ -72,7 +64,8 @@ const BillingSummary = ({isFreeTrial, daysLeftOnTrial, onUpgradeMattermostCloud}
                 product={product}
                 fullCharges={fullCharges}
                 partialCharges={partialCharges}
-                hasMore={hasMoreLineItems}
+                hasMore={hasMore}
+                willRenew={subscription?.will_renew === 'true'}
             />
         );
     }

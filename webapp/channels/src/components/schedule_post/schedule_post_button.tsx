@@ -7,8 +7,9 @@ import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
+
 import {openModal} from 'actions/views/modals';
-import {getCurrentUserTimezone} from 'selectors/general';
 
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
@@ -19,8 +20,8 @@ import Tooltip from 'components/tooltip';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';
+import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
-import {isKeyPressed, cmdOrCtrlPressed} from 'utils/utils';
 
 const StyledSchedulePostButton = styled(Button)`
     display: flex;
@@ -63,9 +64,9 @@ type Props = {
 
 const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) => {
     const dispatch = useDispatch();
-    const timezone = useSelector(getCurrentUserTimezone);
     const {formatMessage} = useIntl();
     const [open, setOpen] = useState(false);
+    const timezone = useSelector(getUserCurrentTimezone);
 
     const tooltip = (
         <Tooltip id='schedule-post-tooltip'>

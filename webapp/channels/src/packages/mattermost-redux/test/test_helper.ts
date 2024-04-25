@@ -12,16 +12,17 @@ import type {FileInfo} from '@mattermost/types/files';
 import type {Group} from '@mattermost/types/groups';
 import type {Command, DialogElement, OAuthApp} from '@mattermost/types/integrations';
 import type {Post, PostMetadata} from '@mattermost/types/posts';
+import type {Reaction} from '@mattermost/types/reactions';
 import type {Role} from '@mattermost/types/roles';
 import type {Scheme} from '@mattermost/types/schemes';
 import type {Team, TeamMembership} from '@mattermost/types/teams';
 import type {UserProfile, UserNotifyProps} from '@mattermost/types/users';
 
-import General from 'mattermost-redux/constants/general';
-import {generateId} from 'mattermost-redux/utils/helpers';
-
 export const DEFAULT_SERVER = 'http://localhost:8065';
 const PASSWORD = 'password1';
+
+import General from 'mattermost-redux/constants/general';
+import {generateId} from 'mattermost-redux/utils/helpers';
 
 const {DEFAULT_LOCALE} = General;
 
@@ -98,9 +99,11 @@ class TestHelper {
                 comments: 'never',
                 desktop: 'default',
                 desktop_sound: 'false',
+                calls_desktop_sound: 'true',
                 email: 'false',
                 first_name: 'false',
                 mark_unread: 'mention',
+                highlight_keys: '',
                 mention_keys: '',
                 push: 'none',
                 push_status: 'offline',
@@ -138,10 +141,12 @@ class TestHelper {
                 comments: 'never',
                 desktop: 'default',
                 desktop_sound: 'false',
+                calls_desktop_sound: 'true',
                 email: 'false',
                 first_name: 'false',
                 mark_unread: 'mention',
                 mention_keys: '',
+                highlight_keys: '',
                 push: 'none',
                 push_status: 'offline',
             },
@@ -447,10 +452,14 @@ class TestHelper {
     fakeChannelNotifyProps = (override: Partial<ChannelNotifyProps>): ChannelNotifyProps => {
         return {
             desktop: 'default',
+            desktop_sound: 'off',
+            desktop_threads: 'default',
+            push_threads: 'default',
             email: 'default',
             mark_unread: 'mention',
             push: 'default',
             ignore_channel_mentions: 'default',
+            channel_auto_follow_threads: 'off',
             ...override,
         };
     };
@@ -459,6 +468,7 @@ class TestHelper {
         return {
             desktop: 'default',
             desktop_sound: 'true',
+            calls_desktop_sound: 'true',
             email: 'true',
             mark_unread: 'all',
             push: 'default',
@@ -467,6 +477,7 @@ class TestHelper {
             first_name: 'true',
             channel: 'true',
             mention_keys: '',
+            highlight_keys: '',
             ...override,
         };
     };
@@ -713,6 +724,16 @@ class TestHelper {
         };
     }
 
+    getReactionMock(override: Partial<Reaction> = {}): Reaction {
+        return {
+            user_id: '',
+            post_id: '',
+            emoji_name: '',
+            create_at: 0,
+            ...override,
+        };
+    }
+
     mockLogin = () => {
         const clientBaseRoute = this.basicClient4!.getBaseRoute();
         nock(clientBaseRoute).
@@ -732,7 +753,7 @@ class TestHelper {
             reply(200, [{team_id: this.basicTeam!.id, msg_count: 0, mention_count: 0}]);
 
         nock(clientBaseRoute).
-            get('/users/me/servers').
+            get('/users/me/teams').
             reply(200, [this.basicTeam]);
 
         nock(clientBaseRoute).

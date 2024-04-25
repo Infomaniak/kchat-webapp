@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ReactNode} from 'react';
 import React, {memo, useCallback} from 'react';
+import type {ReactNode} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 

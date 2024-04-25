@@ -1,18 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import Heading from '@infomaniak/compass-components/components/heading';
-import Flex from '@infomaniak/compass-components/utilities/layout/Flex';
+import Heading from '@infomaniak/compass-components/components/heading'; // eslint-disable-line no-restricted-imports
+import Flex from '@infomaniak/compass-components/utilities/layout/Flex'; // eslint-disable-line no-restricted-imports
 import classNames from 'classnames';
 import React, {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
+import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 import {isAddChannelDropdownOpen} from 'selectors/views/add_channel_dropdown';
 
+import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
+import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
 import MainMenu from 'components/main_menu';
 import OverlayTrigger from 'components/overlay_trigger';
 import AddChannelDropdown from 'components/sidebar/add_channel_dropdown';
@@ -38,9 +41,9 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
     justify: 'space-between',
     alignment: 'center',
 }))<SidebarHeaderContainerProps>`
-    height: 46px;
-    width: 100%;
-    padding: 0 16px !important;
+    height: 52px;
+    padding: 0 16px;
+    gap: 8px;
 
     .dropdown-menu {
         position: absolute;
@@ -60,22 +63,16 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
     }
 `;
 
-const HEADING_WIDTH = 200;
-const CHEVRON_WIDTH = 26;
-const ADD_CHANNEL_DROPDOWN_WIDTH = 28;
-const TITLE_WIDTH = (HEADING_WIDTH - CHEVRON_WIDTH - ADD_CHANNEL_DROPDOWN_WIDTH).toString();
-
 const SidebarHeading = styled(Heading).attrs(() => ({
     element: 'h1',
     margin: 'none',
     size: 200,
 }))<SidebarHeaderProps>`
-    color: var(--sidebar-header-text-color) !important;
+    color: var(--sidebar-text);
     cursor: pointer;
     display: flex;
 
     .title {
-        max-width: ${TITLE_WIDTH}px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -88,7 +85,7 @@ const SidebarHeading = styled(Heading).attrs(() => ({
     }
 
     #SidebarContainer & {
-        font-family: SuisseIntl, sans-serif;
+        font-family: Metropolis, sans-serif;
     }
 `;
 
@@ -104,16 +101,16 @@ export type Props = {
     unreadFilterEnabled: boolean;
     userGroupsEnabled: boolean;
     canCreateCustomGroups: boolean;
-    showWorkTemplateButton: boolean;
 }
 
 const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
     const dispatch = useDispatch();
     const currentTeam = useSelector((state: GlobalState) => getCurrentTeam(state));
-    const showJoinChannelTourTip = useShowOnboardingTutorialStep(OnboardingTourSteps.JOIN_CHANNELS);
-    const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_CHANNELS);
-    const showInviteTutorialTip = false;
+    const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS);
+    const showInviteTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.INVITE_PEOPLE);
+    const usageDeltas = useGetUsageDeltas();
     const isAddChannelOpen = useSelector(isAddChannelDropdownOpen);
+    const theme = useSelector(getTheme);
     const openAddChannelOpen = useCallback((open: boolean) => {
         dispatch(setAddChannelDropdown(open));
     }, []);
@@ -125,7 +122,7 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
     };
 
     return (
-        <>
+        <CompassThemeProvider theme={theme}>
             <SidebarHeaderContainer
                 id={'sidebar-header-container'}
                 className={classNames({isWebApp: !isDesktopApp()})}
@@ -162,7 +159,6 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                     canJoinPublicChannel={props.canJoinPublicChannel}
                     handleOpenDirectMessagesModal={props.handleOpenDirectMessagesModal}
                     unreadFilterEnabled={props.unreadFilterEnabled}
-                    showJoinChannelTutorialTip={showJoinChannelTourTip}
                     showCreateTutorialTip={showCreateTutorialTip}
                     showInviteTutorialTip={showInviteTutorialTip}
                     isAddChannelOpen={isAddChannelOpen}
@@ -170,10 +166,9 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                     canCreateCustomGroups={props.canCreateCustomGroups}
                     showCreateUserGroupModal={props.showCreateUserGroupModal}
                     userGroupsEnabled={props.userGroupsEnabled}
-                    showWorkTemplateButton={props.showWorkTemplateButton}
                 />
             </SidebarHeaderContainer>
-        </>
+        </CompassThemeProvider>
     );
 };
 

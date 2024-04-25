@@ -9,6 +9,8 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {Constants} from 'utils/constants';
 
+import {renderWithContext, screen} from 'tests/react_testing_utils';
+
 import ChannelIntroMessage from './channel_intro_message';
 
 describe('components/post_view/ChannelIntroMessages', () => {
@@ -50,11 +52,12 @@ describe('components/post_view/ChannelIntroMessages', () => {
     };
 
     describe('test Open Channel', () => {
-        test('should match snapshot, without boards', () => {
-            const wrapper = shallow(
-                <ChannelIntroMessage{...baseProps}/>,
+        test('should match component state, without boards', () => {
+            const initialState = {};
+            const {container} = renderWithContext(
+                <ChannelIntroMessage{...baseProps}/>, initialState,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
     });
 
@@ -68,23 +71,23 @@ describe('components/post_view/ChannelIntroMessages', () => {
             channel: groupChannel,
         };
 
-        test('should match snapshot, no profiles', () => {
-            const wrapper = shallow(
+        test('should match component state, no profiles', () => {
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
 
-        test('should match snapshot, with profiles', () => {
-            const wrapper = shallow(
+        test('should match component state, with profiles', () => {
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     channelProfiles={users}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
     });
 
@@ -98,24 +101,24 @@ describe('components/post_view/ChannelIntroMessages', () => {
             channel: directChannel,
         };
 
-        test('should match snapshot, without teammate', () => {
-            const wrapper = shallow(
+        test('should match component state, without teammate', () => {
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
 
-        test('should match snapshot, with teammate', () => {
-            const wrapper = shallow(
+        test('should match component state, with teammate', () => {
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     teammate={user1 as UserProfile}
                     teammateName='my teammate'
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
     });
 
@@ -130,24 +133,24 @@ describe('components/post_view/ChannelIntroMessages', () => {
             channel: directChannel,
         };
 
-        test('should match snapshot, readonly', () => {
-            const wrapper = shallow(
+        test('should match component state, readonly', () => {
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     isReadOnly={true}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
 
-        test('should match snapshot', () => {
-            const wrapper = shallow(
+        test('should match component state without any permission', () => {
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     teamIsGroupConstrained={true}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
 
         test('should match snapshot, with enableUserCreation', () => {
@@ -183,13 +186,13 @@ describe('components/post_view/ChannelIntroMessages', () => {
             channel: directChannel,
         };
 
-        test('should match snapshot', () => {
-            const wrapper = shallow(
+        test('should match component state', () => {
+            const {container} = renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(container).toMatchSnapshot();
         });
     });
 });

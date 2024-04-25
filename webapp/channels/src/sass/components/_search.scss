@@ -37,10 +37,13 @@
     display: flex;
     height: 100%;
     align-items: center;
+    // Infomaniak
     color: #23A1FE;
     i {
         color: #23A1FE;
     }
+    // Mattermost
+    // color: rgba(var(--center-channel-color-rgb), 0.64);
     pointer-events: none;
 }
 
@@ -48,7 +51,7 @@
     position: absolute;
     top: 6px;
     left: 9px;
-    fill: rgba(var(--center-channel-color-rgb), 0.56);
+    fill: rgba(var(--center-channel-color-rgb), 0.64);
     pointer-events: none;
 
     svg {
@@ -71,13 +74,13 @@
     align-items: center;
     justify-content: center;
     margin: 0;
-    color: rgba(var(--center-channel-color-rgb), 0.56);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
     cursor: pointer;
     font-size: 16px;
     visibility: hidden;
 
     &:hover {
-        color: rgba(var(--center-channel-color-rgb), 0.72);
+        color: rgba(var(--center-channel-color-rgb), 0.8);
     }
 
     &:active {
@@ -213,9 +216,7 @@
 
         .search__font-icon,
         .input-clear-x {
-            i {
-                color: rgba(var(--denim-button-bg), 0.56);
-            }
+            color: rgba(var(--center-channel-color-rgb), 0.64);
         }
 
         .searchTypeBadge {
@@ -236,9 +237,7 @@
     .search__font-icon,
     .input-clear-x {
         display: flex;
-        i {
-            color: rgba(var(--denim-button-bg), 0.56);
-        }
+        color: rgba(var(--global-header-text-rgb), 0.64);
     }
 }
 
@@ -307,7 +306,7 @@
             overflow: hidden;
             flex-shrink: 1;
             font-weight: 600;
-            opacity: 0.72;
+            opacity: 0.73;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
@@ -452,7 +451,52 @@
     }
 }
 
+.search-hint_text-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-hint_learn-search {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 12px;
+    gap: 6px;
+
+    &:hover,
+    &:focus,
+    &:active {
+        text-decoration: none;
+    }
+
+    >span {
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 16px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    >i {
+        display: inline-flex !important;
+        align-items: center;
+        padding: 4px;
+        background-color: hsla(221, 77%, 48%, 0.08);
+        border-radius: 50%;
+        font-size: 14px !important;
+        gap: 10px;
+
+        &::before {
+            margin: 0;
+        }
+    }
+}
+
 .sidebar--right__subheader {
+
     // Fighting specificity with _sidebar-right.scss (sidebar--right .sidebar--right__subheader ul)
     ul.search-hint__suggestions-list {
         padding: 10px 0;

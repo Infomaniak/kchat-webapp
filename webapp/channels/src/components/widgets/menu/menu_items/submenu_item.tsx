@@ -2,17 +2,20 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import type {CSSProperties} from 'react';
 import React from 'react';
+import type {CSSProperties} from 'react';
 
 import {showMobileSubMenuModal} from 'actions/global_actions';
 
+import Constants from 'utils/constants';
+import * as Keyboard from 'utils/keyboard';
 import * as Utils from 'utils/utils';
 
 import type {Menu} from 'types/store/plugins';
 
+import {isMobile as isMobileViewHack} from '../is_mobile_view_hack';
+
 import './menu_item.scss';
-import Constants from 'utils/constants';
 
 // Requires an object conforming to a submenu structure passed to registerPostDropdownSubMenuAction
 // of the form:
@@ -62,6 +65,9 @@ type State = {
     show: boolean;
 }
 
+/**
+ * @deprecated Use the "webapp/channels/src/components/menu" instead.
+ */
 export default class SubMenuItem extends React.PureComponent<Props, State> {
     private node: React.RefObject<HTMLLIElement>;
 
@@ -92,7 +98,7 @@ export default class SubMenuItem extends React.PureComponent<Props, State> {
     private onClick = (event: React.SyntheticEvent<HTMLElement>) => {
         event.preventDefault();
         const {id, postId, subMenu, action, root, isHeader} = this.props;
-        const isMobile = Utils.isMobile();
+        const isMobile = isMobileViewHack();
         if (isHeader) {
             event.stopPropagation();
             return;
@@ -112,7 +118,7 @@ export default class SubMenuItem extends React.PureComponent<Props, State> {
     };
 
     handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (Utils.isKeyPressed(event, Constants.KeyCodes.ENTER)) {
+        if (Keyboard.isKeyPressed(event, Constants.KeyCodes.ENTER)) {
             if (this.props.action) {
                 this.onClick(event);
             } else {
@@ -120,7 +126,7 @@ export default class SubMenuItem extends React.PureComponent<Props, State> {
             }
         }
 
-        if (Utils.isKeyPressed(event, Constants.KeyCodes.RIGHT)) {
+        if (Keyboard.isKeyPressed(event, Constants.KeyCodes.RIGHT)) {
             if (this.props.direction === 'right') {
                 this.show();
             } else {
@@ -128,7 +134,7 @@ export default class SubMenuItem extends React.PureComponent<Props, State> {
             }
         }
 
-        if (Utils.isKeyPressed(event, Constants.KeyCodes.LEFT)) {
+        if (Keyboard.isKeyPressed(event, Constants.KeyCodes.LEFT)) {
             if (this.props.direction === 'left') {
                 this.show();
             } else {
@@ -139,7 +145,7 @@ export default class SubMenuItem extends React.PureComponent<Props, State> {
 
     public render() {
         const {id, postId, text, selectedValueText, subMenu, icon, filter, ariaLabel, direction, styleSelectableItem, extraText, renderSelected, rightDecorator, tabIndex} = this.props;
-        const isMobile = Utils.isMobile();
+        const isMobile = isMobileViewHack();
 
         if (filter && !filter(id)) {
             return ('');
@@ -158,13 +164,8 @@ export default class SubMenuItem extends React.PureComponent<Props, State> {
         const hasSubmenu = subMenu && subMenu.length;
         const subMenuStyle: CSSProperties = {
             visibility: (this.state.show && hasSubmenu && !isMobile ? 'visible' : 'hidden') as 'visible' | 'hidden',
+            top: this.node && this.node.current ? String(this.node.current.offsetTop) + 'px' : 'unset',
         };
-        if (this.props.openUp && !isMobile) {
-            subMenuStyle.bottom = this.node && this.node.current ? 'calc(100% - ' + String(this.node.current.offsetTop + this.node.current.offsetHeight) + 'px)' : 'unset';
-            subMenuStyle.top = 'auto';
-        } else {
-            subMenuStyle.top = this.node && this.node.current ? String(this.node.current.offsetTop) + 'px' : 'unset';
-        }
 
         const menuOffset = '100%';
         if (direction === 'left') {

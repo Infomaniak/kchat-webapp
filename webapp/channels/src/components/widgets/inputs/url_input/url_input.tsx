@@ -24,8 +24,8 @@ type URLInputProps = {
     shortenLength?: number;
     error?: string;
     className?: string;
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onBlur?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 };
 
 function UrlInput({
@@ -55,7 +55,7 @@ function UrlInput({
     const isShortenedURL = shortenLength && fullURL.length > shortenLength;
     const hasError = Boolean(error);
 
-    const handleOnInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleOnInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         event.preventDefault();
 
         if (onChange) {
@@ -63,7 +63,7 @@ function UrlInput({
         }
     };
 
-    const handleOnInputBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleOnInputBlur = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         event.preventDefault();
 
         setEditing(hasError);
@@ -80,7 +80,10 @@ function UrlInput({
     };
 
     const urlInputLabel = (
-        <span className='url-input-label'>
+        <span
+            className='url-input-label'
+            data-testid='urlInputLabel'
+        >
             {formatMessage({id: 'url_input.label.url', defaultMessage: 'URL: '})}
             {isShortenedURL ? getShortenedURL(fullURL, shortenLength) : fullURL}
         </span>
@@ -106,6 +109,7 @@ function UrlInput({
                 )}
                 {(editing || hasError) && (
                     <Input
+                        data-testid='channelURLInput'
                         name='url-input'
                         type='text'
                         containerClassName='url-input-editable-container'
