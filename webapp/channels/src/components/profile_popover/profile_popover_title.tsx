@@ -14,6 +14,7 @@ import {isGuest, isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {getRhsState} from 'selectors/rhs';
 
+import CopyButton from 'components/copy_button';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
 import Tag from 'components/widgets/tag/tag';
@@ -126,6 +127,13 @@ const ProfilePopoverTitle = ({
     return (
         <div className={titleClassName}>
             <span data-testid={`profilePopoverTitle_${username}`}>
+                <div className='user-popover__copyID'>
+                    <CopyButton
+                        content={userId}
+                        tooltipText='copy.text.userid'
+                        icon='icon-link-variant'
+                    />
+                </div>
                 {roleTitle}
                 <button
                     ref={closeButtonRef}
