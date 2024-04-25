@@ -172,13 +172,13 @@ unit_test:
     - when: never
   artifacts:
     paths:
-      - coverage/
+      - webapp/channels/coverage/
     when: on_success
     reports:
-      junit: coverage/junit.xml
+      junit: webapp/channels/coverage/junit.xml
       coverage_report:
         coverage_format: cobertura
-        path: coverage/cobertura-coverage.xml
+        path: webapp/channels/coverage/cobertura-coverage.xml
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   cache:
     paths:
