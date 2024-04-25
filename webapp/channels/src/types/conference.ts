@@ -5,4 +5,6 @@ export type Conference = {
     participants: string[];
     user_id: string;
     create_at: number;
+    joined?: string[];
+    refused?: string[];
 }

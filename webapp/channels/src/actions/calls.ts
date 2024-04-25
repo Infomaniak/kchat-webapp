@@ -172,6 +172,7 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                     currentUserID: getCurrentUserId(getState()),
                     url: data?.url,
                     id: data?.id,
+                    call: data,
                 },
             });
 
@@ -184,10 +185,16 @@ export function startOrJoinCallInChannelV2(channelID: string) {
 
                 if (isDesktopApp()) {
                     openRingingModal(channelID);
-
-                    // dispatch(startKmeetWindow(data.id));
                 } else {
-                    window.open(kmeetUrl.href, '_blank', 'noopener');
+                    dispatch(openModal(
+                        {
+                            modalId: ModalIdentifiers.INCOMING_CALL,
+                            dialogType: kmeetModal,
+                            dialogProps: {
+                                channelId: channelID,
+                            },
+                        },
+                    ));
                 }
             }
         } catch (error) {
@@ -267,7 +274,9 @@ export function receivedCall(call: Call, currentUserId: string) {
             if (isDesktopApp()) {
                 if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
                     console.log('[calls] call received on desktop.');
-                    handleDesktopKmeetCall(globalState, currentUserId, call);
+
+                    // handleDesktopKmeetCall(globalState, currentUserId, call);
+                    openRingingModal(call.channel_id);
 
                     return;
                 }
@@ -460,6 +469,7 @@ function replacePreviousAddedConference(dispatch: DispatchFunc, call: Call, glob
             currentUserID: getCurrentUserId(globalState),
             url: call.url,
             id: call.id,
+            call,
         },
     });
 }

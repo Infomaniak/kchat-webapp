@@ -104,6 +104,7 @@ import {closeRightHandSide} from 'actions/views/rhs';
 import {incrementWsErrorCount, resetWsErrorCount} from 'actions/views/system';
 import {updateThreadLastOpened} from 'actions/views/threads';
 import {voiceConnectedChannels} from 'selectors/calls';
+import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
@@ -1871,6 +1872,19 @@ function handleThreadFollowChanged(msg) {
 function handleConferenceUserDenied(msg) {
     return async (doDispatch) => {
         const currentUserId = getCurrentUserId(getState());
+        const conference = getConferenceByChannelId(getState(), msg.data.channel_id);
+
+        console.log('conference', conference);
+        console.log('currentUserId', currentUserId);
+
+        if (conference.participants.length <= 2 && currentUserId === conference.user_id) {
+            if (isDesktopApp()) {
+                window.desktopAPI?.closeRingCallWindow?.();
+            } else {
+                stopRing();
+                dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+            }
+        }
 
         if (currentUserId === msg?.data?.user_id) {
             if (isDesktopApp()) {
@@ -1899,8 +1913,6 @@ function handleConferenceUserConnected(msg) {
         const calls = voiceConnectedChannels(state);
         const currentUserId = getCurrentUserId(getState());
 
-        console.log('msg', msg);
-
         if (currentUserId === msg?.data?.user_id) {
             if (isDesktopApp()) {
                 window.postMessage(
@@ -1928,9 +1940,9 @@ function handleConferenceUserConnected(msg) {
                     id: keys[0],
                 },
             });
-
-            doDispatch(externalJoinCall(msg));
         }
+
+        doDispatch(externalJoinCall(msg));
     };
 }
 
@@ -1960,6 +1972,9 @@ function handleConferenceDeleted(msg) {
         dispatch(getPostsSince(msg.data.channel_id, Date.now()));
         if (callDialingEnabled(doGetState())) {
             dispatch(callNoLongerExist(msg));
+        }
+        if (isDesktopApp()) {
+            window.desktopAPI?.closeRingCallWindow?.();
         }
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_DELETED,

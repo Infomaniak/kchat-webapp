@@ -84,12 +84,33 @@ const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action
         Reflect.set(nextState, call.channel_id, call);
         return nextState;
     }
+    case ActionTypes.VOICE_CHANNEL_ADDED: {
+        return {
+            ...state,
+            [action.data.call.channel_id]: {
+                ...action.data.call,
+                joined: [],
+                refused: [],
+            },
+        };
+    }
     case ActionTypes.VOICE_CHANNEL_DELETED:
         if (state[action.data.channelID]) {
             const filteredCalls = Object.entries(state).filter(([key]) => key !== action.data.channelID);
             return filteredCalls.length > 0 ? Object.fromEntries(filteredCalls) : {};
         }
         return state;
+    case ActionTypes.KMEET_CALL_USER_CONNECTED: {
+        return {
+            ...state,
+            [action.data.channelId]: {
+                joined: [
+                    ...state[action.data.channelId].joined || [],
+                    action.data.connectedUserId,
+                ],
+            },
+        };
+    }
     default:
         return state;
     }

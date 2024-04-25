@@ -8,6 +8,8 @@ import {GenericModal} from '@mattermost/components';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users.js';
 
+import {getUser} from 'mattermost-redux/actions/users';
+
 import {joinCall, declineCall, leaveCall} from 'actions/kmeet_calls';
 
 import Avatars from 'components/widgets/users/avatars';
@@ -21,7 +23,7 @@ type Props = {
     user: UserProfile;
     channel: Channel;
     conference: Conference;
-    caller: UserProfile;
+    caller?: UserProfile;
     users: UserProfile[];
 }
 
@@ -30,38 +32,46 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     const {formatMessage} = useIntl();
 
     const onHandleAccept = React.useCallback(() => {
-        dispatch(joinCall(channel.id));
-    }, [dispatch, channel]);
+        dispatch(joinCall(conference.channel_id));
+    }, [dispatch, conference]);
 
     const onHandleDecline = React.useCallback(() => {
         dispatch(declineCall(conference.id));
     }, [dispatch, conference]);
 
     const onHandleCancel = React.useCallback(() => {
-        dispatch(leaveCall(channel.id));
-    }, [dispatch, channel]);
+        dispatch(leaveCall(conference.channel_id));
+    }, [dispatch, conference]);
 
     useEffect(() => {
         window.addEventListener('offline', () => {
             onHandleDecline();
         });
 
-        // const timeout = setTimeout(() => {
-        //     onHandleDecline();
-        // }, 30000);
+        const timeout = setTimeout(() => {
+            onHandleDecline();
+        }, 30000);
+
         return () => {
-            // clearTimeout(timeout);
+            clearTimeout(timeout);
         };
     }, [onHandleDecline]);
 
+    useEffect(() => {
+        if (!caller) {
+            dispatch(getUser(conference.id));
+        }
+    }, [caller, conference, dispatch]);
+
     const getUsersForOverlay = () => {
-        if (users.length >= 2) {
+        if (users.length >= 2 && caller) {
             const overlayUsers: UserProfile[] = [caller];
             const getOverLayUser: UserProfile = users.filter((usr) => usr.id !== caller.id)[0];
             overlayUsers.push(getOverLayUser);
             return overlayUsers;
         }
-        return [caller];
+
+        return caller ? [caller] : [];
     };
 
     const getUsersNicknames = (users: UserProfile[]): string => {
@@ -112,7 +122,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         }
     };
 
-    const isCallerCurrentUser = useMemo(() => caller.id === user.id, [caller, user]);
+    const isCallerCurrentUser = useMemo(() => caller?.id === user.id, [caller, user]);
     const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
     const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
     const textButtonCancel = formatMessage({id: 'calling_modal.button.cancel', defaultMessage: 'Cancel'});
@@ -121,7 +131,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
 
     return (
         <Container
-            className={classNames('call-modal', {
+            className={classNames('call-modal CallRingingModal', {
                 desktop: isDesktopApp(),
             })}
             aria-labelledby='contained-modal-title-vcenter'
