@@ -182,7 +182,7 @@ unit_test:
   coverage: /Lines\s*:\s*(\d+.?\d*)%/
   cache:
     paths:
-      - .jestcache
+      - webapp/channels/.jestcache
   before_script:
     - yarn --silent
   script:
