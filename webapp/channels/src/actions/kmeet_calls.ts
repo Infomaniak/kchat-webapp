@@ -6,7 +6,8 @@ import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entit
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
-import {getConferenceByChannelId, getIsUserInConference, getTotalJoinedUserInConference} from 'selectors/kmeet_calls';
+import {getConferenceByChannelId, getIsUserInConference} from 'selectors/kmeet_calls';
+import {isModalOpen} from 'selectors/views/modals';
 
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
@@ -25,13 +26,13 @@ export function externalJoinCall(msg: any) {
         const conference = getConferenceByChannelId(state, msg.data.channel_id);
         const currentUserId = getCurrentUserId(state);
         const isUserInConference = getIsUserInConference(state, msg.data.channel_id, msg.data.user_id);
-        const totalJoinedUserInConference = getTotalJoinedUserInConference(state, msg.data.channel_id);
+        const isModalOpen = isRingingModalOpen(state);
 
         if (!conference || isUserInConference) {
             return;
         }
 
-        if (conference.user_id === currentUserId && totalJoinedUserInConference === 0 && msg.data.user_id !== currentUserId) {
+        if (conference.user_id === currentUserId && msg.data.user_id !== currentUserId && isModalOpen) {
             if (isDesktopApp()) {
                 dispatch(startKmeetWindow(msg.data.channel_id));
             } else {
@@ -116,3 +117,7 @@ export function startKmeetWindow(channelId: string) {
         window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, locale});
     };
 }
+
+const isRingingModalOpen = (state: GlobalState) => {
+    return isDesktopApp() ? Boolean(window.desktopAPI?.isRingCallWindowOpen?.()) : isModalOpen(state, ModalIdentifiers.INCOMING_CALL);
+};

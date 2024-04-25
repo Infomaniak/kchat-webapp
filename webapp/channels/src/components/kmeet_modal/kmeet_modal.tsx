@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, {useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import type {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
@@ -30,6 +30,7 @@ type Props = {
 const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
+    const modalRef = React.useRef<HTMLDivElement>(null);
 
     const onHandleAccept = React.useCallback(() => {
         dispatch(joinCall(conference.channel_id));
@@ -43,19 +44,28 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         dispatch(leaveCall(conference.channel_id));
     }, [dispatch, conference]);
 
+    const handleClickOutsideModal = useCallback((event: any) => {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+            onHandleDecline();
+        }
+    }, [onHandleDecline]);
+
     useEffect(() => {
         window.addEventListener('offline', () => {
             onHandleDecline();
         });
+
+        document.addEventListener('click', handleClickOutsideModal);
 
         const timeout = setTimeout(() => {
             onHandleDecline();
         }, 30000);
 
         return () => {
+            document.removeEventListener('click', handleClickOutsideModal);
             clearTimeout(timeout);
         };
-    }, [onHandleDecline]);
+    }, [onHandleDecline, handleClickOutsideModal]);
 
     useEffect(() => {
         if (!caller) {
@@ -135,10 +145,10 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                 desktop: isDesktopApp(),
             })}
             aria-labelledby='contained-modal-title-vcenter'
-            headerButton={null}
-            footerContent={null}
         >
-            <div>
+            <div
+                ref={modalRef}
+            >
                 <div
                     className='call-modal__header'
                 >

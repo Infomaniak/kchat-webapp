@@ -10,6 +10,18 @@
         height: 100vh;
     }
 
+    &:not(.desktop) {
+        max-width: 270px !important;
+        min-height: 267px !important;
+        max-height: 267px !important;
+        min-width: 267px !important;
+
+        .modal-content {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
     & .modal-header {
         display: none !important;
     }

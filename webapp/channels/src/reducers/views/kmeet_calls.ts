@@ -72,7 +72,7 @@ const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action
         const nextState = {};
 
         for (const call of action.data) {
-            Reflect.set(nextState, call.channel_id, call);
+            Reflect.set(nextState, call.channel_id, {...call, participants: []});
         }
 
         return nextState;
@@ -89,8 +89,7 @@ const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action
             ...state,
             [action.data.call.channel_id]: {
                 ...action.data.call,
-                joined: [],
-                refused: [],
+                participants: [],
             },
         };
     }
@@ -103,10 +102,10 @@ const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action
     case ActionTypes.KMEET_CALL_USER_CONNECTED: {
         const nextState = {...state};
         const conference = Reflect.get(nextState, action.data.channelId);
-        const newSet = new Set([action.data.connectedUserId, ...conference.joined]);
-        const joined = Array.from(newSet);
+        const newSet = new Set([action.data.connectedUserId, ...(conference.participants || [])]);
+        const participants = Array.from(newSet);
 
-        Reflect.set(nextState, action.data.channelId, {...conference, joined});
+        Reflect.set(nextState, action.data.channelId, {...conference, participants});
 
         return nextState;
     }

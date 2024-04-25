@@ -20,10 +20,10 @@ export const getConferenceByChannelId = (state: GlobalState, channelId: string) 
 };
 
 export const getIsUserInConference = (state: GlobalState, channelId: string, userId: string) => {
-    return Boolean(state.views.kmeetCalls.conferences[channelId].joined?.includes(userId));
+    return Boolean(state.views.kmeetCalls.conferences[channelId].participants?.includes(userId));
 };
 
 export const getTotalJoinedUserInConference = (state: GlobalState, channelId: string) => {
-    return Number(state.views.kmeetCalls.conferences[channelId].joined?.length);
+    return Number(state.views.kmeetCalls.conferences[channelId].participants?.length);
 };
 
