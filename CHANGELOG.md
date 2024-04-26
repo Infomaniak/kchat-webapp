@@ -1,3 +1,11 @@
+## 2.7.0-rc.16 (2024-04-26)
+
+### Fixed (3 changes)
+
+- [fix: thread icon collapse display](kchat/webapp@7bb4476dac4a08366a7f1a75d04801a7ee4d58ae) by @tim.dewinter ([merge request](kchat/webapp!754))
+- [fix: inconsistent custom gif file size translation](kchat/webapp@88ae493c446ce34433fff387830f121c6cec3753) by @tim.dewinter ([merge request](kchat/webapp!753))
+- [fix: bug tracker background-color if component is hidden](kchat/webapp@804a32dbf3e7a3ed4acc1e28dbcf56990a5ad060) by @tim.dewinter ([merge request](kchat/webapp!752))
+
 ## 2.7.0-rc.15 (2024-04-25)
 
 ### Added (1 change)
