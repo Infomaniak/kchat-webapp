@@ -12,7 +12,7 @@ exports[`components/admin_console/admin_user_card/admin_user_card should match d
         class="status-wrapper  admin-user-card"
       >
         <button
-          class="RoundButton-jiiGed cWyntj style--none"
+          class="RoundButton-dvlhqG gnYSKj style--none"
         >
           <span
             class="profile-icon "
@@ -72,7 +72,7 @@ exports[`components/admin_console/admin_user_card/admin_user_card should match s
         class="status-wrapper  admin-user-card"
       >
         <button
-          class="RoundButton-jiiGed cWyntj style--none"
+          class="RoundButton-dvlhqG gnYSKj style--none"
         >
           <span
             class="profile-icon "
@@ -127,7 +127,7 @@ exports[`components/admin_console/admin_user_card/admin_user_card should match s
         class="status-wrapper  admin-user-card"
       >
         <button
-          class="RoundButton-jiiGed cWyntj style--none"
+          class="RoundButton-dvlhqG gnYSKj style--none"
         >
           <span
             class="profile-icon "
@@ -180,7 +180,7 @@ exports[`components/admin_console/admin_user_card/admin_user_card should match s
         class="status-wrapper  admin-user-card"
       >
         <button
-          class="RoundButton-jiiGed cWyntj style--none"
+          class="RoundButton-dvlhqG gnYSKj style--none"
         >
           <span
             class="profile-icon "

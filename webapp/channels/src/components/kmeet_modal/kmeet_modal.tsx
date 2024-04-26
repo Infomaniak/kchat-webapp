@@ -14,13 +14,15 @@ import {joinCall, declineCall, leaveCall} from 'actions/kmeet_calls';
 
 import CallAccept from 'components/widgets/icons/call_accept';
 import CallHangUp from 'components/widgets/icons/call_hang_up';
-import Avatars from 'components/widgets/users/avatars';
 
-import './kmeet_modal.scss';
+// import Avatars from 'components/widgets/users/avatars';
+
 import {ringing, stopRing} from 'utils/notification_sounds';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {Conference} from 'types/conference';
+
+import './kmeet_modal.scss';
 
 type Props = {
     user: UserProfile;
@@ -171,15 +173,12 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                 <div
                     className='call-modal__header'
                 >
-                    <Avatars
+                    {/* <Avatars
                         userIds={conference.participants}
                         size='xl'
                         totalUsers={users.length}
                         disableProfileOverlay={true}
-                        disablePopover={true}
-                        fetchMissingUsers={false}
-                        disableButton={true}
-                    />
+                    /> */}
                 </div>
                 <div className='call-modal__text'>
                     {text()}
