@@ -261,9 +261,12 @@ const SwitchChannelSuggestion = React.forwardRef<HTMLDivElement, Props>((props, 
     }
 
     let teamName = null;
-    if (isRealChannel(channel) && channel.team_id && team) {
-        teamName = (<span className='ml-2 suggestion-list__team-name'>{team.display_name}</span>);
-    }
+
+    // Infomaniak obsolete since always same team
+    // if (isRealChannel(channel) && channel.team_id && team) {
+    //     teamName = (<span className='ml-2 suggestion-list__team-name'>{team.display_name}</span>);
+    // }
+
     const showSlug = (isPartOfOnlyOneTeam || channel.type === Constants.DM_CHANNEL) && channel.type !== Constants.THREADS;
 
     return (
