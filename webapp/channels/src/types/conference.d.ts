@@ -6,4 +6,4 @@ export type Conference = {
     user_id: string;
     create_at: number;
     jwt: string;
-}
+};

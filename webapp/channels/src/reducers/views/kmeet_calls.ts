@@ -89,7 +89,6 @@ const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action
             ...state,
             [action.data.call.channel_id]: {
                 ...action.data.call,
-                participants: [],
             },
         };
     }

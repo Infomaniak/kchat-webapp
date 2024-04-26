@@ -4406,6 +4406,7 @@ export default class Client4 {
             team_user_id: string;
             updated_at: string;
             url: string;
+            jwt: string;
         }>(
             `${this.getBaseRoute()}/conferences`,
             {method: 'post', body: JSON.stringify({channel_id: channelID})},
@@ -4419,7 +4420,16 @@ export default class Client4 {
     }
 
     acceptIncomingMeetCall(callID: string) {
-        return this.doFetch(
+        return this.doFetch<{
+            channel_id: string;
+            created_at: string;
+            id: string;
+            team_user: Object;
+            team_user_id: string;
+            updated_at: string;
+            url: string;
+            jwt: string;
+        }>(
             `${this.getBaseRoute()}/conferences/${callID}/answer`,
             {method: 'post'},
         );

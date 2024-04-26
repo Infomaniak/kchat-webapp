@@ -32,6 +32,12 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     const {formatMessage} = useIntl();
     const modalRef = React.useRef<HTMLDivElement>(null);
 
+    const isCallerCurrentUser = useMemo(() => caller?.id === user.id, [caller, user]);
+
+    const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
+    const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
+    const textButtonCancel = formatMessage({id: 'calling_modal.button.cancel', defaultMessage: 'Cancel'});
+
     const onHandleAccept = React.useCallback(() => {
         dispatch(joinCall(conference.channel_id));
     }, [dispatch, conference]);
@@ -94,7 +100,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         case 'O':
         case 'P':
             return (<>
-                <div className='content-calling__info'>
+                <div className='call-modal__calling-info'>
                     <>
                         <FormattedMessage
                             id='calling_modal.calling.teams'
@@ -102,7 +108,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                         />
                     </>
                 </div>
-                <div className='content-calling__user'>
+                <div className='call-modal__calling-user'>
                     <span>
                         {channel.display_name}
                     </span>
@@ -112,18 +118,25 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         case 'D':
             return (
                 <>
-                    <div className='content-calling__user'>
+                    <div className='call-modal__calling-user'>
                         <span>
                             {getUsersNicknames(getUsersForOverlay())}
                         </span>
                     </div>
-                    <div className='content-calling__info'>
-                        <>
-                            <FormattedMessage
-                                id='calling_modal.calling'
-                                defaultMessage='is calling'
-                            />
-                        </>
+                    <div className='call-modal__calling-info'>
+                        {
+                            isCallerCurrentUser ? (
+                                <FormattedMessage
+                                    id='calling_modal.call_in_progress'
+                                    defaultMessage='is calling...'
+                                />
+                            ) : (
+                                <FormattedMessage
+                                    id='calling_modal.calling'
+                                    defaultMessage='call in progress...'
+                                />
+                            )
+                        }
                     </div>
                 </>
             );
@@ -131,11 +144,6 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
             return '';
         }
     };
-
-    const isCallerCurrentUser = useMemo(() => caller?.id === user.id, [caller, user]);
-    const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
-    const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
-    const textButtonCancel = formatMessage({id: 'calling_modal.button.cancel', defaultMessage: 'Cancel'});
 
     const Container = isDesktopApp() === false ? GenericModal : 'div';
 
@@ -171,7 +179,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                     {isCallerCurrentUser === false ? (
                         <>
                             <button
-                                className='btn btn-tertiary decline'
+                                className='btn btn-grey decline'
                                 onClick={onHandleDecline}
                                 aria-label={textButtonDecline}
                             >{textButtonDecline}</button>
@@ -183,7 +191,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                         </>
                     ) : (
                         <button
-                            className='btn btn-tertiary decline'
+                            className='btn btn-grey decline'
                             onClick={onHandleCancel}
                             aria-label={textButtonCancel}
                         >{textButtonCancel}</button>

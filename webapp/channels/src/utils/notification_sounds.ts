@@ -1,13 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import * as UserAgent from 'utils/user_agent';
+
 import bing from 'sounds/bing.mp3';
 import crackle from 'sounds/crackle.mp3';
 import down from 'sounds/down.mp3';
 import hello from 'sounds/hello.mp3';
 import ring from 'sounds/ring.mp3';
 import ripple from 'sounds/ripple.mp3';
-import * as UserAgent from 'utils/user_agent';
 
 export const notificationSounds = new Map([
     ['Bing', bing],

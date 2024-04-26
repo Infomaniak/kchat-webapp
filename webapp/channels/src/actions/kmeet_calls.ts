@@ -10,6 +10,7 @@ import {getConferenceByChannelId, getIsUserInConference} from 'selectors/kmeet_c
 import {isModalOpen} from 'selectors/views/modals';
 
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
+import {stopRing} from 'utils/notification_sounds';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
@@ -33,12 +34,7 @@ export function externalJoinCall(msg: any) {
         }
 
         if (conference.user_id === currentUserId && msg.data.user_id !== currentUserId && isModalOpen) {
-            if (isDesktopApp()) {
-                dispatch(startKmeetWindow(msg.data.channel_id));
-            } else {
-                dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-                window.open(conference.url, '_blank', 'noopener');
-            }
+            dispatch(joinCall(msg.data.channel_id));
         }
 
         dispatch({
@@ -54,21 +50,17 @@ export function externalJoinCall(msg: any) {
 export function joinCall(channelId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const conference = getConferenceByChannelId(getState(), channelId);
-        await Client4.acceptIncomingMeetCall(conference.id);
+        const answer = await Client4.acceptIncomingMeetCall(conference.id);
 
-        if (isDesktopApp()) {
-            dispatch(startKmeetWindow(channelId));
-            return;
-        }
-
-        window.open(conference.url, '_blank', 'noopener');
+        stopRing();
+        dispatch(startCall(channelId, answer.jwt, conference.url));
     };
 }
 
 export function declineCall(conferenceId: string) {
     return async (dispatch: DispatchFunc) => {
         await Client4.declineIncomingMeetCall(conferenceId);
-        console.log('[calls: hangUpCall]', conferenceId);
+        stopRing();
 
         if (isDesktopApp()) {
             window.desktopAPI?.closeRingCallWindow?.();
@@ -85,6 +77,8 @@ export function leaveCall(channelId: string) {
         const currentUserId = getCurrentUserId(getState());
 
         await Client4.leaveMeet(conference.id);
+
+        stopRing();
 
         if (isDesktopApp()) {
             window.desktopAPI?.closeRingCallWindow?.();
@@ -106,7 +100,18 @@ export function leaveCall(channelId: string) {
     };
 }
 
-export function startKmeetWindow(channelId: string) {
+export function startCall(channelId: string, jwt: string, url: string) {
+    return async (dispatch: DispatchFunc) => {
+        if (isDesktopApp()) {
+            dispatch(startKmeetWindow(channelId, jwt));
+        } else {
+            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+            window.open(url + `jwt=${jwt}`, '_blank', 'noopener');
+        }
+    };
+}
+
+export function startKmeetWindow(channelId: string, jwt: string) {
     return async (_: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const user = getCurrentUser(state);
@@ -114,7 +119,7 @@ export function startKmeetWindow(channelId: string) {
         const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
         const locale = getCurrentLocale(state);
 
-        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, locale});
+        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, locale, jwt});
     };
 }
 

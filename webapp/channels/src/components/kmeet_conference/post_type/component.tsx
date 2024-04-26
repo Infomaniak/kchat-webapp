@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import type {Post} from '@mattermost/types/posts';
 
-import {joinCall, putChannelActiveConf} from 'actions/calls';
+import {putChannelActiveConf} from 'actions/calls';
 
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
@@ -18,16 +18,17 @@ interface Props {
     connectedKmeetUrl: string;
     isDialingEnabled: boolean;
     startOrJoinCallInChannelV2: (channelID: string) => void;
+    joinCall: (channelID: string) => void;
 }
 
-const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInChannelV2}: Props) => {
+const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInChannelV2, joinCall}: Props) => {
     const intl = useIntl();
     const dispatch = useDispatch();
 
     const meetingUrl = connectedKmeetUrl ?? post.props.url;
 
     const onJoinCallClick = () => {
-        dispatch(joinCall(post.props.conference_id, meetingUrl));
+        joinCall(post.channel_id);
     };
 
     const onStartOrJoinCall = () => {

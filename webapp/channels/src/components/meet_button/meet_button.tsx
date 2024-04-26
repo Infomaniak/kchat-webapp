@@ -22,6 +22,7 @@ export type Props = {
     hasCall?: boolean;
     actions: {
         startOrJoinCallInChannelV2: (channelID: unknown) => void;
+        joinCall: (channelID: unknown) => void;
     };
 }
 
@@ -32,7 +33,7 @@ function MeetButton(props: Props) {
     const kmeetTourStep = isGuest ? OnboardingTourStepsForGuestUsers.KMEET : OnboardingTourSteps.KMEET;
     const showKmeetTutorialStep = useShowOnboardingTutorialStep(kmeetTourStep);
     const {actions} = props;
-    const {startOrJoinCallInChannelV2} = actions;
+    const {startOrJoinCallInChannelV2, joinCall} = actions;
     const ref = useRef<HTMLButtonElement>(null);
     let spamBtn = false;
 
@@ -41,7 +42,11 @@ function MeetButton(props: Props) {
             return;
         }
         spamBtn = true;
-        startOrJoinCallInChannelV2(props.currentChannelID);
+        if (props.hasCall) {
+            joinCall(props.currentChannelID);
+        } else {
+            startOrJoinCallInChannelV2(props.currentChannelID);
+        }
         const timerId = setTimeout(() => {
             spamBtn = false;
             clearTimeout(timerId);

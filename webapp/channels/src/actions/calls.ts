@@ -183,6 +183,8 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             if (kmeetUrl) {
                 console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
 
+                ringing('Ring');
+
                 if (isDesktopApp()) {
                     openRingingModal(channelID);
                 } else {
@@ -277,6 +279,7 @@ export function receivedCall(call: Call, currentUserId: string) {
 
                     // handleDesktopKmeetCall(globalState, currentUserId, call);
                     openRingingModal(call.channel_id);
+                    ringing('Ring');
 
                     return;
                 }

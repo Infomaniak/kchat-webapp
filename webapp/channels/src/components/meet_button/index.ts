@@ -9,6 +9,7 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import type {Action} from 'mattermost-redux/types/actions';
 
 import {startOrJoinCallInChannelV2} from 'actions/calls';
+import {joinCall} from 'actions/kmeet_calls';
 
 import type {GlobalState} from 'types/store';
 
@@ -29,6 +30,7 @@ function mapStateToProps(state: GlobalState) {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     actions: bindActionCreators<ActionCreatorsMapObject<Action>, any>({
         startOrJoinCallInChannelV2,
+        joinCall,
     }, dispatch),
 });
 

@@ -10,6 +10,7 @@ import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preference
 import type {Post} from 'mattermost-redux/types/posts';
 
 import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannelV2} from 'actions/calls';
+import {joinCall} from 'actions/kmeet_calls';
 import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 
 import type {GlobalState} from 'types/store';
@@ -35,6 +36,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     startOrJoinCallInChannelV2,
     showSwitchCallModal,
     leaveCallInChannel,
+    joinCall,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostType);

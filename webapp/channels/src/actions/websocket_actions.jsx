@@ -1881,9 +1881,10 @@ function handleConferenceUserDenied(msg) {
             if (isDesktopApp()) {
                 window.desktopAPI?.closeRingCallWindow?.();
             } else {
-                stopRing();
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
+
+            stopRing();
         }
 
         if (currentUserId === msg?.data?.user_id) {
@@ -1922,9 +1923,10 @@ function handleConferenceUserConnected(msg) {
                     window.origin,
                 );
             } else {
-                stopRing();
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
+
+            stopRing();
         }
 
         if (msg.data.channel_id in calls && calls[msg.data.channel_id].length) {
