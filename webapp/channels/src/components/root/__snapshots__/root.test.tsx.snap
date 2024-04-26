@@ -18,7 +18,21 @@ exports[`components/Root Routes Should mount public product routes 1`] = `
     />
     <LoggedInRoute
       component={[Function]}
+      headerRef={
+        Object {
+          "current": null,
+        }
+      }
       path="/preparing-workspace"
+    />
+    <LoggedInRoute
+      component={[Function]}
+      headerRef={
+        Object {
+          "current": null,
+        }
+      }
+      path="/kmeet"
     />
     <Redirect
       from="/_redirect/integrations/:subpath*"
