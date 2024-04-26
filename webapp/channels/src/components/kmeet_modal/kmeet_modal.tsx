@@ -12,6 +12,8 @@ import {getUser} from 'mattermost-redux/actions/users';
 
 import {joinCall, declineCall, leaveCall} from 'actions/kmeet_calls';
 
+import CallAccept from 'components/widgets/icons/call_accept';
+import CallHangUp from 'components/widgets/icons/call_hang_up';
 import Avatars from 'components/widgets/users/avatars';
 
 import './kmeet_modal.scss';
@@ -191,19 +193,28 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                                 className='btn btn-grey decline'
                                 onClick={onHandleDecline}
                                 aria-label={textButtonDecline}
-                            >{textButtonDecline}</button>
+                            >
+                                <CallAccept/>
+                                {textButtonDecline}
+                            </button>
                             <button
                                 className='btn btn-primary accept'
                                 onClick={onHandleAccept}
                                 aria-label={textButtonAccept}
-                            >{textButtonAccept}</button>
+                            >
+                                <CallHangUp/>
+                                {textButtonAccept}
+                            </button>
                         </>
                     ) : (
                         <button
                             className='btn btn-grey decline'
                             onClick={onHandleCancel}
                             aria-label={textButtonCancel}
-                        >{textButtonCancel}</button>
+                        >
+                            <CallHangUp/>
+                            {textButtonCancel}
+                        </button>
                     )}
                 </div>
             </div>

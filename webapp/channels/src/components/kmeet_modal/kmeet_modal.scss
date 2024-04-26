@@ -11,10 +11,8 @@
     }
 
     &:not(.desktop) {
-        max-width: 270px !important;
-        min-height: 267px !important;
-        max-height: 267px !important;
-        min-width: 267px !important;
+        max-width: 290px !important;
+        max-height: 200px !important;
 
         .modal-content {
             width: 100%;
@@ -27,15 +25,19 @@
         }
     }
 
+    .GenericModal__body {
+        width: 100%;
+    }
+
     & .modal-header {
         display: none !important;
     }
 
     & .modal-body {
-        padding: 24px !important;
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
     }
 
     &__text {
@@ -58,9 +60,16 @@
         display: flex;
         align-items: center;
         margin-top: 24px;
+        padding: 0 24px;
+        gap: 16px;
+
+        > * {
+            flex: 1;
+            margin: 0 !important;
+        }
 
         button {
-            width: 100%;
+            padding: 10px 12px;
         }
     }
 }
