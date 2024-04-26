@@ -892,7 +892,8 @@ export default class Root extends React.PureComponent<Props, State> {
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
                     />
-                    <Route
+                    <LoggedInRoute
+                        headerRef={this.headerResizerRef}
                         path={'/kmeet'}
                         component={KmeetController}
                     />
