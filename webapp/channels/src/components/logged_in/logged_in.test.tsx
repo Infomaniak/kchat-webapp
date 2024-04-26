@@ -6,11 +6,15 @@ import React from 'react';
 
 import type {UserProfile} from '@mattermost/types/users';
 
+import {Preferences} from 'mattermost-redux/constants';
+
 import * as GlobalActions from 'actions/global_actions';
 import BrowserStore from 'stores/browser_store';
 
 import LoggedIn from 'components/logged_in/logged_in';
 import type {Props} from 'components/logged_in/logged_in';
+
+import {TestHelper} from 'utils/test_helper';
 
 jest.mock('actions/websocket_actions.jsx', () => ({
     initialize: jest.fn(),
@@ -20,6 +24,12 @@ BrowserStore.signalLogin = jest.fn();
 
 describe('components/logged_in/LoggedIn', () => {
     const children = <span>{'Test'}</span>;
+    const mockTeam = TestHelper.getTeamMock({
+        id: '123test',
+        name: 'testTeam',
+        display_name: 'testTeam',
+        delete_at: 0,
+    });
     const baseProps: Props = {
         currentUser: {} as UserProfile,
         mfaRequired: false,
@@ -29,6 +39,8 @@ describe('components/logged_in/LoggedIn', () => {
             markChannelAsViewedOnServer: jest.fn(),
             updateApproximateViewTime: jest.fn(),
             registerInternalKdrivePlugin: jest.fn(),
+            setTheme: jest.fn(),
+            updateTeamsOrderForUser: jest.fn(),
         },
         isCurrentChannelManuallyUnread: false,
         showTermsOfService: false,
@@ -36,6 +48,8 @@ describe('components/logged_in/LoggedIn', () => {
             pathname: '/',
             search: '',
         },
+        currentTeam: mockTeam,
+        theme: Preferences.THEMES.onyx,
     };
 
     it('should render loading state without user', () => {
@@ -58,9 +72,9 @@ describe('components/logged_in/LoggedIn', () => {
         const wrapper = shallow(<LoggedIn {...props}>{children}</LoggedIn>);
 
         expect(wrapper).toMatchInlineSnapshot(`
-            <Redirect
-              to="/mfa/setup"
-            />
+            <span>
+              Test
+            </span>
         `);
     });
 
@@ -112,9 +126,9 @@ describe('components/logged_in/LoggedIn', () => {
         const wrapper = shallow(<LoggedIn {...props}>{children}</LoggedIn>);
 
         expect(wrapper).toMatchInlineSnapshot(`
-            <Redirect
-              to="/terms_of_service?redirect_to=%2F"
-            />
+            <span>
+              Test
+            </span>
         `);
     });
 

@@ -12,8 +12,9 @@ import FilePreviewModal from 'components/file_preview_modal';
 import MarkdownImageExpand from 'components/markdown_image_expand';
 import SizeAwareImage from 'components/size_aware_image';
 
-import brokenImageIcon from 'images/icons/brokenimage.png';
 import Constants, {ModalIdentifiers} from 'utils/constants';
+
+import brokenImageIcon from 'images/icons/brokenimage.png';
 
 import type {ModalData} from 'types/actions';
 
@@ -42,6 +43,7 @@ export type Props = {
 type State = {
     loadFailed: boolean;
     loaded: boolean;
+    height?: number;
 };
 
 export default class MarkdownImage extends PureComponent<Props, State> {
@@ -59,27 +61,27 @@ export default class MarkdownImage extends PureComponent<Props, State> {
     }
 
     getHeight = () => {
-        const {
-            height,
-            imageMetadata,
-            width,
-        } = this.props;
+        const {imageMetadata, width} = this.props;
+
+        if (this.state.height) {
+            return this.state.height;
+        }
 
         if (!imageMetadata) {
             return 0;
         }
 
-        if (!height) {
+        if (!this.props.height) {
             return imageMetadata.height;
         }
 
-        if (height === 'auto') {
+        if (this.props.height === 'auto') {
             const widthNumber = parseInt(width, 10);
 
             return (imageMetadata.height / imageMetadata.width) * widthNumber;
         }
 
-        return parseInt(height, 10);
+        return parseInt(this.props.height, 10);
     };
 
     getFileExtensionFromUrl = (url: string) => {
@@ -132,6 +134,7 @@ export default class MarkdownImage extends PureComponent<Props, State> {
     handleImageLoaded = ({height, width}: {height: number; width: number}) => {
         this.setState({
             loaded: true,
+            height,
         }, () => { // Call onImageLoaded prop only after state has already been set
             if (this.props.onImageLoaded) {
                 this.props.onImageLoaded({height, width});

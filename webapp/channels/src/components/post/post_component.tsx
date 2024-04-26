@@ -480,7 +480,7 @@ const PostComponent = (props: Props): JSX.Element => {
                 onMouseOver={handleMouseOver}
                 onMouseLeave={handleMouseLeave}
             >
-                {(Boolean(isSearchResultItem) || (props.location !== Locations.CENTER && props.isFlagged)) &&
+                {(Boolean(isSearchResultItem) || (props.location !== Locations.CENTER && props.isPinnedPosts && props.isFlagged)) &&
                     <div
                         className='search-channel__name__container'
                         aria-hidden='true'

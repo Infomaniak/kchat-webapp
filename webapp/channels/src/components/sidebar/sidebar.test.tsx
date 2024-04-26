@@ -19,7 +19,7 @@ import type {GlobalState} from 'types/store';
 import Sidebar from './sidebar';
 
 describe('components/sidebar', () => {
-    const currentTeamId = 'fake_team_id';
+    const currentTeamId = 'team_1';
 
     const baseProps = {
         canCreatePublicChannel: true,
@@ -34,14 +34,15 @@ describe('components/sidebar', () => {
         isKeyBoardShortcutModalOpen: false,
         userGroupsEnabled: false,
         canCreateCustomGroups: true,
-        headerRef: jest.fn(),
+        headerRef: {current: null},
         actions: {
+            clearChannelSelection: jest.fn(),
+            closeModal: jest.fn(),
+            closeRightHandSide: jest.fn(),
             createCategory: jest.fn(),
             fetchMyCategories: jest.fn(),
             openModal: jest.fn(),
-            closeModal: jest.fn(),
-            clearChannelSelection: jest.fn(),
-            closeRightHandSide: jest.fn(),
+            showSettings: jest.fn(),
         },
     };
 

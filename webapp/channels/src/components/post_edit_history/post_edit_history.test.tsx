@@ -1,13 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import ThemeProvider, {lightTheme} from '@infomaniak/compass-components/utilities/theme';
 import React from 'react';
 import type {ComponentProps} from 'react';
 
 import {Client4} from 'mattermost-redux/client';
 
-import {renderWithContext, waitFor} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, waitFor} from 'tests/react_testing_utils';
 
 import PostEditHistory from './post_edit_history';
 
@@ -36,7 +38,11 @@ describe('components/post_edit_history', () => {
         mock.mockResolvedValue(data);
 
         const wrapper = await waitFor(() => {
-            return renderWithContext(<PostEditHistory {...baseProps}/>);
+            return renderWithContext(
+                <ThemeProvider theme={lightTheme}>
+                    <PostEditHistory {...baseProps}/>
+                </ThemeProvider>,
+            );
         });
 
         expect(wrapper.container).toMatchSnapshot();
@@ -48,7 +54,11 @@ describe('components/post_edit_history', () => {
         mock.mockRejectedValue(error);
 
         const wrapper = await waitFor(() => {
-            return renderWithContext(<PostEditHistory {...baseProps}/>);
+            return renderWithContext(
+                <ThemeProvider theme={lightTheme}>
+                    <PostEditHistory {...baseProps}/>
+                </ThemeProvider>,
+            );
         });
 
         expect(wrapper.container).toMatchSnapshot();

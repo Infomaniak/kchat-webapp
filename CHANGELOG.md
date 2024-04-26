@@ -1,3 +1,22 @@
+## 2.7.0-rc.15 (2024-04-25)
+
+### Added (1 change)
+
+- [feat: allowed collapsing gifs](kchat/webapp@49ab5e2c476870043f62bad52cf7172d0c07ddaf) by @tim.dewinter ([merge request](kchat/webapp!750))
+
+### Fixed (2 changes)
+
+- [Fix: Numbered table list content overflowing parent element](kchat/webapp@4a40462d9850ce8dc1fd67e9c90a2e4d58fe3467) by @philippe.karle ([merge request](kchat/webapp!732))
+- [fix: compact post header alignment](kchat/webapp@b7452a09bb66b7b53453b9461e540dac3582bf01) by @tim.dewinter ([merge request](kchat/webapp!745))
+
+## 2.7.0-rc.14 (2024-04-25)
+
+### Fixed (3 changes)
+
+- [fix: disabled enable/disable join leave messages preference](kchat/webapp@ae7b72b5178b44df7f6c5c12b65ee87bfaaa19a1) by @tim.dewinter ([merge request](kchat/webapp!748))
+- [fix: channel display name appearing in saved thread](kchat/webapp@49faf78645a3cfa085d5264b9b4216ad375b8a84) by @tim.dewinter ([merge request](kchat/webapp!746))
+- [fix: re-added user popover profile copy button](kchat/webapp@387743764b6a8ef4da2ed281b0b5f766d8b0e36e) by @tim.dewinter ([merge request](kchat/webapp!744))
+
 ## 2.7.0-rc.13 (2024-04-23)
 
 ### Fixed (1 change)
@@ -104,6 +123,20 @@ No changes.
 ### Chore (1 change)
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
+
+## 2.7.0-next.9 (2024-04-25)
+
+### Added (1 change)
+
+- [feat: allowed collapsing gifs](kchat/webapp@49ab5e2c476870043f62bad52cf7172d0c07ddaf) by @tim.dewinter ([merge request](kchat/webapp!750))
+
+### Fixed (5 changes)
+
+- [Fix: Numbered table list content overflowing parent element](kchat/webapp@4a40462d9850ce8dc1fd67e9c90a2e4d58fe3467) by @philippe.karle ([merge request](kchat/webapp!732))
+- [fix: compact post header alignment](kchat/webapp@b7452a09bb66b7b53453b9461e540dac3582bf01) by @tim.dewinter ([merge request](kchat/webapp!745))
+- [fix: disabled enable/disable join leave messages preference](kchat/webapp@ae7b72b5178b44df7f6c5c12b65ee87bfaaa19a1) by @tim.dewinter ([merge request](kchat/webapp!748))
+- [fix: channel display name appearing in saved thread](kchat/webapp@49faf78645a3cfa085d5264b9b4216ad375b8a84) by @tim.dewinter ([merge request](kchat/webapp!746))
+- [fix: re-added user popover profile copy button](kchat/webapp@387743764b6a8ef4da2ed281b0b5f766d8b0e36e) by @tim.dewinter ([merge request](kchat/webapp!744))
 
 ## 2.7.0-next.8 (2024-04-23)
 
