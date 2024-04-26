@@ -34,6 +34,10 @@ export function ringing(name: string) {
     currentRing.muted = false;
     const promise = currentRing.play();
 
+    if (name === 'Ring') {
+        currentRing.volume = 0.6;
+    }
+
     currentRing.addEventListener('pause', () => {
         stopRing();
     });

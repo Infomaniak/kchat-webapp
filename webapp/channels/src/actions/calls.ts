@@ -26,7 +26,7 @@ import {isModalOpen} from 'selectors/views/modals';
 import kmeetModal from 'components/kmeet_modal';
 
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
-import {ringing, stopRing} from 'utils/notification_sounds';
+import {stopRing} from 'utils/notification_sounds';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {imageURLForUser} from 'utils/utils';
@@ -183,8 +183,6 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             if (kmeetUrl) {
                 console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
 
-                ringing('Ring');
-
                 if (isDesktopApp()) {
                     openRingingModal(channelID);
                 } else {
@@ -279,7 +277,6 @@ export function receivedCall(call: Call, currentUserId: string) {
 
                     // handleDesktopKmeetCall(globalState, currentUserId, call);
                     openRingingModal(call.channel_id);
-                    ringing('Ring');
 
                     return;
                 }
@@ -294,7 +291,7 @@ export function receivedCall(call: Call, currentUserId: string) {
             if (isModalOpen(getState(), ModalIdentifiers.INCOMING_CALL)) {
                 return;
             }
-            ringing('Ring');
+
             dispatch(openModal(
                 {
                     modalId: ModalIdentifiers.INCOMING_CALL,

@@ -15,6 +15,7 @@ import {joinCall, declineCall, leaveCall} from 'actions/kmeet_calls';
 import Avatars from 'components/widgets/users/avatars';
 
 import './kmeet_modal.scss';
+import {ringing, stopRing} from 'utils/notification_sounds';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {Conference} from 'types/conference';
@@ -72,6 +73,14 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
             clearTimeout(timeout);
         };
     }, [onHandleDecline, handleClickOutsideModal]);
+
+    useEffect(() => {
+        ringing('Ring');
+
+        return () => {
+            stopRing();
+        };
+    }, []);
 
     useEffect(() => {
         if (!caller) {

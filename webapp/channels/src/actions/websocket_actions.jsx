@@ -124,7 +124,7 @@ import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, receivedCall} from './calls';
-import {externalJoinCall} from './kmeet_calls';
+import {closeRingModal, externalJoinCall} from './kmeet_calls';
 import {handleServerEvent} from './servers_actions';
 
 const dispatch = store.dispatch;
@@ -1874,17 +1874,8 @@ function handleConferenceUserDenied(msg) {
         const currentUserId = getCurrentUserId(getState());
         const conference = getConferenceByChannelId(getState(), msg.data.channel_id);
 
-        console.log('conference', conference);
-        console.log('currentUserId', currentUserId);
-
         if (conference.participants.length <= 2 && currentUserId === conference.user_id) {
-            if (isDesktopApp()) {
-                window.desktopAPI?.closeRingCallWindow?.();
-            } else {
-                dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-            }
-
-            stopRing();
+            dispatch(closeRingModal());
         }
 
         if (currentUserId === msg?.data?.user_id) {
@@ -1896,7 +1887,6 @@ function handleConferenceUserDenied(msg) {
                     window.origin,
                 );
             } else {
-                stopRing();
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
         }
@@ -1925,8 +1915,6 @@ function handleConferenceUserConnected(msg) {
             } else {
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
-
-            stopRing();
         }
 
         if (msg.data.channel_id in calls && calls[msg.data.channel_id].length) {
