@@ -102,7 +102,6 @@ const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
 const LazyPreparingWorkspace = React.lazy(() => import('components/preparing_workspace'));
 const LazyTeamController = React.lazy(() => import('components/team_controller'));
 const LazyOnBoardingTaskList = React.lazy(() => import('components/onboarding_tasklist'));
-const LazyKmeetController = React.lazy(() => import('components/kmeet_controller'));
 
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const Login = makeAsyncComponent('LoginController', LazyLogin);
@@ -111,7 +110,6 @@ const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
 const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
-const KmeetController = makeAsyncComponent('KmeetController', LazyKmeetController);
 
 // const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 // const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
@@ -891,11 +889,6 @@ export default class Root extends React.PureComponent<Props, State> {
                         headerRef={this.headerResizerRef}
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
-                    />
-                    <LoggedInRoute
-                        headerRef={this.headerResizerRef}
-                        path={'/kmeet'}
-                        component={KmeetController}
                     />
                     <Redirect
                         from={'/_redirect/integrations/:subpath*'}
