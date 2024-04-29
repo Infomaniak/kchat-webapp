@@ -29,7 +29,9 @@ function makeMapStateToProps() {
         return {
             currentUserId: currentUser.id,
             currentUsername: currentUser.username,
-            showJoinLeave: getBool(state, Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_FILTER_JOIN_LEAVE, true),
+
+            // showJoinLeave: getBool(state, Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_FILTER_JOIN_LEAVE, true),
+            showJoinLeave: true,
             userProfiles: getProfilesByIdsAndUsernames(state, {allUserIds, allUsernames}),
         };
     };
