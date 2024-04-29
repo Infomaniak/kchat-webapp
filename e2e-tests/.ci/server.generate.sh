@@ -49,6 +49,9 @@ version: "2.4"
 services:
   server:
     image: \${SERVER_IMAGE}
+    build:
+      context: ../../server
+      dockerfile: Dockerfile
     restart: always
     env_file:
       - "./.env.server"
@@ -82,7 +85,7 @@ $(for service in $ENABLED_DOCKER_SERVICES; do
 $(if mme2e_is_token_in_list "postgres" "$ENABLED_DOCKER_SERVICES"; then
     echo '
   postgres:
-    image: mattermostdevelopment/mirrored-postgres:12
+    image: postgres:12
     restart: always
     environment:
       POSTGRES_USER: mmuser
@@ -205,14 +208,11 @@ $(if mme2e_is_token_in_list "webhook-interactions" "$ENABLED_DOCKER_SERVICES"; t
     # shellcheck disable=SC2016
     echo '
   webhook-interactions:
-    image: mattermostdevelopment/mirrored-node:${NODE_VERSION_REQUIRED}
-    command: sh -c "npm install --global --legacy-peer-deps && exec node webhook_serve.js"
-    healthcheck:
-      test: ["CMD", "curl", "-s", "-o/dev/null", "127.0.0.1:3000"]
-      interval: 10s
-      timeout: 15s
-      retries: 12
-    working_dir: /cypress
+    image: infomaniak-development/cypress-webhook
+    build:
+      context: ../cypress
+      dockerfile: Dockerfile.webhook
+    working_dir: /usr/src
     network_mode: host
     restart: on-failure
     volumes:
