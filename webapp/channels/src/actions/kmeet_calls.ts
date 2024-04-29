@@ -23,7 +23,14 @@ export function openCallDialingModal(channelId: string) {
         const conference = getConferenceByChannelId(state, channelId);
         const currentUser = getCurrentUser(state);
         const caller = getUserById(state, conference.user_id);
-        const users = conference.participants.map((id: string) => getUserById(state, id));
+
+        const users = conference.participants.map((id: string) => {
+            const user = getUserById(state, id);
+            return {
+                ...user,
+                avatar: Client4.getProfilePictureUrl(user.id, user.last_picture_update),
+            };
+        });
 
         window.desktopAPI?.openCallDialing?.({
             conference,
@@ -115,7 +122,7 @@ export function startCall(channelId: string, jwt: string, url: string) {
             dispatch(startKmeetWindow(channelId, jwt));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-            window.open(url + `jwt=${jwt}`, '_blank', 'noopener');
+            window.open(url + `?jwt=${jwt}`, '_blank', 'noopener');
         }
     };
 }
