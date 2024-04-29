@@ -3,6 +3,7 @@
 
 import {Client4} from 'mattermost-redux/client';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getUserById} from 'mattermost-redux/selectors/entities/users';
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
@@ -16,8 +17,22 @@ import type {GlobalState} from 'types/store';
 
 import {closeModal} from './views/modals';
 
-export function openRingingModal(channelId: string) {
-    window.open(`${window.location.origin}/kmeet/calls/${channelId}/modal`, '_blank', 'top=500,left=200,frame=false,nodeIntegration=no');
+export function openCallDialingModal(channelId: string) {
+    return async (_: DispatchFunc, getState: () => GlobalState) => {
+        const state = getState();
+        const conference = getConferenceByChannelId(state, channelId);
+        const currentUserId = getCurrentUserId(state);
+        const caller = getUserById(state, conference.user_id);
+        const users = conference.participants.map((id: string) => getUserById(state, id));
+
+        window.desktopAPI?.openCallDialing?.({
+            conference,
+            currentUserId,
+            caller,
+            users,
+            channelId,
+        });
+    };
 }
 
 export function externalJoinCall(msg: any) {

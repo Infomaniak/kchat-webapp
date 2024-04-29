@@ -21,11 +21,12 @@ declare global {
             openKmeetCallWindow: (params: object) => void;
             closeRingCallWindow: () => void;
             isRingCallWindowOpen: () => boolean;
+            openCallDialing: (callInfo: object) => boolean;
         }>;
         callManager?: Partial<{
-            onCallJoined: (callback: (_: any, props: {conferenceId: string}) => void) => void;
-            onCallDeclined: (callback: (_: any, props: {conferenceId: string}) => void) => void;
-            onCallEnded: (callback: (_: any, props: {conferenceId: string}) => void) => void;
+            onCallJoined: (callback: (_: any, props: {channelId: string}) => void) => void;
+            onCallDeclined: (callback: (_: any, props: {channelId: string}) => void) => void;
+            onCallEnded: (callback: (_: any, props: {channelID: string}) => void) => void;
         }>;
     }
 }

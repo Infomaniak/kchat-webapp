@@ -49,9 +49,9 @@ export type Props = {
         registerInternalKdrivePlugin: () => void;
         setTheme: (theme: Theme) => void;
         updateTeamsOrderForUser: (teamsOrder: string[]) => void;
-        notifyJoinCall: (conferenceId: string) => void;
-        notifyDeclineCall: (conferenceId: string) => void;
-        leaveCall: (conferenceId: string) => void;
+        joinCall: (channelId: string) => void;
+        declineCall: (channelId: string) => void;
+        leaveCall: (channelId: string) => void;
     };
     showTermsOfService: boolean;
     location: {
@@ -237,9 +237,9 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
     private setCallListeners() {
         if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.2.0')) {
-            window?.callManager?.onCallJoined?.((_: any, {conferenceId}) => this.props.actions.notifyJoinCall(conferenceId));
-            window?.callManager?.onCallDeclined?.((_: any, {conferenceId}) => this.props.actions.notifyDeclineCall(conferenceId));
-            window?.callManager?.onCallEnded?.((_: any, {conferenceId}) => this.props.actions.leaveCall(conferenceId));
+            window?.callManager?.onCallJoined?.((_: any, {channelId}) => this.props.actions.joinCall(channelId));
+            window?.callManager?.onCallDeclined?.((_: any, {channelId}) => this.props.actions.declineCall(channelId));
+            window?.callManager?.onCallEnded?.((_: any, {channelID}) => this.props.actions.leaveCall(channelID));
         }
     }
 

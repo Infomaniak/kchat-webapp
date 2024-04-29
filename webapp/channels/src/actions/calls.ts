@@ -33,7 +33,7 @@ import {imageURLForUser} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
-import {openRingingModal} from './kmeet_calls';
+import {openCallDialingModal} from './kmeet_calls';
 import {closeModal, openModal} from './views/modals';
 
 export function showExpandedView(): ActionFunc {
@@ -184,7 +184,7 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
 
                 if (isDesktopApp()) {
-                    openRingingModal(channelID);
+                    dispatch(openCallDialingModal(channelID));
                 } else {
                     dispatch(openModal(
                         {
@@ -276,7 +276,7 @@ export function receivedCall(call: Call, currentUserId: string) {
                     console.log('[calls] call received on desktop.');
 
                     // handleDesktopKmeetCall(globalState, currentUserId, call);
-                    openRingingModal(call.channel_id);
+                    dispatch(openCallDialingModal(call.channel_id));
 
                     return;
                 }
@@ -330,46 +330,6 @@ export function joinCall(conferenceId: string, meetingUrl: string) {
 
         const kmeetUrl = new URL(meetingUrl);
         window.open(kmeetUrl.href, '_blank', 'noopener');
-    };
-}
-
-export function declineCall(conferenceId: string) {
-    return async () => {
-        Client4.declineIncomingMeetCall(conferenceId);
-    };
-}
-
-export function notifyJoinCall(conferenceId: string) {
-    return async () => {
-        await Client4.acceptIncomingMeetCall(conferenceId);
-    };
-}
-
-export function notifyDeclineCall(conferenceId: string) {
-    return async () => {
-        await Client4.declineIncomingMeetCall(conferenceId);
-    };
-}
-
-export function leaveCall(conferenceId: string) {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
-        const state = getState();
-        const callParams = callParameters(state);
-        const currentUserId = getCurrentUserId(getState());
-
-        await Client4.leaveMeet(conferenceId);
-
-        dispatch({
-            type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
-            data: {
-                channelID: callParams.channel.id,
-                userID: currentUserId,
-                currentUserID: currentUserId,
-                callID: conferenceId,
-            },
-        });
-
-        return {data: true};
     };
 }
 
