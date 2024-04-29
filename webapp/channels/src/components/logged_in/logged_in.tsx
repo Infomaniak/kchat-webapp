@@ -239,6 +239,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
         if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.2.0')) {
             window?.callManager?.onCallJoined?.((_: any, {channelId}) => this.props.actions.joinCall(channelId));
             window?.callManager?.onCallDeclined?.((_: any, {channelId}) => this.props.actions.declineCall(channelId));
+            window?.callManager?.onCallCancel?.((_: any, {channelId}) => this.props.actions.leaveCall(channelId));
             window?.callManager?.onCallEnded?.((_: any, {channelID}) => this.props.actions.leaveCall(channelID));
         }
     }

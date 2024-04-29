@@ -20,8 +20,8 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     const locale = getCurrentLocale(state);
     const channel = getChannel(state, ownProps.channelId);
     const conference = getConferenceByChannelId(state, ownProps.channelId);
-    const caller = getUserById(state, conference.user_id);
-    const users = conference.participants.map((id) => getUserById(state, id));
+    const caller = getUserById(state, conference?.user_id);
+    const users = conference?.participants.map((id) => getUserById(state, id));
 
     return {
         user,

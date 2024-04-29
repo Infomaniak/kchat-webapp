@@ -27,6 +27,7 @@ declare global {
             onCallJoined: (callback: (_: any, props: {channelId: string}) => void) => void;
             onCallDeclined: (callback: (_: any, props: {channelId: string}) => void) => void;
             onCallEnded: (callback: (_: any, props: {channelID: string}) => void) => void;
+            onCallCancel: (callback: (_: any, props: {channelId: string}) => void) => void;
         }>;
     }
 }

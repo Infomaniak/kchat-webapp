@@ -21,13 +21,13 @@ export function openCallDialingModal(channelId: string) {
     return async (_: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const conference = getConferenceByChannelId(state, channelId);
-        const currentUserId = getCurrentUserId(state);
+        const currentUser = getCurrentUser(state);
         const caller = getUserById(state, conference.user_id);
         const users = conference.participants.map((id: string) => getUserById(state, id));
 
         window.desktopAPI?.openCallDialing?.({
             conference,
-            currentUserId,
+            currentUser,
             caller,
             users,
             channelId,
