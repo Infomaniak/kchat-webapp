@@ -75,10 +75,8 @@ function ThreadViewerRow({
                     postId={listId}
                     isLastPost={isLastPost}
                     handleCardClick={onCardClick}
-                    teamId={teamId}
                     timestampProps={timestampProps}
                     location={Locations.RHS_ROOT}
-                    disableConsecutive={true}
                 />
                 <RootPostDivider postId={listId}/>
             </>

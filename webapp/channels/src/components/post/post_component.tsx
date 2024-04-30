@@ -296,7 +296,9 @@ const PostComponent = (props: Props): JSX.Element => {
             'post--comment': (post.root_id && post.root_id.length > 0 && !props.isCollapsedThreadsEnabled) || (props.location === Locations.RHS_COMMENT),
             'post--compact': props.compactDisplay,
             'post--hovered': hovered,
-            'same--user': props.isConsecutivePost && (!props.compactDisplay || props.location === Locations.RHS_COMMENT),
+
+            // Infomaniak: we disable this in threads
+            'same--user': props.isConsecutivePost && props.location !== Locations.RHS_COMMENT && !props.compactDisplay,
             'cursor--pointer': alt && !props.channelIsArchived,
             'post--hide-controls': post.failed || post.state === Posts.POST_DELETED,
             'post--comment same--root': fromAutoResponder,
