@@ -1,3 +1,9 @@
+## 2.7.0-rc.20 (2024-04-30)
+
+### Changed (1 change)
+
+- [disable consecutive messages in threads](kchat/webapp@31558dcf5a440c2b15b1400c7c139da3861a3539) by @antonbuksa
+
 ## 2.7.0-rc.19 (2024-04-30)
 
 ### Changed (1 change)
