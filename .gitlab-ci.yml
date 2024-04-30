@@ -85,11 +85,13 @@ variables:
   - yarn --immutable --silent
 
 # Cache for yarn dependencies
+# Ref https://classic.yarnpkg.com/lang/en/docs/install-ci/
 .cache-yarn: &cache-yarn
   - key:
       files:
         - yarn.lock
     paths:
+      - node_modules/
       - .yarn
 
 # Cache for jest
