@@ -163,6 +163,18 @@ No changes.
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
 
+## 2.7.0-next.11 (2024-04-30)
+
+### Fixed (2 changes)
+
+- [fix content gap in threads](kchat/webapp@7e82d133920796a8fd7809b30f7e23ef452a9433) by @antonbuksa
+- [fix schedule message dialog style](kchat/webapp@4636ea8e969009c41285690c25fe07089f205954) by @antonbuksa
+
+### Changed (2 changes)
+
+- [disable consecutive messages in threads](kchat/webapp@31558dcf5a440c2b15b1400c7c139da3861a3539) by @antonbuksa
+- [css update posts](kchat/webapp@a3e5cd68656028ebf9fcd772c8ed1ffc0141950e) by @antonbuksa
+
 ## 2.7.0-next.10 (2024-04-30)
 
 ### Fixed (6 changes)
