@@ -122,7 +122,7 @@ export function startCall(channelId: string, jwt: string, url: string) {
             dispatch(startKmeetWindow(channelId, jwt));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-            window.open(url + `?jwt=${jwt}`, '_blank', 'noopener');
+            window.open(url + `?jwt=${jwt}#config.prejoinConfig.enabled=false`, '_blank', 'noopener');
         }
     };
 }
