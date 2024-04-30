@@ -768,7 +768,8 @@ const AdvanceTextEditor = ({
                             id={textboxId}
                             ref={textboxRef!}
                             disabled={readOnlyChannel}
-                            hidden={draft.postType === Constants.PostTypes.VOICE}
+
+                            // hidden={draft.postType === Constants.PostTypes.VOICE}
                             characterLimit={maxPostSize}
                             preview={shouldShowPreview}
                             badConnection={badConnection}
