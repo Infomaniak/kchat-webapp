@@ -144,6 +144,21 @@ No changes.
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
 
+## 2.7.0-next.10 (2024-04-30)
+
+### Fixed (6 changes)
+
+- [Fix: weird looking button on settings modal](kchat/webapp@26bc008067d6175e753c7aeaa9a8ab63db515d16) by @philippe.karle ([merge request](kchat/webapp!759))
+- [fix: thread list mark all as read button tooltip re-appearing](kchat/webapp@a276a48bb3c3a067ff22d0f9977b1d0db0045b68) by @tim.dewinter ([merge request](kchat/webapp!758))
+- [fix: empty ephemeral messages](kchat/webapp@a9089b6b09584d30abebf1b79ac48341f534941e) by @tim.dewinter ([merge request](kchat/webapp!756))
+- [fix: thread icon collapse display](kchat/webapp@7bb4476dac4a08366a7f1a75d04801a7ee4d58ae) by @tim.dewinter ([merge request](kchat/webapp!754))
+- [fix: inconsistent custom gif file size translation](kchat/webapp@88ae493c446ce34433fff387830f121c6cec3753) by @tim.dewinter ([merge request](kchat/webapp!753))
+- [fix: bug tracker background-color if component is hidden](kchat/webapp@804a32dbf3e7a3ed4acc1e28dbcf56990a5ad060) by @tim.dewinter ([merge request](kchat/webapp!752))
+
+### Removed (1 change)
+
+- [Team name removed from channel search panel !636](kchat/webapp@85974c0d409f650d449c9f424432c56d480fea6a) by @antonbuksa
+
 ## 2.7.0-next.9 (2024-04-25)
 
 ### Added (1 change)
