@@ -82,7 +82,7 @@ variables:
 # Configure yarn and install dependencies
 .script-yarn-install: &script-yarn-install
   - *script-configure-yarn
-  - yarn --immutable --immutable-cache --silent
+  - yarn --immutable --silent
 
 # Cache for yarn dependencies
 .cache-yarn: &cache-yarn
