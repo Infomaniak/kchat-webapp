@@ -69,9 +69,9 @@ variables:
 
 # Configure yarn cache and extra npm registries
 .script-configure-yarn: &script-configure-yarn
-  - yarn config set cacheFolder .yarn-cache
+  - yarn config set cacheFolder .yarn
   # - |
-  #   yarn config set cacheFolder .yarn-cache \
+  #   yarn config set cacheFolder .yarn \
   #   && yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch \
   #   && yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAlwaysAuth' true \
   #   && yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken' "$VERDACCIO_TOKEN" \
@@ -82,7 +82,7 @@ variables:
 # Configure yarn and install dependencies
 .script-yarn-install: &script-yarn-install
   - *script-configure-yarn
-  - yarn --silent
+  - yarn --immutable --immutable-cache --silent
 
 # Cache for yarn dependencies
 .cache-yarn: &cache-yarn
@@ -90,7 +90,7 @@ variables:
       files:
         - yarn.lock
     paths:
-      - .yarn-cache/
+      - .yarn
 
 # Cache for jest
 .cache-jest: &cache-jest
