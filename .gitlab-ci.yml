@@ -1,6 +1,6 @@
 stages:
-  - build
   - test
+  - build
   - release
 
 include:
@@ -140,6 +140,46 @@ workflow:
     - when: never
 
 # STAGES
+# Execute tsc
+test:tsc:
+  stage: test
+  extends:
+    - .tests
+  allow_failure: true
+  script:
+    - yarn test:types
+
+# Execute unit tests
+test:unit:
+  stage: test
+  extends:
+    - .tests
+  script:
+    - yarn test:webapp
+  # Save coverage report
+  artifacts:
+    paths:
+      - webapp/channels/coverage/
+    when: on_success
+    reports:
+      junit: webapp/channels/coverage/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: webapp/channels/coverage/cobertura-coverage.xml
+  coverage: /Lines\s*:\s*(\d+.?\d*)%/
+  # Save jest/yarn cache
+  cache:
+    - *cache-jest
+    - *cache-yarn
+
+# Execute e2e tests
+test:e2e:
+  stage: test
+  extends:
+    - .tests
+  script:
+    - yarn test:e2e
+
 # Build front sources using node and store the bundle as an artifact
 build:front:
   stage: build
@@ -224,46 +264,6 @@ build:image:
       --context ${CI_PROJECT_DIR}
       --dockerfile ${CI_PROJECT_DIR}/Dockerfile
       --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
-
-# Execute tsc
-test:tsc:
-  stage: test
-  extends:
-    - .tests
-  allow_failure: true
-  script:
-    - yarn test:types
-
-# Execute unit tests
-test:unit:
-  stage: test
-  extends:
-    - .tests
-  script:
-    - yarn test:webapp
-  # Save coverage report
-  artifacts:
-    paths:
-      - webapp/channels/coverage/
-    when: on_success
-    reports:
-      junit: webapp/channels/coverage/junit.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: webapp/channels/coverage/cobertura-coverage.xml
-  coverage: /Lines\s*:\s*(\d+.?\d*)%/
-  # Save jest/yarn cache
-  cache:
-    - *cache-jest
-    - *cache-yarn
-
-# Execute e2e tests
-test:e2e:
-  stage: test
-  extends:
-    - .tests
-  script:
-    - yarn test:e2e
 
 # Update front using minio-client
 release:front:
