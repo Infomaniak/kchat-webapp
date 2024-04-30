@@ -1,3 +1,15 @@
+## 2.7.0-rc.17 (2024-04-30)
+
+### Fixed (3 changes)
+
+- [Fix: weird looking button on settings modal](kchat/webapp@26bc008067d6175e753c7aeaa9a8ab63db515d16) by @philippe.karle ([merge request](kchat/webapp!759))
+- [fix: thread list mark all as read button tooltip re-appearing](kchat/webapp@a276a48bb3c3a067ff22d0f9977b1d0db0045b68) by @tim.dewinter ([merge request](kchat/webapp!758))
+- [fix: empty ephemeral messages](kchat/webapp@a9089b6b09584d30abebf1b79ac48341f534941e) by @tim.dewinter ([merge request](kchat/webapp!756))
+
+### Removed (1 change)
+
+- [Team name removed from channel search panel !636](kchat/webapp@85974c0d409f650d449c9f424432c56d480fea6a) by @antonbuksa
+
 ## 2.7.0-rc.16 (2024-04-26)
 
 ### Fixed (3 changes)
