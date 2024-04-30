@@ -84,6 +84,12 @@ variables:
   - *script-configure-yarn
   - yarn --immutable --silent
 
+# Build packages/dependencies
+.script-build-packages: &script-build-packages
+  - yarn workspace @infomaniak/mattermost-types build
+  - yarn workspace @infomaniak/mattermost-client build
+  - yarn workspace @mattermost/components build
+
 # Cache for yarn dependencies
 # Ref https://classic.yarnpkg.com/lang/en/docs/install-ci/
 .cache-yarn: &cache-yarn
@@ -199,11 +205,7 @@ build:front:
   before_script:
     - *script-yarn-install
   script:
-    # Build dependencies
-    - yarn workspace @infomaniak/mattermost-types build
-    - yarn workspace @infomaniak/mattermost-client build
-    - yarn workspace @mattermost/components build
-    # Build main
+    - *script-build-packages
     - yarn build:webapp
   cache:
     - *cache-yarn
