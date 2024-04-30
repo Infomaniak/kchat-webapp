@@ -234,6 +234,30 @@ test:unit:
     - *cache-jest
     - *cache-yarn
 
+# Execute e2e tests
+test:e2e:
+  stage: test
+  image: node:${NODE_VERSION}
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  rules:
+    - *rule-not-scheduled # Job is not triggered by schedule
+    - *rule-staging
+    - *rule-prodsec
+    - when: never
+  environment:
+    name: "$ENVIRONMENT_NAME"
+  before_script:
+    - *script-yarn-install
+  script:
+    - yarn test:e2e
+  # Save jest/yarn cache
+  cache:
+    - *cache-jest
+    - *cache-yarn
+
 # Update front using minio-client
 release:front:
   stage: release

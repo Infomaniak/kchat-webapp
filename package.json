@@ -4,6 +4,7 @@
   "scripts": {
     "build:webapp": "yarn workspace mattermost-webapp build",
     "dev-server:webapp": "yarn workspace mattermost-webapp dev-server",
+    "test:e2e": "yarn workspace e2e-playwright test",
     "test:webapp": "yarn workspace mattermost-webapp test-ci"
   },
   "resolutions": {
@@ -12,6 +13,8 @@
   },
   "workspaces": {
     "packages": [
+      "e2e-tests/cypress",
+      "e2e-tests/playwright",
       "webapp/platform/client",
       "webapp/platform/components",
       "webapp/platform/types",
