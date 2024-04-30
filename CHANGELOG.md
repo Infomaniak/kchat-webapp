@@ -1,3 +1,10 @@
+## 2.7.0-rc.18 (2024-04-30)
+
+### Fixed (2 changes)
+
+- [fix content gap in threads](kchat/webapp@7e82d133920796a8fd7809b30f7e23ef452a9433) by @antonbuksa
+- [fix schedule message dialog style](kchat/webapp@4636ea8e969009c41285690c25fe07089f205954) by @antonbuksa
+
 ## 2.7.0-rc.17 (2024-04-30)
 
 ### Fixed (3 changes)
