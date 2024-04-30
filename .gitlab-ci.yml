@@ -137,6 +137,11 @@ build:front:
   before_script:
     - *script-yarn-install
   script:
+    # Build dependencies
+    - yarn workspace @infomaniak/mattermost-types build
+    - yarn workspace @infomaniak/mattermost-client build
+    - yarn workspace @mattermost/components build
+    # Build main
     - yarn build:webapp
   cache:
     - *cache-yarn
