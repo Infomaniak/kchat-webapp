@@ -5,6 +5,7 @@
     "build:webapp": "yarn workspace mattermost-webapp build",
     "dev-server:webapp": "yarn workspace mattermost-webapp dev-server",
     "test:e2e": "yarn workspace e2e-playwright test",
+    "test:types": "yarn workspace mattermost-webapp check-types",
     "test:webapp": "yarn workspace mattermost-webapp test-ci"
   },
   "resolutions": {

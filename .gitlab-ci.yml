@@ -97,6 +97,26 @@ variables:
   - paths:
       - webapp/channels/.jestcache
 
+# Shared test config
+.tests:
+  image: node:${NODE_VERSION}
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  rules:
+    - *rule-not-scheduled # Job is not triggered by schedule
+    - *rule-staging
+    - *rule-prodsec
+    - when: never
+  environment:
+    name: "$ENVIRONMENT_NAME"
+  before_script:
+    - *script-yarn-install
+  # Save yarn cache
+  cache:
+    - *cache-yarn
+
 # WORKFLOW
 # Setup environment specific variables
 # Ref https://docs.gitlab.com/ee/ci/yaml/#workflowrulesvariables
@@ -205,23 +225,20 @@ build:image:
       --dockerfile ${CI_PROJECT_DIR}/Dockerfile
       --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
 
+# Execute tsc
+test:tsc:
+  stage: test
+  extends:
+    - .tests
+  allow_failure: true
+  script:
+    - yarn test:types
+
 # Execute unit tests
 test:unit:
   stage: test
-  image: node:${NODE_VERSION}
-  tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  rules:
-    - *rule-not-scheduled # Job is not triggered by schedule
-    - *rule-staging
-    - *rule-prodsec
-    - when: never
-  environment:
-    name: "$ENVIRONMENT_NAME"
-  before_script:
-    - *script-yarn-install
+  extends:
+    - .tests
   script:
     - yarn test:webapp
   # Save coverage report
@@ -243,26 +260,10 @@ test:unit:
 # Execute e2e tests
 test:e2e:
   stage: test
-  image: node:${NODE_VERSION}
-  tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  rules:
-    - *rule-not-scheduled # Job is not triggered by schedule
-    - *rule-staging
-    - *rule-prodsec
-    - when: never
-  environment:
-    name: "$ENVIRONMENT_NAME"
-  before_script:
-    - *script-yarn-install
+  extends:
+    - .tests
   script:
     - yarn test:e2e
-  # Save jest/yarn cache
-  cache:
-    - *cache-jest
-    - *cache-yarn
 
 # Update front using minio-client
 release:front:
