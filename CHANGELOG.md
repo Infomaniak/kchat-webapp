@@ -1,3 +1,9 @@
+## 2.7.0-rc.19 (2024-04-30)
+
+### Changed (1 change)
+
+- [css update posts](kchat/webapp@a3e5cd68656028ebf9fcd772c8ed1ffc0141950e) by @antonbuksa
+
 ## 2.7.0-rc.18 (2024-04-30)
 
 ### Fixed (2 changes)
