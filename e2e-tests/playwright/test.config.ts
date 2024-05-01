@@ -8,9 +8,8 @@ dotenv.config();
 
 // All process.env should be defined here
 const config: TestConfig = {
-    // Server
-    baseURL: process.env.PW_BASE_URL || 'http://localhost:8065',
-    adminUsername: process.env.PW_ADMIN_USERNAME || 'sysadmin',
+    baseURL: process.env.PW_BASE_URL || 'https://local.preprod.dev.infomaniak.ch:9005',
+    adminUsername: process.env.PW_ADMIN_USERNAME || process.env.PW_ADMIN_EMAIL || 'sysadmin@sample.mattermost.com',
     adminPassword: process.env.PW_ADMIN_PASSWORD || 'Sys@dmin-sample1',
     adminEmail: process.env.PW_ADMIN_EMAIL || 'sysadmin@sample.mattermost.com',
     ensurePluginsInstalled:
