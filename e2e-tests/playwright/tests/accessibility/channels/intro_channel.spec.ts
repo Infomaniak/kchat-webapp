@@ -3,12 +3,12 @@
 
 import {expect, test} from '@e2e-support/test_fixture';
 
-test('Base channel accessibility', async ({pw, pages, axe}) => {
+test('Base channel accessibility', async ({page, pages, axe}) => {
     // # Create and sign in a new user
-    const {user} = await pw.initSetup();
+    // const {user} = await pw.initSetup();
 
     // # Log in a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    // const {page} = await pw.testBrowser.login(user);
 
     // # Visit a default channel page
     const channelsPage = new pages.ChannelsPage(page);
@@ -24,12 +24,12 @@ test('Base channel accessibility', async ({pw, pages, axe}) => {
     expect(accessibilityScanResults.violations).toHaveLength(0);
 });
 
-test('Post actions tab support', async ({pw, pages, axe}) => {
+test('Post actions tab support', async ({page, pages, axe}) => {
     // # Create and sign in a new user
-    const {user} = await pw.initSetup();
+    // const {user} = await pw.initSetup();
 
     // # Log in a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    // const {page} = await pw.testBrowser.login(user);
 
     // # Visit a default channel page
     const channelsPage = new pages.ChannelsPage(page);
