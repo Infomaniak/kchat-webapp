@@ -1,6 +1,6 @@
 stages:
-  - test
   - build
+  - test
   - release
 
 include:
@@ -22,12 +22,15 @@ variables:
   # GITLAB_TRIAGE
   # MR_REVIEW_SCHEDULE
   # TRIAGE_TECHNICAL_DEBT
+  # PW_ADMIN_EMAIL
+  # PW_ADMIN_PASSWORD
   # ---
   KANIKO_VERSION: "debug" # https://github.com/GoogleContainerTools/kaniko/releases
   MINIO_CLIENT_VERSION: "RELEASE.2022-11-07T23-47-39Z" # https://hub.docker.com/r/minio/mc/tags
   NODE_VERSION: 18.17.1 # Sould respect /.nvmrc
   SENTRY_VERSION: 2.17.1 # https://hub.docker.com/r/getsentry/sentry-cli/tags
   RUBY_VERSION: 3.3.1 # https://hub.docker.com/_/ruby/tags
+  PLAYWRIGHT_VERSION: "v1.43.1-jammy" # https://mcr.microsoft.com/en-us/product/playwright/tags
   # SAST_DISABLED: "true"
   NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
 
@@ -66,6 +69,10 @@ variables:
 .rule-not-scheduled: &rule-not-scheduled
   - if: *rule-scheduled
     when: never
+
+# Setup kaniko config
+.script-configure-kaniko: &script-configure-kaniko
+  - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
 
 # Configure yarn cache and extra npm registries
 .script-configure-yarn: &script-configure-yarn
@@ -148,46 +155,6 @@ workflow:
     - when: never
 
 # STAGES
-# Execute tsc
-test:tsc:
-  stage: test
-  extends:
-    - .tests
-  allow_failure: true
-  script:
-    - yarn test:types
-
-# Execute unit tests
-test:unit:
-  stage: test
-  extends:
-    - .tests
-  script:
-    - yarn test:webapp
-  # Save coverage report
-  artifacts:
-    paths:
-      - webapp/channels/coverage/
-    when: on_success
-    reports:
-      junit: webapp/channels/coverage/junit.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: webapp/channels/coverage/cobertura-coverage.xml
-  coverage: /Lines\s*:\s*(\d+.?\d*)%/
-  # Save jest/yarn cache
-  cache:
-    - *cache-jest
-    - *cache-yarn
-
-# Execute e2e tests
-test:e2e:
-  stage: test
-  extends:
-    - .tests
-  script:
-    - yarn test:e2e
-
 # Build front sources using node and store the bundle as an artifact
 build:front:
   stage: build
@@ -261,13 +228,67 @@ build:image:
       allow_failure: false
     - when: never
   before_script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - *script-configure-kaniko
   script:
     - /kaniko/executor
       --cache=true
       --context ${CI_PROJECT_DIR}
       --dockerfile ${CI_PROJECT_DIR}/Dockerfile
       --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+
+# Execute tsc
+test:tsc:
+  stage: test
+  extends:
+    - .tests
+  allow_failure: true
+  script:
+    - yarn test:types
+
+# Execute unit tests
+test:unit:
+  stage: test
+  extends:
+    - .tests
+  script:
+    - yarn test:webapp
+  # Save coverage report
+  artifacts:
+    paths:
+      - webapp/channels/coverage/
+    when: on_success
+    reports:
+      junit: webapp/channels/coverage/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: webapp/channels/coverage/cobertura-coverage.xml
+  coverage: /Lines\s*:\s*(\d+.?\d*)%/
+  # Save jest/yarn cache
+  cache:
+    - *cache-jest
+    - *cache-yarn
+
+# Execute e2e tests
+test:e2e:
+  stage: test
+  extends:
+    - .tests
+  image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
+  rules:
+    - if: *if-merge-request
+      when: manual
+      allow_failure: false
+    - when: never
+  variables:
+    PW_BASE_URL: ${PW_BASE_URL}
+    PW_ADMIN_EMAIL: ${PW_ADMIN_EMAIL}
+    PW_ADMIN_PASSWORD: ${PW_ADMIN_PASSWORD}
+  before_script:
+    - cd e2e-tests/playwright
+    - *script-yarn-install
+  script:
+    - echo "Get PW_BASE_URL"
+    - yarn run test
 
 # Update front using minio-client
 release:front:
