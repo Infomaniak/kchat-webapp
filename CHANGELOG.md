@@ -1,3 +1,9 @@
+## 2.7.0-rc.24 (2024-05-01)
+
+### Changed (1 change)
+
+- [update post options component](kchat/webapp@2b4f05a0a6b2f01012f248762b1fd4122741374e) by @antonbuksa
+
 ## 2.7.0-rc.23 (2024-05-01)
 
 ### Fixed (1 change)
