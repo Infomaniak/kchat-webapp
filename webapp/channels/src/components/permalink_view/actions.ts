@@ -135,7 +135,7 @@ export function focusPost(postId: string, returnTo = '', currentUserId: string, 
 
         if (!myMember) {
             // If it's a DM or GM channel and we don't have a channel member for it already, user is not a member
-            if (channel.type === Constants.PRIVATE_CHANNEL && isSystemAdmin(user.roles)) {
+            if (channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) {
                 getHistory().replace(`/error?type=${ErrorPageTypes.PERMALINK_NOT_FOUND}&returnTo=${returnTo}`);
                 return;
             }
