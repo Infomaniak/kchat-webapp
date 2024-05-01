@@ -1,3 +1,9 @@
+## 2.7.0-rc.21 (2024-05-01)
+
+### Fixed (1 change)
+
+- [fix permalink channel previews](kchat/webapp@edc52c331e1f675c96b500246b17642acfa23fe3) by @antonbuksa
+
 ## 2.7.0-rc.20 (2024-04-30)
 
 ### Changed (1 change)
