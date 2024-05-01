@@ -5,20 +5,20 @@ import {expect} from '@playwright/test';
 
 import {test} from '@e2e-support/test_fixture';
 import {getRandomId} from '@e2e-support/util';
-import {createRandomPost} from '@e2e-support/server/post';
+// import {createRandomPost} from '@e2e-support/server/post';
 
 const keywords = [`AB${getRandomId()}`, `CD${getRandomId()}`, `EF${getRandomId()}`, `Highlight me ${getRandomId()}`];
 
 const highlightWithoutNotificationClass = 'non-notification-highlight';
 
-test('MM-T5465-1 Should add the keyword when enter, comma or tab is pressed on the textbox', async ({pw, pages}) => {
+test('MM-T5465-1 Should add the keyword when enter, comma or tab is pressed on the textbox', async ({page, pages}) => {
     // # Skip test if no license
-    await pw.skipIfNoLicense();
+    // await pw.skipIfNoLicense();
 
-    const {user} = await pw.initSetup();
+    // const {user} = await pw.initSetup();
 
     // # Log in as a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    // const {page} = await pw.testBrowser.login(user);
 
     // # Visit default channel page
     const channelPage = new pages.ChannelsPage(page);
@@ -66,16 +66,16 @@ test('MM-T5465-1 Should add the keyword when enter, comma or tab is pressed on t
 });
 
 test('MM-T5465-2 Should highlight the keywords when a message is sent with the keyword in center', async ({
-    pw,
+    page,
     pages,
 }) => {
     // # Skip test if no license
-    await pw.skipIfNoLicense();
+    // await pw.skipIfNoLicense();
 
-    const {user} = await pw.initSetup();
+    // const {user} = await pw.initSetup();
 
     // # Log in as a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    // const {page} = await pw.testBrowser.login(user);
 
     // # Visit default channel page
     const channelPage = new pages.ChannelsPage(page);
@@ -124,14 +124,14 @@ test('MM-T5465-2 Should highlight the keywords when a message is sent with the k
     await expect(lastPostWithHighlight.container.getByText(keywords[3])).toHaveClass(highlightWithoutNotificationClass);
 });
 
-test('MM-T5465-3 Should highlight the keywords when a message is sent with the keyword in rhs', async ({pw, pages}) => {
+test('MM-T5465-3 Should highlight the keywords when a message is sent with the keyword in rhs', async ({page, pages}) => {
     // # Skip test if no license
-    await pw.skipIfNoLicense();
+    // await pw.skipIfNoLicense();
 
-    const {user} = await pw.initSetup();
+    // const {user} = await pw.initSetup();
 
     // # Log in as a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    // const {page} = await pw.testBrowser.login(user);
 
     // # Visit default channel page
     const channelPage = new pages.ChannelsPage(page);
@@ -182,14 +182,14 @@ test('MM-T5465-3 Should highlight the keywords when a message is sent with the k
     );
 });
 
-test('MM-T5465-4 Highlighted keywords should not appear in the Recent Mentions', async ({pw, pages}) => {
+test('MM-T5465-4 Highlighted keywords should not appear in the Recent Mentions', async ({page, pages}) => {
     // # Skip test if no license
-    await pw.skipIfNoLicense();
+    // await pw.skipIfNoLicense();
 
-    const {user} = await pw.initSetup();
+    // const {user} = await pw.initSetup();
 
     // # Log in as a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    // const {page} = await pw.testBrowser.login(user);
 
     // # Visit default channel page
     const channelPage = new pages.ChannelsPage(page);
@@ -226,63 +226,63 @@ test('MM-T5465-4 Highlighted keywords should not appear in the Recent Mentions',
 });
 
 // test('MM-T5465-5 Should highlight keywords in message sent from another user', async ({page, pages}) => {
-    //     // # Skip test if no license
-    //     await pw.skipIfNoLicense();
+//     // # Skip test if no license
+//     await pw.skipIfNoLicense();
 
-    //     const {adminClient, team, adminUser, user} = await pw.initSetup();
+//     const {adminClient, team, adminUser, user} = await pw.initSetup();
 
-    //     if (!adminUser) {
-        //         throw new Error('Failed to create admin user');
-    //     }
+//     if (!adminUser) {
+//         throw new Error('Failed to create admin user');
+//     }
 
-    //     // # Get the default channel of the team for getting the channel id
-    //     const channel = await adminClient.getChannelByName(team.id, 'town-square');
+//     // # Get the default channel of the team for getting the channel id
+//     const channel = await adminClient.getChannelByName(team.id, 'town-square');
 
-    //     const highlightKeyword = keywords[0];
-    //     const messageWithKeyword = `This recieved message contains the ${highlightKeyword} keyword `;
+//     const highlightKeyword = keywords[0];
+//     const messageWithKeyword = `This recieved message contains the ${highlightKeyword} keyword `;
 
-    //     // # Create a post containing the keyword in the channel by admin
-    //     await adminClient.createPost(
-        //         createRandomPost({
-            //             message: messageWithKeyword,
-            //             channel_id: channel.id,
-            //             user_id: adminUser.id,
-        //         }),
-    //     );
+//     // # Create a post containing the keyword in the channel by admin
+//     await adminClient.createPost(
+//         createRandomPost({
+//             message: messageWithKeyword,
+//             channel_id: channel.id,
+//             user_id: adminUser.id,
+//         }),
+//     );
 
-    //     // # Now log in as a user in new browser context
-    //     const {page} = await pw.testBrowser.login(user);
+//     // # Now log in as a user in new browser context
+//     const {page} = await pw.testBrowser.login(user);
 
-    //     // # Visit default channel page
-    //     const channelPage = new pages.ChannelsPage(page);
-    //     await channelPage.goto();
-    //     await channelPage.toBeVisible();
+//     // # Visit default channel page
+//     const channelPage = new pages.ChannelsPage(page);
+//     await channelPage.goto();
+//     await channelPage.toBeVisible();
 
-    //     // # Open settings modal
-    //     await channelPage.globalHeader.openSettings();
-    //     await channelPage.settingsModal.toBeVisible();
+//     // # Open settings modal
+//     await channelPage.globalHeader.openSettings();
+//     await channelPage.settingsModal.toBeVisible();
 
-    //     // # Open notifications tab
-    //     await channelPage.settingsModal.openNotificationsTab();
+//     // # Open notifications tab
+//     await channelPage.settingsModal.openNotificationsTab();
 
-    //     // # Open keywords that get highlighted section
-    //     await channelPage.settingsModal.notificationsSettings.expandSection('keysWithHighlight');
+//     // # Open keywords that get highlighted section
+//     await channelPage.settingsModal.notificationsSettings.expandSection('keysWithHighlight');
 
-    //     // # Enter the keyword
-    //     const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
-    //     await keywordsInput.type(keywords[0]);
-    //     await keywordsInput.press('Tab');
+//     // # Enter the keyword
+//     const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
+//     await keywordsInput.type(keywords[0]);
+//     await keywordsInput.press('Tab');
 
-    //     // # Save the keyword
-    //     await channelPage.settingsModal.notificationsSettings.save();
+//     // # Save the keyword
+//     await channelPage.settingsModal.notificationsSettings.save();
 
-    //     // # Close the settings modal
-    //     await channelPage.settingsModal.closeModal();
+//     // # Close the settings modal
+//     await channelPage.settingsModal.closeModal();
 
-    //     // * Verify that the keywords are highlighted in the last message recieved
-    //     const lastPostWithHighlight = await channelPage.centerView.getLastPost();
-    //     await expect(lastPostWithHighlight.container.getByText(messageWithKeyword)).toBeVisible();
-    //     await expect(lastPostWithHighlight.container.getByText(highlightKeyword)).toHaveClass(
-        //         highlightWithoutNotificationClass,
-    //     );
+//     // * Verify that the keywords are highlighted in the last message recieved
+//     const lastPostWithHighlight = await channelPage.centerView.getLastPost();
+//     await expect(lastPostWithHighlight.container.getByText(messageWithKeyword)).toBeVisible();
+//     await expect(lastPostWithHighlight.container.getByText(highlightKeyword)).toHaveClass(
+//         highlightWithoutNotificationClass,
+//     );
 // });

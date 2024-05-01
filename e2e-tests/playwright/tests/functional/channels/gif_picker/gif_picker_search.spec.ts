@@ -4,13 +4,13 @@
 import {expect, test} from '@e2e-support/test_fixture';
 
 test('MM-T5445 Should search, select and post correct Gif when Gif picker is opened from center textbox', async ({
-    pw,
+    page,
     pages,
 }) => {
-    const {user} = await pw.initSetup();
+    // const {user} = await pw.initSetup();
 
     // # Log in as a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    // const {page} = await pw.testBrowser.login(user);
 
     // # Visit default channel page
     const channelPage = new pages.ChannelsPage(page);
@@ -42,13 +42,13 @@ test('MM-T5445 Should search, select and post correct Gif when Gif picker is ope
 });
 
 test('MM-T5446 Should search, select and post correct Gif when Gif picker is opened from RHS textbox', async ({
-    pw,
+    page,
     pages,
 }) => {
-    const {user} = await pw.initSetup();
+    // const {user} = await pw.initSetup();
 
     // # Log in as a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    // const {page} = await pw.testBrowser.login(user);
 
     // # Visit default channel page
     const channelPage = new pages.ChannelsPage(page);
