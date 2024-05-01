@@ -14,8 +14,7 @@ import {joinCall, declineCall, leaveCall} from 'actions/kmeet_calls';
 
 import CallAccept from 'components/widgets/icons/call_accept';
 import CallHangUp from 'components/widgets/icons/call_hang_up';
-
-// import Avatars from 'components/widgets/users/avatars';
+import Avatars from 'components/widgets/users/avatars';
 
 import {ringing, stopRing} from 'utils/notification_sounds';
 import {isDesktopApp} from 'utils/user_agent';
@@ -68,13 +67,14 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
 
         document.addEventListener('click', handleClickOutsideModal);
 
-        const timeout = setTimeout(() => {
-            onHandleDecline();
-        }, 30000);
+        // const timeout = setTimeout(() => {
+        //     onHandleDecline();
+        // }, 30000);
 
         return () => {
             document.removeEventListener('click', handleClickOutsideModal);
-            clearTimeout(timeout);
+
+            // clearTimeout(timeout);
         };
     }, [onHandleDecline, handleClickOutsideModal]);
 
@@ -92,16 +92,8 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         }
     }, [caller, conference, dispatch]);
 
-    const getUsersForOverlay = () => {
-        if (users.length >= 2 && caller) {
-            const overlayUsers: UserProfile[] = [caller];
-            const getOverLayUser: UserProfile = users.filter((usr) => usr.id !== caller.id)[0];
-            overlayUsers.push(getOverLayUser);
-            return overlayUsers;
-        }
-
-        return caller ? [caller] : [];
-    };
+    const participants = useMemo(() => users.filter((u) => u.id !== user.id), [users]);
+    const participantsIds = useMemo(() => participants.map((p) => p.id), [participants]);
 
     const getUsersNicknames = (users: UserProfile[]): string => {
         const nicknames = users.map((user) => user.nickname);
@@ -113,6 +105,11 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         case 'O':
         case 'P':
             return (<>
+                <div className='call-modal__calling-user'>
+                    <span>
+                        {getUsersNicknames(participants)}
+                    </span>
+                </div>
                 <div className='call-modal__calling-info'>
                     <>
                         <FormattedMessage
@@ -133,7 +130,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                 <>
                     <div className='call-modal__calling-user'>
                         <span>
-                            {getUsersNicknames(getUsersForOverlay())}
+                            {getUsersNicknames(participants)}
                         </span>
                     </div>
                     <div className='call-modal__calling-info'>
@@ -173,12 +170,12 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                 <div
                     className='call-modal__header'
                 >
-                    {/* <Avatars
-                        userIds={conference.participants}
-                        size='xl'
-                        totalUsers={users.length}
+                    <Avatars
+                        userIds={participantsIds}
+                        size='lg'
+                        totalUsers={participants.length}
                         disableProfileOverlay={true}
-                    /> */}
+                    />
                 </div>
                 <div className='call-modal__text'>
                     {text()}
@@ -208,7 +205,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                     ) : (
                         <button
                             className='btn btn-grey decline'
-                            onClick={onHandleCancel}
+                            onClick={onHandleDecline}
                             aria-label={textButtonCancel}
                         >
                             <CallHangUp/>

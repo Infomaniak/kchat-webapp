@@ -2,30 +2,44 @@
 // See LICENSE.txt for license information.
 
 import moment from 'moment-timezone';
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
-import styled from 'styled-components';
 
 import type {Post} from '@mattermost/types/posts';
 
 import {putChannelActiveConf} from 'actions/calls';
 
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
+import Avatars from 'components/widgets/users/avatars';
+
+import type {Conference} from 'types/conference';
+
+import * as Sc from './styled';
 
 interface Props {
     post: Post;
-    connectedKmeetUrl: string;
+    conference?: Conference;
     isDialingEnabled: boolean;
     startOrJoinCallInChannelV2: (channelID: string) => void;
     joinCall: (channelID: string) => void;
 }
 
-const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInChannelV2, joinCall}: Props) => {
+type Status = 'M'|'O'|'E'|'D' | undefined
+
+const text = {
+    O: {id: 'kmeet.calls.started', defaultMessage: 'Appel démarré', values: {}},
+    M: {id: 'kmeet.calls.called', defaultMessage: 'Appel manqué', values: {}},
+    E: {id: 'kmeet.calls.ended.title', defaultMessage: 'Appel terminé', values: {}},
+    D: {id: 'kmeet.calls.in_progress', defaultMessage: 'Appel en cours', values: {}},
+};
+
+const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV2, joinCall}: Props) => {
     const intl = useIntl();
     const dispatch = useDispatch();
 
-    const meetingUrl = connectedKmeetUrl ?? post.props.url;
+    const meetingUrl = useMemo(() => conference?.url ?? post.props.url, [conference, post]);
+    const usersIds = useMemo(() => (conference ? Object.keys(conference.registrants) : []), [conference]);
 
     const onJoinCallClick = () => {
         joinCall(post.channel_id);
@@ -42,222 +56,135 @@ const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInC
         }
     }, [dispatch, post.props.conference_id, meetingUrl, post.channel_id]);
 
-    // M: missed
-    // S: started
-    // E: ended
-    // D: declined
-    type Status = 'M'|'O'|'E'|'D' | undefined
-    let declinedUsernames: string[] = [];
     const defineStatus = (): Status => {
         const spec = post.props;
         const ended = Boolean(spec.end_at);
 
-        if (spec.declined_usernames) {
-            declinedUsernames = spec.declined_usernames;
-            return 'D';
-        }
         if (spec.in_call === true) {
             return 'M';
         }
+
         if (ended === true) {
             return 'E';
         }
+
         return 'O';
     };
+
     const renderCallStatus = (status: Status = 'O') => {
         if (!isDialingEnabled) {
             return (
-                <MessageWrapper>
-                    <Message>
+                <Sc.MessageWrapper>
+                    <Sc.Message>
                         <FormattedMessage
                             id='kmeet.calls.started'
                             defaultMessage='Réunion kMeet démarrée'
                         />
-                    </Message>
-                    <SubMessage>{subMessage}</SubMessage>
-                </MessageWrapper>
+                    </Sc.Message>
+                    <Sc.SubMessage>{subMessage}</Sc.SubMessage>
+                </Sc.MessageWrapper>
 
             );
         }
-        const text = {
-            O: {id: 'kmeet.calls.started', defaultMessage: 'Appel démarré', values: {}},
-            M: {id: 'kmeet.calls.called', defaultMessage: 'Appel manqué', values: {}},
-            E: {id: 'kmeet.calls.ended.title', defaultMessage: 'Appel terminé', values: {}},
-            D: {id: 'kmeet.calls.declined', defaultMessage: 'Appel refusé {usernames}', values: {usernames: declinedUsernames.toString()}},
-        };
+
         return (
-            <MessageWrapper>
-                <Message>
+            <Sc.MessageWrapper>
+                <Sc.Message>
                     <FormattedMessage
                         id={text[status].id}
                         defaultMessage={text[status].defaultMessage}
                         values={text[status].values}
                     />
-                </Message>
-                <SubMessage>{subMessage}</SubMessage>
-            </MessageWrapper>
+                </Sc.Message>
+                <Sc.SubMessage>{subMessage}</Sc.SubMessage>
+            </Sc.MessageWrapper>
         );
     };
 
     const renderButton = (status: Status) => {
         if (isDialingEnabled) {
-            if (meetingUrl && status === 'O') {
+            if (conference && status === 'O') {
                 return (
-                    <JoinButton onClick={onJoinCallClick}>
-                        <ButtonText>
+                    <Sc.JoinButton onClick={onJoinCallClick}>
+                        <Sc.ButtonText>
                             <FormattedMessage
                                 id='kmeet.calls.open'
                                 defaultMessage='Rejoindre'
                             />
-                        </ButtonText>
-                    </JoinButton>
+                        </Sc.ButtonText>
+                    </Sc.JoinButton>
                 );
             }
             if (status === 'M') {
                 return (
-                    <JoinButton onClick={onStartOrJoinCall}>
-                        <ButtonText>
+                    <Sc.JoinButton onClick={onStartOrJoinCall}>
+                        <Sc.ButtonText>
                             <FormattedMessage
                                 id='kmeet.calls.callback'
                                 defaultMessage='Rappeler'
                             />
-                        </ButtonText>
-                    </JoinButton>
+                        </Sc.ButtonText>
+                    </Sc.JoinButton>
                 );
             }
         }
 
-        return meetingUrl ? (
-            <JoinButton onClick={onJoinCallClick}>
-                <ButtonText>
+        return conference ? (
+            <Sc.JoinButton onClick={onJoinCallClick}>
+                <Sc.ButtonText>
                     <FormattedMessage
                         id='kmeet.calls.open'
                         defaultMessage='Ouvrir'
                     />
-                </ButtonText>
-            </JoinButton>
+                </Sc.ButtonText>
+            </Sc.JoinButton>
         ) : null;
     };
 
+    const renderAvatars = () => {
+        if (!conference) {
+            return <></>;
+        }
+
+        return (
+            <Avatars
+                userIds={usersIds}
+                size='lg'
+                breakAt={1}
+            />
+        );
+    };
+
     const subMessage = post.props.end_at ? (
-        <>
-            <Duration>
-                <FormattedMessage
-                    id='kmeet.calls.ended'
-                    defaultMessage='Terminée à {time}'
-                    values={{
-                        time: moment(post.props.end_at).format('LT'),
-                    }}
-                />
-            </Duration>
-        </>
+        <Sc.Duration>
+            <FormattedMessage
+                id='kmeet.calls.ended'
+                defaultMessage='Terminée à {time}'
+                values={{
+                    time: moment(post.props.end_at).format('LT'),
+                }}
+            />
+        </Sc.Duration>
     ) : (
-        <Duration>
+        <Sc.Duration>
             {moment(post.props.start_at).fromNow()}
-        </Duration>
+        </Sc.Duration>
     );
     const status: Status = defineStatus();
     return (
-        <Main data-testid={'call-thread'}>
-
-            <Left>
-                <CallIndicator ended={Boolean(post.props.end_at)}>
+        <Sc.Main data-testid={'call-thread'}>
+            <Sc.Left>
+                <Sc.CallIndicator ended={Boolean(post.props.end_at)}>
                     <KMeetIcon style={{width: '100%', height: '100%'}}/>
-                </CallIndicator>
+                </Sc.CallIndicator>
                 {renderCallStatus(status)}
-            </Left>
-            <Right>
+            </Sc.Left>
+            <Sc.Right>
+                {renderAvatars()}
                 {renderButton(status)}
-            </Right>
-
-        </Main>
+            </Sc.Right>
+        </Sc.Main>
     );
 };
-
-const Main = styled.div`
-    display: flex;
-    align-items: center;
-    width: min(600px, 100%);
-    margin: 4px 0;
-    padding: 16px;
-    background: var(--center-channel-bg);
-    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    box-shadow: 0px 4px 6px rgba(var(--center-channel-color-rgb), 0.12);
-    color: var(--center-channel-color);
-    border-radius: 4px;
-`;
-
-const Left = styled.div`
-    display: flex;
-    flex-grow: 10;
-    overflow: hidden;
-    white-space: nowrap;
-`;
-
-const Right = styled.div`
-    display: flex;
-    flex-grow: 1;
-`;
-
-const CallIndicator = styled.div<{ ended: boolean }>`
-    border-radius: 4px;
-    padding: 4px;
-    width: 40px;
-    height: 40px;
-`;
-
-const MessageWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin: 0 12px;
-    overflow: hidden;
-`;
-
-const Message = styled.span`
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
-const SubMessage = styled.div`
-    white-space: normal;
-`;
-
-const Profiles = styled.div`
-    display: flex;
-    align-items: center;
-    margin-right: auto;
-    img {
-        max-width: 40px;
-    }
-`;
-
-const Duration = styled.span`
-    color: var(--center-channel-color);
-`;
-
-const Button = styled.button`
-    display: flex;
-    align-items: center;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 16px;
-    cursor: pointer;
-`;
-
-const JoinButton = styled(Button)`
-    color: var(--center-channel-bg);
-    background: var(--button-bg);
-`;
-
-const LeaveButton = styled(Button)`
-    color: var(--error-text);
-    background: rgba(var(--error-text-color-rgb), 0.16);
-`;
-
-const ButtonText = styled.span`
-    font-weight: 600;
-    margin: 0 8px;
-`;
 
 export default PostType;

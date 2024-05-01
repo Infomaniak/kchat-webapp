@@ -15,15 +15,15 @@ import type {GlobalState} from 'types/store';
 
 import MeetButton from './meet_button';
 
-import {connectedKmeetCallUrl} from '../../selectors/kmeet_calls';
+import {getConferenceByChannelId} from '../../selectors/kmeet_calls';
 
 function mapStateToProps(state: GlobalState) {
     const currentChannelID = getCurrentChannelId(state);
-    const connectedKmeetUrl = connectedKmeetCallUrl(state, currentChannelID);
+    const conference = getConferenceByChannelId(state, currentChannelID);
 
     return {
         currentChannelID,
-        hasCall: connectedKmeetUrl != null,
+        hasCall: Boolean(conference),
     };
 }
 
