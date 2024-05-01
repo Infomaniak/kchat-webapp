@@ -1,3 +1,9 @@
+## 2.7.0-rc.23 (2024-05-01)
+
+### Fixed (1 change)
+
+- [fix timestamps not supposed to be displayed as relative](kchat/webapp@91021e1728f612d9d888196b4b5b29463fe7f09e) by @antonbuksa
+
 ## 2.7.0-rc.22 (2024-05-01)
 
 ### Fixed (1 change)
