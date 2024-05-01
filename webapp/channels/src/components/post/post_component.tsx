@@ -590,7 +590,7 @@ const PostComponent = (props: Props): JSX.Element => {
                                         eventTime={post.create_at}
                                         postId={post.id}
                                         location={props.location}
-                                        timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay ? 'narrow' : undefined}}
+                                        timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay && props.location !== Locations.RHS_COMMENT ? 'narrow' : undefined}}
                                     />
                                 }
                                 {priority}
