@@ -2,6 +2,7 @@ stages:
   - build
   - test
   - release
+  - deploy
 
 include:
   # - template: Security/SAST.gitlab-ci.yml
@@ -54,7 +55,7 @@ variables:
 
 # Prodsec deployments on master commits
 .rule-prodsec: &rule-prodsec
-  - if: &if-master-commit $CI_COMMIT_BRANCH == "master"
+  - if: &if-master-commit $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     when: on_success
 
 # Staging deployments on Merge Requests
@@ -75,20 +76,17 @@ variables:
   - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
 
 # Configure yarn cache and extra npm registries
-.script-configure-yarn: &script-configure-yarn
-  - yarn config set cacheFolder .yarn
-  # - |
-  #   yarn config set cacheFolder .yarn \
-  #   && yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch \
-  #   && yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAlwaysAuth' true \
-  #   && yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken' "$VERDACCIO_TOKEN" \
-  #   && yarn config set npmScopes.infomaniak.npmAuthToken "$VERDACCIO_TOKEN" \
-  #   && yarn config set npmScopes.infomaniak.npmPublishRegistry https://verdaccio.dev.infomaniak.ch \
-  #   && yarn config set npmScopes.infomaniak.npmRegistryServer https://verdaccio.dev.infomaniak.ch
+# .script-configure-yarn: &script-configure-yarn
+#   - |
+#     yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch \
+#     && yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAlwaysAuth' true \
+#     && yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken' "$VERDACCIO_TOKEN" \
+#     && yarn config set npmScopes.infomaniak.npmAuthToken "$VERDACCIO_TOKEN" \
+#     && yarn config set npmScopes.infomaniak.npmPublishRegistry https://verdaccio.dev.infomaniak.ch \
+#     && yarn config set npmScopes.infomaniak.npmRegistryServer https://verdaccio.dev.infomaniak.ch
 
 # Configure yarn and install dependencies
-.script-yarn-install: &script-yarn-install
-  - *script-configure-yarn
+.script-yarn-install: &script-yarn-install # - *script-configure-yarn
   - yarn --immutable --silent
 
 # Build packages/dependencies
@@ -96,16 +94,6 @@ variables:
   - yarn workspace @infomaniak/mattermost-types build
   - yarn workspace @infomaniak/mattermost-client build
   - yarn workspace @mattermost/components build
-
-# Cache for yarn dependencies
-# Ref https://classic.yarnpkg.com/lang/en/docs/install-ci/
-.cache-yarn: &cache-yarn
-  - key:
-      files:
-        - yarn.lock
-    paths:
-      - node_modules/
-      - .yarn
 
 # Cache for jest
 .cache-jest: &cache-jest
@@ -128,9 +116,6 @@ variables:
     name: "$ENVIRONMENT_NAME"
   before_script:
     - *script-yarn-install
-  # Save yarn cache
-  cache:
-    - *cache-yarn
 
 # WORKFLOW
 # Setup environment specific variables
@@ -171,11 +156,9 @@ build:front:
     name: "$ENVIRONMENT_NAME"
   before_script:
     - *script-yarn-install
-  script:
     - *script-build-packages
+  script:
     - yarn build:webapp
-  cache:
-    - *cache-yarn
   # Save bundle /dist
   artifacts:
     paths:
@@ -187,8 +170,6 @@ build:front:
 # build:packages:
 #   stage: release
 #   image: node:${NODE_VERSION}
-#   extends:
-#     - .yarn-cache
 #   tags:
 #     - kubernetes
 #   rules:
@@ -203,8 +184,6 @@ build:front:
 #     - yarn workspace @infomaniak/mattermost-types build
 #     - yarn workspace @infomaniak/mattermost-client build
 #     - yarn workspace @mattermost/components build
-#   cache:
-#     - *cache-yarn
 #   # Save tsc'ed javascript files /lib
 #   artifacts:
 #     paths:
@@ -263,10 +242,9 @@ test:unit:
         coverage_format: cobertura
         path: webapp/channels/coverage/cobertura-coverage.xml
   coverage: /Lines\s*:\s*(\d+.?\d*)%/
-  # Save jest/yarn cache
+  # Save jest cache
   cache:
     - *cache-jest
-    - *cache-yarn
 
 # Execute e2e tests
 test:e2e:
@@ -274,21 +252,40 @@ test:e2e:
   extends:
     - .tests
   image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
+  allow_failure: true
   rules:
     - if: *if-merge-request
       when: manual
-      allow_failure: false
     - when: never
   variables:
-    PW_BASE_URL: ${PW_BASE_URL}
     PW_ADMIN_EMAIL: ${PW_ADMIN_EMAIL}
     PW_ADMIN_PASSWORD: ${PW_ADMIN_PASSWORD}
   before_script:
-    - cd e2e-tests/playwright
     - *script-yarn-install
+    - *script-build-packages
   script:
-    - echo "Get PW_BASE_URL"
-    - yarn run test
+    # Install jq
+    - apt update && apt upgrade -y && apt install jq -y
+    # Get the dev-bot note that match the regexp
+    - echo "Reading notes for MR ${CI_MERGE_REQUEST_IID}..."
+    - |
+      DEV_BOT_NOTE=$( \
+        curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" | \
+        jq '.[] | .body | select(.|test("^Staging is now available at https://.+$"))' \
+      )
+    # Parse PW_BASE_URL from comment
+    - |
+      [[ -z "$DEV_BOT_NOTE" ]] && { echo "Staging URL could not be found!" ; exit 1; }
+    - export PW_BASE_URL=${DEV_BOT_NOTE:29:-1}
+    # Execute tests
+    - echo "Executing e2e tests on ${PW_BASE_URL}..." \
+    - yarn run test:e2e:playwright
+  # Save playwright report
+  artifacts:
+    paths:
+      - e2e-tests/playwright/playwright-report
+    expire_in: 1 days
+    when: always
 
 # Update front using minio-client
 release:front:
@@ -340,9 +337,42 @@ release:front:
 #     - yarn workspace @infomaniak/mattermost-types npm publish
 #     - yarn workspace @infomaniak/mattermost-client npm publish
 
+# Publish changelog to kChat
+release:changelog:
+  stage: release
+  image: ruby:${RUBY_VERSION}
+  needs:
+    - release:front
+  rules:
+    - *rule-preprod
+    - *rule-canary
+    - *rule-prod
+    - when: never
+  environment:
+    name: "$ENVIRONMENT_NAME"
+  script:
+    - ruby .gitlab/release.rb ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${NOTIFY_CHANNEL}
+
+# Upload pages report
+# https://docs.gitlab.com/ee/user/project/pages/getting_started/pages_from_scratch.html
+pages:
+  stage: deploy
+  needs: ["test:e2e"]
+  rules:
+    - if: *if-merge-request
+      variables:
+        PAGES_PREFIX: "mr$CI_MERGE_REQUEST_IID" # Prefix with the mr<iid>, like `mr123`
+  variables:
+    PAGES_PREFIX: "" # No prefix by default (master)
+  script:
+    - cp -r e2e-tests/playwright/playwright-report public
+  artifacts:
+    paths:
+      - public
+
 # Create a new sentry release and push source maps
 release:sentry:
-  stage: release
+  stage: .post
   image: getsentry/sentry-cli:${SENTRY_VERSION}
   tags:
     - docker-executor
@@ -362,22 +392,6 @@ release:sentry:
     - sentry-cli releases set-commits --auto --ignore-empty --ignore-missing ${CI_COMMIT_TAG}
     - sentry-cli releases files ${CI_COMMIT_TAG} upload-sourcemaps --url-prefix '~/static/' ./dist --ignore-file .sentryignore
     - sentry-cli releases finalize ${CI_COMMIT_TAG}
-
-# Publish changelog to kChat
-release:changelog:
-  stage: release
-  image: ruby:${RUBY_VERSION}
-  needs:
-    - release:front
-  rules:
-    - *rule-preprod
-    - *rule-canary
-    - *rule-prod
-    - when: never
-  environment:
-    name: "$ENVIRONMENT_NAME"
-  script:
-    - ruby .gitlab/release.rb ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${NOTIFY_CHANNEL}
 
 # HOUSE KEEPING
 guild_review:

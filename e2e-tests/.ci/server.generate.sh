@@ -45,12 +45,11 @@ generate_docker_compose_file() {
 # Image hashes in this file are for amd64 systems
 # NB:  May include paths relative to the "server/build" directory, which contains the original compose file that this yaml is overriding
 
-version: "2.4"
 services:
   server:
     image: \${SERVER_IMAGE}
     build:
-      context: ../../server
+      context: ../../server/build
       dockerfile: Dockerfile
     restart: always
     env_file:
@@ -222,7 +221,7 @@ $(if mme2e_is_token_in_list "webhook-interactions" "$ENABLED_DOCKER_SERVICES"; t
 $(if mme2e_is_token_in_list "playwright" "$ENABLED_DOCKER_SERVICES"; then
     echo '
   playwright:
-    image: mcr.microsoft.com/playwright:v1.38.1-jammy
+    image: mcr.microsoft.com/playwright:v1.41.1-jammy
     entrypoint: ["/bin/bash", "-c"]
     command: ["until [ -f /var/run/mm_terminate ]; do sleep 5; done"]
     env_file:

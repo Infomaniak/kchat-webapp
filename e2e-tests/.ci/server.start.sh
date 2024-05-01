@@ -8,8 +8,8 @@ mme2e_log "Stopping leftover E2E containers, if any are running"
 ${MME2E_DC_SERVER} down -v --remove-orphans
 
 # Wait for the required server image
-mme2e_log "Waiting for server image to be available"
-mme2e_wait_image "$SERVER_IMAGE" 30 60
+# mme2e_log "Waiting for server image to be available"
+# mme2e_wait_image "$SERVER_IMAGE" 30 60
 
 # Launch mattermost-server, and wait for it to be healthy
 mme2e_log "Starting E2E containers"

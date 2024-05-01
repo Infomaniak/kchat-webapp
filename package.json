@@ -5,7 +5,9 @@
     "build:webapp": "yarn workspace mattermost-webapp build",
     "dev-server:webapp": "yarn workspace mattermost-webapp dev-server",
     "test:types": "yarn workspace mattermost-webapp check-types",
-    "test:webapp": "yarn workspace mattermost-webapp test-ci"
+    "test:webapp": "yarn workspace mattermost-webapp test-ci",
+    "test:e2e:cypress": "yarn workspace e2e-cypress test",
+    "test:e2e:playwright": "yarn workspace e2e-playwright test"
   },
   "resolutions": {
     "@types/react": "17.0.2",
@@ -15,11 +17,13 @@
     "packages": [
       "e2e-tests/cypress",
       "e2e-tests/playwright",
+      "webapp/channels",
       "webapp/platform/client",
       "webapp/platform/components",
-      "webapp/platform/types",
       "webapp/platform/eslint-plugin",
-      "webapp/channels"
+      "webapp/platform/types",
+      "e2e-tests/cypress",
+      "e2e-tests/playwright"
     ]
   },
   "packageManager": "yarn@4.0.1"

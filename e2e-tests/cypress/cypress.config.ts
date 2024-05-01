@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {defineConfig} from 'cypress';
+import webpack from '@cypress/webpack-preprocessor'
 
 export default defineConfig({
     chromeWebSecurity: false,
@@ -49,6 +50,17 @@ export default defineConfig({
     },
     e2e: {
         setupNodeEvents(on, config) {
+            const options = {
+                webpackOptions: {
+                    resolve: {
+                        alias: {
+                            '@mattermost/client': '@infomaniak/mattermost-client',
+                            '@mattermost/types': '@infomaniak/mattermost-types',
+                        }
+                    }
+                }
+            }
+            on('file:preprocessor', webpack(options))
             return require('./tests/plugins/index.js')(on, config); // eslint-disable-line global-require
         },
         baseUrl: process.env.MM_SERVICESETTINGS_SITEURL || 'http://localhost:8065',
