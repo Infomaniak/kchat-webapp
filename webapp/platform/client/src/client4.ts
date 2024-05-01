@@ -4412,9 +4412,9 @@ export default class Client4 {
             {method: 'post', body: JSON.stringify({channel_id: channelID})},
         );
     }
-    leaveMeet = (callID: string) => {
+    cancelMeet = (callID: string) => {
         return this.doFetch(
-            `${this.getBaseRoute()}/conferences/${callID}/leave`,
+            `${this.getBaseRoute()}/conferences/${callID}/cancel`,
             {method: 'post'},
         );
     }

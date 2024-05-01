@@ -23,10 +23,11 @@ import Avatar from 'components/widgets/users/avatar';
 import {t} from 'utils/i18n';
 import {imageURLForUser} from 'utils/utils';
 
-import type {Conference} from 'types/conference';
+import type {Conference, Registrant} from 'types/conference';
 import type {GlobalState} from 'types/store';
 
 import './avatars.scss';
+import Status from './status';
 
 type Props = {
     conference: Conference;
@@ -64,11 +65,13 @@ function UserAvatar({
     userId,
     overlayProps,
     disableProfileOverlay,
+    status,
     ...props
 }: {
     userId: UserProfile['id'];
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
     disableProfileOverlay: boolean;
+    status: Registrant;
 } & ComponentProps<typeof Avatar>) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
@@ -83,11 +86,13 @@ function UserAvatar({
 
     if (disableProfileOverlay) {
         return (
-            <Avatar
-                url={imageURLForUser(userId, user?.last_picture_update)}
-                tabIndex={-1}
-                {...props}
-            />
+            <Status registrant={status}>
+                <Avatar
+                    url={imageURLForUser(userId, user?.last_picture_update)}
+                    tabIndex={-1}
+                    {...props}
+                />
+            </Status>
         );
     }
 
@@ -116,11 +121,13 @@ function UserAvatar({
                     className={'style--none'}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <Avatar
-                        url={imageURLForUser(userId, user?.last_picture_update)}
-                        tabIndex={-1}
-                        {...props}
-                    />
+                    <Status registrant={status}>
+                        <Avatar
+                            url={imageURLForUser(userId, user?.last_picture_update)}
+                            tabIndex={-1}
+                            {...props}
+                        />
+                    </Status>
                 </RoundButton>
             </SimpleTooltip>
         </OverlayTrigger>
@@ -134,9 +141,10 @@ function Avatars({
     fetchMissingUsers,
 }: Props) {
     const {formatMessage} = useIntl();
-
     const dispatch = useDispatch();
+
     const usersIds = useMemo(() => Object.keys(conference.registrants), [conference]);
+
     const [overlayProps, setImmediate] = useSynchronizedImmediate();
     const [displayUserIds, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(usersIds, usersIds.length);
     const overflowNames = useSelector((state: GlobalState) => {
@@ -170,6 +178,7 @@ function Avatars({
                     userId={id}
                     size={size}
                     overlayProps={overlayProps}
+                    status={conference.registrants[id]}
                     disableProfileOverlay={Boolean(disableProfileOverlay)}
                 />
             ))}

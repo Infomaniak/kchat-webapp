@@ -51,7 +51,7 @@ export type Props = {
         updateTeamsOrderForUser: (teamsOrder: string[]) => void;
         joinCall: (channelId: string) => void;
         declineCall: (channelId: string) => void;
-        leaveCall: (channelId: string) => void;
+        cancelCall: (channelId: string) => void;
     };
     showTermsOfService: boolean;
     location: {
@@ -239,8 +239,8 @@ export default class LoggedIn extends React.PureComponent<Props> {
         if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.2.0')) {
             window?.callManager?.onCallJoined?.((_: any, {channelId}) => this.props.actions.joinCall(channelId));
             window?.callManager?.onCallDeclined?.((_: any, {channelId}) => this.props.actions.declineCall(channelId));
-            window?.callManager?.onCallCancel?.((_: any, {channelId}) => this.props.actions.leaveCall(channelId));
-            window?.callManager?.onCallEnded?.((_: any, {channelID}) => this.props.actions.leaveCall(channelID));
+            window?.callManager?.onCallCancel?.((_: any, {channelId}) => this.props.actions.cancelCall(channelId));
+            window?.callManager?.onCallEnded?.((_: any, {channelID}) => this.props.actions.cancelCall(channelID));
         }
     }
 

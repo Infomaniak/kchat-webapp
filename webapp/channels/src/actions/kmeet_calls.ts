@@ -88,13 +88,13 @@ export function declineCall(conferenceId: string) {
     };
 }
 
-export function leaveCall(channelId: string) {
+export function cancelCall(channelId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const conference = getConferenceByChannelId(state, channelId);
         const currentUserId = getCurrentUserId(getState());
 
-        await Client4.leaveMeet(conference.id);
+        await Client4.cancelMeet(conference.id);
 
         if (isDesktopApp()) {
             window.desktopAPI?.closeRingCallWindow?.();
@@ -122,7 +122,7 @@ export function startCall(channelId: string, jwt: string, url: string) {
             dispatch(startKmeetWindow(channelId, jwt));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-            window.open(url + `?jwt=${jwt}#config.prejoinConfig.enabled=false`, '_blank', 'noopener');
+            window.open(url + `?jwt=${jwt}#config.prejoinConfig.enabled=false&config.deeplinking.disabled=true&interfaceConfigOverwrite.HIDE_INVITE_MORE_HEADER=false`, '_blank', 'noopener');
         }
     };
 }

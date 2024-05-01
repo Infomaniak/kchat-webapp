@@ -10,8 +10,9 @@ import type {UserProfile} from '@mattermost/types/users.js';
 
 import {getUser} from 'mattermost-redux/actions/users';
 
-import {joinCall, declineCall, leaveCall} from 'actions/kmeet_calls';
+import {joinCall, declineCall, cancelCall} from 'actions/kmeet_calls';
 
+import Avatars from 'components/kmeet_conference/avatars';
 import CallAccept from 'components/widgets/icons/call_accept';
 import CallHangUp from 'components/widgets/icons/call_hang_up';
 
@@ -21,7 +22,6 @@ import {isDesktopApp} from 'utils/user_agent';
 import type {Conference} from 'types/conference';
 
 import './kmeet_modal.scss';
-import Avatars from 'components/kmeet_conference/avatars';
 
 type Props = {
     user: UserProfile;
@@ -51,7 +51,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     }, [dispatch, conference]);
 
     const onHandleCancel = React.useCallback(() => {
-        dispatch(leaveCall(conference.channel_id));
+        dispatch(cancelCall(conference.channel_id));
     }, [dispatch, conference]);
 
     const handleClickOutsideModal = useCallback((event: any) => {
@@ -67,14 +67,13 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
 
         document.addEventListener('click', handleClickOutsideModal);
 
-        // const timeout = setTimeout(() => {
-        //     onHandleDecline();
-        // }, 30000);
+        const timeout = setTimeout(() => {
+            onHandleDecline();
+        }, 30000);
 
         return () => {
             document.removeEventListener('click', handleClickOutsideModal);
-
-            // clearTimeout(timeout);
+            clearTimeout(timeout);
         };
     }, [onHandleDecline, handleClickOutsideModal]);
 
@@ -92,7 +91,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         }
     }, [caller, conference, dispatch]);
 
-    const participants = useMemo(() => users.filter((u) => u.id !== user.id), [users, user]);
+    const participants = useMemo(() => users && users.filter((u) => u.id !== user.id), [users, user]);
 
     const getUsersNicknames = (users: UserProfile[]): string => {
         const nicknames = users.map((user) => user.nickname);
@@ -203,7 +202,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                     ) : (
                         <button
                             className='btn btn-grey decline'
-                            onClick={onHandleDecline}
+                            onClick={onHandleCancel}
                             aria-label={textButtonCancel}
                         >
                             <CallHangUp/>

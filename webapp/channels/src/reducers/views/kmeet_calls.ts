@@ -108,6 +108,21 @@ const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action
 
         return nextState;
     }
+    case ActionTypes.KMEET_CALL_USER_DENIED: {
+        return {
+            ...state,
+            [action.data.channelId]: {
+                ...state[action.data.channelId],
+                registrants: {
+                    ...state[action.data.channelId].registrants,
+                    [action.data.userId]: {
+                        ...state[action.data.channelId].registrants[action.data.userId],
+                        status: 'denied',
+                    },
+                },
+            },
+        };
+    }
     default:
         return state;
     }

@@ -1874,6 +1874,8 @@ function handleConferenceUserDenied(msg) {
         const currentUserId = getCurrentUserId(getState());
         const conference = getConferenceByChannelId(getState(), msg.data.channel_id);
 
+        console.log('MSG', msg);
+
         if (conference.participants.length <= 2 && currentUserId === conference.user_id) {
             dispatch(closeRingModal());
         }
@@ -1890,6 +1892,13 @@ function handleConferenceUserDenied(msg) {
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
         }
+        doDispatch({
+            type: ActionTypes.KMEET_CALL_USER_DENIED,
+            data: {
+                userId: msg.data.user_id,
+                channelId: msg.data.channel_id,
+            },
+        });
 
         doDispatch({
             type: ActionTypes.CALL_HANGUP,
