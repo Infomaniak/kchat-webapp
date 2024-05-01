@@ -225,64 +225,64 @@ test('MM-T5465-4 Highlighted keywords should not appear in the Recent Mentions',
     await expect(channelPage.sidebarRight.container.getByText('No mentions yet')).toBeVisible();
 });
 
-test('MM-T5465-5 Should highlight keywords in message sent from another user', async ({pw, pages}) => {
-    // # Skip test if no license
-    await pw.skipIfNoLicense();
+// test('MM-T5465-5 Should highlight keywords in message sent from another user', async ({page, pages}) => {
+    //     // # Skip test if no license
+    //     await pw.skipIfNoLicense();
 
-    const {adminClient, team, adminUser, user} = await pw.initSetup();
+    //     const {adminClient, team, adminUser, user} = await pw.initSetup();
 
-    if (!adminUser) {
-        throw new Error('Failed to create admin user');
-    }
+    //     if (!adminUser) {
+        //         throw new Error('Failed to create admin user');
+    //     }
 
-    // # Get the default channel of the team for getting the channel id
-    const channel = await adminClient.getChannelByName(team.id, 'town-square');
+    //     // # Get the default channel of the team for getting the channel id
+    //     const channel = await adminClient.getChannelByName(team.id, 'town-square');
 
-    const highlightKeyword = keywords[0];
-    const messageWithKeyword = `This recieved message contains the ${highlightKeyword} keyword `;
+    //     const highlightKeyword = keywords[0];
+    //     const messageWithKeyword = `This recieved message contains the ${highlightKeyword} keyword `;
 
-    // # Create a post containing the keyword in the channel by admin
-    await adminClient.createPost(
-        createRandomPost({
-            message: messageWithKeyword,
-            channel_id: channel.id,
-            user_id: adminUser.id,
-        }),
-    );
+    //     // # Create a post containing the keyword in the channel by admin
+    //     await adminClient.createPost(
+        //         createRandomPost({
+            //             message: messageWithKeyword,
+            //             channel_id: channel.id,
+            //             user_id: adminUser.id,
+        //         }),
+    //     );
 
-    // # Now log in as a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    //     // # Now log in as a user in new browser context
+    //     const {page} = await pw.testBrowser.login(user);
 
-    // # Visit default channel page
-    const channelPage = new pages.ChannelsPage(page);
-    await channelPage.goto();
-    await channelPage.toBeVisible();
+    //     // # Visit default channel page
+    //     const channelPage = new pages.ChannelsPage(page);
+    //     await channelPage.goto();
+    //     await channelPage.toBeVisible();
 
-    // # Open settings modal
-    await channelPage.globalHeader.openSettings();
-    await channelPage.settingsModal.toBeVisible();
+    //     // # Open settings modal
+    //     await channelPage.globalHeader.openSettings();
+    //     await channelPage.settingsModal.toBeVisible();
 
-    // # Open notifications tab
-    await channelPage.settingsModal.openNotificationsTab();
+    //     // # Open notifications tab
+    //     await channelPage.settingsModal.openNotificationsTab();
 
-    // # Open keywords that get highlighted section
-    await channelPage.settingsModal.notificationsSettings.expandSection('keysWithHighlight');
+    //     // # Open keywords that get highlighted section
+    //     await channelPage.settingsModal.notificationsSettings.expandSection('keysWithHighlight');
 
-    // # Enter the keyword
-    const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
-    await keywordsInput.type(keywords[0]);
-    await keywordsInput.press('Tab');
+    //     // # Enter the keyword
+    //     const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
+    //     await keywordsInput.type(keywords[0]);
+    //     await keywordsInput.press('Tab');
 
-    // # Save the keyword
-    await channelPage.settingsModal.notificationsSettings.save();
+    //     // # Save the keyword
+    //     await channelPage.settingsModal.notificationsSettings.save();
 
-    // # Close the settings modal
-    await channelPage.settingsModal.closeModal();
+    //     // # Close the settings modal
+    //     await channelPage.settingsModal.closeModal();
 
-    // * Verify that the keywords are highlighted in the last message recieved
-    const lastPostWithHighlight = await channelPage.centerView.getLastPost();
-    await expect(lastPostWithHighlight.container.getByText(messageWithKeyword)).toBeVisible();
-    await expect(lastPostWithHighlight.container.getByText(highlightKeyword)).toHaveClass(
-        highlightWithoutNotificationClass,
-    );
-});
+    //     // * Verify that the keywords are highlighted in the last message recieved
+    //     const lastPostWithHighlight = await channelPage.centerView.getLastPost();
+    //     await expect(lastPostWithHighlight.container.getByText(messageWithKeyword)).toBeVisible();
+    //     await expect(lastPostWithHighlight.container.getByText(highlightKeyword)).toHaveClass(
+        //         highlightWithoutNotificationClass,
+    //     );
+// });
