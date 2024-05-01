@@ -187,6 +187,16 @@ No changes.
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
 
+## 2.7.0-next.14 (2024-05-01)
+
+### Fixed (1 change)
+
+- [fix timestamps not supposed to be displayed as relative](kchat/webapp@91021e1728f612d9d888196b4b5b29463fe7f09e) by @antonbuksa
+
+### Changed (1 change)
+
+- [update post options component](kchat/webapp@2b4f05a0a6b2f01012f248762b1fd4122741374e) by @antonbuksa
+
 ## 2.7.0-next.13 (2024-05-01)
 
 ### Fixed (1 change)
