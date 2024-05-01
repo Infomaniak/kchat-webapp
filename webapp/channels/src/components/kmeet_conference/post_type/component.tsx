@@ -11,11 +11,12 @@ import type {Post} from '@mattermost/types/posts';
 import {putChannelActiveConf} from 'actions/calls';
 
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
-import Avatars from 'components/widgets/users/avatars';
 
 import type {Conference} from 'types/conference';
 
 import * as Sc from './styled';
+
+import Avatars from '../avatars';
 
 interface Props {
     post: Post;
@@ -39,7 +40,6 @@ const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV
     const dispatch = useDispatch();
 
     const meetingUrl = useMemo(() => conference?.url ?? post.props.url, [conference, post]);
-    const usersIds = useMemo(() => (conference ? Object.keys(conference.registrants) : []), [conference]);
 
     const onJoinCallClick = () => {
         joinCall(post.channel_id);
@@ -48,6 +48,7 @@ const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV
     const onStartOrJoinCall = () => {
         startOrJoinCallInChannelV2(post.channel_id);
     };
+
     moment.locale(String(intl.locale));
 
     useEffect(() => {
@@ -148,7 +149,7 @@ const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV
 
         return (
             <Avatars
-                userIds={usersIds}
+                conference={conference}
                 size='lg'
                 breakAt={1}
             />
@@ -170,7 +171,9 @@ const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV
             {moment(post.props.start_at).fromNow()}
         </Sc.Duration>
     );
-    const status: Status = defineStatus();
+
+    const status = defineStatus();
+
     return (
         <Sc.Main data-testid={'call-thread'}>
             <Sc.Left>
