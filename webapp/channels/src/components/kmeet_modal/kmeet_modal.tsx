@@ -136,12 +136,12 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                             isCallerCurrentUser ? (
                                 <FormattedMessage
                                     id='calling_modal.call_in_progress'
-                                    defaultMessage='is calling...'
+                                    defaultMessage='call in progress...'
                                 />
                             ) : (
                                 <FormattedMessage
                                     id='calling_modal.calling'
-                                    defaultMessage='call in progress...'
+                                    defaultMessage='is calling...'
                                 />
                             )
                         }
