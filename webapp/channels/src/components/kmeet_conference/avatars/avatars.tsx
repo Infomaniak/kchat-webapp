@@ -36,6 +36,7 @@ type Props = {
     size?: ComponentProps<typeof Avatar>['size'];
     fetchMissingUsers?: boolean;
     disableProfileOverlay?: boolean;
+    displayProfileStatus?: boolean;
 };
 
 interface MMOverlayTrigger extends BaseOverlayTrigger {
@@ -64,13 +65,15 @@ const displayNameGetter = makeDisplayNameGetter();
 function UserAvatar({
     userId,
     overlayProps,
-    disableProfileOverlay,
+    displayProfileOverlay,
+    displayProfileStatus,
     status,
     ...props
 }: {
     userId: UserProfile['id'];
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
-    disableProfileOverlay: boolean;
+    displayProfileOverlay: boolean;
+    displayProfileStatus: boolean;
     status: Registrant;
 } & ComponentProps<typeof Avatar>) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
@@ -84,22 +87,10 @@ function UserAvatar({
         overlay.current?.hide();
     };
 
-    if (disableProfileOverlay) {
-        return (
-            <Status registrant={status}>
-                <Avatar
-                    url={imageURLForUser(userId, user?.last_picture_update)}
-                    tabIndex={-1}
-                    {...props}
-                />
-            </Status>
-        );
-    }
-
     return (
         <OverlayTrigger
             trigger='click'
-            disabled={disableProfileOverlay}
+            disabled={!displayProfileOverlay}
             placement='right'
             rootClose={true}
             ref={overlay}
@@ -121,7 +112,10 @@ function UserAvatar({
                     className={'style--none'}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <Status registrant={status}>
+                    <Status
+                        showStatus={displayProfileStatus}
+                        registrant={status}
+                    >
                         <Avatar
                             url={imageURLForUser(userId, user?.last_picture_update)}
                             tabIndex={-1}
@@ -138,6 +132,7 @@ function Avatars({
     size,
     conference,
     disableProfileOverlay,
+    displayProfileStatus,
     fetchMissingUsers,
 }: Props) {
     const {formatMessage} = useIntl();
@@ -179,7 +174,8 @@ function Avatars({
                     size={size}
                     overlayProps={overlayProps}
                     status={conference.registrants[id]}
-                    disableProfileOverlay={Boolean(disableProfileOverlay)}
+                    displayProfileOverlay={Boolean(disableProfileOverlay)}
+                    displayProfileStatus={Boolean(displayProfileStatus)}
                 />
             ))}
             {Boolean(nonDisplayCount) && (

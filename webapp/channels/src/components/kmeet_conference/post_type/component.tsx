@@ -150,8 +150,8 @@ const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV
         return (
             <Avatars
                 conference={conference}
+                displayProfileStatus={true}
                 size='lg'
-                breakAt={1}
             />
         );
     };

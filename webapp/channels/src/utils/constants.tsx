@@ -366,6 +366,7 @@ export const ActionTypes = keyMirror({
     VOICE_CHANNEL_DELETED: null,
     VOICE_CHANNELS_RECEIVED: null,
     KMEET_CALL_USER_CONNECTED: null,
+    KMEET_CALL_USER_DISCONNECTED: null,
     KMEET_CALL_USER_DENIED: null,
 
     SHOW_EXPANDED_VIEW: null,

@@ -1874,8 +1874,6 @@ function handleConferenceUserDenied(msg) {
         const currentUserId = getCurrentUserId(getState());
         const conference = getConferenceByChannelId(getState(), msg.data.channel_id);
 
-        console.log('MSG', msg);
-
         if (conference.participants.length <= 2 && currentUserId === conference.user_id) {
             dispatch(closeRingModal());
         }
@@ -1963,6 +1961,14 @@ function handleConferenceUserDisconnected(msg) {
                 },
             });
         }
+
+        doDispatch({
+            type: ActionTypes.KMEET_CALL_USER_DISCONNECTED,
+            data: {
+                channelId: msg.data.channel_id,
+                userId: msg.data.user_id,
+            },
+        });
     };
 }
 

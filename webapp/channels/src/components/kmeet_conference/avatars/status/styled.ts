@@ -22,7 +22,7 @@ export const IconWrapper = styled.div<{status: ConferenceUserStatus}>`
         background-color: #F44336;
     `};
 
-    ${({status}) => status === 'granted' && css`
+    ${({status}) => status === 'approved' && css`
         background-color: #3EBF4D;
     `};
 
@@ -31,8 +31,12 @@ export const IconWrapper = styled.div<{status: ConferenceUserStatus}>`
     `};
 `;
 
-export const Container = styled.div`
+export const Container = styled.div<{grayscale: boolean}>`
     position: relative;
+
+    ${({grayscale}) => grayscale && css`
+        filter: grayscale(1);
+    `};
 
     &:hover {
         ${IconWrapper} {

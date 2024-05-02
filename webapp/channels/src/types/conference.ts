@@ -1,7 +1,7 @@
 
-export type ConferenceUserStatus = 'denied' | 'granted' | 'pending'
+export type ConferenceUserStatus = 'denied' | 'approved' | 'pending'
 
-export type Registrant = { id: string; status: ConferenceUserStatus }
+export type Registrant = { id: string; status: ConferenceUserStatus; present: boolean }
 
 export type Conference = {
     url: string;

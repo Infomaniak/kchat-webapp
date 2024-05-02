@@ -99,16 +99,49 @@ const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action
         }
         return state;
     case ActionTypes.KMEET_CALL_USER_CONNECTED: {
-        const nextState = {...state};
-        const conference = Reflect.get(nextState, action.data.channelId);
-        const newSet = new Set([action.data.connectedUserId, ...(conference.participants || [])]);
-        const participants = Array.from(newSet);
+        if (!Reflect.has(state, action.data.channelId)) {
+            return state;
+        }
 
-        Reflect.set(nextState, action.data.channelId, {...conference, participants});
+        return {
+            ...state,
+            [action.data.channelId]: {
+                ...state[action.data.channelId],
+                registrants: {
+                    ...state[action.data.channelId].registrants,
+                    [action.data.userId]: {
+                        ...state[action.data.channelId].registrants[action.data.userId],
+                        status: 'approved',
+                        present: true,
+                    },
+                },
+            },
+        };
+    }
+    case ActionTypes.KMEET_CALL_USER_DISCONNECTED: {
+        if (!Reflect.has(state, action.data.channelId)) {
+            return state;
+        }
 
-        return nextState;
+        return {
+            ...state,
+            [action.data.channelId]: {
+                ...state[action.data.channelId],
+                registrants: {
+                    ...state[action.data.channelId].registrants,
+                    [action.data.userId]: {
+                        ...state[action.data.channelId].registrants[action.data.userId],
+                        present: false,
+                    },
+                },
+            },
+        };
     }
     case ActionTypes.KMEET_CALL_USER_DENIED: {
+        if (!Reflect.has(state, action.data.channelId)) {
+            return state;
+        }
+
         return {
             ...state,
             [action.data.channelId]: {

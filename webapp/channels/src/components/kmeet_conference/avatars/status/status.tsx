@@ -6,17 +6,20 @@ import * as Sc from './styled';
 
 type Props = {
     registrant: Registrant;
+    showStatus: boolean;
     children: React.ReactChild;
 }
 
-const Status: FC<Props> = ({registrant, children}) => {
+const Status: FC<Props> = ({registrant, showStatus, children}) => {
     return (
-        <Sc.Container>
-            <Sc.IconWrapper status={registrant.status}>
-                {registrant.status === 'denied' && <Sc.DeniedIcon/>}
-                {registrant.status === 'granted' && <Sc.GrantedIcon/>}
-                {registrant.status === 'pending' && <Sc.PendingIcon/>}
-            </Sc.IconWrapper>
+        <Sc.Container grayscale={!registrant.present && registrant.status === 'approved'}>
+            {showStatus && (
+                <Sc.IconWrapper status={registrant.status}>
+                    {registrant.status === 'denied' && <Sc.DeniedIcon/>}
+                    {registrant.status === 'approved' && <Sc.GrantedIcon/>}
+                    {registrant.status === 'pending' && <Sc.PendingIcon/>}
+                </Sc.IconWrapper>
+            )}
             {children}
         </Sc.Container>
     );

@@ -7,7 +7,7 @@ import {getUserById} from 'mattermost-redux/selectors/entities/users';
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
-import {getConferenceByChannelId, getIsUserInConference} from 'selectors/kmeet_calls';
+import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
@@ -47,10 +47,9 @@ export function externalJoinCall(msg: any) {
         const state = getState();
         const conference = getConferenceByChannelId(state, msg.data.channel_id);
         const currentUserId = getCurrentUserId(state);
-        const isUserInConference = getIsUserInConference(state, msg.data.channel_id, msg.data.user_id);
         const isModalOpen = isRingingModalOpen(state);
 
-        if (!conference || isUserInConference) {
+        if (!conference) {
             return;
         }
 
@@ -62,7 +61,7 @@ export function externalJoinCall(msg: any) {
             type: ActionTypes.KMEET_CALL_USER_CONNECTED,
             data: {
                 channelId: msg.data.channel_id,
-                connectedUserId: msg.data.user_id,
+                userId: msg.data.user_id,
             },
         });
     };
