@@ -23,7 +23,7 @@ import {getCurrentLocale} from 'selectors/i18n';
 import {connectedKmeetCallId, connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
-import kmeetModal from 'components/kmeet_modal';
+import KmeetModal from 'components/kmeet_modal';
 
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {stopRing} from 'utils/notification_sounds';
@@ -189,7 +189,7 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                     dispatch(openModal(
                         {
                             modalId: ModalIdentifiers.INCOMING_CALL,
-                            dialogType: kmeetModal,
+                            dialogType: KmeetModal,
                             dialogProps: {
                                 channelId: channelID,
                             },
@@ -295,11 +295,9 @@ export function receivedCall(call: Call, currentUserId: string) {
             dispatch(openModal(
                 {
                     modalId: ModalIdentifiers.INCOMING_CALL,
-                    dialogType: kmeetModal,
+                    dialogType: KmeetModal,
                     dialogProps: {
                         channelId: call.channel_id,
-
-                        // toneTimeOut: 30000,
                     },
                 },
             ));

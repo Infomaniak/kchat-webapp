@@ -10,7 +10,7 @@ import type {FileInfo} from '@mattermost/types/files';
 
 import {getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 
-import FileInfoPreview from 'components/file_info_preview';
+// import FileInfoPreview from 'components/file_info_preview';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
 const INITIAL_RENDERED_PAGES = 3;
@@ -227,10 +227,12 @@ export default class PDFPreview extends React.PureComponent<Props, State> {
 
         if (!this.state.success) {
             return (
-                <FileInfoPreview
-                    fileInfo={this.props.fileInfo}
-                    fileUrl={this.props.fileUrl}
-                />
+
+                // <FileInfoPreview
+                //     fileInfo={this.props.fileInfo}
+                //     fileUrl={this.props.fileUrl}
+                // />
+                <></>
             );
         }
 

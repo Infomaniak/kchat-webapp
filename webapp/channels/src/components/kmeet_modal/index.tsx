@@ -33,4 +33,4 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     };
 }
 
-export default connect(mapStateToProps, {})(KmeetModal);
+export default connect(mapStateToProps)(KmeetModal);
