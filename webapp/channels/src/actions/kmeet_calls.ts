@@ -47,14 +47,13 @@ export function externalJoinCall(msg: any) {
         const state = getState();
         const conference = getConferenceByChannelId(state, msg.data.channel_id);
         const currentUserId = getCurrentUserId(state);
-        const isModalOpen = isRingingModalOpen(state);
 
         if (!conference) {
             return;
         }
 
-        if (conference.user_id === currentUserId && msg.data.user_id !== currentUserId && isModalOpen) {
-            dispatch(joinCall(msg.data.channel_id));
+        if (conference.user_id === currentUserId && msg.data.user_id !== currentUserId) {
+            dispatch(joinCallIfModalOpen(msg.data.channel_id));
         }
 
         dispatch({
@@ -72,6 +71,23 @@ export function joinCall(channelId: string) {
         const conference = getConferenceByChannelId(getState(), channelId);
         const answer = await Client4.acceptIncomingMeetCall(conference.id);
         dispatch(startCall(channelId, answer.jwt, conference.url));
+    };
+}
+
+export function joinCallIfModalOpen(channelId: string) {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        if (isDesktopApp()) {
+            const isOpen = await window.desktopAPI?.isRingCallWindowOpen?.();
+
+            if (isOpen) {
+                dispatch(joinCall(channelId));
+            }
+        } else {
+            const isOpen = isModalOpen(getState(), ModalIdentifiers.INCOMING_CALL);
+            if (isOpen) {
+                dispatch(joinCall(channelId));
+            }
+        }
     };
 }
 
@@ -137,10 +153,6 @@ export function startKmeetWindow(channelId: string, jwt: string) {
         window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, locale, jwt});
     };
 }
-
-export const isRingingModalOpen = (state: GlobalState) => {
-    return isDesktopApp() ? Boolean(window.desktopAPI?.isRingCallWindowOpen?.()) : isModalOpen(state, ModalIdentifiers.INCOMING_CALL);
-};
 
 export const closeRingModal = () => {
     return async (dispatch: DispatchFunc) => {

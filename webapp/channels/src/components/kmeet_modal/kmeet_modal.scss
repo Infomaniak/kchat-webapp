@@ -6,10 +6,6 @@
     justify-content: center;
     text-align: center;
 
-    &.desktop {
-        height: 100vh;
-    }
-
     &:not(.desktop) {
         max-width: 290px !important;
         max-height: 200px !important;

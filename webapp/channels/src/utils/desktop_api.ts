@@ -20,7 +20,7 @@ declare global {
         desktopAPI?: Partial<DesktopAPI & {
             openKmeetCallWindow: (params: object) => void;
             closeRingCallWindow: () => void;
-            isRingCallWindowOpen: () => boolean;
+            isRingCallWindowOpen: () => Promise<boolean>;
             openCallDialing: (callInfo: object) => boolean;
         }>;
         callManager?: Partial<{
