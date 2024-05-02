@@ -7,6 +7,7 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
+import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentChannelId, getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import type {ActionFunc, ActionFuncAsync, DispatchFunc} from 'mattermost-redux/types/actions';
 
@@ -20,21 +21,16 @@ import {
     voiceConnectedChannels,
 } from 'selectors/calls';
 import {getCurrentLocale} from 'selectors/i18n';
-import {connectedKmeetCallId, connectedKmeetCallUrl} from 'selectors/kmeet_calls';
-import {isModalOpen} from 'selectors/views/modals';
-
-import KmeetModal from 'components/kmeet_modal';
 
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {stopRing} from 'utils/notification_sounds';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+import {isDesktopApp} from 'utils/user_agent';
 import {imageURLForUser} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
 import {openCallDialingModal} from './kmeet_calls';
-import {closeModal, openModal} from './views/modals';
+import {closeModal} from './views/modals';
 
 export function showExpandedView(): ActionFunc {
     return (dispatch) => {
@@ -156,9 +152,10 @@ export function startOrJoinCallInChannel(channelID: string): ActionFuncAsync {
 //used to manage action from postType actions and meet button
 export function startOrJoinCallInChannelV2(channelID: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const state = getState();
         try {
-            let kmeetUrl;
             const data = await Client4.startMeet(channelID);
+            const channel = getChannel(state, channelID);
 
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
@@ -168,49 +165,23 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 type: ActionTypes.VOICE_CHANNEL_ADDED,
                 data: {
                     channelID,
-                    userID: getCurrentUserId(getState()),
-                    currentUserID: getCurrentUserId(getState()),
+                    userID: getCurrentUserId(state),
+                    currentUserID: getCurrentUserId(state),
                     url: data?.url,
                     id: data?.id,
                     call: data,
                 },
             });
 
-            if (data && data.url) {
-                kmeetUrl = new URL(data.url);
+            if (channel.type === 'O' || channel.type === 'P') {
+                return;
             }
 
-            if (kmeetUrl) {
-                console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
-
-                if (isDesktopApp()) {
-                    dispatch(openCallDialingModal(channelID));
-                } else {
-                    dispatch(openModal(
-                        {
-                            modalId: ModalIdentifiers.INCOMING_CALL,
-                            dialogType: KmeetModal,
-                            dialogProps: {
-                                channelId: channelID,
-                            },
-                        },
-                    ));
-                }
+            if (data && data.url) {
+                dispatch(openCallDialingModal(channelID));
             }
         } catch (error) {
-            if (isDesktopApp()) {
-                const id = connectedKmeetCallId(getState(), channelID);
-                dispatch(startKmeetWindow(id));
-            } else {
-                const url = connectedKmeetCallUrl(getState(), channelID);
-
-                if (!url) {
-                    return;
-                }
-
-                window.open(url, '_blank', 'noopener');
-                console.log(`[calls]: Call user back. connected url: ${url}`);
-            }
+            console.error('call could not be started', error);
         }
     };
 }
@@ -271,36 +242,37 @@ export function receivedCall(call: Call, currentUserId: string) {
                 },
             });
 
-            if (isDesktopApp()) {
-                if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
-                    console.log('[calls] call received on desktop.');
+            dispatch(openCallDialingModal(call.channel_id));
 
-                    // handleDesktopKmeetCall(globalState, currentUserId, call);
-                    dispatch(openCallDialingModal(call.channel_id));
+            return;
 
-                    return;
-                }
-                console.warn(`[calls] dialing on desktop is supported from version 2.2 and up, current version is ${getDesktopVersion()}`);
-                const kmeetUrl = new URL(call.url);
-                window.open(kmeetUrl.href, '_blank', 'noopener');
+            // if (isDesktopApp()) {
+            //     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
+            //         console.log('[calls] call received on desktop.');
+            //         handleDesktopKmeetCall(globalState, currentUserId, call);
+            //         return;
+            //     }
+            //     console.warn(`[calls] dialing on desktop is supported from version 2.2 and up, current version is ${getDesktopVersion()}`);
+            //     const kmeetUrl = new URL(call.url);
+            //     window.open(kmeetUrl.href, '_blank', 'noopener');
 
-                return;
-            }
+            //     return;
+            // }
 
-            console.log('[calls] call received on browser.');
-            if (isModalOpen(getState(), ModalIdentifiers.INCOMING_CALL)) {
-                return;
-            }
+            // console.log('[calls] call received on browser.');
+            // if (isModalOpen(getState(), ModalIdentifiers.INCOMING_CALL)) {
+            //     return;
+            // }
 
-            dispatch(openModal(
-                {
-                    modalId: ModalIdentifiers.INCOMING_CALL,
-                    dialogType: KmeetModal,
-                    dialogProps: {
-                        channelId: call.channel_id,
-                    },
-                },
-            ));
+            // dispatch(openModal(
+            //     {
+            //         modalId: ModalIdentifiers.INCOMING_CALL,
+            //         dialogType: KmeetModal,
+            //         dialogProps: {
+            //             channelId: call.channel_id,
+            //         },
+            //     },
+            // ));
         } catch (error) {
             console.error('[calls] receivedCall error:', error);
         }

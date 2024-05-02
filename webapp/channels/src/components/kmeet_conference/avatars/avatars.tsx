@@ -31,6 +31,8 @@ import Status from './status';
 
 type Props = {
     conference: Conference;
+    caller: UserProfile;
+    showCaller?: boolean;
     totalUsers?: number;
     breakAt?: number;
     size?: ComponentProps<typeof Avatar>['size'];
@@ -129,16 +131,26 @@ function UserAvatar({
 }
 
 function Avatars({
-    size,
     conference,
+    caller,
+    size,
     disableProfileOverlay,
     displayProfileStatus,
     fetchMissingUsers,
+    showCaller = true,
 }: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
 
-    const usersIds = useMemo(() => Object.keys(conference.registrants), [conference]);
+    const usersIds = useMemo(() => {
+        const ids = Object.keys(conference.registrants);
+
+        if (caller && !showCaller) {
+            return ids.filter((id) => id !== caller.id);
+        }
+
+        return ids;
+    }, [conference, caller, showCaller]);
 
     const [overlayProps, setImmediate] = useSynchronizedImmediate();
     const [displayUserIds, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(usersIds, usersIds.length);

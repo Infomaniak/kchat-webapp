@@ -10,35 +10,53 @@ import {getCurrentLocale} from 'selectors/i18n';
 import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
+import KmeetModal from 'components/kmeet_modal';
+
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
 
-import {closeModal} from './views/modals';
+import {closeModal, openModal} from './views/modals';
 
 export function openCallDialingModal(channelId: string) {
-    return async (_: DispatchFunc, getState: () => GlobalState) => {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
-        const conference = getConferenceByChannelId(state, channelId);
-        const currentUser = getCurrentUser(state);
-        const caller = getUserById(state, conference.user_id);
+        if (isDesktopApp()) {
+            const conference = getConferenceByChannelId(state, channelId);
+            const currentUser = getCurrentUser(state);
+            const caller = getUserById(state, conference.user_id);
 
-        const users = conference.participants.map((id: string) => {
-            const user = getUserById(state, id);
-            return {
-                ...user,
-                avatar: Client4.getProfilePictureUrl(user.id, user.last_picture_update),
-            };
-        });
+            const users = conference.participants.map((id: string) => {
+                const user = getUserById(state, id);
+                return {
+                    ...user,
+                    avatar: Client4.getProfilePictureUrl(user.id, user.last_picture_update),
+                };
+            });
 
-        window.desktopAPI?.openCallDialing?.({
-            conference,
-            currentUser,
-            caller,
-            users,
-            channelId,
-        });
+            window.desktopAPI?.openCallDialing?.({
+                conference,
+                currentUser,
+                caller,
+                users,
+                channelId,
+            });
+        } else {
+            if (isModalOpen(getState(), ModalIdentifiers.INCOMING_CALL)) {
+                return;
+            }
+
+            dispatch(openModal(
+                {
+                    modalId: ModalIdentifiers.INCOMING_CALL,
+                    dialogType: KmeetModal,
+                    dialogProps: {
+                        channelId,
+                    },
+                },
+            ));
+        }
     };
 }
 

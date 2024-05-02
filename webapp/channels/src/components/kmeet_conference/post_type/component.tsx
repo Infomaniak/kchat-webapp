@@ -149,7 +149,7 @@ const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV
 
         return (
             <Avatars
-                conference={conference}
+                channelId={post.channel_id}
                 displayProfileStatus={true}
                 size='lg'
             />

@@ -169,7 +169,8 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                     className='call-modal__header'
                 >
                     <Avatars
-                        conference={conference}
+                        channelId={channel.id}
+                        showCaller={false}
                         size='lg'
                         disableProfileOverlay={false}
                         displayProfileStatus={false}
