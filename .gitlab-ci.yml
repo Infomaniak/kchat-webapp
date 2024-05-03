@@ -364,8 +364,25 @@ pages:
         PAGES_PREFIX: "mr$CI_MERGE_REQUEST_IID" # Prefix with the mr<iid>, like `mr123`
   variables:
     PAGES_PREFIX: "" # No prefix by default (master)
+  before_script:
+    - apt update && apt upgrade -y && apt install curl jq -y
   script:
     - cp -r e2e-tests/playwright/playwright-report public
+    # Check if a note about pages URL has already been created
+    - echo "Reading notes for MR ${CI_MERGE_REQUEST_IID}..."
+    - |
+      PAGES_URL_NOTE=$( \
+        curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes?per_page=1000" | \
+        jq '.[] | .body | select(.|test("^E2E report is now available at https://.+$"))' \
+      )
+    # Notify about the created E2E report
+    - |
+      [[ -z "$PAGES_URL_NOTE" ]] && { \
+        curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" -X POST "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \
+          -d "body=E2E report is now available at ${CI_PAGES_URL}/${PAGES_PREFIX}"; \
+      }
+  pages:
+    path_prefix: "$PAGES_PREFIX"
   artifacts:
     paths:
       - public
