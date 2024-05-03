@@ -1,3 +1,10 @@
+## 2.8.0-rc.3 (2024-05-03)
+
+### Fixed (2 changes)
+
+- [fix: disabled search bar outline](kchat/webapp@9139ebbdd4aefa8735f4ea44bad9e1708b39a7fb) by @tim.dewinter ([merge request](kchat/webapp!765))
+- [fix: message priority footer font-family](kchat/webapp@34c625a4c09d66a5237bdb029c696ecf80bab06b) by @tim.dewinter ([merge request](kchat/webapp!764))
+
 ## 2.8.0-rc.2 (2024-05-03)
 
 ### Fixed (3 changes)
