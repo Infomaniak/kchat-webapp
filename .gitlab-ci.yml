@@ -362,6 +362,7 @@ pages:
     - if: *if-merge-request
       variables:
         PAGES_PREFIX: "mr$CI_MERGE_REQUEST_IID" # Prefix with the mr<iid>, like `mr123`
+  retry: 3
   variables:
     PAGES_PREFIX: "" # No prefix by default (master)
   before_script:
