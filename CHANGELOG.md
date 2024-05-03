@@ -1,3 +1,15 @@
+## 2.8.0-rc.2 (2024-05-03)
+
+### Fixed (3 changes)
+
+- [fix: edit channel header modal button dark mode](kchat/webapp@619248a849a3eac7ed0ca71b36f77ec21cf442e6) by @tim.dewinter ([merge request](kchat/webapp!763))
+- [fix view user groups heading align](kchat/webapp@37ad93d33ffbf9728449336d3a417cfdb2536968) by @antonbuksa
+- [fix: channel info close button in dark mode](kchat/webapp@c0a0836fc0ea73883c0b3f6cac788c1e5e65bd55) by @tim.dewinter ([merge request](kchat/webapp!762))
+
+### Removed (1 change)
+
+- [hide learn about search url in search helper](kchat/webapp@4fe73fec7a64ecf66800f1a905566fbf8af37f38) by @antonbuksa
+
 ## 2.8.0-rc.1 (2024-05-03)
 
 No changes.
