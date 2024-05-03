@@ -169,6 +169,11 @@ const ThreadList = ({
     const handleOpenMarkAllAsReadModal = useCallback(() => {
         const handleCloseMarkAllAsReadModal = () => {
             dispatch(closeModal(ModalIdentifiers.MARK_ALL_THREADS_AS_READ));
+
+            // blur the modal toggle button to prevent displaying a tooltip
+            if (document.activeElement instanceof HTMLButtonElement) {
+                document.activeElement.blur();
+            }
         };
 
         const handleConfirm = () => {

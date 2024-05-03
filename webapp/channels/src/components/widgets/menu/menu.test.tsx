@@ -84,7 +84,14 @@ describe("components/Menu", () => {
               <ul
                 className="Menu__content dropdown-menu openLeft openUp"
                 onClick={[Function]}
-                style={Object {}}
+                style={
+                  Object {
+                    "bottom": "100%",
+                    "left": "inherit",
+                    "right": 0,
+                    "top": "auto",
+                  }
+                }
               >
                 text
               </ul>
@@ -111,7 +118,14 @@ describe("components/Menu", () => {
               <ul
                 className="Menu__content dropdown-menu openLeft openUp"
                 onClick={[Function]}
-                style={Object {}}
+                style={
+                  Object {
+                    "bottom": "100%",
+                    "left": "inherit",
+                    "right": 0,
+                    "top": "auto",
+                  }
+                }
               >
                 text
               </ul>

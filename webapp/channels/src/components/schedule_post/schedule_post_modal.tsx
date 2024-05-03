@@ -4,7 +4,7 @@
 import classNames from 'classnames';
 import type {Moment} from 'moment-timezone';
 import React, {useState} from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
 import {GenericModal} from '@mattermost/components';
@@ -54,18 +54,6 @@ const SchedulePostModal = ({
             handleExit();
         }
     };
-
-    const modalHeaderText = (
-        <div>
-            <h1>
-                {formatMessage({
-                    id: 'create_post.schedule_post.modal.header',
-                    defaultMessage: 'Schedule draft',
-                })}
-            </h1>
-            {timezone && <span>{timezone}</span>}
-        </div>
-    );
 
     const removeScheduleButtonText = formatMessage({
         id: 'create_post.schedule_post.modal.remove_schedule',
@@ -121,11 +109,20 @@ const SchedulePostModal = ({
     return (
         <GenericModal
             className='schedule-post-modal'
-            modalHeaderText={modalHeaderText}
+            modalHeaderText={(
+                <>
+                    <FormattedMessage
+                        id='create_post.schedule_post.modal.header'
+                        defaultMessage='Schedule draft'
+                    />
+                    {timezone && <span>{timezone}</span>}
+                </>
+            )}
             confirmButtonText={confirmButtonText}
             isConfirmDisabled={isConfirmDisabled}
             autoCloseOnConfirmButton={false}
             enforceFocus={false}
+            compassDesign={true}
             handleConfirm={handleConfirm}
             handleCancel={handleExit}
             onExited={handleExit}

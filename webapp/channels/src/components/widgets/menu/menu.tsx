@@ -5,6 +5,8 @@ import classNames from 'classnames';
 import React from 'react';
 import type {CSSProperties} from 'react';
 
+import {isMobile} from 'utils/user_agent';
+
 import MenuGroup from './menu_group';
 import MenuHeader from './menu_header';
 import MenuCloudTrial from './menu_items/menu_cloud_trial';
@@ -121,6 +123,15 @@ export default class Menu extends React.PureComponent<Props> {
         let styles: CSSProperties = {};
         if (customStyles) {
             styles = customStyles;
+        } else {
+            if (openLeft) {
+                styles.left = 'inherit';
+                styles.right = 0;
+            }
+            if (openUp && !isMobile()) {
+                styles.bottom = '100%';
+                styles.top = 'auto';
+            }
         }
 
         return (

@@ -70,6 +70,7 @@ jest.mock('mattermost-redux/actions/channels', () => ({
     selectChannel: (...args: any) => ({type: 'MOCK_SELECT_CHANNEL', args}),
     joinChannel: (...args: any) => ({type: 'MOCK_JOIN_CHANNEL', args}),
     getChannelStats: (...args: any) => ({type: 'MOCK_GET_CHANNEL_STATS', args}),
+    getChannelMember: (...args: any) => ({type: 'MOCK_GET_CHANNEL_MEMBER', args}),
     getChannel: jest.fn((channelId) => {
         switch (channelId) {
         case 'channelid2':
