@@ -270,7 +270,7 @@ test:e2e:
     - echo "Reading notes for MR ${CI_MERGE_REQUEST_IID}..."
     - |
       DEV_BOT_NOTE=$( \
-        curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" | \
+        curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes?per_page=1000" | \
         jq '.[] | .body | select(.|test("^Staging is now available at https://.+$"))' \
       )
     # Parse PW_BASE_URL from comment
