@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ComponentProps} from 'react';
 import React from 'react';
+import type {ComponentProps} from 'react';
 import {Link} from 'react-router-dom';
 
 import * as GlobalActions from 'actions/global_actions';
@@ -18,6 +18,7 @@ const POST_TOOLTIP_RANGES = [
     RelativeRanges.TODAY_TITLE_CASE,
     RelativeRanges.YESTERDAY_TITLE_CASE,
 ];
+const getTimeFormat: ComponentProps<typeof Timestamp>['useTime'] = (_, {hour, minute, second}) => ({hour, minute, second});
 
 type Props = {
 
@@ -105,6 +106,7 @@ export default class PostTime extends React.PureComponent<Props> {
                             value={eventTime}
                             ranges={POST_TOOLTIP_RANGES}
                             useSemanticOutput={false}
+                            useTime={getTimeFormat}
                         />
                     </Tooltip>
                 }

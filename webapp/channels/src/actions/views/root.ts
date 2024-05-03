@@ -1,29 +1,29 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-// import {loadMe} from 'mattermost-redux/actions/users';
 import {getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
-import {loadMeREST} from 'mattermost-redux/actions/users';
+import {loadMe} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
-import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import type {ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale, getTranslations} from 'selectors/i18n';
 
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
-import en from 'i18n/en.json';
 import {ActionTypes} from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
+
+import en from 'i18n/en.json';
 
 import type {GlobalState} from 'types/store';
 import type {Translations} from 'types/store/i18n';
 
-import {isDesktopApp} from '../../utils/user_agent';
 const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};
 
 export type TranslationPluginFunction = (locale: string) => Translations
 
-export function loadConfigAndMe() {
-    return async (dispatch: DispatchFunc) => {
+export function loadConfigAndMe(): ActionFuncAsync<boolean> {
+    return async (dispatch) => {
         // If expired, refresh token
         if (isDesktopApp() && checkIKTokenIsExpired()) {
             console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
@@ -37,19 +37,22 @@ export function loadConfigAndMe() {
             dispatch(getLicenseConfig()),
         ]);
 
-        // const isGraphQLEnabled = clientConfig && clientConfig.FeatureFlagGraphQL === 'true';
-
         let isMeLoaded = false;
-        const dataFromLoadMe = await dispatch(loadMeREST());
+
+        // if (document.cookie.includes('MMUSERID=')) {
+        const dataFromLoadMe = await dispatch(loadMe());
         isMeLoaded = dataFromLoadMe?.data ?? false;
+
+        // }
+
         return {data: isMeLoaded};
     };
 }
 
-export function registerPluginTranslationsSource(pluginId: string, sourceFunction: TranslationPluginFunction) {
+export function registerPluginTranslationsSource(pluginId: string, sourceFunction: TranslationPluginFunction): ThunkActionFunc<void, GlobalState> {
     pluginTranslationSources[pluginId] = sourceFunction;
-    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState() as GlobalState;
+    return (dispatch, getState) => {
+        const state = getState();
         const locale = getCurrentLocale(state);
         const immutableTranslations = getTranslations(state, locale);
         const translations = {};
@@ -71,8 +74,8 @@ export function unregisterPluginTranslationsSource(pluginId: string) {
     Reflect.deleteProperty(pluginTranslationSources, pluginId);
 }
 
-export function loadTranslations(locale: string, url: string) {
-    return async (dispatch: DispatchFunc) => {
+export function loadTranslations(locale: string, url: string): ActionFuncAsync {
+    return async (dispatch) => {
         const translations = {...en};
         Object.values(pluginTranslationSources).forEach((pluginFunc) => {
             Object.assign(translations, pluginFunc(locale));
@@ -98,8 +101,8 @@ export function loadTranslations(locale: string, url: string) {
     };
 }
 
-export function registerCustomPostRenderer(type: string, component: any, id: string) {
-    return async (dispatch: DispatchFunc) => {
+export function registerCustomPostRenderer(type: string, component: any, id: string): ActionFuncAsync {
+    return async (dispatch) => {
         // piggyback on plugins state to register a custom post renderer
         dispatch({
             type: ActionTypes.RECEIVED_PLUGIN_POST_COMPONENT,

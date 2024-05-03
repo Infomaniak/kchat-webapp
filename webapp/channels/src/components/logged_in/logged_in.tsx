@@ -2,32 +2,28 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import semver from 'semver';
+import {Redirect} from 'react-router-dom';
 
-import type {Channel} from '@mattermost/types/channels';
+import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
-import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
 import * as GlobalActions from 'actions/global_actions';
-import {updateTeamsOrderForUser} from 'actions/team_actions';
-import {setTheme} from 'actions/views/theme';
 import * as WebSocketActions from 'actions/websocket_actions.jsx';
 import BrowserStore from 'stores/browser_store';
-import store from 'stores/redux_store';
 
 import LoadingScreen from 'components/loading_screen';
 
+import Constants from 'utils/constants';
+import DesktopApp from 'utils/desktop_api';
+import {isKeyPressed} from 'utils/keyboard';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getBrowserTimezone} from 'utils/timezone';
 import * as UserAgent from 'utils/user_agent';
 
 import WebSocketClient from 'client/web_websocket_client';
-
-const BACKSPACE_CHAR = 8;
 
 declare global {
     interface Window {
@@ -39,44 +35,32 @@ declare global {
 }
 
 export type Props = {
+    currentTeam: Team;
+    theme: Theme;
     currentUser?: UserProfile;
     currentChannelId?: string;
+    isCurrentChannelManuallyUnread: boolean;
     children?: React.ReactNode;
-    enableTimezone: boolean;
+    mfaRequired: boolean;
     actions: {
         autoUpdateTimezone: (deviceTimezone: string) => void;
-        getChannelURLAction: (channel: Channel, teamId: string, url: string) => void;
-        viewChannel: (channelId: string, prevChannelId?: string) => void;
+        getChannelURLAction: (channelId: string, teamId: string, url: string) => void;
+        markChannelAsViewedOnServer: (channelId: string) => void;
+        updateApproximateViewTime: (channelId: string) => void;
         registerInternalKdrivePlugin: () => void;
+        setTheme: (theme: Theme) => void;
+        updateTeamsOrderForUser: (teamsOrder: string[]) => void;
     };
+    showTermsOfService: boolean;
     location: {
         pathname: string;
         search: string;
     };
 }
 
-type DesktopMessage = {
-    origin: string;
-    data: {
-        type: string;
-        message: {
-            version: string;
-            theme: object | null;
-            userIsActive: boolean;
-            manual: boolean;
-            channel: Channel;
-            teamId: string;
-            url: string;
-            teamsOrder?: string[];
-            serverId?: string;
-        };
-    };
-}
-
-const dispatch = store.dispatch;
-const getState = store.getState;
-
 export default class LoggedIn extends React.PureComponent<Props> {
+    private cleanupDesktopListeners?: () => void;
+
     constructor(props: Props) {
         super(props);
 
@@ -94,13 +78,10 @@ export default class LoggedIn extends React.PureComponent<Props> {
         // Initialize websocket
         WebSocketActions.initialize();
 
-        if (this.props.enableTimezone && this.props.currentUser) {
-            this.props.actions.autoUpdateTimezone(getBrowserTimezone());
-        }
-
         if (!UserAgent.isDesktopApp() || isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.4.0')) {
             this.props.actions.registerInternalKdrivePlugin();
         }
+        this.props.actions.autoUpdateTimezone(getBrowserTimezone());
 
         // Make sure the websockets close and reset version
         window.addEventListener('beforeunload', this.handleBeforeUnload);
@@ -112,16 +93,21 @@ export default class LoggedIn extends React.PureComponent<Props> {
             GlobalActions.emitBrowserFocus(false);
         }
 
-        // Listen for messages from the desktop app
-        window.addEventListener('message', this.onDesktopMessageListener);
-
-        // Tell the desktop app the webapp is ready
-        window.postMessage(
-            {
-                type: 'webapp-ready',
-            },
-            window.location.origin,
-        );
+        // Listen for user activity and notifications from the Desktop App (if applicable)
+        const offUserActivity = DesktopApp.onUserActivityUpdate(this.updateActiveStatus);
+        const offNotificationClicked = DesktopApp.onNotificationClicked(this.clickNotification);
+        const offThemeChangedGlobal = DesktopApp.onThemeChangedGlobal(this.changeGlobalTheme);
+        const offGetServerTheme = DesktopApp.onGetServerTheme(this.getServerTheme);
+        const offUpdateTeamsOrder = DesktopApp.onTeamsOrderUpdated(this.updateTeamsOrder);
+        const offSwitchServerSidebar = DesktopApp.onSwitchServerSidebar(this.switchServerSidebar);
+        this.cleanupDesktopListeners = () => {
+            offUserActivity();
+            offNotificationClicked();
+            offThemeChangedGlobal();
+            offGetServerTheme();
+            offUpdateTeamsOrder();
+            offSwitchServerSidebar();
+        };
 
         // Device tracking setup
         if (UserAgent.isIos()) {
@@ -153,7 +139,8 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         window.removeEventListener('focus', this.onFocusListener);
         window.removeEventListener('blur', this.onBlurListener);
-        window.removeEventListener('message', this.onDesktopMessageListener);
+
+        this.cleanupDesktopListeners?.();
     }
 
     public render(): React.ReactNode {
@@ -172,84 +159,74 @@ export default class LoggedIn extends React.PureComponent<Props> {
         GlobalActions.emitBrowserFocus(false);
     }
 
-    // listen for messages from the desktop app
-    private onDesktopMessageListener = (desktopMessage: DesktopMessage) => {
+    private updateActiveStatus = (userIsActive: boolean, idleTime: number, manual: boolean) => {
         if (!this.props.currentUser) {
             return;
         }
-        if (desktopMessage.origin !== window.location.origin) {
-            return;
-        }
 
-        switch (desktopMessage.data.type) {
-        case 'register-desktop': {
-            const {version} = desktopMessage.data.message;
-            if (!window.desktop) {
-                window.desktop = {};
-            }
-            window.desktop.version = semver.valid(semver.coerce(version));
-            if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.1.0')) {
-                window.desktop.theme = desktopMessage.data.message.theme;
-                dispatch(setTheme(window.desktop.theme as Theme));
-            }
-            break;
+        // update the server with the users current away status
+        if (userIsActive === true || userIsActive === false) {
+            WebSocketClient.userUpdateActiveStatus(userIsActive, manual);
         }
-        case 'user-activity-update': {
-            const {userIsActive, manual} = desktopMessage.data.message;
+    };
 
-            if (userIsActive === true || userIsActive === false) {
-                WebSocketClient.userUpdateActiveStatus(userIsActive, Boolean(manual));
-            }
-            break;
-        }
-        case 'teams-order-updated': {
-            const {teamsOrder} = desktopMessage.data.message;
-            if (teamsOrder) {
-                updateTeamsOrderForUser(teamsOrder)(dispatch, getState);
-            }
-            break;
-        }
-        case 'get-server-theme': {
-            const preferredTheme = getTheme(store.getState());
-            const currentTeam = getCurrentTeam(store.getState());
+    private clickNotification = (channelId: string, teamId: string, url: string) => {
+        window.focus();
 
-            window.postMessage(
-                {
-                    type: 'preferred-theme',
-                    data: {
-                        theme: preferredTheme,
-                        teamName: currentTeam.display_name,
-                    },
+        // navigate to the appropriate channel
+        this.props.actions.getChannelURLAction(channelId, teamId, url);
+    };
+
+    changeGlobalTheme = (theme?: Theme) => {
+        if (theme) {
+            this.props.actions.setTheme(theme as Theme);
+        }
+    };
+
+    getServerTheme = () => {
+        const preferredTheme = this.props.theme;
+        const currentTeam = this.props.currentTeam;
+
+        window.postMessage(
+            {
+                type: 'preferred-theme',
+                data: {
+                    theme: preferredTheme,
+                    teamName: currentTeam.display_name,
                 },
-                window.origin,
-            );
-            break;
-        }
-        case 'switch-server-sidebar': {
-            if (desktopMessage.data.message?.serverId) {
-                setLastKSuiteSeenCookie(desktopMessage.data.message.serverId);
-            }
-            break;
-        }
-        case 'notification-clicked': {
-            const {channel, teamId, url} = desktopMessage.data.message;
-            window.focus();
+            },
+            window.origin,
+        );
+    };
 
-            // navigate to the appropriate channel
-            this.props.actions.getChannelURLAction(channel, teamId, url);
-            break;
+    updateTeamsOrder = (teamsOrder: string[]) => {
+        if (teamsOrder) {
+            this.props.actions.updateTeamsOrderForUser(teamsOrder);
         }
-        case 'theme-changed-global': {
-            dispatch(setTheme((desktopMessage.data as any).theme as Theme));
-            break;
-        }
+    };
+
+    switchServerSidebar = (serverId: string) => {
+        if (serverId) {
+            setLastKSuiteSeenCookie(serverId);
         }
     };
 
     private handleBackSpace = (e: KeyboardEvent): void => {
         const excludedElements = ['input', 'textarea', 'module-reporting-tools-component'];
+        const targetElement = e.target as HTMLElement;
 
-        if (e.which === BACKSPACE_CHAR && !(excludedElements.includes((e.target as HTMLElement).tagName.toLowerCase()))) {
+        if (!targetElement) {
+            return;
+        }
+
+        const targetsTagName = targetElement.tagName.toLowerCase();
+        const isTargetNotContentEditable = targetElement.getAttribute?.('contenteditable') !== 'true';
+
+        if (
+            isKeyPressed(e, Constants.KeyCodes.BACKSPACE) &&
+            !(excludedElements.includes(targetsTagName)) &&
+            isTargetNotContentEditable
+        ) {
             e.preventDefault();
         }
     };
@@ -257,7 +234,10 @@ export default class LoggedIn extends React.PureComponent<Props> {
     private handleBeforeUnload = (): void => {
         // remove the event listener to prevent getting stuck in a loop
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
-        this.props.actions.viewChannel('', this.props.currentChannelId || '');
+        if (this.props.currentChannelId && !this.props.isCurrentChannelManuallyUnread) {
+            this.props.actions.updateApproximateViewTime(this.props.currentChannelId);
+            this.props.actions.markChannelAsViewedOnServer(this.props.currentChannelId);
+        }
         WebSocketActions.close();
     };
 }

@@ -1,21 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {screen} from '@testing-library/react';
 import React from 'react';
 import * as redux from 'react-redux';
-import {Provider} from 'react-redux';
 
 import type {Subscription} from '@mattermost/types/cloud';
 import type {GlobalState} from '@mattermost/types/store';
+import type {DeepPartial} from '@mattermost/types/utilities';
 
-import {renderWithIntl} from 'tests/react_testing_utils';
-import mockStore from 'tests/test_store';
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 import {Constants} from 'utils/constants';
 import {FileSizes} from 'utils/file_utils';
 
-import type {Props} from './index';
 import CloudUsageModal from './index';
+import type {Props} from './index';
 
 const freeLimits = {
     messages: {
@@ -30,8 +28,8 @@ const freeLimits = {
     },
 };
 
-function setupStore(hasLimits: boolean) {
-    const state = {
+function setupState(hasLimits: boolean) {
+    const state: DeepPartial<GlobalState> = {
         entities: {
             cloud: {
                 limits: {
@@ -78,10 +76,9 @@ function setupStore(hasLimits: boolean) {
                 },
             } as unknown as GlobalState['entities']['users'],
         },
-    } as GlobalState;
-    const store = mockStore(state);
+    };
 
-    return store;
+    return state;
 }
 
 let props: Props = {
@@ -99,36 +96,34 @@ describe('CloudUsageModal', () => {
     });
 
     test('renders text elements', () => {
-        const store = setupStore(true);
+        const state = setupState(true);
 
         props.title = 'very important title';
         props.description = 'very important description';
 
-        renderWithIntl(
-            <Provider store={store}>
-                <CloudUsageModal
-                    {...props}
-                />
-            </Provider>,
+        renderWithContext(
+            <CloudUsageModal
+                {...props}
+            />,
+            state,
         );
         screen.getByText(props.title as string);
         screen.getByText(props.description as string);
     });
 
     test('renders primary modal action', () => {
-        const store = setupStore(true);
+        const state = setupState(true);
 
         props.primaryAction = {
             message: 'primary action',
             onClick: jest.fn(),
         };
 
-        renderWithIntl(
-            <Provider store={store}>
-                <CloudUsageModal
-                    {...props}
-                />
-            </Provider>,
+        renderWithContext(
+            <CloudUsageModal
+                {...props}
+            />,
+            state,
         );
         expect(props.primaryAction.onClick).not.toHaveBeenCalled();
         screen.getByText(props.primaryAction.message as string).click();
@@ -136,18 +131,17 @@ describe('CloudUsageModal', () => {
     });
 
     test('renders secondary modal action', () => {
-        const store = setupStore(true);
+        const state = setupState(true);
 
         props.secondaryAction = {
             message: 'secondary action',
         };
 
-        renderWithIntl(
-            <Provider store={store}>
-                <CloudUsageModal
-                    {...props}
-                />
-            </Provider>,
+        renderWithContext(
+            <CloudUsageModal
+                {...props}
+            />,
+            state,
         );
         expect(props.onClose).not.toHaveBeenCalled();
         screen.getByText(props.secondaryAction.message as string).click();
@@ -155,14 +149,13 @@ describe('CloudUsageModal', () => {
     });
 
     test('hides footer when there are no actions', () => {
-        const store = setupStore(true);
+        const state = setupState(true);
 
-        renderWithIntl(
-            <Provider store={store}>
-                <CloudUsageModal
-                    {...props}
-                />
-            </Provider>,
+        renderWithContext(
+            <CloudUsageModal
+                {...props}
+            />,
+            state,
         );
         expect(screen.queryByTestId('limits-modal-footer')).not.toBeInTheDocument();
     });

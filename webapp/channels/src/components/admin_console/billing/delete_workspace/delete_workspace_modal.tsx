@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, defineMessages} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import './delete_workspace_modal.scss';
@@ -12,7 +12,6 @@ import type {Feedback} from '@mattermost/types/cloud';
 
 import {getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {subscribeCloudSubscription, deleteWorkspace as deleteWorkspaceRequest} from 'actions/cloud';
 import {trackEvent} from 'actions/telemetry_actions';
@@ -41,8 +40,12 @@ type Props = {
     callerCTA: string;
 }
 
+export const messages = defineMessages({
+    deleteButton: {id: 'admin.billing.subscription.deleteWorkspaceModal.deleteButton', defaultMessage: 'Delete Workspace'},
+});
+
 export default function DeleteWorkspaceModal(props: Props) {
-    const dispatch = useDispatch<DispatchFunc>();
+    const dispatch = useDispatch();
     const openDowngradeModal = useOpenDowngradeModal();
 
     // License/product checks.
@@ -185,6 +188,7 @@ export default function DeleteWorkspaceModal(props: Props) {
 
     return (
         <GenericModal
+            compassDesign={true}
             className='DeleteWorkspaceModal'
             onExited={handleClickCancel}
         >
@@ -227,10 +231,7 @@ export default function DeleteWorkspaceModal(props: Props) {
                     className='btn DeleteWorkspaceModal__Buttons-Delete'
                     onClick={handleClickDeleteWorkspace}
                 >
-                    <FormattedMessage
-                        id='admin.billing.subscription.deleteWorkspaceModal.deleteButton'
-                        defaultMessage='Delete Workspace'
-                    />
+                    <FormattedMessage {...messages.deleteButton}/>
                 </button>
                 {!isStarter && !isEnterprise &&
                     <button

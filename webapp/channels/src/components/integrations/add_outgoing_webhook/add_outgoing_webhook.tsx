@@ -9,7 +9,7 @@ import type {Team} from '@mattermost/types/teams';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import AbstractOutgoingWebhook from 'components/integrations/abstract_outgoing_webhook.jsx';
+import AbstractOutgoingWebhook from 'components/integrations/abstract_outgoing_webhook';
 
 import {t} from 'utils/i18n';
 
@@ -29,7 +29,7 @@ export type Props = {
         /**
         * The function to call to add a new outgoing webhook
         */
-        createOutgoingHook: (hook: OutgoingWebhook) => Promise<ActionResult>;
+        createOutgoingHook: (hook: OutgoingWebhook) => Promise<ActionResult<OutgoingWebhook>>;
     };
 
     /**

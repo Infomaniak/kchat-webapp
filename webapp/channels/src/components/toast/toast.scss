@@ -41,6 +41,8 @@
         height: 32px;
         padding: 0 8px;
         cursor: pointer;
+        // Infomaniak
+        border-radius: 0 15px 15px 0;
 
         &:hover {
             background-color: rgba(0, 0, 0, 0.2);
@@ -62,6 +64,8 @@
 
         &.toast__pointer {
             cursor: pointer;
+            // Infomaniak
+            border-radius: 15px 0 0 15px;
 
             &:hover {
                 background-color: rgba(0, 0, 0, 0.2);
@@ -102,5 +106,5 @@
 }
 
 .tooltip__shortcut--txt {
-    opacity: 0.6;
+    opacity: 0.73;
 }

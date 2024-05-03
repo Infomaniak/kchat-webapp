@@ -1,26 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {capitalize as caps, isArray} from 'lodash';
+import caps from 'lodash/capitalize';
+import isArray from 'lodash/isArray';
 import type {Moment} from 'moment-timezone';
 import moment from 'moment-timezone';
-import type {ReactNode} from 'react';
 import React, {PureComponent} from 'react';
-import type {
-    IntlShape,
-    FormatDateOptions,
-    FormatRelativeTimeOptions} from 'react-intl';
+import type {ReactNode} from 'react';
 import {
     injectIntl,
     FormattedMessage,
 } from 'react-intl';
+import type {
+    IntlShape,
+    FormatDateOptions,
+    FormatRelativeTimeOptions} from 'react-intl';
 import {isValidElementType} from 'react-is';
 
 import type {RequireOnlyOne} from '@mattermost/types/utilities';
 
 import {isSameYear, isWithin, isEqual, getDiff} from 'utils/datetime';
-import type {Resolvable} from 'utils/resolvable';
 import {resolve} from 'utils/resolvable';
+import type {Resolvable} from 'utils/resolvable';
 
 import {STANDARD_UNITS} from './relative_ranges';
 import SemanticTime from './semantic_time';

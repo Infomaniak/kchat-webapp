@@ -1,3 +1,320 @@
+## 2.7.0-rc.24 (2024-05-01)
+
+### Changed (1 change)
+
+- [update post options component](kchat/webapp@2b4f05a0a6b2f01012f248762b1fd4122741374e) by @antonbuksa
+
+## 2.7.0-rc.23 (2024-05-01)
+
+### Fixed (1 change)
+
+- [fix timestamps not supposed to be displayed as relative](kchat/webapp@91021e1728f612d9d888196b4b5b29463fe7f09e) by @antonbuksa
+
+## 2.7.0-rc.22 (2024-05-01)
+
+### Fixed (1 change)
+
+- [fix pl logic and tests for dm/gm with previews](kchat/webapp@a53b7d8ba0ab2d1abd9875b41d5a4c1aa0dae1f4) by @antonbuksa
+
+## 2.7.0-rc.21 (2024-05-01)
+
+### Fixed (1 change)
+
+- [fix permalink channel previews](kchat/webapp@edc52c331e1f675c96b500246b17642acfa23fe3) by @antonbuksa
+
+## 2.7.0-rc.20 (2024-04-30)
+
+### Changed (1 change)
+
+- [disable consecutive messages in threads](kchat/webapp@31558dcf5a440c2b15b1400c7c139da3861a3539) by @antonbuksa
+
+## 2.7.0-rc.19 (2024-04-30)
+
+### Changed (1 change)
+
+- [css update posts](kchat/webapp@a3e5cd68656028ebf9fcd772c8ed1ffc0141950e) by @antonbuksa
+
+## 2.7.0-rc.18 (2024-04-30)
+
+### Fixed (2 changes)
+
+- [fix content gap in threads](kchat/webapp@7e82d133920796a8fd7809b30f7e23ef452a9433) by @antonbuksa
+- [fix schedule message dialog style](kchat/webapp@4636ea8e969009c41285690c25fe07089f205954) by @antonbuksa
+
+## 2.7.0-rc.17 (2024-04-30)
+
+### Fixed (3 changes)
+
+- [Fix: weird looking button on settings modal](kchat/webapp@26bc008067d6175e753c7aeaa9a8ab63db515d16) by @philippe.karle ([merge request](kchat/webapp!759))
+- [fix: thread list mark all as read button tooltip re-appearing](kchat/webapp@a276a48bb3c3a067ff22d0f9977b1d0db0045b68) by @tim.dewinter ([merge request](kchat/webapp!758))
+- [fix: empty ephemeral messages](kchat/webapp@a9089b6b09584d30abebf1b79ac48341f534941e) by @tim.dewinter ([merge request](kchat/webapp!756))
+
+### Removed (1 change)
+
+- [Team name removed from channel search panel !636](kchat/webapp@85974c0d409f650d449c9f424432c56d480fea6a) by @antonbuksa
+
+## 2.7.0-rc.16 (2024-04-26)
+
+### Fixed (3 changes)
+
+- [fix: thread icon collapse display](kchat/webapp@7bb4476dac4a08366a7f1a75d04801a7ee4d58ae) by @tim.dewinter ([merge request](kchat/webapp!754))
+- [fix: inconsistent custom gif file size translation](kchat/webapp@88ae493c446ce34433fff387830f121c6cec3753) by @tim.dewinter ([merge request](kchat/webapp!753))
+- [fix: bug tracker background-color if component is hidden](kchat/webapp@804a32dbf3e7a3ed4acc1e28dbcf56990a5ad060) by @tim.dewinter ([merge request](kchat/webapp!752))
+
+## 2.7.0-rc.15 (2024-04-25)
+
+### Added (1 change)
+
+- [feat: allowed collapsing gifs](kchat/webapp@49ab5e2c476870043f62bad52cf7172d0c07ddaf) by @tim.dewinter ([merge request](kchat/webapp!750))
+
+### Fixed (2 changes)
+
+- [Fix: Numbered table list content overflowing parent element](kchat/webapp@4a40462d9850ce8dc1fd67e9c90a2e4d58fe3467) by @philippe.karle ([merge request](kchat/webapp!732))
+- [fix: compact post header alignment](kchat/webapp@b7452a09bb66b7b53453b9461e540dac3582bf01) by @tim.dewinter ([merge request](kchat/webapp!745))
+
+## 2.7.0-rc.14 (2024-04-25)
+
+### Fixed (3 changes)
+
+- [fix: disabled enable/disable join leave messages preference](kchat/webapp@ae7b72b5178b44df7f6c5c12b65ee87bfaaa19a1) by @tim.dewinter ([merge request](kchat/webapp!748))
+- [fix: channel display name appearing in saved thread](kchat/webapp@49faf78645a3cfa085d5264b9b4216ad375b8a84) by @tim.dewinter ([merge request](kchat/webapp!746))
+- [fix: re-added user popover profile copy button](kchat/webapp@387743764b6a8ef4da2ed281b0b5f766d8b0e36e) by @tim.dewinter ([merge request](kchat/webapp!744))
+
+## 2.7.0-rc.13 (2024-04-23)
+
+### Fixed (1 change)
+
+- [Fix: Locale post message for servers sidebar](kchat/webapp@5c26dc09aeb0a09825510f44b0c9f621fe9c1035) by @philippe.karle ([merge request](kchat/webapp!741))
+
+## 2.7.0-rc.12 (2024-04-23)
+
+### Added (1 change)
+
+- [Feature: listen to settings navigation events](kchat/webapp@9c788e419324fc20b07e1efdf3eda2b0e167f6e8) by @philippe.karle
+
+### Fixed (11 changes)
+
+- [Reloading guest members on current channel on user roles changes](kchat/webapp@5867269fb722f957cd509790f287244514ff1fa7) by @philippe.karle ([merge request](kchat/webapp!733))
+- [Fix: loading all users profiles available](kchat/webapp@34734451b771b90c6af6007c7410297528f4804d) by @philippe.karle ([merge request](kchat/webapp!739))
+- [fix: Replaced worker-src placeholder for sentry CSP](kchat/webapp@3c2bee906b1383951914b3d60f8bac2d57d2b7e2) by  ([merge request](kchat/webapp!738))
+- [Fix: red banner on quick channel switch](kchat/webapp@ae3502acd0d3a18a0418b849471f57438f3d2468) by @philippe.karle ([merge request](kchat/webapp!736))
+- [Fix: dark theme user modal design broken](kchat/webapp@be3db93cf2cc2033bd8fdd0726b524fa292352b5) by @philippe.karle ([merge request](kchat/webapp!735))
+- [fix audio recording module](kchat/webapp@4744c26f7b0531d21a4ae4cb5921eadf23e1efc7) by @antonbuksa
+- [fix login loading template](kchat/webapp@a86d97b9ce8622984c6e21142a7d9c1edf517da8) by @antonbuksa
+- [fix buttons status reset dialog](kchat/webapp@b990800e045a50277f5e6f432296acc820cd66f7) by @antonbuksa
+- [fix margin in emoji autocomplete](kchat/webapp@4eb40d4037da844a1b3328414a8491ad8b425213) by @antonbuksa
+- [fix profile action](kchat/webapp@8f7fc1c05b95c05adc139cbf70cc7a2672ac71e2) by @antonbuksa
+- [restore mas migration banner](kchat/webapp@7c245a78759263070f036cc17e576c5c7537828f) by @antonbuksa
+
+### Changed (2 changes)
+
+- [hard update notification actions](kchat/webapp@e8be15119678b41f2ee0121bbf94bc236fe46b01) by @antonbuksa
+- [Fix: switch-server event triggering on webapp](kchat/webapp@edffba3e44fe953213a5ad2dbc7c858a8f253700) by @philippe.karle ([merge request](kchat/webapp!731))
+
+### Chore (1 change)
+
+- [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
+
+## 2.7.0-rc.11 (2024-04-22)
+
+No changes.
+
+## 2.7.0-rc.10 (2024-04-22)
+
+### Added (1 change)
+
+- [Feature: listen to settings navigation events](kchat/webapp@9c788e419324fc20b07e1efdf3eda2b0e167f6e8) by @philippe.karle
+
+## 2.7.0-rc.9 (2024-04-22)
+
+No changes.
+
+## 2.7.0-rc.8 (2024-04-22)
+
+### Fixed (2 changes)
+
+- [Fix: red banner on quick channel switch](kchat/webapp@ae3502acd0d3a18a0418b849471f57438f3d2468) by @philippe.karle ([merge request](kchat/webapp!736))
+- [Fix: dark theme user modal design broken](kchat/webapp@be3db93cf2cc2033bd8fdd0726b524fa292352b5) by @philippe.karle ([merge request](kchat/webapp!735))
+
+## 2.7.0-rc.7 (2024-04-22)
+
+### Fixed (1 change)
+
+- [fix audio recording module](kchat/webapp@4744c26f7b0531d21a4ae4cb5921eadf23e1efc7) by @antonbuksa
+
+## 2.7.0-rc.6 (2024-04-22)
+
+### Fixed (4 changes)
+
+- [fix audio recording module](kchat/webapp@4744c26f7b0531d21a4ae4cb5921eadf23e1efc7) by @antonbuksa
+- [fix login loading template](kchat/webapp@a86d97b9ce8622984c6e21142a7d9c1edf517da8) by @antonbuksa
+- [fix buttons status reset dialog](kchat/webapp@b990800e045a50277f5e6f432296acc820cd66f7) by @antonbuksa
+- [fix margin in emoji autocomplete](kchat/webapp@4eb40d4037da844a1b3328414a8491ad8b425213) by @antonbuksa
+
+### Changed (1 change)
+
+- [hard update notification actions](kchat/webapp@e8be15119678b41f2ee0121bbf94bc236fe46b01) by @antonbuksa
+
+## 2.7.0-rc.5 (2024-04-19)
+
+### Fixed (1 change)
+
+- [fix profile action](kchat/webapp@8f7fc1c05b95c05adc139cbf70cc7a2672ac71e2) by @antonbuksa
+
+## 2.7.0-rc.4 (2024-04-19)
+
+### Fixed (1 change)
+
+- [restore mas migration banner](kchat/webapp@7c245a78759263070f036cc17e576c5c7537828f) by @antonbuksa
+
+## 2.7.0-rc.3 (2024-04-19)
+
+### Fixed (1 change)
+
+- [restore mas migration banner](kchat/webapp@7c245a78759263070f036cc17e576c5c7537828f) by @antonbuksa
+
+## 2.7.0-rc.2 (2024-04-19)
+
+No changes.
+
+## 2.7.0-rc.1 (2024-04-19)
+
+### Changed (1 change)
+
+- [Fix: switch-server event triggering on webapp](kchat/webapp@edffba3e44fe953213a5ad2dbc7c858a8f253700) by @philippe.karle ([merge request](kchat/webapp!731))
+
+### Chore (1 change)
+
+- [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
+
+## 2.7.0-next.14 (2024-05-01)
+
+### Fixed (1 change)
+
+- [fix timestamps not supposed to be displayed as relative](kchat/webapp@91021e1728f612d9d888196b4b5b29463fe7f09e) by @antonbuksa
+
+### Changed (1 change)
+
+- [update post options component](kchat/webapp@2b4f05a0a6b2f01012f248762b1fd4122741374e) by @antonbuksa
+
+## 2.7.0-next.13 (2024-05-01)
+
+### Fixed (1 change)
+
+- [fix pl logic and tests for dm/gm with previews](kchat/webapp@a53b7d8ba0ab2d1abd9875b41d5a4c1aa0dae1f4) by @antonbuksa
+
+## 2.7.0-next.12 (2024-05-01)
+
+### Fixed (1 change)
+
+- [fix permalink channel previews](kchat/webapp@edc52c331e1f675c96b500246b17642acfa23fe3) by @antonbuksa
+
+## 2.7.0-next.11 (2024-04-30)
+
+### Fixed (2 changes)
+
+- [fix content gap in threads](kchat/webapp@7e82d133920796a8fd7809b30f7e23ef452a9433) by @antonbuksa
+- [fix schedule message dialog style](kchat/webapp@4636ea8e969009c41285690c25fe07089f205954) by @antonbuksa
+
+### Changed (2 changes)
+
+- [disable consecutive messages in threads](kchat/webapp@31558dcf5a440c2b15b1400c7c139da3861a3539) by @antonbuksa
+- [css update posts](kchat/webapp@a3e5cd68656028ebf9fcd772c8ed1ffc0141950e) by @antonbuksa
+
+## 2.7.0-next.10 (2024-04-30)
+
+### Fixed (6 changes)
+
+- [Fix: weird looking button on settings modal](kchat/webapp@26bc008067d6175e753c7aeaa9a8ab63db515d16) by @philippe.karle ([merge request](kchat/webapp!759))
+- [fix: thread list mark all as read button tooltip re-appearing](kchat/webapp@a276a48bb3c3a067ff22d0f9977b1d0db0045b68) by @tim.dewinter ([merge request](kchat/webapp!758))
+- [fix: empty ephemeral messages](kchat/webapp@a9089b6b09584d30abebf1b79ac48341f534941e) by @tim.dewinter ([merge request](kchat/webapp!756))
+- [fix: thread icon collapse display](kchat/webapp@7bb4476dac4a08366a7f1a75d04801a7ee4d58ae) by @tim.dewinter ([merge request](kchat/webapp!754))
+- [fix: inconsistent custom gif file size translation](kchat/webapp@88ae493c446ce34433fff387830f121c6cec3753) by @tim.dewinter ([merge request](kchat/webapp!753))
+- [fix: bug tracker background-color if component is hidden](kchat/webapp@804a32dbf3e7a3ed4acc1e28dbcf56990a5ad060) by @tim.dewinter ([merge request](kchat/webapp!752))
+
+### Removed (1 change)
+
+- [Team name removed from channel search panel !636](kchat/webapp@85974c0d409f650d449c9f424432c56d480fea6a) by @antonbuksa
+
+## 2.7.0-next.9 (2024-04-25)
+
+### Added (1 change)
+
+- [feat: allowed collapsing gifs](kchat/webapp@49ab5e2c476870043f62bad52cf7172d0c07ddaf) by @tim.dewinter ([merge request](kchat/webapp!750))
+
+### Fixed (5 changes)
+
+- [Fix: Numbered table list content overflowing parent element](kchat/webapp@4a40462d9850ce8dc1fd67e9c90a2e4d58fe3467) by @philippe.karle ([merge request](kchat/webapp!732))
+- [fix: compact post header alignment](kchat/webapp@b7452a09bb66b7b53453b9461e540dac3582bf01) by @tim.dewinter ([merge request](kchat/webapp!745))
+- [fix: disabled enable/disable join leave messages preference](kchat/webapp@ae7b72b5178b44df7f6c5c12b65ee87bfaaa19a1) by @tim.dewinter ([merge request](kchat/webapp!748))
+- [fix: channel display name appearing in saved thread](kchat/webapp@49faf78645a3cfa085d5264b9b4216ad375b8a84) by @tim.dewinter ([merge request](kchat/webapp!746))
+- [fix: re-added user popover profile copy button](kchat/webapp@387743764b6a8ef4da2ed281b0b5f766d8b0e36e) by @tim.dewinter ([merge request](kchat/webapp!744))
+
+## 2.7.0-next.8 (2024-04-23)
+
+### Fixed (1 change)
+
+- [Fix: Locale post message for servers sidebar](kchat/webapp@5c26dc09aeb0a09825510f44b0c9f621fe9c1035) by @philippe.karle ([merge request](kchat/webapp!741))
+
+## 2.7.0-next.7 (2024-04-23)
+
+### Fixed (3 changes)
+
+- [Reloading guest members on current channel on user roles changes](kchat/webapp@5867269fb722f957cd509790f287244514ff1fa7) by @philippe.karle ([merge request](kchat/webapp!733))
+- [Fix: loading all users profiles available](kchat/webapp@34734451b771b90c6af6007c7410297528f4804d) by @philippe.karle ([merge request](kchat/webapp!739))
+- [fix: Replaced worker-src placeholder for sentry CSP](kchat/webapp@3c2bee906b1383951914b3d60f8bac2d57d2b7e2) by  ([merge request](kchat/webapp!738))
+
+## 2.7.0-next.6 (2024-04-22)
+
+### Added (1 change)
+
+- [Feature: listen to settings navigation events](kchat/webapp@9c788e419324fc20b07e1efdf3eda2b0e167f6e8) by @philippe.karle
+
+## 2.7.0-next.5 (2024-04-22)
+
+No changes.
+
+## 2.7.0-next.4 (2024-04-22)
+
+### Fixed (2 changes)
+
+- [Fix: red banner on quick channel switch](kchat/webapp@ae3502acd0d3a18a0418b849471f57438f3d2468) by @philippe.karle ([merge request](kchat/webapp!736))
+- [Fix: dark theme user modal design broken](kchat/webapp@be3db93cf2cc2033bd8fdd0726b524fa292352b5) by @philippe.karle ([merge request](kchat/webapp!735))
+
+## 2.7.0-next.3 (2024-04-22)
+
+### Fixed (4 changes)
+
+- [fix audio recording module](kchat/webapp@4744c26f7b0531d21a4ae4cb5921eadf23e1efc7) by @antonbuksa
+- [fix login loading template](kchat/webapp@a86d97b9ce8622984c6e21142a7d9c1edf517da8) by @antonbuksa
+- [fix buttons status reset dialog](kchat/webapp@b990800e045a50277f5e6f432296acc820cd66f7) by @antonbuksa
+- [fix margin in emoji autocomplete](kchat/webapp@4eb40d4037da844a1b3328414a8491ad8b425213) by @antonbuksa
+
+### Changed (1 change)
+
+- [hard update notification actions](kchat/webapp@e8be15119678b41f2ee0121bbf94bc236fe46b01) by @antonbuksa
+
+## 2.7.0-next.2 (2024-04-19)
+
+### Fixed (2 changes)
+
+- [fix profile action](kchat/webapp@8f7fc1c05b95c05adc139cbf70cc7a2672ac71e2) by @antonbuksa
+- [restore mas migration banner](kchat/webapp@7c245a78759263070f036cc17e576c5c7537828f) by @antonbuksa
+
+## 2.7.0-next.1 (2024-04-19)
+
+### Fixed (1 change)
+
+- [restore mas migration banner](kchat/webapp@7c245a78759263070f036cc17e576c5c7537828f) by @antonbuksa
+
+### Changed (1 change)
+
+- [Fix: switch-server event triggering on webapp](kchat/webapp@edffba3e44fe953213a5ad2dbc7c858a8f253700) by @philippe.karle ([merge request](kchat/webapp!731))
+
+### Chore (1 change)
+
+- [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
+
 ## 2.6.3-rc.6 (2024-04-16)
 
 ### Fixed (3 changes)

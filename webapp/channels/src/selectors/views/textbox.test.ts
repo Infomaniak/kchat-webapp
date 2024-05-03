@@ -12,8 +12,8 @@ describe('selectors/views/textbox', () => {
                 general: {
                     config: {
                         EnableFileAttachments: 'true',
-                        FeatureFlagVoiceMessages: 'true',
-                        EnableVoiceMessages: 'true',
+                        FeatureFlagEnableVoiceMessages: 'true',
+                        ExperimentalEnableVoiceMessage: 'true',
                     },
                 },
             },
@@ -33,8 +33,8 @@ describe('selectors/views/textbox', () => {
                     general: {
                         config: {
                             EnableFileAttachments: config[0],
-                            FeatureFlagVoiceMessages: config[1],
-                            EnableVoiceMessages: config[2],
+                            FeatureFlagEnableVoiceMessages: config[1],
+                            ExperimentalEnableVoiceMessage: config[2],
                         },
                     },
                 },

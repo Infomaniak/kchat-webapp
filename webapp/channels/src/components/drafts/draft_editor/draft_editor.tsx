@@ -42,6 +42,7 @@ import Constants, {
     ModalIdentifiers,
     StoragePrefixes,
 } from 'utils/constants';
+import * as Keyboard from 'utils/keyboard';
 import {applyMarkdown} from 'utils/markdown/apply_markdown';
 import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 import {
@@ -145,8 +146,6 @@ class DraftEditor extends React.PureComponent<Props, State> {
         }
     }
 
-    handleSelect = (e: React.SyntheticEvent<Element, Event>) => Utils.adjustSelection(this.textboxRef.current?.getInputBox(), e as React.KeyboardEvent<HTMLInputElement>);
-
     handleMouseUpKeyUp = (e: React.MouseEvent | React.KeyboardEvent) => {
         this.setState({
             caretPosition: (e.target as HTMLInputElement).selectionStart || 0,
@@ -202,10 +201,10 @@ class DraftEditor extends React.PureComponent<Props, State> {
         } = e.target as TextboxElement;
 
         const ctrlOrMetaKeyPressed = e.ctrlKey || e.metaKey;
-        const ctrlEnterKeyCombo = (this.props.ctrlSend || this.props.codeBlockOnCtrlEnter) && Utils.isKeyPressed(e, KeyCodes.ENTER) && ctrlOrMetaKeyPressed;
-        const ctrlKeyCombo = Utils.cmdOrCtrlPressed(e) && !e.altKey && !e.shiftKey;
-        const ctrlAltCombo = Utils.cmdOrCtrlPressed(e, true) && e.altKey;
-        const shiftAltCombo = !Utils.cmdOrCtrlPressed(e) && e.shiftKey && e.altKey;
+        const ctrlEnterKeyCombo = (this.props.ctrlSend || this.props.codeBlockOnCtrlEnter) && Keyboard.isKeyPressed(e, KeyCodes.ENTER) && ctrlOrMetaKeyPressed;
+        const ctrlKeyCombo = Keyboard.cmdOrCtrlPressed(e) && !e.altKey && !e.shiftKey;
+        const ctrlAltCombo = Keyboard.cmdOrCtrlPressed(e, true) && e.altKey;
+        const shiftAltCombo = !Keyboard.cmdOrCtrlPressed(e) && e.shiftKey && e.altKey;
 
         // listen for line break key combo and insert new line character
         if (Utils.isUnhandledLineBreakKeyCombo(e)) {
@@ -222,12 +221,12 @@ class DraftEditor extends React.PureComponent<Props, State> {
             return;
         }
 
-        if (Utils.isKeyPressed(e, KeyCodes.ESCAPE)) {
+        if (Keyboard.isKeyPressed(e, KeyCodes.ESCAPE)) {
             this.textboxRef.current?.blur();
         }
 
         if (ctrlKeyCombo) {
-            if (Utils.isKeyPressed(e, KeyCodes.B)) {
+            if (Keyboard.isKeyPressed(e, KeyCodes.B)) {
                 e.stopPropagation();
                 e.preventDefault();
                 this.applyMarkdown({
@@ -236,7 +235,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     selectionEnd,
                     message: value,
                 });
-            } else if (Utils.isKeyPressed(e, KeyCodes.I)) {
+            } else if (Keyboard.isKeyPressed(e, KeyCodes.I)) {
                 e.stopPropagation();
                 e.preventDefault();
                 this.applyMarkdown({
@@ -247,7 +246,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
                 });
             }
         } else if (ctrlAltCombo) {
-            if (Utils.isKeyPressed(e, KeyCodes.K)) {
+            if (Keyboard.isKeyPressed(e, KeyCodes.K)) {
                 e.stopPropagation();
                 e.preventDefault();
                 this.applyMarkdown({
@@ -256,7 +255,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     selectionEnd,
                     message: value,
                 });
-            } else if (Utils.isKeyPressed(e, KeyCodes.C)) {
+            } else if (Keyboard.isKeyPressed(e, KeyCodes.C)) {
                 e.stopPropagation();
                 e.preventDefault();
                 this.applyMarkdown({
@@ -265,21 +264,21 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     selectionEnd,
                     message: value,
                 });
-            } else if (Utils.isKeyPressed(e, KeyCodes.E)) {
+            } else if (Keyboard.isKeyPressed(e, KeyCodes.E)) {
                 e.stopPropagation();
                 e.preventDefault();
                 this.toggleEmojiPicker();
-            } else if (Utils.isKeyPressed(e, KeyCodes.T)) {
+            } else if (Keyboard.isKeyPressed(e, KeyCodes.T)) {
                 e.stopPropagation();
                 e.preventDefault();
                 this.toggleAdvanceTextEditor();
-            } else if (Utils.isKeyPressed(e, KeyCodes.P) && message.length) {
+            } else if (Keyboard.isKeyPressed(e, KeyCodes.P) && message.length) {
                 e.stopPropagation();
                 e.preventDefault();
                 this.handleShowPreview(!this.state.showPreview);
             }
         } else if (shiftAltCombo) {
-            if (Utils.isKeyPressed(e, KeyCodes.X)) {
+            if (Keyboard.isKeyPressed(e, KeyCodes.X)) {
                 e.stopPropagation();
                 e.preventDefault();
                 this.applyMarkdown({
@@ -288,7 +287,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     selectionEnd,
                     message: value,
                 });
-            } else if (Utils.isKeyPressed(e, KeyCodes.SEVEN)) {
+            } else if (Keyboard.isKeyPressed(e, KeyCodes.SEVEN)) {
                 e.preventDefault();
                 this.applyMarkdown({
                     markdownMode: 'ol',
@@ -296,7 +295,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     selectionEnd,
                     message: value,
                 });
-            } else if (Utils.isKeyPressed(e, KeyCodes.EIGHT)) {
+            } else if (Keyboard.isKeyPressed(e, KeyCodes.EIGHT)) {
                 e.preventDefault();
                 this.applyMarkdown({
                     markdownMode: 'ul',
@@ -304,7 +303,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     selectionEnd,
                     message: value,
                 });
-            } else if (Utils.isKeyPressed(e, KeyCodes.NINE)) {
+            } else if (Keyboard.isKeyPressed(e, KeyCodes.NINE)) {
                 e.preventDefault();
                 this.applyMarkdown({
                     markdownMode: 'quote',
@@ -835,7 +834,6 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     handleBlur={noop}
                     emitTypingEvent={noop}
                     handleMouseUpKeyUp={this.handleMouseUpKeyUp}
-                    handleSelect={this.handleSelect}
                     toggleEmojiPicker={this.toggleEmojiPicker}
                     toggleAdvanceTextEditor={this.toggleAdvanceTextEditor}
                     handleKeyDown={this.handleKeyDown}

@@ -38,10 +38,8 @@ function Reply({
             isLastPost={isLastPost}
             post={post}
             previousPostId={previousPostId}
-            teamId={teamId}
             timestampProps={timestampProps}
             location={Locations.RHS_COMMENT}
-            disableConsecutive={true}
         />
     );
 }

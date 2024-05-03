@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useMemo, useEffect, useState, useCallback} from 'react';
+import React, {memo, useCallback, useMemo, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
@@ -11,11 +11,10 @@ import type {UserThread, UserThreadSynthetic} from '@mattermost/types/threads';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 
 import {getPost} from 'mattermost-redux/actions/posts';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {setGlobalItem} from 'actions/storage';
 import {makeOnSubmit} from 'actions/views/create_comment';
-import {removeDraft, addToUpdateDraftQueue, upsertScheduleDraft, setGlobalDraftSource} from 'actions/views/drafts';
+import {addToUpdateDraftQueue, removeDraft, setGlobalDraftSource, upsertScheduleDraft} from 'actions/views/drafts';
 import {closeModal, openModal} from 'actions/views/modals';
 import {selectPost} from 'actions/views/rhs';
 import {getGlobalItem} from 'selectors/storage';
@@ -44,9 +43,9 @@ type Props = {
     type: 'channel' | 'thread';
     user: UserProfile;
     value: PostDraft;
-    isRemote: boolean;
     isScheduled: boolean;
     scheduledWillNotBeSent: boolean;
+    isRemote?: boolean;
 }
 
 function ThreadDraft({
@@ -64,7 +63,7 @@ function ThreadDraft({
     isScheduled,
     scheduledWillNotBeSent,
 }: Props) {
-    const dispatch = useDispatch<DispatchFunc>();
+    const dispatch = useDispatch();
     const history = useHistory();
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const threadDraft = useSelector((state: GlobalState) => getGlobalItem(state, StoragePrefixes.COMMENT_DRAFT + value.rootId, {}));
@@ -84,7 +83,7 @@ function ThreadDraft({
             return makeOnSubmit(channel.id, thread.id, '');
         }
 
-        return () => () => Promise.resolve({data: true});
+        return () => Promise.resolve({data: true});
     }, [channel.id, thread?.id]);
 
     const handleOnDelete = useCallback((id: string) => {

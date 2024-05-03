@@ -49,12 +49,7 @@ describe('components/Menu', () => {
         // reportAProblemLink: undefined,
         pluginMenuItems: [],
         isMentionSearch: false,
-        isFirstAdmin: false,
         intl: createIntl({locale: 'en', defaultLocale: 'en', timeZone: 'Etc/UTC', textComponent: 'span'}),
-        teamUrl: '/team',
-        location: {
-            pathname: '/team',
-        },
         guestAccessEnabled: true,
         canInviteTeamMember: true,
         actions: {
@@ -79,7 +74,13 @@ describe('components/Menu', () => {
     const defaultState = {
         entities: {
             channels: {
-                myMembers: [],
+                myMembers: {},
+            },
+            general: {
+                config: {},
+                license: {
+                    Cloud: 'false',
+                },
             },
             teams: {
                 currentTeamId: 'team-id',
@@ -88,7 +89,7 @@ describe('components/Menu', () => {
                         team_id: 'team-id',
                         user_id: 'test-user-id',
                         roles: 'team_user',
-                        scheme_user: 'true',
+                        scheme_user: true,
                     },
                 },
             },

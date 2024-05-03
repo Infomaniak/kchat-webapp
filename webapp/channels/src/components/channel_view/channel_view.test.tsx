@@ -26,6 +26,7 @@ describe('components/channel_view', () => {
         isCloud: false,
         goToLastViewedChannel: jest.fn(),
         isFirstAdmin: false,
+        enableWebSocketEventScope: false,
     };
 
     it('Should match snapshot with base props', () => {

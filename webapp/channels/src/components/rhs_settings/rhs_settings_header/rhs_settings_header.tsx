@@ -3,14 +3,13 @@
 
 import React from 'react';
 /* eslint-disable react/no-string-refs */
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
-import LocalizedIcon from 'components/localized_icon';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
@@ -36,6 +35,7 @@ export default function RhsSettingsHeader({
     isMobile,
 }: Props) {
     const dispatch = useDispatch();
+    const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
 
     const onClose = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -89,13 +89,13 @@ export default function RhsSettingsHeader({
                 <button
                     id='rhsCloseButton'
                     type='button'
-                    className='sidebar--right__close btn-icon'
+                    className='sidebar--right__close btn btn-icon'
                     aria-label='Close'
                     onClick={onClose}
                 >
-                    <LocalizedIcon
+                    <i
                         className='icon icon-close'
-                        ariaLabel={{id: t('rhs_header.closeTooltip.icon'), defaultMessage: 'Close Sidebar Icon'}}
+                        aria-label={formatMessage({id: t('rhs_header.closeTooltip.icon'), defaultMessage: 'Close Sidebar Icon'})}
                     />
                 </button>
             </OverlayTrigger>

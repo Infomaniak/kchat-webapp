@@ -167,3 +167,7 @@ yarn-error.log
 .pnp.*
 .jestcache
 .env
+
+## Notice Folders
+.notice/
+.notice-work/

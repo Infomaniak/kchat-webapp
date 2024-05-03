@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ChangeEvent, FormEvent} from 'react';
 import React from 'react';
+import type {ChangeEvent, FormEvent} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
@@ -14,7 +14,7 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {getFullName} from 'mattermost-redux/utils/user_utils';
 
 import ModalSuggestionList from 'components/suggestion/modal_suggestion_list';
-import SearchChannelWithPermissionsProvider from 'components/suggestion/search_channel_with_permissions_provider.jsx';
+import SearchChannelWithPermissionsProvider from 'components/suggestion/search_channel_with_permissions_provider';
 import SuggestionBox from 'components/suggestion/suggestion_box';
 import type SuggestionBoxComponent from 'components/suggestion/suggestion_box/suggestion_box';
 
@@ -55,7 +55,7 @@ export type Props = {
         * SearchChannelWithPermissionsProvider class to fetch channels
         * based on a search term
         */
-        autocompleteChannelsForSearch: (teamId: string, term: string) => Promise<ActionResult>;
+        autocompleteChannelsForSearch: (teamId: string, term: string) => Promise<ActionResult<Channel[]>>;
     };
 
 }
@@ -258,6 +258,8 @@ export default class AddUserToChannelModal extends React.PureComponent<Props, St
 
         const content = (
             <SuggestionBox
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 ref={this.setSearchBoxRef}
                 className='form-control focused'
                 onChange={this.onInputChange}
@@ -321,7 +323,7 @@ export default class AddUserToChannelModal extends React.PureComponent<Props, St
                     <Modal.Footer>
                         <button
                             type='button'
-                            className='btn btn-link'
+                            className='btn btn-tertiary'
                             onClick={this.onHide}
                         >
                             <FormattedMessage

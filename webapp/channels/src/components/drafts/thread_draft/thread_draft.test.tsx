@@ -15,6 +15,10 @@ import type {PostDraft} from 'types/store/draft';
 
 import ThreadDraft from './thread_draft';
 
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(),
+}));
+
 describe('components/drafts/drafts_row', () => {
     const baseProps = {
         channel: {

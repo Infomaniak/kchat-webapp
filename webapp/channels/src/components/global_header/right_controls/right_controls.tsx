@@ -82,10 +82,13 @@ const NewsWrapper = styled.div`
 const ReportingToolsWrapper = styled.div`
     height: 46px;
     width: 42px;
-    background: #7974B4;
     display: none;
     justify-content: center;
-    align-items: center
+    align-items: center;
+    overflow: hidden;
+    module-reporting-tools-component {
+        background: #7974B4;
+    }
 `;
 
 const tooltipUserReport = (
