@@ -3,7 +3,7 @@
 
 import {connect} from 'react-redux';
 
-import {getUserById} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
 import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 
@@ -17,11 +17,11 @@ type OwnProps = {
 
 const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     const conference = getConferenceByChannelId(state, ownProps.channelId);
-    const caller = getUserById(state, conference.user_id);
+    const currentUser = getCurrentUser(state);
 
     return {
         conference,
-        caller,
+        currentUser,
     };
 };
 

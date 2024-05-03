@@ -170,7 +170,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                 >
                     <Avatars
                         channelId={channel.id}
-                        showCaller={false}
+                        showCurrentUser={false}
                         size='lg'
                         disableProfileOverlay={false}
                         displayProfileStatus={false}
