@@ -6,12 +6,10 @@
     justify-content: center;
     text-align: center;
     margin-top: 0 !important;
-    max-width: 290px !important;
 
     .modal-content {
-        width: 100%;
         padding: 24px;
-        border-radius: 10px !important;
+        border-radius: 8px !important;
     }
 
     .modal-body {
@@ -63,6 +61,7 @@
 
         button {
             padding: 10px 12px;
+            font-weight: 400;
         }
     }
 }
