@@ -210,6 +210,13 @@ No changes.
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
 
+## 2.7.0-next.16 (2024-05-03)
+
+### Fixed (2 changes)
+
+- [fix: disabled search bar outline](kchat/webapp@9139ebbdd4aefa8735f4ea44bad9e1708b39a7fb) by @tim.dewinter ([merge request](kchat/webapp!765))
+- [fix: message priority footer font-family](kchat/webapp@34c625a4c09d66a5237bdb029c696ecf80bab06b) by @tim.dewinter ([merge request](kchat/webapp!764))
+
 ## 2.7.0-next.15 (2024-05-03)
 
 ### Fixed (3 changes)
