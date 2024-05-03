@@ -53,29 +53,34 @@ export default defineConfig({
         },
     },
     projects: [
-        {
-            name: 'ipad',
-            use: {
-                browserName: 'chromium',
-                ...devices['iPad Pro 11'],
-            },
-        },
+        // Setup project
+        { name: 'setup', testMatch: /.*\.setup\.ts/ },
+        // {
+        //     name: 'ipad',
+        //     use: {
+        //         browserName: 'chromium',
+        //         storageState: '.auth/user.json',
+        //         ...devices['iPad Pro 11'],
+        //     },
+        // },
         {
             name: 'chrome',
             use: {
                 browserName: 'chromium',
+                storageState: '.auth/user.json',
                 permissions: ['notifications'],
                 viewport: {width: 1280, height: 1024},
             },
         },
-        {
-            name: 'firefox',
-            use: {
-                browserName: 'firefox',
-                permissions: ['notifications'],
-                viewport: {width: 1280, height: 1024},
-            },
-        },
+        // {
+        //     name: 'firefox',
+        //     use: {
+        //         browserName: 'firefox',
+        //         storageState: '.auth/user.json',
+        //         permissions: ['notifications'],
+        //         viewport: {width: 1280, height: 1024},
+        //     },
+        // },
     ],
     reporter: [
         ['html', {open: 'never', outputFolder: defaultOutputFolder}],
