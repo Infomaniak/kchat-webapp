@@ -37,6 +37,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     const modalRef = React.useRef<HTMLDivElement>(null);
 
     const isCallerCurrentUser = useMemo(() => caller?.id === user.id, [caller, user]);
+    const participants = useMemo(() => users && users.filter((u) => u.id !== user.id), [users, user]);
 
     const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
     const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
@@ -90,8 +91,6 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
             dispatch(getUser(conference.id));
         }
     }, [caller, conference, dispatch]);
-
-    const participants = useMemo(() => users && users.filter((u) => u.id !== user.id), [users, user]);
 
     const getUsersNicknames = (users: UserProfile[]): string => {
         const nicknames = users.map((user) => user.nickname);
