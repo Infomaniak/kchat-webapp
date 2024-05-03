@@ -201,7 +201,7 @@ export default class WebSocketClient {
                 forceTLS: true,
             });
         } else {
-            Pusher.logToConsole = true;
+            // Pusher.logToConsole = true;
             this.conn = new Pusher('kchat-key', {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,
