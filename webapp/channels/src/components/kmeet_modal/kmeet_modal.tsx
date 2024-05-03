@@ -47,7 +47,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     }, [dispatch, conference]);
 
     const onHandleDecline = React.useCallback(() => {
-        dispatch(declineCall(conference.id));
+        dispatch(declineCall(conference.channel_id));
     }, [dispatch, conference]);
 
     const onHandleCancel = React.useCallback(() => {

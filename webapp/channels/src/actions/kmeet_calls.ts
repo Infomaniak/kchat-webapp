@@ -109,9 +109,15 @@ export function joinCallIfModalOpen(channelId: string) {
     };
 }
 
-export function declineCall(conferenceId: string) {
-    return async (dispatch: DispatchFunc) => {
-        await Client4.declineIncomingMeetCall(conferenceId);
+export function declineCall(channelId: string) {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const conference = getConferenceByChannelId(getState(), channelId);
+
+        if (!conference) {
+            return;
+        }
+
+        await Client4.declineIncomingMeetCall(conference.id);
 
         if (isDesktopApp()) {
             window.desktopAPI?.closeRingCallWindow?.();
