@@ -275,7 +275,7 @@ test:e2e:
       )
     # Parse PW_BASE_URL from comment
     - |
-      [[ -z "$DEV_BOT_NOTE" ]] && { echo "Staging URL could not be found!" ; exit 1; }
+      [[ -z "$DEV_BOT_NOTE" ]] && { echo "Staging URL could not be found!"; exit 1; }
     - export PW_BASE_URL=${DEV_BOT_NOTE:29:-1}
     # Execute tests
     - echo "Executing e2e tests on ${PW_BASE_URL}..." \
@@ -367,7 +367,7 @@ pages:
   before_script:
     - apt update && apt upgrade -y && apt install curl jq -y
   script:
-    - cp -r e2e-tests/playwright/playwright-report public
+    - mkdir public && cp -r e2e-tests/playwright/playwright-report "public/${PAGES_PREFIX}"
     # Check if a note about pages URL has already been created
     - echo "Reading notes for MR ${CI_MERGE_REQUEST_IID}..."
     - |
@@ -377,10 +377,10 @@ pages:
       )
     # Notify about the created E2E report
     - |
-      [[ -z "$PAGES_URL_NOTE" ]] && { \
-        curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" -X POST "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \
-          -d "body=E2E report is now available at ${CI_PAGES_URL}/${PAGES_PREFIX}"; \
-      }
+      if [ -z "$PAGES_URL_NOTE" ]; then
+        curl --header "PRIVATE-TOKEN: $GITLAB_PAT" -X POST "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \
+          -d "body=E2E report is now available at ${CI_PAGES_URL}/${PAGES_PREFIX}"
+      fi
   pages:
     path_prefix: "$PAGES_PREFIX"
   artifacts:
