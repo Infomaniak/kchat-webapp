@@ -66,7 +66,6 @@ const Footer = styled.div`
     align-items: center;
     border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
     display: flex;
-    font-family: Open Sans;
     justify-content: flex-end;
     padding: 16px;
     gap: 8px;
