@@ -1,3 +1,9 @@
+## 2.8.0-rc.6 (2024-05-06)
+
+### Changed (1 change)
+
+- [restore message history limiter in search_results](kchat/webapp@373d18c49fa0999b08924ad0d2fb6c8f352250df) by @antonbuksa
+
 ## 2.8.0-rc.5 (2024-05-06)
 
 ### Changed (1 change)
