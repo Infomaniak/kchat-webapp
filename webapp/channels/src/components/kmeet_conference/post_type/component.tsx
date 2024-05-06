@@ -186,7 +186,7 @@ const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV
                 {renderCallStatus(status)}
             </Sc.Left>
             <Sc.Right>
-                {(!isDesktopApp || isCallV3Available()) && renderAvatars()}
+                {(!isDesktopApp() || isCallV3Available()) && renderAvatars()}
                 {renderButton(status)}
             </Sc.Right>
         </Sc.Main>
