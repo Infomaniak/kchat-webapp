@@ -37,6 +37,16 @@
 
 No changes.
 
+## 2.7.1-next.2 (2024-05-06)
+
+### Changed (1 change)
+
+- [Revert front-end changes for #25715 (#26553)](kchat/webapp@92cf5b587f0784a00a7f62eb37a0c51477d3c00a) by  ([merge request](kchat/webapp!769))
+
+### Removed (1 change)
+
+- [do not send new mattermost presence events](kchat/webapp@4e35290f56aeb0450ec217d2f91fcbff145d4c03) by @antonbuksa
+
 ## 2.7.1-next.1 (2024-05-06)
 
 ### Fixed (5 changes)
