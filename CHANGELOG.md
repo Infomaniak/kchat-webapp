@@ -1,3 +1,9 @@
+## 2.8.0-rc.4 (2024-05-06)
+
+### Changed (1 change)
+
+- [update message_html_to_component module for emoji preview in posts](kchat/webapp@3c286404d0786c66de7519c7e5dd9cd9062ea05f) by @antonbuksa ([merge request](kchat/webapp!768))
+
 ## 2.8.0-rc.3 (2024-05-03)
 
 ### Fixed (2 changes)
