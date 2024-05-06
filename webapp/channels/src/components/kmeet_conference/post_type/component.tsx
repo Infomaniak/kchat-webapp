@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import moment from 'moment-timezone';
+import type {FC} from 'react';
 import React, {useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
@@ -39,7 +40,7 @@ const text = {
     D: {id: 'kmeet.calls.in_progress', defaultMessage: 'Appel en cours', values: {}},
 };
 
-const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV2, joinCall, hasConferenceStarted}: Props) => {
+const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV2, joinCall, hasConferenceStarted}) => {
     const intl = useIntl();
     const dispatch = useDispatch();
 

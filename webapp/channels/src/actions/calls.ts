@@ -255,34 +255,6 @@ export function receivedCall(call: Call, currentUserId: string) {
             }
 
             dispatch(openCallDialingModal(call.channel_id));
-
-            // if (isDesktopApp()) {
-            //     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
-            //         console.log('[calls] call received on desktop.');
-            //         handleDesktopKmeetCall(globalState, currentUserId, call);
-            //         return;
-            //     }
-            //     console.warn(`[calls] dialing on desktop is supported from version 2.2 and up, current version is ${getDesktopVersion()}`);
-            //     const kmeetUrl = new URL(call.url);
-            //     window.open(kmeetUrl.href, '_blank', 'noopener');
-
-            //     return;
-            // }
-
-            // console.log('[calls] call received on browser.');
-            // if (isModalOpen(getState(), ModalIdentifiers.INCOMING_CALL)) {
-            //     return;
-            // }
-
-            // dispatch(openModal(
-            //     {
-            //         modalId: ModalIdentifiers.INCOMING_CALL,
-            //         dialogType: KmeetModal,
-            //         dialogProps: {
-            //             channelId: call.channel_id,
-            //         },
-            //     },
-            // ));
         } catch (error) {
             console.error('[calls] receivedCall error:', error);
         }
