@@ -25,6 +25,7 @@ interface Props {
     post: Post;
     conference?: Conference;
     isDialingEnabled: boolean;
+    hasConferenceStarted?: boolean;
     startOrJoinCallInChannelV2: (channelID: string) => void;
     joinCall: (channelID: string) => void;
 }
@@ -38,7 +39,7 @@ const text = {
     D: {id: 'kmeet.calls.in_progress', defaultMessage: 'Appel en cours', values: {}},
 };
 
-const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV2, joinCall}: Props) => {
+const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV2, joinCall, hasConferenceStarted}: Props) => {
     const intl = useIntl();
     const dispatch = useDispatch();
 
@@ -70,6 +71,10 @@ const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV
 
         if (ended === true) {
             return 'E';
+        }
+
+        if (hasConferenceStarted) {
+            return 'D';
         }
 
         return 'O';

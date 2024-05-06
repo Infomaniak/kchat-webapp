@@ -12,7 +12,7 @@ import {isModalOpen} from 'selectors/views/modals';
 
 import KmeetModal from 'components/kmeet_modal';
 
-import {isCallV3Available} from 'utils/calls_utils';
+import {isCallV3Available, openKmeetInExternalWindow} from 'utils/calls_utils';
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -166,7 +166,7 @@ export function startCall(channelId: string, jwt: string, url: string) {
             dispatch(startKmeetWindow(channelId, jwt));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-            window.open(url + `?jwt=${jwt}#config.prejoinConfig.enabled=false&config.deeplinking.disabled=true&interfaceConfigOverwrite.HIDE_INVITE_MORE_HEADER=false`, '_blank', 'noopener');
+            openKmeetInExternalWindow(url, jwt);
         }
     };
 }

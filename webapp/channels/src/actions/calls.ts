@@ -22,7 +22,7 @@ import {
 } from 'selectors/calls';
 import {getCurrentLocale} from 'selectors/i18n';
 
-import {isCallV3Available} from 'utils/calls_utils';
+import {isCallV3Available, openKmeetInExternalWindow} from 'utils/calls_utils';
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {stopRing} from 'utils/notification_sounds';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
@@ -181,7 +181,7 @@ export function startOrJoinCallInChannelV2(channelID: string) {
 
             if (data && data.url) {
                 if (isDesktopApp() && !isCallV3Available()) {
-                    window.open(data.url + `?jwt=${data.jwt}#config.prejoinConfig.enabled=false&config.deeplinking.disabled=true&interfaceConfigOverwrite.HIDE_INVITE_MORE_HEADER=false`, '_blank', 'noopener');
+                    openKmeetInExternalWindow(data.url, data.jwt);
                     return;
                 }
 

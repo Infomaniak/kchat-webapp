@@ -19,11 +19,13 @@ export const getConferenceByChannelId = (state: GlobalState, channelId: string) 
     return state.views.kmeetCalls.conferences[channelId];
 };
 
-export const getIsUserInConference = (state: GlobalState, channelId: string, userId: string) => {
-    return Boolean(state.views.kmeetCalls.conferences[channelId].participants?.includes(userId));
-};
+export const getIsAnyUserInConference = (state: GlobalState, channelId: string) => {
+    const conference = state.views.kmeetCalls.conferences[channelId];
 
-export const getTotalJoinedUserInConference = (state: GlobalState, channelId: string) => {
-    return Number(state.views.kmeetCalls.conferences[channelId].participants?.length);
+    if (!conference) {
+        return false;
+    }
+
+    return Object.values(conference.registrants).some((registrant) => registrant.status === 'approved');
 };
 

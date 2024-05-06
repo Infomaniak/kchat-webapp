@@ -26,9 +26,9 @@ import './kmeet_modal.scss';
 type Props = {
     user: UserProfile;
     channel: Channel;
-    conference: Conference;
+    conference?: Conference;
     caller?: UserProfile;
-    users: UserProfile[];
+    users?: UserProfile[];
 }
 
 const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
@@ -37,22 +37,28 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     const modalRef = React.useRef<HTMLDivElement>(null);
 
     const isCallerCurrentUser = useMemo(() => caller?.id === user.id, [caller, user]);
-    const participants = useMemo(() => users && users.filter((u) => u.id !== user.id), [users, user]);
+    const participants = useMemo(() => (users ? users.filter((u) => u.id !== user.id) : []), [users, user]);
 
     const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
     const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
     const textButtonCancel = formatMessage({id: 'calling_modal.button.cancel', defaultMessage: 'Cancel'});
 
     const onHandleAccept = React.useCallback(() => {
-        dispatch(joinCall(conference.channel_id));
+        if (conference) {
+            dispatch(joinCall(conference.channel_id));
+        }
     }, [dispatch, conference]);
 
     const onHandleDecline = React.useCallback(() => {
-        dispatch(declineCall(conference.channel_id));
+        if (conference) {
+            dispatch(declineCall(conference.channel_id));
+        }
     }, [dispatch, conference]);
 
     const onHandleCancel = React.useCallback(() => {
-        dispatch(cancelCall(conference.channel_id));
+        if (conference) {
+            dispatch(cancelCall(conference.channel_id));
+        }
     }, [dispatch, conference]);
 
     const handleClickOutsideModal = useCallback((event: any) => {
@@ -87,7 +93,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     }, []);
 
     useEffect(() => {
-        if (!caller) {
+        if (!caller && conference) {
             dispatch(getUser(conference.id));
         }
     }, [caller, conference, dispatch]);
