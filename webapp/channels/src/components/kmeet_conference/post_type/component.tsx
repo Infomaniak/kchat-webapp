@@ -12,6 +12,9 @@ import {putChannelActiveConf} from 'actions/calls';
 
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
+import {isCallV3Available} from 'utils/calls_utils';
+import {isDesktopApp} from 'utils/user_agent';
+
 import type {Conference} from 'types/conference';
 
 import * as Sc from './styled';
@@ -183,7 +186,7 @@ const PostType = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV
                 {renderCallStatus(status)}
             </Sc.Left>
             <Sc.Right>
-                {renderAvatars()}
+                {(!isDesktopApp || isCallV3Available()) && renderAvatars()}
                 {renderButton(status)}
             </Sc.Right>
         </Sc.Main>

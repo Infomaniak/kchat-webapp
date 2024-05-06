@@ -12,6 +12,7 @@ import {isModalOpen} from 'selectors/views/modals';
 
 import KmeetModal from 'components/kmeet_modal';
 
+import {isCallV3Available} from 'utils/calls_utils';
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -158,6 +159,10 @@ export function cancelCall(channelId: string) {
 export function startCall(channelId: string, jwt: string, url: string) {
     return async (dispatch: DispatchFunc) => {
         if (isDesktopApp()) {
+            if (!isCallV3Available()) {
+                return;
+            }
+
             dispatch(startKmeetWindow(channelId, jwt));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));

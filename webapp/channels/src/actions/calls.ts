@@ -22,9 +22,11 @@ import {
 } from 'selectors/calls';
 import {getCurrentLocale} from 'selectors/i18n';
 
+import {isCallV3Available} from 'utils/calls_utils';
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {stopRing} from 'utils/notification_sounds';
-import {isDesktopApp} from 'utils/user_agent';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {imageURLForUser} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
@@ -178,6 +180,11 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             }
 
             if (data && data.url) {
+                if (isDesktopApp() && !isCallV3Available()) {
+                    window.open(data.url + `?jwt=${data.jwt}#config.prejoinConfig.enabled=false&config.deeplinking.disabled=true&interfaceConfigOverwrite.HIDE_INVITE_MORE_HEADER=false`, '_blank', 'noopener');
+                    return;
+                }
+
                 dispatch(openCallDialingModal(channelID));
             }
         } catch (error) {
@@ -242,9 +249,12 @@ export function receivedCall(call: Call, currentUserId: string) {
                 },
             });
 
-            dispatch(openCallDialingModal(call.channel_id));
+            if (isDesktopApp() && !isCallV3Available() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
+                handleDesktopKmeetCall(globalState, call);
+                return;
+            }
 
-            return;
+            dispatch(openCallDialingModal(call.channel_id));
 
             // if (isDesktopApp()) {
             //     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
@@ -365,9 +375,9 @@ function setUsersAvatar(users: UserProfile[]): Users[] {
     }));
 }
 
-function handleDesktopKmeetCall(globalState: GlobalState, currentUserId: string, call: Call): void {
+export function handleDesktopKmeetCall(globalState: GlobalState, call: Call): void {
     const currentUser = getCurrentUser(globalState);
-    const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);
+    const avatar = imageURLForUser(currentUser.id, currentUser?.last_picture_update);
     const {users, channel} = callParameters(globalState);
     const usersWithAvatars = setUsersAvatar(users);
     window.postMessage(

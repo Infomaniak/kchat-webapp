@@ -24,8 +24,8 @@ declare global {
             openCallDialing: (callInfo: object) => boolean;
         }>;
         callManager?: Partial<{
-            onCallJoined: (callback: (_: any, props: {channelId: string}) => void) => void;
-            onCallDeclined: (callback: (_: any, props: {channelId: string}) => void) => void;
+            onCallJoined: (callback: (_: any, props: {channelId: string; channelID?: string}) => void) => void;
+            onCallDeclined: (callback: (_: any, props: {channelId: string; channelID?: string}) => void) => void;
             onCallEnded: (callback: (_: any, props: {channelID: string}) => void) => void;
             onCallCancel: (callback: (_: any, props: {channelId: string}) => void) => void;
         }>;

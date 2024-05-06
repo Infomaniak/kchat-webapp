@@ -28,8 +28,6 @@ import {
     getChannelAndMyMember,
     getMyChannelMember,
     getChannelStats,
-    viewChannel,
-    markChannelAsRead,
     getChannelMemberCountsByGroup,
     markMultipleChannelsAsRead,
     getChannelGuestMembers,
@@ -75,7 +73,6 @@ import {
     getCurrentChannel,
     getCurrentChannelId,
     getGuestMembersIdsInChannel,
-    getMembersInCurrentChannel,
     getRedirectChannelNameForTeam,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
@@ -116,14 +113,13 @@ import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, StoragePrefixes} from 'utils/constants';
-import {stopRing} from 'utils/notification_sounds';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 
 import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
-import {callNoLongerExist, receivedCall} from './calls';
+import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
 import {closeRingModal, externalJoinCall} from './kmeet_calls';
 import {handleServerEvent} from './servers_actions';
 
@@ -343,6 +339,7 @@ export async function reconnect(socketId) {
     dispatch(clearErrors());
 
     dispatch(getDrafts(currentTeamId));
+    dispatch(getMyMeets());
 }
 
 function syncThreads(teamId, userId) {
