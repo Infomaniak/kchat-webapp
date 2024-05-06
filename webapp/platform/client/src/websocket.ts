@@ -183,37 +183,24 @@ export default class WebSocketClient {
         // We cannot use a cookie because it will bleed across tabs.
         // We cannot also send it as part of the auth_challenge, because the session cookie is already sent with the request.
 
-        if (isDesktopApp()) {
-            this.conn = new Pusher('kchat-key', {
-                wsHost: connectionUrl,
-                httpHost: connectionUrl,
-                cluster: 'mt1',
-                authEndpoint: '/broadcasting/auth',
-                auth: {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                },
-                enabledTransports: ['ws', 'wss'],
-                disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
-                activityTimeout: 10000,
-                pongTimeout: 5000,
-                forceTLS: true,
-            });
-        } else {
-            // Pusher.logToConsole = true;
-            this.conn = new Pusher('kchat-key', {
-                wsHost: connectionUrl,
-                httpHost: connectionUrl,
-                cluster: 'mt1',
-                authEndpoint: '/broadcasting/auth',
-                enabledTransports: ['ws', 'wss'],
-                disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
-                activityTimeout: 10000,
-                pongTimeout: 5000,
-                forceTLS: true,
-            });
-        }
+        const auth = isDesktopApp() ? {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        } : undefined;
+
+        this.conn = new Pusher('kchat-key', {
+            wsHost: connectionUrl,
+            httpHost: connectionUrl,
+            cluster: 'mt1',
+            authEndpoint: '/broadcasting/auth',
+            auth,
+            enabledTransports: ['ws', 'wss'],
+            disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
+            activityTimeout: 10000,
+            pongTimeout: 5000,
+            forceTLS: true,
+        });
 
         this.connectionUrl = connectionUrl;
 
