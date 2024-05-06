@@ -1,3 +1,32 @@
+## 2.8.0-rc.6 (2024-05-06)
+
+### Changed (1 change)
+
+- [restore message history limiter in search_results](kchat/webapp@373d18c49fa0999b08924ad0d2fb6c8f352250df) by @antonbuksa
+
+## 2.8.0-rc.5 (2024-05-06)
+
+### Changed (1 change)
+
+- [Revert front-end changes for #25715 (#26553)](kchat/webapp@92cf5b587f0784a00a7f62eb37a0c51477d3c00a) by  ([merge request](kchat/webapp!769))
+
+### Removed (1 change)
+
+- [do not send new mattermost presence events](kchat/webapp@4e35290f56aeb0450ec217d2f91fcbff145d4c03) by @antonbuksa
+
+## 2.8.0-rc.4 (2024-05-06)
+
+### Changed (1 change)
+
+- [update message_html_to_component module for emoji preview in posts](kchat/webapp@3c286404d0786c66de7519c7e5dd9cd9062ea05f) by @antonbuksa ([merge request](kchat/webapp!768))
+
+## 2.8.0-rc.3 (2024-05-03)
+
+### Fixed (2 changes)
+
+- [fix: disabled search bar outline](kchat/webapp@9139ebbdd4aefa8735f4ea44bad9e1708b39a7fb) by @tim.dewinter ([merge request](kchat/webapp!765))
+- [fix: message priority footer font-family](kchat/webapp@34c625a4c09d66a5237bdb029c696ecf80bab06b) by @tim.dewinter ([merge request](kchat/webapp!764))
+
 ## 2.8.0-rc.2 (2024-05-03)
 
 ### Fixed (3 changes)
@@ -13,6 +42,40 @@
 ## 2.8.0-rc.1 (2024-05-03)
 
 No changes.
+
+## 2.7.1-next.3 (2024-05-06)
+
+### Changed (1 change)
+
+- [restore message history limiter in search_results](kchat/webapp@373d18c49fa0999b08924ad0d2fb6c8f352250df) by @antonbuksa
+
+## 2.7.1-next.2 (2024-05-06)
+
+### Changed (1 change)
+
+- [Revert front-end changes for #25715 (#26553)](kchat/webapp@92cf5b587f0784a00a7f62eb37a0c51477d3c00a) by  ([merge request](kchat/webapp!769))
+
+### Removed (1 change)
+
+- [do not send new mattermost presence events](kchat/webapp@4e35290f56aeb0450ec217d2f91fcbff145d4c03) by @antonbuksa
+
+## 2.7.1-next.1 (2024-05-06)
+
+### Fixed (5 changes)
+
+- [fix: disabled search bar outline](kchat/webapp@9139ebbdd4aefa8735f4ea44bad9e1708b39a7fb) by @tim.dewinter ([merge request](kchat/webapp!765))
+- [fix: message priority footer font-family](kchat/webapp@34c625a4c09d66a5237bdb029c696ecf80bab06b) by @tim.dewinter ([merge request](kchat/webapp!764))
+- [fix: edit channel header modal button dark mode](kchat/webapp@619248a849a3eac7ed0ca71b36f77ec21cf442e6) by @tim.dewinter ([merge request](kchat/webapp!763))
+- [fix view user groups heading align](kchat/webapp@37ad93d33ffbf9728449336d3a417cfdb2536968) by @antonbuksa
+- [fix: channel info close button in dark mode](kchat/webapp@c0a0836fc0ea73883c0b3f6cac788c1e5e65bd55) by @tim.dewinter ([merge request](kchat/webapp!762))
+
+### Changed (1 change)
+
+- [update message_html_to_component module for emoji preview in posts](kchat/webapp@3c286404d0786c66de7519c7e5dd9cd9062ea05f) by @antonbuksa ([merge request](kchat/webapp!768))
+
+### Removed (1 change)
+
+- [hide learn about search url in search helper](kchat/webapp@4fe73fec7a64ecf66800f1a905566fbf8af37f38) by @antonbuksa
 
 ## 2.7.0-rc.24 (2024-05-01)
 
@@ -202,6 +265,13 @@ No changes.
 ### Chore (1 change)
 
 - [Merge remote-tracking branch 'mattermost/master' into MM-9.3](kchat/webapp@f0a2e5ab2c86c682486a483023c2041e23c6bdab) by @antonbuksa ([merge request](kchat/webapp!672))
+
+## 2.7.0-next.16 (2024-05-03)
+
+### Fixed (2 changes)
+
+- [fix: disabled search bar outline](kchat/webapp@9139ebbdd4aefa8735f4ea44bad9e1708b39a7fb) by @tim.dewinter ([merge request](kchat/webapp!765))
+- [fix: message priority footer font-family](kchat/webapp@34c625a4c09d66a5237bdb029c696ecf80bab06b) by @tim.dewinter ([merge request](kchat/webapp!764))
 
 ## 2.7.0-next.15 (2024-05-03)
 
