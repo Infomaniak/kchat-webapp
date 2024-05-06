@@ -89,8 +89,12 @@ test('Post actions tab support', async ({page, pages, axe}) => {
     await channelsPage.postDotMenu.saveMenuItem.press('ArrowDown');
     await expect(channelsPage.postDotMenu.pinToChannelMenuItem).toBeFocused();
 
-    // * Should move focus to Copy Link after arrow down
+    // * Should move focus to Translate after arrow down
     await channelsPage.postDotMenu.pinToChannelMenuItem.press('ArrowDown');
+    await expect(channelsPage.postDotMenu.translateMenuItem).toBeFocused();
+
+    // * Should move focus to Copy Link after arrow down
+    await channelsPage.postDotMenu.translateMenuItem.press('ArrowDown');
     await expect(channelsPage.postDotMenu.copyLinkMenuItem).toBeFocused();
 
     // * Should move focus to Edit after arrow down
@@ -101,15 +105,19 @@ test('Post actions tab support', async ({page, pages, axe}) => {
     await channelsPage.postDotMenu.editMenuItem.press('ArrowDown');
     await expect(channelsPage.postDotMenu.copyTextMenuItem).toBeFocused();
 
-    // * Should move focus to Delete after arrow down
+    // * Should move focus to Copy ID after arrow down
     await channelsPage.postDotMenu.copyTextMenuItem.press('ArrowDown');
+    await expect(channelsPage.postDotMenu.copyIdMenuItem).toBeFocused();
+
+    // * Should move focus to Delete after arrow down
+    await channelsPage.postDotMenu.copyIdMenuItem.press('ArrowDown');
     await expect(channelsPage.postDotMenu.deleteMenuItem).toBeFocused();
 
     // * Then, should move focus back to Reply after arrow down
     await channelsPage.postDotMenu.deleteMenuItem.press('ArrowDown');
     await expect(channelsPage.postDotMenu.replyMenuItem).toBeFocused();
 
-    // * Should move focus to Delete after arrow uo
+    // * Should move focus to Delete after arrow up
     await channelsPage.postDotMenu.container.press('ArrowUp');
     expect(await channelsPage.postDotMenu.deleteMenuItem).toBeFocused();
 

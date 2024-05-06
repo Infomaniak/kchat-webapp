@@ -160,7 +160,10 @@ function PostReminderSubmenu(props: Props) {
             trailingElements={<span className={'dot-menu__item-trailing-icon'}><ChevronRightIcon size={16}/></span>}
             menuId={`remind_post_${props.post.id}-menu`}
         >
-            <h5 className={'dot-menu__post-reminder-menu-header'}>
+            <h5
+                className={'dot-menu__post-reminder-menu-header'}
+                disabled={true}
+            >
                 {formatMessage(
                     {id: 'post_info.post_reminder.sub_menu.header',
                         defaultMessage: 'Set a reminder for:'},
