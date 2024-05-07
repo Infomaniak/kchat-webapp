@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {expect, test} from '@e2e-support/test_fixture';
+import {wait} from '@e2e-support/util';
 
 test('Base channel accessibility', async ({page, pages, axe}) => {
     // # Create and sign in a new user
@@ -43,6 +44,7 @@ test('Post actions tab support', async ({page, pages, axe}) => {
 
     const post = await channelsPage.centerView.getLastPost();
     await post.hover();
+    await wait(500);
     await post.postMenu.toBeVisible();
 
     // # Open the dot menu
