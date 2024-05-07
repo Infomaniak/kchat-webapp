@@ -3627,7 +3627,7 @@
   "kmeet.calls.ended": "Terminado a las {time}",
   "kmeet.calls.join": "Únase a la reunión",
   "kmeet.calls.open": "contacto",
-  "kmeet.calls.start": "Iniciar una reunión",
+  "kmeet.calls.start": "Llamar",
   "kmeet.calls.started": "Comienza la reunión de kMeet",
   "kmeet.calls.ended.title": "Llamada completada",
   "kmeet.calls.declined": "Llamada denegado por {usernames}",

@@ -194,7 +194,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                                 onClick={onHandleDecline}
                                 aria-label={textButtonDecline}
                             >
-                                <CallAccept/>
+                                <CallHangUp/>
                                 {textButtonDecline}
                             </button>
                             <button
@@ -202,7 +202,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                                 onClick={onHandleAccept}
                                 aria-label={textButtonAccept}
                             >
-                                <CallHangUp/>
+                                <CallAccept/>
                                 {textButtonAccept}
                             </button>
                         </>

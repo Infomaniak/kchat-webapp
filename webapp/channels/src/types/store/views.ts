@@ -110,12 +110,6 @@ export type ViewsState = {
     };
 
     kmeetCalls: {
-        connectedKmeetUrls: {
-            [channelId: string]: {
-                url: string;
-                id: string;
-            };
-        };
         conferences: {
             [channelId: string]: Conference;
         };

@@ -3573,7 +3573,7 @@
   "kmeet.calls.open": "Rejoindre",
   "kmeet.calls.callback": "Rappeler",
   "kmeet.calls.called": "Appel manqué",
-  "kmeet.calls.start": "Démarrer une réunion",
+  "kmeet.calls.start": "Appeler",
   "kmeet.calls.started": "Appel démarré",
   "last_users_message.added_to_channel.type": "a été **ajouté au canal** par {actor}.",
   "last_users_message.added_to_team.type": "a été **ajouté à l'équipe** par {actor}.",
