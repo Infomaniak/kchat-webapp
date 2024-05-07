@@ -4169,6 +4169,7 @@
   "kmeet.calls.declined": "Call rejected by {usernames}",
   "kmeet.calls.callback": "Callback",
   "kmeet.calls.called": "Call missed",
+  "kmeet.calls.already_in_call": "You are already in a call. End your call before starting a new one.",
   "last_users_message.added_to_channel.type": "were **added to the channel** by {actor}.",
   "last_users_message.added_to_team.type": "were **added to the team** by {actor}.",
   "last_users_message.first": "{firstUser} and ",

@@ -3575,6 +3575,7 @@
   "kmeet.calls.called": "Appel manqué",
   "kmeet.calls.start": "Appeler",
   "kmeet.calls.started": "Appel démarré",
+  "kmeet.calls.already_in_call": "Vous êtes déjà dans un appel. Terminez votre appel avant d’en démarrer un nouveau.",
   "last_users_message.added_to_channel.type": "a été **ajouté au canal** par {actor}.",
   "last_users_message.added_to_team.type": "a été **ajouté à l'équipe** par {actor}.",
   "last_users_message.first": "{firstUser} et ",

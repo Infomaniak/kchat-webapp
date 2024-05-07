@@ -15,6 +15,7 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {makePreparePostIdsForPostList} from 'mattermost-redux/utils/post_list';
 
 import {updateToastStatus} from 'actions/views/channel';
+import {getIsCurrentUserInCall} from 'selectors/kmeet_calls';
 
 import type {GlobalState} from 'types/store/index';
 
@@ -91,6 +92,8 @@ function makeMapStateToProps() {
         const channelMarkedAsUnread = isManuallyUnread(state, ownProps.channelId);
         const lastViewedAt = state.views.channel.lastChannelViewTime[ownProps.channelId];
         const unreadScrollPosition = getUnreadScrollPositionPreference(state);
+        const inCall = getIsCurrentUserInCall(state);
+
         if (!ownProps.atLatestPost) {
             let postIds = getPostIdsInChannel(state, ownProps.channelId) || [];
             if (postIds) {
@@ -106,6 +109,7 @@ function makeMapStateToProps() {
             isCollapsedThreadsEnabled: isCollapsedThreadsEnabled(state),
             unreadCountInChannel: countCurrentChannelUnreadMessages(state),
             channelMarkedAsUnread,
+            inCall,
         };
     };
 }

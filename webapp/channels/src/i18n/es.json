@@ -3633,6 +3633,7 @@
   "kmeet.calls.declined": "Llamada denegado por {usernames}",
   "kmeet.calls.callback": "llamar de nuevo",
   "kmeet.calls.called": "Llamada perdida",
+  "kmeet.calls.already_in_call": "Ya estás en una llamada. Finaliza tu llamada antes de comenzar una nueva.",
   "last_users_message.added_to_channel.type": "fueron **agregados al canal** por {actor}.",
   "last_users_message.added_to_team.type": "fueron **agregados al equipo** por {actor}.",
   "last_users_message.first": "{firstUser} y ",
