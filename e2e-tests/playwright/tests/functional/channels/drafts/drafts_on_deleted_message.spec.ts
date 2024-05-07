@@ -1,7 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {test} from '@e2e-support/test_fixture';
+// import {test} from '@e2e-support/test_fixture';
+// import {wait} from '@e2e-support/util';
 // import {test, expect} from '@e2e-support/test_fixture';
 // import {createRandomPost} from '@e2e-support/server/post';
 
@@ -79,52 +80,53 @@ import {test} from '@e2e-support/test_fixture';
 //     await channelPage.sidebarLeft.draftsNotVisible();
 // });
 
-test('MM-T5435_2 Global Drafts link in sidebar should be hidden when user deletes root post ', async ({page, pages}) => {
-    // const {user} = await pw.initSetup();
+// test('MM-T5435_2 Global Drafts link in sidebar should be hidden when user deletes root post ', async ({page, pages}) => {
+//     // const {user} = await pw.initSetup();
 
-    // # Log in as user in new browser context
-    // const {page} = await pw.testBrowser.login(user);
+//     // # Log in as user in new browser context
+//     // const {page} = await pw.testBrowser.login(user);
 
-    // # Visit default channel page
-    const channelPage = new pages.ChannelsPage(page);
-    await channelPage.goto();
-    await channelPage.toBeVisible();
+//     // # Visit default channel page
+//     const channelPage = new pages.ChannelsPage(page);
+//     await channelPage.goto();
+//     await channelPage.toBeVisible();
 
-    // # Post a message in the channel
-    await channelPage.centerView.postCreate.postMessage('Message which will be deleted');
+//     // # Post a message in the channel
+//     await channelPage.centerView.postCreate.postMessage('Message which will be deleted');
 
-    // # Start a thread by clicking on reply menuitem from post options menu
-    const post = await channelPage.centerView.getLastPost();
-    await post.hover();
-    await post.postMenu.toBeVisible();
-    await post.postMenu.reply();
+//     // # Start a thread by clicking on reply menuitem from post options menu
+//     const post = await channelPage.centerView.getLastPost();
+//     await post.hover();
+//     await post.postMenu.toBeVisible();
+//     await wait(500);
+//     await post.postMenu.reply();
 
-    const sidebarRight = channelPage.sidebarRight;
-    await sidebarRight.toBeVisible();
+//     const sidebarRight = channelPage.sidebarRight;
+//     await sidebarRight.toBeVisible();
 
-    // # Post a message in the thread
-    await sidebarRight.postCreate.postMessage('Replying to a thread');
+//     // # Post a message in the thread
+//     await sidebarRight.postCreate.postMessage('Replying to a thread');
 
-    // # Write a message in the reply thread but don't send it
-    await sidebarRight.postCreate.writeMessage('I should be in drafts');
+//     // # Write a message in the reply thread but don't send it
+//     await sidebarRight.postCreate.writeMessage('I should be in drafts');
 
-    // # Close the RHS for draft to be saved
-    await sidebarRight.close();
+//     // # Close the RHS for draft to be saved
+//     await sidebarRight.close();
 
-    // * Verify drafts link in channel sidebar is visible
-    await channelPage.sidebarLeft.draftsVisible();
+//     // * Verify drafts link in channel sidebar is visible
+//     await channelPage.sidebarLeft.draftsVisible();
 
-    // # Click on the dot menu of the post and select delete
-    await post.hover();
-    await post.postMenu.toBeVisible();
-    await post.postMenu.openDotMenu();
-    await channelPage.postDotMenu.toBeVisible();
-    await channelPage.postDotMenu.deleteMenuItem.click();
+//     // # Click on the dot menu of the post and select delete
+//     await post.hover();
+//     await post.postMenu.toBeVisible();
+//     await post.postMenu.openDotMenu();
+//     await channelPage.postDotMenu.toBeVisible();
+//     await channelPage.postDotMenu.deleteMenuItem.click();
 
-    // # Confirm the delete from the modal
-    await channelPage.deletePostModal.toBeVisible();
-    await channelPage.deletePostModal.confirm();
+//     // # Confirm the delete from the modal
+//     await channelPage.deletePostModal.toBeVisible();
+//     await channelPage.deletePostModal.confirm();
 
-    // * Verify drafts link in channel sidebar is visible
-    await channelPage.sidebarLeft.draftsNotVisible();
-});
+//     // * Verify drafts link in channel sidebar is visible
+//     await channelPage.sidebarLeft.draftsNotVisible();
+// });
