@@ -17,6 +17,7 @@ import {emitShortcutReactToLastPostFrom} from 'actions/post_actions';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import AutoHeightSwitcher from 'components/common/auto_height_switcher';
+import DndBanner from 'components/dnd_banner';
 import EmojiPickerOverlay from 'components/emoji_picker/emoji_picker_overlay';
 import FilePreview from 'components/file_preview';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
@@ -738,6 +739,7 @@ const AdvanceTextEditor = ({
                     disabled={readOnlyChannel}
                 >
                     <GuestBanner channelId={channelId}/>
+                    <DndBanner channelId={channelId}/>
                     <div
                         ref={editorBodyRef}
                         role='application'
