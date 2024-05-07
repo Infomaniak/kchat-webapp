@@ -257,13 +257,13 @@ test:e2e:
     - if: *if-merge-request
       when: manual
     - when: never
+  retry: 1
   variables:
     PW_ADMIN_EMAIL: ${PW_ADMIN_EMAIL}
     PW_ADMIN_PASSWORD: ${PW_ADMIN_PASSWORD}
   before_script:
     - *script-yarn-install
     - *script-build-packages
-  script:
     # Install jq
     - apt update && apt upgrade -y && apt install jq -y
     # Get the dev-bot note that match the regexp
@@ -277,6 +277,7 @@ test:e2e:
     - |
       [[ -z "$DEV_BOT_NOTE" ]] && { echo "Staging URL could not be found!"; exit 1; }
     - export PW_BASE_URL=${DEV_BOT_NOTE:29:-1}
+  script:
     # Execute tests
     - echo "Executing e2e tests on ${PW_BASE_URL}..." \
     - yarn run test:e2e:playwright
