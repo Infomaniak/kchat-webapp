@@ -76,20 +76,20 @@ exports[`components/shortcuts/KeyboardShortcutsSequence should match snapshot wh
     </span>
     <ShortcutKey
       key="⌘"
-      variant="shortcut"
+      variant="contrast"
     >
       <mark
-        className="shortcut-key shortcut-key--shortcut-modal"
+        className="shortcut-key shortcut-key--contrast"
       >
         ⌘
       </mark>
     </ShortcutKey>
     <ShortcutKey
       key="/"
-      variant="shortcut"
+      variant="contrast"
     >
       <mark
-        className="shortcut-key shortcut-key--shortcut-modal"
+        className="shortcut-key shortcut-key--contrast"
       >
         /
       </mark>
@@ -115,28 +115,28 @@ exports[`components/shortcuts/KeyboardShortcutsSequence should match snapshot wi
     </span>
     <ShortcutKey
       key="⌘"
-      variant="shortcut"
+      variant="contrast"
     >
       <mark
-        className="shortcut-key shortcut-key--shortcut-modal"
+        className="shortcut-key shortcut-key--contrast"
       >
         ⌘
       </mark>
     </ShortcutKey>
     <ShortcutKey
       key=""
-      variant="shortcut"
+      variant="contrast"
     >
       <mark
-        className="shortcut-key shortcut-key--shortcut-modal"
+        className="shortcut-key shortcut-key--contrast"
       />
     </ShortcutKey>
     <ShortcutKey
       key="P"
-      variant="shortcut"
+      variant="contrast"
     >
       <mark
-        className="shortcut-key shortcut-key--shortcut-modal"
+        className="shortcut-key shortcut-key--contrast"
       >
         P
       </mark>
@@ -146,20 +146,20 @@ exports[`components/shortcuts/KeyboardShortcutsSequence should match snapshot wi
     </span>
     <ShortcutKey
       key="Ctrl"
-      variant="shortcut"
+      variant="contrast"
     >
       <mark
-        className="shortcut-key shortcut-key--shortcut-modal"
+        className="shortcut-key shortcut-key--contrast"
       >
         Ctrl
       </mark>
     </ShortcutKey>
     <ShortcutKey
       key="P"
-      variant="shortcut"
+      variant="contrast"
     >
       <mark
-        className="shortcut-key shortcut-key--shortcut-modal"
+        className="shortcut-key shortcut-key--contrast"
       >
         P
       </mark>
@@ -222,20 +222,20 @@ exports[`components/shortcuts/KeyboardShortcutsSequence should render sequence w
   >
     <ShortcutKey
       key="⌘"
-      variant="shortcut"
+      variant="contrast"
     >
       <mark
-        className="shortcut-key shortcut-key--shortcut-modal"
+        className="shortcut-key shortcut-key--contrast"
       >
         ⌘
       </mark>
     </ShortcutKey>
     <ShortcutKey
       key="/"
-      variant="shortcut"
+      variant="contrast"
     >
       <mark
-        className="shortcut-key shortcut-key--shortcut-modal"
+        className="shortcut-key shortcut-key--contrast"
       >
         /
       </mark>
