@@ -4221,6 +4221,7 @@
   "sidebar.types.favorites": "FAVORIS",
   "sidebar.types.unreads": "NON LUS",
   "sidebar.unreads": "Messages non lus",
+"sidebar_left.addChannelsCta": "Ajouter des canaux",
   "sidebar_left.sidebar_channel_menu.markAsUnread": "Marquer comme non lu",
   "sidebar_left.add_channel_dropdown.browseChannels": "Parcourir les canaux",
   "sidebar_left.add_channel_dropdown.browseOrCreateChannels": "Parcourir ou créer des canaux",
