@@ -1,11 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
 import React, {useRef, useCallback, useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled, {css} from 'styled-components';
+
+import {CloseIcon, PlayIcon, PlaylistCheckIcon} from '@mattermost/compass-icons/components';
 
 import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {getMyPreferences, savePreferences} from 'mattermost-redux/actions/preferences';
@@ -13,13 +14,15 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {
     getBool,
     getMyPreferences as getMyPreferencesSelector,
+    getTheme,
 } from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {trackEvent} from 'actions/telemetry_actions';
-import {showRHSPlugin} from 'actions/views/rhs';
+import {openModal} from 'actions/views/modals';
 import {getShowTaskListBool} from 'selectors/onboarding';
 
+import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
 import {useFirstAdminUser, useIsCurrentUserSystemAdmin} from 'components/global_header/hooks';
 import {
     useTasksListWithStatus,
@@ -29,7 +32,7 @@ import {
 import {useHandleOnBoardingTaskTrigger} from 'components/onboarding_tasks/onboarding_tasks_manager';
 
 import checklistImg from 'images/onboarding-checklist.svg';
-import {Preferences, RecommendedNextStepsLegacy, suitePluginIds} from 'utils/constants';
+import {Preferences, RecommendedNextStepsLegacy} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -131,6 +134,7 @@ const Button = styled.button<{open: boolean}>(({open}) => {
 
 const Skeleton = styled.div`
     height: auto;
+    margin: 0 auto;
     padding: 0 20px;
     position: relative;
 `;
@@ -158,22 +162,11 @@ const OnBoardingTaskList = (): JSX.Element | null => {
     const isFirstAdmin = useFirstAdminUser();
     const isEnableOnboardingFlow = useSelector((state: GlobalState) => getConfig(state).EnableOnboardingFlow === 'true');
     const [showTaskList, firstTimeOnboarding] = useSelector(getShowTaskListBool);
-
-    // a/b test auto show linked boards
-    const pluginsComponentsList = useSelector((state: GlobalState) => state.plugins.components);
+    const theme = useSelector(getTheme);
 
     const startTask = (taskName: string) => {
         toggleTaskList();
         handleTaskTrigger(taskName);
-    };
-
-    const findRhsPluginId = (pluginId: string) => {
-        const rhsPlugins = pluginsComponentsList.RightHandSidebarComponent;
-
-        if (rhsPlugins.length) {
-            return rhsPlugins.find((plugin) => plugin.pluginId === pluginId)?.id;
-        }
-        return null;
     };
 
     const initOnboardingPrefs = async () => {
@@ -275,24 +268,23 @@ const OnBoardingTaskList = (): JSX.Element | null => {
         }
         dispatch(savePreferences(currentUserId, preferences));
         trackEvent(OnboardingTaskCategory, open ? OnboardingTaskList.ONBOARDING_TASK_LIST_CLOSE : OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN);
+    }, [open, currentUserId]);
 
-        // check if the AB test FF is set and also check that the linkedBoard has only been shown once, then open the RHS
-        // if (autoShowLinkedBoard && open) {
-        //     const boardsId = findRhsPluginId(suitePluginIds.boards);
-        //     if (!boardsId) {
-        //         return;
-        //     }
-
-        //     dispatch(showRHSPlugin(boardsId));
-        // }
-    }, [open, currentUserId, completedCount, tasksList]);
+    const openVideoModal = useCallback(() => {
+        toggleTaskList();
+        dispatch(openModal({
+            modalId: OnboardingTaskList.ONBOARDING_VIDEO_MODAL,
+            dialogType: OnBoardingVideoModal,
+            dialogProps: {},
+        }));
+    }, []);
 
     if (Object.keys(myPreferences).length === 0 || !showTaskList || !isEnableOnboardingFlow) {
         return null;
     }
 
     return (
-        <>
+        <CompassThemeProvider theme={theme}>
             <CompletedAnimation completed={showAnimation}/>
             <Button
                 onClick={toggleTaskList}
@@ -300,7 +292,7 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                 open={open}
                 data-cy='onboarding-task-list-action-button'
             >
-                <Icon glyph={open ? 'close' : 'playlist-check'}/>
+                {open ? <CloseIcon size={20}/> : <PlaylistCheckIcon size={20}/>}
                 {itemsLeft !== 0 && (<span>{itemsLeft}</span>)}
             </Button>
             <TaskListPopover
@@ -309,12 +301,14 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                 onClick={toggleTaskList}
             >
                 <TaskItems className={open ? 'open' : ''}>
-                    {completedCount === tasksList.length ? <Completed
-                        dismissAction={dismissChecklist}
-                        isFirstAdmin={isFirstAdmin}
-                        isCurrentUserSystemAdmin={isCurrentUserSystemAdmin}
-                    /> : (
-                                                               <>
+                    {completedCount === tasksList.length ? (
+                        <Completed
+                            dismissAction={dismissChecklist}
+                            isFirstAdmin={isFirstAdmin}
+                            isCurrentUserSystemAdmin={isCurrentUserSystemAdmin}
+                        />
+                    ) : (
+                        <>
                             <h1>
                                                                        <FormattedMessage
                                     id='next_steps_view.welcomeToMattermost'
@@ -331,7 +325,7 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                                                                        <TasklistIcon/>
                                                                    </Skeleton>
                             {tasksList.map((task) => (
-                                                                       <Task
+                                <Task
                                     key={OnboardingTaskCategory + task.name}
                                     label={task.label()}
                                     onClick={() => {
@@ -353,7 +347,7 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                     )}
                 </TaskItems>
             </TaskListPopover>
-        </>
+        </CompassThemeProvider>
     );
 };
 
