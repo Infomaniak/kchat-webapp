@@ -37,7 +37,7 @@ import {runMessageWillBePostedHooks, runSlashCommandWillBePostedHooks} from 'act
 import {addReaction, createPost, setEditingPost, emitShortcutReactToLastPostFrom, submitReaction} from 'actions/post_actions';
 import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
 import {scrollPostListToBottom} from 'actions/views/channel';
-import {addToUpdateDraftQueue, removeDraft, upsertScheduleDraft, setGlobalDraft} from 'actions/views/drafts';
+import {updateDraft, removeDraft, upsertScheduleDraft} from 'actions/views/drafts';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
 import {openModal} from 'actions/views/modals';
 import {selectPostFromRightHandSideSearchByPostId} from 'actions/views/rhs';
@@ -150,14 +150,14 @@ function setDraft(key: string, value: PostDraft | null, draftChannelId: string, 
             updatedValue = {...value, channelId};
         }
         if (updatedValue) {
-            console.log('[advanced_create_post/idx ~ draft] setDraft.addToUpdateDraftQueue',
+            console.log('[advanced_create_post/idx ~ draft] setDraft.updateDraft',
                 `key: ${key}`,
                 `id: ${value?.id}`,
                 `updatedAt: ${value?.updateAt}`,
                 `createdAt: ${value?.createAt}`,
             );
 
-            return dispatch(addToUpdateDraftQueue(key, updatedValue, '', save));
+            return dispatch(updateDraft(key, updatedValue, '', save));
         }
 
         console.log('[advanced_create_post/idx ~ draft] setDraft.removeDraft',
