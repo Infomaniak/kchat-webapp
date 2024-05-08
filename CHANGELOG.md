@@ -49,6 +49,12 @@
 
 No changes.
 
+## 2.7.2-next.1 (2024-05-08)
+
+### Fixed (1 change)
+
+- [fix: multi-select input style](kchat/webapp@f4109119fa01b9c45b99fbe79b88bf64d1371a87) by @tim.dewinter ([merge request](kchat/webapp!771))
+
 ## 2.7.1-next.3 (2024-05-06)
 
 ### Changed (1 change)
