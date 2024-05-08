@@ -12,7 +12,7 @@ import {StoragePrefixes} from 'utils/constants';
 
 import type {PostDraft} from 'types/store/draft';
 
-import {removeDraft, setGlobalDraftSource, addToUpdateDraftQueue} from './drafts';
+import {removeDraft, setGlobalDraftSource, updateDraft} from './drafts';
 
 jest.mock('mattermost-redux/client', () => {
     const original = jest.requireActual('mattermost-redux/client');
@@ -142,7 +142,7 @@ describe('draft actions', () => {
             jest.useFakeTimers();
             jest.setSystemTime(42);
 
-            await store.dispatch(addToUpdateDraftQueue(key, draft, '', false));
+            await store.dispatch(updateDraft(key, draft, '', false));
 
             const testStore = mockStore(initialState);
 
@@ -160,7 +160,7 @@ describe('draft actions', () => {
         });
 
         it('calls upsertDraft correctly', async () => {
-            await store.dispatch(addToUpdateDraftQueue(key, draft, '', true));
+            await store.dispatch(updateDraft(key, draft, '', true));
             expect(createDraftSpy).toHaveBeenCalled();
         });
     });
