@@ -17,8 +17,6 @@ import PurchaseLink from 'components/announcement_bar/purchase_link/purchase_lin
 import CloudStartTrialButton from 'components/cloud_start_trial/cloud_start_trial_btn';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import StartTrialBtn from 'components/learn_more_trial_modal/start_trial_btn';
-import PurchaseModal from 'components/purchase_modal';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
 import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
@@ -178,18 +176,20 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
         const canRequestCloudFreeTrial = isCloud && !isCloudTrial && !hadPrevCloudTrial && !isPaidSubscription;
 
         // by default we assume is not cloud, so the cta button is Start Trial (which will request a trial license)
-        let ctaPrimaryButton = (
-            <StartTrialBtn
-                message={Utils.localizeMessage(
-                    'admin.ldap_feature_discovery.call_to_action.primary',
-                    'Start trial',
-                )}
-                telemetryId={`start_self_hosted_trial_from_${this.props.featureName}`}
-                btnClass='btn btn-primary'
-                renderAsButton={true}
-                trackingPage={this.props.featureName}
-            />
-        );
+        let ctaPrimaryButton = null;
+
+        // (
+        //     <StartTrialBtn
+        //         message={Utils.localizeMessage(
+        //             'admin.ldap_feature_discovery.call_to_action.primary',
+        //             'Start trial',
+        //         )}
+        //         telemetryId={`start_self_hosted_trial_from_${this.props.featureName}`}
+        //         btnClass='btn btn-primary'
+        //         renderAsButton={true}
+        //         trackingPage={this.props.featureName}
+        //     />
+        // );
 
         if (isCloud) {
         // if all conditions are set for being able to request a cloud trial, then show the cta start cloud trial button
