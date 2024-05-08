@@ -23,8 +23,6 @@ import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 
-import ADLDAPUpsellBanner from '../ad_ldap_upsell_banner';
-
 export type Props = {
     groups: Group[];
     searchTerm: string;
@@ -239,7 +237,6 @@ const UserGroupsList = (props: Props) => {
                         {Item}
                     </VariableSizeList>)}
             </InfiniteLoader>
-            <ADLDAPUpsellBanner/>
         </div>
     );
 };

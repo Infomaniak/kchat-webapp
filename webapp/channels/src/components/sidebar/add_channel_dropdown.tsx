@@ -9,7 +9,7 @@ import {trackEvent} from 'actions/telemetry_actions';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import {CreateAndJoinChannelsTour, InvitePeopleTour} from 'components/tours/onboarding_tour';
+import {CreateAndJoinChannelsTour, CreateChannelsTour, InvitePeopleTour, JoinChannelsTour} from 'components/tours/onboarding_tour';
 import PlusFilledIcon from 'components/widgets/icons/plus_filled_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
@@ -44,6 +44,7 @@ const AddChannelDropdown = ({
     showCreateCategoryModal,
     handleOpenDirectMessagesModal,
     unreadFilterEnabled,
+    showJoinChannelTutorialTip,
     showCreateTutorialTip,
     showInviteTutorialTip,
     isAddChannelOpen,
@@ -74,6 +75,7 @@ const AddChannelDropdown = ({
                     onClick={showMoreChannelsModal}
                     icon={<i className='icon-globe'/>}
                     text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.browseChannels', defaultMessage: 'Browse channels'})}
+                    sibling={showJoinChannelTutorialTip && <JoinChannelsTour/>}
                 />
             );
         }
@@ -86,6 +88,7 @@ const AddChannelDropdown = ({
                     onClick={showNewChannelModal}
                     icon={<i className='icon-plus'/>}
                     text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.createNewChannel', defaultMessage: 'Create new channel'})}
+                    sibling={showCreateTutorialTip && <CreateChannelsTour/>}
                 />
             );
         }
@@ -130,7 +133,7 @@ const AddChannelDropdown = ({
                     {createChannel}
                     {joinPublicChannel}
                     {createDirectMessage}
-                    {showCreateTutorialTip && <CreateAndJoinChannelsTour/>}
+                    {/* {showCreateTutorialTip && <CreateAndJoinChannelsTour/>} */}
                     {createUserGroup}
                 </Menu.Group>
                 {createCategory}

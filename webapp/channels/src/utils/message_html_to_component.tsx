@@ -5,7 +5,7 @@ import {Parser, ProcessNodeDefinitions} from 'html-to-react';
 import React from 'react';
 
 import AtMention from 'components/at_mention';
-import AtPlanMention from 'components/at_plan_mention';
+// import AtPlanMention from 'components/at_plan_mention';
 import AtSumOfMembersMention from 'components/at_sum_members_mention';
 import CodeBlock from 'components/code_block/code_block';
 import LatexBlock from 'components/latex_block';
@@ -167,10 +167,12 @@ export function messageHtmlToComponent(html: string, options: Options = {}) {
             shouldProcessNode: (node: any) => node.attribs && node.attribs[mentionAttrib],
             processNode: (node: any) => {
                 const mentionName = node.attribs[mentionAttrib];
-                const sumOfMembersMention = (
-                    <AtPlanMention
-                        plan={mentionName}
-                    />);
+                const sumOfMembersMention = null;
+
+                // const sumOfMembersMention = (
+                //     <AtPlanMention
+                //         plan={mentionName}
+                //     />);
                 return sumOfMembersMention;
             },
         });

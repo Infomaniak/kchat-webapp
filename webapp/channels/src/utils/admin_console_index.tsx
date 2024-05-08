@@ -97,12 +97,10 @@ export function adminDefinitionsToUrlsAndTexts(adminDefinition: typeof AdminDefi
         adminDefinition.user_management,
         adminDefinition.environment,
         adminDefinition.site,
-        adminDefinition.authentication,
         adminDefinition.plugins,
         adminDefinition.integrations,
         adminDefinition.compliance,
         adminDefinition.experimental,
-        adminDefinition.billing,
     ];
     for (const section of sections) {
         for (const item of Object.values(section.subsections)) {
