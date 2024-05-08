@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import PQueue from 'p-queue';
 import {batchActions} from 'redux-batched-actions';
 
 import type {Draft as ServerDraft} from '@mattermost/types/drafts';
@@ -31,8 +30,6 @@ type Draft = {
     value: PostDraft;
     timestamp: Date;
 }
-
-const updateDraftQueue = new PQueue({concurrency: 1});
 
 /**
  * Gets drafts stored on the server and reconciles them with any locally stored drafts.
@@ -107,13 +104,6 @@ export function removeDraft(key: string, channelId: string, rootId = ''): Action
     };
 }
 
-// Assert previous call ended before dispatching the action again to ensure latest draftId is used and prevent multiple draft creation on the same channel
-export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false): ActionFuncAsync<boolean, GlobalState> => {
-    return (dispatch) => {
-        return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save, scheduleDelete)));
-    };
-};
-
 export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false): ActionFuncAsync<boolean, GlobalState> {
     return async (dispatch, getState) => {
         const state = getState();
@@ -156,21 +146,29 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
             const userId = getCurrentUserId(state);
 
             try {
-                // TODO: remove
-                if (value?.message === '' || value?.message.replace(/\s/g, '').length || (value && value?.fileInfos.length > 0)) {
-                    if (value?.message.replace(/\s/g, '').length) {
-                        const {id} = await upsertDraft(updatedValue, userId, rootId, scheduleDelete);
-                        dispatch(setGlobalDraft(key, {
-                            ...updatedValue,
-                            id,
-                        }, false));
-                    } else {
-                        //This case is when there is a file attached with no message
-                        await upsertDraft({...updatedValue, message: ''}, userId, rootId, scheduleDelete);
+                const isDraftMessageEmpty = (draft: PostDraft|null) =>
+                    (draft?.message.replace(/\s/g, '').length === 0);
+
+                /**
+                 * Test if a draft is empty, either:
+                 *  - the draft is null
+                 *  - both the draft message and files are empty
+                 */
+                const isDraftEmpty = (draft: PostDraft|null) =>
+                    (draft === null) ||
+                    (isDraftMessageEmpty(draft) && (draft?.fileInfos.length === 0));
+
+                const {id} = await upsertDraft(updatedValue as PostDraft, userId, rootId, scheduleDelete);
+
+                // Do not update id in case there is a file attached with no message [???]
+                if (!isDraftMessageEmpty(updatedValue)) {
+                    // Only update the draft id if it has not been cleared from the reducer
+                    // during the upsertDraft client call
+                    const draft = getGlobalItem(getState(), key, {});
+                    if (!isDraftEmpty(draft)) {
+                        dispatch(setGlobalDraft(key, {...draft, id}, false));
                     }
                 }
-
-                // await upsertDraft(updatedValue, userId, rootId, scheduleDelete);
             } catch (error) {
                 return {data: false, error};
             }
