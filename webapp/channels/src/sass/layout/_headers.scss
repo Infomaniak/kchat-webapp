@@ -388,6 +388,10 @@
             }
         }
 
+        span.last-active__text {
+            color: rgba(var(--center-channel-color-rgb), 0.75);
+        }
+
         .header-description__text {
             display: flex;
             overflow: hidden;
@@ -477,27 +481,6 @@
             top: 1px;
             margin: 0 2px 0 5px;
             content: "\2022";
-        }
-    }
-
-    .header-status__text {
-        display: flex;
-        overflow: hidden;
-        flex-shrink: 0;
-        align-items: center;
-        margin-right: 7px;
-        line-height: 16px;
-
-        span.last-active__text {
-            color: rgba(var(--center-channel-color-rgb), 0.75);
-        }
-
-        .custom-emoji__wrapper {
-            padding-left: 8px;
-        }
-
-        p {
-            margin: 0;
         }
     }
 
