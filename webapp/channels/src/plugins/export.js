@@ -68,12 +68,6 @@ Object.defineProperty(window.WebappUtils, 'browserHistory', {
     get: () => getHistory(),
 });
 
-// This need to be a function because `openPricingModal`
-// is initialized when `UpgradeCloudButton` is loaded.
-// So if we export `openPricingModal` directly, it will be locked
-// to the initial value of undefined.
-// window.openPricingModal = () => openPricingModal;
-
 // Components exposed on window FOR INTERNAL PLUGIN USE ONLY. These components may have breaking changes in the future
 // outside of major releases. They will be replaced by common components once that project is more mature and able to
 // guarantee better compatibility.
