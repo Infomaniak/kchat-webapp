@@ -13,7 +13,7 @@ import Popover from 'components/widgets/popover';
 
 import Constants, {A11yClassNames, A11yCustomEventTypes} from 'utils/constants';
 import type {A11yFocusEventDetail} from 'utils/constants';
-import * as Keyboard from 'utils/keyboard';
+import {isKeyPressed} from 'utils/keyboard';
 import {shouldFocusMainTextbox} from 'utils/post_utils';
 
 import {Body, CloseButton, Header, Heading, NoShrink, Subtitle, Title} from './styled';
@@ -72,7 +72,7 @@ const GuestListPopover: FC<Props> = ({
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (shouldFocusMainTextbox(e, document.activeElement)) {
             hide();
-        } else if (Keyboard.isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
+        } else if (isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
             returnFocus();
         }
     };

@@ -41,7 +41,16 @@ function makeMapStateToProps() {
     return (state: GlobalState, ownProps: OwnProps) => {
         const member = getMyChannelMemberships(state)[ownProps.channel.id];
         const unreadCount = getUnreadCount(state, ownProps.channel.id);
-
+        const firstChannelName = getFirstChannelName(state);
+        const config = getConfig(state);
+        const enableTutorial = config.EnableTutorial === 'true';
+        const currentUserId = getCurrentUserId(state);
+        const tutorialStep = getInt(state, TutorialTourName.ONBOARDING_TUTORIAL_STEP, currentUserId, 0);
+        const triggerStep = getInt(state, OnboardingTaskCategory, OnboardingTasksName.CHANNELS_TOUR, FINISHED);
+        const channelTourTriggered = triggerStep === GenericTaskSteps.STARTED;
+        const isOnboardingFlowEnabled = config.EnableOnboardingFlow;
+        const showChannelsTour = enableTutorial && tutorialStep === OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES;
+        const showChannelsTutorialStep = showChannelsTour && channelTourTriggered && isOnboardingFlowEnabled === 'true';
         return {
             unreadMentions: unreadCount.mentions,
             unreadMsgs: unreadCount.messages,
@@ -49,6 +58,8 @@ function makeMapStateToProps() {
             isMuted: isChannelMuted(member),
             hasUrgent: unreadCount.hasUrgent,
             isChannelSelected: isChannelSelected(state, ownProps.channel.id),
+            firstChannelName: showChannelsTutorialStep ? firstChannelName : '',
+            showChannelsTutorialStep,
             rhsState: getRhsState(state),
             rhsOpen: getIsRhsOpen(state),
         };

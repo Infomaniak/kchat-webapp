@@ -54,7 +54,6 @@
             margin-top: 0.6em;
         }
 
-        p + p,
         p + ul,
         p + ol {
             margin-top: 0.6em;
@@ -419,57 +418,6 @@
         }
     }
 
-    .post-create-body {
-        position: relative;
-        padding: 0 0 2px;
-
-        .post-body__cell {
-            position: relative;
-            vertical-align: top;
-        }
-
-        .send-button {
-            display: none;
-            width: 45px;
-            height: 100%;
-            padding-right: 4px;
-            border-left: 1px solid transparent;
-            cursor: pointer;
-            font-size: 17px;
-            line-height: 49px;
-            text-align: center;
-            transition: all 0.15s;
-            vertical-align: bottom;
-
-            &:active {
-                opacity: 0.75;
-            }
-
-            &.disabled {
-                i {
-                    color: inherit;
-                }
-            }
-
-            .android &,
-            .ios & {
-                display: block;
-            }
-        }
-
-        .icon--emoji-picker {
-            cursor: pointer;
-            opacity: 0.5;
-            transition: all 0.15s;
-
-            &:hover,
-            &:active {
-                box-shadow: none;
-                opacity: 0.9;
-            }
-        }
-    }
-
     .msg-typing {
         display: block;
         overflow: hidden;
@@ -488,7 +436,6 @@
         border-top-width: 1px;
         border-top-style: solid;
         text-align: center;
-        border-color: #e8e8ea;
     }
 
     .channel-archived__close-btn {
@@ -608,7 +555,7 @@
     font-size: 13px;
 
     .help__text {
-        // text-align: right;
+        text-align: right;
 
         a,
         button {
@@ -660,7 +607,7 @@
     word-wrap: break-word;
 
     &:not(.post--editing):not(.post--editing):hover {
-        background-color: rgba(v(center-channel-color-rgb), 0.06);
+        background-color: rgba(v(center-channel-color-rgb), 0.04);
 
         .PostAttachmentOpenGraph .remove-button {
             display: flex;
@@ -958,6 +905,7 @@
         .post__header,
         .post-preview__header {
             display: flex;
+            width: auto;
             max-height: 22px;
             padding: 0;
             margin-bottom: 0;
@@ -1343,10 +1291,7 @@
         align-items: center;
         margin-bottom: 2px;
         white-space: nowrap;
-        .display_name {
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
+
         .col__name {
             display: flex;
             min-width: 0;
@@ -1709,6 +1654,7 @@
         box-shadow: $elevation-1;
 
         button.size-aware-image__copy_link,
+        a.size-aware-image__download--kdrive,
         a.size-aware-image__download {
             display: inline-block;
             width: 28px;
@@ -1764,6 +1710,7 @@
         }
 
         &:hover button.size-aware-image__copy_link,
+        &:hover a.size-aware-image__download--kdrive,
         &:hover a.size-aware-image__download {
             color: rgba(var(--center-channel-color-rgb), 0.75);
         }
@@ -2133,6 +2080,12 @@
                     left: -4px;
                     font-size: 29px;
                 }
+            }
+        }
+
+        .post-message__text {
+            span.emoticon[style]:hover {
+                cursor: pointer;
             }
         }
     }

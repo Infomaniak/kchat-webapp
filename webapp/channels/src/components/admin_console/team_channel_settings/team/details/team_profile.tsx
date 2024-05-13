@@ -11,19 +11,15 @@ import type {Team} from '@mattermost/types/teams';
 
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 
-import {openModal} from 'actions/views/modals';
-
 import useGetUsage from 'components/common/hooks/useGetUsage';
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import PricingModal from 'components/pricing_modal';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import UnarchiveIcon from 'components/widgets/icons/unarchive_icon';
 import TeamIcon from 'components/widgets/team_icon/team_icon';
 import WithTooltip from 'components/with_tooltip';
 
-import {ModalIdentifiers} from 'utils/constants';
 import {imageURLForTeam} from 'utils/utils';
 
 import './team_profile.scss';
@@ -175,28 +171,6 @@ export function TeamProfile({team, isArchived, onToggleArchive, isDisabled, save
                     </div>
                     <div className='AdminChannelDetails_archiveContainer'>
                         {button()}
-                        {restoreDisabled &&
-                            <button
-                                onClick={() => {
-                                    dispatch(openModal({
-                                        modalId: ModalIdentifiers.PRICING_MODAL,
-                                        dialogType: PricingModal,
-                                    }));
-                                }}
-                                type='button'
-                                className={
-                                    classNames(
-                                        'btn',
-                                        'btn-secondary',
-                                        'upgrade-options-button',
-                                    )
-                                }
-                            >
-                                <FormattedMessage
-                                    id={'workspace_limits.teams_limit_reached.view_upgrade_options'}
-                                    defaultMessage={'View upgrade options'}
-                                />
-                            </button>}
                     </div>
                 </div>
             </div>

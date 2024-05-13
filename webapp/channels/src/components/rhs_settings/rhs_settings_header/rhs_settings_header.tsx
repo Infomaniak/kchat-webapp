@@ -89,7 +89,7 @@ export default function RhsSettingsHeader({
                 <button
                     id='rhsCloseButton'
                     type='button'
-                    className='sidebar--right__close btn-icon'
+                    className='sidebar--right__close btn btn-icon'
                     aria-label='Close'
                     onClick={onClose}
                 >

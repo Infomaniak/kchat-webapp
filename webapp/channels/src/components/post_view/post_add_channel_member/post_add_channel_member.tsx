@@ -15,6 +15,7 @@ import {Constants} from 'utils/constants';
 import {t} from 'utils/i18n';
 
 interface Actions {
+    notifyChannelMember: (channelId: string, userIds: string[], postId: string) => void;
     addChannelMember: (channelId: string, userId: string, rootId: string) => void;
     removePost: (post: Post) => void;
 }
@@ -54,6 +55,14 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                 sendAddToChannelEphemeralPost(currentUser, usernames[index], userId, post.channel_id, post.root_id, createAt);
             });
 
+            this.props.actions.removePost(post);
+        }
+    };
+
+    handleNotifyChannelMember = () => {
+        const {post, userIds} = this.props;
+        if (post && post.channel_id) {
+            this.props.actions.notifyChannelMember(post.channel_id, userIds, this.props.post.props.add_channel_member.original_post_id);
             this.props.actions.removePost(post);
         }
     };
@@ -164,13 +173,23 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
 
         let outOfChannelMessageID;
         let outOfChannelMessageText;
+        let notificationMessageTextId;
+        let notificationOrMessageTextId;
+        let historyMessageId;
+
         const outOfChannelAtMentions = this.generateAtMentions(usernames);
         if (usernames.length === 1) {
             outOfChannelMessageID = t('post_body.check_for_out_of_channel_mentions.message.one');
             outOfChannelMessageText = 'did not get notified by this mention because they are not in the channel. Would you like to ';
+            notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message';
+            notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message';
+            historyMessageId = 'post_body.check_for_out_of_channel_mentions.message_last';
         } else if (usernames.length > 1) {
             outOfChannelMessageID = t('post_body.check_for_out_of_channel_mentions.message.multiple');
             outOfChannelMessageText = 'did not get notified by this mention because they are not in the channel. Would you like to ';
+            notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple';
+            notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message.multiple';
+            historyMessageId = 'post_body.check_for_out_of_channel_mentions.message_last.multiple';
         }
 
         let outOfGroupsMessageID;
@@ -185,29 +204,68 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
         let outOfGroupsMessage = null;
 
         if (usernames.length) {
-            outOfChannelMessage = (
-                <p>
-                    {outOfChannelAtMentions}
-                    {' '}
-                    <FormattedMessage
-                        id={outOfChannelMessageID}
-                        defaultMessage={outOfChannelMessageText}
-                    />
-                    <a
-                        className='PostBody_addChannelMemberLink'
-                        onClick={this.handleAddChannelMember}
-                    >
+            if (channelType === Constants.OPEN_CHANNEL) {
+                outOfChannelMessage = (
+                    <p>
+                        {outOfChannelAtMentions}
+                        {' '}
                         <FormattedMessage
-                            id={linkId}
-                            defaultMessage={linkText}
+                            id={outOfChannelMessageID}
+                            defaultMessage={outOfChannelMessageText}
                         />
-                    </a>
-                    <FormattedMessage
-                        id={'post_body.check_for_out_of_channel_mentions.message_last'}
-                        defaultMessage={'? They will have access to all message history.'}
-                    />
-                </p>
-            );
+                        <a
+                            className='PostBody_addChannelMemberLink'
+                            onClick={this.handleAddChannelMember}
+                        >
+                            <FormattedMessage
+                                id={linkId}
+                                defaultMessage={linkText}
+                            />
+                        </a>
+                        <FormattedMessage
+                            id={notificationOrMessageTextId}
+                            defaultMessage={'or '}
+                        />
+                        <a
+                            className='PostBody_addChannelMemberLink-notify'
+                            onClick={this.handleNotifyChannelMember}
+                        >
+                            <FormattedMessage
+                                id={notificationMessageTextId}
+                                defaultMessage={'notify them'}
+                            />
+                        </a>
+                        <FormattedMessage
+                            id={historyMessageId}
+                            defaultMessage={' ? They will have access to all message history.'}
+                        />
+                    </p>
+                );
+            } else {
+                outOfChannelMessage = (
+                    <p>
+                        {outOfChannelAtMentions}
+                        {' '}
+                        <FormattedMessage
+                            id={outOfChannelMessageID}
+                            defaultMessage={outOfChannelMessageText}
+                        />
+                        <a
+                            className='PostBody_addChannelMemberLink'
+                            onClick={this.handleAddChannelMember}
+                        >
+                            <FormattedMessage
+                                id={linkId}
+                                defaultMessage={linkText}
+                            />
+                        </a>
+                        <FormattedMessage
+                            id={historyMessageId}
+                            defaultMessage={' ? They will have access to all message history.'}
+                        />
+                    </p>
+                );
+            }
         }
 
         if (noGroupsUsernames.length) {

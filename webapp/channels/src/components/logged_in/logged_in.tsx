@@ -44,7 +44,6 @@ export type Props = {
     actions: {
         autoUpdateTimezone: (deviceTimezone: string) => void;
         getChannelURLAction: (channelId: string, teamId: string, url: string) => void;
-        markChannelAsViewedOnServer: (channelId: string) => void;
         updateApproximateViewTime: (channelId: string) => void;
         registerInternalKdrivePlugin: () => void;
         setTheme: (theme: Theme) => void;
@@ -249,7 +248,6 @@ export default class LoggedIn extends React.PureComponent<Props> {
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
         if (this.props.currentChannelId && !this.props.isCurrentChannelManuallyUnread) {
             this.props.actions.updateApproximateViewTime(this.props.currentChannelId);
-            this.props.actions.markChannelAsViewedOnServer(this.props.currentChannelId);
         }
         WebSocketActions.close();
     };

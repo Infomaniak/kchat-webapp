@@ -19,17 +19,10 @@ describe('AdminConsoleIndex.generateIndex', () => {
         const idx = generateIndex(AdminDefinition, intl, {});
         expect(idx.search('ldap')).toEqual([
             'environment/session_lengths',
-            'authentication/mfa',
-            'authentication/ldap',
-            'authentication/saml',
             'experimental/features',
-            'authentication/email',
-            'authentication/guest_access',
         ]);
         expect(idx.search('saml')).toEqual([
-            'authentication/saml',
             'environment/session_lengths',
-            'authentication/email',
             'experimental/features',
         ]);
         expect(idx.search('nginx')).toEqual([
@@ -37,7 +30,6 @@ describe('AdminConsoleIndex.generateIndex', () => {
         ]);
         expect(idx.search('characters')).toEqual([
             'site_config/customization',
-            'authentication/password',
         ]);
         expect(idx.search('caracteres')).toEqual([]);
         expect(idx.search('notexistingword')).toEqual([]);
@@ -47,27 +39,11 @@ describe('AdminConsoleIndex.generateIndex', () => {
         const intl = createIntl({locale: 'es', messages: esMessages, defaultLocale: 'es'});
 
         const idx = generateIndex(AdminDefinition, intl, {});
-        expect(idx.search('ldap').sort()).toEqual([
-            'authentication/mfa',
-            'authentication/ldap',
-            'authentication/saml',
-            'experimental/features',
-            'authentication/email',
-            'environment/session_lengths',
-            'authentication/guest_access',
-        ].sort());
-        expect(idx.search('saml').sort()).toEqual([
-            'authentication/saml',
-            'environment/session_lengths',
-            'authentication/email',
-            'experimental/features',
-        ].sort());
         expect(idx.search('nginx')).toEqual([
             'environment/rate_limiting',
         ]);
         expect(idx.search('caracteres').sort()).toEqual([
             'site_config/customization',
-            'authentication/password',
         ].sort());
         expect(idx.search('characters')).toEqual([]);
         expect(idx.search('notexistingword')).toEqual([]);

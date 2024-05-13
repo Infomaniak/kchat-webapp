@@ -704,14 +704,14 @@ export default class WebSocketClient {
         const data = {
             channel_id: channelId,
         };
-        this.sendMessage('presence', data, callback);
+        // this.sendMessage('presence', data, callback);
     }
 
     updateActiveTeam(teamId: string, callback?: (msg: any) => void) {
         const data = {
             team_id: teamId,
         };
-        this.sendMessage('presence', data, callback);
+        // this.sendMessage('presence', data, callback);
     }
 
     updateActiveThread(isThreadView: boolean, channelId: string, callback?: (msg: any) => void) {
@@ -719,7 +719,7 @@ export default class WebSocketClient {
             thread_channel_id: channelId,
             is_thread_view: isThreadView,
         };
-        this.sendMessage('presence', data, callback);
+        // this.sendMessage('presence', data, callback);
     }
 
     userUpdateActiveStatus(userIsActive: boolean, manual: boolean, callback?: () => void) {

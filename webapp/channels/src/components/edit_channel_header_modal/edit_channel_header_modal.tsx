@@ -260,7 +260,7 @@ export class EditChannelHeaderModal extends React.PureComponent<Props, State> {
                 <Modal.Footer>
                     <button
                         type='button'
-                        className='btn cancel-button secondary'
+                        className='btn cancel-button btn-secondary'
                         onClick={this.hideModal}
                     >
                         <FormattedMessage

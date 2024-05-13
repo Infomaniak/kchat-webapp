@@ -26,9 +26,10 @@ import {BoardsTourTip, PlaybooksTourTip} from 'components/tours/onboarding_explo
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
-import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
 import {ExploreOtherToolsTourSteps, suitePluginIds} from 'utils/constants';
 import {useCurrentProductId, useProducts, isChannels} from 'utils/products';
+
+import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
 
 import type {GlobalState} from 'types/store';
 

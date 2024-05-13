@@ -288,8 +288,9 @@ export function makeGetPostsInChannel(): (state: GlobalState, channelId: Channel
 
             const posts: PostWithFormatData[] = [];
 
-            const joinLeavePref = myPreferences[getPreferenceKey(Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_FILTER_JOIN_LEAVE)];
-            const showJoinLeave = joinLeavePref ? joinLeavePref.value !== 'false' : true;
+            // const joinLeavePref = myPreferences[getPreferenceKey(Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_FILTER_JOIN_LEAVE)];
+            // const showJoinLeave = joinLeavePref ? joinLeavePref.value !== 'false' : true;
+            const showJoinLeave = true;
 
             const postIds = numPosts === -1 ? allPostIds : allPostIds.slice(0, numPosts);
 
@@ -330,8 +331,10 @@ export function makeGetPostsAroundPost(): (state: GlobalState, postId: Post['id'
             }
 
             const posts: PostWithFormatData[] = [];
-            const joinLeavePref = myPreferences[getPreferenceKey(Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_FILTER_JOIN_LEAVE)];
-            const showJoinLeave = joinLeavePref ? joinLeavePref.value !== 'false' : true;
+
+            // const joinLeavePref = myPreferences[getPreferenceKey(Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_FILTER_JOIN_LEAVE)];
+            // const showJoinLeave = joinLeavePref ? joinLeavePref.value !== 'false' : true;
+            const showJoinLeave = true;
 
             for (let i = 0; i < postIds.length; i++) {
                 const post = allPosts[postIds[i]];
@@ -509,8 +512,10 @@ export const getMostRecentPostIdInChannel: (state: GlobalState, channelId: Chann
         if (!postIdsInChannel) {
             return '';
         }
-        const key = getPreferenceKey(Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_FILTER_JOIN_LEAVE);
-        const allowSystemMessages = preferences[key] ? preferences[key].value === 'true' : true;
+
+        // const key = getPreferenceKey(Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_FILTER_JOIN_LEAVE);
+        // const allowSystemMessages = preferences[key] ? preferences[key].value === 'true' : true;
+        const allowSystemMessages = true;
 
         if (!allowSystemMessages) {
             // return the most recent non-system message in the channel

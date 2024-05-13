@@ -1,16 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {without} from 'lodash';
 import {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import type {ChannelCategory} from '@mattermost/types/channel_categories';
-
 import {savePreferences} from 'mattermost-redux/actions/preferences';
-import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
-import {getCurrentTeamDefaultChannelId} from 'mattermost-redux/selectors/entities/channels';
-import {getWorkTemplatesLinkedProducts} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
@@ -18,11 +12,13 @@ import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 import {close as closeLhs, open as openLhs} from 'actions/views/lhs';
 import {switchToChannels} from 'actions/views/onboarding_tasks';
 import {setProductMenuSwitcherOpen} from 'actions/views/product_menu';
+import {setStatusDropdown} from 'actions/views/status_dropdown';
 
 import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from 'components/onboarding_tasks';
 
-import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
 import {getHistory} from 'utils/browser_history';
+
+import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
 
 import type {GlobalState} from 'types/store';
 
@@ -64,58 +60,31 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
     const nextStepActions = useCallback((step: number) => {
         if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP) {
             switch (step) {
-            case OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES : {
-                dispatch(openLhs());
-                break;
-            }
-            case OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS : {
+            // case OnboardingTourSteps.CHANNELS : {
+            //     dispatch(openLhs());
+            //     break;
+            // }
+            case OnboardingTourSteps.JOIN_CHANNELS : {
                 dispatch(setAddChannelDropdown(true));
                 break;
             }
-            case OnboardingTourSteps.INVITE_PEOPLE : {
+            case OnboardingTourSteps.CREATE_CHANNELS : {
                 dispatch(setAddChannelDropdown(true));
                 break;
             }
-            case OnboardingTourSteps.SEND_MESSAGE : {
+            case OnboardingTourSteps.CHANNEL_HEADER : {
                 dispatch(switchToChannels());
                 break;
             }
-            case tourSteps.CHANNELS: {
-                dispatch(openLhs());
-                dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => category.type !== CategoryTypes.CHANNELS));
-                break;
-            }
-            case isGuest ? null : OnboardingTourSteps.JOIN_CHANNELS: {
-                dispatch(setAddChannelDropdown(true));
-                break;
-            }
-            case isGuest ? null : OnboardingTourSteps.CREATE_CHANNELS: {
-                dispatch(setAddChannelDropdown(true));
-                break;
-            }
-            case tourSteps.CHANNEL_HEADER: {
-                dispatch(switchToChannels());
-                dispatch(setAddChannelDropdown(false));
-                break;
-            }
-            case tourSteps.DIRECT_MESSAGES: {
-                dispatch(openLhs());
-                dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => category.type !== CategoryTypes.DIRECT_MESSAGES));
-                break;
-            }
-            case tourSteps.KMEET: {
-                dispatch(switchToChannels());
-                break;
-            }
-            case tourSteps.STATUS: {
+            case OnboardingTourSteps.STATUS : {
                 dispatch(setStatusDropdown(true));
                 break;
             }
-            case tourSteps.PROFILE: {
+            case OnboardingTourSteps.PROFILE : {
                 dispatch(setStatusDropdown(true));
                 break;
             }
-            case tourSteps.FINISHED: {
+            case OnboardingTourSteps.FINISHED: {
                 let preferences = [
                     {
                         user_id: currentUserId,
@@ -133,7 +102,6 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
                     },
                 ];
                 dispatch(savePreferences(currentUserId, preferences));
-                dispatch(setStatusDropdown(false));
                 break;
             }
             default:
@@ -185,14 +153,15 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
     const lastStepActions = useCallback((lastStep: number) => {
         if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP) {
             switch (lastStep) {
-            case OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS : {
+            case OnboardingTourSteps.CHANNELS : {
                 dispatch(setAddChannelDropdown(false));
                 break;
             }
-            case OnboardingTourSteps.INVITE_PEOPLE : {
-                dispatch(setAddChannelDropdown(false));
-                break;
-            }
+
+            // case OnboardingTourSteps.INVITE_PEOPLE : {
+            //     dispatch(setAddChannelDropdown(false));
+            //     break;
+            // }
             default:
             }
         } else if (tourCategory === TutorialTourName.CRT_TUTORIAL_STEP) {

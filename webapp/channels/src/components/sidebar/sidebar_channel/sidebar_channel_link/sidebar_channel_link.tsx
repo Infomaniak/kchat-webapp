@@ -12,12 +12,10 @@ import {mark, trackEvent} from 'actions/telemetry_actions';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import {ChannelsAndDirectMessagesTour} from 'components/tours/onboarding_tour';
 
 import Constants, {RHSStates} from 'utils/constants';
 import {wrapEmojis} from 'utils/emoji_utils';
 import {cmdOrCtrlPressed} from 'utils/keyboard';
-import {isDesktopApp} from 'utils/user_agent';
 import {localizeMessage} from 'utils/utils';
 
 import Pluggable from 'plugins/pluggable';
@@ -28,6 +26,9 @@ import ChannelMentionBadge from '../channel_mention_badge';
 import ChannelPencilIcon from '../channel_pencil_icon';
 import SidebarChannelIcon from '../sidebar_channel_icon';
 import SidebarChannelMenu from '../sidebar_channel_menu';
+
+// import {ChannelsAndDirectMessagesTour} from 'components/tours/onboarding_tour';
+// import {isDesktopApp} from 'utils/user_agent';
 
 type Props = {
     channel: Channel;
