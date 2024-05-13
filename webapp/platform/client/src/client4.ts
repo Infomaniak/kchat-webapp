@@ -1944,6 +1944,15 @@ export default class Client4 {
         );
     };
 
+    notifyMember = (channelId: string, userIds: string[], postId: string) => {
+        const body = {post_id: postId, user_ids: userIds}
+        return this.doFetch<StatusOK>(
+            `${this.getChannelMembersRoute(channelId)}/invite`,
+            {method: 'post', body: JSON.stringify(body)},
+        );
+        
+    };
+
     removeFromChannel = (userId: string, channelId: string) => {
         this.trackEvent('api', 'api_channels_remove_member', {channel_id: channelId});
 

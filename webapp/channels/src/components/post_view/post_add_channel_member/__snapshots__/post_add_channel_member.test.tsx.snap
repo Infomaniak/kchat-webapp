@@ -58,8 +58,21 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, more t
       />
     </a>
     <MemoizedFormattedMessage
-      defaultMessage="? They will have access to all message history."
-      id="post_body.check_for_out_of_channel_mentions.message_last"
+      defaultMessage="or "
+      id="post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple"
+    />
+    <a
+      className="PostBody_addChannelMemberLink-notify"
+      onClick={[Function]}
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="notify them"
+        id="post_body.check_for_out_of_channel_groups_mentions_notify.message.multiple"
+      />
+    </a>
+    <MemoizedFormattedMessage
+      defaultMessage=" ? They will have access to all message history."
+      id="post_body.check_for_out_of_channel_mentions.message_last.multiple"
     />
   </p>
 </Fragment>
@@ -120,8 +133,21 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, more t
       />
     </a>
     <MemoizedFormattedMessage
-      defaultMessage="? They will have access to all message history."
-      id="post_body.check_for_out_of_channel_mentions.message_last"
+      defaultMessage="or "
+      id="post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple"
+    />
+    <a
+      className="PostBody_addChannelMemberLink-notify"
+      onClick={[Function]}
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="notify them"
+        id="post_body.check_for_out_of_channel_groups_mentions_notify.message.multiple"
+      />
+    </a>
+    <MemoizedFormattedMessage
+      defaultMessage=" ? They will have access to all message history."
+      id="post_body.check_for_out_of_channel_mentions.message_last.multiple"
     />
   </p>
 </Fragment>
@@ -149,7 +175,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, privat
       />
     </a>
     <MemoizedFormattedMessage
-      defaultMessage="? They will have access to all message history."
+      defaultMessage=" ? They will have access to all message history."
       id="post_body.check_for_out_of_channel_mentions.message_last"
     />
   </p>
@@ -178,7 +204,20 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, public
       />
     </a>
     <MemoizedFormattedMessage
-      defaultMessage="? They will have access to all message history."
+      defaultMessage="or "
+      id="post_body.check_for_out_of_channel_groups_mentions_choice.message"
+    />
+    <a
+      className="PostBody_addChannelMemberLink-notify"
+      onClick={[Function]}
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="notify them"
+        id="post_body.check_for_out_of_channel_groups_mentions_notify.message"
+      />
+    </a>
+    <MemoizedFormattedMessage
+      defaultMessage=" ? They will have access to all message history."
       id="post_body.check_for_out_of_channel_mentions.message_last"
     />
   </p>
@@ -207,7 +246,20 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, with n
       />
     </a>
     <MemoizedFormattedMessage
-      defaultMessage="? They will have access to all message history."
+      defaultMessage="or "
+      id="post_body.check_for_out_of_channel_groups_mentions_choice.message"
+    />
+    <a
+      className="PostBody_addChannelMemberLink-notify"
+      onClick={[Function]}
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="notify them"
+        id="post_body.check_for_out_of_channel_groups_mentions_notify.message"
+      />
+    </a>
+    <MemoizedFormattedMessage
+      defaultMessage=" ? They will have access to all message history."
       id="post_body.check_for_out_of_channel_mentions.message_last"
     />
   </p>
