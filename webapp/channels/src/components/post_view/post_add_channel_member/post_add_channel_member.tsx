@@ -227,7 +227,7 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                             defaultMessage={'or '}
                         />
                         <a
-                            className='PostBody_addChannelMemberLink'
+                            className='PostBody_addChannelMemberLink-notify'
                             onClick={this.handleNotifyChannelMember}
                         >
                             <FormattedMessage
