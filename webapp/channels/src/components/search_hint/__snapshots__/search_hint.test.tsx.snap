@@ -389,15 +389,6 @@ exports[`components/SearchHint should match snapshot, without searchType 1`] = `
       defaultMessage="What are you searching for?"
       id="search_bar.usage.search_type_question"
     />
-    <MemoizedFormattedMessage
-      defaultMessage="<a>Learn about search</a>"
-      id="search_bar.usage.searchLearn"
-      values={
-        Object {
-          "a": [Function],
-        }
-      }
-    />
   </div>
   <div
     className="button-container"

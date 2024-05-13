@@ -30,16 +30,22 @@ describe('components/post_view/post_list_row', () => {
         shortcutReactToLastPostEmittedFrom: 'NO_WHERE',
         loadingNewerPosts: false,
         loadingOlderPosts: false,
-        isCurrentUserLastPostGroupFirstPost: false,
         actions: {
             emitShortcutReactToLastPostFrom: jest.fn(),
         },
-        channelLimitExceeded: false,
         limitsLoaded: false,
-        limits: {},
+        limits: {
+            storage: 100,
+            public_channels: 100,
+            private_channels: 100,
+            guests: 100,
+            members: 100,
+        },
         usage: {} as CloudUsage,
         post: TestHelper.getPostMock({id: 'post_id_1'}),
         currentUserId: 'user_id_1',
+        channelId: 'channel_id_1',
+        newMessagesSeparatorActions: [],
     };
 
     test('should render more messages loading indicator', () => {

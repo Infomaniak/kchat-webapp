@@ -35,6 +35,7 @@ import SearchLimitsBanner from './search_limits_banner';
 import type {Props} from './types';
 
 import './search_results.scss';
+import ChannelMessageLimitationBanner from 'components/post_view/channel_message_limitation_banner/channel_message_limitation_banner';
 
 const GET_MORE_BUFFER = 30;
 
@@ -145,6 +146,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
     );
 
     const {
+        hasLimitDate,
         results,
         fileResults,
         searchTerms,
@@ -264,6 +266,22 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
             </div>
         );
         break;
+
+    // Todo: delete, use mattermost version
+    case noResults && (searchType === DataSearchTypes.MESSAGES_SEARCH_TYPE && !isChannelFiles && hasLimitDate !== null):
+        contentItems = (
+            <div
+                className={classNames([
+                    'sidebar--right__limitation-noresult a11y__section',
+                    {'sidebar-expanded': isSideBarExpanded},
+                ])}
+            >
+                <ChannelMessageLimitationBanner olderMessagesDate={hasLimitDate}/>
+                <NoResultsIndicator {...noResultsProps}/>
+            </div>
+        );
+        break;
+
     case noResults && (searchType === DataSearchTypes.MESSAGES_SEARCH_TYPE && !isChannelFiles):
         contentItems = (
             <div

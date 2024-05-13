@@ -6,7 +6,6 @@ import React from 'react';
 import {useIntl} from 'react-intl';
 
 import type {LimitSummary} from 'components/common/hooks/useGetHighestThresholdCloudLimit';
-import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import NotifyAdminCTA from 'components/notify_admin_cta/notify_admin_cta';
 
 import {MattermostFeatures, LicenseSkus} from 'utils/constants';
@@ -21,7 +20,6 @@ interface Words {
 
 export default function useWords(highestLimit: LimitSummary | false, isAdminUser: boolean, callerInfo: string): Words | false {
     const intl = useIntl();
-    const openPricingModal = useOpenPricingModal();
     if (!highestLimit) {
         return false;
     }
@@ -44,7 +42,6 @@ export default function useWords(highestLimit: LimitSummary | false, isAdminUser
         a: (chunks: React.ReactNode | React.ReactNodeArray) => (
             <a
                 id='view_plans_cta'
-                onClick={() => openPricingModal({trackingLocation: callerInfo})}
             >
                 {chunks}
             </a>),

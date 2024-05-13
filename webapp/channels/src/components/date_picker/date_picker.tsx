@@ -99,6 +99,7 @@ const DatePicker = ({children, datePickerProps, isPopperOpen, handlePopperOpenSt
                                 IconRight: iconRight,
                                 IconLeft: iconLeft,
                             }}
+                            ISOWeek={true}
                         />
                     </div>
                 </FloatingFocusManager>

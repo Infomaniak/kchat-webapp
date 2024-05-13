@@ -27,7 +27,6 @@ import {ColumnNames} from './constants';
 import {RevokeSessionsButton} from './revoke_sessions_button';
 import {SystemUsersColumnTogglerMenu} from './system_users_column_toggler_menu';
 import {SystemUsersDateRangeMenu} from './system_users_date_range_menu';
-import {SystemUsersExport} from './system_users_export';
 import {SystemUsersFilterPopover} from './system_users_filters_popover';
 import {SystemUsersListAction} from './system_users_list_actions';
 import {SystemUsersSearch} from './system_users_search';
@@ -539,10 +538,6 @@ function SystemUsers(props: Props) {
                             visibleColumnsLength={table.getVisibleLeafColumns()?.length ?? 0}
                         />
                         <SystemUsersDateRangeMenu
-                            dateRange={props.tablePropertyDateRange}
-                        />
-                        <SystemUsersExport
-                            currentUserId={props.currentUser.id}
                             dateRange={props.tablePropertyDateRange}
                         />
                     </div>

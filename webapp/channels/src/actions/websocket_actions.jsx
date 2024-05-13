@@ -95,7 +95,7 @@ import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
-import {removeGlobalItem, setGlobalItem} from 'actions/storage';
+import {setGlobalItem} from 'actions/storage';
 import {loadProfilesForDM, loadProfilesForGM} from 'actions/user_actions';
 import {syncPostsInChannel} from 'actions/views/channel';
 import {getDrafts, setGlobalDraft, transformServerDraft} from 'actions/views/drafts';
@@ -882,19 +882,6 @@ async function handlePostDeleteEvent(msg) {
     }
 
     dispatch(postDeleted(post));
-
-    // remove draft associated with this post from store
-    const draftKey = `${StoragePrefixes.COMMENT_DRAFT}${post.id}`;
-
-    // update the draft first to re-render
-    await dispatch(setGlobalItem(draftKey, {
-        message: '',
-        fileInfos: [],
-        uploadsInProgress: [],
-    }));
-
-    // then remove it
-    await dispatch(removeGlobalItem(draftKey));
 
     // update thread when a comment is deleted and CRT is on
     if (post.root_id && collapsedThreads) {
@@ -2035,15 +2022,11 @@ function handleDeleteDraftEvent(msg) {
             return;
         }
 
-        // update the draft first to re-render
-        await doDispatch(setGlobalItem(key, {
+        doDispatch(setGlobalItem(key, {
             message: '',
             fileInfos: [],
             uploadsInProgress: [],
         }));
-
-        // then remove it
-        await doDispatch(removeGlobalItem(key));
     };
 }
 

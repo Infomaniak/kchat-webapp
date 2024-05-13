@@ -810,21 +810,6 @@ Object {
               >
                 Keywords That Get Highlighted (Without Notifications)
               </h4>
-              <span
-                class="RestrictedIndicator__icon-tooltip-container"
-              >
-                <span>
-                  <button
-                    class="style--none RestrictedIndicator__button"
-                    id="mattermost_feature_highlight_without_notification-restricted-indicator"
-                  >
-                    <i
-                      class="RestrictedIndicator__icon-tooltip icon icon-key-variant"
-                    />
-                    Professional
-                  </button>
-                </span>
-              </span>
             </div>
             <div
               class="section-min__describe isDisabled"
@@ -1071,21 +1056,6 @@ Object {
             >
               Keywords That Get Highlighted (Without Notifications)
             </h4>
-            <span
-              class="RestrictedIndicator__icon-tooltip-container"
-            >
-              <span>
-                <button
-                  class="style--none RestrictedIndicator__button"
-                  id="mattermost_feature_highlight_without_notification-restricted-indicator"
-                >
-                  <i
-                    class="RestrictedIndicator__icon-tooltip icon icon-key-variant"
-                  />
-                  Professional
-                </button>
-              </span>
-            </span>
           </div>
           <div
             class="section-min__describe isDisabled"
