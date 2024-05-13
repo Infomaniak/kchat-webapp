@@ -62,7 +62,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, more t
       id="post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple"
     />
     <a
-      className="PostBody_addChannelMemberLink"
+      className="PostBody_addChannelMemberLink-notify"
       onClick={[Function]}
     >
       <MemoizedFormattedMessage
@@ -137,7 +137,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, more t
       id="post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple"
     />
     <a
-      className="PostBody_addChannelMemberLink"
+      className="PostBody_addChannelMemberLink-notify"
       onClick={[Function]}
     >
       <MemoizedFormattedMessage
@@ -208,7 +208,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, public
       id="post_body.check_for_out_of_channel_groups_mentions_choice.message"
     />
     <a
-      className="PostBody_addChannelMemberLink"
+      className="PostBody_addChannelMemberLink-notify"
       onClick={[Function]}
     >
       <MemoizedFormattedMessage
@@ -250,7 +250,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, with n
       id="post_body.check_for_out_of_channel_groups_mentions_choice.message"
     />
     <a
-      className="PostBody_addChannelMemberLink"
+      className="PostBody_addChannelMemberLink-notify"
       onClick={[Function]}
     >
       <MemoizedFormattedMessage
