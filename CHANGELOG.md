@@ -1,3 +1,20 @@
+## 2.8.0-rc.10 (2024-05-13)
+
+### Added (12 changes)
+
+- [Fix traduction for add channel member component](kchat/webapp@f52d7a718bb7cafaa3b58d7bf912b57cec10eaca) by  ([merge request](kchat/webapp!730))
+- [Fix unit test class for PostAddChannelMember component](kchat/webapp@95b30458962bca59ca283bdf3ea96ff2e2a0a333) by  ([merge request](kchat/webapp!730))
+- [Fix unit test for PostAddChannelMember component](kchat/webapp@2054136949bc37a5de06ef8d6588362eb6a2a086) by  ([merge request](kchat/webapp!730))
+- [Fix original post_id for notify message](kchat/webapp@56ac6f75e5c08db5bc9d981ae58e9a400fae42b6) by  ([merge request](kchat/webapp!730))
+- [Fix traduction for notify message](kchat/webapp@821d00206d3ba1cc69bf91b2620e14957f46fee8) by  ([merge request](kchat/webapp!730))
+- [Add notification when pinging user in a channel fix eslint error 2](kchat/webapp@ecc16fa3fd947faa33b8ebd8a5d0abb27ab5ed6b) by  ([merge request](kchat/webapp!730))
+- [Add notification when pinging user in a channel fix eslint error 2](kchat/webapp@e02958d457c609396347108cb4efc86da2a8c7c6) by  ([merge request](kchat/webapp!730))
+- [Add notification when pinging user in a channel fix eslint error](kchat/webapp@397c617ea77fed6556b64152dd6c6c55e778078b) by  ([merge request](kchat/webapp!730))
+- [Add notification when pinging user in a channel fix](kchat/webapp@8c3102923abe336def1f236a60b935a34c77adce) by  ([merge request](kchat/webapp!730))
+- [Add traduction for notify message](kchat/webapp@3eb2107898bc784c8c843ead20b236d925c038b3) by  ([merge request](kchat/webapp!730))
+- [Add notification when pinging user in a channel](kchat/webapp@8651b62139a3715af9fe7746faa0b40ed4674238) by  ([merge request](kchat/webapp!730))
+- [Ajout d'une notification quand on ajoute un User dans un channel](kchat/webapp@61210a27030c1eca4924f25c6ed56fd3a19a2abd) by  ([merge request](kchat/webapp!730))
+
 ## 2.8.0-rc.9 (2024-05-13)
 
 ### Removed (2 changes)
