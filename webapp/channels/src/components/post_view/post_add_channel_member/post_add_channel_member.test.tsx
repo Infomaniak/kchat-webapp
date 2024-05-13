@@ -41,6 +41,7 @@ describe('components/post_view/PostAddChannelMember', () => {
         actions: {
             removePost: jest.fn(),
             addChannelMember: jest.fn(),
+            notifyChannelMember: jest.fn(),
         },
         noGroupsUsernames: [],
     };
@@ -100,6 +101,7 @@ describe('components/post_view/PostAddChannelMember', () => {
         const actions = {
             removePost: jest.fn(),
             addChannelMember: jest.fn(),
+            notifyChannelMember: jest.fn(),
         };
         const props: Props = {...requiredProps, actions};
         const wrapper = shallow(
@@ -122,6 +124,7 @@ describe('components/post_view/PostAddChannelMember', () => {
         const actions = {
             removePost: jest.fn(),
             addChannelMember: jest.fn(),
+            notifyChannelMember: jest.fn(),
         };
         const props: Props = {...requiredProps, userIds, usernames, actions};
         const wrapper = shallow(
