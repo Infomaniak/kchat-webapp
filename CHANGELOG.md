@@ -1,3 +1,10 @@
+## 2.8.0-rc.9 (2024-05-13)
+
+### Removed (2 changes)
+
+- [MM-57885: Do not mark channel as read on tab unload (#26811)](kchat/webapp@a0fd5ac7f69552cc9fea86f14ec55fb4f5a8e8d8) by  ([merge request](kchat/webapp!779))
+- [remove webpack pwa manifest plugin](kchat/webapp@90ce368df7c429e0dcbe8621a6ca5978577ab13d) by @antonbuksa ([merge request](kchat/webapp!778))
+
 ## 2.8.0-rc.8 (2024-05-08)
 
 ### Fixed (3 changes)
