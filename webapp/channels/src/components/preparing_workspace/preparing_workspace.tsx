@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React, {useState, useCallback, useEffect, useRef} from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import type {RouterProps} from 'react-router-dom';
 
@@ -13,7 +13,7 @@ import {getFirstAdminSetupComplete as getFirstAdminSetupCompleteAction} from 'ma
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {getFirstAdminSetupComplete, getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
+import {getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 import {isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
@@ -25,22 +25,20 @@ import LogoSvg from 'components/common/svg_images_components/logo_dark_blue_svg'
 import Constants from 'utils/constants';
 
 import LaunchingWorkspace, {START_TRANSITIONING_OUT} from './launching_workspace';
-import Plugins from './plugins';
 import Progress from './progress';
-import type {
-    WizardStep,
-    AnimationReason,
-    Form} from './steps';
 import {
     WizardSteps,
     Animations,
     emptyForm,
-    mapStepToNextName,
-    mapStepToSkipName,
     mapStepToPageView,
     mapStepToSubmitFail,
     PLUGIN_NAME_TO_ID_MAP,
+    mapStepToPrevious,
 } from './steps';
+import type {
+    WizardStep,
+    AnimationReason,
+    Form} from './steps';
 
 import './preparing_workspace.scss';
 
@@ -82,12 +80,16 @@ function makeSubmitFail(step: WizardStep) {
 }
 
 const trackSubmitFail = {
+    [WizardSteps.Organization]: makeSubmitFail(WizardSteps.Organization),
     [WizardSteps.Plugins]: makeSubmitFail(WizardSteps.Plugins),
+    [WizardSteps.InviteMembers]: makeSubmitFail(WizardSteps.InviteMembers),
     [WizardSteps.LaunchingWorkspace]: makeSubmitFail(WizardSteps.LaunchingWorkspace),
 };
 
 const onPageViews = {
+    [WizardSteps.Organization]: makeOnPageView(WizardSteps.Organization),
     [WizardSteps.Plugins]: makeOnPageView(WizardSteps.Plugins),
+    [WizardSteps.InviteMembers]: makeOnPageView(WizardSteps.InviteMembers),
     [WizardSteps.LaunchingWorkspace]: makeOnPageView(WizardSteps.LaunchingWorkspace),
 };
 
@@ -103,7 +105,7 @@ const PreparingWorkspace = ({
         defaultMessage: 'Something went wrong. Please try again.',
     });
     const isUserFirstAdmin = useSelector(isFirstAdmin);
-    const useCaseOnboarding = useSelector(getUseCaseOnboarding);
+    const onboardingFlowEnabled = useSelector(getIsOnboardingFlowEnabled);
 
     const currentTeam = useSelector(getCurrentTeam);
     const myTeams = useSelector(getMyKSuites);
@@ -120,6 +122,9 @@ const PreparingWorkspace = ({
         pluginsEnabled && WizardSteps.Plugins,
         WizardSteps.LaunchingWorkspace,
     ].filter((x) => Boolean(x)) as WizardStep[];
+
+    // first steporder that is not false
+    const firstShowablePage = stepOrder[0];
 
     const firstAdminSetupComplete = useSelector(getFirstAdminSetupComplete);
 
@@ -172,19 +177,6 @@ const PreparingWorkspace = ({
         }
         return true;
     };
-    const makeNext = useCallback((currentStep: WizardStep, skip?: boolean) => {
-        return function innerMakeNext(trackingProps?: Record<string, any>) {
-            const stepIndex = stepOrder.indexOf(currentStep);
-            if (stepIndex === -1 || stepIndex >= stepOrder.length) {
-                return;
-            }
-            setStepHistory([currentStep, stepOrder[stepIndex + 1]]);
-            setSubmitError(null);
-
-            const progressName = (skip ? mapStepToSkipName : mapStepToNextName)(currentStep);
-            trackEvent('first_admin_setup', progressName, trackingProps);
-        };
-    }, [stepOrder]);
 
     const redirectWithError = useCallback((redirectTo: WizardStep, error: string) => {
         setStepHistory([WizardSteps.LaunchingWorkspace, redirectTo]);
@@ -225,8 +217,10 @@ const PreparingWorkspace = ({
         // This endpoint sets setup complete state, so we need to make this request
         // even if admin skipped submitting plugins.
         const completeSetupRequest = {
+            organization: form.organization,
             install_plugins: pluginsToSetup,
         };
+
         try {
             await Client4.completeSetup(completeSetupRequest);
             dispatch({type: GeneralTypes.FIRST_ADMIN_COMPLETE_SETUP_RECEIVED, data: true});
@@ -243,6 +237,7 @@ const PreparingWorkspace = ({
 
         const sendFormEnd = Date.now();
         const timeToWait = WAIT_FOR_REDIRECT_TIME - (sendFormEnd - sendFormStart);
+
         if (timeToWait > 0) {
             setTimeout(goToChannels, timeToWait);
         } else {
@@ -258,7 +253,8 @@ const PreparingWorkspace = ({
     }, [submissionState]);
 
     const adminRevisitedPage = firstAdminSetupComplete && submissionState === SubmissionStates.Presubmit;
-    const shouldRedirect = !isUserFirstAdmin || adminRevisitedPage || !useCaseOnboarding;
+    const shouldRedirect = !isUserFirstAdmin || adminRevisitedPage || !onboardingFlowEnabled;
+
     useEffect(() => {
         if (shouldRedirect) {
             history.push('/');
@@ -278,18 +274,54 @@ const PreparingWorkspace = ({
         return stepIndex > currentStepIndex ? Animations.Reasons.ExitToBefore : Animations.Reasons.ExitToAfter;
     };
 
-    const skipPlugins = useCallback((skipped: boolean) => {
-        if (skipped === form.plugins.skipped) {
+    const goPrevious = useCallback((e?: React.KeyboardEvent | React.MouseEvent) => {
+        if (e && (e as React.KeyboardEvent).key) {
+            const key = (e as React.KeyboardEvent).key;
+            if (key !== Constants.KeyCodes.ENTER[0] && key !== Constants.KeyCodes.SPACE[0]) {
+                return;
+            }
+        }
+        if (submissionState !== SubmissionStates.Presubmit && submissionState !== SubmissionStates.SubmitFail) {
+            return;
+        }
+        const stepIndex = stepOrder.indexOf(currentStep);
+        if (stepIndex <= 0) {
+            return;
+        }
+        trackEvent('first_admin_setup', mapStepToPrevious(currentStep));
+        setStepHistory([currentStep, stepOrder[stepIndex - 1]]);
+    }, [currentStep]);
+
+    const skipTeamMembers = useCallback((skipped: boolean) => {
+        if (skipped === form.teamMembers.skipped) {
             return;
         }
         setForm({
             ...form,
-            plugins: {
-                ...form.plugins,
+            teamMembers: {
+                ...form.teamMembers,
                 skipped,
             },
         });
     }, [form]);
+
+    let previous: React.ReactNode = (
+        <div
+            onClick={goPrevious}
+            onKeyUp={goPrevious}
+            tabIndex={0}
+            className='PreparingWorkspace__previous'
+        >
+            <i className='icon-chevron-up'/>
+            <FormattedMessage
+                id={'onboarding_wizard.previous'}
+                defaultMessage='Previous'
+            />
+        </div>
+    );
+    if (currentStep === firstShowablePage) {
+        previous = null;
+    }
 
     return (
         <div className='PreparingWorkspace PreparingWorkspaceContainer'>
@@ -313,34 +345,6 @@ const PreparingWorkspace = ({
                 transitionSpeed={Animations.PAGE_SLIDE}
             />
             <div className='PreparingWorkspacePageContainer'>
-                <Plugins
-                    onPageView={onPageViews[WizardSteps.Plugins]}
-                    next={() => {
-                        const pluginChoices = {...form.plugins};
-                        delete pluginChoices.skipped;
-                        setSubmissionState(SubmissionStates.UserRequested);
-                        makeNext(WizardSteps.Plugins)(pluginChoices);
-                        skipPlugins(false);
-                    }}
-                    skip={() => {
-                        setSubmissionState(SubmissionStates.UserRequested);
-                        makeNext(WizardSteps.Plugins, true)();
-                        skipPlugins(true);
-                    }}
-                    options={form.plugins}
-                    setOption={(option: keyof Form['plugins']) => {
-                        setForm({
-                            ...form,
-                            plugins: {
-                                ...form.plugins,
-                                [option]: !form.plugins[option],
-                            },
-                        });
-                    }}
-                    show={shouldShowPage(WizardSteps.Plugins)}
-                    transitionDirection={getTransitionDirection(WizardSteps.Plugins)}
-                    className='child-page'
-                />
                 <LaunchingWorkspace
                     onPageView={onPageViews[WizardSteps.LaunchingWorkspace]}
                     show={currentStep === WizardSteps.LaunchingWorkspace}

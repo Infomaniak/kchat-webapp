@@ -16,7 +16,6 @@ import Input from 'components/widgets/inputs/input/input';
 import Constants from 'utils/constants';
 import * as Utils from 'utils/utils';
 
-import ADLDAPUpsellBanner from './ad_ldap_upsell_banner';
 import {usePagingMeta} from './hooks';
 import UserGroupsFilter from './user_groups_filter/user_groups_filter';
 import UserGroupsList from './user_groups_list';
@@ -214,7 +213,6 @@ const UserGroupsModal = (props: Props) => {
                     <NoResultsIndicator
                         variant={noResultsType}
                     />
-                    <ADLDAPUpsellBanner/>
                 </> : <>
                     <UserGroupsList
                         groups={groups}

@@ -1,3 +1,21 @@
+## 2.8.0-rc.8 (2024-05-08)
+
+### Fixed (3 changes)
+
+- [fix: image save to kdrive icon style](kchat/webapp@fbcbbb973ca075a9e748eb8fe15f41b68afae733) by @tim.dewinter ([merge request](kchat/webapp!774))
+- [fix: shortcut colors for desktop](kchat/webapp@b94675e99fab926034992c685a4b9b67fe3bf4a7) by @tim.dewinter ([merge request](kchat/webapp!776))
+- [fix onboarding steps hook and anchors](kchat/webapp@8385fa0500fa057f18ed20745bdccb142ff3c49e) by @antonbuksa ([merge request](kchat/webapp!775))
+
+### Chore (1 change)
+
+- [light cleanup of trial and purchase components causing wpack errors](kchat/webapp@3a022cdef990a957653480252e9ec1a685913946) by @antonbuksa ([merge request](kchat/webapp!775))
+
+## 2.8.0-rc.7 (2024-05-08)
+
+### Fixed (1 change)
+
+- [fix: multi-select input style](kchat/webapp@f4109119fa01b9c45b99fbe79b88bf64d1371a87) by @tim.dewinter ([merge request](kchat/webapp!771))
+
 ## 2.8.0-rc.6 (2024-05-06)
 
 ### Changed (1 change)
@@ -42,6 +60,24 @@
 ## 2.8.0-rc.1 (2024-05-03)
 
 No changes.
+
+## 2.7.2-next.2 (2024-05-08)
+
+### Fixed (3 changes)
+
+- [fix: image save to kdrive icon style](kchat/webapp@fbcbbb973ca075a9e748eb8fe15f41b68afae733) by @tim.dewinter ([merge request](kchat/webapp!774))
+- [fix: shortcut colors for desktop](kchat/webapp@b94675e99fab926034992c685a4b9b67fe3bf4a7) by @tim.dewinter ([merge request](kchat/webapp!776))
+- [fix onboarding steps hook and anchors](kchat/webapp@8385fa0500fa057f18ed20745bdccb142ff3c49e) by @antonbuksa ([merge request](kchat/webapp!775))
+
+### Chore (1 change)
+
+- [light cleanup of trial and purchase components causing wpack errors](kchat/webapp@3a022cdef990a957653480252e9ec1a685913946) by @antonbuksa ([merge request](kchat/webapp!775))
+
+## 2.7.2-next.1 (2024-05-08)
+
+### Fixed (1 change)
+
+- [fix: multi-select input style](kchat/webapp@f4109119fa01b9c45b99fbe79b88bf64d1371a87) by @tim.dewinter ([merge request](kchat/webapp!771))
 
 ## 2.7.1-next.3 (2024-05-06)
 

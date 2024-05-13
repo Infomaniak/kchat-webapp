@@ -1654,6 +1654,7 @@
         box-shadow: $elevation-1;
 
         button.size-aware-image__copy_link,
+        a.size-aware-image__download--kdrive,
         a.size-aware-image__download {
             display: inline-block;
             width: 28px;
@@ -1709,6 +1710,7 @@
         }
 
         &:hover button.size-aware-image__copy_link,
+        &:hover a.size-aware-image__download--kdrive,
         &:hover a.size-aware-image__download {
             color: rgba(var(--center-channel-color-rgb), 0.75);
         }

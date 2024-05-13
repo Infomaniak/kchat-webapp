@@ -9,13 +9,10 @@ import {isMobile} from 'utils/user_agent';
 
 import MenuGroup from './menu_group';
 import MenuHeader from './menu_header';
-import MenuCloudTrial from './menu_items/menu_cloud_trial';
 import MenuItemAction from './menu_items/menu_item_action';
-import MenuItemCloudLimit from './menu_items/menu_item_cloud_limit';
 import MenuItemExternalLink from './menu_items/menu_item_external_link';
 import MenuItemLink from './menu_items/menu_item_link';
 import MenuItemToggleModalRedux from './menu_items/menu_item_toggle_modal_redux';
-import MenuStartTrial from './menu_items/menu_start_trial';
 import SubMenuItem from './menu_items/submenu_item';
 
 import './menu.scss';
@@ -42,9 +39,6 @@ export default class Menu extends React.PureComponent<Props> {
     public static ItemLink = MenuItemLink;
     public static ItemToggleModalRedux = MenuItemToggleModalRedux;
     public static ItemSubMenu = SubMenuItem;
-    public static CloudTrial = MenuCloudTrial;
-    public static StartTrial = MenuStartTrial;
-    public static ItemCloudLimit = MenuItemCloudLimit;
 
     public node: React.RefObject<HTMLUListElement>; //Public because it is used by tests
     private observer: MutationObserver;

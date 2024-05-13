@@ -24,7 +24,7 @@ describe('components/shortcuts/KeyboardShortcutsSequence', () => {
         expect(wrapper.contains(tag)).toEqual(true);
         expect(wrapper).toMatchSnapshot();
         expect(wrapper.find('.shortcut-key--tooltip')).toHaveLength(0);
-        expect(wrapper.find('.shortcut-key--shortcut-modal')).toHaveLength(2);
+        expect(wrapper.find('.shortcut-key--contrast')).toHaveLength(2);
     });
 
     test('should render sequence without description', () => {
@@ -57,7 +57,7 @@ describe('components/shortcuts/KeyboardShortcutsSequence', () => {
         expect(wrapper.contains(tag)).toEqual(true);
         expect(wrapper).toMatchSnapshot();
         expect(wrapper.find('.shortcut-key--tooltip')).toHaveLength(0);
-        expect(wrapper.find('.shortcut-key--shortcut-modal')).toHaveLength(5);
+        expect(wrapper.find('.shortcut-key--contrast')).toHaveLength(5);
     });
 
     test('should render sequence without description', () => {
@@ -75,7 +75,7 @@ describe('components/shortcuts/KeyboardShortcutsSequence', () => {
         expect(wrapper.contains(tag)).toEqual(true);
         expect(wrapper).toMatchSnapshot();
         expect(wrapper.find('.shortcut-key--tooltip')).toHaveLength(2);
-        expect(wrapper.find('.shortcut-key--shortcut-modal')).toHaveLength(0);
+        expect(wrapper.find('.shortcut-key--contrast')).toHaveLength(0);
     });
     test('should render sequence hoisting description', () => {
         const wrapper = mountWithIntl(
@@ -93,7 +93,7 @@ describe('components/shortcuts/KeyboardShortcutsSequence', () => {
         expect(wrapper.contains(tag)).toEqual(false);
         expect(wrapper).toMatchSnapshot();
         expect(wrapper.find('.shortcut-key--tooltip')).toHaveLength(2);
-        expect(wrapper.find('.shortcut-key--shortcut-modal')).toHaveLength(0);
+        expect(wrapper.find('.shortcut-key--contrast')).toHaveLength(0);
     });
 
     test('should create sequence with order', () => {
@@ -110,6 +110,6 @@ describe('components/shortcuts/KeyboardShortcutsSequence', () => {
         const tag = <span>{'Keyboard shortcuts'}</span>;
         expect(wrapper.contains(tag)).toEqual(false);
         expect(wrapper.find('.shortcut-key--tooltip')).toHaveLength(3);
-        expect(wrapper.find('.shortcut-key--shortcut-modal')).toHaveLength(0);
+        expect(wrapper.find('.shortcut-key--contrast')).toHaveLength(0);
     });
 });
