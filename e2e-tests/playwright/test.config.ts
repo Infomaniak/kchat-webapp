@@ -6,31 +6,24 @@ import {TestConfig} from '@e2e-types';
 
 dotenv.config();
 
+/**
+ * Replace a domain that is before "staging-XXXXX" (and optionally a prefix)
+ *      with another static value *replaceWith*
+ * Example https://infomaniak.staging-74864.dev.infomaniak.ch replaceWith "kchat-testing-1-preprod"
+ *      -> https://kchat-testing-1-preprod.staging-74864.dev.infomaniak.ch
+ */
+const replaceDomain = (url: string, replaceWith: string, prefix?: string): string => {
+    const prefixRe = new RegExp(`(?<=https://).+(?=${prefix ? `\\.${prefix}` : ''}\\.staging-\\d+)`);
+    return prefixRe.test(url) ? url.replace(prefixRe, replaceWith) : url;
+}
+
+const baseURL = replaceDomain(
+    process.env.PW_BASE_URL || 'https://local.preprod.dev.infomaniak.ch:9005',
+    process.env.PW_KCHAT_TEAM_PREFIX || 'kchat-testing-1-preprod',
+    'kchat',
+);
+const authBaseURL = replaceDomain(baseURL, 'login');
 const adminEmail = process.env.PW_ADMIN_EMAIL || 'sysadmin@sample.mattermost.com';
-const kchatTeamPrefix = process.env.PW_KCHAT_TEAM_PREFIX || 'kchat-testing-1-preprod';
-
-/**
- * Replace "infomaniak" by the PW_KCHAT_TEAM_PREFIX for staging URLs
- * Example https://infomaniak.kchat.staging-74864.dev.infomaniak.ch
- *      -> https://kchat-testing-1-preprod.kchat.staging-74864.dev.infomaniak.ch
- */
-const baseURL = (() => {
-    const url = process.env.PW_BASE_URL || 'https://local.preprod.dev.infomaniak.ch:9005',
-        prefixRe = /(?<=https:\/\/).+(?=\.kchat\.staging-\d+)/;
-
-    return prefixRe.test(url) ? url.replace(prefixRe, kchatTeamPrefix) : url;
-})();
-
-/**
- * Replace "[PW_KCHAT_TEAM_PREFIX].kchat" by "login" for staging URLs
- * Example https://kchat-testing-1-preprod.kchat.staging-74864.dev.infomaniak.ch
- *      -> https://login.staging-74864.dev.infomaniak.ch
- * Defaults to preprod login
- */
-const authBaseURL = (() => {
-    const prefixRe = /(?<=https:\/\/).+(?=\.staging-\d+)/;
-    return prefixRe.test(baseURL) ? baseURL.replace(prefixRe, 'login') : 'https://login.preprod.dev.infomaniak.ch';
-})();
 
 
 // All process.env should be defined here

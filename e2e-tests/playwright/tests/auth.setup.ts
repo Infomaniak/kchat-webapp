@@ -4,7 +4,7 @@ import {expect} from '@playwright/test';
 
 const authFile = '.auth/user.json';
 
-setup('authenticate', async ({page, context}) => {
+setup('Authenticate', async ({page, context}) => {
     // Setup auth state in .auth/user.json
     // Ref https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
 
