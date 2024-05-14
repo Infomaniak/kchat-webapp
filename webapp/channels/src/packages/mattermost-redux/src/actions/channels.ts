@@ -1025,6 +1025,27 @@ export function getChannelStats(channelId: string, includeFileCount?: boolean): 
     };
 }
 
+export function getChannelsMemberCount(channelIds: string[]): ActionFuncAsync<Record<string, number>> {
+    return async (dispatch, getState) => {
+        let channelsMemberCount;
+
+        try {
+                        channelsMemberCount = await Client4.getChannelsMemberCount(channelIds);
+                    } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error};
+        }
+
+        dispatch({
+            type: ChannelTypes.RECEIVED_CHANNELS_MEMBER_COUNT,
+            data: channelsMemberCount,
+        });
+
+        return {data: channelsMemberCount};
+    };
+}
+
 export function notifyChannelMember(channelId: string, userIds: string[], postId: string): ActionFuncAsync<ChannelMembership> {
     return async (dispatch, getState) => {
         let member;
