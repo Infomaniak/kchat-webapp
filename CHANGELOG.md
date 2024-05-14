@@ -1,3 +1,10 @@
+## 2.8.0-rc.12 (2024-05-14)
+
+### Fixed (2 changes)
+
+- [fix: added missing getChannelsMemberCount action](kchat/webapp@3b3fd8f9e8771b77779cf4fc608518b784b52ccd) by @tim.dewinter ([merge request](kchat/webapp!780))
+- [fix: suggestion list emoji overflow](kchat/webapp@70f6d94489708f96a84a228b1589a88a6c001820) by @tim.dewinter ([merge request](kchat/webapp!777))
+
 ## 2.8.0-rc.11 (2024-05-13)
 
 No changes.
