@@ -1,3 +1,9 @@
+## 2.8.0-rc.14 (2024-05-15)
+
+### Fixed (1 change)
+
+- [fix missing posttype in last_users component](kchat/webapp@b0f6250b91f1ebafc1fab97381b96bc248dedd8c) by @antonbuksa
+
 ## 2.8.0-rc.13 (2024-05-15)
 
 ### Fixed (1 change)
