@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import type {IntlShape, MessageDescriptor} from 'react-intl';
 import {injectIntl} from 'react-intl';
+import type {IntlShape, MessageDescriptor} from 'react-intl';
 
 import {Posts} from 'mattermost-redux/constants';
 
@@ -24,6 +24,10 @@ const typeMessage = {
     [Posts.POST_TYPES.LEAVE_CHANNEL]: {
         id: t('last_users_message.left_channel.type'),
         defaultMessage: '**left the channel**.',
+    },
+    [Posts.POST_TYPES.JOIN_LEAVE_CHANNEL]: {
+        id: t('last_users_message.joined_left_channel.type'),
+        defaultMessage: '**joined and left the channel**.',
     },
     [Posts.POST_TYPES.REMOVE_FROM_CHANNEL]: {
         id: t('last_users_message.removed_from_channel.type'),
