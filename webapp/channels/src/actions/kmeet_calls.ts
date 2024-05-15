@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {Client4} from 'mattermost-redux/client';
-import {getChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getChannel, getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getUserById} from 'mattermost-redux/selectors/entities/users';
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
@@ -14,8 +14,10 @@ import {isModalOpen} from 'selectors/views/modals';
 import KmeetModal from 'components/kmeet_modal';
 
 import {isCallV3Available, openKmeetInExternalWindow} from 'utils/calls_utils';
-import {ActionTypes, ModalIdentifiers} from 'utils/constants';
+import Constants, {ActionTypes, ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
 import {isDesktopApp} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -179,9 +181,18 @@ export function startKmeetWindow(channelId: string, jwt: string) {
         const conference = getConferenceByChannelId(state, channelId);
         const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
         const locale = getCurrentLocale(state);
-        const channelName = getChannel(state, conference.channel_id);
+        const channel = getChannel(state, conference.channel_id);
 
-        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, subject: channelName, locale, jwt});
+        let name = channel.display_name;
+
+        const isDirectMessage = channel.type === Constants.DM_CHANNEL;
+
+        if (isDirectMessage) {
+            const directTeammate = getDirectTeammate(state, channel.id);
+            name = Utils.localizeAndFormatMessage(t('search_item.direct'), 'Call (with {username})', {username: directTeammate});
+        }
+
+        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, subject: name, locale, jwt});
     };
 }
 
