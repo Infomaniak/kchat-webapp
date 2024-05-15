@@ -1,3 +1,9 @@
+## 2.8.0-rc.13 (2024-05-15)
+
+### Fixed (1 change)
+
+- [restore import.meta.url in wasm module import](kchat/webapp@70584f03e3d62fa017268a44858acb0ad0122d51) by @antonbuksa
+
 ## 2.8.0-rc.12 (2024-05-14)
 
 ### Fixed (2 changes)
