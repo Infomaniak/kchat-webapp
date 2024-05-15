@@ -23,8 +23,8 @@ variables:
   # GITLAB_TRIAGE
   # MR_REVIEW_SCHEDULE
   # TRIAGE_TECHNICAL_DEBT
-  # PW_ADMIN_EMAIL
-  # PW_ADMIN_PASSWORD
+  # E2E_ADMIN_EMAIL
+  # E2E_ADMIN_PASSWORD
   # ---
   KANIKO_VERSION: "debug" # https://github.com/GoogleContainerTools/kaniko/releases
   MINIO_CLIENT_VERSION: "RELEASE.2022-11-07T23-47-39Z" # https://hub.docker.com/r/minio/mc/tags
@@ -91,9 +91,27 @@ variables:
 
 # Build packages/dependencies
 .script-build-packages: &script-build-packages
-  - yarn workspace @infomaniak/mattermost-types build
-  - yarn workspace @infomaniak/mattermost-client build
-  - yarn workspace @mattermost/components build
+  - |
+    yarn workspace @infomaniak/mattermost-types build \
+    && yarn workspace @infomaniak/mattermost-client build \
+    && yarn workspace @mattermost/components build
+
+# Extract dev-bot note and parse the staging URL
+.script-parse-staging-baseurl: &script-parse-staging-baseurl
+  # Install jq
+  - |
+    apt update && apt upgrade -y && apt install jq -y \
+    && echo "Reading notes for MR ${CI_MERGE_REQUEST_IID}..." \
+  # Get the dev-bot note that match the regexp
+  - |
+    DEV_BOT_NOTE=$( \
+      curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes?per_page=1000" | \
+      jq '.[] | .body | select(.|test("^Staging is now available at https://.+$"))' \
+    )
+  # Parse STAGING_BASE_URL from comment
+  - |
+    [[ -z "$DEV_BOT_NOTE" ]] && { echo "Staging URL could not be found!"; exit 1; }
+  - export STAGING_BASE_URL=${DEV_BOT_NOTE:29:-1}
 
 # Cache for jest
 .cache-jest: &cache-jest
@@ -246,8 +264,8 @@ test:unit:
   cache:
     - *cache-jest
 
-# Execute e2e tests
-test:e2e:
+# Execute playwright tests
+test:pw:
   stage: test
   extends:
     - .tests
@@ -259,27 +277,16 @@ test:e2e:
     - when: never
   retry: 1
   variables:
-    PW_ADMIN_EMAIL: ${PW_ADMIN_EMAIL}
-    PW_ADMIN_PASSWORD: ${PW_ADMIN_PASSWORD}
+    PW_ADMIN_EMAIL: ${E2E_ADMIN_EMAIL}
+    PW_ADMIN_PASSWORD: ${E2E_ADMIN_PASSWORD}
   before_script:
     - *script-yarn-install
     - *script-build-packages
-    # Install jq
-    - apt update && apt upgrade -y && apt install jq -y
-    # Get the dev-bot note that match the regexp
-    - echo "Reading notes for MR ${CI_MERGE_REQUEST_IID}..."
-    - |
-      DEV_BOT_NOTE=$( \
-        curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes?per_page=1000" | \
-        jq '.[] | .body | select(.|test("^Staging is now available at https://.+$"))' \
-      )
-    # Parse PW_BASE_URL from comment
-    - |
-      [[ -z "$DEV_BOT_NOTE" ]] && { echo "Staging URL could not be found!"; exit 1; }
-    - export PW_BASE_URL=${DEV_BOT_NOTE:29:-1}
+    - *script-parse-staging-baseurl
   script:
     # Execute tests
-    - echo "Executing e2e tests on ${PW_BASE_URL}..." \
+    - export PW_BASE_URL=$STAGING_BASE_URL
+    - echo "Executing e2e Playwright tests on ${PW_BASE_URL}..." \
     - yarn run test:e2e:playwright
   # Save playwright report
   artifacts:
@@ -358,7 +365,7 @@ release:changelog:
 # https://docs.gitlab.com/ee/user/project/pages/getting_started/pages_from_scratch.html
 pages:
   stage: deploy
-  needs: ["test:e2e"]
+  needs: ["test:pw"]
   rules:
     - if: *if-merge-request
       variables:
