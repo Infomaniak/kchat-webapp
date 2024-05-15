@@ -102,6 +102,12 @@ No changes.
 
 No changes.
 
+## 2.8.0-next.3 (2024-05-15)
+
+### Fixed (1 change)
+
+- [restore import.meta.url in wasm module import](kchat/webapp@70584f03e3d62fa017268a44858acb0ad0122d51) by @antonbuksa
+
 ## 2.8.0-next.2 (2024-05-14)
 
 ### Fixed (2 changes)
