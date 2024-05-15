@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {Client4} from 'mattermost-redux/client';
+import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getUserById} from 'mattermost-redux/selectors/entities/users';
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
@@ -178,8 +179,9 @@ export function startKmeetWindow(channelId: string, jwt: string) {
         const conference = getConferenceByChannelId(state, channelId);
         const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
         const locale = getCurrentLocale(state);
+        const channelName = getChannel(state, conference.channel_id);
 
-        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, locale, jwt});
+        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, subject: channelName, locale, jwt});
     };
 }
 
