@@ -117,6 +117,16 @@ variables:
   - paths:
       - webapp/channels/.jestcache
 
+# Cache for yarn
+# TODO setup gitlab-ci cache url on minio ?
+# https://stackoverflow.com/a/69303530
+# .cache-yarn: &cache-yarn
+#   - key:
+#       files:
+#         - yarn.lock
+#     paths:
+#       - .yarn/cache
+
 # Shared test config
 .tests:
   image: node:${NODE_VERSION}
@@ -133,6 +143,8 @@ variables:
     name: "$ENVIRONMENT_NAME"
   before_script:
     - *script-yarn-install
+  # cache:
+  #   - *cache-yarn
 
 # WORKFLOW
 # Setup environment specific variables
@@ -176,12 +188,15 @@ build:front:
     - *script-build-packages
   script:
     - yarn build:webapp
+  # cache:
+  #   - *cache-yarn
   # Save bundle /dist
   artifacts:
     paths:
       - dist
+      - .yarn/cache # TODO remove and use *cache-yarn
     expire_in: 1 days
-    when: always
+    when: on_success
 
 # Build mono-repo/internal dependencies
 # build:packages:
@@ -259,9 +274,10 @@ test:unit:
         coverage_format: cobertura
         path: webapp/channels/coverage/cobertura-coverage.xml
   coverage: /Lines\s*:\s*(\d+.?\d*)%/
-  # Save jest cache
+  # Save jest/yarn cache
   cache:
     - *cache-jest
+    # - *cache-yarn
 
 # Execute playwright tests
 test:pw:
@@ -287,6 +303,8 @@ test:pw:
     - export PW_BASE_URL=$STAGING_BASE_URL
     - echo "Executing e2e Playwright tests on ${PW_BASE_URL}..." \
     - yarn run test:e2e:playwright
+  # cache:
+  #   - *cache-yarn
   # Save playwright report
   artifacts:
     paths:
