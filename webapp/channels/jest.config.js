@@ -19,7 +19,7 @@ const config = {
         'src/stores/**/*.{js,jsx,ts,tsx}',
         'src/utils/**/*.{js,jsx,ts,tsx}',
     ],
-    coverageReporters: ['text', 'text-summary', 'lcov', 'cobertura'],
+    coverageReporters: ['text-summary', 'lcov', 'cobertura'],
     moduleNameMapper: {
         '^@mattermost/(components)$': '<rootDir>/../platform/$1/src',
         '^@mattermost/(client)$': '<rootDir>/../platform/$1/src',
