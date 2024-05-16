@@ -13,19 +13,6 @@ include:
     file: "/gitlab-triage.yaml"
 
 variables:
-  # Required CI/CD variables
-  # KCHAT_WHOOK_URL
-  # S3_BUCKET
-  # S3_HOST
-  # S3_KEY
-  # S3_PASSWORD
-  # VERDACCIO_TOKEN
-  # GITLAB_TRIAGE
-  # MR_REVIEW_SCHEDULE
-  # TRIAGE_TECHNICAL_DEBT
-  # E2E_ADMIN_EMAIL
-  # E2E_ADMIN_PASSWORD
-  # ---
   KANIKO_VERSION: "debug" # https://github.com/GoogleContainerTools/kaniko/releases
   MINIO_CLIENT_VERSION: "RELEASE.2022-11-07T23-47-39Z" # https://hub.docker.com/r/minio/mc/tags
   NODE_VERSION: 18.17.1 # Sould respect /.nvmrc
