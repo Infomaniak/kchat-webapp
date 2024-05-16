@@ -45,6 +45,7 @@ import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
 
 import {General, Preferences} from '../constants';
+import display from 'components/user_settings/display';
 
 export function selectChannel(channelId: string) {
     return {
@@ -1029,8 +1030,8 @@ export function getChannelsMemberCount(channelIds: string[]): ActionFuncAsync<Re
         let channelsMemberCount;
 
         try {
-            channelsMemberCount = await Client4.getChannelsMemberCount(channelIds);
-        } catch (error) {
+                        channelsMemberCount = await Client4.getChannelsMemberCount(channelIds);
+                    } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
             return {error};
@@ -1042,6 +1043,20 @@ export function getChannelsMemberCount(channelIds: string[]): ActionFuncAsync<Re
         });
 
         return {data: channelsMemberCount};
+    };
+}
+
+export function notifyChannelMember(channelId: string, userIds: string[], postId: string): ActionFuncAsync<ChannelMembership> {
+    return async (dispatch, getState) => {
+        let member;
+        try {
+            member = await Client4.notifyMember(channelId, userIds, postId);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error};
+        }
+        return {data: member};
     };
 }
 
@@ -1453,6 +1468,7 @@ export default {
     searchGroupChannels,
     getChannelStats,
     addChannelMember,
+    notifyChannelMember,
     removeChannelMember,
     markChannelAsRead,
     favoriteChannel,

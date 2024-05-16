@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import * as Sentry from '@sentry/react';
 import type {RefObject} from 'react';
 import {useRef, useState} from 'react';
 import type {WasmMediaEncoder} from 'wasm-media-encoders';
@@ -8,7 +9,8 @@ import {createEncoder} from 'wasm-media-encoders';
 
 import {AudioFileExtensions} from 'utils/constants';
 import {generateDateSpecificFileName} from 'utils/file_utils';
-import {importMetaUrl} from 'utils/import_meta_url';
+
+import {getWasmFileURL} from './utils';
 
 declare global {
     interface Window {
@@ -153,7 +155,7 @@ export function useAudioRecorder(props: Props) {
 
             // CHANGE LATER
             // migrate to use Audio Worklet instead.
-            const wasmFileURL = new URL('wasm-media-encoders/wasm/mp3', importMetaUrl());
+            const wasmFileURL = getWasmFileURL();
             audioEncoderRef.current = await createEncoder(MP3MimeType, wasmFileURL.href);
 
             audioEncoderRef.current.configure({
@@ -186,6 +188,7 @@ export function useAudioRecorder(props: Props) {
             startElapsedTimer();
         } catch (error) {
             console.log('Error in recording', error); // eslint-disable-line no-console
+            Sentry.captureException(error);
             setError(true);
         }
     }

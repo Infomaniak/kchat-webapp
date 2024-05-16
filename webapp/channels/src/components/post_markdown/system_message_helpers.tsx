@@ -17,6 +17,7 @@ import Markdown from 'components/markdown';
 import CombinedSystemMessage from 'components/post_view/combined_system_message';
 import GMConversionMessage from 'components/post_view/gm_conversion_message/gm_conversion_message';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member';
+import PostNotifyChannelMember from 'components/post_view/post_notify_channel_member/post_notify_channel_member';
 
 import {t} from 'utils/i18n';
 import type {TextFormattingOptions} from 'utils/text_formatting';
@@ -436,6 +437,19 @@ export function renderSystemMessage(post: Post, currentTeam: Team, channel: Chan
             );
         }
 
+        return null;
+    } else if (post.props && post.type === Posts.POST_TYPES.SYSTEM_MENTIONED_CHANNEL) {
+        if (channel && (channel.type === General.DM_CHANNEL) &&
+            isUserCanManageMembers
+        ) {
+            return (
+                <PostNotifyChannelMember
+                    username={post.props.username}
+                    channelName={post.props.channel_name}
+                    postLink={post.props.post_link}
+                />
+            );
+        }
         return null;
     } else if (systemMessageRenderers[post.type]) {
         return systemMessageRenderers[post.type](post);
