@@ -2,6 +2,10 @@
 
 No changes.
 
+## 2.8.1-next.1 (2024-05-16)
+
+No changes.
+
 ## 2.8.0-rc.14 (2024-05-15)
 
 ### Fixed (1 change)
