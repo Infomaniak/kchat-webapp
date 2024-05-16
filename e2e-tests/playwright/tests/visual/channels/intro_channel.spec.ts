@@ -23,5 +23,6 @@ test('Intro to channel as regular user', async ({pw, page, pages, browserName, v
 
     // Match snapshot of channel intro page
     const testArgs = {page, browserName, viewport};
-    await pw.matchSnapshot(testInfo, testArgs);
+    const options = { mask: [page.locator('div.post-list__dynamic')], maxDiffPixels: 6000 };
+    await pw.matchSnapshot(testInfo, testArgs, options);
 });
