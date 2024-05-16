@@ -245,13 +245,16 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     }}
                     spanStyle={{paddingLeft: '8px'}}
                 />
-                <span className='header-description__text'>
-                    <Markdown
-                        message={customStatus?.text}
-                        options={this.getHeaderMarkdownOptions(channelNamesMap)}
-                        imageProps={{hideUtilities: true}}
-                    />
-                </span>
+                {
+                    customStatus?.text &&
+                    <span className='header-description__text'>
+                        <Markdown
+                            message={customStatus?.text}
+                            options={this.getHeaderMarkdownOptions(channelNamesMap)}
+                            imageProps={{hideUtilities: true}}
+                        />
+                    </span>
+                }
             </>
 
         );
