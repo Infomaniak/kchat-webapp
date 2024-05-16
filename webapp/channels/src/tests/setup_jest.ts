@@ -47,9 +47,8 @@ jest.mock('@mui/styled-engine', () => {
     return styledEngineSc;
 });
 
-// Mock import.meta.url
-jest.mock('utils/import_meta_url', () => ({
-    importMetaUrl: () => 'http://localhost:8065',
+jest.mock('components/common/hooks/useAudioRecorder/utils', () => ({
+    getWasmFileURL: jest.fn(() => `${process.env.BASE_URL}/wasm-media-encoders/wasm/mp3`)
 }));
 
 // isDependencyWarning returns true when the given console.warn message is coming from a dependency using deprecated
