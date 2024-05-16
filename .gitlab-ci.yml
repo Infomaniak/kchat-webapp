@@ -292,7 +292,6 @@ test:pw:
     - if: *if-merge-request
       when: manual
     - when: never
-  retry: 1
   variables:
     PW_ADMIN_EMAIL: ${E2E_ADMIN_EMAIL}
     PW_ADMIN_PASSWORD: ${E2E_ADMIN_PASSWORD}
