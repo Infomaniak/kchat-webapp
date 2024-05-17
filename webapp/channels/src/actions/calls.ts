@@ -181,7 +181,7 @@ export function startOrJoinCallInChannelV2(channelID: string) {
 
             if (data && data.url) {
                 if (isDesktopApp() && !isCallV3Available()) {
-                    openKmeetInExternalWindow(data.url, data.jwt);
+                    openKmeetInExternalWindow(data.url, data.jwt, data.name);
                     return;
                 }
 

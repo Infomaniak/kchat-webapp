@@ -5,6 +5,6 @@ export const isCallV3Available = () => {
     return isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.3.0');
 };
 
-export const openKmeetInExternalWindow = (baseUrl: string, jwt: string) => {
-    window.open(baseUrl + `?jwt=${jwt}#config.prejoinConfig.enabled=false&config.deeplinking.disabled=true&config.startWithVideoMuted=true`, '_blank', 'noopener');
+export const openKmeetInExternalWindow = (baseUrl: string, jwt: string, subject: string) => {
+    window.open(baseUrl, '_blank', `jwt=${jwt},config.prejoinConfig.enabled=false,config.deeplinking.disabled=true,config.startWithVideoMuted=true,config.subject=${subject}`);
 };

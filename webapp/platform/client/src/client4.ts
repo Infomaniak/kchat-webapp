@@ -1950,7 +1950,7 @@ export default class Client4 {
             `${this.getChannelMembersRoute(channelId)}/invite`,
             {method: 'post', body: JSON.stringify(body)},
         );
-        
+
     };
 
     removeFromChannel = (userId: string, channelId: string) => {
@@ -4416,6 +4416,7 @@ export default class Client4 {
             updated_at: string;
             url: string;
             jwt: string;
+            name: string;
         }>(
             `${this.getBaseRoute()}/conferences`,
             {method: 'post', body: JSON.stringify({channel_id: channelID})},
@@ -4438,6 +4439,7 @@ export default class Client4 {
             updated_at: string;
             url: string;
             jwt: string;
+            name: string;
         }>(
             `${this.getBaseRoute()}/conferences/${callID}/answer`,
             {method: 'post'},

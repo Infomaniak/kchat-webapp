@@ -92,7 +92,7 @@ export function joinCall(channelId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const conference = getConferenceByChannelId(getState(), channelId);
         const answer = await Client4.acceptIncomingMeetCall(conference.id);
-        dispatch(startCall(channelId, answer.jwt, conference.url));
+        dispatch(startCall(channelId, answer.jwt, conference.url, answer.name));
     };
 }
 
@@ -159,14 +159,14 @@ export function cancelCall(channelId: string) {
     };
 }
 
-export function startCall(channelId: string, jwt: string, url: string) {
+export function startCall(channelId: string, jwt: string, url: string, subject: string) {
     return async (dispatch: DispatchFunc) => {
         if (isDesktopApp()) {
             if (!isCallV3Available()) {
                 return;
             }
 
-            dispatch(startKmeetWindow(channelId, jwt));
+            dispatch(startKmeetWindow(channelId, jwt, subject));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             openKmeetInExternalWindow(url, jwt);
@@ -174,7 +174,7 @@ export function startCall(channelId: string, jwt: string, url: string) {
     };
 }
 
-export function startKmeetWindow(channelId: string, jwt: string) {
+export function startKmeetWindow(channelId: string, jwt: string, subject: string) {
     return async (_: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const user = getCurrentUser(state);
@@ -192,7 +192,7 @@ export function startKmeetWindow(channelId: string, jwt: string) {
             name = Utils.localizeAndFormatMessage(t('search_item.direct'), 'Call (with {username})', {username: directTeammate});
         }
 
-        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, subject: name, locale, jwt});
+        window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, name: subject, locale, jwt});
     };
 }
 
