@@ -392,7 +392,7 @@ pages:
     # Notify about the created E2E report
     - |
       if [ -z "$PAGES_URL_NOTE" ]; then
-        curl --header "PRIVATE-TOKEN: $GITLAB_PAT" -X POST "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \
+        curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" -X POST "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \
           -d "body=E2E report is now available at ${CI_PAGES_URL}/${PAGES_PREFIX}"
       fi
   pages:
