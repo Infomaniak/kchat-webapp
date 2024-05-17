@@ -83,24 +83,6 @@ variables:
     && yarn workspace @infomaniak/mattermost-client build \
     && yarn workspace @mattermost/components build
 
-# Install curl and jq for interaction with gitlab api
-.script-gitlab-api-install: &script-gitlab-api-install
-  - apt-get update && apt-get install -y curl jq
-
-# Extract dev-bot note and parse the staging URL
-.script-parse-staging-baseurl: &script-parse-staging-baseurl
-  - *script-gitlab-api-install
-  # Get the dev-bot note that match the regexp
-  - |
-    DEV_BOT_NOTE=$( \
-      curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes?per_page=1000" | \
-      jq '.[] | .body | select(.|test("^Staging is now available at https://.+$"))' \
-    )
-  # Parse STAGING_BASE_URL from comment
-  - |
-    [[ -z "$DEV_BOT_NOTE" ]] && { echo "Staging URL could not be found!"; exit 1; }
-  - export STAGING_BASE_URL=${DEV_BOT_NOTE:29:-1}
-
 # Cache for jest
 .cache-jest: &cache-jest
   - paths:
@@ -279,16 +261,15 @@ test:e2e:
   stage: test
   extends:
     - .tests
+  image: ruby:${RUBY_VERSION}
   rules:
     - if: *if-merge-request
       when: manual
     - when: never
-  before_script:
-    - *script-parse-staging-baseurl
+  script:
+    - echo "STAGING_BASE_URL=$(ruby .gitlab/get_staging_baseurl.rb)" >> test.env
   # Pass env variables to Playwright/Cypress
   # https://docs.gitlab.com/ee/ci/variables/index.html#pass-an-environment-variable-to-another-job
-  script:
-    - echo "STAGING_BASE_URL=$STAGING_BASE_URL" >> test.env
   artifacts:
     reports:
       dotenv: test.env
@@ -384,31 +365,18 @@ release:changelog:
 # https://docs.gitlab.com/ee/user/project/pages/getting_started/pages_from_scratch.html
 pages:
   stage: deploy
+  image: ruby:${RUBY_VERSION}
   needs: ["test:e2e:pw"]
   rules:
     - if: *if-merge-request
       variables:
         PAGES_PREFIX: "mr$CI_MERGE_REQUEST_IID" # Prefix with the mr<iid>, like `mr123`
-  retry: 2
   variables:
     PAGES_PREFIX: "" # No prefix by default (master)
-  before_script:
-    - *script-gitlab-api-install
   script:
     - mkdir public && cp -r e2e-tests/playwright/playwright-report "public/${PAGES_PREFIX}"
-    # Check if a note about pages URL has already been created
-    - echo "Reading notes for MR ${CI_MERGE_REQUEST_IID}..."
-    - |
-      PAGES_URL_NOTE=$( \
-        curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes?per_page=1000" | \
-        jq '.[] | .body | select(.|test("^E2E report is now available at https://.+$"))' \
-      )
-    # Notify about the created E2E report
-    - |
-      if [ -z "$PAGES_URL_NOTE" ]; then
-        curl --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" -X POST "https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \
-          -d "body=E2E report is now available at ${CI_PAGES_URL}/${PAGES_PREFIX}"
-      fi
+  after_script:
+    - ruby .gitlab/e2e_report_notify.rb
   pages:
     path_prefix: "$PAGES_PREFIX"
   artifacts:
