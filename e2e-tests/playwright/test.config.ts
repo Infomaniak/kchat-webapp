@@ -19,7 +19,7 @@ const replaceDomain = (url: string, replaceWith: string, prefix?: string): strin
 
 const baseURL = replaceDomain(
     process.env.PW_BASE_URL || 'https://local.preprod.dev.infomaniak.ch:9005',
-    process.env.PW_KCHAT_TEAM_PREFIX || 'kchat-testing-1-preprod',
+    process.env.PW_KCHAT_TEAM_PREFIX || 'infomaniak',
     'kchat',
 );
 const authBaseURL = replaceDomain(baseURL, 'login');
