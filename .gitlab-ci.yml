@@ -85,7 +85,7 @@ variables:
 
 # Install curl and jq for interaction with gitlab api
 .script-gitlab-api-install: &script-gitlab-api-install
-  - apt update && apt upgrade -y && apt install curl jq -y
+  - apt-get update && apt-get install -y curl jq
 
 # Extract dev-bot note and parse the staging URL
 .script-parse-staging-baseurl: &script-parse-staging-baseurl
@@ -117,8 +117,7 @@ variables:
 #       - .yarn/cache
 
 # Shared test config
-.tests:
-  image: node:${NODE_VERSION}
+.tests: &tests
   tags:
     - docker-executor
     - kubernetes
@@ -130,8 +129,14 @@ variables:
     - when: never
   environment:
     name: "$ENVIRONMENT_NAME"
+
+# Node-specific test config
+.tests-node: &tests-node
+  <<: *tests
+  image: node:${NODE_VERSION}
   before_script:
     - *script-yarn-install
+    - *script-build-packages
   # cache:
   #   - *cache-yarn
 
@@ -249,7 +254,7 @@ build:image:
 test:unit:
   stage: test
   extends:
-    - .tests
+    - .tests-node
   script:
     - yarn test:webapp
   # Save coverage report
@@ -268,27 +273,39 @@ test:unit:
     - *cache-jest
     # - *cache-yarn
 
-# Execute playwright tests
-test:pw:
+# Triggers e2e tests
+# Parse staging base URL and store in dotenv artifact
+test:e2e:
   stage: test
   extends:
     - .tests
-  image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
-  allow_failure: true
   rules:
     - if: *if-merge-request
       when: manual
     - when: never
+  before_script:
+    - *script-parse-staging-baseurl
+  # Pass env variables to Playwright/Cypress
+  # https://docs.gitlab.com/ee/ci/variables/index.html#pass-an-environment-variable-to-another-job
+  script:
+    - echo "STAGING_BASE_URL=$STAGING_BASE_URL" >> test.env
+  artifacts:
+    reports:
+      dotenv: test.env
+
+# Execute playwright tests
+test:e2e:pw:
+  stage: test
+  extends:
+    - .tests-node
+  image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
+  allow_failure: true
+  needs: ["test:e2e"]
   variables:
+    PW_BASE_URL: ${STAGING_BASE_URL} # From test:e2e - dotenv
     PW_ADMIN_EMAIL: ${E2E_ADMIN_EMAIL}
     PW_ADMIN_PASSWORD: ${E2E_ADMIN_PASSWORD}
-  before_script:
-    - *script-yarn-install
-    - *script-build-packages
-    - *script-parse-staging-baseurl
   script:
-    # Execute tests
-    - export PW_BASE_URL=$STAGING_BASE_URL
     - echo "Executing e2e Playwright tests on ${PW_BASE_URL}..." \
     - yarn run test:e2e:playwright
   # cache:
@@ -308,8 +325,7 @@ release:front:
     entrypoint: [""]
   tags:
     - kubernetes
-  needs:
-    - build:front
+  needs: ["build:front"]
   rules:
     - *rule-preprod
     - *rule-canary
@@ -332,8 +348,7 @@ release:front:
 #   image: node:${NODE_VERSION}
 #   tags:
 #     - kubernetes
-#   needs:
-#     - build:packages
+#   needs: ["build:packages"]
 #   rules:
 #     - *rule-not-scheduled
 #     - *rule-prodsec
@@ -354,8 +369,7 @@ release:front:
 release:changelog:
   stage: release
   image: ruby:${RUBY_VERSION}
-  needs:
-    - release:front
+  needs: ["release:front"]
   rules:
     - *rule-preprod
     - *rule-canary
@@ -370,7 +384,7 @@ release:changelog:
 # https://docs.gitlab.com/ee/user/project/pages/getting_started/pages_from_scratch.html
 pages:
   stage: deploy
-  needs: ["test:pw"]
+  needs: ["test:e2e:pw"]
   rules:
     - if: *if-merge-request
       variables:
@@ -409,8 +423,7 @@ release:sentry:
     - docker-executor
     - kubernetes
     - shared
-  needs:
-    - build:front
+  needs: ["build:front"]
   rules:
     - *rule-preprod
     - *rule-canary
