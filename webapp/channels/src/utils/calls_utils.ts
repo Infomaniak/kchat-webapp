@@ -6,5 +6,5 @@ export const isCallV3Available = () => {
 };
 
 export const openKmeetInExternalWindow = (baseUrl: string, jwt: string, subject: string) => {
-    window.open(baseUrl, '_blank', `jwt=${jwt},config.prejoinConfig.enabled=false,config.deeplinking.disabled=true,config.startWithVideoMuted=true,config.subject=${subject}`);
+    window.open(baseUrl + `?jwt=${jwt}&config.subject=${subject}#config.prejoinConfig.enabled=false&config.deeplinking.disabled=true&config.startWithVideoMuted=true`, '_blank', 'noopener');
 };

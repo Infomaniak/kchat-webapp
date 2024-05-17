@@ -169,7 +169,7 @@ export function startCall(channelId: string, jwt: string, url: string, subject: 
             dispatch(startKmeetWindow(channelId, jwt, subject));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-            openKmeetInExternalWindow(url, jwt);
+            openKmeetInExternalWindow(url, jwt, subject);
         }
     };
 }
