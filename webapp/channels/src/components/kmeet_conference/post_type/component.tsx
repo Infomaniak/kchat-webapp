@@ -13,7 +13,7 @@ import {putChannelActiveConf} from 'actions/calls';
 
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
-import {isCallV3Available} from 'utils/calls_utils';
+import {isDesktopExtendedCallSupported} from 'utils/calls_utils';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {Conference} from 'types/conference';
@@ -192,7 +192,7 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
                 {renderCallStatus(status)}
             </Sc.Left>
             <Sc.Right>
-                {(!isDesktopApp() || isCallV3Available()) && renderAvatars()}
+                {(!isDesktopApp() || isDesktopExtendedCallSupported()) && renderAvatars()}
                 {renderButton(status)}
             </Sc.Right>
         </Sc.Main>

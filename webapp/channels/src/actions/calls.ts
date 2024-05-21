@@ -22,7 +22,7 @@ import {
 } from 'selectors/calls';
 import {getCurrentLocale} from 'selectors/i18n';
 
-import {isCallV3Available, openKmeetInExternalWindow} from 'utils/calls_utils';
+import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_utils';
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {stopRing} from 'utils/notification_sounds';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
@@ -180,8 +180,8 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             }
 
             if (data && data.url) {
-                if (isDesktopApp() && !isCallV3Available()) {
-                    openKmeetInExternalWindow(data.url, data.jwt, data.name);
+                if (isDesktopApp() && !isDesktopExtendedCallSupported()) {
+                    openWebCallInNewTab(data.url, data.jwt, data.name);
                     return;
                 }
 
@@ -249,7 +249,7 @@ export function receivedCall(call: Call, currentUserId: string) {
                 },
             });
 
-            if (isDesktopApp() && !isCallV3Available() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
+            if (isDesktopApp() && !isDesktopExtendedCallSupported() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
                 handleDesktopKmeetCall(globalState, call);
                 return;
             }

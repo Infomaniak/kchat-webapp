@@ -13,7 +13,7 @@ import {isModalOpen} from 'selectors/views/modals';
 
 import KmeetModal from 'components/kmeet_modal';
 
-import {isCallV3Available, openKmeetInExternalWindow} from 'utils/calls_utils';
+import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_utils';
 import Constants, {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {t} from 'utils/i18n';
 import {isDesktopApp} from 'utils/user_agent';
@@ -162,19 +162,19 @@ export function cancelCall(channelId: string) {
 export function startCall(channelId: string, jwt: string, url: string, subject: string) {
     return async (dispatch: DispatchFunc) => {
         if (isDesktopApp()) {
-            if (!isCallV3Available()) {
+            if (!isDesktopExtendedCallSupported()) {
                 return;
             }
 
-            dispatch(startKmeetWindow(channelId, jwt, subject));
+            dispatch(startDesktopCall(channelId, jwt, subject));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-            openKmeetInExternalWindow(url, jwt, subject);
+            openWebCallInNewTab(url, jwt, subject);
         }
     };
 }
 
-export function startKmeetWindow(channelId: string, jwt: string, subject: string) {
+export function startDesktopCall(channelId: string, jwt: string, subject: string) {
     return async (_: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const user = getCurrentUser(state);
