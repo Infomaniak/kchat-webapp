@@ -6,5 +6,12 @@ export const isCallV3Available = () => {
 };
 
 export const openKmeetInExternalWindow = (baseUrl: string, jwt: string, subject: string) => {
-    window.open(baseUrl + `?jwt=${jwt}#config.disableInviteFunctions=true#config.localSubject=${encodeURIComponent(`"${subject}"`)}#config.prejoinConfig.enabled=false&config.deeplinking.disabled=true&config.startWithVideoMuted=true`, '_blank', 'noopener');
+    let url = baseUrl;
+    url += `?jwt=${jwt}`;
+    url += '#config.disableInviteFunctions=true';
+    url += `#config.localSubject=${subject}`;
+    url += '#config.prejoinConfig.enabled=false';
+    url += '#config.deeplinking.disabled=true';
+    url += '#config.startWithVideoMuted=true';
+    window.open(url, '_blank', 'noopener');
 };
