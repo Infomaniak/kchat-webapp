@@ -158,6 +158,7 @@ export function startOrJoinCallInChannelV2(channelID: string) {
         try {
             const data = await Client4.startMeet(channelID);
             const channel = getChannel(state, channelID);
+            const {status} = callUserStatus(state);
 
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
@@ -185,7 +186,13 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                     return;
                 }
 
+                console.log('data', data)
+                console.log('status', status)
+                // if (status[data.user_id] !== 'dnd') {
+
                 dispatch(openCallDialingModal(channelID));
+
+                // }
             }
         } catch (error) {
             console.error('call could not be started', error);
