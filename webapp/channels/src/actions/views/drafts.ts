@@ -64,6 +64,14 @@ export function getDrafts(teamId: string): ActionFuncAsync<boolean, GlobalState>
         });
 
         const actions = Array.from(draftsMap).map(([key, draft]) => {
+            // Local drafts that are past-schedule are cleared from local storage
+            if (typeof draft.value.timestamp === 'number') {
+                const isPastSchedule = Math.floor(Date.now() / 1000) > draft.value.timestamp;
+                if (isPastSchedule) {
+                    return removeGlobalItem(key);
+                }
+            }
+
             return setGlobalItem(key, draft.value);
         });
 
