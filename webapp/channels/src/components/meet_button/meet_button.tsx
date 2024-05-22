@@ -63,6 +63,7 @@ function MeetButton(props: Props) {
         timeoutRef.current = setTimeout(() => {
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
             }
         }, TIME_TO_AVOID_SPAMMING_CALL_BTN);
     };
