@@ -6,6 +6,10 @@ No changes.
 
 No changes.
 
+## 2.8.1-next.2 (2024-05-22)
+
+No changes.
+
 ## 2.8.1-next.1 (2024-05-16)
 
 No changes.
