@@ -235,11 +235,12 @@ export default class LoggedIn extends React.PureComponent<Props> {
     };
 
     private setCallListeners() {
-        if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.2.0')) {
+        if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.3.0')) {
             window?.callManager?.onCallJoined?.((_: any, {channelId, channelID}) => this.props.actions.joinCall(channelID || channelId));
             window?.callManager?.onCallDeclined?.((_: any, {channelId, channelID}) => this.props.actions.declineCall(channelID || channelId));
             window?.callManager?.onCallCancel?.((_: any, {channelId}) => this.props.actions.cancelCall(channelId));
-            window?.callManager?.onCallEnded?.((_: any, {channelID}) => this.props.actions.cancelCall(channelID));
+
+            // window?.callManager?.onCallEnded?.((_: any, {channelID}) => this.props.actions.cancelCall(channelID));
         }
     }
 
