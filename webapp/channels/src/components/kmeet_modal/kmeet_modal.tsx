@@ -163,6 +163,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     return (
         <Container
             backdrop='static'
+            keyboardEscape={false}
             className={classNames('call-modal CallRingingModal', {
                 desktop: isDesktopApp(),
             })}
