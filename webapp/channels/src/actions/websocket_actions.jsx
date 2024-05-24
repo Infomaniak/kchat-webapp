@@ -1897,12 +1897,7 @@ function handleConferenceUserConnected(msg) {
 
         if (currentUserId === msg?.data?.user_id) {
             if (isDesktopApp()) {
-                window.postMessage(
-                    {
-                        type: 'call-joined-browser',
-                    },
-                    window.origin,
-                );
+                window.desktopAPI.closeDial();
             } else {
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
