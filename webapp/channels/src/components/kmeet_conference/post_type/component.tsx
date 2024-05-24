@@ -31,13 +31,14 @@ interface Props {
     joinCall: (channelID: string) => void;
 }
 
-type Status = 'M'|'O'|'E'|'D' | undefined
+type Status = 'M'|'O'|'E'|'D'|'S' | undefined
 
 const text = {
     O: {id: 'kmeet.calls.started', defaultMessage: 'Appel démarré', values: {}},
     M: {id: 'kmeet.calls.called', defaultMessage: 'Appel manqué', values: {}},
     E: {id: 'kmeet.calls.ended.title', defaultMessage: 'Appel terminé', values: {}},
     D: {id: 'kmeet.calls.in_progress', defaultMessage: 'Appel en cours', values: {}},
+    S: {id: 'kmeet.calls.declined', defaultMessage: 'Appel decline', values: {}},
 };
 
 const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV2, joinCall, hasConferenceStarted}) => {
@@ -63,22 +64,20 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
     }, [dispatch, post.props.conference_id, meetingUrl, post.channel_id]);
 
     const defineStatus = (): Status => {
-        const spec = post.props;
-        const ended = Boolean(spec.end_at);
-
-        if (spec.in_call === true) {
+        switch (post.props.status) {
+        case 'calling':
+            return 'O';
+        case 'joined':
+            return 'D';
+        case 'ended':
+            return 'E';
+        case 'missed':
             return 'M';
-        }
-
-        if (ended === true) {
+        case 'declined':
+            return 'S';
+        default:
             return 'E';
         }
-
-        if (hasConferenceStarted) {
-            return 'D';
-        }
-
-        return 'O';
     };
 
     const renderCallStatus = (status: Status = 'O') => {
