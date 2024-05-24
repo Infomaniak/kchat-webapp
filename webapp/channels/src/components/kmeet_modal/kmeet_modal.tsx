@@ -61,28 +61,28 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         }
     }, [dispatch, conference]);
 
-    const handleClickOutsideModal = useCallback((event: any) => {
-        if (modalRef.current && !modalRef.current.contains(event.target)) {
-            onHandleDecline();
-        }
-    }, [onHandleDecline]);
+    // const handleClickOutsideModal = useCallback((event: any) => {
+    //     if (modalRef.current && !modalRef.current.contains(event.target)) {
+    //         onHandleDecline();
+    //     }
+    // }, [onHandleDecline]);
 
     useEffect(() => {
         window.addEventListener('offline', () => {
             onHandleDecline();
         });
 
-        document.addEventListener('click', handleClickOutsideModal);
+        // document.addEventListener('click', handleClickOutsideModal);
 
         const timeout = setTimeout(() => {
             onHandleDecline();
         }, 30000);
 
         return () => {
-            document.removeEventListener('click', handleClickOutsideModal);
+            // document.removeEventListener('click', handleClickOutsideModal);
             clearTimeout(timeout);
         };
-    }, [onHandleDecline, handleClickOutsideModal]);
+    }, [onHandleDecline]);
 
     useEffect(() => {
         ringing('Ring');
