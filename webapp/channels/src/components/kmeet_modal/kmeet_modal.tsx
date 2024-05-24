@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import type {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
@@ -11,11 +11,13 @@ import type {UserProfile} from '@mattermost/types/users.js';
 import {getUser} from 'mattermost-redux/actions/users';
 
 import {joinCall, declineCall, cancelCall} from 'actions/kmeet_calls';
+import {closeModal} from 'actions/views/modals';
 
 import Avatars from 'components/kmeet_conference/avatars';
 import CallAccept from 'components/widgets/icons/call_accept';
 import CallHangUp from 'components/widgets/icons/call_hang_up';
 
+import {ModalIdentifiers} from 'utils/constants';
 import {ringing, stopRing} from 'utils/notification_sounds';
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -60,6 +62,13 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
             dispatch(cancelCall(conference.channel_id));
         }
     }, [dispatch, conference]);
+
+    if (
+        caller.id in conference?.registrants &&
+        (conference?.registrants[caller.id].status === 'approved' || conference?.registrants[caller.id].status === 'denied')
+    ) {
+        dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+    }
 
     // const handleClickOutsideModal = useCallback((event: any) => {
     //     if (modalRef.current && !modalRef.current.contains(event.target)) {
