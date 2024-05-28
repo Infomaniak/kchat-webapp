@@ -1,12 +1,11 @@
 import classNames from 'classnames';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import type {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import './guest_banner.scss';
-
 import type {ChannelMembership} from '@mattermost/types/channels';
 
+import TextBanner from 'components/text_banner';
 import InfoIconFilled from 'components/widgets/icons/info_icon_filled';
 
 import GuestListModal from './guest_list_modal';
@@ -33,7 +32,7 @@ const GuestBanner: FC<Props> = ({count, isGuest, channelId, actions}) => {
         }
     }, [actions, channelId]);
 
-    return (count && !isGuest ? <div className={classNames('GuestBanner')}>
+    return (count && !isGuest ? <TextBanner className={classNames('GuestBanner')}>
         <InfoIconFilled className={'InfoIcon'}/>
         <FormattedMessage
             id='guest_banner.text'
@@ -48,7 +47,7 @@ const GuestBanner: FC<Props> = ({count, isGuest, channelId, actions}) => {
                 count,
             }}
         />
-    </div> : <></>);
+    </TextBanner> : <></>);
 };
 
 export default GuestBanner;

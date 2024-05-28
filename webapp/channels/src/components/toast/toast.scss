@@ -72,6 +72,10 @@
             }
         }
     }
+
+    &--darker {
+        background: var(--dark-modal-color);
+    }
 }
 
 .toast__visible {
