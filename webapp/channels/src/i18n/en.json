@@ -4166,6 +4166,7 @@
   "kmeet.calls.start": "Call",
   "kmeet.calls.started": "kMeet meeting started",
   "kmeet.calls.ended.title": "Call ended",
+  "kmeet.calls.in_progress": "Call in progress",
   "kmeet.calls.declined": "Call rejected by {usernames}",
   "kmeet.calls.callback": "Callback",
   "kmeet.calls.called": "Call missed",

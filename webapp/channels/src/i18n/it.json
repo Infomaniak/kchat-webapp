@@ -2759,6 +2759,7 @@
   "kmeet.calls.start": "Chiamare",
   "kmeet.calls.started": "La riunione kMeet è iniziata",
   "kmeet.calls.already_in_call": "Sei già in una chiamata. Termina la tua chiamata prima di avviarne una nuova.",
+  "kmeet.calls.in_progress": "Chiamata in corso",
   "last_users_message.added_to_channel.type": "sono stati **aggiunti al canale** da {actor}.",
   "last_users_message.added_to_team.type": "sono stati **aggiunti alla squadra** da {actor}.",
   "last_users_message.first": "{firstUser} e ",
