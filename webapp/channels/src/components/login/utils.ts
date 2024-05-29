@@ -12,7 +12,7 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion} from 'utils/user_agent';
 
 // eslint-disable-next-line no-process-env
-const v2DefaultAuthServer = 'https://kchat.staging-74314.dev.infomaniak.ch'; //process.env.BASE_URL;
+const v2DefaultAuthServer = 'https://kchat.infomaniak.com'; //process.env.BASE_URL;
 
 /**
  * Store IKToken infos in localStorage and update Client
