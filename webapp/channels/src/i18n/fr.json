@@ -3827,7 +3827,7 @@
   "notify_all.title.confirm": "Confirmez l'envoi de notifications au canal en entier",
   "notify_all.title.confirm_groups": "Confirm sending notifications to groups",
   "notify_here.question": "En utilisant **@here**, vous êtes sur le point d'envoyer des notifications à **{totalMembers} personnes**. Voulez-vous vraiment continuer ?",
-  "notify_here.question_timezone": "En utilisant **@here**, vous êtes sur le point d'envoyer des notifications à **{totalMembers} personne** dans **{timezones, number} {timezones, plural, one {timezone} other {timezones}}**. Voulez-vous vraiment continuer ?",
+  "notify_here.question_timezone": "En utilisant **@here**, vous êtes sur le point d'envoyer des notifications à **{totalMembers} personnes** dans **{timezones, number} {timezones, plural, one {timezone} other {timezones}}**. Voulez-vous vraiment continuer ?",
   "numMembers": "{num, number} {num, plural, one {membre} other {membres}}",
   "offers_modal.accept": "Modifier mon offre",
   "offers_modal.cancel": "Pas pour le moment",
