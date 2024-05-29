@@ -41,6 +41,7 @@
         height: 0;
         padding-right: calc(16px + var(--right-padding-for-scrollbar) + var(--right-padding-for-preview-button));
         box-shadow: none;
+        overflow:auto;
 
         &:focus {
             box-shadow: none;

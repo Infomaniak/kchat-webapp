@@ -643,6 +643,7 @@
             max-height: calc(50vh - 40px);
             padding: 13px 16px 12px 16px;
             background-color: var(--center-channel-bg);
+            overflow: auto;
 
             &.custom-textarea--emoji-picker {
                 padding-right: 50px;
