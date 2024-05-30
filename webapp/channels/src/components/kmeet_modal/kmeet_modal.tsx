@@ -83,14 +83,14 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
 
         // document.addEventListener('click', handleClickOutsideModal);
 
-        const timeout = setTimeout(() => {
-            onHandleDecline();
-        }, 30000);
+        // const timeout = setTimeout(() => {
+        //     onHandleDecline();
+        // }, 30000);
 
-        return () => {
-            // document.removeEventListener('click', handleClickOutsideModal);
-            clearTimeout(timeout);
-        };
+        // return () => {
+        //     // document.removeEventListener('click', handleClickOutsideModal);
+        //     clearTimeout(timeout);
+        // };
     }, [onHandleDecline]);
 
     useEffect(() => {
