@@ -210,10 +210,9 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                 </div>
             </div>
             <div >
-                <div className='transcript-text-container'>
-                    {transcript && isTranscriptOpen && transcript}
-                </div>
-                {transcript && isTranscriptOpen && transcriptDatas &&
+                <div>
+                    {transcript && isTranscriptOpen && (transcript.length > 300 ? transcript.substring(0, 300) + '... ' : transcript + ' ')}
+                    {transcript && isTranscriptOpen && transcriptDatas &&
                     <OverlayTrigger
                         overlay={
                             <TranscriptComponent
@@ -231,7 +230,8 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             />
                         </a>
                     </OverlayTrigger>
-                }
+                    }
+                </div>
 
                 {error && <div className='transcript-error'>{error}</div>}
             </div>
