@@ -38,6 +38,7 @@ export interface Props {
     fileId: FileInfo['id'];
     inPost?: boolean;
     onCancel?: () => void;
+    isPreview?: boolean;
 }
 
 function VoiceMessageAttachmentPlayer(props: Props) {
@@ -183,18 +184,18 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             />
                         </Menu.Container>
                     )}
-                    <div
-                        onClick={fetchTranscript}
-                        className='post-image__end-button'
-                    >
-                        {isLoadingTranscript ? (<LoadingSpinner/>) : (
-
-                            <MenuIcon
-                                size={18}
-                                color='currentColor'
-                            />)}
-
-                    </div>
+                    {!props.isPreview && (
+                        <div
+                            onClick={fetchTranscript}
+                            className='post-image__end-button'
+                        >
+                            {isLoadingTranscript ? (<LoadingSpinner/>) : (
+                                <MenuIcon
+                                    size={18}
+                                    color='currentColor'
+                                />
+                            )}
+                        </div>)}
                     {!props.inPost && (
                         <button
                             className='post-image__end-button'
