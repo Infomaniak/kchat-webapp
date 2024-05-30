@@ -16,15 +16,7 @@
     margin-top: 3px;
 }
 
-.transcript-text-container {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .transcript-popover{
-    max-height: 300px !important;
+    max-width: 400px !important;
     overflow: auto;
 }
