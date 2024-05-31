@@ -26,7 +26,6 @@ import {getActiveTeamsList} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, isCurrentUserSystemAdmin, checkIsFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import {setCallListeners} from 'actions/calls';
 import {loadRecentlyUsedCustomEmojis} from 'actions/emoji_actions';
 import * as GlobalActions from 'actions/global_actions';
 import {storeBridge} from 'actions/ksuite_bridge_actions';
@@ -224,8 +223,6 @@ export default class Root extends React.PureComponent<Props, State> {
         if (!UserAgent.isDesktopApp()) {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
-
-        setCallListeners();
 
         setSystemEmojis(new Set(EmojiIndicesByAlias.keys()));
 
@@ -887,6 +884,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     /> */}
 
                     <LoggedInRoute
+                        headerRef={this.headerResizerRef}
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
                     />

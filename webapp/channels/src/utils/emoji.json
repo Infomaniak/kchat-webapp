@@ -57795,5 +57795,15 @@
             "kchat"
         ],
         "category": "custom"
+    },
+    {
+        "id": "kmeet",
+        "name": "kMeet",
+        "unified": "",
+        "short_name": "kmeet",
+        "short_names": [
+            "kmeet"
+        ],
+        "category": "custom"
     }
 ]

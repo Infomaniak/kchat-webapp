@@ -230,6 +230,12 @@ export default class Client4 {
         return this.url;
     }
 
+    getTranscript = (fileId: string) => {
+        return this.doFetch(
+            `${this.getFileRoute(fileId)}/transcript`,
+            {method: 'POST'},
+        );
+    }
     getAbsoluteUrl(baseUrl: string) {
         if (typeof baseUrl !== 'string' || !baseUrl.startsWith('/')) {
             return baseUrl;
@@ -1950,7 +1956,7 @@ export default class Client4 {
             `${this.getChannelMembersRoute(channelId)}/invite`,
             {method: 'post', body: JSON.stringify(body)},
         );
-        
+
     };
 
     removeFromChannel = (userId: string, channelId: string) => {
@@ -4422,20 +4428,32 @@ export default class Client4 {
             team_user_id: string;
             updated_at: string;
             url: string;
+            jwt: string;
+            name: string;
         }>(
             `${this.getBaseRoute()}/conferences`,
             {method: 'post', body: JSON.stringify({channel_id: channelID})},
         );
     }
-    leaveMeet = (callID: string) => {
+    cancelMeet = (callID: string) => {
         return this.doFetch(
-            `${this.getBaseRoute()}/conferences/${callID}/leave`,
+            `${this.getBaseRoute()}/conferences/${callID}/cancel`,
             {method: 'post'},
         );
     }
 
     acceptIncomingMeetCall(callID: string) {
-        return this.doFetch(
+        return this.doFetch<{
+            channel_id: string;
+            created_at: string;
+            id: string;
+            team_user: Object;
+            team_user_id: string;
+            updated_at: string;
+            url: string;
+            jwt: string;
+            name: string;
+        }>(
             `${this.getBaseRoute()}/conferences/${callID}/answer`,
             {method: 'post'},
         );

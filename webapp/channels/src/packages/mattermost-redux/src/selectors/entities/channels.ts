@@ -314,6 +314,15 @@ export const getCurrentChannelStats: (state: GlobalState) => ChannelStats = crea
     },
 );
 
+export const getCurrentChannelMembersCount: (state: GlobalState) => number = createSelector(
+    'getCurrentChannelStats',
+    getAllChannelStats,
+    getCurrentChannelId,
+    (allChannelStats: RelationOneToOne<Channel, ChannelStats>, currentChannelId: string): number => {
+        return allChannelStats[currentChannelId]?.member_count || 0;
+    },
+);
+
 export function isCurrentChannelFavorite(state: GlobalState): boolean {
     const currentChannelId = getCurrentChannelId(state);
     return isFavoriteChannel(state, currentChannelId);

@@ -83,6 +83,10 @@ export function getUserStatuses(state: GlobalState): RelationOneToOne<UserProfil
     return state.entities.users.statuses;
 }
 
+export function getUserStatusById(state: GlobalState, id: string) {
+    return state.entities.users.statuses[id];
+}
+
 export function getUserSessions(state: GlobalState): any[] {
     return state.entities.users.mySessions;
 }

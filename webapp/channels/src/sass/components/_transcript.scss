@@ -1,0 +1,22 @@
+@charset 'UTF-8';
+.time-transcript{
+    color: var(--center-channel-color);
+    margin-right:10px;
+}
+
+.transcript-text{
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.transcript-error{
+    text-align: center;
+    color: var(--error-text);
+    margin-top: 3px;
+}
+
+.transcript-popover{
+    max-width: 400px !important;
+    overflow: auto;
+}

@@ -1060,6 +1060,13 @@ export function notifyChannelMember(channelId: string, userIds: string[], postId
     };
 }
 
+export function fetchTranscriptData(fileId: string) {
+    return async () => {
+        const transcript = await Client4.getTranscript(fileId);
+        return transcript;
+    };
+}
+
 export function addChannelMember(channelId: string, userId: string, postRootId = ''): ActionFuncAsync<ChannelMembership> {
     return async (dispatch, getState) => {
         let member;

@@ -24,7 +24,7 @@ import {
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 
 import {startOrJoinCallInChannelV2} from 'actions/calls';
-import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
+import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 import {getPenultimateViewedChannelName} from 'selectors/local_storage';
 import {getChannelHeaderMenuPluginComponents} from 'selectors/plugins';
 
@@ -78,7 +78,7 @@ const mapStateToProps = (state: GlobalState) => {
         penultimateViewedChannelName: getPenultimateViewedChannelName(state) || getRedirectChannelNameForTeam(state, getCurrentTeamId(state)),
         pluginMenuItems: getChannelHeaderMenuPluginComponents(state),
         isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
-        hasCall: connectedKmeetCallUrl(state, channel.id) != null,
+        hasCall: getConferenceByChannelId(state, channel.id) != null,
     };
 };
 
