@@ -38,7 +38,7 @@ const text = {
     M: {id: 'kmeet.calls.called', defaultMessage: 'Appel manqué', values: {}},
     E: {id: 'kmeet.calls.ended.title', defaultMessage: 'Appel terminé', values: {}},
     D: {id: 'kmeet.calls.in_progress', defaultMessage: 'Appel en cours', values: {}},
-    S: {id: 'kmeet.calls.declined', defaultMessage: 'Appel decline', values: {}},
+    S: {id: 'kmeet.calls.declined', defaultMessage: 'Appel décliné', values: {}},
 };
 
 const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV2, joinCall, hasConferenceStarted}) => {
