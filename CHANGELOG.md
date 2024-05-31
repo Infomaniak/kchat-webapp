@@ -1,3 +1,9 @@
+## 2.9.0-rc.7 (2024-05-31)
+
+### Fixed (1 change)
+
+- [remove decline call when call missed](kchat/webapp@564549d5249063a067c5724836d3cbc75b53fe4b) by @antonbuksa
+
 ## 2.9.0-rc.6 (2024-05-31)
 
 No changes.
