@@ -218,9 +218,9 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             <TranscriptComponent
                                 className='transcript-popover'
                                 transcriptDatas={transcriptDatas}
-                            />}
+                            />
+                        }
                         trigger={['click']}
-                        placement='right'
                         rootClose={true}
                     >
                         <a className='transcript-link-view'>
@@ -232,7 +232,6 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                     </OverlayTrigger>
                     }
                 </div>
-
                 {error && <div className='transcript-error'>{error}</div>}
             </div>
         </>
