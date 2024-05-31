@@ -11,12 +11,31 @@
 }
 
 .transcript-error{
-    text-align: center;
-    color: var(--error-text);
+    text-align: left;
+    color: var(--center-channel-color);
     margin-top: 3px;
 }
 
+.transcript-container{
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
 .transcript-popover{
-    max-width: 400px !important;
+    position: absolute;
+    top: calc(100% - 400px);
+    left: 0;
+    width: 400px;
+    height: 400px;
     overflow: auto;
+
+    @media screen and (max-width: 1280px) {
+        left: unset;
+        right: 0;
+    }
+    @media screen and (max-width: 768px) {
+        position: fixed;
+        top: 50vh;
+    }
 }

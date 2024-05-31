@@ -13,38 +13,41 @@ interface Props {
 
 const TranscriptComponent: React.FC<Props> = ({transcriptDatas, ...restProps}) => {
     return (
-        <Popover
+        <div
             {...restProps}
-        >
-            <div className='transcript-text'>
-                <FormattedMessage
-                    id='vocals.transcript_title'
-                    defaultMessage='Audio Transcript (auto-generated)'
-                />
-            </div>
-            <div >
-                {transcriptDatas.segments.map((segment, index) => {
-                    const minutes = Math.floor(segment.start / 60);
-                    const seconds = Math.floor(segment.start % 60);
-                    const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                    return (
-                        <div
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={index}
+            className='transcript-container'
 
-                        >
-                            <p>
-                                <span className='time-transcript'>
-                                    {time}
-                                </span>
-                                {''}
-                                {` ${segment.text.trim()}`}
-                            </p>
-                        </div>
-                    );
-                })}
-            </div>
-        </Popover>
+        >
+            <Popover className='transcript-popover'>
+                <div className='transcript-text'>
+                    <FormattedMessage
+                        id='vocals.transcript_title'
+                        defaultMessage='Audio Transcript (auto-generated)'
+                    />
+                </div>
+                <div >
+                    {transcriptDatas.segments.map((segment, index) => {
+                        const minutes = Math.floor(segment.start / 60);
+                        const seconds = Math.floor(segment.start % 60);
+                        const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                        return (
+                            <div
+                            // eslint-disable-next-line react/no-array-index-key
+                                key={index}
+                            >
+                                <p>
+                                    <span className='time-transcript'>
+                                        {time}
+                                    </span>
+                                    {''}
+                                    {` ${segment.text.trim()}`}
+                                </p>
+                            </div>
+                        );
+                    })}
+                </div>
+            </Popover>
+        </div>
     );
 };
 
