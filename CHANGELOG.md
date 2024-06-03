@@ -1,3 +1,9 @@
+## 2.9.0-rc.9 (2024-06-03)
+
+### Fixed (1 change)
+
+- [fix calls web dial modal teardown on conference_deleted ws event](kchat/webapp@13e7418abc2c7b3c4d9ccea0a178442239773ea4) by @antonbuksa
+
 ## 2.9.0-rc.8 (2024-05-31)
 
 ### Added (3 changes)
