@@ -120,7 +120,7 @@ import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
-import {closeRingModal, externalJoinCall} from './kmeet_calls';
+import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';
 import {handleServerEvent} from './servers_actions';
 
 const dispatch = store.dispatch;
@@ -1960,13 +1960,8 @@ function handleConferenceDeleted(msg) {
         if (isDesktopApp()) {
             window.desktopAPI?.closeRingCallWindow?.();
         }
-        doDispatch({
-            type: ActionTypes.VOICE_CHANNEL_DELETED,
-            data: {
-                callID: msg.data.url.split('/').at(-1),
-                channelID: msg.data.channel_id,
-            },
-        });
+
+        doDispatch(deleteConference(msg.data.url.split('/').at(-1), msg.data.channel_id));
     };
 }
 

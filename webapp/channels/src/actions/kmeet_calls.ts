@@ -205,3 +205,19 @@ export const closeRingModal = () => {
         }
     };
 };
+
+export function deleteConference(callId: string, channelId: string) {
+    return (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const state = getState();
+        if (!isDesktopApp() && state.views.modals.modalState[ModalIdentifiers.INCOMING_CALL]?.dialogProps?.channelId === channelId) {
+            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+        }
+        dispatch({
+            type: ActionTypes.VOICE_CHANNEL_DELETED,
+            data: {
+                callID: callId,
+                channelID: channelId,
+            },
+        });
+    };
+}
