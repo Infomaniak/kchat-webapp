@@ -8,7 +8,6 @@ import {
     CloseIcon,
     LinkVariantIcon,
     DownloadOutlineIcon,
-    MenuIcon,
 } from '@infomaniak/compass-icons/components';
 import React, {useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
@@ -29,6 +28,7 @@ import OverlayTrigger from 'components/overlay_trigger';
 import TranscriptComponent from 'components/transcript/transcript';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
+import Constants from 'utils/constants';
 import {convertSecondsToMSS} from 'utils/datetime';
 import {getSiteURL} from 'utils/url';
 import {copyToClipboard} from 'utils/utils';
@@ -78,6 +78,8 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             setHasFetchedTranscript(true);
         }
     };
+
+    const transcriptIcon = () => Constants.TRANSCRIPT_ICON;
 
     function copyLink() {
         copyToClipboard(`${getSiteURL()}/api/v4/files/${props.fileId}`);
@@ -190,9 +192,8 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             className='post-image__end-button'
                         >
                             {isLoadingTranscript ? (<LoadingSpinner/>) : (
-                                <MenuIcon
-                                    size={18}
-                                    color='currentColor'
+                                <img
+                                    src={transcriptIcon()}
                                 />
                             )}
                         </div>)}
