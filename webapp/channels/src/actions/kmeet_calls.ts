@@ -8,7 +8,7 @@ import {getUserById} from 'mattermost-redux/selectors/entities/users';
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
-import {getConferenceByChannelId} from 'selectors/kmeet_calls';
+import {getConferenceByChannelId, getIsCurrentUserInCall} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
 import KmeetModal from 'components/kmeet_modal';
@@ -26,6 +26,11 @@ import {closeModal, openModal} from './views/modals';
 export function openCallDialingModal(channelId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
+        const isCurrentUserAlreadyInCall = getIsCurrentUserInCall(state);
+        if (isCurrentUserAlreadyInCall) {
+            return;
+        }
+
         if (isDesktopApp()) {
             const conference = getConferenceByChannelId(state, channelId);
             const currentUser = getCurrentUser(state);
