@@ -41,7 +41,7 @@ import {trackEvent} from './telemetry_actions';
 const KeyboardShortcutsModal = withSuspense(lazy(() => import('components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal')));
 const LeaveChannelModal = withSuspense(lazy(() => import('components/leave_channel_modal')));
 const MarketplaceModal = withSuspense(lazy(() => import('components/plugin_marketplace/marketplace_modal')));
-const UserSettingsModal = withSuspense(lazy(() => import('components/user_settings/modal')));
+export const UserSettingsModal = withSuspense(lazy(() => import('components/user_settings/modal')));
 
 export function executeCommand(message: string, args: CommandArgs): ActionFuncAsync<boolean, GlobalState> {
     return async (dispatch, getState) => {
