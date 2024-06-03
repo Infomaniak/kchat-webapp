@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {lazy} from 'react';
+
 import type {CommandArgs} from '@mattermost/types/integrations';
 
 import {IntegrationTypes} from 'mattermost-redux/action_types';
@@ -21,12 +23,9 @@ import * as GlobalActions from 'actions/global_actions';
 import * as PostActions from 'actions/post_actions';
 import {openModal} from 'actions/views/modals';
 
-import KeyboardShortcutsModal from 'components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal';
-import LeaveChannelModal from 'components/leave_channel_modal';
-import MarketplaceModal from 'components/plugin_marketplace/marketplace_modal';
+import {withSuspense} from 'components/common/hocs/with_suspense';
 import {AppCommandParser} from 'components/suggestion/command_provider/app_command_parser/app_command_parser';
 import {intlShim} from 'components/suggestion/command_provider/app_command_parser/app_command_parser_dependencies';
-import UserSettingsModal from 'components/user_settings/modal';
 
 import {getHistory} from 'utils/browser_history';
 import {Constants, ModalIdentifiers} from 'utils/constants';
@@ -38,6 +37,11 @@ import type {GlobalState} from 'types/store';
 
 import {doAppSubmit, openAppsModal, postEphemeralCallResponseForCommandArgs} from './apps';
 import {trackEvent} from './telemetry_actions';
+
+const KeyboardShortcutsModal = withSuspense(lazy(() => import('components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal')));
+const LeaveChannelModal = withSuspense(lazy(() => import('components/leave_channel_modal')));
+const MarketplaceModal = withSuspense(lazy(() => import('components/plugin_marketplace/marketplace_modal')));
+const UserSettingsModal = withSuspense(lazy(() => import('components/user_settings/modal')));
 
 export function executeCommand(message: string, args: CommandArgs): ActionFuncAsync<boolean, GlobalState> {
     return async (dispatch, getState) => {

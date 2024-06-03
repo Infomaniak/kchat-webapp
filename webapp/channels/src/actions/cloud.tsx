@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {Stripe} from '@stripe/stripe-js';
+import {lazy} from 'react';
 
 import type {ChannelType} from '@mattermost/types/channels';
 import type {Address, Feedback, WorkspaceDeletionRequest} from '@mattermost/types/cloud';
@@ -17,8 +18,7 @@ import type {ActionFunc, ThunkActionFunc} from 'mattermost-redux/types/actions';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {isModalOpen} from 'selectors/views/modals';
 
-import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
-import ExternalLimitReachedModal from 'components/limits/external_limit_reached_modal';
+import {withSuspense} from 'components/common/hocs/with_suspense';
 import {getConfirmCardSetup} from 'components/payment_form/stripe';
 
 import {ModalIdentifiers} from 'utils/constants';
@@ -29,6 +29,9 @@ import type {StripeSetupIntent, BillingDetails} from 'types/cloud/sku';
 import type {GlobalState} from 'types/store';
 
 import {closeModal, openModal} from './views/modals';
+
+const ChannelLimitReachedModal = withSuspense(lazy(() => import('components/limits/channel_limit_reached_modal')));
+const ExternalLimitReachedModal = withSuspense(lazy(() => import('components/limits/external_limit_reached_modal')));
 
 // Returns true for success, and false for any error
 export function completeStripeAddPaymentMethod(

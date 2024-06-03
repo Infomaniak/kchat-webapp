@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {lazy} from 'react';
+
 import {Client4} from 'mattermost-redux/client';
 import {getChannel, getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
@@ -11,7 +13,7 @@ import {getCurrentLocale} from 'selectors/i18n';
 import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
-import KmeetModal from 'components/kmeet_modal';
+import {withSuspense} from 'components/common/hocs/with_suspense';
 
 import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_utils';
 import Constants, {ActionTypes, ModalIdentifiers} from 'utils/constants';
@@ -22,6 +24,8 @@ import * as Utils from 'utils/utils';
 import type {GlobalState} from 'types/store';
 
 import {closeModal, openModal} from './views/modals';
+
+const KmeetModal = withSuspense(lazy(() => import('components/kmeet_modal')));
 
 export function openCallDialingModal(channelId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {

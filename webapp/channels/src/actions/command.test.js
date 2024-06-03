@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {lazy} from 'react';
+
 import {Client4} from 'mattermost-redux/client';
 import {Permissions} from 'mattermost-redux/constants';
 import {AppCallResponseTypes} from 'mattermost-redux/constants/apps';
@@ -9,14 +11,17 @@ import * as Teams from 'mattermost-redux/selectors/entities/teams';
 
 import * as GlobalActions from 'actions/global_actions';
 
-import UserSettingsModal from 'components/user_settings/modal';
+import {withSuspense} from 'components/common/hocs/with_suspense';
 
-import mockStore from 'tests/test_store';
 import {ActionTypes, Constants, ModalIdentifiers} from 'utils/constants';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 
+import mockStore from 'tests/test_store';
+
 import {executeCommand} from './command';
+
+const UserSettingsModal = withSuspense(lazy(() => import('components/user_settings/modal')));
 
 const currentChannelId = '123';
 const currentTeamId = '321';

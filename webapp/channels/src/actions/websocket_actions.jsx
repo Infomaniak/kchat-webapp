@@ -3,6 +3,7 @@
 
 /* eslint-disable max-lines */
 
+import {lazy} from 'react';
 import {batchActions} from 'redux-batched-actions';
 
 import {
@@ -107,12 +108,12 @@ import {getGlobalItem} from 'selectors/storage';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
 import store from 'stores/redux_store';
 
+import {withSuspense} from 'components/common/hocs/with_suspense';
 import InteractiveDialog from 'components/interactive_dialog';
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
-import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 
 import {getHistory} from 'utils/browser_history';
-import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, StoragePrefixes} from 'utils/constants';
+import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -122,6 +123,8 @@ import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
 import {closeRingModal, externalJoinCall} from './kmeet_calls';
 import {handleServerEvent} from './servers_actions';
+
+const RemovedFromChannelModal = withSuspense(lazy(() => import('components/removed_from_channel_modal')));
 
 const dispatch = store.dispatch;
 const getState = store.getState;

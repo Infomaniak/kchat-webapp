@@ -4,11 +4,9 @@
 import type {ComponentType} from 'react';
 import React, {Suspense} from 'react';
 
-const withSuspense = <P extends object>(WrappedComponent: ComponentType<P>) => // eslint-disable-line @typescript-eslint/no-unnecessary-type-constraint
+export const withSuspense = <P extends object>(WrappedComponent: ComponentType<P>) => // eslint-disable-line @typescript-eslint/no-unnecessary-type-constraint
     (props: P) => (
         <Suspense fallback={null}>
             <WrappedComponent {...props}/>
         </Suspense>
     );
-
-export default withSuspense;
