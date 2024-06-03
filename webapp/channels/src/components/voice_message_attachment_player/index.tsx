@@ -173,17 +173,6 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                                 )}
                                 onClick={downloadFile}
                             />
-                            <Menu.Item
-                                id={`permalink_${props.postId}`}
-                                leadingElement={<LinkVariantIcon size={18}/>}
-                                labels={(
-                                    <FormattedMessage
-                                        id='single_image_view.copy_link_tooltip'
-                                        defaultMessage='Copy link'
-                                    />
-                                )}
-                                onClick={copyLink}
-                            />
                         </Menu.Container>
                     )}
                     {!props.isPreview && (
