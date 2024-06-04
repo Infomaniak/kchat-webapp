@@ -14,7 +14,7 @@ import {getPost} from 'mattermost-redux/actions/posts';
 
 import {setGlobalItem} from 'actions/storage';
 import {makeOnSubmit} from 'actions/views/create_comment';
-import {addToUpdateDraftQueue, removeDraft, setGlobalDraftSource, upsertScheduleDraft} from 'actions/views/drafts';
+import {updateDraft, removeDraft, setGlobalDraftSource, upsertScheduleDraft} from 'actions/views/drafts';
 import {closeModal, openModal} from 'actions/views/modals';
 import {selectPost} from 'actions/views/rhs';
 import {getGlobalItem} from 'selectors/storage';
@@ -144,7 +144,7 @@ function ThreadDraft({
         await dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, channel.id, newDraft.rootId));
 
         // Update thread draft
-        const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, value, newDraft.rootId, true, true));
+        const {error} = await dispatch(updateDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, value, newDraft.rootId, true, true));
         if (error) {
             dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${newDraft.rootId}_${newDraft.id}`, value));
         }
