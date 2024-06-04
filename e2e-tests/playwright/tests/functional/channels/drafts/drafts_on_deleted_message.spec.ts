@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-// import {test} from '@e2e-support/test_fixture';
-// import {wait} from '@e2e-support/util';
+import {test} from '@e2e-support/test_fixture';
+import {wait} from '@e2e-support/util';
 // import {test, expect} from '@e2e-support/test_fixture';
 // import {createRandomPost} from '@e2e-support/server/post';
 
@@ -80,53 +80,68 @@
 //     await channelPage.sidebarLeft.draftsNotVisible();
 // });
 
-// test('MM-T5435_2 Global Drafts link in sidebar should be hidden when user deletes root post ', async ({page, pages}) => {
-//     // const {user} = await pw.initSetup();
+test('Posting a message should not end up in drafts ', async ({page, pages}) => {
+    // # Visit default channel page
+    const channelPage = new pages.ChannelsPage(page);
+    await channelPage.goto();
+    await channelPage.toBeVisible();
 
-//     // # Log in as user in new browser context
-//     // const {page} = await pw.testBrowser.login(user);
+    // # Post a message in the channel
+    await channelPage.centerView.postCreate.postMessage('Message that should not end up in drafts');
 
-//     // # Visit default channel page
-//     const channelPage = new pages.ChannelsPage(page);
-//     await channelPage.goto();
-//     await channelPage.toBeVisible();
+    // # It should not appear in drafts
+    await channelPage.sidebarLeft.draftsNotVisible();
+});
 
-//     // # Post a message in the channel
-//     await channelPage.centerView.postCreate.postMessage('Message which will be deleted');
+test('MM-T5435_2 Global Drafts link in sidebar should be hidden when user deletes root post ', async ({page, pages}) => {
+    // const {user} = await pw.initSetup();
 
-//     // # Start a thread by clicking on reply menuitem from post options menu
-//     const post = await channelPage.centerView.getLastPost();
-//     await post.hover();
-//     await post.postMenu.toBeVisible();
-//     await wait(500);
-//     await post.postMenu.reply();
+    // # Log in as user in new browser context
+    // const {page} = await pw.testBrowser.login(user);
 
-//     const sidebarRight = channelPage.sidebarRight;
-//     await sidebarRight.toBeVisible();
+    // # Visit default channel page
+    const channelPage = new pages.ChannelsPage(page);
+    await channelPage.goto();
+    await channelPage.toBeVisible();
 
-//     // # Post a message in the thread
-//     await sidebarRight.postCreate.postMessage('Replying to a thread');
+    // # Post a message in the channel
+    await channelPage.centerView.postCreate.postMessage('Message which will be deleted');
 
-//     // # Write a message in the reply thread but don't send it
-//     await sidebarRight.postCreate.writeMessage('I should be in drafts');
+    await channelPage.sidebarLeft.draftsNotVisible();
 
-//     // # Close the RHS for draft to be saved
-//     await sidebarRight.close();
+    // # Start a thread by clicking on reply menuitem from post options menu
+    const post = await channelPage.centerView.getLastPost();
+    await post.hover();
+    await post.postMenu.toBeVisible();
+    await wait(500);
+    await post.postMenu.reply();
 
-//     // * Verify drafts link in channel sidebar is visible
-//     await channelPage.sidebarLeft.draftsVisible();
+    const sidebarRight = channelPage.sidebarRight;
+    await sidebarRight.toBeVisible();
 
-//     // # Click on the dot menu of the post and select delete
-//     await post.hover();
-//     await post.postMenu.toBeVisible();
-//     await post.postMenu.openDotMenu();
-//     await channelPage.postDotMenu.toBeVisible();
-//     await channelPage.postDotMenu.deleteMenuItem.click();
+    // # Post a message in the thread
+    await sidebarRight.postCreate.postMessage('Replying to a thread');
 
-//     // # Confirm the delete from the modal
-//     await channelPage.deletePostModal.toBeVisible();
-//     await channelPage.deletePostModal.confirm();
+    // # Write a message in the reply thread but don't send it
+    await sidebarRight.postCreate.writeMessage('I should be in drafts');
 
-//     // * Verify drafts link in channel sidebar is visible
-//     await channelPage.sidebarLeft.draftsNotVisible();
-// });
+    // # Close the RHS for draft to be saved
+    await sidebarRight.close();
+
+    // * Verify drafts link in channel sidebar is visible
+    await channelPage.sidebarLeft.draftsVisible();
+
+    // # Click on the dot menu of the post and select delete
+    await post.hover();
+    await post.postMenu.toBeVisible();
+    await post.postMenu.openDotMenu();
+    await channelPage.postDotMenu.toBeVisible();
+    await channelPage.postDotMenu.deleteMenuItem.click();
+
+    // # Confirm the delete from the modal
+    await channelPage.deletePostModal.toBeVisible();
+    await channelPage.deletePostModal.confirm();
+
+    // * Verify drafts link in channel sidebar is visible
+    await channelPage.sidebarLeft.draftsNotVisible();
+});
