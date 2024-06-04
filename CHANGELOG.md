@@ -1,3 +1,13 @@
+## 2.9.0-rc.11 (2024-06-04)
+
+### Added (1 change)
+
+- [Feat: Audio transcription](kchat/webapp@305e02a71634e099b13c8b73a3d35bffc387b47d) by  ([merge request](kchat/webapp!787))
+
+### Fixed (1 change)
+
+- [fix: sent messages sometimes coming back as drafts](kchat/webapp@561508b28bebe8615607e9b6dcf5ccf4f7415a50) by @tim.dewinter ([merge request](kchat/webapp!772))
+
 ## 2.9.0-rc.10 (2024-06-03)
 
 No changes.
