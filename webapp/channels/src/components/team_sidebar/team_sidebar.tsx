@@ -2,27 +2,22 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
+import type {ElementType} from 'react';
 import React from 'react';
 import type {DroppableProvided, DropResult} from 'react-beautiful-dnd';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Scrollbars from 'react-custom-scrollbars';
-import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
 import type {Team} from '@mattermost/types/teams';
 
-import Permissions from 'mattermost-redux/constants/permissions';
 import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
-import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import TeamButton from 'components/team_sidebar/components/team_button';
 
 import {Constants} from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
-import {getCurrentProduct} from 'utils/products';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
-import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 
 import WebSocketClient from 'client/web_websocket_client';
@@ -30,9 +25,7 @@ import Pluggable from 'plugins/pluggable';
 
 import type {PropsFromRedux} from './index';
 
-export interface Props extends PropsFromRedux {
-    location: RouteComponentProps['location'];
-}
+export type Props = PropsFromRedux & RouteComponentProps;
 
 type State = {
     showOrder: boolean;
@@ -231,7 +224,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         const plugins = [];
         const sortedTeams = filterAndSortTeamsByDisplayName(this.props.myTeams, this.props.locale, this.props.userTeamsOrderPreference);
 
-        const currentProduct = getCurrentProduct(this.props.products, this.props.location.pathname);
+        const {currentProduct} = this.props;
         if (currentProduct && !currentProduct.showTeamSidebar) {
             return null;
         }
@@ -259,7 +252,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
             );
         });
 
-        const joinableTeams = [];
+        const joinableTeams = [] as ElementType[];
 
         // const plusIcon = (
         //     <i

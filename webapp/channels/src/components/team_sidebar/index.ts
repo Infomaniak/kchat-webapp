@@ -4,6 +4,7 @@
 import type {ConnectedProps} from 'react-redux';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import type {RouteComponentProps} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import type {Dispatch} from 'redux';
 
@@ -22,12 +23,13 @@ import {getTeamsOrderCookie} from 'mattermost-redux/utils/team_utils';
 import {switchTeam, updateTeamsOrderForUser} from 'actions/team_actions';
 import {getCurrentLocale} from 'selectors/i18n';
 import {getIsLhsOpen} from 'selectors/lhs';
+import {selectCurrentProduct} from 'selectors/products';
 
 import type {GlobalState} from 'types/store';
 
 import TeamSidebar from './team_sidebar';
 
-function mapStateToProps(state: GlobalState) {
+function mapStateToProps(state: GlobalState, props: RouteComponentProps) {
     const config: Partial<ClientConfig> = getConfig(state);
 
     const experimentalPrimaryTeam: string | undefined = config.ExperimentalPrimaryTeam;
@@ -40,6 +42,7 @@ function mapStateToProps(state: GlobalState) {
 
     return {
         currentTeamId: getCurrentTeamId(state),
+        currentProduct: selectCurrentProduct(state, props.location.pathname),
         myTeams: getMyKSuites(state),
         isOpen: getIsLhsOpen(state),
         experimentalPrimaryTeam,
