@@ -1444,6 +1444,16 @@ export function getChannelMemberCountsByGroup(channelId: string) {
     });
 }
 
+export function getChannelPendingGuests(channelId: string) {
+    return bindClientFunc({
+        clientFunc: async () => {
+            const pendingGuests = await Client4.getChannelPendingGuests(channelId);
+            return {channelId, pendingGuests};
+        },
+        onSuccess: ChannelTypes.RECEIVED_CHANNEL_PENDING_GUESTS,
+    });
+}
+
 export function cancelPendingGuestInvite(channelId: string, invitationKey: string) {
     return bindClientFunc({
         clientFunc: async () => {
