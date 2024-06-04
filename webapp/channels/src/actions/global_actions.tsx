@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {lazy} from 'react';
 import {batchActions} from 'redux-batched-actions';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
@@ -23,7 +24,7 @@ import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedi
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
 import {getBool, getTeamsOrderPreference, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getTeam, getMyTeamMember, getTeamMemberships, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUser, getCurrentUserId, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
 import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
@@ -39,8 +40,8 @@ import BrowserStore from 'stores/browser_store';
 import LocalStorageStore from 'stores/local_storage_store';
 import store from 'stores/redux_store';
 
+import {withSuspense} from 'components/common/hocs/with_suspense';
 import {clearLocalStorageToken} from 'components/login/utils';
-import SubMenuModal from 'components/widgets/menu/menu_modals/submenu_modal/submenu_modal';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, PostTypes, RHSStates, ModalIdentifiers, PreviousViewedTypes} from 'utils/constants';
@@ -56,6 +57,8 @@ import type {GlobalState} from 'types/store';
 
 import {joinChannelById} from './views/channel';
 import {openModal} from './views/modals';
+
+const SubMenuModal = withSuspense(lazy(() => import('components/widgets/menu/menu_modals/submenu_modal/submenu_modal')));
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -372,6 +375,7 @@ export async function redirectUserToDefaultTeam() {
     // Assume we need to load the user if they don't have any team memberships loaded or the user loaded
     let user = getCurrentUser(state);
     const shouldLoadUser = Utils.isEmptyObject(getTeamMemberships(state)) || !user;
+
     // const onboardingFlowEnabled = getIsOnboardingFlowEnabled(state);
 
     if (shouldLoadUser) {
@@ -390,8 +394,9 @@ export async function redirectUserToDefaultTeam() {
     let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
         // if (isUserFirstAdmin && onboardingFlowEnabled) {
-            getHistory().push('/error?type=no_ksuite');
-            return;
+        getHistory().push('/error?type=no_ksuite');
+        return;
+
         // }
     }
 

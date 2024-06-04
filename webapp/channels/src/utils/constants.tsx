@@ -24,6 +24,7 @@ import genericIcon from 'images/icons/generic.svg';
 import patchIcon from 'images/icons/patch.svg';
 import pdfIcon from 'images/icons/pdf.svg';
 import pptIcon from 'images/icons/ppt.svg';
+import transcriptIcon from 'images/icons/transcript.svg';
 import videoIcon from 'images/icons/video.svg';
 import wordIcon from 'images/icons/word.svg';
 import logoImage from 'images/logo_compact.png';
@@ -2116,6 +2117,7 @@ export const Constants = {
     EMOJI_PATH: '/static/emoji',
     RECENT_EMOJI_KEY: 'recentEmojis',
     DEFAULT_WEBHOOK_LOGO: logoWebhook,
+    TRANSCRIPT_ICON: transcriptIcon,
     MHPNS_US: 'https://push.mattermost.com',
     MHPNS_DE: 'https://hpns-de.mattermost.com',
     MTPNS: 'https://push-test.mattermost.com',

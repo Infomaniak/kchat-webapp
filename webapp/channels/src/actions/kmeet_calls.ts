@@ -1,8 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {lazy} from 'react';
+
 import {Client4} from 'mattermost-redux/client';
-import {getChannel, getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getUserById} from 'mattermost-redux/selectors/entities/users';
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
@@ -11,17 +12,17 @@ import {getCurrentLocale} from 'selectors/i18n';
 import {getConferenceByChannelId, getIsCurrentUserInCall} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
-import KmeetModal from 'components/kmeet_modal';
+import {withSuspense} from 'components/common/hocs/with_suspense';
 
 import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_utils';
-import Constants, {ActionTypes, ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
+import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
 import {closeModal, openModal} from './views/modals';
+
+const KmeetModal = withSuspense(lazy(() => import('components/kmeet_modal')));
 
 export function openCallDialingModal(channelId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
@@ -186,16 +187,6 @@ export function startDesktopCall(channelId: string, jwt: string, subject: string
         const conference = getConferenceByChannelId(state, channelId);
         const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
         const locale = getCurrentLocale(state);
-        const channel = getChannel(state, conference.channel_id);
-
-        let name = channel.display_name;
-
-        const isDirectMessage = channel.type === Constants.DM_CHANNEL;
-
-        if (isDirectMessage) {
-            const directTeammate = getDirectTeammate(state, channel.id);
-            name = Utils.localizeAndFormatMessage(t('search_item.direct'), 'Call (with {username})', {username: directTeammate});
-        }
 
         window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, name: subject, locale, jwt});
     };

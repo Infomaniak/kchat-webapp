@@ -52,7 +52,7 @@ describe('components/logged_in/LoggedIn', () => {
             setTheme: jest.fn(),
             updateTeamsOrderForUser: jest.fn(),
             joinCall: jest.fn(),
-            leaveCall: jest.fn(),
+            cancelCall: jest.fn(),
             declineCall: jest.fn(),
         },
         isCurrentChannelManuallyUnread: false,
