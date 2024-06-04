@@ -6,25 +6,40 @@ import {TestConfig} from '@e2e-types';
 
 dotenv.config();
 
+const firstMatch = (match: RegExpMatchArray | null): string =>
+    match === null ? '' : match[0]
+
 /**
- * Replace a domain that is before "staging-XXXXX" (and optionally a prefix)
+ * Replace a domain that is before "staging-XXXXX" or "preprod"
  *      with another static value *replaceWith*
  * Example https://infomaniak.staging-74864.dev.infomaniak.ch replaceWith "kchat-testing-1-preprod"
  *      -> https://kchat-testing-1-preprod.staging-74864.dev.infomaniak.ch
  */
-const replaceDomain = (url: string, replaceWith: string, prefix?: string): string => {
-    const prefixRe = new RegExp(`(?<=https://).+(?=${prefix ? `\\.${prefix}` : ''}\\.staging-\\d+)`);
-    return prefixRe.test(url) ? url.replace(prefixRe, replaceWith) : url;
-}
+const replaceDomain = (url: string, replaceWith?: string, allowLocal = true): string => {
+    // Get the unwanted "leading" sub-domain fragment
+    // https://infomaniak.staging-74864.dev.infomaniak.ch => "//infomaniak."
+    // https://kchat.local.preprod.dev.infomaniak.ch      => "//kchat.local."
+    let leadingDomain = firstMatch(url.match(/\/\/.*(?=(staging-\d+|preprod))/));
+
+    // If local URLs are allowed, do not replace the trailing "local."
+    if (allowLocal) {
+        leadingDomain = leadingDomain.replace(/local\.$/, '');
+    }
+
+    // Using a prod URL will also cause this error
+    if (!leadingDomain) {
+        throw new Error(`Bad URL used for E2E testing! URL: ${url}`);
+    }
+
+    return url.replace(leadingDomain, `//${replaceWith ? `${replaceWith}.` : ''}`);
+};
 
 const baseURL = replaceDomain(
-    process.env.PW_BASE_URL || 'https://local.preprod.dev.infomaniak.ch:9005',
+    process.env.PW_BASE_URL || 'https://local.preprod.dev.infomaniak.ch',
     process.env.PW_KCHAT_TEAM_PREFIX || 'infomaniak',
-    'kchat',
 );
-const authBaseURL = replaceDomain(baseURL, 'login');
+const authBaseURL = replaceDomain(baseURL, 'login', false); // Local auth is not possible
 const adminEmail = process.env.PW_ADMIN_EMAIL || 'sysadmin@sample.mattermost.com';
-
 
 // All process.env should be defined here
 const config: TestConfig = {
@@ -34,7 +49,7 @@ const config: TestConfig = {
     adminEmail,
     adminUsername: process.env.PW_ADMIN_USERNAME || adminEmail,
     adminPassword: process.env.PW_ADMIN_PASSWORD || 'Sys@dmin-sample1',
-        ensurePluginsInstalled:
+    ensurePluginsInstalled:
         typeof process.env?.PW_ENSURE_PLUGINS_INSTALLED === 'string'
             ? process.env.PW_ENSURE_PLUGINS_INSTALLED.split(',').filter((plugin) => Boolean(plugin))
             : [],
