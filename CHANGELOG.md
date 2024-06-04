@@ -1,4 +1,98 @@
+## 2.9.0-rc.10 (2024-06-03)
+
+No changes.
+
+## 2.9.0-rc.9 (2024-06-03)
+
+### Fixed (1 change)
+
+- [fix calls web dial modal teardown on conference_deleted ws event](kchat/webapp@13e7418abc2c7b3c4d9ccea0a178442239773ea4) by @antonbuksa
+
+## 2.9.0-rc.8 (2024-05-31)
+
+### Added (3 changes)
+
+- [add kmeet system emoji](kchat/webapp@bfc6abbfc190c62df3a077e03164e2dbd7c3954f) by @antonbuksa ([merge request](kchat/webapp!747))
+- [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
+- [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
+
+### Fixed (1 change)
+
+- [remove decline call when call missed](kchat/webapp@564549d5249063a067c5724836d3cbc75b53fe4b) by @antonbuksa
+
+## 2.9.0-rc.7 (2024-05-31)
+
+### Fixed (1 change)
+
+- [remove decline call when call missed](kchat/webapp@564549d5249063a067c5724836d3cbc75b53fe4b) by @antonbuksa
+
+## 2.9.0-rc.6 (2024-05-31)
+
+No changes.
+
+## 2.9.0-rc.5 (2024-05-30)
+
+### Fixed (1 change)
+
+- [remove decline call when call missed](kchat/webapp@564549d5249063a067c5724836d3cbc75b53fe4b) by @antonbuksa
+
+## 2.9.0-rc.4 (2024-05-29)
+
+No changes.
+
+## 2.9.0-rc.3 (2024-05-29)
+
+No changes.
+
+## 2.9.0-rc.2 (2024-05-29)
+
+No changes.
+
+## 2.9.0-rc.1 (2024-05-28)
+
+### Added (3 changes)
+
+- [add kmeet system emoji](kchat/webapp@bfc6abbfc190c62df3a077e03164e2dbd7c3954f) by @antonbuksa ([merge request](kchat/webapp!747))
+- [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
+- [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
+
+## 2.8.1-rc.3 (2024-05-23)
+
+No changes.
+
+## 2.8.1-rc.2 (2024-05-22)
+
+No changes.
+
 ## 2.8.1-rc.1 (2024-05-16)
+
+No changes.
+
+## 2.8.1-next.4 (2024-06-03)
+
+### Added (3 changes)
+
+- [add kmeet system emoji](kchat/webapp@bfc6abbfc190c62df3a077e03164e2dbd7c3954f) by @antonbuksa ([merge request](kchat/webapp!747))
+- [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
+- [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
+
+### Fixed (1 change)
+
+- [remove decline call when call missed](kchat/webapp@564549d5249063a067c5724836d3cbc75b53fe4b) by @antonbuksa
+
+## 2.8.1-next.3 (2024-05-31)
+
+### Added (3 changes)
+
+- [add kmeet system emoji](kchat/webapp@bfc6abbfc190c62df3a077e03164e2dbd7c3954f) by @antonbuksa ([merge request](kchat/webapp!747))
+- [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
+- [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
+
+### Fixed (1 change)
+
+- [remove decline call when call missed](kchat/webapp@564549d5249063a067c5724836d3cbc75b53fe4b) by @antonbuksa
+
+## 2.8.1-next.2 (2024-05-22)
 
 No changes.
 

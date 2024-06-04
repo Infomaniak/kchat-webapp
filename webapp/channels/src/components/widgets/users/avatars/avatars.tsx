@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ComponentProps, CSSProperties} from 'react';
 import React, {memo, useMemo, useEffect, useRef} from 'react';
+import type {ComponentProps, CSSProperties} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
@@ -12,10 +12,10 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {getMissingProfilesByIds} from 'mattermost-redux/actions/users';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
-import {getUser as selectUser, makeDisplayNameGetter, getUsers} from 'mattermost-redux/selectors/entities/users';
+import {getUser as selectUser, makeDisplayNameGetter} from 'mattermost-redux/selectors/entities/users';
 
-import type {BaseOverlayTrigger} from 'components/overlay_trigger';
 import OverlayTrigger from 'components/overlay_trigger';
+import type {BaseOverlayTrigger} from 'components/overlay_trigger';
 import ProfilePopover from 'components/profile_popover';
 import SimpleTooltip, {useSynchronizedImmediate} from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
@@ -34,9 +34,6 @@ type Props = {
     size?: ComponentProps<typeof Avatar>['size'];
     fetchMissingUsers?: boolean;
     disableProfileOverlay?: boolean;
-    disablePopover?: boolean;
-    disableButton?: boolean;
-    showDeleted?: boolean;
 };
 
 interface MMOverlayTrigger extends BaseOverlayTrigger {
@@ -66,15 +63,11 @@ function UserAvatar({
     userId,
     overlayProps,
     disableProfileOverlay,
-    disablePopover = false,
-    disableButton = false,
     ...props
 }: {
     userId: UserProfile['id'];
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
     disableProfileOverlay: boolean;
-    disablePopover?: boolean;
-    disableButton?: boolean;
 } & ComponentProps<typeof Avatar>) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
@@ -108,22 +101,16 @@ function UserAvatar({
                 content={name}
                 {...overlayProps}
             >
-                {/* eslint-disable-next-line multiline-ternary */}
-                { disableButton ? (<Avatar
-                    url={imageURLForUser(userId, user?.last_picture_update)}
-                    tabIndex={-1}
-                    {...props}
-                                   />) :
-                    (<RoundButton
-                        className={'style--none'}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <Avatar
-                            url={imageURLForUser(userId, user?.last_picture_update)}
-                            tabIndex={-1}
-                            {...props}
-                        />
-                    </RoundButton>)}
+                <RoundButton
+                    className={'style--none'}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <Avatar
+                        url={imageURLForUser(userId, user?.last_picture_update)}
+                        tabIndex={-1}
+                        {...props}
+                    />
+                </RoundButton>
             </SimpleTooltip>
         </OverlayTrigger>
     );
@@ -135,20 +122,11 @@ function Avatars({
     totalUsers,
     fetchMissingUsers = true,
     disableProfileOverlay = false,
-    disablePopover = false,
-    showDeleted = true,
 }: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
-    const ids = useSelector((state: GlobalState) => {
-        if (!showDeleted) {
-            const users = getUsers(state);
-            return userIds.reduce((acc, next) => [...acc as string[], ...(users?.[next] && users?.[next].delete_at === 0 ? [next] : [])], [] as string[]);
-        }
-        return userIds;
-    });
     const [overlayProps, setImmediate] = useSynchronizedImmediate();
-    const [displayUserIds, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(ids, totalUsers);
+    const [displayUserIds, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(userIds, totalUsers);
     const overflowNames = useSelector((state: GlobalState) => {
         return overflowUserIds.map((userId) => displayNameGetter(state, true)(selectUser(state, userId))).join(', ');
     });
@@ -160,9 +138,9 @@ function Avatars({
 
     useEffect(() => {
         if (fetchMissingUsers) {
-            dispatch(getMissingProfilesByIds(ids));
+            dispatch(getMissingProfilesByIds(userIds));
         }
-    }, [fetchMissingUsers, ids]);
+    }, [fetchMissingUsers, userIds, dispatch]);
 
     return (
         <div
@@ -177,7 +155,6 @@ function Avatars({
                     size={size}
                     overlayProps={overlayProps}
                     disableProfileOverlay={disableProfileOverlay}
-                    disablePopover={disablePopover}
                 />
             ))}
             {Boolean(nonDisplayCount) && (

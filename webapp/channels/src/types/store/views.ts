@@ -12,6 +12,7 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
+import type {Conference} from 'types/conference';
 import type {DesktopThemePreference} from 'types/theme';
 
 import type {I18nState} from './i18n';
@@ -109,11 +110,8 @@ export type ViewsState = {
     };
 
     kmeetCalls: {
-        connectedKmeetUrls: {
-            [channelId: string]: {
-                url: string;
-                id: string;
-            };
+        conferences: {
+            [channelId: string]: Conference;
         };
     };
 

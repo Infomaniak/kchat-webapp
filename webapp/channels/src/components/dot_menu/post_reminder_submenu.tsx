@@ -31,6 +31,7 @@ const PostReminders = {
     ONE_HOUR: 'one_hour',
     TWO_HOURS: 'two_hours',
     TOMORROW: 'tomorrow',
+    MONDAY: 'monday',
     CUSTOM: 'custom',
 } as const;
 
@@ -65,6 +66,9 @@ function PostReminderSubmenu(props: Props) {
             } else if (id === PostReminders.TOMORROW) {
                 // set to next day 9 in the morning
                 endTime = currentDate.add(1, 'day').set({hour: 9, minute: 0});
+            } else if (id === PostReminders.MONDAY) {
+                // set to next Monday 9 in the morning
+                endTime = currentDate.add(1, 'week').isoWeekday(1).set({hour: 9, minute: 0});
             }
 
             dispatch(addPostReminder(props.userId, props.post.id, toUTCUnix(endTime.toDate())));
@@ -101,6 +105,13 @@ function PostReminderSubmenu(props: Props) {
                     defaultMessage='Tomorrow'
                 />
             );
+        } else if (postReminder === PostReminders.MONDAY) {
+            labels = (
+                <FormattedMessage
+                    id='post_info.post_reminder.sub_menu.monday'
+                    defaultMessage='Monday'
+                />
+            );
         } else {
             labels = (
                 <FormattedMessage
@@ -124,6 +135,27 @@ function PostReminderSubmenu(props: Props) {
                     {', '}
                     <FormattedTime
                         value={tomorrow}
+                        timeStyle='short'
+                        hour12={!props.isMilitaryTime}
+                        timeZone={props.timezone}
+                    />
+                </span>
+            );
+        }
+
+        if (postReminder === PostReminders.MONDAY) {
+            const monday = getCurrentMomentForTimezone(props.timezone).add(1, 'week').isoWeekday(1).set({hour: 9, minute: 0}).toDate();
+
+            trailingElements = (
+                <span className={`postReminder-${postReminder}_timestamp`}>
+                    <FormattedDate
+                        value={monday}
+                        weekday='short'
+                        timeZone={props.timezone}
+                    />
+                    {', '}
+                    <FormattedTime
+                        value={monday}
                         timeStyle='short'
                         hour12={!props.isMilitaryTime}
                         timeZone={props.timezone}

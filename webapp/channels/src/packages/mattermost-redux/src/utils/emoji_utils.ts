@@ -19,6 +19,11 @@ export function getEmojiImageUrl(emoji: Emoji): string {
         return Client4.getSystemEmojiImageUrl('kchat');
     }
 
+    // If its the kmeet custom emoji
+    if (!isSystemEmoji(emoji) && emoji.id === 'kmeet') {
+        return Client4.getSystemEmojiImageUrl('kmeet');
+    }
+
     if (isSystemEmoji(emoji)) {
         const emojiUnified = emoji?.unified?.toLowerCase() ?? '';
         const filename = emojiUnified || emoji.short_names[0];

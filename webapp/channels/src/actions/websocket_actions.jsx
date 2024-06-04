@@ -28,8 +28,6 @@ import {
     getChannelAndMyMember,
     getMyChannelMember,
     getChannelStats,
-    viewChannel,
-    markChannelAsRead,
     getChannelMemberCountsByGroup,
     markMultipleChannelsAsRead,
     getChannelGuestMembers,
@@ -75,7 +73,6 @@ import {
     getCurrentChannel,
     getCurrentChannelId,
     getGuestMembersIdsInChannel,
-    getMembersInCurrentChannel,
     getRedirectChannelNameForTeam,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
@@ -104,6 +101,7 @@ import {closeRightHandSide} from 'actions/views/rhs';
 import {incrementWsErrorCount, resetWsErrorCount} from 'actions/views/system';
 import {updateThreadLastOpened} from 'actions/views/threads';
 import {voiceConnectedChannels} from 'selectors/calls';
+import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
@@ -115,14 +113,14 @@ import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, StoragePrefixes} from 'utils/constants';
-import {stopRing} from 'utils/notification_sounds';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 
 import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
-import {callNoLongerExist, receivedCall} from './calls';
+import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
+import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';
 import {handleServerEvent} from './servers_actions';
 
 const dispatch = store.dispatch;
@@ -341,6 +339,7 @@ export async function reconnect(socketId) {
     dispatch(clearErrors());
 
     dispatch(getDrafts(currentTeamId));
+    dispatch(getMyMeets());
 }
 
 function syncThreads(teamId, userId) {
@@ -1857,6 +1856,11 @@ function handleThreadFollowChanged(msg) {
 function handleConferenceUserDenied(msg) {
     return async (doDispatch) => {
         const currentUserId = getCurrentUserId(getState());
+        const conference = getConferenceByChannelId(getState(), msg.data.channel_id);
+
+        if (conference.participants.length <= 2 && currentUserId === conference.user_id) {
+            dispatch(closeRingModal());
+        }
 
         if (currentUserId === msg?.data?.user_id) {
             if (isDesktopApp()) {
@@ -1867,10 +1871,16 @@ function handleConferenceUserDenied(msg) {
                     window.origin,
                 );
             } else {
-                stopRing();
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
         }
+        doDispatch({
+            type: ActionTypes.KMEET_CALL_USER_DENIED,
+            data: {
+                userId: msg.data.user_id,
+                channelId: msg.data.channel_id,
+            },
+        });
 
         doDispatch({
             type: ActionTypes.CALL_HANGUP,
@@ -1887,14 +1897,8 @@ function handleConferenceUserConnected(msg) {
 
         if (currentUserId === msg?.data?.user_id) {
             if (isDesktopApp()) {
-                window.postMessage(
-                    {
-                        type: 'call-joined-browser',
-                    },
-                    window.origin,
-                );
+                window.desktopAPI.closeDial?.();
             } else {
-                stopRing();
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
         }
@@ -1913,6 +1917,8 @@ function handleConferenceUserConnected(msg) {
                 },
             });
         }
+
+        doDispatch(externalJoinCall(msg));
     };
 }
 
@@ -1934,6 +1940,14 @@ function handleConferenceUserDisconnected(msg) {
                 },
             });
         }
+
+        doDispatch({
+            type: ActionTypes.KMEET_CALL_USER_DISCONNECTED,
+            data: {
+                channelId: msg.data.channel_id,
+                userId: msg.data.user_id,
+            },
+        });
     };
 }
 
@@ -1943,13 +1957,11 @@ function handleConferenceDeleted(msg) {
         if (callDialingEnabled(doGetState())) {
             dispatch(callNoLongerExist(msg));
         }
-        doDispatch({
-            type: ActionTypes.VOICE_CHANNEL_DELETED,
-            data: {
-                callID: msg.data.url.split('/').at(-1),
-                channelID: msg.data.channel_id,
-            },
-        });
+        if (isDesktopApp()) {
+            window.desktopAPI?.closeRingCallWindow?.();
+        }
+
+        doDispatch(deleteConference(msg.data.url.split('/').at(-1), msg.data.channel_id));
     };
 }
 
