@@ -1,3 +1,9 @@
+## 2.9.0-rc.13 (2024-06-05)
+
+### Changed (1 change)
+
+- [Revert "add 10 sec debounce to desktop theme getter"](kchat/webapp@1aa6bfdbced9d8c7781e0404f599741a363324d8) by @antonbuksa
+
 ## 2.9.0-rc.12 (2024-06-05)
 
 ### Changed (1 change)
