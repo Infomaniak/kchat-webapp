@@ -90,6 +90,28 @@ No changes.
 - [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
 - [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
 
+## 2.9.0-next.1 (2024-06-05)
+
+### Added (4 changes)
+
+- [Feat: Audio transcription](kchat/webapp@305e02a71634e099b13c8b73a3d35bffc387b47d) by  ([merge request](kchat/webapp!787))
+- [add kmeet system emoji](kchat/webapp@bfc6abbfc190c62df3a077e03164e2dbd7c3954f) by @antonbuksa ([merge request](kchat/webapp!747))
+- [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
+- [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
+
+### Fixed (4 changes)
+
+- [fix call msg display in rhs thread view](kchat/webapp@764ac6f4fd1d48c22b5e670f32ed47bd11fdeb78) by @antonbuksa
+- [fix: sent messages sometimes coming back as drafts](kchat/webapp@561508b28bebe8615607e9b6dcf5ccf4f7415a50) by @tim.dewinter ([merge request](kchat/webapp!772))
+- [fix calls web dial modal teardown on conference_deleted ws event](kchat/webapp@13e7418abc2c7b3c4d9ccea0a178442239773ea4) by @antonbuksa
+- [remove decline call when call missed](kchat/webapp@564549d5249063a067c5724836d3cbc75b53fe4b) by @antonbuksa
+
+### Changed (3 changes)
+
+- [reduce spacing in meet button](kchat/webapp@25be7b4256545a43c39f8faacddd670372bf5d31) by @antonbuksa
+- [auto join call for caller in channels](kchat/webapp@0e5d468e9aa9f89fe60dbab95a232e37a01f3762) by @antonbuksa
+- [Revert "add 10 sec debounce to desktop theme getter"](kchat/webapp@1aa6bfdbced9d8c7781e0404f599741a363324d8) by @antonbuksa
+
 ## 2.8.2-next.1 (2024-06-04)
 
 ### Added (4 changes)
