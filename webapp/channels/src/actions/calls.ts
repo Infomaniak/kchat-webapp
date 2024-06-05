@@ -176,6 +176,7 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             });
 
             if (channel.type === 'O' || channel.type === 'P') {
+                openWebCallInNewTab(data.url, data.jwt, data.name);
                 return;
             }
 
