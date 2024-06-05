@@ -11,6 +11,9 @@ export const Main = styled.div`
     box-shadow: 0px 4px 6px rgba(var(--center-channel-color-rgb), 0.12);
     color: var(--center-channel-color);
     border-radius: 4px;
+    .sidebar--right & {
+        flex-wrap: wrap;
+    }
 `;
 
 export const Left = styled.div`
@@ -18,12 +21,19 @@ export const Left = styled.div`
     flex-grow: 10;
     overflow: hidden;
     white-space: nowrap;
+    .sidebar--right & {
+        flex: 1 0 100%;
+    }
 `;
 
 export const Right = styled.div`
     display: flex;
     gap: 24px;
     flex-grow: 1;
+    .sidebar--right & {
+        justify-content: space-between;
+        padding-top: 8px;
+    }
 `;
 
 export const CallIndicator = styled.div<{ ended: boolean }>`
