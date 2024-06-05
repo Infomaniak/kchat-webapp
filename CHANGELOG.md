@@ -1,3 +1,9 @@
+## 2.9.0-rc.14 (2024-06-05)
+
+### Fixed (1 change)
+
+- [fix call msg display in rhs thread view](kchat/webapp@764ac6f4fd1d48c22b5e670f32ed47bd11fdeb78) by @antonbuksa
+
 ## 2.9.0-rc.13 (2024-06-05)
 
 ### Changed (1 change)
