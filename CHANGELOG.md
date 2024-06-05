@@ -90,6 +90,10 @@ No changes.
 - [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
 - [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
 
+## 2.9.0-next.2 (2024-06-05)
+
+No changes.
+
 ## 2.9.0-next.1 (2024-06-05)
 
 ### Added (4 changes)
