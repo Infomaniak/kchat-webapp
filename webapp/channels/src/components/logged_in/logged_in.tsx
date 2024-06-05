@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import debounce from 'lodash/debounce';
 import React from 'react';
 
 import type {Team} from '@mattermost/types/teams';
@@ -98,7 +99,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
         const offUserActivity = DesktopApp.onUserActivityUpdate(this.updateActiveStatus);
         const offNotificationClicked = DesktopApp.onNotificationClicked(this.clickNotification);
         const offThemeChangedGlobal = DesktopApp.onThemeChangedGlobal(this.changeGlobalTheme);
-        const offGetServerTheme = DesktopApp.onGetServerTheme(this.getServerTheme);
+        const offGetServerTheme = DesktopApp.onGetServerTheme(debounce(this.getServerTheme, 10000));
         const offUpdateTeamsOrder = DesktopApp.onTeamsOrderUpdated(this.updateTeamsOrder);
         const offSwitchServerSidebar = DesktopApp.onSwitchServerSidebar(this.switchServerSidebar);
         this.cleanupDesktopListeners = () => {
