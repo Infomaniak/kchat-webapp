@@ -1,3 +1,9 @@
+## 2.9.0-rc.15 (2024-06-05)
+
+### Changed (1 change)
+
+- [auto join call for caller in channels](kchat/webapp@0e5d468e9aa9f89fe60dbab95a232e37a01f3762) by @antonbuksa
+
 ## 2.9.0-rc.14 (2024-06-05)
 
 ### Fixed (1 change)
