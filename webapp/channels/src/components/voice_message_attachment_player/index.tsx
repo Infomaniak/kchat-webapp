@@ -6,7 +6,6 @@ import {
     PauseIcon,
     DotsVerticalIcon,
     CloseIcon,
-    LinkVariantIcon,
     DownloadOutlineIcon,
 } from '@infomaniak/compass-icons/components';
 import React, {useState} from 'react';
@@ -30,8 +29,6 @@ import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
 import Constants from 'utils/constants';
 import {convertSecondsToMSS} from 'utils/datetime';
-import {getSiteURL} from 'utils/url';
-import {copyToClipboard} from 'utils/utils';
 
 export interface Props {
     postId?: Post['id'];
@@ -80,10 +77,6 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     };
 
     const transcriptIcon = () => Constants.TRANSCRIPT_ICON;
-
-    function copyLink() {
-        copyToClipboard(`${getSiteURL()}/api/v4/files/${props.fileId}`);
-    }
 
     function downloadFile() {
         window.location.assign(getFileDownloadUrl(props.fileId));
@@ -147,17 +140,6 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                                     />),
                             }}
                         >
-                            <Menu.Item
-                                id={`permalink_${props.postId}`}
-                                leadingElement={<LinkVariantIcon size={18}/>}
-                                labels={(
-                                    <FormattedMessage
-                                        id='single_image_view.copy_link_tooltip'
-                                        defaultMessage='Copy link'
-                                    />
-                                )}
-                                onClick={copyLink}
-                            />
                             <Menu.Item
                                 id={`download_${props.postId}`}
                                 leadingElement={(
