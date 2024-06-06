@@ -9,6 +9,17 @@
 
 - [reduce spacing in meet button](kchat/webapp@25be7b4256545a43c39f8faacddd670372bf5d31) by @antonbuksa
 
+## 2.9.2-next.1 (2024-06-06)
+
+### Fixed (2 changes)
+
+- [Fix: Remove copy link in audio message](kchat/webapp@ed896fae7ee70068244f6bb8ec36101b46cd6b78) by  ([merge request](kchat/webapp!795))
+- [restore pending external invites in rhs members list](kchat/webapp@f051af57d45c2882a2349cd3068480490ac510a1) by @antonbuksa ([merge request](kchat/webapp!793))
+
+### Changed (1 change)
+
+- [reduce spacing in meet button](kchat/webapp@25be7b4256545a43c39f8faacddd670372bf5d31) by @antonbuksa
+
 ## 2.9.1 (2024-06-05)
 
 No changes.
