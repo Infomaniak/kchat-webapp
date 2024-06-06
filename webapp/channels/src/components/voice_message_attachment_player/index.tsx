@@ -8,7 +8,8 @@ import {
     CloseIcon,
     DownloadOutlineIcon,
 } from '@infomaniak/compass-icons/components';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import ReactDOM from 'react-dom';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {FileInfo} from '@mattermost/types/files';
@@ -23,7 +24,6 @@ import {
     useAudioPlayer,
 } from 'components/common/hooks/useAudioPlayer';
 import * as Menu from 'components/menu';
-import OverlayTrigger from 'components/overlay_trigger';
 import TranscriptComponent from 'components/transcript/transcript';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
@@ -40,23 +40,36 @@ export interface Props {
 
 function VoiceMessageAttachmentPlayer(props: Props) {
     const {formatMessage} = useIntl();
-
     const {playerState, duration, elapsed, togglePlayPause} = useAudioPlayer(props.fileId ? `/api/v4/files/${props.fileId}` : '');
 
     const progressValue = elapsed === 0 || duration === 0 ? '0' : (elapsed / duration).toFixed(2);
     const [transcript, setTranscript] = useState('');
     const [transcriptDatas, setTranscriptDatas] = useState<TranscriptData>();
     const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
+    const [isTranscriptModalOpen, setIsTranscriptModalOpen] = useState(false);
     const [hasFetchedTranscript, setHasFetchedTranscript] = useState(false);
     const [isLoadingTranscript, setIsLoadingTranscript] = useState(false);
     const [error, setError] = useState<JSX.Element | null>(null);
+    const elementRef = React.useRef<HTMLAnchorElement>(null);
+
+    useEffect(() => {
+        const closeTranscriptModal = () => {
+            if (isTranscriptOpen) {
+                setIsTranscriptOpen(false);
+            }
+        };
+
+        document.addEventListener('click', closeTranscriptModal);
+        return () => {
+            document.removeEventListener('click', closeTranscriptModal);
+        };
+    }, [isTranscriptOpen]);
 
     const fetchTranscript = async () => {
         if (isTranscriptOpen) {
             setIsTranscriptOpen(false);
             return;
         }
-        setIsTranscriptOpen(true);
         if (!hasFetchedTranscript) {
             setIsLoadingTranscript(true);
             const result = await fetchTranscriptData(props.fileId)();
@@ -71,7 +84,6 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             setIsLoadingTranscript(false);
             setTranscript((result as TranscriptData).text.trim());
             setTranscriptDatas((result as TranscriptData));
-            setIsTranscriptOpen(true);
             setHasFetchedTranscript(true);
         }
     };
@@ -159,13 +171,18 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                     )}
                     {!props.isPreview && (
                         <div
-                            onClick={fetchTranscript}
+                            onClick={() => {
+                                fetchTranscript();
+                                setIsTranscriptModalOpen(!isTranscriptModalOpen);
+                            }}
                             className='post-image__end-button'
                         >
-                            {isLoadingTranscript ? (<LoadingSpinner/>) : (
-                                <img
-                                    src={transcriptIcon()}
-                                />
+                            {isLoadingTranscript ? (
+                                <LoadingSpinner/>
+                            ) : (
+                                <div >
+                                    <img src={transcriptIcon()}/>
+                                </div>
                             )}
                         </div>)}
                     {!props.inPost && (
@@ -183,25 +200,31 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             </div>
             <div >
                 <div>
-                    {transcript && isTranscriptOpen && (transcript.length > 300 ? transcript.substring(0, 300) + '... ' : transcript + ' ')}
+                    {transcript && isTranscriptModalOpen && (
+                        <div>
+                            {transcript.length > 300 ? transcript.substring(0, 300) + '... ' : transcript + ' '}
+                            <a
+                                className='transcript-link-view'
+                                onClick={() => {
+                                    setIsTranscriptOpen(!isTranscriptOpen);
+                                }}
+                                ref={elementRef}
+                            >
+                                <FormattedMessage
+                                    id={'vocals.loading_transcript'}
+                                    defaultMessage={'View transcript'}
+                                />
+                            </a>
+                        </div>
+                    )}
+
                     {transcript && isTranscriptOpen && transcriptDatas &&
-                    <OverlayTrigger
-                        overlay={
+                        ReactDOM.createPortal(
                             <TranscriptComponent
-                                className='transcript-popover'
                                 transcriptDatas={transcriptDatas}
+                                elementRef={elementRef}
                             />
-                        }
-                        trigger={['click']}
-                        rootClose={true}
-                    >
-                        <a className='transcript-link-view'>
-                            <FormattedMessage
-                                id={'vocals.loading_transcript'}
-                                defaultMessage={'View transcript'}
-                            />
-                        </a>
-                    </OverlayTrigger>
+                            , document.getElementById('root') as HTMLElement)
                     }
                 </div>
                 {error && <div className='transcript-error'>{error}</div>}
