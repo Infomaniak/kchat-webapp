@@ -19,45 +19,14 @@ import AnnouncementBar from '../default_announcement_bar';
 interface Props {
     config?: Partial<ClientConfig>;
 }
-const versionMapping = {
-    '3.0.0': '1.0.0',
-    '3.2.0': '1.0.1',
-    '3.3.0': '1.0.2',
-};
-function findClosestVersion(userAgentVersion: string, versionMapping: Record<string, string>): string {
-    let closestVersion = Object.keys(versionMapping)[0];
-    let closestDistance = versionDistance(userAgentVersion, closestVersion);
-
-    for (const version in versionMapping) {
-        const distance = versionDistance(userAgentVersion, version);
-        if (distance < closestDistance) {
-            closestVersion = version;
-            closestDistance = distance;
-        }
-    }
-    return versionMapping[closestVersion];
-}
-
-function versionDistance(version1: string, version2: string): number {
-    const [major1, minor1, patch1] = version1.split('.').map(Number);
-    const [major2, minor2, patch2] = version2.split('.').map(Number);
-
-    return Math.abs(major1 - major2) * 10000 + Math.abs(minor1 - minor2) * 100 + Math.abs(patch1 - patch2);
-}
-
 export default class AppStoreBar extends React.PureComponent <Props> {
     render() {
         const {config} = this.props;
+
         const latestVersion = config!.MASLatestVersion!;
-
         const userAgentVersion = UserAgent.getDesktopVersion();
-        let currentVersion = versionMapping[userAgentVersion as keyof typeof versionMapping];
 
-        if (!currentVersion) {
-            currentVersion = findClosestVersion(userAgentVersion, versionMapping);
-        }
-
-        if (userAgentVersion && isServerVersionGreaterThanOrEqualTo(latestVersion, currentVersion) && currentVersion !== latestVersion) {
+        if (userAgentVersion && isServerVersionGreaterThanOrEqualTo(latestVersion, userAgentVersion) && userAgentVersion !== latestVersion && latestVersion) {
             return (
                 <AnnouncementBar
                     type={AnnouncementBarTypes.UPDATE_MAC}
@@ -90,7 +59,6 @@ export default class AppStoreBar extends React.PureComponent <Props> {
                                 />
                                 {'.'}
                             </div>
-
                         </React.Fragment>
                     }
                 />
