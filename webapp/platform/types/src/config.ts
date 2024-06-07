@@ -147,6 +147,7 @@ export type ClientConfig = {
     LdapPictureAttributeSet: string;
     LockTeammateNameDisplay: string;
     ManagedResourcePaths: string;
+    MASLatestVersion: string;
     MaxFileSize: string;
     MaxPostSize: string;
     MaxNotificationsPerChannel: string;
