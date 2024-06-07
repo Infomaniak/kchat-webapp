@@ -62,12 +62,10 @@ export default class AppStoreBar extends React.PureComponent <Props> {
                 <AnnouncementBar
                     type={AnnouncementBarTypes.UPDATE_MAC}
                     icon={
-                        <div>
-                            <img
-                                className='advisor-icon'
-                                src={informationIcon}
-                            />
-                        </div>
+                        <img
+                            className='version-alert-icon'
+                            src={informationIcon}
+                        />
                     }
                     message={
                         <React.Fragment>
