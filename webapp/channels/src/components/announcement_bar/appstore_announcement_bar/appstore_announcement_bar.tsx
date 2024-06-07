@@ -57,7 +57,7 @@ export default class AppStoreBar extends React.PureComponent <Props> {
             currentVersion = findClosestVersion(userAgentVersion, versionMapping);
         }
 
-        if (userAgentVersion && isServerVersionGreaterThanOrEqualTo(latestVersion, currentVersion)) {
+        if (userAgentVersion && isServerVersionGreaterThanOrEqualTo(latestVersion, currentVersion) && currentVersion !== latestVersion) {
             return (
                 <AnnouncementBar
                     type={AnnouncementBarTypes.UPDATE_MAC}
