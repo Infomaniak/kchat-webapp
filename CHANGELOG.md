@@ -1,3 +1,9 @@
+## 2.9.2-rc.2 (2024-06-07)
+
+### Added (1 change)
+
+- [pass desktop version to create call route](kchat/webapp@15b83c150bc566b5a629ec4b12a75aa0ffb19992) by @antonbuksa
+
 ## 2.9.2-rc.1 (2024-06-06)
 
 ### Fixed (2 changes)
