@@ -1921,8 +1921,9 @@ function handleConferenceUserConnected(msg) {
                 },
             });
         }
-
-        doDispatch(externalJoinCall(msg));
+        if (!msg?.data?.desktop_version || (msg?.data?.desktop_version && isServerVersionGreaterThanOrEqualTo(msg?.data?.desktop_version, '3.3.0'))) {
+            doDispatch(externalJoinCall(msg));
+        }
     };
 }
 
