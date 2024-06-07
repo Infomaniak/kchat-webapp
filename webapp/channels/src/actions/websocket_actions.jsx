@@ -114,6 +114,7 @@ import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, StoragePrefixes} from 'utils/constants';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -1901,7 +1902,7 @@ function handleConferenceUserConnected(msg) {
         if (currentUserId === msg?.data?.user_id) {
             if (isDesktopApp()) {
                 window.desktopAPI.closeDial?.();
-            } else {
+            } else if (!msg?.data?.desktop_version || (msg?.data?.desktop_version && isServerVersionGreaterThanOrEqualTo(msg?.data?.desktop_version, '3.3.0'))) {
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
         }
