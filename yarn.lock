@@ -13580,7 +13580,7 @@ __metadata:
     moment-timezone: "npm:0.5.38"
     nock: "npm:13.2.8"
     p-queue: "npm:7.3.0"
-    pdfjs-dist: "npm:3.11.174"
+    pdfjs-dist: "npm:4.3.136"
     popper.js: "npm:1.16.1"
     prettier: "npm:2.3.2"
     process: "npm:0.11.10"
@@ -15084,10 +15084,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path2d-polyfill@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "path2d-polyfill@npm:2.0.1"
-  checksum: 82b26ef1a737560bc7a974919aec5d1c316d923b39cdf3aae2f20cd77b08d6c5256a5605f178d7dc010de7c886eeac0c263a590653687f8aea60fabbc0582890
+"path2d@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "path2d@npm:0.2.0"
+  checksum: 576e4fba080d9177ad5d9d7c17926eed13ca5d606f9a213ea248ce4db953c3eafb6fcc03152eba806ce62d18961f56cce67e863804bd10d8b57b20f74467ddac
   languageName: node
   linkType: hard
 
@@ -15104,18 +15104,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:3.11.174":
-  version: 3.11.174
-  resolution: "pdfjs-dist@npm:3.11.174"
+"pdfjs-dist@npm:4.3.136":
+  version: 4.3.136
+  resolution: "pdfjs-dist@npm:4.3.136"
   dependencies:
     canvas: "npm:^2.11.2"
-    path2d-polyfill: "npm:^2.0.1"
+    path2d: "npm:^0.2.0"
   dependenciesMeta:
     canvas:
       optional: true
-    path2d-polyfill:
+    path2d:
       optional: true
-  checksum: f739ffd451718d214e664c943a066dcb4020bc1ed92b5639ae38d6a25ef0bddcc05b35a68c3dfeb95fcfb852377bcb2aef935c780312a229f1f34e682627a8ae
+  checksum: 5511a54a0811c93c6d0517d3bd7ee1df5ffc00577d8b27054956d3775bb9a8a75427ad878c4b13fdda830aabf17e2807667b957e499848bb5968caaba4254d46
   languageName: node
   linkType: hard
 
