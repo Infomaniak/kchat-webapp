@@ -6,8 +6,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import type {ClientConfig} from '@mattermost/types/config';
-
 import {AnnouncementBarTypes} from 'utils/constants';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import * as UserAgent from 'utils/user_agent';
@@ -16,20 +14,19 @@ import informationIcon from 'images/icons/information-blue.svg';
 
 import AnnouncementBar from '../default_announcement_bar';
 
-interface Props {
-    config?: Partial<ClientConfig>;
+export interface Props {
+    latestVersion?: string | undefined;
 }
 export default class AppStoreBar extends React.PureComponent<Props> {
     render() {
-        const {config} = this.props;
-
-        const latestVersion = config?.MASLatestVersion || '';
+        const {latestVersion} = this.props;
+        const latestVer = latestVersion || '';
         const userAgentVersion = UserAgent.getDesktopVersion();
 
-        if (!latestVersion || !userAgentVersion) {
+        if (!latestVer || !userAgentVersion) {
             return null;
         }
-        if (isServerVersionGreaterThanOrEqualTo(userAgentVersion, latestVersion)) {
+        if (isServerVersionGreaterThanOrEqualTo(userAgentVersion, latestVer)) {
             return null;
         }
         return (

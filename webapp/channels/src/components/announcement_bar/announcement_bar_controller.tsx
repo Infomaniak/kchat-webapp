@@ -7,7 +7,7 @@ import type {ClientLicense, ClientConfig, WarnMetricStatus} from '@mattermost/ty
 
 import withGetCloudSubscription from 'components/common/hocs/cloud/with_get_cloud_subscription';
 
-import AppStoreBar from './appstore_announcement_bar/appstore_announcement_bar';
+import AppStoreBar from './appstore_announcement_bar';
 import AnnouncementBar from './default_announcement_bar';
 import MASMigrationBar from './mas_migration_bar';
 import OverageUsersBanner from './overage_users_banner';
@@ -120,9 +120,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
                 {this.props.license?.Cloud !== 'true' && <OverageUsersBanner/>}
                 {autoStartTrialModal}
                 <VersionBar/>
-                <AppStoreBar
-                    config={this.props.config}
-                />
+                <AppStoreBar/>
                 <MASMigrationBar/>
             </>
         );
