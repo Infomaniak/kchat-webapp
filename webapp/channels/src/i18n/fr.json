@@ -4333,6 +4333,7 @@
   "status_dropdown.set_ooo.extra": "Les Réponses automatiques sont activées",
   "string.id": "message par défaut",
   "suggestion.archive": "Canaux archivés",
+  "suggestion.group.members": "{member_count} {member_count, plural, one {membre} other {membres}}",
   "suggestion.mention.all": "Notifie tous les membres du canal",
   "suggestion.mention.channel": "Notifie tous les membres du canal",
   "suggestion.mention.channels": "Mes canaux",
