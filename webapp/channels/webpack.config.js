@@ -112,6 +112,12 @@ var config = {
                 },
             },
             {
+                test: /\.m?js$/,
+                resolve: {
+                    fullySpecified: false,
+                },
+            },
+            {
                 test: /\.json$/,
                 include: [
                     path.resolve(__dirname, 'src/i18n'),
