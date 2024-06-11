@@ -23,6 +23,9 @@ export default class AppStoreBar extends React.PureComponent<Props> {
         const latestVer = latestVersion || '';
         const userAgentVersion = UserAgent.getDesktopVersion();
 
+        if (userAgentVersion.indexOf('Mac') === -1) {
+            return null;
+        }
         if (!latestVer || !userAgentVersion) {
             return null;
         }
