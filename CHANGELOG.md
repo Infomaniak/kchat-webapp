@@ -1,3 +1,9 @@
+## 2.9.3-rc.5 (2024-06-11)
+
+### Fixed (1 change)
+
+- [fix link in mas update banner](kchat/webapp@6ec2a9370e8eaed9923b85e75d8f47a111a75f36) by @antonbuksa
+
 ## 2.9.3-rc.4 (2024-06-11)
 
 ### Fixed (2 changes)
