@@ -8,7 +8,7 @@ import {
     CloseIcon,
     DownloadOutlineIcon,
 } from '@infomaniak/compass-icons/components';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {FileInfo} from '@mattermost/types/files';
@@ -44,31 +44,21 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     const progressValue = elapsed === 0 || duration === 0 ? '0' : (elapsed / duration).toFixed(2);
     const [transcript, setTranscript] = useState('');
     const [transcriptDatas, setTranscriptDatas] = useState<TranscriptData>();
-    const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
-    const [isTranscriptModalOpen, setIsTranscriptModalOpen] = useState(false);
     const [hasFetchedTranscript, setHasFetchedTranscript] = useState(false);
     const [isLoadingTranscript, setIsLoadingTranscript] = useState(false);
     const [error, setError] = useState<JSX.Element | null>(null);
-    const elementRef = React.useRef<HTMLAnchorElement>(null);
-    const modalRef = useRef<HTMLDivElement | null>(null);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null);
+    const [isTranscriptModalOpen, setIsTranscriptModalOpen] = useState(false);
 
-    const handleClickOutside = (event: MouseEvent) => {
-        if (elementRef.current && elementRef.current.contains(event.target as Node)) {
-            return;
-        }
+    const open = Boolean(anchorEl);
 
-        if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-            setIsTranscriptOpen(false);
-        }
+    const handleClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        setAnchorEl(event.currentTarget);
     };
 
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const fetchTranscript = async () => {
         if (!hasFetchedTranscript) {
@@ -88,14 +78,15 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             setHasFetchedTranscript(true);
         }
     };
-    const toggleTranscriptModal = () => {
-        setIsTranscriptModalOpen(!isTranscriptModalOpen);
-    };
+
     const transcriptIcon = () => Constants.TRANSCRIPT_ICON;
 
     function downloadFile() {
         window.location.assign(getFileDownloadUrl(props.fileId));
     }
+    const toggleTranscriptModal = () => {
+        setIsTranscriptModalOpen(!isTranscriptModalOpen);
+    };
 
     return (
         <>
@@ -203,16 +194,14 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             </div>
             <div >
                 <div>
-                    {transcript && isTranscriptModalOpen && transcriptDatas && (
+                    {transcript && transcriptDatas && isTranscriptModalOpen && (
                         <div>
                             {transcript.length > 300 ? transcript.substring(0, 300) + '... ' : transcript + ' '}
                             <a
                                 className='transcript-link-view'
                                 onClick={(event) => {
-                                    event.stopPropagation();
-                                    setIsTranscriptOpen(!isTranscriptOpen);
+                                    handleClick(event);
                                 }}
-                                ref={elementRef}
                             >
                                 <FormattedMessage
                                     id={'vocals.loading_transcript'}
@@ -221,13 +210,13 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             </a>
                         </div>
                     )}
-                    {transcriptDatas && isTranscriptOpen &&
-                        <div ref={modalRef}>
-                            <TranscriptComponent
-                                transcriptDatas={transcriptDatas}
-                                elementRef={elementRef}
-                            />
-                        </div>
+                    {transcriptDatas &&
+                        <TranscriptComponent
+                            transcriptDatas={transcriptDatas}
+                            handleClose={handleClose}
+                            open={open}
+                            anchorEl={anchorEl}
+                        />
                     }
                 </div>
                 {error && <div className='transcript-error'>{error}</div>}

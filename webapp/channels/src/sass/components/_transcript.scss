@@ -17,10 +17,7 @@
 }
 
 .transcript-popover{
-    position: fixed;
-    width: 350px;
-    overflow: auto;
-    min-height: auto;
+    padding: 10px;
     max-height: 300px;
-    max-width: unset;
+    max-width: 350px;
 }
