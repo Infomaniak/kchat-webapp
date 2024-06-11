@@ -1,3 +1,9 @@
+## 2.9.3-rc.3 (2024-06-11)
+
+### Fixed (1 change)
+
+- [fix calls not opening in channels on old apps](kchat/webapp@0f85e0ad03ecad0b9392371586e01e17c3d18dc7) by @antonbuksa
+
 ## 2.9.3-rc.2 (2024-06-11)
 
 ### Fixed (1 change)
