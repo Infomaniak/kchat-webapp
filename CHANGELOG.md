@@ -30,6 +30,14 @@
 - [Fix: Plural for @here](kchat/webapp@9567d688406a604a02b2db15621582c1d8ef483a) by  ([merge request](kchat/webapp!790))
 - [Fix: Missing traduction for suggestion list](kchat/webapp@9c8c6e36351414729827acba3c6f179faa081a28) by  ([merge request](kchat/webapp!788))
 
+## 2.9.3-next.3 (2024-06-11)
+
+### Fixed (3 changes)
+
+- [fix link in mas update banner](kchat/webapp@6ec2a9370e8eaed9923b85e75d8f47a111a75f36) by @antonbuksa
+- [Fix: condition with userAgent](kchat/webapp@0dd21b9762833e41bf49fb250daa7641d13c9fbe) by  ([merge request](kchat/webapp!800))
+- [Fix: Annoucement banner only for mac app](kchat/webapp@1b09eaab1e2a02912fca8c439a7a9a56d7a00d0d) by  ([merge request](kchat/webapp!800))
+
 ## 2.9.3-next.2 (2024-06-11)
 
 ### Fixed (1 change)
