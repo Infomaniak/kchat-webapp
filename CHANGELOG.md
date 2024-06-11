@@ -1,3 +1,10 @@
+## 2.9.3-rc.4 (2024-06-11)
+
+### Fixed (2 changes)
+
+- [Fix: condition with userAgent](kchat/webapp@0dd21b9762833e41bf49fb250daa7641d13c9fbe) by  ([merge request](kchat/webapp!800))
+- [Fix: Annoucement banner only for mac app](kchat/webapp@1b09eaab1e2a02912fca8c439a7a9a56d7a00d0d) by  ([merge request](kchat/webapp!800))
+
 ## 2.9.3-rc.3 (2024-06-11)
 
 ### Fixed (1 change)
