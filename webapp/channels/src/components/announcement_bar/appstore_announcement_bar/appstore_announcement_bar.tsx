@@ -54,9 +54,12 @@ export default class AppStoreBar extends React.PureComponent<Props> {
                                 id='appstore.bar'
                                 defaultMessage='A new version of the kChat app is available. Please'
                             />
+                            {/* eslint-disable-next-line @mattermost/use-external-link */}
                             <a
                                 style={{marginLeft: '.5rem'}}
-                                href='https://apps.apple.com/fr/app/infomaniak-kchat/id6443845553'
+                                href='https://apps.apple.com/app/infomaniak-kchat/id6443845553'
+                                target='_blank'
+                                rel='noreferrer'
                             >
                                 <FormattedMessage
                                     id='appstore.bar.update'
