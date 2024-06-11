@@ -1,3 +1,9 @@
+## 2.9.3-rc.2 (2024-06-11)
+
+### Fixed (1 change)
+
+- [Fix: Space errors and fix condition](kchat/webapp@ae5f6b9567cde30d07b720a68492466a30c28351) by  ([merge request](kchat/webapp!798))
+
 ## 2.9.3-rc.1 (2024-06-10)
 
 ### Fixed (2 changes)
