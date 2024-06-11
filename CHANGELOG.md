@@ -17,6 +17,12 @@
 - [Fix: Plural for @here](kchat/webapp@9567d688406a604a02b2db15621582c1d8ef483a) by  ([merge request](kchat/webapp!790))
 - [Fix: Missing traduction for suggestion list](kchat/webapp@9c8c6e36351414729827acba3c6f179faa081a28) by  ([merge request](kchat/webapp!788))
 
+## 2.9.3-next.2 (2024-06-11)
+
+### Fixed (1 change)
+
+- [fix calls not opening in channels on old apps](kchat/webapp@0f85e0ad03ecad0b9392371586e01e17c3d18dc7) by @antonbuksa
+
 ## 2.9.3-next.1 (2024-06-11)
 
 ### Fixed (3 changes)
