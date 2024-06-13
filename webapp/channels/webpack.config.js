@@ -203,6 +203,7 @@ var config = {
         new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css',
             chunkFilename: '[name].[contenthash].css',
+            ignoreOrder: true,
         }),
         new HtmlWebpackPlugin({
             filename: 'root.html',
