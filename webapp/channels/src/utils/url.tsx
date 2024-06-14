@@ -5,11 +5,12 @@ import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
 
-import {getModule} from 'module_registry';
 import Constants from 'utils/constants';
 import {t} from 'utils/i18n';
 import {latinise} from 'utils/latinise';
 import * as TextFormatting from 'utils/text_formatting';
+
+import {getModule} from 'module_registry';
 
 type WindowObject = {
     location: {

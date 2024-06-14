@@ -13,6 +13,8 @@ import {getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 import FileInfoPreview from 'components/file_info_preview';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
+import {getPdfJSWorkerURL} from 'utils/url_import';
+
 const INITIAL_RENDERED_PAGES = 3;
 
 export type Props = {
@@ -165,7 +167,7 @@ export default class PDFPreview extends React.PureComponent<Props, State> {
     getPdfDocument = async () => {
         try {
             const PDFJS = await import('pdfjs-dist');
-            const url = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url);
+            const url = getPdfJSWorkerURL();
             PDFJS.GlobalWorkerOptions.workerSrc = url.href;
 
             const pdf = await PDFJS.getDocument(this.props.fileUrl).promise;
