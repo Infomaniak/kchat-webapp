@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import PQueue from 'p-queue';
 import {batchActions} from 'redux-batched-actions';
 
 import type {Draft as ServerDraft} from '@mattermost/types/drafts';
@@ -10,7 +9,6 @@ import type {PostMetadata, PostPriorityMetadata} from '@mattermost/types/posts';
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile} from '@mattermost/types/users';
 
-import {getPost} from 'mattermost-redux/actions/posts';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Client4} from 'mattermost-redux/client';
 import Preferences from 'mattermost-redux/constants/preferences';
@@ -33,8 +31,6 @@ type Draft = {
     timestamp: Date;
 }
 
-const updateDraftQueue = new PQueue({concurrency: 1});
-
 /**
  * Gets drafts stored on the server and reconciles them with any locally stored drafts.
  * @param teamId Only drafts for the given teamId will be fetched.
@@ -47,40 +43,13 @@ export function getDrafts(teamId: string): ActionFuncAsync<boolean, GlobalState>
 
         let serverDrafts: Draft[] = [];
         try {
-            const response = await Client4.getUserDrafts(teamId);
-
-            // check if response is an array
-            if (Array.isArray(response)) {
-                serverDrafts = response.map((draft) => transformServerDraft(draft));
-            }
+            serverDrafts = (await Client4.getUserDrafts(teamId)).map((draft) => transformServerDraft(draft));
         } catch (error) {
             return {data: false, error};
         }
 
-        const drafts = [...serverDrafts];
         const localDrafts = getLocalDrafts(state);
-
-        // drafts that are not on server, but on local storage
-        const localOnlyDrafts = localDrafts.filter((localDraft) => {
-            return !serverDrafts.find((serverDraft) => serverDraft.key === localDraft.key);
-        });
-
-        // check if drafts are still valid
-        await Promise.all(localOnlyDrafts.map(async (draft) => {
-            if (draft.value.rootId) {
-                // get post from server to check if it exists
-                const {error} = await dispatch(getPost(draft.value.rootId));
-
-                // remove locally stored draft if post does not exist
-                if (error.status_code === 404) {
-                    await dispatch(setGlobalItem(draft.key, {message: '', fileInfos: [], uploadsInProgress: []}));
-                    await dispatch(removeGlobalItem(draft.key));
-                    return;
-                }
-            }
-
-            drafts.push(draft);
-        }));
+        const drafts = [...serverDrafts, ...localDrafts];
 
         // Reconcile drafts and only keep the latest version of a draft.
         const draftsMap = new Map(drafts.map((draft) => [draft.key, draft]));
@@ -92,6 +61,14 @@ export function getDrafts(teamId: string): ActionFuncAsync<boolean, GlobalState>
         });
 
         const actions = Array.from(draftsMap).map(([key, draft]) => {
+            // Local drafts that are past-schedule are cleared from local storage
+            if (typeof draft.value.timestamp === 'number') {
+                const isPastSchedule = Math.floor(Date.now() / 1000) > draft.value.timestamp;
+                if (isPastSchedule) {
+                    return removeGlobalItem(key);
+                }
+            }
+
             return setGlobalItem(key, draft.value);
         });
 
@@ -105,11 +82,7 @@ export function removeDraft(key: string, channelId: string, rootId = ''): Action
         const state = getState();
         const draft = getGlobalItem(state, key, {});
 
-        // set draft to empty to re-render the component
-        await dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
-
-        // remove draft from storage
-        await dispatch(removeGlobalItem(key));
+        dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
         if (syncedDraftsAreAllowedAndEnabled(state)) {
             // const connectionId = getConnectionId(getState());
@@ -131,17 +104,13 @@ export function removeDraft(key: string, channelId: string, rootId = ''): Action
                     error,
                 };
             }
+        } else {
+            // only remove draft from storage for local drafts
+            await dispatch(removeGlobalItem(key));
         }
         return {data: true};
     };
 }
-
-// Assert previous call ended before dispatching the action again to ensure latest draftId is used and prevent multiple draft creation on the same channel
-export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false): ActionFuncAsync<boolean, GlobalState> => {
-    return (dispatch) => {
-        return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save, scheduleDelete)));
-    };
-};
 
 export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false): ActionFuncAsync<boolean, GlobalState> {
     return async (dispatch, getState) => {
@@ -185,21 +154,29 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
             const userId = getCurrentUserId(state);
 
             try {
-                // TODO: remove
-                if (value?.message === '' || value?.message.replace(/\s/g, '').length || (value && value?.fileInfos.length > 0)) {
-                    if (value?.message.replace(/\s/g, '').length) {
-                        const {id} = await upsertDraft(updatedValue, userId, rootId, scheduleDelete);
-                        dispatch(setGlobalDraft(key, {
-                            ...updatedValue,
-                            id,
-                        }, false));
-                    } else {
-                        //This case is when there is a file attached with no message
-                        await upsertDraft({...updatedValue, message: ''}, userId, rootId, scheduleDelete);
+                const isDraftMessageEmpty = (draft: PostDraft|null) =>
+                    (draft?.message.replace(/\s/g, '').length === 0);
+
+                /**
+                 * Test if a draft is empty, either:
+                 *  - the draft is null
+                 *  - both the draft message and files are empty
+                 */
+                const isDraftEmpty = (draft: PostDraft|null) =>
+                    (draft === null) ||
+                    (isDraftMessageEmpty(draft) && (draft?.fileInfos.length === 0));
+
+                const {id} = await upsertDraft(updatedValue as PostDraft, userId, rootId, scheduleDelete);
+
+                // Do not update id in case there is a file attached with no message [???]
+                if (!isDraftMessageEmpty(updatedValue)) {
+                    // Only update the draft id if it has not been cleared from the reducer
+                    // during the upsertDraft client call
+                    const draft = getGlobalItem(getState(), key, {});
+                    if (!isDraftEmpty(draft)) {
+                        dispatch(setGlobalDraft(key, {...draft, id}, false));
                     }
                 }
-
-                // await upsertDraft(updatedValue, userId, rootId, scheduleDelete);
             } catch (error) {
                 return {data: false, error};
             }

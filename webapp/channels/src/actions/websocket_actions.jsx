@@ -3,6 +3,7 @@
 
 /* eslint-disable max-lines */
 
+import {lazy} from 'react';
 import {batchActions} from 'redux-batched-actions';
 
 import {
@@ -28,8 +29,6 @@ import {
     getChannelAndMyMember,
     getMyChannelMember,
     getChannelStats,
-    viewChannel,
-    markChannelAsRead,
     getChannelMemberCountsByGroup,
     markMultipleChannelsAsRead,
     getChannelGuestMembers,
@@ -75,7 +74,6 @@ import {
     getCurrentChannel,
     getCurrentChannelId,
     getGuestMembersIdsInChannel,
-    getMembersInCurrentChannel,
     getRedirectChannelNameForTeam,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
@@ -95,7 +93,7 @@ import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
-import {removeGlobalItem, setGlobalItem} from 'actions/storage';
+import {setGlobalItem} from 'actions/storage';
 import {loadProfilesForDM, loadProfilesForGM} from 'actions/user_actions';
 import {syncPostsInChannel} from 'actions/views/channel';
 import {getDrafts, setGlobalDraft, transformServerDraft} from 'actions/views/drafts';
@@ -104,26 +102,30 @@ import {closeRightHandSide} from 'actions/views/rhs';
 import {incrementWsErrorCount, resetWsErrorCount} from 'actions/views/system';
 import {updateThreadLastOpened} from 'actions/views/threads';
 import {voiceConnectedChannels} from 'selectors/calls';
+import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
 import store from 'stores/redux_store';
 
+import {withSuspense} from 'components/common/hocs/with_suspense';
 import InteractiveDialog from 'components/interactive_dialog';
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
-import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 
 import {getHistory} from 'utils/browser_history';
-import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, StoragePrefixes} from 'utils/constants';
-import {stopRing} from 'utils/notification_sounds';
+import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, StoragePrefixes} from 'utils/constants';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 
 import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
-import {callNoLongerExist, receivedCall} from './calls';
+import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
+import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';
 import {handleServerEvent} from './servers_actions';
+
+const RemovedFromChannelModal = withSuspense(lazy(() => import('components/removed_from_channel_modal')));
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -341,6 +343,7 @@ export async function reconnect(socketId) {
     dispatch(clearErrors());
 
     dispatch(getDrafts(currentTeamId));
+    dispatch(getMyMeets());
 }
 
 function syncThreads(teamId, userId) {
@@ -882,19 +885,6 @@ async function handlePostDeleteEvent(msg) {
     }
 
     dispatch(postDeleted(post));
-
-    // remove draft associated with this post from store
-    const draftKey = `${StoragePrefixes.COMMENT_DRAFT}${post.id}`;
-
-    // update the draft first to re-render
-    await dispatch(setGlobalItem(draftKey, {
-        message: '',
-        fileInfos: [],
-        uploadsInProgress: [],
-    }));
-
-    // then remove it
-    await dispatch(removeGlobalItem(draftKey));
 
     // update thread when a comment is deleted and CRT is on
     if (post.root_id && collapsedThreads) {
@@ -1870,6 +1860,11 @@ function handleThreadFollowChanged(msg) {
 function handleConferenceUserDenied(msg) {
     return async (doDispatch) => {
         const currentUserId = getCurrentUserId(getState());
+        const conference = getConferenceByChannelId(getState(), msg.data.channel_id);
+
+        if (conference.participants.length <= 2 && currentUserId === conference.user_id) {
+            dispatch(closeRingModal());
+        }
 
         if (currentUserId === msg?.data?.user_id) {
             if (isDesktopApp()) {
@@ -1880,10 +1875,16 @@ function handleConferenceUserDenied(msg) {
                     window.origin,
                 );
             } else {
-                stopRing();
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
         }
+        doDispatch({
+            type: ActionTypes.KMEET_CALL_USER_DENIED,
+            data: {
+                userId: msg.data.user_id,
+                channelId: msg.data.channel_id,
+            },
+        });
 
         doDispatch({
             type: ActionTypes.CALL_HANGUP,
@@ -1900,14 +1901,8 @@ function handleConferenceUserConnected(msg) {
 
         if (currentUserId === msg?.data?.user_id) {
             if (isDesktopApp()) {
-                window.postMessage(
-                    {
-                        type: 'call-joined-browser',
-                    },
-                    window.origin,
-                );
+                window.desktopAPI.closeDial?.();
             } else {
-                stopRing();
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }
         }
@@ -1925,6 +1920,9 @@ function handleConferenceUserConnected(msg) {
                     id: keys[0],
                 },
             });
+        }
+        if (!msg?.data?.desktop_version || (msg?.data?.desktop_version && isServerVersionGreaterThanOrEqualTo(msg?.data?.desktop_version, '3.3.0'))) {
+            doDispatch(externalJoinCall(msg));
         }
     };
 }
@@ -1947,6 +1945,14 @@ function handleConferenceUserDisconnected(msg) {
                 },
             });
         }
+
+        doDispatch({
+            type: ActionTypes.KMEET_CALL_USER_DISCONNECTED,
+            data: {
+                channelId: msg.data.channel_id,
+                userId: msg.data.user_id,
+            },
+        });
     };
 }
 
@@ -1956,13 +1962,11 @@ function handleConferenceDeleted(msg) {
         if (callDialingEnabled(doGetState())) {
             dispatch(callNoLongerExist(msg));
         }
-        doDispatch({
-            type: ActionTypes.VOICE_CHANNEL_DELETED,
-            data: {
-                callID: msg.data.url.split('/').at(-1),
-                channelID: msg.data.channel_id,
-            },
-        });
+        if (isDesktopApp()) {
+            window.desktopAPI?.closeRingCallWindow?.();
+        }
+
+        doDispatch(deleteConference(msg.data.url.split('/').at(-1), msg.data.channel_id));
     };
 }
 
@@ -2035,15 +2039,11 @@ function handleDeleteDraftEvent(msg) {
             return;
         }
 
-        // update the draft first to re-render
-        await doDispatch(setGlobalItem(key, {
+        doDispatch(setGlobalItem(key, {
             message: '',
             fileInfos: [],
             uploadsInProgress: [],
         }));
-
-        // then remove it
-        await doDispatch(removeGlobalItem(key));
     };
 }
 

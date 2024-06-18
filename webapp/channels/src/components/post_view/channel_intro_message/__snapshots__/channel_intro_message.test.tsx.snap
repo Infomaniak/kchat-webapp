@@ -362,7 +362,7 @@ exports[`components/post_view/ChannelIntroMessages test DIRECT Channel should ma
         class="status-wrapper  "
       >
         <button
-          class="RoundButton-jiiGed kxQKYn style--none"
+          class="RoundButton-dvlhqG ehgqHL style--none"
         >
           <span
             class="profile-icon "
@@ -452,7 +452,7 @@ exports[`components/post_view/ChannelIntroMessages test Group Channel should mat
         class="status-wrapper  "
       >
         <button
-          class="RoundButton-jiiGed kxQKYn style--none"
+          class="RoundButton-dvlhqG ehgqHL style--none"
         >
           <span
             class="profile-icon "
@@ -471,7 +471,7 @@ exports[`components/post_view/ChannelIntroMessages test Group Channel should mat
         class="status-wrapper  "
       >
         <button
-          class="RoundButton-jiiGed kxQKYn style--none"
+          class="RoundButton-dvlhqG ehgqHL style--none"
         >
           <span
             class="profile-icon "

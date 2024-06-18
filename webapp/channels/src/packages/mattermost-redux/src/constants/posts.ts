@@ -22,6 +22,7 @@ export const PostTypes = {
     ADD_TO_CHANNEL: 'system_add_to_channel' as PostType,
     ADD_GUEST_TO_CHANNEL: 'system_add_guest_to_chan' as PostType,
     REMOVE_FROM_CHANNEL: 'system_remove_from_channel' as PostType,
+    SYSTEM_MENTIONED_CHANNEL: 'system_mentioned_channel' as PostType,
 
     JOIN_TEAM: 'system_join_team' as PostType,
     LEAVE_TEAM: 'system_leave_team' as PostType,

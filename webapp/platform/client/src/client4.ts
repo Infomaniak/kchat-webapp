@@ -230,6 +230,12 @@ export default class Client4 {
         return this.url;
     }
 
+    getTranscript = (fileId: string) => {
+        return this.doFetch(
+            `${this.getFileRoute(fileId)}/transcript`,
+            {method: 'POST'},
+        );
+    }
     getAbsoluteUrl(baseUrl: string) {
         if (typeof baseUrl !== 'string' || !baseUrl.startsWith('/')) {
             return baseUrl;
@@ -1944,6 +1950,15 @@ export default class Client4 {
         );
     };
 
+    notifyMember = (channelId: string, userIds: string[], postId: string) => {
+        const body = {post_id: postId, user_ids: userIds}
+        return this.doFetch<StatusOK>(
+            `${this.getChannelMembersRoute(channelId)}/invite`,
+            {method: 'post', body: JSON.stringify(body)},
+        );
+
+    };
+
     removeFromChannel = (userId: string, channelId: string) => {
         this.trackEvent('api', 'api_channels_remove_member', {channel_id: channelId});
 
@@ -1967,6 +1982,13 @@ export default class Client4 {
             {method: 'get'},
         );
     };
+
+    getChannelsMemberCount = (channelIds: string[]) => {
+        return this.doFetch<Record<string, number>>(
+            `${this.getChannelsRoute()}/stats/member_count`,
+            {method: 'post', body: JSON.stringify(channelIds)}
+        )
+    }
 
     getChannelModerations = (channelId: string) => {
         return this.doFetch<ChannelModeration[]>(
@@ -4397,7 +4419,12 @@ export default class Client4 {
         );
     }
 
-    startMeet = (channelID: string) => {
+    startMeet = (channelID: string, version?: string) => {
+        let headers = {}
+        if (version) {
+            headers = {'Desktop-Version': version};
+        }
+
         return this.doFetch<{
             channel_id: string;
             created_at: string;
@@ -4406,20 +4433,32 @@ export default class Client4 {
             team_user_id: string;
             updated_at: string;
             url: string;
+            jwt: string;
+            name: string;
         }>(
             `${this.getBaseRoute()}/conferences`,
-            {method: 'post', body: JSON.stringify({channel_id: channelID})},
+            {method: 'post', body: JSON.stringify({channel_id: channelID}), headers},
         );
     }
-    leaveMeet = (callID: string) => {
+    cancelMeet = (callID: string) => {
         return this.doFetch(
-            `${this.getBaseRoute()}/conferences/${callID}/leave`,
+            `${this.getBaseRoute()}/conferences/${callID}/cancel`,
             {method: 'post'},
         );
     }
 
     acceptIncomingMeetCall(callID: string) {
-        return this.doFetch(
+        return this.doFetch<{
+            channel_id: string;
+            created_at: string;
+            id: string;
+            team_user: Object;
+            team_user_id: string;
+            updated_at: string;
+            url: string;
+            jwt: string;
+            name: string;
+        }>(
             `${this.getBaseRoute()}/conferences/${callID}/answer`,
             {method: 'post'},
         );

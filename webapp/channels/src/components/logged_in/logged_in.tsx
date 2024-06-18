@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Redirect} from 'react-router-dom';
 
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
@@ -45,11 +44,13 @@ export type Props = {
     actions: {
         autoUpdateTimezone: (deviceTimezone: string) => void;
         getChannelURLAction: (channelId: string, teamId: string, url: string) => void;
-        markChannelAsViewedOnServer: (channelId: string) => void;
         updateApproximateViewTime: (channelId: string) => void;
         registerInternalKdrivePlugin: () => void;
         setTheme: (theme: Theme) => void;
         updateTeamsOrderForUser: (teamsOrder: string[]) => void;
+        joinCall: (channelId: string) => void;
+        declineCall: (channelId: string) => void;
+        cancelCall: (channelId: string) => void;
     };
     showTermsOfService: boolean;
     location: {
@@ -108,6 +109,8 @@ export default class LoggedIn extends React.PureComponent<Props> {
             offUpdateTeamsOrder();
             offSwitchServerSidebar();
         };
+
+        this.setCallListeners();
 
         // Device tracking setup
         if (UserAgent.isIos()) {
@@ -231,12 +234,21 @@ export default class LoggedIn extends React.PureComponent<Props> {
         }
     };
 
+    private setCallListeners() {
+        if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.3.0')) {
+            window?.callManager?.onCallJoined?.((_: any, {channelId, channelID}) => this.props.actions.joinCall(channelID || channelId));
+            window?.callManager?.onCallDeclined?.((_: any, {channelId, channelID}) => this.props.actions.declineCall(channelID || channelId));
+            window?.callManager?.onCallCancel?.((_: any, {channelId}) => this.props.actions.cancelCall(channelId));
+
+            // window?.callManager?.onCallEnded?.((_: any, {channelID}) => this.props.actions.cancelCall(channelID));
+        }
+    }
+
     private handleBeforeUnload = (): void => {
         // remove the event listener to prevent getting stuck in a loop
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
         if (this.props.currentChannelId && !this.props.isCurrentChannelManuallyUnread) {
             this.props.actions.updateApproximateViewTime(this.props.currentChannelId);
-            this.props.actions.markChannelAsViewedOnServer(this.props.currentChannelId);
         }
         WebSocketActions.close();
     };

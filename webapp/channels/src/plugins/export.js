@@ -8,11 +8,8 @@ import {getSelectedPostId, getIsRhsOpen} from 'selectors/rhs';
 
 import ChannelInviteModal from 'components/channel_invite_modal';
 import ChannelMembersModal from 'components/channel_members_modal';
-import {openPricingModal} from 'components/global_header/right_controls/plan_upgrade_button';
 import {useNotifyAdmin} from 'components/notify_admin_cta/notify_admin_cta';
 import PostMessagePreview from 'components/post_view/post_message_preview';
-import PurchaseModal from 'components/purchase_modal';
-import StartTrialFormModal from 'components/start_trial_form_modal';
 import ThreadViewer from 'components/threading/thread_viewer';
 import Timestamp from 'components/timestamp';
 import BotTag from 'components/widgets/tag/bot_tag';
@@ -71,25 +68,17 @@ Object.defineProperty(window.WebappUtils, 'browserHistory', {
     get: () => getHistory(),
 });
 
-// This need to be a function because `openPricingModal`
-// is initialized when `UpgradeCloudButton` is loaded.
-// So if we export `openPricingModal` directly, it will be locked
-// to the initial value of undefined.
-window.openPricingModal = () => openPricingModal;
-
 // Components exposed on window FOR INTERNAL PLUGIN USE ONLY. These components may have breaking changes in the future
 // outside of major releases. They will be replaced by common components once that project is more mature and able to
 // guarantee better compatibility.
 window.Components = {
     Textbox,
-    PurchaseModal,
     Timestamp,
     ChannelInviteModal,
     ChannelMembersModal,
     Avatar,
     imageURLForUser,
     BotBadge: BotTag,
-    StartTrialFormModal,
     ThreadViewer,
     CreatePost,
     PostMessagePreview,

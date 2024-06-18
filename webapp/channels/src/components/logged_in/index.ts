@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import type {Dispatch} from 'redux';
 
-import {markChannelAsViewedOnServer, updateApproximateViewTime} from 'mattermost-redux/actions/channels';
+import {updateApproximateViewTime} from 'mattermost-redux/actions/channels';
 import {autoUpdateTimezone} from 'mattermost-redux/actions/timezone';
 import {getChannel, getCurrentChannelId, isManuallyUnread} from 'mattermost-redux/selectors/entities/channels';
 import {getLicense, getConfig} from 'mattermost-redux/selectors/entities/general';
@@ -15,6 +15,7 @@ import {getCurrentUser, shouldShowTermsOfService} from 'mattermost-redux/selecto
 import type {ThunkActionFunc} from 'mattermost-redux/types/actions';
 
 import {registerInternalKdrivePlugin} from 'actions/kdrive_actions';
+import {declineCall, joinCall, cancelCall} from 'actions/kmeet_calls';
 import {updateTeamsOrderForUser} from 'actions/team_actions';
 import {setTheme} from 'actions/views/theme';
 import {getChannelURL} from 'selectors/urls';
@@ -69,11 +70,13 @@ function mapDispatchToProps(dispatch: Dispatch) {
         actions: bindActionCreators({
             autoUpdateTimezone,
             getChannelURLAction,
-            markChannelAsViewedOnServer,
             updateApproximateViewTime,
             registerInternalKdrivePlugin,
             setTheme,
             updateTeamsOrderForUser,
+            joinCall,
+            declineCall,
+            cancelCall,
         }, dispatch),
     };
 }

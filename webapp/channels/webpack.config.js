@@ -10,8 +10,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const {ModuleFederationPlugin} = require('webpack').container;
 const LiveReloadPlugin = require('webpack-livereload-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
 
+// const WebpackPwaManifest = require('webpack-pwa-manifest');
 // const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 
 const packageJson = require('./package.json');
@@ -51,17 +51,53 @@ if (DEV) {
 // entries are guaranteed to have expired.
 const buildTimestamp = Date.now();
 
+var kmeetConfig = {
+    entry: {
+        kmeet: './src/components/kmeet_conference_iframe/index.tsx',
+    },
+    output: {
+        publicPath,
+        filename: '[name].js',
+        chunkFilename: '[name].js',
+        clean: true,
+        path: path.resolve(__dirname, '../../dist'),
+    },
+    module: {
+        noParse: /external_api\\.js/,
+        rules: [
+            {
+                test: /\.(js|jsx|ts|tsx)$/,
+                exclude: STANDARD_EXCLUDE,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+
+                        // Babel configuration is in .babelrc because jest requires it to be there.
+                    },
+                },
+            },
+        ],
+    },
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    },
+    target: 'web',
+};
+
 var config = {
-    entry: ['./src/root.tsx'],
+    entry: {
+        app: './src/root.tsx',
+    },
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
         chunkFilename: '[name].[contenthash].js',
         assetModuleFilename: 'files/[contenthash][ext]',
-        clean: true,
         path: path.resolve(__dirname, '../../dist'),
     },
     module: {
+        noParse: /external_api\\.js/,
         rules: [
             {
                 test: /\.(js|jsx|ts|tsx)$/,
@@ -149,6 +185,7 @@ var config = {
             crypto: require.resolve('crypto-browserify'),
             stream: require.resolve('stream-browserify'),
             buffer: require.resolve('buffer/'),
+            'process/browser': require.resolve('process/browser'),
         },
     },
     performance: {
@@ -166,6 +203,7 @@ var config = {
         new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css',
             chunkFilename: '[name].[contenthash].css',
+            ignoreOrder: true,
         }),
         new HtmlWebpackPlugin({
             filename: 'root.html',
@@ -178,6 +216,13 @@ var config = {
                 },
             },
         }),
+
+        // new HtmlWebpackPlugin({
+        //     template: 'src/components/kmeet_conference_iframe/kmeet_conference.html',
+        //     filename: 'kmeet_conference.html',
+        //     minify: false,
+        //     chunks: ['kmeet'],
+        // }),
         new CopyWebpackPlugin({
             patterns: [
                 {from: 'src/images/emoji', to: 'emoji'},
@@ -216,70 +261,70 @@ var config = {
 
         // Generate manifest.json, honouring any configured publicPath. This also handles injecting
         // <link rel="apple-touch-icon" ... /> and <meta name="apple-*" ... /> tags into root.html.
-        new WebpackPwaManifest({
-            name: 'kChat',
-            short_name: 'kChat',
-            start_url: '..',
-            description: 'Infomaniak kChat',
-            background_color: '#ffffff',
-            inject: true,
-            ios: true,
-            fingerprints: false,
-            orientation: 'any',
-            filename: 'manifest.json',
-            icons: [{
-                src: path.resolve('src/images/favicon/android-chrome-192x192.png'),
-                type: 'image/png',
-                sizes: '192x192',
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-120x120.png'),
-                type: 'image/png',
-                sizes: '120x120',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-144x144.png'),
-                type: 'image/png',
-                sizes: '144x144',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-152x152.png'),
-                type: 'image/png',
-                sizes: '152x152',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-57x57.png'),
-                type: 'image/png',
-                sizes: '57x57',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-60x60.png'),
-                type: 'image/png',
-                sizes: '60x60',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-72x72.png'),
-                type: 'image/png',
-                sizes: '72x72',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-76x76.png'),
-                type: 'image/png',
-                sizes: '76x76',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/favicon-16x16.png'),
-                type: 'image/png',
-                sizes: '16x16',
-            }, {
-                src: path.resolve('src/images/favicon/favicon-32x32.png'),
-                type: 'image/png',
-                sizes: '32x32',
-            }, {
-                src: path.resolve('src/images/favicon/favicon-96x96.png'),
-                type: 'image/png',
-                sizes: '96x96',
-            }],
-        }),
+        // new WebpackPwaManifest({
+        //     name: 'kChat',
+        //     short_name: 'kChat',
+        //     start_url: '..',
+        //     description: 'Infomaniak kChat',
+        //     background_color: '#ffffff',
+        //     inject: true,
+        //     ios: true,
+        //     fingerprints: false,
+        //     orientation: 'any',
+        //     filename: 'manifest.json',
+        //     icons: [{
+        //         src: path.resolve('src/images/favicon/android-chrome-192x192.png'),
+        //         type: 'image/png',
+        //         sizes: '192x192',
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-120x120.png'),
+        //         type: 'image/png',
+        //         sizes: '120x120',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-144x144.png'),
+        //         type: 'image/png',
+        //         sizes: '144x144',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-152x152.png'),
+        //         type: 'image/png',
+        //         sizes: '152x152',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-57x57.png'),
+        //         type: 'image/png',
+        //         sizes: '57x57',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-60x60.png'),
+        //         type: 'image/png',
+        //         sizes: '60x60',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-72x72.png'),
+        //         type: 'image/png',
+        //         sizes: '72x72',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-76x76.png'),
+        //         type: 'image/png',
+        //         sizes: '76x76',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/favicon-16x16.png'),
+        //         type: 'image/png',
+        //         sizes: '16x16',
+        //     }, {
+        //         src: path.resolve('src/images/favicon/favicon-32x32.png'),
+        //         type: 'image/png',
+        //         sizes: '32x32',
+        //     }, {
+        //         src: path.resolve('src/images/favicon/favicon-96x96.png'),
+        //         type: 'image/png',
+        //         sizes: '96x96',
+        //     }],
+        // }),
 
         // Disabling this plugin until we come up with better bundle analysis ci
         // new BundleAnalyzerPlugin({
@@ -393,10 +438,14 @@ if (DEV) {
     // Development mode configuration
     config.mode = 'development';
     config.devtool = 'eval-cheap-module-source-map';
+    kmeetConfig.mode = 'development';
+    kmeetConfig.devtool = 'eval-cheap-module-source-map';
 } else {
     // Production mode configuration
     config.mode = 'production';
     config.devtool = 'source-map';
+    kmeetConfig.mode = 'production';
+    kmeetConfig.devtool = 'source-map';
 }
 
 const env = {};
@@ -434,47 +483,60 @@ config.plugins.push(new webpack.DefinePlugin({
 }));
 
 if (targetIsDevServer) {
+    const devServer = {
+        server: 'https',
+        allowedHosts: 'all',
+        liveReload: true,
+        proxy: [{
+            context: () => true,
+            bypass(req) {
+                if (req.url.indexOf('/api') === 0 ||
+                    req.url.indexOf('/plugins') === 0 ||
+                    req.url.indexOf('/static/plugins/') === 0 ||
+                    req.url.indexOf('/broadcasting/auth') === 0 ||
+                    req.url.indexOf('/sockjs-node/') !== -1) {
+                    return null; // send through proxy to the server
+                }
+                if (req.url.indexOf('/static/') === 0) {
+                    return path; // return the webpacked asset
+                }
+
+                // redirect (root, team routes, etc)
+                return '/static/root.html';
+            },
+            logLevel: 'silent',
+            target: process.env.BASE_URL || 'https://infomaniak.kchat.preprod.dev.infomaniak.ch/', //eslint-disable-line no-process-env
+            changeOrigin: true,
+            xfwd: true,
+            ws: false,
+        }],
+        port: 443,
+        devMiddleware: {
+            writeToDisk: false,
+        },
+        historyApiFallback: {
+            index: '/static/root.html',
+        },
+        client: {
+            overlay: false,
+        },
+    };
+
+    // kmeetConfig = {
+    //     ...kmeetConfig,
+    //     devtool: 'eval-cheap-module-source-map',
+    //     devServer,
+    //     performance: false,
+    //     optimization: {
+    //         ...config.optimization,
+    //         splitChunks: false,
+    //     },
+    // };
+
     config = {
         ...config,
         devtool: 'eval-cheap-module-source-map',
-        devServer: {
-            server: 'https',
-            allowedHosts: 'all',
-            liveReload: true,
-            proxy: [{
-                context: () => true,
-                bypass(req) {
-                    if (req.url.indexOf('/api') === 0 ||
-                        req.url.indexOf('/plugins') === 0 ||
-                        req.url.indexOf('/static/plugins/') === 0 ||
-                        req.url.indexOf('/broadcasting/auth') === 0 ||
-                        req.url.indexOf('/sockjs-node/') !== -1) {
-                        return null; // send through proxy to the server
-                    }
-                    if (req.url.indexOf('/static/') === 0) {
-                        return path; // return the webpacked asset
-                    }
-
-                    // redirect (root, team routes, etc)
-                    return '/static/root.html';
-                },
-                logLevel: 'silent',
-                target: process.env.BASE_URL || 'https://infomaniak.kchat.preprod.dev.infomaniak.ch/', //eslint-disable-line no-process-env
-                changeOrigin: true,
-                xfwd: true,
-                ws: false,
-            }],
-            port: 9005,
-            devMiddleware: {
-                writeToDisk: false,
-            },
-            historyApiFallback: {
-                index: '/static/root.html',
-            },
-            client: {
-                overlay: false,
-            },
-        },
+        devServer,
         performance: false,
         optimization: {
             ...config.optimization,
@@ -514,6 +576,6 @@ if (targetIsEslint) {
         // Do this asynchronously so we can determine whether which remote modules are available
         await initializeModuleFederation();
 
-        return config;
+        return [config, kmeetConfig];
     };
 }

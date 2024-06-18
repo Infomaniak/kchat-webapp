@@ -13,7 +13,7 @@ import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {createPost} from 'actions/post_actions';
 import {setGlobalItem} from 'actions/storage';
-import {removeDraft, upsertScheduleDraft, addToUpdateDraftQueue, setGlobalDraftSource} from 'actions/views/drafts';
+import {removeDraft, upsertScheduleDraft, updateDraft, setGlobalDraftSource} from 'actions/views/drafts';
 import {closeModal, openModal} from 'actions/views/modals';
 import {getGlobalItem} from 'selectors/storage';
 
@@ -135,7 +135,7 @@ function ChannelDraft({
         await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId, channel.id));
 
         // Update channel draft
-        const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.DRAFT + newDraft.channelId, value, '', true, true));
+        const {error} = await dispatch(updateDraft(StoragePrefixes.DRAFT + newDraft.channelId, value, '', true, true));
         if (error) {
             dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, value));
         }

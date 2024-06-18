@@ -9,7 +9,7 @@ import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
-import {loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
+import {getChannelPendingGuests, loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
 import {Permissions} from 'mattermost-redux/constants';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {
@@ -17,6 +17,7 @@ import {
     getCurrentChannelStats,
     getMembersInCurrentChannel,
     getMyCurrentChannelMembership,
+    getPendingGuestsInChannel,
     isCurrentChannelArchived,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
@@ -111,6 +112,7 @@ function mapStateToProps(state: GlobalState) {
             canManageMembers: false,
             canGoBack: false,
             teamUrl: '',
+            pendingGuests: {},
         } as unknown as Props;
     }
 
@@ -142,6 +144,7 @@ function mapStateToProps(state: GlobalState) {
     const editing = getIsEditingMembers(state);
 
     const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
+    const pendingGuests = getPendingGuestsInChannel(state, channel.id);
 
     return {
         channel,
@@ -153,6 +156,7 @@ function mapStateToProps(state: GlobalState) {
         canManageMembers,
         channelMembers,
         editing,
+        pendingGuests,
     } as Props;
 }
 
@@ -168,6 +172,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             loadMyChannelMemberAndRole,
             setEditChannelMembers,
             searchProfilesAndChannelMembers,
+            getChannelPendingGuests,
         }, dispatch),
     };
 }

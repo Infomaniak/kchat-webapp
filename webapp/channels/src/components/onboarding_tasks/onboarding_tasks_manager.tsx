@@ -11,14 +11,12 @@ import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCurrentTeamDefaultChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
-import {isCurrentUserGuestUser, isCurrentUserSystemAdmin, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {isCurrentUserGuestUser, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import {trackEvent as trackEventAction} from 'actions/telemetry_actions';
 import {collapseAllCategoriesExcept} from 'actions/views/channel_sidebar';
 import {open as openLhs} from 'actions/views/lhs';
-import {openModal} from 'actions/views/modals';
 import {
     openInvitationsModal,
     setShowOnboardingCompleteProfileTour,
@@ -36,17 +34,15 @@ import Newspaper from 'components/common/svg_images_components/newspaper_svg';
 import Security from 'components/common/svg_images_components/security_svg';
 import Sunglasses from 'components/common/svg_images_components/sunglasses_svg';
 import Wrench from 'components/common/svg_images_components/wrench_svg';
-import LearnMoreTrialModal from 'components/learn_more_trial_modal/learn_more_trial_modal';
 import {
     AutoTourStatus,
     FINISHED,
     OnboardingTourSteps,
-    OnboardingTourStepsForGuestUsers,
     TTNameMapToATStatusKey,
     TutorialTourName,
 } from 'components/tours';
 
-import {ModalIdentifiers, TELEMETRY_CATEGORIES, ExploreOtherToolsTourSteps} from 'utils/constants';
+import {ExploreOtherToolsTourSteps} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -355,22 +351,6 @@ export const useHandleOnBoardingTaskTrigger = () => {
             }];
             dispatch(savePreferences(currentUserId, preferences));
             window.open('https://infomaniak.com/gtl/apps.kchat', '_blank', 'noopener,noreferrer');
-            break;
-        }
-        case OnboardingTasksName.START_TRIAL: {
-            trackEventAction(
-                TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_TASK_LIST,
-                'open_start_trial_modal',
-            );
-            dispatch(openModal({
-                modalId: ModalIdentifiers.LEARN_MORE_TRIAL_MODAL,
-                dialogType: LearnMoreTrialModal,
-                dialogProps: {
-                    launchedBy: 'onboarding',
-                },
-            }));
-
-            handleSaveData(taskName, TaskNameMapToSteps[taskName].FINISHED, true);
             break;
         }
         default:

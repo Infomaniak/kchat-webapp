@@ -21,6 +21,7 @@ import KeyboardShortcutSequence, {
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+import {ChannelsTour, DirectMessagesTour} from 'components/tours/onboarding_tour';
 
 import Constants, {A11yCustomEventTypes, DraggingStateTypes, DraggingStates} from 'utils/constants';
 import {t} from 'utils/i18n';
@@ -46,6 +47,8 @@ type Props = {
     draggingState: DraggingState;
     currentUserId: string;
     isAdmin: boolean;
+    showDirectMessagesTutorialStep: boolean;
+    showChannelsTutorialStep: boolean;
     actions: {
         setCategoryCollapsed: (categoryId: string, collapsed: boolean) => void;
         setCategorySorting: (categoryId: string, sorting: CategorySorting) => void;
@@ -243,6 +246,8 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
             categoryIndex,
             channelIds,
             isNewCategory,
+            showDirectMessagesTutorialStep,
+            showChannelsTutorialStep,
         } = this.props;
 
         if (!category) {
@@ -366,6 +371,8 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                         >
+                            {category.type === CategoryTypes.CHANNELS && showChannelsTutorialStep && <ChannelsTour/>}
+                            {category.type === CategoryTypes.DIRECT_MESSAGES && showDirectMessagesTutorialStep && <DirectMessagesTour/>}
                             <Droppable
                                 droppableId={category.id}
                                 type='SIDEBAR_CHANNEL'

@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {lazy} from 'react';
+
 import type {FileInfo} from '@mattermost/types/files';
 import type {GroupChannel} from '@mattermost/types/groups';
 import type {Post} from '@mattermost/types/posts';
@@ -29,7 +31,7 @@ import {isEmbedVisible, isInlineImageVisible} from 'selectors/posts';
 import {getSelectedPostId, getSelectedPostCardId, getRhsState} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
 
-import ReactionLimitReachedModal from 'components/reaction_limit_reached_modal';
+import {withSuspense} from 'components/common/hocs/with_suspense';
 
 import {
     ActionTypes,
@@ -46,6 +48,8 @@ import type {GlobalState} from 'types/store';
 
 import {completePostReceive} from './new_post';
 import type {NewPostMessageProps} from './new_post';
+
+const ReactionLimitReachedModal = withSuspense(lazy(() => import('components/reaction_limit_reached_modal')));
 
 export function handleNewPost(post: Post, msg?: {data?: NewPostMessageProps & GroupChannel}): ActionFuncAsync<boolean, GlobalState> {
     return async (dispatch, getState) => {

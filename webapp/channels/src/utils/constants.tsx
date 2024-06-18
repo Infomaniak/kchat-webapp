@@ -15,6 +15,8 @@ import {Preferences as ReduxPreferences} from 'mattermost-redux/constants';
 import Permissions from 'mattermost-redux/constants/permissions';
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
 
+import {t} from 'utils/i18n';
+
 import audioIcon from 'images/icons/audio.svg';
 import codeIcon from 'images/icons/code.svg';
 import excelIcon from 'images/icons/excel.svg';
@@ -22,6 +24,7 @@ import genericIcon from 'images/icons/generic.svg';
 import patchIcon from 'images/icons/patch.svg';
 import pdfIcon from 'images/icons/pdf.svg';
 import pptIcon from 'images/icons/ppt.svg';
+import transcriptIcon from 'images/icons/transcript.svg';
 import videoIcon from 'images/icons/video.svg';
 import wordIcon from 'images/icons/word.svg';
 import logoImage from 'images/logo_compact.png';
@@ -30,7 +33,6 @@ import monokaiIcon from 'images/themes/code_themes/monokai.png';
 import solarizedDarkIcon from 'images/themes/code_themes/solarized-dark.png';
 import solarizedLightIcon from 'images/themes/code_themes/solarized-light.png';
 import logoWebhook from 'images/webhook_icon.jpg';
-import {t} from 'utils/i18n';
 
 export const SettingsTypes = {
     TYPE_TEXT: 'text' as const,
@@ -361,7 +363,12 @@ export const ActionTypes = keyMirror({
     VOICE_CHANNEL_USER_RAISE_HAND: null,
     VOICE_CHANNEL_USER_UNRAISE_HAND: null,
     VOICE_CHANNEL_ADDED: null,
+    VOICE_CHANNEL_PUT: null,
     VOICE_CHANNEL_DELETED: null,
+    VOICE_CHANNELS_RECEIVED: null,
+    KMEET_CALL_USER_CONNECTED: null,
+    KMEET_CALL_USER_DISCONNECTED: null,
+    KMEET_CALL_USER_DENIED: null,
 
     SHOW_EXPANDED_VIEW: null,
     HIDE_EXPANDED_VIEW: null,
@@ -369,6 +376,7 @@ export const ActionTypes = keyMirror({
     HIDE_SWITCH_CALL_MODAL: null,
     SHOW_SCREEN_SOURCE_MODAL: null,
     HIDE_SCREEN_SOURCE_MODAL: null,
+
     // RECEIVED_PLUGIN_INSIGHT: null,
     SET_EDIT_CHANNEL_MEMBERS: null,
     NEEDS_LOGGED_IN_LIMIT_REACHED_CHECK: null,
@@ -489,6 +497,7 @@ export const ModalIdentifiers = {
     DELINQUENCY_MODAL_DOWNGRADE: 'delinquency_modal_downgrade',
     CLOUD_LIMITS_DOWNGRADE: 'cloud_limits_downgrade',
     MARK_ALL_AS_READ_MODAL: 'mark_all_as_read',
+    KMEET_CALL_MODAL: 'kmeet_call_modal',
     PERSIST_NOTIFICATION_CONFIRM_MODAL: 'persist_notification_confirm_modal',
     AIR_GAPPED_SELF_HOSTED_PURCHASE: 'air_gapped_self_hosted_purchase',
     DOWNGRADE_MODAL: 'downgrade_modal',
@@ -500,7 +509,6 @@ export const ModalIdentifiers = {
     SCREENING_IN_PROGRESS: 'screening_in_progress',
     CONFIRM_SWITCH_TO_YEARLY: 'confirm_switch_to_yearly',
     EXPANSION_IN_PROGRESS: 'expansion_in_progress',
-    SELF_HOSTED_EXPANSION: 'self_hosted_expansion',
     CHANNEL_LIMIT_REACHED: 'channel_limit_reached',
     STORAGE_LIMIT_REACHED: 'storage_limit_reached',
     EXTERNAL_LIMIT_REACHED: 'external_limit_reached',
@@ -1031,6 +1039,7 @@ export const JobStatuses = {
 };
 
 export const AnnouncementBarTypes = {
+    UPDATE_MAC: 'update_mac',
     ANNOUNCEMENT: 'announcement',
     CRITICAL: 'critical',
     DEVELOPER: 'developer',
@@ -2109,6 +2118,7 @@ export const Constants = {
     EMOJI_PATH: '/static/emoji',
     RECENT_EMOJI_KEY: 'recentEmojis',
     DEFAULT_WEBHOOK_LOGO: logoWebhook,
+    TRANSCRIPT_ICON: transcriptIcon,
     MHPNS_US: 'https://push.mattermost.com',
     MHPNS_DE: 'https://hpns-de.mattermost.com',
     MTPNS: 'https://push-test.mattermost.com',
@@ -2169,6 +2179,7 @@ export const Constants = {
     FIRST_ADMIN_ROLE: 'first_admin',
     MAX_PURCHASE_SEATS: 1000000,
     MIN_PURCHASE_SEATS: 10,
+    MIN_MEMBERS_FOR_CALL_CONFIRM_MODAL: 10,
 };
 
 export const ValidationErrors = {

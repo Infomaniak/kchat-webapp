@@ -59,6 +59,7 @@ export interface Props {
     className?: string;
     channelType: string;
     membersCount: number;
+    pendingGuestsCount: number;
     canManageMembers: boolean;
     editing: boolean;
     actions: {
@@ -68,8 +69,8 @@ export interface Props {
     };
 }
 
-const ActionBar = ({className, channelType, membersCount, canManageMembers, editing, actions}: Props) => {
-    const showManageButton = channelType !== Constants.GM_CHANNEL && membersCount > 1;
+const ActionBar = ({className, channelType, membersCount, pendingGuestsCount, canManageMembers, editing, actions}: Props) => {
+    const showManageButton = channelType !== Constants.GM_CHANNEL && membersCount + pendingGuestsCount > 1;
 
     const handleShortcut = useCallback((e) => {
         if (isKeyPressed(e, Constants.KeyCodes.ESCAPE) && editing) {

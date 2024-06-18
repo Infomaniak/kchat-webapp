@@ -2,50 +2,132 @@
 // See LICENSE.txt for license information.
 
 import React, {useRef} from 'react';
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
+
+import type {Channel} from '@mattermost/types/channels';
 
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
+import ConfirmModal from 'components/confirm_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {KmeetTour, useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
 
-import Constants from 'utils/constants';
+import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import './meet_button.scss';
+import type {ModalData} from 'types/actions';
+
 import meetSvg from './static/kmeet.svg';
 
 export type Props = {
-    currentChannelID: string;
+    channel: Channel;
     hasCall?: boolean;
+    membersCount: number;
+
     actions: {
         startOrJoinCallInChannelV2: (channelID: unknown) => void;
+        joinCall: (channelID: unknown) => void;
+        openModal: <P>(modalData: ModalData<P>) => void;
+        closeModal: (ModalIdentifier: string) => void;
     };
 }
 
 const TIME_TO_AVOID_SPAMMING_CALL_BTN = 3000;
 
 function MeetButton(props: Props) {
+    const {actions, channel, membersCount} = props;
+
     const isGuest = useSelector(isCurrentUserGuestUser);
     const kmeetTourStep = isGuest ? OnboardingTourStepsForGuestUsers.KMEET : OnboardingTourSteps.KMEET;
     const showKmeetTutorialStep = useShowOnboardingTutorialStep(kmeetTourStep);
-    const {actions} = props;
-    const {startOrJoinCallInChannelV2} = actions;
+
+    const {startOrJoinCallInChannelV2, joinCall} = actions;
     const ref = useRef<HTMLButtonElement>(null);
-    let spamBtn = false;
+    const timeoutRef = useRef<NodeJS.Timeout|null>(null);
 
     const onClick = () => {
-        if (spamBtn) {
+        if (timeoutRef.current) {
             return;
         }
-        spamBtn = true;
-        startOrJoinCallInChannelV2(props.currentChannelID);
-        const timerId = setTimeout(() => {
-            spamBtn = false;
-            clearTimeout(timerId);
+
+        if (membersCount >= Constants.MIN_MEMBERS_FOR_CALL_CONFIRM_MODAL) {
+            openModal();
+            return;
+        }
+
+        startCall();
+
+        timeoutRef.current = setTimeout(() => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+            }
         }, TIME_TO_AVOID_SPAMMING_CALL_BTN);
+    };
+
+    const openModal = () => {
+        const title = (
+            <FormattedMessage
+                id='kmeet_call_modal.title'
+                defaultMessage='Start a call in the channel {name}'
+                values={{name: <strong>{channel.display_name}</strong>}}
+            />
+        );
+        const message = (
+            <FormattedMessage
+                id='kmeet_call_modal.message'
+                defaultMessage='{count} people will be notified to join this call. Do you really want to start a call in the channel {name}'
+                values={{count: <strong>{membersCount}</strong>, name: <strong>{channel.display_name}</strong>}}
+            />
+        );
+        const confirmButtonText = (
+            <FormattedMessage
+                id='kmeet_call_modal.confirm'
+                defaultMessage='Start the call'
+            />
+        );
+        const cancelButtonText = (
+            <FormattedMessage
+                id='kmeet_call_modal.cancel'
+                defaultMessage='Cancel'
+            />
+        );
+
+        actions.openModal({
+            modalId: ModalIdentifiers.KMEET_CALL_MODAL,
+            dialogType: ConfirmModal,
+            dialogProps: {
+                show: true,
+                title,
+                message,
+                confirmButtonText,
+                cancelButtonText,
+                onConfirm,
+                onCancel,
+                onHide: onCancel,
+                onExited: onCancel,
+            },
+        });
+    };
+
+    const startCall = () => {
+        if (props.hasCall) {
+            joinCall(channel.id);
+        } else {
+            startOrJoinCallInChannelV2(channel.id);
+        }
+    };
+
+    const onConfirm = () => {
+        actions.closeModal(ModalIdentifiers.KMEET_CALL_MODAL);
+        startCall();
+    };
+
+    const onCancel = () => {
+        actions.closeModal(ModalIdentifiers.KMEET_CALL_MODAL);
     };
 
     const tooltip = (
@@ -94,6 +176,4 @@ function MeetButton(props: Props) {
     );
 }
 
-const wrappedComponent = injectIntl(MeetButton);
-wrappedComponent.displayName = 'injectIntl(MeetButton)';
-export default wrappedComponent;
+export default MeetButton;

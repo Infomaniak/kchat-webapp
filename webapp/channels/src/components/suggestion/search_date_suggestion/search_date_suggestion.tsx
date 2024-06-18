@@ -76,6 +76,7 @@ const SearchDateSuggestion = ({
             id='searchDatePicker'
             selected={currentDate}
             components={DAY_PICKER_ICONS}
+            ISOWeek={true}
         />
     );
 };

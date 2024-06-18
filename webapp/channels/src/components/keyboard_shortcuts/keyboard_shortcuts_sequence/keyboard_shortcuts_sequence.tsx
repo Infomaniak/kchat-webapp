@@ -55,7 +55,7 @@ function KeyboardShortcutSequence({shortcut, values, hideDescription, hoistDescr
         const shortcutKeys = altKeys.split(KEY_SEPARATOR).map((key) => (
             <ShortcutKey
                 key={key}
-                variant={isInsideTooltip ? ShortcutKeyVariant.Tooltip : ShortcutKeyVariant.ShortcutModal}
+                variant={isInsideTooltip ? ShortcutKeyVariant.Tooltip : ShortcutKeyVariant.Contrast}
             >
                 {key}
             </ShortcutKey>
@@ -77,7 +77,7 @@ function KeyboardShortcutSequence({shortcut, values, hideDescription, hoistDescr
                 {keys && keys.split(KEY_SEPARATOR).map((key) => (
                     <ShortcutKey
                         key={key}
-                        variant={isInsideTooltip ? ShortcutKeyVariant.Tooltip : ShortcutKeyVariant.ShortcutModal}
+                        variant={isInsideTooltip ? ShortcutKeyVariant.Tooltip : ShortcutKeyVariant.Contrast}
                     >
                         {key}
                     </ShortcutKey>

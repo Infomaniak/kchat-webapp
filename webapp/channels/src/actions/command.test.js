@@ -9,14 +9,13 @@ import * as Teams from 'mattermost-redux/selectors/entities/teams';
 
 import * as GlobalActions from 'actions/global_actions';
 
-import UserSettingsModal from 'components/user_settings/modal';
-
-import mockStore from 'tests/test_store';
 import {ActionTypes, Constants, ModalIdentifiers} from 'utils/constants';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 
-import {executeCommand} from './command';
+import mockStore from 'tests/test_store';
+
+import {executeCommand, UserSettingsModal} from './command';
 
 const currentChannelId = '123';
 const currentTeamId = '321';
