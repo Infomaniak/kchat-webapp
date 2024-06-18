@@ -6042,7 +6042,7 @@
   "user_profile.send.dm.yourself": "Sende dir selbst eine Nachricht",
   "users_limits_announcement_bar.copyText": "Benutzerlimit überschritten. Kontaktiere den Administrator mit: ERROR_SAFETY_LIMITS_EXCEEDED",
   "users_limits_announcement_bar.ctaText": "Erfahre mehr",
-  "version_bar.new": "Eine neue Version von Mattermost ist verfügbar.",
+  "version_bar.new": "Eine neue Version von kChat ist verfügbar.",
   "version_bar.refresh": "Lade die App neu",
   "view_image.loading": "Laden ",
   "view_image.zoom_in": "Vergrössern",
