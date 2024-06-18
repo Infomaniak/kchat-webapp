@@ -187,7 +187,7 @@ export default class WebSocketClient {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             },
-        } : undefined;
+        } : {};
 
         this.conn = new Pusher('kchat-key', {
             wsHost: connectionUrl,
