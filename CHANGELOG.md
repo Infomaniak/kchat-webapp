@@ -1,3 +1,13 @@
+## 2.9.4-rc.1 (2024-06-18)
+
+### Fixed (1 change)
+
+- [fix: version_bar.new translation](kchat/webapp@01e7661224548236df1269b3ecd132d33659d301) by @tim.dewinter ([merge request](kchat/webapp!801))
+
+### Chore (1 change)
+
+- [update pdfjs](kchat/webapp@dd77671327b4d0deb4a5846b81fcd8d5010571e0) by @antonbuksa ([merge request](kchat/webapp!799))
+
 ## 2.9.3-rc.5 (2024-06-11)
 
 ### Fixed (1 change)
