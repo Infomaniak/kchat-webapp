@@ -1,3 +1,9 @@
+## 2.9.5-rc.1 (2024-06-18)
+
+### Added (1 change)
+
+- [implement displaying embedded attachments in post previews](kchat/webapp@6dddc1931deefe0b87f2ca4b6715f8fd886fd3d7) by @antonbuksa ([merge request](kchat/webapp!797))
+
 ## 2.9.4-rc.3 (2024-06-18)
 
 No changes.
