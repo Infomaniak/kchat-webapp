@@ -374,7 +374,7 @@ pages:
   variables:
     PAGES_PREFIX: "" # No prefix by default (master)
   script:
-    - mkdir public && cp -r e2e-tests/playwright/playwright-report "public/${PAGES_PREFIX}"
+    - cp -r e2e-tests/playwright/playwright-report public
   after_script:
     - ruby .gitlab/e2e_report_notify.rb
   pages:
