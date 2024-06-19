@@ -355,10 +355,12 @@ class ChannelHeader extends React.PureComponent<Props, State> {
 
         let dmHeaderIconStatus: ReactNode;
         let dmHeaderTextStatus: ReactNode;
+
+        if (dmUser?.is_bot || currentUser.id === dmUser?.id) {
+            showMeetBtn = false;
+        }
+
         if (isDirect && !dmUser?.delete_at && !dmUser?.is_bot) {
-            if (currentUser.id === dmUser?.id) {
-                showMeetBtn = false;
-            }
             dmHeaderIconStatus = (<StatusIcon status={channel.status}/>);
 
             dmHeaderTextStatus = (
@@ -700,7 +702,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         channel={channel}
                         channelMember={channelMember}
                     />
-                    {showMeetBtn && !dmUser?.is_bot && <MeetButton/>}
+                    {showMeetBtn && <MeetButton/>}
                     <ChannelInfoButton channel={channel}/>
                 </div>
             </div>
