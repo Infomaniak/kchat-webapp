@@ -1,3 +1,11 @@
+## 2.9.5-rc.2 (2024-06-19)
+
+### Fixed (3 changes)
+
+- [add check to fix js error in conference user denied ws action](kchat/webapp@79eac8d5a170503579fef622eaa1d276b36732aa) by @antonbuksa ([merge request](kchat/webapp!805))
+- [fix: custom status overflow](kchat/webapp@80ad28dc76c54871a66cd32368cb925508b0bec8) by @tim.dewinter ([merge request](kchat/webapp!773))
+- [fix: error message displayName you](kchat/webapp@123554d51fe8c289538b003cb6d6991ca621ef3c) by  ([merge request](kchat/webapp!804))
+
 ## 2.9.5-rc.1 (2024-06-18)
 
 ### Added (1 change)
