@@ -1,3 +1,9 @@
+## 2.9.5-rc.3 (2024-06-19)
+
+### Fixed (1 change)
+
+- [fix: close actions now close menu](kchat/webapp@87358efe61919cc4a8a48fd4fd024fe885aec33d) by  ([merge request](kchat/webapp!806))
+
 ## 2.9.5-rc.2 (2024-06-19)
 
 ### Fixed (3 changes)
