@@ -1862,7 +1862,7 @@ function handleConferenceUserDenied(msg) {
         const currentUserId = getCurrentUserId(getState());
         const conference = getConferenceByChannelId(getState(), msg.data.channel_id);
 
-        if (conference.participants.length <= 2 && currentUserId === conference.user_id) {
+        if (conference && conference.participants.length <= 2 && currentUserId === conference.user_id) {
             dispatch(closeRingModal());
         }
 
