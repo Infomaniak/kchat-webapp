@@ -36,7 +36,7 @@ const replaceDomain = (url: string, replaceWith?: string, allowLocal = true): st
 
 const baseURL = replaceDomain(
     process.env.PW_BASE_URL || 'https://local.preprod.dev.infomaniak.ch',
-    process.env.PW_KCHAT_TEAM_PREFIX || 'infomaniak',
+    `${process.env.PW_KCHAT_TEAM_PREFIX || 'infomaniak'}.kchat`,
 );
 const authBaseURL = replaceDomain(baseURL, 'login', false); // Local auth is not possible
 const adminEmail = process.env.PW_ADMIN_EMAIL || 'sysadmin@sample.mattermost.com';
