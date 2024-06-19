@@ -700,7 +700,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         channel={channel}
                         channelMember={channelMember}
                     />
-                    {showMeetBtn && <MeetButton/>}
+                    {showMeetBtn && !dmUser?.is_bot && <MeetButton/>}
                     <ChannelInfoButton channel={channel}/>
                 </div>
             </div>
