@@ -177,7 +177,6 @@ const FormattingBar = (props: FormattingBarProps): JSX.Element => {
      */
     const makeFormattingHandler = useCallback((mode) => () => {
         // if the formatting is disabled just return without doing anything
-
         if (disableControls) {
             return;
         }
