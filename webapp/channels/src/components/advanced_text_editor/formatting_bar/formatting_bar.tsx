@@ -263,6 +263,7 @@ const FormattingBar = (props: FormattingBarProps): JSX.Element => {
                 <HiddenControlsContainer
                     ref={setFloating}
                     style={hiddenControlsContainerStyles}
+                    onClick={() => console.log('click')}
                     {...getClickFloatingProps()}
                     {...getDismissFloatingProps()}
                 >

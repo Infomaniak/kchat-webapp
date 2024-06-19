@@ -13,7 +13,7 @@ import {
     FormatListNumberedIcon,
 } from '@infomaniak/compass-icons/components';
 import type IconProps from '@infomaniak/compass-icons/components/props';
-import React, {memo} from 'react';
+import React, {memo, useEffect} from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {useIntl} from 'react-intl';
 import styled from 'styled-components';
@@ -127,6 +127,10 @@ const FormattingIcon = (props: FormattingIconProps): JSX.Element => {
     const {formatMessage} = useIntl();
     const ariaLabelDefinition = MAP_MARKDOWN_MODE_TO_ARIA_LABEL[mode];
     const buttonAriaLabel = formatMessage(ariaLabelDefinition);
+
+    useEffect(() => {
+        console.log('FormattingIcon DidMount');
+    }, []);
 
     const bodyAction = (
         <IconContainer
