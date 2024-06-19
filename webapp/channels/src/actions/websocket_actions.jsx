@@ -114,6 +114,7 @@ import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, StoragePrefixes} from 'utils/constants';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -1861,7 +1862,7 @@ function handleConferenceUserDenied(msg) {
         const currentUserId = getCurrentUserId(getState());
         const conference = getConferenceByChannelId(getState(), msg.data.channel_id);
 
-        if (conference.participants.length <= 2 && currentUserId === conference.user_id) {
+        if (conference && conference.participants.length <= 2 && currentUserId === conference.user_id) {
             dispatch(closeRingModal());
         }
 
@@ -1920,8 +1921,9 @@ function handleConferenceUserConnected(msg) {
                 },
             });
         }
-
-        doDispatch(externalJoinCall(msg));
+        if (!msg?.data?.desktop_version || (msg?.data?.desktop_version && isServerVersionGreaterThanOrEqualTo(msg?.data?.desktop_version, '3.3.0'))) {
+            doDispatch(externalJoinCall(msg));
+        }
     };
 }
 

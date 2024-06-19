@@ -1,3 +1,189 @@
+## 2.9.5-rc.2 (2024-06-19)
+
+### Fixed (3 changes)
+
+- [add check to fix js error in conference user denied ws action](kchat/webapp@79eac8d5a170503579fef622eaa1d276b36732aa) by @antonbuksa ([merge request](kchat/webapp!805))
+- [fix: custom status overflow](kchat/webapp@80ad28dc76c54871a66cd32368cb925508b0bec8) by @tim.dewinter ([merge request](kchat/webapp!773))
+- [fix: error message displayName you](kchat/webapp@123554d51fe8c289538b003cb6d6991ca621ef3c) by  ([merge request](kchat/webapp!804))
+
+## 2.9.5-rc.1 (2024-06-18)
+
+### Added (1 change)
+
+- [implement displaying embedded attachments in post previews](kchat/webapp@6dddc1931deefe0b87f2ca4b6715f8fd886fd3d7) by @antonbuksa ([merge request](kchat/webapp!797))
+
+## 2.9.5-next.1 (2024-06-18)
+
+### Added (1 change)
+
+- [implement displaying embedded attachments in post previews](kchat/webapp@6dddc1931deefe0b87f2ca4b6715f8fd886fd3d7) by @antonbuksa ([merge request](kchat/webapp!797))
+
+## 2.9.4-rc.3 (2024-06-18)
+
+No changes.
+
+## 2.9.4-rc.2 (2024-06-18)
+
+No changes.
+
+## 2.9.4-rc.1 (2024-06-18)
+
+### Fixed (1 change)
+
+- [fix: version_bar.new translation](kchat/webapp@01e7661224548236df1269b3ecd132d33659d301) by @tim.dewinter ([merge request](kchat/webapp!801))
+
+### Chore (1 change)
+
+- [update pdfjs](kchat/webapp@dd77671327b4d0deb4a5846b81fcd8d5010571e0) by @antonbuksa ([merge request](kchat/webapp!799))
+
+## 2.9.4-next.1 (2024-06-18)
+
+### Fixed (1 change)
+
+- [fix: version_bar.new translation](kchat/webapp@01e7661224548236df1269b3ecd132d33659d301) by @tim.dewinter ([merge request](kchat/webapp!801))
+
+### Chore (1 change)
+
+- [update pdfjs](kchat/webapp@dd77671327b4d0deb4a5846b81fcd8d5010571e0) by @antonbuksa ([merge request](kchat/webapp!799))
+
+## 2.9.3-rc.5 (2024-06-11)
+
+### Fixed (1 change)
+
+- [fix link in mas update banner](kchat/webapp@6ec2a9370e8eaed9923b85e75d8f47a111a75f36) by @antonbuksa
+
+## 2.9.3-rc.4 (2024-06-11)
+
+### Fixed (2 changes)
+
+- [Fix: condition with userAgent](kchat/webapp@0dd21b9762833e41bf49fb250daa7641d13c9fbe) by  ([merge request](kchat/webapp!800))
+- [Fix: Annoucement banner only for mac app](kchat/webapp@1b09eaab1e2a02912fca8c439a7a9a56d7a00d0d) by  ([merge request](kchat/webapp!800))
+
+## 2.9.3-rc.3 (2024-06-11)
+
+### Fixed (1 change)
+
+- [fix calls not opening in channels on old apps](kchat/webapp@0f85e0ad03ecad0b9392371586e01e17c3d18dc7) by @antonbuksa
+
+## 2.9.3-rc.2 (2024-06-11)
+
+### Fixed (1 change)
+
+- [Fix: Space errors and fix condition](kchat/webapp@ae5f6b9567cde30d07b720a68492466a30c28351) by  ([merge request](kchat/webapp!798))
+
+## 2.9.3-rc.1 (2024-06-10)
+
+### Fixed (2 changes)
+
+- [Fix: Plural for @here](kchat/webapp@9567d688406a604a02b2db15621582c1d8ef483a) by  ([merge request](kchat/webapp!790))
+- [Fix: Missing traduction for suggestion list](kchat/webapp@9c8c6e36351414729827acba3c6f179faa081a28) by  ([merge request](kchat/webapp!788))
+
+## 2.9.3-next.3 (2024-06-11)
+
+### Fixed (3 changes)
+
+- [fix link in mas update banner](kchat/webapp@6ec2a9370e8eaed9923b85e75d8f47a111a75f36) by @antonbuksa
+- [Fix: condition with userAgent](kchat/webapp@0dd21b9762833e41bf49fb250daa7641d13c9fbe) by  ([merge request](kchat/webapp!800))
+- [Fix: Annoucement banner only for mac app](kchat/webapp@1b09eaab1e2a02912fca8c439a7a9a56d7a00d0d) by  ([merge request](kchat/webapp!800))
+
+## 2.9.3-next.2 (2024-06-11)
+
+### Fixed (1 change)
+
+- [fix calls not opening in channels on old apps](kchat/webapp@0f85e0ad03ecad0b9392371586e01e17c3d18dc7) by @antonbuksa
+
+## 2.9.3-next.1 (2024-06-11)
+
+### Fixed (3 changes)
+
+- [Fix: Space errors and fix condition](kchat/webapp@ae5f6b9567cde30d07b720a68492466a30c28351) by  ([merge request](kchat/webapp!798))
+- [Fix: Plural for @here](kchat/webapp@9567d688406a604a02b2db15621582c1d8ef483a) by  ([merge request](kchat/webapp!790))
+- [Fix: Missing traduction for suggestion list](kchat/webapp@9c8c6e36351414729827acba3c6f179faa081a28) by  ([merge request](kchat/webapp!788))
+
+## 2.9.2-rc.5 (2024-06-07)
+
+No changes.
+
+## 2.9.2-rc.4 (2024-06-07)
+
+No changes.
+
+## 2.9.2-rc.3 (2024-06-07)
+
+No changes.
+
+## 2.9.2-rc.2 (2024-06-07)
+
+### Added (1 change)
+
+- [pass desktop version to create call route](kchat/webapp@15b83c150bc566b5a629ec4b12a75aa0ffb19992) by @antonbuksa
+
+## 2.9.2-rc.1 (2024-06-06)
+
+### Fixed (2 changes)
+
+- [Fix: Remove copy link in audio message](kchat/webapp@ed896fae7ee70068244f6bb8ec36101b46cd6b78) by  ([merge request](kchat/webapp!795))
+- [restore pending external invites in rhs members list](kchat/webapp@f051af57d45c2882a2349cd3068480490ac510a1) by @antonbuksa ([merge request](kchat/webapp!793))
+
+### Changed (1 change)
+
+- [reduce spacing in meet button](kchat/webapp@25be7b4256545a43c39f8faacddd670372bf5d31) by @antonbuksa
+
+## 2.9.2-next.2 (2024-06-07)
+
+### Added (1 change)
+
+- [pass desktop version to create call route](kchat/webapp@15b83c150bc566b5a629ec4b12a75aa0ffb19992) by @antonbuksa
+
+## 2.9.2-next.1 (2024-06-06)
+
+### Fixed (2 changes)
+
+- [Fix: Remove copy link in audio message](kchat/webapp@ed896fae7ee70068244f6bb8ec36101b46cd6b78) by  ([merge request](kchat/webapp!795))
+- [restore pending external invites in rhs members list](kchat/webapp@f051af57d45c2882a2349cd3068480490ac510a1) by @antonbuksa ([merge request](kchat/webapp!793))
+
+### Changed (1 change)
+
+- [reduce spacing in meet button](kchat/webapp@25be7b4256545a43c39f8faacddd670372bf5d31) by @antonbuksa
+
+## 2.9.1 (2024-06-05)
+
+No changes.
+
+## 2.9.0-rc.15 (2024-06-05)
+
+### Changed (1 change)
+
+- [auto join call for caller in channels](kchat/webapp@0e5d468e9aa9f89fe60dbab95a232e37a01f3762) by @antonbuksa
+
+## 2.9.0-rc.14 (2024-06-05)
+
+### Fixed (1 change)
+
+- [fix call msg display in rhs thread view](kchat/webapp@764ac6f4fd1d48c22b5e670f32ed47bd11fdeb78) by @antonbuksa
+
+## 2.9.0-rc.13 (2024-06-05)
+
+### Changed (1 change)
+
+- [Revert "add 10 sec debounce to desktop theme getter"](kchat/webapp@1aa6bfdbced9d8c7781e0404f599741a363324d8) by @antonbuksa
+
+## 2.9.0-rc.12 (2024-06-05)
+
+### Changed (1 change)
+
+- [add 10 sec debounce to desktop theme getter](kchat/webapp@d418bca4de34a6e23c0903ff40c27e342213a31a) by @antonbuksa
+
+## 2.9.0-rc.11 (2024-06-04)
+
+### Added (1 change)
+
+- [Feat: Audio transcription](kchat/webapp@305e02a71634e099b13c8b73a3d35bffc387b47d) by  ([merge request](kchat/webapp!787))
+
+### Fixed (1 change)
+
+- [fix: sent messages sometimes coming back as drafts](kchat/webapp@561508b28bebe8615607e9b6dcf5ccf4f7415a50) by @tim.dewinter ([merge request](kchat/webapp!772))
+
 ## 2.9.0-rc.10 (2024-06-03)
 
 No changes.
@@ -55,6 +241,69 @@ No changes.
 - [add kmeet system emoji](kchat/webapp@bfc6abbfc190c62df3a077e03164e2dbd7c3954f) by @antonbuksa ([merge request](kchat/webapp!747))
 - [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
 - [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
+
+## 2.9.0-next.3 (2024-06-05)
+
+### Added (4 changes)
+
+- [Feat: Audio transcription](kchat/webapp@305e02a71634e099b13c8b73a3d35bffc387b47d) by  ([merge request](kchat/webapp!787))
+- [add kmeet system emoji](kchat/webapp@bfc6abbfc190c62df3a077e03164e2dbd7c3954f) by @antonbuksa ([merge request](kchat/webapp!747))
+- [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
+- [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
+
+### Fixed (4 changes)
+
+- [fix call msg display in rhs thread view](kchat/webapp@764ac6f4fd1d48c22b5e670f32ed47bd11fdeb78) by @antonbuksa
+- [fix: sent messages sometimes coming back as drafts](kchat/webapp@561508b28bebe8615607e9b6dcf5ccf4f7415a50) by @tim.dewinter ([merge request](kchat/webapp!772))
+- [fix calls web dial modal teardown on conference_deleted ws event](kchat/webapp@13e7418abc2c7b3c4d9ccea0a178442239773ea4) by @antonbuksa
+- [remove decline call when call missed](kchat/webapp@564549d5249063a067c5724836d3cbc75b53fe4b) by @antonbuksa
+
+### Changed (3 changes)
+
+- [reduce spacing in meet button](kchat/webapp@25be7b4256545a43c39f8faacddd670372bf5d31) by @antonbuksa
+- [auto join call for caller in channels](kchat/webapp@0e5d468e9aa9f89fe60dbab95a232e37a01f3762) by @antonbuksa
+- [Revert "add 10 sec debounce to desktop theme getter"](kchat/webapp@1aa6bfdbced9d8c7781e0404f599741a363324d8) by @antonbuksa
+
+## 2.9.0-next.2 (2024-06-05)
+
+No changes.
+
+## 2.9.0-next.1 (2024-06-05)
+
+### Added (4 changes)
+
+- [Feat: Audio transcription](kchat/webapp@305e02a71634e099b13c8b73a3d35bffc387b47d) by  ([merge request](kchat/webapp!787))
+- [add kmeet system emoji](kchat/webapp@bfc6abbfc190c62df3a077e03164e2dbd7c3954f) by @antonbuksa ([merge request](kchat/webapp!747))
+- [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
+- [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
+
+### Fixed (4 changes)
+
+- [fix call msg display in rhs thread view](kchat/webapp@764ac6f4fd1d48c22b5e670f32ed47bd11fdeb78) by @antonbuksa
+- [fix: sent messages sometimes coming back as drafts](kchat/webapp@561508b28bebe8615607e9b6dcf5ccf4f7415a50) by @tim.dewinter ([merge request](kchat/webapp!772))
+- [fix calls web dial modal teardown on conference_deleted ws event](kchat/webapp@13e7418abc2c7b3c4d9ccea0a178442239773ea4) by @antonbuksa
+- [remove decline call when call missed](kchat/webapp@564549d5249063a067c5724836d3cbc75b53fe4b) by @antonbuksa
+
+### Changed (3 changes)
+
+- [reduce spacing in meet button](kchat/webapp@25be7b4256545a43c39f8faacddd670372bf5d31) by @antonbuksa
+- [auto join call for caller in channels](kchat/webapp@0e5d468e9aa9f89fe60dbab95a232e37a01f3762) by @antonbuksa
+- [Revert "add 10 sec debounce to desktop theme getter"](kchat/webapp@1aa6bfdbced9d8c7781e0404f599741a363324d8) by @antonbuksa
+
+## 2.8.2-next.1 (2024-06-04)
+
+### Added (4 changes)
+
+- [Feat: Audio transcription](kchat/webapp@305e02a71634e099b13c8b73a3d35bffc387b47d) by  ([merge request](kchat/webapp!787))
+- [add kmeet system emoji](kchat/webapp@bfc6abbfc190c62df3a077e03164e2dbd7c3954f) by @antonbuksa ([merge request](kchat/webapp!747))
+- [add internal kmeet route](kchat/webapp@8e3d5546f264a7d2c9c96be6965cf17aad55106b) by @antonbuksa ([merge request](kchat/webapp!747))
+- [Feature: Kmeet call confirm modal shows up when channel contains more or at least 10 users](kchat/webapp@b894adc5347460220fb20a293272cc699b721d01) by @philippe.karle ([merge request](kchat/webapp!729))
+
+### Fixed (3 changes)
+
+- [fix: sent messages sometimes coming back as drafts](kchat/webapp@561508b28bebe8615607e9b6dcf5ccf4f7415a50) by @tim.dewinter ([merge request](kchat/webapp!772))
+- [fix calls web dial modal teardown on conference_deleted ws event](kchat/webapp@13e7418abc2c7b3c4d9ccea0a178442239773ea4) by @antonbuksa
+- [remove decline call when call missed](kchat/webapp@564549d5249063a067c5724836d3cbc75b53fe4b) by @antonbuksa
 
 ## 2.8.1-rc.3 (2024-05-23)
 

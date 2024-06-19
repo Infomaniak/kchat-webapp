@@ -1039,6 +1039,7 @@ export const JobStatuses = {
 };
 
 export const AnnouncementBarTypes = {
+    UPDATE_MAC: 'update_mac',
     ANNOUNCEMENT: 'announcement',
     CRITICAL: 'critical',
     DEVELOPER: 'developer',

@@ -47,8 +47,9 @@ jest.mock('@mui/styled-engine', () => {
     return styledEngineSc;
 });
 
-jest.mock('components/common/hooks/useAudioRecorder/utils', () => ({
-    getWasmFileURL: jest.fn(() => `${process.env.BASE_URL}/wasm-media-encoders/wasm/mp3`)
+jest.mock('utils/url_import', () => ({
+    getWasmFileURL: jest.fn(() => `${process.env.BASE_URL}/wasm-media-encoders/wasm/mp3`),
+    getPdfJSWorkerURL: jest.fn(() => `${process.env.BASE_URL}/pdfjs-dist/build/pdf.worker.min.mjs`),
 }));
 
 // isDependencyWarning returns true when the given console.warn message is coming from a dependency using deprecated

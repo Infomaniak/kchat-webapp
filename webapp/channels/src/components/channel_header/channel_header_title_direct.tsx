@@ -30,8 +30,8 @@ const ChannelHeaderTitleDirect = ({
             {currentUser.id === dmUser?.id &&
                 <FormattedMessage
                     id='channel_header.directchannel.you'
-                    defaultMessage='{displayName} (you) '
-                    values={{displayName}}
+                    defaultMessage='{displayname} (you) '
+                    values={{displayname: displayName}}
                 />}
             {isGuest(dmUser?.roles ?? '') && <GuestTag/>}
         </React.Fragment>

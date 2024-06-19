@@ -22,6 +22,7 @@ import {Constants} from 'utils/constants';
 import * as PostUtils from 'utils/post_utils';
 import * as Utils from 'utils/utils';
 
+import MessageAttachmentList from '../message_attachments/message_attachment_list';
 import PostAttachmentContainer from '../post_attachment_container/post_attachment_container';
 
 import type {OwnProps} from './index';
@@ -114,6 +115,18 @@ const PostMessagePreview = (props: Props) => {
         );
     }
 
+    let slackAttachment = null;
+
+    if (previewPost.props && previewPost.props.attachments) {
+        slackAttachment = (
+            <MessageAttachmentList
+                attachments={previewPost.props.attachments}
+                postId={previewPost.id}
+                imagesMetadata={previewPost.metadata.images}
+            />
+        );
+    }
+
     let urlPreview = null;
 
     if (previewPost && previewPost.metadata && previewPost.metadata.embeds) {
@@ -202,6 +215,7 @@ const PostMessagePreview = (props: Props) => {
                     maxHeight={105}
                 />
                 {urlPreview}
+                {slackAttachment}
                 {fileAttachmentPreview}
                 {previewFooter}
             </div>

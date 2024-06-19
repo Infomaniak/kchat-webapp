@@ -4,9 +4,10 @@
 import {lazy} from 'react';
 
 import {Client4} from 'mattermost-redux/client';
+import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getUserById} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
+import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
 import {getConferenceByChannelId, getIsCurrentUserInCall} from 'selectors/kmeet_calls';
@@ -166,9 +167,13 @@ export function cancelCall(channelId: string) {
 }
 
 export function startCall(channelId: string, jwt: string, url: string, subject: string) {
-    return async (dispatch: DispatchFunc) => {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         if (isDesktopApp()) {
+            const channel = getChannel(getState(), channelId);
             if (!isDesktopExtendedCallSupported()) {
+                if (channel.type === 'O' || channel.type === 'P') {
+                    openWebCallInNewTab(url, jwt, subject);
+                }
                 return;
             }
 
