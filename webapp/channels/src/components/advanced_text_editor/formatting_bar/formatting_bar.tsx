@@ -177,6 +177,7 @@ const FormattingBar = (props: FormattingBarProps): JSX.Element => {
      */
     const makeFormattingHandler = useCallback((mode) => () => {
         // if the formatting is disabled just return without doing anything
+
         if (disableControls) {
             return;
         }
@@ -199,7 +200,7 @@ const FormattingBar = (props: FormattingBarProps): JSX.Element => {
 
         // if hidden controls are currently open close them
         if (showHiddenControls) {
-            setShowHiddenControls(true);
+            setShowHiddenControls(!showHiddenControls);
         }
     }, [getCurrentSelection, getCurrentMessage, applyMarkdown, showHiddenControls, disableControls]);
 
@@ -263,7 +264,6 @@ const FormattingBar = (props: FormattingBarProps): JSX.Element => {
                 <HiddenControlsContainer
                     ref={setFloating}
                     style={hiddenControlsContainerStyles}
-                    onClick={() => console.log('click')}
                     {...getClickFloatingProps()}
                     {...getDismissFloatingProps()}
                 >
