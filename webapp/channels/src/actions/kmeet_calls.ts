@@ -98,8 +98,13 @@ export function externalJoinCall(msg: any) {
 export function joinCall(channelId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const conference = getConferenceByChannelId(getState(), channelId);
-        const answer = await Client4.acceptIncomingMeetCall(conference.id);
-        dispatch(startCall(channelId, answer.jwt, conference.url, answer.name));
+        try {
+            const answer = await Client4.acceptIncomingMeetCall(conference.id);
+            dispatch(startCall(channelId, answer.jwt, conference.url, answer.name));
+        } catch (error) {
+            console.warn('cant join, call no longer exists', error);
+            dispatch(deleteConference(conference.id, channelId));
+        }
     };
 }
 
