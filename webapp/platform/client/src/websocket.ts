@@ -334,6 +334,14 @@ export default class WebSocketClient {
         this.teamChannel.bind('pusher:subscription_succeeded', () => {
             console.log(`[websocket] subscribed successfully to private-team.${teamId}`)
         })
+
+        this.teamChannel.bind('pusher:subscription_error', () => {
+            console.log(`[websocket] failed to subscribe to private-team.${teamId} queing retry`)
+            this.conn?.unsubscribe(`private-team.${teamId}`)
+            setTimeout(() => {
+                this.subscribeToTeamChannel(teamId);
+            }, JITTER_RANGE)
+        })
     }
 
     subscribeToUserChannel(userId: number) {
@@ -343,6 +351,13 @@ export default class WebSocketClient {
         this.userChannel.bind('pusher:subscription_succeeded', () => {
             console.log(`[websocket] subscribed successfully to presence-user.${userId}`)
         })
+        this.userChannel.bind('pusher:subscription_error', () => {
+            console.log(`[websocket] failed to subscribe to presence-user.${userId} queing retry`)
+            this.conn?.unsubscribe(`presence-user.${userId}`)
+            setTimeout(() => {
+                this.subscribeToUserChannel(userId);
+            }, JITTER_RANGE)
+        })
     }
 
     subscribeToUserTeamScopedChannel(teamUserId: string) {
@@ -351,6 +366,14 @@ export default class WebSocketClient {
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
         this.userTeamChannel.bind('pusher:subscription_succeeded', () => {
             console.log(`[websocket] subscribed successfully to presence-teamUser.${teamUserId}`)
+        })
+
+        this.userTeamChannel.bind('pusher:subscription_error', () => {
+            console.log(`[websocket] failed to subscribe to presence-teamUser.${teamUserId} queing retry`)
+            this.conn?.unsubscribe(`presence-teamUser.${teamUserId}`)
+            setTimeout(() => {
+                this.subscribeToUserTeamScopedChannel(teamUserId);
+            }, JITTER_RANGE)
         })
     }
 
