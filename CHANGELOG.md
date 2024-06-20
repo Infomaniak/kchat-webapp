@@ -24,6 +24,12 @@
 
 - [implement displaying embedded attachments in post previews](kchat/webapp@6dddc1931deefe0b87f2ca4b6715f8fd886fd3d7) by @antonbuksa ([merge request](kchat/webapp!797))
 
+## 2.9.5-next.3 (2024-06-20)
+
+### Added (1 change)
+
+- [retry ws channel subscriptions if error occurs](kchat/webapp@14d4a3ddd72001511b92aa3b4321ba670d5e8ede) by @antonbuksa ([merge request](kchat/webapp!810))
+
 ## 2.9.5-next.2 (2024-06-19)
 
 ### Fixed (4 changes)
