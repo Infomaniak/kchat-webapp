@@ -42,6 +42,17 @@
 
 - [implement displaying embedded attachments in post previews](kchat/webapp@6dddc1931deefe0b87f2ca4b6715f8fd886fd3d7) by @antonbuksa ([merge request](kchat/webapp!797))
 
+## 2.9.5-next.4 (2024-06-20)
+
+### Added (1 change)
+
+- [handle case where call no longer exists when answered](kchat/webapp@880c4bf4222c7ae7bf17fd954e087f23144b6359) by @antonbuksa ([merge request](kchat/webapp!808))
+
+### Fixed (2 changes)
+
+- [fix js error in old calls code](kchat/webapp@aa9a016b40e230b0b5bdd51f3c71de0814e3b70f) by @antonbuksa
+- [fix call delete reduce not removing key causing exceptions](kchat/webapp@72dfd65bfe75d315511b354f28b625eb25f837d8) by @antonbuksa
+
 ## 2.9.5-next.3 (2024-06-20)
 
 ### Added (1 change)
