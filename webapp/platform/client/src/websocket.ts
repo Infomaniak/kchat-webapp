@@ -384,14 +384,6 @@ export default class WebSocketClient {
         if (this.presenceChannel) {
             this.bindChannelGlobally(this.presenceChannel);
         }
-
-        this.presenceChannel.bind('pusher:subscription_error', () => {
-            console.log(`[websocket] failed to subscribe to presence-channel.${channelID} queing retry`)
-            this.conn?.unsubscribe(`presence-channel.${channelID}`)
-            setTimeout(() => {
-                this.bindPresenceChannel(channelID);
-            }, JITTER_RANGE)
-        })
     }
 
     unbindPresenceChannel(channelID: string) {
