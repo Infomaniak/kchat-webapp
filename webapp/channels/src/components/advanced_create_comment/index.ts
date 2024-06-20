@@ -10,7 +10,7 @@ import {moveHistoryIndexBack, moveHistoryIndexForward, resetCreatePostRequest, r
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions, Preferences, Posts} from 'mattermost-redux/constants';
 import {getAllChannelStats, getChannelMemberCountsByGroup as selectChannelMemberCountsByGroup} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentUserId, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getAssociatedGroupsForReferenceByMention} from 'mattermost-redux/selectors/entities/groups';
 import {makeGetMessageInHistoryItem} from 'mattermost-redux/selectors/entities/posts';
@@ -69,7 +69,9 @@ function makeMapStateToProps() {
         const enableEmojiPicker = config.EnableEmojiPicker === 'true';
         const enableGifPicker = config.EnableGifPicker === 'true';
         const badConnection = connectionErrorCount(state) > 1;
-        const canPost = haveIChannelPermission(state, channel.team_id, channel.id, Permissions.CREATE_POST);
+        const myChannelMemberships = getMyChannelMemberships(state);
+        const isMember = channel ? Boolean(myChannelMemberships[channel.id]) : false;
+        const canPost = haveIChannelPermission(state, channel.team_id, channel.id, Permissions.CREATE_POST) && isMember;
         const useChannelMentions = haveIChannelPermission(state, channel.team_id, channel.id, Permissions.USE_CHANNEL_MENTIONS);
         const isLDAPEnabled = license?.IsLicensed === 'true' && license?.LDAPGroups === 'true';
         const useCustomGroupMentions = isCustomGroupsEnabled(state) && haveIChannelPermission(state, channel.team_id, channel.id, Permissions.USE_GROUP_MENTIONS);
