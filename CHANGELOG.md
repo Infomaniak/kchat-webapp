@@ -1,3 +1,9 @@
+## 2.9.5-rc.7 (2024-06-20)
+
+### Fixed (1 change)
+
+- [fix js error in old calls code](kchat/webapp@aa9a016b40e230b0b5bdd51f3c71de0814e3b70f) by @antonbuksa
+
 ## 2.9.5-rc.6 (2024-06-20)
 
 ### Fixed (1 change)
