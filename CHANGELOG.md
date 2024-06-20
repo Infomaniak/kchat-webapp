@@ -1,3 +1,9 @@
+## 2.9.5-rc.5 (2024-06-20)
+
+### Added (1 change)
+
+- [handle case where call no longer exists when answered](kchat/webapp@880c4bf4222c7ae7bf17fd954e087f23144b6359) by @antonbuksa ([merge request](kchat/webapp!808))
+
 ## 2.9.5-rc.4 (2024-06-20)
 
 ### Added (1 change)
