@@ -1,3 +1,9 @@
+## 2.9.5-rc.6 (2024-06-20)
+
+### Fixed (1 change)
+
+- [fix call delete reduce not removing key causing exceptions](kchat/webapp@72dfd65bfe75d315511b354f28b625eb25f837d8) by @antonbuksa
+
 ## 2.9.5-rc.5 (2024-06-20)
 
 ### Added (1 change)
