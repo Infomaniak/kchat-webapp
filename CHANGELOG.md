@@ -1,3 +1,9 @@
+## 2.9.5-rc.4 (2024-06-20)
+
+### Added (1 change)
+
+- [retry ws channel subscriptions if error occurs](kchat/webapp@14d4a3ddd72001511b92aa3b4321ba670d5e8ede) by @antonbuksa ([merge request](kchat/webapp!810))
+
 ## 2.9.5-rc.3 (2024-06-19)
 
 ### Fixed (1 change)
