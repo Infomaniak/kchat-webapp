@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {DoNotDisturbMessage, KSuiteBridge} from '@infomaniak/ksuite-bridge';
-import {AppReadyMessageKey, DoNotDisturbMessageKey} from '@infomaniak/ksuite-bridge';
+import {AppReadyMessageKey, DoNotDisturbMessageKey, LogoutMessageKey} from '@infomaniak/ksuite-bridge';
 
 import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
@@ -17,6 +17,9 @@ export function storeBridge(bridge: KSuiteBridge) {
 
         bridge.sendMessage({
             type: AppReadyMessageKey,
+        });
+        bridge.sendMessage({
+            type: LogoutMessageKey,
         });
 
         bridge.on(DoNotDisturbMessageKey, (doNotDisturbMessage: DoNotDisturbMessage) => {
