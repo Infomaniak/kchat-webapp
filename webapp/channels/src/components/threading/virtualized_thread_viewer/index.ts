@@ -45,6 +45,7 @@ function makeMapStateToProps() {
             showDate: !useRelativeTimestamp,
             lastViewedAt: collapsedThreads ? lastViewedAt : undefined,
         });
+        const newMessagesSeparatorActions = state.plugins.components.NewMessagesSeparatorAction;
 
         const myChannelMemberships = getMyChannelMemberships(state);
         const isMember = channel ? Boolean(myChannelMemberships[channel.id]) : false;
@@ -58,6 +59,8 @@ function makeMapStateToProps() {
             teamId: channel.team_id,
             channelId,
             isMember,
+            lastViewedAt,
+            newMessagesSeparatorActions,
         };
     };
 }

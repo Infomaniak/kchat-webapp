@@ -45,6 +45,7 @@ type Props = {
     newMessagesSeparatorActions: PluginComponent[];
     inputPlaceholder?: string;
     fromSuppressed?: boolean;
+    lastViewedAt: number;
 }
 
 type State = {
@@ -386,6 +387,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                     onCardClick={this.props.onCardClick}
                     previousPostId={getPreviousPostId(data, index)}
                     timestampProps={this.props.useRelativeTimestamp ? THREADING_TIME : undefined}
+                    lastViewedAt={this.props.lastViewedAt}
                     threadId={this.props.selected.id}
                     newMessagesSeparatorActions={this.props.newMessagesSeparatorActions}
                 />

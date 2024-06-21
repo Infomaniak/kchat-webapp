@@ -30,6 +30,7 @@ type Props = {
     previousPostId: string;
     teamId: string;
     timestampProps?: Partial<TimestampProps>;
+    lastViewedAt: number;
     threadId: string;
     newMessagesSeparatorActions: PluginComponent[];
 };
@@ -45,6 +46,7 @@ function ThreadViewerRow({
     previousPostId,
     teamId,
     timestampProps,
+    lastViewedAt,
     threadId,
     newMessagesSeparatorActions,
 }: Props) {
@@ -63,6 +65,7 @@ function ThreadViewerRow({
         return (
             <NewMessageSeparator
                 separatorId={listId}
+                lastViewedAt={lastViewedAt}
                 threadId={threadId}
                 newMessagesSeparatorActions={newMessagesSeparatorActions}
             />
