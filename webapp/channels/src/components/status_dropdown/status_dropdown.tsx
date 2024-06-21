@@ -5,6 +5,7 @@ import StatusIcon from '@infomaniak/compass-components/components/status-icon'; 
 import Text from '@infomaniak/compass-components/components/text'; // eslint-disable-line no-restricted-imports
 import type {TUserStatus} from '@infomaniak/compass-components/shared'; // eslint-disable-line no-restricted-imports
 import {AccountOutlineIcon, CheckIcon, ExitToAppIcon} from '@infomaniak/compass-icons/components';
+import {KSuiteBridge, LogoutMessageKey} from '@infomaniak/ksuite-bridge';
 import classNames from 'classnames';
 import React from 'react';
 import type {ReactNode} from 'react';
@@ -43,6 +44,8 @@ import type {Menu as MenuType} from 'types/store/plugins';
 
 import './status_dropdown.scss';
 import Icon from '@infomaniak/compass-components/foundations/icon';
+
+import ksuite_bridge from 'reducers/plugins/ksuite_bridge';
 
 type Props = {
     intl: IntlShape;
@@ -243,6 +246,10 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
     };
 
     handleEmitUserLoggedOutEvent = (): void => {
+        const ksuiteBridge = new KSuiteBridge();
+        ksuiteBridge.sendMessage({
+            type: LogoutMessageKey,
+        });
         GlobalActions.emitUserLoggedOutEvent('ikLogout');
     };
 
