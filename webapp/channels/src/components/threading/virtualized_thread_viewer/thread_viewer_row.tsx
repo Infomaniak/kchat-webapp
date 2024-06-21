@@ -28,7 +28,6 @@ type Props = {
     listId: string;
     onCardClick: (post: Post) => void;
     previousPostId: string;
-    teamId: string;
     timestampProps?: Partial<TimestampProps>;
     lastViewedAt: number;
     threadId: string;
@@ -44,7 +43,6 @@ function ThreadViewerRow({
     listId,
     onCardClick,
     previousPostId,
-    teamId,
     timestampProps,
     lastViewedAt,
     threadId,
@@ -105,7 +103,6 @@ function ThreadViewerRow({
                 isLastPost={isLastPost}
                 onCardClick={onCardClick}
                 previousPostId={previousPostId}
-                teamId={teamId}
                 timestampProps={timestampProps}
             />
         );
