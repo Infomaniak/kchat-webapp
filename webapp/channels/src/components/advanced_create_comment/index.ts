@@ -10,12 +10,12 @@ import {moveHistoryIndexBack, moveHistoryIndexForward, resetCreatePostRequest, r
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions, Preferences, Posts} from 'mattermost-redux/constants';
 import {getAllChannelStats, getChannelMemberCountsByGroup as selectChannelMemberCountsByGroup} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUserId, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getAssociatedGroupsForReferenceByMention} from 'mattermost-redux/selectors/entities/groups';
 import {makeGetMessageInHistoryItem} from 'mattermost-redux/selectors/entities/posts';
 import {getBool, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import {haveIChannelPermission, haveICurrentChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {emitShortcutReactToLastPostFrom} from 'actions/post_actions';
@@ -69,9 +69,7 @@ function makeMapStateToProps() {
         const enableEmojiPicker = config.EnableEmojiPicker === 'true';
         const enableGifPicker = config.EnableGifPicker === 'true';
         const badConnection = connectionErrorCount(state) > 1;
-        const myChannelMemberships = getMyChannelMemberships(state);
-        const isMember = channel ? Boolean(myChannelMemberships[channel.id]) : false;
-        const canPost = haveIChannelPermission(state, channel.team_id, channel.id, Permissions.CREATE_POST) && isMember;
+        const canPost = haveICurrentChannelPermission(state, Permissions.CREATE_POST);
         const useChannelMentions = haveIChannelPermission(state, channel.team_id, channel.id, Permissions.USE_CHANNEL_MENTIONS);
         const isLDAPEnabled = license?.IsLicensed === 'true' && license?.LDAPGroups === 'true';
         const useCustomGroupMentions = isCustomGroupsEnabled(state) && haveIChannelPermission(state, channel.team_id, channel.id, Permissions.USE_GROUP_MENTIONS);
