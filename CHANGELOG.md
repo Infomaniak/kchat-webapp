@@ -1,3 +1,14 @@
+## 2.9.5-rc.8 (2024-06-21)
+
+### Added (1 change)
+
+- [Add support for actions in the unreads bar from plugins (#24265)](kchat/webapp@9d622e946a45a72e060d44c41ed96c7c54529b98) by @antonbuksa
+
+### Fixed (2 changes)
+
+- [fix wpack error caused by old prop](kchat/webapp@8179af9cd24e279c8b1a51c5279f82c9ccd5e7d4) by @antonbuksa
+- [Fix: Scroll for long text in edit messages and in post](kchat/webapp@04b6213be438b451f7728e1e1d8289ebfa5eccce) by  ([merge request](kchat/webapp!791))
+
 ## 2.9.5-rc.7 (2024-06-20)
 
 ### Fixed (1 change)
