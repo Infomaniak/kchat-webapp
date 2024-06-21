@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {DoNotDisturbMessage, KSuiteBridge} from '@infomaniak/ksuite-bridge';
-import {AppReadyMessageKey, DoNotDisturbMessageKey, LogoutMessageKey} from '@infomaniak/ksuite-bridge';
+import {AppReadyMessageKey, DoNotDisturbMessageKey} from '@infomaniak/ksuite-bridge';
 
 import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 

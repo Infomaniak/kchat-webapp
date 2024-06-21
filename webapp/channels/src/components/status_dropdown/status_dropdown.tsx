@@ -3,9 +3,11 @@
 
 import StatusIcon from '@infomaniak/compass-components/components/status-icon'; // eslint-disable-line no-restricted-imports
 import Text from '@infomaniak/compass-components/components/text'; // eslint-disable-line no-restricted-imports
+import Icon from '@infomaniak/compass-components/foundations/icon';
 import type {TUserStatus} from '@infomaniak/compass-components/shared'; // eslint-disable-line no-restricted-imports
 import {AccountOutlineIcon, CheckIcon, ExitToAppIcon} from '@infomaniak/compass-icons/components';
-import {KSuiteBridge, LogoutMessageKey} from '@infomaniak/ksuite-bridge';
+import {LogoutMessageKey} from '@infomaniak/ksuite-bridge';
+import type {KSuiteBridge} from '@infomaniak/ksuite-bridge';
 import classNames from 'classnames';
 import React from 'react';
 import type {ReactNode} from 'react';
@@ -43,9 +45,6 @@ import type {ModalData} from 'types/actions';
 import type {Menu as MenuType} from 'types/store/plugins';
 
 import './status_dropdown.scss';
-import Icon from '@infomaniak/compass-components/foundations/icon';
-
-import ksuite_bridge from 'reducers/plugins/ksuite_bridge';
 
 type Props = {
     intl: IntlShape;
@@ -72,6 +71,8 @@ type Props = {
     showProfileTutorialStep: boolean;
     showStatusTutorialStep: boolean;
     showNextSwitch: boolean;
+    ksuiteBridge: KSuiteBridge;
+    isBridgeConnected: boolean;
 }
 
 type State = {
@@ -246,10 +247,11 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
     };
 
     handleEmitUserLoggedOutEvent = (): void => {
-        const ksuiteBridge = new KSuiteBridge();
-        ksuiteBridge.sendMessage({
-            type: LogoutMessageKey,
-        });
+        if (this.props.isBridgeConnected) {
+            this.props.ksuiteBridge.sendMessage({
+                type: LogoutMessageKey,
+            });
+        }
         GlobalActions.emitUserLoggedOutEvent('ikLogout');
     };
 
@@ -394,7 +396,8 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
     };
 
     render = (): JSX.Element => {
-        const {intl, showNextSwitch} = this.props;
+        const {intl, showNextSwitch, ksuiteBridge, isBridgeConnected} = this.props;
+        console.log(ksuiteBridge, isBridgeConnected);
         const needsConfirm = this.isUserOutOfOffice() && this.props.autoResetPref === '';
         const {status, customStatus, isCustomStatusExpired, currentUser, showProfileTutorialStep, showStatusTutorialStep} = this.props;
         const isStatusSet = customStatus && (customStatus.text.length > 0 || customStatus.emoji.length > 0) && !isCustomStatusExpired;
