@@ -18,9 +18,6 @@ export function storeBridge(bridge: KSuiteBridge) {
         bridge.sendMessage({
             type: AppReadyMessageKey,
         });
-        bridge.sendMessage({
-            type: LogoutMessageKey,
-        });
 
         bridge.on(DoNotDisturbMessageKey, (doNotDisturbMessage: DoNotDisturbMessage) => {
             if (doNotDisturbMessage.enabled !== getState().ksuite_bridge.dnd) {
