@@ -86,7 +86,6 @@ const SwitchItem: FC<Props> = ({server, isCurrentServer, unreadCounts, displayAr
                             id: 'SidebarCategoryMenu-Button',
                             'aria-label': localizeMessage('integrations.header', 'Integrations'),
                             class: 'SidebarMenu_menuButton',
-                            children: null,
                         }}
                         menuButtonTooltip={{
                             id: 'SidebarCategoryMenu-ButtonTooltip',
