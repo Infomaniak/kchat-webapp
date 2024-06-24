@@ -41,6 +41,7 @@ function makeMapStateToProps() {
 
     return function mapStateToProps(state: GlobalState) {
         const currentUser = getCurrentUser(state);
+
         const userId = currentUser?.id;
         const customStatus = getCustomStatus(state, userId);
         const isMilitaryTime = getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false);
