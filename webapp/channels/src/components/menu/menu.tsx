@@ -43,7 +43,7 @@ type MenuButtonProps = {
     disabled?: boolean;
     class?: string;
     as?: keyof JSX.IntrinsicElements;
-    children?: ReactNode;
+    children: ReactNode;
 }
 
 type MenuButtonTooltipProps = {
