@@ -1,3 +1,11 @@
+## 2.9.6-rc.1 (2024-06-25)
+
+### Fixed (3 changes)
+
+- [better implementation to prevents admin user to write in thread channel while not joining it](kchat/webapp@25245e858adbdf310a2da441eba361d77b73420a) by  ([merge request](kchat/webapp!811))
+- [fixed issue when we could write in a thread even if we didn't join a channel (if we are admin)](kchat/webapp@607cadd585e4381dc482d47548c2584a8e56f9f1) by  ([merge request](kchat/webapp!811))
+- [add LofoutMessageKey to fix the Iframe error](kchat/webapp@dda9b6859b10b9c031bdb46a9fb8fa3906763c9f) by  ([merge request](kchat/webapp!812))
+
 ## 2.9.6-next.1 (2024-06-21)
 
 No changes.
