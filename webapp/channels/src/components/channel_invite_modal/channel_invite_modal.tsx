@@ -583,6 +583,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                 <Modal.Header
                     id='channelInviteModalLabel'
                     closeButton={true}
+                    style={{width: '95%'}}
                 >
                     <Modal.Title
                         componentClass='h1'
