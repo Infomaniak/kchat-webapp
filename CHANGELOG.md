@@ -1,3 +1,10 @@
+## 2.9.6-rc.2 (2024-06-25)
+
+### Fixed (2 changes)
+
+- [remove unused props](kchat/webapp@4c051eb032742cdfc8ccdd5003d30736fed89666) by  ([merge request](kchat/webapp!815))
+- [move intégration button to new tab](kchat/webapp@e3209319e2f97c9bb2c122b815dcd3c7b3286153) by  ([merge request](kchat/webapp!815))
+
 ## 2.9.6-rc.1 (2024-06-25)
 
 ### Fixed (3 changes)
