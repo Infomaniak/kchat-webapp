@@ -10,11 +10,15 @@ import {trackEvent} from 'actions/telemetry_actions';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import {CreateAndJoinChannelsTour, CreateChannelsTour, InvitePeopleTour, JoinChannelsTour} from 'components/tours/onboarding_tour';
+import IntegrationsIcon from 'components/widgets/icons/integrations_icon';
 import PlusFilledIcon from 'components/widgets/icons/plus_filled_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
+import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
+
+import type {Server} from 'types/store/servers';
 
 type Props = {
     canCreateChannel: boolean;
@@ -32,6 +36,7 @@ type Props = {
     isAddChannelOpen: boolean;
     openAddChannelOpen: (open: boolean) => void;
     canCreateCustomGroups: boolean;
+    server: Server;
 };
 
 const AddChannelDropdown = ({
@@ -50,8 +55,13 @@ const AddChannelDropdown = ({
     isAddChannelOpen,
     openAddChannelOpen,
     canCreateCustomGroups,
+    server,
 }: Props) => {
     const intl = useIntl();
+
+    const goToIntegration = () => {
+        getHistory().push(`/${server.name}/integrations`);
+    };
 
     const renderDropdownItems = () => {
         const invitePeople = (
@@ -126,6 +136,18 @@ const AddChannelDropdown = ({
                 />
             );
         }
+        const integration = (
+            <Menu.ItemAction
+                id={'integration'}
+                onClick={() => goToIntegration()}
+                icon={<IntegrationsIcon/>}
+                text={
+                    <FormattedMessage
+                        id='integrations.header'
+                        defaultMessage='Integrations'
+                    />}
+            />
+        );
 
         return (
             <>
@@ -137,6 +159,7 @@ const AddChannelDropdown = ({
                     {createUserGroup}
                 </Menu.Group>
                 {createCategory}
+                {integration}
                 {/* {invitePeople} */}
             </>
         );
