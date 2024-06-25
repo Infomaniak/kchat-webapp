@@ -7,6 +7,7 @@ import bing from 'sounds/bing.mp3';
 import crackle from 'sounds/crackle.mp3';
 import down from 'sounds/down.mp3';
 import hello from 'sounds/hello.mp3';
+import outgoingRing from 'sounds/outgoing_ring.mp3';
 import ring from 'sounds/ring.mp3';
 import ripple from 'sounds/ripple.mp3';
 
@@ -21,6 +22,7 @@ export const notificationSounds = new Map([
 
 export const callsNotificationSounds = new Map([
     ['Ring', ring],
+    ['OutgoingRing', outgoingRing],
 ]);
 
 let currentRing: HTMLAudioElement | null = null;
@@ -34,7 +36,7 @@ export function ringing(name: string) {
     currentRing.muted = false;
     const promise = currentRing.play();
 
-    if (name === 'Ring') {
+    if (name === 'Ring' || name === 'OutgoingRing') {
         currentRing.volume = 0.6;
     }
 
