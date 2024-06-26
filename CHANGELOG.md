@@ -1,3 +1,13 @@
+## 2.9.6-rc.3 (2024-06-26)
+
+### Changed (1 change)
+
+- [use pusher integrated reconnect to try fix sleeping reconnects](kchat/webapp@428b44792ac6540b6052b560842490f2716a53fe) by @antonbuksa ([merge request](kchat/webapp!802))
+
+### Removed (1 change)
+
+- [do not send new mattermost presence events](kchat/webapp@eb3f950b2ff69b6256106dfc95252c3e3f793508) by @antonbuksa ([merge request](kchat/webapp!802))
+
 ## 2.9.6-rc.2 (2024-06-25)
 
 ### Fixed (2 changes)
