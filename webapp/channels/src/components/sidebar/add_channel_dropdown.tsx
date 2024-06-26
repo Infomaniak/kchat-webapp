@@ -4,6 +4,9 @@
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
+
+import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -18,6 +21,7 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 
+import type {GlobalState} from 'types/store';
 import type {Server} from 'types/store/servers';
 
 type Props = {
@@ -58,6 +62,7 @@ const AddChannelDropdown = ({
     server,
 }: Props) => {
     const intl = useIntl();
+    const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
 
     const goToIntegration = () => {
         getHistory().push(`/${server.name}/integrations`);
@@ -159,7 +164,7 @@ const AddChannelDropdown = ({
                     {createUserGroup}
                 </Menu.Group>
                 {createCategory}
-                {integration}
+                {!isGuestUser && integration}
                 {/* {invitePeople} */}
             </>
         );
