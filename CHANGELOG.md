@@ -1,3 +1,9 @@
+## 2.9.6-rc.4 (2024-06-27)
+
+### Changed (1 change)
+
+- [test disable wakeup checker](kchat/webapp@9fe2d814d1b58ef9ea86b6d74c6a10e8737919f6) by @antonbuksa
+
 ## 2.9.6-rc.3 (2024-06-26)
 
 ### Changed (1 change)
