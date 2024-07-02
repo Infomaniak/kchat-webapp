@@ -37,6 +37,22 @@ No changes.
 - [fixed issue when we could write in a thread even if we didn't join a channel (if we are admin)](kchat/webapp@607cadd585e4381dc482d47548c2584a8e56f9f1) by  ([merge request](kchat/webapp!811))
 - [add LofoutMessageKey to fix the Iframe error](kchat/webapp@dda9b6859b10b9c031bdb46a9fb8fa3906763c9f) by  ([merge request](kchat/webapp!812))
 
+## 2.9.6-next.2 (2024-07-02)
+
+### Fixed (2 changes)
+
+- [remove unused props](kchat/webapp@4c051eb032742cdfc8ccdd5003d30736fed89666) by  ([merge request](kchat/webapp!815))
+- [move intégration button to new tab](kchat/webapp@e3209319e2f97c9bb2c122b815dcd3c7b3286153) by  ([merge request](kchat/webapp!815))
+
+### Changed (2 changes)
+
+- [test disable wakeup checker](kchat/webapp@9fe2d814d1b58ef9ea86b6d74c6a10e8737919f6) by @antonbuksa
+- [use pusher integrated reconnect to try fix sleeping reconnects](kchat/webapp@428b44792ac6540b6052b560842490f2716a53fe) by @antonbuksa ([merge request](kchat/webapp!802))
+
+### Removed (1 change)
+
+- [do not send new mattermost presence events](kchat/webapp@eb3f950b2ff69b6256106dfc95252c3e3f793508) by @antonbuksa ([merge request](kchat/webapp!802))
+
 ## 2.9.6-next.1 (2024-06-21)
 
 No changes.
