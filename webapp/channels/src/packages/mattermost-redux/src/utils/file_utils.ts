@@ -56,6 +56,10 @@ export function getFileUrl(fileId: string): string {
     return Client4.getFileRoute(fileId);
 }
 
+export function getZipforPost(postId: string): string {
+    return `${Client4.getPostRoute(postId)}/files/download`;
+}
+
 export function getFileDownloadUrl(fileId: string): string {
     return `${Client4.getFileRoute(fileId)}?download=1`;
 }

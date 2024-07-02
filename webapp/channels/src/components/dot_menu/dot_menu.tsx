@@ -20,6 +20,7 @@ import {
     PinOutlineIcon,
     ReplyOutlineIcon,
     TrashCanOutlineIcon,
+    DownloadOutlineIcon,
 } from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React from 'react';
@@ -262,6 +263,15 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
         this.props.actions.openModal(deletePostModalData);
 
         trackDotMenuEvent(e, TELEMETRY_LABELS.DELETE);
+    };
+
+    handleDownloadAllAttachments = async () => {
+        try {
+            const dlUrl = getZipforPost(this.props.post.id);
+            window.location.href = dlUrl;
+        } catch (error) {
+            console.error('Failed to download attachments:', error);
+        }
     };
 
     handleMoveThreadMenuItemActivated = (e: ChangeEvent): void => {
@@ -707,6 +717,16 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         onClick={this.copyText}
                     />
                 }
+                {this.props.post.metadata.files.length > 1 &&
+                <Menu.Item
+                    leadingElement={<DownloadOutlineIcon size={18}/>}
+                    labels={
+                        <FormattedMessage
+                            id='post_info.download_all_attachments'
+                            defaultMessage='Download all'
+                        />}
+                    onClick={this.handleDownloadAllAttachments}
+                />}
                 {!isSystemMessage &&
                     <Menu.Item
                         id={`copy_id_${this.props.post.id}`}
