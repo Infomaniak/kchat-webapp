@@ -20,6 +20,7 @@ import {
     PinOutlineIcon,
     ReplyOutlineIcon,
     TrashCanOutlineIcon,
+    DownloadOutlineIcon,
 } from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React from 'react';
@@ -30,6 +31,7 @@ import type {Post} from '@mattermost/types/posts';
 import type {UserThread} from '@mattermost/types/threads';
 
 import Permissions from 'mattermost-redux/constants/permissions';
+import {getZipforPost} from 'mattermost-redux/utils/file_utils';
 
 import DeletePostModal from 'components/delete_post_modal';
 import ForwardPostModal from 'components/forward_post_modal';
@@ -264,6 +266,15 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
         trackDotMenuEvent(e, TELEMETRY_LABELS.DELETE);
     };
 
+    handleDownloadAllAttachments = () => {
+        try {
+            const dlUrl = getZipforPost(this.props.post.id);
+            window.location.href = dlUrl;
+        } catch (error) {
+            console.error('Failed to download attachments:', error);
+        }
+    };
+
     handleMoveThreadMenuItemActivated = (e: ChangeEvent): void => {
         e.preventDefault();
         if (!this.props.canMove) {
@@ -429,6 +440,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
 
     render(): JSX.Element {
         const {formatMessage} = this.props.intl;
+        const hasMultipleFiles = this.props?.post?.metadata?.files?.length > 1;
         const isFollowingThread = this.props.isFollowingThread ?? this.props.isMentionedInRootPost;
         const isMobile = this.props.isMobileView;
         const isSystemMessage = PostUtils.isSystemMessage(this.props.post);
@@ -650,6 +662,17 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         onClick={this.translatePost}
                     />
                 }
+                {!isSystemMessage && hasMultipleFiles &&
+                <Menu.Item
+                    data-testid={`download_all_attachments_${this.props.post.id}`}
+                    leadingElement={<DownloadOutlineIcon size={18}/>}
+                    labels={
+                        <FormattedMessage
+                            id='post_info.download_all_attachments'
+                            defaultMessage='Download all'
+                        />}
+                    onClick={this.handleDownloadAllAttachments}
+                />}
                 {Boolean(!isSystemMessage && this.props.canMove) &&
                     <Menu.Item
                         id={`move_thread_${this.props.post.id}`}
