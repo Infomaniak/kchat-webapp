@@ -661,7 +661,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         onClick={this.translatePost}
                     />
                 }
-                {this.props.post.metadata.files.length > 1 &&
+                {!isSystemMessage && this.props?.post?.metadata?.files?.length > 1 &&
                 <Menu.Item
                     leadingElement={<DownloadOutlineIcon size={18}/>}
                     labels={
