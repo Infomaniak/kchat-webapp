@@ -664,6 +664,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                 }
                 {!isSystemMessage && hasMultipleFiles &&
                 <Menu.Item
+                    data-testid={`download_all_attachments_${this.props.post.id}`}
                     leadingElement={<DownloadOutlineIcon size={18}/>}
                     labels={
                         <FormattedMessage
