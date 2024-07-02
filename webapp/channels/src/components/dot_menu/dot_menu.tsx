@@ -440,6 +440,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
 
     render(): JSX.Element {
         const {formatMessage} = this.props.intl;
+        const hasMultipleFiles = this.props?.post?.metadata?.files?.length > 1;
         const isFollowingThread = this.props.isFollowingThread ?? this.props.isMentionedInRootPost;
         const isMobile = this.props.isMobileView;
         const isSystemMessage = PostUtils.isSystemMessage(this.props.post);
@@ -661,7 +662,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         onClick={this.translatePost}
                     />
                 }
-                {!isSystemMessage && this.props?.post?.metadata?.files?.length > 1 &&
+                {!isSystemMessage && hasMultipleFiles &&
                 <Menu.Item
                     leadingElement={<DownloadOutlineIcon size={18}/>}
                     labels={
