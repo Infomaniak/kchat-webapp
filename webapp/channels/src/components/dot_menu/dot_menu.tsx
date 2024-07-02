@@ -266,7 +266,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
         trackDotMenuEvent(e, TELEMETRY_LABELS.DELETE);
     };
 
-    handleDownloadAllAttachments = async () => {
+    handleDownloadAllAttachments = () => {
         try {
             const dlUrl = getZipforPost(this.props.post.id);
             window.location.href = dlUrl;
