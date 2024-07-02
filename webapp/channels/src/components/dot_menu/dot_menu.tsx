@@ -31,6 +31,7 @@ import type {Post} from '@mattermost/types/posts';
 import type {UserThread} from '@mattermost/types/threads';
 
 import Permissions from 'mattermost-redux/constants/permissions';
+import {getZipforPost} from 'mattermost-redux/utils/file_utils';
 
 import DeletePostModal from 'components/delete_post_modal';
 import ForwardPostModal from 'components/forward_post_modal';
