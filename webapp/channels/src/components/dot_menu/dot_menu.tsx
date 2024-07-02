@@ -660,6 +660,16 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         onClick={this.translatePost}
                     />
                 }
+                {this.props.post.metadata.files.length > 1 &&
+                <Menu.Item
+                    leadingElement={<DownloadOutlineIcon size={18}/>}
+                    labels={
+                        <FormattedMessage
+                            id='post_info.download_all_attachments'
+                            defaultMessage='Download all'
+                        />}
+                    onClick={this.handleDownloadAllAttachments}
+                />}
                 {Boolean(!isSystemMessage && this.props.canMove) &&
                     <Menu.Item
                         id={`move_thread_${this.props.post.id}`}
@@ -717,16 +727,6 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         onClick={this.copyText}
                     />
                 }
-                {this.props.post.metadata.files.length > 1 &&
-                <Menu.Item
-                    leadingElement={<DownloadOutlineIcon size={18}/>}
-                    labels={
-                        <FormattedMessage
-                            id='post_info.download_all_attachments'
-                            defaultMessage='Download all'
-                        />}
-                    onClick={this.handleDownloadAllAttachments}
-                />}
                 {!isSystemMessage &&
                     <Menu.Item
                         id={`copy_id_${this.props.post.id}`}
