@@ -221,7 +221,35 @@ export default class WebSocketClient {
             this.errorCount++;
             this.connectFailCount++;
 
-            console.log('websocket closed');
+            console.log('[websocket] unsubscribing channels');
+
+            if (this.teamChannel) {
+                this.conn?.unsubscribe(this.teamChannel.name)
+                this.teamChannel.unbind_all()
+                this.teamChannel = null;
+            }
+
+            if (this.userChannel) {
+                this.conn?.unsubscribe(this.userChannel.name)
+                this.userChannel.unbind_all()
+                this.userChannel = null;
+            }
+
+            if (this.userTeamChannel) {
+                this.conn?.unsubscribe(this.userTeamChannel.name)
+                this.userTeamChannel.unbind_all()
+                this.userTeamChannel = null;
+            }
+
+            if (this.presenceChannel) {
+                this.conn?.unsubscribe(this.presenceChannel.name)
+                this.presenceChannel.unbind_all()
+                this.presenceChannel = null;
+            }
+
+            // TODO: unsub other teams
+
+
             console.log('[websocket] calling close callbacks');
 
             this.closeCallback?.(this.connectFailCount);
