@@ -10,7 +10,6 @@
         "skipLibCheck": true,
         "strictNullChecks": true,
         "isolatedModules": true,
-        "noEmit": true,
         "declaration": true,
         "outDir": "dist",
         "rootDir": "src",

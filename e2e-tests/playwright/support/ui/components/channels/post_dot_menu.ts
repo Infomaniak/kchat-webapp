@@ -15,9 +15,11 @@ export default class PostDotMenu {
     readonly removeFromSavedMenuItem;
     readonly pinToChannelMenuItem;
     readonly unpinFromChannelMenuItem;
+    readonly translateMenuItem;
     readonly copyLinkMenuItem;
     readonly editMenuItem;
     readonly copyTextMenuItem;
+    readonly copyIdMenuItem;
     readonly deleteMenuItem;
 
     constructor(container: Locator) {
@@ -34,9 +36,11 @@ export default class PostDotMenu {
         this.removeFromSavedMenuItem = getMenuItem('Remove from Saved');
         this.pinToChannelMenuItem = getMenuItem('Pin to Channel');
         this.unpinFromChannelMenuItem = getMenuItem('Unpin from Channel');
+        this.translateMenuItem = getMenuItem('Translate');
         this.copyLinkMenuItem = getMenuItem('Copy Link');
         this.editMenuItem = getMenuItem('Edit');
         this.copyTextMenuItem = getMenuItem('Copy Text');
+        this.copyIdMenuItem = getMenuItem('Copy ID');
         this.deleteMenuItem = getMenuItem('Delete');
     }
 

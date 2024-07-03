@@ -10,6 +10,7 @@ export default class PostReminderMenu {
     readonly oneHourMenuItem;
     readonly twoHoursMenuItem;
     readonly tomorrowMenuItem;
+    readonly mondayMenuItem;
     readonly customMenuItem;
 
     constructor(container: Locator) {
@@ -21,6 +22,7 @@ export default class PostReminderMenu {
         this.oneHourMenuItem = getMenuItem('1 hour');
         this.twoHoursMenuItem = getMenuItem('2 hours');
         this.tomorrowMenuItem = getMenuItem('Tomorrow');
+        this.mondayMenuItem = getMenuItem('Monday');
         this.customMenuItem = getMenuItem('Custom');
     }
 

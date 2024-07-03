@@ -161,6 +161,7 @@ function MeetButton(props: Props) {
                     ref={ref}
                 >
                     <img
+                        alt={props.hasCall ? 'join call' : 'start call'}
                         src={meetSvg}
                         className='meet-btn__icon meet-btn__icon--16'
                     />
