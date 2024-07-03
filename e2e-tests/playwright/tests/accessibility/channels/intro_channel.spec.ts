@@ -43,6 +43,7 @@ test('Post actions tab support', async ({page, pages, axe}) => {
     await channelsPage.centerView.postCreate.postMessage('hello');
 
     const post = await channelsPage.centerView.getLastPost();
+    await wait(500);
     await post.hover();
     await wait(500);
     await post.postMenu.toBeVisible();
