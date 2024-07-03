@@ -51,22 +51,15 @@ docker run -it --rm -v "$(pwd):/mattermost/" --ipc=host mcr.microsoft.com/playwr
 #### 2. Inside the docker container
 
 ```
+export NPM_TOKEN=[REPLACE_ME]
 export NODE_OPTIONS='--no-experimental-fetch'
-export PW_BASE_URL=http://host.docker.internal:8065
 export PW_HEADLESS=true
-cd mattermost/e2e-tests/playwright
 
-# Install npm packages. Use "npm ci" to match the automated environment
-npm ci
-
-# Run specific test. See https://playwright.dev/docs/test-cli.
-npm run test -- login --project=chrome
-
-# Or run all tests
-npm run test
+# Install packages. Use "--immutable" to match the automated environment
+yarn --immutable
 
 # Update snapshots
-npm run test -- login --update-snapshots
+yarn workspace e2e-playwright test:update-snapshots
 ```
 
 ## Page/Component Object Model
