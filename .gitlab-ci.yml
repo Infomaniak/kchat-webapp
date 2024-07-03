@@ -23,6 +23,15 @@ variables:
   NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
 
 # REFERENCES
+# Triggered on every commit
+# Ref. https://stackoverflow.com/a/70940590
+.rule-commit: &rule-commit
+  # Stop the execution when a new branch is created
+  - if: $CI_COMMIT_BEFORE_SHA == "0000000000000000000000000000000000000000"
+    when: never
+  # Trigger when a commit happens on branch
+  - if: $CI_PIPELINE_SOURCE == "push"
+
 # Preprod deployments when there is a tag ending with "-rc.[...]"
 .rule-preprod: &rule-preprod
   - if: &if-preprod "$CI_COMMIT_TAG =~ /\\-rc.*/"
@@ -256,6 +265,9 @@ test:unit:
   stage: test
   extends:
     - .tests-node
+  rules:
+    - *rule-commit
+    - when: never
   script:
     - yarn test:webapp
   # Save coverage report
