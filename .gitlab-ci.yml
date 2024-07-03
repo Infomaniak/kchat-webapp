@@ -292,6 +292,10 @@ test:e2e:pw:
   extends:
     - .tests-node
   image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
+  rules:
+    - if: *if-merge-request
+      when: manual
+    - when: never
   allow_failure: true
   needs: ["test:e2e"]
   variables:
