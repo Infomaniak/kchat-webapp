@@ -309,8 +309,9 @@ export default class WebSocketClient {
         }
     }
 
+    // TODO: refactor next 3 functions with helpers
     subscribeToTeamChannel(teamId: string) {
-        console.log(`subscribeToTeamChannel ~ private-team.${teamId}`)
+        console.log(`[websocket] subscribeToTeamChannel ~ private-team.${teamId}`)
         this.currentTeam = teamId;
         this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
         this.teamChannel.bind('pusher:subscription_succeeded', () => {
@@ -327,7 +328,7 @@ export default class WebSocketClient {
     }
 
     subscribeToUserChannel(userId: number) {
-        console.log(`subscribeToUserChannel ~ presence-user.${userId}`)
+        console.log(`[websocket] subscribeToUserChannel ~ presence-user.${userId}`)
         this.currentUser = userId;
         this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
         this.userChannel.bind('pusher:subscription_succeeded', () => {
@@ -343,7 +344,7 @@ export default class WebSocketClient {
     }
 
     subscribeToUserTeamScopedChannel(teamUserId: string) {
-        console.log(`subscribeToUserTeamScopedChannel ~ presence-teamUser.${teamUserId}`)
+        console.log(`[websocket] subscribeToUserTeamScopedChannel ~ presence-teamUser.${teamUserId}`)
         this.currentTeamUser = teamUserId;
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
         this.userTeamChannel.bind('pusher:subscription_succeeded', () => {
@@ -360,7 +361,7 @@ export default class WebSocketClient {
     }
 
     bindPresenceChannel(channelID: string) {
-        console.log(`bindPresenceChannel ~ presence-channel.${channelID}`)
+        console.log(`[websocket] bindPresenceChannel ~ presence-channel.${channelID}`)
         this.currentPresence = channelID;
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
         if (this.presenceChannel) {
@@ -369,7 +370,7 @@ export default class WebSocketClient {
     }
 
     unbindPresenceChannel(channelID: string) {
-        console.log(`unbindPresenceChannel ~ presence-channel.${channelID}`)
+        console.log(`[websocket] unbindPresenceChannel ~ presence-channel.${channelID}`)
         this.conn?.unsubscribe(`presence-channel.${channelID}`);
 
         if (this.presenceChannel) {
@@ -616,7 +617,7 @@ export default class WebSocketClient {
         if (this.conn && this.conn.connection.state === 'connected') {
             this.userChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
-            console.log('[websocket] tried to send message but connection unavailable');
+            console.error('[websocket] tried to send message but connection unavailable');
 
             this.conn?.disconnect();
             this.conn = null;
@@ -646,7 +647,7 @@ export default class WebSocketClient {
         if (this.conn && this.conn.connection.state === 'connected') {
             this.userTeamChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
-            console.log('[websocket] tried to send message but connection unavailable');
+            console.error('[websocket] tried to send message but connection unavailable');
 
             this.conn?.disconnect();
             this.conn = null;
@@ -676,8 +677,8 @@ export default class WebSocketClient {
         if (this.conn && this.presenceChannel && this.conn.connection.state === 'connected') {
             this.presenceChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected' || !this.presenceChannel) {
-            console.log('presence channel is missing');
-            console.log('connection state: ', this.conn?.connection.state);
+            console.error('[websocket] presence channel is missing');
+            console.log('[websocket] connection state: ', this.conn?.connection.state);
 
             this.conn?.disconnect();
             this.conn = null;
