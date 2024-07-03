@@ -183,36 +183,24 @@ export default class WebSocketClient {
         // We cannot use a cookie because it will bleed across tabs.
         // We cannot also send it as part of the auth_challenge, because the session cookie is already sent with the request.
 
-        if (isDesktopApp()) {
-            this.conn = new Pusher('kchat-key', {
-                wsHost: connectionUrl,
-                httpHost: connectionUrl,
-                cluster: 'mt1',
-                authEndpoint: '/broadcasting/auth',
-                auth: {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                },
-                enabledTransports: ['ws', 'wss'],
-                disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
-                activityTimeout: 10000,
-                pongTimeout: 5000,
-                forceTLS: true,
-            });
-        } else {
-            this.conn = new Pusher('kchat-key', {
-                wsHost: connectionUrl,
-                httpHost: connectionUrl,
-                cluster: 'mt1',
-                authEndpoint: '/broadcasting/auth',
-                enabledTransports: ['ws', 'wss'],
-                disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
-                activityTimeout: 10000,
-                pongTimeout: 5000,
-                forceTLS: true,
-            });
-        }
+        const auth = isDesktopApp() ? {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        } : {};
+
+        this.conn = new Pusher('kchat-key', {
+            wsHost: connectionUrl,
+            httpHost: connectionUrl,
+            cluster: 'mt1',
+            authEndpoint: '/broadcasting/auth',
+            auth,
+            enabledTransports: ['ws', 'wss'],
+            disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
+            activityTimeout: 10000,
+            pongTimeout: 5000,
+            forceTLS: true,
+        });
 
         this.connectionUrl = connectionUrl;
 
@@ -233,45 +221,11 @@ export default class WebSocketClient {
             this.errorCount++;
             this.connectFailCount++;
 
-            // Unbind any Pusher event listeners before disconnecting Pusher instance
-            this.unbindPusherEvents();
-            this.unbindGlobalsAndReset();
-
-            this.conn?.disconnect();
-            this.conn = null;
-
             console.log('websocket closed');
             console.log('[websocket] calling close callbacks');
 
             this.closeCallback?.(this.connectFailCount);
             this.closeListeners.forEach((listener) => listener(this.connectFailCount));
-
-            let retryTime = MIN_WEBSOCKET_RETRY_TIME;
-
-            // If we've failed a bunch of connections then start backing off
-            if (this.connectFailCount > MAX_WEBSOCKET_FAILS) {
-                retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount * this.connectFailCount;
-                if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
-                    retryTime = MAX_WEBSOCKET_RETRY_TIME;
-                }
-            }
-
-            // Applying jitter to avoid thundering herd problems.
-            retryTime += Math.random() * JITTER_RANGE;
-
-            setTimeout(
-                () => {
-                    this.initialize(
-                        connectionUrl,
-                        this.currentUser as number,
-                        this.currentTeamUser,
-                        this.currentTeam,
-                        authToken,
-                        this.currentPresence,
-                    );
-                },
-                retryTime,
-            );
         });
 
         this.conn.connection.bind('connected', () => {
@@ -334,6 +288,14 @@ export default class WebSocketClient {
         this.teamChannel.bind('pusher:subscription_succeeded', () => {
             console.log(`[websocket] subscribed successfully to private-team.${teamId}`)
         })
+
+        this.teamChannel.bind('pusher:subscription_error', () => {
+            console.log(`[websocket] failed to subscribe to private-team.${teamId} queing retry`)
+            this.conn?.unsubscribe(`private-team.${teamId}`)
+            setTimeout(() => {
+                this.subscribeToTeamChannel(teamId);
+            }, JITTER_RANGE)
+        })
     }
 
     subscribeToUserChannel(userId: number) {
@@ -343,6 +305,13 @@ export default class WebSocketClient {
         this.userChannel.bind('pusher:subscription_succeeded', () => {
             console.log(`[websocket] subscribed successfully to presence-user.${userId}`)
         })
+        this.userChannel.bind('pusher:subscription_error', () => {
+            console.log(`[websocket] failed to subscribe to presence-user.${userId} queing retry`)
+            this.conn?.unsubscribe(`presence-user.${userId}`)
+            setTimeout(() => {
+                this.subscribeToUserChannel(userId);
+            }, JITTER_RANGE)
+        })
     }
 
     subscribeToUserTeamScopedChannel(teamUserId: string) {
@@ -351,6 +320,14 @@ export default class WebSocketClient {
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
         this.userTeamChannel.bind('pusher:subscription_succeeded', () => {
             console.log(`[websocket] subscribed successfully to presence-teamUser.${teamUserId}`)
+        })
+
+        this.userTeamChannel.bind('pusher:subscription_error', () => {
+            console.log(`[websocket] failed to subscribe to presence-teamUser.${teamUserId} queing retry`)
+            this.conn?.unsubscribe(`presence-teamUser.${teamUserId}`)
+            setTimeout(() => {
+                this.subscribeToUserTeamScopedChannel(teamUserId);
+            }, JITTER_RANGE)
         })
     }
 
@@ -591,11 +568,8 @@ export default class WebSocketClient {
         this.responseSequence = 1;
 
         if (this.conn && this.conn.connection.state === 'connected') {
-            // Unbind any Pusher event listeners before disconnecting Pusher instance
-            this.unbindPusherEvents();
-            this.unbindGlobalsAndReset();
             this.conn.disconnect();
-            this.conn = null;
+            // this.conn = null;
             console.log('websocket closed'); //eslint-disable-line no-console
         }
     }

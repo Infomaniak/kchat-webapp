@@ -217,7 +217,7 @@ export function initialize() {
 }
 
 export function close() {
-    WebSocketClient.close();
+    // WebSocketClient.close();
     WebSocketClient.removeMessageListener(handleEvent);
     WebSocketClient.removeFirstConnectListener(handleFirstConnect);
     WebSocketClient.removeReconnectListener(reconnect);
@@ -1932,7 +1932,7 @@ function handleConferenceUserDisconnected(msg) {
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
 
-        if (msg.data.channel_id in calls && calls[msg.data.channel_id].length) {
+        if (msg.data.channel_id in calls && calls[msg.data.channel_id] && calls[msg.data.channel_id].length) {
             const keys = Object.keys(calls[msg.data.channel_id]);
             doDispatch({
                 type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,

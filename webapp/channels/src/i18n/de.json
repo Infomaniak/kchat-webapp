@@ -4744,6 +4744,7 @@
   "post_info.del": "Löschen",
   "post_info.dot_menu.tooltip.more": "Mehr",
   "post_info.dot_menu.tooltip.more_actions": "Mehr",
+  "post_info.download_all_attachments": "Alles herunterladen",
   "post_info.edit": "Bearbeiten",
   "post_info.edit.aria_label": "Wähle diese Option, um eine alte Nachricht wiederherzustellen.",
   "post_info.edit.current_version": "Aktuelle Version",

@@ -1,3 +1,103 @@
+## 2.9.6-rc.6 (2024-07-02)
+
+No changes.
+
+## 2.9.6-rc.5 (2024-07-02)
+
+No changes.
+
+## 2.9.6-rc.4 (2024-06-27)
+
+### Changed (1 change)
+
+- [test disable wakeup checker](kchat/webapp@9fe2d814d1b58ef9ea86b6d74c6a10e8737919f6) by @antonbuksa
+
+## 2.9.6-rc.3 (2024-06-26)
+
+### Changed (1 change)
+
+- [use pusher integrated reconnect to try fix sleeping reconnects](kchat/webapp@428b44792ac6540b6052b560842490f2716a53fe) by @antonbuksa ([merge request](kchat/webapp!802))
+
+### Removed (1 change)
+
+- [do not send new mattermost presence events](kchat/webapp@eb3f950b2ff69b6256106dfc95252c3e3f793508) by @antonbuksa ([merge request](kchat/webapp!802))
+
+## 2.9.6-rc.2 (2024-06-25)
+
+### Fixed (2 changes)
+
+- [remove unused props](kchat/webapp@4c051eb032742cdfc8ccdd5003d30736fed89666) by  ([merge request](kchat/webapp!815))
+- [move intégration button to new tab](kchat/webapp@e3209319e2f97c9bb2c122b815dcd3c7b3286153) by  ([merge request](kchat/webapp!815))
+
+## 2.9.6-rc.1 (2024-06-25)
+
+### Fixed (3 changes)
+
+- [better implementation to prevents admin user to write in thread channel while not joining it](kchat/webapp@25245e858adbdf310a2da441eba361d77b73420a) by  ([merge request](kchat/webapp!811))
+- [fixed issue when we could write in a thread even if we didn't join a channel (if we are admin)](kchat/webapp@607cadd585e4381dc482d47548c2584a8e56f9f1) by  ([merge request](kchat/webapp!811))
+- [add LofoutMessageKey to fix the Iframe error](kchat/webapp@dda9b6859b10b9c031bdb46a9fb8fa3906763c9f) by  ([merge request](kchat/webapp!812))
+
+## 2.9.6-next.2 (2024-07-02)
+
+### Fixed (2 changes)
+
+- [remove unused props](kchat/webapp@4c051eb032742cdfc8ccdd5003d30736fed89666) by  ([merge request](kchat/webapp!815))
+- [move intégration button to new tab](kchat/webapp@e3209319e2f97c9bb2c122b815dcd3c7b3286153) by  ([merge request](kchat/webapp!815))
+
+### Changed (2 changes)
+
+- [test disable wakeup checker](kchat/webapp@9fe2d814d1b58ef9ea86b6d74c6a10e8737919f6) by @antonbuksa
+- [use pusher integrated reconnect to try fix sleeping reconnects](kchat/webapp@428b44792ac6540b6052b560842490f2716a53fe) by @antonbuksa ([merge request](kchat/webapp!802))
+
+### Removed (1 change)
+
+- [do not send new mattermost presence events](kchat/webapp@eb3f950b2ff69b6256106dfc95252c3e3f793508) by @antonbuksa ([merge request](kchat/webapp!802))
+
+## 2.9.6-next.1 (2024-06-21)
+
+No changes.
+
+## 2.9.5-rc.8 (2024-06-21)
+
+### Added (1 change)
+
+- [Add support for actions in the unreads bar from plugins (#24265)](kchat/webapp@9d622e946a45a72e060d44c41ed96c7c54529b98) by @antonbuksa
+
+### Fixed (2 changes)
+
+- [fix wpack error caused by old prop](kchat/webapp@8179af9cd24e279c8b1a51c5279f82c9ccd5e7d4) by @antonbuksa
+- [Fix: Scroll for long text in edit messages and in post](kchat/webapp@04b6213be438b451f7728e1e1d8289ebfa5eccce) by  ([merge request](kchat/webapp!791))
+
+## 2.9.5-rc.7 (2024-06-20)
+
+### Fixed (1 change)
+
+- [fix js error in old calls code](kchat/webapp@aa9a016b40e230b0b5bdd51f3c71de0814e3b70f) by @antonbuksa
+
+## 2.9.5-rc.6 (2024-06-20)
+
+### Fixed (1 change)
+
+- [fix call delete reduce not removing key causing exceptions](kchat/webapp@72dfd65bfe75d315511b354f28b625eb25f837d8) by @antonbuksa
+
+## 2.9.5-rc.5 (2024-06-20)
+
+### Added (1 change)
+
+- [handle case where call no longer exists when answered](kchat/webapp@880c4bf4222c7ae7bf17fd954e087f23144b6359) by @antonbuksa ([merge request](kchat/webapp!808))
+
+## 2.9.5-rc.4 (2024-06-20)
+
+### Added (1 change)
+
+- [retry ws channel subscriptions if error occurs](kchat/webapp@14d4a3ddd72001511b92aa3b4321ba670d5e8ede) by @antonbuksa ([merge request](kchat/webapp!810))
+
+## 2.9.5-rc.3 (2024-06-19)
+
+### Fixed (1 change)
+
+- [fix: close actions now close menu](kchat/webapp@87358efe61919cc4a8a48fd4fd024fe885aec33d) by  ([merge request](kchat/webapp!806))
+
 ## 2.9.5-rc.2 (2024-06-19)
 
 ### Fixed (3 changes)
@@ -11,6 +111,32 @@
 ### Added (1 change)
 
 - [implement displaying embedded attachments in post previews](kchat/webapp@6dddc1931deefe0b87f2ca4b6715f8fd886fd3d7) by @antonbuksa ([merge request](kchat/webapp!797))
+
+## 2.9.5-next.4 (2024-06-20)
+
+### Added (1 change)
+
+- [handle case where call no longer exists when answered](kchat/webapp@880c4bf4222c7ae7bf17fd954e087f23144b6359) by @antonbuksa ([merge request](kchat/webapp!808))
+
+### Fixed (2 changes)
+
+- [fix js error in old calls code](kchat/webapp@aa9a016b40e230b0b5bdd51f3c71de0814e3b70f) by @antonbuksa
+- [fix call delete reduce not removing key causing exceptions](kchat/webapp@72dfd65bfe75d315511b354f28b625eb25f837d8) by @antonbuksa
+
+## 2.9.5-next.3 (2024-06-20)
+
+### Added (1 change)
+
+- [retry ws channel subscriptions if error occurs](kchat/webapp@14d4a3ddd72001511b92aa3b4321ba670d5e8ede) by @antonbuksa ([merge request](kchat/webapp!810))
+
+## 2.9.5-next.2 (2024-06-19)
+
+### Fixed (4 changes)
+
+- [fix: close actions now close menu](kchat/webapp@87358efe61919cc4a8a48fd4fd024fe885aec33d) by  ([merge request](kchat/webapp!806))
+- [add check to fix js error in conference user denied ws action](kchat/webapp@79eac8d5a170503579fef622eaa1d276b36732aa) by @antonbuksa ([merge request](kchat/webapp!805))
+- [fix: custom status overflow](kchat/webapp@80ad28dc76c54871a66cd32368cb925508b0bec8) by @tim.dewinter ([merge request](kchat/webapp!773))
+- [fix: error message displayName you](kchat/webapp@123554d51fe8c289538b003cb6d6991ca621ef3c) by  ([merge request](kchat/webapp!804))
 
 ## 2.9.5-next.1 (2024-06-18)
 

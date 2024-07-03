@@ -126,6 +126,15 @@ describe('Components/SidebarHeader', () => {
                 addChannelDropdown: {
                     isOpen: false,
                 },
+                servers: {
+                    servers: {
+                        server1: {
+                            id: 'server1',
+                            name: 'server1',
+                        },
+                    },
+                },
+                currentServerId: 'server1',
             },
         };
     });

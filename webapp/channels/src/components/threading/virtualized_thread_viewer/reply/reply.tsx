@@ -17,7 +17,6 @@ type Props = {
     onCardClick: (post: Post) => void;
     post: Post;
     previousPostId: string;
-    teamId: string;
     timestampProps?: Partial<TimestampProps>;
     id?: Post['id'];
 }
@@ -28,7 +27,6 @@ function Reply({
     onCardClick,
     post,
     previousPostId,
-    teamId,
     timestampProps,
 }: Props) {
     return (
