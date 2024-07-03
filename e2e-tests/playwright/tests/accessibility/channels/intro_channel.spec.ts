@@ -153,8 +153,12 @@ test('Post actions tab support', async ({page, pages, axe}) => {
     await channelsPage.postReminderMenu.twoHoursMenuItem.press('ArrowDown');
     expect(await channelsPage.postReminderMenu.tomorrowMenuItem).toBeFocused();
 
-    // * Should move focus to Custom after arrow down
+    // * Should move focus to Monday after arrow down
     await channelsPage.postReminderMenu.tomorrowMenuItem.press('ArrowDown');
+    expect(await channelsPage.postReminderMenu.mondayMenuItem).toBeFocused();
+
+    // * Should move focus to Custom after arrow down
+    await channelsPage.postReminderMenu.mondayMenuItem.press('ArrowDown');
     expect(await channelsPage.postReminderMenu.customMenuItem).toBeFocused();
 
     // * Then, should move focus back to 30 mins after arrow down
