@@ -21,6 +21,7 @@ import {getProfilesNotInCurrentChannel, getProfilesInCurrentChannel, getProfiles
 
 import {addUsersToChannel} from 'actions/channel_actions';
 import {loadStatusesForProfilesList} from 'actions/status_actions';
+import {loadProfilesAndReloadChannelMembers} from 'actions/user_actions';
 import {leaveChannel} from 'actions/views/channel';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
 import {closeModal} from 'actions/views/modals';
@@ -101,6 +102,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             searchAssociatedGroupsForReference,
             getTeamMembersByIds,
             leaveChannel,
+            loadProfilesAndReloadChannelMembers,
         }, dispatch),
     };
 }
