@@ -56,6 +56,12 @@ export function getFileUrl(fileId: string): string {
     return Client4.getFileRoute(fileId);
 }
 
+// Infomaniak function - do not delete on upstream merge
+// Returns the ZIP download URL for a post
+export function getZipforPost(postId: string): string {
+    return `${Client4.getPostRoute(postId)}/files/download`;
+}
+
 export function getFileDownloadUrl(fileId: string): string {
     return `${Client4.getFileRoute(fileId)}?download=1`;
 }

@@ -100,6 +100,7 @@ export default class EmojiPickerTabs extends PureComponent<Props, State> {
                 <div
                     ref={this.rootPickerNodeRef}
                     style={pickerStyle}
+                    id='emojiGifPicker'
                     className={pickerClass}
                 >
                     <Tabs

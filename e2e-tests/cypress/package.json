@@ -1,13 +1,14 @@
 {
-  "name": "cypress",
+  "name": "e2e-cypress",
   "devDependencies": {
     "@aws-sdk/client-s3": "3.489.0",
     "@aws-sdk/lib-storage": "3.489.0",
     "@babel/eslint-parser": "7.23.3",
     "@babel/eslint-plugin": "7.23.5",
     "@cypress/request": "3.0.1",
-    "@mattermost/client": "9.2.0",
-    "@mattermost/types": "9.2.0",
+    "@cypress/webpack-preprocessor": "6.0.1",
+    "@infomaniak/mattermost-client": "workspace:webapp/platform/client",
+    "@infomaniak/mattermost-types": "workspace:webapp/platform/types",
     "@testing-library/cypress": "10.0.1",
     "@types/async": "3.2.24",
     "@types/authenticator": "1.1.4",

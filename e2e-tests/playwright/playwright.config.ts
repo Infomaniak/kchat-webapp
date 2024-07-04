@@ -53,10 +53,13 @@ export default defineConfig({
         },
     },
     projects: [
+        // Setup project
+        { name: 'setup', testMatch: /.*\.setup\.ts/ },
         {
             name: 'ipad',
             use: {
                 browserName: 'chromium',
+                storageState: '.auth/user.json',
                 ...devices['iPad Pro 11'],
             },
         },
@@ -64,6 +67,7 @@ export default defineConfig({
             name: 'chrome',
             use: {
                 browserName: 'chromium',
+                storageState: '.auth/user.json',
                 permissions: ['notifications'],
                 viewport: {width: 1280, height: 1024},
             },
@@ -72,6 +76,7 @@ export default defineConfig({
             name: 'firefox',
             use: {
                 browserName: 'firefox',
+                storageState: '.auth/user.json',
                 permissions: ['notifications'],
                 viewport: {width: 1280, height: 1024},
             },

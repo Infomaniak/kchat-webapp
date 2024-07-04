@@ -116,6 +116,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                 <div
                     className='post-create__container'
                     id='post-create'
+                    data-testid='post-create'
                 >
                     <div
                         className='channel-archived__message'
@@ -141,6 +142,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                 <div
                     className='post-create__container'
                     id='post-create'
+                    data-testid='post-create'
                 >
                     <div
                         id='channelArchivedMessage'
@@ -167,6 +169,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                 <div
                     className='post-create__container AdvancedTextEditor__ctr'
                     id='post-create'
+                    data-testid='post-create'
                 >
                     <AdvancedCreatePost getChannelView={this.getChannelView}/>
                 </div>

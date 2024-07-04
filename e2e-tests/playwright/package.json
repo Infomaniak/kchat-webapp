@@ -1,4 +1,5 @@
 {
+    "name": "e2e-playwright",
     "scripts": {
         "test": "cross-env NODE_OPTIONS='--no-experimental-fetch' PW_SNAPSHOT_ENABLE=true playwright test",
         "test:update-snapshots": "cross-env NODE_OPTIONS='--no-experimental-fetch' PW_SNAPSHOT_ENABLE=true playwright test --update-snapshots",
@@ -18,7 +19,7 @@
         "@axe-core/playwright": "4.8.3",
         "@percy/cli": "1.27.7",
         "@percy/playwright": "1.0.4",
-        "@playwright/test": "1.41.1",
+        "@playwright/test": "1.43.1",
         "async-wait-until": "2.0.12",
         "axe-core": "4.8.3",
         "chalk": "4.1.2",
