@@ -273,11 +273,6 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
         }
 
         if (isUser(option)) {
-            const ProfilesInGroup = profilesInCurrentChannel!.map((user: any) => user.id);
-            const userMapping: Record<string, string> = {};
-            for (let i = 0; i < ProfilesInGroup.length; i++) {
-                userMapping[ProfilesInGroup[i]] = 'Already in channel';
-            }
             const displayName = displayUsername(option, 'full_name');
             return (
                 <div
@@ -302,11 +297,6 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
                                     {'@'}{option.username}
                                 </UsernameSpan>
                                 }
-                                <UserMappingSpan
-                                    className='light'
-                                >
-                                    {userMapping[option.id]}
-                                </UserMappingSpan>
                             </span>
                         </div>
                     </div>
