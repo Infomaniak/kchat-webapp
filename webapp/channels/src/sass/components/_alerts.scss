@@ -18,7 +18,25 @@
             padding-right: 9px;
         }
     }
+    &.alert-with-icon-leave {
+        display: flex;
+        justify-content: space-between;
+        margin-left: 30px;
+        margin-right: 30px;
+        i {
+            font-size: 16px;
+            padding-right: 9px;
+        }
+    }
 }
+
+.alert-message {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
 
 .alert-grey {
     i {

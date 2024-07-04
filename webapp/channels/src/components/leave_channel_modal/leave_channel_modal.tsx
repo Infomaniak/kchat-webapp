@@ -1,38 +1,323 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useState} from 'react';
+import isEqual from 'lodash/isEqual';
+import type {FC} from 'react';
+import React, {useEffect, useState} from 'react';
+import {Modal} from 'react-bootstrap';
+import type {IntlShape} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
+import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
+import type {Group, GroupSearchParams} from '@mattermost/types/groups';
 import type {LeastActiveChannel} from '@mattermost/types/insights';
+import type {UserProfile} from '@mattermost/types/users';
 
-import ConfirmModal from 'components/confirm_modal';
+import {Client4} from 'mattermost-redux/client';
+import type {ActionResult} from 'mattermost-redux/types/actions';
+import {displayUsername, isGuest} from 'mattermost-redux/utils/user_utils';
 
-import Constants from 'utils/constants';
+import type {Value} from 'components/multiselect/multiselect';
+import MultiSelect from 'components/multiselect/multiselect';
+import ProfilePicture from 'components/profile_picture';
+import BotTag from 'components/widgets/tag/bot_tag';
+import GuestTag from 'components/widgets/tag/guest_tag';
+
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
+
+import GroupOption from '../channel_invite_modal/group_option';
 
 type Props = {
+    profilesNotInCurrentChannel?: UserProfile[];
+    profilesInCurrentChannel?: UserProfile[];
+    intl: IntlShape;
     channel: Channel | LeastActiveChannel;
+    onAddCallback?: (userProfiles?: UserProfileValue[]) => void;
     onExited: () => void;
-    callback?: () => any;
     actions: {
-        leaveChannel: (channelId: string) => any;
+        leaveChannel: (channelId: string) => Promise<ActionResult>;
+        getChannelStats: (channelId: string) => void;
+        getChannelMember: (channelId: string, userId: string[]) => void;
+        updateChannelMemberSchemeRoles: (channelId: string, userId: string | string[], isSchemeUser: boolean, isSchemeAdmin: boolean) => Promise<ActionResult>;
+        loadStatusesForProfilesList: (users: UserProfile[]) => void;
+        addUsersToChannel: (channelId: string, userIds: string[]) => Promise<ActionResult>;
+        searchProfiles: (term: string, options: any) => Promise<ActionResult>;
+        getProfilesNotInChannel: (teamId: string, channelId: string, groupConstrained: boolean, page: number, perPage?: number) => Promise<ActionResult>;
+        searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined, opts: GroupSearchParams) => Promise<ActionResult>;
+        getTeamStats: (teamId: string) => void;
+        closeModal: (modalId: string) => void;
+        getProfilesInChannel: (channelId: string, page: number, perPage: number, sort: string, options: {active?: boolean}) => Promise<ActionResult>;
+        getTeamMembersByIds: (teamId: string, userIds: string[]) => Promise<ActionResult>;
     };
+    currentMembers: UserProfile[];
+    currentUserIsChannelAdmin: boolean;
+    skipCommit?: boolean;
+    isGroupsEnabled: boolean;
 }
 
-const LeaveChannelModal = ({actions, channel, callback, onExited}: Props) => {
-    const [show, setShow] = useState(true);
+const USERS_PER_PAGE = 50;
 
-    const handleSubmit = () => {
+type UserProfileValue = Value & UserProfile;
+type GroupValue = Value & Group;
+
+const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited, currentMembers, currentUserIsChannelAdmin}) => {
+    const selectedItemRef = React.createRef<HTMLDivElement>();
+    const [selectedUsers, setSelectedUsers] = useState<UserProfileValue[]>([]);
+    const [groupAndUserOptions, setGroupAndUserOptions] = useState < Array<UserProfileValue | GroupValue > >([]);
+    const [term, setTerm] = useState('');
+    const [show, setShow] = useState(true);
+    const [saving, setSavingUsers] = useState(false);
+    const [loadingUsers, setLoadingUsers] = useState(true);
+    const [inviteError, setInviteError] = useState();
+
+    const isUser = (option: UserProfileValue | GroupValue | UserProfile): option is UserProfileValue => {
+        return (option as UserProfile).username !== undefined;
+    };
+
+    const addValue = (value: UserProfileValue | GroupValue): void => {
+        if (isUser(value)) {
+            const profile = value;
+            setSelectedUsers((prev) => [...prev, profile]);
+        }
+    };
+
+    useEffect(() => {
+        actions.getProfilesNotInChannel(channel.team_id, channel.id, channel.group_constrained, 0).then(() => {
+            setLoadingUsers(false);
+        });
+        actions.getProfilesInChannel(channel.id, 0, USERS_PER_PAGE, '', {active: true});
+
+        actions.getTeamStats(channel.team_id);
+        actions.loadStatusesForProfilesList(profilesNotInCurrentChannel!);
+        actions.loadStatusesForProfilesList(profilesInCurrentChannel!);
+    }, []);
+
+    useEffect(() => {
+        const values = getOptions();
+        const userIds = [];
+
+        for (let index = 0; index < values.length; index++) {
+            const newValue = values[index];
+            if (isUser(newValue)) {
+                userIds.push(newValue.id);
+            } else if (newValue.member_ids) {
+                userIds.push(...newValue.member_ids);
+            }
+        }
+        if (!isEqual(values, groupAndUserOptions)) {
+            if (userIds.length > 0) {
+                actions.getTeamMembersByIds(channel.team_id, userIds);
+            }
+            setGroupAndUserOptions(values);
+        }
+    }, [term]);
+
+    const getOptions = () => {
+        return Array.from(new Set(profilesInCurrentChannel));
+    };
+
+    const onHide = (): void => {
+        setShow(false);
+        actions.loadStatusesForProfilesList(profilesNotInCurrentChannel!);
+        actions.loadStatusesForProfilesList(profilesInCurrentChannel!);
+    };
+
+    const handleDelete = (values: Array<UserProfileValue | GroupValue>): void => {
+        const profiles = values as UserProfileValue[];
+        setSelectedUsers(profiles);
+    };
+
+    const handlePageChange = (page: number, prevPage: number): void => {
+        if (page > prevPage) {
+            setLoadingUsers(true);
+            actions.getProfilesNotInChannel(
+                channel.team_id,
+                channel.id,
+                channel.group_constrained,
+                page + 1, USERS_PER_PAGE).then(() => setLoadingUsers(false));
+
+            actions.getProfilesInChannel(channel.id, page + 1, USERS_PER_PAGE, '', {active: true});
+        }
+    };
+
+    const handleLeaveSubmit = () => {
         if (channel) {
             const channelId = channel.id;
-            actions.leaveChannel(channelId).then((result: {data: boolean}) => {
+            actions.leaveChannel(channelId).then((result: ActionResult) => {
                 if (result.data) {
-                    callback?.();
                     handleHide();
                 }
             });
         }
+    };
+
+    const handleMakeChannelAdmin = (userIds: string[], channelId: string) => {
+        updateChannelMemberSchemeRole(true, userIds, channelId);
+    };
+
+    const updateChannelMemberSchemeRole = async (schemeAdmin: boolean, userIds: string[], channelId: string) => {
+        const {error} = await actions.updateChannelMemberSchemeRoles(channel.id, userIds, true, schemeAdmin);
+        if (error) {
+            return;
+        }
+
+        actions.getChannelStats(channel.id);
+        actions.getChannelMember(channel.id, userIds);
+        actions.leaveChannel(channelId);
+    };
+
+    const handleSubmit = () => {
+        const userIds = selectedUsers.map((u) => u.id);
+        if (userIds.length === 0) {
+            return;
+        }
+
+        if (skipCommit && onAddCallback) {
+            onAddCallback(selectedUsers);
+            setSavingUsers(false);
+            setInviteError(undefined);
+            onHide();
+            return;
+        }
+        setSavingUsers(true);
+        handleMakeChannelAdmin(userIds, channel.id);
+        setSavingUsers(false);
+        setInviteError(undefined);
+        onHide();
+    };
+
+    const searshTimeoutIdRef = React.useRef < number | undefined >(0);
+    const search = (searchTerm: string): void => {
+        const term = searchTerm.trim();
+        clearTimeout(searshTimeoutIdRef.current);
+        setTerm(term);
+        searshTimeoutIdRef.current = window.setTimeout(
+            async () => {
+                if (!term) {
+                    return;
+                }
+
+                const options = {
+                    team_id: channel.team_id,
+                    not_in_channel_id: channel.id,
+                    group_constrained: channel.group_constrained,
+                };
+
+                const opts = {
+                    q: term,
+                    filter_allow_reference: true,
+                    page: 0,
+                    per_page: 100,
+                    include_member_count: true,
+                    include_member_ids: true,
+                };
+                const promises = [
+                    actions.searchProfiles(term, options),
+                ];
+                if (isGroupsEnabled) {
+                    promises.push(actions.searchAssociatedGroupsForReference(term, channel.team_id, channel.id, opts));
+                }
+                await Promise.all(promises);
+                setLoadingUsers(false);
+            },
+            Constants.SEARCH_TIMEOUT_MILLISECONDS,
+        );
+    };
+
+    const renderAriaLabel = (option: UserProfileValue | GroupValue): string => {
+        if (!option) {
+            return '';
+        }
+        if (isUser(option)) {
+            return option.username!;
+        }
+
+        return option.name!;
+    };
+
+    const UsernameSpan = styled.span`
+    fontSize: 12px;
+    `;
+
+    const UserMappingSpan = styled.span`
+    position: absolute;
+    right: 20px;
+    `;
+
+    const renderOption = (option: UserProfileValue | GroupValue, isSelected: boolean, onAdd: (option: UserProfileValue | GroupValue) => void, onMouseMove: (option: UserProfileValue | GroupValue) => void) => {
+        let rowSelected = '';
+        if (isSelected) {
+            rowSelected = 'more-modal__row--selected';
+        }
+
+        if (isUser(option)) {
+            const ProfilesInGroup = profilesInCurrentChannel!.map((user: any) => user.id);
+            const userMapping: Record<string, string> = {};
+            for (let i = 0; i < ProfilesInGroup.length; i++) {
+                userMapping[ProfilesInGroup[i]] = 'Already in channel';
+            }
+            const displayName = displayUsername(option, 'full_name');
+            return (
+                <div
+                    key={option.id}
+                    ref={isSelected ? selectedItemRef : option.id}
+                    className={'more-modal__row clickable ' + rowSelected}
+                    onClick={() => onAdd(option)}
+                    onMouseMove={() => onMouseMove(option)}
+                >
+                    <ProfilePicture
+                        src={Client4.getProfilePictureUrl(option.id, option.last_picture_update)}
+
+                        // status={userStatuses[option.id]}
+                        size='md'
+                        username={option.username}
+                    />
+                    <div className='more-modal__details'>
+                        <div className='more-modal__name'>
+                            <span>
+                                {displayName}
+                                {option.is_bot && <BotTag/>}
+                                {isGuest(option.roles) && <GuestTag className='popoverlist'/>}
+                                {displayName === option.username ? null : <UsernameSpan className='ml-2 light'>
+                                    {'@'}{option.username}
+                                </UsernameSpan>
+                                }
+                                <UserMappingSpan
+                                    className='light'
+                                >
+                                    {userMapping[option.id]}
+                                </UserMappingSpan>
+                            </span>
+                        </div>
+                    </div>
+                    <div className='more-modal__actions'>
+                        <div className='more-modal__actions--round'>
+                            <i
+                                className='icon icon-plus'
+                            />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <GroupOption
+                group={option}
+                key={option.id}
+                addUserProfile={onAdd}
+                isSelected={isSelected}
+                rowSelected={rowSelected}
+                onMouseMove={onMouseMove}
+                selectedItemRef={selectedItemRef}
+            />
+        );
+    };
+
+    const closeMembersInviteModal = () => {
+        actions.closeModal(ModalIdentifiers.CHANNEL_INVITE);
     };
 
     const handleHide = () => setShow(false);
@@ -63,15 +348,27 @@ const LeaveChannelModal = ({actions, channel, callback, onExited}: Props) => {
         }
 
         if (channel.type === Constants.PRIVATE_CHANNEL) {
-            message = (
-                <FormattedMessage
-                    id='leave_private_channel_modal.message'
-                    defaultMessage='Do you really want to leave the {channel} channel?'
-                    values={{
-                        channel: <b>{channel.display_name}</b>,
-                    }}
-                />
-            );
+            if (profilesInCurrentChannel!.length > 1 && currentUserIsChannelAdmin) {
+                message = (
+                    <FormattedMessage
+                        id='leave_privatechannel_modal.message'
+                        defaultMessage='A quel utilisateur souhaitez-vous accorder un droit d’administrateur sur ce canal ?'
+                        values={{
+                            channel: <b>{channel.display_name}</b>,
+                        }}
+                    />
+                );
+            } else if (!currentUserIsChannelAdmin) {
+                message = (
+                    <FormattedMessage
+                        id='leave_private_chnnel_modal.message'
+                        defaultMessage='Souhaitez-vous vraiment quitter le canal {channel} ?'
+                        values={{
+                            channel: <b>{channel.display_name}</b>,
+                        }}
+                    />
+                );
+            }
         } else {
             message = (
                 <FormattedMessage
@@ -85,20 +382,85 @@ const LeaveChannelModal = ({actions, channel, callback, onExited}: Props) => {
         }
     }
 
+    const buttonSubmitText = localizeMessage('multiselect.ad', 'Quitter');
+    const buttonSubmitLoadingText = localizeMessage('multiselect.adding', 'Adding...');
+
     let content;
+
     if (channel.type === Constants.PRIVATE_CHANNEL) {
-        content = (
-            <div>
-                <div className='alert alert-with-icon alert-grey'>
-                    <i className='icon-information-outline'/>
-                    <FormattedMessage
-                        id='leave_private_channel_modal.information'
-                        defaultMessage='Only a channel administrator can invite you to join this channel again.'
+        if (profilesInCurrentChannel!.length > 1 && currentUserIsChannelAdmin) {
+            content = (
+                <div>
+                    <div className='alert alert-with-icon-leave alert-grey'>
+                        <i className='icon-information-outline'/>
+                        <FormattedMessage
+                            id='leave_private_channe_modal.information'
+                            defaultMessage='En tant que dernier administrateur de ce canal, attribuez des droits d’administration à un autre membre avant de quitter ce canal.'
+                        />
+                    </div>
+                    <div className='alert-message'>
+                        {message}
+                    </div>
+                    <MultiSelect
+                        key='addUsersToChannelKey'
+                        options={groupAndUserOptions}
+                        optionRenderer={renderOption}
+                        intl={intl}
+                        selectedItemRef={selectedItemRef}
+                        values={selectedUsers}
+                        ariaLabelRenderer={renderAriaLabel}
+                        saveButtonPosition={'bottom'}
+                        perPage={USERS_PER_PAGE}
+                        handlePageChange={handlePageChange}
+                        handleInput={search}
+                        handleDelete={handleDelete}
+                        handleAdd={addValue}
+                        handleSubmit={handleSubmit}
+                        handleCancel={closeMembersInviteModal}
+                        buttonSubmitText={buttonSubmitText}
+                        buttonSubmitLoadingText={buttonSubmitLoadingText}
+                        saving={saving}
+                        loading={loadingUsers}
+                        placeholderText={localizeMessage('multiselect.placeholder.peopOrGroups', 'Séléctionner un ou des utilisateurs')}
+                        valueWithImage={true}
+                        backButtonText={localizeMessage('multiselect.cancel', 'Cancel')}
+                        backButtonClick={closeMembersInviteModal}
+                        backButtonClass={'btn-tertiary tertiary-button'}
+                        customNoOptionsMessage={null}
                     />
                 </div>
-                {message}
-            </div>
-        );
+            );
+        } else if (currentUserIsChannelAdmin && Object.keys(currentMembers).length === 1) {
+            content = (
+                <div>
+                    <div className='alert alert-with-icon-leave alert-grey'>
+                        <i className='icon-information-outline'/>
+                        <FormattedMessage
+                            id='leave_private_hannel_modal.information'
+                            defaultMessage='Vous êtes le dernier utilisateur de ce canal privé. Le canal sera archivé et ne pourra être désarchivié que par un administrateur.'
+                        />
+                    </div>
+                    <div className='alert-message'>
+                        {message}
+                    </div>
+                </div>
+            );
+        } else {
+            content = (
+                <div>
+                    <div className='alert alert-with-icon-leave alert-grey'>
+                        <i className='icon-information-outline'/>
+                        <FormattedMessage
+                            id='leave_private_channel_modal.information'
+                            defaultMessage='Only a channel administrator can invite you to join this channel again.'
+                        />
+                    </div>
+                    <div className='alert-message'>
+                        {message}
+                    </div>
+                </div>
+            );
+        }
     } else {
         content = (<div>{message}</div>);
     }
@@ -112,16 +474,56 @@ const LeaveChannelModal = ({actions, channel, callback, onExited}: Props) => {
     );
 
     return (
-        <ConfirmModal
+        <Modal
+            id='addUsersToChannelModal'
+            dialogClassName='a11y__modal channel-invite'
             show={show}
-            title={title}
-            message={content}
-            confirmButtonClass={buttonClass}
-            confirmButtonText={button}
-            onConfirm={handleSubmit}
-            onCancel={handleHide}
+            onHide={onHide}
             onExited={onExited}
-        />
+            role='dialog'
+            aria-labelledby='channelInviteModalLabel'
+        >
+            <Modal.Header
+                id='channelInviteModalLabel'
+                closeButton={true}
+            >
+                <Modal.Title
+                    componentClass='h1'
+                    id='deletePostModalLabel'
+                >
+                    {title}
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body
+                role='application'
+                className='overflow--visible'
+            >
+                {inviteError}
+                <div className='channel-invite__content'>
+                    {content}
+                </div>
+            </Modal.Body>
+            {!currentUserIsChannelAdmin && <Modal.Footer>
+                <button
+                    type='button'
+                    className='btn btn-tertiary'
+
+                    onClick={onExited}
+                    id='cancelModalButton'
+                >
+                    {localizeMessage('multiselect.cancel', 'Cancel')}
+                </button>
+                <button
+                    className={buttonClass}
+                    autoFocus={true}
+                    type='button'
+                    onClick={handleLeaveSubmit}
+                    id='confirmModalButton'
+                >
+                    {button}
+                </button>
+            </Modal.Footer>}
+        </Modal>
     );
 };
 
