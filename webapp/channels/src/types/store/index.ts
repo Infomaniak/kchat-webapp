@@ -19,6 +19,8 @@ export type GlobalState = BaseGlobalState & {
     ksuite_bridge: {
         bridge: KSuiteBridge;
         dnd: boolean;
+        spaceId: string;
+        ksuiteMode: string;
     };
     kdrive: {
         toast: {
