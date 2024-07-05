@@ -114,7 +114,6 @@ export type LeastActiveChannel = {
     display_name: string;
     name: string;
     participants: string[];
-    group_constrained: boolean;
     last_activity_at: number;
     type: ChannelType;
     team_id: string;

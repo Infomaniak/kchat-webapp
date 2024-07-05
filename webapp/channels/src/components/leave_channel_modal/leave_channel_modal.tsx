@@ -12,7 +12,6 @@ import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Group, GroupSearchParams} from '@mattermost/types/groups';
-import type {LeastActiveChannel} from '@mattermost/types/insights';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
@@ -37,29 +36,29 @@ type Props = {
     profilesNotInCurrentChannel?: UserProfile[];
     profilesInCurrentChannel?: UserProfile[];
     intl: IntlShape;
-    channel: Channel | LeastActiveChannel;
+    channel: Channel ;
+    currentUser?: UserProfile;
     onAddCallback?: (userProfiles?: UserProfileValue[]) => void;
     onExited: () => void;
     actions: {
         leaveChannel: (channelId: string) => Promise<ActionResult>;
-        getChannelStats: (channelId: string) => void;
-        getChannelMember: (channelId: string, userId: string[]) => void;
-        updateChannelMemberSchemeRoles: (channelId: string, userId: string | string[], isSchemeUser: boolean, isSchemeAdmin: boolean) => Promise<ActionResult>;
-        loadStatusesForProfilesList: (users: UserProfile[]) => void;
-        addUsersToChannel: (channelId: string, userIds: string[]) => Promise<ActionResult>;
-        searchProfiles: (term: string, options: any) => Promise<ActionResult>;
-        getProfilesNotInChannel: (teamId: string, channelId: string, groupConstrained: boolean, page: number, perPage?: number) => Promise<ActionResult>;
-        searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined, opts: GroupSearchParams) => Promise<ActionResult>;
-        getTeamStats: (teamId: string) => void;
-        closeModal: (modalId: string) => void;
-        getProfilesInChannel: (channelId: string, page: number, perPage: number, sort: string, options: {active?: boolean}) => Promise<ActionResult>;
-        getTeamMembersByIds: (teamId: string, userIds: string[]) => Promise<ActionResult>;
-        loadProfilesAndReloadChannelMembers: (page: number, perParge: number, channelId: string, sort: string) => void;
+        getChannelStats?: (channelId: string) => void;
+        getChannelMember?: (channelId: string, userId: string[]) => void;
+        updateChannelMemberSchemeRoles?: (channelId: string, userId: string | string[], isSchemeUser: boolean, isSchemeAdmin: boolean) => Promise<ActionResult>;
+        loadStatusesForProfilesList?: (users: UserProfile[]) => void;
+        addUsersToChannel?: (channelId: string, userIds: string[]) => Promise<ActionResult>;
+        searchProfiles?: (term: string, options: any) => Promise<ActionResult>;
+        getProfilesNotInChannel?: (teamId: string, channelId: string, groupConstrained: boolean, page: number, perPage?: number) => Promise<ActionResult>;
+        searchAssociatedGroupsForReference?: (prefix: string, teamId: string, channelId: string | undefined, opts: GroupSearchParams) => Promise<ActionResult>;
+        getTeamStats?: (teamId: string) => void;
+        closeModal?: (modalId: string) => void;
+        getProfilesInChannel?: (channelId: string, page: number, perPage: number, sort: string, options: {active?: boolean}) => Promise<ActionResult>;
+        getTeamMembersByIds?: (teamId: string, userIds: string[]) => Promise<ActionResult>;
+        loadProfilesAndReloadChannelMembers?: (page: number, perParge: number, channelId: string, sort: string) => void;
     };
-    currentMembers: UserProfile[];
-    currentUserIsChannelAdmin: boolean;
+    currentUserIsChannelAdmin?: boolean;
     skipCommit?: boolean;
-    isGroupsEnabled: boolean;
+    isGroupsEnabled?: boolean;
 }
 
 const USERS_PER_PAGE = 50;
@@ -71,8 +70,10 @@ export enum ProfilesInChannelSortBy {
     None = '',
     Admin = 'admin',
 }
-
-const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited, currentMembers, currentUserIsChannelAdmin}) => {
+const UsernameSpan = styled.span`
+fontSize: 12px;
+`;
+const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited, currentUserIsChannelAdmin}) => {
     const selectedItemRef = React.createRef<HTMLDivElement>();
     const [selectedUsers, setSelectedUsers] = useState<UserProfileValue[]>([]);
     const [groupAndUserOptions, setGroupAndUserOptions] = useState < Array<UserProfileValue | GroupValue > >([]);
@@ -104,14 +105,15 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
     };
 
     useEffect(() => {
-        actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
-        actions.getProfilesNotInChannel(channel.team_id, channel.id, channel.group_constrained, 0).then(() => {
+        actions.loadProfilesAndReloadChannelMembers!(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
+
+        actions.getProfilesNotInChannel!(channel.team_id, channel.id, channel.group_constrained, 0).then(() => {
             setLoadingUsers(false);
         });
-        actions.getProfilesInChannel(channel.id, 0, USERS_PER_PAGE, '', {active: true});
-        actions.getTeamStats(channel.team_id);
-        actions.loadStatusesForProfilesList(profilesNotInCurrentChannel!);
-        actions.loadStatusesForProfilesList(profilesInCurrentChannel!);
+        actions.getProfilesInChannel!(channel.id, 0, USERS_PER_PAGE, '', {active: true});
+        actions.getTeamStats!(channel.team_id);
+        actions.loadStatusesForProfilesList!(profilesNotInCurrentChannel!);
+        actions.loadStatusesForProfilesList!(profilesInCurrentChannel!);
     }, []);
 
     useEffect(() => {
@@ -128,20 +130,21 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
         }
         if (!isEqual(values, groupAndUserOptions)) {
             if (userIds.length > 0) {
-                actions.getTeamMembersByIds(channel.team_id, userIds);
+                actions.getTeamMembersByIds!(channel.team_id, userIds);
             }
             setGroupAndUserOptions(values);
         }
     }, [term]);
 
     const getOptions = () => {
-        return Array.from(new Set(profilesInCurrentChannel));
+        const filteredProfiles = profilesInCurrentChannel!.filter((profile) => profile.id.toString() !== currentUser.user_id.toString());
+        return Array.from(new Set(filteredProfiles));
     };
 
     const onHide = (): void => {
         setShow(false);
-        actions.loadStatusesForProfilesList(profilesNotInCurrentChannel!);
-        actions.loadStatusesForProfilesList(profilesInCurrentChannel!);
+        actions.loadStatusesForProfilesList!(profilesNotInCurrentChannel!);
+        actions.loadStatusesForProfilesList!(profilesInCurrentChannel!);
     };
 
     const handleDelete = (values: Array<UserProfileValue | GroupValue>): void => {
@@ -152,13 +155,13 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
     const handlePageChange = (page: number, prevPage: number): void => {
         if (page > prevPage) {
             setLoadingUsers(true);
-            actions.getProfilesNotInChannel(
+            actions.getProfilesNotInChannel!(
                 channel.team_id,
                 channel.id,
                 channel.group_constrained,
                 page + 1, USERS_PER_PAGE).then(() => setLoadingUsers(false));
 
-            actions.getProfilesInChannel(channel.id, page + 1, USERS_PER_PAGE, '', {active: true});
+            actions.getProfilesInChannel!(channel.id, page + 1, USERS_PER_PAGE, '', {active: true});
         }
     };
 
@@ -178,13 +181,13 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
     };
 
     const updateChannelMemberSchemeRole = async (schemeAdmin: boolean, userIds: string[], channelId: string) => {
-        const {error} = await actions.updateChannelMemberSchemeRoles(channel.id, userIds, true, schemeAdmin);
+        const {error} = await actions.updateChannelMemberSchemeRoles!(channel.id, userIds, true, schemeAdmin);
         if (error) {
             return;
         }
 
-        actions.getChannelStats(channel.id);
-        actions.getChannelMember(channel.id, userIds);
+        actions.getChannelStats!(channel.id);
+        actions.getChannelMember!(channel.id, userIds);
         actions.leaveChannel(channelId);
     };
 
@@ -234,10 +237,10 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
                     include_member_ids: true,
                 };
                 const promises = [
-                    actions.searchProfiles(term, options),
+                    actions.searchProfiles!(term, options),
                 ];
                 if (isGroupsEnabled) {
-                    promises.push(actions.searchAssociatedGroupsForReference(term, channel.team_id, channel.id, opts));
+                    promises.push(actions.searchAssociatedGroupsForReference!(term, channel.team_id, channel.id, opts));
                 }
                 await Promise.all(promises);
                 setLoadingUsers(false);
@@ -256,15 +259,6 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
 
         return option.name!;
     };
-
-    const UsernameSpan = styled.span`
-    fontSize: 12px;
-    `;
-
-    const UserMappingSpan = styled.span`
-    position: absolute;
-    right: 20px;
-    `;
 
     const renderOption = (option: UserProfileValue | GroupValue, isSelected: boolean, onAdd: (option: UserProfileValue | GroupValue) => void, onMouseMove: (option: UserProfileValue | GroupValue) => void) => {
         let rowSelected = '';
@@ -325,7 +319,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
     };
 
     const closeMembersInviteModal = () => {
-        actions.closeModal(ModalIdentifiers.CHANNEL_INVITE);
+        actions.closeModal!(ModalIdentifiers.CHANNEL_INVITE);
     };
 
     const handleHide = () => setShow(false);
@@ -398,7 +392,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
     if (channel.type === Constants.PRIVATE_CHANNEL) {
         if (profilesInCurrentChannel!.length > 1 && currentUserIsChannelAdmin && isChannelLastAdmin === 1) {
             content = (
-                <div>
+                <div className='test-channel-1-download'>
                     <div className='alert alert-with-icon-leave alert-grey'>
                         <i className='icon-information-outline'/>
                         <FormattedMessage
@@ -530,21 +524,22 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isGroupsEnabled, 
                 <button
                     type='button'
                     className='btn btn-tertiary'
-
                     onClick={onExited}
                     id='cancelModalButton'
                 >
                     {localizeMessage('multiselect.cancel', 'Cancel')}
                 </button>
-                <button
-                    className={buttonClass}
-                    autoFocus={true}
-                    type='button'
-                    onClick={handleLeaveSubmit}
-                    id='confirmModalButton'
-                >
-                    {button}
-                </button>
+                <div className='leave-button'>
+                    <button
+                        className={buttonClass}
+                        autoFocus={true}
+                        type='button'
+                        data-testid='confirmModalButton'
+                        onClick={handleLeaveSubmit}
+                        id='confirmModalButton'
+                    >
+                        {button}
+                    </button></div>
             </Modal.Footer>}
         </Modal>
     );

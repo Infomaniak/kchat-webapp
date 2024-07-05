@@ -73,6 +73,7 @@ function mapStateToProps(state: GlobalState, initialProps: OwnProps) {
             membersInTeam = getMembersInCurrentTeam(state);
         }
         return {
+            currentUser,
             groups,
             profilesFromRecentDMs,
             profilesInCurrentChannel,

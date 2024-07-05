@@ -27,7 +27,6 @@ export type Value = {
     scheme_id?: string;
     value: string;
     disabled?: boolean;
-    name?: string;
 };
 
 export type Props<T extends Value> = {
