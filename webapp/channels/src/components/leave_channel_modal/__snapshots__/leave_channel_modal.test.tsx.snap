@@ -1,46 +1,61 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/LeaveChannelModal should match snapshot, init 1`] = `
-<ConfirmModal
-  confirmButtonClass="btn btn-danger"
-  confirmButtonText={
-    <Memo(MemoizedFormattedMessage)
-      defaultMessage="Leave"
-      id="leave_private_channel_modal.leave"
-    />
+<ContextProvider
+  value={
+    Object {
+      "store": Object {
+        "@@observable": [Function],
+        "dispatch": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      },
+      "subscription": Subscription {
+        "handleChangeWrapper": [Function],
+        "listeners": Object {
+          "notify": [Function],
+        },
+        "onStateChange": [Function],
+        "parentSub": undefined,
+        "store": Object {
+          "@@observable": [Function],
+          "dispatch": [Function],
+          "getState": [Function],
+          "replaceReducer": [Function],
+          "subscribe": [Function],
+        },
+        "unsubscribe": null,
+      },
+    }
   }
-  message={
-    <div>
-      <Memo(MemoizedFormattedMessage)
-        defaultMessage="Are you sure you wish to leave the channel {channel}? You can re-join this channel in the future if you change your mind."
-        id="leave_public_channel_modal.message"
-        values={
-          Object {
-            "channel": <b>
-              Town Square
-            </b>,
-          }
-        }
-      />
-    </div>
-  }
-  modalClass=""
-  onCancel={[Function]}
-  onConfirm={[Function]}
-  onExited={[MockFunction]}
-  show={true}
-  title={
-    <Memo(MemoizedFormattedMessage)
-      defaultMessage="Leave Channel {channel}"
-      id="leave_public_channel_modal.title"
-      values={
-        Object {
-          "channel": <b>
-            Town Square
-          </b>,
-        }
+>
+  <LeaveChannelModal
+    actions={
+      Object {
+        "leaveChannel": [MockFunction],
       }
-    />
-  }
-/>
+    }
+    channel={
+      Object {
+        "create_at": 0,
+        "creator_id": "",
+        "delete_at": 0,
+        "display_name": "Town Square",
+        "group_constrained": false,
+        "header": "",
+        "id": "town-square-id",
+        "last_post_at": 0,
+        "last_root_post_at": 0,
+        "name": "town-square",
+        "purpose": "",
+        "scheme_id": "",
+        "team_id": "team-1",
+        "type": "O",
+        "update_at": 0,
+      }
+    }
+    onExited={[MockFunction]}
+  />
+</ContextProvider>
 `;
