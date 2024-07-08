@@ -7,15 +7,13 @@ import React, {useEffect, useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
-import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import type {Channel} from '@mattermost/types/channels';
+import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {Group, GroupSearchParams} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
-import {getChannelMember} from 'mattermost-redux/selectors/entities/channels';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {displayUsername, isGuest} from 'mattermost-redux/utils/user_utils';
 
@@ -28,8 +26,6 @@ import GuestTag from 'components/widgets/tag/guest_tag';
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
 
-import type {GlobalState} from 'types/store';
-
 import GroupOption from '../channel_invite_modal/group_option';
 
 type Props = {
@@ -37,18 +33,17 @@ type Props = {
     profilesInCurrentChannel?: UserProfile[];
     intl: IntlShape;
     channel: Channel ;
-    currentUser?: UserProfile;
+    currentUser?: ChannelMembership | undefined;
     onAddCallback?: (userProfiles?: UserProfileValue[]) => void;
     onExited: () => void;
     actions: {
         leaveChannel: (channelId: string) => Promise<ActionResult>;
         getChannelStats?: (channelId: string) => void;
-        getChannelMember?: (channelId: string, userId: string[]) => void;
-        updateChannelMemberSchemeRoles?: (channelId: string, userId: string | string[], isSchemeUser: boolean, isSchemeAdmin: boolean) => Promise<ActionResult>;
+        getChannelMember?: (channelId: string, userId: string) => Promise<ActionResult<ChannelMembership, any>>;
+        updateChannelMemberSchemeRoles?: (channelId: string, userId: string, isSchemeUser: boolean, isSchemeAdmin: boolean) => Promise<ActionResult<{ channelId: string; userId: string; isSchemeUser: boolean; isSchemeAdmin: boolean }, any>>;
         loadStatusesForProfilesList?: (users: UserProfile[]) => void;
         addUsersToChannel?: (channelId: string, userIds: string[]) => Promise<ActionResult>;
         searchProfiles?: (term: string, options: any) => Promise<ActionResult>;
-        getProfilesNotInChannel?: (teamId: string, channelId: string, groupConstrained: boolean, page: number, perPage?: number) => Promise<ActionResult>;
         searchAssociatedGroupsForReference?: (prefix: string, teamId: string, channelId: string | undefined, opts: GroupSearchParams) => Promise<ActionResult>;
         getTeamStats?: (teamId: string) => void;
         closeModal?: (modalId: string) => void;
@@ -56,9 +51,9 @@ type Props = {
         getTeamMembersByIds?: (teamId: string, userIds: string[]) => Promise<ActionResult>;
         loadProfilesAndReloadChannelMembers?: (page: number, perParge: number, channelId: string, sort: string) => void;
     };
-    currentUserIsChannelAdmin?: boolean;
     skipCommit?: boolean;
     isGroupsEnabled?: boolean;
+    canManageMembers?: boolean;
 }
 
 const USERS_PER_PAGE = 50;
@@ -73,7 +68,7 @@ export enum ProfilesInChannelSortBy {
 const UsernameSpan = styled.span`
 fontSize: 12px;
 `;
-const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited, currentUserIsChannelAdmin}) => {
+const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, canManageMembers, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited}) => {
     const selectedItemRef = React.createRef<HTMLDivElement>();
     const [selectedUsers, setSelectedUsers] = useState<UserProfileValue[]>([]);
     const [groupAndUserOptions, setGroupAndUserOptions] = useState < Array<UserProfileValue | GroupValue > >([]);
@@ -87,16 +82,6 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, isGr
         return (option as UserProfile).username !== undefined;
     };
 
-    const isLastUserAdmin = (state: GlobalState) => {
-        return profilesInCurrentChannel!.filter((user) => {
-            const userId = user.id;
-            const channelMember = getChannelMember(state, channel.id, userId);
-            return channelMember?.scheme_admin;
-        }).length;
-    };
-
-    const isChannelLastAdmin = useSelector((state: GlobalState) => isLastUserAdmin(state));
-
     const addValue = (value: UserProfileValue | GroupValue): void => {
         if (isUser(value)) {
             const profile = value;
@@ -105,14 +90,8 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, isGr
     };
 
     useEffect(() => {
-        actions.loadProfilesAndReloadChannelMembers!(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
-
-        actions.getProfilesNotInChannel!(channel.team_id, channel.id, channel.group_constrained, 0).then(() => {
-            setLoadingUsers(false);
-        });
         actions.getProfilesInChannel!(channel.id, 0, USERS_PER_PAGE, '', {active: true});
         actions.getTeamStats!(channel.team_id);
-        actions.loadStatusesForProfilesList!(profilesNotInCurrentChannel!);
         actions.loadStatusesForProfilesList!(profilesInCurrentChannel!);
     }, []);
 
@@ -134,10 +113,11 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, isGr
             }
             setGroupAndUserOptions(values);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [term]);
 
     const getOptions = () => {
-        const filteredProfiles = profilesInCurrentChannel!.filter((profile) => profile.id.toString() !== currentUser.user_id.toString());
+        const filteredProfiles = profilesInCurrentChannel!.filter((profile) => profile.id.toString() !== currentUser!.user_id.toString());
         return Array.from(new Set(filteredProfiles));
     };
 
@@ -155,12 +135,6 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, isGr
     const handlePageChange = (page: number, prevPage: number): void => {
         if (page > prevPage) {
             setLoadingUsers(true);
-            actions.getProfilesNotInChannel!(
-                channel.team_id,
-                channel.id,
-                channel.group_constrained,
-                page + 1, USERS_PER_PAGE).then(() => setLoadingUsers(false));
-
             actions.getProfilesInChannel!(channel.id, page + 1, USERS_PER_PAGE, '', {active: true});
         }
     };
@@ -350,7 +324,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, isGr
         }
 
         if (channel.type === Constants.PRIVATE_CHANNEL) {
-            if (profilesInCurrentChannel!.length > 1 && currentUserIsChannelAdmin && isChannelLastAdmin === 1) {
+            if (profilesInCurrentChannel!.length > 1 && canManageMembers) {
                 message = (
                     <FormattedMessage
                         id='leave_private_channel_modal.which_user'
@@ -390,7 +364,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, isGr
     let content;
 
     if (channel.type === Constants.PRIVATE_CHANNEL) {
-        if (profilesInCurrentChannel!.length > 1 && currentUserIsChannelAdmin && isChannelLastAdmin === 1) {
+        if (canManageMembers && profilesInCurrentChannel!.length > 1) {
             content = (
                 <div className='test-channel-1-download'>
                     <div className='alert alert-with-icon-leave alert-grey'>
@@ -432,29 +406,14 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, isGr
                     />
                 </div>
             );
-        } else if (isChannelLastAdmin === 1 && currentUserIsChannelAdmin && profilesInCurrentChannel!.length === 1) {
+        } else if (canManageMembers && profilesInCurrentChannel!.length === 1) {
             content = (
                 <div>
                     <div className='alert alert-with-icon-leave alert-grey'>
                         <i className='icon-information-outline'/>
                         <FormattedMessage
-                            id='leave_private_channel_modal.one_user'
+                            id='leave_private_channel_modal.one_admin'
                             defaultMessage='You are the last user of this private channel. The channel will be archived and can only be unarchived by an administrator.'
-                        />
-                    </div>
-                    <div className='alert-message'>
-                        {message}
-                    </div>
-                </div>
-            );
-        } else if (profilesInCurrentChannel!.length > 1 && !isChannelLastAdmin) {
-            content = (
-                <div>
-                    <div className='alert alert-with-icon-leave alert-grey'>
-                        <i className='icon-information-outline'/>
-                        <FormattedMessage
-                            id='leave_private_channel_modal.information'
-                            defaultMessage='Only a channel administrator can invite you to join this channel again.'
                         />
                     </div>
                     <div className='alert-message'>
@@ -520,7 +479,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, isGr
                     {content}
                 </div>
             </Modal.Body>
-            {(!currentUserIsChannelAdmin || (currentUserIsChannelAdmin && isChannelLastAdmin > 1)) && <Modal.Footer>
+            {((canManageMembers && profilesInCurrentChannel!.length === 1) || !canManageMembers) && <Modal.Footer>
                 <button
                     type='button'
                     className='btn btn-tertiary'

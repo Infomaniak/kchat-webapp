@@ -1,61 +1,113 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/LeaveChannelModal should match snapshot, init 1`] = `
-<ContextProvider
-  value={
-    Object {
-      "store": Object {
-        "@@observable": [Function],
-        "dispatch": [Function],
-        "getState": [Function],
-        "replaceReducer": [Function],
-        "subscribe": [Function],
-      },
-      "subscription": Subscription {
-        "handleChangeWrapper": [Function],
-        "listeners": Object {
-          "notify": [Function],
-        },
-        "onStateChange": [Function],
-        "parentSub": undefined,
-        "store": Object {
-          "@@observable": [Function],
-          "dispatch": [Function],
-          "getState": [Function],
-          "replaceReducer": [Function],
-          "subscribe": [Function],
-        },
-        "unsubscribe": null,
-      },
+<Modal
+  animation={true}
+  aria-labelledby="channelInviteModalLabel"
+  autoFocus={true}
+  backdrop={true}
+  bsClass="modal"
+  dialogClassName="a11y__modal channel-invite"
+  dialogComponentClass={[Function]}
+  enforceFocus={true}
+  id="addUsersToChannelModal"
+  keyboard={true}
+  manager={
+    ModalManager {
+      "add": [Function],
+      "containers": Array [],
+      "data": Array [],
+      "handleContainerOverflow": true,
+      "hideSiblingNodes": true,
+      "isTopModal": [Function],
+      "modals": Array [],
+      "remove": [Function],
     }
   }
+  onExited={[MockFunction]}
+  onHide={[Function]}
+  renderBackdrop={[Function]}
+  restoreFocus={true}
+  role="dialog"
+  show={true}
 >
-  <LeaveChannelModal
-    actions={
-      Object {
-        "leaveChannel": [MockFunction],
-      }
-    }
-    channel={
-      Object {
-        "create_at": 0,
-        "creator_id": "",
-        "delete_at": 0,
-        "display_name": "Town Square",
-        "group_constrained": false,
-        "header": "",
-        "id": "town-square-id",
-        "last_post_at": 0,
-        "last_root_post_at": 0,
-        "name": "town-square",
-        "purpose": "",
-        "scheme_id": "",
-        "team_id": "team-1",
-        "type": "O",
-        "update_at": 0,
-      }
-    }
-    onExited={[MockFunction]}
-  />
-</ContextProvider>
+  <ModalHeader
+    bsClass="modal-header"
+    closeButton={true}
+    closeLabel="Close"
+    id="channelInviteModalLabel"
+  >
+    <ModalTitle
+      bsClass="modal-title"
+      componentClass="h1"
+      id="deletePostModalLabel"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Leave Channel {channel}"
+        id="leave_public_channel_modal.title"
+        values={
+          Object {
+            "channel": <b>
+              Town Square
+            </b>,
+          }
+        }
+      />
+    </ModalTitle>
+  </ModalHeader>
+  <ModalBody
+    bsClass="modal-body"
+    className="overflow--visible"
+    componentClass="div"
+    role="application"
+  >
+    <div
+      className="channel-invite__content"
+    >
+      <div>
+        <MemoizedFormattedMessage
+          defaultMessage="Are you sure you wish to leave the channel {channel}? You can re-join this channel in the future if you change your mind."
+          id="leave_public_channel_modal.message"
+          values={
+            Object {
+              "channel": <b>
+                Town Square
+              </b>,
+            }
+          }
+        />
+      </div>
+    </div>
+  </ModalBody>
+  <ModalFooter
+    bsClass="modal-footer"
+    componentClass="div"
+  >
+    <button
+      className="btn btn-tertiary"
+      id="cancelModalButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      Cancel
+    </button>
+    <div
+      className="leave-button"
+    >
+      <button
+        autoFocus={true}
+        className="btn btn-danger"
+        data-testid="confirmModalButton"
+        id="confirmModalButton"
+        onClick={[Function]}
+        type="button"
+      >
+        <MemoizedFormattedMessage
+          defaultMessage="Leave"
+          id="leave_private_channel_modal.leave"
+        />
+      </button>
+    </div>
+  </ModalFooter>
+</Modal>
 `;
