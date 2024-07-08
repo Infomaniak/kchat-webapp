@@ -27,6 +27,7 @@ const WebsocketEvents = {
     ROLE_UPDATED: 'role_updated',
     TYPING: 'client-user_typing',
     STOP_TYPING: 'stop_typing',
+    RECORDING: 'client-user_recording',
     PREFERENCE_CHANGED: 'preference_changed',
     PREFERENCES_CHANGED: 'preferences_changed',
     PREFERENCES_DELETED: 'preferences_deleted',

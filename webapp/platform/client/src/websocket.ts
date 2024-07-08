@@ -703,6 +703,16 @@ export default class WebSocketClient {
         this.sendPresenceMessage('client-user_typing', data, callback);
     }
 
+    userRecording(channelId: string, userId: string, parentId: string, callback?: () => void) {
+        const data = {
+            channel_id: channelId,
+            parent_id: parentId,
+            user_id: userId,
+        };
+        this.sendPresenceMessage('client-user_recording', data, callback);
+    }
+
+
     updateActiveChannel(channelId: string, callback?: (msg: any) => void) {
         const data = {
             channel_id: channelId,
