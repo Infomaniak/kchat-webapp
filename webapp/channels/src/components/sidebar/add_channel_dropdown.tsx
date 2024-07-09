@@ -4,6 +4,9 @@
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
+
+import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -58,6 +61,7 @@ const AddChannelDropdown = ({
     server,
 }: Props) => {
     const intl = useIntl();
+    const isGuestUser = useSelector(isCurrentUserGuestUser);
 
     const goToIntegration = () => {
         getHistory().push(`/${server.name}/integrations`);
@@ -159,7 +163,7 @@ const AddChannelDropdown = ({
                     {createUserGroup}
                 </Menu.Group>
                 {createCategory}
-                {integration}
+                {!isGuestUser && integration}
                 {/* {invitePeople} */}
             </>
         );
