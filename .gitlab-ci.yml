@@ -55,7 +55,7 @@ variables:
     when: on_success
 
 # Staging deployments on Merge Requests
-.rule-staging: &rule-staging
+.rule-merge-request: &rule-merge-request
   - if: &if-merge-request "$CI_MERGE_REQUEST_ID"
     when: on_success
 
@@ -115,7 +115,7 @@ variables:
     - shared
   rules:
     - *rule-not-scheduled # Job is not triggered by schedule
-    - *rule-staging
+    - *rule-merge-request
     - *rule-prodsec
     - when: never
   environment:
@@ -164,7 +164,7 @@ build:front:
     - *rule-preprod
     - *rule-canary
     - *rule-prod
-    - *rule-staging
+    - *rule-merge-request
     - when: never
   environment:
     name: "$ENVIRONMENT_NAME"
@@ -248,6 +248,7 @@ test:unit:
     - .tests-node
   rules:
     - *rule-commit
+    - *rule-merge-request
     - when: never
   script:
     - yarn test:webapp
@@ -323,7 +324,7 @@ release:front:
     - *rule-preprod
     - *rule-canary
     - *rule-prod
-    - *rule-staging
+    - *rule-merge-request
     - when: never
   environment:
     name: "$ENVIRONMENT_NAME"
