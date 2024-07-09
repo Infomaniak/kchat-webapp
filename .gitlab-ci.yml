@@ -1,16 +1,17 @@
 stages:
   - build
-  - test
+  - test_unit
+  - test_e2e
   - release
   - deploy
 
-include:
+# include:
   # - template: Security/SAST.gitlab-ci.yml
   # - template: Security/Container-Scanning.gitlab-ci.yml
   # - template: Code-Quality.gitlab-ci.yml
-  - project: "docker-public/gitlab-triage"
-    ref: master
-    file: "/gitlab-triage.yaml"
+  # - project: "docker-public/gitlab-triage"
+  #   ref: master
+  #   file: "/gitlab-triage.yaml"
 
 variables:
   KANIKO_VERSION: "debug" # https://github.com/GoogleContainerTools/kaniko/releases
@@ -55,7 +56,7 @@ variables:
     when: on_success
 
 # Staging deployments on Merge Requests
-.rule-staging: &rule-staging
+.rule-merge-request: &rule-merge-request
   - if: &if-merge-request "$CI_MERGE_REQUEST_ID"
     when: on_success
 
@@ -115,7 +116,7 @@ variables:
     - shared
   rules:
     - *rule-not-scheduled # Job is not triggered by schedule
-    - *rule-staging
+    - *rule-merge-request
     - *rule-prodsec
     - when: never
   environment:
@@ -164,7 +165,7 @@ build:front:
     - *rule-preprod
     - *rule-canary
     - *rule-prod
-    - *rule-staging
+    - *rule-merge-request
     - when: never
   environment:
     name: "$ENVIRONMENT_NAME"
@@ -234,7 +235,7 @@ build:image:
 
 # Execute tsc
 # test:tsc:
-#   stage: test
+#   stage: test_unit
 #   extends:
 #     - .tests
 #   allow_failure: true
@@ -243,11 +244,12 @@ build:image:
 
 # Execute unit tests
 test:unit:
-  stage: test
+  stage: test_unit
   extends:
     - .tests-node
   rules:
     - *rule-commit
+    - *rule-merge-request
     - when: never
   script:
     - yarn test:webapp
@@ -270,7 +272,7 @@ test:unit:
 # Triggers e2e tests
 # Parse staging base URL and store in dotenv artifact
 test:e2e:
-  stage: test
+  stage: test_e2e
   extends:
     - .tests
   image: ruby:${RUBY_VERSION}
@@ -288,14 +290,10 @@ test:e2e:
 
 # Execute playwright tests
 test:e2e:pw:
-  stage: test
+  stage: test_e2e
   extends:
     - .tests-node
   image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
-  rules:
-    - if: *if-merge-request
-      when: manual
-    - when: never
   allow_failure: true
   needs: ["test:e2e"]
   variables:
@@ -327,7 +325,7 @@ release:front:
     - *rule-preprod
     - *rule-canary
     - *rule-prod
-    - *rule-staging
+    - *rule-merge-request
     - when: never
   environment:
     name: "$ENVIRONMENT_NAME"
@@ -422,28 +420,28 @@ release:sentry:
     - sentry-cli releases finalize ${CI_COMMIT_TAG}
 
 # HOUSE KEEPING
-guild_review:
-  image: ruby:${RUBY_VERSION}
-  rules:
-    - if: "$MR_REVIEW_SCHEDULE"
-      when: on_success
-    - when: never
-  script:
-    - ruby .gitlab/mr_review.rb
+# guild_review:
+#   image: ruby:${RUBY_VERSION}
+#   rules:
+#     - if: "$MR_REVIEW_SCHEDULE"
+#       when: on_success
+#     - when: never
+#   script:
+#     - ruby .gitlab/mr_review.rb
 
-gitlab_triage:
-  rules:
-    - if: "$GITLAB_TRIAGE"
-      when: on_success
-    - when: never
-  variables:
-    TRIAGE_POLICY_FILE: .gitlab/triage-policies.yml
+# gitlab_triage:
+#   rules:
+#     - if: "$GITLAB_TRIAGE"
+#       when: on_success
+#     - when: never
+#   variables:
+#     TRIAGE_POLICY_FILE: .gitlab/triage-policies.yml
 
-technical_debt:
-  extends: gitlab_triage
-  rules:
-    - if: "$TRIAGE_TECHNICAL_DEBT"
-      when: on_success
-    - when: never
-  variables:
-    TRIAGE_POLICY_FILE: .gitlab/summaries-technical-debt.yml
+# technical_debt:
+#   extends: gitlab_triage
+#   rules:
+#     - if: "$TRIAGE_TECHNICAL_DEBT"
+#       when: on_success
+#     - when: never
+#   variables:
+#     TRIAGE_POLICY_FILE: .gitlab/summaries-technical-debt.yml
