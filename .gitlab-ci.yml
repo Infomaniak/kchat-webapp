@@ -429,13 +429,13 @@ guild_review:
   script:
     - ruby .gitlab/mr_review.rb
 
-gitlab_triage:
-  rules:
-    - if: "$GITLAB_TRIAGE"
-      when: on_success
-    - when: never
-  variables:
-    TRIAGE_POLICY_FILE: .gitlab/triage-policies.yml
+# gitlab_triage:
+#   rules:
+#     - if: "$GITLAB_TRIAGE"
+#       when: on_success
+#     - when: never
+#   variables:
+#     TRIAGE_POLICY_FILE: .gitlab/triage-policies.yml
 
 technical_debt:
   extends: gitlab_triage
