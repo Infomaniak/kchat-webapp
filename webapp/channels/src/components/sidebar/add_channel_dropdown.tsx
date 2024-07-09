@@ -21,7 +21,6 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 
-import type {GlobalState} from 'types/store';
 import type {Server} from 'types/store/servers';
 
 type Props = {
@@ -62,7 +61,7 @@ const AddChannelDropdown = ({
     server,
 }: Props) => {
     const intl = useIntl();
-    const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
+    const isGuestUser = useSelector(isCurrentUserGuestUser);
 
     const goToIntegration = () => {
         getHistory().push(`/${server.name}/integrations`);
