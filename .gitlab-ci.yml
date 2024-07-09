@@ -116,7 +116,6 @@ variables:
   rules:
     - *rule-not-scheduled # Job is not triggered by schedule
     - *rule-merge-request
-    - *rule-prodsec
     - when: never
   environment:
     name: "$ENVIRONMENT_NAME"
@@ -247,8 +246,8 @@ test:unit:
   extends:
     - .tests-node
   rules:
-    - *rule-commit
     - *rule-merge-request
+    - *rule-prodsec
     - when: never
   script:
     - yarn test:webapp
