@@ -1,7 +1,7 @@
 stages:
   - build
-  - test-unit
-  - test-e2e
+  - test_unit
+  - test_e2e
   - release
   - deploy
 
@@ -235,7 +235,7 @@ build:image:
 
 # Execute tsc
 # test:tsc:
-#   stage: test-unit
+#   stage: test_unit
 #   extends:
 #     - .tests
 #   allow_failure: true
@@ -244,7 +244,7 @@ build:image:
 
 # Execute unit tests
 test:unit:
-  stage: test-unit
+  stage: test_unit
   extends:
     - .tests-node
   rules:
@@ -272,7 +272,7 @@ test:unit:
 # Triggers e2e tests
 # Parse staging base URL and store in dotenv artifact
 test:e2e:
-  stage: test-e2e
+  stage: test_e2e
   extends:
     - .tests
   image: ruby:${RUBY_VERSION}
@@ -290,7 +290,7 @@ test:e2e:
 
 # Execute playwright tests
 test:e2e:pw:
-  stage: test-e2e
+  stage: test_e2e
   extends:
     - .tests-node
   image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
