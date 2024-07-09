@@ -36,9 +36,8 @@ export function bridgeRecreate(url: string) {
     return (_: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
         const urlObj = new URL(url);
-        const bridge = state.ksuite_bridge.bridge;
-        const ksuiteMode = state.ksuite_bridge.ksuiteMode;
-        const spaceId = state.ksuite_bridge.spaceId;
+        const {bridge, ksuiteMode, spaceId} = state.ksuite_bridge;
+
         if (ksuiteMode) {
             urlObj.searchParams.append('ksuite-mode', ksuiteMode);
         }
