@@ -48,22 +48,18 @@ export default function MsgTyping(props: Props) {
             userStoppedRecording]),
     });
 
-    const getTypingText = () => {
-        let users: string[] = [];
-        let numUsers = 0;
-        if (props.typingUsers) {
-            users = [...props.typingUsers];
-            numUsers = users.length;
-        }
-
+    const getInputText = (users: string[], type: 'typing' | 'recording') => {
+        const numUsers = users.length;
         if (numUsers === 0) {
             return '';
         }
+        const simpleMessage = type === 'typing' ? 'msg_typing.isTyping' : 'msg_recording.isRecording';
+        const multipleMessage = type === 'typing' ? 'msg_typing.areTyping' : 'msg_recording.areRecording';
         if (numUsers === 1) {
             return (
                 <FormattedMessage
-                    id='msg_typing.isTyping'
-                    defaultMessage='{user} is typing...'
+                    id={simpleMessage}
+                    defaultMessage={type === 'typing' ? '{user} is typing...' : '{user} is recording...'}
                     values={{
                         user: users[0],
                     }}
@@ -73,8 +69,8 @@ export default function MsgTyping(props: Props) {
         const last = users.pop();
         return (
             <FormattedMessage
-                id='msg_typing.areTyping'
-                defaultMessage='{users} and {last} are typing...'
+                id={multipleMessage}
+                defaultMessage={type === 'typing' ? '{users} and {last} are typing...' : '{users} and {last} are recording...'}
                 values={{
                     users: (users.join(', ')),
                     last,
@@ -83,45 +79,10 @@ export default function MsgTyping(props: Props) {
         );
     };
 
-    const getRecordingText = () => {
-        let users: string[] = [];
-        let numUsers = 0;
-        if (props.recordingUsers) {
-            users = [...props.recordingUsers];
-            numUsers = users.length;
-        }
-
-        if (numUsers === 0) {
-            return '';
-        }
-        if (numUsers === 1) {
-            return (
-                <FormattedMessage
-                    id='msg_recording.isRecording'
-                    defaultMessage='{user} is recording...'
-                    values={{
-                        user: users[0],
-                    }}
-                />
-            );
-        }
-        const last = users.pop();
-        return (
-            <FormattedMessage
-                id='msg_recording.areRecording'
-                defaultMessage='{users} and {last} are recording...'
-                values={{
-                    users: (users.join(', ')),
-                    last,
-                }}
-            />
-        );
-    };
+    const typingText = getInputText([...props.typingUsers], 'typing');
+    const recordingText = getInputText([...props.recordingUsers], 'recording');
 
     return (
-        <>
-            <span className='msg-typing'>{getTypingText()}</span>
-            <span className='msg-typing'>{getRecordingText()}</span>
-        </>
+        <span className='msg-typing'>{typingText || recordingText}</span>
     );
 }
