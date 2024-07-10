@@ -55,6 +55,7 @@ type Props = {
     isGroupsEnabled?: boolean;
     canManageMembers?: boolean;
     isInvite?: boolean;
+    currentMemberIsChannelAdmin?: boolean;
 }
 
 const USERS_PER_PAGE = 50;
@@ -69,7 +70,7 @@ export enum ProfilesInChannelSortBy {
 const UsernameSpan = styled.span`
 fontSize: 12px;
 `;
-const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isInvite, currentUser, canManageMembers, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited}) => {
+const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsChannelAdmin, isInvite, currentUser, canManageMembers, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited}) => {
     const selectedItemRef = React.createRef<HTMLDivElement>();
     const [selectedUsers, setSelectedUsers] = useState<UserProfileValue[]>([]);
     const [groupAndUserOptions, setGroupAndUserOptions] = useState < Array<UserProfileValue | GroupValue > >([]);
@@ -91,14 +92,18 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isInvite, current
         }
     };
     useEffect(() => {
-        setLoadingMembers(true);
-        Promise.all([
-            actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin),
-        ]).then(() => {
+        if (currentMemberIsChannelAdmin) {
+            setLoadingMembers(true);
+            Promise.all([
+                actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin),
+            ]).then(() => {
+                setLoadingMembers(false);
+            }).catch(() => {
+                setLoadingMembers(false);
+            });
+        } else {
             setLoadingMembers(false);
-        }).catch(() => {
-            setLoadingMembers(false);
-        });
+        }
     }, [channel.id, channel.type, actions]);
 
     useEffect(() => {

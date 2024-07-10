@@ -10,10 +10,10 @@ import type {TeamMembership} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
-import {getChannelStats, updateChannelMemberSchemeRoles, getChannelMember} from 'mattermost-redux/actions/channels';
+import {getChannelStats, updateChannelMemberSchemeRoles} from 'mattermost-redux/actions/channels';
 import {getTeamStats, getTeamMembersByIds} from 'mattermost-redux/actions/teams';
 import {getProfilesInChannel, searchProfiles} from 'mattermost-redux/actions/users';
-import {getChannelMemberChannel, getMyCurrentChannelMembership, getRecentProfilesFromDMs} from 'mattermost-redux/selectors/entities/channels';
+import {getChannelMemberChannel, getMyCurrentChannelMembership, getRecentProfilesFromDMs, getChannelMember} from 'mattermost-redux/selectors/entities/channels';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {makeGetAllAssociatedGroupsForReference} from 'mattermost-redux/selectors/entities/groups';
 import {isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
@@ -50,8 +50,9 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
         const currentTeam = getCurrentTeam(state);
         const currentMembers = getChannelMemberChannel(state, initialProps.channel.id);
         const currentUser = getMyCurrentChannelMembership(state);
+        const currentMember = getChannelMember(state, initialProps.channel.id, currentUser!.user_id);
         const getAllAssociatedGroupsForReference = makeGetAllAssociatedGroupsForReference();
-        const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
+        const currentMemberIsChannelAdmin = currentMember && currentMember.scheme_admin;
         const profilesFromRecentDMs = getRecentProfilesFromDMs(state);
         const enableCustomUserGroups = isCustomGroupsEnabled(state);
         const license = getLicense(state);
@@ -72,7 +73,8 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
         const membersArray = currentMembers ? Object.values(currentMembers).filter((user) => {
             return user?.user_id !== currentUser?.user_id;
         }) : [];
-        if (isPrivate) {
+
+        if (isPrivate && currentMemberIsChannelAdmin) {
             const channelTeamUsers = membersArray.filter((user) => {
                 const userRoles = user.roles.split(' ');
                 return userRoles.some((roleName: string) => {
@@ -96,7 +98,7 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
             profilesFromRecentDMs,
             profilesInCurrentChannel,
             membersInTeam,
-            currentUserIsChannelAdmin,
+            currentMemberIsChannelAdmin,
             isGroupsEnabled,
         };
     };
