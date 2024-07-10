@@ -1,3 +1,38 @@
+## 2.9.7-rc.1 (2024-07-10)
+
+### Added (2 changes)
+
+- [Add support for actions in the unreads bar from plugins (#24265)](kchat/webapp@9d622e946a45a72e060d44c41ed96c7c54529b98) by @antonbuksa
+- [feat(e2e): added playwright ci](kchat/webapp@23c4043f16ade5d62ee839438b51f0d2962a4376) by @tim.dewinter ([merge request](kchat/webapp!783))
+
+### Fixed (11 changes)
+
+- [avoiding guestUser to see integration tab](kchat/webapp@d1997809fc5e2fea10d0c8c73f63861b0f381471) by  ([merge request](kchat/webapp!819))
+- [fix(ci): trigger unit-test on merge request commits](kchat/webapp@efc8f2e9ec248bb52649b71058f0cb8afa25e572) by @tim.dewinter ([merge request](kchat/webapp!827))
+- [unsubscribe and unbind channels on ws error](kchat/webapp@6623f94fa0796a920980cb59f53faa76f02e3548) by @antonbuksa ([merge request](kchat/webapp!822))
+- [remove unused props](kchat/webapp@4c051eb032742cdfc8ccdd5003d30736fed89666) by  ([merge request](kchat/webapp!815))
+- [move intégration button to new tab](kchat/webapp@e3209319e2f97c9bb2c122b815dcd3c7b3286153) by  ([merge request](kchat/webapp!815))
+- [better implementation to prevents admin user to write in thread channel while not joining it](kchat/webapp@25245e858adbdf310a2da441eba361d77b73420a) by  ([merge request](kchat/webapp!811))
+- [fixed issue when we could write in a thread even if we didn't join a channel (if we are admin)](kchat/webapp@607cadd585e4381dc482d47548c2584a8e56f9f1) by  ([merge request](kchat/webapp!811))
+- [fix wpack error caused by old prop](kchat/webapp@8179af9cd24e279c8b1a51c5279f82c9ccd5e7d4) by @antonbuksa
+- [Fix: Scroll for long text in edit messages and in post](kchat/webapp@04b6213be438b451f7728e1e1d8289ebfa5eccce) by  ([merge request](kchat/webapp!791))
+- [add LofoutMessageKey to fix the Iframe error](kchat/webapp@dda9b6859b10b9c031bdb46a9fb8fa3906763c9f) by  ([merge request](kchat/webapp!812))
+- [fix: sent messages sometimes coming back as drafts](kchat/webapp@f7b7859d4c6d0257a75b06711ded8c9a2e28f99a) by @tim.dewinter ([merge request](kchat/webapp!783))
+
+### Changed (3 changes)
+
+- [improve ws logs](kchat/webapp@524bc9ce0c72c8818df46a7bd9527ed3c41c3a0c) by @antonbuksa ([merge request](kchat/webapp!822))
+- [test disable wakeup checker](kchat/webapp@9fe2d814d1b58ef9ea86b6d74c6a10e8737919f6) by @antonbuksa
+- [use pusher integrated reconnect to try fix sleeping reconnects](kchat/webapp@428b44792ac6540b6052b560842490f2716a53fe) by @antonbuksa ([merge request](kchat/webapp!802))
+
+### Removed (1 change)
+
+- [do not send new mattermost presence events](kchat/webapp@eb3f950b2ff69b6256106dfc95252c3e3f793508) by @antonbuksa ([merge request](kchat/webapp!802))
+
+### Chore (1 change)
+
+- [split test steps for coverage reports to work](kchat/webapp@a1374068e5164f93e6353dc9a2ab25c0f22cf8d6) by @antonbuksa ([merge request](kchat/webapp!827))
+
 ## 2.9.6-rc.6 (2024-07-02)
 
 No changes.
