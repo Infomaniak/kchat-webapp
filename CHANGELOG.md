@@ -1,3 +1,10 @@
+## 2.9.7-rc.2 (2024-07-10)
+
+### Fixed (2 changes)
+
+- [rebind last used channel presence on ws reconnect](kchat/webapp@89dd9457c11d730d52e78e499177e7c61e5e90bb) by @antonbuksa ([merge request](kchat/webapp!829))
+- [fix(ci): e2e report notify channel should be NOTIFY_CHANNEL instead of GUILD](kchat/webapp@4ae1657e3dfb70740fb43f61a4cf2bddbf8d9504) by @tim.dewinter ([merge request](kchat/webapp!828))
+
 ## 2.9.7-rc.1 (2024-07-10)
 
 ### Added (2 changes)
