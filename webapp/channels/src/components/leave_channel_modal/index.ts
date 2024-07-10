@@ -44,8 +44,7 @@ type OwnProps = {
 
 function mapStateToProps(state: GlobalState, initialProps: OwnProps) {
     const currentTeam = getCurrentTeam(state);
-    const currentMembers = getMembersInCurrentChannel(state);
-    const currentMemberss = getChannelMemberChannel(state, initialProps.channel.id);
+    const currentMembers = getChannelMemberChannel(state, initialProps.channel.id);
     const currentUser = getMyCurrentChannelMembership(state);
     const getAllAssociatedGroupsForReference = makeGetAllAssociatedGroupsForReference();
     const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
@@ -73,7 +72,7 @@ function mapStateToProps(state: GlobalState, initialProps: OwnProps) {
         const isPrivate = initialProps.channel.type === Constants.PRIVATE_CHANNEL;
         let isInvite = false;
         const roles = getRoles(state);
-        const membersArray = currentMemberss ? Object.values(currentMemberss).filter((user) => user.user_id !== currentUser!.user_id) : [];
+        const membersArray = currentMembers ? Object.values(currentMembers).filter((user) => user.user_id !== currentUser!.user_id) : [];
 
         if (isPrivate) {
             const channelTeamUsers = membersArray.filter((user) => {
@@ -100,7 +99,6 @@ function mapStateToProps(state: GlobalState, initialProps: OwnProps) {
             profilesInCurrentChannel,
             membersInTeam,
             currentUserIsChannelAdmin,
-            currentMembers,
             isGroupsEnabled,
         };
     };
