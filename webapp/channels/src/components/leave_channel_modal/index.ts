@@ -10,15 +10,14 @@ import type {TeamMembership} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
-import {getChannelPendingGuests, loadMyChannelMemberAndRole, getChannelStats, updateChannelMemberSchemeRoles, getChannelMember} from 'mattermost-redux/actions/channels';
+import {getChannelStats, updateChannelMemberSchemeRoles, getChannelMember} from 'mattermost-redux/actions/channels';
 import {getTeamStats, getTeamMembersByIds} from 'mattermost-redux/actions/teams';
 import {getProfilesInChannel, searchProfiles} from 'mattermost-redux/actions/users';
-import {Permissions} from 'mattermost-redux/constants';
-import {getChannelMemberChannel, getMembersInCurrentChannel, getMyCurrentChannelMembership, getRecentProfilesFromDMs} from 'mattermost-redux/selectors/entities/channels';
+import {getChannelMemberChannel, getMyCurrentChannelMembership, getRecentProfilesFromDMs} from 'mattermost-redux/selectors/entities/channels';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {makeGetAllAssociatedGroupsForReference} from 'mattermost-redux/selectors/entities/groups';
 import {isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getChannelPermission, getRoles} from 'mattermost-redux/selectors/entities/roles';
+import {getRoles} from 'mattermost-redux/selectors/entities/roles';
 import {getMembersInTeam, getMembersInCurrentTeam, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getProfilesInCurrentChannel, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 
@@ -27,7 +26,6 @@ import {loadStatusesForProfilesList} from 'actions/status_actions';
 import {loadProfilesAndReloadChannelMembers} from 'actions/user_actions';
 import {leaveChannel} from 'actions/views/channel';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
-import {setChannelMembersRhsSearchTerm} from 'actions/views/search';
 
 import Constants from 'utils/constants';
 
@@ -42,26 +40,25 @@ type OwnProps = {
 
 }
 
-function mapStateToProps(state: GlobalState, initialProps: OwnProps) {
-    const currentTeam = getCurrentTeam(state);
-    const currentMembers = getChannelMemberChannel(state, initialProps.channel.id);
-    const currentUser = getMyCurrentChannelMembership(state);
-    const getAllAssociatedGroupsForReference = makeGetAllAssociatedGroupsForReference();
-    const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
-    const profilesFromRecentDMs = getRecentProfilesFromDMs(state);
-    const enableCustomUserGroups = isCustomGroupsEnabled(state);
-    const license = getLicense(state);
-    const groups = getAllAssociatedGroupsForReference(state, true);
-    const isGroupsEnabled = enableCustomUserGroups || (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true');
-
+function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
     let doGetProfilesInChannel: (state: GlobalState, channelId: string, filters?: any) => UserProfile[];
     if (initialProps.channel.id && initialProps.channel.team_id) {
         doGetProfilesInChannel = makeGetProfilesInChannel();
     }
 
-    let profilesInCurrentChannel: UserProfile[];
-    let membersInTeam: RelationOneToOne<UserProfile, TeamMembership>;
     return (state: GlobalState, props: OwnProps) => {
+        const currentTeam = getCurrentTeam(state);
+        const currentMembers = getChannelMemberChannel(state, initialProps.channel.id);
+        const currentUser = getMyCurrentChannelMembership(state);
+        const getAllAssociatedGroupsForReference = makeGetAllAssociatedGroupsForReference();
+        const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
+        const profilesFromRecentDMs = getRecentProfilesFromDMs(state);
+        const enableCustomUserGroups = isCustomGroupsEnabled(state);
+        const license = getLicense(state);
+        const groups = getAllAssociatedGroupsForReference(state, true);
+        const isGroupsEnabled = enableCustomUserGroups || (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true');
+        let profilesInCurrentChannel: UserProfile[];
+        let membersInTeam: RelationOneToOne<UserProfile, TeamMembership>;
         if (props.channel.id && props.channel.team_id) {
             profilesInCurrentChannel = doGetProfilesInChannel(state, props.channel.id);
             membersInTeam = getMembersInTeam(state, props.channel.team_id);
@@ -72,8 +69,9 @@ function mapStateToProps(state: GlobalState, initialProps: OwnProps) {
         const isPrivate = initialProps.channel.type === Constants.PRIVATE_CHANNEL;
         let isInvite = false;
         const roles = getRoles(state);
-        const membersArray = currentMembers ? Object.values(currentMembers).filter((user) => user.user_id !== currentUser!.user_id) : [];
-
+        const membersArray = currentMembers ? Object.values(currentMembers).filter((user) => {
+            return user?.user_id !== currentUser?.user_id;
+        }) : [];
         if (isPrivate) {
             const channelTeamUsers = membersArray.filter((user) => {
                 const userRoles = user.roles.split(' ');
@@ -107,6 +105,7 @@ function mapStateToProps(state: GlobalState, initialProps: OwnProps) {
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
+            loadProfilesAndReloadChannelMembers,
             getChannelMember,
             getChannelStats,
             updateChannelMemberSchemeRoles,
@@ -122,4 +121,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LeaveChannelModal);
+export default connect(makeMapStateToProps, mapDispatchToProps)(LeaveChannelModal);

@@ -49,6 +49,7 @@ type Props = {
         closeModal?: (modalId: string) => void;
         getProfilesInChannel?: (channelId: string, page: number, perPage: number, sort: string, options: {active?: boolean}) => Promise<ActionResult>;
         getTeamMembersByIds?: (teamId: string, userIds: string[]) => Promise<ActionResult>;
+        loadProfilesAndReloadChannelMembers: (page: number, perParge: number, channelId: string, sort: string) => void;
     };
     skipCommit?: boolean;
     isGroupsEnabled?: boolean;
@@ -58,8 +59,8 @@ type Props = {
 
 const USERS_PER_PAGE = 50;
 
-type UserProfileValue = Value & UserProfile;
-type GroupValue = Value & Group;
+type UserProfileValue = UserProfile & Value;
+type GroupValue = Group & Value ;
 
 export enum ProfilesInChannelSortBy {
     None = '',
@@ -76,6 +77,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isInvite, current
     const [show, setShow] = useState(true);
     const [saving, setSavingUsers] = useState(false);
     const [loadingUsers, setLoadingUsers] = useState(true);
+    const [loadingMembers, setLoadingMembers] = useState(true);
     const [inviteError, setInviteError] = useState();
 
     const isUser = (option: UserProfileValue | GroupValue | UserProfile): option is UserProfileValue => {
@@ -88,6 +90,16 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isInvite, current
             setSelectedUsers((prev) => [...prev, profile]);
         }
     };
+    useEffect(() => {
+        setLoadingMembers(true);
+        Promise.all([
+            actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin),
+        ]).then(() => {
+            setLoadingMembers(false);
+        }).catch(() => {
+            setLoadingMembers(false);
+        });
+    }, [channel.id, channel.type, actions]);
 
     useEffect(() => {
         actions.getProfilesInChannel!(channel.id, 0, USERS_PER_PAGE, '', {active: true});
@@ -117,8 +129,11 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isInvite, current
     }, [term]);
 
     const getOptions = () => {
-        const filteredProfiles = profilesInCurrentChannel!.filter((profile) => profile.id.toString() !== currentUser!.user_id.toString());
-        return Array.from(new Set(filteredProfiles));
+        const filteredProfiles: Array<UserProfileValue | GroupValue> = profilesInCurrentChannel!.filter(
+            (profile) => profile.id.toString() !== currentUser!.user_id.toString(),
+        ) as Array<UserProfileValue | GroupValue>;
+
+        return filteredProfiles;
     };
 
     const onHide = (): void => {
@@ -150,11 +165,11 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isInvite, current
         }
     };
 
-    const handleMakeChannelAdmin = (userIds: string[], channelId: string) => {
+    const handleMakeChannelAdmin = (userIds: string, channelId: string) => {
         updateChannelMemberSchemeRole(true, userIds, channelId);
     };
 
-    const updateChannelMemberSchemeRole = async (schemeAdmin: boolean, userIds: string[], channelId: string) => {
+    const updateChannelMemberSchemeRole = async (schemeAdmin: boolean, userIds: string, channelId: string) => {
         const {error} = await actions.updateChannelMemberSchemeRoles!(channel.id, userIds, true, schemeAdmin);
         if (error) {
             return;
@@ -179,7 +194,9 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isInvite, current
             return;
         }
         setSavingUsers(true);
-        handleMakeChannelAdmin(userIds, channel.id);
+        userIds.forEach((userId) => {
+            handleMakeChannelAdmin(userId, channel.id);
+        });
         setSavingUsers(false);
         setInviteError(undefined);
         onHide();
@@ -476,7 +493,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isInvite, current
             >
                 {inviteError}
                 <div className='channel-invite__content'>
-                    {content}
+                    {!loadingMembers && content}
                 </div>
             </Modal.Body>
             {((isInvite && profilesInCurrentChannel!.length === 1) || !isInvite) && <Modal.Footer>
