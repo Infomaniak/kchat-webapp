@@ -4254,6 +4254,8 @@
   "move_thread_modal.title": "Move thread",
   "msg_typing.areTyping": "{users} and {last} are typing...",
   "msg_typing.isTyping": "{user} is typing...",
+  "msg_recording.isRecording" : "{user} is recording...", 
+  "msg_recording.areRecording": "{users} et {last} are recording...",
   "multiselect.add": "Add",
   "multiselect.addChannelsPlaceholder": "Search and add channels",
   "multiselect.addGroupMembers": "Add {number} people",

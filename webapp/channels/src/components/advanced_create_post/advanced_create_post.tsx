@@ -912,7 +912,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.recordingInterval = setInterval(() => {
             const channelId = this.props.currentChannel.id;
             GlobalActions.emitLocalUserRecordingEvent(channelId, '');
-            console.log('i am emiting emitRecordingEvent', this.emitRecordingEvent);
         }, TIMER);
     };
 

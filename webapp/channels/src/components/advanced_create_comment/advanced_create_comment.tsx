@@ -52,6 +52,7 @@ import * as Utils from 'utils/utils';
 import type {ModalData} from 'types/actions';
 import type {PostDraft} from 'types/store/draft';
 import type {PluginComponent} from 'types/store/plugins';
+import { Post } from '@mattermost/types/posts';
 
 export type Props = {
     currentTeamId: string;
@@ -777,7 +778,6 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.recordingInterval = setInterval(() => {
             const {channelId, rootId} = this.props;
             GlobalActions.emitLocalUserRecordingEvent(channelId, rootId);
-            console.log('i am emiting emitRecordingEvent', this.emitRecordingEvent);
         }, TIMER);
     };
 
