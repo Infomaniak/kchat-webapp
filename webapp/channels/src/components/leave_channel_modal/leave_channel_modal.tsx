@@ -49,11 +49,11 @@ type Props = {
         closeModal?: (modalId: string) => void;
         getProfilesInChannel?: (channelId: string, page: number, perPage: number, sort: string, options: {active?: boolean}) => Promise<ActionResult>;
         getTeamMembersByIds?: (teamId: string, userIds: string[]) => Promise<ActionResult>;
-        loadProfilesAndReloadChannelMembers?: (page: number, perParge: number, channelId: string, sort: string) => void;
     };
     skipCommit?: boolean;
     isGroupsEnabled?: boolean;
     canManageMembers?: boolean;
+    isInvite?: boolean;
 }
 
 const USERS_PER_PAGE = 50;
@@ -68,7 +68,7 @@ export enum ProfilesInChannelSortBy {
 const UsernameSpan = styled.span`
 fontSize: 12px;
 `;
-const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, canManageMembers, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited}) => {
+const LeaveChannelModal: FC<Props> = ({actions, channel, intl, isInvite, currentUser, canManageMembers, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited}) => {
     const selectedItemRef = React.createRef<HTMLDivElement>();
     const [selectedUsers, setSelectedUsers] = useState<UserProfileValue[]>([]);
     const [groupAndUserOptions, setGroupAndUserOptions] = useState < Array<UserProfileValue | GroupValue > >([]);
@@ -364,7 +364,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, canM
     let content;
 
     if (channel.type === Constants.PRIVATE_CHANNEL) {
-        if (canManageMembers && profilesInCurrentChannel!.length > 1) {
+        if (isInvite && profilesInCurrentChannel!.length > 1) {
             content = (
                 <div className='test-channel-1-download'>
                     <div className='alert alert-with-icon-leave alert-grey'>
@@ -406,7 +406,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, canM
                     />
                 </div>
             );
-        } else if (canManageMembers && profilesInCurrentChannel!.length === 1) {
+        } else if (isInvite && profilesInCurrentChannel!.length === 1) {
             content = (
                 <div>
                     <div className='alert alert-with-icon-leave alert-grey'>
@@ -479,7 +479,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentUser, canM
                     {content}
                 </div>
             </Modal.Body>
-            {((canManageMembers && profilesInCurrentChannel!.length === 1) || !canManageMembers) && <Modal.Footer>
+            {((isInvite && profilesInCurrentChannel!.length === 1) || !isInvite) && <Modal.Footer>
                 <button
                     type='button'
                     className='btn btn-tertiary'

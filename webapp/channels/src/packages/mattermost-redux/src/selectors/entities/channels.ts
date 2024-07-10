@@ -143,6 +143,10 @@ export function getChannelMembersInChannels(state: GlobalState): RelationOneToOn
     return state.entities.channels.membersInChannel;
 }
 
+export function getChannelMemberChannel(state: GlobalState, channelId: string): Record<string, ChannelMembership> {
+    return getChannelMembersInChannels(state)[channelId];
+}
+
 export function getChannelMember(state: GlobalState, channelId: string, userId: string): ChannelMembership | undefined {
     return getChannelMembersInChannels(state)[channelId]?.[userId];
 }
