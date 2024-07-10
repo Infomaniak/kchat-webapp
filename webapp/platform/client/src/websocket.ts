@@ -39,7 +39,7 @@ export default class WebSocketClient {
     private currentTeamUser: string;
     private currentTeam: string;
     private otherTeams: OtherTeam[];
-    private otherTeamsChannel: Record<string, Array<Channel>>
+    private otherTeamsChannel: Record<string, Array<Channel>>;
 
     // responseSequence is the number to track a response sent
     // via the websocket. A response will always have the same sequence number
@@ -151,7 +151,6 @@ export default class WebSocketClient {
     ) {
         let currentUserId: any;
         let currentUserTeamId: any;
-        let currentPresenceChannelId: string | undefined;
 
         // Store this for onmessage reconnect
         if (userId) {
@@ -163,7 +162,7 @@ export default class WebSocketClient {
         }
 
         if (presenceChannelId) {
-            currentPresenceChannelId = presenceChannelId;
+            this.currentPresence = presenceChannelId;
         }
 
         if (this.conn) {
@@ -262,7 +261,8 @@ export default class WebSocketClient {
             this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId);
             this.subscribeToOtherTeams(this.otherTeams, teamId)
 
-            const presenceChannel = presenceChannelId || currentPresenceChannelId;
+            // There is a case where presenceChannelId can be undefined on first connect and will be set by the bind function later.
+            const presenceChannel = presenceChannelId || this.currentPresence;
             if (presenceChannel) {
                 this.bindPresenceChannel(presenceChannel);
             }
