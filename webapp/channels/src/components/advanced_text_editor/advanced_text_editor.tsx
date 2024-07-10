@@ -767,7 +767,6 @@ const AdvanceTextEditor = ({
                             onMouseUp={handleMouseUpKeyUp}
                             onKeyUp={handleMouseUpKeyUp}
                             onComposition={emitTypingEvent}
-                            onRecording={emitRecordingEvent}
                             onHeightChange={handleHeightChange}
                             handlePostError={handlePostError}
                             value={messageValue}

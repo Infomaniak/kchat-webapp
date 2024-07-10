@@ -123,6 +123,7 @@ const baseProps = {
     handleBlur: jest.fn(),
     handlePostError: jest.fn(),
     emitTypingEvent: jest.fn(),
+    recordingTypingEvent: jest.fn(),
     handleMouseUpKeyUp: jest.fn(),
     postMsgKeyPress: jest.fn(),
     handleChange: jest.fn(),

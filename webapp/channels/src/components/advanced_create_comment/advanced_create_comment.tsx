@@ -52,7 +52,6 @@ import * as Utils from 'utils/utils';
 import type {ModalData} from 'types/actions';
 import type {PostDraft} from 'types/store/draft';
 import type {PluginComponent} from 'types/store/plugins';
-import { Post } from '@mattermost/types/posts';
 
 export type Props = {
     currentTeamId: string;
