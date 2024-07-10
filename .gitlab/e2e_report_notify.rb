@@ -8,11 +8,11 @@ CI_MERGE_REQUEST_IID = ENV['CI_MERGE_REQUEST_IID']
 CI_PAGES_PREFIX = ENV['PAGES_PREFIX']
 CI_PAGES_URL = ENV['CI_PAGES_URL']
 CI_PROJECT_ID = ENV['CI_PROJECT_ID']
-GUILD_WEBHOOK_URL = ENV['GUILD_WEBHOOK_URL']
+WEBHOOK_URL = ENV['NOTIFY_CHANNEL']
 
 # Function to send a message to kChat
 def send_to_kchat(msg)
-  uri = URI(GUILD_WEBHOOK_URL)
+  uri = URI(WEBHOOK_URL)
   req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
 
   message = <<-MESSAGE
