@@ -225,6 +225,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
     private isDraftEdited = false;
     private isNonFormattedPaste = false;
     private timeoutId: number | null = null;
+    private recordingInterval: ReturnType<typeof setInterval> | null = null;
 
     private readonly textboxRef: React.RefObject<TextboxClass>;
     private readonly fileUploadRef: React.RefObject<FileUploadClass>;
@@ -771,6 +772,21 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         GlobalActions.emitLocalUserTypingEvent(channelId, rootId);
     };
 
+    emitRecordingEvent = () => {
+        const TIMER = 1000;
+        this.recordingInterval = setInterval(() => {
+            const {channelId, rootId} = this.props;
+            GlobalActions.emitLocalUserRecordingEvent(channelId, rootId);
+            console.log('i am emiting emitRecordingEvent', this.emitRecordingEvent);
+        }, TIMER);
+    };
+
+    stopRecordingEvent = () => {
+        if (this.recordingInterval !== null) {
+            clearInterval(this.recordingInterval);
+        }
+    };
+
     handleChange = (e: React.ChangeEvent<TextboxElement>) => {
         const message = e.target.value;
 
@@ -1151,6 +1167,8 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     postError={this.state.postError}
                     handlePostError={this.handlePostError}
                     emitTypingEvent={this.emitTypingEvent}
+                    emitRecordingEvent={this.emitRecordingEvent}
+                    stopRecordingEvent={this.stopRecordingEvent}
                     handleMouseUpKeyUp={this.handleMouseUpKeyUp}
                     postMsgKeyPress={this.commentMsgKeyPress}
                     handleChange={this.handleChange}

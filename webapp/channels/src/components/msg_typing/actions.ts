@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {GlobalState} from '@mattermost/types/store';
+import type {ValueOf} from '@mattermost/types/utilities';
 
 import {getMissingProfilesByIds, getStatusesByIds} from 'mattermost-redux/actions/users';
 import {General, Preferences, WebsocketEvents} from 'mattermost-redux/constants';
@@ -15,35 +16,6 @@ function getTimeBetweenTypingEvents(state: GlobalState) {
     const config = getConfig(state);
 
     return config.TimeBetweenUserTypingUpdatesMilliseconds === undefined ? 0 : parseInt(config.TimeBetweenUserTypingUpdatesMilliseconds, 10);
-}
-
-export function userStartedTyping(userId: string, channelId: string, rootId: string, now: number): ThunkActionFunc<void> {
-    return (dispatch, getState) => {
-        const state = getState();
-
-        if (
-            isPerformanceDebuggingEnabled(state) &&
-            getBool(state, Preferences.CATEGORY_PERFORMANCE_DEBUGGING, Preferences.NAME_DISABLE_TYPING_MESSAGES)
-        ) {
-            return;
-        }
-
-        dispatch({
-            type: WebsocketEvents.TYPING,
-            data: {
-                id: channelId + rootId,
-                userId,
-                now,
-            },
-        });
-
-        // Ideally this followup loading would be done by someone else
-        dispatch(fillInMissingInfo(userId));
-
-        setTimeout(() => {
-            dispatch(userStoppedTyping(userId, channelId, rootId, now));
-        }, getTimeBetweenTypingEvents(state));
-    };
 }
 
 function fillInMissingInfo(userId: string): ActionFuncAsync {
@@ -69,13 +41,48 @@ function fillInMissingInfo(userId: string): ActionFuncAsync {
     };
 }
 
-export function userStoppedTyping(userId: string, channelId: string, rootId: string, now: number) {
-    return {
-        type: WebsocketEvents.STOP_TYPING,
+const createUserStoppedAction = (action: ValueOf<typeof WebsocketEvents>) =>
+    (userId: string, channelId: string, rootId: string, now: number) => ({
+        type: action,
         data: {
             id: channelId + rootId,
             userId,
             now,
         },
-    };
-}
+    });
+
+const createUserStartedAction = (action: ValueOf<typeof WebsocketEvents>, callback: ReturnType<typeof createUserStoppedAction>) =>
+    (userId: string, channelId: string, rootId: string, now: number): ThunkActionFunc<void> =>
+        (dispatch, getState) => {
+            const state = getState();
+            if (
+                isPerformanceDebuggingEnabled(state) &&
+                getBool(state, Preferences.CATEGORY_PERFORMANCE_DEBUGGING, Preferences.NAME_DISABLE_TYPING_MESSAGES)
+            ) {
+                return;
+            }
+
+            dispatch({
+                type: action,
+                data: {
+                    id: channelId + rootId,
+                    userId,
+                    now,
+                },
+            });
+
+            // Ideally this followup loading would be done by someone else
+            dispatch(fillInMissingInfo(userId));
+
+            setTimeout(() => {
+                dispatch(callback(userId, channelId, rootId, now));
+            }, getTimeBetweenTypingEvents(state));
+        };
+
+export const userStoppedTyping = createUserStoppedAction(WebsocketEvents.STOP_TYPING);
+
+export const userStoppedRecording = createUserStoppedAction(WebsocketEvents.STOP_RECORDING);
+
+export const userStartedTyping = createUserStartedAction(WebsocketEvents.TYPING, userStoppedTyping);
+
+export const userStartedRecording = createUserStartedAction(WebsocketEvents.RECORDING, userStoppedRecording);

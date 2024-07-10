@@ -266,6 +266,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     private isDraftSubmitting = false;
     private isNonFormattedPaste = false;
     private timeoutId: number | null = null;
+    private recordingInterval: ReturnType<typeof setInterval> | null = null;
 
     private topDiv: React.RefObject<HTMLFormElement>;
     private textboxRef: React.RefObject<TextboxClass>;
@@ -906,6 +907,21 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         GlobalActions.emitLocalUserTypingEvent(channelId, '');
     };
 
+    emitRecordingEvent = () => {
+        const TIMER = 1000;
+        this.recordingInterval = setInterval(() => {
+            const channelId = this.props.currentChannel.id;
+            GlobalActions.emitLocalUserRecordingEvent(channelId, '');
+            console.log('i am emiting emitRecordingEvent', this.emitRecordingEvent);
+        }, TIMER);
+    };
+
+    stopRecordingEvent = () => {
+        if (this.recordingInterval !== null) {
+            clearInterval(this.recordingInterval);
+        }
+    };
+
     setDraftAsPostType = (channelId: Channel['id'], draft: PostDraft, postType?: PostDraft['postType']) => {
         if (postType) {
             const updatedDraft: PostDraft = {...draft, postType: Constants.PostTypes.VOICE};
@@ -1518,6 +1534,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     handleBlur={this.handleBlur}
                     handlePostError={this.handlePostError}
                     emitTypingEvent={this.emitTypingEvent}
+                    emitRecordingEvent={this.emitRecordingEvent}
+                    stopRecordingEvent={this.stopRecordingEvent}
                     handleMouseUpKeyUp={this.handleMouseUpKeyUp}
                     postMsgKeyPress={this.postMsgKeyPress}
                     handleChange={this.handleChange}

@@ -27,6 +27,7 @@ interface Props {
     theme: Theme;
     onCancel: () => void;
     onComplete: (audioFile: File) => Promise<void>;
+    onStarted?: () => void;
 }
 
 function VoiceMessageRecordingStarted(props: Props) {
@@ -61,6 +62,9 @@ function VoiceMessageRecordingStarted(props: Props) {
 
     useEffect(() => {
         startRecording();
+        if (typeof props.onStarted === 'function') {
+            props.onStarted();
+        }
 
         return () => {
             cleanPostRecording(true);

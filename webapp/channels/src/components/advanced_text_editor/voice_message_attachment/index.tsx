@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {FormEvent} from 'react';
+import type {ComponentProps, FormEvent} from 'react';
 import React, {memo, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -32,7 +32,7 @@ declare global {
     }
 }
 
-interface Props {
+type Props = Pick<ComponentProps<typeof VoiceMessageRecordingStarted>, 'onStarted'> & {
     channelId: Channel['id'];
     rootId: Post['id'];
     draft: PostDraft;
@@ -48,6 +48,8 @@ interface Props {
     onUploadError: (err: string | ServerError, clientId?: string, channelId?: Channel['id'], rootId?: Post['id']) => void;
     onRemoveDraft: (fileInfoIdOrClientId: FileInfo['id'] | string) => void;
     onSubmit: (e: FormEvent<Element>) => void;
+    onComplete?: () => void;
+    onCancel?: () => void;
 }
 
 const VoiceMessageAttachment = (props: Props) => {
@@ -131,6 +133,7 @@ const VoiceMessageAttachment = (props: Props) => {
     async function handleCompleteRecordingClicked(audioFile: File) {
         audioFileRef.current = audioFile;
         uploadRecording(audioFile);
+        props.onComplete?.();
     }
 
     function handleCancelRecordingClicked() {
@@ -140,6 +143,7 @@ const VoiceMessageAttachment = (props: Props) => {
         if (props.location === Locations.RHS_COMMENT) {
             props.setDraftAsPostType(props.rootId, props.draft);
         }
+        props.onCancel?.();
     }
 
     if (props.vmState === VoiceMessageStates.RECORDING) {
@@ -148,6 +152,7 @@ const VoiceMessageAttachment = (props: Props) => {
                 theme={theme}
                 onCancel={handleCancelRecordingClicked}
                 onComplete={handleCompleteRecordingClicked}
+                onStarted={props.onStarted}
             />
         );
     }

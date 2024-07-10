@@ -21,6 +21,7 @@ import jobs from './jobs';
 import limits from './limits';
 import posts from './posts';
 import preferences from './preferences';
+import recording from './recording';
 import roles from './roles';
 import schemes from './schemes';
 import search from './search';
@@ -40,6 +41,7 @@ export default combineReducers({
     files,
     preferences,
     typing,
+    recording,
     integrations,
     emojis,
     gifs,

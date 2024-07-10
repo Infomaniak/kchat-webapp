@@ -3,6 +3,7 @@
 
 import {EmoticonHappyOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
+import type {ComponentProps} from 'react';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
@@ -93,6 +94,8 @@ type Props = {
     handleBlur: () => void;
     handlePostError: (postError: React.ReactNode) => void;
     emitTypingEvent: () => void;
+    emitRecordingEvent?: ComponentProps<typeof VoiceMessageAttachment>['onStarted'];
+    stopRecordingEvent?: ComponentProps<typeof VoiceMessageAttachment>['onComplete'] | ComponentProps<typeof VoiceMessageAttachment>['onCancel'];
     handleMouseUpKeyUp: (e: React.MouseEvent<TextboxElement> | React.KeyboardEvent<TextboxElement>) => void;
     postMsgKeyPress: (e: React.KeyboardEvent<TextboxElement>) => void;
     handleChange: (e: React.ChangeEvent<TextboxElement>) => void;
@@ -163,6 +166,8 @@ const AdvanceTextEditor = ({
     handleBlur: onBlur,
     handlePostError,
     emitTypingEvent,
+    emitRecordingEvent,
+    stopRecordingEvent,
     handleMouseUpKeyUp,
     postMsgKeyPress,
     handleChange,
@@ -261,6 +266,9 @@ const AdvanceTextEditor = ({
                     onUploadError={handleUploadError}
                     onRemoveDraft={removePreview}
                     onSubmit={handleSubmit}
+                    onStarted={emitRecordingEvent}
+                    onCancel={stopRecordingEvent}
+                    onComplete={stopRecordingEvent}
                 />
             </div>
         );
@@ -759,6 +767,7 @@ const AdvanceTextEditor = ({
                             onMouseUp={handleMouseUpKeyUp}
                             onKeyUp={handleMouseUpKeyUp}
                             onComposition={emitTypingEvent}
+                            onRecording={emitRecordingEvent}
                             onHeightChange={handleHeightChange}
                             handlePostError={handlePostError}
                             value={messageValue}

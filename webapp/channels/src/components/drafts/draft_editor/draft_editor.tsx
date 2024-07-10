@@ -833,6 +833,8 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     enableGifPicker={this.props.isGifPickerEnabled}
                     handleBlur={noop}
                     emitTypingEvent={noop}
+                    emitRecordingEvent={noop}
+                    stopRecordingEvent={noop}
                     handleMouseUpKeyUp={this.handleMouseUpKeyUp}
                     toggleEmojiPicker={this.toggleEmojiPicker}
                     toggleAdvanceTextEditor={this.toggleAdvanceTextEditor}
