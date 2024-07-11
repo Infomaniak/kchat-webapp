@@ -26,6 +26,7 @@ import {loadStatusesForProfilesList} from 'actions/status_actions';
 import {loadProfilesAndReloadChannelMembers} from 'actions/user_actions';
 import {leaveChannel} from 'actions/views/channel';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
+import {closeModal} from 'actions/views/modals';
 
 import Constants from 'utils/constants';
 
@@ -50,7 +51,7 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
         const currentTeam = getCurrentTeam(state);
         const currentMembers = getChannelMemberChannel(state, initialProps.channel.id);
         const currentUser = getMyCurrentChannelMembership(state);
-        const currentMember = getChannelMember(state, initialProps.channel.id, currentUser!.user_id);
+        const currentMember = currentUser ? getChannelMember(state, initialProps.channel.id, currentUser.user_id) : undefined;
         const getAllAssociatedGroupsForReference = makeGetAllAssociatedGroupsForReference();
         const currentMemberIsChannelAdmin = currentMember && currentMember.scheme_admin;
         const profilesFromRecentDMs = getRecentProfilesFromDMs(state);
@@ -107,6 +108,7 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
+            closeModal,
             loadProfilesAndReloadChannelMembers,
             getChannelMemberAction,
             getChannelStats,

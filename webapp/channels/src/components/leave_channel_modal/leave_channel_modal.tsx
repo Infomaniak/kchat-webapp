@@ -91,8 +91,8 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
         }
     };
     useEffect(() => {
-        setLoadingMembers(true);
         if (currentMemberIsChannelAdmin) {
+            setLoadingMembers(true);
             Promise.all([
                 actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin),
             ]).then(() => {
@@ -136,9 +136,13 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
     }, [term, profilesInCurrentChannel]);
 
     const getOptions = () => {
-        const filteredProfiles = profilesInCurrentChannel!.filter(
-            (profile) => profile.id.toString() !== currentUser!.user_id.toString(),
-        );
+        let filteredProfiles: UserProfile[] = [];
+        if (currentUser !== undefined && profilesInCurrentChannel) {
+            filteredProfiles = profilesInCurrentChannel.filter(
+                (profile) => profile.id.toString() !== currentUser!.user_id.toString(),
+            );
+        }
+
         const filterProfilesWithTerm: Array<UserProfileValue | GroupValue> = filterProfilesStartingWithTerm(filteredProfiles, term) as Array<UserProfileValue | GroupValue>;
 
         return filterProfilesWithTerm;
