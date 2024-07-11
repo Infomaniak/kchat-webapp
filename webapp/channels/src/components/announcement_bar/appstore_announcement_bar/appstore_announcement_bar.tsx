@@ -52,7 +52,7 @@ export default class AppStoreBar extends React.PureComponent<Props> {
 
                             <FormattedMessage
                                 id='appstore.bar'
-                                defaultMessage='A new version of the kChat app is available. Please'
+                                defaultMessage='Your version of the app is no longer supported. Please'
                             />
                             {/* eslint-disable-next-line @mattermost/use-external-link */}
                             <a
@@ -63,12 +63,12 @@ export default class AppStoreBar extends React.PureComponent<Props> {
                             >
                                 <FormattedMessage
                                     id='appstore.bar.update'
-                                    defaultMessage='update'
+                                    defaultMessage='install the new version'
                                 />
                             </a>
                             <FormattedMessage
                                 id='appstore.bar.end'
-                                defaultMessage=' from the App Store to benefit from the latest improvements'
+                                defaultMessage=' before September 2nd to benefit from the latest improvements.'
                             />
                             {'.'}
                         </div>
