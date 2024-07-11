@@ -54,6 +54,7 @@ export type Props<T extends Value> = {
         select: (value: T) => void
     ) => void;
     selectedItemRef?: React.RefObject<HTMLDivElement>;
+    showInputByDefault: boolean;
     options: T[];
     perPage: number;
     placeholderText?: string;
@@ -89,6 +90,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
         valueWithImage: false,
         focusOnLoad: true,
         savingEnabled: true,
+        showInputByDefault: false,
     };
 
     public constructor(props: Props<T>) {
@@ -416,6 +418,25 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                         loading={this.props.loading}
                         query={this.state.input}
                         selectedItemRef={this.props.selectedItemRef}
+                        customNoOptionsMessage={this.props.customNoOptionsMessage || undefined}
+                    />
+                );
+            } else if (this.props.showInputByDefault) {
+                multiSelectList = (
+                    <MultiSelectList
+                        ref={this.listRef}
+                        options={optionsToDisplay}
+                        optionRenderer={this.props.optionRenderer}
+                        ariaLabelRenderer={this.props.ariaLabelRenderer}
+                        page={this.state.page}
+                        perPage={this.props.perPage}
+                        onPageChange={this.props.handlePageChange}
+                        onAdd={this.onAdd}
+                        onSelect={this.onSelect}
+                        loading={this.props.loading}
+                        query={this.state.input}
+                        selectedItemRef={this.props.selectedItemRef}
+                        showInputByDefault={true}
                         customNoOptionsMessage={this.props.customNoOptionsMessage || undefined}
                     />
                 );

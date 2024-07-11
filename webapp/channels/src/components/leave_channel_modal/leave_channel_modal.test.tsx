@@ -8,67 +8,53 @@ import type {ChannelType} from '@mattermost/types/channels';
 import LeaveChannelModal from 'components/leave_channel_modal/leave_channel_modal';
 
 describe('components/LeaveChannelModal', () => {
-    const channels = {
-        'channel-1': {
-            id: 'channel-1',
-            name: 'test-channel-1',
-            display_name: 'Test Channel 1',
-            type: ('P' as ChannelType),
-            team_id: 'team-1',
-            header: '',
-            purpose: '',
-            creator_id: '',
-            scheme_id: '',
-            group_constrained: false,
-            create_at: 0,
-            update_at: 0,
-            delete_at: 0,
-            last_post_at: 0,
-            last_root_post_at: 0,
-        },
-        'channel-2': {
-            id: 'channel-2',
-            name: 'test-channel-2',
-            display_name: 'Test Channel 2',
-            team_id: 'team-1',
-            type: ('P' as ChannelType),
-            header: '',
-            purpose: '',
-            creator_id: '',
-            scheme_id: '',
-            group_constrained: false,
-            create_at: 0,
-            update_at: 0,
-            delete_at: 0,
-            last_post_at: 0,
-            last_root_post_at: 0,
-        },
-        'town-square': {
-            id: 'town-square-id',
-            name: 'town-square',
-            display_name: 'Town Square',
-            type: ('O' as ChannelType),
-            team_id: 'team-1',
-            header: '',
-            purpose: '',
-            creator_id: '',
-            scheme_id: '',
-            group_constrained: false,
-            create_at: 0,
-            update_at: 0,
-            delete_at: 0,
-            last_post_at: 0,
-            last_root_post_at: 0,
-        },
-    };
-
     test('should match snapshot, init', () => {
         const props = {
-            channel: channels['town-square'],
-            onExited: jest.fn(),
-            actions: {
-                leaveChannel: jest.fn(),
+            channel: {
+                id: 'channel7',
+                name: 'test-channel-7',
+                display_name: 'Test Channel 1',
+                type: ('P' as ChannelType),
+                team_id: 'team-1',
+                header: '',
+                purpose: '',
+                creator_id: '',
+                scheme_id: '',
+                group_constrained: false,
+                create_at: 0,
+                update_at: 0,
+                delete_at: 0,
+                last_post_at: 0,
+                last_root_post_at: 0,
             },
+            actions: {
+                leaveChannel: jest.fn().mockImplementation(() => {
+                    const error = {
+                        message: 'error leaving channel',
+                    };
+
+                    return Promise.resolve({error});
+                }),
+                getChannelMemberAction: jest.fn(),
+                getChannelStats: jest.fn(),
+                getChannelMember: jest.fn(),
+                updateChannelMemberSchemeRoles: jest.fn().mockResolvedValue({data: true}),
+                loadStatusesForProfilesList: jest.fn(),
+                addUsersToChannel: jest.fn().mockResolvedValue({data: true}),
+                searchProfiles: jest.fn().mockResolvedValue({data: true}),
+                getProfilesNotInChannel: jest.fn().mockResolvedValue({data: true}),
+                searchAssociatedGroupsForReference: jest.fn().mockResolvedValue({data: true}),
+                getTeamStats: jest.fn(),
+                closeModal: jest.fn(),
+                getProfilesInChannel: jest.fn().mockResolvedValue({data: true}),
+                getTeamMembersByIds: jest.fn().mockResolvedValue({data: true}),
+                loadProfilesAndReloadChannelMembers: jest.fn(),
+            },
+            currentUser: {user_id: 'user-1'},
+            onExited: jest.fn(),
+            callback: jest.fn(),
+            profilesInCurrentChannel: [{id: 'user1'}],
+            isInvite: true,
         };
 
         const wrapper = shallow<typeof LeaveChannelModal>(
@@ -107,6 +93,7 @@ describe('components/LeaveChannelModal', () => {
 
                     return Promise.resolve({error});
                 }),
+                getChannelMemberAction: jest.fn(),
                 getChannelStats: jest.fn(),
                 getChannelMember: jest.fn(),
                 updateChannelMemberSchemeRoles: jest.fn().mockResolvedValue({data: true}),
@@ -125,7 +112,7 @@ describe('components/LeaveChannelModal', () => {
             onExited: jest.fn(),
             callback: jest.fn(),
             profilesInCurrentChannel: [{id: 'user1'}],
-            canManageMembers: true,
+            isInvite: true,
         };
         const wrapper = shallow<typeof LeaveChannelModal>(
             <LeaveChannelModal
@@ -161,6 +148,8 @@ describe('components/LeaveChannelModal', () => {
                 last_root_post_at: 0,
             },
             actions: {
+                getChannelMemberAction: jest.fn(),
+                loadProfilesAndReloadChannelMembers: jest.fn(),
                 leaveChannel: jest.fn(),
                 getChannelStats: jest.fn(),
                 getChannelMember: jest.fn(),
@@ -174,14 +163,14 @@ describe('components/LeaveChannelModal', () => {
                 closeModal: jest.fn(),
                 getProfilesInChannel: jest.fn().mockResolvedValue({data: true}),
                 getTeamMembersByIds: jest.fn().mockResolvedValue({data: true}),
-                loadProfilesAndReloadChannelMembers: jest.fn(),
             },
             currentUser: {user_id: 'user-1'},
             onExited: jest.fn(),
             callback: jest.fn(),
             currentUserIsChannelAdmin: true,
             profilesInCurrentChannel: [{id: 'user1'}, {id: 'user-2'}],
-            canManageMembers: true,
+            isInvite: true,
+            currentMemberIsChannelAdmin: true,
         };
 
         const wrapper = shallow<typeof LeaveChannelModal>(

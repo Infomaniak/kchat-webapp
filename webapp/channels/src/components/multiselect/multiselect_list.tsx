@@ -26,6 +26,7 @@ export type Props<T extends Value> = {
     ) => void;
     query?: string;
     selectedItemRef?: React.RefObject<HTMLDivElement>;
+    showInputByDefault: boolean;
     options: T[];
     page: number;
     perPage: number;
@@ -42,6 +43,7 @@ export default class MultiSelectList<T extends Value> extends React.PureComponen
         options: [],
         perPage: 50,
         onAction: () => null,
+        showInputByDefault: false,
     };
 
     private toSelect = -1;
@@ -165,6 +167,12 @@ export default class MultiSelectList<T extends Value> extends React.PureComponen
     public render() {
         const {options, customNoOptionsMessage} = this.props;
         let renderOutput;
+
+        if ((options == null || options.length === 0) && this.props.loading === false && this.props.showInputByDefault) {
+            return (
+                <></>
+            );
+        }
 
         if (this.props.loading) {
             renderOutput = (

@@ -10,7 +10,7 @@ import type {TeamMembership} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
-import {getChannelStats, updateChannelMemberSchemeRoles} from 'mattermost-redux/actions/channels';
+import {getChannelMember as getChannelMemberAction, getChannelStats, updateChannelMemberSchemeRoles} from 'mattermost-redux/actions/channels';
 import {getTeamStats, getTeamMembersByIds} from 'mattermost-redux/actions/teams';
 import {getProfilesInChannel, searchProfiles} from 'mattermost-redux/actions/users';
 import {getChannelMemberChannel, getMyCurrentChannelMembership, getRecentProfilesFromDMs, getChannelMember} from 'mattermost-redux/selectors/entities/channels';
@@ -108,7 +108,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
             loadProfilesAndReloadChannelMembers,
-            getChannelMember,
+            getChannelMemberAction,
             getChannelStats,
             updateChannelMemberSchemeRoles,
             addUsersToChannel,
