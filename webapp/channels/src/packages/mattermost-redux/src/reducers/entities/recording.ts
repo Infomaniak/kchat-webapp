@@ -1,6 +1,6 @@
 import type {AnyAction} from 'redux';
 
-import type{Recording} from '@mattermost/types/recording';
+import type {Recording} from '@mattermost/types/recording';
 
 import {WebsocketEvents} from 'mattermost-redux/constants';
 
@@ -22,7 +22,7 @@ export default function recording(state: Recording = {}, action: AnyAction): Rec
             return {
                 ...state,
                 [id]: {
-                    ...(state[id] || {}),
+                    ...state[id],
                     [userId]: now,
                 },
             };
@@ -38,16 +38,9 @@ export default function recording(state: Recording = {}, action: AnyAction): Rec
         } = data;
 
         if (state[id] && state[id][userId] <= now) {
-            const nextState: Recording = {
-                ...state,
-                [id]: {...state[id]},
-            };
+            const nextState = {...state};
 
-            Reflect.deleteProperty(nextState[id], userId);
-
-            if (Object.keys(nextState[id]).length === 0) {
-                Reflect.deleteProperty(nextState, id);
-            }
+            delete nextState[id];
 
             return nextState;
         }

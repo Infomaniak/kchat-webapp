@@ -12,11 +12,11 @@ import {getUsers} from 'mattermost-redux/selectors/entities/common';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
-const getUsersImpl = <T extends (Typing | Recording)>(profiles: IDMappedObjects<UserProfile>, teammateNameDisplay: string, channelId: string, parentPostId: string, msgState: T): string[] => {
+const getUsersImpl = (profiles: IDMappedObjects<UserProfile>, teammateNameDisplay: string, channelId: string, parentPostId: string, typing: Typing): string[] => {
     const id = channelId + parentPostId;
 
-    if (msgState[id]) {
-        const users = Object.keys(msgState[id]);
+    if (typing[id]) {
+        const users = Object.keys(typing[id]);
 
         if (users.length) {
             return users.map((userId) => {

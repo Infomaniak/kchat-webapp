@@ -19,6 +19,7 @@ import {getEmojiName} from 'mattermost-redux/utils/emoji_utils';
 import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
 
 import * as GlobalActions from 'actions/global_actions';
+import * as InfomaniakActions from 'actions/infomaniak_actions';
 
 import AdvancedTextEditor from 'components/advanced_text_editor/advanced_text_editor';
 import FileLimitStickyBanner from 'components/file_limit_sticky_banner';
@@ -776,7 +777,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         const TIMER = 1000;
         this.recordingInterval = setInterval(() => {
             const {channelId, rootId} = this.props;
-            GlobalActions.emitLocalUserRecordingEvent(channelId, rootId);
+            InfomaniakActions.emitLocalUserRecordingEvent(channelId, rootId);
         }, TIMER);
     };
 

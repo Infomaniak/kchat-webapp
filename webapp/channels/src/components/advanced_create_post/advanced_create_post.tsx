@@ -21,6 +21,7 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
 
 import * as GlobalActions from 'actions/global_actions';
+import * as InfomaniakActions from 'actions/infomaniak_actions';
 
 import AdvancedTextEditor from 'components/advanced_text_editor/advanced_text_editor';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
@@ -911,7 +912,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         const TIMER = 1000;
         this.recordingInterval = setInterval(() => {
             const channelId = this.props.currentChannel.id;
-            GlobalActions.emitLocalUserRecordingEvent(channelId, '');
+            InfomaniakActions.emitLocalUserRecordingEvent(channelId, '');
         }, TIMER);
     };
 

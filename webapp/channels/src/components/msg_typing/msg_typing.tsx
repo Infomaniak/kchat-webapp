@@ -30,7 +30,11 @@ export default function MsgTyping(props: Props) {
                 const rootId = msg.data.data.parent_id;
                 const userId = msg.data.data.user_id;
                 if (props.channelId === channelId && props.postId === rootId) {
-                    msg.event === SocketEvents.TYPING ? userStartedTyping(userId, channelId, rootId, Date.now()) : userStartedRecording(userId, channelId, rootId, Date.now());
+                    if (msg.event === SocketEvents.TYPING) {
+                        userStartedTyping(userId, channelId, rootId, Date.now());
+                    } else {
+                        userStartedRecording(userId, channelId, rootId, Date.now());
+                    }
                 }
             } else if (msg.event === SocketEvents.POSTED) {
                 const post = msg.data.post;
@@ -53,13 +57,36 @@ export default function MsgTyping(props: Props) {
         if (numUsers === 0) {
             return '';
         }
-        const simpleMessage = type === 'typing' ? 'msg_typing.isTyping' : 'msg_recording.isRecording';
-        const multipleMessage = type === 'typing' ? 'msg_typing.areTyping' : 'msg_recording.areRecording';
+        let simpleMessage;
+        let multipleMessage;
+        let defaultSimpleMessage;
+        let defaultMultipleMessage;
+
+        switch (type) {
+        case 'typing':
+            simpleMessage = 'msg_typing.isTyping';
+            multipleMessage = 'msg_typing.areTyping';
+            defaultSimpleMessage = '{user} is typing...';
+            defaultMultipleMessage = '{users} and {last} are typing...';
+
+            break;
+        case 'recording':
+            simpleMessage = 'msg_recording.isRecording';
+            multipleMessage = 'msg_recording.areRecording';
+            defaultSimpleMessage = '{user} is recording...';
+            defaultMultipleMessage = '{users} and {last} are recording...';
+            break;
+
+        default:
+            throw new Error('no messages found');
+            break;
+        }
+
         if (numUsers === 1) {
             return (
                 <FormattedMessage
                     id={simpleMessage}
-                    defaultMessage={type === 'typing' ? '{user} is typing...' : '{user} is recording...'}
+                    defaultMessage={defaultSimpleMessage}
                     values={{
                         user: users[0],
                     }}
@@ -70,7 +97,7 @@ export default function MsgTyping(props: Props) {
         return (
             <FormattedMessage
                 id={multipleMessage}
-                defaultMessage={type === 'typing' ? '{users} and {last} are typing...' : '{users} and {last} are recording...'}
+                defaultMessage={defaultMultipleMessage}
                 values={{
                     users: (users.join(', ')),
                     last,
