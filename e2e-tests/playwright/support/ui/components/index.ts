@@ -16,6 +16,7 @@ import {GlobalHeader} from './global_header';
 import {MainHeader} from './main_header';
 import {PostDotMenu} from './channels/post_dot_menu';
 import {PostReminderMenu} from './channels/post_reminder_menu';
+import {OnboardingMenu} from './channels/onboarding_menu';
 import {PostMenu} from './channels/post_menu';
 import {ThreadFooter} from './channels/thread_footer';
 import {EmojiGifPicker} from './channels/emoji_gif_picker';
@@ -47,6 +48,7 @@ const components = {
     Footer,
     MainHeader,
     PostReminderMenu,
+    OnboardingMenu,
     EmojiGifPicker,
     GenericConfirmModal,
     SystemConsoleSidebar,

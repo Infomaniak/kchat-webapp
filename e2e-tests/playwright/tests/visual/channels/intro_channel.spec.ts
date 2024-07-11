@@ -14,6 +14,7 @@ test('Intro to channel as regular user', async ({pw, page, pages, browserName, v
     const channelsPage = new pages.ChannelsPage(page);
     await channelsPage.goto();
     await channelsPage.toBeVisible();
+    await channelsPage.closeOnboardingIfOpen();
 
     // Wait for Playbooks icon to be loaded in App bar, except in iphone
     // await expect(channelsPage.appBar.playbooksIcon).toBeVisible();
