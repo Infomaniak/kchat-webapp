@@ -10,7 +10,7 @@ import {AnnouncementBarTypes} from 'utils/constants';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import * as UserAgent from 'utils/user_agent';
 
-import informationIcon from 'images/icons/information-blue.svg';
+import warningIcon from 'images/icons/warning-alert.svg';
 
 import AnnouncementBar from '../default_announcement_bar';
 
@@ -43,7 +43,7 @@ export default class AppStoreBar extends React.PureComponent<Props> {
                 icon={
                     <img
                         className='version-alert-icon'
-                        src={informationIcon}
+                        src={warningIcon}
                     />
                 }
                 message={
