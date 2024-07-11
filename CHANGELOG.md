@@ -1,3 +1,9 @@
+## 2.9.7-rc.3 (2024-07-11)
+
+### Fixed (1 change)
+
+- [Fix: Remove inherit color for set admin button in channel](kchat/webapp@f5fec3723e32913eac8667c97c7fa3b7646db60c) by  ([merge request](kchat/webapp!834))
+
 ## 2.9.7-rc.2 (2024-07-10)
 
 ### Fixed (2 changes)
