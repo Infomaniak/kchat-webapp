@@ -10,7 +10,7 @@ import {AnnouncementBarTypes} from 'utils/constants';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import * as UserAgent from 'utils/user_agent';
 
-import informationIcon from 'images/icons/information-blue.svg';
+import warningIcon from 'images/icons/warning-alert.svg';
 
 import AnnouncementBar from '../default_announcement_bar';
 
@@ -43,7 +43,7 @@ export default class AppStoreBar extends React.PureComponent<Props> {
                 icon={
                     <img
                         className='version-alert-icon'
-                        src={informationIcon}
+                        src={warningIcon}
                     />
                 }
                 message={
@@ -52,7 +52,7 @@ export default class AppStoreBar extends React.PureComponent<Props> {
 
                             <FormattedMessage
                                 id='appstore.bar'
-                                defaultMessage='A new version of the kChat app is available. Please'
+                                defaultMessage='Your version of the app is no longer supported. Please'
                             />
                             {/* eslint-disable-next-line @mattermost/use-external-link */}
                             <a
@@ -63,12 +63,12 @@ export default class AppStoreBar extends React.PureComponent<Props> {
                             >
                                 <FormattedMessage
                                     id='appstore.bar.update'
-                                    defaultMessage='update'
+                                    defaultMessage='install the new version'
                                 />
                             </a>
                             <FormattedMessage
                                 id='appstore.bar.end'
-                                defaultMessage=' from the App Store to benefit from the latest improvements'
+                                defaultMessage=' before September 2nd to benefit from the latest improvements.'
                             />
                             {'.'}
                         </div>
