@@ -76,7 +76,7 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
         }) : [];
 
         if (isPrivate && currentMemberIsChannelAdmin) {
-            const channelTeamUsers = membersArray.filter((user) => {
+            const hasChannelMembersAdmin = membersArray.some((user) => {
                 const userRoles = user.roles.split(' ');
                 return userRoles.some((roleName: string) => {
                     const role = roles[roleName];
@@ -85,8 +85,8 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
                     }
                     return false;
                 });
-            }).length;
-            if (channelTeamUsers < 1) {
+            });
+            if (!hasChannelMembersAdmin) {
                 isInvite = true;
             }
         }
