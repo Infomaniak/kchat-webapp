@@ -13,11 +13,10 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 import {getChannelMember as getChannelMemberAction, getChannelStats, updateChannelMemberSchemeRoles} from 'mattermost-redux/actions/channels';
 import {getTeamStats, getTeamMembersByIds} from 'mattermost-redux/actions/teams';
 import {getProfilesInChannel, searchProfiles} from 'mattermost-redux/actions/users';
-import {getChannelMemberChannel, getMyCurrentChannelMembership, getRecentProfilesFromDMs, getChannelMember} from 'mattermost-redux/selectors/entities/channels';
+import {getChannelMemberChannel, getMyCurrentChannelMembership, getRecentProfilesFromDMs, getChannelMember, getHasChannelMembersAdmin} from 'mattermost-redux/selectors/entities/channels';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {makeGetAllAssociatedGroupsForReference} from 'mattermost-redux/selectors/entities/groups';
 import {isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getRoles} from 'mattermost-redux/selectors/entities/roles';
 import {getMembersInTeam, getMembersInCurrentTeam, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getProfilesInCurrentChannel, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 
@@ -28,8 +27,6 @@ import {leaveChannel} from 'actions/views/channel';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
 import {closeModal} from 'actions/views/modals';
 
-import Constants from 'utils/constants';
-
 import type {GlobalState} from 'types/store';
 
 import LeaveChannelModal from './leave_channel_modal';
@@ -38,7 +35,6 @@ type OwnProps = {
     channelId?: string;
     teamId?: string;
     channel: Channel;
-
 }
 
 function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
@@ -48,17 +44,19 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
     }
 
     return (state: GlobalState, props: OwnProps) => {
-        const currentTeam = getCurrentTeam(state);
-        const currentMembers = getChannelMemberChannel(state, initialProps.channel.id);
         const currentUser = getMyCurrentChannelMembership(state);
         const currentMember = currentUser ? getChannelMember(state, initialProps.channel.id, currentUser.user_id) : undefined;
-        const getAllAssociatedGroupsForReference = makeGetAllAssociatedGroupsForReference();
         const currentMemberIsChannelAdmin = currentMember && currentMember.scheme_admin;
-        const profilesFromRecentDMs = getRecentProfilesFromDMs(state);
+        const currentMembers = getChannelMemberChannel(state, initialProps.channel.id);
+        const currentTeam = getCurrentTeam(state);
         const enableCustomUserGroups = isCustomGroupsEnabled(state);
-        const license = getLicense(state);
+        const getAllAssociatedGroupsForReference = makeGetAllAssociatedGroupsForReference();
         const groups = getAllAssociatedGroupsForReference(state, true);
+        const hasChannelMembersAdmin = getHasChannelMembersAdmin(state, props.channel, currentMembers, currentMemberIsChannelAdmin);
+        const license = getLicense(state);
         const isGroupsEnabled = enableCustomUserGroups || (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true');
+        const profilesFromRecentDMs = getRecentProfilesFromDMs(state);
+
         let profilesInCurrentChannel: UserProfile[];
         let membersInTeam: RelationOneToOne<UserProfile, TeamMembership>;
         if (props.channel.id && props.channel.team_id) {
@@ -68,31 +66,9 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
             profilesInCurrentChannel = getProfilesInCurrentChannel(state);
             membersInTeam = getMembersInCurrentTeam(state);
         }
-        const isPrivate = initialProps.channel.type === Constants.PRIVATE_CHANNEL;
-        let isInvite = false;
-        const roles = getRoles(state);
-        const membersArray = currentMembers ? Object.values(currentMembers).filter((user) => {
-            return user?.user_id !== currentUser?.user_id;
-        }) : [];
-
-        if (isPrivate && currentMemberIsChannelAdmin) {
-            const hasChannelMembersAdmin = membersArray.some((user) => {
-                const userRoles = user.roles.split(' ');
-                return userRoles.some((roleName: string) => {
-                    const role = roles[roleName];
-                    if (role && role.permissions.includes('manage_private_channel_members')) {
-                        return true;
-                    }
-                    return false;
-                });
-            });
-            if (!hasChannelMembersAdmin) {
-                isInvite = true;
-            }
-        }
 
         return {
-            isInvite,
+            hasChannelMembersAdmin,
             currentTeam,
             currentUser,
             groups,

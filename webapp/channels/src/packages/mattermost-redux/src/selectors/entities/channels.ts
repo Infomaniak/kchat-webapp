@@ -38,6 +38,7 @@ import {
     isCollapsedThreadsEnabled,
 } from 'mattermost-redux/selectors/entities/preferences';
 import {
+    getRoles,
     haveIChannelPermission,
     haveICurrentChannelPermission,
     haveITeamPermission,
@@ -154,6 +155,36 @@ export function getChannelMember(state: GlobalState, channelId: string, userId: 
 export function getGuestMembersInChannel(state: GlobalState, channelId: string) {
     return state.entities.channels.guestMembersInChannel[channelId];
 }
+
+export const getHasChannelMembersAdmin: (state: GlobalState, channel: Channel, members: Record<string, ChannelMembership>, currentMemberIsChannelAdmin: boolean | undefined) => boolean = createSelector(
+    'getHasChannelMembersAdmin',
+    (_state: GlobalState, _channel: Channel, members: Record<string, ChannelMembership>) => members,
+    getCurrentUserId,
+    (_state: GlobalState, channel: Channel) => channel.type === General.PRIVATE_CHANNEL,
+    (state: GlobalState) => getRoles(state),
+    (state: GlobalState, channel: Channel) => getChannelMemberChannel(state, channel.id),
+    (_state: GlobalState, _channel: Channel, _members: Record<string, ChannelMembership>, currentMemberIsChannelAdmin: boolean | undefined) => currentMemberIsChannelAdmin,
+    (guestsInChannel, currentUserId, isPrivateChannel, roles, currentMember, test) => {
+        const guestsInChannelArray = Object.values(guestsInChannel);
+        let hasChannelMembersAdmin = false;
+        if (isPrivateChannel && test) {
+            hasChannelMembersAdmin = guestsInChannelArray.some((user) => {
+                if (user?.user_id === currentUserId) {
+                    return false;
+                }
+                const userRoles = user.roles.split(' ');
+                return userRoles.some((roleName) => {
+                    const role = roles[roleName];
+                    return role && role.permissions.includes('manage_private_channel_members');
+                });
+            });
+            if (!hasChannelMembersAdmin) {
+                return true;
+            }
+        }
+        return false;
+    },
+);
 
 export const getGuestMembersIdsInChannel = createSelector(
     'getGuestMembersIdsInChannel',
