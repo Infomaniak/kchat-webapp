@@ -21,7 +21,6 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
 
 import * as GlobalActions from 'actions/global_actions';
-import * as InfomaniakActions from 'actions/infomaniak_actions';
 
 import AdvancedTextEditor from 'components/advanced_text_editor/advanced_text_editor';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
@@ -367,6 +366,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         if (this.timeoutId !== null) {
             clearTimeout(this.timeoutId);
         }
+        this.stopRecordingEvent();
     }
 
     getChannelMemberCountsByGroup = () => {
@@ -900,19 +900,31 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             this.setShowPreview(false);
         }
 
-        this.emitTypingEvent();
+        this.emitTypingEvent('typing');
     };
 
-    emitTypingEvent = () => {
+    emitTypingEvent = (type = 'typing') => {
         const channelId = this.props.currentChannel.id;
-        GlobalActions.emitLocalUserTypingEvent(channelId, '');
+        switch (type) {
+        case 'typing':
+            GlobalActions.emitLocalUserTypingEvent('typing', channelId, '');
+            break;
+        case 'recording':
+            this.emitRecordingEvent();
+            break;
+        case 'stop':
+            this.stopRecordingEvent();
+            break;
+        default:
+            break;
+        }
     };
 
     emitRecordingEvent = () => {
         const TIMER = 1000;
         this.recordingInterval = setInterval(() => {
             const channelId = this.props.currentChannel.id;
-            InfomaniakActions.emitLocalUserRecordingEvent(channelId, '');
+            GlobalActions.emitLocalUserTypingEvent('recording', channelId, '');
         }, TIMER);
     };
 
@@ -1534,8 +1546,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     handleBlur={this.handleBlur}
                     handlePostError={this.handlePostError}
                     emitTypingEvent={this.emitTypingEvent}
-                    emitRecordingEvent={this.emitRecordingEvent}
-                    stopRecordingEvent={this.stopRecordingEvent}
                     handleMouseUpKeyUp={this.handleMouseUpKeyUp}
                     postMsgKeyPress={this.postMsgKeyPress}
                     handleChange={this.handleChange}

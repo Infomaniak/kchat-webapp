@@ -52,7 +52,6 @@ exports[`components/advanced_create_post Show tutorial 1`] = `
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -98,7 +97,6 @@ exports[`components/advanced_create_post Show tutorial 1`] = `
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={true}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -165,7 +163,6 @@ exports[`components/advanced_create_post should match snapshot for center textbo
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -211,7 +208,6 @@ exports[`components/advanced_create_post should match snapshot for center textbo
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -278,7 +274,6 @@ exports[`components/advanced_create_post should match snapshot when cannot post 
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -324,7 +319,6 @@ exports[`components/advanced_create_post should match snapshot when cannot post 
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -391,7 +385,6 @@ exports[`components/advanced_create_post should match snapshot when file upload 
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -437,7 +430,6 @@ exports[`components/advanced_create_post should match snapshot when file upload 
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -504,7 +496,6 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -550,7 +541,6 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -617,7 +607,6 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -663,7 +652,6 @@ exports[`components/advanced_create_post should match snapshot, can post; previe
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -730,7 +718,6 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -776,7 +763,6 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -843,7 +829,6 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -889,7 +874,6 @@ exports[`components/advanced_create_post should match snapshot, cannot post; pre
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -956,7 +940,6 @@ exports[`components/advanced_create_post should match snapshot, init 1`] = `
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -1002,7 +985,6 @@ exports[`components/advanced_create_post should match snapshot, init 1`] = `
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -1074,7 +1056,6 @@ exports[`components/advanced_create_post should match snapshot, post priority di
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -1120,7 +1101,6 @@ exports[`components/advanced_create_post should match snapshot, post priority di
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -1195,7 +1175,6 @@ exports[`components/advanced_create_post should match snapshot, post priority en
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -1241,7 +1220,6 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -1326,7 +1304,6 @@ exports[`components/advanced_create_post should match snapshot, post priority en
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -1387,7 +1364,6 @@ exports[`components/advanced_create_post should match snapshot, post priority en
     shouldShowPreview={false}
     showEmojiPicker={false}
     showSendTutorialTip={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,

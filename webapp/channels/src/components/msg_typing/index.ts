@@ -13,7 +13,6 @@ import MsgTyping from './msg_typing';
 type OwnProps = {
     channelId: string;
     postId: string;
-    rootId: string;
 };
 
 function makeMapStateToProps() {

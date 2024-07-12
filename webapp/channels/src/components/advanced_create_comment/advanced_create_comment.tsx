@@ -19,7 +19,6 @@ import {getEmojiName} from 'mattermost-redux/utils/emoji_utils';
 import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
 
 import * as GlobalActions from 'actions/global_actions';
-import * as InfomaniakActions from 'actions/infomaniak_actions';
 
 import AdvancedTextEditor from 'components/advanced_text_editor/advanced_text_editor';
 import FileLimitStickyBanner from 'components/file_limit_sticky_banner';
@@ -316,6 +315,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         if (this.timeoutId !== null) {
             clearTimeout(this.timeoutId);
         }
+        this.stopRecordingEvent();
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
@@ -755,7 +755,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             });
         }
 
-        this.emitTypingEvent();
+        this.emitTypingEvent('typing');
     };
 
     reactToLastMessage = (e: React.KeyboardEvent<TextboxElement>) => {
@@ -768,16 +768,28 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         emitShortcutReactToLastPostFrom(Locations.RHS_ROOT);
     };
 
-    emitTypingEvent = () => {
+    emitTypingEvent = (type = 'typing') => {
         const {channelId, rootId} = this.props;
-        GlobalActions.emitLocalUserTypingEvent(channelId, rootId);
+        switch (type) {
+        case 'typing':
+            GlobalActions.emitLocalUserTypingEvent('typing', channelId, rootId);
+            break;
+        case 'recording':
+            this.emitRecordingEvent();
+            break;
+        case 'stop':
+            this.stopRecordingEvent();
+            break;
+        default:
+            break;
+        }
     };
 
     emitRecordingEvent = () => {
         const TIMER = 1000;
         this.recordingInterval = setInterval(() => {
             const {channelId, rootId} = this.props;
-            InfomaniakActions.emitLocalUserRecordingEvent(channelId, rootId);
+            GlobalActions.emitLocalUserTypingEvent('recording', channelId, rootId);
         }, TIMER);
     };
 
@@ -1167,8 +1179,6 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     postError={this.state.postError}
                     handlePostError={this.handlePostError}
                     emitTypingEvent={this.emitTypingEvent}
-                    emitRecordingEvent={this.emitRecordingEvent}
-                    stopRecordingEvent={this.stopRecordingEvent}
                     handleMouseUpKeyUp={this.handleMouseUpKeyUp}
                     postMsgKeyPress={this.commentMsgKeyPress}
                     handleChange={this.handleChange}

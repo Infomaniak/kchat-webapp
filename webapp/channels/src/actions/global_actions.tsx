@@ -217,7 +217,7 @@ export function sendAddToChannelEphemeralPost(user: UserProfile, addedUsername: 
 }
 
 let lastTimeTypingSent = 0;
-export function emitLocalUserTypingEvent(channelId: string, parentPostId: string) {
+export function emitLocalUserTypingEvent(type = 'typing', channelId: string, parentPostId: string) {
     const userTyping: ActionFuncAsync = async (actionDispatch, actionGetState) => {
         const state = actionGetState();
         const config = getConfig(state);
@@ -239,7 +239,16 @@ export function emitLocalUserTypingEvent(channelId: string, parentPostId: string
 
         if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
             (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
-            WebSocketClient.userTyping(channelId, userId, parentPostId);
+            switch (type) {
+            case 'typing':
+                WebSocketClient.userTyping(channelId, userId, parentPostId);
+                break;
+            case 'recording':
+                WebSocketClient.userRecording(channelId, userId, parentPostId);
+                break;
+            default:
+                break;
+            }
             lastTimeTypingSent = t;
         }
 

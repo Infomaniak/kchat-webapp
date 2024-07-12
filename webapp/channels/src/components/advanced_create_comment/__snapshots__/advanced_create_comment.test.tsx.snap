@@ -78,7 +78,6 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -121,7 +120,6 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -165,7 +163,6 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -208,7 +205,6 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -302,7 +298,6 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={false}
     enableGifPicker={true}
@@ -345,7 +340,6 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -389,7 +383,6 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -432,7 +425,6 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,
@@ -526,7 +518,6 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
         "uploadsInProgress": Array [],
       }
     }
-    emitRecordingEvent={[Function]}
     emitTypingEvent={[Function]}
     enableEmojiPicker={true}
     enableGifPicker={true}
@@ -569,7 +560,6 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
     setShowPreview={[Function]}
     shouldShowPreview={false}
     showEmojiPicker={false}
-    stopRecordingEvent={[Function]}
     textboxRef={
       Object {
         "current": null,

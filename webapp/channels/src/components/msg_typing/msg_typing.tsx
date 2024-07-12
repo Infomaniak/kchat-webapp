@@ -52,7 +52,7 @@ export default function MsgTyping(props: Props) {
             userStoppedRecording]),
     });
 
-    const getInputText = (users: string[], type: 'typing' | 'recording') => {
+    const getInputText = (users: string[], type = 'typing') => {
         const numUsers = users.length;
         if (numUsers === 0) {
             return '';

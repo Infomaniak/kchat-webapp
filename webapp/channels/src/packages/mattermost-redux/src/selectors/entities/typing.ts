@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Recording} from '@mattermost/types/recording';
 import type {GlobalState} from '@mattermost/types/store';
 import type {Typing} from '@mattermost/types/typing';
 import type {UserProfile} from '@mattermost/types/users';

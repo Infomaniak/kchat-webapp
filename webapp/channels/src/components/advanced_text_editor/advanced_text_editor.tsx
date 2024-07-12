@@ -93,9 +93,7 @@ type Props = {
     enableGifPicker: boolean;
     handleBlur: () => void;
     handlePostError: (postError: React.ReactNode) => void;
-    emitTypingEvent: () => void;
-    emitRecordingEvent?: ComponentProps<typeof VoiceMessageAttachment>['onStarted'];
-    stopRecordingEvent?: ComponentProps<typeof VoiceMessageAttachment>['onComplete'] | ComponentProps<typeof VoiceMessageAttachment>['onCancel'];
+    emitTypingEvent: (type: string) => void;
     handleMouseUpKeyUp: (e: React.MouseEvent<TextboxElement> | React.KeyboardEvent<TextboxElement>) => void;
     postMsgKeyPress: (e: React.KeyboardEvent<TextboxElement>) => void;
     handleChange: (e: React.ChangeEvent<TextboxElement>) => void;
@@ -166,8 +164,6 @@ const AdvanceTextEditor = ({
     handleBlur: onBlur,
     handlePostError,
     emitTypingEvent,
-    emitRecordingEvent,
-    stopRecordingEvent,
     handleMouseUpKeyUp,
     postMsgKeyPress,
     handleChange,
@@ -266,9 +262,9 @@ const AdvanceTextEditor = ({
                     onUploadError={handleUploadError}
                     onRemoveDraft={removePreview}
                     onSubmit={handleSubmit}
-                    onStarted={emitRecordingEvent}
-                    onCancel={stopRecordingEvent}
-                    onComplete={stopRecordingEvent}
+                    onStarted={emitTypingEvent}
+                    onCancel={emitTypingEvent}
+                    onComplete={emitTypingEvent}
                 />
             </div>
         );

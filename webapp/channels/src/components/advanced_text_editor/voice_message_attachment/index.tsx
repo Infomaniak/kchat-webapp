@@ -32,7 +32,7 @@ declare global {
     }
 }
 
-type Props = Pick<ComponentProps<typeof VoiceMessageRecordingStarted>, 'onStarted'> & {
+type Props = {
     channelId: Channel['id'];
     rootId: Post['id'];
     draft: PostDraft;
@@ -48,8 +48,9 @@ type Props = Pick<ComponentProps<typeof VoiceMessageRecordingStarted>, 'onStarte
     onUploadError: (err: string | ServerError, clientId?: string, channelId?: Channel['id'], rootId?: Post['id']) => void;
     onRemoveDraft: (fileInfoIdOrClientId: FileInfo['id'] | string) => void;
     onSubmit: (e: FormEvent<Element>) => void;
-    onComplete?: () => void;
-    onCancel?: () => void;
+    onComplete?: (type: string) => void;
+    onCancel?: (type: string) => void;
+    onStarted?: (type: string) => void;
 }
 
 const VoiceMessageAttachment = (props: Props) => {
@@ -133,7 +134,7 @@ const VoiceMessageAttachment = (props: Props) => {
     async function handleCompleteRecordingClicked(audioFile: File) {
         audioFileRef.current = audioFile;
         uploadRecording(audioFile);
-        props.onComplete?.();
+        props.onComplete?.('stop');
     }
 
     function handleCancelRecordingClicked() {
@@ -143,7 +144,7 @@ const VoiceMessageAttachment = (props: Props) => {
         if (props.location === Locations.RHS_COMMENT) {
             props.setDraftAsPostType(props.rootId, props.draft);
         }
-        props.onCancel?.();
+        props.onCancel?.('stop');
     }
 
     if (props.vmState === VoiceMessageStates.RECORDING) {
