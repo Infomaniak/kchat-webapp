@@ -64,6 +64,7 @@ function NewRepliesBanner({
                 onClickMessage={onClickMessage}
                 overlayPlacement='top'
                 width={156}
+                isInThread={true}
             >
                 <FormattedMessage
                     id='rhs_thread.toast.newReplies'
