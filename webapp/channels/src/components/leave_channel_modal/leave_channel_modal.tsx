@@ -3,7 +3,7 @@
 
 import isEqual from 'lodash/isEqual';
 import type {FC} from 'react';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
@@ -11,6 +11,7 @@ import styled from 'styled-components';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {Group, GroupSearchParams} from '@mattermost/types/groups';
+import type {TeamStats} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
@@ -45,7 +46,7 @@ type Props = {
         addUsersToChannel: (channelId: string, userIds: string[]) => Promise<ActionResult>;
         searchProfiles: (term: string, options: any) => Promise<ActionResult>;
         searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined, opts: GroupSearchParams) => Promise<ActionResult>;
-        getTeamStats: (teamId: string) => void;
+        getTeamStats: (teamId: string) => Promise<ActionResult<TeamStats, any>>;
         closeModal: (modalId: string) => void;
         getProfilesInChannel: (channelId: string, page: number, perPage: number, sort: string, options: {active?: boolean}) => Promise<ActionResult>;
         getTeamMembersByIds: (teamId: string, userIds: string[]) => Promise<ActionResult>;
@@ -53,7 +54,7 @@ type Props = {
     };
     skipCommit?: boolean;
     isGroupsEnabled?: boolean;
-    isInvite?: boolean;
+    hasChannelMembersAdmin?: boolean;
     currentMemberIsChannelAdmin?: boolean;
 }
 
@@ -69,20 +70,19 @@ export enum ProfilesInChannelSortBy {
 const UsernameSpan = styled.span`
 fontSize: 12px;
 `;
-const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsChannelAdmin, isInvite, currentUser, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited}) => {
-    const selectedItemRef = React.createRef<HTMLDivElement>();
-    const [selectedUsers, setSelectedUsers] = useState<UserProfileValue[]>([]);
+const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsChannelAdmin, hasChannelMembersAdmin, currentUser, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited}) => {
     const [groupAndUserOptions, setGroupAndUserOptions] = useState < Array<UserProfileValue | GroupValue > >([]);
-    const [term, setTerm] = useState('');
-    const [show, setShow] = useState(true);
-    const [saving, setSavingUsers] = useState(false);
-    const [loadingUsers, setLoadingUsers] = useState(true);
-    const [loadingMembers, setLoadingMembers] = useState(false);
     const [inviteError, setInviteError] = useState();
+    const [loadingUsers, setLoadingUsers] = useState(true);
+    const [saving, setSavingUsers] = useState(false);
+    const [selectedUsers, setSelectedUsers] = useState<UserProfileValue[]>([]);
+    const [show, setShow] = useState(true);
+    const [term, setTerm] = useState('');
+    const selectedItemRef = React.createRef<HTMLDivElement>();
 
-    const isUser = (option: UserProfileValue | GroupValue | UserProfile): option is UserProfileValue => {
+    const isUser = useCallback((option: UserProfileValue | GroupValue | UserProfile): option is UserProfileValue => {
         return (option as UserProfile).username !== undefined;
-    };
+    }, []);
 
     const addValue = (value: UserProfileValue | GroupValue): void => {
         if (isUser(value)) {
@@ -90,63 +90,64 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
             setSelectedUsers((prev) => [...prev, profile]);
         }
     };
+
     useEffect(() => {
-        if (currentMemberIsChannelAdmin) {
-            setLoadingMembers(true);
-            Promise.all([
-                actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin),
-            ]).then(() => {
-                setLoadingMembers(false);
-            });
-        } else {
-            setLoadingMembers(false);
-        }
+        const fetchProfiles = () => {
+            if (currentMemberIsChannelAdmin) {
+                actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
+            }
+        };
+        fetchProfiles();
     }, [channel.id, channel.type, actions, currentMemberIsChannelAdmin]);
 
     useEffect(() => {
-        actions.getProfilesInChannel(channel.id, 0, USERS_PER_PAGE, '', {active: true});
-        actions.getTeamStats(channel.team_id);
-        actions.loadStatusesForProfilesList(profilesInCurrentChannel!);
-        setLoadingUsers(false);
-    }, []);
-
-    useEffect(() => {
-        const values = getOptions();
-        const userIds = [];
-        setLoadingUsers(true);
-
-        for (let index = 0; index < values.length; index++) {
-            const newValue = values[index];
-            if (isUser(newValue)) {
-                userIds.push(newValue.id);
-            } else if (newValue.member_ids) {
-                userIds.push(...newValue.member_ids);
-            }
-        }
-        if (!isEqual(values, groupAndUserOptions)) {
-            if (userIds.length > 0) {
-                actions.getTeamMembersByIds(channel.team_id, userIds);
-            }
-            setGroupAndUserOptions(values);
+        const fetchData = async () => {
+            await Promise.all([
+                actions.getProfilesInChannel(channel.id, 0, USERS_PER_PAGE, '', {active: true}),
+                actions.getTeamStats(channel.team_id),
+                actions.loadStatusesForProfilesList(profilesInCurrentChannel!),
+            ]);
             setLoadingUsers(false);
-        }
-        setLoadingUsers(false);
+        };
+        fetchData();
+    }, [actions, channel.id, channel.team_id, profilesInCurrentChannel]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [term, profilesInCurrentChannel]);
-
-    const getOptions = () => {
+    const getOptions = useCallback(() => {
         let filteredProfiles: UserProfile[] = [];
         if (currentUser !== undefined && profilesInCurrentChannel) {
             filteredProfiles = profilesInCurrentChannel.filter(
                 (profile) => profile.id.toString() !== currentUser!.user_id.toString(),
             );
         }
-
-        const filterProfilesWithTerm: Array<UserProfileValue | GroupValue> = filterProfilesStartingWithTerm(filteredProfiles, term) as Array<UserProfileValue | GroupValue>;
-
+        const filterProfilesWithTerm = filterProfilesStartingWithTerm(filteredProfiles, term) as Array<UserProfileValue | GroupValue>;
         return filterProfilesWithTerm;
-    };
+    }, [currentUser, profilesInCurrentChannel, term]);
+
+    useEffect(() => {
+        const fetchTeamMembers = async () => {
+            const values = getOptions();
+            const userIds = [];
+            setLoadingUsers(true);
+
+            for (let index = 0; index < values.length; index++) {
+                const newValue = values[index];
+                if (isUser(newValue)) {
+                    userIds.push(newValue.id);
+                } else if (newValue.member_ids) {
+                    userIds.push(...newValue.member_ids);
+                }
+            }
+
+            if (!isEqual(values, groupAndUserOptions)) {
+                if (userIds.length > 0) {
+                    await actions.getTeamMembersByIds(channel.team_id, userIds);
+                }
+                setGroupAndUserOptions(values);
+            }
+            setLoadingUsers(false);
+        };
+        fetchTeamMembers();
+    }, [actions, channel.team_id, getOptions, groupAndUserOptions, isUser]);
 
     const onHide = (): void => {
         setShow(false);
@@ -159,12 +160,15 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
         setSelectedUsers(profiles);
     };
 
-    const handlePageChange = (page: number, prevPage: number): void => {
+    const handlePageChange = useCallback(async (page: number, prevPage: number): Promise<void> => {
         if (page > prevPage) {
             setLoadingUsers(true);
-            actions.getProfilesInChannel(channel.id, page + 1, USERS_PER_PAGE, '', {active: true});
+            try {
+                await actions.getProfilesInChannel(channel.id, page + 1, USERS_PER_PAGE, '', {active: true});
+            } catch (err) {} // eslint-disable-line no-empty
+            setLoadingUsers(false);
         }
-    };
+    }, [channel.id, actions]);
 
     const handleLeaveSubmit = () => {
         if (channel) {
@@ -353,7 +357,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
         }
 
         if (channel.type === Constants.PRIVATE_CHANNEL) {
-            if (profilesInCurrentChannel!.length > 1 && isInvite) {
+            if (profilesInCurrentChannel!.length > 1 && hasChannelMembersAdmin) {
                 message = (
                     <FormattedMessage
                         id='leave_private_channel_modal.which_user'
@@ -392,7 +396,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
 
     let content;
     if (channel.type === Constants.PRIVATE_CHANNEL) {
-        if (isInvite && profilesInCurrentChannel!.length > 1) {
+        if (hasChannelMembersAdmin && profilesInCurrentChannel!.length > 1) {
             content = (
                 <div className='test-channel-1-download'>
                     <div className='alert alert-with-icon-leave alert-grey'>
@@ -435,7 +439,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
                     />
                 </div>
             );
-        } else if (isInvite && profilesInCurrentChannel!.length === 1) {
+        } else if (hasChannelMembersAdmin && profilesInCurrentChannel!.length === 1) {
             content = (
                 <div>
                     <div className='alert alert-with-icon-leave alert-grey'>
@@ -505,10 +509,10 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
             >
                 {inviteError}
                 <div className='channel-invite__content'>
-                    {!loadingMembers && content}
+                    {content}
                 </div>
             </Modal.Body>
-            {((isInvite && profilesInCurrentChannel!.length === 1) || !isInvite) && <Modal.Footer>
+            {((hasChannelMembersAdmin && profilesInCurrentChannel!.length === 1) || !hasChannelMembersAdmin) && <Modal.Footer>
                 <button
                     type='button'
                     className='btn btn-tertiary'
