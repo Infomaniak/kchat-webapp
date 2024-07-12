@@ -65,6 +65,11 @@ function CustomStatusEmoji({
         return statusEmoji;
     }
 
+    const expires = Boolean(
+        customStatus.expires_at &&
+        customStatus.duration !== CustomStatusDuration.DONT_CLEAR,
+    );
+
     return (
         <OverlayTrigger
             delayShow={Constants.OVERLAY_TIME_DELAY}
@@ -74,7 +79,7 @@ function CustomStatusEmoji({
                     <div className='custom-status'>
                         <RenderEmoji
                             emojiName={customStatus.emoji}
-                            size={14}
+                            size={expires ? 14 : 28}
                             emojiStyle={{
                                 marginTop: 2,
                             }}
@@ -88,7 +93,7 @@ function CustomStatusEmoji({
                             </span>
                         }
                     </div>
-                    {customStatus.expires_at && customStatus.duration !== CustomStatusDuration.DONT_CLEAR &&
+                    {expires &&
                         <div>
                             <ExpiryTime
                                 time={customStatus.expires_at}
