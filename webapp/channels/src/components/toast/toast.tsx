@@ -27,7 +27,6 @@ export type Props = {
     extraClasses?: string;
     overlayPlacement?: OverlayTriggerProps['placement'];
     jumpDirection?: 'up' | 'down';
-    isInThread?: boolean;
 }
 
 export default class Toast extends React.PureComponent<Props> {
@@ -113,7 +112,7 @@ export default class Toast extends React.PureComponent<Props> {
                     overlay={closeTooltip}
                 >
                     <div
-                        className={this.props.isInThread ? 'toast__dismiss' : 'toast__dismiss_thread'}
+                        className='toast__dismiss'
                         onClick={this.handleDismiss}
                         data-testid={extraClasses ? `dismissToast-${extraClasses}` : 'dismissToast'}
                     >
