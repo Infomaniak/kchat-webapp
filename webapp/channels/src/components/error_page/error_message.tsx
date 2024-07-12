@@ -222,6 +222,16 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                 </p>
             );
             break;
+        case ErrorPageTypes.FORCE_MIGRATION:
+            errorMessage = (
+                <p>
+                    <FormattedMessage
+                        id='error.force_migration.message'
+                        defaultMessage='Votre version de l’application n’est plus supportée. Veuillez télécharger la nouvelle version et l’installer pour bénéficier des dernières améliorations.'
+                    />
+                </p>
+            );
+            break;
         case ErrorPageTypes.PAGE_NOT_FOUND:
         default:
             errorMessage = (

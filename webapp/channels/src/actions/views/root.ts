@@ -1,7 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {get} from 'lodash';
+
+import type {ServerError} from '@mattermost/types/errors';
+
 import {getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
+import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
 import {loadMe} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import type {ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
@@ -11,7 +16,9 @@ import {getCurrentLocale, getTranslations} from 'selectors/i18n';
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
 import {ActionTypes} from 'utils/constants';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {isDesktopApp} from 'utils/user_agent';
+import * as UserAgent from 'utils/user_agent';
 
 import en from 'i18n/en.json';
 
@@ -25,8 +32,20 @@ const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};
 export type TranslationPluginFunction = (locale: string) => Translations
 
 export function loadConfigAndMe(): ActionFuncAsync<boolean> {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         // If expired, refresh token
+        const state = getState();
+        const latestVer = state.entities.general.config || '';
+        const userAgentVersion = UserAgent.getDesktopVersion();
+
+        if (!UserAgent.isMacApp() || UserAgent.isNotMacMas() || !latestVer || !userAgentVersion || isServerVersionGreaterThanOrEqualTo(userAgentVersion, latestVer)) {
+            const forceMigrationError: ServerError = {
+                message: 'Maintenance mode',
+                status_code: 1,
+            };
+            redirectToErrorPageIfNecessary(forceMigrationError);
+        }
+
         if (isDesktopApp() && checkIKTokenIsExpired()) {
             console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
             await refreshIKToken(/*redirectToReam*/false)?.catch((e: unknown) => {
@@ -118,3 +137,4 @@ export function registerCustomPostRenderer(type: string, component: any, id: str
         return {data: true};
     };
 }
+

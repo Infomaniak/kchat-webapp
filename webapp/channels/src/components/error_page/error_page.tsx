@@ -8,15 +8,16 @@ import {Link} from 'react-router-dom';
 
 import * as GlobalActions from 'actions/global_actions';
 
+import {ErrorPageTypes} from 'utils/constants';
+
 import kSuite from 'images/ik/kSuite.svg';
 import MattermostLogoSvg from 'images/logo.svg';
 import loaderkChat from 'images/logo_compact.png';
 import NoTeamIcon from 'images/no_team_icon.png';
-import {ErrorPageTypes, Constants} from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
 
 import SvgIlluErrorBlocked from './assets/SvgIlluErrorBlocked';
 import SvgIlluErrorMaintenance from './assets/SvgIlluErrorMaintenance';
+import SvgIlluMigration from './assets/SvgIlluErrorMigration';
 import SvgIlluErrorQuestion from './assets/SvgIlluErrorQuestion';
 import ErrorMessage from './error_message';
 import ErrorTitle from './error_title';
@@ -77,6 +78,10 @@ export default class ErrorPage extends React.PureComponent<Props> {
             }
         };
 
+        const goToAppStore = () => {
+            window.open('https://apps.apple.com/app/infomaniak-kchat/id6443845553', '_blank');
+        };
+
         const goToKsuite = () => {
             if (window) {
                 window.open('https://infomaniak.com/ksuite', '_blank');
@@ -95,7 +100,8 @@ export default class ErrorPage extends React.PureComponent<Props> {
             trustParams = verify.verify(keyPEM, signature, 'base64');
         }
 
-        const type = params.get('type');
+        // const type = params.get('type');
+        const type = ErrorPageTypes.FORCE_MIGRATION;
         const title = (trustParams && params.get('title')) || '';
         const message = (trustParams && params.get('message')) || '';
         const service = (trustParams && params.get('service')) || '';
@@ -104,6 +110,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
         let backButton;
         let secondaryButton;
         let illustration: JSX.Element | null = <SvgIlluErrorQuestion/>;
+        const illustrationMigration: JSX.Element | null = <SvgIlluMigration/>;
         let fullscreenIllustration;
         if (type === ErrorPageTypes.PERMALINK_NOT_FOUND && returnTo) {
             backButton = (
@@ -282,6 +289,20 @@ export default class ErrorPage extends React.PureComponent<Props> {
                     <FormattedMessage
                         id='navbar_dropdown.dashboard'
                         defaultMessage='Tableau de bord'
+                    />
+                </a>
+            );
+        } else if (type === ErrorPageTypes.FORCE_MIGRATION) {
+            illustration = illustrationMigration;
+            backButton = (
+                <a
+                    className='btn btn-primary'
+                    onClick={() => goToAppStore()}
+                >
+                    <FormattedMessage
+                        id='error.generic.reld'
+                        defaultMessage='Télécharger la nouvelle version'
+
                     />
                 </a>
             );
