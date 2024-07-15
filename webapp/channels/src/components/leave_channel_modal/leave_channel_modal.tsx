@@ -2,11 +2,11 @@
 // See LICENSE.txt for license information.
 
 import {Skeleton} from '@mui/material';
+import debounce from 'lodash/debounce';
 import type {FC} from 'react';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Modal} from 'react-bootstrap';
-import type {IntlShape} from 'react-intl';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 
@@ -15,6 +15,7 @@ import type {Group, GroupSearchParams} from '@mattermost/types/groups';
 import type {TeamStats} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {ProfilesInChannelSortBy} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import type {ActionResult} from 'mattermost-redux/types/actions';
@@ -35,7 +36,6 @@ import GroupOption from '../channel_invite_modal/group_option';
 type Props = {
     profilesNotInCurrentChannel?: UserProfile[];
     profilesInCurrentChannel?: UserProfile[];
-    intl: IntlShape;
     channel: Channel ;
     currentUser?: ChannelMembership | undefined;
     onAddCallback?: (userProfiles?: UserProfileValue[]) => void;
@@ -66,14 +66,22 @@ const USERS_PER_PAGE = 50;
 type UserProfileValue = UserProfile & Value;
 type GroupValue = Group & Value ;
 
-export enum ProfilesInChannelSortBy {
-    None = '',
-    Admin = 'admin',
-}
 const UsernameSpan = styled.span`
 fontSize: 12px;
 `;
-const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsChannelAdmin, hasChannelMembersAdmin, currentUser, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited}) => {
+
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
+const useTransientRef = <T extends unknown>(value: T) => {
+    const ref = React.useRef(value);
+    ref.current = value;
+    return ref;
+};
+
+const isUser = (option: UserProfileValue | GroupValue | UserProfile): option is UserProfileValue => {
+    return (option as UserProfile).username !== undefined;
+};
+
+const LeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChannelAdmin, hasChannelMembersAdmin, currentUser, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited}) => {
     const [inviteError, setInviteError] = useState();
     const [initialLoadingUsers, setInitalLoadingUsers] = useState(true);
     const [loadingUsers, setLoadingUsers] = useState(false);
@@ -83,10 +91,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
     const [term, setTerm] = useState('');
     const selectedItemRef = React.createRef<HTMLDivElement>();
     const theme = useSelector(getTheme);
-
-    const isUser = useCallback((option: UserProfileValue | GroupValue | UserProfile): option is UserProfileValue => {
-        return (option as UserProfile).username !== undefined;
-    }, []);
+    const intl = useIntl();
 
     const addValue = (value: UserProfileValue | GroupValue): void => {
         if (isUser(value)) {
@@ -174,43 +179,51 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
         onHide();
     };
 
-    const searshTimeoutIdRef = React.useRef < number | undefined >(0);
-    const search = (searchTerm: string): void => {
-        const term = searchTerm.trim();
-        clearTimeout(searshTimeoutIdRef.current);
-        setTerm(term);
-        searshTimeoutIdRef.current = window.setTimeout(
-            async () => {
-                if (!term) {
-                    return;
-                }
+    const searchFnRef = useTransientRef(async (term: string) => {
+        if (!term) {
+            return;
+        }
 
-                const options = {
-                    team_id: channel.team_id,
-                    not_in_channel_id: channel.id,
-                    group_constrained: channel.group_constrained,
-                };
+        const options = {
+            team_id: channel.team_id,
+            not_in_channel_id: channel.id,
+            group_constrained: channel.group_constrained,
+        };
 
-                const opts = {
-                    q: term,
-                    filter_allow_reference: true,
-                    page: 0,
-                    per_page: 100,
-                    include_member_count: true,
-                    include_member_ids: true,
-                };
-                const promises = [
-                    actions.searchProfiles(term, options),
-                ];
-                if (isGroupsEnabled) {
-                    promises.push(actions.searchAssociatedGroupsForReference(term, channel.team_id, channel.id, opts));
-                }
-                await Promise.all(promises);
-                setLoadingUsers(false);
+        const opts = {
+            q: term,
+            filter_allow_reference: true,
+            page: 0,
+            per_page: 100,
+            include_member_count: true,
+            include_member_ids: true,
+        };
+        const promises = [
+            actions.searchProfiles(term, options),
+        ];
+        if (isGroupsEnabled) {
+            promises.push(actions.searchAssociatedGroupsForReference(term, channel.team_id, channel.id, opts));
+        }
+        await Promise.all(promises);
+        setLoadingUsers(false);
+    });
+
+    const search = useMemo(() => {
+        const debounced = debounce(
+            (term: string) => {
+                searchFnRef.current(term);
             },
             Constants.SEARCH_TIMEOUT_MILLISECONDS,
         );
-    };
+
+        return Object.assign(
+            (searchTerm: string): void => {
+                setTerm(term);
+                debounced(searchTerm.trim());
+            },
+            {cancel: debounced.cancel},
+        );
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const renderAriaLabel = (option: UserProfileValue | GroupValue): string => {
         if (!option) {
@@ -222,6 +235,8 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
 
         return option.name!;
     };
+
+    useEffect(() => search.cancel);
 
     /**
      * Fetch profiles and team stats when the component mounts and only if the current user is a channel admin
@@ -240,6 +255,11 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
         } else {
             setInitalLoadingUsers(false);
         }
+
+        return () => {
+            // componentPropsDidUpdate
+            search.cancel();
+        };
     }, [currentMemberIsChannelAdmin]);
 
     const renderOption = (option: UserProfileValue | GroupValue, isSelected: boolean, onAdd: (option: UserProfileValue | GroupValue) => void, onMouseMove: (option: UserProfileValue | GroupValue) => void) => {
