@@ -156,15 +156,22 @@ export function getGuestMembersInChannel(state: GlobalState, channelId: string) 
     return state.entities.channels.guestMembersInChannel[channelId];
 }
 
-export const getHasChannelMembersAdmin: (state: GlobalState, channel: Channel, members: Record<string, ChannelMembership>, currentMemberIsChannelAdmin: boolean | undefined) => boolean = createSelector(
+export const getCurrentMemberIsChannelAdmin: (state: GlobalState, channelId: string) => boolean | undefined = createSelector(
+    'getCurrentMemberIsChannelAdmin',
+    (state: GlobalState, channelId: string) => getChannelMember(state, channelId, getCurrentUserId(state)),
+    (currentMember) => currentMember && currentMember.scheme_admin,
+);
+
+export const getHasChannelMembersAdmin: (state: GlobalState, channelId: string) => boolean = createSelector(
     'getHasChannelMembersAdmin',
-    (_state: GlobalState, _channel: Channel, members: Record<string, ChannelMembership>) => members,
+    getChannelMemberChannel,
+    getChannel,
     getCurrentUserId,
-    (_state: GlobalState, channel: Channel) => channel.type === General.PRIVATE_CHANNEL,
     (state: GlobalState) => getRoles(state),
-    (_state: GlobalState, _channel: Channel, _members: Record<string, ChannelMembership>, currentMemberIsChannelAdmin: boolean | undefined) => currentMemberIsChannelAdmin,
-    (guestsInChannel, currentUserId, isPrivateChannel, roles, currentMemberIsChannelAdmin) => {
+    (_state: GlobalState, _channelId: string) => getCurrentMemberIsChannelAdmin(_state, _channelId),
+    (guestsInChannel, channel, currentUserId, roles, currentMemberIsChannelAdmin) => {
         const guestsInChannelArray = Object.values(guestsInChannel);
+        const isPrivateChannel = channel.type === General.PRIVATE_CHANNEL;
         let hasChannelMembersAdmin = false;
         if (isPrivateChannel && currentMemberIsChannelAdmin) {
             hasChannelMembersAdmin = guestsInChannelArray.some((user) => {
