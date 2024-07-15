@@ -224,7 +224,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
     };
 
     /**
-     *
+     * Fetch profiles and team stats when the component mounts and only if the current user is a channel admin
      */
     useEffect(() => {
         if (currentMemberIsChannelAdmin) {
