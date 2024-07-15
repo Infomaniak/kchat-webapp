@@ -100,8 +100,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
             trustParams = verify.verify(keyPEM, signature, 'base64');
         }
 
-        // const type = params.get('type');
-        const type = ErrorPageTypes.FORCE_MIGRATION;
+        const type = params.get('type');
         const title = (trustParams && params.get('title')) || '';
         const message = (trustParams && params.get('message')) || '';
         const service = (trustParams && params.get('service')) || '';
@@ -300,8 +299,8 @@ export default class ErrorPage extends React.PureComponent<Props> {
                     onClick={() => goToAppStore()}
                 >
                     <FormattedMessage
-                        id='error.generic.reld'
-                        defaultMessage='Télécharger la nouvelle version'
+                        id='error.generic.dl_link'
+                        defaultMessage='Download the new version'
 
                     />
                 </a>

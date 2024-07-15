@@ -227,7 +227,7 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                 <p>
                     <FormattedMessage
                         id='error.force_migration.message'
-                        defaultMessage='Votre version de l’application n’est plus supportée. Veuillez télécharger la nouvelle version et l’installer pour bénéficier des dernières améliorations.'
+                        defaultMessage='Your version of the application is no longer supported. Please download and install the new version to benefit from the latest improvements.'
                     />
                 </p>
             );

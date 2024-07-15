@@ -116,7 +116,7 @@ const ErrorTitle: React.FC<Props> = ({type, title, groupName}: Props) => {
             errorTitle = (
                 <FormattedMessage
                     id='error.force_migration.title'
-                    defaultMessage='Télécharger la nouvelle version de l’application kChat'
+                    defaultMessage='Download the new version of the kChat application'
                 />
             );
             break;
