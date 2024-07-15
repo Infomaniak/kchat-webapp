@@ -78,10 +78,6 @@ export default function ChannelMembersDropdown({
                 dialogType: LeaveChannelModal,
                 dialogProps: {
                     channel,
-                    callback: () => {
-                        actions.getChannelStats(channel.id);
-                        setRemoving(false);
-                    },
                 },
             }));
         } else {

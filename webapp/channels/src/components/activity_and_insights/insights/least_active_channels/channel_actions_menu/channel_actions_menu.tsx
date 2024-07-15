@@ -5,6 +5,7 @@ import React, {memo, useCallback} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
+import type {Channel} from '@mattermost/types/channels';
 import type {LeastActiveChannel} from '@mattermost/types/insights';
 import type {GlobalState} from '@mattermost/types/store';
 
@@ -27,7 +28,7 @@ import {copyToClipboard} from 'utils/utils';
 import './channel_actions_menu.scss';
 
 type Props = {
-    channel: LeastActiveChannel;
+    channel: LeastActiveChannel & Channel;
     actionCallback?: () => Promise<void>;
 }
 
@@ -48,7 +49,6 @@ const ChannelActionsMenu = ({channel, actionCallback}: Props) => {
                 dialogType: LeaveChannelModal,
                 dialogProps: {
                     channel,
-                    callback: actionCallback,
                 },
             }));
         } else {
