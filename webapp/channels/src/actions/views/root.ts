@@ -1,8 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {get} from 'lodash';
-
 import type {ServerError} from '@mattermost/types/errors';
 
 import {getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
@@ -12,6 +10,7 @@ import {Client4} from 'mattermost-redux/client';
 import type {ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale, getTranslations} from 'selectors/i18n';
+import store from 'stores/redux_store';
 
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
@@ -32,20 +31,8 @@ const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};
 export type TranslationPluginFunction = (locale: string) => Translations
 
 export function loadConfigAndMe(): ActionFuncAsync<boolean> {
-    return async (dispatch, getState) => {
+    return async (dispatch) => {
         // If expired, refresh token
-        const state = getState();
-        const latestVer = state.entities.general.config || '';
-        const userAgentVersion = UserAgent.getDesktopVersion();
-
-        if (!UserAgent.isMacApp() || UserAgent.isNotMacMas() || !latestVer || !userAgentVersion || isServerVersionGreaterThanOrEqualTo(userAgentVersion, latestVer)) {
-            const forceMigrationError: ServerError = {
-                message: 'Maintenance mode',
-                status_code: 1,
-            };
-            redirectToErrorPageIfNecessary(forceMigrationError);
-        }
-
         if (isDesktopApp() && checkIKTokenIsExpired()) {
             console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
             await refreshIKToken(/*redirectToReam*/false)?.catch((e: unknown) => {
@@ -57,6 +44,29 @@ export function loadConfigAndMe(): ActionFuncAsync<boolean> {
             dispatch(getClientConfig()),
             dispatch(getLicenseConfig()),
         ]);
+
+        const currentState = store.getState();
+        const {MASLatestVersion} = currentState.entities.general.config;
+
+        const latestVer = MASLatestVersion || '';
+        const userAgentVersion = UserAgent.getDesktopVersion();
+        let redirect = true;
+        if (!UserAgent.isMacApp()) {
+            redirect = false;
+        } else if (UserAgent.isNotMacMas()) {
+            redirect = false;
+        } else if (!latestVer || !userAgentVersion) {
+            redirect = false;
+        } else if (isServerVersionGreaterThanOrEqualTo(userAgentVersion, latestVer)) {
+            redirect = false;
+        }
+        if (redirect) {
+            const forceMigrationError: ServerError = {
+                message: 'Maintenance mode',
+                status_code: 1,
+            };
+            redirectToErrorPageIfNecessary(forceMigrationError);
+        }
 
         let isMeLoaded = false;
 
