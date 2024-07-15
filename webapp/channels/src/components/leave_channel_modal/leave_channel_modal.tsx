@@ -374,7 +374,9 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
         if (initialLoadingUsers) {
             content = (
                 <CompassDesignProvider theme={theme}>
-                    <div className='skeleton-mui leave-channel-modal'>
+                    <div
+                        className='skeleton-mui leave-channel-modal'
+                    >
                         <Skeleton
                             variant='rectangular'
                             width={538}
@@ -388,6 +390,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
                             style={{marginBottom: '16px'}}
                         />
                     </div>
+                    <div style={{height: '106px'}}/>
                 </CompassDesignProvider>
             );
         } else if (hasChannelMembersAdmin && profilesInCurrentChannel!.length > 1) {
@@ -450,7 +453,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
             );
         } else {
             content = (
-                <div>
+                <div className='channel-invite__content no-options'>
                     <div className='alert alert-with-icon-leave alert-grey'>
                         <i className='icon-information-outline'/>
                         <FormattedMessage
@@ -506,7 +509,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
                     {content}
                 </div>
             </Modal.Body>
-            {((hasChannelMembersAdmin && profilesInCurrentChannel!.length === 1) || !hasChannelMembersAdmin) && <Modal.Footer>
+            {((hasChannelMembersAdmin && profilesInCurrentChannel!.length === 1) || !hasChannelMembersAdmin) && !initialLoadingUsers && <Modal.Footer>
                 <button
                     type='button'
                     className='btn btn-tertiary'
