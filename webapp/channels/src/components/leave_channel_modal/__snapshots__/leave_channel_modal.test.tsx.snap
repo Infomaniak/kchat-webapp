@@ -1,128 +1,177 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/LeaveChannelModal should match snapshot, init 1`] = `
-<Modal
-  animation={true}
-  aria-labelledby="channelInviteModalLabel"
-  autoFocus={true}
-  backdrop={true}
-  bsClass="modal"
-  dialogClassName="a11y__modal channel-invite"
-  dialogComponentClass={[Function]}
-  enforceFocus={true}
-  id="addUsersToChannelModal"
-  keyboard={true}
-  manager={
-    ModalManager {
-      "add": [Function],
-      "containers": Array [],
-      "data": Array [],
-      "handleContainerOverflow": true,
-      "hideSiblingNodes": true,
-      "isTopModal": [Function],
-      "modals": Array [],
-      "remove": [Function],
-    }
-  }
-  onExited={[MockFunction]}
-  onHide={[Function]}
-  renderBackdrop={[Function]}
-  restoreFocus={true}
-  role="dialog"
-  show={true}
->
-  <ModalHeader
-    bsClass="modal-header"
-    closeButton={true}
-    closeLabel="Close"
-    id="channelInviteModalLabel"
-  >
-    <ModalTitle
-      bsClass="modal-title"
-      componentClass="h1"
-      id="deletePostModalLabel"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Leave Private Channel {channel}"
-        id="leave_private_channel_modal.title"
-        values={
-          Object {
-            "channel": <b>
-              Test Channel 1
-            </b>,
-          }
-        }
-      />
-    </ModalTitle>
-  </ModalHeader>
-  <ModalBody
-    bsClass="modal-body"
-    className="overflow--visible"
-    componentClass="div"
-    role="application"
+Object {
+  "asFragment": [Function],
+  "baseElement": <body
+    class="modal-open"
+    style="padding-right: 0px;"
   >
     <div
-      className="channel-invite__content"
+      aria-hidden="true"
+    />
+    <div
+      role="dialog"
     >
-      <div>
+      <div
+        class="fade modal-backdrop in"
+      />
+      <div
+        aria-labelledby="channelInviteModalLabel"
+        class="fade in modal"
+        id="addUsersToChannelModal"
+        role="dialog"
+        style="display: block; padding-right: 0px;"
+        tabindex="-1"
+      >
         <div
-          className="alert alert-with-icon-leave alert-grey"
+          class="a11y__modal channel-invite modal-dialog"
         >
-          <i
-            className="icon-information-outline"
-          />
-          <MemoizedFormattedMessage
-            defaultMessage="You are the last user of this private channel. The channel will be archived and can only be unarchived by an administrator."
-            id="leave_private_channel_modal.one_admin"
-          />
-        </div>
-        <div
-          className="alert-message"
-        >
-          <MemoizedFormattedMessage
-            defaultMessage="Do you really want to leave the {channel} channel?"
-            id="leave_private_channel_modal.message"
-            values={
-              Object {
-                "channel": <b>
+          <div
+            class="modal-content"
+            role="document"
+          >
+            <div
+              class="modal-header"
+              id="channelInviteModalLabel"
+            >
+              <button
+                aria-label="Close"
+                class="close"
+                type="button"
+              >
+                <span
+                  aria-hidden="true"
+                >
+                  ×
+                </span>
+                <span
+                  class="sr-only"
+                >
+                  Close
+                </span>
+              </button>
+              <h1
+                class="modal-title"
+                id="deletePostModalLabel"
+              >
+                Leave Private Channel 
+                <b>
                   Test Channel 1
-                </b>,
-              }
-            }
-          />
+                </b>
+              </h1>
+            </div>
+            <div
+              class="overflow--visible modal-body"
+              role="application"
+            >
+              <div
+                class="channel-invite__content"
+              >
+                <div>
+                  <div
+                    class="alert alert-with-icon-leave alert-grey"
+                  >
+                    <i
+                      class="icon-information-outline"
+                    />
+                    Only a channel administrator can invite you to join this channel again.
+                  </div>
+                  <div
+                    class="alert-message"
+                  >
+                    Do you really want to leave the 
+                    <b>
+                      Test Channel 1
+                    </b>
+                     channel?
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="modal-footer"
+            >
+              <button
+                class="btn btn-tertiary"
+                id="cancelModalButton"
+                type="button"
+              >
+                Cancel
+              </button>
+              <div
+                class="leave-button"
+              >
+                <button
+                  class="btn btn-danger"
+                  data-testid="confirmModalButton"
+                  id="confirmModalButton"
+                  type="button"
+                >
+                  Leave
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </ModalBody>
-  <ModalFooter
-    bsClass="modal-footer"
-    componentClass="div"
-  >
-    <button
-      className="btn btn-tertiary"
-      id="cancelModalButton"
-      onClick={[MockFunction]}
-      type="button"
-    >
-      Cancel
-    </button>
-    <div
-      className="leave-button"
-    >
-      <button
-        autoFocus={true}
-        className="btn btn-danger"
-        data-testid="confirmModalButton"
-        id="confirmModalButton"
-        onClick={[Function]}
-        type="button"
-      >
-        <MemoizedFormattedMessage
-          defaultMessage="Leave"
-          id="leave_private_channel_modal.leave"
-        />
-      </button>
-    </div>
-  </ModalFooter>
-</Modal>
+  </body>,
+  "container": <div
+    aria-hidden="true"
+  />,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "replaceStoreState": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+  "updateStoreState": [Function],
+}
 `;

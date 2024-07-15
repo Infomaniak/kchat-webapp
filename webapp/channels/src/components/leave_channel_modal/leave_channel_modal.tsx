@@ -392,7 +392,7 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
             );
         } else if (hasChannelMembersAdmin && profilesInCurrentChannel!.length > 1) {
             content = (
-                <div className='test-channel-1-download'>
+                <div data-testid='test-channel-1-download'>
                     <div className='alert alert-with-icon-leave alert-grey'>
                         <i className='icon-information-outline'/>
                         <FormattedMessage

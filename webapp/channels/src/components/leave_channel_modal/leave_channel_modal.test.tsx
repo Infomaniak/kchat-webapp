@@ -1,11 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import {shallow} from 'enzyme';
+import {act, fireEvent, screen} from '@testing-library/react';
 import React from 'react';
 
 import type {ChannelType} from '@mattermost/types/channels';
 
 import LeaveChannelModal from 'components/leave_channel_modal/leave_channel_modal';
+
+import {renderWithContext} from 'tests/react_testing_utils';
 
 describe('components/LeaveChannelModal', () => {
     test('should match snapshot, init', () => {
@@ -57,7 +59,8 @@ describe('components/LeaveChannelModal', () => {
             isInvite: true,
         };
 
-        const wrapper = shallow<typeof LeaveChannelModal>(
+        const wrapper = renderWithContext(
+
             <LeaveChannelModal
                 {...props}
             />,
@@ -114,18 +117,17 @@ describe('components/LeaveChannelModal', () => {
             profilesInCurrentChannel: [{id: 'user1'}],
             isInvite: true,
         };
-        const wrapper = shallow<typeof LeaveChannelModal>(
+        renderWithContext(
             <LeaveChannelModal
                 {...props}
             />,
         );
 
-        const button = wrapper.find('[data-testid="confirmModalButton"]');
-        button.simulate('click');
-
+        const button = screen.getByTestId('confirmModalButton');
+        fireEvent.click(button);
         expect(props.actions.leaveChannel).toHaveBeenCalledTimes(1);
         expect(props.callback).toHaveBeenCalledTimes(0);
-        expect(wrapper.find('.leave-button').exists()).toBe(true);
+        expect(button).toBeInTheDocument();
     });
 
     test(('should show modal if there is one admin in the channel'), async () => {
@@ -167,18 +169,21 @@ describe('components/LeaveChannelModal', () => {
             currentUser: {user_id: 'user-1'},
             onExited: jest.fn(),
             callback: jest.fn(),
+            hasChannelMembersAdmin: true,
             currentUserIsChannelAdmin: true,
             profilesInCurrentChannel: [{id: 'user1'}, {id: 'user-2'}],
             isInvite: true,
             currentMemberIsChannelAdmin: true,
         };
 
-        const wrapper = shallow<typeof LeaveChannelModal>(
-            <LeaveChannelModal
-                {...props}
-            />,
-        );
-
-        expect(wrapper.find('.test-channel-1-download').exists()).toBe(true);
+        await act(async () => {
+            renderWithContext(
+                <LeaveChannelModal
+                    {...props}
+                />,
+            );
+        });
+        const button = screen.getByTestId('test-channel-1-download');
+        expect(button).toBeInTheDocument();
     });
 });
