@@ -4412,6 +4412,7 @@
   "textbox.preview": "Aperçu",
   "textbox.quote": ">citation",
   "textbox.strike": "barré",
+  "threadFromArchivedChannelMessage": "Vous consultez un fil de discussion d'un **canal archivé**. Il n'est pas possible de poster de nouveaux messages.",
   "threading.filters.allThreads": "Tous vos fils de discussion",
   "threading.filters.unreads": "Non lus",
   "threading.following": "Suivis",
