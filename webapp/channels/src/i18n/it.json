@@ -3092,6 +3092,8 @@
   "reaction.usersAndOthersReacted": "{users} e {otherUsers, number} other {otherUsers, plural, one {user} other {users}}",
   "reaction.usersReacted": "{users} e {lastUser}",
   "reaction.you": "Tu",
+  "reaction_limit_reached_modal.body.admin": "¡Uy! Parece que hemos alcanzado el límite de reacciones por emoji para este mensaje.",
+  "reaction_limit_reached_modal.title": "Has alcanzado el límite de reacciones",
   "reaction_list.addReactionTooltip": "Aggiungi reazione",
   "remove_group_confirm_button": "Si, Cancella il gruppo e {memberCount, plural, one {Member} other {Members}}",
   "remove_group_confirm_message": "{memberCount, number} {memberCount, plural, one {member} other {members}} associati a questo gruppo saranno rimossi dalla squadra. Sicuro di voler rimuovere questo gruppo e {memberCount} {memberCount, plural, one {member} other {members}}?",
