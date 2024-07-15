@@ -1,12 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import isEqual from 'lodash/isEqual';
+import {Skeleton} from '@mui/material';
 import type {FC} from 'react';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
+import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
@@ -15,9 +16,11 @@ import type {TeamStats} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
+import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {displayUsername, isGuest, filterProfilesStartingWithTerm} from 'mattermost-redux/utils/user_utils';
 
+import CompassDesignProvider from 'components/compass_design_provider';
 import type {Value} from 'components/multiselect/multiselect';
 import MultiSelect from 'components/multiselect/multiselect';
 import ProfilePicture from 'components/profile_picture';
@@ -71,14 +74,15 @@ const UsernameSpan = styled.span`
 fontSize: 12px;
 `;
 const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsChannelAdmin, hasChannelMembersAdmin, currentUser, isGroupsEnabled, skipCommit, profilesInCurrentChannel, profilesNotInCurrentChannel, onAddCallback, onExited}) => {
-    const [groupAndUserOptions, setGroupAndUserOptions] = useState < Array<UserProfileValue | GroupValue > >([]);
     const [inviteError, setInviteError] = useState();
-    const [loadingUsers, setLoadingUsers] = useState(true);
+    const [initialLoadingUsers, setInitalLoadingUsers] = useState(true);
+    const [loadingUsers, setLoadingUsers] = useState(false);
     const [saving, setSavingUsers] = useState(false);
     const [selectedUsers, setSelectedUsers] = useState<UserProfileValue[]>([]);
     const [show, setShow] = useState(true);
     const [term, setTerm] = useState('');
     const selectedItemRef = React.createRef<HTMLDivElement>();
+    const theme = useSelector(getTheme);
 
     const isUser = useCallback((option: UserProfileValue | GroupValue | UserProfile): option is UserProfileValue => {
         return (option as UserProfile).username !== undefined;
@@ -91,63 +95,15 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
         }
     };
 
-    useEffect(() => {
-        const fetchProfiles = () => {
-            if (currentMemberIsChannelAdmin) {
-                actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
-            }
-        };
-        fetchProfiles();
-    }, [channel.id, channel.type, actions, currentMemberIsChannelAdmin]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            await Promise.all([
-                actions.getProfilesInChannel(channel.id, 0, USERS_PER_PAGE, '', {active: true}),
-                actions.getTeamStats(channel.team_id),
-                actions.loadStatusesForProfilesList(profilesInCurrentChannel!),
-            ]);
-            setLoadingUsers(false);
-        };
-        fetchData();
-    }, [actions, channel.id, channel.team_id, profilesInCurrentChannel]);
-
-    const getOptions = useCallback(() => {
+    const groupAndUserOptions = useMemo(() => {
         let filteredProfiles: UserProfile[] = [];
         if (currentUser !== undefined && profilesInCurrentChannel) {
             filteredProfiles = profilesInCurrentChannel.filter(
                 (profile) => profile.id.toString() !== currentUser!.user_id.toString(),
             );
         }
-        const filterProfilesWithTerm = filterProfilesStartingWithTerm(filteredProfiles, term) as Array<UserProfileValue | GroupValue>;
-        return filterProfilesWithTerm;
+        return filterProfilesStartingWithTerm(filteredProfiles, term) as Array<UserProfileValue | GroupValue>;
     }, [currentUser, profilesInCurrentChannel, term]);
-
-    useEffect(() => {
-        const fetchTeamMembers = async () => {
-            const values = getOptions();
-            const userIds = [];
-            setLoadingUsers(true);
-
-            for (let index = 0; index < values.length; index++) {
-                const newValue = values[index];
-                if (isUser(newValue)) {
-                    userIds.push(newValue.id);
-                } else if (newValue.member_ids) {
-                    userIds.push(...newValue.member_ids);
-                }
-            }
-
-            if (!isEqual(values, groupAndUserOptions)) {
-                if (userIds.length > 0) {
-                    await actions.getTeamMembersByIds(channel.team_id, userIds);
-                }
-                setGroupAndUserOptions(values);
-            }
-            setLoadingUsers(false);
-        };
-        fetchTeamMembers();
-    }, [actions, channel.team_id, getOptions, groupAndUserOptions, isUser]);
 
     const onHide = (): void => {
         setShow(false);
@@ -266,6 +222,25 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
 
         return option.name!;
     };
+
+    /**
+     *
+     */
+    useEffect(() => {
+        if (currentMemberIsChannelAdmin) {
+            const fetchProfiles = async () => {
+                await Promise.all([
+                    actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin),
+                    actions.getTeamStats(channel.team_id),
+                ]);
+
+                setInitalLoadingUsers(false);
+            };
+            fetchProfiles();
+        } else {
+            setInitalLoadingUsers(false);
+        }
+    }, [currentMemberIsChannelAdmin]);
 
     const renderOption = (option: UserProfileValue | GroupValue, isSelected: boolean, onAdd: (option: UserProfileValue | GroupValue) => void, onMouseMove: (option: UserProfileValue | GroupValue) => void) => {
         let rowSelected = '';
@@ -396,7 +371,26 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
 
     let content;
     if (channel.type === Constants.PRIVATE_CHANNEL) {
-        if (hasChannelMembersAdmin && profilesInCurrentChannel!.length > 1) {
+        if (initialLoadingUsers) {
+            content = (
+                <CompassDesignProvider theme={theme}>
+                    <div className='skeleton-mui leave-channel-modal'>
+                        <Skeleton
+                            variant='rectangular'
+                            width={538}
+                            height={74}
+                            style={{marginBottom: '16px'}}
+                        />
+                        <Skeleton
+                            variant='rectangular'
+                            width={534}
+                            height={48}
+                            style={{marginBottom: '16px'}}
+                        />
+                    </div>
+                </CompassDesignProvider>
+            );
+        } else if (hasChannelMembersAdmin && profilesInCurrentChannel!.length > 1) {
             content = (
                 <div className='test-channel-1-download'>
                     <div className='alert alert-with-icon-leave alert-grey'>
@@ -531,7 +525,8 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, intl, currentMemberIsCh
                         id='confirmModalButton'
                     >
                         {button}
-                    </button></div>
+                    </button>
+                </div>
             </Modal.Footer>}
         </Modal>
     );

@@ -167,11 +167,11 @@ export const getHasChannelMembersAdmin: (state: GlobalState, channelId: string) 
     getChannelMemberChannel,
     getChannel,
     getCurrentUserId,
-    (state: GlobalState) => getRoles(state),
-    (_state: GlobalState, _channelId: string) => getCurrentMemberIsChannelAdmin(_state, _channelId),
+    getRoles,
+    getCurrentMemberIsChannelAdmin,
     (guestsInChannel, channel, currentUserId, roles, currentMemberIsChannelAdmin) => {
         const guestsInChannelArray = Object.values(guestsInChannel);
-        const isPrivateChannel = channel.type === General.PRIVATE_CHANNEL;
+        const isPrivateChannel = channel && channel.type === General.PRIVATE_CHANNEL;
         let hasChannelMembersAdmin = false;
         if (isPrivateChannel && currentMemberIsChannelAdmin) {
             hasChannelMembersAdmin = guestsInChannelArray.some((user) => {

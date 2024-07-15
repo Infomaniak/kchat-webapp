@@ -17,7 +17,7 @@ import {getMyCurrentChannelMembership, getRecentProfilesFromDMs, getChannelMembe
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {makeGetAllAssociatedGroupsForReference} from 'mattermost-redux/selectors/entities/groups';
 import {isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getMembersInTeam, getMembersInCurrentTeam, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getMembersInTeam, getMembersInCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getProfilesInCurrentChannel, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 
 import {addUsersToChannel} from 'actions/channel_actions';
@@ -47,7 +47,6 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
         const currentUser = getMyCurrentChannelMembership(state);
         const currentMember = currentUser ? getChannelMember(state, initialProps.channel.id, currentUser.user_id) : undefined;
         const currentMemberIsChannelAdmin = currentMember && currentMember.scheme_admin;
-        const currentTeam = getCurrentTeam(state);
         const enableCustomUserGroups = isCustomGroupsEnabled(state);
         const getAllAssociatedGroupsForReference = makeGetAllAssociatedGroupsForReference();
         const groups = getAllAssociatedGroupsForReference(state, true);
@@ -55,7 +54,6 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
         const license = getLicense(state);
         const isGroupsEnabled = enableCustomUserGroups || (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true');
         const profilesFromRecentDMs = getRecentProfilesFromDMs(state);
-
         let profilesInCurrentChannel: UserProfile[];
         let membersInTeam: RelationOneToOne<UserProfile, TeamMembership>;
         if (props.channel.id && props.channel.team_id) {
@@ -68,7 +66,6 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
 
         return {
             hasChannelMembersAdmin,
-            currentTeam,
             currentUser,
             groups,
             profilesFromRecentDMs,
