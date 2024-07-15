@@ -43,7 +43,7 @@ const ChannelActionsMenu = ({channel, actionCallback}: Props) => {
         trackEvent('insights', 'leave_channel_action');
 
         if (channel.type === Constants.PRIVATE_CHANNEL) {
-            dispatch(openModal({
+            dispatch(openModal<React.ComponentProps<typeof LeaveChannelModal>>({
                 modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
                 dialogType: LeaveChannelModal,
                 dialogProps: {

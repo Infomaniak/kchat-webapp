@@ -73,7 +73,7 @@ export default function ChannelMembersDropdown({
 
         if (user.id === currentUserId) {
             setRemoving(true);
-            dispatch(actions.openModal({
+            dispatch(actions.openModal<React.ComponentProps<typeof LeaveChannelModal>>({
                 modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
                 dialogType: LeaveChannelModal,
                 dialogProps: {

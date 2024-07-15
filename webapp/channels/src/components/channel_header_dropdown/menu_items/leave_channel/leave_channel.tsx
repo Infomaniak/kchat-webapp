@@ -54,7 +54,7 @@ export default class LeaveChannel extends React.PureComponent<Props> {
         } = this.props;
 
         if (channel.type === Constants.PRIVATE_CHANNEL) {
-            openModal({
+            openModal<React.ComponentProps<typeof LeaveChannelModal>>({
                 modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
                 dialogType: LeaveChannelModal,
                 dialogProps: {
