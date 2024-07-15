@@ -900,9 +900,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             this.setShowPreview(false);
         }
 
-        this.emitTypingEvent('typing');
+        this.emitTypingEvent();
     };
 
+    // infomaniak
     emitTypingEvent = (type = 'typing') => {
         const channelId = this.props.currentChannel.id;
         switch (type) {

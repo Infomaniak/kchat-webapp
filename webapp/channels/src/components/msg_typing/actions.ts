@@ -17,6 +17,33 @@ function getTimeBetweenTypingEvents(state: GlobalState) {
 
     return config.TimeBetweenUserTypingUpdatesMilliseconds === undefined ? 0 : parseInt(config.TimeBetweenUserTypingUpdatesMilliseconds, 10);
 }
+const createUserStartedAction = (action: ValueOf<typeof WebsocketEvents>, callback: ReturnType<typeof createUserStoppedAction>) =>
+    (userId: string, channelId: string, rootId: string, now: number): ThunkActionFunc<void> =>
+        (dispatch, getState) => {
+            const state = getState();
+            if (
+                isPerformanceDebuggingEnabled(state) &&
+                getBool(state, Preferences.CATEGORY_PERFORMANCE_DEBUGGING, Preferences.NAME_DISABLE_TYPING_MESSAGES)
+            ) {
+                return;
+            }
+
+            dispatch({
+                type: action,
+                data: {
+                    id: channelId + rootId,
+                    userId,
+                    now,
+                },
+            });
+
+            // Ideally this followup loading would be done by someone else
+            dispatch(fillInMissingInfo(userId));
+
+            setTimeout(() => {
+                dispatch(callback(userId, channelId, rootId, now));
+            }, getTimeBetweenTypingEvents(state));
+        };
 
 function fillInMissingInfo(userId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
@@ -50,34 +77,6 @@ const createUserStoppedAction = (action: ValueOf<typeof WebsocketEvents>) =>
             now,
         },
     });
-
-const createUserStartedAction = (action: ValueOf<typeof WebsocketEvents>, callback: ReturnType<typeof createUserStoppedAction>) =>
-    (userId: string, channelId: string, rootId: string, now: number): ThunkActionFunc<void> =>
-        (dispatch, getState) => {
-            const state = getState();
-            if (
-                isPerformanceDebuggingEnabled(state) &&
-                getBool(state, Preferences.CATEGORY_PERFORMANCE_DEBUGGING, Preferences.NAME_DISABLE_TYPING_MESSAGES)
-            ) {
-                return;
-            }
-
-            dispatch({
-                type: action,
-                data: {
-                    id: channelId + rootId,
-                    userId,
-                    now,
-                },
-            });
-
-            // Ideally this followup loading would be done by someone else
-            dispatch(fillInMissingInfo(userId));
-
-            setTimeout(() => {
-                dispatch(callback(userId, channelId, rootId, now));
-            }, getTimeBetweenTypingEvents(state));
-        };
 
 export const userStoppedTyping = createUserStoppedAction(WebsocketEvents.STOP_TYPING);
 

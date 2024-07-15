@@ -108,7 +108,6 @@ export type ClientConfig = {
     EnableUserCreation: string;
     EnableUserDeactivation: string;
     EnableUserTypingMessages: string;
-    EnableUserRecordingMessages: string;
     EnforceMultifactorAuthentication: string;
     ExperimentalClientSideCertCheck: string;
     ExperimentalClientSideCertEnable: string;
@@ -192,7 +191,6 @@ export type ClientConfig = {
     TeammateNameDisplay: string;
     TermsOfServiceLink: string;
     TimeBetweenUserTypingUpdatesMilliseconds: string;
-    TimeBetweenUserRecordingUpdatesMilliseconds: string;
     UpgradedFromTE: string;
     Version: string;
     WebsocketPort: string;
@@ -356,12 +354,10 @@ export type ServiceSettings = {
     GiphySdkKey: string;
     PostEditTimeLimit: number;
     TimeBetweenUserTypingUpdatesMilliseconds: number;
-    TimeBetweenUserRecordingUpdatesMilliseconds: number;
     EnablePostSearch: boolean;
     EnableFileSearch: boolean;
     MinimumHashtagLength: number;
     EnableUserTypingMessages: boolean;
-    EnableUserRecordingMessages: boolean;
     EnableChannelViewedMessages: boolean;
     EnableUserStatuses: boolean;
     ExperimentalEnableAuthenticationTransfer: boolean;

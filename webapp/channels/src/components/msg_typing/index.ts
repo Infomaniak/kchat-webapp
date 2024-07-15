@@ -3,7 +3,7 @@
 
 import {connect} from 'react-redux';
 
-import {makeGetUsersRecordingByChannelAndPost, makeGetUsersTypingByChannelAndPost} from 'mattermost-redux/selectors/entities/typing';
+import {makeGetUsersTypingByChannelAndPost} from 'mattermost-redux/selectors/entities/typing';
 
 import type {GlobalState} from 'types/store';
 
@@ -17,7 +17,7 @@ type OwnProps = {
 
 function makeMapStateToProps() {
     const getUsersTypingByChannelAndPost = makeGetUsersTypingByChannelAndPost();
-    const getUsersRecordingByChannelAndPost = makeGetUsersRecordingByChannelAndPost();
+    const getUsersRecordingByChannelAndPost = makeGetUsersTypingByChannelAndPost('recording');
 
     return function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         const typingUsers = getUsersTypingByChannelAndPost(state, {channelId: ownProps.channelId, postId: ownProps.postId});

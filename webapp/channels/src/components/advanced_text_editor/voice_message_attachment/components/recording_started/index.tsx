@@ -27,7 +27,7 @@ interface Props {
     theme: Theme;
     onCancel: (type: string) => void;
     onComplete: (audioFile: File, type: string) => Promise<void>;
-    onStarted?: (type: string) => void;
+    onStarted: (type: string) => void;
 }
 
 function VoiceMessageRecordingStarted(props: Props) {

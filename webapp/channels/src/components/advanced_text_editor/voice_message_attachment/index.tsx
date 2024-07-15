@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ComponentProps, FormEvent} from 'react';
+import type {FormEvent} from 'react';
 import React, {memo, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -32,7 +32,7 @@ declare global {
     }
 }
 
-type Props = {
+interface Props {
     channelId: Channel['id'];
     rootId: Post['id'];
     draft: PostDraft;
@@ -48,9 +48,9 @@ type Props = {
     onUploadError: (err: string | ServerError, clientId?: string, channelId?: Channel['id'], rootId?: Post['id']) => void;
     onRemoveDraft: (fileInfoIdOrClientId: FileInfo['id'] | string) => void;
     onSubmit: (e: FormEvent<Element>) => void;
-    onComplete?: (type: string) => void;
-    onCancel?: (type: string) => void;
-    onStarted?: (type: string) => void;
+    onComplete: (type: string) => void;
+    onCancel: (type: string) => void;
+    onStarted: (type: string) => void;
 }
 
 const VoiceMessageAttachment = (props: Props) => {

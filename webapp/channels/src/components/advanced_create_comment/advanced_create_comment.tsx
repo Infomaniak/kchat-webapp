@@ -755,7 +755,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             });
         }
 
-        this.emitTypingEvent('typing');
+        this.emitTypingEvent();
     };
 
     reactToLastMessage = (e: React.KeyboardEvent<TextboxElement>) => {
@@ -768,6 +768,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         emitShortcutReactToLastPostFrom(Locations.RHS_ROOT);
     };
 
+    // infomaniak
     emitTypingEvent = (type = 'typing') => {
         const {channelId, rootId} = this.props;
         switch (type) {

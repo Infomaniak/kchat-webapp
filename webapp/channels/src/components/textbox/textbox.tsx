@@ -38,7 +38,7 @@ export type Props = {
     value: string;
     onChange: (e: ChangeEvent<TextboxElement>) => void;
     onKeyPress: (e: KeyboardEvent<any>) => void;
-    onComposition?: (type: 'typing' | 'recording' | 'stop') => void;
+    onComposition?: (type: 'typing' | 'recording' | 'stop') => void; // infomaniak
     onHeightChange?: (height: number, maxHeight: number) => void;
     onWidthChange?: (width: number) => void;
     createMessage: string;

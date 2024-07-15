@@ -29,12 +29,16 @@ export default function MsgTyping(props: Props) {
                 const channelId = msg.data.data.channel_id;
                 const rootId = msg.data.data.parent_id;
                 const userId = msg.data.data.user_id;
-                if (props.channelId === channelId && props.postId === rootId) {
-                    if (msg.event === SocketEvents.TYPING) {
-                        userStartedTyping(userId, channelId, rootId, Date.now());
-                    } else {
-                        userStartedRecording(userId, channelId, rootId, Date.now());
-                    }
+                switch (msg.event) {
+                case SocketEvents.TYPING:
+                    userStartedTyping(userId, channelId, rootId, Date.now());
+                    break;
+                case SocketEvents.RECORDING:
+                    userStartedRecording(userId, channelId, rootId, Date.now());
+                    break;
+                default:
+                    throw new Error('no SocketEvents found');
+                    break;
                 }
             } else if (msg.event === SocketEvents.POSTED) {
                 const post = msg.data.post;
@@ -57,30 +61,7 @@ export default function MsgTyping(props: Props) {
         if (numUsers === 0) {
             return '';
         }
-        let simpleMessage;
-        let multipleMessage;
-        let defaultSimpleMessage;
-        let defaultMultipleMessage;
-
-        switch (type) {
-        case 'typing':
-            simpleMessage = 'msg_typing.isTyping';
-            multipleMessage = 'msg_typing.areTyping';
-            defaultSimpleMessage = '{user} is typing...';
-            defaultMultipleMessage = '{users} and {last} are typing...';
-
-            break;
-        case 'recording':
-            simpleMessage = 'msg_recording.isRecording';
-            multipleMessage = 'msg_recording.areRecording';
-            defaultSimpleMessage = '{user} is recording...';
-            defaultMultipleMessage = '{users} and {last} are recording...';
-            break;
-
-        default:
-            throw new Error('no messages found');
-            break;
-        }
+        const {simpleMessage, multipleMessage, defaultSimpleMessage, defaultMultipleMessage} = getMessages(type);
 
         if (numUsers === 1) {
             return (
@@ -106,10 +87,34 @@ export default function MsgTyping(props: Props) {
         );
     };
 
+    const getMessages = (type = 'typing') => {
+        switch (type) {
+        case 'typing':
+            return {
+                simpleMessage: 'msg_typing.isTyping',
+                multipleMessage: 'msg_typing.areTyping',
+                defaultSimpleMessage: '{user} is typing...',
+                defaultMultipleMessage: '{users} and {last} are typing...',
+            };
+        case 'recording':
+            return {
+                simpleMessage: 'msg_recording.isRecording',
+                multipleMessage: 'msg_recording.areRecording',
+                defaultSimpleMessage: '{user} is recording...',
+                defaultMultipleMessage: '{users} and {last} are recording...',
+            };
+        default:
+            throw new Error('no messages found');
+        }
+    };
+
     const typingText = getInputText([...props.typingUsers], 'typing');
     const recordingText = getInputText([...props.recordingUsers], 'recording');
 
+    if (typingText) {
+        return <span className='msg-typing'>{typingText}</span>;
+    }
     return (
-        <span className='msg-typing'>{typingText || recordingText}</span>
+        <span className='msg-typing'>{recordingText}</span>
     );
 }

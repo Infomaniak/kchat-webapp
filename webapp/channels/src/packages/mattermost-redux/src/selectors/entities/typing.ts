@@ -11,7 +11,7 @@ import {getUsers} from 'mattermost-redux/selectors/entities/common';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
-const getUsersImpl = (profiles: IDMappedObjects<UserProfile>, teammateNameDisplay: string, channelId: string, parentPostId: string, typing: Typing): string[] => {
+const getUsersTypingImpl = (profiles: IDMappedObjects<UserProfile>, teammateNameDisplay: string, channelId: string, parentPostId: string, typing: Typing): string[] => {
     const id = channelId + parentPostId;
 
     if (typing[id]) {
@@ -27,26 +27,14 @@ const getUsersImpl = (profiles: IDMappedObjects<UserProfile>, teammateNameDispla
     return [];
 };
 
-export function makeGetUsersTypingByChannelAndPost(): (state: GlobalState, props: {channelId: string; postId: string}) => string[] {
+export function makeGetUsersTypingByChannelAndPost(type: 'typing' | 'recording' = 'typing'): (state: GlobalState, props: {channelId: string; postId: string}) => string[] {
     return createSelector(
         'makeGetUsersTypingByChannelAndPost',
         getUsers,
         getTeammateNameDisplaySetting,
         (state: GlobalState, options: {channelId: string; postId: string}) => options.channelId,
         (state: GlobalState, options: {channelId: string; postId: string}) => options.postId,
-        (state: GlobalState) => state.entities.typing,
-        getUsersImpl,
-    );
-}
-
-export function makeGetUsersRecordingByChannelAndPost(): (state: GlobalState, props: {channelId: string; postId: string}) => string[] {
-    return createSelector(
-        'makeGetUsersRecordingByChannelAndPost',
-        getUsers,
-        getTeammateNameDisplaySetting,
-        (state: GlobalState, options: {channelId: string; postId: string}) => options.channelId,
-        (state: GlobalState, options: {channelId: string; postId: string}) => options.postId,
-        (state: GlobalState) => state.entities.recording,
-        getUsersImpl,
+        (state: GlobalState) => state.entities[type],
+        getUsersTypingImpl,
     );
 }

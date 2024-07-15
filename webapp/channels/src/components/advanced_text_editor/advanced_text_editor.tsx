@@ -3,7 +3,6 @@
 
 import {EmoticonHappyOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
-import type {ComponentProps} from 'react';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';

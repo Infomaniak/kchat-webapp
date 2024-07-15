@@ -239,6 +239,7 @@ export function emitLocalUserTypingEvent(type = 'typing', channelId: string, par
 
         if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
             (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
+            // infomaniak
             switch (type) {
             case 'typing':
                 WebSocketClient.userTyping(channelId, userId, parentPostId);
