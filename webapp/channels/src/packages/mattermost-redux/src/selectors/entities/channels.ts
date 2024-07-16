@@ -141,10 +141,12 @@ export const getDirectChannelsSet: (state: GlobalState) => Set<string> = createS
 );
 
 export function getChannelMembersInChannels(state: GlobalState): RelationOneToOne<Channel, Record<string, ChannelMembership>> {
+    console.log('state.entities.channels', state.entities.channels);
     return state.entities.channels.membersInChannel;
 }
 
 export function getChannelMemberChannel(state: GlobalState, channelId: string): Record<string, ChannelMembership> {
+    console.log('channelId', channelId);
     return getChannelMembersInChannels(state)[channelId];
 }
 
@@ -170,12 +172,12 @@ export const getHasChannelMembersAdmin: (state: GlobalState, channelId: string) 
     getRoles,
     getCurrentMemberIsChannelAdmin,
     (guestsInChannel, channel, currentUserId, roles, currentMemberIsChannelAdmin) => {
-        const guestsInChannelArray = Object.values(guestsInChannel);
+        const guestsInChannelArray = Object.values(guestsInChannel).filter((user) => user.user_id !== '');
         const isPrivateChannel = channel && channel.type === General.PRIVATE_CHANNEL;
         let hasChannelMembersAdmin = false;
         if (isPrivateChannel && currentMemberIsChannelAdmin) {
             hasChannelMembersAdmin = guestsInChannelArray.some((user) => {
-                if (user?.user_id === currentUserId) {
+                if (user.user_id === currentUserId) {
                     return false;
                 }
                 const userRoles = user.roles.split(' ');
