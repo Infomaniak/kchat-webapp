@@ -4094,6 +4094,8 @@
   "reaction.usersAndOthersReacted": "{users} y {otherUsers, number} {otherUsers, plural, one {otro usuario} other {otros usuarios}}",
   "reaction.usersReacted": "{users} y {lastUser}",
   "reaction.you": "Tu",
+  "reaction_limit_reached_modal.body.admin": "Ops! Sembra che sia stato raggiunto il limite di reazione per emoji per questo messaggio.",
+  "reaction_limit_reached_modal.title": "Avete raggiunto il limite di reazione",
   "reaction_list.addReactionTooltip": "Reaccionar",
   "remove_group_confirm_button": "Sí, Eliminar Grupo y {memberCount, plural, one {Miembros} other {Miembros}}",
   "remove_group_confirm_message": "{memberCount, number} {memberCount, plural, one {miembro} other {miembros}} asociados a este grupo serán eliminados del equipo en la próxima sincronización de AD/LDAP. Está usted seguro de que desea eliminar este grupo y {memberCount} {memberCount, plural, one {miembro} other {miembros}}?",
