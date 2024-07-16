@@ -478,6 +478,6 @@ export function redirectTokSuiteDashboard(accountId?: number) {
 }
 
 export function redirectToDeveloperDocumentation() {
-    window.open('https://developer.infomaniak.com', '_blank', 'noopener,noreferrer');
+    window.open('https://faq.infomaniak.com/2001', '_blank', 'noopener,noreferrer');
 }
 
