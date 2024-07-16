@@ -7,7 +7,7 @@ import type {Channel} from '@mattermost/types/channels';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import LeaveChannelModal from 'components/leave_channel_modal';
+import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
 import SharedChannelIndicator from 'components/shared_channel_indicator';
 import SidebarChannelLink from 'components/sidebar/sidebar_channel/sidebar_channel_link';
 
@@ -29,9 +29,9 @@ export default class SidebarBaseChannel extends React.PureComponent<Props> {
     };
 
     handleLeavePrivateChannel = (callback: () => void) => {
-        this.props.actions.openModal<React.ComponentProps<typeof LeaveChannelModal>>({
+        this.props.actions.openModal<React.ComponentProps<typeof IkLeaveChannelModal>>({
             modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
-            dialogType: LeaveChannelModal,
+            dialogType: IkLeaveChannelModal,
             dialogProps: {channel: this.props.channel},
         });
         trackEvent('ui', 'ui_private_channel_x_button_clicked');

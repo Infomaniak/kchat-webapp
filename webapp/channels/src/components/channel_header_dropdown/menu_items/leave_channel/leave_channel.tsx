@@ -5,7 +5,7 @@ import React from 'react';
 
 import type {Channel} from '@mattermost/types/channels';
 
-import LeaveChannelModal from 'components/leave_channel_modal';
+import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
 import Menu from 'components/widgets/menu/menu';
 
 import {Constants, ModalIdentifiers} from 'utils/constants';
@@ -54,9 +54,9 @@ export default class LeaveChannel extends React.PureComponent<Props> {
         } = this.props;
 
         if (channel.type === Constants.PRIVATE_CHANNEL) {
-            openModal<React.ComponentProps<typeof LeaveChannelModal>>({
+            openModal<React.ComponentProps<typeof IkLeaveChannelModal>>({
                 modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
-                dialogType: LeaveChannelModal,
+                dialogType: IkLeaveChannelModal,
                 dialogProps: {
                     channel,
                 },

@@ -11,7 +11,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
-import LeaveChannelModal from 'components/leave_channel_modal';
+import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
@@ -73,9 +73,9 @@ export default function ChannelMembersDropdown({
 
         if (user.id === currentUserId) {
             setRemoving(true);
-            dispatch(actions.openModal<React.ComponentProps<typeof LeaveChannelModal>>({
+            dispatch(actions.openModal<React.ComponentProps<typeof IkLeaveChannelModal>>({
                 modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
-                dialogType: LeaveChannelModal,
+                dialogType: IkLeaveChannelModal,
                 dialogProps: {
                     channel,
                 },
