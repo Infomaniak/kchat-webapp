@@ -536,7 +536,7 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
                 >
                     {localizeMessage('multiselect.cancel', 'Cancel')}
                 </button>
-                <div className='leave-button'>
+                <div className='btn-leave'>
                     <button
                         className={buttonClass}
                         autoFocus={true}

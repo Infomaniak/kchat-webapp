@@ -102,7 +102,7 @@ Object {
                 Cancel
               </button>
               <div
-                class="leave-button"
+                class="btn-leave"
               >
                 <button
                   class="btn btn-danger"
