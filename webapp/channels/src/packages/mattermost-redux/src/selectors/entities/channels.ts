@@ -141,12 +141,10 @@ export const getDirectChannelsSet: (state: GlobalState) => Set<string> = createS
 );
 
 export function getChannelMembersInChannels(state: GlobalState): RelationOneToOne<Channel, Record<string, ChannelMembership>> {
-    console.log('state.entities.channels', state.entities.channels);
     return state.entities.channels.membersInChannel;
 }
 
 export function getChannelMemberChannel(state: GlobalState, channelId: string): Record<string, ChannelMembership> {
-    console.log('channelId', channelId);
     return getChannelMembersInChannels(state)[channelId];
 }
 
