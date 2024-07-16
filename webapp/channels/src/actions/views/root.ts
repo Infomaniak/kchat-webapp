@@ -53,7 +53,7 @@ export function loadConfigAndMe(): ActionFuncAsync<boolean> {
         let redirect = true;
         if (!UserAgent.isMacApp()) {
             redirect = false;
-        } else if (UserAgent.isNotMacMas()) {
+        } else if (!UserAgent.isNotMacMas()) {
             redirect = false;
         } else if (!latestVer || !userAgentVersion) {
             redirect = false;
