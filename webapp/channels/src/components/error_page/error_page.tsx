@@ -296,7 +296,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
             backButton = (
                 <a
                     className='btn btn-primary'
-                    onClick={() => goToAppStore()}
+                    onClick={goToAppStore}
                 >
                     <FormattedMessage
                         id='error.generic.dl_link'
