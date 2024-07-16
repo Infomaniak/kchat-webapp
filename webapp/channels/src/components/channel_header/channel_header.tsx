@@ -276,6 +276,15 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             hideGuestTags,
         } = this.props;
         const {formatMessage} = this.props.intl;
+        const isDirect = (channel.type === Constants.DM_CHANNEL);
+        const isGroup = (channel.type === Constants.GM_CHANNEL);
+        const isPrivate = (channel.type === Constants.PRIVATE_CHANNEL);
+
+        const channelNamesMap = channel.props && channel.props.channel_mentions;
+        const headerText = (isDirect && dmUser?.is_bot) ? dmUser.bot_description : channel.header;
+        const imageProps = {
+            hideUtilities: true,
+        };
         const ariaLabelChannelHeader = this.props.intl.formatMessage({id: 'accessibility.sections.channelHeader', defaultMessage: 'channel header region'});
         let showMeetBtn = true;
 
@@ -306,7 +315,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                 >
                     <div
                         className='flex-parent'
-                        style={{alignItems: 'center'}}
+                        style={{flexDirection: 'column', textAlign: 'left', justifyContent: 'center'}}
                     >
                         <strong
                             role='heading'
@@ -318,6 +327,15 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                                 {channel.name}
                             </span>
                         </strong>
+                        <span
+                            style={{fontSize: '12px', marginLeft: '2px'}}
+                        >
+                            <Markdown
+                                message={headerText}
+                                options={this.getHeaderMarkdownOptions(channelNamesMap)}
+                                imageProps={imageProps}
+                            />
+                        </span>
                     </div>
                 </div>
             );
@@ -333,12 +351,6 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                 <div className='channel-header'/>
             );
         }
-
-        const channelNamesMap = channel.props && channel.props.channel_mentions;
-
-        const isDirect = (channel.type === Constants.DM_CHANNEL);
-        const isGroup = (channel.type === Constants.GM_CHANNEL);
-        const isPrivate = (channel.type === Constants.PRIVATE_CHANNEL);
 
         if (isGroup) {
             if (hasGuests && !hideGuestTags) {
@@ -468,11 +480,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
         }
 
         let headerTextContainer;
-        const headerText = (isDirect && dmUser?.is_bot) ? dmUser.bot_description : channel.header;
         if (headerText) {
-            const imageProps = {
-                hideUtilities: true,
-            };
             const popoverContent = (
                 <Popover
                     id='header-popover'
