@@ -318,8 +318,8 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
         );
     };
 
-    const closeMembersInviteModal = () => {
-        actions.closeModal(ModalIdentifiers.CHANNEL_INVITE);
+    const closeLeaveModal = () => {
+        actions.closeModal(ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL);
     };
 
     const handleHide = () => setShow(false);
@@ -439,7 +439,7 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
                         handleDelete={handleDelete}
                         handleAdd={addValue}
                         handleSubmit={handleSubmit}
-                        handleCancel={closeMembersInviteModal}
+                        handleCancel={closeLeaveModal}
                         buttonSubmitText={buttonSubmitText}
                         buttonSubmitLoadingText={buttonSubmitLoadingText}
                         saving={saving}
@@ -448,7 +448,7 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
                         placeholderText={localizeMessage('multiselect.placeholder.peopOrGroups', 'Séléctionner un ou des utilisateurs')}
                         valueWithImage={true}
                         backButtonText={localizeMessage('multiselect.cancel', 'Cancel')}
-                        backButtonClick={closeMembersInviteModal}
+                        backButtonClick={closeLeaveModal}
                         backButtonClass={'btn-tertiary tertiary-button'}
                         customNoOptionsMessage={null}
                     />
