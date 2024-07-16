@@ -236,6 +236,9 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChannelA
         return option.name!;
     };
 
+    /**
+     * Stop debounce when component unmounts to prevent setting state on unmounted component
+     */
     useEffect(() => search.cancel);
 
     /**
@@ -255,11 +258,6 @@ const LeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChannelA
         } else {
             setInitalLoadingUsers(false);
         }
-
-        return () => {
-            // componentPropsDidUpdate
-            search.cancel();
-        };
     }, [currentMemberIsChannelAdmin]);
 
     const renderOption = (option: UserProfileValue | GroupValue, isSelected: boolean, onAdd: (option: UserProfileValue | GroupValue) => void, onMouseMove: (option: UserProfileValue | GroupValue) => void) => {
