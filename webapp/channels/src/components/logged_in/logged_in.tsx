@@ -82,6 +82,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
         if (!UserAgent.isDesktopApp() || isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.4.0')) {
             this.props.actions.registerInternalKdrivePlugin();
         }
+        this.props.actions.registerInternalAiPlugin();
         this.props.actions.autoUpdateTimezone(getBrowserTimezone());
 
         // Make sure the websockets close and reset version

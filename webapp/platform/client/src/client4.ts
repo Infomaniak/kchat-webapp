@@ -4858,6 +4858,103 @@ export default class Client4 {
             })}
         )
     }
+
+    //
+    // PLUGIN AI
+    //
+    async doSummarize(postId: string, botUsername: string) {
+        const url = `${this.getPostRoute(postId)}/summarize?botUsername=${botUsername}`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
+
+    async doStopGenerating(postId: string) {
+        const url = `${this.getPostRoute(postId)}/stop`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
+
+    async doRegenerate(postId: string) {
+        const url = `${this.getPostRoute(postId)}/regenerate`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
+
+    async doPostbackSummary(postId: string) {
+        const url = `${this.getPostRoute(postId)}/postback_summary`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
+
+    // async summarizeChannelSince(channelID: string, since: number, prompt: string, botUsername: string) {
+    //     const url = `${channelRoute(channelID)}/since?botUsername=${botUsername}`;
+    //     const response = await fetch(url, Client4.getOptions({
+    //         method: 'POST',
+    //         body: JSON.stringify({
+    //             since,
+    //             preset_prompt: prompt,
+    //         }),
+    //     }));
+
+    //     if (response.ok) {
+    //         return response.json();
+    //     }
+
+    //     throw new ClientError(Client4.url, {
+    //         message: '',
+    //         status_code: response.status,
+    //         url,
+    //     });
+    // }
+
+    // export async function viewMyChannel(channelID: string) {
+    //     return Client4.viewMyChannel(channelID);
+    // }
+
+    // export async function getAIDirectChannel(currentUserId: string) {
+    //     const botUser = await Client4.getUserByUsername('ai');
+    //     const dm = await Client4.createDirectChannel([currentUserId, botUser.id]);
+    //     return dm.id;
+    // }
+
+    // export async function getBotDirectChannel(currentUserId: string, botUserID: string) {
+    //     const dm = await Client4.createDirectChannel([currentUserId, botUserID]);
+    //     return dm.id;
+    // }
+
+    // export async function getAIThreads() {
+    //     const url = `${baseRoute()}/ai_threads`;
+    //     const response = await fetch(url, Client4.getOptions({
+    //         method: 'GET',
+    //     }));
+
+    //     if (response.ok) {
+    //         return response.json();
+    //     }
+
+    //     throw new ClientError(Client4.url, {
+    //         message: '',
+    //         status_code: response.status,
+    //         url,
+    //     });
+    // }
+
+    // export async function getAIBots() {
+    //     const url = `${baseRoute()}/ai_bots`;
+    //     const response = await fetch(url, Client4.getOptions({
+    //         method: 'GET',
+    //     }));
+
+    //     if (response.ok) {
+    //         return response.json();
+    //     }
+
+    //     throw new ClientError(Client4.url, {
+    //         message: '',
+    //         status_code: response.status,
+    //         url,
+    //     });
+    // }
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {
