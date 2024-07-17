@@ -1,3 +1,56 @@
+## 2.9.7-rc.4 (2024-07-17)
+
+### Added (2 changes)
+
+- [chore: double custom status emoji tooltip size if it does not expires](kchat/webapp@71d6fa59748ff8d2ee6d5ab7cd6bca5d727e4afb) by @tim.dewinter ([merge request](kchat/webapp!825))
+- [chore: double custom status emoji tooltip size if it does not expires](kchat/webapp@035df97ecd109f61f2dffc13f752d99fa91d0cf4) by @tim.dewinter ([merge request](kchat/webapp!839))
+
+### Fixed (34 changes)
+
+- [Fix: multiselect disappear when no input](kchat/webapp@29de75ec95833ed200a1e6e924503397be1386d2) by  ([merge request](kchat/webapp!825))
+- [updating reaction limit reached modal text and add missing translation. es fr it](kchat/webapp@59395d184a993932b7ef1e20e12907ee7500b808) by  ([merge request](kchat/webapp!825))
+- [Fix: Create ik file for feature](kchat/webapp@5e20d6d1ad12190e2eba7c38b9d2cdfb85ee1836) by  ([merge request](kchat/webapp!825))
+- [updating reaction limit reached modal text and add missing translation. es fr it](kchat/webapp@a18b9c69b58a1972ac6549638fc3c0a4468de2a6) by  ([merge request](kchat/webapp!840))
+- [change incoming webhooks redirection in integration doc](kchat/webapp@b0280e1abd7138edffe6721bf9e1f273948b4a86) by  ([merge request](kchat/webapp!825))
+- [Fix: remove props and use class instead](kchat/webapp@3773a9b9ac698f4ba43e0d771c2cb9dc9f5ee2b3) by  ([merge request](kchat/webapp!825))
+- [Fix: Border radius only for newReplies](kchat/webapp@3b63c00a5afe3256140150f9ccf08c1be85d0aca) by  ([merge request](kchat/webapp!825))
+- [Fix: Remove border-radius for hover](kchat/webapp@29ee2f677ae691c59c702403b259202f6ae6a438) by  ([merge request](kchat/webapp!825))
+- [add fr translation for threadFromArchivedChannelMessage](kchat/webapp@eb31131c7e24839af4c5ad85179defc2fb97bc98) by  ([merge request](kchat/webapp!825))
+- [Fix: use debounce and transient ref instead of setTimeout](kchat/webapp@cec145a7d14969de24b6f95019f40cba63027963) by  ([merge request](kchat/webapp!825))
+- [Fix: Add skeleton and fix errors](kchat/webapp@9bdcb8afd9ed9fb1a9b980b308de5003471ff540) by  ([merge request](kchat/webapp!825))
+- [Fix: remove self role change when only 1 admin is in channel](kchat/webapp@6e6ba8c638bf49758d80f6655a2ff13afbeaa912) by  ([merge request](kchat/webapp!825))
+- [change incoming webhooks redirection in integration doc](kchat/webapp@6170a84347af763a9a83b3d3513597fdc8215755) by  ([merge request](kchat/webapp!842))
+- [add fr translation for threadFromArchivedChannelMessage](kchat/webapp@1ce3781b0773051bc1f3ca515ca04b5cdde28754) by  ([merge request](kchat/webapp!841))
+- [Fix: Only use channel id in params of selector](kchat/webapp@a516e2153f266999bbb920514da683beb4200757) by  ([merge request](kchat/webapp!825))
+- [Fix: Remove promise all and add await on request in useEffect](kchat/webapp@27ebe6d53bf19f0c4b8962d6deb05eed745f45e1) by  ([merge request](kchat/webapp!825))
+- [Fix: add selector instead of doing computation in component](kchat/webapp@63b4c2819a0b3c7cd4659cc74882df5edf38c4fc) by  ([merge request](kchat/webapp!825))
+- [Fix: remove props and use class instead](kchat/webapp@f7ff2899f6c581f3067950d051aa766e698ca502) by  ([merge request](kchat/webapp!835))
+- [Fix: Use .some to avoid using an array](kchat/webapp@aa7757ea17ed70f49768249ed3da72a34c0e3d68) by  ([merge request](kchat/webapp!825))
+- [Fix: Remove inherit color for set admin button in channel](kchat/webapp@24fa20f0ffc7eefa3673b33edbc0e1c494c1ec5b) by  ([merge request](kchat/webapp!825))
+- [Fix: Border radius only for newReplies](kchat/webapp@54752788107b697a703d29dc3bd95db51ff11cb8) by  ([merge request](kchat/webapp!835))
+- [Fix: Remove border-radius for hover](kchat/webapp@f211f9bcfbe4899277067aaba814b843f7e6ac30) by  ([merge request](kchat/webapp!835))
+- [fix(ci): e2e report notify channel should be NOTIFY_CHANNEL instead of GUILD](kchat/webapp@653d68afe85f8ea97fd83d6a985ec9fe656fa48f) by @tim.dewinter ([merge request](kchat/webapp!825))
+- [rebind last used channel presence on ws reconnect](kchat/webapp@eec085f07458edf80b50791a828801808e0fd994) by @antonbuksa ([merge request](kchat/webapp!825))
+- [avoiding guestUser to see integration tab](kchat/webapp@2b21700e0caf67305e9d6c86910c984862d6dda2) by  ([merge request](kchat/webapp!825))
+- [fix(ci): trigger unit-test on merge request commits](kchat/webapp@79beedd415436a42f5cd8fac059b1534b2ea0fe6) by @tim.dewinter ([merge request](kchat/webapp!825))
+- [Fix: Add props to multiselect to render option on mount and tests](kchat/webapp@175c4079c2f00e8b41eb091cc5742d5edf0f91c8) by  ([merge request](kchat/webapp!825))
+- [fix: prevent registerInternalKdrivePlugin from being called multiple times](kchat/webapp@410a1e548f05a3c826cbaad5444cd9eda1f68628) by @tim.dewinter ([merge request](kchat/webapp!831))
+- [Fix: only fetch is you are channel admin](kchat/webapp@e8cba5f181734ca5faf9bd7dc9076710441db25c) by  ([merge request](kchat/webapp!825))
+- [Fix: Condition by checking member permission](kchat/webapp@f07dc16c5069a52b58698bb76509d905634629cc) by  ([merge request](kchat/webapp!825))
+- [Fix: Condition to display modal and tests](kchat/webapp@f253614db1cf4f3570bbfb5e6e67bf416d442441) by  ([merge request](kchat/webapp!825))
+- [Fix: Remove current user from options](kchat/webapp@3166e837414c985d1ebbcb7cb56c9b6e0434b7c4) by  ([merge request](kchat/webapp!825))
+- [Fix: remove useless span](kchat/webapp@e9f28ad83371b4b112a2938a93d27945f8494c68) by  ([merge request](kchat/webapp!825))
+- [Fix: Modal text position](kchat/webapp@130f453215162153cbbd4b6d04940e00b1a492ff) by  ([merge request](kchat/webapp!825))
+
+### Chore (1 change)
+
+- [split test steps for coverage reports to work](kchat/webapp@7497ed64ae9592babbef5db367820fdbab13362a) by @antonbuksa ([merge request](kchat/webapp!825))
+
+### feat (2 changes)
+
+- [Feat: Set condition when there is one admin + traduction](kchat/webapp@c9f6346597d731e9abd89ac76b60e40fc5be73a7) by  ([merge request](kchat/webapp!825))
+- [Feat: last admin impossible to leave channel](kchat/webapp@d05a4c57d63ccfa87b78ee044f349b9cae9c86f6) by  ([merge request](kchat/webapp!825))
+
 ## 2.9.7-rc.3 (2024-07-11)
 
 ### Fixed (1 change)
