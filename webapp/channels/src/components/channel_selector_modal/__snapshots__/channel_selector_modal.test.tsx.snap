@@ -142,6 +142,7 @@ exports[`components/ChannelSelectorModal exclude already selected 1`] = `
           "current": null,
         }
       }
+      showInputByDefault={false}
       valueRenderer={[Function]}
       valueWithImage={false}
       values={Array []}
@@ -314,6 +315,7 @@ exports[`components/ChannelSelectorModal should match snapshot 1`] = `
           "current": null,
         }
       }
+      showInputByDefault={false}
       valueRenderer={[Function]}
       valueWithImage={false}
       values={Array []}
