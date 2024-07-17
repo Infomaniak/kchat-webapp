@@ -57792,7 +57792,7 @@
         "unified": "",
         "short_name": "kchat",
         "short_names": [
-            "kchat"
+            "kchat-ico"
         ],
         "category": "custom"
     },
@@ -57802,7 +57802,97 @@
         "unified": "",
         "short_name": "kmeet",
         "short_names": [
-            "kmeet"
+            "kmeet-ico"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "calendar",
+        "name": "Calendar",
+        "unified": "",
+        "short_name": "calendar",
+        "short_names": [
+            "calendar-ico"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "chk",
+        "name": "Chk",
+        "unified": "",
+        "short_name": "chk",
+        "short_names": [
+            "chk-ico"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "contact",
+        "name": "Contact",
+        "unified": "",
+        "short_name": "contact",
+        "short_names": [
+            "contact-ico"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "drive",
+        "name": "Drive",
+        "unified": "",
+        "short_name": "drive",
+        "short_names": [
+            "drive-ico"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "ksuite",
+        "name": "kSuite",
+        "unified": "",
+        "short_name": "ksuite",
+        "short_names": [
+            "ksuite-ico"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "mail",
+        "name": "Mail",
+        "unified": "",
+        "short_name": "mail",
+        "short_names": [
+            "mail-ico"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "paste",
+        "name": "Paste",
+        "unified": "",
+        "short_name": "paste",
+        "short_names": [
+            "paste-ico"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "swisstransfer",
+        "name": "SwissTransfer",
+        "unified": "",
+        "short_name": "swisstransfer",
+        "short_names": [
+            "swisstransfer-ico"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "tasks",
+        "name": "Tasks",
+        "unified": "",
+        "short_name": "tasks",
+        "short_names": [
+            "tasks-ico"
         ],
         "category": "custom"
     }
