@@ -125,6 +125,7 @@ exports[`components/channel_invite_modal should match snapshot for channel_invit
             "current": null,
           }
         }
+        showInputByDefault={false}
         valueWithImage={true}
         values={Array []}
       />
@@ -263,6 +264,7 @@ exports[`components/channel_invite_modal should match snapshot for channel_invit
             "current": null,
           }
         }
+        showInputByDefault={false}
         valueWithImage={true}
         values={Array []}
       />
@@ -423,6 +425,7 @@ exports[`components/channel_invite_modal should match snapshot with exclude and 
             "current": null,
           }
         }
+        showInputByDefault={false}
         valueWithImage={true}
         values={Array []}
       />
