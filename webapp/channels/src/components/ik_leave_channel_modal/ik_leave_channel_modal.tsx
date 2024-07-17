@@ -218,12 +218,12 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
 
         return Object.assign(
             (searchTerm: string): void => {
-                setTerm(term);
+                setTerm(searchTerm.trim());
                 debounced(searchTerm.trim());
             },
             {cancel: debounced.cancel},
         );
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [setTerm]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const renderAriaLabel = (option: UserProfileValue | GroupValue): string => {
         if (!option) {

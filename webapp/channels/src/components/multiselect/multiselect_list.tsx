@@ -168,12 +168,6 @@ export default class MultiSelectList<T extends Value> extends React.PureComponen
         const {options, customNoOptionsMessage} = this.props;
         let renderOutput;
 
-        if ((options == null || options.length === 0) && this.props.loading === false && this.props.showInputByDefault) {
-            return (
-                <></>
-            );
-        }
-
         if (this.props.loading) {
             renderOutput = (
                 <div aria-hidden={true}>
