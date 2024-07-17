@@ -344,10 +344,11 @@ const UserListItem = styled.div<{first?: boolean; last?: boolean}>`
 const UserButton = styled.button`
     display: flex;
     width: 100%;
-    padding: 8px 20px;
+    padding: 0px 20px;
     border: none;
     background: unset;
     text-align: unset;
+    align-items: center;
 `;
 
 // A gap to make space for the DM button to be positioned on
