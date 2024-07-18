@@ -18,6 +18,7 @@ import type {
 } from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
 import type {PreferenceType} from '@mattermost/types/preferences';
+import type {TranscriptData} from '@mattermost/types/transcript';
 
 import {ChannelTypes, PreferenceTypes, UserTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
@@ -1030,8 +1031,8 @@ export function getChannelsMemberCount(channelIds: string[]): ActionFuncAsync<Re
         let channelsMemberCount;
 
         try {
-                        channelsMemberCount = await Client4.getChannelsMemberCount(channelIds);
-                    } catch (error) {
+            channelsMemberCount = await Client4.getChannelsMemberCount(channelIds);
+        } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
             return {error};
@@ -1060,11 +1061,9 @@ export function notifyChannelMember(channelId: string, userIds: string[], postId
     };
 }
 
-export function fetchTranscriptData(fileId: string) {
-    return async () => {
-        const transcript = await Client4.getTranscript(fileId);
-        return transcript;
-    };
+export async function fetchTranscriptData(fileId: string): Promise<TranscriptData> {
+    const transcript = await Client4.getTranscript(fileId);
+    return transcript;
 }
 
 export function addChannelMember(channelId: string, userId: string, postRootId = ''): ActionFuncAsync<ChannelMembership> {

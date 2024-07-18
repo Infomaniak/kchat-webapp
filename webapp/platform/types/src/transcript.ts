@@ -6,5 +6,5 @@ export type TranscriptData = {
         text: string;
         start: number;
     }>;
-    text: string;
+    text?: string;
 };
