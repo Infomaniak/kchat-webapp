@@ -1,3 +1,18 @@
+## 2.9.7-rc.5 (2024-07-18)
+
+### Fixed (6 changes)
+
+- [Fix: New MUI component for transcript](kchat/webapp@f9b7373e809bd0507bffc10699a4053cabb725cd) by  ([merge request](kchat/webapp!796))
+- [Fix: Responsive according to popover size](kchat/webapp@e06d7e1f6c4ece63bd6bbe0940a14f609c3de3cf) by  ([merge request](kchat/webapp!796))
+- [Fix: New responsive component for transcript](kchat/webapp@311333c1ee9a112073e9fb5a3494f10089dc6a8b) by  ([merge request](kchat/webapp!796))
+- [Fix: New MUI component for transcript](kchat/webapp@fe08003d46303adce4ab2d517ca9690f5c02b759) by  ([merge request](kchat/webapp!796))
+- [Fix: Responsive according to popover size](kchat/webapp@107a018b005e4b3b13cb3b99a56fa466aca452c2) by  ([merge request](kchat/webapp!796))
+- [Fix: New responsive component for transcript](kchat/webapp@29a0e1e8366938d4362f04a452829ad368d17a43) by  ([merge request](kchat/webapp!796))
+
+### Changed (1 change)
+
+- [refactor websocket binding](kchat/webapp@522a0b8b7e367ee3d4853ee581b0024f78433545) by @antonbuksa ([merge request](kchat/webapp!847))
+
 ## 2.9.7-rc.4 (2024-07-17)
 
 ### Added (2 changes)
