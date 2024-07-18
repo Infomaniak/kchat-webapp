@@ -1,3 +1,9 @@
+## 2.9.7-rc.7 (2024-07-18)
+
+### Fixed (1 change)
+
+- [add check for empty array in transcript popover](kchat/webapp@b5e03da4c1d074cf992582ea822cb5c4c15c260f) by @antonbuksa
+
 ## 2.9.7-rc.6 (2024-07-18)
 
 ### Fixed (1 change)
