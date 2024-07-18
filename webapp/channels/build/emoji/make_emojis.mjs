@@ -214,8 +214,8 @@ fullEmoji.forEach((emoji) => {
 // add built-in custom emojis
 fullEmoji.push({
     id: 'kchat',
-    name: 'kChat',
-    unified: '',
+    name: 'kchat',
+    unified: 'kchat',
     image: 'kchat.png',
     short_name: 'kchat',
     short_names: ['kchat'],
@@ -223,11 +223,92 @@ fullEmoji.push({
 });
 fullEmoji.push({
     id: 'kmeet',
-    name: 'kMeet',
-    unified: '',
+    name: 'kmeet',
+    unified: 'kmeet',
     image: 'kmeet.png',
     short_name: 'kmeet',
     short_names: ['kmeet'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'calendar',
+    name: 'calendar',
+    unified: 'calendar',
+    image: 'calendar.png',
+    short_name: 'calendar',
+    short_names: ['calendar'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'chk',
+    name: 'chk',
+    unified: 'chk',
+    image: 'chk.png',
+    short_name: 'chk',
+    short_names: ['chk'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'contact',
+    name: 'contact',
+    unified: 'contact',
+    image: 'contact.png',
+    short_name: 'contact',
+    short_names: ['contact'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'drive',
+    name: 'drive',
+    unified: 'drive',
+    image: 'drive.png',
+    short_name: 'drive',
+    short_names: ['drive'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'ksuite',
+    name: 'ksuite',
+    unified: 'ksuite',
+    image: 'ksuite.png',
+    short_name: 'ksuite',
+    short_names: ['ksuite'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'mail',
+    name: 'mail',
+    unified: 'mail',
+    image: 'mail.png',
+    short_name: 'mail',
+    short_names: ['mail'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'paste',
+    name: 'paste',
+    unified: 'paste',
+    image: 'paste.png',
+    short_name: 'paste',
+    short_names: ['paste'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'swisstransfer',
+    name: 'swisstransfer',
+    unified: 'swisstransfer',
+    image: 'swisstransfer.png',
+    short_name: 'swisstransfer',
+    short_names: ['swisstransfer'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'tasks',
+    name: 'tasks',
+    unified: 'tasks',
+    image: 'tasks.png',
+    short_name: 'tasks',
+    short_names: ['tasks'],
     category: 'custom',
 });
 
