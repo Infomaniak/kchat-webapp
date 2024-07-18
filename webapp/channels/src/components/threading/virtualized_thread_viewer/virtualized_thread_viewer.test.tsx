@@ -44,7 +44,8 @@ function getBasePropsAndState(): [Props, DeepPartial<GlobalState>] {
         replyListIds: ['create-comment'],
         useRelativeTimestamp: true,
         isMobileView: false,
-        isThreadView: false,
+        isThreadView: true,
+        lastViewedAt: 0,
         newMessagesSeparatorActions: [],
         fromSuppressed: false,
     };
@@ -151,34 +152,5 @@ describe('components/threading/VirtualizedThreadViewer', () => {
         });
 
         expect(scrollToBottom).not.toHaveBeenCalled();
-    });
-});
-
-describe('fromSuppressed works as expected', () => {
-    // This setup is so AutoSizer renders its contents
-    const originalOffsetHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight');
-    const originalOffsetWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetWidth');
-
-    beforeAll(() => {
-        Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {configurable: true, value: 50});
-        Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {configurable: true, value: 50});
-    });
-
-    afterAll(() => {
-        Object.defineProperty(HTMLElement.prototype, 'offsetHeight', originalOffsetHeight!);
-        Object.defineProperty(HTMLElement.prototype, 'offsetWidth', originalOffsetWidth!);
-    });
-
-    it('autofocus if fromSuppressed is not set', () => {
-        const [props, state] = getBasePropsAndState();
-        renderWithContext(<VirtualizedThreadViewer {...props}/>, state);
-        expect(screen.getByRole('textbox')).toHaveFocus();
-    });
-
-    it('do not autofocus if fromSuppressed is set', () => {
-        const [props, state] = getBasePropsAndState();
-        props.fromSuppressed = true;
-        renderWithContext(<VirtualizedThreadViewer {...props}/>, state);
-        expect(screen.getByRole('textbox')).not.toHaveFocus();
     });
 });

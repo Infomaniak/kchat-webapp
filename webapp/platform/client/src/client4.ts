@@ -4419,7 +4419,12 @@ export default class Client4 {
         );
     }
 
-    startMeet = (channelID: string) => {
+    startMeet = (channelID: string, version?: string) => {
+        let headers = {}
+        if (version) {
+            headers = {'Desktop-Version': version};
+        }
+
         return this.doFetch<{
             channel_id: string;
             created_at: string;
@@ -4432,7 +4437,7 @@ export default class Client4 {
             name: string;
         }>(
             `${this.getBaseRoute()}/conferences`,
-            {method: 'post', body: JSON.stringify({channel_id: channelID})},
+            {method: 'post', body: JSON.stringify({channel_id: channelID}), headers},
         );
     }
     cancelMeet = (callID: string) => {

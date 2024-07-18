@@ -36,8 +36,9 @@ const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action
     }
     case ActionTypes.VOICE_CHANNEL_DELETED:
         if (state[action.data.channelID]) {
-            const filteredCalls = Object.entries(state).filter(([key]) => key !== action.data.channelID);
-            return filteredCalls.length > 0 ? Object.fromEntries(filteredCalls) : {};
+            const nextState = {...state};
+            delete nextState[action.data.channelID];
+            return nextState;
         }
         return state;
     case ActionTypes.KMEET_CALL_USER_CONNECTED: {

@@ -185,6 +185,7 @@ var config = {
             crypto: require.resolve('crypto-browserify'),
             stream: require.resolve('stream-browserify'),
             buffer: require.resolve('buffer/'),
+            'process/browser': require.resolve('process/browser'),
         },
     },
     performance: {
@@ -202,6 +203,7 @@ var config = {
         new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css',
             chunkFilename: '[name].[contenthash].css',
+            ignoreOrder: true,
         }),
         new HtmlWebpackPlugin({
             filename: 'root.html',

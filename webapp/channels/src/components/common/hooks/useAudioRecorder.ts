@@ -9,8 +9,7 @@ import {createEncoder} from 'wasm-media-encoders';
 
 import {AudioFileExtensions} from 'utils/constants';
 import {generateDateSpecificFileName} from 'utils/file_utils';
-
-import {getWasmFileURL} from './utils';
+import {getWasmFileURL} from 'utils/url_import';
 
 declare global {
     interface Window {

@@ -156,7 +156,12 @@ export function startOrJoinCallInChannelV2(channelID: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         try {
-            const data = await Client4.startMeet(channelID);
+            let version;
+
+            if (isDesktopApp()) {
+                version = getDesktopVersion();
+            }
+            const data = await Client4.startMeet(channelID, version);
             const channel = getChannel(state, channelID);
 
             dispatch({

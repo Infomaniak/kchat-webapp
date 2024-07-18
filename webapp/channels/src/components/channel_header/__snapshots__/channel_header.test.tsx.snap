@@ -80,32 +80,28 @@ exports[`components/ChannelHeader should match snapshot with last active display
             status="offline"
           />
           <span
-            className="header-status__text"
+            className="last-active__text"
           >
-            <span
-              className="last-active__text"
-            >
-              <MemoizedFormattedMessage
-                defaultMessage="Active {timestamp}"
-                id="channel_header.lastActive"
-                values={
-                  Object {
-                    "timestamp": <Memo(Connect(injectIntl(Timestamp)))
-                      style="short"
-                      units={
-                        Array [
-                          "now",
-                          "minute",
-                          "hour",
-                        ]
-                      }
-                      useTime={false}
-                      value={1632146562846}
-                    />,
-                  }
+            <MemoizedFormattedMessage
+              defaultMessage="Active {timestamp}"
+              id="channel_header.lastActive"
+              values={
+                Object {
+                  "timestamp": <Memo(Connect(injectIntl(Timestamp)))
+                    style="short"
+                    units={
+                      Array [
+                        "now",
+                        "minute",
+                        "hour",
+                      ]
+                    }
+                    useTime={false}
+                    value={1632146562846}
+                  />,
                 }
-              />
-            </span>
+              }
+            />
           </span>
           <HeaderIconWrapper
             ariaLabel={true}
@@ -372,14 +368,10 @@ exports[`components/ChannelHeader should match snapshot with no last active disp
           <Memo(StatusIcon)
             status="offline"
           />
-          <span
-            className="header-status__text"
-          >
-            <MemoizedFormattedMessage
-              defaultMessage="Offline"
-              id="status_dropdown.set_offline"
-            />
-          </span>
+          <MemoizedFormattedMessage
+            defaultMessage="Offline"
+            id="status_dropdown.set_offline"
+          />
           <HeaderIconWrapper
             ariaLabel={true}
             buttonClass="channel-header__icon channel-header__icon--wide channel-header__icon--left"
@@ -2342,32 +2334,28 @@ exports[`components/ChannelHeader should render properly when custom status is e
             status="offline"
           />
           <span
-            className="header-status__text"
+            className="last-active__text"
           >
-            <span
-              className="last-active__text"
-            >
-              <MemoizedFormattedMessage
-                defaultMessage="Active {timestamp}"
-                id="channel_header.lastActive"
-                values={
-                  Object {
-                    "timestamp": <Memo(Connect(injectIntl(Timestamp)))
-                      style="short"
-                      units={
-                        Array [
-                          "now",
-                          "minute",
-                          "hour",
-                        ]
-                      }
-                      useTime={false}
-                      value={1632146562846}
-                    />,
-                  }
+            <MemoizedFormattedMessage
+              defaultMessage="Active {timestamp}"
+              id="channel_header.lastActive"
+              values={
+                Object {
+                  "timestamp": <Memo(Connect(injectIntl(Timestamp)))
+                    style="short"
+                    units={
+                      Array [
+                        "now",
+                        "minute",
+                        "hour",
+                      ]
+                    }
+                    useTime={false}
+                    value={1632146562846}
+                  />,
                 }
-              />
-            </span>
+              }
+            />
           </span>
           <HeaderIconWrapper
             ariaLabel={true}
@@ -2633,52 +2621,64 @@ exports[`components/ChannelHeader should render properly when custom status is s
             status="offline"
           />
           <span
-            className="header-status__text"
+            className="last-active__text"
           >
-            <span
-              className="last-active__text"
-            >
-              <MemoizedFormattedMessage
-                defaultMessage="Active {timestamp}"
-                id="channel_header.lastActive"
-                values={
-                  Object {
-                    "timestamp": <Memo(Connect(injectIntl(Timestamp)))
-                      style="short"
-                      units={
-                        Array [
-                          "now",
-                          "minute",
-                          "hour",
-                        ]
-                      }
-                      useTime={false}
-                      value={1632146562846}
-                    />,
-                  }
+            <MemoizedFormattedMessage
+              defaultMessage="Active {timestamp}"
+              id="channel_header.lastActive"
+              values={
+                Object {
+                  "timestamp": <Memo(Connect(injectIntl(Timestamp)))
+                    style="short"
+                    units={
+                      Array [
+                        "now",
+                        "minute",
+                        "hour",
+                      ]
+                    }
+                    useTime={false}
+                    value={1632146562846}
+                  />,
                 }
-              />
-            </span>
-            <div
-              className="custom-emoji__wrapper"
-            >
-              <Memo(CustomStatusEmoji)
-                emojiStyle={
-                  Object {
-                    "margin": "0 4px 1px",
-                    "verticalAlign": "top",
-                  }
+              }
+            />
+          </span>
+          <Memo(CustomStatusEmoji)
+            emojiStyle={
+              Object {
+                "margin": "0 4px 1px",
+                "verticalAlign": "top",
+              }
+            }
+            showTooltip={true}
+            spanStyle={
+              Object {
+                "paddingLeft": "8px",
+              }
+            }
+            tooltipDirection="bottom"
+            userID="user_id"
+          />
+          <span
+            className="header-description__text"
+          >
+            <Connect(Markdown)
+              imageProps={
+                Object {
+                  "hideUtilities": true,
                 }
-                showTooltip={true}
-                tooltipDirection="bottom"
-                userID="user_id"
-              />
-              <CustomStatusText
-                className=""
-                text="In a meeting"
-                tooltipDirection="bottom"
-              />
-            </div>
+              }
+              message="In a meeting"
+              options={
+                Object {
+                  "atMentions": true,
+                  "channelNamesMap": undefined,
+                  "mentionHighlight": false,
+                  "singleline": true,
+                }
+              }
+            />
           </span>
           <HeaderIconWrapper
             ariaLabel={true}

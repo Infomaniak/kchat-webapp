@@ -19,5 +19,8 @@
       "webapp/channels"
     ]
   },
-  "packageManager": "yarn@4.0.1"
+  "packageManager": "yarn@4.0.1",
+  "dependencies": {
+    "process": "^0.11.10"
+  }
 }

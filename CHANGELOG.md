@@ -1,3 +1,194 @@
+## 2.9.6-next.1 (2024-06-21)
+
+No changes.
+
+## 2.9.5-rc.8 (2024-06-21)
+
+### Added (1 change)
+
+- [Add support for actions in the unreads bar from plugins (#24265)](kchat/webapp@9d622e946a45a72e060d44c41ed96c7c54529b98) by @antonbuksa
+
+### Fixed (2 changes)
+
+- [fix wpack error caused by old prop](kchat/webapp@8179af9cd24e279c8b1a51c5279f82c9ccd5e7d4) by @antonbuksa
+- [Fix: Scroll for long text in edit messages and in post](kchat/webapp@04b6213be438b451f7728e1e1d8289ebfa5eccce) by  ([merge request](kchat/webapp!791))
+
+## 2.9.5-rc.7 (2024-06-20)
+
+### Fixed (1 change)
+
+- [fix js error in old calls code](kchat/webapp@aa9a016b40e230b0b5bdd51f3c71de0814e3b70f) by @antonbuksa
+
+## 2.9.5-rc.6 (2024-06-20)
+
+### Fixed (1 change)
+
+- [fix call delete reduce not removing key causing exceptions](kchat/webapp@72dfd65bfe75d315511b354f28b625eb25f837d8) by @antonbuksa
+
+## 2.9.5-rc.5 (2024-06-20)
+
+### Added (1 change)
+
+- [handle case where call no longer exists when answered](kchat/webapp@880c4bf4222c7ae7bf17fd954e087f23144b6359) by @antonbuksa ([merge request](kchat/webapp!808))
+
+## 2.9.5-rc.4 (2024-06-20)
+
+### Added (1 change)
+
+- [retry ws channel subscriptions if error occurs](kchat/webapp@14d4a3ddd72001511b92aa3b4321ba670d5e8ede) by @antonbuksa ([merge request](kchat/webapp!810))
+
+## 2.9.5-rc.3 (2024-06-19)
+
+### Fixed (1 change)
+
+- [fix: close actions now close menu](kchat/webapp@87358efe61919cc4a8a48fd4fd024fe885aec33d) by  ([merge request](kchat/webapp!806))
+
+## 2.9.5-rc.2 (2024-06-19)
+
+### Fixed (3 changes)
+
+- [add check to fix js error in conference user denied ws action](kchat/webapp@79eac8d5a170503579fef622eaa1d276b36732aa) by @antonbuksa ([merge request](kchat/webapp!805))
+- [fix: custom status overflow](kchat/webapp@80ad28dc76c54871a66cd32368cb925508b0bec8) by @tim.dewinter ([merge request](kchat/webapp!773))
+- [fix: error message displayName you](kchat/webapp@123554d51fe8c289538b003cb6d6991ca621ef3c) by  ([merge request](kchat/webapp!804))
+
+## 2.9.5-rc.1 (2024-06-18)
+
+### Added (1 change)
+
+- [implement displaying embedded attachments in post previews](kchat/webapp@6dddc1931deefe0b87f2ca4b6715f8fd886fd3d7) by @antonbuksa ([merge request](kchat/webapp!797))
+
+## 2.9.5-next.4 (2024-06-20)
+
+### Added (1 change)
+
+- [handle case where call no longer exists when answered](kchat/webapp@880c4bf4222c7ae7bf17fd954e087f23144b6359) by @antonbuksa ([merge request](kchat/webapp!808))
+
+### Fixed (2 changes)
+
+- [fix js error in old calls code](kchat/webapp@aa9a016b40e230b0b5bdd51f3c71de0814e3b70f) by @antonbuksa
+- [fix call delete reduce not removing key causing exceptions](kchat/webapp@72dfd65bfe75d315511b354f28b625eb25f837d8) by @antonbuksa
+
+## 2.9.5-next.3 (2024-06-20)
+
+### Added (1 change)
+
+- [retry ws channel subscriptions if error occurs](kchat/webapp@14d4a3ddd72001511b92aa3b4321ba670d5e8ede) by @antonbuksa ([merge request](kchat/webapp!810))
+
+## 2.9.5-next.2 (2024-06-19)
+
+### Fixed (4 changes)
+
+- [fix: close actions now close menu](kchat/webapp@87358efe61919cc4a8a48fd4fd024fe885aec33d) by  ([merge request](kchat/webapp!806))
+- [add check to fix js error in conference user denied ws action](kchat/webapp@79eac8d5a170503579fef622eaa1d276b36732aa) by @antonbuksa ([merge request](kchat/webapp!805))
+- [fix: custom status overflow](kchat/webapp@80ad28dc76c54871a66cd32368cb925508b0bec8) by @tim.dewinter ([merge request](kchat/webapp!773))
+- [fix: error message displayName you](kchat/webapp@123554d51fe8c289538b003cb6d6991ca621ef3c) by  ([merge request](kchat/webapp!804))
+
+## 2.9.5-next.1 (2024-06-18)
+
+### Added (1 change)
+
+- [implement displaying embedded attachments in post previews](kchat/webapp@6dddc1931deefe0b87f2ca4b6715f8fd886fd3d7) by @antonbuksa ([merge request](kchat/webapp!797))
+
+## 2.9.4-rc.3 (2024-06-18)
+
+No changes.
+
+## 2.9.4-rc.2 (2024-06-18)
+
+No changes.
+
+## 2.9.4-rc.1 (2024-06-18)
+
+### Fixed (1 change)
+
+- [fix: version_bar.new translation](kchat/webapp@01e7661224548236df1269b3ecd132d33659d301) by @tim.dewinter ([merge request](kchat/webapp!801))
+
+### Chore (1 change)
+
+- [update pdfjs](kchat/webapp@dd77671327b4d0deb4a5846b81fcd8d5010571e0) by @antonbuksa ([merge request](kchat/webapp!799))
+
+## 2.9.4-next.1 (2024-06-18)
+
+### Fixed (1 change)
+
+- [fix: version_bar.new translation](kchat/webapp@01e7661224548236df1269b3ecd132d33659d301) by @tim.dewinter ([merge request](kchat/webapp!801))
+
+### Chore (1 change)
+
+- [update pdfjs](kchat/webapp@dd77671327b4d0deb4a5846b81fcd8d5010571e0) by @antonbuksa ([merge request](kchat/webapp!799))
+
+## 2.9.3-rc.5 (2024-06-11)
+
+### Fixed (1 change)
+
+- [fix link in mas update banner](kchat/webapp@6ec2a9370e8eaed9923b85e75d8f47a111a75f36) by @antonbuksa
+
+## 2.9.3-rc.4 (2024-06-11)
+
+### Fixed (2 changes)
+
+- [Fix: condition with userAgent](kchat/webapp@0dd21b9762833e41bf49fb250daa7641d13c9fbe) by  ([merge request](kchat/webapp!800))
+- [Fix: Annoucement banner only for mac app](kchat/webapp@1b09eaab1e2a02912fca8c439a7a9a56d7a00d0d) by  ([merge request](kchat/webapp!800))
+
+## 2.9.3-rc.3 (2024-06-11)
+
+### Fixed (1 change)
+
+- [fix calls not opening in channels on old apps](kchat/webapp@0f85e0ad03ecad0b9392371586e01e17c3d18dc7) by @antonbuksa
+
+## 2.9.3-rc.2 (2024-06-11)
+
+### Fixed (1 change)
+
+- [Fix: Space errors and fix condition](kchat/webapp@ae5f6b9567cde30d07b720a68492466a30c28351) by  ([merge request](kchat/webapp!798))
+
+## 2.9.3-rc.1 (2024-06-10)
+
+### Fixed (2 changes)
+
+- [Fix: Plural for @here](kchat/webapp@9567d688406a604a02b2db15621582c1d8ef483a) by  ([merge request](kchat/webapp!790))
+- [Fix: Missing traduction for suggestion list](kchat/webapp@9c8c6e36351414729827acba3c6f179faa081a28) by  ([merge request](kchat/webapp!788))
+
+## 2.9.3-next.3 (2024-06-11)
+
+### Fixed (3 changes)
+
+- [fix link in mas update banner](kchat/webapp@6ec2a9370e8eaed9923b85e75d8f47a111a75f36) by @antonbuksa
+- [Fix: condition with userAgent](kchat/webapp@0dd21b9762833e41bf49fb250daa7641d13c9fbe) by  ([merge request](kchat/webapp!800))
+- [Fix: Annoucement banner only for mac app](kchat/webapp@1b09eaab1e2a02912fca8c439a7a9a56d7a00d0d) by  ([merge request](kchat/webapp!800))
+
+## 2.9.3-next.2 (2024-06-11)
+
+### Fixed (1 change)
+
+- [fix calls not opening in channels on old apps](kchat/webapp@0f85e0ad03ecad0b9392371586e01e17c3d18dc7) by @antonbuksa
+
+## 2.9.3-next.1 (2024-06-11)
+
+### Fixed (3 changes)
+
+- [Fix: Space errors and fix condition](kchat/webapp@ae5f6b9567cde30d07b720a68492466a30c28351) by  ([merge request](kchat/webapp!798))
+- [Fix: Plural for @here](kchat/webapp@9567d688406a604a02b2db15621582c1d8ef483a) by  ([merge request](kchat/webapp!790))
+- [Fix: Missing traduction for suggestion list](kchat/webapp@9c8c6e36351414729827acba3c6f179faa081a28) by  ([merge request](kchat/webapp!788))
+
+## 2.9.2-rc.5 (2024-06-07)
+
+No changes.
+
+## 2.9.2-rc.4 (2024-06-07)
+
+No changes.
+
+## 2.9.2-rc.3 (2024-06-07)
+
+No changes.
+
+## 2.9.2-rc.2 (2024-06-07)
+
+### Added (1 change)
+
+- [pass desktop version to create call route](kchat/webapp@15b83c150bc566b5a629ec4b12a75aa0ffb19992) by @antonbuksa
+
 ## 2.9.2-rc.1 (2024-06-06)
 
 ### Fixed (2 changes)
@@ -8,6 +199,12 @@
 ### Changed (1 change)
 
 - [reduce spacing in meet button](kchat/webapp@25be7b4256545a43c39f8faacddd670372bf5d31) by @antonbuksa
+
+## 2.9.2-next.2 (2024-06-07)
+
+### Added (1 change)
+
+- [pass desktop version to create call route](kchat/webapp@15b83c150bc566b5a629ec4b12a75aa0ffb19992) by @antonbuksa
 
 ## 2.9.2-next.1 (2024-06-06)
 

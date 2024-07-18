@@ -16,7 +16,6 @@ import {memoizeResult} from 'mattermost-redux/utils/helpers';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
-import CustomStatusText from 'components/custom_status/custom_status_text';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
 import Markdown from 'components/markdown';
 import MeetButton from 'components/meet_button';
@@ -227,14 +226,15 @@ class ChannelHeader extends React.PureComponent<Props, State> {
     handleFormattedTextClick = (e: MouseEvent<HTMLSpanElement>) => handleFormattedTextClick(e, this.props.currentRelativeTeamUrl);
 
     renderCustomStatus = () => {
-        const {customStatus, isCustomStatusEnabled, isCustomStatusExpired} = this.props;
+        const {channel, customStatus, isCustomStatusEnabled, isCustomStatusExpired} = this.props;
         const isStatusSet = !isCustomStatusExpired && (customStatus?.text || customStatus?.emoji);
         if (!(isCustomStatusEnabled && isStatusSet)) {
             return null;
         }
 
+        const channelNamesMap = channel.props && channel.props.channel_mentions;
         return (
-            <div className='custom-emoji__wrapper'>
+            <>
                 <CustomStatusEmoji
                     userID={this.props.dmUser?.id}
                     showTooltip={true}
@@ -243,11 +243,20 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         verticalAlign: 'top',
                         margin: '0 4px 1px',
                     }}
+                    spanStyle={{paddingLeft: '8px'}}
                 />
-                <CustomStatusText
-                    text={customStatus?.text}
-                />
-            </div>
+                {
+                    customStatus?.text &&
+                    <span className='header-description__text'>
+                        <Markdown
+                            message={customStatus?.text}
+                            options={this.getHeaderMarkdownOptions(channelNamesMap)}
+                            imageProps={{hideUtilities: true}}
+                        />
+                    </span>
+                }
+            </>
+
         );
     };
 
@@ -346,22 +355,24 @@ class ChannelHeader extends React.PureComponent<Props, State> {
 
         let dmHeaderIconStatus: ReactNode;
         let dmHeaderTextStatus: ReactNode;
+
+        if (dmUser?.is_bot || currentUser.id === dmUser?.id) {
+            showMeetBtn = false;
+        }
+
         if (isDirect && !dmUser?.delete_at && !dmUser?.is_bot) {
-            if (currentUser.id === dmUser?.id) {
-                showMeetBtn = false;
-            }
             dmHeaderIconStatus = (<StatusIcon status={channel.status}/>);
 
             dmHeaderTextStatus = (
-                <span className='header-status__text'>
+                <>
                     <FormattedMessage {...statusDropdownMessages[channel.status!].name}/>
                     {this.renderCustomStatus()}
-                </span>
+                </>
             );
 
             if (this.props.isLastActiveEnabled && this.props.lastActivityTimestamp && this.props.timestampUnits) {
                 dmHeaderTextStatus = (
-                    <span className='header-status__text'>
+                    <>
                         <span className='last-active__text'>
                             <FormattedMessage
                                 id='channel_header.lastActive'
@@ -379,7 +390,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                             />
                         </span>
                         {this.renderCustomStatus()}
-                    </span>
+                    </>
                 );
             }
         }
