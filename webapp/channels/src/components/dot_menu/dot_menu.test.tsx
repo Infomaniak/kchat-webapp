@@ -255,6 +255,116 @@ describe('components/dot_menu/DotMenu', () => {
         expect(menuItem).toBeNull();
     });
 
+    test('should display the download all attachments action', () => {
+        const props = {
+            ...baseProps,
+            post: TestHelper.getPostMock({id: 'post_id_1',
+                is_pinned: false,
+                type: '' as PostType,
+                metadata: {
+                    files: [
+                        {
+                            id: 'file_id_1',
+                            user_id: '',
+                            create_at: 0,
+                            update_at: 0,
+                            delete_at: 0,
+                            name: '',
+                            extension: '',
+                            size: 0,
+                            mime_type: '',
+                            width: 0,
+                            height: 0,
+                            has_preview_image: false,
+                            clientId: '',
+                            archived: false,
+                        }, {
+                            id: 'file_id_2',
+                            user_id: '',
+                            create_at: 0,
+                            update_at: 0,
+                            delete_at: 0,
+                            name: '',
+                            extension: '',
+                            size: 0,
+                            mime_type: '',
+                            width: 0,
+                            height: 0,
+                            has_preview_image: false,
+                            clientId: '',
+                            archived: false,
+                        }]}}),
+        };
+
+        const {getByTestId} = renderWithContext(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+        const button = screen.getByTestId(`PostDotMenu-Button-${baseProps.post.id}`);
+        fireEvent.click(button);
+        const downloadAction = getByTestId(`download_all_attachments_${props.post.id}`);
+        expect(downloadAction).toBeInTheDocument();
+        expect(downloadAction).toBeVisible();
+    });
+
+    test('should not display the download all attachments action for one or no file', () => {
+        let props = {
+            ...baseProps,
+            post: TestHelper.getPostMock({
+                id: 'post_id_1',
+                is_pinned: false,
+                type: '' as PostType,
+                metadata: {
+                    files: [{
+                        id: 'file_id_1',
+                        user_id: '',
+                        create_at: 0,
+                        update_at: 0,
+                        delete_at: 0,
+                        name: '',
+                        extension: '',
+                        size: 0,
+                        mime_type: '',
+                        width: 0,
+                        height: 0,
+                        has_preview_image: false,
+                        clientId: '',
+                        archived: false,
+                    }],
+                },
+            }),
+        };
+
+        const {queryByTestId} = renderWithContext(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+        const button = screen.getByTestId(`PostDotMenu-Button-${baseProps.post.id}`);
+        fireEvent.click(button);
+        let downloadAction = queryByTestId(`download_all_attachments_${props.post.id}`);
+        expect(downloadAction).not.toBeInTheDocument();
+
+        props = {
+            ...baseProps,
+            post: TestHelper.getPostMock({
+                id: 'post_id_2',
+                is_pinned: false,
+                type: '' as PostType,
+                metadata: {
+                    files: [],
+                },
+            }),
+        };
+
+        renderWithContext(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+        fireEvent.click(button);
+        downloadAction = queryByTestId(`download_all_attachments_${props.post.id}`);
+        expect(downloadAction).not.toBeInTheDocument();
+    });
+
     describe('RHS', () => {
         test.each([
             [true, {location: Locations.RHS_ROOT, isCollapsedThreadsEnabled: true}],

@@ -11,19 +11,19 @@ import {defaultTeam} from './support/util';
 import testConfig from './test.config';
 
 async function globalSetup() {
-    let adminClient: Client;
-    let adminUser: UserProfile | null;
-    ({adminClient, adminUser} = await getAdminClient());
+    // let adminClient: Client;
+    // let adminUser: UserProfile | null;
+    // ({adminClient, adminUser} = await getAdminClient());
 
-    if (!adminUser) {
-        const {client: firstClient} = await makeClient();
-        const defaultAdmin = getDefaultAdminUser();
-        await firstClient.createUser(defaultAdmin, '', '');
+    // if (!adminUser) {
+    //     const {client: firstClient} = await makeClient();
+    //     const defaultAdmin = getDefaultAdminUser();
+    //     await firstClient.createUser(defaultAdmin, '', '');
 
-        ({client: adminClient, user: adminUser} = await makeClient(defaultAdmin));
-    }
+    //     ({client: adminClient, user: adminUser} = await makeClient(defaultAdmin));
+    // }
 
-    await sysadminSetup(adminClient, adminUser);
+    // await sysadminSetup(adminClient, adminUser);
 
     return function () {
         // placeholder for teardown setup

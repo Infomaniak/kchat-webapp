@@ -212,6 +212,10 @@ export function haveIChannelPermission(state: GlobalState, teamId: string, chann
     );
 }
 
+export const haveIOnlyPermissionsByChannel = (state: GlobalState, teamId: string, channelId: string, permission: string): boolean => {
+    return getMyPermissionsByChannel(state)[channelId]?.has(permission);
+};
+
 export function haveICurrentTeamPermission(state: GlobalState, permission: string): boolean {
     return haveITeamPermission(state, getCurrentTeamId(state), permission);
 }

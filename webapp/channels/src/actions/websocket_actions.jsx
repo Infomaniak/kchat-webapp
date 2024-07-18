@@ -217,7 +217,7 @@ export function initialize() {
 }
 
 export function close() {
-    WebSocketClient.close();
+    // WebSocketClient.close();
     WebSocketClient.removeMessageListener(handleEvent);
     WebSocketClient.removeFirstConnectListener(handleFirstConnect);
     WebSocketClient.removeReconnectListener(reconnect);

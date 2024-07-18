@@ -16,6 +16,7 @@ import {getCurrentUser, getStatusForUserId, isCurrentUserGuestUser} from 'matter
 
 import {openModal} from 'actions/views/modals';
 import {setStatusDropdown} from 'actions/views/status_dropdown';
+import {getKSuiteBridge} from 'selectors/ksuite_bridge';
 import {getShowTutorialStep} from 'selectors/onboarding';
 import {makeGetCustomStatus, isCustomStatusEnabled, showStatusDropdownPulsatingDot, isCustomStatusExpired} from 'selectors/views/custom_status';
 import {isStatusDropdownOpen} from 'selectors/views/status_dropdown';
@@ -60,6 +61,8 @@ function makeMapStateToProps() {
         const showNextSwitch = currentTeam ? STAFF_ONLY_TEAM_NAME_WHITELIST.includes(currentTeam.name) : false;
         const step = getInt(state, OnboardingTaskCategory, OnboardingTasksName.COMPLETE_YOUR_PROFILE, 0);
         const showCompleteYourProfileTour = step === TaskNameMapToSteps[OnboardingTasksName.COMPLETE_YOUR_PROFILE].STARTED;
+        const ksuiteBridge = getKSuiteBridge(state);
+
         return {
             userId,
             profilePicture: Client4.getProfilePictureUrl(userId, currentUser?.last_picture_update),
@@ -77,6 +80,8 @@ function makeMapStateToProps() {
             showNextSwitch,
             showCompleteYourProfileTour,
             timezone: getCurrentTimezone(state),
+            ksuiteBridge,
+            isBridgeConnected: ksuiteBridge?.isConnected,
         };
     };
 }

@@ -39,7 +39,7 @@ import {doAppSubmit, openAppsModal, postEphemeralCallResponseForCommandArgs} fro
 import {trackEvent} from './telemetry_actions';
 
 const KeyboardShortcutsModal = withSuspense(lazy(() => import('components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal')));
-const LeaveChannelModal = withSuspense(lazy(() => import('components/leave_channel_modal')));
+const IkLeaveChannelModal = withSuspense(lazy(() => import('components/ik_leave_channel_modal')));
 const MarketplaceModal = withSuspense(lazy(() => import('components/plugin_marketplace/marketplace_modal')));
 export const UserSettingsModal = withSuspense(lazy(() => import('components/user_settings/modal')));
 
@@ -92,7 +92,7 @@ export function executeCommand(message: string, args: CommandArgs): ActionFuncAs
             }
             const channel = getCurrentChannel(state) || {};
             if (channel.type === Constants.PRIVATE_CHANNEL) {
-                dispatch(openModal({modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL, dialogType: LeaveChannelModal, dialogProps: {channel}}));
+                dispatch(openModal({modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL, dialogType: IkLeaveChannelModal, dialogProps: {channel}}));
                 return {data: true};
             }
             if (

@@ -13,6 +13,7 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 import {isAddChannelDropdownOpen} from 'selectors/views/add_channel_dropdown';
+import {getCurrentServer} from 'selectors/views/servers';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
@@ -106,6 +107,7 @@ export type Props = {
 const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
     const dispatch = useDispatch();
     const currentTeam = useSelector((state: GlobalState) => getCurrentTeam(state));
+    const currentServer = useSelector((state: GlobalState) => getCurrentServer(state));
     const showJoinChannelTourTip = useShowOnboardingTutorialStep(OnboardingTourSteps.JOIN_CHANNELS);
     const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_CHANNELS);
     const showInviteTutorialTip = false;
@@ -168,6 +170,7 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                     canCreateCustomGroups={props.canCreateCustomGroups}
                     showCreateUserGroupModal={props.showCreateUserGroupModal}
                     userGroupsEnabled={props.userGroupsEnabled}
+                    server={currentServer}
                 />
             </SidebarHeaderContainer>
         </CompassThemeProvider>

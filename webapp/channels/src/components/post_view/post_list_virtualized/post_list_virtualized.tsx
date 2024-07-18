@@ -379,8 +379,8 @@ export default class PostList extends React.PureComponent<Props, State> {
                     isLastPost={isLastPost}
                     loadingNewerPosts={this.props.loadingNewerPosts}
                     loadingOlderPosts={this.props.loadingOlderPosts}
-                    lastViewedAt={this.props.lastViewedAt}
                     channelId={this.props.channelId}
+                    lastViewedAt={this.props.lastViewedAt}
                 />
             </div>
         );
@@ -684,7 +684,6 @@ export default class PostList extends React.PureComponent<Props, State> {
 
         return (
             <div
-                role='list'
                 className='a11y__region'
                 data-a11y-sort-order='1'
                 data-a11y-focus-child={true}

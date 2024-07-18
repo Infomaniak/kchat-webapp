@@ -160,15 +160,16 @@ export function selectFileFromKdrive(
 }
 
 /**
- * This action is called every channel switch in {@code ChannelView} to register a kdrive upload plugin.
- * The plugin needs to be reregistered every channel switch because it needs to bind the channel id to the
- * plugin action. The old one needs to be manually removed otherwise it adds a duplicate.
- *
- * @param channelId - Current channel id.
- * @returns {void}
+ * This action is called to register the kdrive upload plugin.
  */
 export function registerInternalKdrivePlugin() {
+    let registered = false;
     return async (dispatch: DispatchFunc) => {
+        if (registered) {
+            return;
+        }
+        registered = true;
+
         dispatch({
             type: ActionTypes.RECEIVED_PLUGIN_COMPONENT,
             name: 'FileUploadMethod',

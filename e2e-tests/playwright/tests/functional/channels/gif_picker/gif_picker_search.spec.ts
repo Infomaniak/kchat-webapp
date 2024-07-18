@@ -2,15 +2,16 @@
 // See LICENSE.txt for license information.
 
 import {expect, test} from '@e2e-support/test_fixture';
+import {wait} from '@e2e-support/util';
 
 test('MM-T5445 Should search, select and post correct Gif when Gif picker is opened from center textbox', async ({
-    pw,
+    page,
     pages,
 }) => {
-    const {user} = await pw.initSetup();
+    // const {user} = await pw.initSetup();
 
     // # Log in as a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    // const {page} = await pw.testBrowser.login(user);
 
     // # Visit default channel page
     const channelPage = new pages.ChannelsPage(page);
@@ -42,13 +43,13 @@ test('MM-T5445 Should search, select and post correct Gif when Gif picker is ope
 });
 
 test('MM-T5446 Should search, select and post correct Gif when Gif picker is opened from RHS textbox', async ({
-    pw,
+    page,
     pages,
 }) => {
-    const {user} = await pw.initSetup();
+    // const {user} = await pw.initSetup();
 
     // # Log in as a user in new browser context
-    const {page} = await pw.testBrowser.login(user);
+    // const {page} = await pw.testBrowser.login(user);
 
     // # Visit default channel page
     const channelPage = new pages.ChannelsPage(page);
@@ -62,6 +63,7 @@ test('MM-T5446 Should search, select and post correct Gif when Gif picker is ope
     const lastPost = await channelPage.centerView.getLastPost();
     await lastPost.hover();
     await lastPost.postMenu.toBeVisible();
+    await wait(500);
     await lastPost.postMenu.reply();
 
     const sidebarRight = channelPage.sidebarRight;

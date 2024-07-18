@@ -11,7 +11,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
-import LeaveChannelModal from 'components/leave_channel_modal';
+import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
@@ -32,6 +32,7 @@ export interface Props {
     channelMember: ChannelMembership;
     canChangeMemberRoles: boolean;
     canRemoveMember: boolean;
+    hasChannelMembersAdmin: boolean;
     index: number;
     totalUsers: number;
     channelAdminLabel?: JSX.Element;
@@ -58,6 +59,7 @@ export default function ChannelMembersDropdown({
     channelAdminLabel,
     channelMemberLabel,
     guestLabel,
+    hasChannelMembersAdmin,
     actions,
 }: Props) {
     const [removing, setRemoving] = useState(false);
@@ -71,15 +73,11 @@ export default function ChannelMembersDropdown({
 
         if (user.id === currentUserId) {
             setRemoving(true);
-            dispatch(actions.openModal({
+            dispatch(actions.openModal<React.ComponentProps<typeof IkLeaveChannelModal>>({
                 modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
-                dialogType: LeaveChannelModal,
+                dialogType: IkLeaveChannelModal,
                 dialogProps: {
                     channel,
-                    callback: () => {
-                        actions.getChannelStats(channel.id);
-                        setRemoving(false);
-                    },
                 },
             }));
         } else {
@@ -183,7 +181,7 @@ export default function ChannelMembersDropdown({
         );
     }
 
-    const canMakeUserChannelMember = canChangeMemberRoles && isChannelAdmin;
+    const canMakeUserChannelMember = canChangeMemberRoles && isChannelAdmin && !hasChannelMembersAdmin;
     const canMakeUserChannelAdmin = canChangeMemberRoles && isMember;
     const canRemoveUserFromChannel = canRemoveMember && (!channel.group_constrained || user.is_bot) && (!isDefaultChannel || isGuest);
     const removeFromChannelText = user.id === currentUserId ? Utils.localizeMessage('channel_header.leave', 'Leave Channel') : Utils.localizeMessage('channel_members_dropdown.remove_from_channel', 'Remove from Channel');

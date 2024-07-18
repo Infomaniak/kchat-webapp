@@ -1,4 +1,4 @@
-FROM ubuntu:jammy-20230308@sha256:7a57c69fe1e9d5b97c5fe649849e79f2cfc3bf11d10bbd5218b4eb61716aebe6
+FROM ubuntu:jammy-20230308
 
 
 # Setting bash as our shell, and enabling pipefail option
@@ -6,9 +6,10 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Some ENV variables
 ENV PATH="/mattermost/bin:${PATH}"
+ARG ARCH=arm64
 ARG PUID=2000
 ARG PGID=2000
-ARG MM_PACKAGE="https://releases.mattermost.com/9.5.1/mattermost-9.5.1-linux-amd64.tar.gz?src=docker"
+ARG MM_PACKAGE="https://releases.mattermost.com/9.7.2/mattermost-9.7.2-linux-${ARCH}.tar.gz?src=docker"
 
 # # Install needed packages and indirect dependencies
 RUN apt-get update \
