@@ -16,28 +16,8 @@
     margin-top: 3px;
 }
 
-.transcript-container{
-    position: absolute;
-    width: 0;
-    height: 0;
-}
-
 .transcript-popover{
-    position: absolute;
-    top: calc(100% - 400px);
-    left: 0;
-    width: 400px;
-    height: 400px;
-    overflow: auto;
-
-    @media screen and (max-width: 1280px) {
-        left: unset;
-        right: 0;
-    }
-    @media screen and (max-width: 768px) {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-    }
+    padding: 10px;
+    max-height: 300px;
+    max-width: 350px;
 }
