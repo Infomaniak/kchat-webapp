@@ -1,3 +1,9 @@
+## 2.9.7-rc.6 (2024-07-18)
+
+### Fixed (1 change)
+
+- [fix trim js error in transcript popover](kchat/webapp@cde30700e59730412320a4e866c236083522b546) by @antonbuksa
+
 ## 2.9.7-rc.5 (2024-07-18)
 
 ### Fixed (6 changes)
