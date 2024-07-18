@@ -76,7 +76,9 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             if (result.text) {
                 setTranscript(result.text.trim());
             }
-            setTranscriptDatas(result);
+            if (!Array.isArray(result)) {
+                setTranscriptDatas(result);
+            }
             setHasFetchedTranscript(true);
         }
     };
