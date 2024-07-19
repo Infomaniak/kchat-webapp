@@ -10,12 +10,15 @@ import ReactSelect, {components} from 'react-select';
 import type {getOptionValue} from 'react-select/src/builtins';
 import type {InputActionMeta} from 'react-select/src/types';
 
+import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import SaveButton from 'components/save_button';
 import CloseCircleSolidIcon from 'components/widgets/icons/close_circle_solid_icon';
 import Avatar from 'components/widgets/users/avatar';
 
-import {Constants, A11yCustomEventTypes} from 'utils/constants';
+import {Constants, A11yCustomEventTypes, ModalIdentifiers} from 'utils/constants';
 import {imageURLForUser, getDisplayName, localizeMessage} from 'utils/utils';
+
+import type {ModalData} from 'types/actions';
 
 import MultiSelectList from './multiselect_list';
 
@@ -29,7 +32,13 @@ export type Value = {
     disabled?: boolean;
 };
 
+type Actions = {
+    openModal: <P>(modalData: ModalData<P>) => void;
+    closeModal: (modalId: string) => void;
+}
+
 export type Props<T extends Value> = {
+    actions: Actions;
     ariaLabelRenderer: getOptionValue<T>;
     backButtonClick?: () => void;
     backButtonClass?: string;
@@ -59,16 +68,20 @@ export type Props<T extends Value> = {
     perPage: number;
     placeholderText?: string;
     saving?: boolean;
+    showError?: boolean;
+    changeMessageColor: string;
     submitImmediatelyOn?: (value: T) => boolean;
     totalCount?: number;
     users?: unknown[];
     valueWithImage: boolean;
+    disableMultiSelectList?: boolean;
     valueRenderer?: (props: {data: T}) => any;
     values: T[];
     focusOnLoad?: boolean;
     savingEnabled?: boolean;
     handleCancel?: () => void;
     customNoOptionsMessage?: React.ReactNode;
+    exitParentModal: () => void;
 }
 
 export type State = {
@@ -91,6 +104,8 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
         focusOnLoad: true,
         savingEnabled: true,
         showInputByDefault: false,
+        changeMessageColor: false,
+        disableMultiSelectList: false,
     };
 
     public constructor(props: Props<T>) {
@@ -102,6 +117,15 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
             input: '',
         };
     }
+
+    public openModal = (): void => {
+        this.props.exitParentModal();
+        const newModal = {
+            modalId: ModalIdentifiers.NEW_CHANNEL_MODAL,
+            dialogType: NewChannelModal,
+        };
+        this.props.actions.openModal(newModal);
+    };
 
     public componentDidMount() {
         const inputRef: unknown = this.reactSelectRef.current && this.reactSelectRef.current.select.inputRef;
@@ -447,18 +471,18 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
             memberCount = (
                 <FormattedMessage
                     id='multiselect.numMembers'
-                    defaultMessage='{memberOptions, number} of {totalCount, number} members'
+                    defaultMessage='{options}/7 users'
                     values={{
-                        memberOptions: optionsToDisplay.length,
-                        totalCount: this.props.totalCount,
+                        options: this.props.values.length,
                     }}
                 />
             );
         }
+        const lampIcon = () => Constants.LAMP_ICON;
 
         return (
             <>
-                <div className='filtered-user-list'>
+                <div className={(this.props.disableMultiSelectList && this.props.values.length === 7) ? 'filtered-user-list disable-list' : 'filtered-user-list'}>
                     <div className='filter-row filter-row--full'>
                         <div className='multi-select__container react-select'>
                             <ReactSelect
@@ -466,7 +490,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                                 ref={this.reactSelectRef as React.RefObject<any>} // type of ref on @types/react-select is outdated
                                 isMulti={true}
                                 options={this.props.options}
-                                styles={styles}
+                                styles={styles(this.props.showError)}
                                 components={{
                                     Menu: nullComponent,
                                     IndicatorsContainer: nullComponent,
@@ -487,7 +511,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                                 getOptionLabel={this.props.ariaLabelRenderer}
                                 aria-label={this.props.placeholderText}
                                 className={this.state.a11yActive ? 'multi-select__focused' : ''}
-                                classNamePrefix='react-select-auto react-select'
+                                classNamePrefix={this.props.showError ? 'react-select-auto react-select error' : 'react-select-auto react-select'}
                             />
                             {this.props.saveButtonPosition === 'top' &&
                                 <SaveButton
@@ -504,18 +528,42 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                             id='multiSelectHelpMemberInfo'
                             className='multi-select__help'
                         >
-                            {numRemainingText}
+                            <div style={this.props.showError ? {color: this.props.changeMessageColor} : {}}>
+                                {numRemainingText}
+                            </div>
+
                             {memberCount}
                         </div>
                     </div>
-                    {multiSelectList}
+                    {this.props.disableMultiSelectList && this.props.values.length === 7 ? (
+                        <div className='create-new-channel'>
+                            <img src={lampIcon()}/>
+                            <FormattedMessage
+                                id='multiselect.new_channel'
+                                defaultMessage='Create a channel to communicate with more people'
+                            />
+                            <a
+                                href='#'
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    this.openModal();
+                                }}
+                            >
+                                <FormattedMessage
+                                    id='multiselect.new_channel_create'
+                                    defaultMessage='Create a channel'
+                                />
+                            </a>
+                        </div>
+                    ) : (multiSelectList)
+                    }
                     <div
                         id='multiSelectMessageNote'
                         className='multi-select__help'
                     >
                         {noteTextContainer}
                     </div>
-                    {this.props.saveButtonPosition === 'top' &&
+                    {this.props.saveButtonPosition === 'top' && !this.props.disableMultiSelectList &&
                         <div className='filter-controls'>
                             {previousButton}
                             {nextButton}
@@ -572,14 +620,21 @@ const paddedComponent = (WrappedComponent: any) => {
     };
 };
 
-const styles = {
-    container: () => {
-        return {
-            display: 'flex',
-            overflow: 'hidden',
-            flex: 'auto',
-        };
-    },
-};
+const styles = (showError: boolean | undefined) => ({
+    container: (base: React.CSSProperties) => ({
+        ...base,
+        display: 'flex',
+        overflow: 'hidden',
+        flex: 'auto',
+    }),
+    control: (base: React.CSSProperties) => ({
+        ...base,
+        borderColor: 'red',
+        boxShadow: showError ? '0 0 0 1px red' : 'none',
+        '&:hover': {
+            borderColor: 'red',
+        },
+    }),
+});
 
 export default MultiSelect;

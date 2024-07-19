@@ -1,4 +1,7 @@
 .react-select {
+    &.error {
+        border-color: var(--danger-color) !important;
+    }
     .a11y--focused {
         box-shadow: none;
     }

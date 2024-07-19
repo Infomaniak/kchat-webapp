@@ -980,6 +980,10 @@
         flex: 1 1 auto;
     }
 
+    &.disable-list {
+        height: unset;
+    }
+
     .multi-select__wrapper {
         display: flex;
         height: 1px;
@@ -1038,6 +1042,16 @@
             float: right;
         }
     }
+}
+
+.create-new-channel {
+    height: 60px;
+    margin: 20px;
+    display: flex;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #f2f2f2;
 }
 
 .team-selector-modal,

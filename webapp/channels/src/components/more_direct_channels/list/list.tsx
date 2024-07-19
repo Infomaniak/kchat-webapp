@@ -7,7 +7,7 @@ import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import MultiSelect from 'components/multiselect/multiselect';
+import MultiSelect from 'components/multiselect/index';
 
 import Constants from 'utils/constants';
 
@@ -35,6 +35,7 @@ export type Props = {
     totalCount: number;
     users: UserProfile[];
     emptyGroupChannelsIds: string[];
+    exitParentModal: () => void;
 
     /**
      * An array of values that have been selected by the user in the multiselect.
@@ -118,20 +119,21 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
             handleAdd={props.addValue}
             handleSubmit={props.handleSubmit}
             noteText={note}
+            exitParentModal={props.exitParentModal}
+            disableMultiSelectList={true}
             maxValues={MAX_SELECTABLE_VALUES}
+            changeMessageColor='red'
+            showError={props.values.length === MAX_SELECTABLE_VALUES}
             numRemainingText={
                 props.values.length === MAX_SELECTABLE_VALUES ? (
                     <FormattedMessage
                         id='multiselect.noMorePeople'
-                        defaultMessage='Un message personnel est limité à 7 personnes.'
+                        defaultMessage='A personal message is limited to 7 people.'
                     />
                 ) : (
                     <FormattedMessage
                         id='multiselect.numPeopleRemaining'
-                        defaultMessage='Use ↑↓ to browse, ↵ to select. You can add {num, number} more {num, plural, one {person} other {people}}. '
-                        values={{
-                            num: MAX_SELECTABLE_VALUES - props.values.length,
-                        }}
+                        defaultMessage='Use the ↑↓ arrows on the keyboard, ENTER to select.'
                     />
                 )
             }
