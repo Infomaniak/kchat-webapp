@@ -53,6 +53,8 @@ exports[`components/ChannelSelectorModal exclude already selected 1`] = `
     <MultiSelect
       ariaLabelRenderer={[Function]}
       buttonSubmitText="Add"
+      changeMessageColor=""
+      disableMultiSelectList={false}
       focusOnLoad={true}
       handleAdd={[Function]}
       handleDelete={[Function]}
@@ -204,6 +206,8 @@ exports[`components/ChannelSelectorModal should match snapshot 1`] = `
     <MultiSelect
       ariaLabelRenderer={[Function]}
       buttonSubmitText="Add"
+      changeMessageColor=""
+      disableMultiSelectList={false}
       focusOnLoad={true}
       handleAdd={[Function]}
       handleDelete={[Function]}
