@@ -63,8 +63,8 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     const fetchTranscript = async () => {
         if (!hasFetchedTranscript) {
             setIsLoadingTranscript(true);
-            const result = await fetchTranscriptData(props.fileId)();
-            if (!(result as TranscriptData).text) {
+            const result = await fetchTranscriptData(props.fileId);
+            if (!result.text) {
                 setError(
                     <FormattedMessage
                         id='vocals.transcript.error'
@@ -73,8 +73,12 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                 );
             }
             setIsLoadingTranscript(false);
-            setTranscript((result as TranscriptData).text.trim());
-            setTranscriptDatas((result as TranscriptData));
+            if (result.text) {
+                setTranscript(result.text.trim());
+            }
+            if (!Array.isArray(result)) {
+                setTranscriptDatas(result);
+            }
             setHasFetchedTranscript(true);
         }
     };
