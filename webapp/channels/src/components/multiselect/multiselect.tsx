@@ -38,7 +38,7 @@ type Actions = {
 }
 
 export type Props<T extends Value> = {
-    actions: Actions;
+    actions?: Actions;
     ariaLabelRenderer: getOptionValue<T>;
     backButtonClick?: () => void;
     backButtonClass?: string;
@@ -69,7 +69,7 @@ export type Props<T extends Value> = {
     placeholderText?: string;
     saving?: boolean;
     showError?: boolean;
-    changeMessageColor: string;
+    changeMessageColor?: string;
     submitImmediatelyOn?: (value: T) => boolean;
     totalCount?: number;
     users?: unknown[];
@@ -81,7 +81,7 @@ export type Props<T extends Value> = {
     savingEnabled?: boolean;
     handleCancel?: () => void;
     customNoOptionsMessage?: React.ReactNode;
-    exitParentModal: () => void;
+    exitParentModal?: () => void;
 }
 
 export type State = {
@@ -119,12 +119,14 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
     }
 
     public openModal = (): void => {
-        this.props.exitParentModal();
+        if (this.props.exitParentModal) {
+            this.props.exitParentModal();
+        }
         const newModal = {
             modalId: ModalIdentifiers.NEW_CHANNEL_MODAL,
             dialogType: NewChannelModal,
         };
-        this.props.actions.openModal(newModal);
+        this.props.actions?.openModal(newModal);
     };
 
     public componentDidMount() {
