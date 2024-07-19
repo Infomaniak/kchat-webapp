@@ -267,6 +267,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
     render() {
         const body = (
             <List
+                exitParentModal={this.handleExit}
                 addValue={this.addValue}
                 currentUserId={this.props.currentUserId}
                 handleDelete={this.handleDelete}
