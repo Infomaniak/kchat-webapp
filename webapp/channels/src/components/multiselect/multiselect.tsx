@@ -104,7 +104,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
         focusOnLoad: true,
         savingEnabled: true,
         showInputByDefault: false,
-        changeMessageColor: false,
+        changeMessageColor: '',
         disableMultiSelectList: false,
     };
 
@@ -533,8 +533,9 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                             <div style={this.props.showError ? {color: this.props.changeMessageColor} : {}}>
                                 {numRemainingText}
                             </div>
-
-                            {memberCount}
+                            <div style={this.props.showError ? {color: this.props.changeMessageColor} : {}}>
+                                {memberCount}
+                            </div>
                         </div>
                     </div>
                     {this.props.disableMultiSelectList && this.props.values.length === 7 ? (
