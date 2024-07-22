@@ -3852,6 +3852,8 @@
   "post_reminder.custom_time_picker_modal.text": "Imposta promemoria",
   "post.reminder.acknowledgement": "Ti verrà ricordato a {reminderTime}, {reminderDate} questo messaggio da {username}: {permaLink}",
   "post.reminder.systemBot": "Salve, ecco il promemoria di questo messaggio da parte di {username}: {permaLink}",
+  "postpone.post_reminder.menu": "Rimanda il promemoria",
+  "postpone.post_reminder.mark": "Segna come completato",
   "toggle_next_modal.title": "Passa alla versione {version}",
   "toggle_next_modal.message_stable": "STABLE è il nostro ambiente predefinito. Se non siete interessati a testare nuove funzionalità, vi consigliamo di tornare alla versione STABLE.",
   "toggle_next_modal.message_next": "NEXT è il nostro ambiente di prova. Potreste incontrare alcuni bug, ma avrete anche accesso agli ultimi contenuti e aggiornamenti. Se non siete interessati a testare nuove funzionalità, vi consigliamo di rimanere sulla versione STABILE.",

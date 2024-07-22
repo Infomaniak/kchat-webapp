@@ -2,19 +2,41 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
+import type {AnyAction, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
+import type {Post} from '@mattermost/types/posts';
+
+import {addPostReminder} from 'mattermost-redux/actions/posts';
 import {Preferences} from 'mattermost-redux/constants';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getTheme, getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
+import {getUserByUsername} from 'mattermost-redux/selectors/entities/users';
 
+import {openModal} from 'actions/views/modals';
 import {getIsRhsExpanded, getIsRhsOpen} from 'selectors/rhs';
 
 import type {GlobalState} from 'types/store';
 
 import PostMessageView from './post_message_view';
 
-function mapStateToProps(state: GlobalState) {
+export type OwnProps = {
+    post: Post;
+}
+
+function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
+    const timezone = getCurrentTimezone(state);
+    const userId = getCurrentUserId(state);
+    const isMilitaryTime = getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false);
+    const userByName = getUserByUsername(state, ownProps.post?.props?.username);
+
     return {
+        userByName,
+        userId,
+        timezone,
+        isMilitaryTime,
         enableFormatting: getBool(state, Preferences.CATEGORY_ADVANCED_SETTINGS, 'formatting', true),
         isRHSExpanded: getIsRhsExpanded(state),
         isRHSOpen: getIsRhsOpen(state),
@@ -24,4 +46,13 @@ function mapStateToProps(state: GlobalState) {
     };
 }
 
-export default connect(mapStateToProps)(PostMessageView);
+function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
+    return {
+        actions: bindActionCreators({
+            openModal,
+            addPostReminder,
+        }, dispatch),
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostMessageView);
