@@ -7,6 +7,7 @@ import {withRouter} from 'react-router-dom';
 
 import {getTeamsOrderCookie} from 'mattermost-redux/utils/team_utils';
 
+import {getKSuiteSpaceId} from 'selectors/ksuite_bridge';
 import {getCurrentServer, getOtherServers, getServersUnreadStatus, isMultiServer} from 'selectors/views/servers';
 
 import type {GlobalState} from 'types/store';
@@ -23,6 +24,7 @@ function mapStateToProps(state: GlobalState) {
         unreadStatus: getServersUnreadStatus(state),
         userTeamsOrderPreference: getTeamsOrderCookie(),
         isMultiServer: isMultiServer(state),
+        spaceId: getKSuiteSpaceId(state),
     };
 }
 
