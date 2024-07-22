@@ -365,8 +365,8 @@ export default class PostMessageView extends React.PureComponent<Props, State> {
                             onClick={this.handleDeleteMenuItemActivated}
                         >
                             <FormattedMessage
-                                id='post_info.post_rdeminder.sub_menu.custom'
-                                defaultMessage='postpone.post_reminder.mark'
+                                id='postpone.post_reminder.mark'
+                                defaultMessage='Mark as completed'
                             />
                         </button>
                     </div> : null}
