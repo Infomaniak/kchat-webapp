@@ -4,7 +4,7 @@
 import classNames from 'classnames';
 import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import type {MouseEvent} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
 import type {Emoji} from '@mattermost/types/emojis';
 import type {Post} from '@mattermost/types/posts';
@@ -19,12 +19,15 @@ import {
 import {trackEvent} from 'actions/telemetry_actions';
 
 import AutoHeightSwitcher, {AutoHeightSlots} from 'components/common/auto_height_switcher';
+import DeletePostModal from 'components/delete_post_modal/delete_post_modal';
 import EditPost from 'components/edit_post';
 import FileAttachmentListContainer from 'components/file_attachment_list';
+import * as Menu from 'components/menu';
 import MessageWithAdditionalContent from 'components/message_with_additional_content';
 import OverlayTrigger from 'components/overlay_trigger';
 import PriorityLabel from 'components/post_priority/post_priority_label';
 import PostProfilePicture from 'components/post_profile_picture';
+import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal/post_reminder_custom_time_picker_modal';
 import PostAcknowledgements from 'components/post_view/acknowledgements';
 import CommentedOn from 'components/post_view/commented_on/commented_on';
 import DateSeparator from 'components/post_view/date_separator';
@@ -42,10 +45,12 @@ import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import InfoSmallIcon from 'components/widgets/icons/info_small_icon';
 
 import {getHistory} from 'utils/browser_history';
-import Constants, {A11yCustomEventTypes, AppEvents, Locations} from 'utils/constants';
+import Constants, {A11yCustomEventTypes, AppEvents, Locations, ModalIdentifiers} from 'utils/constants';
 import type {A11yFocusEventDetail} from 'utils/constants';
+import {toUTCUnix} from 'utils/datetime';
 import {isKeyPressed} from 'utils/keyboard';
 import * as PostUtils from 'utils/post_utils';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
 import {getDateForUnixTicks, makeIsEligibleForClick} from 'utils/utils';
 
 import type {PostPluginComponent, PluginComponent} from 'types/store/plugins';
@@ -99,6 +104,8 @@ export type Props = {
         closeRightHandSide: () => void;
         selectPostCard: (post: Post) => void;
         setRhsExpanded: (rhsExpanded: boolean) => void;
+        openModal: (modalData: {modalId: string; dialogType: any; dialogProps: any}) => void;
+        addPostReminder: (userId: string, postId: string, remindAt: number) => void;
     };
     timestampProps?: Partial<TimestampProps>;
     shouldHighlight?: boolean;
@@ -119,7 +126,19 @@ export type Props = {
     isCardOpen?: boolean;
     canDelete?: boolean;
     pluginActions: PluginComponent[];
+    timezone: string; /* Current user timezone */
+    isMilitaryTime: boolean; /* Whether or not to use military time */
+    userByName?: UserProfile; /* The user object for the post author */
 };
+
+const PostReminders = {
+    THIRTY_MINUTES: 'thirty_minutes',
+    ONE_HOUR: 'one_hour',
+    TWO_HOURS: 'two_hours',
+    TOMORROW: 'tomorrow',
+    MONDAY: 'monday',
+    CUSTOM: 'custom',
+} as const;
 
 const PostComponent = (props: Props): JSX.Element => {
     const {post, shouldHighlight, togglePostMenu} = props;
@@ -518,6 +537,166 @@ const PostComponent = (props: Props): JSX.Element => {
         postAriaLabelDivTestId = 'rhsPostView';
     }
 
+    const handleDeleteMenuItemActivated = (): void => {
+        const deletePostModalData = {
+            modalId: ModalIdentifiers.DELETE_POST,
+            dialogType: DeletePostModal,
+            dialogProps: {
+                post: props.post,
+                isRHS: false,
+            },
+        };
+
+        props.actions.openModal(deletePostModalData);
+    };
+
+    const handlePostReminderMenuClick = (id: string) => {
+        if (id === PostReminders.CUSTOM) {
+            const postReminderCustomTimePicker = {
+                modalId: ModalIdentifiers.POST_REMINDER_CUSTOM_TIME_PICKER,
+                dialogType: PostReminderCustomTimePicker,
+                dialogProps: {
+                    postId: props.post.props.previewed_post,
+                },
+            };
+            props.actions.openModal(postReminderCustomTimePicker);
+        } else {
+            let link = props.post.props.previewed_post;
+
+            if (props.post.props.previewed_post) {
+                link = props.post.props.link;
+                if (link.includes('/pl/')) {
+                    const parts = link.split('/pl/');
+                    const partAfterPl = parts[1];
+                    link = partAfterPl;
+                }
+            }
+            const currentDate = getCurrentMomentForTimezone(props.timezone);
+            let endTime = currentDate;
+            if (id === PostReminders.THIRTY_MINUTES) {
+                // add 30 minutes in current time
+                endTime = currentDate.add(30, 'minutes');
+            } else if (id === PostReminders.ONE_HOUR) {
+                // add 1 hour in current time
+                endTime = currentDate.add(1, 'hour');
+            } else if (id === PostReminders.TWO_HOURS) {
+                // add 2 hours in current time
+                endTime = currentDate.add(2, 'hours');
+            } else if (id === PostReminders.TOMORROW) {
+                // set to next day 9 in the morning
+                endTime = currentDate.add(1, 'day').set({hour: 9, minute: 0});
+            } else if (id === PostReminders.MONDAY) {
+                // set to next Monday 9 in the morning
+                endTime = currentDate.add(1, 'week').isoWeekday(1).set({hour: 9, minute: 0});
+            }
+
+            if (props.userByName?.id) {
+                props.actions.addPostReminder(props.userByName?.id, link, toUTCUnix(endTime.toDate()));
+            }
+        }
+    };
+
+    const postReminderSubMenuItems = Object.values(PostReminders).map((postReminder) => {
+        let labels = null;
+        if (postReminder === PostReminders.THIRTY_MINUTES) {
+            labels = (
+                <FormattedMessage
+                    id='post_info.post_reminder.sub_menu.thirty_minutes'
+                    defaultMessage='30 mins'
+                />
+            );
+        } else if (postReminder === PostReminders.ONE_HOUR) {
+            labels = (
+                <FormattedMessage
+                    id='post_info.post_reminder.sub_menu.one_hour'
+                    defaultMessage='1 hour'
+                />
+            );
+        } else if (postReminder === PostReminders.TWO_HOURS) {
+            labels = (
+                <FormattedMessage
+                    id='post_info.post_reminder.sub_menu.two_hours'
+                    defaultMessage='2 hours'
+                />
+            );
+        } else if (postReminder === PostReminders.TOMORROW) {
+            labels = (
+                <FormattedMessage
+                    id='post_info.post_reminder.sub_menu.tomorrow'
+                    defaultMessage='Tomorrow'
+                />
+            );
+        } else if (postReminder === PostReminders.MONDAY) {
+            labels = (
+                <FormattedMessage
+                    id='post_info.post_reminder.sub_menu.monday'
+                    defaultMessage='Monday'
+                />
+            );
+        } else {
+            labels = (
+                <FormattedMessage
+                    id='post_info.post_reminder.sub_menu.custom'
+                    defaultMessage='Custom'
+                />
+            );
+        }
+
+        let trailingElements = null;
+        if (postReminder === PostReminders.TOMORROW) {
+            const tomorrow = getCurrentMomentForTimezone(props.timezone).add(1, 'day').set({hour: 9, minute: 0}).toDate();
+
+            trailingElements = (
+                <span className={`postReminder-${postReminder}_timestamp`}>
+                    <FormattedDate
+                        value={tomorrow}
+                        weekday='short'
+                        timeZone={props.timezone}
+                    />
+                    {', '}
+                    <FormattedTime
+                        value={tomorrow}
+                        timeStyle='short'
+                        hour12={props.isMilitaryTime}
+                        timeZone={props.timezone}
+                    />
+                </span>
+            );
+        }
+
+        if (postReminder === PostReminders.MONDAY) {
+            const monday = getCurrentMomentForTimezone(props.timezone).add(1, 'week').isoWeekday(1).set({hour: 9, minute: 0}).toDate();
+
+            trailingElements = (
+                <span className={`postReminder-${postReminder}_timestamp`}>
+                    <FormattedDate
+                        value={monday}
+                        weekday='short'
+                        timeZone={props.timezone}
+                    />
+                    {', '}
+                    <FormattedTime
+                        value={monday}
+                        timeStyle='short'
+                        hour12={props.isMilitaryTime}
+                        timeZone={props.timezone}
+                    />
+                </span>
+            );
+        }
+
+        return (
+            <Menu.Item
+                id={`remind_post_options_${postReminder}`}
+                key={`remind_post_options_${postReminder}`}
+                labels={labels}
+                trailingElements={trailingElements}
+
+                onClick={() => handlePostReminderMenuClick(postReminder)}
+            />
+        );
+    });
+
     return (
         <>
             {(isSearchResultItem || (props.location !== Locations.CENTER && (props.isPinnedPosts || props.isFlaggedPosts))) && <DateSeparator date={currentPostDay}/>}
@@ -656,6 +835,42 @@ const PostComponent = (props: Props): JSX.Element => {
                                 handleFileDropdownOpened={handleFileDropdownOpened}
                             />
                             }
+                            {post.type === Posts.POST_TYPES.SYSTEM_POST_REMINDER ? <div>
+                                <Menu.Container
+                                    menuButton={{
+                                        id: `_button_${props.post.id}`,
+                                        dateTestId: `PostDotMenu-Button-${props.post.id}`,
+                                        class: 'PostPriorityPicker__apply',
+                                        children:
+                                <FormattedMessage
+                                    id='postpone.post_reminder.menu'
+                                    defaultMessage='Postpone the reminder'
+                                />,
+                                    }}
+                                    menu={{
+                                        id: `dropdown_${props.post.id}`,
+                                        width: '264px',
+                                    }}
+                                >
+                                    <h5 className='dot-menu__post-reminder-menu-header'>
+                                        <FormattedMessage
+                                            id='post_info.post_reminder.sub_menu.header'
+                                            defaultMessage='Set a reminder for:'
+                                        />
+                                    </h5>
+                                    {postReminderSubMenuItems}
+                                </Menu.Container>
+                                <button
+                                    className='PostPriorityPicker__cancel'
+                                    onClick={handleDeleteMenuItemActivated}
+                                    style={{marginLeft: '10px'}}
+                                >
+                                    <FormattedMessage
+                                        id='postpone.post_reminder.mark'
+                                        defaultMessage='Mark as completed'
+                                    />
+                                </button>
+                            </div> : null}
                             <div className='post__body-reactions-acks'>
                                 {props.isPostAcknowledgementsEnabled && post.metadata?.priority?.requested_ack && (
                                     <PostAcknowledgements
