@@ -61,7 +61,7 @@ const ViewUserGroupListItem = (props: Props) => {
                     className={'avatar-post-preview'}
                 />
                 <StatusIcon
-                    className='status user-popover-status'
+                    className='status bottom user-popover-status'
                     status={status}
                     button={true}
                 />
