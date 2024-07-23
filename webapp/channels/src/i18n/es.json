@@ -3813,7 +3813,7 @@
   "multiselect.noMorePeople": "Un mensaje personal está limitado a 7 personas.",
   "multiselect.numMembers": "{options}/7 usuarios",
   "multiselect.numPeopleRemaining": "Usa las flechas ↑↓ del teclado, ENTER para seleccionar.",
-  "multiselect.new_channel": "Crear un canal para comunicarse con más personas",
+  "multiselect.new_channel": "¿Más de 7 personas? Crea un canal",
   "multiselect.new_channel_create": "Crear un canal",
   "multiselect.numGroupsRemaining": "Utiliza ↑↓ para navegar, ↵ para seleccionar. Puedes agregar {num, number} {num, plural, one {grupo} other {grupos}} más. ",
   "multiselect.numRemaining": "Se puede añadir hasta {max, number} a la vez. Te quedan {num, number}.",

@@ -4414,7 +4414,7 @@
   "multiselect.noMorePeople": "A personal message is limited to 7 people.",
   "multiselect.numMembers": "{options}/7 users",
   "multiselect.numPeopleRemaining": "Use the ↑↓ arrows on the keyboard, ENTER to select.",
-  "multiselect.new_channel": "Create a channel to communicate with more people",
+  "multiselect.new_channel": "More than 7 people? Create a channel instead",
   "multiselect.new_channel_create": "Create a channel",
   "multiselect.maxGroupMembers": "No more than 256 members can be added to a group at once.",
   "multiselect.numGroupsRemaining": "Use ↑↓ to browse, ↵ to select. You can add {num, number} more {num, plural, one {group} other {groups}}. ",

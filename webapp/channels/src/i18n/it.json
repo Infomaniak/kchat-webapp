@@ -2911,7 +2911,7 @@
   "multiselect.noMorePeople": "Un messaggio personale è limitato a 7 persone.",
   "multiselect.numMembers": "{options}/7 utenti",
   "multiselect.numPeopleRemaining": "Usa le frecce ↑↓ della tastiera, ENTER per selezionare.",
-  "multiselect.new_channel": "Crea un canale per comunicare con più persone",
+  "multiselect.new_channel": "Più di 7 persone? Create invece un canale",
   "multiselect.new_channel_create": "Crea un canale",
   "multiselect.numGroupsRemaining": "Usa ↑↓ per navigare, ↵ per scegliere. Puoi aggiungere {num, number} {num, plural, one {group} other {groups}}. ",
   "multiselect.numRemaining": "Si possono ancora aggiungere {num, number}",

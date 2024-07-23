@@ -4440,7 +4440,7 @@
   "multiselect.noMorePeople": "Eine persönliche Nachricht ist auf 7 Personen begrenzt.",
   "multiselect.numMembers": "{options}/7 Benutzer",
   "multiselect.numPeopleRemaining": "Verwenden Sie die ↑↓ Pfeiltasten auf der Tastatur, ENTER zum Auswählen.",
-  "multiselect.new_channel": "Erstellen Sie einen Kanal, um mit mehr Personen zu kommunizieren",
+  "multiselect.new_channel": "Mehr als sieben Personen? Erstellen Sie stattdessen einen Kanal",
   "multiselect.new_channel_create": "Einen Kanal erstellen",
   "multiselect.maxGroupMembers": "Es können nicht mehr als 256 Mitglieder auf einmal zu einer Gruppe hinzugefügt werden.",
   "multiselect.numGroupsRemaining": "Verwende ↑↓ zum Navigieren, ↵ zur Auswahl. Du kannst {num, number} weitere {num, plural, one {Gruppe} other {Gruppen}} hinzufügen. ",
