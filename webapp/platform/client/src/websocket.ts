@@ -220,26 +220,6 @@ export default class WebSocketClient {
             this.errorCount++;
             this.connectFailCount++;
 
-            console.log('[websocket] unsubscribing channels');
-
-            if (this.teamChannel) {
-                this.conn?.unsubscribe(this.teamChannel.name)
-                this.teamChannel.unbind_all()
-                this.teamChannel = null;
-            }
-
-            if (this.userChannel) {
-                this.conn?.unsubscribe(this.userChannel.name)
-                this.userChannel.unbind_all()
-                this.userChannel = null;
-            }
-
-            if (this.userTeamChannel) {
-                this.conn?.unsubscribe(this.userTeamChannel.name)
-                this.userTeamChannel.unbind_all()
-                this.userTeamChannel = null;
-            }
-
             if (this.presenceChannel) {
                 this.conn?.unsubscribe(this.presenceChannel.name)
                 this.presenceChannel.unbind_all()
@@ -266,15 +246,6 @@ export default class WebSocketClient {
             if (presenceChannel) {
                 this.bindPresenceChannel(presenceChannel);
             }
-            this.bindChannelGlobally(this.teamChannel);
-            this.bindChannelGlobally(this.userChannel);
-
-            // unbind previous listeners if needed to prevent duplicated callbacks
-            // TODO: obsolete, remove now that disconnect does a global unbind
-            if (this.userTeamChannel && this.userTeamChannel.global_callbacks.length > 0) {
-                this.userTeamChannel.unbind_global();
-            }
-            this.bindChannelGlobally(this.userTeamChannel);
 
             console.log('[websocket] re-established connection');
             if (this.connectFailCount > 0) {
@@ -309,18 +280,24 @@ export default class WebSocketClient {
         }
     }
 
-    // TODO: refactor next 3 functions with helpers
     subscribeToTeamChannel(teamId: string) {
+        if (this.teamChannel) {
+            this.conn?.unsubscribe(this.teamChannel.name)
+            this.teamChannel.unbind_all()
+            this.teamChannel = null;
+        }
+
         console.log(`[websocket] subscribeToTeamChannel ~ private-team.${teamId}`)
         this.currentTeam = teamId;
         this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
-        this.teamChannel.bind('pusher:subscription_succeeded', () => {
+        this.teamChannel?.bind('pusher:subscription_succeeded', () => {
             console.log(`[websocket] subscribed successfully to private-team.${teamId}`)
+            this.bindChannelGlobally(this.teamChannel);
         })
 
-        this.teamChannel.bind('pusher:subscription_error', () => {
+        this.teamChannel?.bind('pusher:subscription_error', () => {
             console.log(`[websocket] failed to subscribe to private-team.${teamId} queing retry`)
-            this.conn?.unsubscribe(`private-team.${teamId}`)
+
             setTimeout(() => {
                 this.subscribeToTeamChannel(teamId);
             }, JITTER_RANGE)
@@ -328,15 +305,23 @@ export default class WebSocketClient {
     }
 
     subscribeToUserChannel(userId: number) {
+        if (this.userChannel) {
+            this.conn?.unsubscribe(this.userChannel.name)
+            this.userChannel.unbind_all()
+            this.userChannel = null;
+        }
+
         console.log(`[websocket] subscribeToUserChannel ~ presence-user.${userId}`)
         this.currentUser = userId;
         this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
-        this.userChannel.bind('pusher:subscription_succeeded', () => {
+        this.userChannel?.bind('pusher:subscription_succeeded', () => {
             console.log(`[websocket] subscribed successfully to presence-user.${userId}`)
+            this.bindChannelGlobally(this.userChannel);
         })
-        this.userChannel.bind('pusher:subscription_error', () => {
+
+        this.userChannel?.bind('pusher:subscription_error', () => {
             console.log(`[websocket] failed to subscribe to presence-user.${userId} queing retry`)
-            this.conn?.unsubscribe(`presence-user.${userId}`)
+
             setTimeout(() => {
                 this.subscribeToUserChannel(userId);
             }, JITTER_RANGE)
@@ -344,16 +329,23 @@ export default class WebSocketClient {
     }
 
     subscribeToUserTeamScopedChannel(teamUserId: string) {
+        if (this.userTeamChannel) {
+            this.conn?.unsubscribe(this.userTeamChannel.name)
+            this.userTeamChannel.unbind_all()
+            this.userTeamChannel = null;
+        }
+
         console.log(`[websocket] subscribeToUserTeamScopedChannel ~ presence-teamUser.${teamUserId}`)
         this.currentTeamUser = teamUserId;
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
-        this.userTeamChannel.bind('pusher:subscription_succeeded', () => {
+        this.userTeamChannel?.bind('pusher:subscription_succeeded', () => {
             console.log(`[websocket] subscribed successfully to presence-teamUser.${teamUserId}`)
+            this.bindChannelGlobally(this.userTeamChannel);
         })
 
         this.userTeamChannel.bind('pusher:subscription_error', () => {
             console.log(`[websocket] failed to subscribe to presence-teamUser.${teamUserId} queing retry`)
-            this.conn?.unsubscribe(`presence-teamUser.${teamUserId}`)
+
             setTimeout(() => {
                 this.subscribeToUserTeamScopedChannel(teamUserId);
             }, JITTER_RANGE)

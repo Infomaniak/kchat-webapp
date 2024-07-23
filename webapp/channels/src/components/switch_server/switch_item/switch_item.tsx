@@ -33,6 +33,7 @@ type Props = PropsFromRedux & {
 
 const SwitchItem: FC<Props> = ({server, isCurrentServer, unreadCounts, displayArrowIcon, displayUnreadDot, isDropdownOpen, disabled, actions, onClick}) => {
     const handleSwitchTeam = () => {
+        actions.bridgeRecreate(server.url);
         actions.switchTeam(server.url, server);
         setLastKSuiteSeenCookie(server.id);
         window.location.href = server.url;
