@@ -17,7 +17,7 @@ import ListItem from '../list_item';
 import type {Option, OptionValue} from '../types';
 import {optionValue} from '../types';
 
-const MAX_SELECTABLE_VALUES = Constants.MAX_USERS_IN_GM - 1;
+const MAX_SELECTABLE_VALUES = Constants.MAX_USERS_IN_GM;
 export const USERS_PER_PAGE = 50;
 
 export type Props = {
