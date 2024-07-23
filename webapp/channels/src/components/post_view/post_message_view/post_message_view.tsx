@@ -335,6 +335,14 @@ export default class PostMessageView extends React.PureComponent<Props, State> {
                     dir='auto'
                     onClick={this.handleFormattedTextClick}
                 >
+                    <PostMarkdown
+                        message={message}
+                        imageProps={this.imageProps}
+                        options={options}
+                        post={post}
+                        channelId={post.channel_id}
+                        showPostEditedIndicator={this.props.showPostEditedIndicator}
+                    />
                     {post.type === Posts.POST_TYPES.SYSTEM_POST_REMINDER ? <div>
                         <Menu.Container
                             menuButton={{
@@ -363,6 +371,7 @@ export default class PostMessageView extends React.PureComponent<Props, State> {
                         <button
                             className='PostPriorityPicker__cancel'
                             onClick={this.handleDeleteMenuItemActivated}
+                            style={{marginLeft: '10px'}}
                         >
                             <FormattedMessage
                                 id='postpone.post_reminder.mark'
@@ -370,14 +379,6 @@ export default class PostMessageView extends React.PureComponent<Props, State> {
                             />
                         </button>
                     </div> : null}
-                    <PostMarkdown
-                        message={message}
-                        imageProps={this.imageProps}
-                        options={options}
-                        post={post}
-                        channelId={post.channel_id}
-                        showPostEditedIndicator={this.props.showPostEditedIndicator}
-                    />
                 </div>
                 <Pluggable
                     pluggableName='PostMessageAttachment'
