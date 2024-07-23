@@ -172,6 +172,7 @@ exports[`admin_console/add_users_to_role_modal search should not include bot use
       saveButtonPosition="top"
       saving={false}
       savingEnabled={true}
+      showInputByDefault={false}
       valueRenderer={[Function]}
       valueWithImage={false}
       values={Array []}
@@ -308,6 +309,7 @@ exports[`admin_console/add_users_to_role_modal should exclude user 1`] = `
       saveButtonPosition="top"
       saving={false}
       savingEnabled={true}
+      showInputByDefault={false}
       valueRenderer={[Function]}
       valueWithImage={false}
       values={Array []}
@@ -488,6 +490,7 @@ exports[`admin_console/add_users_to_role_modal should have single passed value 1
       saveButtonPosition="top"
       saving={false}
       savingEnabled={true}
+      showInputByDefault={false}
       valueRenderer={[Function]}
       valueWithImage={false}
       values={Array []}
@@ -709,6 +712,7 @@ exports[`admin_console/add_users_to_role_modal should include additional user 1`
       saveButtonPosition="top"
       saving={false}
       savingEnabled={true}
+      showInputByDefault={false}
       valueRenderer={[Function]}
       valueWithImage={false}
       values={Array []}
@@ -930,6 +934,7 @@ exports[`admin_console/add_users_to_role_modal should include additional user 2`
       saveButtonPosition="top"
       saving={false}
       savingEnabled={true}
+      showInputByDefault={false}
       valueRenderer={[Function]}
       valueWithImage={false}
       values={Array []}
@@ -1110,6 +1115,7 @@ exports[`admin_console/add_users_to_role_modal should not include bot user 1`] =
       saveButtonPosition="top"
       saving={false}
       savingEnabled={true}
+      showInputByDefault={false}
       valueRenderer={[Function]}
       valueWithImage={false}
       values={Array []}

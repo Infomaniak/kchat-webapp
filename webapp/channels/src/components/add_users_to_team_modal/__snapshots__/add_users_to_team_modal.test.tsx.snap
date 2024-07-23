@@ -218,6 +218,7 @@ exports[`components/admin_console/add_users_to_team_modal/AddUsersToTeamModal sh
           "current": null,
         }
       }
+      showInputByDefault={false}
       valueRenderer={[Function]}
       valueWithImage={false}
       values={Array []}
@@ -444,6 +445,7 @@ exports[`components/admin_console/add_users_to_team_modal/AddUsersToTeamModal sh
           "current": null,
         }
       }
+      showInputByDefault={false}
       valueRenderer={[Function]}
       valueWithImage={false}
       values={Array []}

@@ -44,6 +44,7 @@ export type UserProfile = {
     position: string;
     roles: string;
     props: Record<string, string>;
+    member_ids: string[];
     notify_props: UserNotifyProps;
     last_password_update: number;
     last_picture_update: number;

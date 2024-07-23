@@ -13,7 +13,7 @@ export default function ReactionLimitReachedModal(props: {isAdmin: boolean; onEx
     const body = props.isAdmin ? (
         <FormattedMessage
             id='reaction_limit_reached_modal.body.admin'
-            defaultMessage="Oops! It looks like we've hit a ceiling on emoji reactions for this message. We've <link>set a limit</link> to keep things running smoothly on your server. As a system administrator, you can adjust this limit from the <linkAdmin>system console</linkAdmin>."
+            defaultMessage="Oops! It looks like we've hit a ceiling on emoji reactions for this message."
             values={{
                 link: (msg: React.ReactNode) => (
                     <ExternalLink
@@ -35,7 +35,7 @@ export default function ReactionLimitReachedModal(props: {isAdmin: boolean; onEx
     ) : (
         <FormattedMessage
             id='reaction_limit_reached_modal.body'
-            defaultMessage="Oops! It looks like we've hit a ceiling on emoji reactions for this message. Please contact your system administrator for any adjustments to this limit."
+            defaultMessage="Oops! It looks like we've hit a ceiling on emoji reactions for this message."
         />
     );
 
