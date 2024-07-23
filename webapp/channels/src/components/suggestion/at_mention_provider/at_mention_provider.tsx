@@ -50,6 +50,7 @@ export type Props = {
     autocompleteGroups: Group[] | null;
     searchAssociatedGroupsForReference: (prefix: string) => Promise<{data: any}>;
     priorityProfiles: UserProfile[] | undefined;
+    loading: boolean;
 }
 
 // The AtMentionProvider provides matches for at mentions, including @here, @channel, @all,
@@ -63,6 +64,7 @@ export default class AtMentionProvider extends Provider {
     public autocompleteGroups: Group[] | null;
     public searchAssociatedGroupsForReference: (prefix: string) => Promise<{data: any}>;
     public priorityProfiles: UserProfile[] | undefined;
+    public loading: boolean;
 
     public data: any;
     public lastCompletedWord: string;
@@ -73,7 +75,7 @@ export default class AtMentionProvider extends Provider {
     constructor(props: Props) {
         super();
 
-        const {currentUserId, channelId, autocompleteUsersInChannel, useChannelMentions, autocompleteGroups, searchAssociatedGroupsForReference, priorityProfiles} = props;
+        const {currentUserId, channelId, autocompleteUsersInChannel, useChannelMentions, autocompleteGroups, searchAssociatedGroupsForReference, priorityProfiles, loading} = props;
 
         this.currentUserId = currentUserId;
         this.channelId = channelId;
@@ -82,6 +84,7 @@ export default class AtMentionProvider extends Provider {
         this.autocompleteGroups = autocompleteGroups;
         this.searchAssociatedGroupsForReference = searchAssociatedGroupsForReference;
         this.priorityProfiles = priorityProfiles;
+        this.loading = loading;
 
         this.data = null;
         this.lastCompletedWord = '';
@@ -357,7 +360,7 @@ export default class AtMentionProvider extends Provider {
 
     // updateMatches invokes the resultCallback with the metadata for rendering at mentions
     updateMatches(resultCallback: ResultsCallback, items: any[]) {
-        if (items.length === 0) {
+        if (this.loading !== true && items.length === 0) {
             this.lastPrefixWithNoResults = this.latestPrefix;
         } else if (this.lastPrefixWithNoResults === this.latestPrefix) {
             this.lastPrefixWithNoResults = '';
@@ -396,8 +399,10 @@ export default class AtMentionProvider extends Provider {
             return false;
         }
 
+        this.loading = true;
         this.startNewRequest(prefix);
         this.updateMatches(resultCallback, this.items());
+        this.loading = false;
 
         // If we haven't gotten server-side results in 500 ms, add the loading indicator.
         let showLoadingIndicator: NodeJS.Timeout | null = setTimeout(() => {
