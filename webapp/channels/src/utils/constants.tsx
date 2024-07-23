@@ -205,7 +205,10 @@ export const suitePluginIds = {
 export const BridgeActionTypes = keyMirror({
     STORE_BRIDGE: null,
     DND_CHANGE: null,
+    UPDATE_PARAMS_DATA: null,
 });
+
+export const BridgeParamWhitelist = ['spaceId', 'ksuiteMode'];
 
 export const KDriveActionTypes = keyMirror({
     TOAST: null,

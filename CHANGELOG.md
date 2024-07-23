@@ -1,3 +1,9 @@
+## 2.9.7-rc.8 (2024-07-22)
+
+### Changed (1 change)
+
+- [make adaptations for ksuite spaces](kchat/webapp@3227f3d7ed2fb712342f52cd95c51eab822cb5aa) by @antonbuksa ([merge request](kchat/webapp!826))
+
 ## 2.9.7-rc.7 (2024-07-18)
 
 ### Fixed (1 change)

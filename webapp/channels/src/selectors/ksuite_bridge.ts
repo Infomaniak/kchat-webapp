@@ -13,3 +13,11 @@ export function getKSuiteBridge(state: GlobalState): KSuiteBridge {
 export function getKSuiteDnd(state: GlobalState): boolean {
     return state.ksuite_bridge.dnd;
 }
+
+export function getKSuiteMode(state: GlobalState): string {
+    return state.ksuite_bridge.ksuiteMode;
+}
+
+export function getKSuiteSpaceId(state: GlobalState): string {
+    return state.ksuite_bridge.spaceId;
+}

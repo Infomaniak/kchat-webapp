@@ -18,7 +18,7 @@ type Props = {
     isMultiServer: boolean;
 }
 
-const SwitchServer: FC<Props> = ({currentServer, unreadStatus, servers, isMultiServer}) => {
+const SwitchServer: FC<Props> = ({currentServer, unreadStatus, servers, isMultiServer, spaceId}) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const handleToggleDropdown = () => setIsOpen(!isOpen);
 
@@ -32,11 +32,11 @@ const SwitchServer: FC<Props> = ({currentServer, unreadStatus, servers, isMultiS
                     server={currentServer}
                     isCurrentServer={true}
                     onClick={handleToggleDropdown}
-                    displayArrowIcon={isMultiServer}
+                    displayArrowIcon={isMultiServer && !spaceId}
                     isDropdownOpen={isOpen}
                     displayUnreadDot={Boolean(unreadStatus)}
                 />
-                {isMultiServer && isOpen && (
+                {isMultiServer && !spaceId && isOpen && (
                     <div className='list'>
                         {servers.map((server, idx) => (
                             <SwitchItem

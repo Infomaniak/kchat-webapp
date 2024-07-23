@@ -28,7 +28,7 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {loadRecentlyUsedCustomEmojis} from 'actions/emoji_actions';
 import * as GlobalActions from 'actions/global_actions';
-import {storeBridge} from 'actions/ksuite_bridge_actions';
+import {storeBridge, storeBridgeParam} from 'actions/ksuite_bridge_actions';
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
 import {setThemePreference} from 'actions/views/theme';
@@ -737,6 +737,17 @@ export default class Root extends React.PureComponent<Props, State> {
 
         const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch, store.getState);
+
+        const ksuiteMode = (new URLSearchParams(window.location.search)).get('ksuite-mode');
+        const spaceId = (new URLSearchParams(window.location.search)).get('space-id');
+
+        if (ksuiteMode) {
+            storeBridgeParam('ksuiteMode', ksuiteMode)(store.dispatch);
+        }
+
+        if (spaceId) {
+            storeBridgeParam('spaceId', spaceId)(store.dispatch);
+        }
 
         Utils.injectWebcomponentInit();
 
