@@ -138,6 +138,13 @@
 
 - [split test steps for coverage reports to work](kchat/webapp@a1374068e5164f93e6353dc9a2ab25c0f22cf8d6) by @antonbuksa ([merge request](kchat/webapp!827))
 
+## 2.9.7-next.3 (2024-07-23)
+
+### Changed (2 changes)
+
+- [make adaptations for ksuite spaces](kchat/webapp@3227f3d7ed2fb712342f52cd95c51eab822cb5aa) by @antonbuksa ([merge request](kchat/webapp!826))
+- [fix(call): Updated ringtone](kchat/webapp@2dd0d34454cc479f2513cd462c7b87300ce93a2b) by @tim.dewinter ([merge request](kchat/webapp!817))
+
 ## 2.9.7-next.2 (2024-07-18)
 
 ### Added (2 changes)
