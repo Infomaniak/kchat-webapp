@@ -3757,7 +3757,7 @@
   "multiselect.numRemaining": "Vous pouvez ajouter jusqu'à {max, number} à la fois. Il vous reste {num, number}.",
   "multiselect.placeholder": "Rechercher des membres",
   "multiselect.placeholder.peopleOrGroups": "Rechercher des personnes ou des groupes",
-  "multiselect.new_channel": "Créer un canal pour échanger avec plus de personnes",
+  "multiselect.new_channel": "Plus de 7 personnes ? Créez plutôt un canal",
   "multiselect.new_channel_create": "Créer un canal",
   "multiselect.saveDetailsButton": "Enregistrer les détails",
   "multiselect.savingDetailsButton": "Enregistrement...",
