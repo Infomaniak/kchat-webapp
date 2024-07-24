@@ -1,3 +1,9 @@
+## 2.9.7-rc.10 (2024-07-24)
+
+### Changed (1 change)
+
+- [fix(call): Updated ringtone](kchat/webapp@c8b4b62b6743ce524172e7f239767a08c4699ad0) by @tim.dewinter ([merge request](kchat/webapp!853))
+
 ## 2.9.7-rc.9 (2024-07-23)
 
 ### Changed (1 change)
