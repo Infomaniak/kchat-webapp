@@ -835,7 +835,7 @@ const PostComponent = (props: Props): JSX.Element => {
                                 handleFileDropdownOpened={handleFileDropdownOpened}
                             />
                             }
-                            {post.type === Posts.POST_TYPES.SYSTEM_POST_REMINDER ? <div>
+                            {post.type === Posts.POST_TYPES.SYSTEM_POST_REMINDER ? <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
                                 <Menu.Container
                                     menuButton={{
                                         id: `_button_${props.post.id}`,
