@@ -23,7 +23,6 @@ import {
     useAudioPlayer,
 } from 'components/common/hooks/useAudioPlayer';
 import * as Menu from 'components/menu';
-import OverlayTrigger from 'components/overlay_trigger';
 import TranscriptComponent from 'components/transcript/transcript';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
@@ -40,27 +39,32 @@ export interface Props {
 
 function VoiceMessageAttachmentPlayer(props: Props) {
     const {formatMessage} = useIntl();
-
     const {playerState, duration, elapsed, togglePlayPause} = useAudioPlayer(props.fileId ? `/api/v4/files/${props.fileId}` : '');
 
     const progressValue = elapsed === 0 || duration === 0 ? '0' : (elapsed / duration).toFixed(2);
     const [transcript, setTranscript] = useState('');
     const [transcriptDatas, setTranscriptDatas] = useState<TranscriptData>();
-    const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
     const [hasFetchedTranscript, setHasFetchedTranscript] = useState(false);
     const [isLoadingTranscript, setIsLoadingTranscript] = useState(false);
     const [error, setError] = useState<JSX.Element | null>(null);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null);
+    const [isTranscriptModalOpen, setIsTranscriptModalOpen] = useState(false);
+
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const fetchTranscript = async () => {
-        if (isTranscriptOpen) {
-            setIsTranscriptOpen(false);
-            return;
-        }
-        setIsTranscriptOpen(true);
         if (!hasFetchedTranscript) {
             setIsLoadingTranscript(true);
-            const result = await fetchTranscriptData(props.fileId)();
-            if (!(result as TranscriptData).text) {
+            const result = await fetchTranscriptData(props.fileId);
+            if (!result.text) {
                 setError(
                     <FormattedMessage
                         id='vocals.transcript.error'
@@ -69,9 +73,12 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                 );
             }
             setIsLoadingTranscript(false);
-            setTranscript((result as TranscriptData).text.trim());
-            setTranscriptDatas((result as TranscriptData));
-            setIsTranscriptOpen(true);
+            if (result.text) {
+                setTranscript(result.text.trim());
+            }
+            if (!Array.isArray(result)) {
+                setTranscriptDatas(result);
+            }
             setHasFetchedTranscript(true);
         }
     };
@@ -81,6 +88,9 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     function downloadFile() {
         window.location.assign(getFileDownloadUrl(props.fileId));
     }
+    const toggleTranscriptModal = () => {
+        setIsTranscriptModalOpen(!isTranscriptModalOpen);
+    };
 
     return (
         <>
@@ -159,13 +169,18 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                     )}
                     {!props.isPreview && (
                         <div
-                            onClick={fetchTranscript}
+                            onClick={() => {
+                                fetchTranscript();
+                                toggleTranscriptModal();
+                            }}
                             className='post-image__end-button'
                         >
-                            {isLoadingTranscript ? (<LoadingSpinner/>) : (
-                                <img
-                                    src={transcriptIcon()}
-                                />
+                            {isLoadingTranscript ? (
+                                <LoadingSpinner/>
+                            ) : (
+                                <div >
+                                    <img src={transcriptIcon()}/>
+                                </div>
                             )}
                         </div>)}
                     {!props.inPost && (
@@ -183,25 +198,29 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             </div>
             <div >
                 <div>
-                    {transcript && isTranscriptOpen && (transcript.length > 300 ? transcript.substring(0, 300) + '... ' : transcript + ' ')}
-                    {transcript && isTranscriptOpen && transcriptDatas &&
-                    <OverlayTrigger
-                        overlay={
-                            <TranscriptComponent
-                                className='transcript-popover'
-                                transcriptDatas={transcriptDatas}
-                            />
-                        }
-                        trigger={['click']}
-                        rootClose={true}
-                    >
-                        <a className='transcript-link-view'>
-                            <FormattedMessage
-                                id={'vocals.loading_transcript'}
-                                defaultMessage={'View transcript'}
-                            />
-                        </a>
-                    </OverlayTrigger>
+                    {transcript && transcriptDatas && isTranscriptModalOpen && (
+                        <div>
+                            {transcript.length > 300 ? transcript.substring(0, 300) + '... ' : transcript + ' '}
+                            <a
+                                className='transcript-link-view'
+                                onClick={(event) => {
+                                    handleClick(event);
+                                }}
+                            >
+                                <FormattedMessage
+                                    id={'vocals.loading_transcript'}
+                                    defaultMessage={'View transcript'}
+                                />
+                            </a>
+                        </div>
+                    )}
+                    {transcriptDatas &&
+                        <TranscriptComponent
+                            transcriptDatas={transcriptDatas}
+                            handleClose={handleClose}
+                            open={open}
+                            anchorEl={anchorEl}
+                        />
                     }
                 </div>
                 {error && <div className='transcript-error'>{error}</div>}

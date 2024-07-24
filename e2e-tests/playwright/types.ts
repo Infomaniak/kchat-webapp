@@ -12,6 +12,7 @@ export type TestArgs = {
 export type TestConfig = {
     // Server
     baseURL: string;
+    authBaseURL?: string;
     adminUsername: string;
     adminPassword: string;
     adminEmail: string;

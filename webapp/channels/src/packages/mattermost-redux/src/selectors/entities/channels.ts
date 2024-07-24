@@ -38,6 +38,7 @@ import {
     isCollapsedThreadsEnabled,
 } from 'mattermost-redux/selectors/entities/preferences';
 import {
+    getRoles,
     haveIChannelPermission,
     haveICurrentChannelPermission,
     haveITeamPermission,
@@ -143,6 +144,10 @@ export function getChannelMembersInChannels(state: GlobalState): RelationOneToOn
     return state.entities.channels.membersInChannel;
 }
 
+export function getChannelMemberChannel(state: GlobalState, channelId: string): Record<string, ChannelMembership> {
+    return getChannelMembersInChannels(state)[channelId];
+}
+
 export function getChannelMember(state: GlobalState, channelId: string, userId: string): ChannelMembership | undefined {
     return getChannelMembersInChannels(state)[channelId]?.[userId];
 }
@@ -150,6 +155,42 @@ export function getChannelMember(state: GlobalState, channelId: string, userId: 
 export function getGuestMembersInChannel(state: GlobalState, channelId: string) {
     return state.entities.channels.guestMembersInChannel[channelId];
 }
+
+export const getCurrentMemberIsChannelAdmin: (state: GlobalState, channelId: string) => boolean | undefined = createSelector(
+    'getCurrentMemberIsChannelAdmin',
+    (state: GlobalState, channelId: string) => getChannelMember(state, channelId, getCurrentUserId(state)),
+    (currentMember) => currentMember && currentMember.scheme_admin,
+);
+
+export const getHasChannelMembersAdmin: (state: GlobalState, channelId: string) => boolean = createSelector(
+    'getHasChannelMembersAdmin',
+    getChannelMemberChannel,
+    getChannel,
+    getCurrentUserId,
+    getRoles,
+    getCurrentMemberIsChannelAdmin,
+    (guestsInChannel, channel, currentUserId, roles, currentMemberIsChannelAdmin) => {
+        const guestsInChannelArray = Object.values(guestsInChannel).filter((user) => user.user_id !== '');
+        const isPrivateChannel = channel && channel.type === General.PRIVATE_CHANNEL;
+        let hasChannelMembersAdmin = false;
+        if (isPrivateChannel && currentMemberIsChannelAdmin) {
+            hasChannelMembersAdmin = guestsInChannelArray.some((user) => {
+                if (user.user_id === currentUserId) {
+                    return false;
+                }
+                const userRoles = user.roles.split(' ');
+                return userRoles.some((roleName) => {
+                    const role = roles[roleName];
+                    return role && role.permissions.includes('manage_private_channel_members');
+                });
+            });
+            if (!hasChannelMembersAdmin) {
+                return true;
+            }
+        }
+        return false;
+    },
+);
 
 export const getGuestMembersIdsInChannel = createSelector(
     'getGuestMembersIdsInChannel',

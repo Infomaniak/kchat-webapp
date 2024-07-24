@@ -13,7 +13,7 @@ services:
       timeout: 15s
       retries: 12
   inbucket:
-    image: mattermostdevelopment/mirrored-inbucket:3.0.0
+    image: inbucket/inbucket:3.0.4
     restart: always
     environment:
       INBUCKET_WEB_ADDR: "0.0.0.0:9001"

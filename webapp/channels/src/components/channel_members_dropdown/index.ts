@@ -9,6 +9,7 @@ import type {Channel} from '@mattermost/types/channels';
 
 import {getChannelStats, updateChannelMemberSchemeRoles, removeChannelMember, getChannelMember} from 'mattermost-redux/actions/channels';
 import {Permissions} from 'mattermost-redux/constants';
+import {getHasChannelMembersAdmin} from 'mattermost-redux/selectors/entities/channels';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
@@ -33,11 +34,13 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         Permissions.MANAGE_CHANNEL_ROLES,
     ) && canManageMembers(state, channel);
     const canRemoveMember = canManageMembers(state, channel);
+    const hasChannelMembersAdmin = getHasChannelMembersAdmin(state, channel.id);
 
     return {
         currentUserId: getCurrentUserId(state),
         canChangeMemberRoles,
         canRemoveMember,
+        hasChannelMembersAdmin,
     };
 }
 

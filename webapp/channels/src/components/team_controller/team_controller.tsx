@@ -62,20 +62,20 @@ function TeamController(props: Props) {
         fetchInitialChannels();
     }, []);
 
-    useEffect(() => {
-        const wakeUpIntervalId = setInterval(() => {
-            const currentTime = Date.now();
-            if ((currentTime - lastTime.current) > WAKEUP_THRESHOLD) {
-                console.log('computer woke up - reconnecting'); //eslint-disable-line no-console
-                reconnect();
-            }
-            lastTime.current = currentTime;
-        }, WAKEUP_CHECK_INTERVAL);
+    // useEffect(() => {
+    //     const wakeUpIntervalId = setInterval(() => {
+    //         const currentTime = Date.now();
+    //         if ((currentTime - lastTime.current) > WAKEUP_THRESHOLD) {
+    //             console.log('computer woke up - reconnecting'); //eslint-disable-line no-console
+    //             reconnect();
+    //         }
+    //         lastTime.current = currentTime;
+    //     }, WAKEUP_CHECK_INTERVAL);
 
-        return () => {
-            clearInterval(wakeUpIntervalId);
-        };
-    }, []);
+    //     return () => {
+    //         clearInterval(wakeUpIntervalId);
+    //     };
+    // }, []);
 
     // Effect runs on mount, add event listeners on windows object
     useEffect(() => {

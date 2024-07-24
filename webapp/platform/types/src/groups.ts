@@ -37,6 +37,7 @@ export type Group = {
     delete_at: number;
     has_syncables: boolean;
     member_count: number;
+    member_ids: string[];
     scheme_admin: boolean;
     allow_reference: boolean;
     channel_member_count?: number;

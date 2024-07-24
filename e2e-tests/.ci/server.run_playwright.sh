@@ -12,9 +12,16 @@ mkdir -p logs
 touch logs/mattermost.log
 EOF
 
-# Install Playwright dependencies
-mme2e_log "Prepare Playwright: install dependencies"
-${MME2E_DC_SERVER} exec -T -u "$MME2E_UID" -- playwright bash -c "cd e2e-tests/playwright && rm -rf node_modules && npm install --cache /tmp/empty-cache"
+# # Install Playwright dependencies
+# mme2e_log "Prepare Playwright: install dependencies"
+# # ${MME2E_DC_SERVER} exec -T -u "$MME2E_UID" -- playwright bash <<EOF
+# ${MME2E_DC_SERVER} exec -T -- playwright bash <<EOF
+# cd e2e-tests/playwright
+# npm i --cache /tmp/empty-cache -g yarn
+# export NPM_TOKEN=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
+# yarn config set cacheFolder /tmp/empty-cache
+# yarn
+# EOF
 
 # Enable next line to debug Playwright
 # export DEBUG=pw:protocol,pw:browser,pw:api

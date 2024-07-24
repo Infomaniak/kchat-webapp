@@ -79,6 +79,7 @@ exports[`component/add_user_to_group_multiselect should match snapshot with diff
       "current": null,
     }
   }
+  showInputByDefault={false}
   valueWithImage={true}
   values={Array []}
 />
@@ -163,6 +164,7 @@ exports[`component/add_user_to_group_multiselect should match snapshot with prof
       "current": null,
     }
   }
+  showInputByDefault={false}
   valueWithImage={true}
   values={Array []}
 />
@@ -232,6 +234,7 @@ exports[`component/add_user_to_group_multiselect should match snapshot without a
       "current": null,
     }
   }
+  showInputByDefault={false}
   valueWithImage={true}
   values={Array []}
 />

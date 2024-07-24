@@ -54,6 +54,7 @@ export type Props<T extends Value> = {
         select: (value: T) => void
     ) => void;
     selectedItemRef?: React.RefObject<HTMLDivElement>;
+    showInputByDefault: boolean;
     options: T[];
     perPage: number;
     placeholderText?: string;
@@ -89,6 +90,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
         valueWithImage: false,
         focusOnLoad: true,
         savingEnabled: true,
+        showInputByDefault: false,
     };
 
     public constructor(props: Props<T>) {
@@ -401,7 +403,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
         let multiSelectList;
 
         if (this.props.saveButtonPosition === 'bottom') {
-            if (this.state.input) {
+            if (this.state.input || (this.props.showInputByDefault && this.props.values.length === 0)) {
                 multiSelectList = (
                     <MultiSelectList
                         ref={this.listRef}

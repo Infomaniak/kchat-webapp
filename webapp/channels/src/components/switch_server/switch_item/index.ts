@@ -9,8 +9,9 @@ import {bindActionCreators} from 'redux';
 
 import type {Team} from '@mattermost/types/teams';
 
-import type {GenericAction, GetStateFunc} from 'mattermost-redux/types/actions';
+import type {GetStateFunc} from 'mattermost-redux/types/actions';
 
+import {bridgeRecreate} from 'actions/ksuite_bridge_actions';
 import {switchTeam} from 'actions/team_actions';
 import {makeGetBadgeCountForServerId} from 'selectors/views/servers';
 
@@ -31,13 +32,15 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
 }
 
 type Actions = {
-    switchTeam: (url: string, team?: Team) => (dispatch: Dispatch<GenericAction>, getState: GetStateFunc) => void;
+    switchTeam: (url: string, team?: Team) => (dispatch: Dispatch, getState: GetStateFunc) => void;
+    bridgeRecreate: (url: string) => void;
 }
 
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators<ActionCreatorsMapObject, Actions>({
             switchTeam,
+            bridgeRecreate,
         }, dispatch),
     };
 }
