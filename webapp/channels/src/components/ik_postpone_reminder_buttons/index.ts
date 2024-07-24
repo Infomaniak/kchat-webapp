@@ -17,7 +17,7 @@ import {openModal} from 'actions/views/modals';
 
 import type {GlobalState} from 'types/store';
 
-import IkPostponeReminderButtons from './ik_pospone_reminder_buttons';
+import IkPostponeReminderButtons from './ik_postpone_reminder_buttons';
 
 interface OwnProps {
     post: Post ;
