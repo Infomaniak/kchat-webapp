@@ -978,13 +978,7 @@ export function patchUser(user: UserProfile): ActionFuncAsync<UserProfile> {
     return async (dispatch) => {
         let data: UserProfile;
         try {
-            data = await Client4.patchUser({
-                ...user,
-                timezone: user.timezone ? {
-                    ...user.timezone,
-                    useAutomaticTimezone: user.timezone.useAutomaticTimezone.toString(),
-                } : undefined,
-            });
+            data = await Client4.patchUser(user);
         } catch (error) {
             dispatch(logError(error));
             return {error};

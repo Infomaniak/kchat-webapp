@@ -138,8 +138,6 @@ export const Preferences = {
     CLOUD_USER_EPHEMERAL_INFO: 'cloud_user_ephemeral_info',
     CATEGORY_CLOUD_LIMITS: 'cloud_limits',
     THREE_DAYS_LEFT_TRIAL_MODAL: 'three_days_left_trial_modal',
-    TIMEZONE_DISPLAY: 'timezone_display',
-    TIMEZONE_DISPLAY_DEFAULT: 'true',
 
     // For one off things that have a special, attention-grabbing UI until you interact with them
     TOUCHED: 'touched',

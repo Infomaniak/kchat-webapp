@@ -140,7 +140,6 @@ type Props = {
     militaryTime: string;
     lastActiveDisplay: string;
     lastActiveTimeEnabled: boolean;
-    timezoneDisplay: string;
     actions: {
         savePreferences: (userId: string, preferences: PreferenceType[]) => void;
         autoUpdateTimezone: (deviceTimezone: string) => void;
@@ -149,6 +148,7 @@ type Props = {
 }
 
 type State = {
+    [key: string]: any;
     isSaving: boolean;
     teammateNameDisplay: string;
     availabilityStatusOnPosts: string;
@@ -164,7 +164,6 @@ type State = {
     serverError?: string;
     militaryTime: string;
     lastActiveDisplay: string;
-    timezoneDisplay: string;
     timezone: UserTimezone;
 }
 
@@ -183,7 +182,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             oneClickReactionsOnPosts: props.oneClickReactionsOnPosts ? props.oneClickReactionsOnPosts : 'true',
             showUnreadsCategory: props.showUnreadsCategory ? props.showUnreadsCategory : 'true',
             unreadScrollPosition: props.unreadScrollPosition ? props.unreadScrollPosition : Preferences.UNREAD_SCROLL_POSITION,
-            timezoneDisplay: props.timezoneDisplay ? props.timezoneDisplay : 'true',
             timezone: props.timezone,
         };
     }
@@ -214,7 +212,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             showUnreadsCategory: props.showUnreadsCategory ? props.showUnreadsCategory : 'true',
             unreadScrollPosition: props.unreadScrollPosition ? props.unreadScrollPosition : Preferences.UNREAD_SCROLL_POSITION,
             isSaving: false,
-            timezoneDisplay: props.timezoneDisplay ? props.timezoneDisplay : 'true',
             timezone: props.timezone,
         };
 
@@ -350,13 +347,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             name: Preferences.USE_MILITARY_TIME,
             value: newSettingsState.militaryTime,
         };
-
-        const timezonePreference = {
-            user_id: userId,
-            category: Preferences.CATEGORY_DISPLAY_SETTINGS,
-            name: Preferences.TIMEZONE_DISPLAY,
-            value: newSettingsState.timezoneDisplay,
-        };
         this.setState({isSaving: true});
 
         const preferences = [
@@ -371,7 +361,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             availabilityStatusOnPostsPreference,
             colorizeUsernamesPreference,
             timePreference,
-            timezonePreference,
         ];
 
         await this.props.actions.savePreferences(userId, preferences);
@@ -381,7 +370,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         this.setState({isSaving: false});
     };
 
-    handleOnChange(display: Partial<State>) {
+    handleOnChange(display: {[key: string]: any}) {
         this.handleSubmit({...this.state, ...display});
     }
     handleOnTimezoneChange: ComponentProps<typeof ManageTimezones>['onChange'] = (timezone) => {
