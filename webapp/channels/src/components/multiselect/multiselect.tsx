@@ -536,33 +536,38 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                             <div style={this.props.showError ? {color: this.props.changeMessageColor} : {}}>
                                 {memberCount}
                             </div>
+
                         </div>
+                        {
+                            (this.props.disableMultiSelectList && this.props.values.length >= 7) ? (
+                                <>
+                                    <div className='create-new-channel'>
+                                        <img src={lampIcon()}/>
+                                        <FormattedMessage
+                                            id='multiselect.new_channel'
+                                            defaultMessage='Create a channel to communicate with more people'
+                                        />
+                                        <a
+                                            href='#'
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                this.openModal();
+                                            }}
+                                        >
+                                            <FormattedMessage
+                                                id='multiselect.new_channel_create'
+                                                defaultMessage='Create a channel'
+                                            />
+                                        </a>
+                                    </div>
+                                </>
+                            ) : null
+                        }
                     </div>
                     {
-                        this.props.disableMultiSelectList && this.props.values.length >= 7 ? (
-                            <>
-                                {this.props.values.length === 7 && multiSelectList}
-                                <div className='create-new-channel'>
-                                    <img src={lampIcon()}/>
-                                    <FormattedMessage
-                                        id='multiselect.new_channel'
-                                        defaultMessage='Create a channel to communicate with more people'
-                                    />
-                                    <a
-                                        href='#'
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            this.openModal();
-                                        }}
-                                    >
-                                        <FormattedMessage
-                                            id='multiselect.new_channel_create'
-                                            defaultMessage='Create a channel'
-                                        />
-                                    </a>
-                                </div>
-                            </>
-                        ) : (multiSelectList)
+                        (!this.props.disableMultiSelectList || this.props.values.length <= 7) ? (
+                            multiSelectList
+                        ) : null
                     }
                     <div
                         id='multiSelectMessageNote'
