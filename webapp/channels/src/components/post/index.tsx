@@ -167,16 +167,8 @@ function makeMapStateToProps() {
             Preferences.LINK_PREVIEW_DISPLAY,
             Preferences.LINK_PREVIEW_DISPLAY_DEFAULT === 'true',
         );
-        const timezone = getCurrentTimezone(state);
-        const userId = getCurrentUserId(state);
-        const isMilitaryTime = getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false);
-        const userByName = getUserByUsername(state, ownProps.post?.props?.username);
 
         return {
-            userByName,
-            userId,
-            timezone,
-            isMilitaryTime,
             enableEmojiPicker,
             enablePostUsernameOverride,
             isEmbedVisible: isEmbedVisible(state, post.id),
@@ -234,8 +226,6 @@ function makeMapStateToProps() {
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
     return {
         actions: bindActionCreators({
-            openModal,
-            addPostReminder,
             markPostAsUnread,
             emitShortcutReactToLastPostFrom,
             setActionsMenuInitialisationState,
