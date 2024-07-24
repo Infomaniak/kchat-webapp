@@ -9,7 +9,6 @@ import type {AnyAction, Dispatch} from 'redux';
 import type {Emoji} from '@mattermost/types/emojis';
 import type {Post} from '@mattermost/types/posts';
 
-import {addPostReminder} from 'mattermost-redux/actions/posts';
 import {setActionsMenuInitialisationState} from 'mattermost-redux/actions/preferences';
 import {General} from 'mattermost-redux/constants';
 import {getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
@@ -22,11 +21,9 @@ import {
     isCollapsedThreadsEnabled,
 } from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam, getTeam, getTeamMemberships} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
-import {getCurrentUserId, getUser, getUserByUsername} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 
 import {markPostAsUnread, emitShortcutReactToLastPostFrom} from 'actions/post_actions';
-import {openModal} from 'actions/views/modals';
 import {closeRightHandSide, selectPost, setRhsExpanded, selectPostCard, selectPostFromRightHandSideSearch} from 'actions/views/rhs';
 import {getShortcutReactToLastPostEmittedFrom, getOneClickReactionEmojis} from 'selectors/emojis';
 import {getIsPostBeingEdited, getIsPostBeingEditedInRHS, isEmbedVisible} from 'selectors/posts';
