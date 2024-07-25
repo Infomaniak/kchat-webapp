@@ -1,25 +1,30 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {ComponentProps} from 'react';
 import React from 'react';
 import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
 
-import DeletePostModal from 'components/delete_post_modal/delete_post_modal';
+import type {ActionResult} from 'mattermost-redux/types/actions';
+
 import * as Menu from 'components/menu';
-import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal/post_reminder_custom_time_picker_modal';
+import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal';
 
 import {ModalIdentifiers} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 
+import type {ModalData} from 'types/actions';
+
 export type Props = {
     post: Post;
     actions: {
-        addPostReminder: (userId: string, postId: string, remindAt: number) => void;
-        openModal: (modalData: {modalId: string; dialogType: any; dialogProps: any}) => void;
+        markPostReminderAsDone: (userId: string, postId: string) => Promise<ActionResult<unknown, any>>;
+        addPostReminder: (userId: string, postId: string, timestamp: number, reschedule?: boolean, reminderPostId?: string) => void;
+        openModal: (modalData: ModalData<ComponentProps<typeof PostReminderCustomTimePicker>>) => void;
     };
     timezone?: string; /* Current user timezone */
     isMilitaryTime?: boolean; /* Whether or not to use military time */
@@ -35,22 +40,14 @@ const PostReminders = {
     CUSTOM: 'custom',
 } as const;
 
-const IkPostponeReminderButtons = (props: Props): JSX.Element => {
+const IkPostponeReminderButtons = (props: Props) => {
     const handleDeleteMenuItemActivated = (): void => {
-        const deletePostModalData = {
-            modalId: ModalIdentifiers.DELETE_POST,
-            dialogType: DeletePostModal,
-            dialogProps: {
-                post: props.post,
-                isRHS: false,
-            },
-        };
-
-        props.actions.openModal(deletePostModalData);
+        if (props.userByName) {
+            props.actions.markPostReminderAsDone(props.userByName.id, props.post.id);
+        }
     };
 
     const handlePostReminderMenuClick = (id: string) => {
-        console.log('test');
         if (id === PostReminders.CUSTOM) {
             const postReminderCustomTimePicker = {
                 modalId: ModalIdentifiers.POST_REMINDER_CUSTOM_TIME_PICKER,
@@ -61,21 +58,11 @@ const IkPostponeReminderButtons = (props: Props): JSX.Element => {
             };
             props.actions.openModal(postReminderCustomTimePicker);
         } else {
-            let link = props.post.props.previewed_post;
-
-            if (props.post.props.previewed_post) {
-                link = props.post.props.link;
-                if (link.includes('/pl/')) {
-                    const parts = link.split('/pl/');
-                    const partAfterPl = parts[1];
-                    link = partAfterPl;
-                }
-            }
             const currentDate = getCurrentMomentForTimezone(props.timezone);
             let endTime = currentDate;
             if (id === PostReminders.THIRTY_MINUTES) {
                 // add 30 minutes in current time
-                endTime = currentDate.add(30, 'minutes');
+                endTime = currentDate.add(0.1, 'minutes');
             } else if (id === PostReminders.ONE_HOUR) {
                 // add 1 hour in current time
                 endTime = currentDate.add(1, 'hour');
@@ -91,7 +78,7 @@ const IkPostponeReminderButtons = (props: Props): JSX.Element => {
             }
 
             if (props.userByName?.id) {
-                props.actions.addPostReminder(props.userByName?.id, link, toUTCUnix(endTime.toDate()));
+                props.actions.addPostReminder(props.userByName?.id, props.post.props.post_id, toUTCUnix(endTime.toDate()), true, props.post.id);
             }
         }
     };

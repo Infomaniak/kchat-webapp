@@ -536,6 +536,33 @@ function renderReminderACKMessage(post: Post, currentTeam: Team, isMilitaryTime:
 export function renderReminderSystemBotMessage(post: Post): ReactNode {
     const username = post.props.username ? renderUsername(post.props.username) : '';
     const permaLink = renderFormattedText(`[${post.props.link}](${post.props.link})`);
+
+    if (post.props.reschedule) {
+        return (
+            <FormattedMessage
+                id={'post.reminder.systemBot.reschedule'}
+                defaultMessage='D`accord ! Je reprogramme le rappel de <a>ce message</a>.'
+                values={{
+                    permaLink,
+                    a: (chunks: React.ReactNode) => <a href={String(permaLink)}>{chunks}</a>,
+                }}
+            />
+        );
+    }
+
+    if (post.props.completed) {
+        return (
+            <FormattedMessage
+                id={'post.reminder.systemBot.completed'}
+                defaultMessage='D`accord ! J`ai marqué le rappel de <a>ce message</a> comme terminé.'
+                values={{
+                    permaLink,
+                    a: (chunks: React.ReactNode) => <a href={String(permaLink)}>{chunks}</a>,
+                }}
+            />
+        );
+    }
+
     return (
         <FormattedMessage
             id={'post.reminder.systemBot'}

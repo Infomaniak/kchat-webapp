@@ -2369,12 +2369,19 @@ export default class Client4 {
         );
     }
 
-    addPostReminder = (userId: string, postId: string, timestamp: number) => {
+    addPostReminder = (userId: string, postId: string, timestamp: number, reschedule?: boolean, reminderPostId?: string) => {
         this.trackEvent('api', 'api_post_set_reminder');
 
         return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/posts/${postId}/reminder`,
-            {method: 'post', body: JSON.stringify({target_time: timestamp})},
+            {method: 'post', body: JSON.stringify({target_time: timestamp, reschedule: reschedule, post_id: reminderPostId})},
+        );
+    }
+
+    markPostReminderAsDone = (userId: string, postId: string) => {
+        return this.doFetch<StatusOK>(
+            `${this.getUserRoute(userId)}/posts/${postId}/reminder`,
+            {method: 'delete'},
         );
     }
 

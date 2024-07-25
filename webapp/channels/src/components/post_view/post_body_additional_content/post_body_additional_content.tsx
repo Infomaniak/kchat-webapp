@@ -14,8 +14,9 @@ import PostImage from 'components/post_view/post_image';
 import PostMessagePreview from 'components/post_view/post_message_preview';
 import YoutubeVideo from 'components/youtube_video';
 
-import webSocketClient from 'client/web_websocket_client';
 import type {TextFormattingOptions} from 'utils/text_formatting';
+
+import webSocketClient from 'client/web_websocket_client';
 
 import type {PostWillRenderEmbedPluginComponent} from 'types/store/plugins';
 
@@ -123,7 +124,7 @@ export default class PostBodyAdditionalContent extends React.PureComponent<Props
                 />
             );
         case 'permalink':
-            if (embed.data && 'post_id' in embed.data && embed.data.post_id) {
+            if (embed.data && 'post_id' in embed.data && embed.data.post_id && !(this.props.post.props.reschedule || this.props.post.props.completed)) {
                 return (
                     <PostMessagePreview
                         metadata={embed.data}
