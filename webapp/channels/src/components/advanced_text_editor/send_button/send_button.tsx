@@ -12,7 +12,12 @@ import {getTheme, syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selec
 import CompassDesignProvider from 'components/compass_design_provider';
 import SchedulePostButton from 'components/schedule_post/schedule_post_button';
 
-import {t} from 'utils/i18n';
+type SendButtonProps = {
+    handleSubmit: (e: React.FormEvent) => void;
+    disabled: boolean;
+    isSchedulable?: boolean;
+    handleSchedulePost: (scheduleUTCTimestamp: number) => void;
+}
 
 const SendButtonContainer = styled(Button)`
     display: flex;
@@ -50,13 +55,6 @@ const StyledButtonGroup = styled(ButtonGroup)`
     border-radius: 4px;
 `;
 
-type SendButtonProps = {
-    disabled: boolean;
-    isSchedulable?: boolean;
-    handleSubmit: (e: React.FormEvent) => void;
-    handleSchedulePost: (scheduleUTCTimestamp: number) => void;
-};
-
 const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}: SendButtonProps) => {
     const theme = useSelector(getTheme);
     const draftsAreAllowed = useSelector(syncedDraftsAreAllowedAndEnabled);
@@ -78,7 +76,6 @@ const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}:
                 ref={buttonGroupRef}
             >
                 <SendButtonContainer
-                    disableRipple={true}
                     data-testid='SendMessageButton'
                     tabIndex={0}
                     aria-label={formatMessage({
@@ -92,7 +89,7 @@ const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}:
                         size={18}
                         color='currentColor'
                         aria-label={formatMessage({
-                            id: t('create_post.icon'),
+                            id: 'create_post.icon',
                             defaultMessage: 'Create a post',
                         })}
                     />

@@ -29,13 +29,16 @@ import DraftTitle from '../draft_title';
 import Panel from '../panel/panel';
 import PanelBody from '../panel/panel_body';
 import Header from '../panel/panel_header';
+import PersistNotificationConfirmModal from 'components/persist_notification_confirm_modal';
+import { hasRequestedPersistentNotifications, specialMentionsInText } from 'utils/post_utils';
 
 type Props = {
-    channel: Channel;
+    channel?: Channel;
     channelUrl: string;
     displayName: string;
     draftId: string;
     id: Channel['id'];
+    postPriorityEnabled: boolean;
     status: UserStatus['status'];
     type: 'channel' | 'thread';
     user: UserProfile;
@@ -50,6 +53,7 @@ function ChannelDraft({
     channelUrl,
     displayName,
     draftId,
+    postPriorityEnabled,
     status,
     type,
     user,
@@ -57,8 +61,9 @@ function ChannelDraft({
     isRemote,
     isScheduled,
     scheduledWillNotBeSent,
+    id: channelId,
 }: Props) {
-    const dispatch = useDispatch<DispatchFunc>();
+    const dispatch = useDispatch();
     const history = useHistory();
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const channelDraft = useSelector((state: GlobalState) => getGlobalItem(state, StoragePrefixes.DRAFT + value.channelId, {}));
@@ -76,10 +81,33 @@ function ChannelDraft({
     };
 
     const handleOnDelete = useCallback((id: string) => {
-        dispatch(removeDraft(id, channel.id));
-    }, [dispatch, channel.id]);
+        dispatch(removeDraft(id, channelId));
+    }, [dispatch, channelId]);
 
-    const handleOnSend = async (id: string) => {
+    const doSubmit = useCallback((id: string, post: Post) => {
+        dispatch(createPost(post, value.fileInfos));
+        dispatch(removeDraft(id, channelId));
+        history.push(channelUrl);
+    }, [dispatch, history, value.fileInfos, channelId, channelUrl]);
+
+    const showPersistNotificationModal = useCallback((id: string, post: Post) => {
+        if (!channel) {
+            return;
+        }
+
+        dispatch(openModal({
+            modalId: ModalIdentifiers.PERSIST_NOTIFICATION_CONFIRM_MODAL,
+            dialogType: PersistNotificationConfirmModal,
+            dialogProps: {
+                message: post.message,
+                channelType: channel.type,
+                specialMentions: specialMentionsInText(post.message),
+                onConfirm: () => doSubmit(id, post),
+            },
+        }));
+    }, [channel, dispatch, doSubmit]);
+
+    const handleOnSend = useCallback(async (id: string) => {
         const post = {} as Post;
         post.file_ids = [];
         post.message = value.message;
@@ -92,11 +120,13 @@ function ChannelDraft({
             return;
         }
 
-        dispatch(createPost(post, value.fileInfos));
-        dispatch(removeDraft(id, channel.id));
+        if (postPriorityEnabled && hasRequestedPersistentNotifications(value?.metadata?.priority)) {
+            showPersistNotificationModal(id, post);
+            return;
+        }
 
-        history.push(channelUrl);
-    };
+        doSubmit(id, post);
+    }, [doSubmit, postPriorityEnabled, value, user.id, showPersistNotificationModal]);
 
     const handleOnSchedule = (scheduleUTCTimestamp: number) => {
         const newDraft = {
@@ -187,7 +217,7 @@ function ChannelDraft({
                         scheduledWillNotBeSent={scheduledWillNotBeSent}
                     />
                     <PanelBody
-                        channelId={channel.id}
+                        channelId={channelId}
                         displayName={displayName}
                         fileInfos={value.fileInfos}
                         message={value.message}

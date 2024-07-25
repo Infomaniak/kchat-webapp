@@ -12,7 +12,6 @@ import {sendAddToChannelEphemeralPost} from 'actions/global_actions';
 import AtMention from 'components/at_mention';
 
 import {Constants} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 interface Actions {
     notifyChannelMember: (channelId: string, userIds: string[], postId: string) => void;
@@ -161,14 +160,21 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
             return null;
         }
 
-        let linkId;
-        let linkText;
+        let link;
         if (channelType === Constants.PRIVATE_CHANNEL) {
-            linkId = t('post_body.check_for_out_of_channel_mentions.link.private');
-            linkText = 'add them to this private channel';
+            link = (
+                <FormattedMessage
+                    id='post_body.check_for_out_of_channel_mentions.link.private'
+                    defaultMessage='add them to this private channel'
+                />
+            );
         } else if (channelType === Constants.OPEN_CHANNEL) {
-            linkId = t('post_body.check_for_out_of_channel_mentions.link.public');
-            linkText = 'add them to the channel';
+            link = (
+                <FormattedMessage
+                    id='post_body.check_for_out_of_channel_mentions.link.public'
+                    defaultMessage='add them to the channel'
+                />
+            );
         }
 
         let outOfChannelMessageID;
@@ -192,12 +198,15 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
             historyMessageId = 'post_body.check_for_out_of_channel_mentions.message_last.multiple';
         }
 
-        let outOfGroupsMessageID;
-        let outOfGroupsMessageText;
+        let outOfGroupsMessagePart;
         const outOfGroupsAtMentions = this.generateAtMentions(noGroupsUsernames);
         if (noGroupsUsernames.length) {
-            outOfGroupsMessageID = t('post_body.check_for_out_of_channel_groups_mentions.message');
-            outOfGroupsMessageText = 'did not get notified by this mention because they are not in the channel. They cannot be added to the channel because they are not a member of the linked groups. To add them to this channel, they must be added to the linked groups.';
+            outOfGroupsMessagePart = (
+                <FormattedMessage
+                    id='post_body.check_for_out_of_channel_groups_mentions.message'
+                    defaultMessage='did not get notified by this mention because they are not in the channel. They cannot be added to the channel because they are not a member of the linked groups. To add them to this channel, they must be added to the linked groups.'
+                />
+            );
         }
 
         let outOfChannelMessage = null;
@@ -236,7 +245,7 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                             />
                         </a>
                         <FormattedMessage
-                            id={historyMessageId}
+                            id={'post_body.check_for_out_of_channel_mentions.message_last'}
                             defaultMessage={' ? They will have access to all message history.'}
                         />
                     </p>
@@ -246,22 +255,16 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                     <p>
                         {outOfChannelAtMentions}
                         {' '}
-                        <FormattedMessage
-                            id={outOfChannelMessageID}
-                            defaultMessage={outOfChannelMessageText}
-                        />
+                        {outOfChannelMessagePart}
                         <a
                             className='PostBody_addChannelMemberLink'
                             onClick={this.handleAddChannelMember}
                         >
-                            <FormattedMessage
-                                id={linkId}
-                                defaultMessage={linkText}
-                            />
+                            {link}
                         </a>
                         <FormattedMessage
-                            id={historyMessageId}
-                            defaultMessage={' ? They will have access to all message history.'}
+                            id={'post_body.check_for_out_of_channel_mentions.message_last'}
+                            defaultMessage={'? They will have access to all message history.'}
                         />
                     </p>
                 );
@@ -273,10 +276,7 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                 <p>
                     {outOfGroupsAtMentions}
                     {' '}
-                    <FormattedMessage
-                        id={outOfGroupsMessageID}
-                        defaultMessage={outOfGroupsMessageText}
-                    />
+                    {outOfGroupsMessagePart}
                 </p>
             );
         }

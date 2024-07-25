@@ -124,6 +124,7 @@ type AdminDefinitionSettingButton = AdminDefinitionSettingBase & {
     error_message: string | MessageDescriptor;
     success_message?: string | MessageDescriptor;
     sourceUrlKey?: string;
+    skipSaveNeeded?: boolean;
 }
 
 type AdminDefinitionSettingUsername = AdminDefinitionSettingBase & {
@@ -166,12 +167,14 @@ type AdminDefinitionConfigSchemaSettings = {
     header?: string | MessageDescriptor;
 }
 
-type AdminDefinitionConfigSchemaSection = {
-    title: string;
+export type AdminDefinitionConfigSchemaSection = {
+    key: string;
+    title?: string;
     subtitle?: string;
     settings: AdminDefinitionSetting[];
     header?: string | MessageDescriptor;
     footer?: string | MessageDescriptor;
+    component?: Component;
 }
 
 type RestrictedIndicatorType = {

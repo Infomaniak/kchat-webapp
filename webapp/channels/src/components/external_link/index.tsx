@@ -3,7 +3,8 @@
 
 /* eslint-disable mattermost/use-external-link */
 
-import React from 'react';
+import React, {forwardRef} from 'react';
+import {useSelector} from 'react-redux';
 
 // import {useSelector} from 'react-redux';
 
@@ -27,26 +28,22 @@ type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
     rel?: string;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
     queryParams?: ExternalLinkQueryParams;
-    location?: string;
+    location: string;
     children: React.ReactNode;
 };
 
-export default function ExternalLink(props: Props) {
+const ExternalLink = forwardRef<HTMLAnchorElement, Props>((props, ref) => {
     // const userId = useSelector(getCurrentUserId);
     // const config = useSelector(getConfig);
-
     // const license = useSelector(getLicense);
     // let href = props.href;
     // let queryParams = {};
-
-    // if (href?.includes('infomaniak.com')) {
+    // if (href?.includes('mattermost.com')) {
     //     const existingURLSearchParams = new URL(href).searchParams;
     //     const existingQueryParamsObj = Object.fromEntries(existingURLSearchParams.entries());
     //     queryParams = {
-    //         utm_source: 'infomaniak',
-
-    //         // utm_medium: license.Cloud === 'true' ? 'in-product-cloud' : 'in-product',
-    //         utm_medium: 'in-product',
+    //         utm_source: 'mattermost',
+    //         utm_medium: license.Cloud === 'true' ? 'in-product-cloud' : 'in-product',
     //         utm_content: props.location || '',
     //         uid: userId,
     //         sid: config.TelemetryId || '',
@@ -54,13 +51,6 @@ export default function ExternalLink(props: Props) {
     //         ...existingQueryParamsObj,
     //     };
     //     const queryString = new URLSearchParams(queryParams).toString();
-
-    //     if (Object.keys(existingQueryParamsObj).length) {
-    //         // If the href already has query params, remove them before adding them back with the addition of the new ones
-    //         href = href?.split('?')[0];
-    //     }
-    //     href = `${href}?${queryString}`;
-    // }
 
     const handleClick = (e: React.MouseEvent<HTMLElement>) => {
         trackEvent('link_out', 'click_external_link');
@@ -72,6 +62,7 @@ export default function ExternalLink(props: Props) {
     return (
         <a
             {...props}
+            ref={ref}
             target={props.target || '_blank'}
             rel={props.rel || 'noopener noreferrer'}
             onClick={handleClick}
@@ -80,4 +71,6 @@ export default function ExternalLink(props: Props) {
             {props.children}
         </a>
     );
-}
+});
+
+export default ExternalLink;

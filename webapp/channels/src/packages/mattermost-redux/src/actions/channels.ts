@@ -268,26 +268,12 @@ export function patchChannel(channelId: string, patch: Partial<Channel>): Action
     });
 }
 
-export function updateChannelPrivacy(channelId: string, privacy: ChannelType, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc): ActionFuncAsync<Channel> {
-    return async (dispatch, getState) => {
-        let updatedChannel;
-        try {
-            updatedChannel = await Client4.updateChannelPrivacy(channelId, privacy);
-        } catch (error) {
-            forceLogoutIfNecessary(error, dispatch, getState);
-
-            dispatch(logError(error));
-            dispatch(openLimitModalIfNeeded(error, privacy));
-            return {error};
-        }
-
-        dispatch({
-            type: ChannelTypes.RECEIVED_CHANNEL,
-            data: updatedChannel,
-        });
-
-        return {data: updatedChannel};
-    };
+export function updateChannelPrivacy(channelId: string, privacy: string): ActionFuncAsync<Channel> {
+    return bindClientFunc({
+        clientFunc: Client4.updateChannelPrivacy,
+        onSuccess: [ChannelTypes.RECEIVED_CHANNEL],
+        params: [channelId, privacy],
+    });
 }
 
 export function convertGroupMessageToPrivateChannel(channelID: string, teamID: string, displayName: string, name: string): ActionFuncAsync<Channel> {
@@ -750,6 +736,21 @@ export function updateApproximateViewTime(channelId: string): ActionFuncAsync {
     };
 }
 
+export function unsetActiveChannelOnServer(): ActionFuncAsync {
+    return async (dispatch, getState) => {
+        try {
+            // The view channel api in the server handles the active channel
+            await Client4.viewMyChannel('');
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {data: false};
+        }
+
+        return {data: true};
+    };
+}
+
 export function readMultipleChannels(channelIds: string[]): ActionFuncAsync {
     return async (dispatch, getState) => {
         let response;
@@ -1101,6 +1102,45 @@ export function addChannelMember(channelId: string, userId: string, postRootId =
     };
 }
 
+export function addChannelMembers(channelId: string, userIds: string[], postRootId = ''): ActionFuncAsync {
+    const batchSize = 1000;
+    return async (dispatch, getState) => {
+        const channelMembers: ChannelMembership[] = [];
+        try {
+            for (let i = 0; i < userIds.length; i += batchSize) {
+                // eslint-disable-next-line no-await-in-loop
+                const cm = await Client4.addToChannels(userIds.slice(i, i + batchSize), channelId, postRootId);
+                channelMembers.push(...cm);
+            }
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error};
+        }
+
+        Client4.trackEvent('action', 'action_channels_add_member', {channel_id: channelId});
+
+        const ids = channelMembers.map((member) => ({id: member.user_id}));
+        dispatch(batchActions([
+            {
+                type: UserTypes.RECEIVED_PROFILES_IN_CHANNEL,
+                id: channelId,
+                data: ids,
+            },
+            {
+                type: ChannelTypes.RECEIVED_CHANNEL_MEMBERS,
+                data: channelMembers,
+            },
+            {
+                type: ChannelTypes.ADD_CHANNEL_MEMBER_SUCCESS,
+                id: channelId,
+                count: channelMembers.length,
+            },
+        ], 'ADD_CHANNEL_MEMBERS.BATCH'));
+        return {data: channelMembers};
+    };
+}
+
 export function removeChannelMember(channelId: string, userId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         try {
@@ -1347,7 +1387,7 @@ export function favoriteChannel(channelId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const channel = getChannelSelector(state, channelId);
-        const category = getCategoryInTeamByType(state, channel.team_id || getCurrentTeamId(state), CategoryTypes.FAVORITES);
+        const category = getCategoryInTeamByType(state, channel?.team_id || getCurrentTeamId(state), CategoryTypes.FAVORITES);
 
         Client4.trackEvent('action', 'action_channels_favorite');
 
@@ -1364,6 +1404,10 @@ export function unfavoriteChannel(channelId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const channel = getChannelSelector(state, channelId);
+        if (!channel) {
+            return {data: false};
+        }
+
         const category = getCategoryInTeamByType(
             state,
             channel.team_id || getCurrentTeamId(state),
@@ -1485,6 +1529,7 @@ export default {
     getChannelStats,
     addChannelMember,
     notifyChannelMember,
+    addChannelMembers,
     removeChannelMember,
     markChannelAsRead,
     favoriteChannel,

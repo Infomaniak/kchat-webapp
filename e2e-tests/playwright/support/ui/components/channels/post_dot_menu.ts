@@ -16,6 +16,7 @@ export default class PostDotMenu {
     readonly pinToChannelMenuItem;
     readonly unpinFromChannelMenuItem;
     readonly translateMenuItem;
+    readonly moveThreadMenuItem;
     readonly copyLinkMenuItem;
     readonly editMenuItem;
     readonly copyTextMenuItem;
@@ -37,6 +38,7 @@ export default class PostDotMenu {
         this.pinToChannelMenuItem = getMenuItem('Pin to Channel');
         this.unpinFromChannelMenuItem = getMenuItem('Unpin from Channel');
         this.translateMenuItem = getMenuItem('Translate');
+        this.moveThreadMenuItem = getMenuItem('Move Thread');
         this.copyLinkMenuItem = getMenuItem('Copy Link');
         this.editMenuItem = getMenuItem('Edit');
         this.copyTextMenuItem = getMenuItem('Copy Text');

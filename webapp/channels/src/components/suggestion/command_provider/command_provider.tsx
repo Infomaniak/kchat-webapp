@@ -3,6 +3,7 @@
 
 import {DockWindowIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
+import {defineMessages} from 'react-intl';
 import type {Store} from 'redux';
 
 import type {AutocompleteSuggestion, CommandArgs} from '@mattermost/types/integrations';
@@ -288,3 +289,10 @@ export default class CommandProvider extends Provider {
         return matches.findIndex((match) => match.Complete === complete) !== -1;
     }
 }
+
+defineMessages({
+    commandsDivider: {
+        id: 'suggestion.commands',
+        defaultMessage: 'Commands',
+    },
+});

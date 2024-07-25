@@ -1,9 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {useCallback} from 'react';
-import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
 import type {PostPriorityMetadata} from '@mattermost/types/posts';
@@ -12,9 +10,9 @@ import type {UserProfile, UserStatus} from '@mattermost/types/users';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 
 import DraftEditor from 'components/drafts/draft_editor';
+import PriorityLabels from 'components/advanced_text_editor/priority_labels';
 import FilePreview from 'components/file_preview';
 import Markdown from 'components/markdown';
-import PriorityLabel from 'components/post_priority/post_priority_label';
 import ProfilePicture from 'components/profile_picture';
 
 import {imageURLForUser, handleFormattedTextClick} from 'utils/utils';
@@ -84,27 +82,16 @@ function PanelBody({
             >
                 <div className='DraftPanelBody__right'>
                     <div className='post__header'>
-                        <strong className='display_name'>{displayName}</strong>
+                        <strong>{displayName}</strong>
                         {priority && (
-                            <div className='DraftPanelBody__priority'>
-                                {priority.priority && (
-                                    <PriorityLabel
-                                        size='xs'
-                                        priority={priority.priority}
-                                    />
-                                )}
-                                {priority.requested_ack && (
-                                    <div className='DraftPanelBody__priority-ack'>
-                                        <CheckCircleOutlineIcon size={14}/>
-                                        {!priority.priority && (
-                                            <FormattedMessage
-                                                id={'post_priority.request_acknowledgement'}
-                                                defaultMessage={'Request acknowledgement'}
-                                            />
-                                        )}
-                                    </div>
-                                )}
-                            </div>
+                            <PriorityLabels
+                                canRemove={false}
+                                padding='0 0 0 8px'
+                                hasError={false}
+                                persistentNotifications={priority.persistent_notifications}
+                                priority={priority.priority}
+                                requestedAck={priority.requested_ack}
+                            />
                         )}
                     </div>
                     <div className='post__body'>

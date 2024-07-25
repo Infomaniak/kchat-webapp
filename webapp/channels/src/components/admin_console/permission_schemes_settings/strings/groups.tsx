@@ -35,6 +35,16 @@ export const groupRolesStrings: Record<string, Record<string, MessageDescriptor>
             defaultMessage: 'Write, edit and delete posts.',
         },
     }),
+    create_post: defineMessages({
+        name: {
+            id: 'admin.permissions.permission.create_post.name',
+            defaultMessage: 'Create Posts',
+        },
+        description: {
+            id: 'admin.permissions.permission.create_post.description',
+            defaultMessage: 'Allow users to create posts.',
+        },
+    }),
     private_channel: defineMessages({
         name: {
             id: 'admin.permissions.group.private_channel.name',
@@ -253,6 +263,26 @@ export const groupRolesStrings: Record<string, Record<string, MessageDescriptor>
         description: {
             id: 'admin.permissions.group.custom_groups.description',
             defaultMessage: 'Create, edit, delete and manage the members of custom groups.',
+        },
+    }),
+    manage_public_channel_bookmarks: defineMessages({
+        name: {
+            id: 'admin.permissions.group.manage_public_channel_bookmarks.name',
+            defaultMessage: 'Manage Bookmarks',
+        },
+        description: {
+            id: 'admin.permissions.group.manage_public_channel_bookmarks.description',
+            defaultMessage: 'Add, edit, delete and sort bookmarks',
+        },
+    }),
+    manage_private_channel_bookmarks: defineMessages({
+        name: {
+            id: 'admin.permissions.group.manage_private_channel_bookmarks.name',
+            defaultMessage: 'Manage Bookmarks',
+        },
+        description: {
+            id: 'admin.permissions.group.manage_private_channel_bookmarks.description',
+            defaultMessage: 'Add, edit, delete and sort bookmarks',
         },
     }),
 };

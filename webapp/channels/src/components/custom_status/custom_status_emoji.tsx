@@ -81,7 +81,7 @@ function CustomStatusEmoji({
                             emojiName={customStatus.emoji}
                             size={expires ? 14 : 28}
                             emojiStyle={{
-                                marginTop: 2,
+                                marginTop: -1,
                             }}
                         />
                         {customStatus.text &&

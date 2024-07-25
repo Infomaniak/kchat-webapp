@@ -21,6 +21,7 @@ const CenterControlsContainer = styled.div`
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
     border-left: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
     flex-basis: 40%;
+    background-color: #fff;
 
     > * + * {
         margin-left: 3px;

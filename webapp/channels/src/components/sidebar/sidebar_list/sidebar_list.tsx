@@ -38,7 +38,7 @@ import SidebarCategory from '../sidebar_category';
 import UnreadChannelIndicator from '../unread_channel_indicator';
 import UnreadChannels from '../unread_channels';
 
-export function renderView(props: any) {
+export function renderView(props: React.HTMLProps<HTMLDivElement>) {
     return (
         <div
             {...props}
@@ -47,7 +47,7 @@ export function renderView(props: any) {
     );
 }
 
-export function renderThumbHorizontal(props: any) {
+export function renderThumbHorizontal(props: React.HTMLProps<HTMLDivElement>) {
     return (
         <div
             {...props}
@@ -56,7 +56,7 @@ export function renderThumbHorizontal(props: any) {
     );
 }
 
-export function renderTrackVertical(props: any) {
+export function renderTrackVertical(props: React.HTMLProps<HTMLDivElement>) {
     return (
         <div
             {...props}
@@ -65,7 +65,7 @@ export function renderTrackVertical(props: any) {
     );
 }
 
-export function renderThumbVertical(props: any) {
+export function renderThumbVertical(props: React.HTMLProps<HTMLDivElement>) {
     return (
         <div
             {...props}
@@ -77,7 +77,7 @@ export function renderThumbVertical(props: any) {
 const scrollbarStyles: CSSProperties = {position: 'absolute'};
 
 type Props = {
-    currentTeam: Team;
+    currentTeam?: Team;
     currentChannelId: string;
     categories: ChannelCategory[];
     unreadChannelIds: string[];
@@ -115,6 +115,7 @@ type Props = {
 type State = {
     showTopUnread: boolean;
     showBottomUnread: boolean;
+    autoHide: boolean;
 };
 
 // scrollMargin is the margin at the edge of the channel list that we leave when scrolling to a channel.
@@ -132,6 +133,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
     scrollbar: React.RefObject<Scrollbars>;
     animate: SpringSystem;
     scrollAnimation: Spring;
+    channelsListScrollTimeout: NodeJS.Timeout | null = null;
 
     constructor(props: Props) {
         super(props);
@@ -140,6 +142,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
         this.state = {
             showTopUnread: false,
             showBottomUnread: false,
+            autoHide: true,
         };
         this.scrollbar = React.createRef();
 
@@ -512,12 +515,26 @@ export default class SidebarList extends React.PureComponent<Props, State> {
                 this.props.actions.moveChannelsInSidebar(result.destination.droppableId, result.destination.index, result.draggableId);
                 trackEvent('ui', 'ui_sidebar_dragdrop_dropped_channel');
             } else if (result.type === 'SIDEBAR_CATEGORY') {
-                this.props.actions.moveCategory(this.props.currentTeam.id, result.draggableId, result.destination.index);
+                this.props.actions.moveCategory(this.props.currentTeam!.id, result.draggableId, result.destination.index);
                 trackEvent('ui', 'ui_sidebar_dragdrop_dropped_category');
             }
         }
 
         this.props.actions.stopDragging();
+    };
+
+    showChannelListScrollbar = () => {
+        if (this.channelsListScrollTimeout !== null) {
+            clearTimeout(this.channelsListScrollTimeout);
+        }
+
+        this.setState({autoHide: false});
+    };
+
+    hideChannelListScrollbar = () => {
+        this.channelsListScrollTimeout = setTimeout(() => {
+            this.setState({autoHide: true});
+        }, 300);
     };
 
     render() {
@@ -621,20 +638,23 @@ export default class SidebarList extends React.PureComponent<Props, State> {
                         extraClass='nav-pills__unread-indicator-bottom'
                         content={below}
                     />
-                    <Scrollbars
-                        ref={this.scrollbar}
-                        autoHide={true}
-                        autoHideTimeout={500}
-                        autoHideDuration={500}
-                        renderThumbHorizontal={renderThumbHorizontal}
-                        renderThumbVertical={renderThumbVertical}
-                        renderTrackVertical={renderTrackVertical}
-                        renderView={renderView}
-                        onScroll={this.onScroll}
-                        style={scrollbarStyles}
+                    <div
+                        onPointerLeave={this.hideChannelListScrollbar}
+                        onPointerOver={this.showChannelListScrollbar}
                     >
-                        {channelList}
-                    </Scrollbars>
+                        <Scrollbars
+                            ref={this.scrollbar}
+                            autoHide={this.state.autoHide}
+                            renderThumbHorizontal={renderThumbHorizontal}
+                            renderThumbVertical={renderThumbVertical}
+                            renderTrackVertical={renderTrackVertical}
+                            renderView={renderView}
+                            onScroll={this.onScroll}
+                            style={scrollbarStyles}
+                        >
+                            {channelList}
+                        </Scrollbars>
+                    </div>
                 </div>
             </>
         );

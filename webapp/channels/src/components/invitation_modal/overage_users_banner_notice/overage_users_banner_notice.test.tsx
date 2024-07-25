@@ -10,15 +10,14 @@ import {General} from 'mattermost-redux/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import {LicenseLinks, OverActiveUserLimits, Preferences, SelfHostedProducts, StatTypes} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
-import {generateId} from 'utils/utils';
-
 import {
     fireEvent,
     renderWithContext,
     screen,
 } from 'tests/react_testing_utils';
+import {LicenseLinks, OverActiveUserLimits, Preferences, SelfHostedProducts, StatTypes} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
+import {generateId} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -51,7 +50,6 @@ const text10PercentageState = `Your workspace user count has exceeded your paid 
 const notifyText = 'Notify your Customer Success Manager on your next true-up check';
 
 const contactSalesTextLink = 'Contact Sales';
-const expandSeatsTextLink = 'Purchase additional seats';
 
 const licenseId = generateId();
 
@@ -91,12 +89,7 @@ describe('components/invitation_modal/overage_users_banner_notice', () => {
             preferences: {
                 myPreferences: {},
             },
-            cloud: {
-                subscriptionStats: {
-                    is_expandable: false,
-                    getRequestState: 'IDLE',
-                },
-            },
+            cloud: {},
             hostedCustomer: {
                 products: {
                     productsLoaded: true,
@@ -227,10 +220,6 @@ describe('components/invitation_modal/overage_users_banner_notice', () => {
 
         store.entities.cloud = {
             ...store.entities.cloud,
-            subscriptionStats: {
-                is_expandable: false,
-                getRequestState: 'OK',
-            },
         };
 
         renderWithContext(
@@ -241,7 +230,8 @@ describe('components/invitation_modal/overage_users_banner_notice', () => {
         fireEvent.click(screen.getByText(contactSalesTextLink));
         expect(screen.getByRole('link')).toHaveAttribute(
             'href',
-            LicenseLinks.CONTACT_SALES,
+            LicenseLinks.CONTACT_SALES +
+                '?utm_source=mattermost&utm_medium=in-product&utm_content=overage_users_banner&uid=current_user&sid=',
         );
         expect(trackEvent).toBeCalledTimes(2);
         expect(trackEvent).toBeCalledWith('insights', 'click_true_up_warning', {
@@ -336,10 +326,6 @@ describe('components/invitation_modal/overage_users_banner_notice', () => {
 
         store.entities.cloud = {
             ...store.entities.cloud,
-            subscriptionStats: {
-                is_expandable: false,
-                getRequestState: 'OK',
-            },
         };
 
         renderWithContext(
@@ -350,7 +336,8 @@ describe('components/invitation_modal/overage_users_banner_notice', () => {
         fireEvent.click(screen.getByText(contactSalesTextLink));
         expect(screen.getByRole('link')).toHaveAttribute(
             'href',
-            LicenseLinks.CONTACT_SALES,
+            LicenseLinks.CONTACT_SALES +
+                '?utm_source=mattermost&utm_medium=in-product&utm_content=overage_users_banner&uid=current_user&sid=',
         );
         expect(trackEvent).toBeCalledTimes(2);
         expect(trackEvent).toBeCalledWith('insights', 'click_true_up_error', {
@@ -443,70 +430,6 @@ describe('components/invitation_modal/overage_users_banner_notice', () => {
         }]);
     });
 
-    it('should track if the admin click expansion seats CTA in a 5% overage state', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
-
-        store.entities.admin = {
-            ...store.entities.admin,
-            analytics: {
-                [StatTypes.TOTAL_USERS]: seatsMinimumFor5PercentageState,
-            },
-        };
-
-        store.entities.cloud = {
-            ...store.entities.cloud,
-            subscriptionStats: {
-                is_expandable: true,
-                getRequestState: 'OK',
-            },
-        };
-
-        renderWithContext(
-            <OverageUsersBannerNotice/>,
-            store,
-        );
-
-        fireEvent.click(screen.getByText(expandSeatsTextLink));
-        expect(screen.getByRole('link')).toHaveAttribute('href', `http://testing/subscribe/expand?licenseId=${licenseId}`);
-        expect(trackEvent).toBeCalledTimes(2);
-        expect(trackEvent).toBeCalledWith('insights', 'click_true_up_warning', {
-            cta: 'Self Serve',
-            banner: 'invite modal',
-        });
-    });
-
-    it('should track if the admin click expansion seats CTA in a 10% overage state', () => {
-        const store: GlobalState = JSON.parse(JSON.stringify(initialState));
-
-        store.entities.admin = {
-            ...store.entities.admin,
-            analytics: {
-                [StatTypes.TOTAL_USERS]: seatsMinimumFor10PercentageState,
-            },
-        };
-
-        store.entities.cloud = {
-            ...store.entities.cloud,
-            subscriptionStats: {
-                is_expandable: true,
-                getRequestState: 'OK',
-            },
-        };
-
-        renderWithContext(
-            <OverageUsersBannerNotice/>,
-            store,
-        );
-
-        fireEvent.click(screen.getByText(expandSeatsTextLink));
-        expect(screen.getByRole('link')).toHaveAttribute('href', `http://testing/subscribe/expand?licenseId=${licenseId}`);
-        expect(trackEvent).toBeCalledTimes(2);
-        expect(trackEvent).toBeCalledWith('insights', 'click_true_up_error', {
-            cta: 'Self Serve',
-            banner: 'invite modal',
-        });
-    });
-
     it('gov sku sees overage notice but not a call to do true up', async () => {
         const store: GlobalState = JSON.parse(JSON.stringify(initialState));
 
@@ -519,10 +442,6 @@ describe('components/invitation_modal/overage_users_banner_notice', () => {
 
         store.entities.cloud = {
             ...store.entities.cloud,
-            subscriptionStats: {
-                is_expandable: false,
-                getRequestState: 'OK',
-            },
         };
         store.entities.general.license.IsGovSku = 'true';
 

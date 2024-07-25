@@ -29,7 +29,6 @@ type Props = {
     user: UserProfile;
     displayName: string;
     status: UserStatus['status'];
-    localDraftsAreEnabled: boolean;
     invalidScheduledAmount: number;
     draftRemotes: Record<string, boolean>;
 }
@@ -40,7 +39,6 @@ function Drafts({
     draftRemotes,
     status,
     user,
-    localDraftsAreEnabled,
     invalidScheduledAmount,
 }: Props) {
     const dispatch = useDispatch();
@@ -67,10 +65,6 @@ function Drafts({
             dispatch(unsuppressRHS);
         };
     }, []);
-
-    if (!localDraftsAreEnabled) {
-        return null;
-    }
 
     let invalidScheduledIndicator;
     if (showInvalidScheduledIndicator && filter !== DraftFilter.NOT_SCHEDULED) {

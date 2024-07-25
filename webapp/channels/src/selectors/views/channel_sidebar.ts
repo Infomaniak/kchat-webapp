@@ -217,7 +217,7 @@ export function makeGetFilteredChannelIdsForCategory(): (state: GlobalState, cat
         'makeGetFilteredChannelIdsForCategory',
         getChannelIdsForCategory,
         getUnreadChannelIdsSet,
-        shouldShowUnreadsCategory,
+        (state: GlobalState) => shouldShowUnreadsCategory(state),
         (channelIds, unreadChannelIdsSet, showUnreadsCategory) => {
             if (!showUnreadsCategory) {
                 return channelIds;
@@ -240,7 +240,7 @@ export function makeGetUnreadIdsForCategory(): (state: GlobalState, category: Ch
         'makeGetFilteredChannelIdsForCategory',
         getChannelIdsForCategory,
         getUnreadChannelIdsSet,
-        shouldShowUnreadsCategory,
+        (state: GlobalState) => shouldShowUnreadsCategory(state),
         (channelIds, unreadChannelIdsSet, showUnreadsCategory) => {
             if (showUnreadsCategory) {
                 return emptyList;

@@ -20,6 +20,9 @@ const config = {
         'src/utils/**/*.{js,jsx,ts,tsx}',
     ],
     coverageReporters: ['text-summary', 'lcov', 'cobertura'],
+    fakeTimers: {
+        doNotFake: ['performance'],
+    },
     moduleNameMapper: {
         '^@mattermost/(components)$': '<rootDir>/../platform/$1/src',
         '^@mattermost/(client)$': '<rootDir>/../platform/$1/src',
@@ -28,7 +31,7 @@ const config = {
             '<rootDir>/src/packages/mattermost-redux/test/$1',
         '^mattermost-redux/(.*)$': '<rootDir>/src/packages/mattermost-redux/src/$1',
         '^.+\\.(jpg|jpeg|png|apng|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-            'identity-obj-proxy',
+            '<rootDir>/src/tests/image_url_mock.json',
         '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
         '^.*i18n.*\\.(json)$': '<rootDir>/src/tests/i18n_mock.json',
         '^@mattermost/compass-icons/(.*)$': '<rootDir>/../../node_modules/@infomaniak/compass-icons/$1',

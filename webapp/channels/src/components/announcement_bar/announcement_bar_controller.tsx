@@ -8,21 +8,17 @@ import type {ClientLicense, ClientConfig, WarnMetricStatus} from '@mattermost/ty
 import withGetCloudSubscription from 'components/common/hocs/cloud/with_get_cloud_subscription';
 
 import AppStoreBar from './appstore_announcement_bar';
-import AnnouncementBar from './default_announcement_bar';
 import MASMigrationBar from './mas_migration_bar';
+import CloudTrialAnnouncementBar from './cloud_trial_announcement_bar';
+import ConfigurationAnnouncementBar from './configuration_bar';
+import AnnouncementBar from './default_announcement_bar';
+import NotificationPermissionBar from './notification_permission_bar';
 import OverageUsersBanner from './overage_users_banner';
 import TextDismissableBar from './text_dismissable_bar';
 import UsersLimitsAnnouncementBar from './users_limits_announcement_bar';
 import VersionBar from './version_bar';
 
-// import ShowThreeDaysLeftTrialModal from './show_tree_days_left_trial_modal/show_three_days_left_trial_modal';
-// import AutoStartTrialModal from './show_start_trial_modal/show_start_trial_modal';
-// import {ToPaidPlanBannerDismissable} from 'components/admin_console/billing/billing_subscriptions/to_paid_plan_nudge_banner';
-// import CloudAnnualRenewalAnnouncementBar from './cloud_annual_renewal';
-// import CloudDelinquencyAnnouncementBar from './cloud_delinquency';
-// import CloudTrialAnnouncementBar from './cloud_trial_announcement_bar';
 // import CloudTrialEndAnnouncementBar from './cloud_trial_ended_announcement_bar';
-// import PaymentAnnouncementBar from './payment_announcement_bar';
 
 type Props = {
     license?: ClientLicense;
@@ -46,6 +42,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
         if (this.props.config?.EnableBanner === 'true' && this.props.config.BannerText?.trim()) {
             adminConfiguredAnnouncementBar = (
                 <TextDismissableBar
+                    className='admin-announcement'
                     color={this.props.config.BannerColor}
                     textColor={this.props.config.BannerTextColor}
                     allowDismissal={this.props.config.AllowBannerDismissal === 'true'}
@@ -66,11 +63,9 @@ class AnnouncementBarController extends React.PureComponent<Props> {
             );
         }
 
-        const paymentAnnouncementBar = null;
-        const cloudTrialAnnouncementBar = null;
-        const cloudTrialEndAnnouncementBar = null;
-        const cloudDelinquencyAnnouncementBar = null;
-        const cloudRenewalAnnouncementBar = null;
+        let paymentAnnouncementBar = null;
+        let cloudTrialAnnouncementBar = null;
+        let cloudTrialEndAnnouncementBar = null;
         const notifyAdminDowngradeDelinquencyBar = null;
         const toYearlyNudgeBannerDismissable = null;
         let toPaidPlanNudgeBannerDismissable = null;
@@ -84,12 +79,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
             // cloudTrialEndAnnouncementBar = (
             //     <CloudTrialEndAnnouncementBar/>
             // );
-            // cloudDelinquencyAnnouncementBar = (
-            //     <CloudDelinquencyAnnouncementBar/>
-            // );
-            // cloudRenewalAnnouncementBar = (
-            //     <CloudAnnualRenewalAnnouncementBar/>
-            // );
+
             toPaidPlanNudgeBannerDismissable = (<ToPaidPlanBannerDismissable/>);
         }
 
@@ -101,8 +91,19 @@ class AnnouncementBarController extends React.PureComponent<Props> {
         //     );
         // }
 
+        // The component specified further down takes priority over the component above it.
+        // For example, consider this-
+        // {
+        //    Foo
+        //    Bar
+        //    Baz
+        // }
+        // Even if all Foo, Bar and Baz render, only Baz is visible as it's further down.
+        // One exception to this rule is for admin configured announcement banners
+        // If set with class 'admin-announcement', they will always be visible, stacked vertically.
         return (
             <>
+                <NotificationPermissionBar/>
                 {adminConfiguredAnnouncementBar}
                 {errorBar}
                 <UsersLimitsAnnouncementBar
@@ -112,8 +113,6 @@ class AnnouncementBarController extends React.PureComponent<Props> {
                 {paymentAnnouncementBar}
                 {cloudTrialAnnouncementBar}
                 {cloudTrialEndAnnouncementBar}
-                {cloudDelinquencyAnnouncementBar}
-                {cloudRenewalAnnouncementBar}
                 {notifyAdminDowngradeDelinquencyBar}
                 {toYearlyNudgeBannerDismissable}
                 {toPaidPlanNudgeBannerDismissable}

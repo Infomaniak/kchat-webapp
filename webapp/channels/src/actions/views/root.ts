@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {ClientConfig} from '@mattermost/types/config';
+
 import {getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
 import {loadMe} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
@@ -22,17 +24,17 @@ const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};
 
 export type TranslationPluginFunction = (locale: string) => Translations
 
-export function loadConfigAndMe(): ActionFuncAsync<boolean> {
+export function loadConfigAndMe(): ThunkActionFunc<Promise<{config?: ClientConfig; isMeLoaded: boolean}>> {
     return async (dispatch) => {
         // If expired, refresh token
-        if (isDesktopApp() && checkIKTokenIsExpired()) {
-            console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
-            await refreshIKToken(/*redirectToReam*/false)?.catch((e: unknown) => {
-                console.warn('[actions/view/root] desktop token refresh error: ', e); // eslint-disable-line no-console
-            });
-        }
+        // if (isDesktopApp() && checkIKTokenIsExpired()) {
+        //     console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
+        //     await refreshIKToken(/*redirectToReam*/false)?.catch((e: unknown) => {
+        //         console.warn('[actions/view/root] desktop token refresh error: ', e); // eslint-disable-line no-console
+        //     });
+        // }
 
-        await Promise.all([
+        const results = await Promise.all([
             dispatch(getClientConfig()),
             dispatch(getLicenseConfig()),
         ]);
@@ -45,7 +47,10 @@ export function loadConfigAndMe(): ActionFuncAsync<boolean> {
 
         // }
 
-        return {data: isMeLoaded};
+        return {
+            config: results[0].data,
+            isMeLoaded,
+        };
     };
 }
 

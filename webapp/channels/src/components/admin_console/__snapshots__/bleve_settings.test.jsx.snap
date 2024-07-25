@@ -15,15 +15,12 @@ exports[`components/BleveSettings should match snapshot, disabled 1`] = `
         id="admin.bleve.title"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <BooleanSetting
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -49,7 +46,7 @@ exports[`components/BleveSettings should match snapshot, disabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -152,7 +149,7 @@ exports[`components/BleveSettings should match snapshot, disabled 1`] = `
         disabled={true}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -173,7 +170,7 @@ exports[`components/BleveSettings should match snapshot, disabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -183,7 +180,7 @@ exports[`components/BleveSettings should match snapshot, disabled 1`] = `
         disabled={true}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -204,18 +201,18 @@ exports[`components/BleveSettings should match snapshot, disabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
         value={false}
       />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
+        btnClass=""
         defaultMessage={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Save"
@@ -269,15 +266,12 @@ exports[`components/BleveSettings should match snapshot, enabled 1`] = `
         id="admin.bleve.title"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <BooleanSetting
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -303,7 +297,7 @@ exports[`components/BleveSettings should match snapshot, enabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -406,7 +400,7 @@ exports[`components/BleveSettings should match snapshot, enabled 1`] = `
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -427,7 +421,7 @@ exports[`components/BleveSettings should match snapshot, enabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -437,7 +431,7 @@ exports[`components/BleveSettings should match snapshot, enabled 1`] = `
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -458,18 +452,18 @@ exports[`components/BleveSettings should match snapshot, enabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
         value={false}
       />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
+        btnClass=""
         defaultMessage={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Save"

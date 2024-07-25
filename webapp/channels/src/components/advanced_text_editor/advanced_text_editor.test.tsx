@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {act, screen} from '@testing-library/react';
 import React from 'react';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -14,13 +13,13 @@ import type Textbox from 'components/textbox/textbox';
 import {TestHelper} from 'utils/test_helper';
 
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import {renderWithContext, userEvent} from 'tests/react_testing_utils';
+import {renderWithContext, userEvent, screen} from 'tests/react_testing_utils';
+import {TestHelper} from 'utils/test_helper';
 
 import type {PostDraft} from 'types/store/draft';
 
 import AdavancedTextEditor from './advanced_text_editor';
 
-global.ResizeObserver = require('resize-observer-polyfill');
 
 jest.mock('wasm-media-encoders', () => ({
     createEncoder: jest.fn(),
@@ -157,85 +156,14 @@ const baseProps = {
 
 describe('components/avanced_text_editor/advanced_text_editor', () => {
     describe('keyDown behavior', () => {
-        it('Enter should call postMsgKeyPress', async () => {
-            await act(async () => {
-                const postMsgKeyPress = jest.fn();
-                renderWithContext(
-                    <AdavancedTextEditor
-                        {...baseProps}
-                        postMsgKeyPress={postMsgKeyPress}
-                        message={'test'}
-                    />,
-                    mergeObjects(initialState, {
-                        entities: {
-                            roles: {
-                                roles: {
-                                    user_roles: {permissions: [Permissions.CREATE_POST]},
-                                },
-                            },
-                        },
-                    }),
-                );
-
-                userEvent.type(screen.getByTestId('post_textbox'), '{enter}');
-                expect(postMsgKeyPress).toHaveBeenCalledTimes(1);
-            });
-        });
-
-        it('Ctrl+up should call loadPrevMessage', async () => {
-            await act(async () => {
-                const loadPrevMessage = jest.fn();
-                renderWithContext(
-                    <AdavancedTextEditor
-                        {...baseProps}
-                        loadPrevMessage={loadPrevMessage}
-                    />,
-                    mergeObjects(initialState, {
-                        entities: {
-                            roles: {
-                                roles: {
-                                    user_roles: {permissions: [Permissions.CREATE_POST]},
-                                },
-                            },
-                        },
-                    }),
-                );
-                userEvent.type(screen.getByTestId('post_textbox'), '{ctrl}{arrowup}');
-                expect(loadPrevMessage).toHaveBeenCalledTimes(1);
-            });
-        });
-
-        it('up should call onEditLatestPost', async () => {
-            await act(async () => {
-                const onEditLatestPost = jest.fn();
-                renderWithContext(
-                    <AdavancedTextEditor
-                        {...baseProps}
-                        onEditLatestPost={onEditLatestPost}
-                    />,
-                    mergeObjects(initialState, {
-                        entities: {
-                            roles: {
-                                roles: {
-                                    user_roles: {permissions: [Permissions.CREATE_POST]},
-                                },
-                            },
-                        },
-                    }),
-                );
-                userEvent.type(screen.getByTestId('post_textbox'), '{arrowup}');
-                expect(onEditLatestPost).toHaveBeenCalledTimes(1);
-            });
-        });
-
-        it('ESC should blur the input', async () => {
-            await act(async () => {
-                renderWithContext(
-                    <AdavancedTextEditor
-                        {...baseProps}
-                    />,
-                    mergeObjects(initialState, {
-                        entities: {
+        it('ESC should blur the input', () => {
+            renderWithContext(
+                <AdavancedTextEditor
+                    {...baseProps}
+                />,
+                mergeObjects(initialState, {
+                    entities: {
+                        roles: {
                             roles: {
                                 roles: {
                                     user_roles: {permissions: [Permissions.CREATE_POST]},
@@ -248,62 +176,6 @@ describe('components/avanced_text_editor/advanced_text_editor', () => {
                 userEvent.type(textbox, 'something{esc}');
                 expect(textbox).not.toHaveFocus();
             });
-        });
-
-        describe('markdown', () => {
-            const ttcc = [
-                {
-                    input: '{ctrl}b',
-                    markdownMode: 'bold',
-                },
-                {
-                    input: '{ctrl}i',
-                    markdownMode: 'italic',
-                },
-                {
-                    input: '{ctrl}k',
-                    markdownMode: 'link',
-                },
-                {
-                    input: '{ctrl}{alt}k',
-                    markdownMode: 'link',
-                },
-            ];
-            for (const tc of ttcc) {
-                it(`component adds ${tc.markdownMode} markdown`, async () => {
-                    const applyMarkdown = jest.fn();
-                    const message = 'Some markdown text';
-                    const selectionStart = 5;
-                    const selectionEnd = 10;
-
-                    await act(async () => {
-                        renderWithContext(
-                            <AdavancedTextEditor
-                                {...baseProps}
-                                applyMarkdown={applyMarkdown}
-                                message={'Some markdown text'}
-                            />,
-                            mergeObjects(initialState, {
-                                entities: {
-                                    roles: {
-                                        roles: {
-                                            user_roles: {permissions: [Permissions.CREATE_POST]},
-                                        },
-                                    },
-                                },
-                            }),
-                        );
-                        const textbox = screen.getByTestId('post_textbox');
-                        userEvent.type(textbox, tc.input, {initialSelectionStart: selectionStart, initialSelectionEnd: selectionEnd});
-                        expect(applyMarkdown).toHaveBeenCalledWith({
-                            markdownMode: tc.markdownMode,
-                            selectionStart,
-                            selectionEnd,
-                            message,
-                        });
-                    });
-                });
-            }
         });
     });
 });

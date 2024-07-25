@@ -3,6 +3,7 @@
 
 import classNames from 'classnames';
 import React from 'react';
+import {defineMessages} from 'react-intl';
 import {connect, useSelector} from 'react-redux';
 
 import type {Channel, ChannelMembership, ChannelType} from '@mattermost/types/channels';
@@ -74,6 +75,7 @@ const ThreadsChannel: FakeChannel = {
     name: 'threads',
     display_name: 'Threads',
     type: Constants.THREADS,
+    update_at: 0,
     delete_at: 0,
 };
 
@@ -82,10 +84,11 @@ const InsightsChannel = {
     name: 'activity-and-insights',
     display_name: 'Insights',
     type: Constants.INSIGHTS,
+    update_at: 0,
     delete_at: 0,
 };
 
-type FakeChannel = Pick<Channel, 'id' | 'name' | 'display_name' | 'delete_at'> & {
+type FakeChannel = Pick<Channel, 'id' | 'name' | 'display_name' | 'update_at' | 'delete_at'> & {
     type: string;
 }
 
@@ -906,3 +909,22 @@ export default class SwitchChannelProvider extends Provider {
         });
     }
 }
+
+defineMessages({
+    moreChannels: {
+        id: 'suggestion.mention.morechannels',
+        defaultMessage: 'Other Channels',
+    },
+    privateChannelsDivider: {
+        id: 'suggestion.mention.private.channels',
+        defaultMessage: 'Private Channels',
+    },
+    recentChannels: {
+        id: 'suggestion.mention.recent.channels',
+        defaultMessage: 'Recent',
+    },
+    unreadChannels: {
+        id: 'suggestion.mention.unread',
+        defaultMessage: 'Unread',
+    },
+});

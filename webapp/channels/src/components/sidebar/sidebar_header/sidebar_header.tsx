@@ -42,7 +42,7 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
     justify: 'space-between',
     alignment: 'center',
 }))<SidebarHeaderContainerProps>`
-    height: 52px;
+    height: 55px;
     padding: 0 16px;
     gap: 8px;
 
@@ -104,7 +104,7 @@ export type Props = {
     canCreateCustomGroups: boolean;
 }
 
-const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
+const SidebarHeader = (props: Props) => {
     const dispatch = useDispatch();
     const currentTeam = useSelector((state: GlobalState) => getCurrentTeam(state));
     const currentServer = useSelector((state: GlobalState) => getCurrentServer(state));
@@ -123,6 +123,10 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
     const handleMenuToggle = () => {
         setMenuToggled(!menuToggled);
     };
+
+    if (!currentTeam) {
+        return null;
+    }
 
     return (
         <CompassThemeProvider theme={theme}>

@@ -3,10 +3,10 @@
 
 import {UserTypes, CloudTypes} from 'mattermost-redux/action_types';
 import {
-    getMentionsAndStatusesForPosts,
-    getThreadsForPosts,
+    getPostThreads,
     receivedNewPost,
 } from 'mattermost-redux/actions/posts';
+import {batchFetchStatusesProfilesGroupsFromPosts} from 'mattermost-redux/actions/status_profile_polling';
 import {getUser} from 'mattermost-redux/actions/users';
 
 import {handleNewPost} from 'actions/post_actions';
@@ -39,8 +39,18 @@ import {
 
 jest.mock('mattermost-redux/actions/posts', () => ({
     ...jest.requireActual('mattermost-redux/actions/posts'),
-    getThreadsForPosts: jest.fn(() => ({type: 'GET_THREADS_FOR_POSTS'})),
+    getPostThreads: jest.fn(() => ({type: 'GET_THREADS_FOR_POSTS'})),
     getMentionsAndStatusesForPosts: jest.fn(),
+}));
+
+jest.mock('mattermost-redux/actions/status_profile_polling', () => ({
+    ...jest.requireActual('mattermost-redux/actions/status_profile_polling'),
+    batchFetchStatusesProfilesGroupsFromPosts: jest.fn(() => ({type: ''})),
+}));
+
+jest.mock('mattermost-redux/actions/groups', () => ({
+    ...jest.requireActual('mattermost-redux/actions/groups'),
+    getGroup: jest.fn(() => ({type: 'RECEIVED_GROUP'})),
 }));
 
 jest.mock('mattermost-redux/actions/users', () => ({
@@ -239,7 +249,7 @@ describe('handleUserRemovedEvent', () => {
 
     let redirectUserToDefaultTeam;
     beforeEach(async () => {
-        const globalActions = require('actions/global_actions'); // eslint-disable-line global-require
+        const globalActions = require('actions/global_actions');
         redirectUserToDefaultTeam = globalActions.redirectUserToDefaultTeam;
         redirectUserToDefaultTeam.mockReset();
     });
@@ -426,29 +436,28 @@ describe('handleNewPostEvent', () => {
         };
 
         testStore.dispatch(handleNewPostEvent(msg));
-        expect(getMentionsAndStatusesForPosts).toHaveBeenCalledWith([post], expect.anything(), expect.anything());
         expect(handleNewPost).toHaveBeenCalledWith(post, msg);
+        expect(batchFetchStatusesProfilesGroupsFromPosts).toHaveBeenCalledWith([post]);
     });
 
-    // weird stuff happens with this test
-    // test('should set other user to online', () => {
-    //     const testStore = configureStore(initialState);
+    test('should set other user to online', () => {
+        const testStore = configureStore(initialState);
 
-    //     const post = {id: 'post1', channel_id: 'channel1', user_id: 'user2'};
-    //     const msg = {
-    //         data: {
-    //             post: JSON.stringify(post),
-    //             set_online: true,
-    //         },
-    //     };
+        const post = {id: 'post1', channel_id: 'channel1', user_id: 'user2'};
+        const msg = {
+            data: {
+                post: JSON.stringify(post),
+                set_online: true,
+            },
+        };
 
-    //     testStore.dispatch(handleNewPostEvent(msg));
+        testStore.dispatch(handleNewPostEvent(msg));
 
-    //     expect(testStore.getActions()).toContainEqual({
-    //         type: UserTypes.RECEIVED_STATUSES,
-    //         data: [{user_id: post.user_id, status: UserStatuses.ONLINE}],
-    //     });
-    // });
+        expect(testStore.getActions()).toContainEqual({
+            type: UserTypes.RECEIVED_STATUSES,
+            data: [{[post.user_id]: UserStatuses.ONLINE}],
+        });
+    });
 
     test('should not set other user to online if post was from autoresponder', () => {
         const testStore = configureStore(initialState);
@@ -465,7 +474,7 @@ describe('handleNewPostEvent', () => {
 
         expect(testStore.getActions()).not.toContainEqual({
             type: UserTypes.RECEIVED_STATUSES,
-            data: [{user_id: post.user_id, status: UserStatuses.ONLINE}],
+            data: [{[post.user_id]: UserStatuses.ONLINE}],
         });
     });
 
@@ -495,7 +504,7 @@ describe('handleNewPostEvent', () => {
 
         expect(testStore.getActions()).not.toContainEqual({
             type: UserTypes.RECEIVED_STATUSES,
-            data: [{user_id: post.user_id, status: UserStatuses.ONLINE}],
+            data: [{[post.user_id]: UserStatuses.ONLINE}],
         });
     });
 
@@ -514,7 +523,7 @@ describe('handleNewPostEvent', () => {
 
         expect(testStore.getActions()).not.toContainEqual({
             type: UserTypes.RECEIVED_STATUSES,
-            data: [{user_id: post.user_id, status: UserStatuses.ONLINE}],
+            data: [{[post.user_id]: UserStatuses.ONLINE}],
         });
     });
 });
@@ -548,18 +557,17 @@ describe('handleNewPostEvents', () => {
 
         testStore.dispatch(handleNewPostEvents(queue));
 
-        expect(testStore.getActions()).toEqual([
-            {
-                meta: {batch: true},
-                payload: posts.map((post) => receivedNewPost(post, false)),
-                type: 'BATCHING_REDUCER.BATCH',
-            },
-            {
-                type: 'GET_THREADS_FOR_POSTS',
-            },
-        ]);
-        expect(getThreadsForPosts).toHaveBeenCalledWith(posts);
-        expect(getMentionsAndStatusesForPosts).toHaveBeenCalledWith(posts, expect.anything(), expect.anything());
+        expect(testStore.getActions()[0]).toEqual({
+            type: 'BATCHING_REDUCER.BATCH',
+            meta: {batch: true},
+            payload: posts.map((post) => receivedNewPost(post, false)),
+        });
+        expect(testStore.getActions()[1]).toEqual({
+            type: 'GET_THREADS_FOR_POSTS',
+        });
+
+        expect(getPostThreads).toHaveBeenCalledWith(posts);
+        expect(batchFetchStatusesProfilesGroupsFromPosts).toHaveBeenCalledWith(posts);
     });
 });
 

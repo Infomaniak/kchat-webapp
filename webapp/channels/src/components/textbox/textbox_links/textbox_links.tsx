@@ -11,7 +11,6 @@ type Props = {
     previewMessageLink?: ReactNode;
     hasText?: boolean;
     hasExceededCharacterLimit?: boolean;
-    isMarkdownPreviewEnabled: boolean;
     currentLocale: string;
     updatePreview?: (showPreview: boolean) => void;
 };
@@ -21,7 +20,6 @@ function TextboxLinks({
     previewMessageLink,
     hasText = false,
     hasExceededCharacterLimit = false,
-    isMarkdownPreviewEnabled,
     currentLocale,
     updatePreview,
 }: Props) {
@@ -49,25 +47,22 @@ function TextboxLinks({
         );
     }
 
-    let previewLink = null;
-    if (isMarkdownPreviewEnabled) {
-        previewLink = (
-            <button
-                id='previewLink'
-                onClick={togglePreview}
-                className='style--none textbox-preview-link color--link'
-            >
-                {showPreview ? (
-                    editHeader
-                ) : (
-                    <FormattedMessage
-                        id='textbox.preview'
-                        defaultMessage='Preview'
-                    />
-                )}
-            </button>
-        );
-    }
+    const previewLink = (
+        <button
+            id='previewLink'
+            onClick={togglePreview}
+            className='style--none textbox-preview-link color--link'
+        >
+            {showPreview ? (
+                editHeader
+            ) : (
+                <FormattedMessage
+                    id='textbox.preview'
+                    defaultMessage='Preview'
+                />
+            )}
+        </button>
+    );
 
     const helpText = (
         <div

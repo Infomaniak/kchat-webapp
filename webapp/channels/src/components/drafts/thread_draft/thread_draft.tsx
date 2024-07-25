@@ -33,7 +33,7 @@ import PanelBody from '../panel/panel_body';
 import Header from '../panel/panel_header';
 
 type Props = {
-    channel: Channel;
+    channel?: Channel;
     channelUrl: string;
     displayName: string;
     draftId: string;
@@ -79,33 +79,34 @@ function ThreadDraft({
     }, [thread?.id]);
 
     const onSubmit = useMemo(() => {
-        if (thread) {
-            return makeOnSubmit(channel.id, thread.id, '');
+        if (thread?.id) {
+            return makeOnSubmit(value.channelId, thread.id, '');
         }
 
         return () => Promise.resolve({data: true});
-    }, [channel.id, thread?.id]);
+    }, [value.channelId, thread?.id]);
 
     const handleOnDelete = useCallback((id: string) => {
-        dispatch(removeDraft(id, channel.id, rootId));
-    }, [channel.id, rootId]);
+        dispatch(removeDraft(id, value.channelId, rootId));
+    }, [value.channelId, rootId, dispatch]);
 
-    const handleOnEdit = (_e?: React.MouseEvent, redirectToThread?: boolean) => {
+    const handleOnEdit = useCallback((e?: React.MouseEvent, redirectToThread?: boolean) => {
         if (!redirectToThread && isScheduled) {
             setIsEditing(true);
             return;
         }
-        dispatch(selectPost({id: rootId, channel_id: channel.id} as Post));
-    };
 
-    const handleOnSend = async (id: string) => {
+        dispatch(selectPost({id: rootId, channel_id: value.channelId} as Post));
+    }, [value.channelId, dispatch, rootId, isScheduled]);
+
+    const handleOnSend = useCallback(async (id: string) => {
         const newDraft = {...value};
         Reflect.deleteProperty(newDraft, 'timestamp');
         await dispatch(onSubmit(newDraft));
 
         handleOnDelete(id);
-        handleOnEdit(undefined, true);
-    };
+        handleOnEdit();
+    }, [value, onSubmit, dispatch, handleOnDelete, handleOnEdit]);
 
     const handleOnSchedule = (scheduleUTCTimestamp: number) => {
         const newDraft = {
@@ -150,7 +151,7 @@ function ThreadDraft({
         }
     };
 
-    if (!thread) {
+    if (!thread || !channel) {
         return null;
     }
 

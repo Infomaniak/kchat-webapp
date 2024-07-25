@@ -31,7 +31,6 @@ import {
     getSelectedPostId,
     getSelectedPostCardId,
     getPreviousRhsState,
-    getIsRhsSuppressed,
 } from 'selectors/rhs';
 
 import {RHSStates} from 'utils/constants';
@@ -53,7 +52,6 @@ function mapStateToProps(state: GlobalState, props: RouteComponentProps) {
     return {
         isExpanded: getIsRhsExpanded(state),
         isOpen: getIsRhsOpen(state),
-        isSuppressed: getIsRhsSuppressed(state),
         channel,
         postRightVisible: Boolean(selectedPostId) && rhsState !== RHSStates.EDIT_HISTORY,
         postCardVisible: Boolean(selectedPostCardId),

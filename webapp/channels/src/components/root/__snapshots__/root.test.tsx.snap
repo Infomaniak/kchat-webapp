@@ -3,12 +3,14 @@
 exports[`components/Root Routes Should mount public product routes 1`] = `
 <RootProvider>
   <Connect(MobileViewWatcher) />
+  <LuxonController />
+  <PerformanceReporterController />
   <Switch>
     <Route
       component={[Function]}
       path="/error"
     />
-    <Route
+    <HFRoute
       component={[Function]}
       path="/login"
     />
@@ -16,13 +18,68 @@ exports[`components/Root Routes Should mount public product routes 1`] = `
       component={[Function]}
       path="/access_problem"
     />
+    <HFTRoute
+      component={[Function]}
+      path="/reset_password"
+    />
+    <HFTRoute
+      component={[Function]}
+      path="/reset_password_complete"
+    />
+    <HFRoute
+      component={[Function]}
+      path="/signup_user_complete"
+    />
+    <HFRoute
+      component={[Function]}
+      path="/should_verify_email"
+    />
+    <HFRoute
+      component={[Function]}
+      path="/do_verify_email"
+    />
+    <HFTRoute
+      component={[Function]}
+      path="/claim"
+    />
     <LoggedInRoute
       component={[Function]}
-      headerRef={
-        Object {
-          "current": null,
-        }
-      }
+      path="/terms_of_service"
+    />
+    <Route
+      component={[Function]}
+      path="/landing"
+    />
+    <Route
+      path="/admin_console"
+    >
+      <Switch>
+        <LoggedInRoute
+          component={[Function]}
+          path="/admin_console"
+          theme={Object {}}
+        />
+        <Connect(RootRedirect) />
+      </Switch>
+    </Route>
+    <LoggedInHFTRoute
+      component={[Function]}
+      path="/select_team"
+    />
+    <LoggedInHFTRoute
+      component={[Function]}
+      path="/oauth/authorize"
+    />
+    <LoggedInHFTRoute
+      component={[Function]}
+      path="/create_team"
+    />
+    <LoggedInRoute
+      component={[Function]}
+      path="/mfa"
+    />
+    <LoggedInRoute
+      component={[Function]}
       path="/preparing-workspace"
     />
     <Redirect
@@ -40,47 +97,42 @@ exports[`components/Root Routes Should mount public product routes 1`] = `
       <Connect(ModalController) />
       <Connect(Component) />
       <Connect(injectIntl(SystemNotice)) />
-      <GlobalHeader
-        headerRef={
-          Object {
-            "current": null,
-          }
-        }
-      />
-      <Switch>
-        <Route
-          key="productwithpublic-public"
-          path="/productwithpublic/public"
-          render={[Function]}
-        />
-        <Route
-          key="productwithpublic"
-          path="/productwithpublic"
-          render={[Function]}
-        />
-        <Route
-          key="productwithoutpublic"
-          path="/productwithoutpublic"
-          render={[Function]}
-        />
-        <LoggedInRoute
-          component={[Function]}
-          headerRef={
-            Object {
-              "current": null,
-            }
-          }
-          path="/:team([a-z0-9\\\\-_]+)"
-          theme={Object {}}
-        />
-        <Connect(RootRedirect) />
-      </Switch>
+      <GlobalHeader />
+      <CloudEffectsWrapper />
+      <withRouter(Connect(TeamSidebar)) />
+      <div
+        className="main-wrapper"
+      >
+        <Switch>
+          <Route
+            key="productwithpublic-public"
+            path="/productwithpublic/public"
+            render={[Function]}
+          />
+          <Route
+            key="productwithpublic"
+            path="/productwithpublic"
+            render={[Function]}
+          />
+          <Route
+            key="productwithoutpublic"
+            path="/productwithoutpublic"
+            render={[Function]}
+          />
+          <LoggedInRoute
+            component={[Function]}
+            path="/:team([a-z0-9\\\\-_]+)"
+            theme={Object {}}
+          />
+          <Connect(RootRedirect) />
+        </Switch>
+        <withRouter(Connect(SidebarRight)) />
+      </div>
       <Connect(Pluggable)
         pluggableName="Global"
       />
-      <withRouter(Connect(Component)) />
       <AppBar />
-      <Connect(SidebarRightMenu) />
+      <Connect(Component) />
     </CompassThemeProvider>
   </Switch>
 </RootProvider>

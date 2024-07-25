@@ -7,15 +7,10 @@
     bottom: 12px;
     width: 280px;
     padding: 18px 20px 0;
-    border: 1px solid alpha-color($black, 0.15);
-    background-color: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb, 0.12));
     border-radius: 4px;
-    box-shadow: 0 20px 30px alpha-color($black, 0.07), 0 14px 20px alpha-color($black, 0.07);
-}
-
-.system-notice__header {
-    display: flex;
-    align-items: flex-start;
+    background-color: var(--center-channel-bg);
+    box-shadow: rgba(var(--center-channel-color-rgb), 0.1) 0 20px 30px 0, rgba(var(--center-channel-color-rgb), 0.1) 0 14px 20px 0;
 }
 
 .system-notice__logo {

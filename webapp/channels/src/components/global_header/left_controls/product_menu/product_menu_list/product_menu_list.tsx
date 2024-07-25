@@ -28,8 +28,8 @@ import './product_menu_list.scss';
 
 export type Props = {
     isMobile: boolean;
-    teamId: string;
-    teamName: string;
+    teamId?: string;
+    teamName?: string;
     siteName: string;
     currentUser: UserProfile;
     appDownloadLink: string;

@@ -93,6 +93,18 @@ type Params struct {
 	FilterHasMember           string
 	IncludeChannelMemberCount string
 	OutgoingOAuthConnectionID string
+	ExcludeOffline            bool
+	InChannel                 string
+	NotInChannel              string
+	Topic                     string
+	CreatorId                 string
+	OnlyConfirmed             bool
+	OnlyPlugins               bool
+	ExcludePlugins            bool
+
+	//Bookmarks
+	ChannelBookmarkId string
+	BookmarksSince    int64
 
 	// Cloud
 	InvoiceId string
@@ -122,7 +134,11 @@ func ParamsFromRequest(r *http.Request) *Params {
 	params.FileId = props["file_id"]
 	params.Filename = query.Get("filename")
 	params.UploadId = props["upload_id"]
-	params.PluginId = props["plugin_id"]
+	if val, ok := props["plugin_id"]; ok {
+		params.PluginId = val
+	} else {
+		params.PluginId = query.Get("plugin_id")
+	}
 	params.CommandId = props["command_id"]
 	params.HookId = props["hook_id"]
 	params.ReportId = props["report_id"]
@@ -146,6 +162,15 @@ func ParamsFromRequest(r *http.Request) *Params {
 	params.RemoteId = props["remote_id"]
 	params.InvoiceId = props["invoice_id"]
 	params.OutgoingOAuthConnectionID = props["outgoing_oauth_connection_id"]
+	params.ExcludeOffline, _ = strconv.ParseBool(query.Get("exclude_offline"))
+	params.InChannel = query.Get("in_channel")
+	params.NotInChannel = query.Get("not_in_channel")
+	params.Topic = query.Get("topic")
+	params.CreatorId = query.Get("creator_id")
+	params.OnlyConfirmed, _ = strconv.ParseBool(query.Get("only_confirmed"))
+	params.OnlyPlugins, _ = strconv.ParseBool(query.Get("only_plugins"))
+	params.ExcludePlugins, _ = strconv.ParseBool(query.Get("exclude_plugins"))
+	params.ChannelBookmarkId = props["bookmark_id"]
 	params.Scope = query.Get("scope")
 
 	if val, err := strconv.Atoi(query.Get("page")); err != nil || val < 0 {
@@ -239,6 +264,12 @@ func ParamsFromRequest(r *http.Request) *Params {
 	}
 
 	params.FilterHasMember = query.Get("filter_has_member")
+
+	if val, err := strconv.ParseInt(query.Get("bookmarks_since"), 10, 64); err != nil || val < 0 {
+		params.BookmarksSince = 0
+	} else {
+		params.BookmarksSince = val
+	}
 
 	return params
 }

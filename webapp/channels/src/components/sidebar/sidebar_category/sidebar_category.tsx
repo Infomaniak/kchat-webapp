@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import React from 'react';
 import type {MouseEvent, KeyboardEvent} from 'react';
 import {Draggable, Droppable} from 'react-beautiful-dnd';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import {CategorySorting} from '@mattermost/types/channel_categories';
@@ -24,7 +24,6 @@ import Tooltip from 'components/tooltip';
 import {ChannelsTour, DirectMessagesTour} from 'components/tours/onboarding_tour';
 
 import Constants, {A11yCustomEventTypes, DraggingStateTypes, DraggingStates} from 'utils/constants';
-import {t} from 'utils/i18n';
 import {isKeyPressed} from 'utils/keyboard';
 
 import type {DraggingState} from 'types/store';
@@ -333,7 +332,8 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
 
         let displayName = category.display_name;
         if (category.type !== CategoryTypes.CUSTOM) {
-            displayName = localizeMessage(`sidebar.types.${category.type}`, category.display_name);
+            const message = categoryNames[category.type as keyof typeof categoryNames];
+            displayName = localizeMessage(message.id, message.defaultMessage);
         }
 
         return (
@@ -434,7 +434,17 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
     }
 }
 
-// Adding references to translations for i18n-extract
-t('sidebar.types.channels');
-t('sidebar.types.direct_messages');
-t('sidebar.types.favorites');
+const categoryNames = defineMessages({
+    channels: {
+        id: 'sidebar.types.channels',
+        defaultMessage: 'CHANNELS',
+    },
+    direct_messages: {
+        id: 'sidebar.types.direct_messages',
+        defaultMessage: 'DIRECT MESSAGES',
+    },
+    favorites: {
+        id: 'sidebar.types.favorites',
+        defaultMessage: 'FAVORITES',
+    },
+});

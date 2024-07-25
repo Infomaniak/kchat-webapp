@@ -33,12 +33,72 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
     }
   }
   pluggableName="PopoverSection1"
+  theme={
+    Object {
+      "awayIndicator": "#ffbc1f",
+      "buttonBg": "#1c58d9",
+      "buttonColor": "#ffffff",
+      "centerChannelBg": "#ffffff",
+      "centerChannelColor": "#3f4350",
+      "codeTheme": "github",
+      "dndIndicator": "#d24b4e",
+      "errorTextColor": "#d24b4e",
+      "linkColor": "#386fe5",
+      "mentionBg": "#ffffff",
+      "mentionBj": "#ffffff",
+      "mentionColor": "#1e325c",
+      "mentionHighlightBg": "#ffd470",
+      "mentionHighlightLink": "#1b1d22",
+      "newMessageSeparator": "#cc8f00",
+      "onlineIndicator": "#3db887",
+      "sidebarBg": "#1e325c",
+      "sidebarHeaderBg": "#192a4d",
+      "sidebarHeaderTextColor": "#ffffff",
+      "sidebarTeamBarBg": "#162545",
+      "sidebarText": "#ffffff",
+      "sidebarTextActiveBorder": "#5d89ea",
+      "sidebarTextActiveColor": "#ffffff",
+      "sidebarTextHoverBg": "#28427b",
+      "sidebarUnreadText": "#ffffff",
+      "type": "Denim",
+    }
+  }
 >
   <PluggableErrorBoundary
     key="PopoverSection1"
     pluginId=""
   >
     <ProfilePopoverPlugin
+      theme={
+        Object {
+          "awayIndicator": "#ffbc1f",
+          "buttonBg": "#1c58d9",
+          "buttonColor": "#ffffff",
+          "centerChannelBg": "#ffffff",
+          "centerChannelColor": "#3f4350",
+          "codeTheme": "github",
+          "dndIndicator": "#d24b4e",
+          "errorTextColor": "#d24b4e",
+          "linkColor": "#386fe5",
+          "mentionBg": "#ffffff",
+          "mentionBj": "#ffffff",
+          "mentionColor": "#1e325c",
+          "mentionHighlightBg": "#ffd470",
+          "mentionHighlightLink": "#1b1d22",
+          "newMessageSeparator": "#cc8f00",
+          "onlineIndicator": "#3db887",
+          "sidebarBg": "#1e325c",
+          "sidebarHeaderBg": "#192a4d",
+          "sidebarHeaderTextColor": "#ffffff",
+          "sidebarTeamBarBg": "#162545",
+          "sidebarText": "#ffffff",
+          "sidebarTextActiveBorder": "#5d89ea",
+          "sidebarTextActiveColor": "#ffffff",
+          "sidebarTextHoverBg": "#28427b",
+          "sidebarUnreadText": "#ffffff",
+          "type": "Denim",
+        }
+      }
       webSocketClient={
         WebSocketClient {
           "closeCallback": null,
@@ -47,12 +107,7 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
           "connectFailCount": 0,
           "connectionId": "",
           "connectionUrl": null,
-          "currentPresence": "",
-          "currentTeam": "",
-          "currentTeamUser": "",
-          "currentUser": null,
           "errorCallback": null,
-          "errorCount": 0,
           "errorListeners": Set {},
           "eventCallback": null,
           "firstConnectCallback": null,
@@ -60,19 +115,12 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "otherServersMessageListeners": Set {},
-          "otherTeams": Array [],
-          "otherTeamsChannel": Object {},
-          "presenceChannel": null,
+          "postedAck": false,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
-          "socketId": null,
-          "teamChannel": null,
-          "userChannel": null,
-          "userTeamChannel": null,
         }
       }
     >
@@ -119,12 +167,72 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
     }
   }
   pluggableName="PopoverSection1"
+  theme={
+    Object {
+      "awayIndicator": "#ffbc1f",
+      "buttonBg": "#1c58d9",
+      "buttonColor": "#ffffff",
+      "centerChannelBg": "#ffffff",
+      "centerChannelColor": "#3f4350",
+      "codeTheme": "github",
+      "dndIndicator": "#d24b4e",
+      "errorTextColor": "#d24b4e",
+      "linkColor": "#386fe5",
+      "mentionBg": "#ffffff",
+      "mentionBj": "#ffffff",
+      "mentionColor": "#1e325c",
+      "mentionHighlightBg": "#ffd470",
+      "mentionHighlightLink": "#1b1d22",
+      "newMessageSeparator": "#cc8f00",
+      "onlineIndicator": "#3db887",
+      "sidebarBg": "#1e325c",
+      "sidebarHeaderBg": "#192a4d",
+      "sidebarHeaderTextColor": "#ffffff",
+      "sidebarTeamBarBg": "#162545",
+      "sidebarText": "#ffffff",
+      "sidebarTextActiveBorder": "#5d89ea",
+      "sidebarTextActiveColor": "#ffffff",
+      "sidebarTextHoverBg": "#28427b",
+      "sidebarUnreadText": "#ffffff",
+      "type": "Denim",
+    }
+  }
 >
   <PluggableErrorBoundary
     key="PopoverSection1"
     pluginId=""
   >
     <ProfilePopoverPlugin
+      theme={
+        Object {
+          "awayIndicator": "#ffbc1f",
+          "buttonBg": "#1c58d9",
+          "buttonColor": "#ffffff",
+          "centerChannelBg": "#ffffff",
+          "centerChannelColor": "#3f4350",
+          "codeTheme": "github",
+          "dndIndicator": "#d24b4e",
+          "errorTextColor": "#d24b4e",
+          "linkColor": "#386fe5",
+          "mentionBg": "#ffffff",
+          "mentionBj": "#ffffff",
+          "mentionColor": "#1e325c",
+          "mentionHighlightBg": "#ffd470",
+          "mentionHighlightLink": "#1b1d22",
+          "newMessageSeparator": "#cc8f00",
+          "onlineIndicator": "#3db887",
+          "sidebarBg": "#1e325c",
+          "sidebarHeaderBg": "#192a4d",
+          "sidebarHeaderTextColor": "#ffffff",
+          "sidebarTeamBarBg": "#162545",
+          "sidebarText": "#ffffff",
+          "sidebarTextActiveBorder": "#5d89ea",
+          "sidebarTextActiveColor": "#ffffff",
+          "sidebarTextHoverBg": "#28427b",
+          "sidebarUnreadText": "#ffffff",
+          "type": "Denim",
+        }
+      }
       webSocketClient={
         WebSocketClient {
           "closeCallback": null,
@@ -133,12 +241,7 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
           "connectFailCount": 0,
           "connectionId": "",
           "connectionUrl": null,
-          "currentPresence": "",
-          "currentTeam": "",
-          "currentTeamUser": "",
-          "currentUser": null,
           "errorCallback": null,
-          "errorCount": 0,
           "errorListeners": Set {},
           "eventCallback": null,
           "firstConnectCallback": null,
@@ -146,19 +249,12 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "otherServersMessageListeners": Set {},
-          "otherTeams": Array [],
-          "otherTeamsChannel": Object {},
-          "presenceChannel": null,
+          "postedAck": false,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
-          "socketId": null,
-          "teamChannel": null,
-          "userChannel": null,
-          "userTeamChannel": null,
         }
       }
     >
@@ -198,6 +294,36 @@ exports[`plugins/Pluggable should match snapshot with no extended component 1`] 
     }
   }
   pluggableName=""
+  theme={
+    Object {
+      "awayIndicator": "#ffbc1f",
+      "buttonBg": "#1c58d9",
+      "buttonColor": "#ffffff",
+      "centerChannelBg": "#ffffff",
+      "centerChannelColor": "#3f4350",
+      "codeTheme": "github",
+      "dndIndicator": "#d24b4e",
+      "errorTextColor": "#d24b4e",
+      "linkColor": "#386fe5",
+      "mentionBg": "#ffffff",
+      "mentionBj": "#ffffff",
+      "mentionColor": "#1e325c",
+      "mentionHighlightBg": "#ffd470",
+      "mentionHighlightLink": "#1b1d22",
+      "newMessageSeparator": "#cc8f00",
+      "onlineIndicator": "#3db887",
+      "sidebarBg": "#1e325c",
+      "sidebarHeaderBg": "#192a4d",
+      "sidebarHeaderTextColor": "#ffffff",
+      "sidebarTeamBarBg": "#162545",
+      "sidebarText": "#ffffff",
+      "sidebarTextActiveBorder": "#5d89ea",
+      "sidebarTextActiveColor": "#ffffff",
+      "sidebarTextHoverBg": "#28427b",
+      "sidebarUnreadText": "#ffffff",
+      "type": "Denim",
+    }
+  }
 />
 `;
 
@@ -235,6 +361,36 @@ exports[`plugins/Pluggable should match snapshot with non-null pluggableId 1`] =
   }
   pluggableId="pluggableId"
   pluggableName="PopoverSection1"
+  theme={
+    Object {
+      "awayIndicator": "#ffbc1f",
+      "buttonBg": "#1c58d9",
+      "buttonColor": "#ffffff",
+      "centerChannelBg": "#ffffff",
+      "centerChannelColor": "#3f4350",
+      "codeTheme": "github",
+      "dndIndicator": "#d24b4e",
+      "errorTextColor": "#d24b4e",
+      "linkColor": "#386fe5",
+      "mentionBg": "#ffffff",
+      "mentionBj": "#ffffff",
+      "mentionColor": "#1e325c",
+      "mentionHighlightBg": "#ffd470",
+      "mentionHighlightLink": "#1b1d22",
+      "newMessageSeparator": "#cc8f00",
+      "onlineIndicator": "#3db887",
+      "sidebarBg": "#1e325c",
+      "sidebarHeaderBg": "#192a4d",
+      "sidebarHeaderTextColor": "#ffffff",
+      "sidebarTeamBarBg": "#162545",
+      "sidebarText": "#ffffff",
+      "sidebarTextActiveBorder": "#5d89ea",
+      "sidebarTextActiveColor": "#ffffff",
+      "sidebarTextHoverBg": "#28427b",
+      "sidebarUnreadText": "#ffffff",
+      "type": "Denim",
+    }
+  }
 />
 `;
 
@@ -271,12 +427,72 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
     }
   }
   pluggableName="PopoverSection1"
+  theme={
+    Object {
+      "awayIndicator": "#ffbc1f",
+      "buttonBg": "#1c58d9",
+      "buttonColor": "#ffffff",
+      "centerChannelBg": "#ffffff",
+      "centerChannelColor": "#3f4350",
+      "codeTheme": "github",
+      "dndIndicator": "#d24b4e",
+      "errorTextColor": "#d24b4e",
+      "linkColor": "#386fe5",
+      "mentionBg": "#ffffff",
+      "mentionBj": "#ffffff",
+      "mentionColor": "#1e325c",
+      "mentionHighlightBg": "#ffd470",
+      "mentionHighlightLink": "#1b1d22",
+      "newMessageSeparator": "#cc8f00",
+      "onlineIndicator": "#3db887",
+      "sidebarBg": "#1e325c",
+      "sidebarHeaderBg": "#192a4d",
+      "sidebarHeaderTextColor": "#ffffff",
+      "sidebarTeamBarBg": "#162545",
+      "sidebarText": "#ffffff",
+      "sidebarTextActiveBorder": "#5d89ea",
+      "sidebarTextActiveColor": "#ffffff",
+      "sidebarTextHoverBg": "#28427b",
+      "sidebarUnreadText": "#ffffff",
+      "type": "Denim",
+    }
+  }
 >
   <PluggableErrorBoundary
     key="PopoverSection1"
     pluginId=""
   >
     <ProfilePopoverPlugin
+      theme={
+        Object {
+          "awayIndicator": "#ffbc1f",
+          "buttonBg": "#1c58d9",
+          "buttonColor": "#ffffff",
+          "centerChannelBg": "#ffffff",
+          "centerChannelColor": "#3f4350",
+          "codeTheme": "github",
+          "dndIndicator": "#d24b4e",
+          "errorTextColor": "#d24b4e",
+          "linkColor": "#386fe5",
+          "mentionBg": "#ffffff",
+          "mentionBj": "#ffffff",
+          "mentionColor": "#1e325c",
+          "mentionHighlightBg": "#ffd470",
+          "mentionHighlightLink": "#1b1d22",
+          "newMessageSeparator": "#cc8f00",
+          "onlineIndicator": "#3db887",
+          "sidebarBg": "#1e325c",
+          "sidebarHeaderBg": "#192a4d",
+          "sidebarHeaderTextColor": "#ffffff",
+          "sidebarTeamBarBg": "#162545",
+          "sidebarText": "#ffffff",
+          "sidebarTextActiveBorder": "#5d89ea",
+          "sidebarTextActiveColor": "#ffffff",
+          "sidebarTextHoverBg": "#28427b",
+          "sidebarUnreadText": "#ffffff",
+          "type": "Denim",
+        }
+      }
       webSocketClient={
         WebSocketClient {
           "closeCallback": null,
@@ -285,12 +501,7 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
           "connectFailCount": 0,
           "connectionId": "",
           "connectionUrl": null,
-          "currentPresence": "",
-          "currentTeam": "",
-          "currentTeamUser": "",
-          "currentUser": null,
           "errorCallback": null,
-          "errorCount": 0,
           "errorListeners": Set {},
           "eventCallback": null,
           "firstConnectCallback": null,
@@ -298,19 +509,12 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "otherServersMessageListeners": Set {},
-          "otherTeams": Array [],
-          "otherTeamsChannel": Object {},
-          "presenceChannel": null,
+          "postedAck": false,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
-          "socketId": null,
-          "teamChannel": null,
-          "userChannel": null,
-          "userTeamChannel": null,
         }
       }
     >
@@ -358,12 +562,72 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
   }
   pluggableId="pluggableId"
   pluggableName="PopoverSection1"
+  theme={
+    Object {
+      "awayIndicator": "#ffbc1f",
+      "buttonBg": "#1c58d9",
+      "buttonColor": "#ffffff",
+      "centerChannelBg": "#ffffff",
+      "centerChannelColor": "#3f4350",
+      "codeTheme": "github",
+      "dndIndicator": "#d24b4e",
+      "errorTextColor": "#d24b4e",
+      "linkColor": "#386fe5",
+      "mentionBg": "#ffffff",
+      "mentionBj": "#ffffff",
+      "mentionColor": "#1e325c",
+      "mentionHighlightBg": "#ffd470",
+      "mentionHighlightLink": "#1b1d22",
+      "newMessageSeparator": "#cc8f00",
+      "onlineIndicator": "#3db887",
+      "sidebarBg": "#1e325c",
+      "sidebarHeaderBg": "#192a4d",
+      "sidebarHeaderTextColor": "#ffffff",
+      "sidebarTeamBarBg": "#162545",
+      "sidebarText": "#ffffff",
+      "sidebarTextActiveBorder": "#5d89ea",
+      "sidebarTextActiveColor": "#ffffff",
+      "sidebarTextHoverBg": "#28427b",
+      "sidebarUnreadText": "#ffffff",
+      "type": "Denim",
+    }
+  }
 >
   <PluggableErrorBoundary
     key="PopoverSection1pluggableId"
     pluginId=""
   >
     <ProfilePopoverPlugin
+      theme={
+        Object {
+          "awayIndicator": "#ffbc1f",
+          "buttonBg": "#1c58d9",
+          "buttonColor": "#ffffff",
+          "centerChannelBg": "#ffffff",
+          "centerChannelColor": "#3f4350",
+          "codeTheme": "github",
+          "dndIndicator": "#d24b4e",
+          "errorTextColor": "#d24b4e",
+          "linkColor": "#386fe5",
+          "mentionBg": "#ffffff",
+          "mentionBj": "#ffffff",
+          "mentionColor": "#1e325c",
+          "mentionHighlightBg": "#ffd470",
+          "mentionHighlightLink": "#1b1d22",
+          "newMessageSeparator": "#cc8f00",
+          "onlineIndicator": "#3db887",
+          "sidebarBg": "#1e325c",
+          "sidebarHeaderBg": "#192a4d",
+          "sidebarHeaderTextColor": "#ffffff",
+          "sidebarTeamBarBg": "#162545",
+          "sidebarText": "#ffffff",
+          "sidebarTextActiveBorder": "#5d89ea",
+          "sidebarTextActiveColor": "#ffffff",
+          "sidebarTextHoverBg": "#28427b",
+          "sidebarUnreadText": "#ffffff",
+          "type": "Denim",
+        }
+      }
       webSocketClient={
         WebSocketClient {
           "closeCallback": null,
@@ -372,12 +636,7 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
           "connectFailCount": 0,
           "connectionId": "",
           "connectionUrl": null,
-          "currentPresence": "",
-          "currentTeam": "",
-          "currentTeamUser": "",
-          "currentUser": null,
           "errorCallback": null,
-          "errorCount": 0,
           "errorListeners": Set {},
           "eventCallback": null,
           "firstConnectCallback": null,
@@ -385,19 +644,12 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "otherServersMessageListeners": Set {},
-          "otherTeams": Array [],
-          "otherTeamsChannel": Object {},
-          "presenceChannel": null,
+          "postedAck": false,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
-          "socketId": null,
-          "teamChannel": null,
-          "userChannel": null,
-          "userTeamChannel": null,
         }
       }
     >

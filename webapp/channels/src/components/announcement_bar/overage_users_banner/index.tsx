@@ -15,8 +15,9 @@ import {getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selecto
 
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
 import {useExpandOverageUsersCheck} from 'components/common/hooks/useExpandOverageUsersCheck';
+import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 
-import {LicenseLinks, StatTypes, Preferences, AnnouncementBarTypes} from 'utils/constants';
+import {StatTypes, Preferences, AnnouncementBarTypes} from 'utils/constants';
 import {calculateOverageUserActivated} from 'utils/overage_team';
 
 import type {GlobalState} from 'types/store';
@@ -38,6 +39,7 @@ const adminHasDismissed = ({preferenceName, overagePreferences, isWarningBanner}
 };
 
 const OverageUsersBanner = () => {
+    const [openContactSales] = useOpenSalesLink();
     const dispatch = useDispatch();
     const stats = useSelector((state: GlobalState) => state.entities.admin.analytics) || {};
     const isAdmin = useSelector(isCurrentUserSystemAdmin);
@@ -65,13 +67,8 @@ const OverageUsersBanner = () => {
     const hasPermission = isAdmin && isOverageState && !isCloud;
     const {
         cta,
-        expandableLink,
         trackEventFn,
-        getRequestState,
-        isExpandable,
     } = useExpandOverageUsersCheck({
-        shouldRequest: hasPermission && !adminHasDismissed({isWarningBanner: isBetween5PercerntAnd10PercentPurchasedSeats, overagePreferences, preferenceName}),
-        licenseId: license.Id,
         isWarningState: isBetween5PercerntAnd10PercentPurchasedSeats,
         banner: 'global banner',
     });
@@ -85,19 +82,13 @@ const OverageUsersBanner = () => {
         }]));
     };
 
-    const handleUpdateSeatsSelfServeClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault();
-        trackEventFn('Self Serve');
-        window.open(expandableLink(license.Id), '_blank');
-    };
-
     const handleContactSalesClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         trackEventFn('Contact Sales');
-        window.open(LicenseLinks.CONTACT_SALES, '_blank');
+        openContactSales();
     };
 
-    const handleClick = isExpandable ? handleUpdateSeatsSelfServeClick : handleContactSalesClick;
+    const handleClick = handleContactSalesClick;
 
     if (!hasPermission || adminHasDismissed({isWarningBanner: isBetween5PercerntAnd10PercentPurchasedSeats, overagePreferences, preferenceName})) {
         return null;
@@ -106,7 +97,7 @@ const OverageUsersBanner = () => {
     const message = (
         <FormattedMessage
             id='licensingPage.overageUsersBanner.text'
-            defaultMessage='Your workspace user count has exceeded your paid license seat count by {seats, number} {seats, plural, one {seat} other {seats}}. Purchase additional seats to remain compliant.'
+            defaultMessage='(Only visible to admins) Your workspace user count has exceeded your paid license seat count by {seats, number} {seats, plural, one {seat} other {seats}}. Purchase additional seats to remain compliant.'
             values={{
                 seats: overageByUsers,
             }}
@@ -118,13 +109,11 @@ const OverageUsersBanner = () => {
             showCloseButton={isBetween5PercerntAnd10PercentPurchasedSeats}
             onButtonClick={handleClick}
             modalButtonText={cta}
-            modalButtonDefaultText={cta}
             message={message}
             showLinkAsButton={true}
             isTallBanner={true}
             icon={<i className='icon icon-alert-outline'/>}
             handleClose={handleClose}
-            showCTA={getRequestState !== 'IDLE' && getRequestState !== 'LOADING'}
         />
     );
 };

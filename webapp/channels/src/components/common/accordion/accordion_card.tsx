@@ -51,7 +51,7 @@ const AccordionCard = ({
             setHeight(0);
         }
         setOpen(isExpanded);
-    }, [isExpanded]);
+    }, [data.items.length, isExpanded]);
 
     const hasItems = data.items.length > 0;
 

@@ -210,7 +210,7 @@ class DesktopAppAPI {
      * One-ways
      */
 
-    dispatchNotification = (
+    dispatchNotification = async (
         title: string,
         body: string,
         channelId: string,
@@ -220,8 +220,8 @@ class DesktopAppAPI {
         url: string,
     ) => {
         if (window.desktopAPI?.sendNotification) {
-            window.desktopAPI.sendNotification(title, body, channelId, teamId, url, silent, soundName);
-            return;
+            const result = await window.desktopAPI.sendNotification(title, body, channelId, teamId, url, silent, soundName);
+            return result ?? {status: 'unsupported', reason: 'desktop_app_unsupported'};
         }
 
         // get the desktop app to trigger the notification
@@ -240,6 +240,7 @@ class DesktopAppAPI {
             },
             window.location.origin,
         );
+        return {status: 'unsupported', reason: 'desktop_app_unsupported'};
     };
 
     doBrowserHistoryPush = (path: string) => {
@@ -260,6 +261,8 @@ class DesktopAppAPI {
     updateUnreadsAndMentions = (isUnread: boolean, mentionCount: number) =>
         window.desktopAPI?.setUnreadsAndMentions && window.desktopAPI.setUnreadsAndMentions(isUnread, mentionCount);
     setSessionExpired = (expired: boolean) => window.desktopAPI?.setSessionExpired && window.desktopAPI.setSessionExpired(expired);
+    signalLogin = () => window.desktopAPI?.onLogin && window.desktopAPI?.onLogin();
+    signalLogout = () => window.desktopAPI?.onLogout && window.desktopAPI?.onLogout();
 
     /*********************************************************************
      * Helper functions for legacy code

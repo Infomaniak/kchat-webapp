@@ -82,10 +82,13 @@ export default class LoggedIn extends React.PureComponent<Props> {
         if (!UserAgent.isDesktopApp() || isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.4.0')) {
             this.props.actions.registerInternalKdrivePlugin();
         }
-        this.props.actions.autoUpdateTimezone(getBrowserTimezone());
+        this.updateTimeZone();
 
         // Make sure the websockets close and reset version
         window.addEventListener('beforeunload', this.handleBeforeUnload);
+
+        // listen for the app visibility state
+        window.addEventListener('visibilitychange', this.handleVisibilityChange, false);
 
         // Listen for focused tab/window state
         window.addEventListener('focus', this.onFocusListener);
@@ -132,6 +135,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         if (this.isValidState()) {
             BrowserStore.signalLogin();
+            DesktopApp.signalLogin();
         }
     }
 
@@ -152,6 +156,16 @@ export default class LoggedIn extends React.PureComponent<Props> {
         }
 
         return this.props.children;
+    }
+
+    private handleVisibilityChange = (): void => {
+        if (!document.hidden) {
+            this.updateTimeZone();
+        }
+    };
+
+    private updateTimeZone(): void {
+        this.props.actions.autoUpdateTimezone(getBrowserTimezone());
     }
 
     private onFocusListener(): void {

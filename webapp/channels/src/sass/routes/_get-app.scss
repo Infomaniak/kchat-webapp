@@ -153,9 +153,10 @@
 .get-app__preference {
     display: flex;
     margin-top: 23px;
+    cursor: pointer;
 
     > span {
-        margin-top: -2px;
+        margin-top: 1px;
         color: #000;
         font-family: "SuisseIntl";
         font-size: 16px;
@@ -163,26 +164,17 @@
         line-height: 22px;
         opacity: 0.8;
     }
-}
 
-.get-app__checkbox {
-    width: 18px;
-    height: 18px;
-    padding: 0;
-    border: 2px solid $dark-gray;
-    margin-right: 7px;
-    background: none;
-    border-radius: 3px;
+    .get-app__checkbox {
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        margin-right: 7px;
 
-    > * {
-        pointer-events: none;
-    }
-
-    &.checked {
-        border: 0;
-
-        svg {
-            fill: var(--button-bg);
+        &.checked {
+            svg {
+                fill: var(--button-bg);
+            }
         }
     }
 }

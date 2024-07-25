@@ -12,15 +12,25 @@ mkdir -p logs
 touch logs/mattermost.log
 EOF
 
+# # Install webapp dependencies
+# mme2e_log "Prepare Playwright: install webapp dependencies"
+# ${MME2E_DC_SERVER} exec -T -u "$MME2E_UID" -- playwright bash -c "cd webapp && npm install --cache /tmp/empty-cache"
+
 # # Install Playwright dependencies
 # mme2e_log "Prepare Playwright: install dependencies"
-# # ${MME2E_DC_SERVER} exec -T -u "$MME2E_UID" -- playwright bash <<EOF
-# ${MME2E_DC_SERVER} exec -T -- playwright bash <<EOF
-# cd e2e-tests/playwright
-# npm i --cache /tmp/empty-cache -g yarn
-# export NPM_TOKEN=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
-# yarn config set cacheFolder /tmp/empty-cache
-# yarn
+# ${MME2E_DC_SERVER} exec -T -u "$MME2E_UID" -- playwright bash -c "cd e2e-tests/playwright && rm -rf node_modules && PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install --cache /tmp/empty-cache"
+
+# mme2e_log "Prepare Playwright: environment info"
+# ${MME2E_DC_SERVER} exec -T -u "$MME2E_UID" -- playwright bash <<"EOF"
+# cat <<INNEREOF
+# debian      = $(cat /etc/debian_version)
+# uname       = $(uname -m)
+# node        = $(node -v)
+# npm         = $(npm -v)
+# playwright  = $(cd e2e-tests/playwright && npx playwright --version)
+# browsers
+# $(du -hs ~/ms-playwright/* | awk '{print "            = " $2 " (" $1 ")"}')
+# INNEREOF
 # EOF
 
 # Enable next line to debug Playwright

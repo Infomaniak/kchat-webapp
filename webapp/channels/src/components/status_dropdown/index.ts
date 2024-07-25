@@ -12,7 +12,7 @@ import {Preferences} from 'mattermost-redux/constants';
 import {get, getBool, getInt} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
-import {getCurrentUser, getStatusForUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getDndEndTimeForUserId, getStatusForUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {openModal} from 'actions/views/modals';
 import {setStatusDropdown} from 'actions/views/status_dropdown';
@@ -82,6 +82,7 @@ function makeMapStateToProps() {
             timezone: getCurrentTimezone(state),
             ksuiteBridge,
             isBridgeConnected: ksuiteBridge?.isConnected,
+            dndEndTime: getDndEndTimeForUserId(state, userId),
         };
     };
 }

@@ -7,11 +7,8 @@ import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
-
-import Constants from 'utils/constants';
 import {t} from 'utils/i18n';
+import WithTooltip from 'components/with_tooltip';
 
 interface Props {
     channel: Channel;
@@ -30,14 +27,6 @@ const HeaderTitle = styled.span`
 
 const Header = ({channel, isArchived, isMobile, onClose}: Props) => {
     const {formatMessage} = useIntl();
-    const closeSidebarTooltip = (
-        <Tooltip id='closeSidebarTooltip'>
-            <FormattedMessage
-                id='rhs_header.closeSidebarTooltip'
-                defaultMessage='Close'
-            />
-        </Tooltip>
-    );
 
     return (
         <div className='sidebar--right__header'>
@@ -70,10 +59,15 @@ const Header = ({channel, isArchived, isMobile, onClose}: Props) => {
                 }
             </span>
 
-            <OverlayTrigger
-                delayShow={Constants.OVERLAY_TIME_DELAY}
+            <WithTooltip
+                id='closeSidebarTooltip'
                 placement='top'
-                overlay={closeSidebarTooltip}
+                title={
+                    <FormattedMessage
+                        id='rhs_header.closeSidebarTooltip'
+                        defaultMessage='Close'
+                    />
+                }
             >
                 <button
                     id='rhsCloseButton'
@@ -87,7 +81,7 @@ const Header = ({channel, isArchived, isMobile, onClose}: Props) => {
                         aria-label={formatMessage({id: t('rhs_header.closeTooltip.icon'), defaultMessage: 'Close Sidebar Icon'})}
                     />
                 </button>
-            </OverlayTrigger>
+            </WithTooltip>
         </div>
     );
 };

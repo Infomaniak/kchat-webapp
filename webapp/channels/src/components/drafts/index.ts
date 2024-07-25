@@ -4,7 +4,7 @@
 import {connect} from 'react-redux';
 
 import {Permissions} from 'mattermost-redux/constants';
-import {localDraftsAreEnabled, getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
@@ -38,7 +38,6 @@ function makeMapStateToProps() {
             draftRemotes: state.views.drafts.remotes,
             status,
             user,
-            localDraftsAreEnabled: localDraftsAreEnabled(state),
             invalidScheduledAmount,
         };
     };

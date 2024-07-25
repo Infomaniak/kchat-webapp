@@ -34,8 +34,8 @@ describe('components/external_link', () => {
         const wrapper = mount(
             <Provider store={store}>
                 <ExternalLink
+                    location='test'
                     href='https://infomaniak.com'
-
                 >{'Click Me'}</ExternalLink>
             </Provider>,
         );
@@ -57,7 +57,10 @@ describe('components/external_link', () => {
             },
         };
         renderWithContext(
-            <ExternalLink href='https://infomaniak.com'>
+            <ExternalLink
+                location='test'
+                href='https://infomaniak.com'
+            >
                 {'Click Me'}
             </ExternalLink>,
             state,
@@ -83,7 +86,10 @@ describe('components/external_link', () => {
             },
         };
         renderWithContext(
-            <ExternalLink href='https://infomaniak.com?test=true'>
+            <ExternalLink
+                location='test'
+                href='https://infomaniak.com?test=true'
+            >
                 {'Click Me'}
             </ExternalLink>,
             state,
@@ -111,7 +117,10 @@ describe('components/external_link', () => {
             },
         };
         renderWithContext(
-            <ExternalLink href='https://google.com'>
+            <ExternalLink
+                location='test'
+                href='https://google.com'
+            >
                 {'Click Me'}
             </ExternalLink>,
             state,
@@ -141,6 +150,7 @@ describe('components/external_link', () => {
                 target='test'
                 rel='test'
                 href='https://google.com'
+                location='test'
             >{'Click Me'}</ExternalLink>,
             state,
         );
@@ -172,6 +182,7 @@ describe('components/external_link', () => {
         };
         renderWithContext(
             <ExternalLink
+                location='test'
                 href='https://infomaniak.com#desktop'
             >
                 {'Click Me'}

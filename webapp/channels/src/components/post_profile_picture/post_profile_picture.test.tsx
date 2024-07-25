@@ -5,6 +5,7 @@ import {shallow} from 'enzyme';
 import type {ComponentProps} from 'react';
 import React from 'react';
 
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
 
 import PostProfilePicture from './post_profile_picture';
@@ -31,20 +32,19 @@ describe('components/PostProfilePicture', () => {
 
     test('should match snapshot, no status and post icon override specified, default props', () => {
         const props: Props = baseProps;
-        const wrapper = shallow(
+        renderWithContext(
             <PostProfilePicture {...props}/>,
         );
 
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should match snapshot, status and post icon override specified, default props', () => {
+    test('status is specified, default props', () => {
         const props: Props = {
             ...baseProps,
             status: 'away',
-            postIconOverrideURL: 'http://example.com/image.png',
         };
-        const wrapper = shallow(
+        renderWithContext(
             <PostProfilePicture {...props}/>,
         );
 

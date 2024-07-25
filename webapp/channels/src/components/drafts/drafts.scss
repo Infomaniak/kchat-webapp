@@ -2,10 +2,8 @@
 // See LICENSE.txt for license information.
 
 .Drafts {
-    --border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-
     &__header {
-        border-bottom: var(--border);
+        border-bottom: var(--border-default);
         grid-area: header;
         .controls {
             display: flex;
@@ -61,7 +59,7 @@
 
     // 2-column
     grid-template-columns: var(--list);
-    grid-template-rows: 63px 1fr;
+    grid-template-rows: 56px 1fr;
 
     @media screen and (max-width: 768px) {
         grid-template-rows: 0 1fr;
@@ -71,7 +69,7 @@
         }
 
         .Header {
-            border-top: var(--border);
+            border-top: var(--border-default);
         }
     }
 }

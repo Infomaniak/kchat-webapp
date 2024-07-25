@@ -178,11 +178,6 @@ button.custom_status__row {
     justify-content: center;
     min-width: 50px;
 
-    .icon > i:not(.status-icon) {
-        color: rgba(var(--center-channel-color-rgb), 0.64);
-        font-family: "compass-icons";
-    }
-
     &:hover {
         background: var(--sidebar-text-08);
         cursor: pointer;

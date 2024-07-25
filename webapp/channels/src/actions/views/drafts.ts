@@ -16,7 +16,7 @@ import {syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entit
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 
-import {removeGlobalItem, setGlobalItem} from 'actions/storage';
+import {setGlobalItem} from 'actions/storage';
 import {makeGetDrafts} from 'selectors/drafts';
 import {getGlobalItem} from 'selectors/storage';
 
@@ -119,7 +119,7 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
         let updatedValue: PostDraft|null = null;
         if (value) {
             const timestamp = new Date().getTime();
-            const data = getGlobalItem(state, key, {});
+            const data = getGlobalItem<Partial<PostDraft>>(state, key, {});
             updatedValue = {
                 ...value,
                 id: value.id || activeDraft.id,

@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -43,14 +43,13 @@ type Props = {
     menuTriggerRef: React.RefObject<HTMLButtonElement>;
 };
 
-const getUnreadsIdsForCategory = makeGetUnreadIdsForCategory();
-
 const SidebarCategoryMenu = ({
     category,
     menuTriggerRef,
 }: Props) => {
     const dispatch = useDispatch();
     const showUnreadsCategory = useSelector(shouldShowUnreadsCategory);
+    const getUnreadsIdsForCategory = useMemo(makeGetUnreadIdsForCategory, [category]);
     const unreadsIds = useSelector((state: GlobalState) => getUnreadsIdsForCategory(state, category));
 
     const {formatMessage} = useIntl();

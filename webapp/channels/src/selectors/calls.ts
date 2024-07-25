@@ -86,3 +86,15 @@ export function isCallsRingingEnabledOnServer(state: GlobalState) {
     // @ts-ignore
     return Boolean(state[`plugins-${suitePluginIds.calls}`]?.callsConfig?.EnableRinging);
 }
+
+export function getSessionsInCalls(state: GlobalState): Record<string, Record<string, UserSessionState>> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return state[CALLS_PLUGIN].sessions || {};
+}
+
+export function getCallsConfig(state: GlobalState): CallsConfig {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return state[CALLS_PLUGIN].callsConfig;
+}

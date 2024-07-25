@@ -110,8 +110,8 @@
                 .signup-body-custom-branding-image {
                     max-height: 540px;
                     align-self: center;
-                    margin-bottom: 28px;
                     border-radius: 8px;
+                    margin-bottom: 28px;
                 }
             }
 
@@ -124,9 +124,9 @@
             width: 540px;
             box-sizing: border-box;
             border: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+            border-radius: 8px;
             margin-left: 60px;
             background-color: var(--center-channel-bg);
-            border-radius: 8px;
             box-shadow: var(--elevation-5);
 
             &.with-error {
@@ -403,7 +403,6 @@
                 padding: 24px;
 
                 .signup-body-message-title {
-                    max-width: 271px;
                     padding-right: 0;
                     font-size: 45px;
                     line-height: 56px;

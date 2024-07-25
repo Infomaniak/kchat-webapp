@@ -42,7 +42,7 @@ const getTeammateId = createSelector(
     getCurrentChannel,
     getCurrentUserId,
     (channel, currentUserId) => {
-        if (channel.type !== Constants.DM_CHANNEL) {
+        if (channel?.type !== Constants.DM_CHANNEL) {
             return null;
         }
 

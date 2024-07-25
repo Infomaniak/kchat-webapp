@@ -133,7 +133,7 @@ function makeMapStateToProps() {
 
         const currentTeam = getCurrentTeam(state);
         const team = getTeam(state, channel.team_id);
-        let teamName = currentTeam.name;
+        let teamName = currentTeam?.name;
         let teamDisplayName;
 
         const memberships = getTeamMemberships(state);
@@ -145,10 +145,10 @@ function makeMapStateToProps() {
             memberships && Object.values(memberships).length > 1 // Not show if the user only belongs to one team
         ) {
             teamDisplayName = team?.display_name;
-            teamName = team?.name || currentTeam.name;
+            teamName = team?.name || currentTeam?.name;
         }
 
-        const canReply = isDMorGM || (channel.team_id === currentTeam.id);
+        const canReply = isDMorGM || (channel.team_id === currentTeam?.id);
         const directTeammate = getDirectTeammate(state, channel.id);
 
         const previewCollapsed = get(

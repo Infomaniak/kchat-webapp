@@ -43,7 +43,7 @@ import MenuItemViewPinnedPosts from './menu_items/view_pinned_posts';
 
 export type Props = {
     user: UserProfile;
-    channel: Channel;
+    channel?: Channel;
     isDefault: boolean;
     isFavorite: boolean;
     isReadonly: boolean;
@@ -78,6 +78,10 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
             actions,
         } = this.props;
 
+        if (!channel) {
+            return null;
+        }
+
         const isPrivate = channel.type === Constants.PRIVATE_CHANNEL;
         const isGroupConstrained = channel.group_constrained === true;
         const channelMembersPermission = isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS : Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS;
@@ -103,7 +107,7 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                     key={item.id + '_pluginmenuitem'}
                     onClick={() => {
                         if (item.action) {
-                            item.action(this.props.channel.id);
+                            item.action(channel.id);
                         }
                     }}
                     text={item.text}

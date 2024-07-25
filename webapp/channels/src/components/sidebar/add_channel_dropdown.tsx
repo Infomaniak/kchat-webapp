@@ -10,13 +10,12 @@ import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users'
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
-import {CreateAndJoinChannelsTour, CreateChannelsTour, InvitePeopleTour, JoinChannelsTour} from 'components/tours/onboarding_tour';
+import {CreateAndJoinChannelsTour, InvitePeopleTour} from 'components/tours/onboarding_tour';
 import IntegrationsIcon from 'components/widgets/icons/integrations_icon';
 import PlusFilledIcon from 'components/widgets/icons/plus_filled_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+import WithTooltip from 'components/with_tooltip';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
@@ -180,47 +179,35 @@ const AddChannelDropdown = ({
         return null;
     }
 
-    const tooltip = (
-        <Tooltip
-            id='new-group-tooltip'
-            className='hidden-xs'
-        >
-            <FormattedMessage
-                id={'sidebar_left.add_channel_dropdown.browseOrCreateChannels'}
-                defaultMessage='Browse or create channels'
-            />
-        </Tooltip>
-    );
-
     return (
         <MenuWrapper
             className={classNames('AddChannelDropdown', {isWebApp: !isDesktopApp()})}
             onToggle={trackOpen}
             open={isAddChannelOpen}
         >
-            <OverlayTrigger
-                delayShow={500}
+            <WithTooltip
+                id='new-group-tooltip'
                 placement='top'
-                overlay={tooltip}
+                title={intl.formatMessage({
+                    id: 'sidebar_left.add_channel_dropdown.browseOrCreateChannels',
+                    defaultMessage: 'Browse or create channels',
+                })}
             >
-                <>
-                    <button
-                        className={'AddChannelDropdown_dropdownButton'}
-                        aria-label={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channel Dropdown'})}
-                    >
-
-                        {isDesktopApp() ? <i className='icon-plus'/> : (
-                            <>
-                                <PlusFilledIcon/>
-                                <FormattedMessage
-                                    id={'admin.user_grid.new'}
-                                    defaultMessage='New'
-                                />
-                            </>
-                        )}
-                    </button>
-                </>
-            </OverlayTrigger>
+                <button
+                    className={'AddChannelDropdown_dropdownButton'}
+                    aria-label={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channel Dropdown'})}
+                >
+                    {isDesktopApp() ? <i className='icon-plus'/> : (
+                        <>
+                            <PlusFilledIcon/>
+                            <FormattedMessage
+                                id={'admin.user_grid.new'}
+                                defaultMessage='New'
+                            />
+                        </>
+                    )}
+                </button>
+            </WithTooltip>
             <Menu
                 id='AddChannelDropdown'
                 ariaLabel={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channel Dropdown'})}

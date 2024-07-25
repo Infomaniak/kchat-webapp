@@ -15,14 +15,10 @@ exports[`components/PushSettings should match snapshot, licensed 1`] = `
         id="admin.environment.pushNotificationServer"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
-      <DropdownSetting
+    <Memo(SettingsGroup)>
+      <Memo(DropdownSetting)
         helpText={null}
         id="pushNotificationServerType"
-        isDisabled={false}
         label={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Enable Push Notifications: "
@@ -53,9 +49,8 @@ exports[`components/PushSettings should match snapshot, licensed 1`] = `
           ]
         }
       />
-      <DropdownSetting
+      <Memo(DropdownSetting)
         id="pushNotificationServerLocation"
-        isDisabled={false}
         label={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Push Notification Server location:"
@@ -161,12 +156,12 @@ exports[`components/PushSettings should match snapshot, licensed 1`] = `
         type="number"
         value={1000}
       />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
+        btnClass=""
         defaultMessage={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Save"
@@ -220,14 +215,10 @@ exports[`components/PushSettings should match snapshot, unlicensed 1`] = `
         id="admin.environment.pushNotificationServer"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
-      <DropdownSetting
+    <Memo(SettingsGroup)>
+      <Memo(DropdownSetting)
         helpText={null}
         id="pushNotificationServerType"
-        isDisabled={false}
         label={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Enable Push Notifications: "
@@ -309,12 +300,12 @@ exports[`components/PushSettings should match snapshot, unlicensed 1`] = `
         type="number"
         value={1000}
       />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
+        btnClass=""
         defaultMessage={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Save"

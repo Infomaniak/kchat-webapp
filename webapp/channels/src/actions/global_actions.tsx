@@ -47,6 +47,7 @@ import {getHistory} from 'utils/browser_history';
 import {ActionTypes, PostTypes, RHSStates, ModalIdentifiers, PreviousViewedTypes} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import DesktopApp from 'utils/desktop_api';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
@@ -259,6 +260,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
     dispatch(logout()).then(() => {
         if (shouldSignalLogout) {
             BrowserStore.signalLogout();
+            DesktopApp.signalLogout();
         }
 
         // Waiting for deleteToken login ik

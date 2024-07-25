@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import type {UserThread} from '@mattermost/types/threads';
 
-import {getThreads, markAllThreadsInTeamRead} from 'mattermost-redux/actions/threads';
+import {getThreadsForCurrentTeam, markAllThreadsInTeamRead} from 'mattermost-redux/actions/threads';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';
 import {getThreadCountsInCurrentTeam} from 'mattermost-redux/selectors/entities/threads';
 
@@ -150,7 +150,7 @@ const ThreadList = ({
             before = data[startIndex - 2];
         }
 
-        await dispatch(getThreads(currentUserId, currentTeamId, {unread, perPage: Constants.THREADS_PAGE_SIZE, before}));
+        await dispatch(getThreadsForCurrentTeam({unread, before}));
 
         setLoading(false);
         setHasLoaded(true);
@@ -211,8 +211,8 @@ const ThreadList = ({
                                 onClick={handleRead}
                             >
                                 <FormattedMessage
-                                    id='threading.filters.allThreads'
-                                    defaultMessage='All your threads'
+                                    id='globalThreads.heading'
+                                    defaultMessage='Followed threads'
                                 />
                             </Button>
                         </div>

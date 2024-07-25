@@ -15,10 +15,7 @@ exports[`components/DatabaseSettings should match snapshot 1`] = `
         id="admin.database.title"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <div
         className="banner"
       >
@@ -253,7 +250,7 @@ exports[`components/DatabaseSettings should match snapshot 1`] = `
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -274,7 +271,7 @@ exports[`components/DatabaseSettings should match snapshot 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -335,7 +332,7 @@ exports[`components/DatabaseSettings should match snapshot 1`] = `
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -361,7 +358,7 @@ exports[`components/DatabaseSettings should match snapshot 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -425,12 +422,12 @@ exports[`components/DatabaseSettings should match snapshot 1`] = `
           </div>
         </div>
       </div>
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
+        btnClass=""
         defaultMessage={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Save"

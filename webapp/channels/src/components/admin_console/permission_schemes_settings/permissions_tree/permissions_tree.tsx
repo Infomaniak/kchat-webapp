@@ -208,6 +208,8 @@ export default class PermissionsTree extends React.PureComponent<Props, State> {
         const {config, scope, license} = this.props;
 
         const teamsGroup = this.groups[0];
+        const publicChannelsGroup = this.groups[1];
+        const privateChannelsGroup = this.groups[2];
         const postsGroup = this.groups[7];
         const integrationsGroup = this.groups[8];
         const sharedChannelsGroup = this.groups[9];
@@ -247,14 +249,43 @@ export default class PermissionsTree extends React.PureComponent<Props, State> {
         if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && !postsGroup.permissions.includes(Permissions.USE_GROUP_MENTIONS)) {
             postsGroup.permissions.push(Permissions.USE_GROUP_MENTIONS);
         }
-        postsGroup.permissions.push(Permissions.CREATE_POST);
-
+        postsGroup.permissions.push({
+            id: Permissions.CREATE_POST,
+            combined: true,
+            permissions: [
+                Permissions.CREATE_POST,
+                Permissions.UPLOAD_FILE,
+            ],
+        });
         if (config.ExperimentalSharedChannels === 'true') {
             sharedChannelsGroup.permissions.push(Permissions.MANAGE_SHARED_CHANNELS);
             sharedChannelsGroup.permissions.push(Permissions.MANAGE_SECURE_CONNECTIONS);
         }
         if (!this.props.customGroupsEnabled) {
             customGroupsGroup?.permissions.pop();
+        }
+
+        if (license?.IsLicensed === 'true') {
+            publicChannelsGroup.permissions.push({
+                id: 'manage_public_channel_bookmarks',
+                combined: true,
+                permissions: [
+                    Permissions.ADD_BOOKMARK_PUBLIC_CHANNEL,
+                    Permissions.EDIT_BOOKMARK_PUBLIC_CHANNEL,
+                    Permissions.DELETE_BOOKMARK_PUBLIC_CHANNEL,
+                    Permissions.ORDER_BOOKMARK_PUBLIC_CHANNEL,
+                ],
+            });
+            privateChannelsGroup.permissions.push({
+                id: 'manage_private_channel_bookmarks',
+                combined: true,
+                permissions: [
+                    Permissions.ADD_BOOKMARK_PRIVATE_CHANNEL,
+                    Permissions.EDIT_BOOKMARK_PRIVATE_CHANNEL,
+                    Permissions.DELETE_BOOKMARK_PRIVATE_CHANNEL,
+                    Permissions.ORDER_BOOKMARK_PRIVATE_CHANNEL,
+                ],
+            });
         }
 
         this.groups = this.groups.filter((group) => {

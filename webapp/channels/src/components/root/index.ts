@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import type {Dispatch} from 'redux';
 
@@ -14,7 +15,7 @@ import {getTeamsOrderPreference, getTheme} from 'mattermost-redux/selectors/enti
 import {getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {shouldShowTermsOfService, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
-import {migrateRecentEmojis} from 'actions/emoji_actions';
+import {loadRecentlyUsedCustomEmojis, migrateRecentEmojis} from 'actions/emoji_actions';
 import {emitBrowserWindowResized} from 'actions/views/browser';
 import {loadConfigAndMe, registerCustomPostRenderer} from 'actions/views/root';
 import {getKSuiteBridge} from 'selectors/ksuite_bridge';
@@ -31,6 +32,7 @@ import {initializeProducts} from 'plugins/products';
 
 import type {GlobalState} from 'types/store/index';
 
+import {handleLoginLogoutSignal, redirectToOnboardingOrDefaultTeam} from './actions';
 import Root from './root';
 
 function mapStateToProps(state: GlobalState) {
@@ -75,11 +77,14 @@ function mapDispatchToProps(dispatch: Dispatch) {
             emitBrowserWindowResized,
             getFirstAdminSetupComplete,
             getProfiles,
+            loadRecentlyUsedCustomEmojis,
             migrateRecentEmojis,
             registerCustomPostRenderer,
             initializeProducts,
+            handleLoginLogoutSignal,
+            redirectToOnboardingOrDefaultTeam,
         }, dispatch),
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Root);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Root));

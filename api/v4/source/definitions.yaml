@@ -298,6 +298,68 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/ChannelWithTeamData"
+    ChannelBookmark:
+      type: object
+      properties:
+        id:
+          type: string
+        create_at:
+          description: The time in milliseconds a channel bookmark was created
+          type: integer
+          format: int64
+        update_at:
+          description: The time in milliseconds a channel bookmark was last updated
+          type: integer
+          format: int64
+        delete_at:
+          description: The time in milliseconds a channel bookmark was deleted
+          type: integer
+          format: int64
+        channel_id:
+          type: string
+        owner_id:
+          description: The ID of the user that the channel bookmark belongs to
+          type: string
+        file_id:
+          description: The ID of the file associated with the channel bookmark
+          type: string
+        display_name:
+          type: string
+        sort_order:
+          description: The order of the channel bookmark
+          type: integer
+          format: int64
+        link_url:
+          description: The URL associated with the channel bookmark
+          type: string
+        image_url:
+          description: The URL of the image associated with the channel bookmark
+          type: string
+        emoji:
+          type: string
+        type:
+          type: string
+          enum: [link, file]
+        original_id:
+          description: The ID of the original channel bookmark
+          type: string
+        parent_id:
+          description: The ID of the parent channel bookmark
+          type: string
+    ChannelBookmarkWithFileInfo:
+      allOf:
+        - $ref: "#/components/schemas/ChannelBookmark"
+        - type: object
+          properties:
+            file:
+              $ref: "#/components/schemas/FileInfo"
+    UpdateChannelBookmarkResponse:
+      type: object
+      properties:
+        updated:
+          $ref: "#/components/schemas/ChannelBookmarkWithFileInfo"
+        deleted:
+          $ref: "#/components/schemas/ChannelBookmarkWithFileInfo"
     Post:
       type: object
       properties:
@@ -3423,6 +3485,39 @@ components:
         remote_id:
           description: Id of the remote cluster where the shared channel is homed
           type: string
+    RemoteCluster:
+      type: object
+      properties:
+        remote_id:
+          type: string
+        remote_team_id:
+          type: string
+        name:
+          type: string
+        display_name:
+          type: string
+        site_url:
+          description: URL of the remote cluster
+          type: string
+        create_at:
+          description: Time in milliseconds that the remote cluster was created
+          type: integer
+        last_ping_at:
+          description: Time in milliseconds when the last ping to the remote cluster was run
+          type: integer
+        token:
+          type: string
+        remote_token:
+          type: string
+        topics:
+          type: string
+        creator_id:
+          type: string
+        plugin_id:
+          type: string
+        options:
+          description: A bitmask with a set of option flags
+          type: integer
     RemoteClusterInfo:
       type: object
       properties:
@@ -3575,7 +3670,7 @@ components:
         state:
           description: The current state of the installation
           type: string
-    UserLimits:
+    ServerLimits:
       type: object
       properties:
         maxUsersLimit:

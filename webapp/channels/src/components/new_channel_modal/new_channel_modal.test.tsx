@@ -6,6 +6,7 @@ import {act} from 'react-dom/test-utils';
 
 import {GenericModal} from '@mattermost/components';
 import type {ChannelType} from '@mattermost/types/channels';
+import type {DeepPartial} from '@mattermost/types/utilities';
 
 import {createChannel} from 'mattermost-redux/actions/channels';
 import Permissions from 'mattermost-redux/constants/permissions';
@@ -20,9 +21,7 @@ import {cleanUpUrlable} from 'utils/url';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {
-    render,
-
-    // renderWithContext,
+    renderWithContext,
     screen,
     userEvent,
 
@@ -41,86 +40,40 @@ import NewChannelModal from './new_channel_modal';
 import {shallow} from 'enzyme';
 import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
 
-const mockDispatch = jest.fn();
-let mockState: GlobalState;
-
-jest.mock('react-redux', () => ({
-    ...jest.requireActual('react-redux') as typeof import('react-redux'),
-    useSelector: (selector: (state: typeof mockState) => unknown) => selector(mockState),
-    useDispatch: () => mockDispatch,
-}));
-
 describe('components/new_channel_modal', () => {
-    beforeEach(() => {
-        mockState = {
-            entities: {
-                general: {
-                    config: {},
-                },
+    const initialState: DeepPartial<GlobalState> = {
+        entities: {
+            general: {
+                config: {},
+            },
+            channels: {
+                currentChannelId: 'current_channel_id',
                 channels: {
-                    currentChannelId: 'current_channel_id',
-                    channels: {
-                        current_channel_id: {
-                            id: 'current_channel_id',
-                            display_name: 'Current channel',
-                            name: 'current_channel',
-                        },
-                    },
-                    roles: {
-                        current_channel_id: [
-                            'channel_user',
-                            'channel_admin',
-                        ],
-                    },
-                },
-                teams: {
-                    currentTeamId: 'current_team_id',
-                    myMembers: {
-                        current_team_id: {
-                            roles: 'team_user team_admin',
-                        },
-                    },
-                    teams: {
-                        current_team_id: {
-                            id: 'current_team_id',
-                            description: 'Curent team description',
-                            name: 'current-team',
-                        },
-                    },
-                },
-                preferences: {
-                    myPreferences: {},
-                },
-                users: {
-                    currentUserId: 'current_user_id',
-                    profiles: {
-                        current_user_id: {roles: 'system_admin system_user'},
+                    current_channel_id: {
+                        id: 'current_channel_id',
+                        display_name: 'Current channel',
+                        name: 'current_channel',
                     },
                 },
                 roles: {
-                    roles: {
-                        channel_admin: {
-                            permissions: [],
-                        },
-                        channel_user: {
-                            permissions: [],
-                        },
-                        team_admin: {
-                            permissions: [],
-                        },
-                        team_user: {
-                            permissions: [
-                                Permissions.CREATE_PRIVATE_CHANNEL,
-                            ],
-                        },
-                        system_admin: {
-                            permissions: [
-                                Permissions.CREATE_PUBLIC_CHANNEL,
-                            ],
-                        },
-                        system_user: {
-                            permissions: [],
-                        },
+                    current_channel_id: new Set([
+                        'channel_user',
+                        'channel_admin',
+                    ]),
+                },
+            },
+            teams: {
+                currentTeamId: 'current_team_id',
+                myMembers: {
+                    current_team_id: {
+                        roles: 'team_user team_admin',
+                    },
+                },
+                teams: {
+                    current_team_id: {
+                        id: 'current_team_id',
+                        description: 'Curent team description',
+                        name: 'current-team',
                     },
                 },
                 usage: {
@@ -157,14 +110,52 @@ describe('components/new_channel_modal', () => {
                     },
                 },
             },
-            plugins: {
-                plugins: {focalboard: {id: suitePluginIds.focalboard}},
+            preferences: {
+                myPreferences: {},
             },
-        } as unknown as GlobalState;
-    });
+            users: {
+                currentUserId: 'current_user_id',
+                profiles: {
+                    current_user_id: {roles: 'system_admin system_user'},
+                },
+            },
+            roles: {
+                roles: {
+                    channel_admin: {
+                        permissions: [],
+                    },
+                    channel_user: {
+                        permissions: [],
+                    },
+                    team_admin: {
+                        permissions: [],
+                    },
+                    team_user: {
+                        permissions: [
+                            Permissions.CREATE_PRIVATE_CHANNEL,
+                        ],
+                    },
+                    system_admin: {
+                        permissions: [
+                            Permissions.CREATE_PUBLIC_CHANNEL,
+                        ],
+                    },
+                    system_user: {
+                        permissions: [],
+                    },
+                },
+            },
+        },
+        plugins: {
+            plugins: {focalboard: {id: suitePluginIds.focalboard}},
+        },
+    };
 
     test('should match component state with given props', () => {
-        render(<NewChannelModal/>);
+        renderWithContext(
+            <NewChannelModal/>,
+            initialState,
+        );
 
         const heading = screen.getByRole('heading');
         expect(heading).toBeInTheDocument();
@@ -223,8 +214,9 @@ describe('components/new_channel_modal', () => {
     test('should handle display name change', () => {
         const value = 'Channel name';
 
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Change display name
@@ -265,9 +257,10 @@ describe('components/new_channel_modal', () => {
     //         },
     //     } as unknown as React.ChangeEvent<HTMLInputElement>;
 
-    //     const wrapper = shallow(
-    //         <NewChannelModal/>,
-    //     );
+        // renderWithContext(
+        //     <NewChannelModal/>,
+        //     initialState,
+        // );
 
     //     // Change display name
     //     const input = wrapper.find(ChannelNameFormField).first();
@@ -294,8 +287,9 @@ describe('components/new_channel_modal', () => {
     // });
 
     test('should handle type changes', () => {
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Change type to private
@@ -320,8 +314,9 @@ describe('components/new_channel_modal', () => {
     test('should handle purpose changes', () => {
         const value = 'Purpose';
 
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Change purpose
@@ -336,8 +331,9 @@ describe('components/new_channel_modal', () => {
     });
 
     test('should enable confirm button when having valid display name, url and type', () => {
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Confirm button should be disabled
@@ -363,8 +359,9 @@ describe('components/new_channel_modal', () => {
     });
 
     test('should disable confirm button when display name in error', () => {
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Change display name
@@ -392,8 +389,9 @@ describe('components/new_channel_modal', () => {
     });
 
     test('should disable confirm button when url in error', () => {
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Change display name
@@ -465,8 +463,9 @@ describe('components/new_channel_modal', () => {
             },
         } as unknown as React.ChangeEvent<HTMLInputElement>;
 
-        const wrapper = shallow(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Confirm button should be disabled
@@ -496,12 +495,10 @@ describe('components/new_channel_modal', () => {
     // test('should request team creation on submit', async () => {
     //     const name = 'Channel name';
 
-    //     const mockChangeEvent = {
-    //         preventDefault: jest.fn(),
-    //         target: {
-    //             value: name,
-    //         },
-    //     } as unknown as React.ChangeEvent<HTMLInputElement>;
+        // renderWithContext(
+        //     <NewChannelModal/>,
+        //     initialState,
+        // );
 
     //     const wrapper = mountWithIntl(
     //         <NewChannelModal/>,

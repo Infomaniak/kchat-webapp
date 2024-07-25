@@ -4,7 +4,7 @@
 import {ArchiveOutlineIcon, CheckIcon, ChevronDownIcon, GlobeIcon, LockOutlineIcon, AccountOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React from 'react';
-import {FormattedMessage, injectIntl, type WrappedComponentProps} from 'react-intl';
+import {FormattedMessage, defineMessages, injectIntl, type WrappedComponentProps} from 'react-intl';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
@@ -15,12 +15,12 @@ import MagnifyingGlassSVG from 'components/common/svg_images_components/magnifyi
 import LoadingScreen from 'components/loading_screen';
 import * as Menu from 'components/menu';
 import QuickInput from 'components/quick_input';
+import SharedChannelIndicator from 'components/shared_channel_indicator';
 import CheckboxCheckedIcon from 'components/widgets/icons/checkbox_checked_icon';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
 
 import {isArchivedChannel} from 'utils/channel_utils';
 import Constants, {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
 import {isKeyPressed} from 'utils/keyboard';
 import * as UserAgent from 'utils/user_agent';
 import {localizeMessage, localizeAndFormatMessage} from 'utils/utils';
@@ -142,6 +142,14 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
 
         if (isArchivedChannel(channel)) {
             channelTypeIcon = <ArchiveOutlineIcon size={18}/>;
+        } else if (channel.shared) {
+            channelTypeIcon = (
+                <SharedChannelIndicator
+                    className='shared-channel-icon'
+                    channelType={channel.type}
+                    withTooltip={true}
+                />
+            );
         } else if (isPrivateChannel(channel)) {
             channelTypeIcon = <LockOutlineIcon size={18}/>;
         } else {
@@ -166,8 +174,8 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
         ) : null;
 
         const channelPurposeContainerAriaLabel = localizeAndFormatMessage(
-            t('more_channels.channel_purpose'),
-            'Channel Information: Membership Indicator: Joined, Member count {memberCount}, Purpose: {channelPurpose}',
+            messages.channelPurpose.id,
+            messages.channelPurpose.defaultMessage,
             {memberCount, channelPurpose: channel.purpose || ''},
         );
 
@@ -378,7 +386,7 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
             listContent = (
                 <div
                     className='no-channel-message'
-                    aria-label={this.state.channelSearchValue.length > 0 ? localizeAndFormatMessage(t('more_channels.noMore'), 'No results for {text}', {text: this.state.channelSearchValue}) : localizeMessage('widgets.channels_input.empty', 'No channels found')
+                    aria-label={this.state.channelSearchValue.length > 0 ? localizeAndFormatMessage(messages.noMore.id, messages.noMore.defaultMessage, {text: this.state.channelSearchValue}) : localizeMessage('widgets.channels_input.empty', 'No channels found')
                     }
                 >
                     <MagnifyingGlassSVG/>
@@ -397,7 +405,7 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
             if (channelsToDisplay.length >= this.props.channelsPerPage && pageEnd < this.props.channels.length) {
                 nextButton = (
                     <button
-                        className='btn btn-sm filter-control filter-control__next outlineButton'
+                        className='btn btn-sm btn-tertiary filter-control filter-control__next'
                         onClick={this.nextPage}
                         disabled={this.state.nextDisabled}
                         aria-label={localizeMessage('more_channels.next', 'Next')}
@@ -413,7 +421,7 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
             if (this.state.page > 0) {
                 previousButton = (
                     <button
-                        className='btn btn-sm filter-control filter-control__prev outlineButton'
+                        className='btn btn-sm btn-tertiary filter-control filter-control__prev'
                         onClick={this.previousPage}
                         aria-label={localizeMessage('more_channels.prev', 'Previous')}
                     >
@@ -567,7 +575,7 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
         } else if (channels.length === 1) {
             channelCountLabel = localizeMessage('more_channels.count_one', '1 Result');
         } else if (channels.length > 1) {
-            channelCountLabel = localizeAndFormatMessage(t('more_channels.count'), '0 Results', {count: channels.length});
+            channelCountLabel = localizeAndFormatMessage(messages.channelCount.id, messages.channelCount.defaultMessage, {count: channels.length});
         } else {
             channelCountLabel = localizeMessage('more_channels.count_zero', '0 Results');
         }
@@ -607,5 +615,20 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
         );
     }
 }
+
+const messages = defineMessages({
+    channelCount: {
+        id: 'more_channels.count',
+        defaultMessage: '{count} Results',
+    },
+    channelPurpose: {
+        id: 'more_channels.channel_purpose',
+        defaultMessage: 'Channel Information: Membership Indicator: Joined, Member count {memberCount} , Purpose: {channelPurpose}',
+    },
+    noMore: {
+        id: 'more_channels.noMore',
+        defaultMessage: 'No results for {text}',
+    },
+});
 
 export default injectIntl(SearchableChannelList);

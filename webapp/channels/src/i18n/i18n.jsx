@@ -1,6 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/**
+ * @typedef {} Language
+ */
+
 /* eslint-disable import/order */
 import bg from './bg.json';
 import de from './de.json';
@@ -25,9 +29,7 @@ import zhCN from './zh-CN.json';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
-import store from 'stores/redux_store';
-
-// should match the values in model/config.go
+// should match the values in server/public/shared/i18n/i18n.go
 const languages = {
     de: {
         value: 'de',
@@ -161,8 +163,12 @@ export function getAllLanguages() {
     return languages;
 }
 
-export function getLanguages() {
-    const config = getConfig(store.getState());
+/**
+ * @param {import('types/store').GlobalState} state
+ * @returns {Record<string, Language>}
+ */
+export function getLanguages(state) {
+    const config = getConfig(state);
     if (!config.AvailableLocales) {
         return getAllLanguages();
     }
@@ -178,6 +184,11 @@ export function getLanguageInfo(locale) {
     return getAllLanguages()[locale];
 }
 
-export function isLanguageAvailable(locale) {
-    return Boolean(getLanguages()[locale]);
+/**
+ * @param {import('types/store').GlobalState} state
+ * @param {string} locale
+ * @returns {boolean}
+ */
+export function isLanguageAvailable(state, locale) {
+    return Boolean(getLanguages(state)[locale]);
 }

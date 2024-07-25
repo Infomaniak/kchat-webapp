@@ -15,15 +15,12 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
         id="admin.elasticsearch.title"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <BooleanSetting
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -49,11 +46,35 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
         value={false}
+      />
+      <AdminTextSetting
+        disabled={true}
+        helpText={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="The type of the search backend."
+            id="admin.elasticsearch.backendDescription"
+          />
+        }
+        id="backend"
+        label={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Backend type:"
+            id="admin.elasticsearch.backendTitle"
+          />
+        }
+        onChange={[Function]}
+        placeholder={
+          Object {
+            "defaultMessage": "E.g.: \\"elasticsearch\\"",
+            "id": "admin.elasticsearch.backendExample",
+          }
+        }
+        setByEnv={false}
       />
       <AdminTextSetting
         disabled={true}
@@ -164,7 +185,7 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
         disabled={true}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -185,7 +206,7 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -245,7 +266,7 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
         disabled={true}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -266,7 +287,7 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -344,6 +365,50 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
       <RequestButton
         buttonText={
           <Memo(MemoizedFormattedMessage)
+            defaultMessage="Rebuild Channels Index"
+            id="admin.elasticsearch.rebuildChannelsIndex.title"
+          />
+        }
+        disabled={true}
+        errorMessage={
+          Object {
+            "defaultMessage": "Failed to trigger channels index rebuild job: {error}",
+            "id": "admin.elasticsearch.rebuildIndexSuccessfully.error",
+          }
+        }
+        helpText={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="This purges the channels index and re-indexes all channels in the database, from oldest to newest. Channel autocomplete is available during indexing but search results may be incomplete until the indexing job is complete.
+<b>Note- Please ensure no other indexing job is in progress in the table above.</b>"
+            id="admin.elasticsearch.rebuildChannelsIndex.helpText"
+            values={
+              Object {
+                "b": [Function],
+              }
+            }
+          />
+        }
+        id="rebuildChannelsIndexButton"
+        includeDetailedError={false}
+        label={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Rebuild Channels Index"
+            id="admin.elasticsearch.rebuildChannelsIndex.title"
+          />
+        }
+        requestAction={[MockFunction]}
+        saveNeeded={false}
+        showSuccessMessage={true}
+        successMessage={
+          Object {
+            "defaultMessage": "Channels index rebuild job triggered successfully.",
+            "id": "admin.elasticsearch.rebuildIndexSuccessfully.success",
+          }
+        }
+      />
+      <RequestButton
+        buttonText={
+          <Memo(MemoizedFormattedMessage)
             defaultMessage="Purge Index"
             id="admin.elasticsearch.purgeIndexesButton"
           />
@@ -407,7 +472,7 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
         disabled={true}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -428,7 +493,7 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -438,7 +503,7 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
         disabled={true}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -459,18 +524,18 @@ exports[`components/ElasticSearchSettings should match snapshot, disabled 1`] = 
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
         value={false}
       />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
+        btnClass=""
         defaultMessage={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Save"
@@ -524,15 +589,12 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
         id="admin.elasticsearch.title"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <BooleanSetting
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -558,11 +620,35 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
         value={true}
+      />
+      <AdminTextSetting
+        disabled={false}
+        helpText={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="The type of the search backend."
+            id="admin.elasticsearch.backendDescription"
+          />
+        }
+        id="backend"
+        label={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Backend type:"
+            id="admin.elasticsearch.backendTitle"
+          />
+        }
+        onChange={[Function]}
+        placeholder={
+          Object {
+            "defaultMessage": "E.g.: \\"elasticsearch\\"",
+            "id": "admin.elasticsearch.backendExample",
+          }
+        }
+        setByEnv={false}
       />
       <AdminTextSetting
         disabled={false}
@@ -673,7 +759,7 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -694,7 +780,7 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -754,7 +840,7 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -775,7 +861,7 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -852,6 +938,50 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
       <RequestButton
         buttonText={
           <Memo(MemoizedFormattedMessage)
+            defaultMessage="Rebuild Channels Index"
+            id="admin.elasticsearch.rebuildChannelsIndex.title"
+          />
+        }
+        disabled={false}
+        errorMessage={
+          Object {
+            "defaultMessage": "Failed to trigger channels index rebuild job: {error}",
+            "id": "admin.elasticsearch.rebuildIndexSuccessfully.error",
+          }
+        }
+        helpText={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="This purges the channels index and re-indexes all channels in the database, from oldest to newest. Channel autocomplete is available during indexing but search results may be incomplete until the indexing job is complete.
+<b>Note- Please ensure no other indexing job is in progress in the table above.</b>"
+            id="admin.elasticsearch.rebuildChannelsIndex.helpText"
+            values={
+              Object {
+                "b": [Function],
+              }
+            }
+          />
+        }
+        id="rebuildChannelsIndexButton"
+        includeDetailedError={false}
+        label={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Rebuild Channels Index"
+            id="admin.elasticsearch.rebuildChannelsIndex.title"
+          />
+        }
+        requestAction={[MockFunction]}
+        saveNeeded={false}
+        showSuccessMessage={true}
+        successMessage={
+          Object {
+            "defaultMessage": "Channels index rebuild job triggered successfully.",
+            "id": "admin.elasticsearch.rebuildIndexSuccessfully.success",
+          }
+        }
+      />
+      <RequestButton
+        buttonText={
+          <Memo(MemoizedFormattedMessage)
             defaultMessage="Purge Index"
             id="admin.elasticsearch.purgeIndexesButton"
           />
@@ -915,7 +1045,7 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -936,7 +1066,7 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
@@ -946,7 +1076,7 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
         disabled={false}
         falseText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
+            defaultMessage="False"
             id="admin.false"
           />
         }
@@ -967,18 +1097,18 @@ exports[`components/ElasticSearchSettings should match snapshot, enabled 1`] = `
         setByEnv={false}
         trueText={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
+            defaultMessage="True"
             id="admin.true"
           />
         }
         value={false}
       />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
+        btnClass=""
         defaultMessage={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Save"

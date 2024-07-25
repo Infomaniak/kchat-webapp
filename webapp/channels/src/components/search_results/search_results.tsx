@@ -4,8 +4,7 @@
 import classNames from 'classnames';
 import React, {useEffect, useRef, useState} from 'react';
 import Scrollbars from 'react-custom-scrollbars';
-import {useIntl, FormattedMessage} from 'react-intl';
-import type {MessageDescriptor} from 'react-intl';
+import {useIntl, FormattedMessage, defineMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
 import type {FileSearchResultItem as FileSearchResultItemType} from '@mattermost/types/files';
@@ -25,7 +24,6 @@ import LoadingSpinner from 'components/widgets/loading/loading_wrapper';
 
 import {searchHintOptions, DataSearchTypes} from 'utils/constants';
 import {isFileAttachmentsEnabled} from 'utils/file_utils';
-import {t} from 'utils/i18n';
 import * as Utils from 'utils/utils';
 
 import FilesFilterMenu from './files_filter_menu';
@@ -180,7 +178,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
 
     let sortedResults: any = results;
 
-    const titleDescriptor: MessageDescriptor = {};
+    let titleDescriptor;
     const noResultsProps: NoResultsProps = {
         variant: NoResultsVariant.ChannelSearch,
     };
@@ -188,8 +186,10 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
     if (isMentionSearch) {
         noResultsProps.variant = NoResultsVariant.Mentions;
 
-        titleDescriptor.id = t('search_header.title2');
-        titleDescriptor.defaultMessage = 'Recent Mentions';
+        titleDescriptor = defineMessage({
+            id: 'search_header.title2',
+            defaultMessage: 'Recent Mentions',
+        });
     } else if (isFlaggedPosts) {
         noResultsProps.variant = NoResultsVariant.FlaggedPosts;
         noResultsProps.subtitleValues = {buttonText: <strong>{
@@ -197,8 +197,10 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                 id: 'flag_post.flag',
                 defaultMessage: 'Save Message'},
             )}</strong>};
-        titleDescriptor.id = t('search_header.title3');
-        titleDescriptor.defaultMessage = 'Saved messages';
+        titleDescriptor = defineMessage({
+            id: 'search_header.title3',
+            defaultMessage: 'Saved messages',
+        });
     } else if (isPinnedPosts) {
         noResultsProps.variant = NoResultsVariant.PinnedPosts;
         noResultsProps.subtitleValues = {text: <strong>{
@@ -210,8 +212,10 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
         sortedResults = [...results];
         sortedResults.sort((postA: Post|FileSearchResultItemType, postB: Post|FileSearchResultItemType) => postB.create_at - postA.create_at);
 
-        titleDescriptor.id = t('search_header.pinnedMessages');
-        titleDescriptor.defaultMessage = 'Pinned messages';
+        titleDescriptor = defineMessage({
+            id: 'search_header.pinnedMessages',
+            defaultMessage: 'Pinned messages',
+        });
     } else if (isChannelFiles) {
         if (searchFilterType === 'all') {
             noResultsProps.variant = NoResultsVariant.ChannelFiles;
@@ -219,24 +223,34 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
             noResultsProps.variant = NoResultsVariant.ChannelFilesFiltered;
         }
 
-        titleDescriptor.id = t('search_header.channelFiles');
-        titleDescriptor.defaultMessage = 'Files';
+        titleDescriptor = defineMessage({
+            id: 'search_header.channelFiles',
+            defaultMessage: 'Files',
+        });
     } else if (isCard) {
-        titleDescriptor.id = t('search_header.title5');
-        titleDescriptor.defaultMessage = 'Extra information';
+        titleDescriptor = defineMessage({
+            id: 'search_header.title5',
+            defaultMessage: 'Extra information',
+        });
     } else if (!searchTerms && noResults && noFileResults) {
-        titleDescriptor.id = t('search_header.search');
-        titleDescriptor.defaultMessage = 'Search';
+        titleDescriptor = defineMessage({
+            id: 'search_header.search',
+            defaultMessage: 'Search',
+        });
     } else if (searchType === DataSearchTypes.FILES_SEARCH_TYPE && !isChannelFiles) {
         noResultsProps.variant = NoResultsVariant.Files;
         noResultsProps.titleValues = {searchTerm: `${searchTerms}`};
-        titleDescriptor.id = t('search_header.results');
-        titleDescriptor.defaultMessage = 'Search Results';
+        titleDescriptor = defineMessage({
+            id: 'search_header.results',
+            defaultMessage: 'Search Results',
+        });
     } else {
         noResultsProps.titleValues = {channelName: `${searchTerms}`};
 
-        titleDescriptor.id = t('search_header.results');
-        titleDescriptor.defaultMessage = 'Search Results';
+        titleDescriptor = defineMessage({
+            id: 'search_header.results',
+            defaultMessage: 'Search Results',
+        });
     }
 
     const formattedTitle = intl.formatMessage(titleDescriptor);
@@ -360,7 +374,9 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
             className='SearchResults sidebar-right__body'
         >
             <SearchResultsHeader>
-                {formattedTitle}
+                <span>
+                    {formattedTitle}
+                </span>
                 {props.channelDisplayName && <div className='sidebar--right__title__channel'>{props.channelDisplayName}</div>}
             </SearchResultsHeader>
             {isMessagesSearch &&

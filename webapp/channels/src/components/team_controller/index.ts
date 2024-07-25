@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import type {ConnectedProps} from 'react-redux';
 import type {RouteComponentProps} from 'react-router-dom';
 
-import {fetchAllMyTeamsChannelsAndChannelMembersREST, fetchChannelsAndMembers} from 'mattermost-redux/actions/channels';
+import {fetchAllMyTeamsChannelsAndChannelMembersREST, fetchChannelsAndMembers, unsetActiveChannelOnServer} from 'mattermost-redux/actions/channels';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {getLicense, getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId, getMyTeams} from 'mattermost-redux/selectors/entities/teams';
@@ -39,6 +39,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     const currentUser = getCurrentUser(state);
     const plugins = state.plugins.components.NeedsTeamComponent;
     const disableRefetchingOnBrowserFocus = config.DisableRefetchingOnBrowserFocus === 'true';
+    const disableWakeUpReconnectHandler = config.DisableWakeUpReconnectHandler === 'true';
 
     return {
         currentTeamId: getCurrentTeamId(state),
@@ -48,6 +49,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         selectedThreadId: getSelectedThreadIdInCurrentTeam(state),
         mfaRequired: checkIfMFARequired(currentUser, license, config, ownProps.match.url),
         disableRefetchingOnBrowserFocus,
+        disableWakeUpReconnectHandler,
     };
 }
 
@@ -57,6 +59,7 @@ const mapDispatchToProps = {
     markChannelAsReadOnFocus,
     initializeTeam,
     joinTeam,
+    unsetActiveChannelOnServer,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

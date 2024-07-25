@@ -8,15 +8,15 @@ import type {FileInfo} from '@mattermost/types/files';
 import {getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 
 import ExternalLink from 'components/external_link';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
 import AttachmentIcon from 'components/widgets/icons/attachment_icon';
 import KDriveIcon from 'components/widgets/icons/kdrive_icon';
+import WithTooltip from 'components/with_tooltip';
 
 import {trimFilename} from 'utils/file_utils';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {localizeMessage} from 'utils/utils';
+import OverlayTrigger from 'components/overlay_trigger';
 
 type Props = {
 
@@ -74,13 +74,12 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
         let filenameOverlay;
         if (compactDisplay) {
             filenameOverlay = (
-                <OverlayTrigger
-                    delayShow={1000}
+                <WithTooltip
+                    id='file-name__tooltip'
+                    title={fileName}
                     placement='top'
-                    overlay={<Tooltip id='file-name__tooltip'>{fileName}</Tooltip>}
                 >
                     <a
-                        id='file-attachment-link'
                         href='#'
                         onClick={handleImageClick}
                         className='post-image__name'
@@ -89,30 +88,22 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                         <AttachmentIcon className='icon'/>
                         {trimmedFilename}
                     </a>
-                </OverlayTrigger>
+                </WithTooltip>
             );
         } else if (canDownload) {
             filenameOverlay = (
                 <div className={iconClass || 'post-image__name'}>
-                    <OverlayTrigger
-                        delayShow={1000}
+                    <WithTooltip
+                        id='file-name__tooltip'
+                        title={localizeMessage('view_image_popover.download', 'Download')}
                         placement='top'
-                        overlay={
-                            <Tooltip id='file-name__tooltip'>
-                                {localizeMessage('view_image_popover.download', 'Download')}
-                            </Tooltip>
-                        }
                     >
                         <>
                             {(!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) && (
-                                <OverlayTrigger
-                                    delayShow={200}
+                                <WithTooltip
+                                    id='file-name__tooltip'
+                                    title={localizeMessage('kdrive.save', 'Save file to kDrive')}
                                     placement='top'
-                                    overlay={
-                                        <Tooltip id='file-name__tooltip'>
-                                            {localizeMessage('kdrive.save', 'Save file to kDrive')}
-                                        </Tooltip>
-                                    }
                                 >
                                     <span className='file-kdrive__icon--wrapper'>
                                         <KDriveIcon
@@ -120,7 +111,7 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                                             className='icon file-kdrive__icon'
                                         />
                                     </span>
-                                </OverlayTrigger>
+                                </WithTooltip>
                             )}
                             <ExternalLink
                                 href={getFileDownloadUrl(fileInfo.id)}
@@ -131,7 +122,7 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                                 {children || trimmedFilename}
                             </ExternalLink>
                         </>
-                    </OverlayTrigger>
+                    </WithTooltip>
                 </div>
             );
         } else {
