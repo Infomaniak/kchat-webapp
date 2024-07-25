@@ -3752,7 +3752,7 @@
   "multiselect.loading": "Chargement…",
   "multiselect.noMorePeople": "Un message personnel est limité à 7 personnes.",
   "multiselect.numGroupsRemaining": "Utilisez les flèches ↑↓ pour parcourir, ↵ pour sélectionner. Vous pouvez encore ajouter {num, number} {num, plural, one {groupe} other {groupes}}. ",
-  "multiselect.numMembers": "{options}/7 utilisateurs",
+  "multiselect.numMembers": "{options}/{maxUsers} utilisateurs",
   "multiselect.numPeopleRemaining": "Utilisez les flèches ↑↓ du clavier, ENTER pour sélectionner.",
   "multiselect.numRemaining": "Vous pouvez ajouter jusqu'à {max, number} à la fois. Il vous reste {num, number}.",
   "multiselect.placeholder": "Rechercher des membres",

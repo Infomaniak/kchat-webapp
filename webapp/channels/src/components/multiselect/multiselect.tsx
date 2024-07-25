@@ -473,8 +473,9 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
             memberCount = (
                 <FormattedMessage
                     id='multiselect.numMembers'
-                    defaultMessage='{options}/7 users'
+                    defaultMessage='{options}/{maxUsers} users'
                     values={{
+                        maxUsers: Constants.MAX_USERS_IN_GM - 1,
                         options: this.props.values.length,
                     }}
                 />
@@ -484,7 +485,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
 
         return (
             <>
-                <div className={(this.props.disableMultiSelectList && this.props.values.length === 8) ? 'filtered-user-list disable-list' : 'filtered-user-list'}>
+                <div className={(this.props.disableMultiSelectList && this.props.values.length === Constants.MAX_USERS_IN_GM) ? 'filtered-user-list disable-list' : 'filtered-user-list'}>
                     <div className='filter-row filter-row--full'>
                         <div className='multi-select__container react-select'>
                             <ReactSelect
@@ -539,7 +540,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
 
                         </div>
                         {
-                            (this.props.disableMultiSelectList && this.props.values.length >= 7) ? (
+                            (this.props.disableMultiSelectList && this.props.values.length >= (Constants.MAX_USERS_IN_GM - 1)) ? (
                                 <>
                                     <div className='create-new-channel'>
                                         <img src={lampIcon()}/>
@@ -565,7 +566,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                         }
                     </div>
                     {
-                        (!this.props.disableMultiSelectList || this.props.values.length <= 7) ? (
+                        (!this.props.disableMultiSelectList || this.props.values.length <= (Constants.MAX_USERS_IN_GM - 1)) ? (
                             multiSelectList
                         ) : null
                     }

@@ -4412,7 +4412,7 @@
   "multiselect.list.notFound": "No results found matching <b>{searchQuery}</b>",
   "multiselect.loading": "Loading...",
   "multiselect.noMorePeople": "A personal message is limited to 7 people.",
-  "multiselect.numMembers": "{options}/7 users",
+  "multiselect.numMembers": "{options}/{maxUsers} users",
   "multiselect.numPeopleRemaining": "Use the ↑↓ arrows on the keyboard, ENTER to select.",
   "multiselect.new_channel": "More than 7 people? Create a channel instead",
   "multiselect.new_channel_create": "Create a channel",
