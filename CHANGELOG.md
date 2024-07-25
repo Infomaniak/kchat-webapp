@@ -1,3 +1,9 @@
+## 2.9.7-rc.10 (2024-07-24)
+
+### Changed (1 change)
+
+- [fix(call): Updated ringtone](kchat/webapp@c8b4b62b6743ce524172e7f239767a08c4699ad0) by @tim.dewinter ([merge request](kchat/webapp!853))
+
 ## 2.9.7-rc.9 (2024-07-23)
 
 ### Changed (1 change)
@@ -137,6 +143,12 @@
 ### Chore (1 change)
 
 - [split test steps for coverage reports to work](kchat/webapp@a1374068e5164f93e6353dc9a2ab25c0f22cf8d6) by @antonbuksa ([merge request](kchat/webapp!827))
+
+## 2.9.7-next.4 (2024-07-24)
+
+### Changed (1 change)
+
+- [fix(call): Updated ringtone](kchat/webapp@c8b4b62b6743ce524172e7f239767a08c4699ad0) by @tim.dewinter ([merge request](kchat/webapp!853))
 
 ## 2.9.7-next.3 (2024-07-23)
 
