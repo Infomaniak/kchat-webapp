@@ -42,8 +42,11 @@ const PostReminders = {
 
 const IkPostponeReminderButtons = (props: Props) => {
     const handleDeleteMenuItemActivated = (): void => {
+        const postId = props.post.id;
+
         if (props.userByName) {
-            props.actions.markPostReminderAsDone(props.userByName.id, props.post.id);
+            const userId = props.userByName.id;
+            props.actions.markPostReminderAsDone(userId, postId);
         }
     };
 
@@ -77,8 +80,14 @@ const IkPostponeReminderButtons = (props: Props) => {
                 endTime = currentDate.add(1, 'week').isoWeekday(1).set({hour: 9, minute: 0});
             }
 
+            const postId = props.post.props.post_id;
+            const timestamp = toUTCUnix(endTime.toDate());
+            const reschedule = true;
+            const reminderPostId = props.post.id;
+
             if (props.userByName?.id) {
-                props.actions.addPostReminder(props.userByName?.id, props.post.props.post_id, toUTCUnix(endTime.toDate()), true, props.post.id);
+                const userId = props.userByName.id;
+                props.actions.addPostReminder(userId, postId, timestamp, reschedule, reminderPostId);
             }
         }
     };
@@ -131,7 +140,10 @@ const IkPostponeReminderButtons = (props: Props) => {
 
         let trailingElements = null;
         if (postReminder === PostReminders.TOMORROW) {
-            const tomorrow = getCurrentMomentForTimezone(props.timezone).add(1, 'day').set({hour: 9, minute: 0}).toDate();
+            const tomorrow = getCurrentMomentForTimezone(props.timezone).
+                add(1, 'day').
+                set({hour: 9, minute: 0}).
+                toDate();
 
             trailingElements = (
                 <span className={`postReminder-${postReminder}_timestamp`}>
@@ -152,7 +164,11 @@ const IkPostponeReminderButtons = (props: Props) => {
         }
 
         if (postReminder === PostReminders.MONDAY) {
-            const monday = getCurrentMomentForTimezone(props.timezone).add(1, 'week').isoWeekday(1).set({hour: 9, minute: 0}).toDate();
+            const monday = getCurrentMomentForTimezone(props.timezone).
+                add(1, 'week').
+                isoWeekday(1).
+                set({hour: 9, minute: 0}).
+                toDate();
 
             trailingElements = (
                 <span className={`postReminder-${postReminder}_timestamp`}>
@@ -185,12 +201,12 @@ const IkPostponeReminderButtons = (props: Props) => {
     });
 
     return (
-        <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
+        <div className='PostponeButtonsWrapper'>
             <Menu.Container
                 menuButton={{
                     id: `_button_${props.post.id}`,
                     dateTestId: `PostDotMenu-Button-${props.post.id}`,
-                    class: 'PostPriorityPicker__apply',
+                    class: 'PostponeButtons__apply',
                     children:
     <FormattedMessage
         id='postpone.post_reminder.menu'
@@ -211,9 +227,8 @@ const IkPostponeReminderButtons = (props: Props) => {
                 {postReminderSubMenuItems}
             </Menu.Container>
             <button
-                className='PostPriorityPicker__cancel'
+                className='PostponeButtons__cancel'
                 onClick={handleDeleteMenuItemActivated}
-                style={{marginLeft: '10px'}}
             >
                 <FormattedMessage
                     id='postpone.post_reminder.mark'
