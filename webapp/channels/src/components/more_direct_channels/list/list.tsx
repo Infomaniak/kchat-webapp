@@ -128,7 +128,10 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
                 props.values.length === MAX_SELECTABLE_VALUES ? (
                     <FormattedMessage
                         id='multiselect.noMorePeople'
-                        defaultMessage='A personal message is limited to 7 people.'
+                        defaultMessage='A personal message is limited to {maxUsers} people.'
+                        values={{
+                            maxUsers: (Constants.MAX_USERS_IN_GM - 1),
+                        }}
                     />
                 ) : (
                     <FormattedMessage

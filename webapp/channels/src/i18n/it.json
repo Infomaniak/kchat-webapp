@@ -2909,7 +2909,7 @@
   "multiselect.list.notFound": "Nessun elemento trovato corrispondenti a <b>{searchQuery}</b>",
   "multiselect.loading": "Caricamento...",
   "multiselect.noMorePeople": "Un messaggio personale è limitato a 7 persone.",
-  "multiselect.numMembers": "{options}/7 utenti",
+  "multiselect.numMembers": "{options}/{maxUsers} utenti",
   "multiselect.numPeopleRemaining": "Usa le frecce ↑↓ della tastiera, ENTER per selezionare.",
   "multiselect.new_channel": "Più di 7 persone? Create invece un canale",
   "multiselect.new_channel_create": "Crea un canale",

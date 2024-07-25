@@ -4438,7 +4438,7 @@
   "multiselect.list.notFound": "Für die Suchanfrage <b>{searchQuery}</b> wurden keine Ergebnisse gefunden",
   "multiselect.loading": "Lade...",
   "multiselect.noMorePeople": "Eine persönliche Nachricht ist auf 7 Personen begrenzt.",
-  "multiselect.numMembers": "{options}/7 Benutzer",
+  "multiselect.numMembers": "{options}/{maxUsers} Benutzer",
   "multiselect.numPeopleRemaining": "Verwenden Sie die ↑↓ Pfeiltasten auf der Tastatur, ENTER zum Auswählen.",
   "multiselect.new_channel": "Mehr als sieben Personen? Erstellen Sie stattdessen einen Kanal",
   "multiselect.new_channel_create": "Einen Kanal erstellen",

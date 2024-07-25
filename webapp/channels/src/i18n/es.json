@@ -3811,7 +3811,7 @@
   "multiselect.list.notFound": "No se encontraron resultados que encajen con **{searchQuery}**",
   "multiselect.loading": "Cargando...",
   "multiselect.noMorePeople": "Un mensaje personal está limitado a 7 personas.",
-  "multiselect.numMembers": "{options}/7 usuarios",
+  "multiselect.numMembers": "{options}/{maxUsers} usuarios",
   "multiselect.numPeopleRemaining": "Usa las flechas ↑↓ del teclado, ENTER para seleccionar.",
   "multiselect.new_channel": "¿Más de 7 personas? Crea un canal",
   "multiselect.new_channel_create": "Crear un canal",
