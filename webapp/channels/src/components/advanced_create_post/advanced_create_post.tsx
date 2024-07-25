@@ -922,7 +922,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     };
 
     emitRecordingEvent = () => {
-        const TIMER = 10;
+        const TIMER = 500;
         this.recordingInterval = setInterval(() => {
             const channelId = this.props.currentChannel.id;
             GlobalActions.emitLocalUserTypingEvent('recording', channelId, '');
