@@ -43,7 +43,6 @@ export interface Props {
     channel: Channel;
     currentUserIsChannelAdmin: boolean;
     membersCount: number;
-    guestsCount: number;
     searchTerms: string;
     canGoBack: boolean;
     teamUrl: string;
@@ -83,7 +82,6 @@ export default function ChannelMembersRHS({
     currentUserIsChannelAdmin,
     searchTerms,
     membersCount,
-    guestsCount,
     canGoBack,
     teamUrl,
     channelMembers,
@@ -312,7 +310,7 @@ export default function ChannelMembersRHS({
                         channel={channel}
                         openDirectMessage={openDirectMessage}
                         loadMore={loadMore}
-                        hasNextPage={channelMembers.length < membersCount + guestsCount}
+                        hasNextPage={channelMembers.length < membersCount}
                         isNextPageLoading={isNextPageLoading}
                     />
                 )}
