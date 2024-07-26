@@ -58,6 +58,7 @@ describe('components/MoreDirectChannels', () => {
                     process.nextTick(() => resolve({data: true}));
                 });
             }),
+            openModal: jest.fn().mockResolvedValue({data: true}),
             getProfilesInTeam: jest.fn().mockResolvedValue({data: true}),
             loadProfilesMissingStatus: jest.fn().mockResolvedValue({data: true}),
             searchProfiles: jest.fn().mockResolvedValue({data: true}),
