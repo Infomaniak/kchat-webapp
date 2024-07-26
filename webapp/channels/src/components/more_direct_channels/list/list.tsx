@@ -23,7 +23,7 @@ export const USERS_PER_PAGE = 50;
 
 export type Props = {
     addValue: (value: OptionValue) => void;
-    children: ReactNode;
+    children?: ReactNode;
     currentUserId: string;
     handleDelete: (values: OptionValue[]) => void;
     handlePageChange: (page: number, prevPage: number) => void;
