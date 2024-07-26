@@ -541,7 +541,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
         return (
             <FormattedMessage
                 id={'post.reminder.systemBot.reschedule'}
-                defaultMessage='D`accord ! Je reprogramme le rappel de <a>ce message</a>.'
+                defaultMessage='Alright, I will remind you of <a>this message</a> in'
                 values={{
                     permaLink,
                     a: (chunks: React.ReactNode) => <a href={String(permaLink)}>{chunks}</a>,
@@ -554,7 +554,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
         return (
             <FormattedMessage
                 id={'post.reminder.systemBot.completed'}
-                defaultMessage='D`accord ! J`ai marqué le rappel de <a>ce message</a> comme terminé.'
+                defaultMessage='Alright, I have marked the reminder for <a>this message</a> as completed!'
                 values={{
                     permaLink,
                     a: (chunks: React.ReactNode) => <a href={String(permaLink)}>{chunks}</a>,
