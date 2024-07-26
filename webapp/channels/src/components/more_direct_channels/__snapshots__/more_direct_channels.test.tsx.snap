@@ -56,7 +56,6 @@ exports[`components/MoreDirectChannels should exclude deleted users if there is 
     <Connect(Component)
       addValue={[Function]}
       currentUserId="current_user_id"
-      exitParentModal={[Function]}
       handleDelete={[Function]}
       handlePageChange={[Function]}
       handleSubmit={[Function]}
@@ -347,7 +346,6 @@ exports[`components/MoreDirectChannels should match snapshot 1`] = `
     <Connect(Component)
       addValue={[Function]}
       currentUserId="current_user_id"
-      exitParentModal={[Function]}
       handleDelete={[Function]}
       handlePageChange={[Function]}
       handleSubmit={[Function]}
