@@ -10,12 +10,11 @@ import ReactSelect, {components} from 'react-select';
 import type {getOptionValue} from 'react-select/src/builtins';
 import type {InputActionMeta} from 'react-select/src/types';
 
-import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import SaveButton from 'components/save_button';
 import CloseCircleSolidIcon from 'components/widgets/icons/close_circle_solid_icon';
 import Avatar from 'components/widgets/users/avatar';
 
-import {Constants, A11yCustomEventTypes, ModalIdentifiers} from 'utils/constants';
+import {Constants, A11yCustomEventTypes} from 'utils/constants';
 import {imageURLForUser, getDisplayName, localizeMessage} from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
@@ -81,7 +80,7 @@ export type Props<T extends Value> = {
     savingEnabled?: boolean;
     handleCancel?: () => void;
     customNoOptionsMessage?: React.ReactNode;
-    exitParentModal?: () => void;
+    children?: ReactNode;
 }
 
 export type State = {
@@ -117,17 +116,6 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
             input: '',
         };
     }
-
-    public openModal = (): void => {
-        if (this.props.exitParentModal) {
-            this.props.exitParentModal();
-        }
-        const newModal = {
-            modalId: ModalIdentifiers.NEW_CHANNEL_MODAL,
-            dialogType: NewChannelModal,
-        };
-        this.props.actions?.openModal(newModal);
-    };
 
     public componentDidMount() {
         const inputRef: unknown = this.reactSelectRef.current && this.reactSelectRef.current.select.inputRef;
@@ -481,7 +469,6 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                 />
             );
         }
-        const lampIcon = () => Constants.LAMP_ICON;
 
         return (
             <>
@@ -539,31 +526,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                             </div>
 
                         </div>
-                        {
-                            (this.props.disableMultiSelectList && this.props.values.length >= (Constants.MAX_USERS_IN_GM - 1)) ? (
-                                <>
-                                    <div className='create-new-channel'>
-                                        <img src={lampIcon()}/>
-                                        <FormattedMessage
-                                            id='multiselect.new_channel'
-                                            defaultMessage='Create a channel to communicate with more people'
-                                        />
-                                        <a
-                                            href='#'
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                this.openModal();
-                                            }}
-                                        >
-                                            <FormattedMessage
-                                                id='multiselect.new_channel_create'
-                                                defaultMessage='Create a channel'
-                                            />
-                                        </a>
-                                    </div>
-                                </>
-                            ) : null
-                        }
+                        {this.props.children}
                     </div>
                     {
                         (!this.props.disableMultiSelectList || this.props.values.length <= (Constants.MAX_USERS_IN_GM - 1)) ? (

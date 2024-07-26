@@ -2,12 +2,13 @@
 // See LICENSE.txt for license information.
 
 import _ from 'lodash';
+import type {ReactNode} from 'react';
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import MultiSelect from 'components/multiselect/index';
+import MultiSelect from 'components/multiselect';
 
 import Constants from 'utils/constants';
 
@@ -22,6 +23,7 @@ export const USERS_PER_PAGE = 50;
 
 export type Props = {
     addValue: (value: OptionValue) => void;
+    children: ReactNode;
     currentUserId: string;
     handleDelete: (values: OptionValue[]) => void;
     handlePageChange: (page: number, prevPage: number) => void;
@@ -35,7 +37,6 @@ export type Props = {
     totalCount: number;
     users: UserProfile[];
     emptyGroupChannelsIds: string[];
-    exitParentModal: () => void;
 
     /**
      * An array of values that have been selected by the user in the multiselect.
@@ -103,62 +104,66 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
     }, [props.emptyGroupChannelsIds, props.actions, previousEmptyGroupIds]);
 
     return (
-        <MultiSelect<OptionValue>
-            ref={ref}
-            options={options}
-            optionRenderer={renderOptionValue}
-            intl={intl}
-            selectedItemRef={props.selectedItemRef}
-            values={props.values}
-            valueRenderer={renderValue}
-            ariaLabelRenderer={renderAriaLabel}
-            perPage={USERS_PER_PAGE}
-            handlePageChange={props.handlePageChange}
-            handleInput={props.search}
-            handleDelete={props.handleDelete}
-            handleAdd={props.addValue}
-            handleSubmit={props.handleSubmit}
-            noteText={note}
-            exitParentModal={props.exitParentModal}
-            disableMultiSelectList={true}
-            maxValues={MAX_SELECTABLE_VALUES}
-            changeMessageColor='red'
-            showError={props.values.length === MAX_SELECTABLE_VALUES}
-            numRemainingText={
-                props.values.length === MAX_SELECTABLE_VALUES ? (
+        <>
+            <MultiSelect<OptionValue>
+                ref={ref}
+                options={options}
+                optionRenderer={renderOptionValue}
+                intl={intl}
+                selectedItemRef={props.selectedItemRef}
+                values={props.values}
+                valueRenderer={renderValue}
+                ariaLabelRenderer={renderAriaLabel}
+                perPage={USERS_PER_PAGE}
+                handlePageChange={props.handlePageChange}
+                handleInput={props.search}
+                handleDelete={props.handleDelete}
+                handleAdd={props.addValue}
+                handleSubmit={props.handleSubmit}
+                noteText={note}
+                disableMultiSelectList={true}
+                maxValues={MAX_SELECTABLE_VALUES}
+                changeMessageColor='red'
+                showError={props.values.length === MAX_SELECTABLE_VALUES}
+                numRemainingText={
+                    props.values.length === MAX_SELECTABLE_VALUES ? (
+                        <FormattedMessage
+                            id='multiselect.noMorePeople'
+                            defaultMessage='A personal message is limited to {maxUsers} people.'
+                            values={{
+                                maxUsers: (Constants.MAX_USERS_IN_GM - 1),
+                            }}
+                        />
+                    ) : (
+                        <FormattedMessage
+                            id='multiselect.numPeopleRemaining'
+                            defaultMessage='Use the ↑↓ arrows on the keyboard, ENTER to select.'
+                        />
+                    )
+                }
+                buttonSubmitText={
                     <FormattedMessage
-                        id='multiselect.noMorePeople'
-                        defaultMessage='A personal message is limited to {maxUsers} people.'
-                        values={{
-                            maxUsers: (Constants.MAX_USERS_IN_GM - 1),
-                        }}
+                        id='multiselect.go'
+                        defaultMessage='Go'
                     />
-                ) : (
+                }
+                buttonSubmitLoadingText={
                     <FormattedMessage
-                        id='multiselect.numPeopleRemaining'
-                        defaultMessage='Use the ↑↓ arrows on the keyboard, ENTER to select.'
+                        id='multiselect.loading'
+                        defaultMessage='Loading...'
                     />
-                )
-            }
-            buttonSubmitText={
-                <FormattedMessage
-                    id='multiselect.go'
-                    defaultMessage='Go'
-                />
-            }
-            buttonSubmitLoadingText={
-                <FormattedMessage
-                    id='multiselect.loading'
-                    defaultMessage='Loading...'
-                />
-            }
-            submitImmediatelyOn={handleSubmitImmediatelyOn}
-            saving={props.saving}
-            loading={props.loading}
-            users={props.users}
-            totalCount={props.totalCount}
-            placeholderText={intl.formatMessage({id: 'multiselect.placeholder', defaultMessage: 'Search and add members'})}
-        />
+                }
+                submitImmediatelyOn={handleSubmitImmediatelyOn}
+                saving={props.saving}
+                loading={props.loading}
+                users={props.users}
+                totalCount={props.totalCount}
+                placeholderText={intl.formatMessage({id: 'multiselect.placeholder', defaultMessage: 'Search and add members'})}
+
+            >
+                {props.children}
+            </MultiSelect>
+        </>
     );
 });
 

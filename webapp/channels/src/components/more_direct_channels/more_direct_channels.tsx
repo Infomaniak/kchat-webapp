@@ -12,9 +12,12 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import type MultiSelect from 'components/multiselect/multiselect';
+import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 
 import {getHistory} from 'utils/browser_history';
-import Constants from 'utils/constants';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+
+import type {ModalData} from 'types/actions';
 
 import List from './list';
 import {USERS_PER_PAGE} from './list/list';
@@ -61,6 +64,7 @@ export type Props = {
         searchProfiles: (term: string, options: any) => Promise<ActionResult<UserProfile[]>>;
         searchGroupChannels: (term: string) => Promise<ActionResult<Channel[]>>;
         setModalSearchTerm: (term: string) => void;
+        openModal: <P>(modalData: ModalData<P>) => void;
     };
 }
 
@@ -264,10 +268,20 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         this.setState({values});
     };
 
+    lampIcon = () => Constants.LAMP_ICON;
+
+    openModal = (): void => {
+        this.handleExit();
+        const newModal = {
+            modalId: ModalIdentifiers.NEW_CHANNEL_MODAL,
+            dialogType: NewChannelModal,
+        };
+        this.props.actions?.openModal(newModal);
+    };
+
     render() {
         const body = (
             <List
-                exitParentModal={this.handleExit}
                 addValue={this.addValue}
                 currentUserId={this.props.currentUserId}
                 handleDelete={this.handleDelete}
@@ -281,7 +295,33 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
                 totalCount={this.props.totalCount}
                 users={this.props.users}
                 values={this.state.values}
-            />
+            >
+                {
+                    (this.state.values.length >= (Constants.MAX_USERS_IN_GM - 1)) ? (
+                        <>
+                            <div className='create-new-channel'>
+                                <img src={this.lampIcon()}/>
+                                <FormattedMessage
+                                    id='multiselect.new_channel'
+                                    defaultMessage='Create a channel to communicate with more people'
+                                />
+                                <a
+                                    href='#'
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        this.openModal();
+                                    }}
+                                >
+                                    <FormattedMessage
+                                        id='multiselect.new_channel_create'
+                                        defaultMessage='Create a channel'
+                                    />
+                                </a>
+                            </div>
+                        </>
+                    ) : null
+                }
+            </List>
         );
 
         return (
