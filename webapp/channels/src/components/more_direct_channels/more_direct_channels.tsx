@@ -298,27 +298,26 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
             >
                 {
                     (this.state.values.length >= (Constants.MAX_USERS_IN_GM - 1)) ? (
-                        <>
-                            <div className='create-new-channel'>
-                                <img src={this.lampIcon()}/>
+                        <div className='create-new-channel'>
+                            <img src={this.lampIcon()}/>
+                            <FormattedMessage
+                                id='multiselect.new_channel'
+                                defaultMessage='Create a channel to communicate with more people'
+                            />
+                            <a
+                                href='#'
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    this.openModal();
+                                }}
+                            >
                                 <FormattedMessage
-                                    id='multiselect.new_channel'
-                                    defaultMessage='Create a channel to communicate with more people'
+                                    id='multiselect.new_channel_create'
+                                    defaultMessage='Create a channel'
                                 />
-                                <a
-                                    href='#'
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        this.openModal();
-                                    }}
-                                >
-                                    <FormattedMessage
-                                        id='multiselect.new_channel_create'
-                                        defaultMessage='Create a channel'
-                                    />
-                                </a>
-                            </div>
-                        </>
+                            </a>
+                        </div>
+
                     ) : null
                 }
             </List>

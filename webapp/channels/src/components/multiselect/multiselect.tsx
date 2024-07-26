@@ -17,8 +17,6 @@ import Avatar from 'components/widgets/users/avatar';
 import {Constants, A11yCustomEventTypes} from 'utils/constants';
 import {imageURLForUser, getDisplayName, localizeMessage} from 'utils/utils';
 
-import type {ModalData} from 'types/actions';
-
 import MultiSelectList from './multiselect_list';
 
 export type Value = {
@@ -31,13 +29,7 @@ export type Value = {
     disabled?: boolean;
 };
 
-type Actions = {
-    openModal: <P>(modalData: ModalData<P>) => void;
-    closeModal: (modalId: string) => void;
-}
-
 export type Props<T extends Value> = {
-    actions?: Actions;
     ariaLabelRenderer: getOptionValue<T>;
     backButtonClick?: () => void;
     backButtonClass?: string;
@@ -472,7 +464,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
 
         return (
             <>
-                <div className={(this.props.disableMultiSelectList && this.props.values.length === Constants.MAX_USERS_IN_GM) ? 'filtered-user-list disable-list' : 'filtered-user-list'}>
+                <div className={(this.props.disableMultiSelectList) ? 'filtered-user-list disable-list' : 'filtered-user-list'}>
                     <div className='filter-row filter-row--full'>
                         <div className='multi-select__container react-select'>
                             <ReactSelect
@@ -529,9 +521,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                         {this.props.children}
                     </div>
                     {
-                        (!this.props.disableMultiSelectList || this.props.values.length <= (Constants.MAX_USERS_IN_GM - 1)) ? (
-                            multiSelectList
-                        ) : null
+                        this.props.disableMultiSelectList ? null : multiSelectList
                     }
                     <div
                         id='multiSelectMessageNote'
