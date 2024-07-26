@@ -787,7 +787,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
     };
 
     emitRecordingEvent = () => {
-        const TIMER = 500;
+        const TIMER = 1000;
         this.recordingInterval = setInterval(() => {
             const {channelId, rootId} = this.props;
             GlobalActions.emitLocalUserTypingEvent('recording', channelId, rootId);

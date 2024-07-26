@@ -237,22 +237,15 @@ export function emitLocalUserTypingEvent(type = 'typing', channelId: string, par
         const timeBetweenUserTypingUpdatesMilliseconds = Utils.stringToNumber(config.TimeBetweenUserTypingUpdatesMilliseconds);
         const maxNotificationsPerChannel = Utils.stringToNumber(config.MaxNotificationsPerChannel);
 
-        if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
-            (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
-            // infomaniak
-            switch (type) {
-            case 'typing':
+        if (type === 'typing') {
+            if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
+                (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
                 WebSocketClient.userTyping(channelId, userId, parentPostId);
-                break;
-            case 'recording':
-                WebSocketClient.userRecording(channelId, userId, parentPostId);
-                break;
-            default:
-                break;
+                lastTimeTypingSent = t;
             }
-            lastTimeTypingSent = t;
+        } else if (type === 'recording') {
+            WebSocketClient.userRecording(channelId, userId, parentPostId);
         }
-
         return {data: true};
     };
 
