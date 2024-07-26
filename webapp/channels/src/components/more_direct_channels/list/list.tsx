@@ -104,66 +104,64 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
     }, [props.emptyGroupChannelsIds, props.actions, previousEmptyGroupIds]);
 
     return (
-        <>
-            <MultiSelect<OptionValue>
-                ref={ref}
-                options={options}
-                optionRenderer={renderOptionValue}
-                intl={intl}
-                selectedItemRef={props.selectedItemRef}
-                values={props.values}
-                valueRenderer={renderValue}
-                ariaLabelRenderer={renderAriaLabel}
-                perPage={USERS_PER_PAGE}
-                handlePageChange={props.handlePageChange}
-                handleInput={props.search}
-                handleDelete={props.handleDelete}
-                handleAdd={props.addValue}
-                handleSubmit={props.handleSubmit}
-                noteText={note}
-                disableMultiSelectList={true}
-                maxValues={MAX_SELECTABLE_VALUES}
-                changeMessageColor='red'
-                showError={props.values.length === MAX_SELECTABLE_VALUES}
-                numRemainingText={
-                    props.values.length === MAX_SELECTABLE_VALUES ? (
-                        <FormattedMessage
-                            id='multiselect.noMorePeople'
-                            defaultMessage='A personal message is limited to {maxUsers} people.'
-                            values={{
-                                maxUsers: (Constants.MAX_USERS_IN_GM - 1),
-                            }}
-                        />
-                    ) : (
-                        <FormattedMessage
-                            id='multiselect.numPeopleRemaining'
-                            defaultMessage='Use the ↑↓ arrows on the keyboard, ENTER to select.'
-                        />
-                    )
-                }
-                buttonSubmitText={
+        <MultiSelect<OptionValue>
+            ref={ref}
+            options={options}
+            optionRenderer={renderOptionValue}
+            intl={intl}
+            selectedItemRef={props.selectedItemRef}
+            values={props.values}
+            valueRenderer={renderValue}
+            ariaLabelRenderer={renderAriaLabel}
+            perPage={USERS_PER_PAGE}
+            handlePageChange={props.handlePageChange}
+            handleInput={props.search}
+            handleDelete={props.handleDelete}
+            handleAdd={props.addValue}
+            handleSubmit={props.handleSubmit}
+            noteText={note}
+            disableMultiSelectList={props.values.length > (Constants.MAX_USERS_IN_GM - 1)}
+            maxValues={MAX_SELECTABLE_VALUES}
+            changeMessageColor='red'
+            showError={props.values.length === MAX_SELECTABLE_VALUES}
+            numRemainingText={
+                props.values.length === MAX_SELECTABLE_VALUES ? (
                     <FormattedMessage
-                        id='multiselect.go'
-                        defaultMessage='Go'
+                        id='multiselect.noMorePeople'
+                        defaultMessage='A personal message is limited to {maxUsers} people.'
+                        values={{
+                            maxUsers: (Constants.MAX_USERS_IN_GM - 1),
+                        }}
                     />
-                }
-                buttonSubmitLoadingText={
+                ) : (
                     <FormattedMessage
-                        id='multiselect.loading'
-                        defaultMessage='Loading...'
+                        id='multiselect.numPeopleRemaining'
+                        defaultMessage='Use the ↑↓ arrows on the keyboard, ENTER to select.'
                     />
-                }
-                submitImmediatelyOn={handleSubmitImmediatelyOn}
-                saving={props.saving}
-                loading={props.loading}
-                users={props.users}
-                totalCount={props.totalCount}
-                placeholderText={intl.formatMessage({id: 'multiselect.placeholder', defaultMessage: 'Search and add members'})}
+                )
+            }
+            buttonSubmitText={
+                <FormattedMessage
+                    id='multiselect.go'
+                    defaultMessage='Go'
+                />
+            }
+            buttonSubmitLoadingText={
+                <FormattedMessage
+                    id='multiselect.loading'
+                    defaultMessage='Loading...'
+                />
+            }
+            submitImmediatelyOn={handleSubmitImmediatelyOn}
+            saving={props.saving}
+            loading={props.loading}
+            users={props.users}
+            totalCount={props.totalCount}
+            placeholderText={intl.formatMessage({id: 'multiselect.placeholder', defaultMessage: 'Search and add members'})}
 
-            >
-                {props.children}
-            </MultiSelect>
-        </>
+        >
+            {props.children}
+        </MultiSelect>
     );
 });
 
