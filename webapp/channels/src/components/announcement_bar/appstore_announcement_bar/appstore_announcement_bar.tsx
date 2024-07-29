@@ -70,7 +70,6 @@ export default class AppStoreBar extends React.PureComponent<Props> {
                                 id='appstore.bar.end'
                                 defaultMessage=' before September 2nd to benefit from the latest improvements.'
                             />
-                            {'.'}
                         </div>
                     </React.Fragment>
                 }
