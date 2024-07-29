@@ -2920,7 +2920,7 @@
   "apps.suggestion.no_static": "No matching options.",
   "apps.suggestion.no_suggestion": "No matching suggestions.",
   "appstore.bar": "Your version of the app is no longer supported. Please",
-  "appstore.bar.end": "before September 2nd to benefit from the latest improvements.",
+  "appstore.bar.end": " before September 2nd to benefit from the latest improvements.",
   "appstore.bar.update": "install the new version",
   "archivedChannelMessage": "You are viewing an **archived channel**. New messages cannot be posted.",
   "atmos/camo": "atmos/camo",
