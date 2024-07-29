@@ -891,6 +891,10 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
                       "label": "Ring",
                       "value": "Ring",
                     },
+                    Object {
+                      "label": "OutgoingRing",
+                      "value": "OutgoingRing",
+                    },
                   ]
                 }
                 value={
