@@ -54,9 +54,9 @@ export default class AppStoreBar extends React.PureComponent<Props> {
                                 id='appstore.bar'
                                 defaultMessage='Your version of the app is no longer supported. Please'
                             />
+                            {' '}
                             {/* eslint-disable-next-line @mattermost/use-external-link */}
                             <a
-                                style={{marginLeft: '.5rem'}}
                                 href='https://apps.apple.com/app/infomaniak-kchat/id6443845553'
                                 target='_blank'
                                 rel='noreferrer'
@@ -66,9 +66,10 @@ export default class AppStoreBar extends React.PureComponent<Props> {
                                     defaultMessage='install the new version'
                                 />
                             </a>
+                            {' '}
                             <FormattedMessage
                                 id='appstore.bar.end'
-                                defaultMessage=' before September 2nd to benefit from the latest improvements.'
+                                defaultMessage='before September 2nd to benefit from the latest improvements.'
                             />
                         </div>
                     </React.Fragment>
