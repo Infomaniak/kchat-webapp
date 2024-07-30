@@ -1,3 +1,13 @@
+## 2.9.8-rc.1 (2024-07-30)
+
+### Fixed (5 changes)
+
+- [Fix: Member list don't scroll](kchat/webapp@e6a1d366630a2ba458c80b4f595921bb1c8a8dee) by  ([merge request](kchat/webapp!856))
+- [fix markdown image that not showing up in thread](kchat/webapp@eea52ef6c20c2d7a600e4e9965707c05fdbfd982) by  ([merge request](kchat/webapp!849))
+- [Fix: add status in group list modal](kchat/webapp@1cd002c23460212b4edbf4c79cec38a7c5755a5a) by  ([merge request](kchat/webapp!846))
+- [Feat: Add status in group member](kchat/webapp@b25f6bb122cf90d9aaeda301d61e66b601f481d4) by  ([merge request](kchat/webapp!846))
+- [fix: add hide module support](kchat/webapp@8b74bea20f38114eff02b3d108228fd67c286d58) by  ([merge request](kchat/webapp!809))
+
 ## 2.9.7-rc.10 (2024-07-24)
 
 ### Changed (1 change)
