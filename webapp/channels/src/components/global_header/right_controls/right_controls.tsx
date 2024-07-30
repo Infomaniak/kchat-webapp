@@ -144,16 +144,20 @@ const RightControls = (): JSX.Element => {
     );
 
     useEffect(() => {
+        let timeout: NodeJS.Timeout;
         const checkIsPartner = () => {
             if (typeof window.webComponentsStore.currentAccount?.is_partner === 'boolean') {
                 if (window.webComponentsStore.currentAccount.is_partner && !window.webComponentsStore.userStartConfig.is_staff) {
                     setIsNoBackground(true);
                 }
             } else {
-                setTimeout(checkIsPartner, 1000);
+                timeout = setTimeout(checkIsPartner, 1000);
             }
         };
         checkIsPartner();
+        return () => {
+            clearTimeout(timeout);
+        };
     }, []);
 
     return (
