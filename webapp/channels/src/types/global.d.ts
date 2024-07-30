@@ -5,12 +5,12 @@ declare const COMMIT_HASH: string;
 declare const GIT_RELEASE: string;
 declare global {
     interface Window {
-        webComponentsStore: {
-            currentAccount: {
-                is_partner: boolean;
+        webComponentsStore?: {
+            currentAccount?: {
+                is_partner?: boolean;
             };
-            userStartConfig: {
-                is_staff: boolean;
+            userStartConfig?: {
+                is_staff?: boolean;
             };
         };
     }

@@ -87,7 +87,7 @@ const ReportingToolsWrapper = styled.div`
     align-items: center;
     overflow: hidden;
     module-reporting-tools-component {
-        background: #7974B4;
+        transition: background-color 1s ease;
     }
 `;
 
@@ -118,7 +118,7 @@ const RightControls = (): JSX.Element => {
     const settingsTourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SETTINGS : OnboardingTourSteps.SETTINGS;
     const showSettingsTutorialStep = useShowOnboardingTutorialStep(settingsTourStep);
     const isDesktopApp = getIsDesktopApp();
-    const [isNoBackground, setIsNoBackground] = useState(false);
+    const [isPartner, setIsPartner] = useState(false);
     let userReportHref = 'https://feedback.userreport.com/6b7737f6-0cc1-410f-993f-be2ffbf73a05#ideas/popular';
     if (userReportHrefs[locale]) {
         userReportHref = userReportHrefs[locale];
@@ -146,9 +146,9 @@ const RightControls = (): JSX.Element => {
     useEffect(() => {
         let timeout: NodeJS.Timeout;
         const checkIsPartner = () => {
-            if (typeof window.webComponentsStore.currentAccount?.is_partner === 'boolean') {
-                if (window.webComponentsStore.currentAccount.is_partner && !window.webComponentsStore.userStartConfig.is_staff) {
-                    setIsNoBackground(true);
+            if (typeof window?.webComponentsStore?.currentAccount?.is_partner === 'boolean') {
+                if (!(window.webComponentsStore.currentAccount.is_partner && !window?.webComponentsStore?.userStartConfig?.is_staff)) {
+                    setIsPartner(true);
                 }
             } else {
                 timeout = setTimeout(checkIsPartner, 1000);
@@ -170,7 +170,7 @@ const RightControls = (): JSX.Element => {
 
                 <module-reporting-tools-component
                     size='26'
-                    style={isNoBackground ? {background: 'none'} : {}}
+                    style={isPartner ? {background: '#7974B4'} : {background: 'var(--global-header-background)'}}
                 />
             </ReportingToolsWrapper>
             <OverlayTrigger
