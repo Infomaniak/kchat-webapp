@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
@@ -118,6 +118,7 @@ const RightControls = (): JSX.Element => {
     const settingsTourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SETTINGS : OnboardingTourSteps.SETTINGS;
     const showSettingsTutorialStep = useShowOnboardingTutorialStep(settingsTourStep);
     const isDesktopApp = getIsDesktopApp();
+    const [isNoBackground, setIsNoBackground] = useState(false);
     let userReportHref = 'https://feedback.userreport.com/6b7737f6-0cc1-410f-993f-be2ffbf73a05#ideas/popular';
     if (userReportHrefs[locale]) {
         userReportHref = userReportHrefs[locale];
@@ -142,6 +143,19 @@ const RightControls = (): JSX.Element => {
         </span>
     );
 
+    useEffect(() => {
+        const checkIsPartner = () => {
+            if (typeof window.webComponentsStore.currentAccount?.is_partner === 'boolean') {
+                if (window.webComponentsStore.currentAccount.is_partner && !window.webComponentsStore.userStartConfig.is_staff) {
+                    setIsNoBackground(true);
+                }
+            } else {
+                setTimeout(checkIsPartner, 1000);
+            }
+        };
+        checkIsPartner();
+    }, []);
+
     return (
         <RightControlsContainer
             id={'RightControlsContainer'}
@@ -149,7 +163,11 @@ const RightControls = (): JSX.Element => {
             <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
-                <module-reporting-tools-component size='26'/>
+
+                <module-reporting-tools-component
+                    size='26'
+                    style={isNoBackground ? {background: 'none'} : {}}
+                />
             </ReportingToolsWrapper>
             <OverlayTrigger
                 trigger={['hover', 'focus']}
