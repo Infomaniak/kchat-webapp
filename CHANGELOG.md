@@ -26,6 +26,13 @@
 - [Feat: Add status in group member](kchat/webapp@b25f6bb122cf90d9aaeda301d61e66b601f481d4) by  ([merge request](kchat/webapp!846))
 - [fix: add hide module support](kchat/webapp@8b74bea20f38114eff02b3d108228fd67c286d58) by  ([merge request](kchat/webapp!809))
 
+## 2.9.8-next.3 (2024-07-31)
+
+### Fixed (2 changes)
+
+- [Fix: Remove link for invite users to team](kchat/webapp@8fac8885713291660d1cd58a57b315ca904f166b) by  ([merge request](kchat/webapp!863))
+- [Fix: Remove link for invite external users](kchat/webapp@699c12729c821bfab9cd6c9442de131a9bbbaad3) by  ([merge request](kchat/webapp!863))
+
 ## 2.9.8-next.2 (2024-07-31)
 
 ### Fixed (6 changes)
