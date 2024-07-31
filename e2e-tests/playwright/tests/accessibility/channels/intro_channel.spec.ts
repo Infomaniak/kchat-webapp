@@ -15,6 +15,7 @@ test('Base channel accessibility', async ({page, pages, axe}) => {
     const channelsPage = new pages.ChannelsPage(page);
     await channelsPage.goto();
     await channelsPage.toBeVisible();
+    await channelsPage.closeOnboardingIfOpen();
     await channelsPage.centerView.postCreate.postMessage('hello');
 
     // # Analyze the page
@@ -40,6 +41,7 @@ test('Post actions tab support', async ({page, pages, axe}) => {
     const channelsPage = new pages.ChannelsPage(page);
     await channelsPage.goto();
     await channelsPage.toBeVisible();
+    await channelsPage.closeOnboardingIfOpen();
     await channelsPage.centerView.postCreate.postMessage('hello');
 
     const post = await channelsPage.centerView.getLastPost();
