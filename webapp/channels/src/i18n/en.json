@@ -3137,7 +3137,7 @@
   "channel_invite.invite_team_members.title": "{count, plural, =1 {1 user was} other {# users were}} not selected because they are not a part of this team",
   "channel_invite.invite_guest": "Invite a new Guest",
   "channel_invite.already_in_channel": "Already in channel",
-  "channel_invite.no_options_message": "No matches found - <InvitationModalLink>Invite them to the team</InvitationModalLink>",
+  "channel_invite.no_options_message": "No matches found",
   "channel_limitation.messages": "Messages and files older than 3 months are hidden. To view more posts, {isAdmin, select, true {subscribe to a higher offer. <modifyOffer>Change my offer</modifyOffer>} other {contact an administrator to subscribe to a higher offer}}",
   "channel_loader.posted": "Posted",
   "channel_loader.postedImage": " posted an image",

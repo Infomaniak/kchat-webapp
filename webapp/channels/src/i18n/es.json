@@ -2814,7 +2814,7 @@
   "channel_limitation.messages": "Los mensajes y archivos de más de 3 meses están ocultos. Para ver más mensajes, {isAdmin, select, true {suscribirse a una oferta superior. <modifyOffer>Cambiar mi oferta</modifyOffer>} other {contacta con un administrador para suscribirte a una oferta superior}}",
   "channel_invite.invite_guest": "Invitar a un nuevo huésped",
   "channel_invite.already_in_channel": "Ya en el canal",
-  "channel_invite.no_options_message": "No se encontraron coincidencias - <InvitationModalLink>Invítalos al equipo</InvitationModalLink>",
+  "channel_invite.no_options_message": "No se encontraron coincidencias",
   "channel_loader.posted": "Publicó",
   "channel_loader.postedImage": " publicó una imagen",
   "channel_loader.socketError": "Por favor, revisa tu conexión, kChat inalcanzable. Si el problema persiste, solicite al administrador [revisar el puerto del WebSocket](https://docs.mattermost.com/install/troubleshooting.html#please-check-connection-mattermost-unreachable-if-issue-persists-ask-administrator-to-check-websocket-port).",

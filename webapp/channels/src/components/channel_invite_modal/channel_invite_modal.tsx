@@ -496,37 +496,39 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             this.props.actions.closeModal(ModalIdentifiers.CHANNEL_INVITE);
         };
 
-        const InviteModalLink = (props: {inviteAsGuest?: boolean; children: React.ReactNode}) => {
-            return (
-                <ToggleModalButton
-                    id='inviteGuest'
-                    className={`${props.inviteAsGuest ? 'invite-as-guest' : ''} btn btn-link`}
-                    modalId={ModalIdentifiers.INVITATION}
-                    dialogType={InvitationModal}
-                    dialogProps={{
-                        channelToInvite: this.props.channel,
-                        initialValue: this.state.term,
-                        inviteAsGuest: props.inviteAsGuest,
-                    }}
-                    onClick={closeMembersInviteModal}
-                >
-                    {props.children}
-                </ToggleModalButton>
-            );
-        };
+        // Infomaniak edit - this link does not exist in kChat we can invite external users via manager
+        // const InviteModalLink = (props: {inviteAsGuest?: boolean; children: React.ReactNode}) => {
+        //     return (
+        //         <ToggleModalButton
+        //             id='inviteGuest'
+        //             className={`${props.inviteAsGuest ? 'invite-as-guest' : ''} btn btn-link`}
+        //             modalId={ModalIdentifiers.INVITATION}
+        //             dialogType={InvitationModal}
+        //             dialogProps={{
+        //                 channelToInvite: this.props.channel,
+        //                 initialValue: this.state.term,
+        //                 inviteAsGuest: props.inviteAsGuest,
+        //             }}
+        //             onClick={closeMembersInviteModal}
+        //         >
+        //             {props.children}
+        //         </ToggleModalButton>
+        //     );
+        // };
 
         const customNoOptionsMessage = (
             <div className='custom-no-options-message'>
                 <FormattedMessage
                     id='channel_invite.no_options_message'
-                    defaultMessage='No matches found - <InvitationModalLink>Invite them to the team</InvitationModalLink>'
-                    values={{
-                        InvitationModalLink: (chunks: string) => (
-                            <InviteModalLink>
-                                {chunks}
-                            </InviteModalLink>
-                        ),
-                    }}
+                    defaultMessage='No matches found'
+
+                    // values={{
+                    //     InvitationModalLink: (chunks: string) => (
+                    //         <InviteModalLink>
+                    //             {chunks}
+                    //         </InviteModalLink>
+                    //     ),
+                    // }}
                 />
             </div>
         );
@@ -561,14 +563,14 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             />
         );
 
-        const inviteGuestLink = (
-            <InviteModalLink inviteAsGuest={true}>
-                <FormattedMessage
-                    id='channel_invite.invite_guest'
-                    defaultMessage='Invite as a Guest'
-                />
-            </InviteModalLink>
-        );
+        // const inviteGuestLink = (
+        //     <InviteModalLink inviteAsGuest={true}>
+        //         <FormattedMessage
+        //             id='channel_invite.invite_guest'
+        //             defaultMessage='Invite as a Guest'
+        //         />
+        //     </InviteModalLink>
+        // );
 
         return (
             <Modal
@@ -609,7 +611,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                             teamId={this.props.channel.team_id}
                             users={this.state.usersNotInTeam}
                         />
-                        {(this.props.emailInvitationsEnabled && this.props.canInviteGuests) && inviteGuestLink}
+                        {(this.props.emailInvitationsEnabled && this.props.canInviteGuests)}
                     </div>
                 </Modal.Body>
             </Modal>
