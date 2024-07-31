@@ -3062,7 +3062,7 @@
   "channel_invite.invite_team_members.messageOverflow": "Du kannst {firstUser} und {others} zu diesem Kanal hinzufügen, sobald sie Mitglieder des {team} Teams sind.",
   "channel_invite.invite_team_members.title": "{count, plural, =1 {Ein Nutzer wurde} other {# Nutzer wurden}} nicht ausgewählt, weil sie nicht Teil dieses Teams sind",
   "channel_invite.already_in_channel": "Bereits im Kanal",
-  "channel_invite.no_options_message": "Kein Treffer gefunden - <InvitationModalLink>Lade sie ins Team ein</InvitationModalLink>",
+  "channel_invite.no_options_message": "Kein Treffer gefunden",
   "channel_limitation.messages": "Nachrichten und Dateien, die älter als 3 Monate sind, werden ausgeblendet. Um mehr Beiträge anzuzeigen, {isAdmin, select, true {melden Sie sich für ein höheres Angebot an. <modifyOffer>Mein Angebot ändern</modifyOffer>} other {Kontaktieren Sie einen Administrator, um sich für ein höheres Angebot anzumelden.}}",
   "channel_loader.posted": "Verschickt",
   "channel_loader.postedImage": " hat ein Bild hochgeladen",
