@@ -1,3 +1,14 @@
+## 2.9.8-rc.2 (2024-07-31)
+
+### Fixed (6 changes)
+
+- [Fix: Call declined trad not working](kchat/webapp@ccc389ec94725bc94c641a89d83d446c2bce3ca4) by  ([merge request](kchat/webapp!864))
+- [Fix: Transcript text color on dark theme](kchat/webapp@a7b18c9fb8a0e1dafffd28d9892596ec44f1b092) by  ([merge request](kchat/webapp!861))
+- [Fix: Remove hover on status dropdown header](kchat/webapp@6ee105500b94a4b344eb9c45d0b12414634fb41c) by  ([merge request](kchat/webapp!860))
+- [fixed issue while user list disappeared with autocomplete](kchat/webapp@3e46050f4522ff709a2733f5fd38534e920298ac) by  ([merge request](kchat/webapp!852))
+- [Fix: Add arrow for webapp](kchat/webapp@b769f2da0fb0d61267edf399f44c94641c54f25a) by  ([merge request](kchat/webapp!859))
+- [fix: prevent closing menu when pressing enter on a menu-item that has a popup](kchat/webapp@7d904e136857f9da0bee6d39670fb5fce9105bca) by @tim.dewinter ([merge request](kchat/webapp!833))
+
 ## 2.9.8-rc.1 (2024-07-30)
 
 ### Fixed (5 changes)
