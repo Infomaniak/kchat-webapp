@@ -1,3 +1,10 @@
+## 2.9.8-rc.3 (2024-07-31)
+
+### Fixed (2 changes)
+
+- [Fix: Remove link for invite users to team](kchat/webapp@8fac8885713291660d1cd58a57b315ca904f166b) by  ([merge request](kchat/webapp!863))
+- [Fix: Remove link for invite external users](kchat/webapp@699c12729c821bfab9cd6c9442de131a9bbbaad3) by  ([merge request](kchat/webapp!863))
+
 ## 2.9.8-rc.2 (2024-07-31)
 
 ### Fixed (6 changes)
