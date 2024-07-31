@@ -3633,7 +3633,7 @@
   "kmeet.calls.start": "Llamar",
   "kmeet.calls.started": "Comienza la reunión de kMeet",
   "kmeet.calls.ended.title": "Llamada completada",
-  "kmeet.calls.declined": "Llamada denegado por {usernames}",
+  "kmeet.calls.declined": "Llamada rechazada",
   "kmeet.calls.callback": "llamar de nuevo",
   "kmeet.calls.called": "Llamada perdida",
   "kmeet.calls.already_in_call": "Ya estás en una llamada. Finaliza tu llamada antes de comenzar una nueva.",
