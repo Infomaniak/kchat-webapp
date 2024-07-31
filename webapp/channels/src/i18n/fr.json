@@ -3576,7 +3576,7 @@
   "kmeet.calls.ended": "Terminé à {time}",
   "kmeet.calls.ended.title": "Appel terminé",
   "kmeet.calls.in_progress": "Appel en cours",
-  "kmeet.calls.declined": "Appel décliné par {usernames} ",
+  "kmeet.calls.declined": "Appel décliné",
   "kmeet.calls.join": "Rejoindre la réunion",
   "kmeet.calls.open": "Rejoindre",
   "kmeet.calls.callback": "Rappeler",

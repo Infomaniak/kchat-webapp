@@ -4193,7 +4193,7 @@
   "kmeet.calls.already_in_call": "Du bist bereits in einem Anruf. Beende deinen Anruf, bevor du einen neuen startest.",
   "kmeet.calls.ended.title": "Anruf beendet",
   "kmeet.calls.in_progress": "Laufender Anruf",
-  "kmeet.calls.declined": "anruf von {usernames} abgelehnt ",
+  "kmeet.calls.declined": "Anruf abgelehnt",
   "kmeet.calls.callback": "Rückruf",
   "kmeet.calls.called": "Verpasster Anruf",
   "last_users_message.added_to_channel.type": "wurden durch {actor} **dem Kanal hinzugefügt**.",

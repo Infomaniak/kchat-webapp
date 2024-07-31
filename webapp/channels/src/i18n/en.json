@@ -4170,7 +4170,7 @@
   "kmeet.calls.started": "kMeet meeting started",
   "kmeet.calls.ended.title": "Call ended",
   "kmeet.calls.in_progress": "Call in progress",
-  "kmeet.calls.declined": "Call rejected by {usernames}",
+  "kmeet.calls.declined": "Call rejected",
   "kmeet.calls.callback": "Callback",
   "kmeet.calls.called": "Call missed",
   "kmeet.calls.already_in_call": "You are already in a call. End your call before starting a new one.",
