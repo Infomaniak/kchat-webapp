@@ -249,6 +249,12 @@ button.custom_status__row {
     .MenuHeader {
         height: 50px;
         padding: 0 16px;
+        // Infomaniak edit - No need to have hover and cursor on the header because we don't have any action on it
+        // cursor: pointer;
+
+        // &:hover {
+        //     background-color: rgba(var(--center-channel-color-rgb), 0.1);
+        // }
     }
 
     .MenuItem > button,
