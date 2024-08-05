@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {test} from '@e2e-support/test_fixture';
+import {type ScreenshotOptions} from '@e2e-types';
 
 test('Intro to channel as regular user', async ({pw, page, pages, browserName, viewport}, testInfo) => {
     // Create and sign in a new user
@@ -14,6 +15,7 @@ test('Intro to channel as regular user', async ({pw, page, pages, browserName, v
     const channelsPage = new pages.ChannelsPage(page);
     await channelsPage.goto();
     await channelsPage.toBeVisible();
+    await channelsPage.closeOnboardingIfOpen();
 
     // Wait for Playbooks icon to be loaded in App bar, except in iphone
     // await expect(channelsPage.appBar.playbooksIcon).toBeVisible();
@@ -23,6 +25,11 @@ test('Intro to channel as regular user', async ({pw, page, pages, browserName, v
 
     // Match snapshot of channel intro page
     const testArgs = {page, browserName, viewport};
-    const options = { mask: [page.locator('div.post-list__dynamic')], maxDiffPixels: 15000 };
+    const options: ScreenshotOptions = {
+        mask: [
+            page.locator('div.post-list__dynamic'),
+            page.locator('div[id="channelHeaderDescription"]'),
+        ]
+    };
     await pw.matchSnapshot(testInfo, testArgs, options);
 });
