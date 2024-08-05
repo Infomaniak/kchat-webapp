@@ -1,3 +1,9 @@
+## 2.9.8-rc.4 (2024-08-05)
+
+### Fixed (1 change)
+
+- [Fix: Condition for user not on appstore](kchat/webapp@6e02b35d193e6ba08f056c09aa7db7a730a3c14c) by  ([merge request](kchat/webapp!865))
+
 ## 2.9.8-rc.3 (2024-07-31)
 
 ### Fixed (2 changes)
