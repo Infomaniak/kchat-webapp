@@ -536,14 +536,55 @@ function renderReminderACKMessage(post: Post, currentTeam: Team, isMilitaryTime:
 export function renderReminderSystemBotMessage(post: Post): ReactNode {
     const username = post.props.username ? renderUsername(post.props.username) : '';
     const permaLink = renderFormattedText(`[${post.props.link}](${post.props.link})`);
+    let endReminderTime;
+    let reminderDate;
+
+    if (post.props.target_time) {
+        const targetTime = new Date(post.props.target_time);
+        const now = new Date();
+        const diffInMs = targetTime.getTime() - now.getTime();
+        const diffInDays = Math.round(Math.abs(diffInMs) / (1000 * 60 * 60 * 24));
+
+        switch (diffInDays) {
+        case 0:
+            endReminderTime = (
+                <FormattedMessage
+                    id='post.reminder.systemBot.tomorrow'
+                    defaultMessage='at {time}'
+                    values={{time: <FormattedTime value={targetTime}/>}}
+                />
+            );
+            break;
+        case 1:
+            endReminderTime = (
+                <FormattedMessage
+                    id='post.reminder.systemBot.tomorrow'
+                    defaultMessage='tomorrow at {time}'
+                    values={{time: <FormattedTime value={targetTime}/>}}
+                />
+            );
+            break;
+        default:
+            endReminderTime = (
+                <FormattedDate
+                    value={targetTime}
+                    weekday='long'
+                    day='2-digit'
+                    month='short'
+                />
+            );
+        }
+    }
 
     if (post.props.reschedule) {
         return (
             <FormattedMessage
                 id={'post.reminder.systemBot.reschedule'}
-                defaultMessage='Alright, I will remind you of <a>this message</a> in'
+                defaultMessage='Alright, I will remind you of <a>this message</a> {endReminderTime}'
                 values={{
                     permaLink,
+                    endReminderTime,
+                    reminderDate,
                     a: (chunks: React.ReactNode) => <a href={String(permaLink)}>{chunks}</a>,
                 }}
             />
