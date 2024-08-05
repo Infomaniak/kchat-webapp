@@ -1,3 +1,9 @@
+## 2.9.8-rc.5 (2024-08-05)
+
+### Changed (1 change)
+
+- [add temp check to prevent undefined case on latestPost create_at](kchat/webapp@c860209635bdf1862c5835d2571247024e09d21a) by @antonbuksa ([merge request](kchat/webapp!866))
+
 ## 2.9.8-rc.4 (2024-08-05)
 
 ### Fixed (1 change)
