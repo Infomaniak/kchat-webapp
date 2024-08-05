@@ -537,7 +537,6 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
     const username = post.props.username ? renderUsername(post.props.username) : '';
     const permaLink = renderFormattedText(`[${post.props.link}](${post.props.link})`);
     let endReminderTime;
-    let reminderDate;
 
     if (post.props.target_time) {
         const targetTime = new Date(post.props.target_time);
@@ -584,7 +583,6 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
                 values={{
                     permaLink,
                     endReminderTime,
-                    reminderDate,
                     a: (chunks: React.ReactNode) => <a href={String(permaLink)}>{chunks}</a>,
                 }}
             />
