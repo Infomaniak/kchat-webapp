@@ -32,6 +32,12 @@
 - [Feat: Add status in group member](kchat/webapp@b25f6bb122cf90d9aaeda301d61e66b601f481d4) by  ([merge request](kchat/webapp!846))
 - [fix: add hide module support](kchat/webapp@8b74bea20f38114eff02b3d108228fd67c286d58) by  ([merge request](kchat/webapp!809))
 
+## 2.9.8-next.4 (2024-08-05)
+
+### Fixed (1 change)
+
+- [Fix: Condition for user not on appstore](kchat/webapp@6e02b35d193e6ba08f056c09aa7db7a730a3c14c) by  ([merge request](kchat/webapp!865))
+
 ## 2.9.8-next.3 (2024-07-31)
 
 ### Fixed (2 changes)
