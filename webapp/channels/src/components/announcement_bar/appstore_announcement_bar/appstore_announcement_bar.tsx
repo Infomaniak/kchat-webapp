@@ -27,7 +27,7 @@ export default class AppStoreBar extends React.PureComponent<Props> {
             return null;
         }
 
-        if (UserAgent.isNotMacMas()) {
+        if (!UserAgent.isNotMacMas()) {
             return null;
         }
 
