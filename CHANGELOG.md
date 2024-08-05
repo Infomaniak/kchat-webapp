@@ -38,6 +38,12 @@
 - [Feat: Add status in group member](kchat/webapp@b25f6bb122cf90d9aaeda301d61e66b601f481d4) by  ([merge request](kchat/webapp!846))
 - [fix: add hide module support](kchat/webapp@8b74bea20f38114eff02b3d108228fd67c286d58) by  ([merge request](kchat/webapp!809))
 
+## 2.9.8-next.5 (2024-08-05)
+
+### Changed (1 change)
+
+- [add temp check to prevent undefined case on latestPost create_at](kchat/webapp@c860209635bdf1862c5835d2571247024e09d21a) by @antonbuksa ([merge request](kchat/webapp!866))
+
 ## 2.9.8-next.4 (2024-08-05)
 
 ### Fixed (1 change)
