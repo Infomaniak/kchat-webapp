@@ -120,17 +120,17 @@ const PostBody = styled.div<{disableHover?: boolean}>`
 // 	font-weight: 600;
 // `;
 
-const PostSummaryHelpMessage = styled.div`
-	font-size: 14px;
-	font-style: italic;
-	font-weight: 400;
-	line-height: 20px;
-	border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
+// const PostSummaryHelpMessage = styled.div`
+// 	font-size: 14px;
+// 	font-style: italic;
+// 	font-weight: 400;
+// 	line-height: 20px;
+// 	border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
 
-	padding-top: 8px;
-	padding-bottom: 8px;
-	margin-top: 16px;
-`;
+// 	padding-top: 8px;
+// 	padding-bottom: 8px;
+// 	margin-top: 16px;
+// `;
 
 export interface PostUpdateWebsocketMessage {
     next: string;
@@ -264,14 +264,14 @@ export const LLMBotPost = (props: Props) => {
                 />
             </StopGeneratingButton>
             } */}
-            { showPostbackButton &&
+            {/* { showPostbackButton &&
             <PostSummaryHelpMessage>
                 <FormattedMessage
                     id='test'
                     defaultMessage='Would you like to post this summary to the original call thread? You can also ask Copilot to make changes.'
                 />
             </PostSummaryHelpMessage>
-            }
+            } */}
             {/* { showControlsBar &&
             <ControlsBar>
                 {showPostbackButton &&
