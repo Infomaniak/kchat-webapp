@@ -4716,7 +4716,7 @@
   "post.reminder.systemBot": "Hallo, hier ist deine Erinnerung an diese Nachricht von {username}: {permaLink}",
   "postpone.post_reminder.menu": "Erinnerung verschieben",
   "postpone.post_reminder.mark": "Als erledigt markieren",
-  "post.reminder.systemBot.reschedule": "In Ordnung, ich werde Sie an <a>diese Nachricht</a> in erinnern",
+  "post.reminder.systemBot.reschedule": "In Ordnung, ich werde Sie an <a>diese Nachricht</a> {endReminderTime}",
   "post.reminder.systemBot.completed": "In Ordnung, ich habe die Erinnerung für <a>diese Nachricht</a> als abgeschlossen markiert!",
   "post.reminder.systemBot.time": "um {time}",
   "post.reminder.systemBot.tomorrow": "morgen um {time}",

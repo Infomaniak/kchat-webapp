@@ -5118,7 +5118,7 @@
   "post.reminder.systemBot": "Hola, aquí tienes un recordatorio sobre este mensaje de {username}: {permaLink}",
   "postpone.post_reminder.menu": "Posponer el recordatorio",
   "postpone.post_reminder.mark": "Marcar como completado",
-  "post.reminder.systemBot.reschedule": "De acuerdo, te recordaré sobre <a>este mensaje</a> en",
+  "post.reminder.systemBot.reschedule": "De acuerdo, te recordaré sobre <a>este mensaje</a> {endReminderTime}",
   "post.reminder.systemBot.completed": "De acuerdo, he marcado el recordatorio para <a>este mensaje</a> como completado!",
   "post.reminder.systemBot.time": "a las {time}",
   "post.reminder.systemBot.tomorrow": "mañana a las {time}",
