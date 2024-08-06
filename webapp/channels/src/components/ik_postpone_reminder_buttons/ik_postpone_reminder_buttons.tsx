@@ -56,7 +56,9 @@ const IkPostponeReminderButtons = (props: Props) => {
                 modalId: ModalIdentifiers.POST_REMINDER_CUSTOM_TIME_PICKER,
                 dialogType: PostReminderCustomTimePicker,
                 dialogProps: {
-                    postId: props.post.props.previewed_post,
+                    postId: props.post.props.post_id,
+                    reminderPostId: props.post.id,
+                    postpone: true,
                 },
             };
             props.actions.openModal(postReminderCustomTimePicker);
