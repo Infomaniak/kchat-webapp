@@ -143,7 +143,7 @@ const DotMenu = ({
 
 export const DropdownMenuItemStyled = styled.a`
  && {
-    font-family: 'Open Sans';
+    font-family: "SuisseIntl", sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
