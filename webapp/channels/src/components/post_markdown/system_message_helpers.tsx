@@ -548,7 +548,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
         case 0:
             endReminderTime = (
                 <FormattedMessage
-                    id='post.reminder.systemBot.tomorrow'
+                    id='post.reminder.systemBot.time'
                     defaultMessage='at {time}'
                     values={{time: <FormattedTime value={targetTime}/>}}
                 />
