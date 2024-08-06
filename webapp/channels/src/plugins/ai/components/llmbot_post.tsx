@@ -2,7 +2,7 @@ import type {MouseEvent} from 'react';
 import React, {useEffect, useRef, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import styled, {css, createGlobalStyle, useTheme} from 'styled-components';
+import styled, {css, createGlobalStyle} from 'styled-components';
 
 import {SendIcon} from '@mattermost/compass-icons/components';
 import type {GlobalState} from '@mattermost/types/store';
