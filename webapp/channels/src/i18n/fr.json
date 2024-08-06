@@ -5012,7 +5012,7 @@
   "postpone.post_reminder.mark": "Marquer comme terminé",
   "post.reminder.systemBot.time": "à {time}",
   "post.reminder.systemBot.tomorrow": "demain à {time}",
-  "post.reminder.systemBot.reschedule": "D'accord, je vous rappellerai <a>ce message</a> dans",
+  "post.reminder.systemBot.reschedule": "D'accord, je vous rappellerai <a>ce message</a> {endReminderTime}",
   "post.reminder.systemBot.completed": "D'accord, j'ai marqué le rappel de <a>ce message</a> comme terminé !",
   "custom_reminder.time_picker.no_option": "Date invalide",
   "custom_status.expiry.time_picker.description": "Pour ajouter une heure plus précise, saisissez l'heure souhaitée et elle sera ajoutée en tant qu'option sélectionnable.",

@@ -4769,7 +4769,7 @@
   "post.ariaLabel.replyMessage": "At {time} {date}, {authorName} replied, {message}",
   "post.reminder.acknowledgement": "You will be reminded at {reminderTime}, {reminderDate} about this message from {username}: {permaLink}",
   "post.reminder.systemBot": "Hi there, here's your reminder about this message from {username}: {permaLink}",
-  "post.reminder.systemBot.reschedule": "Alright, I will remind you about <a>this message</a> in",
+  "post.reminder.systemBot.reschedule": "Alright, I will remind you about <a>this message</a> {endReminderTime}",
   "post.reminder.systemBot.completed": "Alright, I have marked the reminder for <a>this message</a> as completed!",
   "post.reminder.systemBot.time": "at {time}",
   "post.reminder.systemBot.tomorrow": "tomorrow at {time}",
