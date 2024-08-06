@@ -124,7 +124,7 @@ export default class PostBodyAdditionalContent extends React.PureComponent<Props
                 />
             );
         case 'permalink':
-            if (embed.data && 'post_id' in embed.data && embed.data.post_id && !(this.props.post.props.reschedule || this.props.post.props.completed)) {
+            if (embed.data && 'post_id' in embed.data && embed.data.post_id && this.props.post.props && !(this.props.post.props.reschedule || this.props.post.props.completed)) {
                 return (
                     <PostMessagePreview
                         metadata={embed.data}
