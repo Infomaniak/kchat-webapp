@@ -15,7 +15,7 @@
         }
 
         &__cancel {
-            margin-left: '10px';
+            margin-left: 10px;
             @include button-small;
             @include tertiary-button;
         }
