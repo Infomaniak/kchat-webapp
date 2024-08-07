@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import styled, {keyframes, css} from 'styled-components';
 
-import {GlobalState} from '@mattermost/types/store';
-import {Channel} from '@mattermost/types/channels';
-import {Team} from '@mattermost/types/teams';
+import type {Channel} from '@mattermost/types/channels';
+import type {GlobalState} from '@mattermost/types/store';
+import type {Team} from '@mattermost/types/teams';
+
+import Markdown from 'components/markdown';
 
 export type ChannelNamesMap = {
     [name: string]: {
@@ -93,7 +95,10 @@ const PostText = (props: Props) => {
             data-testid='posttext'
             showCursor={props.showCursor}
         >
-            {text}
+            <Markdown
+                message={props.message}
+            />
+            {/* {text} */}
         </TextContainer>
     );
 };
