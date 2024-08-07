@@ -52,21 +52,23 @@ import type {NewPostMessageProps} from './new_post';
 const ReactionLimitReachedModal = withSuspense(lazy(() => import('components/reaction_limit_reached_modal')));
 
 export function handleNewPost(post: Post, msg?: {data?: NewPostMessageProps & GroupChannel}): ActionFuncAsync<boolean, GlobalState> {
-    return async (dispatch, getState) => {
+    return async (dispatch) => {
         let websocketMessageProps = {};
-        const state = getState();
+
+        //!824 Infomaniak > The code is commented out below because it seems redundant with what loadNewDMIfNeeded and loadNewGMIfNeeded do, they already seem to integrate the necessary checks and updates to handle messaging channels and user preferences.
+        // const state = getState();
         if (msg) {
             websocketMessageProps = msg.data!;
         }
 
-        const myChannelMember = getMyChannelMemberSelector(state, post.channel_id);
-        const myChannelMemberDoesntExist = !myChannelMember || (Object.keys(myChannelMember).length === 0 && myChannelMember.constructor === Object);
+        // const myChannelMember = getMyChannelMemberSelector(state, post.channel_id);
+        // const myChannelMemberDoesntExist = !myChannelMember || (Object.keys(myChannelMember).length === 0 && myChannelMember.constructor === Object);
 
-        if (myChannelMemberDoesntExist) {
-            await dispatch(getMyChannelMember(post.channel_id));
-        }
+        // if (myChannelMemberDoesntExist) {
+        //     await dispatch(getMyChannelMember(post.channel_id));
+        // }
 
-        dispatch(completePostReceive(post, websocketMessageProps as NewPostMessageProps, myChannelMemberDoesntExist));
+        dispatch(completePostReceive(post, websocketMessageProps as NewPostMessageProps, false));
 
         if (msg && msg.data) {
             if (msg.data.channel_type === Constants.DM_CHANNEL) {
