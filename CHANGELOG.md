@@ -23,6 +23,31 @@
 
 - [disable fetching channel own member on posted event](kchat/webapp@d488f2f23d470252b4beea4580951cabd7ad7a2f) by @antonbuksa ([merge request](kchat/webapp!824))
 
+## 2.9.9-next.1 (2024-08-07)
+
+### Added (2 changes)
+
+- [Added: Create channel tip compo](kchat/webapp@405940170dde6541f5899c39098ca5865f624e7e) by  ([merge request](kchat/webapp!848))
+- [Feat: modal for max user in pm](kchat/webapp@bf1b7c87a94dc635b37a1e7ca2e43bf4700b4136) by  ([merge request](kchat/webapp!848))
+
+### Fixed (11 changes)
+
+- [Fix: Missing traduction for leave channel modal](kchat/webapp@dcf4c39bf248c260bbe310a7915e2e443ef11a56) by  ([merge request](kchat/webapp!867))
+- [Fix: move modal in more direct channels and pass it in children](kchat/webapp@cde8bec863bd2944aa139033cf51fbb6fd0180f4) by  ([merge request](kchat/webapp!848))
+- [Fix: Change create channel modal position](kchat/webapp@2b4fecb6908e78eb51cbd2fe870310a77ec223c4) by  ([merge request](kchat/webapp!848))
+- [Fix: Change trad and text position in modal](kchat/webapp@7d23168691a69b756374eb9b9635eb66b7b366bb) by  ([merge request](kchat/webapp!848))
+- [Fix: show modal when 7 user in pm](kchat/webapp@7bb296b6e1efa99f6a7fe0355cc65019978cab02) by  ([merge request](kchat/webapp!848))
+- [Fix: Missing traduction for post reminder](kchat/webapp@5db19ea4f2646b0814cb50ed5a8513d6183d5648) by  ([merge request](kchat/webapp!862))
+- [fix autocomplete for custom emojis](kchat/webapp@eefd5c7559ce6adbb89541001263a04c8dd86aa8) by  ([merge request](kchat/webapp!845))
+- [Fix: move modal in more direct channels and pass it in children](kchat/webapp@e93b55ae433818a60a3d1ce286a25861dc6c3992) by  ([merge request](kchat/webapp!848))
+- [Fix: Change create channel modal position](kchat/webapp@ed1a0ea0cc89de700c9a5ad879ebbd39a7723266) by  ([merge request](kchat/webapp!848))
+- [Fix: Change trad and text position in modal](kchat/webapp@be596919bafe47762373b56c1943025f155a8288) by  ([merge request](kchat/webapp!848))
+- [Fix: show modal when 7 user in pm](kchat/webapp@882050971f77e05c52d4cab57a55807fedfa6b53) by  ([merge request](kchat/webapp!848))
+
+### Changed (1 change)
+
+- [disable fetching channel own member on posted event](kchat/webapp@d488f2f23d470252b4beea4580951cabd7ad7a2f) by @antonbuksa ([merge request](kchat/webapp!824))
+
 ## 2.9.8-rc.5 (2024-08-05)
 
 ### Changed (1 change)
