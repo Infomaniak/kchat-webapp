@@ -4448,6 +4448,7 @@
   "multiselect.savingDetailsButton": "Speichern...",
   "multiselect.selectChannels": "Benutze ↑↓ zum Navigieren, ↵ zum Auswählen.",
   "multiselect.selectTeams": "Benutze ↑↓ zum Navigieren, ↵ zum Auswählen.",
+  "multiselect.quit": "Beenden",
   "mark_all_as_read_modal.title": "Alle Nachrichten als gelesen markieren",
   "mark_all_as_read_modal.message": "Sind Sie sicher, dass Sie alle Ihre Nachrichten als gelesen markieren wollen ?",
   "mark_all_as_read_modal.confirm": "Ja",

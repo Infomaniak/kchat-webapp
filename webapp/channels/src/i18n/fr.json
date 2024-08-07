@@ -3760,6 +3760,7 @@
   "multiselect.savingDetailsButton": "Enregistrement...",
   "multiselect.selectChannels": "Utilisez ↑↓ pour parcourir, ↵ pour sélectionner.",
   "multiselect.selectTeams": "Utilisez ↑↓ pour parcourir, ↵ pour sélectionner.",
+  "multiselect.quit": "Quitter",
   "mark_all_as_read_modal.title": "Marquer tous les messages comme lus",
   "mark_all_as_read_modal.message": "Etes-vous certain de vouloir marquer tous vos messages comme lus ?",
   "mark_all_as_read_modal.confirm": "Oui",

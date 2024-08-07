@@ -384,7 +384,7 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
         }
     }
 
-    const buttonSubmitText = localizeMessage('multiselect.ad', 'Quitter');
+    const buttonSubmitText = localizeMessage('multiselect.quit', 'Quitter');
     const buttonSubmitLoadingText = localizeMessage('multiselect.adding', 'Adding...');
 
     let content;

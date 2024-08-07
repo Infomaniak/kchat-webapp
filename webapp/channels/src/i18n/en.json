@@ -4422,6 +4422,7 @@
   "multiselect.savingDetailsButton": "Saving...",
   "multiselect.selectChannels": "Use ↑↓ to browse, ↵ to select.",
   "multiselect.selectTeams": "Use ↑↓ to browse, ↵ to select.",
+  "multiselect.quit": "Quit",
   "mark_all_as_read_modal.title": "Mark all messages as read",
   "mark_all_as_read_modal.message": "Are you sure want to mark all your messages as read ?",
   "mark_all_as_read_modal.confirm": "Yes",

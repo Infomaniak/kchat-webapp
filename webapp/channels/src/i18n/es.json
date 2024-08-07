@@ -3819,6 +3819,7 @@
   "multiselect.savingDetailsButton": "Guardando...",
   "multiselect.selectChannels": "Utiliza ↑↓ para navegar, ↵ para seleccionar.",
   "multiselect.selectTeams": "Utiliza ↑↓ para navegar, ↵ para seleccionar.",
+  "multiselect.quit": "Salir",
   "mark_all_as_read_modal.title": "Marcar todos los mensajes como leídos",
   "mark_all_as_read_modal.message": "¿Estás seguro de que quieres marcar todos tus mensajes como leídos ?",
   "mark_all_as_read_modal.confirm": "Si",
