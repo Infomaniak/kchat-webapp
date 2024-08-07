@@ -2915,6 +2915,7 @@
   "multiselect.placeholder": "Cercare ed aggiungere membri",
   "multiselect.selectChannels": "Usa ↑↓ per navigare, ↵ per selezionare.",
   "multiselect.selectTeams": "Usa ↑↓ per navigare, ↵ per selezionare.",
+  "multiselect.quit": "Uscire",
   "mark_all_as_read_modal.title": "Contrassegnare tutti i messaggi come letti ",
   "mark_all_as_read_modal.message": "Sei sicuro di voler contrassegnare tutti i tuoi messaggi come letti ?",
   "mark_all_as_read_modal.confirm": "Si",
