@@ -509,14 +509,10 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                         <div
                             id='multiSelectHelpMemberInfo'
                             className='multi-select__help'
+                            style={this.props.showError ? {color: this.props.changeMessageColor} : {}}
                         >
-                            <div style={this.props.showError ? {color: this.props.changeMessageColor} : {}}>
-                                {numRemainingText}
-                            </div>
-                            <div style={this.props.showError ? {color: this.props.changeMessageColor} : {}}>
-                                {memberCount}
-                            </div>
-
+                            {numRemainingText}
+                            {memberCount}
                         </div>
                         {this.props.children}
                     </div>
