@@ -225,7 +225,6 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
     private isDraftEdited = false;
     private isNonFormattedPaste = false;
     private timeoutId: number | null = null;
-    private recordingInterval: ReturnType<typeof setInterval> | null = null;
 
     private readonly textboxRef: React.RefObject<TextboxClass>;
     private readonly fileUploadRef: React.RefObject<FileUploadClass>;
@@ -315,7 +314,6 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         if (this.timeoutId !== null) {
             clearTimeout(this.timeoutId);
         }
-        this.stopRecordingEvent();
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
@@ -768,36 +766,9 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         emitShortcutReactToLastPostFrom(Locations.RHS_ROOT);
     };
 
-    // infomaniak
-    emitTypingEvent = (type = 'typing') => {
+    emitTypingEvent = (eventType = 'typing') => {
         const {channelId, rootId} = this.props;
-        switch (type) {
-        case 'typing':
-            GlobalActions.emitLocalUserTypingEvent('typing', channelId, rootId);
-            break;
-        case 'recording':
-            this.emitRecordingEvent();
-            break;
-        case 'stop':
-            this.stopRecordingEvent();
-            break;
-        default:
-            break;
-        }
-    };
-
-    emitRecordingEvent = () => {
-        const TIMER = 1000;
-        this.recordingInterval = setInterval(() => {
-            const {channelId, rootId} = this.props;
-            GlobalActions.emitLocalUserTypingEvent('recording', channelId, rootId);
-        }, TIMER);
-    };
-
-    stopRecordingEvent = () => {
-        if (this.recordingInterval !== null) {
-            clearInterval(this.recordingInterval);
-        }
+        GlobalActions.emitLocalUserTypingEvent(eventType, channelId, rootId);
     };
 
     handleChange = (e: React.ChangeEvent<TextboxElement>) => {

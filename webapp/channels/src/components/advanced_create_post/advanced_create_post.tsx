@@ -266,7 +266,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     private isDraftSubmitting = false;
     private isNonFormattedPaste = false;
     private timeoutId: number | null = null;
-    private recordingInterval: ReturnType<typeof setInterval> | null = null;
 
     private topDiv: React.RefObject<HTMLFormElement>;
     private textboxRef: React.RefObject<TextboxClass>;
@@ -366,7 +365,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         if (this.timeoutId !== null) {
             clearTimeout(this.timeoutId);
         }
-        this.stopRecordingEvent();
     }
 
     getChannelMemberCountsByGroup = () => {
@@ -903,36 +901,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.emitTypingEvent();
     };
 
-    // infomaniak
-    emitTypingEvent = (type = 'typing') => {
+    emitTypingEvent = (eventType = 'typing') => {
         const channelId = this.props.currentChannel.id;
-        switch (type) {
-        case 'typing':
-            GlobalActions.emitLocalUserTypingEvent('typing', channelId, '');
-            break;
-        case 'recording':
-            this.emitRecordingEvent();
-            break;
-        case 'stop':
-            this.stopRecordingEvent();
-            break;
-        default:
-            break;
-        }
-    };
-
-    emitRecordingEvent = () => {
-        const TIMER = 1000;
-        this.recordingInterval = setInterval(() => {
-            const channelId = this.props.currentChannel.id;
-            GlobalActions.emitLocalUserTypingEvent('recording', channelId, '');
-        }, TIMER);
-    };
-
-    stopRecordingEvent = () => {
-        if (this.recordingInterval !== null) {
-            clearInterval(this.recordingInterval);
-        }
+        GlobalActions.emitLocalUserTypingEvent(eventType, channelId, '');
     };
 
     setDraftAsPostType = (channelId: Channel['id'], draft: PostDraft, postType?: PostDraft['postType']) => {

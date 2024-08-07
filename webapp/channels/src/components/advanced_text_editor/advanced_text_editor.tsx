@@ -92,7 +92,7 @@ type Props = {
     enableGifPicker: boolean;
     handleBlur: () => void;
     handlePostError: (postError: React.ReactNode) => void;
-    emitTypingEvent: (type: string) => void;
+    emitTypingEvent: (eventType: string) => void;
     handleMouseUpKeyUp: (e: React.MouseEvent<TextboxElement> | React.KeyboardEvent<TextboxElement>) => void;
     postMsgKeyPress: (e: React.KeyboardEvent<TextboxElement>) => void;
     handleChange: (e: React.ChangeEvent<TextboxElement>) => void;

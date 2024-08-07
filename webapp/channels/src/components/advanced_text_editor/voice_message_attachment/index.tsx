@@ -48,9 +48,9 @@ interface Props {
     onUploadError: (err: string | ServerError, clientId?: string, channelId?: Channel['id'], rootId?: Post['id']) => void;
     onRemoveDraft: (fileInfoIdOrClientId: FileInfo['id'] | string) => void;
     onSubmit: (e: FormEvent<Element>) => void;
-    onComplete: (type: string) => void;
-    onCancel: (type: string) => void;
-    onStarted: (type: string) => void;
+    onComplete: (eventType: string) => void;
+    onCancel: (eventType: string) => void;
+    onStarted: (eventType: string) => void;
 }
 
 const VoiceMessageAttachment = (props: Props) => {

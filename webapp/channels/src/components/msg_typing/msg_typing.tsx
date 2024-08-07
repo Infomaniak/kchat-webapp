@@ -37,7 +37,6 @@ export default function MsgTyping(props: Props) {
                     userStartedRecording(userId, channelId, rootId, Date.now());
                     break;
                 default:
-                    throw new Error('no SocketEvents found');
                     break;
                 }
             } else if (msg.event === SocketEvents.POSTED) {
@@ -56,12 +55,12 @@ export default function MsgTyping(props: Props) {
             userStoppedRecording]),
     });
 
-    const getInputText = (users: string[], type = 'typing') => {
+    const getInputText = (users: string[], eventType = 'typing') => {
         const numUsers = users.length;
         if (numUsers === 0) {
             return '';
         }
-        const {simpleMessage, multipleMessage, defaultSimpleMessage, defaultMultipleMessage} = getMessages(type);
+        const {simpleMessage, multipleMessage, defaultSimpleMessage, defaultMultipleMessage} = getMessages(eventType);
 
         if (numUsers === 1) {
             return (
@@ -87,8 +86,8 @@ export default function MsgTyping(props: Props) {
         );
     };
 
-    const getMessages = (type = 'typing') => {
-        switch (type) {
+    const getMessages = (eventType = 'typing') => {
+        switch (eventType) {
         case 'typing':
             return {
                 simpleMessage: 'msg_typing.isTyping',

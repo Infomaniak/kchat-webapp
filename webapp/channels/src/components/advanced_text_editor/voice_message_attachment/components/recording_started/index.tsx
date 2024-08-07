@@ -25,9 +25,9 @@ import {convertSecondsToMSS} from 'utils/datetime';
 
 interface Props {
     theme: Theme;
-    onCancel: (type: string) => void;
-    onComplete: (audioFile: File, type: string) => Promise<void>;
-    onStarted: (type: string) => void;
+    onCancel: (eventType: string) => void;
+    onComplete: (audioFile: File, eventType: string) => Promise<void>;
+    onStarted: (eventType: string) => void;
 }
 
 function VoiceMessageRecordingStarted(props: Props) {
