@@ -39,6 +39,7 @@ type Props = {
     shouldShowActionsMenu?: boolean;
     oneClickReactionsEnabled?: boolean;
     recentEmojis: Emoji[];
+    isBot: boolean;
     isExpanded?: boolean;
     hover?: boolean;
     isMobileView: boolean;
@@ -190,13 +191,23 @@ const PostOptions = (props: Props): JSX.Element => {
         pluginItems = props.pluginActions?.
             map((item) => {
                 if (item.component) {
-                    const Component = item.component as any;
-                    return (
-                        <Component
-                            post={props.post}
-                            key={item.id}
-                        />
-                    );
+                    if (item.pluginId === 'ia' && !(props.isBot || props.location === 'RHS_COMMENT')) {
+                        const Component = item.component as any;
+                        return (
+                            <Component
+                                post={props.post}
+                                key={item.id}
+                            />
+                        );
+                    } else if (item.pluginId !== 'ia') {
+                        const Component = item.component as any;
+                        return (
+                            <Component
+                                post={props.post}
+                                key={item.id}
+                            />
+                        );
+                    }
                 }
                 return null;
             }) || [];
