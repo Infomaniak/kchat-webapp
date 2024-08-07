@@ -120,24 +120,18 @@ exports[`components/multiselect/multiselect MultiSelectList should match snapsho
       <div
         className="multi-select__help"
         id="multiSelectHelpMemberInfo"
+        style={Object {}}
       >
-        <div
-          style={Object {}}
-        />
-        <div
-          style={Object {}}
-        >
-          <MemoizedFormattedMessage
-            defaultMessage="{options}/{maxUsers} users"
-            id="multiselect.numMembers"
-            values={
-              Object {
-                "maxUsers": 7,
-                "options": 1,
-              }
+        <MemoizedFormattedMessage
+          defaultMessage="{options}/{maxUsers} users"
+          id="multiselect.numMembers"
+          values={
+            Object {
+              "maxUsers": 7,
+              "options": 1,
             }
-          />
-        </div>
+          }
+        />
       </div>
     </div>
     <MultiSelectList
@@ -330,24 +324,18 @@ exports[`components/multiselect/multiselect should match snapshot 1`] = `
       <div
         className="multi-select__help"
         id="multiSelectHelpMemberInfo"
+        style={Object {}}
       >
-        <div
-          style={Object {}}
-        />
-        <div
-          style={Object {}}
-        >
-          <MemoizedFormattedMessage
-            defaultMessage="{options}/{maxUsers} users"
-            id="multiselect.numMembers"
-            values={
-              Object {
-                "maxUsers": 7,
-                "options": 1,
-              }
+        <MemoizedFormattedMessage
+          defaultMessage="{options}/{maxUsers} users"
+          id="multiselect.numMembers"
+          values={
+            Object {
+              "maxUsers": 7,
+              "options": 1,
             }
-          />
-        </div>
+          }
+        />
       </div>
     </div>
     <MultiSelectList
@@ -531,24 +519,18 @@ exports[`components/multiselect/multiselect should match snapshot for page 2 1`]
       <div
         className="multi-select__help"
         id="multiSelectHelpMemberInfo"
+        style={Object {}}
       >
-        <div
-          style={Object {}}
-        />
-        <div
-          style={Object {}}
-        >
-          <MemoizedFormattedMessage
-            defaultMessage="{options}/{maxUsers} users"
-            id="multiselect.numMembers"
-            values={
-              Object {
-                "maxUsers": 7,
-                "options": 1,
-              }
+        <MemoizedFormattedMessage
+          defaultMessage="{options}/{maxUsers} users"
+          id="multiselect.numMembers"
+          values={
+            Object {
+              "maxUsers": 7,
+              "options": 1,
             }
-          />
-        </div>
+          }
+        />
       </div>
     </div>
     <MultiSelectList
