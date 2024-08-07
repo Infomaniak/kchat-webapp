@@ -28,6 +28,8 @@ import {
 import type {
     OptionValue} from './types';
 
+import CreateChannelTip from '../create_channel_tip/create_channel_tip';
+
 export type Props = {
     currentUserId: string;
     currentTeamId: string;
@@ -296,30 +298,10 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
                 users={this.props.users}
                 values={this.state.values}
             >
-                {
-                    (this.state.values.length >= (Constants.MAX_USERS_IN_GM - 1)) ? (
-                        <div className='create-new-channel'>
-                            <img src={this.lampIcon()}/>
-                            <FormattedMessage
-                                id='multiselect.new_channel'
-                                defaultMessage='Create a channel to communicate with more people'
-                            />
-                            <a
-                                href='#'
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    this.openModal();
-                                }}
-                            >
-                                <FormattedMessage
-                                    id='multiselect.new_channel_create'
-                                    defaultMessage='Create a channel'
-                                />
-                            </a>
-                        </div>
-
-                    ) : null
-                }
+                <CreateChannelTip
+                    values={this.state.values}
+                    openModal={this.openModal}
+                />
             </List>
         );
 
