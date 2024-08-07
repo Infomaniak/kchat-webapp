@@ -55,6 +55,7 @@ export function handleNewPost(post: Post, msg?: {data?: NewPostMessageProps & Gr
     return async (dispatch) => {
         let websocketMessageProps = {};
 
+        //!824 Infomaniak > The code is commented out below because it seems redundant with what loadNewDMIfNeeded and loadNewGMIfNeeded do, they already seem to integrate the necessary checks and updates to handle messaging channels and user preferences.
         // const state = getState();
         if (msg) {
             websocketMessageProps = msg.data!;
