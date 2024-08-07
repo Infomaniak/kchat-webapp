@@ -246,7 +246,7 @@ class RhsHeaderPost extends React.PureComponent<Props> {
                     </div>
                     {this.props.showThreadsTutorialTip && <CRTThreadsPaneTutorialTip/>}
                 </div>
-                <RHSHeader/>
+                {this.props.channel.display_name === 'kChat Bot' && <RHSHeader/>}
             </>
         );
     }
