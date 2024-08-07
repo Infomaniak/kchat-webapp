@@ -5,7 +5,34 @@ import type {Emoji, SystemEmoji} from '@mattermost/types/emojis';
 
 import {Client4} from 'mattermost-redux/client';
 
+const IK_EMOJIS = [
+    'calendar',
+    'chk',
+    'contact',
+    'drive',
+    'kchat',
+    'kmeet',
+    'ksuite',
+    'mail',
+    'paste',
+    'swisstransfer',
+    'tasks',
+];
+
+export function isInfomaniakEmoji(emoji: Emoji): boolean {
+    // Custom infomaniak emojis are considered as system emojis
+    const emojiId = ('id' in emoji) ? emoji.id : null;
+    return (
+        typeof emojiId === 'string' &&
+        IK_EMOJIS.indexOf(emojiId) !== -1
+    );
+}
+
 export function isSystemEmoji(emoji: Emoji): emoji is SystemEmoji {
+    if (isInfomaniakEmoji(emoji)) {
+        return true;
+    }
+
     if ('category' in emoji) {
         return emoji.category !== 'custom';
     }
@@ -14,16 +41,6 @@ export function isSystemEmoji(emoji: Emoji): emoji is SystemEmoji {
 }
 
 export function getEmojiImageUrl(emoji: Emoji): string {
-    // If its the kchat custom emoji
-    if (!isSystemEmoji(emoji) && emoji.id === 'kchat') {
-        return Client4.getSystemEmojiImageUrl('kchat');
-    }
-
-    // If its the kmeet custom emoji
-    if (!isSystemEmoji(emoji) && emoji.id === 'kmeet') {
-        return Client4.getSystemEmojiImageUrl('kmeet');
-    }
-
     if (isSystemEmoji(emoji)) {
         const emojiUnified = emoji?.unified?.toLowerCase() ?? '';
         const filename = emojiUnified || emoji.short_names[0];

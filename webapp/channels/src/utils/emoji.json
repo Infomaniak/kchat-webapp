@@ -57788,8 +57788,8 @@
     },
     {
         "id": "kchat",
-        "name": "kChat",
-        "unified": "",
+        "name": "kchat",
+        "unified": "kchat",
         "short_name": "kchat",
         "short_names": [
             "kchat"
@@ -57798,11 +57798,101 @@
     },
     {
         "id": "kmeet",
-        "name": "kMeet",
-        "unified": "",
+        "name": "kmeet",
+        "unified": "kmeet",
         "short_name": "kmeet",
         "short_names": [
             "kmeet"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "calendar",
+        "name": "calendar",
+        "unified": "calendar",
+        "short_name": "calendar",
+        "short_names": [
+            "calendar"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "chk",
+        "name": "chk",
+        "unified": "chk",
+        "short_name": "chk",
+        "short_names": [
+            "chk"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "contact",
+        "name": "contact",
+        "unified": "contact",
+        "short_name": "contact",
+        "short_names": [
+            "contact"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "drive",
+        "name": "drive",
+        "unified": "drive",
+        "short_name": "drive",
+        "short_names": [
+            "drive"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "ksuite",
+        "name": "ksuite",
+        "unified": "ksuite",
+        "short_name": "ksuite",
+        "short_names": [
+            "ksuite"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "mail",
+        "name": "mail",
+        "unified": "mail",
+        "short_name": "mail",
+        "short_names": [
+            "mail"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "paste",
+        "name": "paste",
+        "unified": "paste",
+        "short_name": "paste",
+        "short_names": [
+            "paste"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "swisstransfer",
+        "name": "swisstransfer",
+        "unified": "swisstransfer",
+        "short_name": "swisstransfer",
+        "short_names": [
+            "swisstransfer"
+        ],
+        "category": "custom"
+    },
+    {
+        "id": "tasks",
+        "name": "tasks",
+        "unified": "tasks",
+        "short_name": "tasks",
+        "short_names": [
+            "tasks"
         ],
         "category": "custom"
     }

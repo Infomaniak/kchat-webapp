@@ -8,7 +8,7 @@ import {useIntl} from 'react-intl';
 
 import type {Emoji} from '@mattermost/types/emojis';
 
-import {getEmojiImageUrl, isSystemEmoji} from 'mattermost-redux/utils/emoji_utils';
+import {getEmojiImageUrl, isInfomaniakEmoji, isSystemEmoji} from 'mattermost-redux/utils/emoji_utils';
 
 import {EMOJI_SCROLL_THROTTLE_DELAY} from 'components/emoji_picker/constants';
 import type {EmojiCursor} from 'components/emoji_picker/types';
@@ -54,7 +54,7 @@ function EmojiPickerItem({emoji, rowIndex, isSelected, onClick, onMouseOver}: Pr
 
     let content;
 
-    if (isSystemEmoji(emoji)) {
+    if (!isInfomaniakEmoji(emoji) && isSystemEmoji(emoji)) {
         const emojiName = emoji.short_name ? emoji.short_name : emoji.name;
         const emojiUnified = emoji.unified ? emoji.unified.toLowerCase() : emoji.name.toLowerCase();
 

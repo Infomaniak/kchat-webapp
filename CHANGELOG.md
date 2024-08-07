@@ -1,3 +1,83 @@
+## 2.9.8-rc.5 (2024-08-05)
+
+### Changed (1 change)
+
+- [add temp check to prevent undefined case on latestPost create_at](kchat/webapp@c860209635bdf1862c5835d2571247024e09d21a) by @antonbuksa ([merge request](kchat/webapp!866))
+
+## 2.9.8-rc.4 (2024-08-05)
+
+### Fixed (1 change)
+
+- [Fix: Condition for user not on appstore](kchat/webapp@6e02b35d193e6ba08f056c09aa7db7a730a3c14c) by  ([merge request](kchat/webapp!865))
+
+## 2.9.8-rc.3 (2024-07-31)
+
+### Fixed (2 changes)
+
+- [Fix: Remove link for invite users to team](kchat/webapp@8fac8885713291660d1cd58a57b315ca904f166b) by  ([merge request](kchat/webapp!863))
+- [Fix: Remove link for invite external users](kchat/webapp@699c12729c821bfab9cd6c9442de131a9bbbaad3) by  ([merge request](kchat/webapp!863))
+
+## 2.9.8-rc.2 (2024-07-31)
+
+### Fixed (6 changes)
+
+- [Fix: Call declined trad not working](kchat/webapp@ccc389ec94725bc94c641a89d83d446c2bce3ca4) by  ([merge request](kchat/webapp!864))
+- [Fix: Transcript text color on dark theme](kchat/webapp@a7b18c9fb8a0e1dafffd28d9892596ec44f1b092) by  ([merge request](kchat/webapp!861))
+- [Fix: Remove hover on status dropdown header](kchat/webapp@6ee105500b94a4b344eb9c45d0b12414634fb41c) by  ([merge request](kchat/webapp!860))
+- [fixed issue while user list disappeared with autocomplete](kchat/webapp@3e46050f4522ff709a2733f5fd38534e920298ac) by  ([merge request](kchat/webapp!852))
+- [Fix: Add arrow for webapp](kchat/webapp@b769f2da0fb0d61267edf399f44c94641c54f25a) by  ([merge request](kchat/webapp!859))
+- [fix: prevent closing menu when pressing enter on a menu-item that has a popup](kchat/webapp@7d904e136857f9da0bee6d39670fb5fce9105bca) by @tim.dewinter ([merge request](kchat/webapp!833))
+
+## 2.9.8-rc.1 (2024-07-30)
+
+### Fixed (5 changes)
+
+- [Fix: Member list don't scroll](kchat/webapp@e6a1d366630a2ba458c80b4f595921bb1c8a8dee) by  ([merge request](kchat/webapp!856))
+- [fix markdown image that not showing up in thread](kchat/webapp@eea52ef6c20c2d7a600e4e9965707c05fdbfd982) by  ([merge request](kchat/webapp!849))
+- [Fix: add status in group list modal](kchat/webapp@1cd002c23460212b4edbf4c79cec38a7c5755a5a) by  ([merge request](kchat/webapp!846))
+- [Feat: Add status in group member](kchat/webapp@b25f6bb122cf90d9aaeda301d61e66b601f481d4) by  ([merge request](kchat/webapp!846))
+- [fix: add hide module support](kchat/webapp@8b74bea20f38114eff02b3d108228fd67c286d58) by  ([merge request](kchat/webapp!809))
+
+## 2.9.8-next.5 (2024-08-05)
+
+### Changed (1 change)
+
+- [add temp check to prevent undefined case on latestPost create_at](kchat/webapp@c860209635bdf1862c5835d2571247024e09d21a) by @antonbuksa ([merge request](kchat/webapp!866))
+
+## 2.9.8-next.4 (2024-08-05)
+
+### Fixed (1 change)
+
+- [Fix: Condition for user not on appstore](kchat/webapp@6e02b35d193e6ba08f056c09aa7db7a730a3c14c) by  ([merge request](kchat/webapp!865))
+
+## 2.9.8-next.3 (2024-07-31)
+
+### Fixed (2 changes)
+
+- [Fix: Remove link for invite users to team](kchat/webapp@8fac8885713291660d1cd58a57b315ca904f166b) by  ([merge request](kchat/webapp!863))
+- [Fix: Remove link for invite external users](kchat/webapp@699c12729c821bfab9cd6c9442de131a9bbbaad3) by  ([merge request](kchat/webapp!863))
+
+## 2.9.8-next.2 (2024-07-31)
+
+### Fixed (6 changes)
+
+- [Fix: Call declined trad not working](kchat/webapp@ccc389ec94725bc94c641a89d83d446c2bce3ca4) by  ([merge request](kchat/webapp!864))
+- [Fix: Transcript text color on dark theme](kchat/webapp@a7b18c9fb8a0e1dafffd28d9892596ec44f1b092) by  ([merge request](kchat/webapp!861))
+- [Fix: Remove hover on status dropdown header](kchat/webapp@6ee105500b94a4b344eb9c45d0b12414634fb41c) by  ([merge request](kchat/webapp!860))
+- [fixed issue while user list disappeared with autocomplete](kchat/webapp@3e46050f4522ff709a2733f5fd38534e920298ac) by  ([merge request](kchat/webapp!852))
+- [Fix: Add arrow for webapp](kchat/webapp@b769f2da0fb0d61267edf399f44c94641c54f25a) by  ([merge request](kchat/webapp!859))
+- [fix: prevent closing menu when pressing enter on a menu-item that has a popup](kchat/webapp@7d904e136857f9da0bee6d39670fb5fce9105bca) by @tim.dewinter ([merge request](kchat/webapp!833))
+
+## 2.9.8-next.1 (2024-07-30)
+
+### Fixed (5 changes)
+
+- [Fix: Member list don't scroll](kchat/webapp@e6a1d366630a2ba458c80b4f595921bb1c8a8dee) by  ([merge request](kchat/webapp!856))
+- [fix markdown image that not showing up in thread](kchat/webapp@eea52ef6c20c2d7a600e4e9965707c05fdbfd982) by  ([merge request](kchat/webapp!849))
+- [Fix: add status in group list modal](kchat/webapp@1cd002c23460212b4edbf4c79cec38a7c5755a5a) by  ([merge request](kchat/webapp!846))
+- [Feat: Add status in group member](kchat/webapp@b25f6bb122cf90d9aaeda301d61e66b601f481d4) by  ([merge request](kchat/webapp!846))
+- [fix: add hide module support](kchat/webapp@8b74bea20f38114eff02b3d108228fd67c286d58) by  ([merge request](kchat/webapp!809))
+
 ## 2.9.7-rc.10 (2024-07-24)
 
 ### Changed (1 change)

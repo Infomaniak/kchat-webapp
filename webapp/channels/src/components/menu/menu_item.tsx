@@ -127,9 +127,12 @@ export function MenuItem(props: Props) {
 
     function handleClick(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
         if (isCorrectKeyPressedOnMenuItem(event)) {
-            // If the menu item is a checkbox or radio button, we don't want to close the menu when it is clicked.
-            // see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
-            if (isRoleCheckboxOrRadio(role)) {
+            if (
+                // If the menu item is a checkbox, radio button, or if it has a submenu, we don't want to close the menu when it is clicked.
+                // see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
+                isRoleCheckboxOrRadio(role) ||
+                hasElementPopup(event.currentTarget)
+            ) {
                 event.stopPropagation();
             } else {
                 // close submenu first if it is open
@@ -328,4 +331,11 @@ function isCorrectKeyPressedOnMenuItem(event: MouseEvent<HTMLLIElement> | Keyboa
 
 function isRoleCheckboxOrRadio(role: AriaRole) {
     return role === 'menuitemcheckbox' || role === 'menuitemradio';
+}
+
+export function hasElementPopup(node: HTMLElement) {
+    return (
+        node.getAttribute('aria-haspopup') === 'true' &&
+        node.getAttribute('aria-expanded') !== null
+    );
 }

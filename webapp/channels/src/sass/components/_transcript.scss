@@ -1,23 +1,23 @@
 @charset 'UTF-8';
-.time-transcript{
-    color: var(--center-channel-color);
-    margin-right:10px;
-}
 
-.transcript-text{
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.transcript-error{
-    text-align: left;
-    color: var(--center-channel-color);
-    margin-top: 3px;
-}
-
-.transcript-popover{
+.transcript-popover {
     padding: 10px;
     max-height: 300px;
     max-width: 350px;
+    color: var(--center-channel-color);
+
+    .time-transcript {
+        margin-right:10px;
+    }
+
+    .transcript-text {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .transcript-error {
+        text-align: left;
+        margin-top: 3px;
+    }
 }

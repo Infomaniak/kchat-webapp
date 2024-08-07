@@ -30,6 +30,7 @@ import Constants, {A11yClassNames} from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
 
 import {MenuContext, useMenuContextValue} from './menu_context';
+import {hasElementPopup} from './menu_item';
 import {MuiMenuStyled} from './menu_styled';
 
 const OVERLAY_TIME_DELAY = 500;
@@ -146,11 +147,7 @@ export function Menu(props: Props) {
 
     function handleMenuKeyDown(event: KeyboardEvent<HTMLDivElement>) {
         if (isKeyPressed(event, Constants.KeyCodes.ENTER) || isKeyPressed(event, Constants.KeyCodes.SPACE)) {
-            const target = event.target as HTMLElement;
-            const ariaHasPopupAttribute = target?.getAttribute('aria-haspopup') === 'true';
-            const ariaHasExpandedAttribute = target?.getAttribute('aria-expanded') === 'true';
-
-            if (ariaHasPopupAttribute && ariaHasExpandedAttribute) {
+            if (hasElementPopup(event.currentTarget)) {
                 // Avoid closing the sub menu item on enter
             } else {
                 setAnchorElement(null);

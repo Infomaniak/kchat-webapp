@@ -101,9 +101,9 @@ describe('EmojiUtils', () => {
         });
 
         test('return correct url for kchat emoji', () => {
-            expect(EmojiUtils.getEmojiImageUrl(TestHelper.getCustomEmojiMock({id: 'kchat', category: 'custom'}))).toBe('/static/emoji/kchat.png');
+            expect(EmojiUtils.getEmojiImageUrl(TestHelper.getSystemEmojiMock({unified: 'kchat'}))).toBe('/static/emoji/kchat.png');
 
-            expect(EmojiUtils.getEmojiImageUrl(TestHelper.getCustomEmojiMock({id: 'kchat'}))).toBe('/static/emoji/kchat.png');
+            expect(EmojiUtils.getEmojiImageUrl(TestHelper.getSystemEmojiMock({short_names: ['kchat']}))).toBe('/static/emoji/kchat.png');
         });
 
         test('return correct url for custom emojis', () => {

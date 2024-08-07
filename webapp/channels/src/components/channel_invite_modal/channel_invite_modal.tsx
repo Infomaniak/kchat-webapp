@@ -519,14 +519,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             <div className='custom-no-options-message'>
                 <FormattedMessage
                     id='channel_invite.no_options_message'
-                    defaultMessage='No matches found - <InvitationModalLink>Invite them to the team</InvitationModalLink>'
-                    values={{
-                        InvitationModalLink: (chunks: string) => (
-                            <InviteModalLink>
-                                {chunks}
-                            </InviteModalLink>
-                        ),
-                    }}
+                    defaultMessage='No matches found'
                 />
             </div>
         );
