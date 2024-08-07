@@ -1,14 +1,17 @@
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
 import type {Post} from '@mattermost/types/posts';
 
 import {Client4} from 'mattermost-redux/client';
+import {getUser} from 'mattermost-redux/selectors/entities/users';
 
 import {selectPostById} from 'actions/views/rhs';
 import {handleEvent} from 'actions/websocket_actions';
+
+import type {GlobalState} from 'types/store';
 
 import IconAI from './assets/icon_ai';
 import IconThreadSummarization from './assets/icon_thread_summarization';
@@ -31,14 +34,19 @@ import {GrayPill} from './pill';
 
 type Props = {
     post: Post;
+    location: string;
 }
 
 const PostMenu = (props: Props) => {
     const dispatch = useDispatch();
     const intl = useIntl();
 
-    // const {bots, activeBot, setActiveBot} = useBotlist();
     const post = props.post;
+
+    const user = useSelector((state: GlobalState) => getUser(state, post.user_id));
+    const isBot = Boolean(user && user.is_bot);
+
+    // const {bots, activeBot, setActiveBot} = useBotlist();
 
     // const isBasicsLicensed = useIsBasicsLicensed();
 
@@ -60,6 +68,10 @@ const PostMenu = (props: Props) => {
     // if (bots && botsArray.length === 0) {
     //     return null;
     // }
+
+    if (isBot || props.location === 'RHS_ROOT') {
+        return null;
+    }
 
     return (
         <DotMenu

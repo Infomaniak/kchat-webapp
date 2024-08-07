@@ -191,23 +191,14 @@ const PostOptions = (props: Props): JSX.Element => {
         pluginItems = props.pluginActions?.
             map((item) => {
                 if (item.component) {
-                    if (item.pluginId === 'ia' && !(props.isBot || props.location === 'RHS_COMMENT')) {
-                        const Component = item.component as any;
-                        return (
-                            <Component
-                                post={props.post}
-                                key={item.id}
-                            />
-                        );
-                    } else if (item.pluginId !== 'ia') {
-                        const Component = item.component as any;
-                        return (
-                            <Component
-                                post={props.post}
-                                key={item.id}
-                            />
-                        );
-                    }
+                    const Component = item.component as any;
+                    return (
+                        <Component
+                            location={props.location}
+                            post={props.post}
+                            key={item.id}
+                        />
+                    );
                 }
                 return null;
             }) || [];
