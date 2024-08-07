@@ -12,9 +12,12 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import type MultiSelect from 'components/multiselect/multiselect';
+import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 
 import {getHistory} from 'utils/browser_history';
-import Constants from 'utils/constants';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+
+import type {ModalData} from 'types/actions';
 
 import List from './list';
 import {USERS_PER_PAGE} from './list/list';
@@ -24,6 +27,8 @@ import {
 } from './types';
 import type {
     OptionValue} from './types';
+
+import CreateChannelTip from '../create_channel_tip/create_channel_tip';
 
 export type Props = {
     currentUserId: string;
@@ -61,6 +66,7 @@ export type Props = {
         searchProfiles: (term: string, options: any) => Promise<ActionResult<UserProfile[]>>;
         searchGroupChannels: (term: string) => Promise<ActionResult<Channel[]>>;
         setModalSearchTerm: (term: string) => void;
+        openModal: <P>(modalData: ModalData<P>) => void;
     };
 }
 
@@ -264,6 +270,17 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         this.setState({values});
     };
 
+    lampIcon = () => Constants.LAMP_ICON;
+
+    openModal = (): void => {
+        this.handleExit();
+        const newModal = {
+            modalId: ModalIdentifiers.NEW_CHANNEL_MODAL,
+            dialogType: NewChannelModal,
+        };
+        this.props.actions?.openModal(newModal);
+    };
+
     render() {
         const body = (
             <List
@@ -280,7 +297,12 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
                 totalCount={this.props.totalCount}
                 users={this.props.users}
                 values={this.state.values}
-            />
+            >
+                <CreateChannelTip
+                    values={this.state.values}
+                    openModal={this.openModal}
+                />
+            </List>
         );
 
         return (
