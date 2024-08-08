@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
@@ -86,9 +86,6 @@ const ReportingToolsWrapper = styled.div`
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    module-reporting-tools-component {
-        transition: background-color 1s ease;
-    }
 `;
 
 const tooltipUserReport = (
@@ -118,7 +115,7 @@ const RightControls = (): JSX.Element => {
     const settingsTourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SETTINGS : OnboardingTourSteps.SETTINGS;
     const showSettingsTutorialStep = useShowOnboardingTutorialStep(settingsTourStep);
     const isDesktopApp = getIsDesktopApp();
-    const [isPartner, setIsPartner] = useState(false);
+
     let userReportHref = 'https://feedback.userreport.com/6b7737f6-0cc1-410f-993f-be2ffbf73a05#ideas/popular';
     if (userReportHrefs[locale]) {
         userReportHref = userReportHrefs[locale];
@@ -143,23 +140,6 @@ const RightControls = (): JSX.Element => {
         </span>
     );
 
-    useEffect(() => {
-        let timeout: NodeJS.Timeout;
-        const checkIsPartner = () => {
-            if (typeof window?.webComponentsStore?.currentAccount?.is_partner === 'boolean') {
-                if (!(window.webComponentsStore.currentAccount.is_partner && !window?.webComponentsStore?.userStartConfig?.is_staff)) {
-                    setIsPartner(true);
-                }
-            } else {
-                timeout = setTimeout(checkIsPartner, 1000);
-            }
-        };
-        checkIsPartner();
-        return () => {
-            clearTimeout(timeout);
-        };
-    }, []);
-
     return (
         <RightControlsContainer
             id={'RightControlsContainer'}
@@ -168,10 +148,7 @@ const RightControls = (): JSX.Element => {
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
 
-                <module-reporting-tools-component
-                    size='26'
-                    style={isPartner ? {background: '#7974B4'} : {background: 'var(--global-header-background)'}}
-                />
+                <module-reporting-tools-component size='26'/>
             </ReportingToolsWrapper>
             <OverlayTrigger
                 trigger={['hover', 'focus']}
