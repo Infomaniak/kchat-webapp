@@ -8,6 +8,8 @@ import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import type {Team} from '@mattermost/types/teams';
 
+import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
+
 import {closeRightHandSide} from 'actions/views/rhs';
 
 import PostView from 'components/post_view/post_view';
