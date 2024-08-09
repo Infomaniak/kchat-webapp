@@ -67,7 +67,7 @@ const IkPostponeReminderButtons = (props: Props) => {
             let endTime = currentDate;
             if (id === PostReminders.THIRTY_MINUTES) {
                 // add 30 minutes in current time
-                endTime = currentDate.add(0.1, 'minutes');
+                endTime = currentDate.add(30, 'minutes');
             } else if (id === PostReminders.ONE_HOUR) {
                 // add 1 hour in current time
                 endTime = currentDate.add(1, 'hour');
