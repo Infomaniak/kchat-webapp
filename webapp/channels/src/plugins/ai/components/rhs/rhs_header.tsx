@@ -1,8 +1,18 @@
+
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
+import {Link, useLocation, useRouteMatch} from 'react-router-dom';
 import styled from 'styled-components';
 
 import {ChevronDownIcon} from '@mattermost/compass-icons/components';
+
+import {getChannelByName} from 'mattermost-redux/selectors/entities/channels';
+
+import {switchToChannel} from 'actions/views/channel';
+import {closeRightHandSide} from 'actions/views/rhs';
+
+import type {GlobalState} from 'types/store';
 
 import {Button} from './common';
 
@@ -18,9 +28,14 @@ type Props = {
     setCurrentTab?: (tab: string) => void;
     selectPost?: (postId: string) => void;
     setActiveBot?: (bot: LLMBot) => void;
+    channelName: string;
+    onChatHistoryClick?: () => void;
 }
 
 const RHSHeader = (props: Props) => {
+    const dispatch = useDispatch();
+    const kChatBotChannel = useSelector((state: GlobalState) => getChannelByName(state, props.channelName));
+
     let historyButton = null;
     if (props.currentTab === 'threads') {
         historyButton = (
@@ -36,11 +51,7 @@ const RHSHeader = (props: Props) => {
         historyButton = (
             <HistoryButton
                 data-testid='chat-history'
-
-                // onClick={() => {
-                //     props.setCurrentTab('threads');
-                //     props.selectPost('');
-                // }}
+                onClick={props.onChatHistoryClick}
             >
                 <i className='icon-clock-outline'/>
                 <FormattedMessage
@@ -54,10 +65,14 @@ const RHSHeader = (props: Props) => {
     return (
         <Header>
             {historyButton}
-            {props.currentTab !== 'new' && (
+            {props.currentTab !== 'new' && kChatBotChannel && (
                 <NewChatButton
                     data-testid='new-chat'
                     className='new-button'
+                    onClick={() => {
+                        dispatch(closeRightHandSide());
+                        dispatch(switchToChannel(kChatBotChannel));
+                    }}
 
                     // onClick={() => {
                     //     props.setCurrentTab('new');
