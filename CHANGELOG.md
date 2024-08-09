@@ -1,3 +1,11 @@
+## 2.9.9-rc.2 (2024-08-09)
+
+### Fixed (3 changes)
+
+- [Fix: remove bugtracker color](kchat/webapp@79fd3916717f06b9804f3be4709e9887a8f2feff) by  ([merge request](kchat/webapp!858))
+- [add join button in thread instead of readonly message](kchat/webapp@f980fb29e9af84d276d59dab56e9099de34f1812) by  ([merge request](kchat/webapp!868))
+- [Fix: Remove bugtracker background for parter organisation](kchat/webapp@d19fb993f9edf25c00db86c22ec77ded85d2383f) by  ([merge request](kchat/webapp!858))
+
 ## 2.9.9-rc.1 (2024-08-07)
 
 ### Added (2 changes)
