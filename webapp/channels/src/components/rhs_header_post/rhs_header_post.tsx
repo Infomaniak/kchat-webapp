@@ -43,6 +43,7 @@ interface Props extends WrappedComponentProps {
     closeRightHandSide: (e?: React.MouseEvent) => void;
     toggleRhsExpanded: (e: React.MouseEvent) => void;
     setThreadFollow: (userId: string, teamId: string, threadId: string, newState: boolean) => void;
+    onChatHistoryClick?: () => void;
 }
 
 class RhsHeaderPost extends React.PureComponent<Props> {
@@ -246,7 +247,12 @@ class RhsHeaderPost extends React.PureComponent<Props> {
                     </div>
                     {this.props.showThreadsTutorialTip && <CRTThreadsPaneTutorialTip/>}
                 </div>
-                {this.props.channel.display_name === 'kChat Bot' && <RHSHeader channelName={this.props.channel.name}/>}
+                {this.props.channel.display_name === 'kChat Bot' && (
+                    <RHSHeader
+                        onChatHistoryClick={this.props.onChatHistoryClick}
+                        channelName={this.props.channel.name}
+                    />
+                )}
             </>
         );
     }
