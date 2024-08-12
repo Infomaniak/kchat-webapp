@@ -4471,4 +4471,13 @@ var SystemEmojis = map[string]string{
 "writing_hand_dark_skin_tone": "270d-1f3ff",
 "kchat": "kchat",
 "kmeet": "kmeet",
+"calendar": "calendar",
+"chk": "chk",
+"contacts": "contacts",
+"kdrive": "kdrive",
+"ksuite": "ksuite",
+"mail": "mail",
+"paste": "paste",
+"swisstransfer": "swisstransfer",
+"tasks": "tasks",
 }

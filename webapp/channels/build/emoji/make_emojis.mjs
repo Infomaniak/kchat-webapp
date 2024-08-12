@@ -249,21 +249,21 @@ fullEmoji.push({
     category: 'custom',
 });
 fullEmoji.push({
-    id: 'contact',
-    name: 'contact',
-    unified: 'contact',
-    image: 'contact.png',
-    short_name: 'contact',
-    short_names: ['contact'],
+    id: 'contacts',
+    name: 'contacts',
+    unified: 'contacts',
+    image: 'contacts.png',
+    short_name: 'contacts',
+    short_names: ['contacts'],
     category: 'custom',
 });
 fullEmoji.push({
-    id: 'drive',
-    name: 'drive',
-    unified: 'drive',
-    image: 'drive.png',
-    short_name: 'drive',
-    short_names: ['drive'],
+    id: 'kdrive',
+    name: 'kdrive',
+    unified: 'kdrive',
+    image: 'kdrive.png',
+    short_name: 'kdrive',
+    short_names: ['kdrive'],
     category: 'custom',
 });
 fullEmoji.push({
