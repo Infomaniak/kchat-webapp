@@ -4422,6 +4422,8 @@
   "move_thread_modal.title": "Unterhaltung verschieben",
   "msg_typing.areTyping": "{users} und {last} tippen gerade...",
   "msg_typing.isTyping": "{user} tippt...",
+  "msg_recording.isRecording" : "{user} nimmt auf..", 
+  "msg_recording.areRecording": "{users} und {last} nehmen auf...",
   "multiselect.add": "Hinzufügen",
   "multiselect.addChannelsPlaceholder": "Kanäle suchen und hinzufügen",
   "multiselect.addGroupMembers": "{number} Personen hinzufügen",

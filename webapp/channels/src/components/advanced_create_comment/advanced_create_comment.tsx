@@ -766,9 +766,9 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         emitShortcutReactToLastPostFrom(Locations.RHS_ROOT);
     };
 
-    emitTypingEvent = () => {
+    emitTypingEvent = (eventType = 'typing') => {
         const {channelId, rootId} = this.props;
-        GlobalActions.emitLocalUserTypingEvent(channelId, rootId);
+        GlobalActions.emitLocalUserTypingEvent(eventType, channelId, rootId);
     };
 
     handleChange = (e: React.ChangeEvent<TextboxElement>) => {

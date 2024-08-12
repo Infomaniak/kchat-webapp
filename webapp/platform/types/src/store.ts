@@ -32,6 +32,7 @@ import {AppsState} from './apps';
 import {InsightsState} from './insights';
 import {GifsState} from './gifs';
 import {LimitsState} from './limits';
+import {Recording} from './recording';
 
 export type GlobalState = {
     entities: {
@@ -57,6 +58,7 @@ export type GlobalState = {
         files: FilesState;
         emojis: EmojisState;
         typing: Typing;
+        recording: Recording;
         roles: {
             roles: {
                 [x: string]: Role;

@@ -3796,6 +3796,8 @@
   "more_direct_channels.title": "Mensajes Directos",
   "msg_typing.areTyping": "{users} y {last} están escribiendo...",
   "msg_typing.isTyping": "{user} está escribiendo...",
+  "msg_recording.isRecording" : "{user} está grabando...", 
+  "msg_recording.areRecording": "{users} et {last} están grabando...",
   "multiselect.add": "Agregar",
   "multiselect.addChannelsPlaceholder": "Buscar y agregar canales",
   "multiselect.addGroupsPlaceholder": "Buscar y agregar grupos",

@@ -25,8 +25,9 @@ import {convertSecondsToMSS} from 'utils/datetime';
 
 interface Props {
     theme: Theme;
-    onCancel: () => void;
-    onComplete: (audioFile: File) => Promise<void>;
+    onCancel: (eventType: string) => void;
+    onComplete: (audioFile: File, eventType: string) => Promise<void>;
+    onStarted: (eventType: string) => void;
 }
 
 function VoiceMessageRecordingStarted(props: Props) {
@@ -61,6 +62,9 @@ function VoiceMessageRecordingStarted(props: Props) {
 
     useEffect(() => {
         startRecording();
+        if (typeof props.onStarted === 'function') {
+            props.onStarted('recording');
+        }
 
         return () => {
             cleanPostRecording(true);
@@ -69,14 +73,14 @@ function VoiceMessageRecordingStarted(props: Props) {
 
     async function handleRecordingCancelled() {
         await cleanPostRecording(true);
-        props.onCancel();
+        props.onCancel('stop');
     }
 
     async function handleRecordingComplete() {
         const audioFile = await stopRecording();
 
         if (audioFile) {
-            props.onComplete(audioFile);
+            props.onComplete(audioFile, 'stop');
         }
     }
 

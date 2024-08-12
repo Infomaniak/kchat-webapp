@@ -2900,6 +2900,8 @@
   "more_direct_channels.title": "Messaggio Privato",
   "msg_typing.areTyping": "{users} e {last} stanno scrivendo...",
   "msg_typing.isTyping": "{user} sta scrivendo...",
+  "msg_recording.isRecording" : "{user} sta registrando", 
+  "msg_recording.areRecording": "{users} et {last} stanno registrando...",
   "multiselect.add": "Aggiungi",
   "multiselect.addChannelsPlaceholder": "Cerca e aggiungi canali",
   "multiselect.addGroupsPlaceholder": "Cerca e aggiungi gruppi",
