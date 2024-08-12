@@ -583,7 +583,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
                 values={{
                     permaLink,
                     endReminderTime,
-                    a: (chunks: React.ReactNode) => <a href={String(permaLink)}>{chunks}</a>,
+                    a: (chunks: React.ReactNode) => <a href={post.props.link}>{chunks}</a>,
                 }}
             />
         );
@@ -596,7 +596,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
                 defaultMessage='Alright, I have marked the reminder for <a>this message</a> as completed!'
                 values={{
                     permaLink,
-                    a: (chunks: React.ReactNode) => <a href={String(permaLink)}>{chunks}</a>,
+                    a: (chunks: React.ReactNode) => <a href={post.props.link}>{chunks}</a>,
                 }}
             />
         );
