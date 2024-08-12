@@ -1,3 +1,18 @@
+## 2.9.9-rc.3 (2024-08-12)
+
+### Added (4 changes)
+
+- [allow app navigation buttons on pwa](kchat/webapp@f65a21d46c7e7eb3d55b439b9e4dc46095c92373) by @boris.trombert ([merge request](kchat/webapp!871))
+- [Added: Reminder time](kchat/webapp@53cb90b6aa8c0942b1603cc70597f8c27bf9a540) by  ([merge request](kchat/webapp!850))
+- [Fix: create compo for postpone buttons](kchat/webapp@60822b0eca1dcdacddbe52811b5b25058a6eb7a7) by  ([merge request](kchat/webapp!850))
+- [Feat: Postpone reminder](kchat/webapp@48a782559152d09e2d141a9bde414369c2459a19) by  ([merge request](kchat/webapp!850))
+
+### Fixed (3 changes)
+
+- [updating emojis name](kchat/webapp@bfa06645d8c8216cd99601d0523739d001d2e124) by @cyril.gromoff ([merge request](kchat/webapp!872))
+- [Fix: API call and changes message according to actions](kchat/webapp@71e15f1f0ae8ad43dcf3c24e0f04a4ec90acc06e) by  ([merge request](kchat/webapp!850))
+- [Fix: button in post compo instead of post message view compo](kchat/webapp@dba36890123a61327790ffe975a4ba4eeaca88af) by  ([merge request](kchat/webapp!850))
+
 ## 2.9.9-rc.2 (2024-08-09)
 
 ### Fixed (3 changes)
