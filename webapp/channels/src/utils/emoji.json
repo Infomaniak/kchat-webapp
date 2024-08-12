@@ -57827,22 +57827,22 @@
         "category": "custom"
     },
     {
-        "id": "contact",
-        "name": "contact",
-        "unified": "contact",
-        "short_name": "contact",
+        "id": "contacts",
+        "name": "contacts",
+        "unified": "contacts",
+        "short_name": "contacts",
         "short_names": [
-            "contact"
+            "contacts"
         ],
         "category": "custom"
     },
     {
-        "id": "drive",
-        "name": "drive",
-        "unified": "drive",
-        "short_name": "drive",
+        "id": "kdrive",
+        "name": "kdrive",
+        "unified": "kdrive",
+        "short_name": "kdrive",
         "short_names": [
-            "drive"
+            "kdrive"
         ],
         "category": "custom"
     },

@@ -8,8 +8,8 @@ import {Client4} from 'mattermost-redux/client';
 const IK_EMOJIS = [
     'calendar',
     'chk',
-    'contact',
-    'drive',
+    'contacts',
+    'kdrive',
     'kchat',
     'kmeet',
     'ksuite',
