@@ -13,12 +13,13 @@ type Props = {
     channelId: string;
     postId: string;
     typingUsers: string[];
+    currentUserId: string;
     userStartedTyping: (userId: string, channelId: string, rootId: string, now: number) => void;
     userStoppedTyping: (userId: string, channelId: string, rootId: string, now: number) => void;
 }
 
 export default function MsgTyping(props: Props) {
-    const {userStartedTyping, userStoppedTyping} = props;
+    const {userStartedTyping, userStoppedTyping, currentUserId} = props;
     useWebSocket({
         handler: useCallback((msg: WebSocketMessage) => {
             if (msg.event === SocketEvents.TYPING) {
@@ -26,6 +27,9 @@ export default function MsgTyping(props: Props) {
                 const rootId = msg.data.data.parent_id;
                 const userId = msg.data.data.user_id;
 
+                if (currentUserId === userId) {
+                    return;
+                }
                 if (props.channelId === channelId && props.postId === rootId) {
                     userStartedTyping(userId, channelId, rootId, Date.now());
                 }

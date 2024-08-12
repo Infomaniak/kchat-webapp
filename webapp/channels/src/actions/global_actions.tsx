@@ -237,10 +237,6 @@ export function emitLocalUserTypingEvent(channelId: string, parentPostId: string
         const timeBetweenUserTypingUpdatesMilliseconds = Utils.stringToNumber(config.TimeBetweenUserTypingUpdatesMilliseconds);
         const maxNotificationsPerChannel = Utils.stringToNumber(config.MaxNotificationsPerChannel);
 
-        if (userId === getCurrentUserId(state)) {
-            return {data: false};
-        }
-
         if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
             (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
             WebSocketClient.userTyping(channelId, userId, parentPostId);
