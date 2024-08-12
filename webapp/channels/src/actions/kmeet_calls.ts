@@ -172,16 +172,8 @@ export function cancelCall(channelId: string) {
 }
 
 export function startCall(channelId: string, jwt: string, url: string, subject: string) {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+    return async (dispatch: DispatchFunc) => {
         if (isDesktopApp()) {
-            const channel = getChannel(getState(), channelId);
-            if (!isDesktopExtendedCallSupported()) {
-                if (channel.type === 'O' || channel.type === 'P') {
-                    openWebCallInNewTab(url, jwt, subject);
-                }
-                return;
-            }
-
             dispatch(startDesktopCall(channelId, jwt, subject));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
