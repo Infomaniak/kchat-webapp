@@ -174,6 +174,9 @@ export function cancelCall(channelId: string) {
 export function startCall(channelId: string, jwt: string, url: string, subject: string) {
     return async (dispatch: DispatchFunc) => {
         if (isDesktopApp()) {
+            if (!isDesktopExtendedCallSupported()) {
+                return;
+            }
             dispatch(startDesktopCall(channelId, jwt, subject));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
