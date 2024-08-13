@@ -48,6 +48,7 @@ const baseProps = {
     isMobileView: false,
     hasInaccessiblePosts: false,
     shouldStartFromBottomWhenUnread: false,
+    isThreadView: false,
 };
 
 describe('components/post_view/post_list', () => {
