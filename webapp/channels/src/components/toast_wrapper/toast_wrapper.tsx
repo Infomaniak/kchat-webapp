@@ -510,7 +510,7 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
             );
         }
 
-        if (showSearchHintToast) {
+        if (showSearchHintToast && !this.props.isThreadView) {
             toasts.push(
                 <HintToast
                     key='search-hint-toast'
