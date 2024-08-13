@@ -14,7 +14,7 @@ const IK_EMOJIS = [
     'kmeet',
     'ksuite',
     'mail',
-    'paste',
+    'kpaste',
     'swisstransfer',
     'tasks',
 ];

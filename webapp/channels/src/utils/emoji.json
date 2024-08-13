@@ -57867,12 +57867,12 @@
         "category": "custom"
     },
     {
-        "id": "paste",
-        "name": "paste",
-        "unified": "paste",
-        "short_name": "paste",
+        "id": "kpaste",
+        "name": "kpaste",
+        "unified": "kpaste",
+        "short_name": "kpaste",
         "short_names": [
-            "paste"
+            "kpaste"
         ],
         "category": "custom"
     },

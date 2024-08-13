@@ -4477,7 +4477,7 @@ var SystemEmojis = map[string]string{
 "kdrive": "kdrive",
 "ksuite": "ksuite",
 "mail": "mail",
-"paste": "paste",
+"kpaste": "kpaste",
 "swisstransfer": "swisstransfer",
 "tasks": "tasks",
 }

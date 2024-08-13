@@ -285,12 +285,12 @@ fullEmoji.push({
     category: 'custom',
 });
 fullEmoji.push({
-    id: 'paste',
-    name: 'paste',
-    unified: 'paste',
-    image: 'paste.png',
-    short_name: 'paste',
-    short_names: ['paste'],
+    id: 'kpaste',
+    name: 'kpaste',
+    unified: 'kpaste',
+    image: 'kpaste.png',
+    short_name: 'kpaste',
+    short_names: ['kpaste'],
     category: 'custom',
 });
 fullEmoji.push({
