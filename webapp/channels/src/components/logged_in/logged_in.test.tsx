@@ -54,6 +54,7 @@ describe('components/logged_in/LoggedIn', () => {
             joinCall: jest.fn(),
             cancelCall: jest.fn(),
             declineCall: jest.fn(),
+            registerInternalAiPlugin: jest.fn(),
         },
         isCurrentChannelManuallyUnread: false,
         showTermsOfService: false,
