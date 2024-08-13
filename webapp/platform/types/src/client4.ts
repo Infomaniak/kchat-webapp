@@ -36,3 +36,8 @@ export type FetchPaginatedThreadOptions = {
     fromCreateAt?: number;
     fromPost?: string;
 }
+
+export type SummarizeResult ={
+    postid: string;
+    channelid: string;
+}

@@ -53,7 +53,7 @@ import {
     ServerChannel,
     PendingGuests,
 } from '@mattermost/types/channels';
-import {Options, StatusOK, ClientResponse, LogLevel, FetchPaginatedThreadOptions} from '@mattermost/types/client4';
+import {Options, StatusOK, ClientResponse, LogLevel, FetchPaginatedThreadOptions, SummarizeResult} from '@mattermost/types/client4';
 import {Compliance} from '@mattermost/types/compliance';
 import {
     ClientConfig,
@@ -4864,6 +4864,33 @@ export default class Client4 {
                 client_ids: clientId,
             })}
         )
+    }
+
+    //
+    // PLUGIN AI
+    //
+    async doSummarize(postId: string, botUsername: string): Promise<SummarizeResult> {
+        const url = `${this.getPostRoute(postId)}/summarize?botUsername=${botUsername}`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
+
+    async doStopGenerating(postId: string) {
+        const url = `${this.getPostRoute(postId)}/stop`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
+
+    async doRegenerate(postId: string) {
+        const url = `${this.getPostRoute(postId)}/regenerate`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
+
+    async doPostbackSummary(postId: string) {
+        const url = `${this.getPostRoute(postId)}/postback_summary`;
+
+        return this.doFetch(url, {method: 'post'});
     }
 }
 

@@ -17,6 +17,7 @@ describe('components/post_view/post_view', () => {
         channelId: '1234',
         focusedPostId: '12345',
         unreadScrollPosition: Preferences.UNREAD_SCROLL_POSITION_START_FROM_LEFT,
+        isThreadView: false,
     };
     jest.useFakeTimers();
 
