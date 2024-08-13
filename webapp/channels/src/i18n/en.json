@@ -5990,6 +5990,7 @@
   "user.settings.sidebar.title": "Sidebar Settings",
   "user.settings.timezones.automatic": "Automatic",
   "user.settings.timezones.promote": "Select the timezone used for timestamps in the user interface and email notifications.",
+  "user.settings.timezones.modify" : "Changing your time zone",
   "user.settings.tokens.activate": "Enable",
   "user.settings.tokens.cancel": "Cancel",
   "user.settings.tokens.clickToEdit": "Click 'Edit' to manage your personal access tokens",

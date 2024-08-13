@@ -5972,6 +5972,7 @@
   "user.settings.sidebar.title": "Seitenleisteneinstellungen",
   "user.settings.timezones.automatic": "Automatisch",
   "user.settings.timezones.promote": "Wähle die Zeitzone, die für Zeitstempel in der Benutzeroberfläche und E-Mail-Benachrichtigungen verwendet wird.",
+  "user.settings.timezones.modify" : "Seine Zeitzone ändern",
   "user.settings.tokens.activate": "Aktivieren",
   "user.settings.tokens.cancel": "Abbrechen",
   "user.settings.tokens.clickToEdit": "Klicke 'Bearbeiten', um deine persönlichen Zugriffs-Token zu verwalten",

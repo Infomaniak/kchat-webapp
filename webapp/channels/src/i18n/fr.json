@@ -4857,6 +4857,7 @@
   "user.settings.sidebar.title": "Paramètres de la barre latérale",
   "user.settings.timezones.automatic": "Automatique",
   "user.settings.timezones.promote": "Sélectionnez le fuseau horaire de l'horodatage utilisé dans l'interface utilisateur et dans les notifications par e-mail.",
+  "user.settings.timezones.modify" : "Modifier son fuseau horaire",
   "user.settings.tokens.activate": "Activer",
   "user.settings.tokens.cancel": "Annuler",
   "user.settings.tokens.clickToEdit": "Cliquez sur 'Modifier' pour gérer vos jetons d'accès",

@@ -12,6 +12,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {getTimezoneLabel} from 'mattermost-redux/utils/timezone_utils';
 
+import ExternalLink from 'components/external_link';
 import SettingItemMax from 'components/setting_item_max';
 
 import {getBrowserTimezone} from 'utils/timezone';
@@ -240,20 +241,16 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
             <div
                 className='pt-2'
             >
-                <ReactSelect
-                    className='react-select react-select-top'
-                    classNamePrefix='react-select'
-                    id='displayTimezone'
-                    menuPortalTarget={document.body}
-                    styles={reactStyles}
-                    options={timeOptions}
-                    clearable={false}
-                    onChange={this.onChange}
-                    value={this.state.selectedOption}
-                    aria-labelledby='changeInterfaceTimezoneLabel'
-                    isDisabled={useAutomaticTimezone}
-                />
-                {serverError}
+                {!useAutomaticTimezone &&
+                <ExternalLink
+                    href='https://manager.infomaniak.com/v3/ng/profile/user/dashboard'
+                    target='_blank'
+                >
+                    <FormattedMessage
+                        id='user.settings.timezones.modify'
+                        defaultMessage='Change your time zone'
+                    />
+                </ExternalLink>}
             </div>
         );
 

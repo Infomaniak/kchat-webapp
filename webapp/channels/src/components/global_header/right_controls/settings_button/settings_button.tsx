@@ -39,7 +39,9 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
     const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (!isDesktopApp()) {
-            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-kchat', 'ksuite-kchat-personalization', {selectedId: currentTeam.product_id}]}));
+            dispatch(showSettings(tab));
+
+            //document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-kchat', 'ksuite-kchat-personalization', {selectedId: currentTeam.product_id}]}));
         } else if (rhsState === RHSStates.SETTINGS) {
             dispatch(closeRightHandSide());
         } else {

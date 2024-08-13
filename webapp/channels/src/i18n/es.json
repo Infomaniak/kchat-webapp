@@ -4916,6 +4916,7 @@
   "user.settings.sidebar.title": "Preferencias de la Barra Lateral",
   "user.settings.timezones.automatic": "Automático",
   "user.settings.timezones.promote": "Selecciona la zona horaria para ser utilizada en la interfaz de usuario y notificaciones de correo electrónico.",
+  "user.settings.timezones.modify" : "Cambiar de huso horario",
   "user.settings.tokens.activate": "Activado",
   "user.settings.tokens.botId": "Bot ID: ",
   "user.settings.tokens.cancel": "Cancelar",
