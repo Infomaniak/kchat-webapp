@@ -96,7 +96,7 @@ type Props = {
     focusedPostId?: string;
 
     shouldStartFromBottomWhenUnread: boolean;
-
+    isThreadView: boolean;
     actions: {
 
         /*
@@ -674,6 +674,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                 showScrollToBottomToast={this.state.showScrollToBottomToast}
                 onScrollToBottomToastDismiss={this.handleScrollToBottomToastDismiss}
                 hideScrollToBottomToast={this.hideScrollToBottomToast}
+                isThreadView={this.props.isThreadView}
             />
         );
     };

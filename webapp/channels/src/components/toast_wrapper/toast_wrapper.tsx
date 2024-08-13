@@ -61,6 +61,7 @@ export type Props = WrappedComponentProps & RouteComponentProps<{team: string}> 
     atLatestPost?: boolean;
     channelId: string;
     intl: IntlShape;
+    isThreadView: boolean;
     actions: {
         updateToastStatus: (status: boolean) => void;
     };
@@ -514,6 +515,7 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
                 <HintToast
                     key='search-hint-toast'
                     onDismiss={this.hideSearchHintToast}
+                    isThreadView={this.props.isThreadView}
                 >
                     {this.getSearchHintToastText()}
                 </HintToast>,
@@ -522,7 +524,7 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
 
         if (toasts.length > 0) {
             return (
-                <div className='toasts-wrapper'>
+                <div className={this.props.isThreadView ? 'toasts-wrapper-thread' : 'toasts-wrapper'}>
                     {toasts}
                 </div>
             );

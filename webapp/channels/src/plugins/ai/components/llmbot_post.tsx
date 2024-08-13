@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 import styled, {css, createGlobalStyle} from 'styled-components';
 
 import {SendIcon} from '@mattermost/compass-icons/components';
+import type {Post} from '@mattermost/types/posts';
 import type {GlobalState} from '@mattermost/types/store';
 
 // import {doPostbackSummary, doRegenerate, doStopGenerating} from '@/client';
@@ -132,14 +133,24 @@ const PostBody = styled.div<{disableHover?: boolean}>`
 // 	margin-top: 16px;
 // `;
 
-export interface PostUpdateWebsocketMessage {
-    next: string;
+type PostUpdateWebsocketMessage = {
+    channel_id: string;
     post_id: string;
-    control?: string;
-}
+};
+
+type PostUpdateWebsocketMessageControl = PostUpdateWebsocketMessage & {control: 'start' | 'end'};
+type PostUpdateWebsocketMessageNext = PostUpdateWebsocketMessage & {next: string};
+type PostUpdateWebsocketMessageAny = PostUpdateWebsocketMessageControl | PostUpdateWebsocketMessageNext;
+type PostUpdateWebsocket = {
+    event: string;
+    data: PostUpdateWebsocketMessageAny;
+};
+
+const isPostUpdateWebsocketMessageNext = (msg: any): msg is PostUpdateWebsocketMessageNext =>
+    typeof msg.next === 'string';
 
 interface Props {
-    post: any;
+    post: Post;
 
     // websocketRegister: (postID: string, handler: (msg: WebSocketMessage<PostUpdateWebsocketMessage>) => void) => void;
     // websocketUnregister: (postID: string) => void;
@@ -147,7 +158,7 @@ interface Props {
 
 export const LLMBotPost = (props: Props) => {
     // const selectPost = useSelectNotAIPost();
-    const [message, setMessage] = useState(props.post.message);
+    const [message, setMessage] = useState(props.post.message as string);
 
     // Generating is true while we are reciving new content from the websocket
     const [generating, setGenerating] = useState(false);
@@ -160,12 +171,13 @@ export const LLMBotPost = (props: Props) => {
 
     // const currentUserId = useSelector<GlobalState, string>((state) => state.entities.users.currentUserId);
     // const rootPost = useSelector<GlobalState, any>((state) => state.entities.posts.posts[props.post.root_id]);
-
     useEffect(() => {
-        function handleCustomMattermostEvent(msg) {
-            if (msg.event === 'custom_mattermost-ai_postupdate') {
-                const data = msg.data;
-                if (!data.control && !stoppedRef.current) {
+        function handleCustomMattermostEvent({event, data}: PostUpdateWebsocket) {
+            if (event === 'custom_mattermost-ai_postupdate' && data.post_id === props.post.id) {
+                if (isPostUpdateWebsocketMessageNext(data)) {
+                    if (stoppedRef.current) {
+                        return;
+                    }
                     setGenerating(true);
                     setMessage(data.next);
                 } else if (data.control === 'end') {

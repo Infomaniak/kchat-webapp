@@ -9,6 +9,11 @@
     font-size: 14px;
     font-weight: bold;
 
+    &.thread {
+        display: flex;
+        justify-content: space-between;
+    }
+
     .hint-toast__message {
         display: inline-block;
         line-height: 20px;

@@ -69,6 +69,7 @@ const RhsThread = ({
                     channelLoading={false}
                     channelId={channel.id}
                     unreadScrollPosition={''}
+                    isThreadView={true}
                 />
             ) : (
                 <ThreadViewer

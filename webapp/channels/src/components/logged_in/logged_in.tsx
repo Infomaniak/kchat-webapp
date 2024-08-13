@@ -51,6 +51,7 @@ export type Props = {
         joinCall: (channelId: string) => void;
         declineCall: (channelId: string) => void;
         cancelCall: (channelId: string) => void;
+        registerInternalAiPlugin: () => void;
     };
     showTermsOfService: boolean;
     location: {

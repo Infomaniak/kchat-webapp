@@ -744,10 +744,10 @@ export default class Root extends React.PureComponent<Props, State> {
         this.initiateMeRequests();
 
         // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
-        this.props.actions.registerCustomPostRenderer('custom_llmbot', LLMBotPost, '');
 
         // this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
         // this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
+        this.props.actions.registerCustomPostRenderer('custom_llmbot', LLMBotPost, 'llmbot_post_message_renderer');
 
         if (this.themeMediaQuery.addEventListener) {
             this.themeMediaQuery.addEventListener('change', this.handleThemeMediaQueryChangeEvent);
