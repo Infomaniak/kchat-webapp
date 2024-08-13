@@ -1,3 +1,19 @@
+## 2.9.10-rc.1 (2024-08-13)
+
+### Added (3 changes)
+
+- [Add: kChat post history](kchat/webapp@fffb12feb58a15ea57169b94e3c8f4ffb943f4bd) by  ([merge request](kchat/webapp!838))
+- [Add: Add icons, llmbot post compo and connect compo to post](kchat/webapp@704ec11ca48d2b5561a0f5e06a218acad15e2d7e) by  ([merge request](kchat/webapp!838))
+- [implement ai plugin as internal webapp plugin](kchat/webapp@0db68d115c5587a6cf5af3c2d6a35d7b9a401b4c) by @antonbuksa ([merge request](kchat/webapp!838))
+
+### Fixed (5 changes)
+
+- [updating system emojis to add all infomaniak products](kchat/webapp@3da4299e1ecefef3080b9f71a88db0b9c1372663) by @cyril.gromoff ([merge request](kchat/webapp!873))
+- [Add: add rhs header buttons](kchat/webapp@188c2b88d2dae521ecb627d8a4e616d279ec85be) by  ([merge request](kchat/webapp!838))
+- [Fix: Color font, clean comment and api type](kchat/webapp@ae57f101e59a57d631793e0246664ccb94794d13) by  ([merge request](kchat/webapp!838))
+- [Fix: remove post summary help message](kchat/webapp@ef6953849f8079abff13060e203bc9efae98c679) by  ([merge request](kchat/webapp!838))
+- [scroll stay in current position when emoji's are loading](kchat/webapp@8bf68c0befaee81dc3839a8f6c5fe1d38cfe80c8) by  ([merge request](kchat/webapp!818))
+
 ## 2.9.9-rc.3 (2024-08-12)
 
 ### Added (4 changes)
