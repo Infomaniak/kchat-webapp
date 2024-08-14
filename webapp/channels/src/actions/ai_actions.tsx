@@ -5,8 +5,13 @@ import {generateId} from 'utils/utils';
 
 import PostMenu from 'plugins/ai/components/post_menu';
 
+let isPluginRegistered = false;
+
 export function registerInternalAiPlugin() {
     return async (dispatch: DispatchFunc) => {
+        if (isPluginRegistered) {
+            return;
+        }
         dispatch({
             type: ActionTypes.RECEIVED_PLUGIN_COMPONENT,
             name: 'PostAction',
@@ -16,5 +21,6 @@ export function registerInternalAiPlugin() {
                 component: PostMenu,
             },
         });
+        isPluginRegistered = true;
     };
 }
