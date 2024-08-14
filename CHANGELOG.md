@@ -1,3 +1,10 @@
+## 2.9.10-rc.2 (2024-08-14)
+
+### Fixed (2 changes)
+
+- [test fix for team added flow desktop](kchat/webapp@7d4d1be76625e1904d62478ab5fed70f5bafbecf) by @antonbuksa
+- [prevent multiple registrations of AI plugin](kchat/webapp@94e8a796b635a750018aa54ea7cb66741fbf01e8) by @boris.trombert ([merge request](kchat/webapp!874))
+
 ## 2.9.10-rc.1 (2024-08-13)
 
 ### Added (3 changes)
