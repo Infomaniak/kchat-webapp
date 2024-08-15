@@ -35,6 +35,20 @@
 - [Fix: remove post summary help message](kchat/webapp@ef6953849f8079abff13060e203bc9efae98c679) by  ([merge request](kchat/webapp!838))
 - [scroll stay in current position when emoji's are loading](kchat/webapp@8bf68c0befaee81dc3839a8f6c5fe1d38cfe80c8) by  ([merge request](kchat/webapp!818))
 
+## 2.9.10-next.2 (2024-08-15)
+
+### Added (3 changes)
+
+- [label merge request status in release script](kchat/webapp@3d6bbf58f2697189f432f274fa8760a067bf2e63) by @antonbuksa
+- [missing traduction for thread in thread view](kchat/webapp@32e259b813c447a098fb7ec506e8fc9eba45f5e5) by @boris.trombert ([merge request](kchat/webapp!880))
+- [add env var for sentry sample rate](kchat/webapp@dd8d4159f1d054b01dac94d9c0d29152c608de32) by @antonbuksa ([merge request](kchat/webapp!877))
+
+### Fixed (3 changes)
+
+- [fix env key for sentry var](kchat/webapp@906a530194d106926aa4fa9f2ff76391a456c4b6) by @antonbuksa
+- [test fix for team added flow desktop](kchat/webapp@7d4d1be76625e1904d62478ab5fed70f5bafbecf) by @antonbuksa
+- [prevent multiple registrations of AI plugin](kchat/webapp@94e8a796b635a750018aa54ea7cb66741fbf01e8) by @boris.trombert ([merge request](kchat/webapp!874))
+
 ## 2.9.10-next.1 (2024-08-13)
 
 ### Added (3 changes)
