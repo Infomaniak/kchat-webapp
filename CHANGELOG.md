@@ -1,3 +1,13 @@
+## 2.9.10-rc.5 (2024-08-15)
+
+### Added (1 change)
+
+- [optional props isThreadView creating warning and summarize button trad](kchat/webapp@99158a179a5510b72706a93841154273c3af9259) by @antonbuksa ([merge request](kchat/webapp!881))
+
+### Removed (1 change)
+
+- [remove dropdown from desktop team name menu](kchat/webapp@b61f22ec8a711700805da95e7f70cd836fcaf49e) by @antonbuksa ([merge request](kchat/webapp!882))
+
 ## 2.9.10-rc.4 (2024-08-15)
 
 ### Fixed (1 change)
