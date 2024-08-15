@@ -2778,6 +2778,8 @@
   "air_gapped_modal.close": "Close",
   "air_gapped_modal.description": "To start your trial, please visit {link} and request a trial key.",
   "air_gapped_modal.title": "Request a trial key",
+  "ai.summarizeThread" : "Summarize thread",
+  "ai.actions" : "AI Actions",
   "admin.webserverModeUncompressedDescription": "The kChat server will serve static files uncompressed.",
   "alert_banner.tooltipCloseBtn": "Close",
   "analytics.chart.loading": "Loading...",

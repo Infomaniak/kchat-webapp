@@ -96,7 +96,7 @@ type Props = {
     focusedPostId?: string;
 
     shouldStartFromBottomWhenUnread: boolean;
-    isThreadView: boolean;
+    isThreadView?: boolean;
     actions: {
 
         /*
