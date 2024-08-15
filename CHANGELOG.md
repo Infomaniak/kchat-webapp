@@ -1,3 +1,9 @@
+## 2.9.10-rc.4 (2024-08-15)
+
+### Fixed (1 change)
+
+- [fix env key for sentry var](kchat/webapp@906a530194d106926aa4fa9f2ff76391a456c4b6) by @antonbuksa
+
 ## 2.9.10-rc.3 (2024-08-15)
 
 ### Added (3 changes)
