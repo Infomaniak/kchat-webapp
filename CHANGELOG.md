@@ -45,6 +45,16 @@
 - [Fix: remove post summary help message](kchat/webapp@ef6953849f8079abff13060e203bc9efae98c679) by  ([merge request](kchat/webapp!838))
 - [scroll stay in current position when emoji's are loading](kchat/webapp@8bf68c0befaee81dc3839a8f6c5fe1d38cfe80c8) by  ([merge request](kchat/webapp!818))
 
+## 2.9.10-next.3 (2024-08-15)
+
+### Added (1 change)
+
+- [optional props isThreadView creating warning and summarize button trad](kchat/webapp@99158a179a5510b72706a93841154273c3af9259) by @antonbuksa ([merge request](kchat/webapp!881))
+
+### Removed (1 change)
+
+- [remove dropdown from desktop team name menu](kchat/webapp@b61f22ec8a711700805da95e7f70cd836fcaf49e) by @antonbuksa ([merge request](kchat/webapp!882))
+
 ## 2.9.10-next.2 (2024-08-15)
 
 ### Added (3 changes)
