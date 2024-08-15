@@ -227,6 +227,26 @@ rescue JSON::ParserError
   raise "Invalid JSON response from GitLab API"
 end
 
+# =begin
+# Helper method to fetch current labels with the given IID.
+#
+# @param mr_iid [Integer] The IID of the merge request to update.
+# @return [Array] True if the status code is 200, false otherwise.
+# =end
+def get_merge_request_labels(mr_iid)
+  uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{mr_iid}")
+  request = Net::HTTP::Get.new(uri.request_uri)
+  request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
+
+  response = get_http(uri).request(request)
+  if response.code.to_i == 200
+    merge_request = JSON.parse(response.body)
+    merge_request['labels']
+  else
+    []
+  end
+end
+
 =begin
 # Sends a PUT request to update the labels of a merge request with the given IID.
 #
@@ -308,9 +328,9 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
 
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
-  # Redmine
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
+    # Redmine
     redmine_links = extract_redmine_links(mr["description"])
     redmine_links.each do |issue_id|
       leave_comment_on_redmine_ticket(issue_id, "fix released in stable version #{GIT_RELEASE_TAG}")
@@ -318,6 +338,14 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
       # status_id 3 -> Resolved
       update_redmine_ticket_status(issue_id, 3)
       puts "Updated redmine ##{issue_id} status to 3"
+    end
+    # Labels
+    current_labels = get_merge_request_labels(mr)
+
+    # Replace 'stage::next' with 'stage::stable'
+    if current_labels.include?('stage::next')
+      current_labels.delete('stage::next')
+      update_merge_request_labels(mr, current_labels + ['stage::stable'])
     end
   end
 
@@ -337,16 +365,26 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
 
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
-  # Redmine
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
+    # Redmine
     redmine_links = extract_redmine_links(mr["description"])
     redmine_links.each do |issue_id|
       leave_comment_on_redmine_ticket(issue_id, "fix deployed in next version #{GIT_RELEASE_TAG}")
       puts "Commented redmine ##{issue_id} to notify about canary deploy"
     end
+    # Labels
+    current_labels = get_merge_request_labels(mr)
+
+    # Replace 'stage::preprod' with 'stage::next'
+    if current_labels.include?('stage::preprod')
+      current_labels.delete('stage::preprod')
+    end
+
+    update_merge_request_labels(mr, current_labels + ['stage::next'])
   end
 
+  # Release
   create_release(changelog)
   puts "Creating release for canary tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
@@ -362,17 +400,27 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
-  # Redmine
-  # mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
-  # mr_numbers.each do |mr_number|
-  #   mr = get_merge_request(mr_number)
-  #   redmine_links = extract_redmine_links(mr["description"])
-  #   redmine_links.each do |issue_id|
-  #     leave_comment_on_redmine_ticket(issue_id, "fix deployed in preprod version #{GIT_RELEASE_TAG}", true)
-  #     puts "Commented redmine ##{issue_id} to notify about preprod deploy"
-  #   end
-  # end
+  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+  mr_numbers.each do |mr_number|
+    mr = get_merge_request(mr_number)
+    current_labels = get_merge_request_labels(mr)
 
+    # Labels
+    # Add 'stage::preprod' if it doesn't exist
+    unless current_labels.include?('stage::preprod')
+      update_merge_request_labels(mr, current_labels + ['stage::preprod'])
+    end
+
+    # Redmine
+    #   redmine_links = extract_redmine_links(mr["description"])
+    #   redmine_links.each do |issue_id|
+    #     leave_comment_on_redmine_ticket(issue_id, "fix deployed in preprod version #{GIT_RELEASE_TAG}", true)
+    #     puts "Commented redmine ##{issue_id} to notify about preprod deploy"
+    #   end
+
+  end
+
+  # Release
   create_release(changelog)
   puts "Creating release for preprod tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
