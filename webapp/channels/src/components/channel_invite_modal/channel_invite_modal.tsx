@@ -384,7 +384,6 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             const ProfilesInGroup = this.props.profilesInCurrentChannel.map((user) => user.id);
 
             const userMapping: Record<string, React.ReactNode> = {};
-
             ProfilesInGroup.forEach((id) => {
                 userMapping[id] = (
                     <FormattedMessage
@@ -414,11 +413,13 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                                 {displayName}
                                 {option.is_bot && <BotTag/>}
                                 {isGuest(option.roles) && <GuestTag className='popoverlist'/>}
-                                {displayName === option.username ? null : <UsernameSpan
-                                    className='ml-2 light'
-                                >
-                                    {'@'}{option.username}
-                                </UsernameSpan>
+                                {displayName === option.username ?
+                                    null :
+                                    <UsernameSpan
+                                        className='ml-2 light'
+                                    >
+                                        {'@'}{option.username}
+                                    </UsernameSpan>
                                 }
                                 <UserMappingSpan
                                     className='light'
@@ -467,7 +468,6 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         } else {
             excludedAndNotInTeamUserIds = new Set(this.props.profilesNotInCurrentTeam.map((user) => user.id));
         }
-
         // let users = this.filterOutDeletedAndExcludedAndNotInTeamUsers(
         //     filterProfilesStartingWithTerm(
         //         this.props.profilesNotInCurrentChannel.concat(this.props.profilesInCurrentChannel),
