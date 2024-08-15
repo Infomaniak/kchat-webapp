@@ -1,3 +1,11 @@
+## 2.9.10-rc.3 (2024-08-15)
+
+### Added (3 changes)
+
+- [label merge request status in release script](kchat/webapp@3d6bbf58f2697189f432f274fa8760a067bf2e63) by @antonbuksa
+- [missing traduction for thread in thread view](kchat/webapp@32e259b813c447a098fb7ec506e8fc9eba45f5e5) by @boris.trombert ([merge request](kchat/webapp!880))
+- [add env var for sentry sample rate](kchat/webapp@dd8d4159f1d054b01dac94d9c0d29152c608de32) by @antonbuksa ([merge request](kchat/webapp!877))
+
 ## 2.9.10-rc.2 (2024-08-14)
 
 ### Fixed (2 changes)
