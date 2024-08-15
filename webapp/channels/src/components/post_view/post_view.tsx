@@ -15,7 +15,7 @@ interface Props {
     channelId: string;
     focusedPostId?: string;
     unreadScrollPosition: string;
-    isThreadView: boolean;
+    isThreadView?: boolean;
 }
 
 interface State {

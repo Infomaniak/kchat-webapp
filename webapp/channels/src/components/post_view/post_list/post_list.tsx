@@ -109,7 +109,7 @@ export interface Props {
     toggleShouldStartFromBottomWhenUnread: () => void;
     shouldStartFromBottomWhenUnread: boolean;
     hasInaccessiblePosts: boolean;
-    isThreadView: boolean;
+    isThreadView?: boolean;
     actions: {
 
         /*

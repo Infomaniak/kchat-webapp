@@ -2429,6 +2429,8 @@
   "air_gapped_modal.close": "Fermer",
   "air_gapped_modal.description": "Pour commencer votre essai, rendez-vous sur {link} et demander une clé d’essai.",
   "air_gapped_modal.title": "Demander une clé d’essai",
+  "ai.summarizeThread" : "Résumer le fil de discussion",
+  "ai.actions" : "Actions IA",
   "alert_banner.tooltipCloseBtn": "Fermer",
   "analytics.chart.loading": "Chargement…",
   "analytics.chart.meaningful": "Pas assez de données pour afficher une représentation pertinente.",
