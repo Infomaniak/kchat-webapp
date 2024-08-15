@@ -340,12 +340,12 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
       puts "Updated redmine ##{issue_id} status to 3"
     end
     # Labels
-    current_labels = get_merge_request_labels(mr)
+    current_labels = get_merge_request_labels(mr_number)
 
     # Replace 'stage::next' with 'stage::stable'
     if current_labels.include?('stage::next')
       current_labels.delete('stage::next')
-      update_merge_request_labels(mr, current_labels + ['stage::stable'])
+      update_merge_request_labels(mr_number, current_labels + ['stage::stable'])
     end
   end
 
@@ -374,14 +374,14 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
       puts "Commented redmine ##{issue_id} to notify about canary deploy"
     end
     # Labels
-    current_labels = get_merge_request_labels(mr)
+    current_labels = get_merge_request_labels(mr_number)
 
     # Replace 'stage::preprod' with 'stage::next'
     if current_labels.include?('stage::preprod')
       current_labels.delete('stage::preprod')
     end
 
-    update_merge_request_labels(mr, current_labels + ['stage::next'])
+    update_merge_request_labels(mr_number, current_labels + ['stage::next'])
   end
 
   # Release
@@ -403,12 +403,12 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
-    current_labels = get_merge_request_labels(mr)
+    current_labels = get_merge_request_labels(mr_number)
 
     # Labels
     # Add 'stage::preprod' if it doesn't exist
     unless current_labels.include?('stage::preprod')
-      update_merge_request_labels(mr, current_labels + ['stage::preprod'])
+      update_merge_request_labels(mr_number, current_labels + ['stage::preprod'])
     end
 
     # Redmine
