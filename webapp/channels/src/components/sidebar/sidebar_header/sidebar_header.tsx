@@ -109,7 +109,6 @@ export type Props = {
 const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
     const dispatch = useDispatch();
     const currentTeam = useSelector((state: GlobalState) => getCurrentTeam(state));
-    const currentServer = useSelector((state: GlobalState) => getCurrentServer(state));
     const showJoinChannelTourTip = useShowOnboardingTutorialStep(OnboardingTourSteps.JOIN_CHANNELS);
     const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_CHANNELS);
     const showInviteTutorialTip = false;
@@ -154,7 +153,6 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                     canCreateCustomGroups={props.canCreateCustomGroups}
                     showCreateUserGroupModal={props.showCreateUserGroupModal}
                     userGroupsEnabled={props.userGroupsEnabled}
-                    server={currentServer}
                 />
             </SidebarHeaderContainer>
         </CompassThemeProvider>
