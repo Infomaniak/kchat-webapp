@@ -55,6 +55,12 @@ No changes.
 - [Fix: remove post summary help message](kchat/webapp@ef6953849f8079abff13060e203bc9efae98c679) by  ([merge request](kchat/webapp!838))
 - [scroll stay in current position when emoji's are loading](kchat/webapp@8bf68c0befaee81dc3839a8f6c5fe1d38cfe80c8) by  ([merge request](kchat/webapp!818))
 
+## 2.9.10-next.4 (2024-08-16)
+
+### Fixed (1 change)
+
+- [fix integrations link not working on desktop](kchat/webapp@e96101e3cff7085e941962d5dae6e8e2e0c75af7) by @antonbuksa ([merge request](kchat/webapp!885))
+
 ## 2.9.10-next.3 (2024-08-15)
 
 ### Added (1 change)
