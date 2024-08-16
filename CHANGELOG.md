@@ -1,3 +1,9 @@
+## 2.9.10-rc.7 (2024-08-16)
+
+### Fixed (1 change)
+
+- [fix integrations link not working on desktop](kchat/webapp@e96101e3cff7085e941962d5dae6e8e2e0c75af7) by @antonbuksa ([merge request](kchat/webapp!885))
+
 ## 2.9.10-rc.6 (2024-08-15)
 
 No changes.
