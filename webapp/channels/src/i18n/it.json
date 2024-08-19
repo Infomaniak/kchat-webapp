@@ -1848,6 +1848,7 @@
   "analytics.chart.meaningful": "Dati insufficienti per una rappresentazione significativa.",
   "ai.summarizeThread" : "Riassumi il thread",
   "ai.actions" : "Azioni IA",
+  "ai.react_for_me": "Reagisci per me",
   "analytics.system.activeUsers": "Utenti attivi con post",
   "analytics.system.channelTypes": "Tipi di canale",
   "analytics.system.dailyActiveUsers": "Utenti attivi quotidianamente",

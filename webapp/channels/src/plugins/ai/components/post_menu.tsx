@@ -107,7 +107,7 @@ const PostMenu = (props: Props) => {
             <DropdownMenuItem onClick={() => reactForMe(post.id)}>
                 <span className='icon'><IconReactForMe/></span>
                 <FormattedMessage
-                    id='test'
+                    id='ai.react_for_me'
                     defaultMessage='React for me'
                 />
             </DropdownMenuItem>
