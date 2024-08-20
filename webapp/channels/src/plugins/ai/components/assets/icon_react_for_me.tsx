@@ -4,8 +4,8 @@ import Svg from '../svg';
 
 const IconReactForMe = () => (
     <Svg
-        width='18'
-        height='18'
+        width='16'
+        height='16'
         viewBox='0 0 18 18'
         fill='none'
     >
