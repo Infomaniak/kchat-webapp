@@ -78,7 +78,7 @@ const PostMenu = (props: Props) => {
     //     return null;
     // }
 
-    if (isBot || props.location === 'RHS_ROOT') {
+    if (isBot || props.location === 'RHS_COMMENT') {
         return null;
     }
 
