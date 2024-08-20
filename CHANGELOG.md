@@ -17,6 +17,20 @@
 - [changing channel from public to private now correctly display the ui](kchat/webapp@22e7074e79eb5cfbf79fde43d0aeb4539851a71e) by @cyril.gromoff ([merge request](kchat/webapp!884))
 - [Fix the color of the 'Invite more' button when in dark mode](kchat/webapp@e588e5ca855b7a9ce4a03c1599422257cecae4a9) by @cyril.gromoff ([merge request](kchat/webapp!878))
 
+## 2.9.11-next.1 (2024-08-20)
+
+### Added (1 change)
+
+- [ai react for me button for posts](kchat/webapp@077522a9114bd38c9d65b2babfa39e3efe4fb571) by @boris.trombert ([merge request](kchat/webapp!888))
+
+### Fixed (5 changes)
+
+- [new style for ai actions modal in posts](kchat/webapp@b5f235fef627aef893744b87eb627f6f55b04bdb) by @boris.trombert ([merge request](kchat/webapp!889))
+- [fix CTA alignement for the modals and move checkbox to the left](kchat/webapp@1e4bf4869bc60431c37fe686d9c57b54cf333984) by @cyril.gromoff ([merge request](kchat/webapp!876))
+- [summarize button only in thread root message](kchat/webapp@f7d23dd5aef6e693fd38e1b106ec0eab8a705dd4) by @boris.trombert ([merge request](kchat/webapp!887))
+- [changing channel from public to private now correctly display the ui](kchat/webapp@22e7074e79eb5cfbf79fde43d0aeb4539851a71e) by @cyril.gromoff ([merge request](kchat/webapp!884))
+- [Fix the color of the 'Invite more' button when in dark mode](kchat/webapp@e588e5ca855b7a9ce4a03c1599422257cecae4a9) by @cyril.gromoff ([merge request](kchat/webapp!878))
+
 ## 2.9.10-rc.7 (2024-08-16)
 
 ### Fixed (1 change)
