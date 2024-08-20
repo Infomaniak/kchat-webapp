@@ -1,3 +1,10 @@
+## 2.9.11-rc.2 (2024-08-20)
+
+### Fixed (2 changes)
+
+- [new style for ai actions modal in posts](kchat/webapp@b5f235fef627aef893744b87eb627f6f55b04bdb) by @boris.trombert ([merge request](kchat/webapp!889))
+- [fix CTA alignement for the modals and move checkbox to the left](kchat/webapp@1e4bf4869bc60431c37fe686d9c57b54cf333984) by @cyril.gromoff ([merge request](kchat/webapp!876))
+
 ## 2.9.11-rc.1 (2024-08-20)
 
 ### Added (1 change)
