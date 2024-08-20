@@ -5154,6 +5154,7 @@
   "shortcuts.msgs.reprint_next.mac": "Reprint next message:\t⌘|Down",
   "shortcuts.msgs.reprint_prev": "Reprint previous message:\tCtrl|Up",
   "shortcuts.msgs.reprint_prev.mac": "Reprint previous message:\t⌘|Up",
+  "shortcuts.msgs.formatting_bar.poll": "Launch a poll",
   "shortcuts.msgs.search_channel": "In channel:\tCtrl|F",
   "shortcuts.msgs.search_channel.mac": "In channel:\t⌘|F",
   "shortcuts.msgs.search.header": "Searching",
