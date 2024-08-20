@@ -17,6 +17,10 @@
 - [changing channel from public to private now correctly display the ui](kchat/webapp@22e7074e79eb5cfbf79fde43d0aeb4539851a71e) by @cyril.gromoff ([merge request](kchat/webapp!884))
 - [Fix the color of the 'Invite more' button when in dark mode](kchat/webapp@e588e5ca855b7a9ce4a03c1599422257cecae4a9) by @cyril.gromoff ([merge request](kchat/webapp!878))
 
+## 2.9.11-next.2 (2024-08-20)
+
+No changes.
+
 ## 2.9.11-next.1 (2024-08-20)
 
 ### Added (1 change)
