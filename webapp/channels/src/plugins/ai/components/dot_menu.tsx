@@ -39,7 +39,7 @@ export const DropdownMenu = styled.div`
     text-align: left;
     list-style: none;
 
-    padding: 10px 0;
+    padding: 3px 0;
     font-family: Open Sans;
     font-style: normal;
     font-weight: normal;
@@ -135,11 +135,27 @@ const DotMenu = ({
                     }
                 }}
             >
+                {title && <DropdownMenuTitle>{title}</DropdownMenuTitle>}
                 {children}
             </Menu>
         </Dropdown>
     );
 };
+
+export const DropdownMenuTitle = styled.div`
+ && {
+    font-family: "SuisseIntl", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+    padding: 5px 10px;
+    text-decoration: unset;
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+}
+`;
 
 export const DropdownMenuItemStyled = styled.a`
  && {
@@ -148,10 +164,11 @@ export const DropdownMenuItemStyled = styled.a`
     font-weight: normal;
     font-size: 14px;
     color: var(--center-channel-color);
-    padding: 10px 20px;
+    padding: 5px 10px;
     text-decoration: unset;
     display: inline-flex;
     align-items: center;
+    min-height: 32px;
 
     >.icon {
         margin-right: 8px;
@@ -187,7 +204,7 @@ export const iconSplitStyling = css`
     gap: 8px;
 `;
 
-export const DropdownMenuItem = (props: { children: React.ReactNode, onClick?: () => void, className?: string}) => {
+export const DropdownMenuItem = (props: { children: React.ReactNode; onClick?: () => void; className?: string}) => {
     return (
         <DropdownMenuItemStyled
             href='#'
