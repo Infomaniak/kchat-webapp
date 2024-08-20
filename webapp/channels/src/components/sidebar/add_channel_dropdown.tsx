@@ -6,13 +6,14 @@ import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import {CreateAndJoinChannelsTour, CreateChannelsTour, InvitePeopleTour, JoinChannelsTour} from 'components/tours/onboarding_tour';
+import {CreateChannelsTour, InvitePeopleTour, JoinChannelsTour} from 'components/tours/onboarding_tour';
 import IntegrationsIcon from 'components/widgets/icons/integrations_icon';
 import PlusFilledIcon from 'components/widgets/icons/plus_filled_icon';
 import Menu from 'components/widgets/menu/menu';
@@ -58,13 +59,13 @@ const AddChannelDropdown = ({
     isAddChannelOpen,
     openAddChannelOpen,
     canCreateCustomGroups,
-    server,
 }: Props) => {
     const intl = useIntl();
     const isGuestUser = useSelector(isCurrentUserGuestUser);
+    const currentTeam = useSelector(getCurrentTeam);
 
     const goToIntegration = () => {
-        getHistory().push(`/${server.name}/integrations`);
+        getHistory().push(`/${currentTeam.name}/integrations`);
     };
 
     const renderDropdownItems = () => {

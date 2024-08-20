@@ -13,9 +13,11 @@ import type {ServerError} from '@mattermost/types/errors';
 import type {FileInfo} from '@mattermost/types/files';
 import type {Post} from '@mattermost/types/posts';
 
+import * as GlobalActions from 'actions/global_actions';
 import {emitShortcutReactToLastPostFrom} from 'actions/post_actions';
 import LocalStorageStore from 'stores/local_storage_store';
 
+import {BannerJoinChannel} from 'components/banner_join_channel';
 import AutoHeightSwitcher from 'components/common/auto_height_switcher';
 import DndBanner from 'components/dnd_banner';
 import EmojiPickerOverlay from 'components/emoji_picker/emoji_picker_overlay';
@@ -92,7 +94,7 @@ type Props = {
     enableGifPicker: boolean;
     handleBlur: () => void;
     handlePostError: (postError: React.ReactNode) => void;
-    emitTypingEvent: () => void;
+    emitTypingEvent: (eventType: string) => void;
     handleMouseUpKeyUp: (e: React.MouseEvent<TextboxElement> | React.KeyboardEvent<TextboxElement>) => void;
     postMsgKeyPress: (e: React.KeyboardEvent<TextboxElement>) => void;
     handleChange: (e: React.ChangeEvent<TextboxElement>) => void;
@@ -261,6 +263,9 @@ const AdvanceTextEditor = ({
                     onUploadError={handleUploadError}
                     onRemoveDraft={removePreview}
                     onSubmit={handleSubmit}
+                    onStarted={emitTypingEvent}
+                    onCancel={emitTypingEvent}
+                    onComplete={emitTypingEvent}
                 />
             </div>
         );
@@ -713,6 +718,12 @@ const AdvanceTextEditor = ({
             shouldScrollIntoView={keepEditorInFocus}
         />
     );
+
+    if (readOnlyChannel) {
+        return (
+            <BannerJoinChannel onButtonClick={() => GlobalActions.joinChannel(channelId)}/>
+        );
+    }
 
     return (
         <>

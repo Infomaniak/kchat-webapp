@@ -86,9 +86,6 @@ const ReportingToolsWrapper = styled.div`
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    module-reporting-tools-component {
-        background: #7974B4;
-    }
 `;
 
 const tooltipUserReport = (

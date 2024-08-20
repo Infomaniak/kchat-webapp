@@ -1,3 +1,202 @@
+## 2.9.10-rc.7 (2024-08-16)
+
+### Fixed (1 change)
+
+- [fix integrations link not working on desktop](kchat/webapp@e96101e3cff7085e941962d5dae6e8e2e0c75af7) by @antonbuksa ([merge request](kchat/webapp!885))
+
+## 2.9.10-rc.6 (2024-08-15)
+
+No changes.
+
+## 2.9.10-rc.5 (2024-08-15)
+
+### Added (1 change)
+
+- [optional props isThreadView creating warning and summarize button trad](kchat/webapp@99158a179a5510b72706a93841154273c3af9259) by @antonbuksa ([merge request](kchat/webapp!881))
+
+### Removed (1 change)
+
+- [remove dropdown from desktop team name menu](kchat/webapp@b61f22ec8a711700805da95e7f70cd836fcaf49e) by @antonbuksa ([merge request](kchat/webapp!882))
+
+## 2.9.10-rc.4 (2024-08-15)
+
+### Fixed (1 change)
+
+- [fix env key for sentry var](kchat/webapp@906a530194d106926aa4fa9f2ff76391a456c4b6) by @antonbuksa
+
+## 2.9.10-rc.3 (2024-08-15)
+
+### Added (3 changes)
+
+- [label merge request status in release script](kchat/webapp@3d6bbf58f2697189f432f274fa8760a067bf2e63) by @antonbuksa
+- [missing traduction for thread in thread view](kchat/webapp@32e259b813c447a098fb7ec506e8fc9eba45f5e5) by @boris.trombert ([merge request](kchat/webapp!880))
+- [add env var for sentry sample rate](kchat/webapp@dd8d4159f1d054b01dac94d9c0d29152c608de32) by @antonbuksa ([merge request](kchat/webapp!877))
+
+## 2.9.10-rc.2 (2024-08-14)
+
+### Fixed (2 changes)
+
+- [test fix for team added flow desktop](kchat/webapp@7d4d1be76625e1904d62478ab5fed70f5bafbecf) by @antonbuksa
+- [prevent multiple registrations of AI plugin](kchat/webapp@94e8a796b635a750018aa54ea7cb66741fbf01e8) by @boris.trombert ([merge request](kchat/webapp!874))
+
+## 2.9.10-rc.1 (2024-08-13)
+
+### Added (3 changes)
+
+- [Add: kChat post history](kchat/webapp@fffb12feb58a15ea57169b94e3c8f4ffb943f4bd) by  ([merge request](kchat/webapp!838))
+- [Add: Add icons, llmbot post compo and connect compo to post](kchat/webapp@704ec11ca48d2b5561a0f5e06a218acad15e2d7e) by  ([merge request](kchat/webapp!838))
+- [implement ai plugin as internal webapp plugin](kchat/webapp@0db68d115c5587a6cf5af3c2d6a35d7b9a401b4c) by @antonbuksa ([merge request](kchat/webapp!838))
+
+### Fixed (5 changes)
+
+- [updating system emojis to add all infomaniak products](kchat/webapp@3da4299e1ecefef3080b9f71a88db0b9c1372663) by @cyril.gromoff ([merge request](kchat/webapp!873))
+- [Add: add rhs header buttons](kchat/webapp@188c2b88d2dae521ecb627d8a4e616d279ec85be) by  ([merge request](kchat/webapp!838))
+- [Fix: Color font, clean comment and api type](kchat/webapp@ae57f101e59a57d631793e0246664ccb94794d13) by  ([merge request](kchat/webapp!838))
+- [Fix: remove post summary help message](kchat/webapp@ef6953849f8079abff13060e203bc9efae98c679) by  ([merge request](kchat/webapp!838))
+- [scroll stay in current position when emoji's are loading](kchat/webapp@8bf68c0befaee81dc3839a8f6c5fe1d38cfe80c8) by  ([merge request](kchat/webapp!818))
+
+## 2.9.10-next.4 (2024-08-16)
+
+### Fixed (1 change)
+
+- [fix integrations link not working on desktop](kchat/webapp@e96101e3cff7085e941962d5dae6e8e2e0c75af7) by @antonbuksa ([merge request](kchat/webapp!885))
+
+## 2.9.10-next.3 (2024-08-15)
+
+### Added (1 change)
+
+- [optional props isThreadView creating warning and summarize button trad](kchat/webapp@99158a179a5510b72706a93841154273c3af9259) by @antonbuksa ([merge request](kchat/webapp!881))
+
+### Removed (1 change)
+
+- [remove dropdown from desktop team name menu](kchat/webapp@b61f22ec8a711700805da95e7f70cd836fcaf49e) by @antonbuksa ([merge request](kchat/webapp!882))
+
+## 2.9.10-next.2 (2024-08-15)
+
+### Added (3 changes)
+
+- [label merge request status in release script](kchat/webapp@3d6bbf58f2697189f432f274fa8760a067bf2e63) by @antonbuksa
+- [missing traduction for thread in thread view](kchat/webapp@32e259b813c447a098fb7ec506e8fc9eba45f5e5) by @boris.trombert ([merge request](kchat/webapp!880))
+- [add env var for sentry sample rate](kchat/webapp@dd8d4159f1d054b01dac94d9c0d29152c608de32) by @antonbuksa ([merge request](kchat/webapp!877))
+
+### Fixed (3 changes)
+
+- [fix env key for sentry var](kchat/webapp@906a530194d106926aa4fa9f2ff76391a456c4b6) by @antonbuksa
+- [test fix for team added flow desktop](kchat/webapp@7d4d1be76625e1904d62478ab5fed70f5bafbecf) by @antonbuksa
+- [prevent multiple registrations of AI plugin](kchat/webapp@94e8a796b635a750018aa54ea7cb66741fbf01e8) by @boris.trombert ([merge request](kchat/webapp!874))
+
+## 2.9.10-next.1 (2024-08-13)
+
+### Added (3 changes)
+
+- [Add: kChat post history](kchat/webapp@fffb12feb58a15ea57169b94e3c8f4ffb943f4bd) by  ([merge request](kchat/webapp!838))
+- [Add: Add icons, llmbot post compo and connect compo to post](kchat/webapp@704ec11ca48d2b5561a0f5e06a218acad15e2d7e) by  ([merge request](kchat/webapp!838))
+- [implement ai plugin as internal webapp plugin](kchat/webapp@0db68d115c5587a6cf5af3c2d6a35d7b9a401b4c) by @antonbuksa ([merge request](kchat/webapp!838))
+
+### Fixed (5 changes)
+
+- [updating system emojis to add all infomaniak products](kchat/webapp@3da4299e1ecefef3080b9f71a88db0b9c1372663) by @cyril.gromoff ([merge request](kchat/webapp!873))
+- [Add: add rhs header buttons](kchat/webapp@188c2b88d2dae521ecb627d8a4e616d279ec85be) by  ([merge request](kchat/webapp!838))
+- [Fix: Color font, clean comment and api type](kchat/webapp@ae57f101e59a57d631793e0246664ccb94794d13) by  ([merge request](kchat/webapp!838))
+- [Fix: remove post summary help message](kchat/webapp@ef6953849f8079abff13060e203bc9efae98c679) by  ([merge request](kchat/webapp!838))
+- [scroll stay in current position when emoji's are loading](kchat/webapp@8bf68c0befaee81dc3839a8f6c5fe1d38cfe80c8) by  ([merge request](kchat/webapp!818))
+
+## 2.9.9-rc.3 (2024-08-12)
+
+### Added (4 changes)
+
+- [allow app navigation buttons on pwa](kchat/webapp@f65a21d46c7e7eb3d55b439b9e4dc46095c92373) by @boris.trombert ([merge request](kchat/webapp!871))
+- [Added: Reminder time](kchat/webapp@53cb90b6aa8c0942b1603cc70597f8c27bf9a540) by  ([merge request](kchat/webapp!850))
+- [Fix: create compo for postpone buttons](kchat/webapp@60822b0eca1dcdacddbe52811b5b25058a6eb7a7) by  ([merge request](kchat/webapp!850))
+- [Feat: Postpone reminder](kchat/webapp@48a782559152d09e2d141a9bde414369c2459a19) by  ([merge request](kchat/webapp!850))
+
+### Fixed (3 changes)
+
+- [updating emojis name](kchat/webapp@bfa06645d8c8216cd99601d0523739d001d2e124) by @cyril.gromoff ([merge request](kchat/webapp!872))
+- [Fix: API call and changes message according to actions](kchat/webapp@71e15f1f0ae8ad43dcf3c24e0f04a4ec90acc06e) by  ([merge request](kchat/webapp!850))
+- [Fix: button in post compo instead of post message view compo](kchat/webapp@dba36890123a61327790ffe975a4ba4eeaca88af) by  ([merge request](kchat/webapp!850))
+
+## 2.9.9-rc.2 (2024-08-09)
+
+### Fixed (3 changes)
+
+- [Fix: remove bugtracker color](kchat/webapp@79fd3916717f06b9804f3be4709e9887a8f2feff) by  ([merge request](kchat/webapp!858))
+- [add join button in thread instead of readonly message](kchat/webapp@f980fb29e9af84d276d59dab56e9099de34f1812) by  ([merge request](kchat/webapp!868))
+- [Fix: Remove bugtracker background for parter organisation](kchat/webapp@d19fb993f9edf25c00db86c22ec77ded85d2383f) by  ([merge request](kchat/webapp!858))
+
+## 2.9.9-rc.1 (2024-08-07)
+
+### Added (2 changes)
+
+- [Added: Create channel tip compo](kchat/webapp@405940170dde6541f5899c39098ca5865f624e7e) by  ([merge request](kchat/webapp!848))
+- [Feat: modal for max user in pm](kchat/webapp@bf1b7c87a94dc635b37a1e7ca2e43bf4700b4136) by  ([merge request](kchat/webapp!848))
+
+### Fixed (11 changes)
+
+- [Fix: Missing traduction for leave channel modal](kchat/webapp@dcf4c39bf248c260bbe310a7915e2e443ef11a56) by  ([merge request](kchat/webapp!867))
+- [Fix: move modal in more direct channels and pass it in children](kchat/webapp@cde8bec863bd2944aa139033cf51fbb6fd0180f4) by  ([merge request](kchat/webapp!848))
+- [Fix: Change create channel modal position](kchat/webapp@2b4fecb6908e78eb51cbd2fe870310a77ec223c4) by  ([merge request](kchat/webapp!848))
+- [Fix: Change trad and text position in modal](kchat/webapp@7d23168691a69b756374eb9b9635eb66b7b366bb) by  ([merge request](kchat/webapp!848))
+- [Fix: show modal when 7 user in pm](kchat/webapp@7bb296b6e1efa99f6a7fe0355cc65019978cab02) by  ([merge request](kchat/webapp!848))
+- [Fix: Missing traduction for post reminder](kchat/webapp@5db19ea4f2646b0814cb50ed5a8513d6183d5648) by  ([merge request](kchat/webapp!862))
+- [fix autocomplete for custom emojis](kchat/webapp@eefd5c7559ce6adbb89541001263a04c8dd86aa8) by  ([merge request](kchat/webapp!845))
+- [Fix: move modal in more direct channels and pass it in children](kchat/webapp@e93b55ae433818a60a3d1ce286a25861dc6c3992) by  ([merge request](kchat/webapp!848))
+- [Fix: Change create channel modal position](kchat/webapp@ed1a0ea0cc89de700c9a5ad879ebbd39a7723266) by  ([merge request](kchat/webapp!848))
+- [Fix: Change trad and text position in modal](kchat/webapp@be596919bafe47762373b56c1943025f155a8288) by  ([merge request](kchat/webapp!848))
+- [Fix: show modal when 7 user in pm](kchat/webapp@882050971f77e05c52d4cab57a55807fedfa6b53) by  ([merge request](kchat/webapp!848))
+
+### Changed (1 change)
+
+- [disable fetching channel own member on posted event](kchat/webapp@d488f2f23d470252b4beea4580951cabd7ad7a2f) by @antonbuksa ([merge request](kchat/webapp!824))
+
+## 2.9.9-next.3 (2024-08-12)
+
+### Added (4 changes)
+
+- [allow app navigation buttons on pwa](kchat/webapp@f65a21d46c7e7eb3d55b439b9e4dc46095c92373) by @boris.trombert ([merge request](kchat/webapp!871))
+- [Added: Reminder time](kchat/webapp@53cb90b6aa8c0942b1603cc70597f8c27bf9a540) by  ([merge request](kchat/webapp!850))
+- [Fix: create compo for postpone buttons](kchat/webapp@60822b0eca1dcdacddbe52811b5b25058a6eb7a7) by  ([merge request](kchat/webapp!850))
+- [Feat: Postpone reminder](kchat/webapp@48a782559152d09e2d141a9bde414369c2459a19) by  ([merge request](kchat/webapp!850))
+
+### Fixed (3 changes)
+
+- [updating emojis name](kchat/webapp@bfa06645d8c8216cd99601d0523739d001d2e124) by @cyril.gromoff ([merge request](kchat/webapp!872))
+- [Fix: API call and changes message according to actions](kchat/webapp@71e15f1f0ae8ad43dcf3c24e0f04a4ec90acc06e) by  ([merge request](kchat/webapp!850))
+- [Fix: button in post compo instead of post message view compo](kchat/webapp@dba36890123a61327790ffe975a4ba4eeaca88af) by  ([merge request](kchat/webapp!850))
+
+## 2.9.9-next.2 (2024-08-09)
+
+### Fixed (3 changes)
+
+- [Fix: remove bugtracker color](kchat/webapp@79fd3916717f06b9804f3be4709e9887a8f2feff) by  ([merge request](kchat/webapp!858))
+- [add join button in thread instead of readonly message](kchat/webapp@f980fb29e9af84d276d59dab56e9099de34f1812) by  ([merge request](kchat/webapp!868))
+- [Fix: Remove bugtracker background for parter organisation](kchat/webapp@d19fb993f9edf25c00db86c22ec77ded85d2383f) by  ([merge request](kchat/webapp!858))
+
+## 2.9.9-next.1 (2024-08-07)
+
+### Added (2 changes)
+
+- [Added: Create channel tip compo](kchat/webapp@405940170dde6541f5899c39098ca5865f624e7e) by  ([merge request](kchat/webapp!848))
+- [Feat: modal for max user in pm](kchat/webapp@bf1b7c87a94dc635b37a1e7ca2e43bf4700b4136) by  ([merge request](kchat/webapp!848))
+
+### Fixed (11 changes)
+
+- [Fix: Missing traduction for leave channel modal](kchat/webapp@dcf4c39bf248c260bbe310a7915e2e443ef11a56) by  ([merge request](kchat/webapp!867))
+- [Fix: move modal in more direct channels and pass it in children](kchat/webapp@cde8bec863bd2944aa139033cf51fbb6fd0180f4) by  ([merge request](kchat/webapp!848))
+- [Fix: Change create channel modal position](kchat/webapp@2b4fecb6908e78eb51cbd2fe870310a77ec223c4) by  ([merge request](kchat/webapp!848))
+- [Fix: Change trad and text position in modal](kchat/webapp@7d23168691a69b756374eb9b9635eb66b7b366bb) by  ([merge request](kchat/webapp!848))
+- [Fix: show modal when 7 user in pm](kchat/webapp@7bb296b6e1efa99f6a7fe0355cc65019978cab02) by  ([merge request](kchat/webapp!848))
+- [Fix: Missing traduction for post reminder](kchat/webapp@5db19ea4f2646b0814cb50ed5a8513d6183d5648) by  ([merge request](kchat/webapp!862))
+- [fix autocomplete for custom emojis](kchat/webapp@eefd5c7559ce6adbb89541001263a04c8dd86aa8) by  ([merge request](kchat/webapp!845))
+- [Fix: move modal in more direct channels and pass it in children](kchat/webapp@e93b55ae433818a60a3d1ce286a25861dc6c3992) by  ([merge request](kchat/webapp!848))
+- [Fix: Change create channel modal position](kchat/webapp@ed1a0ea0cc89de700c9a5ad879ebbd39a7723266) by  ([merge request](kchat/webapp!848))
+- [Fix: Change trad and text position in modal](kchat/webapp@be596919bafe47762373b56c1943025f155a8288) by  ([merge request](kchat/webapp!848))
+- [Fix: show modal when 7 user in pm](kchat/webapp@882050971f77e05c52d4cab57a55807fedfa6b53) by  ([merge request](kchat/webapp!848))
+
+### Changed (1 change)
+
+- [disable fetching channel own member on posted event](kchat/webapp@d488f2f23d470252b4beea4580951cabd7ad7a2f) by @antonbuksa ([merge request](kchat/webapp!824))
+
 ## 2.9.8-rc.5 (2024-08-05)
 
 ### Changed (1 change)

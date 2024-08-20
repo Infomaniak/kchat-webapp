@@ -19,20 +19,23 @@ import './post_reminder_custom_time_picker_modal.scss';
 type Props = PropsFromRedux & {
     onExited: () => void;
     postId: string;
+    postpone?: boolean;
+    reminderPostId?: string;
     actions: {
         addPostReminder: (postId: string, userId: string, timestamp: number) => void;
     };
 };
 
-function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actions}: Props) {
+function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actions, postpone, reminderPostId}: Props) {
     const currentTime = getCurrentMomentForTimezone(timezone);
     const initialReminderTime = getRoundedTime(currentTime);
 
     const [customReminderTime, setCustomReminderTime] = useState(initialReminderTime);
 
     const handleConfirm = useCallback(() => {
-        actions.addPostReminder(userId, postId, toUTCUnix(customReminderTime.toDate()));
-    }, [customReminderTime]);
+        const reschedule = true;
+        postpone ? actions.addPostReminder(userId, postId, toUTCUnix(customReminderTime.toDate()), reschedule, reminderPostId) : actions.addPostReminder(userId, postId, toUTCUnix(customReminderTime.toDate()));
+    }, [actions, customReminderTime, postId, postpone, reminderPostId, userId]);
 
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 

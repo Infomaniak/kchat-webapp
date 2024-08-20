@@ -5,6 +5,8 @@ exports[`component/add_user_to_group_multiselect should match snapshot with diff
   ariaLabelRenderer={[Function]}
   buttonSubmitLoadingText="Updating..."
   buttonSubmitText="Update Group"
+  changeMessageColor=""
+  disableMultiSelectList={false}
   focusOnLoad={false}
   handleAdd={[Function]}
   handleDelete={[Function]}
@@ -90,6 +92,8 @@ exports[`component/add_user_to_group_multiselect should match snapshot with prof
   ariaLabelRenderer={[Function]}
   buttonSubmitLoadingText="Creating..."
   buttonSubmitText="Create Group"
+  changeMessageColor=""
+  disableMultiSelectList={false}
   focusOnLoad={false}
   handleAdd={[Function]}
   handleDelete={[Function]}
@@ -175,6 +179,8 @@ exports[`component/add_user_to_group_multiselect should match snapshot without a
   ariaLabelRenderer={[Function]}
   buttonSubmitLoadingText="Creating..."
   buttonSubmitText="Create Group"
+  changeMessageColor=""
+  disableMultiSelectList={false}
   focusOnLoad={false}
   handleAdd={[Function]}
   handleDelete={[Function]}

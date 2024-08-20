@@ -59,16 +59,20 @@ export type Props<T extends Value> = {
     perPage: number;
     placeholderText?: string;
     saving?: boolean;
+    showError?: boolean;
+    changeMessageColor?: string;
     submitImmediatelyOn?: (value: T) => boolean;
     totalCount?: number;
     users?: unknown[];
     valueWithImage: boolean;
+    disableMultiSelectList?: boolean;
     valueRenderer?: (props: {data: T}) => any;
     values: T[];
     focusOnLoad?: boolean;
     savingEnabled?: boolean;
     handleCancel?: () => void;
     customNoOptionsMessage?: React.ReactNode;
+    children?: ReactNode;
 }
 
 export type State = {
@@ -91,6 +95,8 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
         focusOnLoad: true,
         savingEnabled: true,
         showInputByDefault: false,
+        changeMessageColor: '',
+        disableMultiSelectList: false,
     };
 
     public constructor(props: Props<T>) {
@@ -447,10 +453,10 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
             memberCount = (
                 <FormattedMessage
                     id='multiselect.numMembers'
-                    defaultMessage='{memberOptions, number} of {totalCount, number} members'
+                    defaultMessage='{options}/{maxUsers} users'
                     values={{
-                        memberOptions: optionsToDisplay.length,
-                        totalCount: this.props.totalCount,
+                        maxUsers: Constants.MAX_USERS_IN_GM - 1,
+                        options: this.props.values.length,
                     }}
                 />
             );
@@ -458,7 +464,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
 
         return (
             <>
-                <div className='filtered-user-list'>
+                <div className={(this.props.disableMultiSelectList) ? 'filtered-user-list disable-list' : 'filtered-user-list'}>
                     <div className='filter-row filter-row--full'>
                         <div className='multi-select__container react-select'>
                             <ReactSelect
@@ -466,7 +472,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                                 ref={this.reactSelectRef as React.RefObject<any>} // type of ref on @types/react-select is outdated
                                 isMulti={true}
                                 options={this.props.options}
-                                styles={styles}
+                                styles={styles(this.props.showError)}
                                 components={{
                                     Menu: nullComponent,
                                     IndicatorsContainer: nullComponent,
@@ -487,7 +493,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                                 getOptionLabel={this.props.ariaLabelRenderer}
                                 aria-label={this.props.placeholderText}
                                 className={this.state.a11yActive ? 'multi-select__focused' : ''}
-                                classNamePrefix='react-select-auto react-select'
+                                classNamePrefix={this.props.showError ? 'react-select-auto react-select error' : 'react-select-auto react-select'}
                             />
                             {this.props.saveButtonPosition === 'top' &&
                                 <SaveButton
@@ -503,19 +509,23 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                         <div
                             id='multiSelectHelpMemberInfo'
                             className='multi-select__help'
+                            style={this.props.showError ? {color: this.props.changeMessageColor} : {}}
                         >
                             {numRemainingText}
                             {memberCount}
                         </div>
+                        {this.props.children}
                     </div>
-                    {multiSelectList}
+                    {
+                        this.props.disableMultiSelectList ? null : multiSelectList
+                    }
                     <div
                         id='multiSelectMessageNote'
                         className='multi-select__help'
                     >
                         {noteTextContainer}
                     </div>
-                    {this.props.saveButtonPosition === 'top' &&
+                    {this.props.saveButtonPosition === 'top' && !this.props.disableMultiSelectList &&
                         <div className='filter-controls'>
                             {previousButton}
                             {nextButton}
@@ -572,14 +582,21 @@ const paddedComponent = (WrappedComponent: any) => {
     };
 };
 
-const styles = {
-    container: () => {
-        return {
-            display: 'flex',
-            overflow: 'hidden',
-            flex: 'auto',
-        };
-    },
-};
+const styles = (showError: boolean | undefined) => ({
+    container: (base: React.CSSProperties) => ({
+        ...base,
+        display: 'flex',
+        overflow: 'hidden',
+        flex: 'auto',
+    }),
+    control: (base: React.CSSProperties) => ({
+        ...base,
+        borderColor: 'red',
+        boxShadow: showError ? '0 0 0 1px red' : 'none',
+        '&:hover': {
+            borderColor: 'red',
+        },
+    }),
+});
 
 export default MultiSelect;

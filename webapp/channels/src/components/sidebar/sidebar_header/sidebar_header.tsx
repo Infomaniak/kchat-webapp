@@ -64,14 +64,16 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
     }
 `;
 
-const SidebarHeading = styled(Heading).attrs(() => ({
+const SidebarHeading = styled('div').attrs(() => ({
     element: 'h1',
-    margin: 'none',
+    margin: '5px',
     size: 200,
 }))<SidebarHeaderProps>`
     color: var(--sidebar-text);
     cursor: pointer;
     display: flex;
+    font-size: 16px;
+    font-weight: 600;
 
     .title {
         overflow: hidden;
@@ -107,7 +109,6 @@ export type Props = {
 const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
     const dispatch = useDispatch();
     const currentTeam = useSelector((state: GlobalState) => getCurrentTeam(state));
-    const currentServer = useSelector((state: GlobalState) => getCurrentServer(state));
     const showJoinChannelTourTip = useShowOnboardingTutorialStep(OnboardingTourSteps.JOIN_CHANNELS);
     const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_CHANNELS);
     const showInviteTutorialTip = false;
@@ -131,27 +132,9 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                 className={classNames({isWebApp: !isDesktopApp()})}
             >
                 {isDesktopApp() && (
-                    <OverlayTrigger
-
-                        delayShow={Constants.OVERLAY_TIME_DELAY}
-                        placement='bottom'
-                        overlay={currentTeam.description?.length ? (
-                            <Tooltip id='team-name__tooltip'>{currentTeam.description}</Tooltip>
-                        ) : <></>}
-                    >
-                        <MenuWrapper
-                            onToggle={handleMenuToggle}
-                            className='SidebarHeaderMenuWrapper test-team-header'
-                        >
-                            <SidebarHeading>
-                                <button className='style--none sidebar-header'>
-                                    <span className='title'>{currentTeam.display_name}</span>
-                                    <i className='icon icon-chevron-down'/>
-                                </button>
-                            </SidebarHeading>
-                            <MainMenu id='sidebarDropdownMenu'/>
-                        </MenuWrapper>
-                    </OverlayTrigger>
+                    <SidebarHeading>
+                        <span className='title'>{currentTeam.display_name}</span>
+                    </SidebarHeading>
                 )}
                 <AddChannelDropdown
                     showNewChannelModal={props.showNewChannelModal}
@@ -170,7 +153,6 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                     canCreateCustomGroups={props.canCreateCustomGroups}
                     showCreateUserGroupModal={props.showCreateUserGroupModal}
                     userGroupsEnabled={props.userGroupsEnabled}
-                    server={currentServer}
                 />
             </SidebarHeaderContainer>
         </CompassThemeProvider>

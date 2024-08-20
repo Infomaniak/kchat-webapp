@@ -21,6 +21,7 @@ import {trackEvent} from 'actions/telemetry_actions';
 import AutoHeightSwitcher, {AutoHeightSlots} from 'components/common/auto_height_switcher';
 import EditPost from 'components/edit_post';
 import FileAttachmentListContainer from 'components/file_attachment_list';
+import IkPostponeReminderButtons from 'components/ik_postpone_reminder_buttons/index';
 import MessageWithAdditionalContent from 'components/message_with_additional_content';
 import OverlayTrigger from 'components/overlay_trigger';
 import PriorityLabel from 'components/post_priority/post_priority_label';
@@ -656,6 +657,7 @@ const PostComponent = (props: Props): JSX.Element => {
                                 handleFileDropdownOpened={handleFileDropdownOpened}
                             />
                             }
+                            {(post.type === Posts.POST_TYPES.SYSTEM_POST_REMINDER && !(post.props.reschedule || post.props.completed)) ? <IkPostponeReminderButtons post={post}/> : null}
                             <div className='post__body-reactions-acks'>
                                 {props.isPostAcknowledgementsEnabled && post.metadata?.priority?.requested_ack && (
                                     <PostAcknowledgements

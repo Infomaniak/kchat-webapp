@@ -51,6 +51,10 @@ iOS App:
 
 const userAgent = () => window.navigator.userAgent;
 
+export function isPWA(): boolean {
+    return window.matchMedia('(display-mode: standalone)').matches;
+}
+
 export function isChrome(): boolean {
     return userAgent().indexOf('Chrome') > -1 && userAgent().indexOf('Edge') === -1;
 }

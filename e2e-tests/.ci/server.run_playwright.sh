@@ -18,7 +18,7 @@ EOF
 # ${MME2E_DC_SERVER} exec -T -- playwright bash <<EOF
 # cd e2e-tests/playwright
 # npm i --cache /tmp/empty-cache -g yarn
-# export NPM_TOKEN=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
+# export NPM_TOKEN=npm_token
 # yarn config set cacheFolder /tmp/empty-cache
 # yarn
 # EOF

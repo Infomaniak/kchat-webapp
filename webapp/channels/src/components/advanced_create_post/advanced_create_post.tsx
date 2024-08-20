@@ -901,9 +901,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.emitTypingEvent();
     };
 
-    emitTypingEvent = () => {
+    emitTypingEvent = (eventType = 'typing') => {
         const channelId = this.props.currentChannel.id;
-        GlobalActions.emitLocalUserTypingEvent(channelId, '');
+        GlobalActions.emitLocalUserTypingEvent(eventType, channelId, '');
     };
 
     setDraftAsPostType = (channelId: Channel['id'], draft: PostDraft, postType?: PostDraft['postType']) => {

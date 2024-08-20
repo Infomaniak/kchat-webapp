@@ -48,6 +48,9 @@ interface Props {
     onUploadError: (err: string | ServerError, clientId?: string, channelId?: Channel['id'], rootId?: Post['id']) => void;
     onRemoveDraft: (fileInfoIdOrClientId: FileInfo['id'] | string) => void;
     onSubmit: (e: FormEvent<Element>) => void;
+    onComplete: (eventType: string) => void;
+    onCancel: (eventType: string) => void;
+    onStarted: (eventType: string) => void;
 }
 
 const VoiceMessageAttachment = (props: Props) => {
@@ -131,6 +134,7 @@ const VoiceMessageAttachment = (props: Props) => {
     async function handleCompleteRecordingClicked(audioFile: File) {
         audioFileRef.current = audioFile;
         uploadRecording(audioFile);
+        props.onComplete?.('stop');
     }
 
     function handleCancelRecordingClicked() {
@@ -140,6 +144,7 @@ const VoiceMessageAttachment = (props: Props) => {
         if (props.location === Locations.RHS_COMMENT) {
             props.setDraftAsPostType(props.rootId, props.draft);
         }
+        props.onCancel?.('stop');
     }
 
     if (props.vmState === VoiceMessageStates.RECORDING) {
@@ -148,6 +153,7 @@ const VoiceMessageAttachment = (props: Props) => {
                 theme={theme}
                 onCancel={handleCancelRecordingClicked}
                 onComplete={handleCompleteRecordingClicked}
+                onStarted={props.onStarted}
             />
         );
     }

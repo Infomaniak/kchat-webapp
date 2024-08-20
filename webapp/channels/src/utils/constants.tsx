@@ -21,6 +21,7 @@ import audioIcon from 'images/icons/audio.svg';
 import codeIcon from 'images/icons/code.svg';
 import excelIcon from 'images/icons/excel.svg';
 import genericIcon from 'images/icons/generic.svg';
+import lampIcon from 'images/icons/lamp.svg';
 import patchIcon from 'images/icons/patch.svg';
 import pdfIcon from 'images/icons/pdf.svg';
 import pptIcon from 'images/icons/ppt.svg';
@@ -700,6 +701,7 @@ export const SocketEvents = {
     ROLE_REMOVED: 'role_removed',
     ROLE_UPDATED: 'role_updated',
     TYPING: 'client-user_typing',
+    RECORDING: 'client-user_recording',
     PREFERENCE_CHANGED: 'preference_changed',
     PREFERENCES_CHANGED: 'preferences_changed',
     PREFERENCES_DELETED: 'preferences_deleted',
@@ -2122,6 +2124,7 @@ export const Constants = {
     RECENT_EMOJI_KEY: 'recentEmojis',
     DEFAULT_WEBHOOK_LOGO: logoWebhook,
     TRANSCRIPT_ICON: transcriptIcon,
+    LAMP_ICON: lampIcon,
     MHPNS_US: 'https://push.mattermost.com',
     MHPNS_DE: 'https://hpns-de.mattermost.com',
     MTPNS: 'https://push-test.mattermost.com',

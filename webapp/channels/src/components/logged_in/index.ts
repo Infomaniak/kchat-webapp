@@ -14,6 +14,7 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, shouldShowTermsOfService} from 'mattermost-redux/selectors/entities/users';
 import type {ThunkActionFunc} from 'mattermost-redux/types/actions';
 
+import {registerInternalAiPlugin} from 'actions/ai_actions';
 import {registerInternalKdrivePlugin} from 'actions/kdrive_actions';
 import {declineCall, joinCall, cancelCall} from 'actions/kmeet_calls';
 import {updateTeamsOrderForUser} from 'actions/team_actions';
@@ -72,6 +73,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             getChannelURLAction,
             updateApproximateViewTime,
             registerInternalKdrivePlugin,
+            registerInternalAiPlugin,
             setTheme,
             updateTeamsOrderForUser,
             joinCall,
