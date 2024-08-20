@@ -495,7 +495,7 @@ exports[`components/integrations/AddOutgoingOAuthConnection should match snapsho
                 autoFocus={true}
                 backdrop={true}
                 bsClass="modal"
-                className="modal-confirm "
+                className="modal-confirm"
                 dialogClassName="a11y__modal"
                 dialogComponentClass={[Function]}
                 enforceFocus={true}

@@ -506,7 +506,7 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
               autoFocus={true}
               backdrop={true}
               bsClass="modal"
-              className="modal-confirm "
+              className="modal-confirm"
               dialogClassName="a11y__modal"
               dialogComponentClass={[Function]}
               enforceFocus={true}
@@ -1094,7 +1094,7 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
               autoFocus={true}
               backdrop={true}
               bsClass="modal"
-              className="modal-confirm "
+              className="modal-confirm"
               dialogClassName="a11y__modal"
               dialogComponentClass={[Function]}
               enforceFocus={true}

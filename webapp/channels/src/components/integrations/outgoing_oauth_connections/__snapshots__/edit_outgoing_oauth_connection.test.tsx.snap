@@ -557,7 +557,7 @@ https://myothersite.com/api/v2"
                       autoFocus={true}
                       backdrop={true}
                       bsClass="modal"
-                      className="modal-confirm integrations-backstage-modal"
+                      className="modal-confirmintegrations-backstage-modal"
                       dialogClassName="a11y__modal"
                       dialogComponentClass={[Function]}
                       enforceFocus={true}
@@ -657,7 +657,7 @@ https://myothersite.com/api/v2"
                 autoFocus={true}
                 backdrop={true}
                 bsClass="modal"
-                className="modal-confirm "
+                className="modal-confirm"
                 dialogClassName="a11y__modal"
                 dialogComponentClass={[Function]}
                 enforceFocus={true}
@@ -1278,7 +1278,7 @@ https://myothersite.com/api/v2"
                       autoFocus={true}
                       backdrop={true}
                       bsClass="modal"
-                      className="modal-confirm integrations-backstage-modal"
+                      className="modal-confirmintegrations-backstage-modal"
                       dialogClassName="a11y__modal"
                       dialogComponentClass={[Function]}
                       enforceFocus={true}
@@ -1378,7 +1378,7 @@ https://myothersite.com/api/v2"
                 autoFocus={true}
                 backdrop={true}
                 bsClass="modal"
-                className="modal-confirm "
+                className="modal-confirm"
                 dialogClassName="a11y__modal"
                 dialogComponentClass={[Function]}
                 enforceFocus={true}
@@ -1998,7 +1998,7 @@ https://myothersite.com/api/v2"
                       autoFocus={true}
                       backdrop={true}
                       bsClass="modal"
-                      className="modal-confirm integrations-backstage-modal"
+                      className="modal-confirmintegrations-backstage-modal"
                       dialogClassName="a11y__modal"
                       dialogComponentClass={[Function]}
                       enforceFocus={true}
@@ -2098,7 +2098,7 @@ https://myothersite.com/api/v2"
                 autoFocus={true}
                 backdrop={true}
                 bsClass="modal"
-                className="modal-confirm "
+                className="modal-confirm"
                 dialogClassName="a11y__modal"
                 dialogComponentClass={[Function]}
                 enforceFocus={true}
