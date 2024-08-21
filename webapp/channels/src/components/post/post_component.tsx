@@ -47,6 +47,7 @@ import Constants, {A11yCustomEventTypes, AppEvents, Locations} from 'utils/const
 import type {A11yFocusEventDetail} from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
 import * as PostUtils from 'utils/post_utils';
+import {isDesktopApp} from 'utils/user_agent';
 import {getDateForUnixTicks, makeIsEligibleForClick} from 'utils/utils';
 
 import type {PostPluginComponent, PluginComponent} from 'types/store/plugins';
@@ -141,6 +142,7 @@ const PostComponent = (props: Props): JSX.Element => {
 
     const isSystemMessage = PostUtils.isSystemMessage(post);
     const fromAutoResponder = PostUtils.fromAutoResponder(post);
+    const isDesktop = isDesktopApp();
 
     useEffect(() => {
         if (shouldHighlight) {
@@ -586,7 +588,7 @@ const PostComponent = (props: Props): JSX.Element => {
                             <div className='col d-flex align-items-center'>
                                 {((!hideProfilePicture && props.location === Locations.CENTER) || hover || props.location !== Locations.CENTER) &&
                                     <PostTime
-                                        isPermalink={!(Posts.POST_DELETED === post.state || isPostPendingOrFailed(post))}
+                                        isPermalink={!(Posts.POST_DELETED === post.state || isPostPendingOrFailed(post) || post.id.startsWith('user-activity') || isDesktop)} // Infomaniak: disable permalink for user-activity posts and for all posts in desktop app
                                         teamName={props.team?.name}
                                         eventTime={post.create_at}
                                         postId={post.id}
