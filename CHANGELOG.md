@@ -1,3 +1,24 @@
+## 2.9.11-rc.3 (2024-08-22)
+
+### Added (1 change)
+
+- [ai react for me button for posts](kchat/webapp@077522a9114bd38c9d65b2babfa39e3efe4fb571) by @boris.trombert ([merge request](kchat/webapp!888))
+
+### Fixed (8 changes)
+
+- [disabled post time link on system message and on bot for desktop](kchat/webapp@f0ad8abd7da79b651041dc70e21243dd0a68524d) by @boris.trombert ([merge request](kchat/webapp!891))
+- [hide pending invitations in kChat for external users](kchat/webapp@58316aa863290bfb6bddaf838a44f65d4654f49d) by @cyril.gromoff ([merge request](kchat/webapp!893))
+- [correction of the translation to see the transcript](kchat/webapp@58b4952e258547f6a9c50209a3a993318d7dd31a) by @boris.trombert ([merge request](kchat/webapp!892))
+- [new style for ai actions modal in posts](kchat/webapp@b5f235fef627aef893744b87eb627f6f55b04bdb) by @boris.trombert ([merge request](kchat/webapp!889))
+- [fix CTA alignement for the modals and move checkbox to the left](kchat/webapp@1e4bf4869bc60431c37fe686d9c57b54cf333984) by @cyril.gromoff ([merge request](kchat/webapp!876))
+- [summarize button only in thread root message](kchat/webapp@f7d23dd5aef6e693fd38e1b106ec0eab8a705dd4) by @boris.trombert ([merge request](kchat/webapp!887))
+- [changing channel from public to private now correctly display the ui](kchat/webapp@22e7074e79eb5cfbf79fde43d0aeb4539851a71e) by @cyril.gromoff ([merge request](kchat/webapp!884))
+- [Fix the color of the 'Invite more' button when in dark mode](kchat/webapp@e588e5ca855b7a9ce4a03c1599422257cecae4a9) by @cyril.gromoff ([merge request](kchat/webapp!878))
+
+### Removed (1 change)
+
+- [Revert "Merge branch 'ai-react-for-me' into 'master'"](kchat/webapp@bc14e47471eb904347dc68b66d20f952095a923a) by @antonbuksa
+
 ## 2.9.11-rc.2 (2024-08-20)
 
 ### Fixed (2 changes)
