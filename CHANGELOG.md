@@ -1,3 +1,9 @@
+## 2.9.11-rc.4 (2024-08-22)
+
+### Removed (1 change)
+
+- [Revert "Merge branch 'ai-react-for-me' into 'master'"](kchat/webapp@bc14e47471eb904347dc68b66d20f952095a923a) by @antonbuksa
+
 ## 2.9.11-rc.3 (2024-08-22)
 
 ### Added (1 change)
