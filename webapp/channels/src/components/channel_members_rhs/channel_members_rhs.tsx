@@ -63,6 +63,7 @@ export interface Props {
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;
         getChannelPendingGuests: (channelId: string) => void;
     };
+    isGuestUser: boolean;
 }
 
 export enum ListItemType {
@@ -89,6 +90,7 @@ export default function ChannelMembersRHS({
     editing = false,
     pendingGuests,
     actions,
+    isGuestUser,
 }: Props) {
     const history = useHistory();
 
@@ -161,22 +163,24 @@ export default function ChannelMembersRHS({
 
             listcp.push({type: ListItemType.Member, data: member});
         }
-        Object.keys(pendingGuests).forEach((key, index) => {
-            const pendingGuest = pendingGuests[key];
-            if (index === 0) {
-                const text = (
-                    <FormattedMessage
-                        id='channel_members_rhs.list.channel_pending_guests_title'
-                        defaultMessage='PENDING INVITATIONS'
-                    />
-                );
-                listcp.push({
-                    type: ListItemType.Separator,
-                    data: <MemberListSeparator>{text}</MemberListSeparator>,
-                });
-            }
-            listcp.push({type: ListItemType.PendingGuest, data: pendingGuest});
-        });
+        if (!isGuestUser) {
+            Object.keys(pendingGuests).forEach((key, index) => {
+                const pendingGuest = pendingGuests[key];
+                if (index === 0) {
+                    const text = (
+                        <FormattedMessage
+                            id='channel_members_rhs.list.channel_pending_guests_title'
+                            defaultMessage='PENDING INVITATIONS'
+                        />
+                    );
+                    listcp.push({
+                        type: ListItemType.Separator,
+                        data: <MemberListSeparator>{text}</MemberListSeparator>,
+                    });
+                }
+                listcp.push({type: ListItemType.PendingGuest, data: pendingGuest});
+            });
+        }
 
         if (JSON.stringify(list) !== JSON.stringify(listcp)) {
             setList(listcp);
