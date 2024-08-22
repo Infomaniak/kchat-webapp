@@ -209,7 +209,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             >
                                 <FormattedMessage
                                     id={'vocals.loading_transcript'}
-                                    defaultMessage={'View transcript'}
+                                    defaultMessage={'View the transcript'}
                                 />
                             </a>
                         </div>
