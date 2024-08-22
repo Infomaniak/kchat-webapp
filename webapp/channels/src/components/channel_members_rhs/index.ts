@@ -25,7 +25,7 @@ import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles'
 import {getCurrentRelativeTeamUrl, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {
     getActiveProfilesInCurrentChannelWithoutSorting,
-    getUserStatuses, searchActiveProfilesInCurrentChannel,
+    getUserStatuses, isCurrentUserGuestUser, searchActiveProfilesInCurrentChannel,
 } from 'mattermost-redux/selectors/entities/users';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
@@ -100,6 +100,7 @@ function mapStateToProps(state: GlobalState) {
     const currentTeam = getCurrentTeam(state);
     const currentUser = getMyCurrentChannelMembership(state);
     const {member_count: membersCount} = getCurrentChannelStats(state) || {member_count: 0};
+    const isGuestUser = isCurrentUserGuestUser(state);
 
     if (!channel) {
         return {
@@ -113,6 +114,7 @@ function mapStateToProps(state: GlobalState) {
             canGoBack: false,
             teamUrl: '',
             pendingGuests: {},
+            isGuestUser: false,
         } as unknown as Props;
     }
 
@@ -157,6 +159,7 @@ function mapStateToProps(state: GlobalState) {
         channelMembers,
         editing,
         pendingGuests,
+        isGuestUser,
     } as Props;
 }
 
