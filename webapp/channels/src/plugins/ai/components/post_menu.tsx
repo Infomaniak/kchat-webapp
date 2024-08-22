@@ -14,7 +14,6 @@ import {handleEvent} from 'actions/websocket_actions';
 import type {GlobalState} from 'types/store';
 
 import IconAI from './assets/icon_ai';
-import IconReactForMe from './assets/icon_react_for_me';
 import IconThreadSummarization from './assets/icon_thread_summarization';
 import {DropdownBotSelector} from './bot_slector';
 import DotMenu, {DropdownMenu, DropdownMenuItem} from './dot_menu';
@@ -61,14 +60,6 @@ const PostMenu = (props: Props) => {
         }
     };
 
-    const reactForMe = async (postId: string) => {
-        try {
-            await Client4.doReaction(postId);
-        } catch (error) {
-            console.error('Error react post:', error);
-        }
-    };
-
     // if (!isBasicsLicensed) {
     //     return null;
     // }
@@ -103,13 +94,6 @@ const PostMenu = (props: Props) => {
                     />
                 </div>
 
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => reactForMe(post.id)}>
-                <span className='icon'><IconReactForMe/></span>
-                <FormattedMessage
-                    id='ai.react_for_me'
-                    defaultMessage='React for me'
-                />
             </DropdownMenuItem>
             {/* <Divider/>
             <DropdownInfoOnlyVisibleToYou/> */}

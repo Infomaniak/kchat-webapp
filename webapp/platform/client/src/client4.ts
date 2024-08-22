@@ -4875,12 +4875,6 @@ export default class Client4 {
         return this.doFetch(url, {method: 'post'});
     }
 
-    async doReaction(postId: string) {
-        const url = `${this.getPostRoute(postId)}/react`;
-
-        return this.doFetch(url, {method: 'post'});
-    }
-
     async doStopGenerating(postId: string) {
         const url = `${this.getPostRoute(postId)}/stop`;
 
