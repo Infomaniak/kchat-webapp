@@ -52,3 +52,12 @@ export $(xargs < ./.env) && yarn dev-server:webapp
 ```shell
 export $(xargs < ./.env) && yarn build:webapp
 ```
+### Common errors
+##### This error can occur when running a single test or a suite of tests
+```shell
+Cannot find module '../build/Release/canvas.node'
+```
+fix : 
+```shell
+brew install pkg-config cairo pango libpng jpeg giflib librsvg
+```
