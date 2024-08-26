@@ -3739,11 +3739,6 @@
   "msg_typing.isTyping": "{user} est en train d'écrire...",
   "msg_recording.isRecording" : "{user} est en train d'enregistrer...",
   "msg_recording.areRecording": "{users} et {last} sont en train d'enregistrer...",
-<<<<<<< Updated upstream
-=======
-  "msg_recording.isRecording" : "{user} est en train d'enregistrer...",
-  "msg_recording.areRecording": "{users} et {last} sont en train d'enregistrer...",
->>>>>>> Stashed changes
   "multiselect.add": "Ajouter",
   "multiselect.addChannelsPlaceholder": "Rechercher et ajouter des canaux",
   "multiselect.addGroupMembers": "Ajouter {number} personne(s)",
