@@ -9,7 +9,14 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
     type={1}
   />
   <AdvanceTextEditor
-    additionalControls={Array []}
+    additionalControls={
+      Array [
+        <Memo(Connect(Component))
+          disabled={false}
+          rootId=""
+        />,
+      ]
+    }
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={false}
@@ -143,7 +150,14 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
     type={1}
   />
   <AdvanceTextEditor
-    additionalControls={Array []}
+    additionalControls={
+      Array [
+        <Memo(Connect(Component))
+          disabled={false}
+          rootId=""
+        />,
+      ]
+    }
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
@@ -229,7 +243,14 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
     type={1}
   />
   <AdvanceTextEditor
-    additionalControls={Array []}
+    additionalControls={
+      Array [
+        <Memo(Connect(Component))
+          disabled={false}
+          rootId=""
+        />,
+      ]
+    }
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
@@ -363,7 +384,14 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
     type={1}
   />
   <AdvanceTextEditor
-    additionalControls={Array []}
+    additionalControls={
+      Array [
+        <Memo(Connect(Component))
+          disabled={false}
+          rootId=""
+        />,
+      ]
+    }
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
@@ -449,7 +477,14 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
     type={1}
   />
   <AdvanceTextEditor
-    additionalControls={Array []}
+    additionalControls={
+      Array [
+        <Memo(Connect(Component))
+          disabled={false}
+          rootId=""
+        />,
+      ]
+    }
     applyMarkdown={[Function]}
     badConnection={false}
     canPost={true}
