@@ -30,6 +30,7 @@ import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
 import NotifyConfirmModal from 'components/notify_confirm_modal';
 import PersistNotificationConfirmModal from 'components/persist_notification_confirm_modal';
+import Poll from 'components/post_poll';
 import PostPriorityPickerOverlay from 'components/post_priority/post_priority_picker_overlay';
 import ResetStatusModal from 'components/reset_status_modal';
 import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
@@ -1563,6 +1564,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                                 disabled={this.props.shouldShowPreview}
                             />
                         ),
+                        <Poll
+                            key='poll'
+                            disabled={this.props.shouldShowPreview}
+                        />,
                         ...(pluginItems || []),
                     ].filter(Boolean)}
                     codeBlockOnCtrlEnter={this.props.codeBlockOnCtrlEnter}

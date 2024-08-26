@@ -11,6 +11,7 @@ import type {ServerError} from '@mattermost/types/errors';
 import type {FileInfo} from '@mattermost/types/files';
 import {GroupSource} from '@mattermost/types/groups';
 import type {Group} from '@mattermost/types/groups';
+import type {Post} from '@mattermost/types/posts';
 import type {PreferenceType} from '@mattermost/types/preferences';
 
 import {Posts} from 'mattermost-redux/constants';
@@ -26,6 +27,7 @@ import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
 import NotifyConfirmModal from 'components/notify_confirm_modal';
 import PostDeletedModal from 'components/post_deleted_modal';
+import Poll from 'components/post_poll/';
 import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 import type {TextboxClass, TextboxElement} from 'components/textbox';
 
@@ -1172,7 +1174,14 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     setDraftAsPostType={this.setDraftAsPostType}
                     isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
-                    additionalControls={pluginItems.filter(Boolean)}
+                    additionalControls={[
+                        <Poll
+                            rootId={this.props.rootId}
+                            key='poll'
+                            disabled={this.props.shouldShowPreview}
+                        />,
+                        ...(pluginItems || []),
+                    ].filter(Boolean)}
                     codeBlockOnCtrlEnter={this.props.codeBlockOnCtrlEnter}
                     ctrlSend={this.props.ctrlSend}
                     loadNextMessage={this.loadNextMessage}
