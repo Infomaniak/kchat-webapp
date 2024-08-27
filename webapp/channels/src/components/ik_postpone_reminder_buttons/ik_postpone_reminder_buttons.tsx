@@ -6,7 +6,6 @@ import React from 'react';
 import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
 import type {Post} from '@mattermost/types/posts';
-import type {UserProfile} from '@mattermost/types/users';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
@@ -28,7 +27,7 @@ export type Props = {
     };
     timezone?: string; /* Current user timezone */
     isMilitaryTime?: boolean; /* Whether or not to use military time */
-    userByName?: UserProfile; /* The user object for the post author */
+    currentUserId: string;
 };
 
 const PostReminders = {
@@ -44,8 +43,8 @@ const IkPostponeReminderButtons = (props: Props) => {
     const handleDeleteMenuItemActivated = (): void => {
         const postId = props.post.id;
 
-        if (props.userByName) {
-            const userId = props.userByName.id;
+        if (props.currentUserId) {
+            const userId = props.currentUserId;
             props.actions.markPostReminderAsDone(userId, postId);
         }
     };
@@ -67,7 +66,7 @@ const IkPostponeReminderButtons = (props: Props) => {
             let endTime = currentDate;
             if (id === PostReminders.THIRTY_MINUTES) {
                 // add 30 minutes in current time
-                endTime = currentDate.add(30, 'minutes');
+                endTime = currentDate.add(0.1, 'minutes');
             } else if (id === PostReminders.ONE_HOUR) {
                 // add 1 hour in current time
                 endTime = currentDate.add(1, 'hour');
@@ -87,8 +86,8 @@ const IkPostponeReminderButtons = (props: Props) => {
             const reschedule = true;
             const reminderPostId = props.post.id;
 
-            if (props.userByName?.id) {
-                const userId = props.userByName.id;
+            if (props.currentUserId) {
+                const userId = props.currentUserId;
                 props.actions.addPostReminder(userId, postId, timestamp, reschedule, reminderPostId);
             }
         }
