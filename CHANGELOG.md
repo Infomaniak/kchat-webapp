@@ -1,3 +1,9 @@
+## 2.9.12-rc.2 (2024-08-27)
+
+### Fixed (1 change)
+
+- [pass current user id for postpone reminder](kchat/webapp@458ccd766b0a5af6b3bad064b125c0df5b95e924) by @boris.trombert ([merge request](kchat/webapp!900))
+
 ## 2.9.12-rc.1 (2024-08-26)
 
 ### Fixed (2 changes)
