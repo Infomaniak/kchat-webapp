@@ -11,6 +11,14 @@
 - [add poll button in the formatting bar that trigger a poll](kchat/webapp@d5b934634e7155db31c5ae634a5d5f73e0497338) by @cyril.gromoff ([merge request](kchat/webapp!451))
 - [add the right text when we want to invite a user who is already in the targeted channel](kchat/webapp@362f48692369f73f03d793e16c919a65ab0a0ade) by @cyril.gromoff ([merge request](kchat/webapp!883))
 
+## 2.9.12-next.1 (2024-08-27)
+
+### Fixed (3 changes)
+
+- [pass current user id for postpone reminder](kchat/webapp@458ccd766b0a5af6b3bad064b125c0df5b95e924) by @boris.trombert ([merge request](kchat/webapp!900))
+- [add poll button in the formatting bar that trigger a poll](kchat/webapp@d5b934634e7155db31c5ae634a5d5f73e0497338) by @cyril.gromoff ([merge request](kchat/webapp!451))
+- [add the right text when we want to invite a user who is already in the targeted channel](kchat/webapp@362f48692369f73f03d793e16c919a65ab0a0ade) by @cyril.gromoff ([merge request](kchat/webapp!883))
+
 ## 2.9.11-rc.4 (2024-08-22)
 
 ### Removed (1 change)
