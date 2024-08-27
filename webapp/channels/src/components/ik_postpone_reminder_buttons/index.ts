@@ -5,13 +5,11 @@ import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
-import type {Post} from '@mattermost/types/posts';
-
 import {addPostReminder, markPostReminderAsDone} from 'mattermost-redux/actions/posts';
 import {Preferences} from 'mattermost-redux/constants';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
-import {getUserByUsername} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {openModal} from 'actions/views/modals';
 
@@ -19,16 +17,13 @@ import type {GlobalState} from 'types/store';
 
 import IkPostponeReminderButtons from './ik_postpone_reminder_buttons';
 
-interface OwnProps {
-    post: Post ;
-}
-
-function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
+function mapStateToProps(state: GlobalState) {
     const timezone = getCurrentTimezone(state);
     const isMilitaryTime = getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false);
-    const userByName = getUserByUsername(state, ownProps.post?.props?.username);
+    const currentUserId = getCurrentUserId(state);
+
     return {
-        userByName,
+        currentUserId,
         timezone,
         isMilitaryTime,
     };
