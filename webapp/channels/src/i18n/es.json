@@ -3270,6 +3270,7 @@
   "forward_post_modal.notification.dm_or_gm": "Este mensaje es de una conversación privada y solo se puede compartir con {participants}",
   "forward_post_modal.notification.private_channel": "Este mensaje es de un canal privado y solo se puede compartir con <strong>{channelName}</strong>",
   "forward_post_modal.preview.footer_message": "Publicado originalmente en ~{channel}",
+  "forward_post_modal.selection": "Seleccionar un canal o personas",
   "free.professional_feature.back": "Atrás",
   "free.professional_feature.professional": "característica Professional",
   "free.professional_feature.upgrade": "Actualizar",

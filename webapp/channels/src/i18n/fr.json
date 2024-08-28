@@ -3236,6 +3236,7 @@
   "forward_post_modal.preview.title": "Aperçu du message",
   "forward_post_modal.title": "Transférer le message",
   "forward_post_button.label": "Transférer",
+  "forward_post_modal.selection": "Sélectionner un canal ou des personnes",
   "full_screen_modal.back": "Précédent",
   "full_screen_modal.close": "Fermer",
   "general_button.close": "Fermer",
