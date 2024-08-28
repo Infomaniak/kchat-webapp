@@ -293,7 +293,7 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight, validChan
     };
     const message = (
         <FormattedMessage
-            defaultMessage='iPhone Native Classic App'
+            defaultMessage='Select a channel or people'
             id='forward_post_modal.selection'
         />
     );

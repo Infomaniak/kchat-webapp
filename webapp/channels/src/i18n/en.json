@@ -3726,7 +3726,7 @@
   "forward_post_modal.preview.footer_message": "Originally posted in ~{channel}",
   "forward_post_modal.preview.title": "Message preview",
   "forward_post_modal.title": "Forward message",
-  "forward_post_modal.selection": "Selecting a channel or people",
+  "forward_post_modal.selection": "Select a channel or people",
   "free.banner.downgraded": "Your workspace now has restrictions and some data has been archived",
   "free.professional_feature.back": "Back",
   "free.professional_feature.professional": "Professional feature",
