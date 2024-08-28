@@ -2222,7 +2222,7 @@ export const WindowSizes = {
     DESKTOP_VIEW: 'desktopView',
 };
 
-export const AcceptedProfileImageTypes = ['image/jpeg', 'image/png', 'image/bmp'];
+export const AcceptedProfileImageTypes = ['image/jpeg', 'image/png', 'image/bmp', 'image/gif'];
 
 export const searchHintOptions = [{searchTerm: 'From:', message: {id: t('search_list_option.from'), defaultMessage: 'Messages from a user'}},
     {searchTerm: 'In:', message: {id: t('search_list_option.in'), defaultMessage: 'Messages in a channel'}},
