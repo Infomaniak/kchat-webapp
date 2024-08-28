@@ -1,3 +1,16 @@
+## 2.9.13-rc.1 (2024-08-28)
+
+### Fixed (4 changes)
+
+- [adding correct translations when we want to transfer a thread](kchat/webapp@dc80af1920be5914a7b3e4206f9bf94ea0faa24c) by @cyril.gromoff ([merge request](kchat/webapp!902))
+- [pass current user id for postpone reminder](kchat/webapp@458ccd766b0a5af6b3bad064b125c0df5b95e924) by @boris.trombert ([merge request](kchat/webapp!900))
+- [add poll button in the formatting bar that trigger a poll](kchat/webapp@d5b934634e7155db31c5ae634a5d5f73e0497338) by @cyril.gromoff ([merge request](kchat/webapp!451))
+- [add the right text when we want to invite a user who is already in the targeted channel](kchat/webapp@362f48692369f73f03d793e16c919a65ab0a0ade) by @cyril.gromoff ([merge request](kchat/webapp!883))
+
+### Chore (1 change)
+
+- [chore: add webp as image types](kchat/webapp@bf1d75e0f41bca06035762ac87a4ee4633078536) by @leopold.jacquot ([merge request](kchat/webapp!901))
+
 ## 2.9.12-rc.2 (2024-08-27)
 
 ### Fixed (1 change)
