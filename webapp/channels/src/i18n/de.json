@@ -2692,7 +2692,7 @@
   "air_gapped_modal.close": "Schliessen",
   "air_gapped_modal.description": "Um deinen Test zu starten, besuche bitte {link} und fordere einen Testschlüssel an.",
   "air_gapped_modal.title": "Testschlüssel anfordern",
-  "ai.summarizeThread" : "Thread zusammenfassen",
+  "ai.summarizeThread" : "Zusammenfassen",
   "ai.actions" : "KI-Aktionen",
   "alert_banner.tooltipCloseBtn": "Schliessen",
   "analytics.chart.loading": "Lade...",
