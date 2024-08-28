@@ -3637,6 +3637,7 @@
   "forward_post_modal.preview.footer_message": "Ursprünglich gepostet in ~{channel}",
   "forward_post_modal.preview.title": "Nachrichten Vorschau",
   "forward_post_modal.title": "Nachricht weiterleiten",
+  "forward_post_modal.selection": "Einen Kanal oder Personen auswählen",
   "free.banner.downgraded": "Dein Arbeitsbereich hat jetzt Einschränkungen und einige Daten wurden archiviert",
   "free.professional_feature.back": "Zurück",
   "free.professional_feature.professional": "Professional Funktion",

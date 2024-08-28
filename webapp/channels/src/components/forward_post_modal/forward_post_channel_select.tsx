@@ -8,7 +8,7 @@ import {
     MessageTextOutlineIcon,
 } from '@infomaniak/compass-icons/components';
 import React, {useEffect, useRef} from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {components} from 'react-select';
 import type {IndicatorProps, OptionProps, SingleValueProps, ValueType, OptionTypeBase} from 'react-select';
@@ -291,7 +291,12 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight, validChan
             provider.handlePretextChanged(inputValue, handleResults);
         });
     };
-
+    const message = (
+        <FormattedMessage
+            defaultMessage='iPhone Native Classic App'
+            id='forward_post_modal.selection'
+        />
+    );
     return (
         <AsyncSelect
             value={value}
@@ -301,7 +306,7 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight, validChan
             components={{DropdownIndicator, Option, SingleValue}}
             styles={baseStyles}
             legend='Forward to'
-            placeholder='Select channel or people'
+            placeholder={message}
             className='forward-post__select'
             data-testid='forward-post-select'
         />
