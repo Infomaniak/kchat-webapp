@@ -1597,7 +1597,7 @@ export const Constants = {
     DEFAULT_CHARACTER_LIMIT: 4000,
     IMAGE_TYPE_GIF: 'gif',
     TEXT_TYPES: ['txt', 'rtf', 'vtt'],
-    IMAGE_TYPES: ['jpg', 'gif', 'bmp', 'png', 'jpeg', 'tiff', 'tif', 'psd', 'heic', 'HEIC', 'avif'],
+    IMAGE_TYPES: ['jpg', 'gif', 'bmp', 'png', 'jpeg', 'tiff', 'tif', 'psd', 'heic', 'HEIC', 'avif', 'webp'],
     AUDIO_TYPES: [AudioFileExtensions.MP3, AudioFileExtensions.WAV, AudioFileExtensions.WMA, AudioFileExtensions.M4A, AudioFileExtensions.FLAC, AudioFileExtensions.AAC, AudioFileExtensions.OGG, AudioFileExtensions.M4R],
     VIDEO_TYPES: ['mp4', 'avi', 'webm', 'mkv', 'wmv', 'mpg', 'mov', 'flv'],
     PRESENTATION_TYPES: ['ppt', 'pptx'],
