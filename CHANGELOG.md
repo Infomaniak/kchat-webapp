@@ -1,3 +1,13 @@
+## 2.9.13-rc.2 (2024-08-28)
+
+### Fixed (1 change)
+
+- [updating readme by adding Common errors section and Canvas error solving](kchat/webapp@f2a7d72fe548909b78d87f6fe5c56d66fa943eb5) by @cyril.gromoff ([merge request](kchat/webapp!898))
+
+### Chore (1 change)
+
+- [chore: allow gif as supported profile image](kchat/webapp@c6efb35220bcf1a663f97734ac45a0b6f64d47f8) by @leopold.jacquot ([merge request](kchat/webapp!904))
+
 ## 2.9.13-rc.1 (2024-08-28)
 
 ### Fixed (4 changes)
