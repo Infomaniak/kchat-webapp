@@ -11,6 +11,7 @@
 
         &__title {
             text-align: center;
+            font-size: 25px;
         }
     }
 
@@ -20,7 +21,7 @@
         align-items: center;
         text-align: center;
         gap: 20px;
-        padding-bottom: 20px;
+        padding: 20px;
 
         &__wrapper {
             display: flex;
