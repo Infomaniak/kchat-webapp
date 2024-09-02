@@ -1113,6 +1113,16 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                 );
             });
 
+        const additionalControls = [];
+        if (!this.props.isThreadView) {
+            additionalControls.push(
+                <Poll
+                    rootId={this.props.rootId}
+                    key='poll'
+                    disabled={this.props.shouldShowPreview}
+                />);
+        }
+        additionalControls.push(...(pluginItems || []).filter(Boolean));
         return (
             <form onSubmit={this.handleSubmit}>
                 {
@@ -1174,14 +1184,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     setDraftAsPostType={this.setDraftAsPostType}
                     isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
-                    additionalControls={[
-                        <Poll
-                            rootId={this.props.rootId}
-                            key='poll'
-                            disabled={this.props.shouldShowPreview}
-                        />,
-                        ...(pluginItems || []),
-                    ].filter(Boolean)}
+                    additionalControls={additionalControls}
                     codeBlockOnCtrlEnter={this.props.codeBlockOnCtrlEnter}
                     ctrlSend={this.props.ctrlSend}
                     loadNextMessage={this.loadNextMessage}
