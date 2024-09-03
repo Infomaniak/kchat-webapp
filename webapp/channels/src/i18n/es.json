@@ -4008,6 +4008,8 @@
   "post_info.download_all_attachments": "Descargar todo",
   "post_info.del": "Eliminar",
   "post_info.edit": "Editar",
+  "post_info.dot_menu.tooltip.more_actions": "Otras operaciones",
+  "post_info.dot_menu.tooltip.more": "Más",
   "post_info.info.view_additional_info": "Ver más info",
   "post_info.marketplace": "Aplicación Marketplace",
   "post_info.menuAriaLabel": "Opciones extra del mensaje",
