@@ -2429,7 +2429,7 @@
   "air_gapped_modal.close": "Fermer",
   "air_gapped_modal.description": "Pour commencer votre essai, rendez-vous sur {link} et demander une clé d’essai.",
   "air_gapped_modal.title": "Demander une clé d’essai",
-  "ai.summarizeThread" : "Résumer le fil de discussion",
+  "ai.summarizeThread" : "Résumer",
   "ai.actions" : "Actions IA",
   "alert_banner.tooltipCloseBtn": "Fermer",
   "analytics.chart.loading": "Chargement…",

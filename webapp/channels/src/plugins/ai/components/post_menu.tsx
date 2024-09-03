@@ -90,7 +90,7 @@ const PostMenu = (props: Props) => {
                 <div className=''>
                     <FormattedMessage
                         id='ai.summarizeThread'
-                        defaultMessage='Summarize Thread'
+                        defaultMessage='Summarize'
                     />
                 </div>
 
