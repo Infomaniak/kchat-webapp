@@ -9,3 +9,5 @@ export {PinSVG} from './pin_svg';
 export {ChannelFilesSVG} from './channel_files_svg';
 export {UserGroupsSVG} from './user_groups_svg';
 export {UserGroupMembersSVG} from './user_groups_members_svg';
+export {InfomaniakChannelSearchLightSvg} from './infomaniak_channel_search_light_svg';
+export {InfomaniakChannelSearchDarkSvg} from './infomaniak_channel_search_dark_svg';

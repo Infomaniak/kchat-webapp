@@ -14,6 +14,7 @@ import {SearchSVG, ChannelSearchSVG, MentionsSVG, SavedMessagesSVG, PinSVG, Chan
 
 import {t} from 'utils/i18n';
 
+import ThemedChannelSearchIcon from './theme_channel_search_icon';
 import {NoResultsVariant, NoResultsLayout} from './types';
 import './no_results_indicator.scss';
 
@@ -33,7 +34,7 @@ interface Props {
 
 const iconMap: {[key in NoResultsVariant]: React.ReactNode } = {
     [NoResultsVariant.Search]: <SearchSVG className='no-results__icon'/>,
-    [NoResultsVariant.ChannelSearch]: <ChannelSearchSVG className='no-results__icon'/>,
+    [NoResultsVariant.ChannelSearch]: <ThemedChannelSearchIcon className='no-results__icon'/>, // Utilisation du composant thématisé
     [NoResultsVariant.Files]: <ChannelFilesSVG className='no-results__icon'/>,
     [NoResultsVariant.Mentions]: <MentionsSVG className='no-results__icon'/>,
 
