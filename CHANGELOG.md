@@ -1,3 +1,9 @@
+## 2.9.13-rc.4 (2024-09-03)
+
+### Fixed (1 change)
+
+- [polls now does'nt appears anymore in all threads](kchat/webapp@faa6118eb446b5afcb9323d21a0bfa93dbf49667) by @cyril.gromoff ([merge request](kchat/webapp!909))
+
 ## 2.9.13-rc.3 (2024-09-03)
 
 ### Fixed (4 changes)
