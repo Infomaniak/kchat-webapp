@@ -1,3 +1,12 @@
+## 2.9.13-rc.3 (2024-09-03)
+
+### Fixed (4 changes)
+
+- [remove polls when we are in a thread](kchat/webapp@0d401e5796f872a725eea1b0c4a1ca06c5b983bf) by @cyril.gromoff ([merge request](kchat/webapp!908))
+- [reduce limit modal title font size and add global padding to limit modal content](kchat/webapp@d055897158502c2c88ccfc6552eb4d4cd34c274a) by @cyril.gromoff ([merge request](kchat/webapp!907))
+- [change 'résumer un fil de discussion' to 'Résumer' with correct translation](kchat/webapp@5e90cea25c80fad2ab56407c8d02d251c8a9709f) by @cyril.gromoff ([merge request](kchat/webapp!903))
+- [add correct translation for the thread action bar](kchat/webapp@8731686f6b7f8139d149389d55879e9e414fdba0) by @cyril.gromoff ([merge request](kchat/webapp!905))
+
 ## 2.9.13-rc.2 (2024-08-28)
 
 ### Fixed (1 change)
