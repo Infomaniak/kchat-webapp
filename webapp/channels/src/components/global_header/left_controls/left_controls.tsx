@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import AppNameDisplay from 'components/app_name_display';
 
-import {isDesktopApp} from 'utils/user_agent';
+import {isDesktopApp, isPWA} from 'utils/user_agent';
 
 import HistoryButtons from './history_buttons';
 
@@ -42,7 +42,7 @@ const LeftControls = ({headerRef}: {headerRef: React.RefObject<HTMLDivElement>})
     <LeftControlsContainer ref={headerRef}>
         {/* <ProductMenu/> */}
         <AppNameDisplay/>
-        {isDesktopApp() && <HistoryButtons/>}
+        {(isDesktopApp() || isPWA()) && <HistoryButtons/>}
     </LeftControlsContainer>
 );
 

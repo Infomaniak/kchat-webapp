@@ -22,6 +22,8 @@ import type {Translations} from 'types/store/i18n';
 
 const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};
 
+(window as any).HIDE_MODULE_SUPPORT = true;
+
 export type TranslationPluginFunction = (locale: string) => Translations
 
 export function loadConfigAndMe(): ThunkActionFunc<Promise<{config?: ClientConfig; isMeLoaded: boolean}>> {

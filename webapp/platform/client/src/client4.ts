@@ -29,7 +29,7 @@ import type {
     ServerChannel,
     PendingGuests,
 } from '@mattermost/types/channels';
-import type {Options, StatusOK, ClientResponse, FetchPaginatedThreadOptions} from '@mattermost/types/client4';
+import type {Options, StatusOK, ClientResponse, FetchPaginatedThreadOptions, SummarizeResult} from '@mattermost/types/client4';
 import {LogLevel} from '@mattermost/types/client4';
 import type {
     Address,
@@ -2432,12 +2432,19 @@ export default class Client4 {
         );
     };
 
-    addPostReminder = (userId: string, postId: string, timestamp: number) => {
+    addPostReminder = (userId: string, postId: string, timestamp: number, reschedule?: boolean, reminderPostId?: string) => {
         this.trackEvent('api', 'api_post_set_reminder');
 
         return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/posts/${postId}/reminder`,
-            {method: 'post', body: JSON.stringify({target_time: timestamp})},
+            {method: 'post', body: JSON.stringify({target_time: timestamp, reschedule, post_id: reminderPostId})},
+        );
+    };
+
+    markPostReminderAsDone = (userId: string, postId: string) => {
+        return this.doFetch<StatusOK>(
+            `${this.getUserRoute(userId)}/posts/${postId}/reminder`,
+            {method: 'delete'},
         );
     };
 
@@ -4829,6 +4836,33 @@ export default class Client4 {
                 })},
         );
     };
+
+    //
+    // PLUGIN AI
+    //
+    async doSummarize(postId: string, botUsername: string): Promise<SummarizeResult> {
+        const url = `${this.getPostRoute(postId)}/summarize?botUsername=${botUsername}`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
+
+    async doStopGenerating(postId: string) {
+        const url = `${this.getPostRoute(postId)}/stop`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
+
+    async doRegenerate(postId: string) {
+        const url = `${this.getPostRoute(postId)}/regenerate`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
+
+    async doPostbackSummary(postId: string) {
+        const url = `${this.getPostRoute(postId)}/postback_summary`;
+
+        return this.doFetch(url, {method: 'post'});
+    }
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {

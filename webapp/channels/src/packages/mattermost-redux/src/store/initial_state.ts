@@ -158,6 +158,7 @@ const state: GlobalState = {
             // isLimitedResults: -1,
         },
         typing: {},
+        recording: {},
         roles: {
             roles: {},
             pending: new Set(),

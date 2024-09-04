@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {RecreateMessageKey} from '@infomaniak/ksuite-bridge';
 import type {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
@@ -26,8 +25,9 @@ import {getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/us
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
+// TODO fix import restriction
 import {getMyMeets} from 'actions/calls';
-import {getKSuiteBridge} from 'selectors/ksuite_bridge';
+import {bridgeRecreate} from 'actions/ksuite_bridge_actions';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
@@ -103,8 +103,8 @@ export function loadMe(): ActionFuncAsync<boolean> {
 
                 // don't redirect to the error page if it is a testing environment
                 if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    const bridge = getKSuiteBridge(getState());
-                    bridge.sendMessage({type: RecreateMessageKey, url: lastKSuiteSeen.url});
+                    dispatch(bridgeRecreate(lastKSuiteSeen.url));
+
                     window.open(lastKSuiteSeen.url, '_self');
                 }
 

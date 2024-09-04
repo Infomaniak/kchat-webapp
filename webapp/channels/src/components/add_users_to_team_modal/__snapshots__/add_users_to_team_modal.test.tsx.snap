@@ -59,6 +59,8 @@ exports[`components/admin_console/add_users_to_team_modal/AddUsersToTeamModal sh
       ariaLabelRenderer={[Function]}
       buttonSubmitLoadingText="Adding..."
       buttonSubmitText="Add"
+      changeMessageColor=""
+      disableMultiSelectList={false}
       focusOnLoad={true}
       handleAdd={[Function]}
       handleDelete={[Function]}
@@ -286,6 +288,8 @@ exports[`components/admin_console/add_users_to_team_modal/AddUsersToTeamModal sh
       ariaLabelRenderer={[Function]}
       buttonSubmitLoadingText="Adding..."
       buttonSubmitText="Add"
+      changeMessageColor=""
+      disableMultiSelectList={false}
       focusOnLoad={true}
       handleAdd={[Function]}
       handleDelete={[Function]}

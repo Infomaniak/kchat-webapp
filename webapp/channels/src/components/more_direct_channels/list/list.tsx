@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import _ from 'lodash';
+import type {ReactNode} from 'react';
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
@@ -10,7 +11,7 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {openModal} from 'actions/views/modals';
 
-import MultiSelect from 'components/multiselect/multiselect';
+import MultiSelect from 'components/multiselect';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
@@ -21,11 +22,12 @@ import ListItem from '../list_item';
 import type {Option, OptionValue} from '../types';
 import {optionValue} from '../types';
 
-const MAX_SELECTABLE_VALUES = Constants.MAX_USERS_IN_GM - 1;
+const MAX_SELECTABLE_VALUES = Constants.MAX_USERS_IN_GM;
 export const USERS_PER_PAGE = 50;
 
 export type Props = {
     addValue: (value: OptionValue) => void;
+    children?: ReactNode;
     currentUserId: string;
     handleDelete: (values: OptionValue[]) => void;
     handlePageChange: (page: number, prevPage: number) => void;
@@ -162,8 +164,27 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
             handleAdd={props.addValue}
             handleSubmit={props.handleSubmit}
             noteText={note}
+            disableMultiSelectList={props.values.length > (Constants.MAX_USERS_IN_GM - 1)}
             maxValues={MAX_SELECTABLE_VALUES}
-            numRemainingText={remainingText}
+            // numRemainingText={remainingText}
+            changeMessageColor='red'
+            showError={props.values.length === MAX_SELECTABLE_VALUES}
+            numRemainingText={
+                props.values.length === MAX_SELECTABLE_VALUES ? (
+                    <FormattedMessage
+                        id='multiselect.noMorePeople'
+                        defaultMessage='A personal message is limited to {maxUsers} people.'
+                        values={{
+                            maxUsers: (Constants.MAX_USERS_IN_GM - 1),
+                        }}
+                    />
+                ) : (
+                    <FormattedMessage
+                        id='multiselect.numPeopleRemaining'
+                        defaultMessage='Use the ↑↓ arrows on the keyboard, ENTER to select.'
+                    />
+                )
+            }
             buttonSubmitText={
                 <FormattedMessage
                     id='multiselect.go'
@@ -182,7 +203,10 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
             users={props.users}
             totalCount={props.totalCount}
             placeholderText={intl.formatMessage({id: 'multiselect.placeholder', defaultMessage: 'Search and add members'})}
-        />
+
+        >
+            {props.children}
+        </MultiSelect>
     );
 });
 

@@ -29,6 +29,7 @@ import {
 import {openDirectChannelToUserId, openGroupChannelToUserIds} from 'actions/channel_actions';
 import {loadStatusesForProfilesList, loadProfilesMissingStatus} from 'actions/status_actions';
 import {loadProfilesForGroupChannels} from 'actions/user_actions';
+import {openModal} from 'actions/views/modals';
 import {setModalSearchTerm} from 'actions/views/search';
 
 import type {GlobalState} from 'types/store';
@@ -86,6 +87,7 @@ const makeMapStateToProps = () => {
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
+            openModal,
             getProfiles,
             getProfilesInTeam,
             loadProfilesMissingStatus,

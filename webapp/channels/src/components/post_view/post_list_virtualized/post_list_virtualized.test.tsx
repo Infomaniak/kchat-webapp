@@ -44,6 +44,7 @@ describe('PostList', () => {
         lastViewedAt: 0,
         shouldStartFromBottomWhenUnread: false,
         actions: baseActions,
+        isThreadView: false,
     };
 
     const postListIdsForClassNames = [

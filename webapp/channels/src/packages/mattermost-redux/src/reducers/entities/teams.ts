@@ -61,17 +61,17 @@ function teams(state: IDMappedObjects<Team> = {}, action: AnyAction) {
             [action.data.id]: action.data,
         };
 
-        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
-            window.postMessage(
-                {
-                    type: 'update-teams',
-                    message: {
-                        teams: Object.values(newTeams),
-                    },
-                },
-                window.origin,
-            );
-        }
+        // if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
+        //     window.postMessage(
+        //         {
+        //             type: 'update-teams',
+        //             message: {
+        //                 teams: Object.values(newTeams),
+        //             },
+        //         },
+        //         window.origin,
+        //     );
+        // }
 
         return newTeams;
     }

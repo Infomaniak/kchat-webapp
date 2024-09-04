@@ -94,7 +94,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     }, [onHandleDecline]);
 
     useEffect(() => {
-        ringing('Ring');
+        ringing(isCallerCurrentUser ? 'OutgoingRing' : 'Ring');
 
         return () => {
             stopRing();

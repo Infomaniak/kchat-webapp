@@ -51,6 +51,7 @@ export type Props = {
         joinCall: (channelId: string) => void;
         declineCall: (channelId: string) => void;
         cancelCall: (channelId: string) => void;
+        registerInternalAiPlugin: () => void;
     };
     showTermsOfService: boolean;
     location: {
@@ -83,6 +84,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
             this.props.actions.registerInternalKdrivePlugin();
         }
         this.updateTimeZone();
+        this.props.actions.registerInternalAiPlugin();
 
         // Make sure the websockets close and reset version
         window.addEventListener('beforeunload', this.handleBeforeUnload);

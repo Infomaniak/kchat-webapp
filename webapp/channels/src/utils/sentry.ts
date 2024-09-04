@@ -8,7 +8,7 @@ interface Args {
 }
 
 // Webpack global var
-declare const GIT_RELEASE: string;
+declare const GIT_RELEASE: ReturnType<JSON['stringify']>;
 
 const isLocalhost = (host: string) => host.startsWith('localhost') || host.startsWith('infomaniak.local.') || host.startsWith('kchat.local.') || host.startsWith('local.') || host.startsWith('kchat.devd');
 const isCanaryOrPreprod = GIT_RELEASE.includes('-next') || GIT_RELEASE.includes('-rc');
@@ -40,7 +40,8 @@ export default function init({SENTRY_DSN}: Args) {
             isCanaryOrPreprod && new Sentry.BrowserTracing(),
             isCanaryOrPreprod && new Sentry.Replay(),
         ].filter(bool),
-        tracesSampleRate: 0.1,
+        // eslint-disable-next-line no-process-env
+        tracesSampleRate: parseFloat(process.env.SENTRY_PERFORMANCE_SAMPLE_RATE!),
         ignoreErrors: [
 
             // Ignore random plugins/extensions

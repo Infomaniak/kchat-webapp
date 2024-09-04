@@ -180,18 +180,24 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 },
             });
 
-            if (channel.type === 'O' || channel.type === 'P') {
-                openWebCallInNewTab(data.url, data.jwt, data.name);
-                return;
-            }
-
             if (data && data.url) {
-                if (isDesktopApp() && !isDesktopExtendedCallSupported()) {
+                const isOpenOrPrivateChannel = (channel.type === 'O' || channel.type === 'P');
+
+                // prevent Autojoin when we are in DM or GM and launch directly KmeetWindow for Open and Private message
+                if (isOpenOrPrivateChannel) {
+                    if (isDesktopApp() && isDesktopExtendedCallSupported()) {
+                        dispatch(startKmeetWindow(data.id, channel.id));
+                        return;
+                    }
+
+                    // keep opening meeting in new tab for the webapp
                     openWebCallInNewTab(data.url, data.jwt, data.name);
                     return;
                 }
 
+                // keep ringing behaviour for DM and GM
                 dispatch(openCallDialingModal(channelID));
+                return;
             }
         } catch (error) {
             console.error('call could not be started', error);
@@ -280,9 +286,11 @@ export function callNoLongerExist(endMsg: any) {
 export function joinCall(conferenceId: string, meetingUrl: string) {
     return async (dispatch: DispatchFunc) => {
         Client4.acceptIncomingMeetCall(conferenceId);
+        const channelID = getCurrentChannelId(state);
 
         if (isDesktopApp()) {
-            dispatch(startKmeetWindow(conferenceId));
+            // si desktop app on rejoins bien sur la fenetre integrée.
+            dispatch(startKmeetWindow(conferenceId, channelID));
             return;
         }
 
@@ -302,11 +310,10 @@ export function hangUpCall() {
     };
 }
 
-export function startKmeetWindow(conferenceId?: string) {
+export function startKmeetWindow(conferenceId: string, channelID: string) {
     return async (_: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const user = getCurrentUser(state);
-        const channelID = getCurrentChannelId(state);
         const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
         const locale = getCurrentLocale(state);
 

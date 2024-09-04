@@ -3,6 +3,7 @@
 
 import React, {useEffect, useState, useRef} from 'react';
 import {useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {VariableSizeList} from 'react-window';
@@ -11,17 +12,21 @@ import InfiniteLoader from 'react-window-infinite-loader';
 import styled, {css} from 'styled-components';
 
 import type {Group} from '@mattermost/types/groups';
+import type {GlobalState} from '@mattermost/types/store';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import NoResultsIndicator from 'components/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
 import ProfilePopover from 'components/profile_popover';
+import StatusIcon from 'components/status_icon';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
 
+import {UserStatuses} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
 import {Load} from '../constants';
@@ -152,10 +157,10 @@ const GroupMemberList = (props: Props) => {
         // Remove explicit height provided by VariableSizeList
         style.height = undefined;
 
+        const status = useSelector((state: GlobalState) => getStatusForUserId(state, members[index]?.user?.id) || UserStatuses.OFFLINE);
         if (isUserLoaded(index)) {
             const user = members[index].user;
             const name = members[index].displayName;
-
             return (
                 <UserListItem
                     className='group-member-list_item'
@@ -171,13 +176,20 @@ const GroupMemberList = (props: Props) => {
                         hideStatus={user.is_bot}
                     >
                         <UserButton>
-                            <Avatar
-                                username={user.username}
-                                size={'sm'}
-                                url={Utils.imageURLForUser(user?.id ?? '')}
-                                className={'avatar-post-preview'}
-                                tabIndex={-1}
-                            />
+                            <span className='status-wrapper'>
+                                <Avatar
+                                    username={user.username}
+                                    size={'sm'}
+                                    url={Utils.imageURLForUser(user?.id ?? '')}
+                                    className={'avatar-post-preview'}
+                                    tabIndex={-1}
+                                />
+                                <StatusIcon
+                                    className='status user-popover-status'
+                                    status={status}
+                                    button={true}
+                                />
+                            </span>
                             <Username className='overflow--ellipsis text-nowrap'>{name}</Username>
                             <Gap className='group-member-list_gap'/>
                         </UserButton>
@@ -331,10 +343,11 @@ const UserListItem = styled.div<{first?: boolean; last?: boolean}>`
 const UserButton = styled.button`
     display: flex;
     width: 100%;
-    padding: 8px 20px;
+    padding: 0px 20px;
     border: none;
     background: unset;
     text-align: unset;
+    align-items: center;
 `;
 
 // A gap to make space for the DM button to be positioned on

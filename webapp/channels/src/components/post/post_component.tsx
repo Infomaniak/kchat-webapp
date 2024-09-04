@@ -21,6 +21,7 @@ import {trackEvent} from 'actions/telemetry_actions';
 import AutoHeightSwitcher, {AutoHeightSlots} from 'components/common/auto_height_switcher';
 import EditPost from 'components/edit_post';
 import FileAttachmentListContainer from 'components/file_attachment_list';
+import IkPostponeReminderButtons from 'components/ik_postpone_reminder_buttons/index';
 import MessageWithAdditionalContent from 'components/message_with_additional_content';
 import PriorityLabel from 'components/post_priority/post_priority_label';
 import PostProfilePicture from 'components/post_profile_picture';
@@ -45,6 +46,7 @@ import Constants, {A11yCustomEventTypes, AppEvents, Locations} from 'utils/const
 import type {A11yFocusEventDetail} from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
 import * as PostUtils from 'utils/post_utils';
+import {isDesktopApp} from 'utils/user_agent';
 import {getDateForUnixTicks, makeIsEligibleForClick} from 'utils/utils';
 
 import type {PostPluginComponent, PluginComponent} from 'types/store/plugins';
@@ -139,6 +141,7 @@ const PostComponent = (props: Props): JSX.Element => {
 
     const isSystemMessage = PostUtils.isSystemMessage(post);
     const fromAutoResponder = PostUtils.fromAutoResponder(post);
+    const isDesktop = isDesktopApp();
 
     useEffect(() => {
         if (shouldHighlight) {
@@ -584,7 +587,7 @@ const PostComponent = (props: Props): JSX.Element => {
                             <div className='col d-flex align-items-center'>
                                 {((!hideProfilePicture && props.location === Locations.CENTER) || hover || props.location !== Locations.CENTER) &&
                                     <PostTime
-                                        isPermalink={!(Posts.POST_DELETED === post.state || isPostPendingOrFailed(post))}
+                                        isPermalink={!(Posts.POST_DELETED === post.state || isPostPendingOrFailed(post) || post.id.startsWith('user-activity') || isDesktop)} // Infomaniak: disable permalink for user-activity posts and for all posts in desktop app
                                         teamName={props.team?.name}
                                         eventTime={post.create_at}
                                         postId={post.id}
@@ -653,6 +656,7 @@ const PostComponent = (props: Props): JSX.Element => {
                                 handleFileDropdownOpened={handleFileDropdownOpened}
                             />
                             }
+                            {(post.type === Posts.POST_TYPES.SYSTEM_POST_REMINDER && !(post.props.reschedule || post.props.completed)) ? <IkPostponeReminderButtons post={post}/> : null}
                             <div className='post__body-reactions-acks'>
                                 {props.isPostAcknowledgementsEnabled && post.metadata?.priority?.requested_ack && (
                                     <PostAcknowledgements

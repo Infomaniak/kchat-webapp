@@ -13,6 +13,11 @@
     font-weight: bold;
     gap: 16px;
 
+    &.thread {
+        display: flex;
+        justify-content: space-between;
+    }
+
     .hint-toast__message {
         line-height: 20px;
         text-align: center;

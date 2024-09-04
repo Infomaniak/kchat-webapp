@@ -11,11 +11,11 @@ import type {CloudState, CloudUsage} from './cloud';
 import type {EmojisState} from './emojis';
 import type {FilesState} from './files';
 import type {GeneralState} from './general';
-import type {GroupsState} from './groups';
 import type {GifsState} from './gifs';
+import type {GroupsState} from './groups';
 import type {HostedCustomerState} from './hosted_customer';
-import type {IntegrationsState} from './integrations';
 import type {InsightsState} from './insights';
+import type {IntegrationsState} from './integrations';
 import type {JobsState} from './jobs';
 import type {LimitsState} from './limits';
 import type {PostsState} from './posts';
@@ -64,6 +64,7 @@ export type GlobalState = {
         files: FilesState;
         emojis: EmojisState;
         typing: Typing;
+        recording: Recording;
         roles: {
             roles: {
                 [x: string]: Role;

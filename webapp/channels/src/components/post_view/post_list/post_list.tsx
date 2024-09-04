@@ -120,7 +120,7 @@ export interface Props {
     toggleShouldStartFromBottomWhenUnread: () => void;
     shouldStartFromBottomWhenUnread: boolean;
     hasInaccessiblePosts: boolean;
-
+    isThreadView?: boolean;
     actions: {
 
         /*
@@ -387,6 +387,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                             latestPostTimeStamp={this.props.latestPostTimeStamp}
                             isMobileView={this.props.isMobileView}
                             lastViewedAt={this.props.lastViewedAt}
+                            isThreadView={this.props.isThreadView}
                         />
                     </div>
                 </div>

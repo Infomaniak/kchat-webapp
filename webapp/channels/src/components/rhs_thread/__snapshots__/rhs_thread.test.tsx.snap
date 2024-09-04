@@ -27,6 +27,7 @@ exports[`components/RhsThread should match snapshot 1`] = `
         "update_at": 0,
       }
     }
+    onChatHistoryClick={[Function]}
     rootPostId="id"
   />
   <Connect(ThreadViewer)

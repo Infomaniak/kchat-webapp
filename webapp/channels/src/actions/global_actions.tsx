@@ -218,7 +218,8 @@ export function sendAddToChannelEphemeralPost(user: UserProfile, addedUsername: 
 }
 
 let lastTimeTypingSent = 0;
-export function emitLocalUserTypingEvent(channelId: string, parentPostId: string) {
+let recordingInterval: ReturnType<typeof setInterval> | null = null;
+export function emitLocalUserTypingEvent(eventType = 'typing', channelId: string, parentPostId: string) {
     const userTyping: ActionFuncAsync = async (actionDispatch, actionGetState) => {
         const state = actionGetState();
         const config = getConfig(state);
@@ -238,10 +239,21 @@ export function emitLocalUserTypingEvent(channelId: string, parentPostId: string
         const timeBetweenUserTypingUpdatesMilliseconds = Utils.stringToNumber(config.TimeBetweenUserTypingUpdatesMilliseconds);
         const maxNotificationsPerChannel = Utils.stringToNumber(config.MaxNotificationsPerChannel);
 
-        if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
-            (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
-            WebSocketClient.userTyping(channelId, userId, parentPostId);
-            lastTimeTypingSent = t;
+        if (eventType === 'typing') {
+            if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
+                (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
+                WebSocketClient.userTyping(channelId, userId, parentPostId);
+                lastTimeTypingSent = t;
+            }
+        } else if (eventType === 'recording') {
+            const TIMER = 1000;
+            recordingInterval = setInterval(() => {
+                WebSocketClient.userRecording(channelId, userId, parentPostId);
+            }, TIMER);
+        } else if (eventType === 'stop') {
+            if (recordingInterval !== null) {
+                clearInterval(recordingInterval);
+            }
         }
 
         return {data: true};

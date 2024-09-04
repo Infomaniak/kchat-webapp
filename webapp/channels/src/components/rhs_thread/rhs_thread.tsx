@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useEffect} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -10,6 +10,7 @@ import type {Team} from '@mattermost/types/teams';
 
 import {closeRightHandSide} from 'actions/views/rhs';
 
+import PostView from 'components/post_view/post_view';
 import RhsHeaderPost from 'components/rhs_header_post';
 import ThreadViewer from 'components/threading/thread_viewer';
 
@@ -28,6 +29,7 @@ const RhsThread = ({
     selected,
     previousRhsState,
 }: Props) => {
+    const [displayThreadList, setDisplayThreadList] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -36,6 +38,10 @@ const RhsThread = ({
             dispatch(closeRightHandSide());
         }
     }, [currentTeam, channel]);
+
+    const onChatHistoryClick = () => {
+        setDisplayThreadList((prevState) => !prevState);
+    };
 
     if (selected == null || !channel) {
         return (
@@ -52,12 +58,22 @@ const RhsThread = ({
                 rootPostId={selected.id}
                 channel={channel}
                 previousRhsState={previousRhsState}
+                onChatHistoryClick={onChatHistoryClick}
             />
-            <ThreadViewer
-                rootPostId={selected.id}
-                useRelativeTimestamp={true}
-                isThreadView={false}
-            />
+            {displayThreadList ? (
+                <PostView
+                    channelLoading={false}
+                    channelId={channel.id}
+                    unreadScrollPosition={''}
+                    isThreadView={true}
+                />
+            ) : (
+                <ThreadViewer
+                    rootPostId={selected.id}
+                    useRelativeTimestamp={false}
+                    isThreadView={false}
+                />
+            )}
         </div>
     );
 };

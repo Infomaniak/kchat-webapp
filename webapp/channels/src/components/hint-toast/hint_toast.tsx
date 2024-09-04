@@ -12,9 +12,10 @@ export const HINT_TOAST_TESTID = 'hint-toast';
 type Props = {
     children: React.ReactNode;
     onDismiss: () => void;
+    isThreadView?: boolean;
 }
 
-export const HintToast: React.FC<Props> = ({children, onDismiss}: Props) => {
+export const HintToast: React.FC<Props> = ({children, onDismiss, isThreadView}: Props) => {
     const handleDismiss = () => {
         if (typeof onDismiss === 'function') {
             onDismiss();
@@ -24,8 +25,9 @@ export const HintToast: React.FC<Props> = ({children, onDismiss}: Props) => {
     return (
         <div
             data-testid={HINT_TOAST_TESTID}
-            className='hint-toast'
+            className={isThreadView ? 'hint-toast thread' : 'hint-toast'}
         >
+            <div/>
             <div
                 className='hint-toast__message'
             >

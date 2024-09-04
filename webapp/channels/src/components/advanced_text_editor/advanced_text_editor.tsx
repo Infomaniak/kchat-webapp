@@ -25,6 +25,7 @@ import {makeGetDraft} from 'selectors/rhs';
 import {connectionErrorCount} from 'selectors/views/system';
 import LocalStorageStore from 'stores/local_storage_store';
 
+import {BannerJoinChannel} from 'components/banner_join_channel';
 import AutoHeightSwitcher from 'components/common/auto_height_switcher';
 import DndBanner from 'components/dnd_banner';
 import FilePreview from 'components/file_preview';
@@ -146,7 +147,7 @@ const AdvanceTextEditor = ({
 
         // guest validation to see which point the messaging tour tip starts
         const isGuestUser = isCurrentUserGuestUser(state);
-        const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE : OnboardingTourSteps.SEND_MESSAGE;
+        const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.CHANNELS : OnboardingTourSteps.CHANNELS;
 
         return enableTutorial && (tutorialStep === tourStep);
     });
@@ -317,12 +318,48 @@ const AdvanceTextEditor = ({
         if (!isErrorInvalidSlashCommand(serverError)) {
             setServerError(null);
         }
-
         handleDraftChange({
             ...draft,
             message,
         });
     }, [draft, handleDraftChange, serverError]);
+
+    // let attachmentPreview = null;
+    // if (!readOnlyChannel && draft.postType === Constants.PostTypes.VOICE) {
+    //     attachmentPreview = (
+    //         <div>
+    //             <VoiceMessageAttachment
+    //                 channelId={channelId}
+    //                 rootId={postId}
+    //                 draft={draft}
+    //                 location={location}
+    //                 vmState={voiceMessageState}
+    //                 setDraftAsPostType={setDraftAsPostType}
+    //                 uploadingClientId={voiceMessageClientId}
+    //                 didUploadFail={Boolean(serverError)}
+    //                 onUploadStart={handleVoiceMessageUploadStart}
+    //                 uploadProgress={uploadsProgressPercent?.[voiceMessageClientId]?.percent ?? 0}
+    //                 onUploadProgress={handleUploadProgress}
+    //                 onUploadComplete={handleFileUploadComplete}
+    //                 onUploadError={handleUploadError}
+    //                 onRemoveDraft={removePreview}
+    //                 onSubmit={handleSubmit}
+    //                 onStarted={emitTypingEvent}
+    //                 onCancel={emitTypingEvent}
+    //                 onComplete={emitTypingEvent}
+    //             />
+    //         </div>
+    //     );
+    // } else if (!readOnlyChannel && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0)) {
+    //     attachmentPreview = (
+    //         <FilePreview
+    //             fileInfos={draft.fileInfos}
+    //             onRemove={removePreview}
+    //             uploadsInProgress={draft.uploadsInProgress}
+    //             uploadsProgressPercent={uploadsProgressPercent}
+    //         />
+    //     );
+    // }
 
     /**
      * by getting the value directly from the textbox we eliminate all unnecessary
@@ -554,6 +591,13 @@ const AdvanceTextEditor = ({
     );
 
     const showFormattingSpacer = isMessageLong || showPreview || isRHS || isThreadView;
+
+    if (readOnlyChannel) {
+        return (
+            <BannerJoinChannel onButtonClick={() => GlobalActions.joinChannel(channelId)}/>
+        );
+    }
+
     return (
         <form
             id={postId ? undefined : 'create_post'}

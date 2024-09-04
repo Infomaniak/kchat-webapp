@@ -737,7 +737,7 @@ function handleChannelConvertedEvent(msg) {
         if (channel) {
             dispatch({
                 type: ChannelTypes.RECEIVED_CHANNEL,
-                data: {...channel, type: General.PRIVATE_CHANNEL},
+                data: channel, //Infomaniak : change from {...channel, type: General.PRIVATE_CHANNEL},
             });
         }
     }

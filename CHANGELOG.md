@@ -1,3 +1,469 @@
+## 2.9.13-rc.4 (2024-09-03)
+
+### Fixed (1 change)
+
+- [polls now does'nt appears anymore in all threads](kchat/webapp@faa6118eb446b5afcb9323d21a0bfa93dbf49667) by @cyril.gromoff ([merge request](kchat/webapp!909))
+
+## 2.9.13-rc.3 (2024-09-03)
+
+### Fixed (4 changes)
+
+- [remove polls when we are in a thread](kchat/webapp@0d401e5796f872a725eea1b0c4a1ca06c5b983bf) by @cyril.gromoff ([merge request](kchat/webapp!908))
+- [reduce limit modal title font size and add global padding to limit modal content](kchat/webapp@d055897158502c2c88ccfc6552eb4d4cd34c274a) by @cyril.gromoff ([merge request](kchat/webapp!907))
+- [change 'résumer un fil de discussion' to 'Résumer' with correct translation](kchat/webapp@5e90cea25c80fad2ab56407c8d02d251c8a9709f) by @cyril.gromoff ([merge request](kchat/webapp!903))
+- [add correct translation for the thread action bar](kchat/webapp@8731686f6b7f8139d149389d55879e9e414fdba0) by @cyril.gromoff ([merge request](kchat/webapp!905))
+
+## 2.9.13-rc.2 (2024-08-28)
+
+### Fixed (1 change)
+
+- [updating readme by adding Common errors section and Canvas error solving](kchat/webapp@f2a7d72fe548909b78d87f6fe5c56d66fa943eb5) by @cyril.gromoff ([merge request](kchat/webapp!898))
+
+### Chore (1 change)
+
+- [chore: allow gif as supported profile image](kchat/webapp@c6efb35220bcf1a663f97734ac45a0b6f64d47f8) by @leopold.jacquot ([merge request](kchat/webapp!904))
+
+## 2.9.13-rc.1 (2024-08-28)
+
+### Fixed (4 changes)
+
+- [adding correct translations when we want to transfer a thread](kchat/webapp@dc80af1920be5914a7b3e4206f9bf94ea0faa24c) by @cyril.gromoff ([merge request](kchat/webapp!902))
+- [pass current user id for postpone reminder](kchat/webapp@458ccd766b0a5af6b3bad064b125c0df5b95e924) by @boris.trombert ([merge request](kchat/webapp!900))
+- [add poll button in the formatting bar that trigger a poll](kchat/webapp@d5b934634e7155db31c5ae634a5d5f73e0497338) by @cyril.gromoff ([merge request](kchat/webapp!451))
+- [add the right text when we want to invite a user who is already in the targeted channel](kchat/webapp@362f48692369f73f03d793e16c919a65ab0a0ade) by @cyril.gromoff ([merge request](kchat/webapp!883))
+
+### Chore (1 change)
+
+- [chore: add webp as image types](kchat/webapp@bf1d75e0f41bca06035762ac87a4ee4633078536) by @leopold.jacquot ([merge request](kchat/webapp!901))
+
+## 2.9.13-next.2 (2024-09-03)
+
+### Fixed (5 changes)
+
+- [polls now does'nt appears anymore in all threads](kchat/webapp@faa6118eb446b5afcb9323d21a0bfa93dbf49667) by @cyril.gromoff ([merge request](kchat/webapp!909))
+- [remove polls when we are in a thread](kchat/webapp@0d401e5796f872a725eea1b0c4a1ca06c5b983bf) by @cyril.gromoff ([merge request](kchat/webapp!908))
+- [reduce limit modal title font size and add global padding to limit modal content](kchat/webapp@d055897158502c2c88ccfc6552eb4d4cd34c274a) by @cyril.gromoff ([merge request](kchat/webapp!907))
+- [change 'résumer un fil de discussion' to 'Résumer' with correct translation](kchat/webapp@5e90cea25c80fad2ab56407c8d02d251c8a9709f) by @cyril.gromoff ([merge request](kchat/webapp!903))
+- [add correct translation for the thread action bar](kchat/webapp@8731686f6b7f8139d149389d55879e9e414fdba0) by @cyril.gromoff ([merge request](kchat/webapp!905))
+
+## 2.9.13-next.1 (2024-08-28)
+
+### Fixed (5 changes)
+
+- [adding correct translations when we want to transfer a thread](kchat/webapp@dc80af1920be5914a7b3e4206f9bf94ea0faa24c) by @cyril.gromoff ([merge request](kchat/webapp!902))
+- [pass current user id for postpone reminder](kchat/webapp@458ccd766b0a5af6b3bad064b125c0df5b95e924) by @boris.trombert ([merge request](kchat/webapp!900))
+- [updating readme by adding Common errors section and Canvas error solving](kchat/webapp@f2a7d72fe548909b78d87f6fe5c56d66fa943eb5) by @cyril.gromoff ([merge request](kchat/webapp!898))
+- [add poll button in the formatting bar that trigger a poll](kchat/webapp@d5b934634e7155db31c5ae634a5d5f73e0497338) by @cyril.gromoff ([merge request](kchat/webapp!451))
+- [add the right text when we want to invite a user who is already in the targeted channel](kchat/webapp@362f48692369f73f03d793e16c919a65ab0a0ade) by @cyril.gromoff ([merge request](kchat/webapp!883))
+
+### Chore (2 changes)
+
+- [chore: allow gif as supported profile image](kchat/webapp@c6efb35220bcf1a663f97734ac45a0b6f64d47f8) by @leopold.jacquot ([merge request](kchat/webapp!904))
+- [chore: add webp as image types](kchat/webapp@bf1d75e0f41bca06035762ac87a4ee4633078536) by @leopold.jacquot ([merge request](kchat/webapp!901))
+
+## 2.9.12-rc.2 (2024-08-27)
+
+### Fixed (1 change)
+
+- [pass current user id for postpone reminder](kchat/webapp@458ccd766b0a5af6b3bad064b125c0df5b95e924) by @boris.trombert ([merge request](kchat/webapp!900))
+
+## 2.9.12-rc.1 (2024-08-26)
+
+### Fixed (2 changes)
+
+- [add poll button in the formatting bar that trigger a poll](kchat/webapp@d5b934634e7155db31c5ae634a5d5f73e0497338) by @cyril.gromoff ([merge request](kchat/webapp!451))
+- [add the right text when we want to invite a user who is already in the targeted channel](kchat/webapp@362f48692369f73f03d793e16c919a65ab0a0ade) by @cyril.gromoff ([merge request](kchat/webapp!883))
+
+## 2.9.12-next.1 (2024-08-27)
+
+### Fixed (3 changes)
+
+- [pass current user id for postpone reminder](kchat/webapp@458ccd766b0a5af6b3bad064b125c0df5b95e924) by @boris.trombert ([merge request](kchat/webapp!900))
+- [add poll button in the formatting bar that trigger a poll](kchat/webapp@d5b934634e7155db31c5ae634a5d5f73e0497338) by @cyril.gromoff ([merge request](kchat/webapp!451))
+- [add the right text when we want to invite a user who is already in the targeted channel](kchat/webapp@362f48692369f73f03d793e16c919a65ab0a0ade) by @cyril.gromoff ([merge request](kchat/webapp!883))
+
+## 2.9.11-rc.4 (2024-08-22)
+
+### Removed (1 change)
+
+- [Revert "Merge branch 'ai-react-for-me' into 'master'"](kchat/webapp@bc14e47471eb904347dc68b66d20f952095a923a) by @antonbuksa
+
+## 2.9.11-rc.3 (2024-08-22)
+
+### Added (1 change)
+
+- [ai react for me button for posts](kchat/webapp@077522a9114bd38c9d65b2babfa39e3efe4fb571) by @boris.trombert ([merge request](kchat/webapp!888))
+
+### Fixed (8 changes)
+
+- [disabled post time link on system message and on bot for desktop](kchat/webapp@f0ad8abd7da79b651041dc70e21243dd0a68524d) by @boris.trombert ([merge request](kchat/webapp!891))
+- [hide pending invitations in kChat for external users](kchat/webapp@58316aa863290bfb6bddaf838a44f65d4654f49d) by @cyril.gromoff ([merge request](kchat/webapp!893))
+- [correction of the translation to see the transcript](kchat/webapp@58b4952e258547f6a9c50209a3a993318d7dd31a) by @boris.trombert ([merge request](kchat/webapp!892))
+- [new style for ai actions modal in posts](kchat/webapp@b5f235fef627aef893744b87eb627f6f55b04bdb) by @boris.trombert ([merge request](kchat/webapp!889))
+- [fix CTA alignement for the modals and move checkbox to the left](kchat/webapp@1e4bf4869bc60431c37fe686d9c57b54cf333984) by @cyril.gromoff ([merge request](kchat/webapp!876))
+- [summarize button only in thread root message](kchat/webapp@f7d23dd5aef6e693fd38e1b106ec0eab8a705dd4) by @boris.trombert ([merge request](kchat/webapp!887))
+- [changing channel from public to private now correctly display the ui](kchat/webapp@22e7074e79eb5cfbf79fde43d0aeb4539851a71e) by @cyril.gromoff ([merge request](kchat/webapp!884))
+- [Fix the color of the 'Invite more' button when in dark mode](kchat/webapp@e588e5ca855b7a9ce4a03c1599422257cecae4a9) by @cyril.gromoff ([merge request](kchat/webapp!878))
+
+### Removed (1 change)
+
+- [Revert "Merge branch 'ai-react-for-me' into 'master'"](kchat/webapp@bc14e47471eb904347dc68b66d20f952095a923a) by @antonbuksa
+
+## 2.9.11-rc.2 (2024-08-20)
+
+### Fixed (2 changes)
+
+- [new style for ai actions modal in posts](kchat/webapp@b5f235fef627aef893744b87eb627f6f55b04bdb) by @boris.trombert ([merge request](kchat/webapp!889))
+- [fix CTA alignement for the modals and move checkbox to the left](kchat/webapp@1e4bf4869bc60431c37fe686d9c57b54cf333984) by @cyril.gromoff ([merge request](kchat/webapp!876))
+
+## 2.9.11-rc.1 (2024-08-20)
+
+### Added (1 change)
+
+- [ai react for me button for posts](kchat/webapp@077522a9114bd38c9d65b2babfa39e3efe4fb571) by @boris.trombert ([merge request](kchat/webapp!888))
+
+### Fixed (3 changes)
+
+- [summarize button only in thread root message](kchat/webapp@f7d23dd5aef6e693fd38e1b106ec0eab8a705dd4) by @boris.trombert ([merge request](kchat/webapp!887))
+- [changing channel from public to private now correctly display the ui](kchat/webapp@22e7074e79eb5cfbf79fde43d0aeb4539851a71e) by @cyril.gromoff ([merge request](kchat/webapp!884))
+- [Fix the color of the 'Invite more' button when in dark mode](kchat/webapp@e588e5ca855b7a9ce4a03c1599422257cecae4a9) by @cyril.gromoff ([merge request](kchat/webapp!878))
+
+## 2.9.11-next.3 (2024-08-22)
+
+### Added (1 change)
+
+- [ai react for me button for posts](kchat/webapp@077522a9114bd38c9d65b2babfa39e3efe4fb571) by @boris.trombert ([merge request](kchat/webapp!888))
+
+### Fixed (8 changes)
+
+- [disabled post time link on system message and on bot for desktop](kchat/webapp@f0ad8abd7da79b651041dc70e21243dd0a68524d) by @boris.trombert ([merge request](kchat/webapp!891))
+- [hide pending invitations in kChat for external users](kchat/webapp@58316aa863290bfb6bddaf838a44f65d4654f49d) by @cyril.gromoff ([merge request](kchat/webapp!893))
+- [correction of the translation to see the transcript](kchat/webapp@58b4952e258547f6a9c50209a3a993318d7dd31a) by @boris.trombert ([merge request](kchat/webapp!892))
+- [new style for ai actions modal in posts](kchat/webapp@b5f235fef627aef893744b87eb627f6f55b04bdb) by @boris.trombert ([merge request](kchat/webapp!889))
+- [fix CTA alignement for the modals and move checkbox to the left](kchat/webapp@1e4bf4869bc60431c37fe686d9c57b54cf333984) by @cyril.gromoff ([merge request](kchat/webapp!876))
+- [summarize button only in thread root message](kchat/webapp@f7d23dd5aef6e693fd38e1b106ec0eab8a705dd4) by @boris.trombert ([merge request](kchat/webapp!887))
+- [changing channel from public to private now correctly display the ui](kchat/webapp@22e7074e79eb5cfbf79fde43d0aeb4539851a71e) by @cyril.gromoff ([merge request](kchat/webapp!884))
+- [Fix the color of the 'Invite more' button when in dark mode](kchat/webapp@e588e5ca855b7a9ce4a03c1599422257cecae4a9) by @cyril.gromoff ([merge request](kchat/webapp!878))
+
+### Removed (1 change)
+
+- [Revert "Merge branch 'ai-react-for-me' into 'master'"](kchat/webapp@bc14e47471eb904347dc68b66d20f952095a923a) by @antonbuksa
+
+## 2.9.11-next.2 (2024-08-20)
+
+No changes.
+
+## 2.9.11-next.1 (2024-08-20)
+
+### Added (1 change)
+
+- [ai react for me button for posts](kchat/webapp@077522a9114bd38c9d65b2babfa39e3efe4fb571) by @boris.trombert ([merge request](kchat/webapp!888))
+
+### Fixed (5 changes)
+
+- [new style for ai actions modal in posts](kchat/webapp@b5f235fef627aef893744b87eb627f6f55b04bdb) by @boris.trombert ([merge request](kchat/webapp!889))
+- [fix CTA alignement for the modals and move checkbox to the left](kchat/webapp@1e4bf4869bc60431c37fe686d9c57b54cf333984) by @cyril.gromoff ([merge request](kchat/webapp!876))
+- [summarize button only in thread root message](kchat/webapp@f7d23dd5aef6e693fd38e1b106ec0eab8a705dd4) by @boris.trombert ([merge request](kchat/webapp!887))
+- [changing channel from public to private now correctly display the ui](kchat/webapp@22e7074e79eb5cfbf79fde43d0aeb4539851a71e) by @cyril.gromoff ([merge request](kchat/webapp!884))
+- [Fix the color of the 'Invite more' button when in dark mode](kchat/webapp@e588e5ca855b7a9ce4a03c1599422257cecae4a9) by @cyril.gromoff ([merge request](kchat/webapp!878))
+
+## 2.9.10-rc.7 (2024-08-16)
+
+### Fixed (1 change)
+
+- [fix integrations link not working on desktop](kchat/webapp@e96101e3cff7085e941962d5dae6e8e2e0c75af7) by @antonbuksa ([merge request](kchat/webapp!885))
+
+## 2.9.10-rc.6 (2024-08-15)
+
+No changes.
+
+## 2.9.10-rc.5 (2024-08-15)
+
+### Added (1 change)
+
+- [optional props isThreadView creating warning and summarize button trad](kchat/webapp@99158a179a5510b72706a93841154273c3af9259) by @antonbuksa ([merge request](kchat/webapp!881))
+
+### Removed (1 change)
+
+- [remove dropdown from desktop team name menu](kchat/webapp@b61f22ec8a711700805da95e7f70cd836fcaf49e) by @antonbuksa ([merge request](kchat/webapp!882))
+
+## 2.9.10-rc.4 (2024-08-15)
+
+### Fixed (1 change)
+
+- [fix env key for sentry var](kchat/webapp@906a530194d106926aa4fa9f2ff76391a456c4b6) by @antonbuksa
+
+## 2.9.10-rc.3 (2024-08-15)
+
+### Added (3 changes)
+
+- [label merge request status in release script](kchat/webapp@3d6bbf58f2697189f432f274fa8760a067bf2e63) by @antonbuksa
+- [missing traduction for thread in thread view](kchat/webapp@32e259b813c447a098fb7ec506e8fc9eba45f5e5) by @boris.trombert ([merge request](kchat/webapp!880))
+- [add env var for sentry sample rate](kchat/webapp@dd8d4159f1d054b01dac94d9c0d29152c608de32) by @antonbuksa ([merge request](kchat/webapp!877))
+
+## 2.9.10-rc.2 (2024-08-14)
+
+### Fixed (2 changes)
+
+- [test fix for team added flow desktop](kchat/webapp@7d4d1be76625e1904d62478ab5fed70f5bafbecf) by @antonbuksa
+- [prevent multiple registrations of AI plugin](kchat/webapp@94e8a796b635a750018aa54ea7cb66741fbf01e8) by @boris.trombert ([merge request](kchat/webapp!874))
+
+## 2.9.10-rc.1 (2024-08-13)
+
+### Added (3 changes)
+
+- [Add: kChat post history](kchat/webapp@fffb12feb58a15ea57169b94e3c8f4ffb943f4bd) by  ([merge request](kchat/webapp!838))
+- [Add: Add icons, llmbot post compo and connect compo to post](kchat/webapp@704ec11ca48d2b5561a0f5e06a218acad15e2d7e) by  ([merge request](kchat/webapp!838))
+- [implement ai plugin as internal webapp plugin](kchat/webapp@0db68d115c5587a6cf5af3c2d6a35d7b9a401b4c) by @antonbuksa ([merge request](kchat/webapp!838))
+
+### Fixed (5 changes)
+
+- [updating system emojis to add all infomaniak products](kchat/webapp@3da4299e1ecefef3080b9f71a88db0b9c1372663) by @cyril.gromoff ([merge request](kchat/webapp!873))
+- [Add: add rhs header buttons](kchat/webapp@188c2b88d2dae521ecb627d8a4e616d279ec85be) by  ([merge request](kchat/webapp!838))
+- [Fix: Color font, clean comment and api type](kchat/webapp@ae57f101e59a57d631793e0246664ccb94794d13) by  ([merge request](kchat/webapp!838))
+- [Fix: remove post summary help message](kchat/webapp@ef6953849f8079abff13060e203bc9efae98c679) by  ([merge request](kchat/webapp!838))
+- [scroll stay in current position when emoji's are loading](kchat/webapp@8bf68c0befaee81dc3839a8f6c5fe1d38cfe80c8) by  ([merge request](kchat/webapp!818))
+
+## 2.9.10-next.4 (2024-08-16)
+
+### Fixed (1 change)
+
+- [fix integrations link not working on desktop](kchat/webapp@e96101e3cff7085e941962d5dae6e8e2e0c75af7) by @antonbuksa ([merge request](kchat/webapp!885))
+
+## 2.9.10-next.3 (2024-08-15)
+
+### Added (1 change)
+
+- [optional props isThreadView creating warning and summarize button trad](kchat/webapp@99158a179a5510b72706a93841154273c3af9259) by @antonbuksa ([merge request](kchat/webapp!881))
+
+### Removed (1 change)
+
+- [remove dropdown from desktop team name menu](kchat/webapp@b61f22ec8a711700805da95e7f70cd836fcaf49e) by @antonbuksa ([merge request](kchat/webapp!882))
+
+## 2.9.10-next.2 (2024-08-15)
+
+### Added (3 changes)
+
+- [label merge request status in release script](kchat/webapp@3d6bbf58f2697189f432f274fa8760a067bf2e63) by @antonbuksa
+- [missing traduction for thread in thread view](kchat/webapp@32e259b813c447a098fb7ec506e8fc9eba45f5e5) by @boris.trombert ([merge request](kchat/webapp!880))
+- [add env var for sentry sample rate](kchat/webapp@dd8d4159f1d054b01dac94d9c0d29152c608de32) by @antonbuksa ([merge request](kchat/webapp!877))
+
+### Fixed (3 changes)
+
+- [fix env key for sentry var](kchat/webapp@906a530194d106926aa4fa9f2ff76391a456c4b6) by @antonbuksa
+- [test fix for team added flow desktop](kchat/webapp@7d4d1be76625e1904d62478ab5fed70f5bafbecf) by @antonbuksa
+- [prevent multiple registrations of AI plugin](kchat/webapp@94e8a796b635a750018aa54ea7cb66741fbf01e8) by @boris.trombert ([merge request](kchat/webapp!874))
+
+## 2.9.10-next.1 (2024-08-13)
+
+### Added (3 changes)
+
+- [Add: kChat post history](kchat/webapp@fffb12feb58a15ea57169b94e3c8f4ffb943f4bd) by  ([merge request](kchat/webapp!838))
+- [Add: Add icons, llmbot post compo and connect compo to post](kchat/webapp@704ec11ca48d2b5561a0f5e06a218acad15e2d7e) by  ([merge request](kchat/webapp!838))
+- [implement ai plugin as internal webapp plugin](kchat/webapp@0db68d115c5587a6cf5af3c2d6a35d7b9a401b4c) by @antonbuksa ([merge request](kchat/webapp!838))
+
+### Fixed (5 changes)
+
+- [updating system emojis to add all infomaniak products](kchat/webapp@3da4299e1ecefef3080b9f71a88db0b9c1372663) by @cyril.gromoff ([merge request](kchat/webapp!873))
+- [Add: add rhs header buttons](kchat/webapp@188c2b88d2dae521ecb627d8a4e616d279ec85be) by  ([merge request](kchat/webapp!838))
+- [Fix: Color font, clean comment and api type](kchat/webapp@ae57f101e59a57d631793e0246664ccb94794d13) by  ([merge request](kchat/webapp!838))
+- [Fix: remove post summary help message](kchat/webapp@ef6953849f8079abff13060e203bc9efae98c679) by  ([merge request](kchat/webapp!838))
+- [scroll stay in current position when emoji's are loading](kchat/webapp@8bf68c0befaee81dc3839a8f6c5fe1d38cfe80c8) by  ([merge request](kchat/webapp!818))
+
+## 2.9.9-rc.3 (2024-08-12)
+
+### Added (4 changes)
+
+- [allow app navigation buttons on pwa](kchat/webapp@f65a21d46c7e7eb3d55b439b9e4dc46095c92373) by @boris.trombert ([merge request](kchat/webapp!871))
+- [Added: Reminder time](kchat/webapp@53cb90b6aa8c0942b1603cc70597f8c27bf9a540) by  ([merge request](kchat/webapp!850))
+- [Fix: create compo for postpone buttons](kchat/webapp@60822b0eca1dcdacddbe52811b5b25058a6eb7a7) by  ([merge request](kchat/webapp!850))
+- [Feat: Postpone reminder](kchat/webapp@48a782559152d09e2d141a9bde414369c2459a19) by  ([merge request](kchat/webapp!850))
+
+### Fixed (3 changes)
+
+- [updating emojis name](kchat/webapp@bfa06645d8c8216cd99601d0523739d001d2e124) by @cyril.gromoff ([merge request](kchat/webapp!872))
+- [Fix: API call and changes message according to actions](kchat/webapp@71e15f1f0ae8ad43dcf3c24e0f04a4ec90acc06e) by  ([merge request](kchat/webapp!850))
+- [Fix: button in post compo instead of post message view compo](kchat/webapp@dba36890123a61327790ffe975a4ba4eeaca88af) by  ([merge request](kchat/webapp!850))
+
+## 2.9.9-rc.2 (2024-08-09)
+
+### Fixed (3 changes)
+
+- [Fix: remove bugtracker color](kchat/webapp@79fd3916717f06b9804f3be4709e9887a8f2feff) by  ([merge request](kchat/webapp!858))
+- [add join button in thread instead of readonly message](kchat/webapp@f980fb29e9af84d276d59dab56e9099de34f1812) by  ([merge request](kchat/webapp!868))
+- [Fix: Remove bugtracker background for parter organisation](kchat/webapp@d19fb993f9edf25c00db86c22ec77ded85d2383f) by  ([merge request](kchat/webapp!858))
+
+## 2.9.9-rc.1 (2024-08-07)
+
+### Added (2 changes)
+
+- [Added: Create channel tip compo](kchat/webapp@405940170dde6541f5899c39098ca5865f624e7e) by  ([merge request](kchat/webapp!848))
+- [Feat: modal for max user in pm](kchat/webapp@bf1b7c87a94dc635b37a1e7ca2e43bf4700b4136) by  ([merge request](kchat/webapp!848))
+
+### Fixed (11 changes)
+
+- [Fix: Missing traduction for leave channel modal](kchat/webapp@dcf4c39bf248c260bbe310a7915e2e443ef11a56) by  ([merge request](kchat/webapp!867))
+- [Fix: move modal in more direct channels and pass it in children](kchat/webapp@cde8bec863bd2944aa139033cf51fbb6fd0180f4) by  ([merge request](kchat/webapp!848))
+- [Fix: Change create channel modal position](kchat/webapp@2b4fecb6908e78eb51cbd2fe870310a77ec223c4) by  ([merge request](kchat/webapp!848))
+- [Fix: Change trad and text position in modal](kchat/webapp@7d23168691a69b756374eb9b9635eb66b7b366bb) by  ([merge request](kchat/webapp!848))
+- [Fix: show modal when 7 user in pm](kchat/webapp@7bb296b6e1efa99f6a7fe0355cc65019978cab02) by  ([merge request](kchat/webapp!848))
+- [Fix: Missing traduction for post reminder](kchat/webapp@5db19ea4f2646b0814cb50ed5a8513d6183d5648) by  ([merge request](kchat/webapp!862))
+- [fix autocomplete for custom emojis](kchat/webapp@eefd5c7559ce6adbb89541001263a04c8dd86aa8) by  ([merge request](kchat/webapp!845))
+- [Fix: move modal in more direct channels and pass it in children](kchat/webapp@e93b55ae433818a60a3d1ce286a25861dc6c3992) by  ([merge request](kchat/webapp!848))
+- [Fix: Change create channel modal position](kchat/webapp@ed1a0ea0cc89de700c9a5ad879ebbd39a7723266) by  ([merge request](kchat/webapp!848))
+- [Fix: Change trad and text position in modal](kchat/webapp@be596919bafe47762373b56c1943025f155a8288) by  ([merge request](kchat/webapp!848))
+- [Fix: show modal when 7 user in pm](kchat/webapp@882050971f77e05c52d4cab57a55807fedfa6b53) by  ([merge request](kchat/webapp!848))
+
+### Changed (1 change)
+
+- [disable fetching channel own member on posted event](kchat/webapp@d488f2f23d470252b4beea4580951cabd7ad7a2f) by @antonbuksa ([merge request](kchat/webapp!824))
+
+## 2.9.9-next.3 (2024-08-12)
+
+### Added (4 changes)
+
+- [allow app navigation buttons on pwa](kchat/webapp@f65a21d46c7e7eb3d55b439b9e4dc46095c92373) by @boris.trombert ([merge request](kchat/webapp!871))
+- [Added: Reminder time](kchat/webapp@53cb90b6aa8c0942b1603cc70597f8c27bf9a540) by  ([merge request](kchat/webapp!850))
+- [Fix: create compo for postpone buttons](kchat/webapp@60822b0eca1dcdacddbe52811b5b25058a6eb7a7) by  ([merge request](kchat/webapp!850))
+- [Feat: Postpone reminder](kchat/webapp@48a782559152d09e2d141a9bde414369c2459a19) by  ([merge request](kchat/webapp!850))
+
+### Fixed (3 changes)
+
+- [updating emojis name](kchat/webapp@bfa06645d8c8216cd99601d0523739d001d2e124) by @cyril.gromoff ([merge request](kchat/webapp!872))
+- [Fix: API call and changes message according to actions](kchat/webapp@71e15f1f0ae8ad43dcf3c24e0f04a4ec90acc06e) by  ([merge request](kchat/webapp!850))
+- [Fix: button in post compo instead of post message view compo](kchat/webapp@dba36890123a61327790ffe975a4ba4eeaca88af) by  ([merge request](kchat/webapp!850))
+
+## 2.9.9-next.2 (2024-08-09)
+
+### Fixed (3 changes)
+
+- [Fix: remove bugtracker color](kchat/webapp@79fd3916717f06b9804f3be4709e9887a8f2feff) by  ([merge request](kchat/webapp!858))
+- [add join button in thread instead of readonly message](kchat/webapp@f980fb29e9af84d276d59dab56e9099de34f1812) by  ([merge request](kchat/webapp!868))
+- [Fix: Remove bugtracker background for parter organisation](kchat/webapp@d19fb993f9edf25c00db86c22ec77ded85d2383f) by  ([merge request](kchat/webapp!858))
+
+## 2.9.9-next.1 (2024-08-07)
+
+### Added (2 changes)
+
+- [Added: Create channel tip compo](kchat/webapp@405940170dde6541f5899c39098ca5865f624e7e) by  ([merge request](kchat/webapp!848))
+- [Feat: modal for max user in pm](kchat/webapp@bf1b7c87a94dc635b37a1e7ca2e43bf4700b4136) by  ([merge request](kchat/webapp!848))
+
+### Fixed (11 changes)
+
+- [Fix: Missing traduction for leave channel modal](kchat/webapp@dcf4c39bf248c260bbe310a7915e2e443ef11a56) by  ([merge request](kchat/webapp!867))
+- [Fix: move modal in more direct channels and pass it in children](kchat/webapp@cde8bec863bd2944aa139033cf51fbb6fd0180f4) by  ([merge request](kchat/webapp!848))
+- [Fix: Change create channel modal position](kchat/webapp@2b4fecb6908e78eb51cbd2fe870310a77ec223c4) by  ([merge request](kchat/webapp!848))
+- [Fix: Change trad and text position in modal](kchat/webapp@7d23168691a69b756374eb9b9635eb66b7b366bb) by  ([merge request](kchat/webapp!848))
+- [Fix: show modal when 7 user in pm](kchat/webapp@7bb296b6e1efa99f6a7fe0355cc65019978cab02) by  ([merge request](kchat/webapp!848))
+- [Fix: Missing traduction for post reminder](kchat/webapp@5db19ea4f2646b0814cb50ed5a8513d6183d5648) by  ([merge request](kchat/webapp!862))
+- [fix autocomplete for custom emojis](kchat/webapp@eefd5c7559ce6adbb89541001263a04c8dd86aa8) by  ([merge request](kchat/webapp!845))
+- [Fix: move modal in more direct channels and pass it in children](kchat/webapp@e93b55ae433818a60a3d1ce286a25861dc6c3992) by  ([merge request](kchat/webapp!848))
+- [Fix: Change create channel modal position](kchat/webapp@ed1a0ea0cc89de700c9a5ad879ebbd39a7723266) by  ([merge request](kchat/webapp!848))
+- [Fix: Change trad and text position in modal](kchat/webapp@be596919bafe47762373b56c1943025f155a8288) by  ([merge request](kchat/webapp!848))
+- [Fix: show modal when 7 user in pm](kchat/webapp@882050971f77e05c52d4cab57a55807fedfa6b53) by  ([merge request](kchat/webapp!848))
+
+### Changed (1 change)
+
+- [disable fetching channel own member on posted event](kchat/webapp@d488f2f23d470252b4beea4580951cabd7ad7a2f) by @antonbuksa ([merge request](kchat/webapp!824))
+
+## 2.9.8-rc.5 (2024-08-05)
+
+### Changed (1 change)
+
+- [add temp check to prevent undefined case on latestPost create_at](kchat/webapp@c860209635bdf1862c5835d2571247024e09d21a) by @antonbuksa ([merge request](kchat/webapp!866))
+
+## 2.9.8-rc.4 (2024-08-05)
+
+### Fixed (1 change)
+
+- [Fix: Condition for user not on appstore](kchat/webapp@6e02b35d193e6ba08f056c09aa7db7a730a3c14c) by  ([merge request](kchat/webapp!865))
+
+## 2.9.8-rc.3 (2024-07-31)
+
+### Fixed (2 changes)
+
+- [Fix: Remove link for invite users to team](kchat/webapp@8fac8885713291660d1cd58a57b315ca904f166b) by  ([merge request](kchat/webapp!863))
+- [Fix: Remove link for invite external users](kchat/webapp@699c12729c821bfab9cd6c9442de131a9bbbaad3) by  ([merge request](kchat/webapp!863))
+
+## 2.9.8-rc.2 (2024-07-31)
+
+### Fixed (6 changes)
+
+- [Fix: Call declined trad not working](kchat/webapp@ccc389ec94725bc94c641a89d83d446c2bce3ca4) by  ([merge request](kchat/webapp!864))
+- [Fix: Transcript text color on dark theme](kchat/webapp@a7b18c9fb8a0e1dafffd28d9892596ec44f1b092) by  ([merge request](kchat/webapp!861))
+- [Fix: Remove hover on status dropdown header](kchat/webapp@6ee105500b94a4b344eb9c45d0b12414634fb41c) by  ([merge request](kchat/webapp!860))
+- [fixed issue while user list disappeared with autocomplete](kchat/webapp@3e46050f4522ff709a2733f5fd38534e920298ac) by  ([merge request](kchat/webapp!852))
+- [Fix: Add arrow for webapp](kchat/webapp@b769f2da0fb0d61267edf399f44c94641c54f25a) by  ([merge request](kchat/webapp!859))
+- [fix: prevent closing menu when pressing enter on a menu-item that has a popup](kchat/webapp@7d904e136857f9da0bee6d39670fb5fce9105bca) by @tim.dewinter ([merge request](kchat/webapp!833))
+
+## 2.9.8-rc.1 (2024-07-30)
+
+### Fixed (5 changes)
+
+- [Fix: Member list don't scroll](kchat/webapp@e6a1d366630a2ba458c80b4f595921bb1c8a8dee) by  ([merge request](kchat/webapp!856))
+- [fix markdown image that not showing up in thread](kchat/webapp@eea52ef6c20c2d7a600e4e9965707c05fdbfd982) by  ([merge request](kchat/webapp!849))
+- [Fix: add status in group list modal](kchat/webapp@1cd002c23460212b4edbf4c79cec38a7c5755a5a) by  ([merge request](kchat/webapp!846))
+- [Feat: Add status in group member](kchat/webapp@b25f6bb122cf90d9aaeda301d61e66b601f481d4) by  ([merge request](kchat/webapp!846))
+- [fix: add hide module support](kchat/webapp@8b74bea20f38114eff02b3d108228fd67c286d58) by  ([merge request](kchat/webapp!809))
+
+## 2.9.8-next.5 (2024-08-05)
+
+### Changed (1 change)
+
+- [add temp check to prevent undefined case on latestPost create_at](kchat/webapp@c860209635bdf1862c5835d2571247024e09d21a) by @antonbuksa ([merge request](kchat/webapp!866))
+
+## 2.9.8-next.4 (2024-08-05)
+
+### Fixed (1 change)
+
+- [Fix: Condition for user not on appstore](kchat/webapp@6e02b35d193e6ba08f056c09aa7db7a730a3c14c) by  ([merge request](kchat/webapp!865))
+
+## 2.9.8-next.3 (2024-07-31)
+
+### Fixed (2 changes)
+
+- [Fix: Remove link for invite users to team](kchat/webapp@8fac8885713291660d1cd58a57b315ca904f166b) by  ([merge request](kchat/webapp!863))
+- [Fix: Remove link for invite external users](kchat/webapp@699c12729c821bfab9cd6c9442de131a9bbbaad3) by  ([merge request](kchat/webapp!863))
+
+## 2.9.8-next.2 (2024-07-31)
+
+### Fixed (6 changes)
+
+- [Fix: Call declined trad not working](kchat/webapp@ccc389ec94725bc94c641a89d83d446c2bce3ca4) by  ([merge request](kchat/webapp!864))
+- [Fix: Transcript text color on dark theme](kchat/webapp@a7b18c9fb8a0e1dafffd28d9892596ec44f1b092) by  ([merge request](kchat/webapp!861))
+- [Fix: Remove hover on status dropdown header](kchat/webapp@6ee105500b94a4b344eb9c45d0b12414634fb41c) by  ([merge request](kchat/webapp!860))
+- [fixed issue while user list disappeared with autocomplete](kchat/webapp@3e46050f4522ff709a2733f5fd38534e920298ac) by  ([merge request](kchat/webapp!852))
+- [Fix: Add arrow for webapp](kchat/webapp@b769f2da0fb0d61267edf399f44c94641c54f25a) by  ([merge request](kchat/webapp!859))
+- [fix: prevent closing menu when pressing enter on a menu-item that has a popup](kchat/webapp@7d904e136857f9da0bee6d39670fb5fce9105bca) by @tim.dewinter ([merge request](kchat/webapp!833))
+
+## 2.9.8-next.1 (2024-07-30)
+
+### Fixed (5 changes)
+
+- [Fix: Member list don't scroll](kchat/webapp@e6a1d366630a2ba458c80b4f595921bb1c8a8dee) by  ([merge request](kchat/webapp!856))
+- [fix markdown image that not showing up in thread](kchat/webapp@eea52ef6c20c2d7a600e4e9965707c05fdbfd982) by  ([merge request](kchat/webapp!849))
+- [Fix: add status in group list modal](kchat/webapp@1cd002c23460212b4edbf4c79cec38a7c5755a5a) by  ([merge request](kchat/webapp!846))
+- [Feat: Add status in group member](kchat/webapp@b25f6bb122cf90d9aaeda301d61e66b601f481d4) by  ([merge request](kchat/webapp!846))
+- [fix: add hide module support](kchat/webapp@8b74bea20f38114eff02b3d108228fd67c286d58) by  ([merge request](kchat/webapp!809))
+
+## 2.9.7-rc.10 (2024-07-24)
+
+### Changed (1 change)
+
+- [fix(call): Updated ringtone](kchat/webapp@c8b4b62b6743ce524172e7f239767a08c4699ad0) by @tim.dewinter ([merge request](kchat/webapp!853))
+
+## 2.9.7-rc.9 (2024-07-23)
+
+### Changed (1 change)
+
+- [fix(call): Updated ringtone](kchat/webapp@2dd0d34454cc479f2513cd462c7b87300ce93a2b) by @tim.dewinter ([merge request](kchat/webapp!817))
+
+## 2.9.7-rc.8 (2024-07-22)
+
+### Changed (1 change)
+
+- [make adaptations for ksuite spaces](kchat/webapp@3227f3d7ed2fb712342f52cd95c51eab822cb5aa) by @antonbuksa ([merge request](kchat/webapp!826))
+
 ## 2.9.7-rc.7 (2024-07-18)
 
 ### Fixed (1 change)
@@ -125,6 +591,19 @@
 ### Chore (1 change)
 
 - [split test steps for coverage reports to work](kchat/webapp@a1374068e5164f93e6353dc9a2ab25c0f22cf8d6) by @antonbuksa ([merge request](kchat/webapp!827))
+
+## 2.9.7-next.4 (2024-07-24)
+
+### Changed (1 change)
+
+- [fix(call): Updated ringtone](kchat/webapp@c8b4b62b6743ce524172e7f239767a08c4699ad0) by @tim.dewinter ([merge request](kchat/webapp!853))
+
+## 2.9.7-next.3 (2024-07-23)
+
+### Changed (2 changes)
+
+- [make adaptations for ksuite spaces](kchat/webapp@3227f3d7ed2fb712342f52cd95c51eab822cb5aa) by @antonbuksa ([merge request](kchat/webapp!826))
+- [fix(call): Updated ringtone](kchat/webapp@2dd0d34454cc479f2513cd462c7b87300ce93a2b) by @tim.dewinter ([merge request](kchat/webapp!817))
 
 ## 2.9.7-next.2 (2024-07-18)
 
