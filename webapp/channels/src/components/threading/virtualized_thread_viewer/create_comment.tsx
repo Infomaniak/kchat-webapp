@@ -23,6 +23,8 @@ type Props = {
     threadId: string;
     isThreadView?: boolean;
     placeholder?: string;
+    isMember: boolean;
+    channelId: string;
 };
 
 const CreateComment = forwardRef<HTMLDivElement, Props>(({

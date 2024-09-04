@@ -49,7 +49,7 @@ function makeMapStateToProps() {
         const newMessagesSeparatorActions = state.plugins.components.NewMessagesSeparatorAction;
 
         const myChannelMemberships = getMyChannelMemberships(state);
-        const isMember = channel ? Boolean(myChannelMemberships[channel.id]) : false;
+        const isMember = Boolean(myChannelMemberships[channelId]);
 
         return {
             currentUserId,

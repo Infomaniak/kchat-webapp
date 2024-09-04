@@ -5,18 +5,22 @@ import {SendIcon} from '@infomaniak/compass-icons/components';
 import {Button, ButtonGroup, styled} from '@mui/material';
 import React, {memo, useRef} from 'react';
 import {useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {getTheme, syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import CompassDesignProvider from 'components/compass_design_provider';
 import SchedulePostButton from 'components/schedule_post/schedule_post_button';
+import {onSubmit} from 'actions/views/create_comment';
+import {getPostDraft} from 'selectors/rhs';
+import {StoragePrefixes} from 'utils/constants';
+import {GlobalState} from 'types/store';
 
 type SendButtonProps = {
     handleSubmit: (e: React.FormEvent) => void;
     disabled: boolean;
     isSchedulable?: boolean;
-    handleSchedulePost: (scheduleUTCTimestamp: number) => void;
+    postId: string;
 }
 
 const SendButtonContainer = styled(Button)`
@@ -55,8 +59,10 @@ const StyledButtonGroup = styled(ButtonGroup)`
     border-radius: 4px;
 `;
 
-const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}: SendButtonProps) => {
+const SendButton = ({disabled, isSchedulable, handleSubmit, postId}: SendButtonProps) => {
     const theme = useSelector(getTheme);
+    const dispatch = useDispatch();
+    const draft = useSelector((state: GlobalState) => getPostDraft(state, StoragePrefixes.DRAFT, postId));
     const draftsAreAllowed = useSelector(syncedDraftsAreAllowedAndEnabled);
     const {formatMessage} = useIntl();
     const buttonGroupRef = useRef<HTMLDivElement>(null);
@@ -97,7 +103,7 @@ const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}:
                 {isSchedulable && draftsAreAllowed && (
                     <SchedulePostButton
                         disabled={disabled}
-                        handleSchedulePost={handleSchedulePost}
+                        handleSchedulePost={(timestamp) => dispatch(onSubmit(draft, {}, true, timestamp))}
                         getAnchorEl={getButtonGroupRef}
                     />
                 )}

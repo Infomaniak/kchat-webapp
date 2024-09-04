@@ -95,18 +95,18 @@ function PanelBody({
                         )}
                     </div>
                     <div className='post__body'>
-                        {isEditing ? (
+                        {/* {isEditing ? (
                             <DraftEditor
                                 draft={draft}
                                 onCancel={hideEditor}
                                 onEdit={hideEditor}
                             />
-                        ) : (
+                        ) : ( */}
                             <Markdown
                                 options={OPTIONS}
                                 message={message}
                             />
-                        )}
+                        {/* )} */}
                     </div>
                     {((fileInfos.length > 0 || uploadsInProgress?.length > 0) && !isEditing) && (
                         <FilePreview

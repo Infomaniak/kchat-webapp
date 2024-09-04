@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {EmoticonHappyOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
@@ -74,6 +73,7 @@ import useUploadFiles from './use_upload_files';
 import useVoiceMessage from './use_voice_message';
 
 import './advanced_text_editor.scss';
+import {Post} from '@mattermost/types/posts';
 
 function isDraftEmpty(draft: PostDraft) {
     return draft.message === '' && draft.fileInfos.length === 0 && draft.uploadsInProgress.length === 0;
@@ -103,6 +103,7 @@ const AdvanceTextEditor = ({
     postId,
     isThreadView = false,
     placeholder,
+    isSchedulable
 }: Props) => {
     const {formatMessage} = useIntl();
 
@@ -484,9 +485,9 @@ const AdvanceTextEditor = ({
     const sendButton = readOnlyChannel ? null : (
         <SendButton
             disabled={disableSendButton}
-            // isSchedulable={isSchedulable}
+            isSchedulable={isSchedulable}
             handleSubmit={handleSubmit}
-            // handleSchedulePost={handleSchedulePost}
+            postId={postId}
         />
     );
 

@@ -223,7 +223,7 @@ export function makeOnSubmit(channelId: string, rootId: string, latestPostId: st
     };
 }
 
-export function onSubmit(draft: PostDraft, options: {ignoreSlash?: boolean}): ActionFuncAsync<boolean, GlobalState> {
+export function onSubmit(draft: PostDraft, options: {ignoreSlash?: boolean}, isSchedule = false, scheduleUTCTimestamp?: number): ActionFuncAsync<boolean, GlobalState> {
     return async (dispatch, getState) => {
         const {message, channelId, rootId} = draft;
         const state = getState();
@@ -240,6 +240,16 @@ export function onSubmit(draft: PostDraft, options: {ignoreSlash?: boolean}): Ac
             if (latestPostId) {
                 dispatch(PostActions.submitReaction(latestPostId, isReaction[1], isReaction[2]));
             }
+        } else if (isSchedule) {
+            const updatedDraft = {
+                ...draft,
+                timestamp: scheduleUTCTimestamp,
+                channelId,
+                remote: false,
+            };
+            console.log('[create_comment ~ draft] doSubmit.scheduleDraft id: ', updatedDraft.id);
+            console.log('[create_comment ~ draft] doSubmit.scheduleDraft.timestamp: ', updatedDraft.timestamp);
+            dispatch(upsertScheduleDraft(StoragePrefixes.DRAFT + channelId, updatedDraft));
         } else if (message.indexOf('/') === 0 && !options.ignoreSlash) {
             await dispatch(submitCommand(channelId, rootId, draft));
         } else {

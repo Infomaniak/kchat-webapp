@@ -42,6 +42,7 @@ type Props = {
     isMember: boolean;
     newMessagesSeparatorActions: PluginComponent[];
     inputPlaceholder?: string;
+    channelId: string;
     measureRhsOpened: () => void;
 }
 
@@ -362,7 +363,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                     teammate={this.props.directTeammate}
                     threadId={this.props.selected.id}
                     isMember={this.props.isMember}
-                    channelId={this.props.channel.id}
+                    channelId={this.props.channelId}
                 />
             );
         }

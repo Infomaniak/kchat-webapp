@@ -34,6 +34,7 @@ const AdvancedCreateComment = ({
             postId={rootId}
             isThreadView={isThreadView}
             placeholder={placeholder}
+            isSchedulable={true}
         />
     );
 };
