@@ -63,7 +63,7 @@ const GlobalHeader = ({headerRef}: {headerRef: React.RefObject<HTMLDivElement>})
         <GlobalHeaderContainer id='global-header'>
             <LeftControls headerRef={headerRef}/>
             <CenterControls/>
-            <RightControls productId={currentProductID}/>
+            <RightControls/>
         </GlobalHeaderContainer>
     );
 };

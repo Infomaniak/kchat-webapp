@@ -923,6 +923,7 @@ export default class Root extends React.PureComponent<Props, State> {
                                     />
                                 ))}
                                 <LoggedInRoute
+                                    headerRef={this.headerResizerRef}
                                     theme={this.props.theme}
                                     path={`/:team(${TEAM_NAME_PATH_PATTERN})`}
                                     component={TeamController}
