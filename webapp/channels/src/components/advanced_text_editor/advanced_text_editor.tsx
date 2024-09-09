@@ -249,7 +249,15 @@ const AdvanceTextEditor = ({
     useOrientationHandler(textboxRef, postId);
     const pluginItems = usePluginItems(draft, textboxRef, handleDraftChange);
     const focusTextbox = useTextboxFocus(textboxRef, channelId, isRHS, canPost);
-    const [attachmentPreview, fileUploadJSX, handleUploadProgress, handleFileUploadComplete, handleUploadError, removePreview, uploadsProgressPercent] = useUploadFiles(draft, postId, channelId, isThreadView, storedDrafts, readOnlyChannel, textboxRef, handleDraftChange, focusTextbox, setServerError);
+    const [
+        attachmentPreview,
+        fileUploadJSX,
+        handleUploadProgress,
+        handleFileUploadComplete,
+        handleUploadError,
+        removePreview,
+        uploadsProgressPercent
+    ] = useUploadFiles(draft, postId, channelId, isThreadView, storedDrafts, readOnlyChannel, textboxRef, handleDraftChange, focusTextbox, setServerError);
     const {
         emojiPicker,
         enableEmojiPicker,
@@ -679,6 +687,7 @@ const AdvanceTextEditor = ({
                             rootId={postId}
                             onWidthChange={handleWidthChange}
                         />
+                        {attachmentPreview}
                         {!readOnlyChannel && (showFormattingBar || showPreview) && (
                             <TexteditorActions
                                 placement='top'

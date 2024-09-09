@@ -6,6 +6,8 @@ import VoiceMessageButton from './voice_message_button';
 import type {ServerError} from '@mattermost/types/errors';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import VoiceMessageAttachment from './voice_message_attachment';
+import FilePreview from 'components/file_preview';
+import {Channel} from '@mattermost/types/channels';
 
 const useVoiceMessage = (
     draft: PostDraft,

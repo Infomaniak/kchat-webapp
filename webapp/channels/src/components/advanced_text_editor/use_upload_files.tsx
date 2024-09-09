@@ -170,6 +170,12 @@ const useUploadFiles = (
             rootId={postId}
             channelId={channelId}
             postType={postType}
+            // For drive sharelinks
+            message={draft.message}
+            // caretPosition={caretPosition}
+            handleDriveSharelink={handleFileUploadChange}
+            storedDrafts={storedDrafts}
+
         />
     );
 
