@@ -15,8 +15,6 @@ import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
 import AtMention from 'components/at_mention';
 import ChannelNotificationsModal from 'components/channel_notifications_modal';
-import ChannelIntroPrivateSvg from 'components/common/svg_images_components/channel_intro_private_svg';
-import ChannelIntroPublicSvg from 'components/common/svg_images_components/channel_intro_public_svg';
 import ChannelIntroTownSquareSvg from 'components/common/svg_images_components/channel_intro_town_square_svg';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
@@ -32,6 +30,7 @@ import * as Utils from 'utils/utils';
 
 import AddMembersButton from './add_members_button';
 import PluggableIntroButtons from './pluggable_intro_buttons';
+import EmptyStateThemeableSvg from 'components/common/svg_images_components/empty_state_themeable_svg';
 
 type Props = {
     currentUserId: string;
@@ -419,7 +418,7 @@ function createOffTopicIntroMessage(
             id='channelIntro'
             className={'channel-intro ' + centeredIntro}
         >
-            <ChannelIntroPublicSvg/>
+            <EmptyStateThemeableSvg/>
             <h2 className='channel-intro__title'>
                 {channel.display_name}
             </h2>
@@ -747,7 +746,7 @@ function createStandardIntroMessage(
             id='channelIntro'
             className={'channel-intro ' + centeredIntro}
         >
-            {isPrivate ? <ChannelIntroPrivateSvg/> : <ChannelIntroPublicSvg/>}
+            <EmptyStateThemeableSvg/>
             <h2 className='channel-intro__title'>
                 {channel.display_name}
             </h2>
