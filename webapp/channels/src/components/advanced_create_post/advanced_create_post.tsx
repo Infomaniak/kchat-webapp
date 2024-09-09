@@ -1564,10 +1564,11 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                                 disabled={this.props.shouldShowPreview}
                             />
                         ),
-                        <Poll
-                            key='poll'
-                            disabled={this.props.shouldShowPreview}
-                        />,
+
+                        // <Poll
+                        //     key='poll'
+                        //     disabled={this.props.shouldShowPreview}
+                        // />,
                         ...(pluginItems || []),
                     ].filter(Boolean)}
                     codeBlockOnCtrlEnter={this.props.codeBlockOnCtrlEnter}
