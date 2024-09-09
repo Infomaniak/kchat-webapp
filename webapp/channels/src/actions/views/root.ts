@@ -2,8 +2,10 @@
 // See LICENSE.txt for license information.
 
 import type {ClientConfig} from '@mattermost/types/config';
+import type {ServerError} from '@mattermost/types/errors';
 
 import {getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
+import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
 import {loadMe} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import type {ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
@@ -14,6 +16,7 @@ import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
 import {ActionTypes} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
+import * as UserAgent from 'utils/user_agent';
 
 import en from 'i18n/en.json';
 
@@ -40,6 +43,19 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{config?: ClientConfi
             dispatch(getClientConfig()),
             dispatch(getLicenseConfig()),
         ]);
+
+        let redirect = true;
+        if (!UserAgent.isMacApp() || !UserAgent.isNotMacMas()) {
+            redirect = false;
+        }
+
+        if (redirect) {
+            const forceMigrationError: ServerError = {
+                message: 'Maintenance mode',
+                status_code: 1,
+            };
+            redirectToErrorPageIfNecessary(forceMigrationError);
+        }
 
         let isMeLoaded = false;
 
@@ -123,3 +139,4 @@ export function registerCustomPostRenderer(type: string, component: any, id: str
         return {data: true};
     };
 }
+
