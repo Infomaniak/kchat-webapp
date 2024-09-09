@@ -1,3 +1,14 @@
+## 2.10.0-rc.4 (2024-09-09)
+
+### Fixed (2 changes)
+
+- [Fix: Condition in loadConfig](kchat/webapp@5763edbc980b1a8c331abf5ad5f343df8c656068) by  ([merge request](kchat/webapp!837))
+- [Fix: Force migration for mac desktop users](kchat/webapp@92b0bc8ec97cf9f25931476ce11ea26ea7228d2e) by  ([merge request](kchat/webapp!837))
+
+### Changed (1 change)
+
+- [do not show forced migration page based on version](kchat/webapp@f09a3832c5559b088019732a8fb8a8ab02ebf4d5) by @antonbuksa ([merge request](kchat/webapp!837))
+
 ## 2.10.0-rc.3 (2024-09-04)
 
 No changes.
