@@ -45,21 +45,11 @@ export function loadConfigAndMe(): ActionFuncAsync<boolean> {
             dispatch(getLicenseConfig()),
         ]);
 
-        const currentState = store.getState();
-        const {MASLatestVersion} = currentState.entities.general.config;
-
-        const latestVer = MASLatestVersion || '';
-        const userAgentVersion = UserAgent.getDesktopVersion();
         let redirect = true;
-        if (!UserAgent.isMacApp()) {
-            redirect = false;
-        } else if (!UserAgent.isNotMacMas()) {
-            redirect = false;
-        } else if (!latestVer || !userAgentVersion) {
-            redirect = false;
-        } else if (isServerVersionGreaterThanOrEqualTo(userAgentVersion, latestVer)) {
+        if (!UserAgent.isMacApp() || !UserAgent.isNotMacMas()) {
             redirect = false;
         }
+
         if (redirect) {
             const forceMigrationError: ServerError = {
                 message: 'Maintenance mode',
