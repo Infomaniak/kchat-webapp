@@ -10,12 +10,10 @@ import {Client4} from 'mattermost-redux/client';
 import type {ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale, getTranslations} from 'selectors/i18n';
-import store from 'stores/redux_store';
 
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
 import {ActionTypes} from 'utils/constants';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {isDesktopApp} from 'utils/user_agent';
 import * as UserAgent from 'utils/user_agent';
 
