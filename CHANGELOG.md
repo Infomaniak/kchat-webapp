@@ -21,6 +21,12 @@ No changes.
 
 No changes.
 
+## 2.9.14 (2024-09-09)
+
+### Removed (1 change)
+
+- [disable polls for now](kchat/webapp@1c6a39bc538f242901070d6acec784a190c94c70) by @antonbuksa
+
 ## 2.9.13-rc.4 (2024-09-03)
 
 ### Fixed (1 change)
