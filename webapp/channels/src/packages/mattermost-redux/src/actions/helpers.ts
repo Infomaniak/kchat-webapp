@@ -26,9 +26,10 @@ export function forceLogoutIfNecessary(err: ServerError, dispatch: DispatchFunc,
 const statusCodes = {
     HTTP_MAINTENANCE: 503,
     HTTP_BLOCKED: 401,
+    FORCE_MIGRATION: 1,
 };
 
-function redirectToErrorPageIfNecessary(err: ServerError) {
+export function redirectToErrorPageIfNecessary(err: ServerError) {
     switch (err.status_code) {
     case statusCodes.HTTP_MAINTENANCE:
         getHistory().replace('/error?type=maintenance');
@@ -37,6 +38,9 @@ function redirectToErrorPageIfNecessary(err: ServerError) {
         if (err.server_error_id === 'product_locked' || err.error?.code === 'product_locked') {
             getHistory().replace('/error?type=blocked');
         }
+        break;
+    case statusCodes.FORCE_MIGRATION:
+        getHistory().replace('/error?type=force_migration');
         break;
     }
 }

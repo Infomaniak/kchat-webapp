@@ -1023,6 +1023,7 @@ export const ErrorPageTypes = {
     NO_KSUITE: 'no_ksuite',
     MAINTENANCE: 'maintenance',
     BLOCKED: 'blocked',
+    FORCE_MIGRATION: 'force_migration',
 };
 
 export const JobTypes = {
