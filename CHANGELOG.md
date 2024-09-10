@@ -1,3 +1,9 @@
+## 2.10.0-rc.8 (2024-09-10)
+
+### Removed (1 change)
+
+- [remove profile button](kchat/webapp@956e7dd34e990ebb10af8733a56d78554824ef79) by @antonbuksa ([merge request](kchat/webapp!915))
+
 ## 2.10.0-rc.7 (2024-09-10)
 
 No changes.
