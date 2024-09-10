@@ -42,6 +42,24 @@ No changes.
 
 No changes.
 
+## 2.9.15-next.1 (2024-09-10)
+
+### Fixed (4 changes)
+
+- [fix dark mode modal sentence black on black](kchat/webapp@33092e5cf049754e2bf7327a2e72ab59402709df) by @cyril.gromoff ([merge request](kchat/webapp!913))
+- [new SVG in channel search, light and dark theme](kchat/webapp@27fa510c14c41a3f2dcd1c7806210398f8a63f7d) by @cyril.gromoff ([merge request](kchat/webapp!910))
+- [Fix: Condition in loadConfig](kchat/webapp@5763edbc980b1a8c331abf5ad5f343df8c656068) by  ([merge request](kchat/webapp!837))
+- [Fix: Force migration for mac desktop users](kchat/webapp@92b0bc8ec97cf9f25931476ce11ea26ea7228d2e) by  ([merge request](kchat/webapp!837))
+
+### Changed (1 change)
+
+- [do not show forced migration page based on version](kchat/webapp@f09a3832c5559b088019732a8fb8a8ab02ebf4d5) by @antonbuksa ([merge request](kchat/webapp!837))
+
+### Removed (2 changes)
+
+- [remove profile button](kchat/webapp@956e7dd34e990ebb10af8733a56d78554824ef79) by @antonbuksa ([merge request](kchat/webapp!915))
+- [disable polls for now](kchat/webapp@1c6a39bc538f242901070d6acec784a190c94c70) by @antonbuksa
+
 ## 2.9.14 (2024-09-09)
 
 ### Removed (1 change)
