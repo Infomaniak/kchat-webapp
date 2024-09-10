@@ -42,6 +42,12 @@ No changes.
 
 No changes.
 
+## 2.9.16-next.1 (2024-09-10)
+
+### Added (1 change)
+
+- [add feature flag for polls button](kchat/webapp@9f54be11929809430a70196acef959051f7da38e) by @antonbuksa ([merge request](kchat/webapp!914))
+
 ## 2.9.15-next.1 (2024-09-10)
 
 ### Fixed (4 changes)
