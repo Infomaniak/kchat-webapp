@@ -164,6 +164,8 @@ export type Props = {
 
     isPostPriorityEnabled: boolean;
 
+    isPollsEnabled: boolean;
+
     actions: {
 
         //Set show preview for textbox
@@ -1564,11 +1566,12 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                                 disabled={this.props.shouldShowPreview}
                             />
                         ),
-
-                        // <Poll
-                        //     key='poll'
-                        //     disabled={this.props.shouldShowPreview}
-                        // />,
+                        this.props.isPollsEnabled && (
+                            <Poll
+                                key='poll'
+                                disabled={this.props.shouldShowPreview}
+                            />
+                        ),
                         ...(pluginItems || []),
                     ].filter(Boolean)}
                     codeBlockOnCtrlEnter={this.props.codeBlockOnCtrlEnter}
