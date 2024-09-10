@@ -65,7 +65,7 @@ const ProfilePopoverEdit = ({
             data-toggle='tooltip'
             className='popover__row first'
         >
-            <button
+            {/* <button
                 id='editProfileButton'
                 type='button'
                 className='btn'
@@ -101,7 +101,7 @@ const ProfilePopoverEdit = ({
                         })}
                     />
                 </button>
-            </OverlayTrigger>
+            </OverlayTrigger> */}
         </div>
     );
 };
