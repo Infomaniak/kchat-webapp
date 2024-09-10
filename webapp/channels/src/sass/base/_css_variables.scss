@@ -37,8 +37,6 @@
     --dark-modal-font-color:#fff;
     --code-color: #f80;
     --code-block-color: #fff;
-    --no-results-light: #F1F1F1
-    --no-results-dark: #9F9F9F
 
     // Default RGB values to be replaced by applyTheme() (do not add opacity mutations here)
     // these are define to prevent flashes of unstyled content
@@ -126,4 +124,5 @@
     --ik-illustration-grey-15: #F1F1F1;
     --ik-illustration-grey-16: #F1F1F1;
     --ik-illustration-grey-17: #F5F5F5;
+    --ik-illustration-grey-18: #9F9F9F;
 }
