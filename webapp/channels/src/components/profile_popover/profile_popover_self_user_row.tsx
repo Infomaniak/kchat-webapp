@@ -52,7 +52,7 @@ const ProfilePopoverSelfUserRow = ({
         <div
             className='user-popover__bottom-row-container'
         >
-            <button
+            {/* <button
                 type='button'
                 className='btn btn-primary btn-sm'
                 onClick={handleEditAccountSettings}
@@ -82,7 +82,7 @@ const ProfilePopoverSelfUserRow = ({
                         aria-hidden='true'
                     />
                 </button>
-            </WithTooltip>
+            </WithTooltip> */}
         </div>
     );
 };
