@@ -148,7 +148,8 @@ const AdvanceTextEditor = ({
 
         // guest validation to see which point the messaging tour tip starts
         const isGuestUser = isCurrentUserGuestUser(state);
-        const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.CHANNELS : OnboardingTourSteps.CHANNELS;
+        const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE : OnboardingTourSteps.SEND_MESSAGE;
+        // isGuestUser ? OnboardingTourStepsForGuestUsers.CHANNELS : OnboardingTourSteps.CHANNELS;
 
         return enableTutorial && (tutorialStep === tourStep);
     });
