@@ -1,3 +1,18 @@
+## 2.10.0-rc.5 (2024-09-09)
+
+No changes.
+
+## 2.10.0-rc.4 (2024-09-09)
+
+### Fixed (2 changes)
+
+- [Fix: Condition in loadConfig](kchat/webapp@5763edbc980b1a8c331abf5ad5f343df8c656068) by  ([merge request](kchat/webapp!837))
+- [Fix: Force migration for mac desktop users](kchat/webapp@92b0bc8ec97cf9f25931476ce11ea26ea7228d2e) by  ([merge request](kchat/webapp!837))
+
+### Changed (1 change)
+
+- [do not show forced migration page based on version](kchat/webapp@f09a3832c5559b088019732a8fb8a8ab02ebf4d5) by @antonbuksa ([merge request](kchat/webapp!837))
+
 ## 2.10.0-rc.3 (2024-09-04)
 
 No changes.
@@ -5,6 +20,12 @@ No changes.
 ## 2.10.0-rc.2 (2024-09-04)
 
 No changes.
+
+## 2.9.14 (2024-09-09)
+
+### Removed (1 change)
+
+- [disable polls for now](kchat/webapp@1c6a39bc538f242901070d6acec784a190c94c70) by @antonbuksa
 
 ## 2.9.13-rc.4 (2024-09-03)
 
@@ -43,6 +64,17 @@ No changes.
 ### Chore (1 change)
 
 - [chore: add webp as image types](kchat/webapp@bf1d75e0f41bca06035762ac87a4ee4633078536) by @leopold.jacquot ([merge request](kchat/webapp!901))
+
+## 2.9.13-next.3 (2024-09-09)
+
+### Fixed (2 changes)
+
+- [Fix: Condition in loadConfig](kchat/webapp@5763edbc980b1a8c331abf5ad5f343df8c656068) by  ([merge request](kchat/webapp!837))
+- [Fix: Force migration for mac desktop users](kchat/webapp@92b0bc8ec97cf9f25931476ce11ea26ea7228d2e) by  ([merge request](kchat/webapp!837))
+
+### Changed (1 change)
+
+- [do not show forced migration page based on version](kchat/webapp@f09a3832c5559b088019732a8fb8a8ab02ebf4d5) by @antonbuksa ([merge request](kchat/webapp!837))
 
 ## 2.9.13-next.2 (2024-09-03)
 

@@ -9,7 +9,7 @@ import {FormattedMessage, defineMessages} from 'react-intl';
 import ChannelFilesIcon from 'components/widgets/icons/channel_files_icon';
 import IKFlagIcon from 'components/widgets/icons/ik_flag_icon';
 import PinIcon from 'components/widgets/icons/pin_icon';
-import {SearchSVG, ChannelSearchSVG, MentionsSVG, SavedMessagesSVG, PinSVG, ChannelFilesSVG, UserGroupsSVG, UserGroupMembersSVG} from 'components/common/svg_images_components';
+import {SearchSVG, ChannelSearchSVG, MentionsSVG, SavedMessagesSVG, PinSVG, ChannelFilesSVG, UserGroupsSVG, UserGroupMembersSVG, InfomaniakChannelSearchSvg} from 'components/common/svg_images_components';
 
 import {NoResultsVariant, NoResultsLayout} from './types';
 import './no_results_indicator.scss';
@@ -30,7 +30,7 @@ interface Props {
 
 const iconMap: {[key in NoResultsVariant]: React.ReactNode } = {
     [NoResultsVariant.Search]: <SearchSVG className='no-results__icon'/>,
-    [NoResultsVariant.ChannelSearch]: <ChannelSearchSVG className='no-results__icon'/>,
+    [NoResultsVariant.ChannelSearch]: <InfomaniakChannelSearchSvg className='no-results__icon'/>, // Utilisation du composant thématisé
     [NoResultsVariant.Files]: <ChannelFilesSVG className='no-results__icon'/>,
     [NoResultsVariant.Mentions]: <MentionsSVG className='no-results__icon'/>,
 
