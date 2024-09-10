@@ -772,6 +772,10 @@ export function isPostPriorityEnabled(state: GlobalState) {
     return getConfig(state).PostPriority === 'true';
 }
 
+export function isPollsEnabled(state: GlobalState) {
+    return getConfig(state).AllowPolls === 'true';
+}
+
 export function isPostAcknowledgementsEnabled(state: GlobalState) {
     return (
         isPostPriorityEnabled(state) &&
