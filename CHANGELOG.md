@@ -1,3 +1,14 @@
+## 2.10.0-rc.6 (2024-09-10)
+
+### Fixed (2 changes)
+
+- [fix dark mode modal sentence black on black](kchat/webapp@33092e5cf049754e2bf7327a2e72ab59402709df) by @cyril.gromoff ([merge request](kchat/webapp!913))
+- [new SVG in channel search, light and dark theme](kchat/webapp@27fa510c14c41a3f2dcd1c7806210398f8a63f7d) by @cyril.gromoff ([merge request](kchat/webapp!910))
+
+### Removed (1 change)
+
+- [disable polls for now](kchat/webapp@1c6a39bc538f242901070d6acec784a190c94c70) by @antonbuksa
+
 ## 2.10.0-rc.5 (2024-09-09)
 
 No changes.
