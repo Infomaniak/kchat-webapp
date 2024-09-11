@@ -147,13 +147,6 @@ const AtMentionSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<Ite
         />
     ) : null;
 
-    const sharedIcon = item.remote_id ? (
-        <SharedUserIndicator
-            className='shared-user-icon'
-            withTooltip={true}
-        />
-    ) : null;
-
     let countBadge;
     if (item.type === Constants.MENTION_GROUPS) {
         countBadge = (
@@ -188,7 +181,6 @@ const AtMentionSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<Ite
                 {description}
                 {youElement}
                 {customStatus}
-                {sharedIcon}
                 {isGuest(item.roles) && <GuestTag/>}
             </span>
             {countBadge}
