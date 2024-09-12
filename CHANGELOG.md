@@ -1,3 +1,14 @@
+## 2.10.0-rc.9 (2024-09-12)
+
+### Added (1 change)
+
+- [add feature flag for polls button](kchat/webapp@9f54be11929809430a70196acef959051f7da38e) by @antonbuksa ([merge request](kchat/webapp!914))
+
+### Fixed (2 changes)
+
+- [remove shared icon at mention suggestion](kchat/webapp@7e9af598fd3fd16894dcbcbd78ff80f949be38dd) by @cyril.gromoff ([merge request](kchat/webapp!918))
+- [fix: clicking outside works now on polls modal](kchat/webapp@f02c6640c546275628cddb69d577821220c4f291) by @cyril.gromoff ([merge request](kchat/webapp!916))
+
 ## 2.10.0-rc.8 (2024-09-10)
 
 ### Removed (1 change)
