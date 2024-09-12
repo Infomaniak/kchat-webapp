@@ -106,7 +106,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
 
     const handleClose = () => setOpen(false);
 
-    const handleSchedulePostMenu = (optionName: SchedulePostMenuOption['name']) => {
+    const handleSchedulePostMenu = (e, optionName: SchedulePostMenuOption['name']) => {
         setOpen(false);
         const timestamp = getCurrentMomentForTimezone(timezone);
         switch (optionName) {
@@ -128,7 +128,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
             }));
             return;
         }
-        handleSchedulePost(toUTCUnix(timestamp.toDate()));
+        handleSchedulePost(e, toUTCUnix(timestamp.toDate()));
     };
 
     return (

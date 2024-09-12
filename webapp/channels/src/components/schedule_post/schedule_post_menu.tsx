@@ -24,7 +24,7 @@ type Props = {
     timezone?: string;
     getAnchorEl: () => HTMLDivElement | null;
     onClose: () => void;
-    handleSchedulePostMenu: (optionName: SchedulePostMenuOption['name']) => void;
+    handleSchedulePostMenu: (e: React.KeyboardEvent<HTMLLIElement>, optionName: SchedulePostMenuOption['name']) => void;
     handleKeyDown: (e: React.KeyboardEvent) => void;
 };
 
@@ -105,7 +105,7 @@ const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleScheduleP
         <MenuItem
             key={'schedule-post-menu-' + option.name}
             labels={getMenuItemLabel(option)}
-            onClick={() => handleSchedulePostMenu(option.name)}
+            onClick={(e) => handleSchedulePostMenu(e, option.name)}
             tabIndex={0}
         />
     ));

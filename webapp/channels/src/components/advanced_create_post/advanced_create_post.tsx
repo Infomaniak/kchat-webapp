@@ -24,6 +24,7 @@ const AdvancedCreatePost = () => {
             location={Locations.CENTER}
             postId={''}
             channelId={currentChannelId}
+            isSchedulable={true}
         />
     );
 };

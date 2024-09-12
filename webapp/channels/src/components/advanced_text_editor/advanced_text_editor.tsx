@@ -90,7 +90,6 @@ type Props = {
     postId: string;
     voiceMessageClientId: string;
     isSchedulable?: boolean;
-    handleSchedulePost: (scheduleUTCTimestamp: number) => void;
     setDraftAsPostType: (channelOrRootId: Channel['id'] | Post['id'], draft: PostDraft, postType?: PostDraft['postType']) => void;
     handleVoiceMessageUploadStart: (clientId: string, channelOrRootId: Channel['id'] | Post['id']) => void;
     caretPosition: number;
@@ -290,7 +289,6 @@ const AdvanceTextEditor = ({
         toggleEmojiPicker,
     );
 
-    // const [setDraftAsPostType, isSchedulable, handleSchedulePost] = useScheduleDraft(draft, channelId, postId);
     const [voiceMessageClientId, handleVoiceMessageUploadStart, voiceMessageJSX] = useVoiceMessage(
         draft,
         channelId,
@@ -494,6 +492,7 @@ const AdvanceTextEditor = ({
     const disableSendButton = Boolean(readOnlyChannel || (!draft.message.trim().length && !draft.fileInfos.length)) || !isValidPersistentNotifications;
     const sendButton = readOnlyChannel ? null : (
         <SendButton
+            draft={draft}
             disabled={disableSendButton}
             isSchedulable={isSchedulable}
             handleSubmit={handleSubmit}

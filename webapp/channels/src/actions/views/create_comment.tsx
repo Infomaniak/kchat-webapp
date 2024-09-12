@@ -244,11 +244,8 @@ export function onSubmit(draft: PostDraft, options: {ignoreSlash?: boolean}, isS
             const updatedDraft = {
                 ...draft,
                 timestamp: scheduleUTCTimestamp,
-                channelId,
                 remote: false,
             };
-            console.log('[create_comment ~ draft] doSubmit.scheduleDraft id: ', updatedDraft.id);
-            console.log('[create_comment ~ draft] doSubmit.scheduleDraft.timestamp: ', updatedDraft.timestamp);
             dispatch(upsertScheduleDraft(StoragePrefixes.DRAFT + channelId, updatedDraft));
         } else if (message.indexOf('/') === 0 && !options.ignoreSlash) {
             await dispatch(submitCommand(channelId, rootId, draft));

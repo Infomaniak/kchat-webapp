@@ -115,7 +115,7 @@ const useSubmit = (
         }));
     }, [dispatch]);
 
-    const doSubmit = useCallback(async (e?: React.FormEvent, submittingDraft = draft) => {
+    const doSubmit = useCallback(async (e?: React.FormEvent, submittingDraft = draft, isSchedule = false, scheduleUTCTimestamp?: number) => {
         e?.preventDefault();
 
         if (submittingDraft.uploadsInProgress.length > 0) {
@@ -156,7 +156,7 @@ const useSubmit = (
         const options = {ignoreSlash};
 
         try {
-            await dispatch(onSubmit(submittingDraft, options));
+            await dispatch(onSubmit(submittingDraft, options, isSchedule, scheduleUTCTimestamp));
 
             setPostError(null);
             setServerError(null);
@@ -203,7 +203,7 @@ const useSubmit = (
         }));
     }, [doSubmit, dispatch]);
 
-    const handleSubmit = useCallback(async (e: React.FormEvent, submittingDraft = draft) => {
+    const handleSubmit = useCallback(async (e: React.FormEvent, submittingDraft = draft, isSchedule = false, scheduleUTCTimestamp?: number) => {
         if (!channel) {
             return;
         }
@@ -299,7 +299,7 @@ const useSubmit = (
             return;
         }
 
-        await doSubmit(e, submittingDraft);
+        await doSubmit(e, submittingDraft, isSchedule, scheduleUTCTimestamp);
     }, [
         doSubmit,
         draft,

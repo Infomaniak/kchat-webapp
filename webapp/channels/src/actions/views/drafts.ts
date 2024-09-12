@@ -14,9 +14,9 @@ import {Client4} from 'mattermost-redux/client';
 import Preferences from 'mattermost-redux/constants/preferences';
 import {syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
+import type {ActionFunc, ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
 
-import {setGlobalItem} from 'actions/storage';
+import {removeGlobalItem, setGlobalItem} from 'actions/storage';
 import {makeGetDrafts} from 'selectors/drafts';
 import {getGlobalItem} from 'selectors/storage';
 
@@ -186,8 +186,8 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
     };
 }
 
-export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''): ThunkActionFunc<unknown> {
+    return async (dispatch, getState) => {
         const state = getState() as GlobalState;
         if (!syncedDraftsAreAllowedAndEnabled(state)) {
             return {error: new Error('Drafts are not allowed on the current server')};
