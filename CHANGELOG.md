@@ -53,6 +53,13 @@ No changes.
 
 No changes.
 
+## 2.9.17-next.1 (2024-09-12)
+
+### Fixed (2 changes)
+
+- [remove shared icon at mention suggestion](kchat/webapp@7e9af598fd3fd16894dcbcbd78ff80f949be38dd) by @cyril.gromoff ([merge request](kchat/webapp!918))
+- [fix: clicking outside works now on polls modal](kchat/webapp@f02c6640c546275628cddb69d577821220c4f291) by @cyril.gromoff ([merge request](kchat/webapp!916))
+
 ## 2.9.16-next.1 (2024-09-10)
 
 ### Added (1 change)
