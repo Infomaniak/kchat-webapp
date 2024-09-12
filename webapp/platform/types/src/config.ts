@@ -202,6 +202,7 @@ export type ClientConfig = {
     MaxVoiceMessagesDuration: string;
     EnableComplianceExport: string;
     PostPriority: string;
+    AllowPolls: string;
     PostAcknowledgements: string;
     AllowPersistentNotifications: string;
     PersistentNotificationMaxRecipients: string;
