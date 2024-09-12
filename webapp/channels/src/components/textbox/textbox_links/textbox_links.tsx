@@ -116,7 +116,7 @@ function TextboxLinks({
         <div className={'help__text ' + helpTextClass}>
             {helpText}
             {previewLink}
-            <Link
+            {/* <Link
                 target='_blank'
                 rel='noopener noreferrer'
                 to={`/help/messaging?locale=${currentLocale}`}
@@ -126,7 +126,7 @@ function TextboxLinks({
                     id='textbox.help'
                     defaultMessage='Help'
                 />
-            </Link>
+            </Link> */}
         </div>
     );
 }

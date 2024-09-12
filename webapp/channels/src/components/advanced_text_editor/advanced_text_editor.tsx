@@ -74,6 +74,7 @@ import useVoiceMessage from './use_voice_message';
 
 import './advanced_text_editor.scss';
 import {Post} from '@mattermost/types/posts';
+import Poll from 'components/post_poll';
 
 function isDraftEmpty(draft: PostDraft) {
     return draft.message === '' && draft.fileInfos.length === 0 && draft.uploadsInProgress.length === 0;
@@ -578,6 +579,12 @@ const AdvanceTextEditor = ({
     const additionalControls = useMemo(() =>
         [
             priorityAdditionalControl,
+            ...(location !== Locations.RHS_COMMENT ? [
+                <Poll
+                    key='poll'
+                    disabled={showPreview}
+                />
+            ] : []),
             ...(pluginItems || []),
         ].filter(Boolean),
     [pluginItems, priorityAdditionalControl]);
