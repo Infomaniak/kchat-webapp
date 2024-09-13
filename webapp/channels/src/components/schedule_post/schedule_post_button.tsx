@@ -137,7 +137,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
                 overlay={tooltip}
                 delayShow={Constants.OVERLAY_TIME_DELAY}
                 placement='top'
-                trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
+                trigger={['hover']}
             >
                 <StyledSchedulePostButton
                     disableRipple={true}
