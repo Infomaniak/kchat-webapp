@@ -469,7 +469,7 @@ exports[`SystemUserDetail should not show manage user settings button when user 
                 defaultMessage="Authentication Method"
                 id="admin.userManagement.userDetail.authenticationMethod"
               />
-              <Memo(ShieldOutlineIcon) />
+              <ShieldOutlineIcon />
               <span>
                 
               </span>
@@ -543,7 +543,7 @@ exports[`SystemUserDetail should not show manage user settings button when user 
     className="admin-console-save"
   >
     <SaveButton
-      btnClass=""
+      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"
@@ -675,7 +675,7 @@ exports[`SystemUserDetail should show manage user settings button as activated 1
                 defaultMessage="Authentication Method"
                 id="admin.userManagement.userDetail.authenticationMethod"
               />
-              <Memo(ShieldOutlineIcon) />
+              <ShieldOutlineIcon />
               <span>
                 
               </span>
@@ -758,7 +758,7 @@ exports[`SystemUserDetail should show manage user settings button as activated 1
     className="admin-console-save"
   >
     <SaveButton
-      btnClass=""
+      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"
@@ -890,7 +890,7 @@ exports[`SystemUserDetail should show manage user settings button as disabled wh
                 defaultMessage="Authentication Method"
                 id="admin.userManagement.userDetail.authenticationMethod"
               />
-              <Memo(ShieldOutlineIcon) />
+              <ShieldOutlineIcon />
               <span>
                 
               </span>
@@ -964,7 +964,7 @@ exports[`SystemUserDetail should show manage user settings button as disabled wh
     className="admin-console-save"
   >
     <SaveButton
-      btnClass=""
+      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"

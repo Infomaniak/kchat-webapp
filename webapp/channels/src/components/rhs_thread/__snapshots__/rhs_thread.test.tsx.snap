@@ -33,7 +33,7 @@ exports[`components/RhsThread should match snapshot 1`] = `
   <Connect(ThreadViewer)
     isThreadView={false}
     rootPostId="id"
-    useRelativeTimestamp={true}
+    useRelativeTimestamp={false}
   />
 </div>
 `;

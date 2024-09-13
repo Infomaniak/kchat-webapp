@@ -55,7 +55,7 @@ exports[`components/global/product_switcher should have an active button state w
         onClick={[Function]}
       />
       <Memo(MenuGroup)>
-        <MenuStartTrial
+        <Component
           id="startTrial"
         />
       </Memo(MenuGroup)>
@@ -119,7 +119,7 @@ exports[`components/global/product_switcher should match snapshot 1`] = `
         onClick={[Function]}
       />
       <Memo(MenuGroup)>
-        <MenuStartTrial
+        <Component
           id="startTrial"
         />
       </Memo(MenuGroup)>
@@ -183,7 +183,7 @@ exports[`components/global/product_switcher should match snapshot with product s
         onClick={[Function]}
       />
       <Memo(MenuGroup)>
-        <MenuStartTrial
+        <Component
           id="startTrial"
         />
       </Memo(MenuGroup)>
@@ -247,7 +247,7 @@ exports[`components/global/product_switcher should match snapshot without licens
         onClick={[Function]}
       />
       <Memo(MenuGroup)>
-        <MenuStartTrial
+        <Component
           id="startTrial"
         />
       </Memo(MenuGroup)>
@@ -311,7 +311,7 @@ exports[`components/global/product_switcher should render once when there are no
         onClick={[Function]}
       />
       <Memo(MenuGroup)>
-        <MenuStartTrial
+        <Component
           id="startTrial"
         />
       </Memo(MenuGroup)>
@@ -375,7 +375,7 @@ exports[`components/global/product_switcher should render the correct amount of 
         onClick={[Function]}
       />
       <Memo(MenuGroup)>
-        <MenuStartTrial
+        <Component
           id="startTrial"
         />
       </Memo(MenuGroup)>

@@ -623,11 +623,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       dialogType={
         Object {
           "$$typeof": Symbol(react.memo),
-          "WrappedComponent": Object {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          },
+          "WrappedComponent": [Function],
           "compare": null,
           "type": [Function],
         }

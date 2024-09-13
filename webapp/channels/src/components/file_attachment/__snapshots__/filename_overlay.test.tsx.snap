@@ -37,6 +37,20 @@ exports[`components/file_attachment/FilenameOverlay should match snapshot, stand
     placement="top"
     title="Download"
   >
+    <WithTooltip
+      id="file-name__tooltip"
+      placement="top"
+      title="Save file to kDrive"
+    >
+      <span
+        className="file-kdrive__icon--wrapper"
+      >
+        <KDriveIcon
+          className="icon file-kdrive__icon"
+          onClick={[Function]}
+        />
+      </span>
+    </WithTooltip>
     <ForwardRef
       aria-label="download"
       download="test_filename"
@@ -58,6 +72,20 @@ exports[`components/file_attachment/FilenameOverlay should match snapshot, with 
     placement="top"
     title="Download"
   >
+    <WithTooltip
+      id="file-name__tooltip"
+      placement="top"
+      title="Save file to kDrive"
+    >
+      <span
+        className="file-kdrive__icon--wrapper"
+      >
+        <KDriveIcon
+          className="icon file-kdrive__icon"
+          onClick={[Function]}
+        />
+      </span>
+    </WithTooltip>
     <ForwardRef
       aria-label="download"
       download="test_filename"

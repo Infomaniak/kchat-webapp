@@ -51,25 +51,9 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
           }
         }
       >
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              id="file-name__tooltip"
-            >
-              Save file to kDrive
-            </Tooltip>
-          }
+        <WithTooltip
           placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
-          }
+          title="Save file to kDrive"
         >
           <a
             className="style--none size-aware-image__download--kdrive"
@@ -83,7 +67,7 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
               }
             />
           </a>
-        </OverlayTrigger>
+        </WithTooltip>
       </span>
       <span
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
@@ -191,25 +175,9 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
           }
         }
       >
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              id="file-name__tooltip"
-            >
-              Save file to kDrive
-            </Tooltip>
-          }
+        <WithTooltip
           placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
-          }
+          title="Save file to kDrive"
         >
           <a
             className="style--none size-aware-image__download--kdrive"
@@ -223,7 +191,7 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
               }
             />
           </a>
-        </OverlayTrigger>
+        </WithTooltip>
       </span>
       <span
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
@@ -344,25 +312,9 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
           }
         }
       >
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              id="file-name__tooltip"
-            >
-              Save file to kDrive
-            </Tooltip>
-          }
+        <WithTooltip
           placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
-          }
+          title="Save file to kDrive"
         >
           <a
             className="style--none size-aware-image__download--kdrive"
@@ -376,7 +328,7 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
               }
             />
           </a>
-        </OverlayTrigger>
+        </WithTooltip>
       </span>
       <span
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"

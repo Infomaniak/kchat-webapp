@@ -24,7 +24,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
     }
     show={true}
   />
-  <Memo(ChannelMoveToSubMenuOld)
+  <Memo(ChannelMoveToSubMenu)
     channel={
       Object {
         "create_at": 0,
@@ -627,6 +627,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
           Object {
             "channelDisplayName": "name",
             "channelId": "test-channel-id",
+            "channelType": "O",
           }
         }
         dialogType={
@@ -641,6 +642,37 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         modalId="convert_channel"
         show={true}
         text="Convert to Private Channel"
+      />
+    </Memo(ChannelPermissionGate)>
+    <Memo(ChannelPermissionGate)
+      channelId="test-channel-id"
+      permissions={
+        Array [
+          "convert_public_channel_to_private",
+        ]
+      }
+      teamId="team_id"
+    >
+      <MenuItemToggleModalRedux
+        dialogProps={
+          Object {
+            "channelDisplayName": "name",
+            "channelId": "test-channel-id",
+            "channelType": "P",
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
+        id="channelConvertToPublic"
+        modalId="convert_channel"
+        show={false}
+        text="Convert to Public Channel"
       />
     </Memo(ChannelPermissionGate)>
     <Connect(Component)
@@ -777,7 +809,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
       }
       id="channelCloseMessage"
     />
-    <Connect(Component)
+    <Connect(CloseChannel)
       isArchived={false}
     />
   </Memo(MenuGroup)>
@@ -856,7 +888,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
     }
     show={true}
   />
-  <Memo(ChannelMoveToSubMenuOld)
+  <Memo(ChannelMoveToSubMenu)
     channel={
       Object {
         "create_at": 0,
@@ -1459,6 +1491,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
           Object {
             "channelDisplayName": "name",
             "channelId": "test-channel-id",
+            "channelType": "O",
           }
         }
         dialogType={
@@ -1473,6 +1506,37 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         modalId="convert_channel"
         show={true}
         text="Convert to Private Channel"
+      />
+    </Memo(ChannelPermissionGate)>
+    <Memo(ChannelPermissionGate)
+      channelId="test-channel-id"
+      permissions={
+        Array [
+          "convert_public_channel_to_private",
+        ]
+      }
+      teamId="team_id"
+    >
+      <MenuItemToggleModalRedux
+        dialogProps={
+          Object {
+            "channelDisplayName": "name",
+            "channelId": "test-channel-id",
+            "channelType": "P",
+          }
+        }
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
+        id="channelConvertToPublic"
+        modalId="convert_channel"
+        show={false}
+        text="Convert to Public Channel"
       />
     </Memo(ChannelPermissionGate)>
     <Connect(Component)
@@ -1609,7 +1673,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
       }
       id="channelCloseMessage"
     />
-    <Connect(Component)
+    <Connect(CloseChannel)
       isArchived={false}
     />
   </Memo(MenuGroup)>

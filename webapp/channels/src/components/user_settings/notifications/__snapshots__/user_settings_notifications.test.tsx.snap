@@ -54,7 +54,7 @@ Object {
             >
               <a
                 class="btn btn-link"
-                href="https://mattermost.com/pl/about-notifications?utm_source=mattermost&utm_medium=in-product&utm_content=user_settings_notifications&uid=&sid="
+                href="https://mattermost.com/pl/about-notifications"
                 location="user_settings_notifications"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -313,7 +313,7 @@ Object {
           >
             <a
               class="btn btn-link"
-              href="https://mattermost.com/pl/about-notifications?utm_source=mattermost&utm_medium=in-product&utm_content=user_settings_notifications&uid=&sid="
+              href="https://mattermost.com/pl/about-notifications"
               location="user_settings_notifications"
               rel="noopener noreferrer"
               target="_blank"
@@ -631,7 +631,7 @@ Object {
             >
               <a
                 class="btn btn-link"
-                href="https://mattermost.com/pl/about-notifications?utm_source=mattermost&utm_medium=in-product&utm_content=user_settings_notifications&uid=&sid="
+                href="https://mattermost.com/pl/about-notifications"
                 location="user_settings_notifications"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -813,21 +813,6 @@ Object {
               >
                 Keywords that get highlighted (without notifications)
               </h4>
-              <span
-                class="RestrictedIndicator__icon-tooltip-container"
-              >
-                <span>
-                  <button
-                    class="style--none RestrictedIndicator__button"
-                    id="mattermost_feature_highlight_without_notification-restricted-indicator"
-                  >
-                    <i
-                      class="RestrictedIndicator__icon-tooltip icon icon-key-variant"
-                    />
-                    Professional
-                  </button>
-                </span>
-              </span>
             </div>
             <div
               class="section-min__describe isDisabled"
@@ -893,7 +878,7 @@ Object {
           >
             <a
               class="btn btn-link"
-              href="https://mattermost.com/pl/about-notifications?utm_source=mattermost&utm_medium=in-product&utm_content=user_settings_notifications&uid=&sid="
+              href="https://mattermost.com/pl/about-notifications"
               location="user_settings_notifications"
               rel="noopener noreferrer"
               target="_blank"
@@ -1075,21 +1060,6 @@ Object {
             >
               Keywords that get highlighted (without notifications)
             </h4>
-            <span
-              class="RestrictedIndicator__icon-tooltip-container"
-            >
-              <span>
-                <button
-                  class="style--none RestrictedIndicator__button"
-                  id="mattermost_feature_highlight_without_notification-restricted-indicator"
-                >
-                  <i
-                    class="RestrictedIndicator__icon-tooltip icon icon-key-variant"
-                  />
-                  Professional
-                </button>
-              </span>
-            </span>
           </div>
           <div
             class="section-min__describe isDisabled"
@@ -1214,7 +1184,7 @@ Object {
             >
               <a
                 class="btn btn-link"
-                href="https://mattermost.com/pl/about-notifications?utm_source=mattermost&utm_medium=in-product&utm_content=user_settings_notifications&uid=&sid="
+                href="https://mattermost.com/pl/about-notifications"
                 location="user_settings_notifications"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -1438,7 +1408,7 @@ Object {
           >
             <a
               class="btn btn-link"
-              href="https://mattermost.com/pl/about-notifications?utm_source=mattermost&utm_medium=in-product&utm_content=user_settings_notifications&uid=&sid="
+              href="https://mattermost.com/pl/about-notifications"
               location="user_settings_notifications"
               rel="noopener noreferrer"
               target="_blank"

@@ -15,9 +15,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
       <Connect(CollapseLhsButton) />
       <div
         className="navbar-brand"
-      >
-        <Connect(Component) />
-      </div>
+      />
       <div
         className="spacer"
       />
@@ -66,6 +64,8 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <withRouter(Connect(CollapseKsuiteSidepanel)) />
+      <FlagNext />
     </div>
   </div>
 </nav>
@@ -86,9 +86,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
       <Connect(CollapseLhsButton) />
       <div
         className="navbar-brand"
-      >
-        <Connect(Component) />
-      </div>
+      />
       <div
         className="spacer"
       />
@@ -137,6 +135,8 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <withRouter(Connect(CollapseKsuiteSidepanel)) />
+      <FlagNext />
     </div>
   </div>
 </nav>
@@ -157,9 +157,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
       <Connect(CollapseLhsButton) />
       <div
         className="navbar-brand"
-      >
-        <Connect(Component) />
-      </div>
+      />
       <div
         className="spacer"
       />
@@ -208,6 +206,8 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <withRouter(Connect(CollapseKsuiteSidepanel)) />
+      <FlagNext />
     </div>
   </div>
 </nav>
@@ -228,9 +228,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
       <Connect(CollapseLhsButton) />
       <div
         className="navbar-brand"
-      >
-        <Connect(Component) />
-      </div>
+      />
       <div
         className="spacer"
       />
@@ -279,6 +277,8 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <withRouter(Connect(CollapseKsuiteSidepanel)) />
+      <FlagNext />
     </div>
   </div>
 </nav>

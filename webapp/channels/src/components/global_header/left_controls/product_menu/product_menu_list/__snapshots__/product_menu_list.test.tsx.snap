@@ -5,12 +5,6 @@ exports[`components/global/product_switcher_menu should match snapshot with id 1
   <div
     onClick={[Function]}
   >
-    <MenuCloudTrial
-      id="menuCloudTrial"
-    />
-    <MenuItemCloudLimit
-      id="menuItemCloudLimit"
-    />
     <Memo(SystemPermissionGate)
       permissions={
         Array [
@@ -73,8 +67,9 @@ exports[`components/global/product_switcher_menu should match snapshot with id 1
     >
       <MenuItemLink
         icon={
-          <ApplicationCogIcon
-            size={18}
+          <Icon
+            glyph="application-cog"
+            size={16}
           />
         }
         id="systemConsole"
@@ -89,8 +84,9 @@ exports[`components/global/product_switcher_menu should match snapshot with id 1
     </Memo(SystemPermissionGate)>
     <MenuItemLink
       icon={
-        <WebhookIncomingIcon
-          size={18}
+        <Icon
+          glyph="webhook-incoming"
+          size={16}
         />
       }
       id="integrations"
@@ -117,14 +113,14 @@ exports[`components/global/product_switcher_menu should match snapshot with id 1
       }
       disabled={false}
       icon={
-        <AccountMultipleOutlineIcon
-          size={18}
+        <Icon
+          glyph="account-multiple-outline"
+          size={16}
         />
       }
       id="userGroups"
       modalId="user_groups"
       show={false}
-      sibling={false}
       text="User Groups"
     />
     <Memo(TeamPermissionGate)
@@ -136,27 +132,31 @@ exports[`components/global/product_switcher_menu should match snapshot with id 1
       teamId=""
     >
       <MenuItemToggleModalRedux
-        dialogProps={
+        dialogType={
           Object {
-            "openedFrom": "product_menu",
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
           }
         }
-        dialogType={[Function]}
         icon={
-          <ViewGridPlusOutlineIcon
-            size={18}
+          <Icon
+            glyph="apps"
+            size={16}
           />
         }
         id="marketplaceModal"
         modalId="plugin_marketplace"
         show={false}
-        text="App Marketplace"
+        text="Marketplace"
       />
     </Memo(TeamPermissionGate)>
     <MenuItemExternalLink
       icon={
-        <DownloadOutlineIcon
-          size={18}
+        <Icon
+          glyph="download-outline"
+          size={16}
         />
       }
       id="nativeAppLink"
@@ -174,8 +174,9 @@ exports[`components/global/product_switcher_menu should match snapshot with id 1
         }
       }
       icon={
-        <InformationOutlineIcon
-          size={18}
+        <Icon
+          glyph="information-outline"
+          size={16}
         />
       }
       id="about"
@@ -192,12 +193,6 @@ exports[`components/global/product_switcher_menu should match snapshot with most
   <div
     onClick={[Function]}
   >
-    <MenuCloudTrial
-      id="menuCloudTrial"
-    />
-    <MenuItemCloudLimit
-      id="menuItemCloudLimit"
-    />
     <Memo(SystemPermissionGate)
       permissions={
         Array [
@@ -260,8 +255,9 @@ exports[`components/global/product_switcher_menu should match snapshot with most
     >
       <MenuItemLink
         icon={
-          <ApplicationCogIcon
-            size={18}
+          <Icon
+            glyph="application-cog"
+            size={16}
           />
         }
         id="systemConsole"
@@ -276,8 +272,9 @@ exports[`components/global/product_switcher_menu should match snapshot with most
     </Memo(SystemPermissionGate)>
     <MenuItemLink
       icon={
-        <WebhookIncomingIcon
-          size={18}
+        <Icon
+          glyph="webhook-incoming"
+          size={16}
         />
       }
       id="integrations"
@@ -304,14 +301,14 @@ exports[`components/global/product_switcher_menu should match snapshot with most
       }
       disabled={false}
       icon={
-        <AccountMultipleOutlineIcon
-          size={18}
+        <Icon
+          glyph="account-multiple-outline"
+          size={16}
         />
       }
       id="userGroups"
       modalId="user_groups"
       show={false}
-      sibling={false}
       text="User Groups"
     />
     <Memo(TeamPermissionGate)
@@ -323,27 +320,31 @@ exports[`components/global/product_switcher_menu should match snapshot with most
       teamId=""
     >
       <MenuItemToggleModalRedux
-        dialogProps={
+        dialogType={
           Object {
-            "openedFrom": "product_menu",
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
           }
         }
-        dialogType={[Function]}
         icon={
-          <ViewGridPlusOutlineIcon
-            size={18}
+          <Icon
+            glyph="apps"
+            size={16}
           />
         }
         id="marketplaceModal"
         modalId="plugin_marketplace"
         show={true}
-        text="App Marketplace"
+        text="Marketplace"
       />
     </Memo(TeamPermissionGate)>
     <MenuItemExternalLink
       icon={
-        <DownloadOutlineIcon
-          size={18}
+        <Icon
+          glyph="download-outline"
+          size={16}
         />
       }
       id="nativeAppLink"
@@ -361,8 +362,9 @@ exports[`components/global/product_switcher_menu should match snapshot with most
         }
       }
       icon={
-        <InformationOutlineIcon
-          size={18}
+        <Icon
+          glyph="information-outline"
+          size={16}
         />
       }
       id="about"
@@ -394,14 +396,14 @@ exports[`components/global/product_switcher_menu should match userGroups snapsho
   }
   disabled={false}
   icon={
-    <AccountMultipleOutlineIcon
-      size={18}
+    <Icon
+      glyph="account-multiple-outline"
+      size={16}
     />
   }
   id="userGroups"
   modalId="user_groups"
   show={true}
-  sibling={false}
   text="User Groups"
 />
 `;
@@ -426,27 +428,14 @@ exports[`components/global/product_switcher_menu should match userGroups snapsho
   }
   disabled={true}
   icon={
-    <AccountMultipleOutlineIcon
-      size={18}
+    <Icon
+      glyph="account-multiple-outline"
+      size={16}
     />
   }
   id="userGroups"
   modalId="user_groups"
   show={true}
-  sibling={
-    <RestrictedIndicator
-      blocked={true}
-      feature="mattermost.feature.custom_user_groups"
-      messageAdminPostTrial="User groups are a way to organize users and apply actions to all users within that group. Upgrade to the Professional plan to create unlimited user groups."
-      messageAdminPreTrial="Create unlimited user groups with one of our paid plans. Get the full experience of Enterprise when you start a free, 30 day trial."
-      messageEndUser="User groups are a way to organize users and apply actions to all users within that group."
-      minimumPlanRequiredForFeature="professional"
-      titleAdminPostTrial="Upgrade to create unlimited user groups"
-      titleAdminPreTrial="Try unlimited user groups with a free trial"
-      titleEndUser="User groups available in paid plans"
-      tooltipMessage="During your trial you are able to create user groups. These user groups will be archived after your trial."
-    />
-  }
   text="User Groups"
 />
 `;
@@ -471,27 +460,14 @@ exports[`components/global/product_switcher_menu should match userGroups snapsho
   }
   disabled={false}
   icon={
-    <AccountMultipleOutlineIcon
-      size={18}
+    <Icon
+      glyph="account-multiple-outline"
+      size={16}
     />
   }
   id="userGroups"
   modalId="user_groups"
   show={true}
-  sibling={
-    <RestrictedIndicator
-      blocked={false}
-      feature="mattermost.feature.custom_user_groups"
-      messageAdminPostTrial="User groups are a way to organize users and apply actions to all users within that group. Upgrade to the Professional plan to create unlimited user groups."
-      messageAdminPreTrial="Create unlimited user groups with one of our paid plans. Get the full experience of Enterprise when you start a free, 30 day trial."
-      messageEndUser="User groups are a way to organize users and apply actions to all users within that group."
-      minimumPlanRequiredForFeature="professional"
-      titleAdminPostTrial="Upgrade to create unlimited user groups"
-      titleAdminPreTrial="Try unlimited user groups with a free trial"
-      titleEndUser="User groups available in paid plans"
-      tooltipMessage="During your trial you are able to create user groups. These user groups will be archived after your trial."
-    />
-  }
   text="User Groups"
 />
 `;
@@ -505,12 +481,6 @@ exports[`components/global/product_switcher_menu should show integrations should
   <div
     onClick={[Function]}
   >
-    <MenuCloudTrial
-      id="menuCloudTrial"
-    />
-    <MenuItemCloudLimit
-      id="menuItemCloudLimit"
-    />
     <Memo(SystemPermissionGate)
       permissions={
         Array [
@@ -573,8 +543,9 @@ exports[`components/global/product_switcher_menu should show integrations should
     >
       <MenuItemLink
         icon={
-          <ApplicationCogIcon
-            size={18}
+          <Icon
+            glyph="application-cog"
+            size={16}
           />
         }
         id="systemConsole"
@@ -589,8 +560,9 @@ exports[`components/global/product_switcher_menu should show integrations should
     </Memo(SystemPermissionGate)>
     <MenuItemLink
       icon={
-        <WebhookIncomingIcon
-          size={18}
+        <Icon
+          glyph="webhook-incoming"
+          size={16}
         />
       }
       id="integrations"
@@ -617,14 +589,14 @@ exports[`components/global/product_switcher_menu should show integrations should
       }
       disabled={false}
       icon={
-        <AccountMultipleOutlineIcon
-          size={18}
+        <Icon
+          glyph="account-multiple-outline"
+          size={16}
         />
       }
       id="userGroups"
       modalId="user_groups"
       show={false}
-      sibling={false}
       text="User Groups"
     />
     <Memo(TeamPermissionGate)
@@ -636,27 +608,31 @@ exports[`components/global/product_switcher_menu should show integrations should
       teamId=""
     >
       <MenuItemToggleModalRedux
-        dialogProps={
+        dialogType={
           Object {
-            "openedFrom": "product_menu",
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
           }
         }
-        dialogType={[Function]}
         icon={
-          <ViewGridPlusOutlineIcon
-            size={18}
+          <Icon
+            glyph="apps"
+            size={16}
           />
         }
         id="marketplaceModal"
         modalId="plugin_marketplace"
         show={false}
-        text="App Marketplace"
+        text="Marketplace"
       />
     </Memo(TeamPermissionGate)>
     <MenuItemExternalLink
       icon={
-        <DownloadOutlineIcon
-          size={18}
+        <Icon
+          glyph="download-outline"
+          size={16}
         />
       }
       id="nativeAppLink"
@@ -674,8 +650,9 @@ exports[`components/global/product_switcher_menu should show integrations should
         }
       }
       icon={
-        <InformationOutlineIcon
-          size={18}
+        <Icon
+          glyph="information-outline"
+          size={16}
         />
       }
       id="about"

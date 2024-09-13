@@ -16,8 +16,11 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
   <PanelBody
     channelId="channel_id"
     displayName="display_name"
+    draft={Object {}}
     fileInfos={Array []}
+    isEditing={false}
     message="message"
+    setIsEditing={[Function]}
     status="status"
     uploadsInProgress={Array []}
     userId="user_id"
@@ -213,8 +216,11 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
   <PanelBody
     channelId="channel_id"
     displayName="display_name"
+    draft={Object {}}
     fileInfos={Array []}
+    isEditing={false}
     message="message"
+    setIsEditing={[Function]}
     status="status"
     uploadsInProgress={Array []}
     userId="user_id"
@@ -410,7 +416,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
   <PanelBody
     channelId="channel_id"
     displayName="display_name"
+    draft={Object {}}
     fileInfos={Array []}
+    isEditing={false}
     message="message"
     priority={
       Object {
@@ -418,6 +426,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
         "requested_ack": false,
       }
     }
+    setIsEditing={[Function]}
     status="status"
     uploadsInProgress={Array []}
     userId="user_id"
@@ -549,7 +558,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                     <Memo(Tag)
                       icon="alert-circle-outline"
                       size="xs"
-                      text="Important"
+                      text="IMPORTANT"
                       uppercase={true}
                       variant="info"
                     >
@@ -559,7 +568,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                         uppercase={true}
                       >
                         <div
-                          className="TagWrapper-keYggn hpsCJu Tag Tag--info Tag--xs"
+                          className="TagWrapper-keYggn iVAsXk Tag Tag--info Tag--xs"
                         >
                           <AlertCircleOutlineIcon
                             size={10}
@@ -581,7 +590,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                             <span
                               className="TagText-bWgUzx kzWPbz"
                             >
-                              Important
+                              IMPORTANT
                             </span>
                           </TagText>
                         </div>
@@ -675,7 +684,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
   <PanelBody
     channelId="channel_id"
     displayName="display_name"
+    draft={Object {}}
     fileInfos={Array []}
+    isEditing={false}
     message="message"
     priority={
       Object {
@@ -683,6 +694,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
         "requested_ack": true,
       }
     }
+    setIsEditing={[Function]}
     status="status"
     uploadsInProgress={Array []}
     userId="user_id"
