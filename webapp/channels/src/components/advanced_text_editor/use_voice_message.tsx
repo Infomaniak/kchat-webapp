@@ -14,7 +14,7 @@ const useVoiceMessage = (
     channelId: string,
     postId: string,
     readOnlyChannel: boolean,
-    location,
+    location: string,
     handleDraftChange: (draft: PostDraft, options?: {instant?: boolean; show?: boolean}) => void,
     serverError: ServerError,
     uploadsProgressPercent: {[clientID: string]: FilePreviewInfo},
@@ -22,49 +22,29 @@ const useVoiceMessage = (
     handleFileUploadComplete: () => void,
     handleUploadError: () => void,
     removePreview: () => void,
+    emitTypingEvent: (eventType?: string) => void,
 ) => {
     const [voiceMessageClientId, setVoiceMessageClientId] = useState('')
     const voiceMessageState = getVoiceMessageStateFromDraft(draft);
-
-    const handleSubmit = () => {
-        const key = rootId || channelId;
-        const draftToUpdate = draft;
-        if (!draftToUpdate) {
-            return;
-        }
-
-        const newFileInfos = sortFileInfos([...draftToUpdate.fileInfos || [], ...fileInfos], locale);
-
-        // const clientIdsSet = new Set(clientIds);
-        // const uploadsInProgress = (draftToUpdate.uploadsInProgress || []).filter((v) => !clientIdsSet.has(v));
-
-        const modifiedDraft = {
-            ...draftToUpdate,
-            fileInfos: newFileInfos,
-            // uploadsInProgress,
-        };
-
-        handleDraftChange(modifiedDraft, {instant: true});
-    }
+    console.log('use_voice_message voiceMessageState', voiceMessageState)
 
     const handleVoiceMessageUploadStart = (clientId: string, channelId: Channel['id']) => {
         const uploadsInProgress = [...draft.uploadsInProgress, clientId];
-        const draft = {
+        const newDraft = {
             ...draft,
             uploadsInProgress,
-            postType: Constants.PostTypes.VOICE,
+            postType: Constants.PostTypes.VOICE as PostDraft['postType'],
         };
 
-        handleDraftChange(draft);
+        handleDraftChange(newDraft);
         setVoiceMessageClientId(clientId);
     };
 
     const setDraftAsPostType = (channelId: Channel['id'], draft: PostDraft, postType?: PostDraft['postType']) => {
         if (postType) {
-            const updatedDraft: PostDraft = {...draft, postType: Constants.PostTypes.VOICE};
-            handleDraftChange(updatedDraft);
+            handleDraftChange({...draft, postType: Constants.PostTypes.VOICE as PostDraft['postType']});
         } else {
-            handleDraftChange(null);
+            handleDraftChange({...draft, fileInfos: [], uploadsInProgress: [], postType: ''})
         }
     };
 
@@ -84,9 +64,9 @@ const useVoiceMessage = (
         />
     ) : null;
 
-    let attachmentPreview = null;
+    let voiceAttachmentPreview = null;
     if (!readOnlyChannel && draft.postType === Constants.PostTypes.VOICE) {
-        attachmentPreview = (
+        voiceAttachmentPreview = (
             <div>
                 <VoiceMessageAttachment
                     channelId={channelId}
@@ -103,12 +83,15 @@ const useVoiceMessage = (
                     onUploadComplete={handleFileUploadComplete}
                     onUploadError={handleUploadError}
                     onRemoveDraft={removePreview}
-                    onSubmit={handleSubmit}
+                    onSubmit={handleFileUploadComplete}
+                    onStarted={emitTypingEvent}
+                    onCancel={emitTypingEvent}
+                    onComplete={emitTypingEvent}
                 />
             </div>
         );
     } else if (!readOnlyChannel && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0)) {
-        attachmentPreview = (
+        voiceAttachmentPreview = (
             <FilePreview
                 fileInfos={draft.fileInfos}
                 onRemove={removePreview}
@@ -118,7 +101,7 @@ const useVoiceMessage = (
         );
     }
 
-    return [voiceMessageClientId, handleVoiceMessageUploadStart, voiceMessageJSX]
+    return [voiceMessageClientId, handleVoiceMessageUploadStart, voiceMessageJSX, voiceAttachmentPreview]
 }
 
 export default useVoiceMessage;

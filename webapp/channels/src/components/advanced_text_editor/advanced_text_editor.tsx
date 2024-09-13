@@ -250,7 +250,7 @@ const AdvanceTextEditor = ({
     useOrientationHandler(textboxRef, postId);
     const pluginItems = usePluginItems(draft, textboxRef, handleDraftChange);
     const focusTextbox = useTextboxFocus(textboxRef, channelId, isRHS, canPost);
-    const [
+    let [
         attachmentPreview,
         fileUploadJSX,
         handleUploadProgress,
@@ -289,7 +289,7 @@ const AdvanceTextEditor = ({
         toggleEmojiPicker,
     );
 
-    const [voiceMessageClientId, handleVoiceMessageUploadStart, voiceMessageJSX] = useVoiceMessage(
+    const [voiceMessageClientId, handleVoiceMessageUploadStart, voiceMessageJSX, voiceAttachmentPreview] = useVoiceMessage(
         draft,
         channelId,
         postId,
@@ -301,8 +301,13 @@ const AdvanceTextEditor = ({
         handleUploadProgress,
         handleFileUploadComplete,
         handleUploadError,
-        removePreview
+        removePreview,
+        emitTypingEvent,
     )
+
+    if (draft.postType === Constants.PostTypes.VOICE) {
+        attachmentPreview = voiceAttachmentPreview;
+    }
 
     const handlePostError = useCallback((err: React.ReactNode) => {
         setPostError(err);
@@ -332,43 +337,6 @@ const AdvanceTextEditor = ({
             message,
         });
     }, [draft, handleDraftChange, serverError]);
-
-    // let attachmentPreview = null;
-    // if (!readOnlyChannel && draft.postType === Constants.PostTypes.VOICE) {
-    //     attachmentPreview = (
-    //         <div>
-    //             <VoiceMessageAttachment
-    //                 channelId={channelId}
-    //                 rootId={postId}
-    //                 draft={draft}
-    //                 location={location}
-    //                 vmState={voiceMessageState}
-    //                 setDraftAsPostType={setDraftAsPostType}
-    //                 uploadingClientId={voiceMessageClientId}
-    //                 didUploadFail={Boolean(serverError)}
-    //                 onUploadStart={handleVoiceMessageUploadStart}
-    //                 uploadProgress={uploadsProgressPercent?.[voiceMessageClientId]?.percent ?? 0}
-    //                 onUploadProgress={handleUploadProgress}
-    //                 onUploadComplete={handleFileUploadComplete}
-    //                 onUploadError={handleUploadError}
-    //                 onRemoveDraft={removePreview}
-    //                 onSubmit={handleSubmit}
-    //                 onStarted={emitTypingEvent}
-    //                 onCancel={emitTypingEvent}
-    //                 onComplete={emitTypingEvent}
-    //             />
-    //         </div>
-    //     );
-    // } else if (!readOnlyChannel && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0)) {
-    //     attachmentPreview = (
-    //         <FilePreview
-    //             fileInfos={draft.fileInfos}
-    //             onRemove={removePreview}
-    //             uploadsInProgress={draft.uploadsInProgress}
-    //             uploadsProgressPercent={uploadsProgressPercent}
-    //         />
-    //     );
-    // }
 
     /**
      * by getting the value directly from the textbox we eliminate all unnecessary
