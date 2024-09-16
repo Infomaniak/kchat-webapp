@@ -26,7 +26,6 @@ const useVoiceMessage = (
 ) => {
     const [voiceMessageClientId, setVoiceMessageClientId] = useState('')
     const voiceMessageState = getVoiceMessageStateFromDraft(draft);
-    console.log('use_voice_message voiceMessageState', voiceMessageState)
 
     const handleVoiceMessageUploadStart = (clientId: string, channelId: Channel['id']) => {
         const uploadsInProgress = [...draft.uploadsInProgress, clientId];
