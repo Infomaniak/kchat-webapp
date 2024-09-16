@@ -2,9 +2,12 @@
 // See LICENSE.txt for license information.
 
 import type {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
+import isEqual from 'lodash/isEqual';
+import type {ComponentProps} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import ReactSelect from 'react-select';
+import type {Timezone} from 'timezones.json';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile, UserTimezone} from '@mattermost/types/users';
@@ -17,6 +20,7 @@ import RhsLimitVisibleGMsDMs from 'components/rhs_settings/rhs_settings_display/
 import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_settings_item';
 import RhsThemeSetting from 'components/rhs_settings/rhs_settings_theme';
 import Toggle from 'components/toggle';
+import ManageTimezones from 'components/user_settings/display/manage_timezones';
 
 import Constants from 'utils/constants';
 import {t} from 'utils/i18n';
@@ -110,6 +114,8 @@ type Props = {
     setRequireConfirm?: () => void;
     setEnforceFocus?: () => void;
     userTimezone: UserTimezone;
+    timezones: Timezone[];
+    timezone: UserTimezone;
     allowCustomThemes: boolean;
     enableLinkPreviews: boolean;
     defaultClientLocale: string;
@@ -158,6 +164,7 @@ type State = {
     serverError?: string;
     militaryTime: string;
     lastActiveDisplay: string;
+    timezone: UserTimezone;
 }
 
 export default class RhsSettingsDisplay extends React.PureComponent<Props, State> {
@@ -175,6 +182,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             oneClickReactionsOnPosts: props.oneClickReactionsOnPosts ? props.oneClickReactionsOnPosts : 'true',
             showUnreadsCategory: props.showUnreadsCategory ? props.showUnreadsCategory : 'true',
             unreadScrollPosition: props.unreadScrollPosition ? props.unreadScrollPosition : Preferences.UNREAD_SCROLL_POSITION,
+            timezone: props.timezone,
         };
     }
 
@@ -204,6 +212,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             showUnreadsCategory: props.showUnreadsCategory ? props.showUnreadsCategory : 'true',
             unreadScrollPosition: props.unreadScrollPosition ? props.unreadScrollPosition : Preferences.UNREAD_SCROLL_POSITION,
             isSaving: false,
+            timezone: props.timezone,
         };
 
         this.prevSections = {
@@ -236,9 +245,11 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         const userId = user.id;
 
         // User preferences patch user and don't need to update preferences
-        if (newSettingsState.lastActiveDisplay !== this.props.lastActiveDisplay) {
+        if (newSettingsState.lastActiveDisplay !== this.props.lastActiveDisplay ||
+            !isEqual(newSettingsState.timezone, this.props.timezone)) {
             const updatedUser = {
                 ...user,
+                timezone: newSettingsState.timezone,
                 props: {
                     ...user.props,
                     show_last_active: newSettingsState.lastActiveDisplay,
@@ -336,7 +347,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             name: Preferences.USE_MILITARY_TIME,
             value: newSettingsState.militaryTime,
         };
-
         this.setState({isSaving: true});
 
         const preferences = [
@@ -363,6 +373,16 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
     handleOnChange(display: {[key: string]: any}) {
         this.handleSubmit({...this.state, ...display});
     }
+    handleOnTimezoneChange: ComponentProps<typeof ManageTimezones>['onChange'] = (timezone, xd) => {
+        console.log(timezone);
+        console.log(xd);
+        this.handleOnChange({timezone: {
+            useAutomaticTimezone: timezone.useAutomaticTimezone.toString(),
+
+            // manualTimezone: timezone.useAutomaticTimezone ? timezone.automaticTimezone : timezone.manualTimezone,
+            // automaticTimezone: timezone.useAutomaticTimezone ? timezone.automaticTimezone : timezone.manualTimezone,
+        }});
+    };
 
     updateSection = (section: string) => {
         this.props.updateSection(section);
@@ -873,6 +893,27 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             });
         }
 
+        let timezoneSelection;
+        if (this.props.enableTimezone && !this.props.shouldAutoUpdateTimezone) {
+            timezoneSelection = (
+                <>
+                    <label htmlFor='user.settings.display.timezone'>
+                        <FormattedMessage
+                            id='user.settings.display.timezone2'
+                            defaultMessage='Automatic timezone'
+                        />
+                    </label>
+                    <ManageTimezones
+                        user={this.props.user}
+                        updateSection={this.updateSection}
+                        onChange={this.handleOnTimezoneChange}
+                        compact={true}
+                        {...this.props.timezone}
+                    />
+                </>
+            );
+        }
+
         return (
             <div id='displaySettings'>
                 <div className='user-settings user-rhs-container container'>
@@ -886,6 +927,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     {lastActiveSection}
                     {channelDisplayModeSection}
                     {UnreadScrollPositionSection}
+                    {timezoneSelection}
                     {clockSection}
                     {teammateNameDisplaySection}
                     <RhsLimitVisibleGMsDMs/>
