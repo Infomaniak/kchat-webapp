@@ -373,11 +373,14 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
     handleOnChange(display: {[key: string]: any}) {
         this.handleSubmit({...this.state, ...display});
     }
-    handleOnTimezoneChange: ComponentProps<typeof ManageTimezones>['onChange'] = (timezone) => {
+    handleOnTimezoneChange: ComponentProps<typeof ManageTimezones>['onChange'] = (timezone, xd) => {
+        console.log(timezone);
+        console.log(xd);
         this.handleOnChange({timezone: {
             useAutomaticTimezone: timezone.useAutomaticTimezone.toString(),
-            manualTimezone: timezone.useAutomaticTimezone ? timezone.automaticTimezone : timezone.manualTimezone,
-            automaticTimezone: timezone.useAutomaticTimezone ? timezone.automaticTimezone : timezone.manualTimezone,
+
+            // manualTimezone: timezone.useAutomaticTimezone ? timezone.automaticTimezone : timezone.manualTimezone,
+            // automaticTimezone: timezone.useAutomaticTimezone ? timezone.automaticTimezone : timezone.manualTimezone,
         }});
     };
 
@@ -896,8 +899,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 <>
                     <label htmlFor='user.settings.display.timezone'>
                         <FormattedMessage
-                            id='user.settings.display.timezone'
-                            defaultMessage='Timezone'
+                            id='user.settings.display.timezone2'
+                            defaultMessage='Automatic timezone'
                         />
                     </label>
                     <ManageTimezones
@@ -917,7 +920,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     <div className='divider-dark first'/>
                     {themeSection}
                     {messageDisplaySection}
-                    {timezoneSelection}
                     {collapseSection}
                     {linkPreviewSection}
                     {oneClickReactionsOnPostsSection}
@@ -925,6 +927,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     {lastActiveSection}
                     {channelDisplayModeSection}
                     {UnreadScrollPositionSection}
+                    {timezoneSelection}
                     {clockSection}
                     {teammateNameDisplaySection}
                     <RhsLimitVisibleGMsDMs/>

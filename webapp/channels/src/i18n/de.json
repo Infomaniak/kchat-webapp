@@ -5716,6 +5716,7 @@
   "user.settings.display.theme.themeDark": "Thema Dunkel",
   "user.settings.display.theme.themeAuto": "Automatisches Thema",
   "user.settings.display.timezone": "Zeitzone",
+  "user.settings.display.timezone2": "automatische Zeitzone",
   "user.settings.display.title": "Anzeigeeinstellungen",
   "user.settings.general.close": "Schließen",
   "user.settings.general.confirmEmail": "E-Mail-Adresse bestätigen",

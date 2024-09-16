@@ -4618,6 +4618,7 @@
   "user.settings.display.theme.themeDark": "Thème Sombre",
   "user.settings.display.theme.themeAuto": "Thème automatique",
   "user.settings.display.timezone": "Fuseau horaire",
+  "user.settings.display.timezone2": "Fuseau horaire automatique",
   "user.settings.display.title": "Paramètres d'affichage",
   "user.settings.general.close": "Fermer",
   "user.settings.general.confirmEmail": "Confirmation de l'adresse e-mail",

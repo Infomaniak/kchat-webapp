@@ -4687,6 +4687,7 @@
   "user.settings.display.theme.themeDark": "Tema Oscuro",
   "user.settings.display.theme.themeAuto": "Tema Automático",
   "user.settings.display.timezone": "Zona horaria",
+  "user.settings.display.timezone2": "Zona horaria automática",
   "user.settings.display.title": "Configuración de Visualización",
   "user.settings.general.close": "Cerrar",
   "user.settings.general.confirmEmail": "Confirmar Correo electrónico",

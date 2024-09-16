@@ -5731,6 +5731,7 @@
   "user.settings.display.theme.themeDark": "Dark Theme",
   "user.settings.display.theme.themeAuto": "Automatic Theme",
   "user.settings.display.timezone": "Timezone",
+  "user.settings.display.timezone2": "Automatic timezone",
   "user.settings.display.title": "Display Settings",
   "user.settings.general.close": "Close",
   "user.settings.general.confirmEmail": "Confirm Email",

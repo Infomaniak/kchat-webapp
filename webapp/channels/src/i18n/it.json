@@ -3522,6 +3522,7 @@
   "user.settings.display.theme.themeDark": "Tema Scuro",
   "user.settings.display.theme.themeAuto": "Tema Automatico",
   "user.settings.display.timezone": "Fuso orario",
+  "user.settings.display.timezone2": "Fuso orario automatico",
   "user.settings.display.title": "Impostazioni aspetto",
   "user.settings.general.close": "Chiudi",
   "user.settings.general.confirmEmail": "Conferma l'indirizzo email",

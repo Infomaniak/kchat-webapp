@@ -14,6 +14,7 @@ import {getTimezoneLabel} from 'mattermost-redux/utils/timezone_utils';
 
 import ExternalLink from 'components/external_link';
 import SettingItemMax from 'components/setting_item_max';
+import Toggle from 'components/toggle';
 
 import {getBrowserTimezone} from 'utils/timezone';
 
@@ -157,8 +158,8 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
             });
     };
 
-    handleAutomaticTimezone = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const useAutomaticTimezone = e.target.checked;
+    handleAutomaticTimezone = () => {
+        const useAutomaticTimezone = !this.state.automaticTimezone;
         const manualTimezone = '';
         let automaticTimezone = '';
         let timezoneLabel: string;
@@ -219,27 +220,33 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
 
         const noTimezonesFromServer = timezones.length === 0;
         const automaticTimezoneInput = (
-            <div className='checkbox'>
-                <label>
-                    <input
-                        id='automaticTimezoneInput'
-                        type='checkbox'
-                        checked={useAutomaticTimezone}
-                        onChange={this.handleAutomaticTimezone}
-                        disabled={noTimezonesFromServer}
-                    />
-                    <FormattedMessage
-                        id='user.settings.timezones.automatic'
-                        defaultMessage='Automatic'
-                    />
 
-                </label>
-            </div>
+            // <div className='checkbox'>
+            //     <label>
+            //         <input
+            //             id='automaticTimezoneInput'
+            //             type='checkbox'
+            //             checked={useAutomaticTimezone}
+            //             onChange={this.handleAutomaticTimezone}
+            //             disabled={noTimezonesFromServer}
+            //         />
+            //         <FormattedMessage
+            //             id='user.settings.timezones.automatic'
+            //             defaultMessage='Automatic'
+            //         />
+
+            //     </label>
+            // </div>
+            <Toggle
+                id={'automaticTimezoneInput childOption'}
+                onToggle={this.handleAutomaticTimezone}
+                toggled={useAutomaticTimezone}
+            />
         );
 
         const manualTimezoneInput = (
             <div
-                className='pt-2'
+                className='pt-2 pb-4'
             >
                 {!useAutomaticTimezone &&
                 <ExternalLink
@@ -258,15 +265,15 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
 
         inputs.push(manualTimezoneInput);
 
-        inputs.push(
-            <div>
-                <br/>
-                <FormattedMessage
-                    id='user.settings.timezones.promote'
-                    defaultMessage='Select the time zone used for timestamps in the user interface and email notifications.'
-                />
-            </div>,
-        );
+        // inputs.push(
+        //     <div>
+        //         <br/>
+        //         <FormattedMessage
+        //             id='user.settings.timezones.promote'
+        //             defaultMessage='Select the time zone used for timestamps in the user interface and email notifications.'
+        //         />
+        //     </div>,
+        // );
         if (compact) {
             return inputs;
         }
@@ -274,8 +281,8 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
             <SettingItemMax
                 title={
                     <FormattedMessage
-                        id='user.settings.display.timezone'
-                        defaultMessage='Timezone'
+                        id='user.settings.display.timezone2'
+                        defaultMessage='Automatic timezone'
                     />
                 }
                 containerStyle='timezone-container'
