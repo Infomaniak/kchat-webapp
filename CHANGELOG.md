@@ -1,3 +1,10 @@
+## 2.10.0-rc.12 (2024-09-16)
+
+### Fixed (2 changes)
+
+- [schedule tooltip close behaviour works now properly](kchat/webapp@c8dfd362c7557f836eb34c6722c18567d85a5388) by @cyril.gromoff ([merge request](kchat/webapp!921))
+- [add timezone parameter](kchat/webapp@3780200a1b705cdd608549f551cc830f30a062d8) by  ([merge request](kchat/webapp!851))
+
 ## 2.10.0-rc.11 (2024-09-13)
 
 No changes.
