@@ -180,7 +180,7 @@ const AdvanceTextEditor = ({
     }, []);
 
     const emitTypingEvent = useCallback(() => {
-        GlobalActions.emitLocalUserTypingEvent(channelId, postId);
+        GlobalActions.emitLocalUserTypingEvent("typing",channelId, postId);
     }, [channelId, postId]);
 
     const handleDraftChange = useCallback((draftToChange: PostDraft, options: {instant?: boolean; show?: boolean} = {instant: false, show: false}) => {
