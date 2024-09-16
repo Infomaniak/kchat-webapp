@@ -61,21 +61,17 @@ type State = {
 }
 
 export default class ManageTimezones extends React.PureComponent<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        const useAutomaticTimezone = (
-            props.useAutomaticTimezone === 'true' ||
-            props.useAutomaticTimezone === true
-        );
-        this.state = {
+    static getDerivedStateFromProps(nextProps: Props) {
+        const useAutomaticTimezone = nextProps.useAutomaticTimezone === 'true' || nextProps.useAutomaticTimezone === true;
+        return {
             useAutomaticTimezone,
-            automaticTimezone: props.automaticTimezone,
-            manualTimezone: props.manualTimezone,
+            automaticTimezone: nextProps.automaticTimezone,
+            manualTimezone: nextProps.manualTimezone,
             isSaving: false,
             openMenu: false,
             selectedOption: {
-                label: props.timezoneLabel,
-                value: useAutomaticTimezone ? props.automaticTimezone : props.manualTimezone,
+                label: nextProps.timezoneLabel,
+                value: useAutomaticTimezone ? nextProps.automaticTimezone : nextProps.manualTimezone,
             },
         };
     }
