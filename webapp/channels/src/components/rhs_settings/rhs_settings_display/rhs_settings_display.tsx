@@ -247,9 +247,13 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         // User preferences patch user and don't need to update preferences
         if (newSettingsState.lastActiveDisplay !== this.props.lastActiveDisplay ||
             !isEqual(newSettingsState.timezone, this.props.timezone)) {
+            const updatedTimezone = {
+                ...newSettingsState.timezone,
+                useAutomaticTimezone: newSettingsState.timezone.useAutomaticTimezone.toString(),
+            };
             const updatedUser = {
                 ...user,
-                timezone: newSettingsState.timezone,
+                timezone: updatedTimezone,
                 props: {
                     ...user.props,
                     show_last_active: newSettingsState.lastActiveDisplay,
