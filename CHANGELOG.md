@@ -72,6 +72,12 @@ No changes.
 
 No changes.
 
+## 2.9.17-next.4 (2024-09-16)
+
+### Fixed (1 change)
+
+- [fix submitting bool instead of string for useAutomaticTimezone](kchat/webapp@a8e65420e87bce2f2af69342046204d066b3d0bd) by @antonbuksa
+
 ## 2.9.17-next.3 (2024-09-16)
 
 ### Fixed (1 change)
