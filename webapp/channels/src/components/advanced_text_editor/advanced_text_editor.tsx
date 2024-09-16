@@ -179,8 +179,8 @@ const AdvanceTextEditor = ({
         setShowPreview((prev) => !prev);
     }, []);
 
-    const emitTypingEvent = useCallback(() => {
-        GlobalActions.emitLocalUserTypingEvent("typing",channelId, postId);
+    const emitTypingEvent = useCallback((eventType = "typing") => {
+        GlobalActions.emitLocalUserTypingEvent(eventType,channelId, postId);
     }, [channelId, postId]);
 
     const handleDraftChange = useCallback((draftToChange: PostDraft, options: {instant?: boolean; show?: boolean} = {instant: false, show: false}) => {
