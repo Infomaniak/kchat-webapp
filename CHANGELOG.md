@@ -72,6 +72,12 @@ No changes.
 
 No changes.
 
+## 2.9.17-next.3 (2024-09-16)
+
+### Fixed (1 change)
+
+- [fix wrong state for automaticTimezone](kchat/webapp@76c53934601c484cb5c61329d02bde80ed3bdabb) by @antonbuksa
+
 ## 2.9.17-next.2 (2024-09-16)
 
 ### Fixed (2 changes)
