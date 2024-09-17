@@ -91,6 +91,16 @@ No changes.
 
 No changes.
 
+## 2.9.18-next.1 (2024-09-17)
+
+### Added (1 change)
+
+- [reimplement reactions tooltip truncate](kchat/webapp@ad901db97331704e3e6c8b6713a39614fb888654) by @antonbuksa ([merge request](kchat/webapp!923))
+
+### Fixed (1 change)
+
+- [update isRecording wording](kchat/webapp@97c00d83b2ccf7302c2d0f73a055bf9ba143e956) by @cyril.gromoff ([merge request](kchat/webapp!920))
+
 ## 2.9.17-next.4 (2024-09-16)
 
 ### Fixed (1 change)
