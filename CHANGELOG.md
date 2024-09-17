@@ -1,3 +1,10 @@
+## 2.10.0-rc.14 (2024-09-17)
+
+### Fixed (2 changes)
+
+- [fix submitting bool instead of string for useAutomaticTimezone](kchat/webapp@a8e65420e87bce2f2af69342046204d066b3d0bd) by @antonbuksa
+- [fix wrong state for automaticTimezone](kchat/webapp@76c53934601c484cb5c61329d02bde80ed3bdabb) by @antonbuksa
+
 ## 2.10.0-rc.13 (2024-09-16)
 
 No changes.
