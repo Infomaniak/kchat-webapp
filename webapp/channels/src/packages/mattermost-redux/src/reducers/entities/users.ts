@@ -523,7 +523,7 @@ function dndEndTimes(state: UsersState['dndEndTimes'] = {}, action: AnyAction) {
 function statuses(state: RelationOneToOne<UserProfile, string> = {}, action: AnyAction) {
     switch (action.type) {
     case UserTypes.RECEIVED_STATUSES: {
-        return {...state, ...action.data};
+        return Array.isArray(action.data) ? Object.assign({}, state, ...action.data) : {...state, ...action.data};
     }
 
     case UserTypes.PROFILE_NO_LONGER_VISIBLE: {
