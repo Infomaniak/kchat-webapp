@@ -1,3 +1,15 @@
+## 2.10.0-rc.15 (2024-09-17)
+
+### Added (1 change)
+
+- [reimplement reactions tooltip truncate](kchat/webapp@ad901db97331704e3e6c8b6713a39614fb888654) by @antonbuksa ([merge request](kchat/webapp!923))
+
+### Fixed (3 changes)
+
+- [fix submitting bool instead of string for useAutomaticTimezone](kchat/webapp@a8e65420e87bce2f2af69342046204d066b3d0bd) by @antonbuksa
+- [fix wrong state for automaticTimezone](kchat/webapp@76c53934601c484cb5c61329d02bde80ed3bdabb) by @antonbuksa
+- [update isRecording wording](kchat/webapp@97c00d83b2ccf7302c2d0f73a055bf9ba143e956) by @cyril.gromoff ([merge request](kchat/webapp!920))
+
 ## 2.10.0-rc.14 (2024-09-17)
 
 ### Fixed (2 changes)
