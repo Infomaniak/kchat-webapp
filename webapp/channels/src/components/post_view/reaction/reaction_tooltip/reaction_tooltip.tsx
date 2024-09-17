@@ -19,6 +19,7 @@ type Props = {
     reactions: ReactionType[];
     users: string[];
 };
+const MAX_DISPLAY_USER = 20;
 
 const ReactionTooltip: React.FC<Props> = (props: Props) => {
     const {
@@ -35,18 +36,19 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
 
     const intl = useIntl();
 
-    const otherUsersCount = reactions.length - users.length;
+    const reduceUsers = users.slice(0, MAX_DISPLAY_USER);
+    const otherUsersCount = reactions.length - reduceUsers.length;
 
     let names;
     if (otherUsersCount > 0) {
-        if (users.length > 0) {
+        if (reduceUsers.length > 0) {
             names = intl.formatMessage(
                 {
                     id: 'reaction.usersAndOthersReacted',
                     defaultMessage: '{users} and {otherUsers, number} other {otherUsers, plural, one {user} other {users}}',
                 },
                 {
-                    users: users.join(', '),
+                    users: reduceUsers.join(', '),
                     otherUsers: otherUsersCount,
                 },
             );
@@ -68,8 +70,8 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
                 defaultMessage: '{users} and {lastUser}',
             },
             {
-                users: users.slice(0, -1).join(', '),
-                lastUser: users[users.length - 1],
+                users: reduceUsers.slice(0, -1).join(', '),
+                lastUser: reduceUsers[reduceUsers.length - 1],
             },
         );
     } else {
@@ -77,7 +79,7 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
     }
 
     let reactionVerb;
-    if (users.length + otherUsersCount > 1) {
+    if (users.length > 1) {
         if (currentUserReacted) {
             reactionVerb = intl.formatMessage({
                 id: 'reaction.reactionVerb.youAndUsers',

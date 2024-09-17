@@ -158,7 +158,7 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
     };
 
     handleAutomaticTimezone = () => {
-        const useAutomaticTimezone = !this.state.automaticTimezone;
+        const useAutomaticTimezone = !this.state.useAutomaticTimezone;
         const manualTimezone = '';
         let automaticTimezone = '';
         let timezoneLabel: string;

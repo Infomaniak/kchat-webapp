@@ -1,3 +1,14 @@
+## 2.10.0-rc.14 (2024-09-17)
+
+### Fixed (2 changes)
+
+- [fix submitting bool instead of string for useAutomaticTimezone](kchat/webapp@a8e65420e87bce2f2af69342046204d066b3d0bd) by @antonbuksa
+- [fix wrong state for automaticTimezone](kchat/webapp@76c53934601c484cb5c61329d02bde80ed3bdabb) by @antonbuksa
+
+## 2.10.0-rc.13 (2024-09-16)
+
+No changes.
+
 ## 2.10.0-rc.12 (2024-09-16)
 
 ### Fixed (2 changes)
@@ -67,6 +78,25 @@ No changes.
 ## 2.10.0-rc.2 (2024-09-04)
 
 No changes.
+
+## 2.9.17-next.4 (2024-09-16)
+
+### Fixed (1 change)
+
+- [fix submitting bool instead of string for useAutomaticTimezone](kchat/webapp@a8e65420e87bce2f2af69342046204d066b3d0bd) by @antonbuksa
+
+## 2.9.17-next.3 (2024-09-16)
+
+### Fixed (1 change)
+
+- [fix wrong state for automaticTimezone](kchat/webapp@76c53934601c484cb5c61329d02bde80ed3bdabb) by @antonbuksa
+
+## 2.9.17-next.2 (2024-09-16)
+
+### Fixed (2 changes)
+
+- [schedule tooltip close behaviour works now properly](kchat/webapp@c8dfd362c7557f836eb34c6722c18567d85a5388) by @cyril.gromoff ([merge request](kchat/webapp!921))
+- [add timezone parameter](kchat/webapp@3780200a1b705cdd608549f551cc830f30a062d8) by  ([merge request](kchat/webapp!851))
 
 ## 2.9.17-next.1 (2024-09-12)
 
