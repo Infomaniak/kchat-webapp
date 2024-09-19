@@ -337,7 +337,7 @@ var config = {
 };
 
 function generateCSP() {
-    let csp = 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.preprod.dev.infomaniak.ch/ documentserver.kdrive.infomaniak.com/ ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV;
+    let csp = 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.preprod.dev.infomaniak.ch/ onlyoffice.infomaniak.com/ ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV;
 
     if (IS_CANARY || IS_PREPROD) {
         csp += CSP_WORKER_SRC;
