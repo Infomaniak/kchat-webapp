@@ -2896,7 +2896,7 @@
   "channel_notifications.sendDesktop": "Enviar notificaciones de escritorio",
   "channel_notifications.muteAndIgnore" : "Silenciar o ignorar",
   "channel_notifications.muteChannelDesc" : "Desactiva las notificaciones para este canal. Seguirás viendo insignias si te mencionan.",
-  "channel_notifications.ignoreMentionsTitle": "Ignorar menciones para @canal, @aquí y @todos",
+  "channel_notifications.ignoreMentionsTitle": "Ignorar menciones para @channel, @here y @all",
   "channel_notifications.ignoreMentionsDesc" : "Si esta opción está activada, @canal, @aquí y @todos no activarán menciones ni notificaciones de menciones en este canal.",
   "channel_notifications.ThreadsReplyTitle": "Notificaciones de respuestas a los debates",
   "channel_notifications.muteChannelTitle": "Silenciar canal",
@@ -3834,7 +3834,6 @@
   "multiselect.createGroup": "Crear Grupo",
   "multiselect.creating": "Creando...",
   "multiselect.go": "Ir",
-
   "multiselect.list.notFound": "No se encontraron resultados que encajen con **{searchQuery}**",
   "multiselect.loading": "Cargando...",
   "multiselect.noMorePeople": "Un mensaje personal está limitado a 7 personas.",

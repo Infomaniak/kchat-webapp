@@ -2149,7 +2149,7 @@
   "channel_notifications.preferences": "Preferenze di notifica per ",
   "channel_notifications.muteAndIgnore" : "Silenziare o ignorare",
   "channel_notifications.muteChannelDesc" : "Disattiva le notifiche per questo canale. Si vedranno comunque i badge se si viene menzionati.",
-  "channel_notifications.ignoreMentionsTitle": "Ignora le menzioni per @canale, @qui e @tutti",
+  "channel_notifications.ignoreMentionsTitle": "Ignora le menzioni per @channel, @here e @all",
   "channel_notifications.ignoreMentionsDesc" : "Se abilitato, @channel, @here e @all non attiveranno menzioni o notifiche di menzioni in questo canale.",
   "channel_notifications.ThreadsReplyTitle": "Notifiche delle risposte alle discussioni",
   "channel_notifications.muteChannelTitle": "Silenziamento del canale",

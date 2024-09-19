@@ -2834,7 +2834,7 @@
   "channel_notifications.MobileNotificationNothingLabel": "Rien",
   "channel_notifications.muteAndIgnore" : "Mettre en sourdine ou ignorer",
   "channel_notifications.muteChannelDesc" : "Désactive les notifications pour ce canal. Vous verrez toujours des badges si vous êtes mentionné.",
-  "channel_notifications.ignoreMentionsTitle": "Ignorer les mentions pour @canal, @ici et @tous",
+  "channel_notifications.ignoreMentionsTitle": "Ignorer les mentions pour @channel, @here et @all",
   "channel_notifications.ignoreMentionsDesc" : "Lorsque cette option est activée, @channel, @here et @all ne déclencheront pas de mentions ou de notifications de mention dans ce canal.",
   "channel_notifications.allActivity": "Pour toute activité",
   "channel_notifications.autoFollowThreadsDesc": "Lorsqu'activé, toutes les nouvelles réponses dans ce canal seront automatiquement suivies et apparaîtront dans votre vue des fils de discussion.",
