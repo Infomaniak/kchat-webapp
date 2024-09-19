@@ -402,7 +402,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
 
         const tz = timezone || getBrowserTimezone();
         const currentTime = moment().tz(tz);
-        const endTime = moment.unix(dndEndTime).tz(tz);
+        const endTime = moment(dndEndTime).tz(tz);
 
         let formattedEndTime;
 
