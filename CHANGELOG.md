@@ -1,3 +1,9 @@
+## 2.10.0-rc.17 (2024-09-19)
+
+### Fixed (1 change)
+
+- [Fix: notifications parameter > add missining translation (fr)](kchat/webapp@2e4fe6d53050c611d4c5deed91bd9aa77731b9af) by @cyril.gromoff ([merge request](kchat/webapp!927))
+
 ## 2.10.0-rc.16 (2024-09-19)
 
 No changes.
