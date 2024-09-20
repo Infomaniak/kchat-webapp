@@ -75,6 +75,8 @@ import useVoiceMessage from './use_voice_message';
 import './advanced_text_editor.scss';
 import {Post} from '@mattermost/types/posts';
 import Poll from 'components/post_poll';
+import useScheduledDrafts from './use_scheduled_drafts';
+import {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 
 function isDraftEmpty(draft: PostDraft) {
     return draft.message === '' && draft.fileInfos.length === 0 && draft.uploadsInProgress.length === 0;
@@ -304,6 +306,8 @@ const AdvanceTextEditor = ({
         removePreview,
         emitTypingEvent,
     )
+
+    const [scheduledDrafts, scheduledIndicatorJSX] = useScheduledDrafts(channelId, postId, ScheduledIndicatorType.CHANNEL);
 
     if (draft.postType === Constants.PostTypes.VOICE) {
         attachmentPreview = voiceAttachmentPreview;
@@ -599,6 +603,7 @@ const AdvanceTextEditor = ({
                     displayName={teammateDisplayName}
                 />
             )}
+            {scheduledIndicatorJSX}
             <div
                 className={classNames('AdvancedTextEditor', {
                     'AdvancedTextEditor__attachment-disabled': !canUploadFiles,
