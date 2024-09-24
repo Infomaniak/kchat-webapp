@@ -17,20 +17,13 @@ import {removeDraft, upsertScheduleDraft, updateDraft, setGlobalDraftSource} fro
 import {closeModal, openModal} from 'actions/views/modals';
 import {getGlobalItem} from 'selectors/storage';
 
-import OverrideDraftModal from 'components/schedule_post/override_draft_modal';
+import DraftListItem from 'components/drafts/list_item/list_item';
+import PersistNotificationConfirmModal from 'components/persist_notification_confirm_modal';
 
 import {ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 import type {PostDraft} from 'types/store/draft';
-
-import DraftActions from '../draft_actions';
-import DraftTitle from '../draft_title';
-import Panel from '../panel/panel';
-import PanelBody from '../panel/panel_body';
-import Header from '../panel/panel_header';
-import PersistNotificationConfirmModal from 'components/persist_notification_confirm_modal';
-import { hasRequestedPersistentNotifications, specialMentionsInText } from 'utils/post_utils';
 
 type Props = {
     channel?: Channel;
@@ -176,63 +169,22 @@ function ChannelDraft({
     }
 
     return (
-        <Panel
-            onClick={handleOnEdit}
-            isInvalid={scheduledWillNotBeSent}
-        >
-            {({hover}) => (
-                <>
-                    <Header
-                        hover={hover}
-                        actions={(
-                            <DraftActions
-                                channelDisplayName={channel.display_name}
-                                channelType={channel.type}
-                                channelName={channel.name}
-                                userId={user.id}
-                                draftId={draftId}
-                                isScheduled={isScheduled}
-                                scheduleTimestamp={value.timestamp}
-                                isInvalid={scheduledWillNotBeSent}
-                                goToChannel={goToChannel}
-                                onDelete={handleOnDelete}
-                                onEdit={handleOnEdit}
-                                onSend={handleOnSend}
-                                onSchedule={handleOnSchedule}
-                                onScheduleDelete={handleOnScheduleDelete}
-                            />
-                        )}
-                        title={(
-                            <DraftTitle
-                                channel={channel}
-                                type={type}
-                                userId={user.id}
-                                goToChannel={goToChannel}
-                            />
-                        )}
-                        timestamp={value.updateAt}
-                        remote={isRemote || false}
-                        isScheduled={isScheduled}
-                        scheduledTimestamp={value.timestamp}
-                        scheduledWillNotBeSent={scheduledWillNotBeSent}
-                    />
-                    <PanelBody
-                        channelId={channelId}
-                        displayName={displayName}
-                        fileInfos={value.fileInfos}
-                        message={value.message}
-                        status={status}
-                        priority={value.metadata?.priority}
-                        uploadsInProgress={value.uploadsInProgress}
-                        userId={user.id}
-                        username={user.username}
-                        draft={value}
-                        isEditing={isEditing}
-                        setIsEditing={setIsEditing}
-                    />
-                </>
-            )}
-        </Panel>
+        <DraftListItem
+            kind='draft'
+            type={type}
+            itemId={draftId}
+            user={user}
+            showPriority={true}
+            handleOnEdit={handleOnEdit}
+            handleOnDelete={handleOnDelete}
+            handleOnSend={handleOnSend}
+            item={value}
+            channelId={channelId}
+            displayName={displayName}
+            isRemote={isRemote || false}
+            channel={channel}
+            status={status}
+        />
     );
 }
 

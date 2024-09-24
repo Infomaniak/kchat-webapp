@@ -9,6 +9,7 @@ import {makeAsyncComponent} from 'components/async_load';
 import ChannelIdentifierRouter from 'components/channel_layout/channel_identifier_router';
 import LoadingScreen from 'components/loading_screen';
 
+import {SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
 import {IDENTIFIER_PATH_PATTERN, ID_PATH_PATTERN, TEAM_NAME_PATH_PATTERN} from 'utils/path';
 
 import type {OwnProps, PropsFromRedux} from './index';
@@ -130,6 +131,10 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                                 component={LazyActivityAndInsights}
                             />
                         ) : null}
+                        <Route
+                            path={`/:team(${TEAM_NAME_PATH_PATTERN})/${SCHEDULED_POST_URL_SUFFIX}`}
+                            component={Drafts}
+                        />
 
                         <Redirect to={lastChannelPath}/>
                     </Switch>

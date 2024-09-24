@@ -549,6 +549,7 @@ export const ModalIdentifiers = {
     CHANNEL_BOOKMARK_DELETE: 'channel_bookmark_delete',
     CHANNEL_BOOKMARK_CREATE: 'channel_bookmark_create',
     CONFIRM_MANAGE_USER_SETTINGS_MODAL: 'confirm_switch_to_settings',
+    SCHEDULED_POST_CUSTOM_TIME_MODAL: 'scheduled_post_custom_time',
 };
 
 export const UserStatuses = {
@@ -2500,4 +2501,7 @@ export const PageLoadContext = {
     RECONNECT: 'reconnect',
 } as const;
 
+export const SCHEDULED_POST_URL_SUFFIX = 'scheduled_posts';
+
 export default Constants;
+

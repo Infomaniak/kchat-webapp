@@ -9,14 +9,14 @@ import {makeIsEligibleForClick} from 'utils/utils';
 import './panel.scss';
 
 type Props = {
-    isInvalid: boolean;
     children: ({hover}: {hover: boolean}) => React.ReactNode;
     onClick: () => void;
+    className?: string;
 };
 
 const isEligibleForClick = makeIsEligibleForClick('.hljs, code');
 
-function Panel({isInvalid, children, onClick}: Props) {
+function Panel({children, onClick, className}: Props) {
     const [hover, setHover] = useState(false);
 
     const handleMouseOver = () => {
@@ -35,7 +35,7 @@ function Panel({isInvalid, children, onClick}: Props) {
 
     return (
         <article
-            className={classNames('Panel', {Pannel__dangerous: isInvalid})}
+            className={classNames('Panel', className)}
             onMouseOver={handleMouseOver}
             onClick={handleOnClick}
             onMouseLeave={handleMouseLeave}

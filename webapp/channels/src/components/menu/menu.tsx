@@ -93,6 +93,9 @@ interface Props {
     menu: MenuProps;
     children: ReactNode[];
     menuButtonRef?: React.RefObject<HTMLButtonElement>;
+
+    // Use MUI Anchor Playgroup to try various anchorOrigin
+    // and transformOrigin values - https://mui.com/material-ui/react-popover/#anchor-playground
     anchorOrigin?: {
         vertical: VerticalOrigin;
         horizontal: HorizontalOrigin;
@@ -101,6 +104,7 @@ interface Props {
         vertical: VerticalOrigin;
         horizontal: HorizontalOrigin;
     };
+    hideTooltipWhenDisabled?: boolean;
 }
 
 /**
@@ -231,7 +235,7 @@ export function Menu(props: Props) {
                     id={props.menuButtonTooltip.id}
                     title={props.menuButtonTooltip.text}
                     placement={props?.menuButtonTooltip?.placement ?? 'top'}
-                    disabled={isMenuOpen}
+                    disabled={props.hideTooltipWhenDisabled ? props.menuButton.disabled || isMenuOpen : isMenuOpen}
                 >
                     {triggerElement}
                 </WithTooltip>

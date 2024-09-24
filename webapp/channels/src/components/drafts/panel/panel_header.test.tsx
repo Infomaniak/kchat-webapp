@@ -10,13 +10,13 @@ import PanelHeader from './panel_header';
 
 describe('components/drafts/panel/panel_header', () => {
     const baseProps = {
-        isScheduled: false,
-        scheduledWillNotBeSent: false,
+        kind: 'draft' as const,
         actions: <div>{'actions'}</div>,
         hover: false,
         timestamp: 12345,
         remote: false,
         title: <div>{'title'}</div>,
+        errorCode: undefined,
     };
 
     it('should match snapshot', () => {

@@ -24,6 +24,7 @@ import posts from './posts';
 import preferences from './preferences';
 import recording from './recording';
 import roles from './roles';
+import scheduledPosts from './scheduled_posts';
 import schemes from './schemes';
 import search from './search';
 import teams from './teams';
@@ -61,4 +62,5 @@ export default combineReducers({
     usage,
     hostedCustomer,
     channelBookmarks,
+    scheduledPosts,
 });

@@ -91,6 +91,7 @@ type Store interface {
 	PostPersistentNotification() PostPersistentNotificationStore
 	DesktopTokens() DesktopTokensStore
 	ChannelBookmark() ChannelBookmarkStore
+	ScheduledPost() ScheduledPostStore
 }
 
 type RetentionPolicyStore interface {
@@ -503,6 +504,7 @@ type SessionStore interface {
 	Save(c request.CTX, session *model.Session) (*model.Session, error)
 	GetSessions(c request.CTX, userID string) ([]*model.Session, error)
 	GetLRUSessions(c request.CTX, userID string, limit uint64, offset uint64) ([]*model.Session, error)
+	GetMobileSessionMetadata() ([]*model.MobileSessionMetadata, error)
 	GetSessionsWithActiveDeviceIds(userID string) ([]*model.Session, error)
 	GetSessionsExpired(thresholdMillis int64, mobileOnly bool, unnotifiedOnly bool) ([]*model.Session, error)
 	UpdateExpiredNotify(sessionid string, notified bool) error
@@ -1044,6 +1046,15 @@ type ChannelBookmarkStore interface {
 	UpdateSortOrder(bookmarkId, channelId string, newIndex int64) ([]*model.ChannelBookmarkWithFileInfo, error)
 	Delete(bookmarkId string, deleteFile bool) error
 	GetBookmarksForChannelSince(channelId string, since int64) ([]*model.ChannelBookmarkWithFileInfo, error)
+}
+
+type ScheduledPostStore interface {
+	CreateScheduledPost(scheduledPost *model.ScheduledPost) (*model.ScheduledPost, error)
+	GetScheduledPostsForUser(userId, teamId string) ([]*model.ScheduledPost, error)
+	GetPendingScheduledPosts(beforeTime int64, lastScheduledPostId string, perPage uint64) ([]*model.ScheduledPost, error)
+	PermanentlyDeleteScheduledPosts(scheduledPostIDs []string) error
+	UpdatedScheduledPost(scheduledPost *model.ScheduledPost) error
+	Get(scheduledPostId string) (*model.ScheduledPost, error)
 }
 
 // ChannelSearchOpts contains options for searching channels.

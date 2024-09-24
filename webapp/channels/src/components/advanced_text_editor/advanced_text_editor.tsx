@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
+import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions} from 'mattermost-redux/constants';
@@ -45,9 +46,8 @@ import {SendMessageTour} from 'components/tours/onboarding_tour';
 
 import Constants, {Locations, StoragePrefixes, Preferences, AdvancedTextEditor as AdvancedTextEditorConst, UserStatuses} from 'utils/constants';
 import {canUploadFiles as canUploadFilesAccordingToConfig} from 'utils/file_utils';
-import {applyMarkdown as applyMarkdownUtil} from 'utils/markdown/apply_markdown';
 import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
-import {VoiceMessageStates, getVoiceMessageStateFromDraft} from 'utils/post_utils';
+import {applyMarkdown as applyMarkdownUtil} from 'utils/markdown/apply_markdown';
 import {isErrorInvalidSlashCommand} from 'utils/post_utils';
 import * as Utils from 'utils/utils';
 
@@ -345,6 +345,13 @@ const AdvancedTextEditor = ({
         });
     }, [draft, handleDraftChange, serverError]);
 
+    const handleSubmitEvent = useCallback((e: React.FormEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        handleSubmit();
+    }, [handleSubmit]);
+
     /**
      * by getting the value directly from the textbox we eliminate all unnecessary
      * re-renders for the FormattingBar component. The previous method of always passing
@@ -464,11 +471,14 @@ const AdvancedTextEditor = ({
         previousDraft.current = draft;
     }, [draft]);
 
+    const handleSubmitPostAndScheduledMessage = useCallback((schedulingInfo?: SchedulingInfo) => handleSubmit(undefined, schedulingInfo), [handleSubmit]);
+
     const disableSendButton = Boolean(readOnlyChannel || (!draft.message.trim().length && !draft.fileInfos.length)) || !isValidPersistentNotifications;
     const sendButton = readOnlyChannel ? null : (
         <SendButton
             disabled={disableSendButton}
-            handleSubmit={handleSubmit}
+            handleSubmit={handleSubmitPostAndScheduledMessage}
+            channelId={channelId}
         />
     );
 
@@ -591,7 +601,7 @@ const AdvancedTextEditor = ({
             id={postId ? undefined : 'create_post'}
             data-testid={postId ? undefined : 'create-post'}
             className={(!postId && !fullWidthTextBox) ? 'center' : undefined}
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmitEvent}
         >
             {canPost && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0) && (
                 <FileLimitStickyBanner/>
@@ -722,7 +732,7 @@ const AdvancedTextEditor = ({
                     <MessageSubmitError
                         error={serverError}
                         submittedMessage={serverError.submittedMessage}
-                        handleSubmit={handleSubmit}
+                        handleSubmit={handleSubmitEvent}
                     />
                 )}
                 <MsgTyping

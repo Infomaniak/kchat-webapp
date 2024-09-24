@@ -50,6 +50,7 @@ type OpenTracingLayer struct {
 	RemoteClusterStore              store.RemoteClusterStore
 	RetentionPolicyStore            store.RetentionPolicyStore
 	RoleStore                       store.RoleStore
+	ScheduledPostStore              store.ScheduledPostStore
 	SchemeStore                     store.SchemeStore
 	SessionStore                    store.SessionStore
 	SharedChannelStore              store.SharedChannelStore
@@ -188,6 +189,10 @@ func (s *OpenTracingLayer) RetentionPolicy() store.RetentionPolicyStore {
 
 func (s *OpenTracingLayer) Role() store.RoleStore {
 	return s.RoleStore
+}
+
+func (s *OpenTracingLayer) ScheduledPost() store.ScheduledPostStore {
+	return s.ScheduledPostStore
 }
 
 func (s *OpenTracingLayer) Scheme() store.SchemeStore {
@@ -398,6 +403,11 @@ type OpenTracingLayerRetentionPolicyStore struct {
 
 type OpenTracingLayerRoleStore struct {
 	store.RoleStore
+	Root *OpenTracingLayer
+}
+
+type OpenTracingLayerScheduledPostStore struct {
+	store.ScheduledPostStore
 	Root *OpenTracingLayer
 }
 
@@ -8494,6 +8504,114 @@ func (s *OpenTracingLayerRoleStore) Save(role *model.Role) (*model.Role, error) 
 	return result, err
 }
 
+func (s *OpenTracingLayerScheduledPostStore) CreateScheduledPost(scheduledPost *model.ScheduledPost) (*model.ScheduledPost, error) {
+	origCtx := s.Root.Store.Context()
+	span, newCtx := tracing.StartSpanWithParentByContext(s.Root.Store.Context(), "ScheduledPostStore.CreateScheduledPost")
+	s.Root.Store.SetContext(newCtx)
+	defer func() {
+		s.Root.Store.SetContext(origCtx)
+	}()
+
+	defer span.Finish()
+	result, err := s.ScheduledPostStore.CreateScheduledPost(scheduledPost)
+	if err != nil {
+		span.LogFields(spanlog.Error(err))
+		ext.Error.Set(span, true)
+	}
+
+	return result, err
+}
+
+func (s *OpenTracingLayerScheduledPostStore) Get(scheduledPostId string) (*model.ScheduledPost, error) {
+	origCtx := s.Root.Store.Context()
+	span, newCtx := tracing.StartSpanWithParentByContext(s.Root.Store.Context(), "ScheduledPostStore.Get")
+	s.Root.Store.SetContext(newCtx)
+	defer func() {
+		s.Root.Store.SetContext(origCtx)
+	}()
+
+	defer span.Finish()
+	result, err := s.ScheduledPostStore.Get(scheduledPostId)
+	if err != nil {
+		span.LogFields(spanlog.Error(err))
+		ext.Error.Set(span, true)
+	}
+
+	return result, err
+}
+
+func (s *OpenTracingLayerScheduledPostStore) GetPendingScheduledPosts(beforeTime int64, lastScheduledPostId string, perPage uint64) ([]*model.ScheduledPost, error) {
+	origCtx := s.Root.Store.Context()
+	span, newCtx := tracing.StartSpanWithParentByContext(s.Root.Store.Context(), "ScheduledPostStore.GetPendingScheduledPosts")
+	s.Root.Store.SetContext(newCtx)
+	defer func() {
+		s.Root.Store.SetContext(origCtx)
+	}()
+
+	defer span.Finish()
+	result, err := s.ScheduledPostStore.GetPendingScheduledPosts(beforeTime, lastScheduledPostId, perPage)
+	if err != nil {
+		span.LogFields(spanlog.Error(err))
+		ext.Error.Set(span, true)
+	}
+
+	return result, err
+}
+
+func (s *OpenTracingLayerScheduledPostStore) GetScheduledPostsForUser(userId string, teamId string) ([]*model.ScheduledPost, error) {
+	origCtx := s.Root.Store.Context()
+	span, newCtx := tracing.StartSpanWithParentByContext(s.Root.Store.Context(), "ScheduledPostStore.GetScheduledPostsForUser")
+	s.Root.Store.SetContext(newCtx)
+	defer func() {
+		s.Root.Store.SetContext(origCtx)
+	}()
+
+	defer span.Finish()
+	result, err := s.ScheduledPostStore.GetScheduledPostsForUser(userId, teamId)
+	if err != nil {
+		span.LogFields(spanlog.Error(err))
+		ext.Error.Set(span, true)
+	}
+
+	return result, err
+}
+
+func (s *OpenTracingLayerScheduledPostStore) PermanentlyDeleteScheduledPosts(scheduledPostIDs []string) error {
+	origCtx := s.Root.Store.Context()
+	span, newCtx := tracing.StartSpanWithParentByContext(s.Root.Store.Context(), "ScheduledPostStore.PermanentlyDeleteScheduledPosts")
+	s.Root.Store.SetContext(newCtx)
+	defer func() {
+		s.Root.Store.SetContext(origCtx)
+	}()
+
+	defer span.Finish()
+	err := s.ScheduledPostStore.PermanentlyDeleteScheduledPosts(scheduledPostIDs)
+	if err != nil {
+		span.LogFields(spanlog.Error(err))
+		ext.Error.Set(span, true)
+	}
+
+	return err
+}
+
+func (s *OpenTracingLayerScheduledPostStore) UpdatedScheduledPost(scheduledPost *model.ScheduledPost) error {
+	origCtx := s.Root.Store.Context()
+	span, newCtx := tracing.StartSpanWithParentByContext(s.Root.Store.Context(), "ScheduledPostStore.UpdatedScheduledPost")
+	s.Root.Store.SetContext(newCtx)
+	defer func() {
+		s.Root.Store.SetContext(origCtx)
+	}()
+
+	defer span.Finish()
+	err := s.ScheduledPostStore.UpdatedScheduledPost(scheduledPost)
+	if err != nil {
+		span.LogFields(spanlog.Error(err))
+		ext.Error.Set(span, true)
+	}
+
+	return err
+}
+
 func (s *OpenTracingLayerSchemeStore) CountByScope(scope string) (int64, error) {
 	origCtx := s.Root.Store.Context()
 	span, newCtx := tracing.StartSpanWithParentByContext(s.Root.Store.Context(), "SchemeStore.CountByScope")
@@ -8702,6 +8820,24 @@ func (s *OpenTracingLayerSessionStore) GetLRUSessions(c request.CTX, userID stri
 
 	defer span.Finish()
 	result, err := s.SessionStore.GetLRUSessions(c, userID, limit, offset)
+	if err != nil {
+		span.LogFields(spanlog.Error(err))
+		ext.Error.Set(span, true)
+	}
+
+	return result, err
+}
+
+func (s *OpenTracingLayerSessionStore) GetMobileSessionMetadata() ([]*model.MobileSessionMetadata, error) {
+	origCtx := s.Root.Store.Context()
+	span, newCtx := tracing.StartSpanWithParentByContext(s.Root.Store.Context(), "SessionStore.GetMobileSessionMetadata")
+	s.Root.Store.SetContext(newCtx)
+	defer func() {
+		s.Root.Store.SetContext(origCtx)
+	}()
+
+	defer span.Finish()
+	result, err := s.SessionStore.GetMobileSessionMetadata()
 	if err != nil {
 		span.LogFields(spanlog.Error(err))
 		ext.Error.Set(span, true)
@@ -13546,6 +13682,7 @@ func New(childStore store.Store, ctx context.Context) *OpenTracingLayer {
 	newStore.RemoteClusterStore = &OpenTracingLayerRemoteClusterStore{RemoteClusterStore: childStore.RemoteCluster(), Root: &newStore}
 	newStore.RetentionPolicyStore = &OpenTracingLayerRetentionPolicyStore{RetentionPolicyStore: childStore.RetentionPolicy(), Root: &newStore}
 	newStore.RoleStore = &OpenTracingLayerRoleStore{RoleStore: childStore.Role(), Root: &newStore}
+	newStore.ScheduledPostStore = &OpenTracingLayerScheduledPostStore{ScheduledPostStore: childStore.ScheduledPost(), Root: &newStore}
 	newStore.SchemeStore = &OpenTracingLayerSchemeStore{SchemeStore: childStore.Scheme(), Root: &newStore}
 	newStore.SessionStore = &OpenTracingLayerSessionStore{SessionStore: childStore.Session(), Root: &newStore}
 	newStore.SharedChannelStore = &OpenTracingLayerSharedChannelStore{SharedChannelStore: childStore.SharedChannel(), Root: &newStore}
