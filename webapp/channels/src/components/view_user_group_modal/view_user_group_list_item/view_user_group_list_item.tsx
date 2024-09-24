@@ -46,6 +46,7 @@ const ViewUserGroupListItem = (props: Props) => {
             }
         });
     }, [user.id, groupId, props.decrementMemberCount, props.actions.removeUsersFromGroup]);
+
     const status = useSelector((state: GlobalState) => getStatusForUserId(state, user?.id) || UserStatuses.OFFLINE);
 
     return (
@@ -61,9 +62,7 @@ const ViewUserGroupListItem = (props: Props) => {
                     className={'avatar-post-preview'}
                 />
                 <StatusIcon
-                    className='status bottom user-popover-status'
                     status={status}
-                    button={true}
                 />
             </span>
             <div className='group-member-name'>

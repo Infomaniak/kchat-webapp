@@ -35,8 +35,6 @@ export type Props = {
 export default function InviteAs(props: Props) {
     const {formatMessage} = useIntl();
     const license = useSelector(getLicense);
-
-    // const cloudFreeDeprecated = useSelector(deprecateCloudFree);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -79,7 +77,7 @@ export default function InviteAs(props: Props) {
         if (isFreeTrial) {
             ctaExtraContentMsg = formatMessage({id: 'free.professional_feature.professional', defaultMessage: 'Professional feature'});
         } else {
-            ctaExtraContentMsg = hasPriorTrial ? formatMessage({id: 'free.professional_feature.upgrade', defaultMessage: 'Upgrade'}) : formatMessage({id: 'free.professional_feature.try_free', defaultMessage: 'Professional feature- try it out free'});
+            ctaExtraContentMsg = (hasPriorTrial) ? formatMessage({id: 'free.professional_feature.upgrade', defaultMessage: 'Upgrade'}) : formatMessage({id: 'free.professional_feature.try_free', defaultMessage: 'Professional feature- try it out free'});
         }
 
         const restrictedIndicator = '';

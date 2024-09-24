@@ -7,31 +7,23 @@ import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
-import {getInt} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import IconButton from '@infomaniak/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
+
+import {getLicense} from 'mattermost-redux/selectors/entities/general';
 
 import {setProductMenuSwitcherOpen} from 'actions/views/product_menu';
 import {isSwitcherOpen} from 'selectors/views/product_menu';
 
 import {
-    GenericTaskSteps,
     OnboardingTaskCategory,
     OnboardingTasksName,
     TaskNameMapToSteps,
     useHandleOnBoardingTaskData,
 } from 'components/onboarding_tasks';
-import {FINISHED, TutorialTourName} from 'components/tours';
-import {BoardsTourTip, PlaybooksTourTip} from 'components/tours/onboarding_explore_tools_tour';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
-import {ExploreOtherToolsTourSteps, suitePluginIds} from 'utils/constants';
 import {useCurrentProductId, useProducts, isChannels} from 'utils/products';
-
-import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
-
-import type {GlobalState} from 'types/store';
 
 import ProductBranding from './product_branding';
 import ProductBrandingTeamEdition from './product_branding_team_edition';
@@ -77,19 +69,6 @@ const ProductMenu = (): JSX.Element => {
     const currentProductID = useCurrentProductId();
     const license = useSelector(getLicense);
 
-    const enableTutorial = useSelector(getConfig).EnableTutorial === 'true';
-    const currentUserId = useSelector(getCurrentUserId);
-    const tutorialStep = useSelector((state: GlobalState) => getInt(state, TutorialTourName.EXPLORE_OTHER_TOOLS, currentUserId, 0));
-    const triggerStep = useSelector((state: GlobalState) => getInt(state, OnboardingTaskCategory, OnboardingTasksName.EXPLORE_OTHER_TOOLS, FINISHED));
-    const exploreToolsTourTriggered = triggerStep === GenericTaskSteps.STARTED;
-
-    const {boardsProductEnabled, boardsPlugin, playbooksPlugin} = useGetPluginsActivationState();
-
-    const boardsEnabled = boardsPlugin || boardsProductEnabled;
-
-    const showBoardsTour = enableTutorial && tutorialStep === ExploreOtherToolsTourSteps.BOARDS_TOUR && exploreToolsTourTriggered && boardsEnabled;
-    const showPlaybooksTour = enableTutorial && tutorialStep === ExploreOtherToolsTourSteps.PLAYBOOKS_TOUR && exploreToolsTourTriggered && playbooksPlugin;
-
     const handleClick = () => dispatch(setProductMenuSwitcherOpen(!switcherOpen));
 
     const handleOnBoardingTaskData = useHandleOnBoardingTaskData();
@@ -102,7 +81,7 @@ const ProductMenu = (): JSX.Element => {
     };
 
     useClickOutsideRef(menuRef, () => {
-        if (exploreToolsTourTriggered || !switcherOpen) {
+        if (!switcherOpen) {
             return;
         }
         dispatch(setProductMenuSwitcherOpen(false));
@@ -110,17 +89,6 @@ const ProductMenu = (): JSX.Element => {
 
     const productItems = products?.map((product) => {
         let tourTip;
-
-        // focalboard
-        const boardsEnabled = product.pluginId === suitePluginIds.focalboard || product.pluginId === suitePluginIds.boards;
-        if (boardsEnabled && showBoardsTour) {
-            tourTip = (<BoardsTourTip singleTip={!playbooksPlugin}/>);
-        }
-
-        // playbooks
-        if (product.pluginId === suitePluginIds.playbooks && showPlaybooksTour) {
-            tourTip = (<PlaybooksTourTip singleTip={!boardsEnabled}/>);
-        }
 
         return (
             <ProductMenuItem

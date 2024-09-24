@@ -1,34 +1,31 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import Heading from '@infomaniak/compass-components/components/heading'; // eslint-disable-line no-restricted-imports
-import Flex from '@infomaniak/compass-components/utilities/layout/Flex'; // eslint-disable-line no-restricted-imports
 import classNames from 'classnames';
 import React, {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
+
+import Heading from '@infomaniak/compass-components/components/heading'; // eslint-disable-line no-restricted-imports
+import Flex from '@infomaniak/compass-components/utilities/layout/Flex'; // eslint-disable-line no-restricted-imports
 
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 import {isAddChannelDropdownOpen} from 'selectors/views/add_channel_dropdown';
-import {getCurrentServer} from 'selectors/views/servers';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
 import MainMenu from 'components/main_menu';
-import OverlayTrigger from 'components/overlay_trigger';
 import AddChannelDropdown from 'components/sidebar/add_channel_dropdown';
-import Tooltip from 'components/tooltip';
 import {OnboardingTourSteps} from 'components/tours';
 import {useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-
-import Constants from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
+import WithTooltip from 'components/with_tooltip';
 
 import type {GlobalState} from 'types/store';
+import { isDesktopApp } from 'utils/user_agent';
 
 type SidebarHeaderContainerProps = {
     id?: string;
@@ -57,23 +54,16 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
         border-radius: 16px;
         font-size: 18px;
     }
-
-    &.isWebApp {
-        flex-direction: column;
-        height: auto;
-    }
 `;
 
-const SidebarHeading = styled('div').attrs(() => ({
+const SidebarHeading = styled(Heading).attrs(() => ({
     element: 'h1',
-    margin: '5px',
+    margin: 'none',
     size: 200,
 }))<SidebarHeaderProps>`
     color: var(--sidebar-text);
     cursor: pointer;
     display: flex;
-    font-size: 16px;
-    font-weight: 600;
 
     .title {
         overflow: hidden;
@@ -109,9 +99,8 @@ export type Props = {
 const SidebarHeader = (props: Props) => {
     const dispatch = useDispatch();
     const currentTeam = useSelector((state: GlobalState) => getCurrentTeam(state));
-    const showJoinChannelTourTip = useShowOnboardingTutorialStep(OnboardingTourSteps.JOIN_CHANNELS);
-    const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_CHANNELS);
-    const showInviteTutorialTip = false;
+    const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS);
+    const showInviteTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.INVITE_PEOPLE);
     const usageDeltas = useGetUsageDeltas();
     const isAddChannelOpen = useSelector(isAddChannelDropdownOpen);
     const theme = useSelector(getTheme);
@@ -135,11 +124,29 @@ const SidebarHeader = (props: Props) => {
                 id={'sidebar-header-container'}
                 className={classNames({isWebApp: !isDesktopApp()})}
             >
-                {isDesktopApp() && (
-                    <SidebarHeading>
-                        <span className='title'>{currentTeam.display_name}</span>
-                    </SidebarHeading>
-                )}
+                <MenuWrapper
+                    onToggle={handleMenuToggle}
+                    className='SidebarHeaderMenuWrapper test-team-header'
+                >
+                    <WithTooltip
+                        id='team-name__tooltip'
+                        title={currentTeam.description ? currentTeam.description : currentTeam.display_name}
+                        placement='bottom'
+                    >
+                        <>
+                            {/* Infomaniak custom desktop/web logic */}
+                            {isDesktopApp() && (
+                                <SidebarHeading>
+                                    <span className='title'>{currentTeam.display_name}</span>
+                                </SidebarHeading>
+                            )}
+                        </>
+                    </WithTooltip>
+                    <MainMenu
+                        id='sidebarDropdownMenu'
+                        usageDeltaTeams={usageDeltas.teams.active}
+                    />
+                </MenuWrapper>
                 <AddChannelDropdown
                     showNewChannelModal={props.showNewChannelModal}
                     showMoreChannelsModal={props.showMoreChannelsModal}
@@ -149,7 +156,6 @@ const SidebarHeader = (props: Props) => {
                     canJoinPublicChannel={props.canJoinPublicChannel}
                     handleOpenDirectMessagesModal={props.handleOpenDirectMessagesModal}
                     unreadFilterEnabled={props.unreadFilterEnabled}
-                    showJoinChannelTutorialTip={showJoinChannelTourTip}
                     showCreateTutorialTip={showCreateTutorialTip}
                     showInviteTutorialTip={showInviteTutorialTip}
                     isAddChannelOpen={isAddChannelOpen}

@@ -126,6 +126,7 @@ const state: GlobalState = {
         },
         integrations: {
             incomingHooks: {},
+            incomingHooksTotalCount: 0,
             outgoingHooks: {},
             oauthApps: {},
             systemCommands: {},
@@ -307,10 +308,6 @@ const state: GlobalState = {
             },
         },
         teams: {
-            getMyTeams: {
-                status: 'not_started',
-                error: null,
-            },
             getMyKSuites: {
                 status: 'not_started',
                 error: null,

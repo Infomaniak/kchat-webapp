@@ -14,11 +14,9 @@ import type {
     ServerChannel,
     ChannelStats,
     ChannelWithTeamData,
-    ChannelType,
 } from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
 import type {PreferenceType} from '@mattermost/types/preferences';
-import type {TranscriptData} from '@mattermost/types/transcript';
 
 import {ChannelTypes, PreferenceTypes, UserTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
@@ -30,7 +28,6 @@ import {
     getChannelsNameMapInTeam,
     getMyChannelMember as getMyChannelMemberSelector,
     getRedirectChannelNameForTeam,
-    getUnreadChannelIds,
     isManuallyUnread,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
@@ -46,7 +43,6 @@ import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
 
 import {General, Preferences} from '../constants';
-import display from 'components/user_settings/display';
 
 export function selectChannel(channelId: string) {
     return {
@@ -1205,15 +1201,6 @@ export function markMultipleChannelsAsRead(channelTimes: Record<string, number>)
     };
 }
 
-export function markAllChannelsAsRead(prevChannelId?: string, updateLastViewedAt = true): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const unreadChannelIds = getUnreadChannelIds(getState());
-        for (const unreadChannelId of unreadChannelIds) {
-            dispatch(markChannelAsRead(unreadChannelId, prevChannelId, updateLastViewedAt));
-        }
-    };
-}
-
 export function markChannelAsViewedOnServer(channelId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         try {
@@ -1528,7 +1515,6 @@ export default {
     searchGroupChannels,
     getChannelStats,
     addChannelMember,
-    notifyChannelMember,
     addChannelMembers,
     removeChannelMember,
     markChannelAsRead,

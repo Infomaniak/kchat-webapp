@@ -65,6 +65,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                 <OverlayTrigger
                   defaultOverlayShown={false}
                   delay={400}
+                  disabled={false}
                   overlay={<Unknown />}
                   placement="top"
                   trigger={
@@ -202,6 +203,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                 <OverlayTrigger
                   defaultOverlayShown={false}
                   delay={400}
+                  disabled={false}
                   overlay={<Unknown />}
                   placement="top"
                   trigger={
@@ -339,6 +341,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                 <OverlayTrigger
                   defaultOverlayShown={false}
                   delay={400}
+                  disabled={false}
                   overlay={<Unknown />}
                   placement="top"
                   trigger={
@@ -450,6 +453,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           <OverlayTrigger
             defaultOverlayShown={false}
             delay={400}
+            disabled={false}
             overlay={<Unknown />}
             placement="top"
             trigger={
@@ -760,8 +764,10 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
   <div
     className="ThreadFooter"
   >
-    <SimpleTooltip
-      content={
+    <WithTooltip
+      id="threadFooterIndicator"
+      placement="top"
+      title={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="{newReplies, plural, =0 {no unread messages} =1 {one unread message} other {# unread messages}}"
           id="threading.numNewMessages"
@@ -772,28 +778,12 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           }
         />
       }
-      id="threadFooterIndicator"
     >
       <OverlayTrigger
         defaultOverlayShown={false}
-        delayShow={100}
-        overlay={
-          <Tooltip
-            className="hidden-xs"
-            id="threadFooterIndicator"
-            placement="top"
-          >
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="{newReplies, plural, =0 {no unread messages} =1 {one unread message} other {# unread messages}}"
-              id="threading.numNewMessages"
-              values={
-                Object {
-                  "newReplies": 2,
-                }
-              }
-            />
-          </Tooltip>
-        }
+        delay={400}
+        disabled={false}
+        overlay={<Unknown />}
         placement="top"
         trigger={
           Array [
@@ -804,11 +794,9 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
       >
         <OverlayTrigger
           defaultOverlayShown={false}
-          delayShow={100}
+          delay={400}
           overlay={
             <OverlayWrapper
-              className="hidden-xs"
-              id="threadFooterIndicator"
               intl={
                 Object {
                   "$t": [Function],
@@ -848,18 +836,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   "wrapRichTextChunksInFragment": undefined,
                 }
               }
-              placement="top"
-            >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="{newReplies, plural, =0 {no unread messages} =1 {one unread message} other {# unread messages}}"
-                id="threading.numNewMessages"
-                values={
-                  Object {
-                    "newReplies": 2,
-                  }
-                }
-              />
-            </OverlayWrapper>
+            />
           }
           placement="top"
           trigger={
@@ -884,7 +861,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           </div>
         </OverlayTrigger>
       </OverlayTrigger>
-    </SimpleTooltip>
+    </WithTooltip>
     <Memo(Avatars)
       size="sm"
       userIds={
@@ -934,6 +911,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                 <OverlayTrigger
                   defaultOverlayShown={false}
                   delay={400}
+                  disabled={false}
                   overlay={<Unknown />}
                   placement="top"
                   trigger={
@@ -1071,6 +1049,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                 <OverlayTrigger
                   defaultOverlayShown={false}
                   delay={400}
+                  disabled={false}
                   overlay={<Unknown />}
                   placement="top"
                   trigger={
@@ -1208,6 +1187,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                 <OverlayTrigger
                   defaultOverlayShown={false}
                   delay={400}
+                  disabled={false}
                   overlay={<Unknown />}
                   placement="top"
                   trigger={
@@ -1319,6 +1299,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           <OverlayTrigger
             defaultOverlayShown={false}
             delay={400}
+            disabled={false}
             overlay={<Unknown />}
             placement="top"
             trigger={

@@ -1768,54 +1768,6 @@ export function sortUsersAndGroups(a: UserProfile | Group, b: UserProfile | Grou
     return aSortString.localeCompare(bSortString);
 }
 
-export const lazyWithRetries: typeof React.lazy = (importer) => {
-    const retryImport = async () => {
-        try {
-            return await importer();
-        } catch (error) {
-            for (let i = 0; i < 5; i++) {
-                // eslint-disable-next-line no-await-in-loop
-                await new Promise((resolve) => setTimeout(resolve, 2000));
-                try {
-                    // eslint-disable-next-line no-await-in-loop
-                    return await importer();
-                } catch (e) {
-                    // eslint-disable-next-line no-console
-                    console.log('retrying import');
-                }
-            }
-            throw error;
-        }
-    };
-    return React.lazy(retryImport);
-};
-
-/**
- * Merge electron-log logger + Sentry capture message in a single object.
- * @returns logger object.
- */
-const mergedLoggers = () => {
-    const logLevels: Sentry.SeverityLevel[] = ['error', 'warning', 'log', 'info', 'debug'];
-
-    const logger: { [key: string]: (...args: any) => void } = {};
-
-    logLevels.forEach((level) => {
-        logger[level] = (...args: any) => {
-            Sentry.addBreadcrumb({
-                category: 'console',
-                level,
-                data: args,
-            });
-            (window as any)?.logManager[level](...args);
-        };
-    });
-
-    return logger;
-};
-
-export const initLoggers = (): void => {
-    // Override console object to merge electron-log logger & add Breadcrumbs entries from Sentry.
-    if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
-        Object.assign(console, mergedLoggers());
-    }
-};
+export function doesCookieContainsMMUserId() {
+    return document.cookie.includes('MMUSERID=');
+}

@@ -1,15 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {CloseCircleIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {useState, useEffect} from 'react';
 import {useIntl} from 'react-intl';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+import {CloseCircleIcon} from '@mattermost/compass-icons/components';
 
-import Constants, {ItemStatus} from 'utils/constants';
+import WithTooltip from 'components/with_tooltip';
+
+import {ItemStatus} from 'utils/constants';
 
 import './input.scss';
 
@@ -142,17 +142,13 @@ const Input = React.forwardRef((
             onMouseDown={handleOnClear}
             onTouchEnd={handleOnClear}
         >
-            <OverlayTrigger
-                delayShow={Constants.OVERLAY_TIME_DELAY}
+            <WithTooltip
+                id='inputClearTooltip'
+                title={clearableTooltipText || formatMessage({id: 'widget.input.clear', defaultMessage: 'Clear'})}
                 placement='bottom'
-                overlay={(
-                    <Tooltip id={'InputClearTooltip'}>
-                        {clearableTooltipText || formatMessage({id: 'widget.input.clear', defaultMessage: 'Clear'})}
-                    </Tooltip>
-                )}
             >
                 <CloseCircleIcon size={18}/>
-            </OverlayTrigger>
+            </WithTooltip>
         </div>
     ) : null;
 

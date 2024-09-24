@@ -13,10 +13,10 @@ import type {Team} from '@mattermost/types/teams';
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+import UserSettingsModal from 'components/user_settings/modal';
+import WithTooltip from 'components/with_tooltip';
 
-import Constants, {RHSStates} from 'utils/constants';
+import {ModalIdentifiers, RHSStates} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
@@ -47,17 +47,6 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
         }
     };
 
-    const tooltip = (
-        <Tooltip id='productSettings'>
-            {tooltipContent || (
-                <FormattedMessage
-                    id='global_header.productSettings'
-                    defaultMessage='Settings'
-                />
-            )}
-        </Tooltip>
-    );
-
     useEffect(() => {
         const handleWcNavigate = (e: any) => {
             if ('detail' in e) {
@@ -72,11 +61,15 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
     }, [history]);
 
     return (
-        <OverlayTrigger
-            trigger={['hover', 'focus']}
-            delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement={tooltipPlacement || 'bottom'}
-            overlay={tooltip}
+        <WithTooltip
+            id='productSettings'
+            title={
+                <FormattedMessage
+                    id='global_header.productSettings'
+                    defaultMessage='Settings'
+                />
+            }
+            placement='bottom'
         >
             <IconButton
                 id='right-controls-settings'
@@ -90,8 +83,7 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
                 aria-haspopup='dialog'
                 aria-label={formatMessage({id: 'global_header.productSettings', defaultMessage: 'Settings'})}
             />
-
-        </OverlayTrigger>
+        </WithTooltip>
     );
 };
 

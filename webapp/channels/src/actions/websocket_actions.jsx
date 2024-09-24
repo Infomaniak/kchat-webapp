@@ -68,6 +68,7 @@ import {
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
 import {Client4} from 'mattermost-redux/client';
 import {General, Permissions} from 'mattermost-redux/constants';
+import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {
     getChannel,
     getChannelMembersInChannels,
@@ -288,9 +289,9 @@ export async function reconnect(socketId) {
         const mostRecentId = getMostRecentPostIdInChannel(state, currentChannelId);
         const mostRecentPost = getPost(state, mostRecentId);
 
-        // if (appsFeatureFlagEnabled(state)) {
-        //     dispatch(handleRefreshAppsBindings());
-        // }
+        if (appsEnabled(state)) {
+            dispatch(handleRefreshAppsBindings());
+        }
 
         dispatch(fetchMyCategories(currentTeamId));
         dispatch(loadChannelsForCurrentUser());
@@ -1845,7 +1846,7 @@ function handleThreadUpdated(msg) {
             threadData.is_following = true;
         }
 
-        if (isThreadOpen(state, threadData.id) && !isThreadManuallyUnread(state, threadData.id)) {
+        if (isThreadOpen(state, threadData.id) && window.isActive && !isThreadManuallyUnread(state, threadData.id)) {
             lastViewedAt = Date.now();
 
             // Sometimes `Date.now()` was generating a timestamp before the

@@ -5,12 +5,17 @@ import type {ConnectedProps} from 'react-redux';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
-import {getCurrentChannel, getDirectTeammate, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/channels';
+import type {Channel} from '@mattermost/types/channels';
+
+import {getCurrentChannel, getDirectTeammate, getMyChannelMembership, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
+import {getRoles} from 'mattermost-redux/selectors/entities/roles_helpers';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import {goToLastViewedChannel} from 'actions/views/channel';
+
+import {getIsChannelBookmarksEnabled} from 'components/channel_bookmarks/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -28,6 +33,11 @@ function isGpt(state: GlobalState, channelId: string) {
     return teammate?.username === 'chat.gpt';
 }
 
+function isMissingChannelRoles(state: GlobalState, channel?: Channel) {
+    const channelRoles = channel ? getMyChannelMembership(state, channel.id)?.roles || '' : '';
+    return !channelRoles.split(' ').some((v) => Boolean(getRoles(state)[v]));
+}
+
 function mapStateToProps(state: GlobalState) {
     const channel = getCurrentChannel(state);
 
@@ -38,6 +48,8 @@ function mapStateToProps(state: GlobalState) {
     const myChannelMemberships = getMyChannelMemberships(state);
     const isMember = channel ? Boolean(myChannelMemberships[channel.id]) : false;
     const enableWebSocketEventScope = config.FeatureFlagWebSocketEventScope === 'true';
+
+    const missingChannelRole = isMissingChannelRoles(state, channel);
 
     return {
         channelId: channel ? channel.id : '',
@@ -51,6 +63,8 @@ function mapStateToProps(state: GlobalState) {
         isFirstAdmin: isFirstAdmin(state),
         isMember,
         enableWebSocketEventScope,
+        isChannelBookmarksEnabled: getIsChannelBookmarksEnabled(state),
+        missingChannelRole,
     };
 }
 

@@ -205,7 +205,7 @@ func updateConfig(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 	auditRec.AddEventPriorState(&diffs)
 
-	newCfg.Sanitize()
+	c.App.SanitizedConfig(newCfg)
 
 	cfg, err = config.Merge(&model.Config{}, newCfg, &utils.MergeConfig{
 		StructFieldFilter: func(structField reflect.StructField, base, patch reflect.Value) bool {
@@ -258,7 +258,9 @@ func getClientConfig(c *Context, w http.ResponseWriter, r *http.Request) {
 		config = c.App.Srv().Platform().ClientConfigWithComputed()
 	}
 
-	w.Write([]byte(model.MapToJSON(config)))
+	if err := json.NewEncoder(w).Encode(config); err != nil {
+		c.Logger.Warn("Error while writing response", mlog.Err(err))
+	}
 }
 
 func getEnvironmentConfig(c *Context, w http.ResponseWriter, r *http.Request) {
@@ -353,7 +355,7 @@ func patchConfig(c *Context, w http.ResponseWriter, r *http.Request) {
 
 	auditRec.AddEventPriorState(&diffs)
 
-	newCfg.Sanitize()
+	c.App.SanitizedConfig(newCfg)
 
 	auditRec.Success()
 

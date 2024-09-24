@@ -169,6 +169,7 @@ export default class PerformanceReporter {
         this.histogramMeasures.push({
             metric: entry.name,
             value: entry.duration,
+            labels: entry.detail.labels,
             timestamp: Date.now(),
         });
     }
@@ -268,7 +269,7 @@ export default class PerformanceReporter {
     }
 
     private generateReport(histogramMeasures: PerformanceReportMeasure[], counters: Map<string, number>): PerformanceReport {
-        const now = performance.timeOrigin + performance.now();
+        const now = Date.now();
 
         const counterMeasures = this.countersToMeasures(now, counters);
 
@@ -289,7 +290,7 @@ export default class PerformanceReporter {
 
     private getReportStartEnd(now: number, histogramMeasures: PerformanceReportMeasure[], counterMeasures: PerformanceReportMeasure[]): {start: number; end: number} {
         let start = now;
-        let end = performance.timeOrigin;
+        let end = 0;
 
         for (const measure of histogramMeasures) {
             start = Math.min(start, measure.timestamp);

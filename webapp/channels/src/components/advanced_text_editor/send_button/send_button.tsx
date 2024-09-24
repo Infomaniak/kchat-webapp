@@ -1,41 +1,29 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {SendIcon} from '@infomaniak/compass-icons/components';
-import {Button, ButtonGroup, styled} from '@mui/material';
-import React, {memo, useRef} from 'react';
+import React, {FormEvent, memo} from 'react';
 import {useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
+import styled from 'styled-components';
 
-import {getTheme, syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
-
-import CompassDesignProvider from 'components/compass_design_provider';
-import SchedulePostButton from 'components/schedule_post/schedule_post_button';
-import {PostDraft} from 'types/store/draft';
+import {SendIcon} from '@mattermost/compass-icons/components';
 
 type SendButtonProps = {
-    handleSubmit: (e: React.FormEvent, isSchedulable?: boolean, scheduleUTCTimestamp?: number) => void;
+    handleSubmit: (e: React.FormEvent) => void;
     disabled: boolean;
-    isSchedulable?: boolean;
-    draft: PostDraft;
 }
 
-const SendButtonContainer = styled(Button)`
+const SendButtonContainer = styled.button`
     display: flex;
     height: 32px;
     padding: 0 16px;
+    border: none;
     background: var(--button-bg);
+    border-radius: 4px;
     color: var(--button-color);
     cursor: pointer;
     place-content: center;
     place-items: center;
     transition: color 150ms;
-    border-color: var(--button-color-16);
-
-    :hover {
-        background-color: var(--button-bg);
-        border-color: var(--button-color-16);
-    }
 
     &--disabled,
     &[disabled] {
@@ -52,15 +40,8 @@ const SendButtonContainer = styled(Button)`
     }
 `;
 
-const StyledButtonGroup = styled(ButtonGroup)`
-    border-radius: 4px;
-`;
-
-const SendButton = ({disabled, isSchedulable, handleSubmit, draft}: SendButtonProps) => {
-    const theme = useSelector(getTheme);
-    const draftsAreAllowed = useSelector(syncedDraftsAreAllowedAndEnabled);
+const SendButton = ({disabled, handleSubmit}: SendButtonProps) => {
     const {formatMessage} = useIntl();
-    const buttonGroupRef = useRef<HTMLDivElement>(null);
 
     const sendMessage = (e: React.FormEvent) => {
         e.stopPropagation();
@@ -68,42 +49,26 @@ const SendButton = ({disabled, isSchedulable, handleSubmit, draft}: SendButtonPr
         handleSubmit(e);
     };
 
-    const getButtonGroupRef = () => buttonGroupRef.current;
-
     return (
-        <CompassDesignProvider theme={theme}>
-            <StyledButtonGroup
-                className='send-message-button'
-                ref={buttonGroupRef}
-            >
-                <SendButtonContainer
-                    data-testid='SendMessageButton'
-                    tabIndex={0}
-                    aria-label={formatMessage({
-                        id: 'create_post.send_message',
-                        defaultMessage: 'Send a message',
-                    })}
-                    disabled={disabled}
-                    onClick={sendMessage}
-                >
-                    <SendIcon
-                        size={18}
-                        color='currentColor'
-                        aria-label={formatMessage({
-                            id: 'create_post.icon',
-                            defaultMessage: 'Create a post',
-                        })}
-                    />
-                </SendButtonContainer>
-                {isSchedulable && draftsAreAllowed && (
-                    <SchedulePostButton
-                        disabled={disabled}
-                        handleSchedulePost={(e, scheduleUTCTimestamp) => handleSubmit(e, draft, true, scheduleUTCTimestamp)}
-                        getAnchorEl={getButtonGroupRef}
-                    />
-                )}
-            </StyledButtonGroup>
-        </CompassDesignProvider>
+        <SendButtonContainer
+            data-testid='SendMessageButton'
+            tabIndex={0}
+            aria-label={formatMessage({
+                id: 'create_post.send_message',
+                defaultMessage: 'Send a message',
+            })}
+            disabled={disabled}
+            onClick={sendMessage}
+        >
+            <SendIcon
+                size={18}
+                color='currentColor'
+                aria-label={formatMessage({
+                    id: 'create_post.icon',
+                    defaultMessage: 'Create a post',
+                })}
+            />
+        </SendButtonContainer>
     );
 };
 

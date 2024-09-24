@@ -19,9 +19,8 @@ import {trackEvent} from 'actions/telemetry_actions';
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
 import {ChannelsTour, DirectMessagesTour} from 'components/tours/onboarding_tour';
+import WithTooltip from 'components/with_tooltip';
 
 import Constants, {A11yCustomEventTypes, DraggingStateTypes, DraggingStates} from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
@@ -281,20 +280,6 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
         } else if (category.type === CategoryTypes.DIRECT_MESSAGES) {
             const addHelpLabel = localizeMessage('sidebar.createDirectMessage', 'Create new direct message');
 
-            const addTooltip = (
-                <Tooltip
-                    id='new-group-tooltip'
-                    className='hidden-xs'
-                >
-                    {addHelpLabel}
-                    <KeyboardShortcutSequence
-                        shortcut={KEYBOARD_SHORTCUTS.navDMMenu}
-                        hideDescription={true}
-                        isInsideTooltip={true}
-                    />
-                </Tooltip>
-            );
-
             categoryMenu = (
                 <React.Fragment>
                     <SidebarCategorySortingMenu
@@ -302,10 +287,19 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                         handleOpenDirectMessagesModal={this.handleOpenDirectMessagesModal}
                         menuTriggerRef={this.menuTriggerRef}
                     />
-                    <OverlayTrigger
-                        delayShow={500}
+                    <WithTooltip
+                        id='new-group-tooltip'
+                        title={
+                            <>
+                                {addHelpLabel}
+                                <KeyboardShortcutSequence
+                                    shortcut={KEYBOARD_SHORTCUTS.navDMMenu}
+                                    hideDescription={true}
+                                    isInsideTooltip={true}
+                                />
+                            </>
+                        }
                         placement='top'
-                        overlay={addTooltip}
                     >
                         <button
                             className='SidebarChannelGroupHeader_addButton'
@@ -314,7 +308,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                         >
                             <i className='icon-plus'/>
                         </button>
-                    </OverlayTrigger>
+                    </WithTooltip>
                 </React.Fragment>
             );
 

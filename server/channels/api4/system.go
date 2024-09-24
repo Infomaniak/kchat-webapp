@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"path"
 	"reflect"
 	"runtime"
@@ -20,6 +21,7 @@ import (
 	"github.com/mattermost/mattermost/server/public/model"
 	"github.com/mattermost/mattermost/server/public/shared/mlog"
 	"github.com/mattermost/mattermost/server/v8/channels/audit"
+	"github.com/mattermost/mattermost/server/v8/config"
 	"github.com/mattermost/mattermost/server/v8/platform/services/cache"
 	"github.com/mattermost/mattermost/server/v8/platform/services/upgrader"
 	"github.com/mattermost/mattermost/server/v8/platform/shared/web"
@@ -33,7 +35,7 @@ const (
 	MaxServerBusySeconds          = 86400
 )
 
-var redirectLocationDataCache = cache.NewLRU(cache.LRUOptions{
+var redirectLocationDataCache = cache.NewLRU(&cache.CacheOptions{
 	Size: RedirectLocationCacheSize,
 })
 
@@ -84,7 +86,7 @@ func generateSupportPacket(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Support packet generation is limited to system admins (MM-42271).
+	// Support Packet generation is limited to system admins (MM-42271).
 	if !c.App.SessionHasPermissionTo(*c.AppContext.Session(), model.PermissionManageSystem) {
 		c.SetPermissionError(model.PermissionManageSystem)
 		return
@@ -143,7 +145,7 @@ func generateSupportPacket(c *Context, w http.ResponseWriter, r *http.Request) {
 func getSystemPing(c *Context, w http.ResponseWriter, r *http.Request) {
 	reqs := c.App.Config().ClientRequirements
 
-	s := make(map[string]string)
+	s := make(map[string]any)
 	s[model.STATUS] = model.StatusOk
 	s["AndroidLatestVersion"] = reqs.AndroidLatestVersion
 	s["AndroidMinVersion"] = reqs.AndroidMinVersion
@@ -195,9 +197,20 @@ func getSystemPing(c *Context, w http.ResponseWriter, r *http.Request) {
 			s[model.STATUS] = model.StatusUnhealthy
 		}
 
-		w.Header().Set(model.STATUS, s[model.STATUS])
-		w.Header().Set(dbStatusKey, s[dbStatusKey])
-		w.Header().Set(filestoreStatusKey, s[filestoreStatusKey])
+		if res, ok := s[model.STATUS].(string); ok {
+			w.Header().Set(model.STATUS, res)
+		}
+		if res, ok := s[dbStatusKey].(string); ok {
+			w.Header().Set(dbStatusKey, res)
+		}
+		if res, ok := s[filestoreStatusKey].(string); ok {
+			w.Header().Set(filestoreStatusKey, res)
+		}
+
+		// Checking if mattermost is running as root, if the user is system admin
+		if c.App.SessionHasPermissionTo(*c.AppContext.Session(), model.PermissionManageSystem) {
+			s["root_status"] = os.Geteuid() == 0
+		}
 	}
 
 	if deviceID := r.FormValue("device_id"); deviceID != "" {
@@ -209,7 +222,8 @@ func getSystemPing(c *Context, w http.ResponseWriter, r *http.Request) {
 	if s[model.STATUS] != model.StatusOk && r.FormValue("use_rest_semantics") != "true" {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	w.Write([]byte(model.MapToJSON(s)))
+
+	w.Write(model.ToJSON(s))
 }
 
 func testEmail(c *Context, w http.ResponseWriter, r *http.Request) {
@@ -427,14 +441,14 @@ func downloadLogs(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fileData, err := c.App.GetMattermostLog(c.AppContext)
+	fileData, err := c.App.Srv().Platform().GetLogFile(c.AppContext)
 	if err != nil {
 		c.Err = model.NewAppError("downloadLogs", "api.system.logs.download_bytes_buffer.app_error", nil, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	reader := bytes.NewReader(fileData.Body)
-	web.WriteFileResponse("mattermost.log",
+	web.WriteFileResponse(config.LogFilename,
 		"text/plain",
 		int64(len(fileData.Body)),
 		time.Now(),
@@ -673,7 +687,19 @@ func pushNotificationAck(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 
 	if ack.NotificationType == model.PushTypeMessage {
-		c.App.CountNotificationAck(model.NotificationTypePush, ack.ClientPlatform)
+		session := c.AppContext.Session()
+		ignoreNotificationACK := session.Props[model.SessionPropDeviceNotificationDisabled] == "true"
+		if ignoreNotificationACK && ack.ClientPlatform == "ios" {
+			// iOS doesn't send ack when the notificications are disabled
+			// so we restore the value the moment we receive an ack
+			c.App.SetExtraSessionProps(session, map[string]string{
+				model.SessionPropDeviceNotificationDisabled: "false",
+			})
+			c.App.ClearSessionCacheForUser(session.UserId)
+		}
+		if !ignoreNotificationACK {
+			c.App.CountNotificationAck(model.NotificationTypePush, ack.ClientPlatform)
+		}
 	}
 
 	err := c.App.SendAckToPushProxy(&ack)

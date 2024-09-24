@@ -26,7 +26,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <SettingItem
+    <Memo(SettingItem)
       active={false}
       areAllSectionsInactive={false}
       max={null}
@@ -67,7 +67,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-light"
     />
-    <SettingItem
+    <Memo(SettingItem)
       active={false}
       areAllSectionsInactive={false}
       describe={
@@ -159,7 +159,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <SettingItem
+    <Memo(SettingItem)
       active={false}
       areAllSectionsInactive={false}
       max={null}
@@ -200,7 +200,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-light"
     />
-    <SettingItem
+    <Memo(SettingItem)
       active={false}
       areAllSectionsInactive={false}
       describe={
@@ -292,7 +292,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <SettingItem
+    <Memo(SettingItem)
       active={false}
       areAllSectionsInactive={false}
       max={null}
@@ -333,7 +333,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-light"
     />
-    <SettingItem
+    <Memo(SettingItem)
       active={false}
       areAllSectionsInactive={false}
       describe={
@@ -425,7 +425,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <SettingItem
+    <Memo(SettingItem)
       active={false}
       areAllSectionsInactive={false}
       max={null}
@@ -466,7 +466,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-light"
     />
-    <SettingItem
+    <Memo(SettingItem)
       active={false}
       areAllSectionsInactive={false}
       describe={
@@ -558,7 +558,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <SettingItem
+    <Memo(SettingItem)
       active={false}
       areAllSectionsInactive={false}
       max={null}
@@ -600,7 +600,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-light"
     />
-    <SettingItem
+    <Memo(SettingItem)
       active={false}
       areAllSectionsInactive={false}
       describe={

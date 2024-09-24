@@ -16,18 +16,16 @@ import {
     FormatQuoteOpenIcon,
     FormatListBulletedIcon,
     FormatListNumberedIcon,
-} from '@infomaniak/compass-icons/components';
-import type IconProps from '@infomaniak/compass-icons/components/props';
+} from '@mattermost/compass-icons/components';
+import type IconProps from '@mattermost/compass-icons/components/props';
 
-import type {
-    KeyboardShortcutDescriptor} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+import type {
+    KeyboardShortcutDescriptor} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import WithTooltip from 'components/with_tooltip';
 
-import Constants from 'utils/constants';
 import type {MarkdownMode} from 'utils/markdown/apply_markdown';
 
 export const IconContainer = styled.button`
@@ -73,6 +71,7 @@ export const IconContainer = styled.button`
 `;
 
 interface FormattingIconProps {
+    id?: string;
     mode: MarkdownMode;
     onClick?: () => void;
     className?: string;
@@ -131,7 +130,7 @@ const FormattingIcon = (props: FormattingIconProps): JSX.Element => {
     const bodyAction = (
         <IconContainer
             type='button'
-            id={`FormattingControl_${mode}`}
+            id={props.id || `FormattingControl_${mode}`}
             onClick={onClick}
             aria-label={buttonAriaLabel}
             {...otherProps}
@@ -145,25 +144,21 @@ const FormattingIcon = (props: FormattingIconProps): JSX.Element => {
 
     /* get the correct tooltip from the ShortcutsMap */
     const shortcut = MAP_MARKDOWN_MODE_TO_KEYBOARD_SHORTCUTS[mode];
-    const tooltip = (
-        <Tooltip id='upload-tooltip'>
-            <KeyboardShortcutSequence
-                shortcut={shortcut}
-                hoistDescription={true}
-                isInsideTooltip={true}
-            />
-        </Tooltip>
-    );
 
     return (
-        <OverlayTrigger
-            delayShow={Constants.OVERLAY_TIME_DELAY}
+        <WithTooltip
+            id='formatting-icon-tooltip'
             placement='top'
-            trigger={['hover', 'focus']}
-            overlay={tooltip}
+            title={
+                <KeyboardShortcutSequence
+                    shortcut={shortcut}
+                    hoistDescription={true}
+                    isInsideTooltip={true}
+                />
+            }
         >
             {bodyAction}
-        </OverlayTrigger>
+        </WithTooltip>
     );
 };
 

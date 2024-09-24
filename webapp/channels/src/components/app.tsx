@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, {lazy} from 'react';
 import {hot} from 'react-hot-loader/root';
 import {Provider} from 'react-redux';
 import {Router} from 'react-router-dom';
@@ -11,9 +11,7 @@ import store from 'stores/redux_store';
 import {makeAsyncComponent} from 'components/async_load';
 
 import {getHistory} from 'utils/browser_history';
-import * as Utils from 'utils/utils';
-
-const LazyRoot = Utils.lazyWithRetries(() => import('components/root'));
+const LazyRoot = lazy(() => import('components/root'));
 
 const Root = makeAsyncComponent('Root', LazyRoot);
 

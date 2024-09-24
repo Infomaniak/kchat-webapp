@@ -27,6 +27,7 @@ describe('Selectors.Users', () => {
     const group2 = TestHelper.fakeGroupWithId('');
 
     const user1 = TestHelper.fakeUserWithId('');
+    user1.position = 'Software Engineer at Mattermost';
     user1.notify_props = {mention_keys: 'testkey1,testkey2'} as UserProfile['notify_props'];
     user1.roles = 'system_admin system_user';
     const user2 = TestHelper.fakeUserWithId();
@@ -401,6 +402,7 @@ describe('Selectors.Users', () => {
 
     it('searchProfilesInCurrentChannel', () => {
         expect(Selectors.searchProfilesInCurrentChannel(testState, user1.username)).toEqual([user1]);
+        expect(Selectors.searchProfilesInCurrentChannel(testState, 'engineer at mattermost')).toEqual([user1]);
         expect(Selectors.searchProfilesInCurrentChannel(testState, user1.username, true)).toEqual([]);
     });
 

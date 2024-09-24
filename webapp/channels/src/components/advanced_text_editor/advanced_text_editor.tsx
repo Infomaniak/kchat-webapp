@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {lazy, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -19,19 +19,20 @@ import {getCurrentUserId, isCurrentUserGuestUser, getStatusForUserId, makeGetDis
 
 import * as GlobalActions from 'actions/global_actions';
 import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
+import type {SubmitPostReturnType} from 'actions/views/create_comment';
 import {removeDraft, updateDraft} from 'actions/views/drafts';
 import {makeGetDraft} from 'selectors/rhs';
 import {connectionErrorCount} from 'selectors/views/system';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import {BannerJoinChannel} from 'components/banner_join_channel';
+import {makeAsyncComponent} from 'components/async_load';
 import AutoHeightSwitcher from 'components/common/auto_height_switcher';
 import DndBanner from 'components/dnd_banner';
 import FilePreview from 'components/file_preview';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import GuestBanner from 'components/guest_banner';
 import useDidUpdate from 'components/common/hooks/useDidUpdate';
-import FileLimitStickyBanner from 'components/file_limit_sticky_banner';
 import MessageSubmitError from 'components/message_submit_error';
 import MsgTyping from 'components/msg_typing';
 import RhsSuggestionList from 'components/suggestion/rhs_suggestion_list';
@@ -78,6 +79,8 @@ import Poll from 'components/post_poll';
 import useScheduledDrafts from './use_scheduled_drafts';
 import {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 
+const FileLimitStickyBanner = makeAsyncComponent('FileLimitStickyBanner', lazy(() => import('components/file_limit_sticky_banner')));
+
 function isDraftEmpty(draft: PostDraft) {
     return draft.message === '' && draft.fileInfos.length === 0 && draft.uploadsInProgress.length === 0;
 }
@@ -90,22 +93,22 @@ type Props = {
     location: string;
     channelId: string;
     postId: string;
-    voiceMessageClientId: string;
-    isSchedulable?: boolean;
-    setDraftAsPostType: (channelOrRootId: Channel['id'] | Post['id'], draft: PostDraft, postType?: PostDraft['postType']) => void;
-    handleVoiceMessageUploadStart: (clientId: string, channelOrRootId: Channel['id'] | Post['id']) => void;
-    caretPosition: number;
     isThreadView?: boolean;
     placeholder?: string;
+
+    /**
+     * Used by plugins to act after the post is made
+     */
+    afterSubmit?: (response: SubmitPostReturnType) => void;
 }
 
-const AdvanceTextEditor = ({
+const AdvancedTextEditor = ({
     location,
     channelId,
     postId,
     isThreadView = false,
     placeholder,
-    isSchedulable
+    afterSubmit,
 }: Props) => {
     const {formatMessage} = useIntl();
 
@@ -204,7 +207,7 @@ const AdvanceTextEditor = ({
             }
 
             if (options.show) {
-                dispatch(updateDraft(key, {...draftToChange, show: true}, draftToChange.rootId));
+                dispatch(updateDraft(key, {...draftToChange, show: true}, draftToChange.rootId, true));
                 return;
             }
 
@@ -272,7 +275,7 @@ const AdvanceTextEditor = ({
         isValidPersistentNotifications,
         onSubmitCheck: prioritySubmitCheck,
     } = usePriority(draft, handleDraftChange, focusTextbox, showPreview);
-    const [handleSubmit, errorClass] = useSubmit(draft, postError, channelId, postId, serverError, lastBlurAt, focusTextbox, setServerError, setPostError, setShowPreview, handleDraftChange, prioritySubmitCheck);
+    const [handleSubmit, errorClass] = useSubmit(draft, postError, channelId, postId, serverError, lastBlurAt, focusTextbox, setServerError, setPostError, setShowPreview, handleDraftChange, prioritySubmitCheck, afterSubmit);
     const [handleKeyDown, postMsgKeyPress] = useKeyHandler(
         draft,
         channelId,
@@ -464,11 +467,8 @@ const AdvanceTextEditor = ({
     const disableSendButton = Boolean(readOnlyChannel || (!draft.message.trim().length && !draft.fileInfos.length)) || !isValidPersistentNotifications;
     const sendButton = readOnlyChannel ? null : (
         <SendButton
-            draft={draft}
             disabled={disableSendButton}
-            isSchedulable={isSchedulable}
             handleSubmit={handleSubmit}
-            postId={postId}
         />
     );
 
@@ -734,4 +734,4 @@ const AdvanceTextEditor = ({
     );
 };
 
-export default AdvanceTextEditor;
+export default AdvancedTextEditor;

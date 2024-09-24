@@ -210,8 +210,12 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
                     values={{id: oauthAppToken}}
                 />
                 <CopyText
-                    idMessage='integrations.copy_client_id'
-                    defaultMessage='Copy Client Id'
+                    tooltip={
+                        <FormattedMessage
+                            id='integrations.copy_client_id'
+                            defaultMessage='Copy Client Id'
+                        />
+                    }
                     value={oauthAppToken}
                 />
                 <br/>
@@ -221,8 +225,12 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
                     values={{secret: oauthAppSecret}}
                 />
                 <CopyText
-                    idMessage='integrations.copy_client_secret'
-                    defaultMessage='Copy Client Secret'
+                    tooltip={
+                        <FormattedMessage
+                            id='integrations.copy_client_secret'
+                            defaultMessage='Copy Client Secret'
+                        />
+                    }
                     value={oauthAppSecret}
                 />
             </p>,
@@ -303,8 +311,12 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
                         values={{username}}
                     />
                     <CopyText
-                        idMessage='integrations.copy_username'
-                        defaultMessage='Copy Username'
+                        tooltip={
+                            <FormattedMessage
+                                id='integrations.copy_username'
+                                defaultMessage='Copy Username'
+                            />
+                        }
                         value={username || ''}
                     />
                     <br/>

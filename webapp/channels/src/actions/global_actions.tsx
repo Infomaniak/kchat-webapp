@@ -24,7 +24,7 @@ import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedi
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
 import {getBool, getTeamsOrderPreference, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getTeam, getMyTeamMember, getTeamMemberships, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
 import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
@@ -386,12 +386,9 @@ export async function getTeamRedirectChannelIfIsAccesible(user: UserProfile, tea
 export async function redirectUserToDefaultTeam() {
     let state = getState();
 
-    // Assume we need to load the user if they don't have any team memberships loaded or the user loaded
     let user = getCurrentUser(state);
     const shouldLoadUser = Utils.isEmptyObject(getTeamMemberships(state)) || !user;
-
     // const onboardingFlowEnabled = getIsOnboardingFlowEnabled(state);
-
     if (shouldLoadUser) {
         await dispatch(loadMe());
         state = getState();

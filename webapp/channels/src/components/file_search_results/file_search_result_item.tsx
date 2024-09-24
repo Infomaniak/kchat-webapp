@@ -8,9 +8,7 @@ import {Client4} from 'mattermost-redux/client';
 
 import FileThumbnail from 'components/file_attachment/file_thumbnail';
 import FilePreviewModal from 'components/file_preview_modal';
-import OverlayTrigger from 'components/overlay_trigger';
 import Timestamp, {RelativeRanges} from 'components/timestamp';
-import Tooltip from 'components/tooltip';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
@@ -19,6 +17,7 @@ import type {PropsFromRedux, OwnProps} from './index';
 import './file_search_result_item.scss';
 
 import Tag from 'components/widgets/tag/tag';
+import WithTooltip from 'components/with_tooltip';
 
 import {getHistory} from 'utils/browser_history';
 import Constants, {ModalIdentifiers} from 'utils/constants';
@@ -150,14 +149,10 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                         </div>
                     </div>
                     {this.props.fileInfo.post_id && (
-                        <OverlayTrigger
-                            delayShow={1000}
-                            placement='top'
-                            overlay={
-                                <Tooltip id='file-name__tooltip'>
-                                    {localizeMessage('file_search_result_item.more_actions', 'More Actions')}
-                                </Tooltip>
-                            }
+                        <WithTooltip
+                            id='file-name__tooltip'
+                            title={localizeMessage('file_search_result_item.more_actions', 'More Actions')}
+                            placement={'top'}
                         >
                             <MenuWrapper
                                 onToggle={this.keepOpen}
@@ -186,16 +181,12 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                                     {this.renderPluginItems()}
                                 </Menu>
                             </MenuWrapper>
-                        </OverlayTrigger>
+                        </WithTooltip>
                     )}
-                    <OverlayTrigger
-                        delayShow={1000}
-                        placement='top'
-                        overlay={
-                            <Tooltip id='file-name__tooltip'>
-                                {localizeMessage('file_search_result_item.download', 'Download')}
-                            </Tooltip>
-                        }
+                    <WithTooltip
+                        id='file-name__tooltip'
+                        title={localizeMessage('file_search_result_item.download', 'Download')}
+                        placement={'top'}
                     >
                         <a
                             className='action-icon download-icon'
@@ -204,7 +195,7 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                         >
                             <i className='icon icon-download-outline'/>
                         </a>
-                    </OverlayTrigger>
+                    </WithTooltip>
                 </button>
             </div>
         );

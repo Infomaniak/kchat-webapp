@@ -3,7 +3,7 @@
 
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
-import React from 'react';
+import React, {lazy} from 'react';
 import type {CSSProperties} from 'react';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import type {DropResult, DragStart, BeforeCapture} from 'react-beautiful-dnd';
@@ -20,23 +20,22 @@ import {General} from 'mattermost-redux/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import ActivityAndInsightsLink
-    from 'components/activity_and_insights/activity_and_insights_link/activity_and_insights_link';
-import ConfirmModalRedux from 'components/confirm_modal_redux';
-import DraftsLink from 'components/drafts/drafts_link/drafts_link';
-import GlobalThreadsLink from 'components/threading/global_threads_link';
+import {makeAsyncComponent} from 'components/async_load';
+import SidebarCategory from 'components/sidebar/sidebar_category';
 
-import * as ChannelUtils from 'utils/channel_utils';
-import {Constants, DraggingStates, DraggingStateTypes, ModalIdentifiers} from 'utils/constants';
-import * as Keyboard from 'utils/keyboard';
-import * as Utils from 'utils/utils';
+import {findNextUnreadChannelId} from 'utils/channel_utils';
+import {Constants, DraggingStates, DraggingStateTypes} from 'utils/constants';
+import {isKeyPressed, cmdOrCtrlPressed} from 'utils/keyboard';
+import {localizeMessage, mod} from 'utils/utils';
 
 import type {DraggingState} from 'types/store';
 import type {StaticPage} from 'types/store/lhs';
 
-import SidebarCategory from '../sidebar_category';
-import UnreadChannelIndicator from '../unread_channel_indicator';
-import UnreadChannels from '../unread_channels';
+const ActivityAndInsightsLink = makeAsyncComponent('ActivityAndInsightsLink', lazy(() => import('components/activity_and_insights/activity_and_insights_link/activity_and_insights_link')));
+const DraftsLink = makeAsyncComponent('DraftsLink', lazy(() => import('components/drafts/drafts_link/drafts_link')));
+const GlobalThreadsLink = makeAsyncComponent('GlobalThreadsLink', lazy(() => import('components/threading/global_threads_link')));
+const UnreadChannelIndicator = makeAsyncComponent('UnreadChannelIndicator', lazy(() => import('../unread_channel_indicator')));
+const UnreadChannels = makeAsyncComponent('UnreadChannels', lazy(() => import('../unread_channels')));
 
 export function renderView(props: React.HTMLProps<HTMLDivElement>) {
     return (
@@ -327,7 +326,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
     };
 
     navigateChannelShortcut = (e: KeyboardEvent) => {
-        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && (Keyboard.isKeyPressed(e, Constants.KeyCodes.UP) || Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN))) {
+        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && (isKeyPressed(e, Constants.KeyCodes.UP) || isKeyPressed(e, Constants.KeyCodes.DOWN))) {
             e.preventDefault();
 
             const staticPageIds = this.getDisplayedStaticPageIds();
@@ -337,24 +336,24 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             const curIndex = allIds.indexOf(curSelectedId);
 
             let nextIndex;
-            if (Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
+            if (isKeyPressed(e, Constants.KeyCodes.DOWN)) {
                 nextIndex = curIndex + 1;
             } else {
                 nextIndex = curIndex - 1;
             }
 
-            const nextId = allIds[Utils.mod(nextIndex, allIds.length)];
+            const nextId = allIds[mod(nextIndex, allIds.length)];
             this.navigateById(nextId);
             if (nextIndex >= staticPageIds.length) {
                 this.scrollToChannel(nextId);
             }
-        } else if (Keyboard.cmdOrCtrlPressed(e) && e.shiftKey && Keyboard.isKeyPressed(e, Constants.KeyCodes.K)) {
+        } else if (cmdOrCtrlPressed(e) && e.shiftKey && isKeyPressed(e, Constants.KeyCodes.K)) {
             this.props.handleOpenMoreDirectChannelsModal(e);
         }
     };
 
     navigateUnreadChannelShortcut = (e: KeyboardEvent) => {
-        if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && (Keyboard.isKeyPressed(e, Constants.KeyCodes.UP) || Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN))) {
+        if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && (isKeyPressed(e, Constants.KeyCodes.UP) || isKeyPressed(e, Constants.KeyCodes.DOWN))) {
             e.preventDefault();
 
             const allChannelIds = this.getDisplayedChannelIds();
@@ -369,13 +368,13 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             }
 
             let direction = 0;
-            if (Keyboard.isKeyPressed(e, Constants.KeyCodes.UP)) {
+            if (isKeyPressed(e, Constants.KeyCodes.UP)) {
                 direction = -1;
             } else {
                 direction = 1;
             }
 
-            const nextIndex = ChannelUtils.findNextUnreadChannelId(
+            const nextIndex = findNextUnreadChannelId(
                 this.props.currentChannelId,
                 allChannelIds,
                 unreadChannelIds,
@@ -604,7 +603,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             />
         );
 
-        const ariaLabel = Utils.localizeMessage('accessibility.sections.lhsList', 'channel sidebar region');
+        const ariaLabel = localizeMessage('accessibility.sections.lhsList', 'channel sidebar region');
 
         return (
 

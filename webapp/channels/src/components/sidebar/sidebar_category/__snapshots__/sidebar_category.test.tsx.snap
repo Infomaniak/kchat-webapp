@@ -313,14 +313,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
         }
       }
     />
-    <OverlayTrigger
-      defaultOverlayShown={false}
-      delayShow={500}
-      overlay={
-        <Tooltip
-          className="hidden-xs"
-          id="new-group-tooltip"
-        >
+    <WithTooltip
+      id="new-group-tooltip"
+      placement="top"
+      title={
+        <React.Fragment>
           Create new direct message
           <Memo(KeyboardShortcutSequence)
             hideDescription={true}
@@ -338,14 +335,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
               }
             }
           />
-        </Tooltip>
-      }
-      placement="top"
-      trigger={
-        Array [
-          "hover",
-          "focus",
-        ]
+        </React.Fragment>
       }
     >
       <button
@@ -357,7 +347,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
           className="icon-plus"
         />
       </button>
-    </OverlayTrigger>
+    </WithTooltip>
   </SidebarCategoryHeader>
   <div
     className="SidebarChannelGroup_content"
@@ -442,14 +432,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
         }
       }
     />
-    <OverlayTrigger
-      defaultOverlayShown={false}
-      delayShow={500}
-      overlay={
-        <Tooltip
-          className="hidden-xs"
-          id="new-group-tooltip"
-        >
+    <WithTooltip
+      id="new-group-tooltip"
+      placement="top"
+      title={
+        <React.Fragment>
           Create new direct message
           <Memo(KeyboardShortcutSequence)
             hideDescription={true}
@@ -467,14 +454,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
               }
             }
           />
-        </Tooltip>
-      }
-      placement="top"
-      trigger={
-        Array [
-          "hover",
-          "focus",
-        ]
+        </React.Fragment>
       }
     >
       <button
@@ -486,7 +466,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
           className="icon-plus"
         />
       </button>
-    </OverlayTrigger>
+    </WithTooltip>
   </SidebarCategoryHeader>
   <div
     className="SidebarChannelGroup_content"

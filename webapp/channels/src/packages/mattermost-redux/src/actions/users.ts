@@ -20,10 +20,11 @@ import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getTeams} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId, getUser as selectUser, getUsers, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
+import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
 import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
+import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 
 // TODO fix import restriction
 import {getMyMeets} from 'actions/calls';
@@ -32,8 +33,13 @@ import {bridgeRecreate} from 'actions/ksuite_bridge_actions';
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 
-// import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
 // import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
+
+// Delay requests for missing profiles for up to 100ms to allow for simulataneous requests to be batched
+const missingProfilesWait = 100;
+
+export const maxUserIdsPerProfilesRequest = 100; // users ids per 'users/ids' request
+export const maxUserIdsPerStatusesRequest = 200; // users ids per 'users/status/ids'request
 
 export function generateMfaSecret(userId: string) {
     return bindClientFunc({
@@ -70,68 +76,23 @@ export function createUser(user: UserProfile, token: string, inviteId: string, r
 export function loadMe(): ActionFuncAsync<boolean> {
     return async (dispatch, getState) => {
         // Sometimes the server version is set in one or the other
-        // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
-        const serverVersion = Client4.getServerVersion();
+        const serverVersion = getState().entities.general.serverVersion || Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
 
         try {
-            const kSuiteCall = await dispatch(getMyKSuites());
-            const kSuites = getTeams(getState());
+            await Promise.all([
+                dispatch(getClientConfig()),
+                dispatch(getLicenseConfig()),
+                dispatch(getMe()),
+                dispatch(getMyPreferences()),
+                dispatch(getMyKSuites()),
+                dispatch(getMyTeamMembers()),
+            ]);
 
-            const suiteArr = Object.values(kSuites);
+            const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
+            await dispatch(getMyTeamUnreads(isCollapsedThreads));
 
-            // allow through in tests to launch promise.all but not trigger redirect
-            if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
-                const lastKSuiteSeenId = getLastKSuiteSeenId();
-                const sortedSuites = suiteArr.sort((a, b) => {
-                    if (a.id === lastKSuiteSeenId) {
-                        return -1;
-                    }
-                    if (b.id === lastKSuiteSeenId) {
-                        return 1;
-                    }
-                    return b.update_at - a.update_at;
-                });
-                const lastKSuiteSeen = sortedSuites[0];
-
-                if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    window.postMessage({
-                        type: 'switch-server',
-                        data: lastKSuiteSeen.display_name,
-                    }, window.origin);
-                }
-
-                // don't redirect to the error page if it is a testing environment
-                if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    dispatch(bridgeRecreate(lastKSuiteSeen.url));
-
-                    window.open(lastKSuiteSeen.url, '_self');
-                }
-
-                try {
-                    await Promise.all([
-                        dispatch(getClientConfig()),
-                        dispatch(getLicenseConfig()),
-                        dispatch(getMe()),
-                        dispatch(getMyPreferences()),
-                        dispatch(getMyTeamMembers()),
-                        dispatch(getMyMeets()),
-                    ]);
-
-                    const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
-                    await dispatch(getMyTeamUnreads(isCollapsedThreads));
-
-                    await dispatch(getServerLimits());
-                } catch (error) {
-                    dispatch(logError(error as ServerError));
-                    return {error: error as ServerError};
-                }
-            } else if (!isDesktopApp()) {
-                // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
-                if (kSuiteCall && kSuiteCall.data) {
-                    getHistory().push('/error?type=no_ksuite');
-                }
-            }
+            await dispatch(getServerLimits());
         } catch (error) {
             dispatch(logError(error as ServerError));
             return {error: error as ServerError};
@@ -140,6 +101,82 @@ export function loadMe(): ActionFuncAsync<boolean> {
         return {data: true};
     };
 }
+
+// export function loadMe(): ActionFuncAsync<boolean> {
+//     return async (dispatch, getState) => {
+//         console.log('aloche')
+//         // Sometimes the server version is set in one or the other
+//         // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
+//         const serverVersion = Client4.getServerVersion();
+//         dispatch(setServerVersion(serverVersion));
+
+//         try {
+//             const kSuiteCall = await dispatch(getMyKSuites());
+//             const kSuites = getTeams(getState());
+
+//             const suiteArr = Object.values(kSuites);
+
+//             // allow through in tests to launch promise.all but not trigger redirect
+//             if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
+//                 const lastKSuiteSeenId = getLastKSuiteSeenId();
+//                 const sortedSuites = suiteArr.sort((a, b) => {
+//                     if (a.id === lastKSuiteSeenId) {
+//                         return -1;
+//                     }
+//                     if (b.id === lastKSuiteSeenId) {
+//                         return 1;
+//                     }
+//                     return b.update_at - a.update_at;
+//                 });
+//                 const lastKSuiteSeen = sortedSuites[0];
+
+//                 if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+//                     window.postMessage({
+//                         type: 'switch-server',
+//                         data: lastKSuiteSeen.display_name,
+//                     }, window.origin);
+//                 }
+
+//                 // don't redirect to the error page if it is a testing environment
+//                 if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+//                     dispatch(bridgeRecreate(lastKSuiteSeen.url));
+
+//                     window.open(lastKSuiteSeen.url, '_self');
+//                 }
+
+//                 try {
+//                     console.log('aloche')
+//                     await Promise.all([
+//                         dispatch(getClientConfig()),
+//                         dispatch(getLicenseConfig()),
+//                         dispatch(getMe()),
+//                         dispatch(getMyPreferences()),
+//                         dispatch(getMyTeamMembers()),
+//                         dispatch(getMyMeets()),
+//                     ]);
+
+//                     const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
+//                     await dispatch(getMyTeamUnreads(isCollapsedThreads));
+
+//                     await dispatch(getServerLimits());
+//                 } catch (error) {
+//                     dispatch(logError(error as ServerError));
+//                     return {error: error as ServerError};
+//                 }
+//             } else if (!isDesktopApp()) {
+//                 // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
+//                 if (kSuiteCall && kSuiteCall.data) {
+//                     getHistory().push('/error?type=no_ksuite');
+//                 }
+//             }
+//         } catch (error) {
+//             dispatch(logError(error as ServerError));
+//             return {error: error as ServerError};
+//         }
+
+//         return {data: true};
+//     };
+// }
 
 export function logout(): ActionFuncAsync {
     return async (dispatch) => {
@@ -223,49 +260,61 @@ export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SI
     };
 }
 
-export function getMissingProfilesByIds(userIds: string[]): ActionFuncAsync<UserProfile[]> {
-    return async (dispatch, getState) => {
-        const state = getState();
-        const {profiles} = state.entities.users;
-        const enabledUserStatuses = getIsUserStatusesConfigEnabled(state);
-        const missingIds: string[] = [];
-        userIds.forEach((id) => {
-            if (!profiles[id]) {
-                missingIds.push(id);
-            }
-        });
-
-        if (missingIds.length > 0) {
-            if (enabledUserStatuses) {
-                dispatch(getStatusesByIds(missingIds));
-            }
-            return dispatch(getProfilesByIds(missingIds));
+export function getMissingProfilesByIds(userIds: string[]): ActionFuncAsync<Array<UserProfile['id']>> {
+    return async (dispatch, getState, {loaders}: any) => {
+        if (!loaders.missingStatusLoader) {
+            loaders.missingStatusLoader = new DelayedDataLoader<UserProfile['id']>({
+                fetchBatch: (userIds) => dispatch(getStatusesByIds(userIds)),
+                maxBatchSize: maxUserIdsPerProfilesRequest,
+                wait: missingProfilesWait,
+            });
         }
 
-        return {data: []};
+        if (!loaders.missingProfileLoader) {
+            loaders.missingProfileLoader = new DelayedDataLoader<UserProfile['id']>({
+                fetchBatch: (userIds) => dispatch(getProfilesByIds(userIds)),
+                maxBatchSize: maxUserIdsPerProfilesRequest,
+                wait: missingProfilesWait,
+            });
+        }
+
+        const state = getState();
+
+        const missingIds = userIds.filter((id) => !selectUser(state, id));
+
+        if (missingIds.length > 0) {
+            if (getIsUserStatusesConfigEnabled(state)) {
+                loaders.missingStatusLoader.queue(missingIds);
+            }
+
+            await loaders.missingProfileLoader.queueAndWait(missingIds);
+        }
+
+        return {
+            data: missingIds,
+        };
     };
 }
 
-export function getMissingProfilesByUsernames(usernames: string[]): ActionFuncAsync<UserProfile[]> {
-    return async (dispatch, getState) => {
-        const {profiles} = getState().entities.users;
-
-        const usernameProfiles = Object.values(profiles).reduce((acc, profile: any) => {
-            acc[profile.username] = profile;
-            return acc;
-        }, {} as Record<string, UserProfile>);
-        const missingUsernames: string[] = [];
-        usernames.forEach((username) => {
-            if (!usernameProfiles[username]) {
-                missingUsernames.push(username);
-            }
-        });
-
-        if (missingUsernames.length > 0) {
-            return dispatch(getProfilesByUsernames(missingUsernames));
+export function getMissingProfilesByUsernames(usernames: string[]): ActionFuncAsync<Array<UserProfile['username']>> {
+    return async (dispatch, getState, {loaders}: any) => {
+        if (!loaders.missingUsernameLoader) {
+            loaders.missingUsernameLoader = new DelayedDataLoader<UserProfile['username']>({
+                fetchBatch: (usernames) => dispatch(getProfilesByUsernames(usernames)),
+                maxBatchSize: maxUserIdsPerProfilesRequest,
+                wait: missingProfilesWait,
+            });
         }
 
-        return {data: []};
+        const usersByUsername = getUsersByUsername(getState());
+
+        const missingUsernames = usernames.filter((username) => !usersByUsername[username]);
+
+        if (missingUsernames.length > 0) {
+            await loaders.missingUsernameLoader.queueAndWait(missingUsernames);
+        }
+
+        return {data: missingUsernames};
     };
 }
 
@@ -496,6 +545,7 @@ export function getProfilesNotInChannel(teamId: string, channelId: string, group
 
 export function getMe(): ActionFuncAsync<UserProfile> {
     return async (dispatch) => {
+        console.log('getMe')
         const getMeFunc = bindClientFunc({
             clientFunc: Client4.getMe,
             onSuccess: UserTypes.RECEIVED_ME,

@@ -69,18 +69,14 @@ export function selectTeam(team: Team | Team['id']) {
 export function getMyTeams() {
     return bindClientFunc({
         clientFunc: Client4.getMyTeams,
-        onRequest: TeamTypes.MY_TEAMS_REQUEST,
-        onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, TeamTypes.MY_TEAMS_SUCCESS],
-        onFailure: TeamTypes.MY_TEAMS_FAILURE,
+        onSuccess: TeamTypes.RECEIVED_TEAMS_LIST,
     });
 }
 
-export function getMyKSuites(): ActionFunc {
+export function getMyKSuites() {
     return bindClientFunc({
         clientFunc: Client4.getMyKSuites,
-        onRequest: TeamTypes.MY_TEAMS_REQUEST,
-        onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, TeamTypes.MY_TEAMS_SUCCESS, Servers.RECEIVED_SERVERS],
-        onFailure: TeamTypes.MY_TEAMS_FAILURE,
+        onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, Servers.RECEIVED_SERVERS],
         params: [!isDesktopApp()],
     });
 }

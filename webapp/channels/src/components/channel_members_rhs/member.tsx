@@ -18,6 +18,7 @@ import PendingGuestsDropdown from 'components/pending_guests_dropdown';
 import ProfilePicture from 'components/profile_picture';
 import ProfilePopover from 'components/profile_popover';
 import PendingGuestIcon from 'components/widgets/icons/pending_guest_icon';
+import SharedChannelIndicator from 'components/shared_channel_indicator';
 import GuestTag from 'components/widgets/tag/guest_tag';
 import WithTooltip from 'components/with_tooltip';
 
@@ -92,6 +93,12 @@ const RoleChooser = styled.div`
     }
 `;
 
+const SharedIcon = styled.span`
+    margin: 0 0 0 4px;
+    font-size: 16px;
+    line-height: 20px;
+`;
+
 interface Props {
     className?: string;
     channel: Channel;
@@ -134,6 +141,14 @@ const Member = ({className, channel, member, index, totalUsers, editing, actions
                     <DisplayName>
                         {member.displayName}
                         {isGuest(member.user.roles) && <GuestTag/>}
+                        {member.user.remote_id &&
+                        (
+                            <SharedIcon>
+                                <SharedChannelIndicator
+                                    withTooltip={true}
+                                />
+                            </SharedIcon>
+                        )}
                     </DisplayName>
                     {
                         member.displayName === member.user.username ? null : <Username>{'@'}{member.user.username}</Username>

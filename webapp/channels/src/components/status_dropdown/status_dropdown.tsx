@@ -1,11 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import StatusIcon from '@infomaniak/compass-components/components/status-icon'; // eslint-disable-line no-restricted-imports
-import Text from '@infomaniak/compass-components/components/text'; // eslint-disable-line no-restricted-imports
 import Icon from '@infomaniak/compass-components/foundations/icon';
-import type {TUserStatus} from '@infomaniak/compass-components/shared'; // eslint-disable-line no-restricted-imports
-import {AccountOutlineIcon, CheckIcon, ExitToAppIcon} from '@infomaniak/compass-icons/components';
 import {LogoutMessageKey} from '@infomaniak/ksuite-bridge';
 import type {KSuiteBridge} from '@infomaniak/ksuite-bridge';
 import classNames from 'classnames';
@@ -15,6 +11,10 @@ import type {ReactNode} from 'react';
 import {injectIntl, FormattedDate, FormattedMessage, FormattedTime, defineMessage, defineMessages} from 'react-intl';
 import type {IntlShape, MessageDescriptor} from 'react-intl';
 
+import StatusIcon from '@infomaniak/compass-components/components/status-icon'; // eslint-disable-line no-restricted-imports
+import Text from '@infomaniak/compass-components/components/text'; // eslint-disable-line no-restricted-imports
+import type {TUserStatus} from '@infomaniak/compass-components/shared'; // eslint-disable-line no-restricted-imports
+import {AccountOutlineIcon, CancelIcon, CheckIcon, ExitToAppIcon} from '@mattermost/compass-icons/components';
 import {PulsatingDot} from '@mattermost/components';
 import type {PreferenceType} from '@mattermost/types/preferences';
 import {CustomStatusDuration} from '@mattermost/types/users';
@@ -605,10 +605,16 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                     <Menu.Group>
                         <Menu.ItemAction
                             show={this.isUserOutOfOffice()}
-                            onClick={() => null}
+                            onClick={setOnline}
                             ariaLabel={this.props.intl.formatMessage(statusDropdownMessages.ooo.name)}
                             text={this.props.intl.formatMessage(statusDropdownMessages.ooo.name)}
+                            icon={(
+                                <CancelIcon
+                                    color={'rgba(var(--center-channel-color-rgb), 0.56)'}
+                                />
+                            )}
                             extraText={this.props.intl.formatMessage(statusDropdownMessages.ooo.extra)}
+                            rightDecorator={selectedIndicator}
                         />
                     </Menu.Group>
                     {customStatusComponent}
@@ -684,7 +690,6 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                                 <AccountOutlineIcon
                                     size={16}
                                     color={'rgba(var(--center-channel-color-rgb), 0.56)'}
-                                    className={'profile__icon'}
                                 />
                             }
                             sibling={showProfileTutorialStep && <ProfileTour/>}
