@@ -1,3 +1,9 @@
+## 2.10.0-rc.20 (2024-09-24)
+
+### Fixed (1 change)
+
+- [Make channel optional for toast in post view](kchat/webapp@aa16c6e61c97c5760709f4b4aa0ea80700a33169) by @boris.trombert ([merge request](kchat/webapp!929))
+
 ## 2.10.0-rc.19 (2024-09-20)
 
 No changes.
