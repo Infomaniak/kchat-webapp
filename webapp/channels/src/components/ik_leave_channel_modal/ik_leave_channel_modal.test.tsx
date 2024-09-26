@@ -37,6 +37,7 @@ describe('components/LeaveChannelModal', () => {
 
                     return Promise.resolve({error});
                 }),
+                deleteChannel: jest.fn(),
                 getChannelMemberAction: jest.fn(),
                 getChannelStats: jest.fn(),
                 getChannelMember: jest.fn(),
@@ -96,6 +97,7 @@ describe('components/LeaveChannelModal', () => {
 
                     return Promise.resolve({error});
                 }),
+                deleteChannel: jest.fn(),
                 getChannelMemberAction: jest.fn(),
                 getChannelStats: jest.fn(),
                 getChannelMember: jest.fn(),
@@ -150,6 +152,7 @@ describe('components/LeaveChannelModal', () => {
                 last_root_post_at: 0,
             },
             actions: {
+                deleteChannel: jest.fn(),
                 getChannelMemberAction: jest.fn(),
                 loadProfilesAndReloadChannelMembers: jest.fn(),
                 leaveChannel: jest.fn(),
