@@ -1,3 +1,10 @@
+## 2.10.0-rc.22 (2024-09-26)
+
+### Fixed (2 changes)
+
+- [last admin and user of a private channel can only archive it](kchat/webapp@597cece29bd5f190d96cd8539b1028afe373f9d7) by @boris.trombert ([merge request](kchat/webapp!933))
+- [Make channel optional for toast in post view](kchat/webapp@aa16c6e61c97c5760709f4b4aa0ea80700a33169) by @boris.trombert ([merge request](kchat/webapp!929))
+
 ## 2.10.0-rc.21 (2024-09-25)
 
 No changes.
