@@ -101,18 +101,14 @@ Object {
               >
                 Cancel
               </button>
-              <div
-                class="btn-leave"
+              <button
+                class="btn btn-danger"
+                data-testid="confirmModalButton"
+                id="confirmModalButton"
+                type="button"
               >
-                <button
-                  class="btn btn-danger"
-                  data-testid="confirmModalButton"
-                  id="confirmModalButton"
-                  type="button"
-                >
-                  Leave
-                </button>
-              </div>
+                Leave
+              </button>
             </div>
           </div>
         </div>
