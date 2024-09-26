@@ -41,6 +41,7 @@ type Props = {
     onAddCallback?: (userProfiles?: UserProfileValue[]) => void;
     onExited: () => void;
     actions: {
+        deleteChannel: (channelId: string) => void;
         leaveChannel: (channelId: string) => Promise<ActionResult>;
         getChannelStats: (channelId: string) => void;
         getChannelMemberAction: (channelId: string, userId: string) => Promise<ActionResult<ChannelMembership, any>>;
@@ -139,6 +140,14 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
                     handleHide();
                 }
             });
+        }
+    };
+
+    const handleArchiveSubmit = () => {
+        if (channel) {
+            const channelId = channel.id;
+            actions.deleteChannel(channelId);
+            handleHide();
         }
     };
 
@@ -360,6 +369,16 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
                         }}
                     />
                 );
+            } else if (hasChannelMembersAdmin && profilesInCurrentChannel!.length === 1) {
+                message = (
+                    <FormattedMessage
+                        id='leave_private_channel_modal.last_user'
+                        defaultMessage='Do you want to archive the channel {channel}?'
+                        values={{
+                            channel: <b>{channel.display_name}</b>,
+                        }}
+                    />
+                );
             } else {
                 message = (
                     <FormattedMessage
@@ -497,6 +516,14 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
         />
     );
 
+    const buttonArchiveClass = 'btn btn-danger';
+    const archiveButton = (
+        <FormattedMessage
+            id='delete_channel.del'
+            defaultMessage='Archive'
+        />
+    );
+
     return (
         <Modal
             id='addUsersToChannelModal'
@@ -536,7 +563,18 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
                 >
                     {localizeMessage('multiselect.cancel', 'Cancel')}
                 </button>
-                <div className='btn-leave'>
+                {hasChannelMembersAdmin ? (<div className='btn-leave'>
+                    <button
+                        className={buttonArchiveClass}
+                        autoFocus={true}
+                        type='button'
+                        data-testid='confirmModalButton'
+                        onClick={handleArchiveSubmit}
+                        id='confirmModalButton'
+                    >
+                        {archiveButton}
+                    </button>
+                </div>) : (
                     <button
                         className={buttonClass}
                         autoFocus={true}
@@ -546,8 +584,7 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
                         id='confirmModalButton'
                     >
                         {button}
-                    </button>
-                </div>
+                    </button>)}
             </Modal.Footer>}
         </Modal>
     );
