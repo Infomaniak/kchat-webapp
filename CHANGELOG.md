@@ -1,3 +1,9 @@
+## 2.10.0-rc.24 (2024-09-30)
+
+### Added (1 change)
+
+- [custom keywords notifications in params for dekstop](kchat/webapp@7d66b45e74264275f797a21d8d02c1de49fcfceb) by @boris.trombert ([merge request](kchat/webapp!930))
+
 ## 2.10.0-rc.23 (2024-09-27)
 
 No changes.
