@@ -8,7 +8,9 @@ import debounce from 'lodash/debounce';
 import type {RefObject} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import type {ValueType} from 'react-select';
 import ReactSelect from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import semver from 'semver';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
@@ -21,15 +23,25 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import Toggle from 'components/toggle';
 
 import Constants, {NotificationLevels, Preferences} from 'utils/constants';
+import {t} from 'utils/i18n';
 import {isDesktopApp} from 'utils/user_agent';
 import {localizeMessage, moveCursorToEnd} from 'utils/utils';
-
-import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
 
 import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
 
 import './rhs_settings_notifications.scss';
-
+import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
+type InputProps ={
+    display: string;
+    description: {
+        id: string;
+        message: string;
+    };
+    title: {
+        id: string;
+        message: string;
+    };
+}
 export type Props = {
     user: UserProfile;
     updateSection: (section: string) => void;
@@ -64,6 +76,9 @@ type State = {
     isSaving: boolean;
     serverError: string;
     emailInterval: number;
+    keywordsValues: Array<{ label: string; value: string }>;
+    inputValue: string;
+    showSelect: boolean;
 };
 
 function getNotificationsStateFromProps(props: Props, state?: State): State {
@@ -177,6 +192,9 @@ function getNotificationsStateFromProps(props: Props, state?: State): State {
         notifyCommentsLevel: comments,
         isSaving: false,
         serverError: '',
+        keywordsValues: state?.keywordsValues || [],
+        inputValue: state?.inputValue || '',
+        showSelect: state?.showSelect || false,
         emailInterval: props.emailInterval,
     };
 }
@@ -212,6 +230,16 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         this.handleMentionKeysInput.flush();
     }
 
+    componentDidMount(): void {
+        const {user} = this.props;
+        const keywords = user.notify_props.mention_keys || null;
+        const keywordsArray = keywords ? keywords.split(',').map((keyword) => this.createOption(keyword)) : [];
+        this.setState({
+            keywordsValues: keywordsArray,
+            showSelect: keywordsArray.length > 0,
+        });
+    }
+
     handleSubmit = (): void => {
         const data: UserNotifyProps = {} as UserNotifyProps;
         data.email = this.state.enableEmail;
@@ -236,19 +264,9 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
             );
         }
 
-        const mentionKeys = [];
-        if (this.state.usernameKey) {
-            mentionKeys.push(this.props.user.username);
-        }
-
-        let stringKeys = mentionKeys.join(',');
-        if (this.state.customKeys.length > 0 && this.state.customKeysChecked) {
-            stringKeys += ',' + this.state.customKeys;
-        }
-
-        data.mention_keys = stringKeys;
         data.first_name = this.state.firstNameKey.toString() as UserNotifyProps['first_name'];
         data.channel = this.state.channelKey.toString() as UserNotifyProps['channel'];
+        data.mention_keys = (this.state.keywordsValues || []).map((keyword: { value: string }) => keyword.value).join(',');
 
         this.setState({isSaving: true});
 
@@ -347,6 +365,156 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
             />
         );
     };
+
+    createOption = (label: string) => ({
+        label,
+        value: label.toLowerCase().replace(/\W/g, ''),
+    });
+
+    createInput(props: InputProps) {
+        const {
+            display,
+            description,
+            title,
+        } = props;
+
+        const messageTitle = (
+            <FormattedMessage
+                id={title.id}
+                defaultMessage={title.message}
+            />
+        );
+
+        const messageDesc = (
+            <FormattedMessage
+                id={description.id}
+                defaultMessage={description.message}
+            />
+        );
+
+        const helpMessage = (
+            <FormattedMessage
+                id={'user.settings.display.keywords_help'}
+                defaultMessage={'Press Tab or use commas to separate keywords.'}
+            />
+        );
+
+        const placeholderMessage = (
+            <FormattedMessage
+                id={'user.settings.display.keywords_placeholder'}
+                defaultMessage={'Keywords'}
+            />
+        );
+
+        const handleKeyDown = (event: React.KeyboardEvent) => {
+            if (!this.state.inputValue) {
+                return;
+            }
+
+            const newKeywords = this.state.inputValue.split(',').map((keyword: string) => this.createOption(keyword.trim()));
+
+            switch (event.key) {
+            case 'Enter':
+            case 'Tab':
+                this.setState((prevState) => ({
+                    keywordsValues: Array.isArray(prevState.keywordsValues) ? [...prevState.keywordsValues, ...newKeywords] : newKeywords,
+                    inputValue: '',
+                }), () => {
+                    this.handleSubmit();
+                });
+                event.preventDefault();
+                break;
+            default:
+                break;
+            }
+        };
+
+        const handleOnChange = (newValues: ValueType<{ label: string; value: string }>) => {
+            const valuesArray = Array.isArray(newValues) ? newValues : [];
+            this.setState({keywordsValues: valuesArray}, () => {
+                this.handleSubmit();
+            });
+        };
+
+        const toggleSelectVisibility = () => {
+            this.setState((prevState) => {
+                const newShowSelect = !prevState.showSelect;
+                const newKeywordsValues = newShowSelect ? prevState.keywordsValues : [];
+
+                return {
+                    showSelect: newShowSelect,
+                    keywordsValues: newKeywordsValues,
+                    inputValue: newShowSelect ? prevState.inputValue : '',
+                };
+            }, async () => {
+                if (!this.state.showSelect) {
+                    this.handleSubmit();
+                }
+            });
+        };
+
+        const handleInputChange = (inputValue: string) => {
+            this.setState({inputValue});
+        };
+
+        const handleBlur = () => {
+            if (!this.state.inputValue) {
+                return;
+            }
+
+            const newKeywords = this.state.inputValue.split(',').map((keyword: string) => this.createOption(keyword.trim()));
+
+            this.setState((prevState) => ({
+                keywordsValues: Array.isArray(prevState.keywordsValues) ? [...prevState.keywordsValues, ...newKeywords] : newKeywords,
+                inputValue: '',
+            }), () => {
+                this.handleSubmit();
+            });
+        };
+
+        return (
+            <>
+                <RhsSettingsItem
+                    key={display}
+                    title={messageTitle}
+                    inputs={
+                        <div>
+                            <div>
+                                <Toggle
+                                    onToggle={toggleSelectVisibility}
+                                    toggled={this.state.showSelect}
+                                />
+                            </div>
+
+                        </div>
+                    }
+                    saving={this.state.isSaving}
+                    messageDesc={messageDesc}
+                    updateSection={this.props.updateSection}
+                />
+                {this.state.showSelect && (
+                    <div className='users-settings'>
+                        <CreatableSelect
+                            isClearable={true}
+                            isMulti={true}
+                            menuIsOpen={false}
+                            onChange={handleOnChange}
+                            onInputChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
+                            value={this.state.keywordsValues}
+                            inputValue={this.state.inputValue}
+                            placeholder={placeholderMessage}
+                            components={{DropdownIndicator: null, IndicatorSeparator: null}}
+                            onBlur={handleBlur}
+                        />
+                        <div className='settings-desc help-keyword'>
+                            {helpMessage}
+                        </div>
+                    </div>
+                )}
+            </>
+        );
+    }
 
     createPushNotificationSection = () => {
         const options = [
@@ -748,6 +916,18 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
     }, DEBOUNCE_DELAY);
 
     render() {
+        const keywordsSection = this.createInput({
+            display: 'keywordDisplay',
+            title: {
+                id: t('user.settings.display.keywords'),
+                message: 'Receive notifications for certain keywords',
+            },
+            description: {
+                id: t('user.settings.display.keywords_desc'),
+                message: 'Keywords are case insensitive.',
+            },
+        });
+
         return (
             <div id='notificationSettings'>
                 <div className='user-settings user-rhs-container container mt-0'>
@@ -792,6 +972,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                     </h5>
                     <div className='divider-dark mt-5 rhs-custom-bb'/>
                     {this.createEmailNotificationSection()}
+                    <div className='divider-dark mt-5 rhs-custom-bb'/>
+                    {keywordsSection}
                 </div>
             </div>
 
