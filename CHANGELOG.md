@@ -1,3 +1,11 @@
+## 2.10.0-rc.25 (2024-10-01)
+
+### Fixed (3 changes)
+
+- [correct spelling mistakes](kchat/webapp@956f47b262a9537e3df85636f507bce07aa44293) by @cyril.gromoff ([merge request](kchat/webapp!934))
+- [Fix: change dropdown status text when there is not expire date](kchat/webapp@0d7934cb3c158e077f1b229e0fbb6af786835647) by @cyril.gromoff ([merge request](kchat/webapp!928))
+- [add function to get the last numbered line from text for numbered list](kchat/webapp@7f1b909cfd975a6db078a10a2a5bc8efea5f13e2) by @boris.trombert ([merge request](kchat/webapp!896))
+
 ## 2.10.0-rc.24 (2024-09-30)
 
 ### Added (1 change)
