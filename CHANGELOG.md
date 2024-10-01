@@ -1,3 +1,9 @@
+## 2.10.0-rc.26 (2024-10-01)
+
+### Fixed (1 change)
+
+- [fix: enable preview for all image types without initial or mini preview](kchat/webapp@5df701df3fc1fd02898a375e5f1cbe3af7c52a2c) by @cyril.gromoff ([merge request](kchat/webapp!911))
+
 ## 2.10.0-rc.25 (2024-10-01)
 
 ### Fixed (3 changes)
