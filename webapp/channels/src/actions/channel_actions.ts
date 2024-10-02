@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {ClientError} from '@infomaniak/mattermost-client';
 import {batchActions} from 'redux-batched-actions';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -16,7 +17,7 @@ import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/commo
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentTeamUrl, getCurrentTeamId, getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
+import type {ActionFuncAsync, ActionResult} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {loadNewDMIfNeeded, loadNewGMIfNeeded, loadProfilesForSidebar} from 'actions/user_actions';
@@ -102,9 +103,10 @@ export function loadDeletedPosts(channelId: string, lastDisconnectAt: number): A
     return async (dispatch, getState) => {
         const state = getState();
 
-        const results = await dispatch(fetchDeletedPostsIds(channelId, lastDisconnectAt));
+        const results = await dispatch(fetchDeletedPostsIds(channelId, lastDisconnectAt)) as ActionResult<string[] | null, ClientError>;
+        const error = results.error;
 
-        if ('error' in results) {
+        if (error && error.status_code === 403) {
             const currentTeamId = getCurrentTeamId(state);
             const redirectChannel = getRedirectChannelNameForTeam(state, currentTeamId);
             const teamUrl = getCurrentRelativeTeamUrl(state);
