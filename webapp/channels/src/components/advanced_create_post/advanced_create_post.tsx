@@ -537,7 +537,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             const updatedDraft = {
                 ...this.props.draft,
                 ...this.draftsForChannel[channelId],
-                id: this.draftsForChannel[channelId]?.id ?? this.props.draft.id,
+                id: this.props.draft.id,
                 timestamp: scheduleUTCTimestamp,
                 channelId,
                 remote: false,
