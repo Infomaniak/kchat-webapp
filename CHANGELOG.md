@@ -1,3 +1,10 @@
+## 2.10.0-rc.27 (2024-10-03)
+
+### Fixed (2 changes)
+
+- [pass id of draft from props instead of draftFromChannel const](kchat/webapp@f1690a1f05445e039913d455a1e2f82099c86e8a) by @boris.trombert ([merge request](kchat/webapp!936))
+- [redirect in general only if unauthorized actions in ws reconnect](kchat/webapp@17c6026729301336771d5aed1ac3d813d1e97157) by @boris.trombert ([merge request](kchat/webapp!935))
+
 ## 2.10.0-rc.26 (2024-10-01)
 
 ### Fixed (1 change)
