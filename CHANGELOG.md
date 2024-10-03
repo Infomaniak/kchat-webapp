@@ -1,3 +1,9 @@
+## 2.10.0-rc.28 (2024-10-03)
+
+### Changed (1 change)
+
+- [restore custom pagination in get all groups call](kchat/webapp@6d3a87e27221587656aa264dc5f530905d8b1894) by @antonbuksa ([merge request](kchat/webapp!938))
+
 ## 2.10.0-rc.27 (2024-10-03)
 
 ### Fixed (2 changes)
