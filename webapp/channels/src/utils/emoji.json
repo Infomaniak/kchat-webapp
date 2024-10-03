@@ -32447,17 +32447,6 @@
         "category": "objects"
     },
     {
-        "name": "TEAR-OFF CALENDAR",
-        "unified": "1F4C6",
-        "short_name": "calendar",
-        "short_names": [
-            "calendar"
-        ],
-        "text": null,
-        "texts": null,
-        "category": "objects"
-    },
-    {
         "name": "SPIRAL NOTEPAD",
         "unified": "1F5D2-FE0F",
         "short_name": "spiral_note_pad",
