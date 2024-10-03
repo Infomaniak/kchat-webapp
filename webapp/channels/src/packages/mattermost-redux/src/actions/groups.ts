@@ -158,17 +158,42 @@ export function getGroup(id: string, includeMemberCount = false) {
     });
 }
 
-export function getGroups(opts: GetGroupsParams) {
-    return bindClientFunc({
-        clientFunc: async (opts) => {
-            const result = await Client4.getGroups(opts);
-            return result;
-        },
-        onSuccess: [GroupTypes.RECEIVED_GROUPS],
-        params: [
-            opts,
-        ],
-    });
+export function getGroups(opts: GetGroupsParams): ActionFuncAsync {
+    // return bindClientFunc({
+    //     clientFunc: async (opts) => {
+    //         const result = await Client4.getGroups(opts);
+    //         return result;
+    //     },
+    //     onSuccess: [GroupTypes.RECEIVED_GROUPS],
+    //     params: [
+    //         opts,
+    //     ],
+    // });
+    // Infomaniak custom with pagination
+    return async (dispatch) => {
+        let groups: Group[] = [];
+        let currentFetch: Group[] = [];
+
+        try {
+            // eslint-disable-next-line no-constant-condition
+            while (true) {
+                // eslint-disable-next-line no-await-in-loop
+                currentFetch = await Client4.getGroups(opts);
+                groups = groups.concat(currentFetch);
+                if (!opts.per_page || currentFetch.length < opts.per_page) {
+                    break;
+                }
+                opts.page += 1;
+            }
+            dispatch({
+                type: GroupTypes.RECEIVED_GROUPS,
+                data: groups,
+            });
+        } catch (error) {
+            dispatch(logError(error));
+        }
+        return {data: groups};
+    };
 }
 
 export function getGroupsNotAssociatedToTeam(teamID: string, q = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT, source = GroupSource.Ldap) {
