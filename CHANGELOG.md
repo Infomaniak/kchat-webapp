@@ -163,6 +163,26 @@ No changes.
 
 No changes.
 
+## 2.9.19 (2024-10-07)
+
+### Added (1 change)
+
+- [custom keywords notifications in params for dekstop](kchat/webapp@7d66b45e74264275f797a21d8d02c1de49fcfceb) by @boris.trombert ([merge request](kchat/webapp!930))
+
+### Fixed (7 changes)
+
+- [pass id of draft from props instead of draftFromChannel const](kchat/webapp@f1690a1f05445e039913d455a1e2f82099c86e8a) by @boris.trombert ([merge request](kchat/webapp!936))
+- [redirect in general only if unauthorized actions in ws reconnect](kchat/webapp@17c6026729301336771d5aed1ac3d813d1e97157) by @boris.trombert ([merge request](kchat/webapp!935))
+- [fix: enable preview for all image types without initial or mini preview](kchat/webapp@5df701df3fc1fd02898a375e5f1cbe3af7c52a2c) by @cyril.gromoff ([merge request](kchat/webapp!911))
+- [correct spelling mistakes](kchat/webapp@956f47b262a9537e3df85636f507bce07aa44293) by @cyril.gromoff ([merge request](kchat/webapp!934))
+- [last admin and user of a private channel can only archive it](kchat/webapp@597cece29bd5f190d96cd8539b1028afe373f9d7) by @boris.trombert ([merge request](kchat/webapp!933))
+- [Fix: change dropdown status text when there is not expire date](kchat/webapp@0d7934cb3c158e077f1b229e0fbb6af786835647) by @cyril.gromoff ([merge request](kchat/webapp!928))
+- [add function to get the last numbered line from text for numbered list](kchat/webapp@7f1b909cfd975a6db078a10a2a5bc8efea5f13e2) by @boris.trombert ([merge request](kchat/webapp!896))
+
+### Changed (1 change)
+
+- [restore custom pagination in get all groups call](kchat/webapp@6d3a87e27221587656aa264dc5f530905d8b1894) by @antonbuksa ([merge request](kchat/webapp!938))
+
 ## 2.9.18-next.3 (2024-10-03)
 
 ### Added (1 change)
