@@ -2722,6 +2722,7 @@
   "channel_header.channelFiles": "Fichiers du canal",
   "channel_header.channelHasGuests": "Ce canal dispose d'utilisateurs invités",
   "channel_header.channelMembers": "Membres",
+  "channel_header.closeChannelInfo": "Fermer les informations",
   "channel_header.convert": "Convertir en canal privé",
   "channel_header.convert.public": "Convertir en canal public",
   "channel_header.delete": "Archiver le canal",
