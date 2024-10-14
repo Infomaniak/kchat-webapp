@@ -132,7 +132,7 @@ const ErrorTitle: React.FC<Props> = ({type, title, groupName}: Props) => {
     } else if (title) {
         errorTitle = <>{title}</>;
     } else {
-        errorTitle = <>{Utils.localizeMessage('error.generic.title', 'Error')}</>;
+        errorTitle = <>{Utils.localizeMessage({id: 'error.generic.title', defaultMessage: 'Error'})}</>;
     }
 
     return errorTitle;

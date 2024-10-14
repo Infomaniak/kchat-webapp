@@ -1,17 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {lazy} from 'react';
-
 import type {FileInfo} from '@mattermost/types/files';
 import type {GroupChannel} from '@mattermost/types/groups';
 import type {Post} from '@mattermost/types/posts';
-import type {ScheduledPost} from '@mattermost/types/schedule_post';
 
 import {SearchTypes} from 'mattermost-redux/action_types';
 import {getMyChannelMember} from 'mattermost-redux/actions/channels';
 import * as PostActions from 'mattermost-redux/actions/posts';
-import {createSchedulePost} from 'mattermost-redux/actions/scheduled_posts';
 import * as ThreadActions from 'mattermost-redux/actions/threads';
 import {getChannel, getMyChannelMember as getMyChannelMemberSelector} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
@@ -19,13 +15,7 @@ import * as PostSelectors from 'mattermost-redux/selectors/entities/posts';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {
-    DispatchFunc,
-    ActionFunc,
-    ActionFuncAsync,
-    ThunkActionFunc,
-    GetStateFunc,
-} from 'mattermost-redux/types/actions';
+import type {DispatchFunc, ActionFunc, ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
 import {canEditPost, comparePosts} from 'mattermost-redux/utils/post_utils';
 
 import {addRecentEmoji, addRecentEmojis} from 'actions/emoji_actions';
@@ -35,12 +25,11 @@ import {removeDraft} from 'actions/views/drafts';
 import {closeModal, openModal} from 'actions/views/modals';
 import * as RhsActions from 'actions/views/rhs';
 import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
-import {getConnectionId} from 'selectors/general';
 import {isEmbedVisible, isInlineImageVisible} from 'selectors/posts';
 import {getSelectedPostId, getSelectedPostCardId, getRhsState} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
 
-import {withSuspense} from 'components/common/hocs/with_suspense';
+import ReactionLimitReachedModal from 'components/reaction_limit_reached_modal';
 
 import {
     ActionTypes,
@@ -54,11 +43,9 @@ import {makeGetIsReactionAlreadyAddedToPost, makeGetUniqueEmojiNameReactionsForP
 
 import type {GlobalState} from 'types/store';
 
-import type {NewPostMessageProps} from './new_post';
 import {completePostReceive} from './new_post';
+import type {NewPostMessageProps} from './new_post';
 import type {SubmitPostReturnType} from './views/create_comment';
-
-const ReactionLimitReachedModal = withSuspense(lazy(() => import('components/reaction_limit_reached_modal')));
 
 export function handleNewPost(post: Post, msg?: {data?: NewPostMessageProps & GroupChannel}): ActionFuncAsync<boolean, GlobalState> {
     return async (dispatch) => {
@@ -121,22 +108,19 @@ export function unflagPost(postId: string): ActionFuncAsync {
     };
 }
 
-function addRecentEmojisForMessage(message: string): ActionFunc {
-    return (dispatch) => {
+export function createPost(
+    post: Post,
+    files: FileInfo[],
+    afterSubmit?: (response: SubmitPostReturnType) => void,
+    afterOptimisticSubmit?: () => void,
+): ActionFuncAsync<PostActions.CreatePostReturnType, GlobalState> {
+    return async (dispatch) => {
         // parse message and emit emoji event
-        const emojis = matchEmoticons(message);
+        const emojis = matchEmoticons(post.message);
         if (emojis) {
             const trimmedEmojis = emojis.map((emoji) => emoji.substring(1, emoji.length - 1));
             dispatch(addRecentEmojis(trimmedEmojis));
         }
-        return {data: true};
-    };
-}
-
-export type CreatePostAfterSubmitFunc = (response: SubmitPostReturnType) => void;
-export function createPost(post: Post, files: FileInfo[], afterSubmit?: CreatePostAfterSubmitFunc): ActionFuncAsync<PostActions.CreatePostReturnType, GlobalState> {
-    return async (dispatch) => {
-        dispatch(addRecentEmojisForMessage(post.message));
 
         const result = await dispatch(PostActions.createPost(post, files, afterSubmit));
 
@@ -146,29 +130,8 @@ export function createPost(post: Post, files: FileInfo[], afterSubmit?: CreatePo
             dispatch(storeDraft(post.channel_id, null));
         }
 
+        afterOptimisticSubmit?.();
         return result;
-    };
-}
-
-export function createSchedulePostFromDraft(scheduledPost: ScheduledPost): ActionFuncAsync<PostActions.CreatePostReturnType, GlobalState> {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        dispatch(addRecentEmojisForMessage(scheduledPost.message));
-
-        const state = getState() as GlobalState;
-        const connectionId = getConnectionId(state);
-        const channel = state.entities.channels.channels[scheduledPost.channel_id];
-        const result = await dispatch(createSchedulePost(scheduledPost, channel.team_id, connectionId));
-
-        if (scheduledPost.root_id) {
-            dispatch(storeCommentDraft(scheduledPost.root_id, null));
-        } else {
-            dispatch(storeDraft(scheduledPost.channel_id, null));
-        }
-
-        return {
-            created: !result.error && result.data,
-            error: result.error,
-        };
     };
 }
 

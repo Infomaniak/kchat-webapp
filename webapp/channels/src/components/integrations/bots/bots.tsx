@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {Link} from 'react-router-dom';
 
 import type {Bot as BotType} from '@mattermost/types/bots';
 import type {Team} from '@mattermost/types/teams';
@@ -15,10 +16,8 @@ import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 
 import BackstageList from 'components/backstage/components/backstage_list';
 import ExternalLink from 'components/external_link';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 import Constants from 'utils/constants';
-import {getSiteURL} from 'utils/url';
 import * as Utils from 'utils/utils';
 
 import Bot, {matchesFilter} from './bot';
@@ -238,9 +237,12 @@ export default class Bots extends React.PureComponent<Props, State> {
                     />
                 }
                 emptyTextSearch={
-                    <FormattedMarkdownMessage
-                        id='bots.manage.emptySearch'
-                        defaultMessage='No bot accounts match **{searchTerm}**'
+                    <FormattedMessage
+                        id='bots.emptySearch'
+                        defaultMessage='No bot accounts match <b>{searchTerm}</b>'
+                        values={{
+                            b: (chunks: string) => <b>{chunks}</b>,
+                        }}
                     />
                 }
                 helpText={
@@ -267,7 +269,7 @@ export default class Bots extends React.PureComponent<Props, State> {
                         />
                     </React.Fragment>
                 }
-                searchPlaceholder={Utils.localizeMessage('bots.manage.search', 'Search Bot Accounts')}
+                searchPlaceholder={Utils.localizeMessage({id: 'bots.manage.search', defaultMessage: 'Search Bot Accounts'})}
                 loading={this.state.loading}
             >
                 {this.bots}

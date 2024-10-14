@@ -6,9 +6,7 @@ import React, {lazy, useCallback, useEffect, useMemo, useRef, useState} from 're
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import type {Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
-import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions} from 'mattermost-redux/constants';
@@ -30,8 +28,6 @@ import {BannerJoinChannel} from 'components/banner_join_channel';
 import {makeAsyncComponent} from 'components/async_load';
 import AutoHeightSwitcher from 'components/common/auto_height_switcher';
 import DndBanner from 'components/dnd_banner';
-import FilePreview from 'components/file_preview';
-import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import GuestBanner from 'components/guest_banner';
 import useDidUpdate from 'components/common/hooks/useDidUpdate';
 import MessageSubmitError from 'components/message_submit_error';
@@ -46,8 +42,8 @@ import {SendMessageTour} from 'components/tours/onboarding_tour';
 
 import Constants, {Locations, StoragePrefixes, Preferences, AdvancedTextEditor as AdvancedTextEditorConst, UserStatuses} from 'utils/constants';
 import {canUploadFiles as canUploadFilesAccordingToConfig} from 'utils/file_utils';
-import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 import {applyMarkdown as applyMarkdownUtil} from 'utils/markdown/apply_markdown';
+import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 import {isErrorInvalidSlashCommand} from 'utils/post_utils';
 import * as Utils from 'utils/utils';
 
@@ -62,7 +58,6 @@ import SendButton from './send_button';
 import ShowFormat from './show_formatting';
 import TexteditorActions from './texteditor_actions';
 import ToggleFormattingBar from './toggle_formatting_bar';
-import VoiceMessageAttachment from './voice_message_attachment';
 import useEmojiPicker from './use_emoji_picker';
 import useKeyHandler from './use_key_handler';
 import useOrientationHandler from './use_orientation_handler';
@@ -74,10 +69,7 @@ import useUploadFiles from './use_upload_files';
 import useVoiceMessage from './use_voice_message';
 
 import './advanced_text_editor.scss';
-import {Post} from '@mattermost/types/posts';
 import Poll from 'components/post_poll';
-import useScheduledDrafts from './use_scheduled_drafts';
-import {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 
 const FileLimitStickyBanner = makeAsyncComponent('FileLimitStickyBanner', lazy(() => import('components/file_limit_sticky_banner')));
 
@@ -121,7 +113,7 @@ const AdvancedTextEditor = ({
     const isRHS = Boolean(postId && !isThreadView);
 
     const currentUserId = useSelector(getCurrentUserId);
-    const channelDisplayName = useSelector((state: GlobalState) => getChannelSelector(state, {id: channelId})?.display_name || '');
+    const channelDisplayName = useSelector((state: GlobalState) => getChannelSelector(state, channelId)?.display_name || '');
     const draftFromStore = useSelector((state: GlobalState) => getDraftSelector(state, channelId, postId));
     const badConnection = useSelector((state: GlobalState) => connectionErrorCount(state) > 1);
     const maxPostSize = useSelector((state: GlobalState) => parseInt(getConfig(state).MaxPostSize || '', 10) || Constants.DEFAULT_CHARACTER_LIMIT);
@@ -154,7 +146,6 @@ const AdvancedTextEditor = ({
         // guest validation to see which point the messaging tour tip starts
         const isGuestUser = isCurrentUserGuestUser(state);
         const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE : OnboardingTourSteps.SEND_MESSAGE;
-        // isGuestUser ? OnboardingTourStepsForGuestUsers.CHANNELS : OnboardingTourSteps.CHANNELS;
 
         return enableTutorial && (tutorialStep === tourStep);
     });
@@ -164,7 +155,7 @@ const AdvancedTextEditor = ({
     const textboxRef = useRef<TextboxClass>(null);
     const loggedInAriaLabelTimeout = useRef<NodeJS.Timeout>();
     const saveDraftFrame = useRef<NodeJS.Timeout>();
-    const previousDraft = useRef(draftFromStore);
+    const draftRef = useRef(draftFromStore);
     const storedDrafts = useRef<Record<string, PostDraft | undefined>>({});
     const lastBlurAt = useRef(0);
 
@@ -275,7 +266,21 @@ const AdvancedTextEditor = ({
         isValidPersistentNotifications,
         onSubmitCheck: prioritySubmitCheck,
     } = usePriority(draft, handleDraftChange, focusTextbox, showPreview);
-    const [handleSubmit, errorClass] = useSubmit(draft, postError, channelId, postId, serverError, lastBlurAt, focusTextbox, setServerError, setPostError, setShowPreview, handleDraftChange, prioritySubmitCheck, afterSubmit);
+    const [handleSubmit, errorClass] = useSubmit(
+        draft,
+        postError,
+        channelId,
+        postId,
+        serverError,
+        lastBlurAt,
+        focusTextbox,
+        setServerError,
+        setShowPreview,
+        handleDraftChange,
+        prioritySubmitCheck,
+        undefined,
+        afterSubmit,
+    );
     const [handleKeyDown, postMsgKeyPress] = useKeyHandler(
         draft,
         channelId,
@@ -309,12 +314,11 @@ const AdvancedTextEditor = ({
         removePreview,
         emitTypingEvent,
     )
-
-    const [scheduledDrafts, scheduledIndicatorJSX] = useScheduledDrafts(channelId, postId, ScheduledIndicatorType.CHANNEL);
-
     if (draft.postType === Constants.PostTypes.VOICE) {
         attachmentPreview = voiceAttachmentPreview;
     }
+
+    const noArgumentHandleSubmit = useCallback(() => handleSubmit(), [handleSubmit]);
 
     const handlePostError = useCallback((err: React.ReactNode) => {
         setPostError(err);
@@ -339,18 +343,12 @@ const AdvancedTextEditor = ({
         if (!isErrorInvalidSlashCommand(serverError)) {
             setServerError(null);
         }
+
         handleDraftChange({
             ...draft,
             message,
         });
     }, [draft, handleDraftChange, serverError]);
-
-    const handleSubmitEvent = useCallback((e: React.FormEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        handleSubmit();
-    }, [handleSubmit]);
 
     /**
      * by getting the value directly from the textbox we eliminate all unnecessary
@@ -438,6 +436,7 @@ const AdvancedTextEditor = ({
     // Remove show preview when we switch channels or posts
     useEffect(() => {
         setShowPreview(false);
+        setServerError(null);
     }, [channelId, postId]);
 
     // Remove uploads in progress on mount
@@ -460,25 +459,30 @@ const AdvancedTextEditor = ({
         };
     }, [handleDraftChange, draft]);
 
-    // Set the draft from store when changing post or channels, and store the previus one
+    // Keep track of the draft as a ref so that we can save it when changing channels
     useEffect(() => {
-        setDraft(draftFromStore);
-        return () => handleDraftChange(previousDraft.current, {instant: true, show: true});
-    }, [channelId, postId]);
-
-    // Keep track of the previous draft
-    useEffect(() => {
-        previousDraft.current = draft;
+        draftRef.current = draft;
     }, [draft]);
 
-    const handleSubmitPostAndScheduledMessage = useCallback((schedulingInfo?: SchedulingInfo) => handleSubmit(undefined, schedulingInfo), [handleSubmit]);
+    // Set the draft from store when changing post or channels, and store the previous one
+    useEffect(() => {
+        // Store the draft that existed when we opened the channel to know if it should be saved
+        const draftOnOpen = draftFromStore;
+
+        setDraft(draftOnOpen);
+
+        return () => {
+            if (draftOnOpen !== draftRef.current) {
+                handleDraftChange(draftRef.current, {instant: true, show: true});
+            }
+        };
+    }, [channelId, postId]);
 
     const disableSendButton = Boolean(readOnlyChannel || (!draft.message.trim().length && !draft.fileInfos.length)) || !isValidPersistentNotifications;
     const sendButton = readOnlyChannel ? null : (
         <SendButton
             disabled={disableSendButton}
-            handleSubmit={handleSubmitPostAndScheduledMessage}
-            channelId={channelId}
+            handleSubmit={handleSubmit}
         />
     );
 
@@ -524,9 +528,6 @@ const AdvancedTextEditor = ({
         break;
     case Locations.MODAL:
         textboxId = 'modal_textbox';
-        break;
-    case Locations.SCHEDULED_DRAFT:
-        textboxId = 'scheduled_draft_editor_textbox';
         break;
     }
 
@@ -588,7 +589,7 @@ const AdvancedTextEditor = ({
         />
     );
 
-    const showFormattingSpacer = isMessageLong || showPreview || isRHS || isThreadView;
+    const showFormattingSpacer = isMessageLong || showPreview || attachmentPreview || isRHS || isThreadView;
 
     if (readOnlyChannel) {
         return (
@@ -601,7 +602,7 @@ const AdvancedTextEditor = ({
             id={postId ? undefined : 'create_post'}
             data-testid={postId ? undefined : 'create-post'}
             className={(!postId && !fullWidthTextBox) ? 'center' : undefined}
-            onSubmit={handleSubmitEvent}
+            onSubmit={noArgumentHandleSubmit}
         >
             {canPost && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0) && (
                 <FileLimitStickyBanner/>
@@ -613,7 +614,7 @@ const AdvancedTextEditor = ({
                     displayName={teammateDisplayName}
                 />
             )}
-            {scheduledIndicatorJSX}
+            {/* {scheduledIndicatorJSX} */}
             <div
                 className={classNames('AdvancedTextEditor', {
                     'AdvancedTextEditor__attachment-disabled': !canUploadFiles,
@@ -732,7 +733,7 @@ const AdvancedTextEditor = ({
                     <MessageSubmitError
                         error={serverError}
                         submittedMessage={serverError.submittedMessage}
-                        handleSubmit={handleSubmitEvent}
+                        handleSubmit={noArgumentHandleSubmit}
                     />
                 )}
                 <MsgTyping

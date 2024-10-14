@@ -89,15 +89,15 @@ export default class ClusterTable extends React.PureComponent {
             var status = null;
 
             if (clusterInfo.hostname === '') {
-                clusterInfo.hostname = Utils.localizeMessage('admin.cluster.unknown', 'unknown');
+                clusterInfo.hostname = Utils.localizeMessage({id: 'admin.cluster.unknown', defaultMessage: 'unknown'});
             }
 
             if (clusterInfo.version === '') {
-                clusterInfo.version = Utils.localizeMessage('admin.cluster.unknown', 'unknown');
+                clusterInfo.version = Utils.localizeMessage({id: 'admin.cluster.unknown', defaultMessage: 'unknown'});
             }
 
             if (clusterInfo.config_hash === '') {
-                clusterInfo.config_hash = Utils.localizeMessage('admin.cluster.unknown', 'unknown');
+                clusterInfo.config_hash = Utils.localizeMessage({id: 'admin.cluster.unknown', defaultMessage: 'unknown'});
             }
 
             if (singleItem) {

@@ -4,8 +4,9 @@
 import classNames from 'classnames';
 import React from 'react';
 
-import './action.scss';
 import WithTooltip from 'components/with_tooltip';
+
+import './action.scss';
 
 type Props = {
     icon: string | React.FC<React.HTMLAttributes<HTMLSpanElement>>;
@@ -15,8 +16,13 @@ type Props = {
     tooltipText: React.ReactElement | string;
 };
 
-function Action({name, icon, onClick, id, tooltipText}: Props) {
-    const Icon = typeof icon === 'string' ? null : icon;
+function Action({
+    name,
+    icon,
+    onClick,
+    id,
+    tooltipText,
+}: Props) {
     return (
         <div className='DraftAction'>
             <WithTooltip
@@ -29,10 +35,15 @@ function Action({name, icon, onClick, id, tooltipText}: Props) {
                         'DraftAction__button',
                         {'DraftAction__button--delete': name === 'delete'},
                     )}
-                    id={`draft_{icon}_${id}`}
+                    id={`draft_${icon}_${id}`}
                     onClick={onClick}
                 >
-                    {Icon ? <Icon className='DraftAction__icon icon'/> : <i className={`icon ${icon}`}/>}
+                    <i
+                        className={classNames(
+                            'icon',
+                            icon,
+                        )}
+                    />
                 </button>
             </WithTooltip>
         </div>

@@ -457,15 +457,16 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             inviteError = (<label className='has-error control-label'>{this.state.inviteError}</label>);
         }
 
-        const buttonSubmitText = localizeMessage('multiselect.add', 'Add');
-        const buttonSubmitLoadingText = localizeMessage('multiselect.adding', 'Adding...');
-        const idsInGroup = this.props.profilesInCurrentChannel.map((user) => user.id);
-        let excludedAndNotInTeamUserIds: Set<string>;
-        if (this.props.excludeUsers) {
-            excludedAndNotInTeamUserIds = new Set(...this.props.profilesNotInCurrentTeam.map((user) => user.id), Object.values(this.props.excludeUsers).map((user) => user.id));
-        } else {
-            excludedAndNotInTeamUserIds = new Set(this.props.profilesNotInCurrentTeam.map((user) => user.id));
-        }
+        // TODO MM-10.0: need any of this, majority was commented apart apart from consts
+        // const buttonSubmitText = localizeMessage('multiselect.add', 'Add');
+        // const buttonSubmitLoadingText = localizeMessage('multiselect.adding', 'Adding...');
+        // const idsInGroup = this.props.profilesInCurrentChannel.map((user) => user.id);
+        // let excludedAndNotInTeamUserIds: Set<string>;
+        // if (this.props.excludeUsers) {
+        //     excludedAndNotInTeamUserIds = new Set(...this.props.profilesNotInCurrentTeam.map((user) => user.id), Object.values(this.props.excludeUsers).map((user) => user.id));
+        // } else {
+        //     excludedAndNotInTeamUserIds = new Set(this.props.profilesNotInCurrentTeam.map((user) => user.id));
+        // }
         // let users = this.filterOutDeletedAndExcludedAndNotInTeamUsers(
         //     filterProfilesStartingWithTerm(
         //         this.props.profilesNotInCurrentChannel.concat(this.props.profilesInCurrentChannel),
@@ -494,6 +495,8 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         //     }));
 
         // users = Array.from(new Set(users));
+        const buttonSubmitText = localizeMessage({id: 'multiselect.add', defaultMessage: 'Add'});
+        const buttonSubmitLoadingText = localizeMessage({id: 'multiselect.adding', defaultMessage: 'Adding...'});
 
         const closeMembersInviteModal = () => {
             this.props.actions.closeModal(ModalIdentifiers.CHANNEL_INVITE);
@@ -548,9 +551,9 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                 buttonSubmitLoadingText={buttonSubmitLoadingText}
                 saving={this.state.saving}
                 loading={this.state.loadingUsers}
-                placeholderText={this.props.isGroupsEnabled ? localizeMessage('multiselect.placeholder.peopleOrGroups', 'Search for people or groups') : localizeMessage('multiselect.placeholder', 'Search for people')}
+                placeholderText={this.props.isGroupsEnabled ? localizeMessage({id: 'multiselect.placeholder.peopleOrGroups', defaultMessage: 'Search for people or groups'}) : localizeMessage({id: 'multiselect.placeholder', defaultMessage: 'Search for people'})}
                 valueWithImage={true}
-                backButtonText={localizeMessage('multiselect.cancel', 'Cancel')}
+                backButtonText={localizeMessage({id: 'multiselect.cancel', defaultMessage: 'Cancel'})}
                 backButtonClick={closeMembersInviteModal}
                 backButtonClass={'btn-tertiary tertiary-button'}
                 customNoOptionsMessage={this.props.emailInvitationsEnabled ? customNoOptionsMessage : null}

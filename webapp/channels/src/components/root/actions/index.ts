@@ -114,12 +114,12 @@ export function registerCustomPostRenderer(type: string, component: any, id: str
     };
 }
 
-export function redirectToOnboardingOrDefaultTeam(history: History): ThunkActionFunc<void> {
+export function redirectToOnboardingOrDefaultTeam(history: History, searchParams?: URLSearchParams): ThunkActionFunc<void> {
     return async (dispatch, getState) => {
         const state = getState();
         const isUserAdmin = isCurrentUserSystemAdmin(state);
         if (!isUserAdmin) {
-            redirectUserToDefaultTeam();
+            redirectUserToDefaultTeam(searchParams);
             return;
         }
 
@@ -128,19 +128,19 @@ export function redirectToOnboardingOrDefaultTeam(history: History): ThunkAction
         const onboardingFlowEnabled = getIsOnboardingFlowEnabled(state);
 
         if (teams.length > 0 || !onboardingFlowEnabled) {
-            redirectUserToDefaultTeam();
+            redirectUserToDefaultTeam(searchParams);
             return;
         }
 
         const firstAdminSetupComplete = await dispatch(getFirstAdminSetupComplete());
         if (firstAdminSetupComplete?.data) {
-            redirectUserToDefaultTeam();
+            redirectUserToDefaultTeam(searchParams);
             return;
         }
 
         const profilesResult = await dispatch(getProfiles(0, General.PROFILE_CHUNK_SIZE, {roles: General.SYSTEM_ADMIN_ROLE}));
         if (profilesResult.error) {
-            redirectUserToDefaultTeam();
+            redirectUserToDefaultTeam(searchParams);
             return;
         }
         const currentUser = getCurrentUser(getState());
@@ -156,7 +156,7 @@ export function redirectToOnboardingOrDefaultTeam(history: History): ThunkAction
             return;
         }
 
-        redirectUserToDefaultTeam();
+        redirectUserToDefaultTeam(searchParams);
     };
 }
 

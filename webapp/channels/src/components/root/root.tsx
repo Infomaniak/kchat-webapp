@@ -245,6 +245,11 @@ export default class Root extends React.PureComponent<Props, State> {
     };
 
     private showLandingPageIfNecessary = () => {
+        // Only show Landing Page if enabled
+        if (!this.props.enableDesktopLandingPage) {
+            return;
+        }
+
         // We have nothing to redirect to if we're already on Desktop App
         // Chromebook has no Desktop App to switch to
         if (isDesktopApp() || isChromebook()) {
@@ -401,7 +406,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
             // if (isUserAtRootRoute) {
             //     if (isMeRequested) {
-            //         this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
+            //         this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history, new URLSearchParams(this.props.location.search));
             //     } else if (this.props.noAccounts) {
             //         this.props.history.push('/signup_user_complete');
             //     }
@@ -855,8 +860,10 @@ export default class Root extends React.PureComponent<Props, State> {
 }
 
 export function doesRouteBelongToTeamControllerRoutes(pathname: RouteComponentProps['location']['pathname']): boolean {
-    const TEAM_CONTROLLER_PATH_PATTERN = new RegExp(
-        `^\\/([a-z0-9\\-_]+)\\/(channels|messages|threads|drafts|integrations|emoji|${SCHEDULED_POST_URL_SUFFIX})(\\/.*)?$`,
-    );
+    // Note: we have specifically added admin_console to the negative lookahead as admin_console can have integrations as subpaths (admin_console/integrations/bot_accounts)
+    // and we don't want to treat those as team controller routes.
+    // Infomaniak: removed admin console
+    const TEAM_CONTROLLER_PATH_PATTERN = /^\/(channels|messages|threads|drafts|integrations|emoji)(\/.*)?$/;
+
     return TEAM_CONTROLLER_PATH_PATTERN.test(pathname);
 }

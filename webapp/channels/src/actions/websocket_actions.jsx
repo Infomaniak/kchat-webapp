@@ -33,6 +33,7 @@ import {
     getChannelMemberCountsByGroup,
     markMultipleChannelsAsRead,
     getChannelGuestMembers,
+    fetchAllMyChannelMembers,
 } from 'mattermost-redux/actions/channels';
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
@@ -295,6 +296,7 @@ export async function reconnect(socketId) {
 
         dispatch(fetchMyCategories(currentTeamId));
         dispatch(loadChannelsForCurrentUser());
+        dispatch(fetchAllMyChannelMembers());
 
         if (mostRecentPost) {
             // eslint-disable-next-line no-console
@@ -309,7 +311,7 @@ export async function reconnect(socketId) {
 
         const enabledUserStatuses = getIsUserStatusesConfigEnabled(state);
         if (enabledUserStatuses) {
-            dispatch(StatusActions.addVisibleUsersInCurrentChannelToStatusPoll());
+            dispatch(StatusActions.addVisibleUsersInCurrentChannelAndSelfToStatusPoll());
         }
 
         const crtEnabled = isCollapsedThreadsEnabled(state);

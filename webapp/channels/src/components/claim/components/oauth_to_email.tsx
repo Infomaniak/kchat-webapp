@@ -37,7 +37,7 @@ const OAuthToEmail = (props: Props) => {
 
         const password = passwordInput.current?.value;
         if (!password) {
-            setError(localizeMessage('claim.oauth_to_email.enterPwd', 'Please enter a password.'));
+            setError(localizeMessage({id: 'claim.oauth_to_email.enterPwd', defaultMessage: 'Please enter a password.'}));
             return;
         }
 
@@ -51,7 +51,7 @@ const OAuthToEmail = (props: Props) => {
 
         const confirmPassword = passwordConfirmInput.current?.value;
         if (!confirmPassword || password !== confirmPassword) {
-            setError(localizeMessage('claim.oauth_to_email.pwdNotMatch', 'Passwords do not match.'));
+            setError(localizeMessage({id: 'claim.oauth_to_email.pwdNotMatch', defaultMessage: 'Passwords do not match.'}));
             return;
         }
 

@@ -29,13 +29,14 @@ export type OwnProps = {
     setSearchType: (searchType: SearchType) => void;
     searchFilterType: SearchFilterType;
     setSearchFilterType: (filterType: SearchFilterType) => void;
-}
+};
 
 export type StateProps = {
     results: Post[];
     fileResults: FileInfo[];
     matches: Record<string, string[]>;
     searchTerms: string;
+    searchSelectedType: string;
     isSearchingTerm: boolean;
     isSearchingFlaggedPost: boolean;
     isSearchingPinnedPost: boolean;
@@ -47,7 +48,6 @@ export type StateProps = {
 
 export type IntlProps = {
     intl: IntlShape;
-}
+};
 
 export type Props = OwnProps & StateProps & IntlProps;
-

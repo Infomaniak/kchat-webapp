@@ -384,7 +384,18 @@ export async function getTeamRedirectChannelIfIsAccesible(user: UserProfile, tea
     return null;
 }
 
-export async function redirectUserToDefaultTeam() {
+function historyPushWithQueryParams(path: string, queryParams?: URLSearchParams) {
+    if (queryParams) {
+        getHistory().push({
+            pathname: path,
+            search: queryParams.toString(),
+        });
+    } else {
+        getHistory().push(path);
+    }
+}
+
+export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) {
     let state = getState();
 
     let user = getCurrentUser(state);
@@ -403,13 +414,20 @@ export async function redirectUserToDefaultTeam() {
     const locale = getCurrentLocale(state);
     const teamId = LocalStorageStore.getPreviousTeamId(user.id);
 
+    // let myTeams = getMyTeams(state);
+    // const teams = getActiveTeamsList(state);
+    // if (teams.length === 0) {
+    //     if (isUserFirstAdmin && onboardingFlowEnabled) {
+    //         historyPushWithQueryParams('/preparing-workspace', searchParams);
+    //         return;
+    //     }
+
+    //     historyPushWithQueryParams('/select_team', searchParams);
+
     let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
-        // if (isUserFirstAdmin && onboardingFlowEnabled) {
         getHistory().push('/error?type=no_ksuite');
         return;
-
-        // }
     }
 
     let team: Team | undefined;
@@ -422,8 +440,7 @@ export async function redirectUserToDefaultTeam() {
         if (channel) {
             dispatch(fetchTeamScheduledPosts(team.id, true));
             dispatch(selectChannel(channel.id));
-            const hashParams = window.location.hash ? `/${window.location.hash}` : '';
-            getHistory().push(`/${team.name}/channels/${channel.name}${hashParams}`);
+            historyPushWithQueryParams(`/${team.name}/channels/${channel.name}`, searchParams);
             return;
         }
     }
@@ -435,12 +452,12 @@ export async function redirectUserToDefaultTeam() {
         const channel = await getTeamRedirectChannelIfIsAccesible(user, myTeam); // eslint-disable-line no-await-in-loop
         if (channel) {
             dispatch(selectChannel(channel.id));
-            getHistory().push(`/${myTeam.name}/channels/${channel.name}`);
+            historyPushWithQueryParams(`/${myTeam.name}/channels/${channel.name}`, searchParams);
             return;
         }
     }
 
-    getHistory().push('/select_team');
+    historyPushWithQueryParams('/select_team', searchParams);
 }
 
 export async function redirectDesktopUserToDefaultTeam() {

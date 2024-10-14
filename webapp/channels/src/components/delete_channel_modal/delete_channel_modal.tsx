@@ -7,8 +7,6 @@ import {FormattedMessage} from 'react-intl';
 
 import type {Channel, ChannelType} from '@mattermost/types/channels';
 
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
 import {getHistory} from 'utils/browser_history';
 import Constants from 'utils/constants';
 
@@ -103,21 +101,45 @@ export default class DeleteChannelModal extends React.PureComponent<Props, State
                     <div className='alert alert-with-icon alert-grey'>
                         <i className='icon-information-outline'/>
                         {!canViewArchivedChannels &&
-                            <FormattedMarkdownMessage
-                                id='delete_channel.question'
-                                defaultMessage='This will archive the channel from the team and remove it from the user interface. Archived channels can be unarchived if needed again.'
-                                values={{
-                                    display_name: this.props.channel.display_name,
-                                }}
-                            />}
+                            <>
+                                <p>
+                                    <FormattedMessage
+                                        id='deleteChannelModal.cannotViewArchivedChannelsWarning'
+                                        defaultMessage='This will archive the channel from the team and remove it from the user interface. Archived channels can be unarchived if needed again.'
+                                    />
+                                </p>
+                                <p>
+                                    <FormattedMessage
+                                        id='deleteChannelModal.confirmArchive'
+                                        defaultMessage='Are you sure you wish to archive the <strong>{display_name}</strong> channel?'
+                                        values={{
+                                            display_name: this.props.channel.display_name,
+                                            strong: (chunks: string) => <strong>{chunks}</strong>,
+                                        }}
+                                    />
+                                </p>
+                            </>
+                        }
                         {canViewArchivedChannels &&
-                            <FormattedMarkdownMessage
-                                id='delete_channel.viewArchived.question'
-                                defaultMessage={'This will archive the channel from the team. Channel contents will still be accessible by channel members.'}
-                                values={{
-                                    display_name: this.props.channel.display_name,
-                                }}
-                            />}
+                            <>
+                                <p>
+                                    <FormattedMessage
+                                        id='deleteChannelModal.canViewArchivedChannelsWarning'
+                                        defaultMessage='This will archive the channel from the team. Channel contents will still be accessible by channel members.'
+                                    />
+                                </p>
+                                <p>
+                                    <FormattedMessage
+                                        id='deleteChannelModal.confirmArchive'
+                                        defaultMessage='Are you sure you wish to archive the <strong>{display_name}</strong> channel?'
+                                        values={{
+                                            display_name: this.props.channel.display_name,
+                                            strong: (chunks: string) => <strong>{chunks}</strong>,
+                                        }}
+                                    />
+                                </p>
+                            </>
+                        }
                     </div>
                     <p className='subtitle'>
                         <FormattedMessage

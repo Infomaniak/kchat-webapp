@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {ComponentProps} from 'react';
 import React from 'react';
 import {Provider} from 'react-redux';
 
@@ -20,7 +21,7 @@ jest.mock('wasm-media-encoders', () => ({
 }));
 
 describe('components/drafts/panel/panel_body', () => {
-    const baseProps = {
+    const baseProps: ComponentProps<typeof PanelBody> = {
         channelId: 'channel_id',
         displayName: 'display_name',
         fileInfos: [] as PostDraft['fileInfos'],

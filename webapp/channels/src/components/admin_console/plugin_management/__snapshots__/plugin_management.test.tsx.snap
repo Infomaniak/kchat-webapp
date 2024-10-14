@@ -235,7 +235,7 @@ exports[`components/PluginManagement should match snapshot 1`] = `
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -584,7 +584,7 @@ exports[`components/PluginManagement should match snapshot when \`Enable Marketp
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -1030,7 +1030,7 @@ exports[`components/PluginManagement should match snapshot when \`Enable Remote 
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -1381,7 +1381,7 @@ exports[`components/PluginManagement should match snapshot when \`Require Signat
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -1730,7 +1730,7 @@ exports[`components/PluginManagement should match snapshot, No installed plugins
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -2083,7 +2083,7 @@ exports[`components/PluginManagement should match snapshot, allow insecure URL e
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -2434,7 +2434,7 @@ exports[`components/PluginManagement should match snapshot, disabled 1`] = `
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -2758,7 +2758,7 @@ exports[`components/PluginManagement should match snapshot, text entered into th
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -3109,7 +3109,7 @@ exports[`components/PluginManagement should match snapshot, upload disabled 1`] 
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -3463,7 +3463,7 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -3875,7 +3875,7 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -4255,7 +4255,7 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -4635,7 +4635,7 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />
@@ -5015,7 +5015,7 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
               />
             }
             helpText={
-              <FormattedMarkdownMessage
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
                 id="admin.plugins.settings.enableRemoteMarketplaceDesc"
               />

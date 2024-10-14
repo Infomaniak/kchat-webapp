@@ -8,6 +8,7 @@ import {
     AccountPlusOutlineIcon,
     DotsVerticalIcon,
     ChevronRightIcon,
+    CheckIcon,
 } from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import type {MouseEvent, KeyboardEvent} from 'react';
@@ -92,7 +93,8 @@ const SidebarCategorySortingMenu = (props: Props) => {
                         defaultMessage='Alphabetically'
                     />
                 )}
-                onClick={(event) => handleSortDirectMessages(event, CategorySorting.Alphabetical)}
+                onClick={() => handleSortDirectMessages(CategorySorting.Alphabetical)}
+                trailingElements={category.sorting === CategorySorting.Alphabetical ? <CheckIcon size={16}/> : null}
             />
             <Menu.Item
                 id={`sortByMostRecent-${props.category.id}`}
@@ -102,7 +104,8 @@ const SidebarCategorySortingMenu = (props: Props) => {
                         defaultMessage='Recent Activity'
                     />
                 )}
-                onClick={(event) => handleSortDirectMessages(event, CategorySorting.Recency)}
+                onClick={() => handleSortDirectMessages(CategorySorting.Recency)}
+                trailingElements={category.sorting === CategorySorting.Recency ? <CheckIcon size={16}/> : null}
             />
         </Menu.SubMenu>
 
@@ -152,7 +155,8 @@ const SidebarCategorySortingMenu = (props: Props) => {
                     id={`showDmCount-${props.category.id}-${dmGmShowCount}`}
                     key={`showDmCount-${props.category.id}-${dmGmShowCount}`}
                     labels={<span>{dmGmShowCount}</span>}
-                    onClick={(event) => handlelimitVisibleDMsGMs(event, dmGmShowCount)}
+                    onClick={() => handlelimitVisibleDMsGMs(dmGmShowCount)}
+                    trailingElements={selectedDmNumber === dmGmShowCount ? <CheckIcon size={16}/> : null}
                 />
             ))}
         </Menu.SubMenu>

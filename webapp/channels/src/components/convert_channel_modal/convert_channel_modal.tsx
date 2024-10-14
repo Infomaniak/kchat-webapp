@@ -14,8 +14,6 @@ import type {ActionFunc} from 'mattermost-redux/types/actions';
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
 import Constants from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
 
@@ -96,22 +94,34 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                 </Modal.Header>
                 <Modal.Body>
                     <p>
-                        <FormattedMarkdownMessage
+                        <FormattedMessage
                             id={this.props.channelType === Constants.PRIVATE_CHANNEL ? 'convert_channel.question1.public' : 'convert_channel.question1'}
-                            defaultMessage='When you convert **{display_name}** to a {type} channel, history and membership are preserved.'
+                            defaultMessage='When you convert <b>{display_name}</b> to a {type} channel, history and membership are preserved.'
                             values={{
                                 display_name: channelDisplayName,
                                 type: this.state.type,
+                                b: (chunks: string) => <b>{chunks}</b>,
                             }}
                         />
                     </p>
                     <p>
-                        <FormattedMarkdownMessage
+                        <FormattedMessage
                             id='convert_channel.question3'
-                            defaultMessage='Are you sure you want to convert **{display_name}** to a {type} channel?'
+                            defaultMessage='Are you sure you want to convert <b>{display_name}</b> to a {type} channel?'
                             values={{
                                 display_name: channelDisplayName,
                                 type: this.state.type,
+                                b: (chunks: string) => <b>{chunks}</b>,
+                            }}
+                        />
+                    </p>
+                    <p>
+                        <FormattedMessage
+                            id='convertChannel.question3'
+                            defaultMessage='Are you sure you want to convert <b>{display_name}</b> to a private channel?'
+                            values={{
+                                display_name: channelDisplayName,
+                                b: (chunks: string) => <b>{chunks}</b>,
                             }}
                         />
                     </p>

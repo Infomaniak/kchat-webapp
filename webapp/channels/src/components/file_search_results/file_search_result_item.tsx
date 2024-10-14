@@ -151,7 +151,7 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                     {this.props.fileInfo.post_id && (
                         <WithTooltip
                             id='file-name__tooltip'
-                            title={localizeMessage('file_search_result_item.more_actions', 'More Actions')}
+                            title={localizeMessage({id: 'file_search_result_item.more_actions', defaultMessage: 'More Actions'})}
                             placement={'top'}
                         >
                             <MenuWrapper
@@ -170,13 +170,13 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                                 >
                                     <Menu.ItemAction
                                         onClick={this.jumpToConv}
-                                        ariaLabel={localizeMessage('file_search_result_item.open_in_channel', 'Open in channel')}
-                                        text={localizeMessage('file_search_result_item.open_in_channel', 'Open in channel')}
+                                        ariaLabel={localizeMessage({id: 'file_search_result_item.open_in_channel', defaultMessage: 'Open in channel'})}
+                                        text={localizeMessage({id: 'file_search_result_item.open_in_channel', defaultMessage: 'Open in channel'})}
                                     />
                                     <Menu.ItemAction
                                         onClick={this.copyLink}
-                                        ariaLabel={localizeMessage('file_search_result_item.copy_link', 'Copy link')}
-                                        text={localizeMessage('file_search_result_item.copy_link', 'Copy link')}
+                                        ariaLabel={localizeMessage({id: 'file_search_result_item.copy_link', defaultMessage: 'Copy link'})}
+                                        text={localizeMessage({id: 'file_search_result_item.copy_link', defaultMessage: 'Copy link'})}
                                     />
                                     {this.renderPluginItems()}
                                 </Menu>
@@ -185,7 +185,7 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                     )}
                     <WithTooltip
                         id='file-name__tooltip'
-                        title={localizeMessage('file_search_result_item.download', 'Download')}
+                        title={localizeMessage({id: 'file_search_result_item.download', defaultMessage: 'Download'})}
                         placement={'top'}
                     >
                         <a

@@ -13,7 +13,6 @@ import {getLicense} from 'mattermost-redux/selectors/entities/general';
 
 import useGetUsage from 'components/common/hooks/useGetUsage';
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import UnarchiveIcon from 'components/widgets/icons/unarchive_icon';
@@ -151,17 +150,23 @@ export function TeamProfile({team, isArchived, onToggleArchive, isDisabled, save
                         </div>
                         <div className='team-desc-col'>
                             <div className='row row-bottom-padding'>
-                                <FormattedMarkdownMessage
-                                    id='admin.team_settings.team_detail.teamName'
-                                    defaultMessage='**Team Name**:'
+                                <FormattedMessage
+                                    id='admin.teamSettings.teamDetail.teamName'
+                                    defaultMessage='<b>Team Name</b>:'
+                                    values={{
+                                        b: (chunks: string) => <b>{chunks}</b>,
+                                    }}
                                 />
                                 <br/>
                                 {team.display_name}
                             </div>
                             <div className='row'>
-                                <FormattedMarkdownMessage
-                                    id='admin.team_settings.team_detail.teamDescription'
-                                    defaultMessage='**Team Description**:'
+                                <FormattedMessage
+                                    id='admin.teamSettings.teamDetail.teamDescription'
+                                    defaultMessage='<b>Team Description</b>:'
+                                    values={{
+                                        b: (chunks: string) => <b>{chunks}</b>,
+                                    }}
                                 />
                                 <br/>
                                 {team.description || <span className='greyed-out'>{intl.formatMessage({id: 'admin.team_settings.team_detail.profileNoDescription', defaultMessage: 'No team description added.'})}</span>}

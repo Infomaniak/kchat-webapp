@@ -64,7 +64,6 @@ function PanelBody({
     const hideEditor = () => setIsEditing(false);
 
     return (
-
         <div className='DraftPanelBody post'>
             <div className='DraftPanelBody__left post__img'>
                 <ProfilePicture

@@ -38,10 +38,18 @@ type Props = {
     timestamp: number;
     remote: boolean;
     title: React.ReactNode;
-    errorCode?: ScheduledPostErrorCode;
+    error?: string;
 };
 
-function PanelHeader({kind, actions, hover, timestamp, remote, title, errorCode}: Props) {
+function PanelHeader({
+    kind,
+    actions,
+    hover,
+    timestamp,
+    remote,
+    title,
+    error,
+}: Props) {
     return (
         <header className='PanelHeader'>
             <div className='PanelHeader__left'>{title}</div>
@@ -95,19 +103,21 @@ function PanelHeader({kind, actions, hover, timestamp, remote, title, errorCode}
                             )
                         }
                     </div>
-
-                    {
-                        kind === 'draft' &&
+                    {!error && (
                         <Tag
                             variant={'danger'}
                             uppercase={true}
                             text={'draft'}
                         />
-                    }
-
-                    {
-                        kind === 'scheduledPost' && errorCode && <ScheduledPostErrorCodeTag errorCode={errorCode}/>
-                    }
+                    )}
+                    {error && (
+                        <Tag
+                            text={error}
+                            variant={'danger'}
+                            uppercase={true}
+                            icon={'alert-outline'}
+                        />
+                    )}
                 </div>
             </div>
         </header>

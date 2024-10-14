@@ -177,7 +177,11 @@ export type CreatePostReturnType = {
     error?: string;
 }
 
-export function createPost(post: Post, files: any[] = [], afterSubmit?: (response: any) => void): ActionFuncAsync<CreatePostReturnType, GlobalState> {
+export function createPost(
+    post: Post,
+    files: any[] = [],
+    afterSubmit?: (response: any) => void,
+): ActionFuncAsync<CreatePostReturnType, GlobalState> {
     return async (dispatch, getState) => {
         const state = getState();
         const currentUserId = state.entities.users.currentUserId;
@@ -1098,6 +1102,12 @@ export function getNeededAtMentionedUsernamesAndGroups(state: GlobalState, posts
             for (const attachment of post.props.attachments) {
                 findNeededUsernamesAndGroups(attachment.pretext);
                 findNeededUsernamesAndGroups(attachment.text);
+
+                if (attachment.fields) {
+                    for (const field of attachment.fields) {
+                        findNeededUsernamesAndGroups(field.value);
+                    }
+                }
             }
         }
     }

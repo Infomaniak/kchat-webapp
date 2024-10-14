@@ -16,7 +16,6 @@ import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 
 import BackstageList from 'components/backstage/components/backstage_list';
 import ExternalLink from 'components/external_link';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import InstalledIncomingWebhook, {matchesFilter} from 'components/integrations/installed_incoming_webhook';
 
 import {DeveloperLinks} from 'utils/constants';
@@ -94,7 +93,7 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
             if (channelA) {
                 displayNameA = channelA.display_name;
             } else {
-                displayNameA = Utils.localizeMessage('installed_incoming_webhooks.unknown_channel', 'A Private Webhook');
+                displayNameA = Utils.localizeMessage({id: 'installed_incoming_webhooks.unknown_channel', defaultMessage: 'A Private Webhook'});
             }
         }
 
@@ -145,7 +144,7 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
                     />
                 }
                 emptyTextSearch={
-                    <FormattedMarkdownMessage
+                    <FormattedMessage
                         id='installed_incoming_webhooks.emptySearch'
                         defaultMessage='No incoming webhooks match {searchTerm}'
                     />
@@ -166,7 +165,7 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
                         }}
                     />
                 }
-                searchPlaceholder={Utils.localizeMessage('installed_incoming_webhooks.search', 'Search Incoming Webhooks')}
+                searchPlaceholder={Utils.localizeMessage({id: 'installed_incoming_webhooks.search', defaultMessage: 'Search Incoming Webhooks'})}
                 loading={this.state.loading}
                 nextPage={this.nextPage}
                 previousPage={this.previousPage}
