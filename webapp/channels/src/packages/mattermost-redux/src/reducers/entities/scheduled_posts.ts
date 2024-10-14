@@ -8,6 +8,49 @@ import type {ScheduledPost, ScheduledPostsState} from '@mattermost/types/schedul
 
 import {ScheduledPostTypes, UserTypes} from 'mattermost-redux/action_types';
 
+function byId(state: ScheduledPostsState['byId'] = {}, action: AnyAction) {
+    switch (action.type) {
+    case ScheduledPostTypes.SCHEDULED_POSTS_RECEIVED: {
+        const {scheduledPostsByTeamId} = action.data;
+        const newState = {...state};
+
+        Object.keys(scheduledPostsByTeamId).forEach((teamId: string) => {
+            if (scheduledPostsByTeamId.hasOwnProperty(teamId)) {
+                scheduledPostsByTeamId[teamId].forEach((scheduledPost: ScheduledPost) => {
+                    newState[scheduledPost.id] = scheduledPost;
+                });
+            }
+        });
+
+        return newState;
+    }
+    case ScheduledPostTypes.SINGLE_SCHEDULED_POST_RECEIVED: {
+        const scheduledPost = action.data.scheduledPost;
+        return {
+            ...state,
+            [scheduledPost.id]: scheduledPost,
+        };
+    }
+    case ScheduledPostTypes.SCHEDULED_POST_UPDATED: {
+        const scheduledPost = action.data.scheduledPost;
+        return {
+            ...state,
+            [scheduledPost.id]: scheduledPost,
+        };
+    }
+    case ScheduledPostTypes.SCHEDULED_POST_DELETED: {
+        const scheduledPost = action.data.scheduledPost;
+        const newState = {...state};
+        delete newState[scheduledPost.id];
+        return newState;
+    }
+    case UserTypes.LOGOUT_SUCCESS:
+        return {};
+    default:
+        return state;
+    }
+}
+
 function byTeamId(state: ScheduledPostsState['byTeamId'] = {}, action: AnyAction) {
     switch (action.type) {
     case ScheduledPostTypes.SCHEDULED_POSTS_RECEIVED: {
@@ -16,52 +59,48 @@ function byTeamId(state: ScheduledPostsState['byTeamId'] = {}, action: AnyAction
 
         Object.keys(scheduledPostsByTeamId).forEach((teamId: string) => {
             if (scheduledPostsByTeamId.hasOwnProperty(teamId)) {
-                newState[teamId] = scheduledPostsByTeamId[teamId];
+                newState[teamId] = scheduledPostsByTeamId[teamId].map((scheduledPost: ScheduledPost) => scheduledPost.id);
             }
         });
 
         return newState;
     }
     case ScheduledPostTypes.SINGLE_SCHEDULED_POST_RECEIVED: {
-        const scheduledPost = action.data.scheduledPost;
+        const scheduledPost = action.data.scheduledPost as ScheduledPost;
         const teamId = action.data.teamId || 'directChannels';
 
         const newState = {...state};
 
-        const existingIndex = newState[teamId].findIndex((existingScheduledPost) => existingScheduledPost.id === scheduledPost.id);
+        const existingIndex = newState[teamId].findIndex((existingScheduledPostId) => existingScheduledPostId === scheduledPost.id);
         if (existingIndex >= 0) {
             newState[teamId].splice(existingIndex, 1);
         }
 
         if (newState[teamId]) {
-            newState[teamId] = [...newState[teamId], scheduledPost];
+            newState[teamId] = [...newState[teamId], scheduledPost.id];
         } else {
-            newState[teamId] = [scheduledPost];
+            newState[teamId] = [scheduledPost.id];
         }
 
         return newState;
     }
-    case ScheduledPostTypes.SCHEDULED_POST_UPDATED: {
-        const scheduledPost = action.data.scheduledPost;
+    case ScheduledPostTypes.SCHEDULED_POST_DELETED: {
+        const scheduledPost = action.data.scheduledPost as ScheduledPost;
 
         const newState = {...state};
         let modified = false;
 
-        Object.keys(state).some((teamId: string) => {
-            const index = newState[teamId].findIndex((existingScheduledPost) => existingScheduledPost.id === scheduledPost.id);
+        for (const teamId of Object.keys(state)) {
+            const index = newState[teamId].findIndex((existingScheduledPostId) => existingScheduledPostId === scheduledPost.id);
 
             if (index >= 0) {
                 newState[teamId] = [...newState[teamId]];
-                newState[teamId][index] = scheduledPost;
+                newState[teamId].splice(index, 1);
                 modified = true;
 
-                // return true makes some() not loop through remaining array
-                return true;
+                break;
             }
-
-            // returning false makes some() continue looping through the array
-            return false;
-        });
+        }
 
         return modified ? newState : state;
     }
@@ -77,44 +116,53 @@ function errorsByTeamId(state: ScheduledPostsState['errorsByTeamId'] = {}, actio
     case ScheduledPostTypes.SCHEDULED_POSTS_RECEIVED: {
         const {scheduledPostsByTeamId} = action.data;
         const newState = {...state};
-        let changed = false;
 
         Object.keys(scheduledPostsByTeamId).forEach((teamId: string) => {
             if (scheduledPostsByTeamId.hasOwnProperty(teamId)) {
                 const teamScheduledPosts = scheduledPostsByTeamId[teamId] as ScheduledPost[];
-                const updatedHasError = teamScheduledPosts.some((scheduledPost) => scheduledPost.error_code);
-
-                if (state[teamId] !== updatedHasError) {
-                    changed = true;
-                    newState[teamId] = updatedHasError;
-                }
+                newState[teamId] = teamScheduledPosts.filter((scheduledPost) => scheduledPost.error_code).map((scheduledPost) => scheduledPost.id);
             }
         });
 
-        return changed ? newState : state;
+        return newState;
     }
     case ScheduledPostTypes.SINGLE_SCHEDULED_POST_RECEIVED: {
-        const teamId = action.data.teamId || 'directChannels';
+        let changed = false;
 
-        // if team already has an error state, then irrespective of what's the error
-        // on new scheduled post, the team would still have an error.
-        // So nothing changes so we return the original state as-in.
-        if (state[teamId]) {
-            return state;
+        const teamId = action.data.teamId || 'directChannels';
+        const newState = {...state};
+        if (!newState[teamId]) {
+            newState[teamId] = [];
         }
 
         const scheduledPost = action.data.scheduledPost as ScheduledPost;
-
-        // if team doesn't have any error and neither does the new scheduled post,
-        // then nothing changes so we return the original state as-in.
-        if (!scheduledPost.error_code || state[teamId]) {
-            return state;
+        if (scheduledPost.error_code) {
+            const alreadyExists = newState[teamId].find((scheduledPostId) => scheduledPostId === scheduledPost.id);
+            if (!alreadyExists) {
+                newState[teamId] = [...newState[teamId], scheduledPost.id];
+                changed = true;
+            }
         }
 
-        return {
-            ...state,
-            [teamId]: true,
-        };
+        return changed ? newState : state;
+    }
+    case ScheduledPostTypes.SCHEDULED_POST_DELETED: {
+        let changed = false;
+
+        const scheduledPost = action.data.scheduledPost as ScheduledPost;
+        const newState = {...state};
+
+        for (const teamId of Object.keys(state)) {
+            const index = newState[teamId].findIndex((scheduledPostId) => scheduledPostId === scheduledPost.id);
+
+            if (index >= 0) {
+                changed = true;
+                newState[teamId] = [...newState[teamId]];
+                newState[teamId].splice(index, 1);
+                break;
+            }
+        }
+        return changed ? newState : state;
     }
     case UserTypes.LOGOUT_SUCCESS: {
         return {};
@@ -124,7 +172,73 @@ function errorsByTeamId(state: ScheduledPostsState['errorsByTeamId'] = {}, actio
     }
 }
 
+function byChannelOrThreadId(state: ScheduledPostsState['byChannelOrThreadId'] = {}, action: AnyAction) {
+    switch (action.type) {
+    case ScheduledPostTypes.SCHEDULED_POSTS_RECEIVED: {
+        const {scheduledPostsByTeamId} = action.data;
+        const newState = {...state};
+
+        Object.keys(scheduledPostsByTeamId).forEach((teamId: string) => {
+            if (scheduledPostsByTeamId.hasOwnProperty(teamId)) {
+                scheduledPostsByTeamId[teamId].forEach((scheduledPost: ScheduledPost) => {
+                    const id = scheduledPost.root_id || scheduledPost.channel_id;
+
+                    if (newState[id]) {
+                        newState[id].push(scheduledPost.id);
+                    } else {
+                        newState[id] = [scheduledPost.id];
+                    }
+                });
+            }
+        });
+
+        return newState;
+    }
+    case ScheduledPostTypes.SINGLE_SCHEDULED_POST_RECEIVED: {
+        const scheduledPost = action.data.scheduledPost;
+        const newState = {...state};
+        const id = scheduledPost.root_id || scheduledPost.channel_id;
+
+        if (!newState[id]) {
+            newState[id] = [scheduledPost.id];
+            return newState;
+        }
+
+        let changed = false;
+        const existingIndex = newState[id].findIndex((scheduledPostId) => scheduledPostId === scheduledPost.id);
+
+        if (existingIndex) {
+            newState[id] = [...newState[id], scheduledPost.id];
+            changed = true;
+        }
+
+        return changed ? newState : state;
+    }
+    case ScheduledPostTypes.SCHEDULED_POST_DELETED: {
+        const scheduledPost = action.data.scheduledPost;
+        const id = scheduledPost.root_id || scheduledPost.channel_id;
+
+        if (!state[id]) {
+            return state;
+        }
+
+        const newState = {...state};
+        const index = newState[id].findIndex((scheduledPostId) => scheduledPostId === scheduledPost.id);
+        newState[id] = [...newState[id]];
+        newState[id].splice(index, 1);
+
+        return newState;
+    }
+    case UserTypes.LOGOUT_SUCCESS:
+        return {};
+    default:
+        return state;
+    }
+}
+
 export default combineReducers({
+    byId,
     byTeamId,
+    byChannelOrThreadId,
     errorsByTeamId,
 });

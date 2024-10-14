@@ -1,7 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Post} from '@mattermost/types/posts';
+import type {Post, PostMetadata} from '@mattermost/types/posts';
+import type {ScheduledPost, SchedulingInfo} from '@mattermost/types/schedule_post';
 
 import type {CreatePostReturnType, SubmitReactionReturnType} from 'mattermost-redux/actions/posts';
 import {addMessageIntoHistory} from 'mattermost-redux/actions/posts';
@@ -24,6 +25,7 @@ import type {ExecuteCommandReturnType} from 'actions/command';
 import {executeCommand} from 'actions/command';
 import {runMessageWillBePostedHooks, runSlashCommandWillBePostedHooks} from 'actions/hooks';
 import * as PostActions from 'actions/post_actions';
+import {createSchedulePostFromDraft} from 'actions/post_actions';
 
 import EmojiMap from 'utils/emoji_map';
 import {containsAtChannel, groupsMentionedInText} from 'utils/post_utils';
@@ -37,6 +39,7 @@ export function submitPost(
     rootId: string,
     draft: PostDraft,
     afterSubmit?: (response: SubmitPostReturnType) => void,
+    schedulingInfo?: SchedulingInfo,
     afterOptimisticSubmit?: () => void,
 ): ActionFuncAsync<CreatePostReturnType, GlobalState> {
     return async (dispatch, getState) => {
@@ -85,6 +88,34 @@ export function submitPost(
 
         post = hookResult.data;
 
+        if (schedulingInfo) {
+            const fileIDs = draft.fileInfos.map((fileInfo) => fileInfo.id);
+            const scheduledPost: ScheduledPost = {
+                id: '',
+                scheduled_at: schedulingInfo.scheduled_at,
+                create_at: post.create_at,
+                update_at: post.update_at,
+                user_id: userId,
+                channel_id: post.channel_id,
+                root_id: post.root_id,
+                message: post.message,
+                props: post.props,
+                file_ids: fileIDs,
+                metadata: post.metadata,
+                priority: post.metadata.priority,
+            };
+
+            if (draft.fileInfos?.length > 0) {
+                if (!scheduledPost.metadata) {
+                    scheduledPost.metadata = {} as PostMetadata;
+                }
+
+                scheduledPost.metadata.files = draft.fileInfos;
+            }
+
+            return dispatch(createSchedulePostFromDraft(scheduledPost));
+        }
+
         return dispatch(PostActions.createPost(post, draft.fileInfos, afterSubmit, afterOptimisticSubmit));
     };
 }
@@ -130,7 +161,6 @@ export function submitCommand(channelId: string, rootId: string, draft: PostDraf
 }
 
 export type SubmitPostReturnType = CreatePostReturnType & SubmitCommandRerturnType & SubmitReactionReturnType;
-
 export type OnSubmitOptions = {
     ignoreSlash?: boolean;
     afterSubmit?: (response: SubmitPostReturnType) => void;
@@ -140,6 +170,7 @@ export type OnSubmitOptions = {
 export function onSubmit(
     draft: PostDraft,
     options: OnSubmitOptions,
+    schedulingInfo?: SchedulingInfo,
 ): ActionFuncAsync<SubmitPostReturnType, GlobalState> {
     return async (dispatch, getState) => {
         const {message, channelId, rootId} = draft;
@@ -147,24 +178,26 @@ export function onSubmit(
 
         dispatch(addMessageIntoHistory(message));
 
-        const isReaction = Utils.REACTION_PATTERN.exec(message);
+        if (!schedulingInfo && !options.ignoreSlash) {
+            const isReaction = Utils.REACTION_PATTERN.exec(message);
 
         const emojis = getCustomEmojisByName(state);
         const emojiMap = new EmojiMap(emojis);
 
-        if (isReaction && emojiMap.has(isReaction[2]) && !options.ignoreSlash) {
-            const latestPostId = getLatestInteractablePostId(state, channelId, rootId);
-            if (latestPostId) {
-                return dispatch(PostActions.submitReaction(latestPostId, isReaction[1], isReaction[2]));
+            if (isReaction && emojiMap.has(isReaction[2])) {
+                const latestPostId = getLatestInteractablePostId(state, channelId, rootId);
+                if (latestPostId) {
+                    return dispatch(PostActions.submitReaction(latestPostId, isReaction[1], isReaction[2]));
+                }
+                return {error: new Error('no post to react to')};
             }
-            return {error: new Error('No post to react to')};
+
+            if (message.indexOf('/') === 0 && !options.ignoreSlash) {
+                return dispatch(submitCommand(channelId, rootId, draft));
+            }
         }
 
-        if (message.indexOf('/') === 0 && !options.ignoreSlash) {
-            return dispatch(submitCommand(channelId, rootId, draft));
-        }
-
-        return dispatch(submitPost(channelId, rootId, draft, options.afterSubmit, options.afterOptimisticSubmit));
+        return dispatch(submitPost(channelId, rootId, draft, options.afterSubmit, schedulingInfo, options.afterOptimisticSubmit));
     };
 }
 

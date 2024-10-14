@@ -65,7 +65,7 @@ const useSubmit = (
     afterSubmit?: (response: SubmitPostReturnType) => void,
     skipCommands?: boolean,
 ): [
-        (submittingDraft?: PostDraft) => Promise<void>,
+        (submittingDraft?: PostDraft, schedulingInfo?: SchedulingInfo) => void,
         string | null,
     ] => {
     const getGroupMentions = useGroups(channelId, draft.message);
@@ -119,7 +119,7 @@ const useSubmit = (
         }));
     }, [dispatch]);
 
-    const doSubmit = useCallback(async (submittingDraft = draft) => {
+    const doSubmit = useCallback(async (submittingDraft: PostDraft = draft, schedulingInfo?: SchedulingInfo) => {
         if (submittingDraft.uploadsInProgress.length > 0) {
             isDraftSubmitting.current = false;
             return;
@@ -162,7 +162,7 @@ const useSubmit = (
         const options: OnSubmitOptions = {ignoreSlash, afterSubmit, afterOptimisticSubmit};
 
         try {
-            const res = await dispatch(onSubmit(submittingDraft, options));
+            const res = await dispatch(onSubmit(submittingDraft, options, schedulingInfo));
             if (res.error) {
                 throw res.error;
             }
@@ -228,7 +228,7 @@ const useSubmit = (
         }));
     }, [dispatch]);
 
-    const handleSubmit = useCallback(async (submittingDraft = draft) => {
+    const handleSubmit = useCallback(async (submittingDraft = draft, schedulingInfo?: SchedulingInfo) => {
         if (!channel) {
             return;
         }
@@ -277,7 +277,7 @@ const useSubmit = (
             return;
         }
 
-        if (!skipCommands) {
+        if (!skipCommands && !schedulingInfo) {
             const status = getStatusFromSlashCommand(submittingDraft.message);
             if (userIsOutOfOffice && status) {
                 const resetStatusModalData = {
@@ -331,7 +331,7 @@ const useSubmit = (
             }
         }
 
-        await doSubmit(submittingDraft);
+        await doSubmit(submittingDraft, schedulingInfo);
     }, [
         doSubmit,
         draft,

@@ -1053,12 +1053,14 @@ type ChannelBookmarkStore interface {
 }
 
 type ScheduledPostStore interface {
+	GetMaxMessageSize() int
 	CreateScheduledPost(scheduledPost *model.ScheduledPost) (*model.ScheduledPost, error)
 	GetScheduledPostsForUser(userId, teamId string) ([]*model.ScheduledPost, error)
-	GetPendingScheduledPosts(beforeTime int64, lastScheduledPostId string, perPage uint64) ([]*model.ScheduledPost, error)
+	GetPendingScheduledPosts(beforeTime, afterTime int64, lastScheduledPostId string, perPage uint64) ([]*model.ScheduledPost, error)
 	PermanentlyDeleteScheduledPosts(scheduledPostIDs []string) error
 	UpdatedScheduledPost(scheduledPost *model.ScheduledPost) error
 	Get(scheduledPostId string) (*model.ScheduledPost, error)
+	UpdateOldScheduledPosts(beforeTime int64) error
 }
 
 // ChannelSearchOpts contains options for searching channels.

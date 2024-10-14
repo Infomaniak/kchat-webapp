@@ -9780,11 +9780,17 @@ func (s *RetryLayerScheduledPostStore) Get(scheduledPostId string) (*model.Sched
 
 }
 
-func (s *RetryLayerScheduledPostStore) GetPendingScheduledPosts(beforeTime int64, lastScheduledPostId string, perPage uint64) ([]*model.ScheduledPost, error) {
+func (s *RetryLayerScheduledPostStore) GetMaxMessageSize() int {
+
+	return s.ScheduledPostStore.GetMaxMessageSize()
+
+}
+
+func (s *RetryLayerScheduledPostStore) GetPendingScheduledPosts(beforeTime int64, afterTime int64, lastScheduledPostId string, perPage uint64) ([]*model.ScheduledPost, error) {
 
 	tries := 0
 	for {
-		result, err := s.ScheduledPostStore.GetPendingScheduledPosts(beforeTime, lastScheduledPostId, perPage)
+		result, err := s.ScheduledPostStore.GetPendingScheduledPosts(beforeTime, afterTime, lastScheduledPostId, perPage)
 		if err == nil {
 			return result, nil
 		}
@@ -9827,6 +9833,27 @@ func (s *RetryLayerScheduledPostStore) PermanentlyDeleteScheduledPosts(scheduled
 	tries := 0
 	for {
 		err := s.ScheduledPostStore.PermanentlyDeleteScheduledPosts(scheduledPostIDs)
+		if err == nil {
+			return nil
+		}
+		if !isRepeatableError(err) {
+			return err
+		}
+		tries++
+		if tries >= 3 {
+			err = errors.Wrap(err, "giving up after 3 consecutive repeatable transaction failures")
+			return err
+		}
+		timepkg.Sleep(100 * timepkg.Millisecond)
+	}
+
+}
+
+func (s *RetryLayerScheduledPostStore) UpdateOldScheduledPosts(beforeTime int64) error {
+
+	tries := 0
+	for {
+		err := s.ScheduledPostStore.UpdateOldScheduledPosts(beforeTime)
 		if err == nil {
 			return nil
 		}

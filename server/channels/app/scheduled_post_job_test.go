@@ -16,6 +16,8 @@ func TestProcessScheduledPosts(t *testing.T) {
 		th := Setup(t).InitBasic()
 		defer th.TearDown()
 
+		th.App.Srv().SetLicense(getLicWithSkuShortName(model.LicenseShortSkuProfessional))
+
 		scheduledAt := model.GetMillis() + 1000
 		scheduledPost1 := &model.ScheduledPost{
 			Draft: model.Draft{
@@ -54,10 +56,12 @@ func TestProcessScheduledPosts(t *testing.T) {
 		th := Setup(t).InitBasic()
 		defer th.TearDown()
 
+		th.App.Srv().SetLicense(getLicWithSkuShortName(model.LicenseShortSkuProfessional))
+
 		appErr := th.App.DeleteChannel(th.Context, th.BasicChannel, th.BasicUser.Id)
 		assert.Nil(t, appErr)
 
-		scheduledAt := model.GetMillis() + 1000
+		scheduledAt := model.GetMillis() - (5 * 60 * 60 * 1000)
 		scheduledPost1 := &model.ScheduledPost{
 			Draft: model.Draft{
 				CreateAt:  model.GetMillis(),
@@ -102,6 +106,8 @@ func TestProcessScheduledPosts(t *testing.T) {
 	t.Run("sets error code for archived user", func(t *testing.T) {
 		th := Setup(t).InitBasic()
 		defer th.TearDown()
+
+		th.App.Srv().SetLicense(getLicWithSkuShortName(model.LicenseShortSkuProfessional))
 
 		scheduledAt := model.GetMillis() + 1000
 		scheduledPost1 := &model.ScheduledPost{
@@ -153,6 +159,8 @@ func TestProcessScheduledPosts(t *testing.T) {
 	t.Run("sets error code when user is not a channel member", func(t *testing.T) {
 		th := Setup(t).InitBasic()
 		defer th.TearDown()
+
+		th.App.Srv().SetLicense(getLicWithSkuShortName(model.LicenseShortSkuProfessional))
 
 		scheduledAt := model.GetMillis() + 1000
 		scheduledPost1 := &model.ScheduledPost{

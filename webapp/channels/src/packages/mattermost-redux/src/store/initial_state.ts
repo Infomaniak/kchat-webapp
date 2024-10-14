@@ -267,8 +267,10 @@ const state: GlobalState = {
             myTopReactions: {},
         },
         scheduledPosts: {
+            byId: {},
             byTeamId: {},
             errorsByTeamId: {},
+            byChannelOrThreadId: {},
         },
     },
     errors: [],

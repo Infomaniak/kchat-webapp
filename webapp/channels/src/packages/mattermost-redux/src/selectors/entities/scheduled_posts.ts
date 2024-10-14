@@ -1,25 +1,43 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ScheduledPost} from '@mattermost/types/schedule_post';
+import type {ScheduledPost, ScheduledPostsState} from '@mattermost/types/schedule_post';
 import type {GlobalState} from '@mattermost/types/store';
 
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
+
+const emptyList: string[] = [];
+
+export type ChannelScheduledPostIndicatorData = {
+    scheduledPost?: ScheduledPost;
+    count: number;
+}
 
 export function makeGetScheduledPostsByTeam(): (state: GlobalState, teamId: string, includeDirectChannels: boolean) => ScheduledPost[] {
     return createSelector(
         'makeGetScheduledPostsByTeam',
+        (state: GlobalState) => state.entities.scheduledPosts.byId,
         (state: GlobalState, teamId: string, includeDirectChannels: boolean) => includeDirectChannels,
-        (state: GlobalState, teamId: string) => state.entities.scheduledPosts.byTeamId[teamId],
-        (state: GlobalState) => state.entities.scheduledPosts.byTeamId.directChannels,
-        (includeDirectChannels: boolean, teamScheduledPosts: ScheduledPost[], directChannelScheduledPosts: ScheduledPost[]) => {
-            const team = teamScheduledPosts || [];
-            const direct = directChannelScheduledPosts || [];
-            if (!includeDirectChannels) {
-                return team;
+        (state: GlobalState, teamId: string) => state.entities.scheduledPosts.byTeamId[teamId] || emptyList,
+        (state: GlobalState) => state.entities.scheduledPosts.byTeamId.directChannels || emptyList,
+        (scheduledPostsById: ScheduledPostsState['byId'], includeDirectChannels: boolean, teamScheduledPostsIDs: string[], directChannelScheduledPostsIDs: string[]) => {
+            const scheduledPosts: ScheduledPost[] = [];
+
+            const extractor = (scheduledPostId: string) => {
+                const scheduledPost = scheduledPostsById[scheduledPostId];
+                if (scheduledPost) {
+                    scheduledPosts.push(scheduledPost);
+                }
+            };
+
+            teamScheduledPostsIDs.forEach(extractor);
+
+            if (includeDirectChannels) {
+                directChannelScheduledPostsIDs.forEach(extractor);
             }
 
-            return [...team, ...direct];
+            return scheduledPosts;
         },
     );
 }
@@ -34,5 +52,28 @@ export function getScheduledPostsByTeamCount(state: GlobalState, teamId: string,
 }
 
 export function hasScheduledPostError(state: GlobalState, teamId: string) {
-    return state.entities.scheduledPosts.errorsByTeamId[teamId] || state.entities.scheduledPosts.errorsByTeamId.directChannels;
+    return state.entities.scheduledPosts.errorsByTeamId[teamId]?.length > 0 || state.entities.scheduledPosts.errorsByTeamId.directChannels?.length > 0;
+}
+
+export function showChannelOrThreadScheduledPostIndicator(state: GlobalState, channelOrThreadId: string): ChannelScheduledPostIndicatorData {
+    const allChannelScheduledPosts = state.entities.scheduledPosts.byChannelOrThreadId[channelOrThreadId] || emptyList;
+    const eligibleScheduledPosts = allChannelScheduledPosts.filter((scheduledPostId: string) => {
+        const scheduledPost = state.entities.scheduledPosts.byId[scheduledPostId];
+        return !scheduledPost.error_code;
+    });
+
+    const data = {
+        count: eligibleScheduledPosts.length,
+    } as ChannelScheduledPostIndicatorData;
+
+    if (data.count === 1) {
+        const scheduledPostId = eligibleScheduledPosts[0];
+        data.scheduledPost = state.entities.scheduledPosts.byId[scheduledPostId];
+    }
+
+    return data;
+}
+
+export function isScheduledPostsEnabled(state: GlobalState) {
+    return getConfig(state).ScheduledPosts === 'true';
 }
