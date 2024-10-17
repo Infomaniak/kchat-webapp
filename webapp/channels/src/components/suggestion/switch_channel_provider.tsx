@@ -15,7 +15,6 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 import {UserTypes} from 'mattermost-redux/action_types';
 import {fetchAllMyTeamsChannelsAndChannelMembersREST, searchAllChannels} from 'mattermost-redux/actions/channels';
 import {logError} from 'mattermost-redux/actions/errors';
-import {getStatusesByIds} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {Preferences} from 'mattermost-redux/constants';
 import {
@@ -536,7 +535,7 @@ export default class SwitchChannelProvider extends Provider {
         const remoteFormattedData = this.formatList(channelPrefix, remoteChannelData, remoteUserData, false);
         const users = [...localUserData.filter((user) => user.id !== currentUserId), ...remoteUserData.filter((user) => user.id !== currentUserId)];
 
-        store.dispatch(loadProfilesMissingStatus(users));
+        this.store.dispatch(loadProfilesMissingStatus(users));
 
         this.store.dispatch({
             type: UserTypes.RECEIVED_PROFILES_LIST,
