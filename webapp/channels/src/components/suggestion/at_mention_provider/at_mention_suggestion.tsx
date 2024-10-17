@@ -208,6 +208,6 @@ function mapStateToPropsForAtMentionSuggestion(state: GlobalState, ownProps: Own
     };
 }
 
-const ConnectedAtMentionSuggestion = connect(mapStateToPropsForAtMentionSuggestion, null, null, {forwardRef: true})(injectIntl(AtMentionSuggestion));
+const ConnectedAtMentionSuggestion = connect(mapStateToPropsForAtMentionSuggestion, null, null, {forwardRef: true})(AtMentionSuggestion);
 
 export default ConnectedAtMentionSuggestion;
