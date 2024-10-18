@@ -240,12 +240,14 @@ export function sendDesktopNotification(post, msgProps) {
         let notifyText = post.message;
 
         // If the post has attachments, add their text to the notification message
+
         if (post.props && post.props.attachments && post.props.attachments.length > 0) {
             const attachments = post.props.attachments;
 
             // Collect the text from each attachment
             const attachmentTexts = attachments.map((attachment) => {
-                return [
+                // Use the fallback if available, otherwise collect individual fields
+                return attachment.fallback || [
                     attachment.pretext, // Add pretext to give context to the attachment
                     attachment.title, // Title of the attachment
                     attachment.text, // Main text of the attachment
