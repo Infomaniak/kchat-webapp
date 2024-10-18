@@ -126,7 +126,7 @@ export function sendDesktopNotification(post, msgProps) {
 
             // We do this on a try catch block to avoid errors from malformed props
             try {
-                if (post.props && post.props.attachments) {
+                if (post.props && post.props.attachments && post.props.attachments.length > 0) {
                     const attachments = post.props.attachments;
                     function appendText(toAppend) {
                         if (toAppend) {
@@ -239,17 +239,41 @@ export function sendDesktopNotification(post, msgProps) {
 
         let notifyText = post.message;
 
+        // If the post has attachments, add their text to the notification message
+        if (post.props && post.props.attachments && post.props.attachments.length > 0) {
+            const attachments = post.props.attachments;
+
+            // Collect the text from each attachment
+            const attachmentTexts = attachments.map((attachment) => {
+                return [
+                    attachment.pretext, // Add pretext to give context to the attachment
+                    attachment.title, // Title of the attachment
+                    attachment.text, // Main text of the attachment
+                    attachment.footer, // Footer text, if any
+                    attachment.fields ? attachment.fields.map((field) => `${field.title}: ${field.value}`).join(', ') : '', // If there are fields, add them
+                    attachment.image_url ? '[Image Attached]' : '', // Add '[Image Attached]' if there is an image URL
+                ].filter(Boolean).join(' ');
+            }).join('\n');
+
+            // Add the collected text to the notification message
+            notifyText = notifyText ? `${notifyText}\n${attachmentTexts}` : attachmentTexts;
+        }
+
         const msgPropsPost = msgProps.post;
         const attachments = msgPropsPost && msgPropsPost.props && msgPropsPost.props.attachments ? msgPropsPost.props.attachments : [];
         let image = false;
-        attachments.forEach((attachment) => {
-            if (notifyText.length === 0) {
-                notifyText = attachment.fallback ||
-                    attachment.pretext ||
-                    attachment.text;
-            }
-            image |= attachment.image_url.length > 0;
-        });
+        if (attachments && attachments.length > 0) {
+            attachments.forEach((attachment) => {
+                if (!notifyText || notifyText.length === 0) {
+                    notifyText = attachment.fallback ||
+                        attachment.pretext ||
+                        attachment.text || '';
+                }
+                if (attachment.image_url && attachment.image_url.length > 0) {
+                    image = true;
+                }
+            });
+        }
 
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);
 
