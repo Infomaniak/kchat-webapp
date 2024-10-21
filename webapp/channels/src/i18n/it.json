@@ -3814,6 +3814,7 @@
   "view_image_popover.publicLink": "Ottieni collegamento pubblico",
   "vocals.loading_transcript": "Visualizza la trascrizione...",
   "vocals.transcript_title": "Trascrizione audio (generata automaticamente)",
+  "vocals.transcript_loading": "Trascrizione audio in corso...",
   "vocals.transcript.error": "L'audio è vuoto.",
   "web.footer.about": "Riguardo a",
   "web.footer.help": "Aiuto",

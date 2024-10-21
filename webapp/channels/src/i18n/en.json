@@ -6051,6 +6051,7 @@
   "view_image.zoom_reset": "Reset Zoom",
   "vocals.loading_transcript": "View the transcript...",
   "vocals.transcript_title": "Audio transcription (automatically generated)",
+  "vocals.transcript_loading": "Audio transcription in progress...",
   "vocals.transcript.error": "The audio is empty.",
   "view_user_group_modal.ldapSynced": "AD/LDAP SYNCED",
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Member} other {Members}}",
