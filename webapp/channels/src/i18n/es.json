@@ -5033,6 +5033,7 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, uno {Member} otros {Members}}",
   "vocals.loading_transcript": "Ver la transcripción...",
   "vocals.transcript_title": "Transcripción de audio (generada automáticamente)",
+  "vocals.transcript_loading": "Transcripción de audio en curso...",
   "vocals.transcript.error": "El audio está vacío.",
   "web.footer.about": "Acerca",
   "web.footer.help": "Ayuda",

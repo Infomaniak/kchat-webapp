@@ -6084,6 +6084,7 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Mitglied} other {Mitglieder}}",
   "vocals.loading_transcript": "Transkript anzeigen...",
   "vocals.transcript_title": "Audio-Transkription (automatisch generiert)",
+  "vocals.transcript_loading": "Audio-Transkription läuft...",
   "vocals.transcript.error": "Die Audio ist leer.",
   "web.footer.about": "Über",
   "web.footer.help": "Hilfe",
