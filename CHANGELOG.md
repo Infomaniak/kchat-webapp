@@ -1,3 +1,10 @@
+## 2.10.0-rc.29 (2024-10-22)
+
+### Fixed (2 changes)
+
+- [change status emoji size when hover on status](kchat/webapp@d104f450bbd6e245da8e931eba8125d05849b838) by @boris.trombert ([merge request](kchat/webapp!952))
+- [show transcript by default for vocal messages](kchat/webapp@68c0a7a3c9b75d15f25aecfcc10c97412aeca42c) by @boris.trombert ([merge request](kchat/webapp!950))
+
 ## 2.10.0-rc.28 (2024-10-03)
 
 ### Changed (1 change)
