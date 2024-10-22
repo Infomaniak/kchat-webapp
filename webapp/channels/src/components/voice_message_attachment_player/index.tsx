@@ -51,7 +51,9 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     const open = Boolean(anchorEl);
 
     useEffect(() => {
-        fetchTranscript();
+        if (!props.isPreview) {
+            fetchTranscript();
+        }
     }, []);
 
     const fetchTranscript = async () => {
@@ -142,10 +144,14 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                 className='image-name'
             >
                 <div id='image-name-text'>
-                    {isLoadingTranscript ? (
-                        loadingMessage
-                    ) : (
-                        transcriptReady
+                    {props.isPreview ? null : (
+                        <>
+                            {isLoadingTranscript ? (
+                                loadingMessage
+                            ) : (
+                                transcriptReady
+                            )}
+                        </>
                     )}
                 </div>
             </div>
@@ -241,41 +247,43 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                 </div>
             </div>
             <div>
-                <div>
-                    <div className='file-view--single'>
-                        <div className='file__image'>
-                            {transcriptHeader}
+                {props.isPreview ? null : (
+                    <div>
+                        <div className='file-view--single'>
+                            <div className='file__image'>
+                                {transcriptHeader}
+                            </div>
                         </div>
-                    </div>
-                    <div >
-                        <>
-                            {!isLoadingTranscript && transcript && transcriptDatas && isTranscriptModalOpen && (
-                                <div style={{paddingTop: '5px'}}>
-                                    {transcript.length > 300 ? transcript.substring(0, 300) + '... ' : transcript + ' '}
-                                    <a
-                                        className='transcript-link-view'
-                                        onClick={(event) => {
-                                            handleClick(event);
-                                        }}
-                                    >
-                                        <FormattedMessage
-                                            id={'vocals.loading_transcript'}
-                                            defaultMessage={'View the transcript'}
-                                        />
-                                    </a>
-                                </div>
-                            )}
-                            {transcriptDatas && !isLoadingTranscript && (
-                                <TranscriptComponent
-                                    transcriptDatas={transcriptDatas}
-                                    handleClose={handleClose}
-                                    open={open}
-                                    anchorEl={anchorEl}
-                                />
-                            )}
-                        </>
-                    </div>
-                </div>
+                        <div >
+                            <>
+                                {!isLoadingTranscript && transcript && transcriptDatas && isTranscriptModalOpen && (
+                                    <div style={{paddingTop: '5px'}}>
+                                        {transcript.length > 300 ? transcript.substring(0, 300) + '... ' : transcript + ' '}
+                                        <a
+                                            className='transcript-link-view'
+                                            onClick={(event) => {
+                                                handleClick(event);
+                                            }}
+                                        >
+                                            <FormattedMessage
+                                                id={'vocals.loading_transcript'}
+                                                defaultMessage={'View the transcript'}
+                                            />
+                                        </a>
+                                    </div>
+                                )}
+                                {transcriptDatas && !isLoadingTranscript && (
+                                    <TranscriptComponent
+                                        transcriptDatas={transcriptDatas}
+                                        handleClose={handleClose}
+                                        open={open}
+                                        anchorEl={anchorEl}
+                                    />
+                                )}
+                            </>
+                        </div>
+                    </div>)
+                }
                 {error && <div className='transcript-error'>{error}</div>}
             </div>
         </>
