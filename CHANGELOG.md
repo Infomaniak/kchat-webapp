@@ -1,3 +1,13 @@
+## 2.10.0-rc.30 (2024-10-23)
+
+### Added (1 change)
+
+- [web only redirect to ksuite from base url](kchat/webapp@144f635a2121be1ea701bab0eea86f0b6df490a7) by @antonbuksa ([merge request](kchat/webapp!954))
+
+### Fixed (1 change)
+
+- [fix french traduction for tooltip emoji reaction](kchat/webapp@a33ebf89764bdeb71b7b3a9e577cf85d6fee5c65) by @boris.trombert ([merge request](kchat/webapp!953))
+
 ## 2.10.0-rc.29 (2024-10-22)
 
 ### Fixed (2 changes)
