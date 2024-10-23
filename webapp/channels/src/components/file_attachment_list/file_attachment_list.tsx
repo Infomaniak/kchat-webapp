@@ -42,13 +42,13 @@ export default function FileAttachmentList(props: Props) {
 
     const sortedFileInfos = useMemo(() => sortFileInfos(fileInfos ? [...fileInfos] : [], locale), [fileInfos, locale]);
     if (post.type === Constants.PostTypes.VOICE && fileInfos.length === 1) {
-        return (
-            <VoiceMessageAttachmentPlayer
-                postId={post.id}
-                fileId={fileInfos?.[0]?.id ?? ''}
-                inPost={true}
-            />
-        );
+        return null; //(
+        //     <VoiceMessageAttachmentPlayer
+        //         postId={post.id}
+        //         fileId={fileInfos?.[0]?.id ?? ''}
+        //         inPost={true}
+        //     />
+        // );
     } else if (fileInfos && fileInfos.length === 1 && !fileInfos[0].archived) {
         const fileType = getFileType(fileInfos[0].extension);
 

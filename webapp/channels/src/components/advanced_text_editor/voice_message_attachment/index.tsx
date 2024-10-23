@@ -178,19 +178,19 @@ const VoiceMessageAttachment = (props: Props) => {
         );
     }
 
-    if (props.vmState === VoiceMessageStates.ATTACHED) {
-        const src = props?.draft?.fileInfos?.[0]?.id ?? '';
+    // if (props.vmState === VoiceMessageStates.ATTACHED) {
+    //     const src = props?.draft?.fileInfos?.[0]?.id ?? '';
 
-        return (
-            <div className='file-preview__container'>
-                <VoiceMessageAttachmentPlayer
-                    fileId={src}
-                    onCancel={handleRemoveAfterUpload}
-                    isPreview={true}
-                />
-            </div>
-        );
-    }
+    //     return (
+    //         <div className='file-preview__container'>
+    //             <VoiceMessageAttachmentPlayer
+    //                 fileId={src}
+    //                 onCancel={handleRemoveAfterUpload}
+    //                 isPreview={true}
+    //             />
+    //         </div>
+    //     );
+    // }
 
     return null;
 };
