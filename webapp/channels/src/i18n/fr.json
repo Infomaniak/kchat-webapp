@@ -4060,7 +4060,7 @@
   "reaction.reacted": "{users} {reactionVerb} avec {emoji}",
   "reaction.reactionVerb.user": "a réagi",
   "reaction.reactionVerb.users": "ont réagi",
-  "reaction.reactionVerb.you": "a réagi",
+  "reaction.reactionVerb.you": "avez réagi",
   "reaction.reactionVerb.youAndUsers": "ont réagi",
   "reaction.removeReact.ariaLabel": "supprimer la réaction",
   "reaction.usersAndOthersReacted": "{users} et {otherUsers, number} {otherUsers, plural, one {autre utilisateur} other {autres utilisateurs}}",
