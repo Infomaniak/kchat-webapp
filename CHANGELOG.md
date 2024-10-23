@@ -1,3 +1,9 @@
+## 2.10.0-rc.32 (2024-10-23)
+
+### Changed (1 change)
+
+- [add early return in ksuite redirect](kchat/webapp@27d93a330898e05a9245694a2287a240a80c5a13) by @antonbuksa
+
 ## 2.10.0-rc.31 (2024-10-23)
 
 ### Fixed (1 change)
