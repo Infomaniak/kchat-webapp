@@ -1,3 +1,9 @@
+## 2.10.0-rc.31 (2024-10-23)
+
+### Fixed (1 change)
+
+- [fix base url split for ksuite redirect](kchat/webapp@7cbc515583dc126d7aec79fd75e6526d1205dd0b) by @antonbuksa
+
 ## 2.10.0-rc.30 (2024-10-23)
 
 ### Added (1 change)
