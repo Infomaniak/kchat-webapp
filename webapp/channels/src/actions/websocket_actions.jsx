@@ -333,10 +333,12 @@ export async function reconnect(socketId) {
     });
 
     if (state.websocket.lastDisconnectAt) {
+        console.log('lastConnectAt', state.websocket.lastConnectAt);
+        console.log('lastDisconnectAt', state.websocket.lastDisconnectAt);
         // eslint-disable-next-line no-console
-        console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
         dispatch(checkForModifiedUsers(true));
         dispatch(TeamActions.getMyKSuites());
+        console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
     }
 
     dispatch(resetWsErrorCount());

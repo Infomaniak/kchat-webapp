@@ -25,15 +25,12 @@ export default function reducer(state = getInitialState(), action: AnyAction) {
         return {
             ...state,
             connected: false,
-            lastDisconnectAt: action.timestamp,
+            lastDisconnectAt: state.lastDisconnectAt || action.timestamp,
         };
     }
 
     if (action.type === UserTypes.LOGOUT_SUCCESS) {
-        return getInitialState();
-    }
-
-    if (action.type === UserTypes.LOGOUT_SUCCESS) {
+        console.log('RESET WS STATE');
         return getInitialState();
     }
 
