@@ -205,6 +205,16 @@ No changes.
 
 No changes.
 
+## 2.9.20-next.3 (2024-10-24)
+
+### Fixed (1 change)
+
+- [fix double redirect in ksuite iframe](kchat/webapp@b0bd3c99d10b19b9f967d9d0f3b1921be0005206) by @antonbuksa
+
+### Changed (1 change)
+
+- [do not specify sample rate to audio context if firefox on linux](kchat/webapp@738c5a457b4d6d430ffef50cbca4e1d98ae00e10) by @antonbuksa ([merge request](kchat/webapp!957))
+
 ## 2.9.20-next.2 (2024-10-24)
 
 ### Added (1 change)
