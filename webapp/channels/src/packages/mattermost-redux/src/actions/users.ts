@@ -74,7 +74,10 @@ export function loadMe(): ActionFuncAsync<boolean> {
         const serverVersion = Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
 
-        if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+        // @ts-expect-error todo fix type
+        const bridge = getState().ksuite_bridge.bridge;
+
+        if (!bridge.isConnected && !isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
             // eslint-disable-next-line no-process-env
             window.location.assign(`https://ksuite.${process.env.BASE_URL?.split('kchat.')[1]}`);
 
