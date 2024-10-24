@@ -10,6 +10,7 @@ import {createEncoder} from 'wasm-media-encoders';
 import {AudioFileExtensions} from 'utils/constants';
 import {generateDateSpecificFileName} from 'utils/file_utils';
 import {getWasmFileURL} from 'utils/url_import';
+import {isFirefox, isLinux} from 'utils/user_agent';
 
 declare global {
     interface Window {
@@ -145,7 +146,13 @@ export function useAudioRecorder(props: Props) {
                 audio: true,
             });
 
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 48000});
+            const audioContextConfig: AudioContextOptions = {};
+
+            if (!(isFirefox() && isLinux())) {
+                audioContextConfig.sampleRate = 48000;
+            }
+
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)(audioContextConfig);
 
             const audioAnalyzer = audioContext.createAnalyser();
             audioAnalyzer.fftSize = props.audioAnalyzerFFTSize;
