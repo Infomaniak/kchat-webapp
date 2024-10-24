@@ -194,7 +194,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                     <div className='post-image__elapsed-time'>
                         {playerState === AudioPlayerState.Playing || playerState === AudioPlayerState.Paused ? convertSecondsToMSS(elapsed) : convertSecondsToMSS(duration)}
                     </div>
-                    {props.inPost && (
+                    {props.post && (
                         <Menu.Container
                             menu={{id: 'dropdown-menu-dotmenu',
                                 transformOrigin: {
@@ -234,7 +234,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             />
                         </Menu.Container>
                     )}
-                    {!props.inPost && (
+                    {/* {!props.inPost && (
                         <button
                             className='post-image__end-button'
                             onClick={props.onCancel}
@@ -244,7 +244,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                                 color='currentColor'
                             />
                         </button>
-                    )}
+                    )} */}
                 </div>
             </div>
             <div>
