@@ -90,7 +90,7 @@ function CustomStatusEmoji({
                             <span
                                 className='custom-status-text'
                             >
-                                {customStatus.text === '' ? customStatus.emoji : customStatus.text}
+                                {customStatus?.text === '' ? `:${customStatus?.emoji}:` : customStatus?.text}
                             </span>
 
                             {expires && (
