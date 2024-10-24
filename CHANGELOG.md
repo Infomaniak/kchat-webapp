@@ -1,3 +1,9 @@
+## 2.10.0-rc.34 (2024-10-24)
+
+### Changed (1 change)
+
+- [do not specify sample rate to audio context if firefox on linux](kchat/webapp@738c5a457b4d6d430ffef50cbca4e1d98ae00e10) by @antonbuksa ([merge request](kchat/webapp!957))
+
 ## 2.10.0-rc.33 (2024-10-24)
 
 ### Fixed (2 changes)
