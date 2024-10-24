@@ -199,6 +199,24 @@ No changes.
 
 No changes.
 
+## 2.9.20-next.2 (2024-10-24)
+
+### Added (1 change)
+
+- [web only redirect to ksuite from base url](kchat/webapp@144f635a2121be1ea701bab0eea86f0b6df490a7) by @antonbuksa ([merge request](kchat/webapp!954))
+
+### Fixed (4 changes)
+
+- [fix: wrap emoji name in status tooltip](kchat/webapp@e21d44925a6b140e89278f94bb3b5823b6258265) by @boris.trombert ([merge request](kchat/webapp!955))
+- [fix base url split for ksuite redirect](kchat/webapp@7cbc515583dc126d7aec79fd75e6526d1205dd0b) by @antonbuksa
+- [fix french traduction for tooltip emoji reaction](kchat/webapp@a33ebf89764bdeb71b7b3a9e577cf85d6fee5c65) by @boris.trombert ([merge request](kchat/webapp!953))
+- [prevent resetting lastDisconnectAt if it already exists to avoid user fetch bug on WS reconnect](kchat/webapp@d5a721af7eed29d56f5e473dd49b742464cc1a5c) by @boris.trombert ([merge request](kchat/webapp!890))
+
+### Changed (2 changes)
+
+- [do not specify sample rate to audio context if firefox on linux](kchat/webapp@738c5a457b4d6d430ffef50cbca4e1d98ae00e10) by @antonbuksa ([merge request](kchat/webapp!957))
+- [add early return in ksuite redirect](kchat/webapp@27d93a330898e05a9245694a2287a240a80c5a13) by @antonbuksa
+
 ## 2.9.20-next.1 (2024-10-22)
 
 ### Fixed (2 changes)
