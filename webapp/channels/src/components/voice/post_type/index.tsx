@@ -5,17 +5,13 @@ import {
     PlayIcon,
     PauseIcon,
     DotsVerticalIcon,
-    CloseIcon,
     DownloadOutlineIcon,
 } from '@infomaniak/compass-icons/components';
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import type {FileInfo} from '@mattermost/types/files';
 import type {Post} from '@mattermost/types/posts';
-import type {TranscriptData} from '@mattermost/types/transcript';
 
-import {fetchTranscriptData} from 'mattermost-redux/actions/channels';
 import {getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 
 import {
@@ -29,58 +25,34 @@ import TranscriptSpinner from 'components/widgets/loading/loading_transcript_spi
 import {convertSecondsToMSS} from 'utils/datetime';
 
 export interface Props {
-    post: Post;
+    post?: Post;
+    isPreview?: boolean;
+    fileId?: string;
 }
 
 function VoiceMessageAttachmentPlayer(props: Props) {
     const {post} = props;
+    const [isLoading, setIsLoading] = useState(true);
 
-    // There is always one file id for type voice.
-    const fileId = post.file_ids![0];
+    useEffect(() => {
+        if (post?.metadata && post.metadata.files && post.metadata.files.length > 0) {
+            setIsLoading(false);
+        }
+    }, [post?.metadata]);
 
-    // console.log(post);
-    const transcript = post.metadata.files[0].transcript;
-    console.log(transcript);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null);
+    const [isTranscriptModalOpen, setIsTranscriptModalOpen] = useState(true);
+    const fileId = props.fileId ? props.fileId : post?.file_ids![0]; // There is always one file id for type voice.
+    const transcript = (props.fileId || isLoading) ? null : post?.metadata?.files[0]?.transcript;
     const {formatMessage} = useIntl();
     const {playerState, duration, elapsed, togglePlayPause} = useAudioPlayer(fileId ? `/api/v4/files/${fileId}` : '');
-
     const progressValue = elapsed === 0 || duration === 0 ? '0' : (elapsed / duration).toFixed(2);
-    const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null);
-
-    const [isTranscriptModalOpen, setIsTranscriptModalOpen] = useState(true);
-
     const open = Boolean(anchorEl);
 
-    // useEffect(() => {
-    //     if (!props.isPreview) {
-    //         fetchTranscript();
-    //     }
-    // }, []);
-
-    // const fetchTranscript = async () => {
-    //     if (!hasFetchedTranscript) {
-    //         setIsLoadingTranscript(true);
-    //         const result = await fetchTranscriptData(props.fileId);
-    //         if (!result.text) {
-    //             setError(
-    //                 <FormattedMessage
-    //                     id='vocals.transcript.error'
-    //                     defaultMessage='The audio is empty.'
-    //                 />,
-    //             );
-    //         }
-    //         setIsLoadingTranscript(false);
-    //         if (result.text) {
-    //             setTranscript(result.text.trim());
-    //         }
-    //         if (!Array.isArray(result)) {
-    //             setTranscriptDatas(result);
-    //         }
-    //         setHasFetchedTranscript(true);
-    //     }
-    // };
-
     function downloadFile() {
+        if (!fileId) {
+            return;
+        }
         window.location.assign(getFileDownloadUrl(fileId));
     }
 
@@ -123,12 +95,14 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             aria-label='Toggle Embed Visibility'
             onClick={toggleTranscriptModal}
         >
-            {transcript.length && transcript.length === 0 ? (
-                <div style={{paddingRight: '3px'}}>
-                    <TranscriptSpinner/>
-                </div>
-            ) : (
-                <span className={`icon ${(isTranscriptModalOpen) ? 'icon-menu-down' : 'icon-menu-right'}`}/>
+            {!props.fileId && (
+                isLoading ? (
+                    <div style={{paddingRight: '3px'}}>
+                        <TranscriptSpinner/>
+                    </div>
+                ) : (
+                    <span className={`icon ${(isTranscriptModalOpen) ? 'icon-menu-down' : 'icon-menu-right'}`}/>
+                )
             )}
         </button>
     );
@@ -147,7 +121,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                 <div id='image-name-text'>
                     {props.isPreview ? null : (
                         <>
-                            {transcript.length && transcript.length === 0 ? (
+                            {isLoading && !props.fileId ? (
                                 loadingMessage
                             ) : (
                                 transcriptReady
@@ -218,7 +192,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             }}
                         >
                             <Menu.Item
-                                id={`download_${post.id}`}
+                                id={`download_${post?.id}`}
                                 leadingElement={(
                                     <DownloadOutlineIcon
                                         size={18}
@@ -234,32 +208,21 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             />
                         </Menu.Container>
                     )}
-                    {/* {!props.inPost && (
-                        <button
-                            className='post-image__end-button'
-                            onClick={props.onCancel}
-                        >
-                            <CloseIcon
-                                size={18}
-                                color='currentColor'
-                            />
-                        </button>
-                    )} */}
                 </div>
             </div>
             <div>
-                {props.isPreview ? null : (
-                    <div>
-                        <div className='file-view--single'>
-                            <div className='file__image'>
-                                {transcriptHeader}
-                            </div>
+                <div>
+                    <div className='file-view--single'>
+                        <div className='file__image'>
+                            {transcriptHeader}
                         </div>
+                    </div>
+                    {!props.isPreview && !isLoading && (
                         <div >
                             <>
-                                {typeof transcript === 'object' && transcript.length !== 0 && isTranscriptModalOpen && (
+                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && isTranscriptModalOpen && (
                                     <div style={{paddingTop: '5px'}}>
-                                        {transcript.text.length > 300 ? transcript.text.substring(0, 300) + '... ' : transcript.text + ' '}
+                                        {transcript?.text?.length > 300 ? transcript?.text.substring(0, 300) + '... ' : transcript?.text + ' '}
                                         <a
                                             className='transcript-link-view'
                                             onClick={(event) => {
@@ -273,7 +236,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                                         </a>
                                     </div>
                                 )}
-                                {typeof transcript === 'object' && transcript.length !== 0 && (
+                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && (
                                     <TranscriptComponent
                                         transcriptDatas={transcript}
                                         handleClose={handleClose}
@@ -283,8 +246,9 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                                 )}
                             </>
                         </div>
-                    </div>)
-                }
+                    ) }
+                </div>
+
                 {/* {error && <div className='transcript-error'>{error}</div>} */}
             </div>
         </>

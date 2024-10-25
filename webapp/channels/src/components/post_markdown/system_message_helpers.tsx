@@ -18,11 +18,11 @@ import CombinedSystemMessage from 'components/post_view/combined_system_message'
 import GMConversionMessage from 'components/post_view/gm_conversion_message/gm_conversion_message';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member';
 import PostNotifyChannelMember from 'components/post_view/post_notify_channel_member/post_notify_channel_member';
+import VoiceMessageAttachmentPlayer from 'components/voice/post_type';
 
 import {t} from 'utils/i18n';
 import type {TextFormattingOptions} from 'utils/text_formatting';
 import {getSiteURL} from 'utils/url';
-import VoiceMessageAttachmentPlayer from 'components/voice/post_type';
 
 export function renderUsername(value: string): ReactNode {
     const username = (value[0] === '@') ? value : `@${value}`;
