@@ -18,6 +18,7 @@ import CombinedSystemMessage from 'components/post_view/combined_system_message'
 import GMConversionMessage from 'components/post_view/gm_conversion_message/gm_conversion_message';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member';
 import PostNotifyChannelMember from 'components/post_view/post_notify_channel_member/post_notify_channel_member';
+import VoiceMessageAttachmentPlayer from 'components/voice/post_type';
 
 import {t} from 'utils/i18n';
 import type {TextFormattingOptions} from 'utils/text_formatting';
@@ -371,6 +372,12 @@ function renderCallNotificationMessage(post: Post): ReactNode {
     );
 }
 
+function renderVoiceMessage(post: Post): ReactNode {
+    return (
+        <VoiceMessageAttachmentPlayer post={post}/>
+    );
+}
+
 function renderMeMessage(post: Post): ReactNode {
     // Trim off the leading and trailing asterisk added to /me messages
     const message = post.message.replace(/^\*|\*$/g, '');
@@ -411,6 +418,7 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CHANNEL_UNARCHIVED]: renderChannelUnarchivedMessage,
     [Posts.POST_TYPES.ME]: renderMeMessage,
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
+    [Posts.POST_TYPES.VOICE]: renderVoiceMessage,
     [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
     [Posts.POST_TYPES.CHANGE_CHANNEL_PRIVACY]: renderChangeChannelPrivacyMessage,
 };
