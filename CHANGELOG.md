@@ -1,3 +1,14 @@
+## 2.10.0-rc.35 (2024-10-28)
+
+### Added (1 change)
+
+- [render voice messages as a postType using new transcription field in post meta](kchat/webapp@1a2d1a73cef8e057a4442ddf1648f45d9e984118) by @antonbuksa ([merge request](kchat/webapp!956))
+
+### Fixed (2 changes)
+
+- [redirect to kchat tab directly in ksuite redirect](kchat/webapp@78d809a35671b3f43905bb8529f400cdb8bf76ed) by @antonbuksa ([merge request](kchat/webapp!958))
+- [fix double redirect in ksuite iframe](kchat/webapp@b0bd3c99d10b19b9f967d9d0f3b1921be0005206) by @antonbuksa
+
 ## 2.10.0-rc.34 (2024-10-24)
 
 ### Changed (1 change)
