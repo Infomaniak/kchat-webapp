@@ -186,6 +186,7 @@ const VoiceMessageAttachment = (props: Props) => {
                 <VoiceMessageAttachmentPlayer
                     fileId={src}
                     isPreview={true}
+                    onCancel={handleRemoveAfterUpload}
                 />
             </div>
         );
