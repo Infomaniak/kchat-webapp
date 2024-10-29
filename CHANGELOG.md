@@ -222,6 +222,17 @@ No changes.
 
 No changes.
 
+## 2.9.20-next.4 (2024-10-29)
+
+### Added (1 change)
+
+- [render voice messages as a postType using new transcription field in post meta](kchat/webapp@1a2d1a73cef8e057a4442ddf1648f45d9e984118) by @antonbuksa ([merge request](kchat/webapp!956))
+
+### Fixed (2 changes)
+
+- [fix: hide menu for transcript when empty and add close button](kchat/webapp@2248b60f8d57e8617161e851515813110e84e8d7) by @boris.trombert ([merge request](kchat/webapp!959))
+- [redirect to kchat tab directly in ksuite redirect](kchat/webapp@78d809a35671b3f43905bb8529f400cdb8bf76ed) by @antonbuksa ([merge request](kchat/webapp!958))
+
 ## 2.9.20-next.3 (2024-10-24)
 
 ### Fixed (1 change)
