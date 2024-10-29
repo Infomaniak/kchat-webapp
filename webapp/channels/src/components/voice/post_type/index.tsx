@@ -6,6 +6,7 @@ import {
     PauseIcon,
     DotsVerticalIcon,
     DownloadOutlineIcon,
+    CloseIcon,
 } from '@infomaniak/compass-icons/components';
 import React, {useState, useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
@@ -28,6 +29,7 @@ export interface Props {
     post?: Post;
     isPreview?: boolean;
     fileId?: string;
+    onCancel?: () => void;
 }
 
 function VoiceMessageAttachmentPlayer(props: Props) {
@@ -108,29 +110,31 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     );
 
     const transcriptHeader = (
-        <div
-            className='image-header'
-            style={{cursor: 'pointer', display: 'flex'}}
-            onClick={handleTranscriptClick}
-        >
-            {toggle}
+        ((!props.isPreview && transcript?.text?.length !== 0 && transcript?.text?.length !== undefined) || (isLoading && !props.isPreview)) && (
             <div
-                data-testid='image-name'
-                className='image-name'
+                className='image-header'
+                style={{cursor: 'pointer', display: 'flex'}}
+                onClick={handleTranscriptClick}
             >
-                <div id='image-name-text'>
-                    {props.isPreview ? null : (
-                        <>
-                            {isLoading && !props.fileId ? (
-                                loadingMessage
-                            ) : (
-                                transcriptReady
-                            )}
-                        </>
-                    )}
+                {toggle}
+                <div
+                    data-testid='image-name'
+                    className='image-name'
+                >
+                    <div id='image-name-text'>
+                        {props.isPreview ? null : (
+                            <>
+                                {isLoading && !props.fileId ? (
+                                    loadingMessage
+                                ) : (
+                                    transcriptReady
+                                )}
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        )
     );
 
     return (
@@ -208,6 +212,17 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             />
                         </Menu.Container>
                     )}
+                    {props.isPreview && (
+                        <button
+                            className='post-image__end-button'
+                            onClick={props.onCancel}
+                        >
+                            <CloseIcon
+                                size={18}
+                                color='currentColor'
+                            />
+                        </button>
+                    )}
                 </div>
             </div>
             <div>
@@ -248,8 +263,6 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                         </div>
                     ) }
                 </div>
-
-                {/* {error && <div className='transcript-error'>{error}</div>} */}
             </div>
         </>
     );
