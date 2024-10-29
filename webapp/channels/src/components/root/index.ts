@@ -17,7 +17,7 @@ import {shouldShowTermsOfService, getCurrentUserId} from 'mattermost-redux/selec
 import {migrateRecentEmojis} from 'actions/emoji_actions';
 import {emitBrowserWindowResized} from 'actions/views/browser';
 import {loadConfigAndMe, registerCustomPostRenderer} from 'actions/views/root';
-import {getKSuiteBridge} from 'selectors/ksuite_bridge';
+import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {getShowLaunchingWorkspace} from 'selectors/onboarding';
 import {shouldShowAppBar} from 'selectors/plugins';
 import {

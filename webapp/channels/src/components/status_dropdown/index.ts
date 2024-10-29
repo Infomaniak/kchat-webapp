@@ -16,7 +16,7 @@ import {getCurrentUser, getStatusForUserId, isCurrentUserGuestUser} from 'matter
 
 import {openModal} from 'actions/views/modals';
 import {setStatusDropdown} from 'actions/views/status_dropdown';
-import {getKSuiteBridge} from 'selectors/ksuite_bridge';
+import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {getShowTutorialStep} from 'selectors/onboarding';
 import {makeGetCustomStatus, isCustomStatusEnabled, showStatusDropdownPulsatingDot, isCustomStatusExpired} from 'selectors/views/custom_status';
 import {isStatusDropdownOpen} from 'selectors/views/status_dropdown';

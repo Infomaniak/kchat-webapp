@@ -16,6 +16,7 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
+import {storeBridge, storeBridgeParam} from 'mattermost-redux/actions/ksuiteBridge';
 import {Client4} from 'mattermost-redux/client';
 import {rudderAnalytics, RudderTelemetryHandler} from 'mattermost-redux/client/rudder';
 import {General} from 'mattermost-redux/constants';
@@ -28,7 +29,6 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {loadRecentlyUsedCustomEmojis} from 'actions/emoji_actions';
 import * as GlobalActions from 'actions/global_actions';
-import {storeBridge, storeBridgeParam} from 'actions/ksuite_bridge_actions';
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
 import {setThemePreference} from 'actions/views/theme';

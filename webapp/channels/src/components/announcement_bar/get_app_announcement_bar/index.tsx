@@ -6,7 +6,7 @@ import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {openModal} from 'actions/views/modals';
-import {getKSuiteBridge} from 'selectors/ksuite_bridge';
+import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
 
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';

@@ -12,6 +12,7 @@ import {UserTypes, AdminTypes} from 'mattermost-redux/action_types';
 import {logError} from 'mattermost-redux/actions/errors';
 import {setServerVersion, getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
 import {bindClientFunc, forceLogoutIfNecessary, debounce} from 'mattermost-redux/actions/helpers';
+import {bridgeRecreate} from 'mattermost-redux/actions/ksuiteBridge';
 import {getUsersLimits} from 'mattermost-redux/actions/limits';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
@@ -27,7 +28,6 @@ import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
 // TODO fix import restriction
 import {getMyMeets} from 'actions/calls';
-import {bridgeRecreate} from 'actions/ksuite_bridge_actions';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
@@ -74,8 +74,7 @@ export function loadMe(): ActionFuncAsync<boolean> {
         const serverVersion = Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
 
-        // @ts-expect-error todo fix type
-        const bridge = getState().ksuite_bridge.bridge;
+        const bridge = getState().entities.ksuiteBridge.bridge;
 
         if (!bridge.isConnected && !isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
             // eslint-disable-next-line no-process-env
