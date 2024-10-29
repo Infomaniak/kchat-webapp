@@ -1,3 +1,9 @@
+## 2.10.0-rc.36 (2024-10-29)
+
+### Fixed (1 change)
+
+- [fix: hide menu for transcript when empty and add close button](kchat/webapp@2248b60f8d57e8617161e851515813110e84e8d7) by @boris.trombert ([merge request](kchat/webapp!959))
+
 ## 2.10.0-rc.35 (2024-10-28)
 
 ### Added (1 change)
