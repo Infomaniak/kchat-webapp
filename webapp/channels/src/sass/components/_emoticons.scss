@@ -546,12 +546,11 @@ $emoji-footer-height: $emoji-footer-border-width + $emoji-half-height + $emoji-p
 
         img {
             -moz-transform: scale(0.45);
-            zoom: 0.45;
+            transform: scale(0.45); // IK modifications : use transform: scale() instead of zoom for browser compatibility
 
             &.emoji-category--custom {
                 -moz-transform: scale(1);
-                transform: scale(1.25);
-                zoom: 1;
+                transform: scale(1);
             }
         }
     }
