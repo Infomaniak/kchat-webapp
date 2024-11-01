@@ -228,6 +228,12 @@ No changes.
 
 No changes.
 
+## 2.9.20-next.5 (2024-11-01)
+
+### Fixed (1 change)
+
+- [fix: use transform: scale property instead of zoom for browsers compatibility](kchat/webapp@d22fdce308fb36d81ac88e488d5bbe53ef8a6563) by @boris.trombert ([merge request](kchat/webapp!961))
+
 ## 2.9.20-next.4 (2024-10-29)
 
 ### Added (1 change)
