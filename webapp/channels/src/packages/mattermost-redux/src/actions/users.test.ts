@@ -33,6 +33,8 @@ describe('Actions.Users', () => {
                         CollapsedThreads: 'always_on',
                     },
                 },
+
+                // Infomaniak specific mock
                 ksuiteBridge: {
                     bridge: {
                         isConnected: false,
