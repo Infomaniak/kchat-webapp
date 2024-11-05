@@ -33,10 +33,8 @@ describe('Actions.Preferences', () => {
                     },
                 },
                 ksuiteBridge: {
-                    ksuiteBridge: {
-                        bridge: {
-                            isConnected: false,
-                        },
+                    bridge: {
+                        isConnected: false,
                     },
                 },
             },
