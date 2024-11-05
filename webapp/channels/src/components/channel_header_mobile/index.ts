@@ -21,7 +21,7 @@ import {
     closeRightHandSide as closeRhs,
     closeMenu as closeRhsMenu,
 } from 'actions/views/rhs';
-import {getKSuiteBridge} from 'selectors/ksuite_bridge';
+import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {getIsMobileView} from 'selectors/views/browser';
 
 import type {GlobalState} from 'types/store';

@@ -279,6 +279,12 @@ const state: GlobalState = {
             topReactions: {},
             myTopReactions: {},
         },
+        ksuiteBridge: {
+            bridge: undefined,
+            dnd: false,
+            spaceId: '',
+            ksuiteMode: '',
+        },
     },
     errors: [],
     requests: {

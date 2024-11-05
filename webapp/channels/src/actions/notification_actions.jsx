@@ -7,6 +7,7 @@ import {logError} from 'mattermost-redux/actions/errors';
 import {getProfilesByIds} from 'mattermost-redux/actions/users';
 import {getCurrentChannel, getMyChannelMember, makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getKSuiteBridge, getKSuiteDnd} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {
     getTeammateNameDisplaySetting,
     isCollapsedThreadsEnabled,
@@ -17,7 +18,6 @@ import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 import {isSystemMessage, isUserAddedInChannel} from 'mattermost-redux/utils/post_utils';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
-import {getKSuiteBridge, getKSuiteDnd} from 'selectors/ksuite_bridge';
 import {getChannelURL, getPermalinkURL} from 'selectors/urls';
 import {isThreadOpen} from 'selectors/views/threads';
 

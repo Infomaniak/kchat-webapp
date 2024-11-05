@@ -4,7 +4,7 @@
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
-import {getKSuiteBridge} from 'selectors/ksuite_bridge';
+import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 
 import type {GlobalState} from 'types/store';
 

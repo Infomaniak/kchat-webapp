@@ -86,16 +86,15 @@ describe('actions/new_post', () => {
             preferences: {
                 myPreferences: {},
             },
+            ksuiteBridge: {
+                bridge: {
+                    isConnected: false,
+                },
+            },
         },
         views: {
             posts: {
                 editingPost: {},
-            },
-        },
-        ksuite_bridge: {
-            bridge: {
-                sendMessage: jest.fn(),
-                on: jest.fn(),
             },
         },
     } as unknown as GlobalState;

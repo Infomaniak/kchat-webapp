@@ -18,6 +18,7 @@ import HostedCustomerTypes from './hosted_customer';
 import InsightTypes from './insights';
 import IntegrationTypes from './integrations';
 import JobTypes from './jobs';
+import BridgeActionTypes from './ksuiteBridge';
 import LimitsTypes from './limits';
 import PlaybookType from './playbooks';
 import PluginTypes from './plugins';
@@ -61,4 +62,5 @@ export {
     WorkTemplatesType,
     DraftTypes,
     PlaybookType,
+    BridgeActionTypes,
 };

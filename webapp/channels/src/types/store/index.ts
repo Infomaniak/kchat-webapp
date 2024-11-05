@@ -1,8 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {KSuiteBridge} from '@infomaniak/ksuite-bridge';
-
 import type {GlobalState as BaseGlobalState} from '@mattermost/types/store';
 
 import type {PluginsState} from './plugins';
@@ -16,12 +14,6 @@ export type DraggingState = {
 
 export type GlobalState = BaseGlobalState & {
     plugins: PluginsState;
-    ksuite_bridge: {
-        bridge: KSuiteBridge;
-        dnd: boolean;
-        spaceId: string;
-        ksuiteMode: string;
-    };
     kdrive: {
         toast: {
             message: string;

@@ -5,9 +5,7 @@
 import type {AnyAction} from 'redux';
 import {combineReducers} from 'redux';
 
-import {UserTypes} from 'mattermost-redux/action_types';
-
-import {BridgeActionTypes} from 'utils/constants';
+import {BridgeActionTypes, UserTypes} from 'mattermost-redux/action_types';
 
 function bridge(state = null, action: AnyAction) {
     switch (action.type) {

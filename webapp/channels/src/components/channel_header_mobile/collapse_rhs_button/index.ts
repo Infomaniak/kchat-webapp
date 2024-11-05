@@ -6,7 +6,7 @@ import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import {toggleMenu as toggleRhsMenu} from 'actions/views/rhs';
-import {getKSuiteBridge} from 'selectors/ksuite_bridge';
+import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 
 import type {GlobalState} from 'types/store';
 

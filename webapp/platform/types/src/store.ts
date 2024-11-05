@@ -74,6 +74,12 @@ export type GlobalState = {
         hostedCustomer: HostedCustomerState;
         usage: CloudUsage;
         insights: InsightsState;
+        ksuiteBridge: {
+            bridge: any;
+            dnd: boolean;
+            spaceId: string;
+            ksuiteMode: string;
+        }
     };
     errors: any[];
     requests: {

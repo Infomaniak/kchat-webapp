@@ -32,6 +32,13 @@ describe('Actions.Teams', () => {
                         CollapsedThreads: 'always_on',
                     },
                 },
+
+                // Infomaniak specific mock
+                ksuiteBridge: {
+                    bridge: {
+                        isConnected: false,
+                    },
+                },
             },
         });
     });
@@ -633,6 +640,13 @@ describe('Actions.Teams', () => {
                         [team!.id]: {...team},
                     },
                 },
+
+                // Infomaniak specific mock
+                ksuiteBridge: {
+                    bridge: {
+                        isConnected: false,
+                    },
+                },
             },
         });
 
@@ -669,6 +683,13 @@ describe('Actions.Teams', () => {
                 teams: {
                     teams: {
                         [team!.id]: {...team},
+                    },
+                },
+
+                // Infomaniak specific mock
+                ksuiteBridge: {
+                    bridge: {
+                        isConnected: false,
                     },
                 },
             },
