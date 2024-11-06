@@ -286,7 +286,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             hideUtilities: true,
         };
         const ariaLabelChannelHeader = this.props.intl.formatMessage({id: 'accessibility.sections.channelHeader', defaultMessage: 'channel header region'});
-        let showMeetBtn = true;
+        let showMeetBtn = !isEmptyObject(channelMember);
 
         let hasGuestsText: ReactNode = '';
         if (hasGuests) {
@@ -302,55 +302,56 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             );
         }
 
-        if (isEmptyObject(channelMember) && !isGuest(dmUser?.roles ?? '')) { // light header for the preview mode feature
-            return (
-                <div
-                    id='channel-header'
-                    aria-label={ariaLabelChannelHeader}
-                    role='banner'
-                    tabIndex={-1}
-                    data-channelid={`${channel.id}`}
-                    className='channel-header alt a11y__region'
-                    data-a11y-sort-order='8'
-                >
-                    <div
-                        className='flex-parent'
-                        style={{flexDirection: 'column', textAlign: 'left', justifyContent: 'center'}}
-                    >
-                        <strong
-                            role='heading'
-                            aria-level={2}
-                            id='channelHeaderTitle'
-                            className='heading'
-                        >
-                            <span>
-                                {channel.name}
-                            </span>
-                        </strong>
-                        <span
-                            style={{fontSize: '12px', marginLeft: '2px'}}
-                        >
-                            <Markdown
-                                message={headerText}
-                                options={this.getHeaderMarkdownOptions(channelNamesMap)}
-                                imageProps={imageProps}
-                            />
-                        </span>
-                    </div>
-                </div>
-            );
-        }
+        // if (isEmptyObject(channelMember) && !isGuest(dmUser?.roles ?? '')) { // light header for the preview mode feature
+        //     return (
+        //         <div
+        //             id='channel-header'
+        //             aria-label={ariaLabelChannelHeader}
+        //             role='banner'
+        //             tabIndex={-1}
+        //             data-channelid={`${channel.id}`}
+        //             className='channel-header alt a11y__region'
+        //             data-a11y-sort-order='8'
+        //         >
+        //             <div
+        //                 className='flex-parent'
+        //                 style={{flexDirection: 'column', textAlign: 'left', justifyContent: 'center'}}
+        //             >
+        //                 <strong
+        //                     role='heading'
+        //                     aria-level={2}
+        //                     id='channelHeaderTitle'
+        //                     className='heading'
+        //                 >
+        //                     <span>
+        //                         {channel.name}
+        //                     </span>
+        //                 </strong>
+        //                 <span
+        //                     style={{fontSize: '12px', marginLeft: '2px'}}
+        //                 >
+        //                     <Markdown
+        //                         message={headerText}
+        //                         options={this.getHeaderMarkdownOptions(channelNamesMap)}
+        //                         imageProps={imageProps}
+        //                     />
+        //                 </span>
+        //             </div>
+        //         </div>
+        //     );
+        // }
         const channelIsArchived = channel.delete_at !== 0;
-        if (isEmptyObject(channel) ||
-            isEmptyObject(channelMember) ||
-            isEmptyObject(currentUser) ||
-            (!dmUser && channel.type === Constants.DM_CHANNEL)
-        ) {
-            // Use an empty div to make sure the header's height stays constant
-            return (
-                <div className='channel-header'/>
-            );
-        }
+
+        // if (isEmptyObject(channel) ||
+        //     isEmptyObject(channelMember) ||
+        //     isEmptyObject(currentUser) ||
+        //     (!dmUser && channel.type === Constants.DM_CHANNEL)
+        // ) {
+        //     // Use an empty div to make sure the header's height stays constant
+        //     return (
+        //         <div className='channel-header'/>
+        //     );
+        // }
 
         if (isGroup) {
             if (hasGuests && !hideGuestTags) {
@@ -438,6 +439,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
         if (!isDirect) {
             const membersIconClass = classNames('member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide', {
                 'channel-header__icon--active': rhsState === RHSStates.CHANNEL_MEMBERS,
+                disabled: isEmptyObject(channelMember),
             });
             const membersIcon = this.props.memberCount ? (
                 <>
@@ -469,11 +471,12 @@ class ChannelHeader extends React.PureComponent<Props, State> {
 
             memberListButton = (
                 <HeaderIconWrapper
+                    disabled={isEmptyObject(channelMember)}
                     iconComponent={membersIcon}
                     ariaLabel={true}
                     buttonClass={membersIconClass}
                     buttonId={'member_rhs'}
-                    onClick={this.toggleChannelMembersRHS}
+                    onClick={isEmptyObject(channelMember) ? () => {} : this.toggleChannelMembersRHS}
                     tooltipKey={'channelMembers'}
                 />
             );
