@@ -1,3 +1,13 @@
+## 2.10.0-rc.39 (2024-11-07)
+
+### Fixed (1 change)
+
+- [add header to channel preview](kchat/webapp@b8713762920add4501d4a55465bdb79aab71d734) by  ([merge request](kchat/webapp!844))
+
+### Changed (1 change)
+
+- [implementation sync between chan preview header & regular chan header](kchat/webapp@ca8c19d35f731f5365a94544461c0a1867155a71) by @antonbuksa ([merge request](kchat/webapp!844))
+
 ## 2.10.0-rc.38 (2024-11-05)
 
 No changes.
