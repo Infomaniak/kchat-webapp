@@ -594,6 +594,7 @@ exports[`components/ChannelHeader should render active channel files 1`] = `
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -832,6 +833,7 @@ exports[`components/ChannelHeader should render active flagged posts 1`] = `
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -1070,6 +1072,7 @@ exports[`components/ChannelHeader should render active mentions posts 1`] = `
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -1308,6 +1311,7 @@ exports[`components/ChannelHeader should render active pinned posts 1`] = `
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -1546,6 +1550,7 @@ exports[`components/ChannelHeader should render archived view 1`] = `
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -1816,6 +1821,7 @@ exports[`components/ChannelHeader should render correct menu when muted 1`] = `
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -2054,6 +2060,7 @@ exports[`components/ChannelHeader should render not active channel files 1`] = `
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -2902,6 +2909,7 @@ exports[`components/ChannelHeader should render properly when empty 1`] = `
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -3140,6 +3148,7 @@ exports[`components/ChannelHeader should render properly when populated 1`] = `
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -3378,6 +3387,7 @@ exports[`components/ChannelHeader should render properly when populated with cha
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -3642,6 +3652,7 @@ exports[`components/ChannelHeader should render shared view 1`] = `
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i
@@ -3882,6 +3893,7 @@ exports[`components/ChannelHeader should render the pinned icon with the pinned 
             ariaLabel={true}
             buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
             buttonId="member_rhs"
+            disabled={false}
             iconComponent={
               <React.Fragment>
                 <i

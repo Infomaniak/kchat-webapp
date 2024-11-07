@@ -27,6 +27,9 @@ type Props = {
     tooltipText?: React.ReactNode;
     isRhsOpen?: boolean;
     pluginId?: string;
+
+    // Infomaniak: for disabling actions in channel preview mode
+    disabled?: boolean;
 }
 
 type TooltipInfo = {
@@ -48,6 +51,9 @@ const HeaderIconWrapper = (props: Props) => {
         tooltipText,
         isRhsOpen,
         pluginId,
+
+        // Infomaniak: for disabling actions in channel preview mode
+        disabled = false,
     } = props;
 
     const toolTips: Record<string, TooltipInfo> = {
@@ -159,6 +165,9 @@ const HeaderIconWrapper = (props: Props) => {
                 >
                     <button
                         id={buttonId}
+
+                        // Infomaniak: for disabling actions in channel preview mode
+                        disabled={disabled}
                         aria-label={ariaLabelText}
                         className={buttonClass || 'channel-header__icon'}
                         onClick={onClick}
