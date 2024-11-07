@@ -242,6 +242,20 @@ No changes.
 
 No changes.
 
+## 2.9.21-next.1 (2024-11-07)
+
+### Fixed (1 change)
+
+- [add header to channel preview](kchat/webapp@b8713762920add4501d4a55465bdb79aab71d734) by  ([merge request](kchat/webapp!844))
+
+### Changed (1 change)
+
+- [implementation sync between chan preview header & regular chan header](kchat/webapp@ca8c19d35f731f5365a94544461c0a1867155a71) by @antonbuksa ([merge request](kchat/webapp!844))
+
+### Chore (1 change)
+
+- [move ksuite bridge to redux package for tests](kchat/webapp@f1898f084886a50c299b99ad30fc66343f90ab82) by @antonbuksa ([merge request](kchat/webapp!960))
+
 ## 2.9.20-next.5 (2024-11-01)
 
 ### Fixed (1 change)
