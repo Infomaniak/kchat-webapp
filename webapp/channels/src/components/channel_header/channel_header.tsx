@@ -537,7 +537,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             );
         } else {
             let editMessage;
-            if (!isReadOnly && !channelIsArchived) {
+            if (!isReadOnly && !channelIsArchived && !isEmptyObject(channelMember)) {
                 if (isDirect || isGroup) {
                     if (!isDirect || !dmUser?.is_bot) {
                         editMessage = (
@@ -678,7 +678,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         channelMember={channelMember}
                     />
                     {showMeetBtn && <MeetButton/>}
-                    <ChannelInfoButton channel={channel}/>
+                    {!isEmptyObject(channelMember) && <ChannelInfoButton channel={channel}/>}
                 </div>
             </div>
         );
