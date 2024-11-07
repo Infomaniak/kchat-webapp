@@ -302,56 +302,20 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             );
         }
 
-        // if (isEmptyObject(channelMember) && !isGuest(dmUser?.roles ?? '')) { // light header for the preview mode feature
-        //     return (
-        //         <div
-        //             id='channel-header'
-        //             aria-label={ariaLabelChannelHeader}
-        //             role='banner'
-        //             tabIndex={-1}
-        //             data-channelid={`${channel.id}`}
-        //             className='channel-header alt a11y__region'
-        //             data-a11y-sort-order='8'
-        //         >
-        //             <div
-        //                 className='flex-parent'
-        //                 style={{flexDirection: 'column', textAlign: 'left', justifyContent: 'center'}}
-        //             >
-        //                 <strong
-        //                     role='heading'
-        //                     aria-level={2}
-        //                     id='channelHeaderTitle'
-        //                     className='heading'
-        //                 >
-        //                     <span>
-        //                         {channel.name}
-        //                     </span>
-        //                 </strong>
-        //                 <span
-        //                     style={{fontSize: '12px', marginLeft: '2px'}}
-        //                 >
-        //                     <Markdown
-        //                         message={headerText}
-        //                         options={this.getHeaderMarkdownOptions(channelNamesMap)}
-        //                         imageProps={imageProps}
-        //                     />
-        //                 </span>
-        //             </div>
-        //         </div>
-        //     );
-        // }
         const channelIsArchived = channel.delete_at !== 0;
 
-        // if (isEmptyObject(channel) ||
-        //     isEmptyObject(channelMember) ||
-        //     isEmptyObject(currentUser) ||
-        //     (!dmUser && channel.type === Constants.DM_CHANNEL)
-        // ) {
-        //     // Use an empty div to make sure the header's height stays constant
-        //     return (
-        //         <div className='channel-header'/>
-        //     );
-        // }
+        // Infomaniak: skip for channel previews
+        // isEmptyObject(channel) ||
+        // isEmptyObject(channelMember) ||
+        // isEmptyObject(currentUser) ||
+        if (
+            (!dmUser && channel.type === Constants.DM_CHANNEL)
+        ) {
+            // Use an empty div to make sure the header's height stays constant
+            return (
+                <div className='channel-header'/>
+            );
+        }
 
         if (isGroup) {
             if (hasGuests && !hideGuestTags) {
