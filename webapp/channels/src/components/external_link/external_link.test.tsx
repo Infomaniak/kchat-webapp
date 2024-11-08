@@ -97,9 +97,7 @@ describe('components/external_link', () => {
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
             'href',
-
-            // ?utm_source=infomaniak&utm_medium=in-product&utm_content=&uid=currentUserId&sid=&
-            'https://infomaniak.com?test=true',
+            'https://mattermost.com/?utm_source=kchat&utm_content=test&uid=currentUserId&sid=&test=true',
         );
     });
 
@@ -192,7 +190,7 @@ describe('components/external_link', () => {
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
             'href',
-            'https://infomaniak.com#desktop',
+            'https://mattermost.com/?utm_source=kchat&utm_content=test&uid=currentUserId&sid=#desktop',
         );
     });
 });

@@ -45,8 +45,11 @@ const config = {
         ['jest-junit', {outputDirectory: 'coverage', outputName: 'junit.xml'}],
     ],
     transformIgnorePatterns: [
-        'node_modules/(?!react-native|react-router|p-queue|p-timeout|@infomaniak/compass-components|@infomaniak/compass-icons|cidr-regex|ip-regex|wasm-media-encoders)',
+        'node_modules/(?!react-native|react-router|p-queue|p-timeout|@infomaniak/compass-components|@infomaniak/compass-icons|cidr-regex|ip-regex|wasm-media-encoders|serialize-error)',
     ],
+    transform: {
+        '^.+\\.(js|jsx|ts|tsx|mjs)$': 'babel-jest',
+    },
     setupFiles: ['jest-canvas-mock'],
     setupFilesAfterEnv: ['<rootDir>/src/tests/setup_jest.ts'],
     testEnvironment: 'jsdom',

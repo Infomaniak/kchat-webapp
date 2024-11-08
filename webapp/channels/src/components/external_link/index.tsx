@@ -4,23 +4,11 @@
 /* eslint-disable mattermost/use-external-link */
 
 import React, {forwardRef} from 'react';
-import {useSelector} from 'react-redux';
-
-// import {useSelector} from 'react-redux';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-// import {getLicense} from 'mattermost-redux/selectors/entities/general';
-// import {getConfig} from 'mattermost-redux/selectors/entities/general';
-// import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-
-type ExternalLinkQueryParams = {
-    utm_source?: string;
-    utm_medium?: string;
-    utm_campaign?: string;
-    utm_content?: string;
-    userId?: string;
-}
+import type {ExternalLinkQueryParams} from 'components/common/hooks/use_external_link';
+import {useExternalLink} from 'components/common/hooks/use_external_link';
 
 type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
     href: string;
@@ -33,24 +21,7 @@ type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
 }
 
 const ExternalLink = forwardRef<HTMLAnchorElement, Props>((props, ref) => {
-    // const userId = useSelector(getCurrentUserId);
-    // const config = useSelector(getConfig);
-    // const license = useSelector(getLicense);
-    // let href = props.href;
-    // let queryParams = {};
-    // if (href?.includes('mattermost.com')) {
-    //     const existingURLSearchParams = new URL(href).searchParams;
-    //     const existingQueryParamsObj = Object.fromEntries(existingURLSearchParams.entries());
-    //     queryParams = {
-    //         utm_source: 'mattermost',
-    //         utm_medium: license.Cloud === 'true' ? 'in-product-cloud' : 'in-product',
-    //         utm_content: props.location || '',
-    //         uid: userId,
-    //         sid: config.TelemetryId || '',
-    //         ...props.queryParams,
-    //         ...existingQueryParamsObj,
-    //     };
-    //     const queryString = new URLSearchParams(queryParams).toString();
+    const [href, queryParams] = useExternalLink(props.href, props.location, props.queryParams);
 
     const handleClick = (e: React.MouseEvent<HTMLElement>) => {
         trackEvent('link_out', 'click_external_link');

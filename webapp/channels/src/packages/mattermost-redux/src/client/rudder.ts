@@ -8,15 +8,16 @@ export {rudderAnalytics};
 
 import type {TelemetryHandler} from '@mattermost/client';
 
+import {TrackMiscCategory, eventCategory, eventSKUs, TrackPropertyUser} from 'mattermost-redux/constants/telemetry';
 import {isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 export class RudderTelemetryHandler implements TelemetryHandler {
-    trackEvent(userId: string, userRoles: string, category: string, event: string, props?: any) {
+    trackEvent(userId: string, userRoles: string, category: string, event: string, props: Record<string, unknown> = {}) {
         const properties = Object.assign({
             category,
             type: event,
             user_actual_role: getActualRoles(userRoles),
-            user_actual_id: userId,
+            [TrackPropertyUser]: userId,
         }, props);
         const options = {
             context: {
@@ -35,6 +36,26 @@ export class RudderTelemetryHandler implements TelemetryHandler {
         rudderAnalytics.track('event', properties, options);
     }
 
+    trackFeatureEvent(userId: string, userRoles: string, featureName: string, event: string, props: Record<string, unknown> = {}) {
+        const properties = Object.assign({
+            category: getEventCategory(event),
+            type: event,
+            [TrackPropertyUser]: userId,
+            user_actual_role: getActualRoles(userRoles),
+        }, props);
+
+        const options = {
+            context: {
+                feature: {
+                    name: featureName,
+                    skus: getSKUs(event),
+                },
+            },
+        };
+
+        rudderAnalytics.track(event, properties, options);
+    }
+
     pageVisited(userId: string, userRoles: string, category: string, name: string) {
         rudderAnalytics.page(
             category,
@@ -46,7 +67,7 @@ export class RudderTelemetryHandler implements TelemetryHandler {
                 title: '',
                 url: '',
                 user_actual_role: getActualRoles(userRoles),
-                user_actual_id: userId,
+                [TrackPropertyUser]: userId,
             },
             {
                 context: {
@@ -60,4 +81,27 @@ export class RudderTelemetryHandler implements TelemetryHandler {
 
 function getActualRoles(userRoles: string) {
     return userRoles && isSystemAdmin(userRoles) ? 'system_admin, system_user' : 'system_user';
+}
+
+function getSKUs(eventName: string) {
+    const skus: string[] | undefined = eventSKUs[eventName];
+
+    if (skus === undefined) {
+        // Next line is to be aware if you've forgotten to add a SKU, add an empty array for Team edition
+        // eslint-disable-next-line
+        console.warn(`Event ${eventName} has no SKUs attached`);
+    }
+
+    return skus ?? [];
+}
+
+function getEventCategory(eventName: string) {
+    const category: string | undefined = eventCategory[eventName];
+
+    if (category === undefined) {
+        // eslint-disable-next-line
+        console.warn(`Event ${eventName} doesn't have a category`);
+    }
+
+    return category ?? TrackMiscCategory;
 }

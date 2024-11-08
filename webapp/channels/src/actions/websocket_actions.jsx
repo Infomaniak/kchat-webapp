@@ -22,6 +22,7 @@ import {
     CloudTypes,
     HostedCustomerTypes,
     ChannelBookmarkTypes,
+    ScheduledPostTypes,
 } from 'mattermost-redux/action_types';
 import {getStandardAnalytics} from 'mattermost-redux/actions/admin';
 import {fetchAppBindings, fetchRHSAppsBindings} from 'mattermost-redux/actions/apps';
@@ -84,7 +85,15 @@ import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getMyKSuites, getRelativeTeamUrl, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {
+    getTeamIdByChannelId,
+    getMyKSuites,
+    getCurrentRelativeTeamUrl,
+    getCurrentTeamId,
+    getCurrentTeamUrl,
+    getTeam,
+    getRelativeTeamUrl,
+} from 'mattermost-redux/selectors/entities/teams';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, getUserById} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
@@ -95,6 +104,7 @@ import {
 } from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
+import {sendDesktopNotification} from 'actions/notification_actions';
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
 import {setGlobalItem} from 'actions/storage';
@@ -297,6 +307,7 @@ export async function reconnect(socketId) {
         dispatch(fetchMyCategories(currentTeamId));
         dispatch(loadChannelsForCurrentUser());
         dispatch(fetchAllMyChannelMembers());
+        dispatch(fetchMyCategories(currentTeamId));
 
         if (mostRecentPost) {
             // eslint-disable-next-line no-console
@@ -708,6 +719,18 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.DRAFT_DELETED:
         dispatch(handleDeleteDraftEvent(msg));
+        break;
+    case SocketEvents.SCHEDULED_POST_CREATED:
+        dispatch(handleCreateScheduledPostEvent(msg));
+        break;
+    case SocketEvents.SCHEDULED_POST_UPDATED:
+        dispatch(handleUpdateScheduledPostEvent(msg));
+        break;
+    case SocketEvents.SCHEDULED_POST_DELETED:
+        dispatch(handleDeleteScheduledPostEvent(msg));
+        break;
+    case SocketEvents.PERSISTENT_NOTIFICATION_TRIGGERED:
+        dispatch(handlePersistentNotification(msg));
         break;
     case SocketEvents.HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED:
         dispatch(handleHostedCustomerSignupProgressUpdated(msg));
@@ -2052,6 +2075,48 @@ function handleUpsertDraftEvent(msg) {
         }
 
         doDispatch(setGlobalDraft(key, value, true));
+    };
+}
+
+function handleCreateScheduledPostEvent(msg) {
+    return async (doDispatch) => {
+        const scheduledPost = JSON.parse(msg.data.scheduledPost);
+        const state = getState();
+        const teamId = getTeamIdByChannelId(state, scheduledPost.channel_id);
+
+        doDispatch({
+            type: ScheduledPostTypes.SINGLE_SCHEDULED_POST_RECEIVED,
+            data: {
+                scheduledPost,
+                teamId,
+            },
+        });
+    };
+}
+
+function handleUpdateScheduledPostEvent(msg) {
+    return async (doDispatch) => {
+        const scheduledPost = JSON.parse(msg.data.scheduledPost);
+
+        doDispatch({
+            type: ScheduledPostTypes.SCHEDULED_POST_UPDATED,
+            data: {
+                scheduledPost,
+            },
+        });
+    };
+}
+
+function handleDeleteScheduledPostEvent(msg) {
+    return async (doDispatch) => {
+        const scheduledPost = JSON.parse(msg.data.scheduledPost);
+
+        doDispatch({
+            type: ScheduledPostTypes.SCHEDULED_POST_DELETED,
+            data: {
+                scheduledPost,
+            },
+        });
     };
 }
 

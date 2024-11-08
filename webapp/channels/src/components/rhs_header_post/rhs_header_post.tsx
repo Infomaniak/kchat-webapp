@@ -21,7 +21,7 @@ import RHSHeader from 'plugins/ai/components/rhs/rhs_header';
 
 import type {RhsState} from 'types/store/rhs';
 
-interface Props extends WrappedComponentProps {
+type Props = WrappedComponentProps & {
     isExpanded: boolean;
     isMobileView: boolean;
     rootPostId: string;

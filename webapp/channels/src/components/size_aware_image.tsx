@@ -19,7 +19,8 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
-import {localizeMessage, copyToClipboard} from 'utils/utils';
+import {FileTypes} from 'utils/constants';
+import {localizeMessage, copyToClipboard, getFileType} from 'utils/utils';
 
 const MIN_IMAGE_SIZE = 48;
 const MIN_IMAGE_SIZE_FOR_INTERNAL_BUTTONS = 100;
@@ -195,6 +196,7 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
     renderImageWithContainerIfNeeded = () => {
         const {
             fileInfo,
+            dimensions,
             src,
             fileURL,
             enablePublicLink,
@@ -216,6 +218,15 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
         }
 
         const shouldShowKdriveAction = !isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0');
+        const fileType = getFileType(fileInfo?.extension ?? '');
+
+        let conditionalSVGStyleAttribute;
+        if (fileType === FileTypes.SVG) {
+            conditionalSVGStyleAttribute = {
+                width: dimensions?.width || MIN_IMAGE_SIZE,
+                height: 'auto',
+            };
+        }
 
         const image = (
             <img
@@ -231,6 +242,7 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
                 src={src}
                 onError={this.handleError}
                 onLoad={this.handleLoad}
+                style={conditionalSVGStyleAttribute}
             />
         );
 

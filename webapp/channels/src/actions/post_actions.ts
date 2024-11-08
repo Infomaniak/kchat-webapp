@@ -54,7 +54,12 @@ import type {GlobalState} from 'types/store';
 
 import type {NewPostMessageProps} from './new_post';
 import {completePostReceive} from './new_post';
-import type {SubmitPostReturnType} from './views/create_comment';
+import type {OnSubmitOptions, SubmitPostReturnType} from './views/create_comment';
+
+export type CreatePostOptions = {
+    keepDraft?: boolean;
+    ignorePostError?: boolean;
+}
 
 export function handleNewPost(post: Post, msg?: {data?: NewPostMessageProps & GroupChannel}): ActionFuncAsync<boolean, GlobalState> {
     return async (dispatch, getState) => {
@@ -127,25 +132,26 @@ function addRecentEmojisForMessage(message: string): ActionFunc {
     };
 }
 
-export type CreatePostAfterSubmitFunc = (response: SubmitPostReturnType) => void;
 export function createPost(
     post: Post,
     files: FileInfo[],
     afterSubmit?: (response: SubmitPostReturnType) => void,
-    afterOptimisticSubmit?: () => void,
+    options?: OnSubmitOptions,
 ): ActionFuncAsync<PostActions.CreatePostReturnType, GlobalState> {
     return async (dispatch) => {
         dispatch(addRecentEmojisForMessage(post.message));
 
         const result = await dispatch(PostActions.createPost(post, files, afterSubmit));
 
-        if (post.root_id) {
-            dispatch(storeCommentDraft(post.root_id, null));
-        } else {
-            dispatch(storeDraft(post.channel_id, null));
+        if (!options?.keepDraft) {
+            if (post.root_id) {
+                dispatch(storeCommentDraft(post.root_id, null));
+            } else {
+                dispatch(storeDraft(post.channel_id, null));
+            }
         }
 
-        afterOptimisticSubmit?.();
+        options?.afterOptimisticSubmit?.();
         return result;
     };
 }
@@ -158,12 +164,6 @@ export function createSchedulePostFromDraft(scheduledPost: ScheduledPost): Actio
         const connectionId = getConnectionId(state);
         const channel = state.entities.channels.channels[scheduledPost.channel_id];
         const result = await dispatch(createSchedulePost(scheduledPost, channel.team_id, connectionId));
-
-        if (scheduledPost.root_id) {
-            dispatch(storeCommentDraft(scheduledPost.root_id, null));
-        } else {
-            dispatch(storeDraft(scheduledPost.channel_id, null));
-        }
 
         return {
             created: !result.error && result.data,
@@ -317,7 +317,7 @@ export function unpinPost(postId: string): ActionFuncAsync<boolean, GlobalState>
     };
 }
 
-export function setEditingPost(postId = '', refocusId = '', title = '', isRHS = false): ActionFunc<boolean> {
+export function setEditingPost(postId = '', refocusId = '', isRHS = false): ActionFunc<boolean> {
     return (dispatch, getState) => {
         const state = getState();
         const post = PostSelectors.getPost(state, postId);
@@ -339,7 +339,7 @@ export function setEditingPost(postId = '', refocusId = '', title = '', isRHS = 
         if (canEditNow) {
             dispatch({
                 type: ActionTypes.TOGGLE_EDITING_POST,
-                data: {postId, refocusId, title, isRHS, show: true},
+                data: {postId, refocusId, isRHS, show: true},
             });
         }
 

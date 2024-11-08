@@ -73,6 +73,7 @@ describe('ClientError', () => {
 describe('trackEvent', () => {
     class TestTelemetryHandler implements TelemetryHandler {
         trackEvent = jest.fn();
+        trackFeatureEvent = jest.fn();
         pageVisited = jest.fn();
     }
 

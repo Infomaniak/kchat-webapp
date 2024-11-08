@@ -310,6 +310,8 @@
                     @include pie-clearfix;
                     @include alpha-property('background', $black, 0.05);
 
+                    display: flex;
+                    flex-direction: column;
                     padding: 12px;
                     margin-bottom: 0;
 
@@ -319,6 +321,11 @@
                         font-size: 14px;
                         font-weight: 400;
                         line-height: 20px;
+                    }
+
+                    .extraContentBeforeSettingList {
+                        width: 100%;
+                        padding-block-start: 20px;
                     }
 
                     .sectionContent {
@@ -834,10 +841,13 @@
 }
 
 .section-min__title {
+    display: flex;
+    flex-direction: row;
     padding-right: 50px;
     margin: 0 0 5px;
     font-size: 14px;
     font-weight: 600;
+    gap: 8px;
     line-height: 20px;
 
     &.isDisabled {

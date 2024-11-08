@@ -3,8 +3,7 @@
 
 import classNames from 'classnames';
 import type {ReactNode} from 'react';
-import React from 'react';
-import type {IntlShape} from 'react-intl';
+import type {IntlShape, MessageDescriptor} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
 import ReactSelect, {components} from 'react-select';
 import type {getOptionValue} from 'react-select/src/builtins';
@@ -15,7 +14,8 @@ import CloseCircleSolidIcon from 'components/widgets/icons/close_circle_solid_ic
 import Avatar from 'components/widgets/users/avatar';
 
 import {Constants, A11yCustomEventTypes} from 'utils/constants';
-import {imageURLForUser, getDisplayName, localizeMessage} from 'utils/utils';
+import {formatAsComponent, formatAsString} from 'utils/i18n';
+import {imageURLForUser, getDisplayName} from 'utils/utils';
 
 import MultiSelectList from './multiselect_list';
 
@@ -33,9 +33,9 @@ export type Props<T extends Value> = {
     ariaLabelRenderer: getOptionValue<T>;
     backButtonClick?: () => void;
     backButtonClass?: string;
-    backButtonText?: string;
-    buttonSubmitLoadingText?: ReactNode;
-    buttonSubmitText?: ReactNode;
+    backButtonText?: string | MessageDescriptor;
+    buttonSubmitLoadingText?: ReactNode | MessageDescriptor;
+    buttonSubmitText?: ReactNode | MessageDescriptor;
     handleAdd: (value: T) => void;
     handleDelete: (values: T[]) => void;
     handleInput: (input: string, multiselect: MultiSelect<T>) => void;
@@ -46,7 +46,7 @@ export type Props<T extends Value> = {
     saveButtonPosition?: string;
     maxValues?: number;
     noteText?: ReactNode;
-    numRemainingText?: ReactNode;
+    numRemainingText?: ReactNode | MessageDescriptor;
     optionRenderer: (
         option: T,
         isSelected: boolean,
@@ -57,7 +57,7 @@ export type Props<T extends Value> = {
     showInputByDefault: boolean;
     options: T[];
     perPage: number;
-    placeholderText?: string;
+    placeholderText?: string | MessageDescriptor;
     saving?: boolean;
     showError?: boolean;
     changeMessageColor?: string;
@@ -313,7 +313,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
 
         let numRemainingText;
         if (this.props.numRemainingText) {
-            numRemainingText = this.props.numRemainingText;
+            numRemainingText = formatAsComponent(this.props.numRemainingText);
         } else if (this.props.maxValues != null && this.props.maxValues !== undefined) {
             numRemainingText = (
                 <FormattedMessage
@@ -329,12 +329,24 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
 
         let buttonSubmitText: ReactNode;
         if (this.props.buttonSubmitText) {
-            buttonSubmitText = this.props.buttonSubmitText;
+            buttonSubmitText = formatAsComponent(this.props.buttonSubmitText);
         } else if (this.props.maxValues != null) {
             buttonSubmitText = (
                 <FormattedMessage
                     id='multiselect.go'
                     defaultMessage='Go'
+                />
+            );
+        }
+
+        let backButtonText: ReactNode;
+        if (this.props.backButtonText) {
+            backButtonText = formatAsComponent(this.props.backButtonText);
+        } else {
+            backButtonText = (
+                <FormattedMessage
+                    id='multiselect.backButton'
+                    defaultMessage='Back'
                 />
             );
         }
@@ -487,11 +499,11 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                                 onChange={this.onChange}
                                 value={this.props.values}
                                 formatOptionLabel={this.props.valueWithImage ? this.formatOptionLabel : undefined}
-                                placeholder={this.props.placeholderText}
+                                placeholder={formatAsString(this.props.intl.formatMessage, this.props.placeholderText)}
                                 inputValue={this.state.input}
                                 getOptionValue={(option: Value) => option.id}
                                 getOptionLabel={this.props.ariaLabelRenderer}
-                                aria-label={this.props.placeholderText}
+                                aria-label={formatAsString(this.props.intl.formatMessage, this.props.placeholderText)}
                                 className={this.state.a11yActive ? 'multi-select__focused' : ''}
                                 classNamePrefix={this.props.showError ? 'react-select-auto react-select error' : 'react-select-auto react-select'}
                             />
@@ -502,7 +514,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                                     disabled={this.props.saving}
                                     onClick={this.handleOnClick}
                                     defaultMessage={buttonSubmitText}
-                                    savingMessage={this.props.buttonSubmitLoadingText}
+                                    savingMessage={formatAsComponent(this.props.buttonSubmitLoadingText)}
                                 />
                             }
                         </div>
@@ -545,7 +557,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                                 }}
                                 className={classNames('btn', this.props.backButtonClass)}
                             >
-                                {this.props.backButtonText || localizeMessage({id: 'multiselect.backButton', defaultMessage: 'Back'})}
+                                {backButtonText}
                             </button>
                         }
                         <SaveButton
@@ -554,7 +566,7 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
                             disabled={this.props.saving || !this.props.savingEnabled}
                             onClick={this.handleOnClick}
                             defaultMessage={buttonSubmitText}
-                            savingMessage={this.props.buttonSubmitLoadingText}
+                            savingMessage={formatAsComponent(this.props.buttonSubmitLoadingText)}
                         />
                     </div>
                 }

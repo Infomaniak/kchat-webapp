@@ -1,19 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import type {ScheduledPost} from '@mattermost/types/schedule_post';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 
+import {fetchMissingChannels} from 'mattermost-redux/actions/channels';
 import {hasScheduledPostError} from 'mattermost-redux/selectors/entities/scheduled_posts';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import AlertBanner from 'components/alert_banner';
 import NoScheduledPostsIllustration from 'components/drafts/scheduled_post_list/empty_scheduled_post_list_illustration';
 import NoResultsIndicator from 'components/no_results_indicator';
+
+import {useQuery} from 'utils/http_utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -39,6 +42,15 @@ export default function ScheduledPostList({
     const currentTeamId = useSelector(getCurrentTeamId);
     const scheduledPostsHasError = useSelector((state: GlobalState) => hasScheduledPostError(state, currentTeamId));
 
+    const query = useQuery();
+    const targetId = query.get('target_id');
+    const targetScheduledPostId = useRef<string>();
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchMissingChannels(scheduledPosts.map((post) => post.channel_id)));
+    }, [scheduledPosts]);
+
     return (
         <div className='ScheduledPostList'>
             {
@@ -56,15 +68,27 @@ export default function ScheduledPostList({
             }
 
             {
-                scheduledPosts.map((scheduledPost) => (
-                    <DraftRow
-                        key={scheduledPost.id}
-                        item={scheduledPost}
-                        displayName={displayName}
-                        status={status}
-                        user={user}
-                    />
-                ))
+                scheduledPosts.map((scheduledPost) => {
+                    // find the first scheduled posst with the target and no error
+                    const isInTargetChannelOrThread = scheduledPost.channel_id === targetId || scheduledPost.root_id === targetId;
+                    const hasError = Boolean(scheduledPost.error_code);
+                    const scrollIntoView = !targetScheduledPostId.current && (isInTargetChannelOrThread && !hasError);
+                    if (scrollIntoView) {
+                        // if found, save the scheduled post's ID
+                        targetScheduledPostId.current = scheduledPost.id;
+                    }
+
+                    return (
+                        <DraftRow
+                            key={scheduledPost.id}
+                            item={scheduledPost}
+                            displayName={displayName}
+                            status={status}
+                            user={user}
+                            scrollIntoView={targetScheduledPostId.current === scheduledPost.id} // scroll into view if this is the target scheduled post
+                        />
+                    );
+                })
             }
 
             {

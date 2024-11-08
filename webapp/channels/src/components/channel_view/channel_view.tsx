@@ -9,7 +9,6 @@ import * as GlobalActions from 'actions/global_actions';
 import {makeAsyncComponent} from 'components/async_load';
 import {BannerJoinChannel} from 'components/banner_join_channel';
 import deferComponentRender from 'components/deferComponentRender';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import PostView from 'components/post_view';
 
 import WebSocketClient from 'client/web_websocket_client';
@@ -127,9 +126,12 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                     <div
                         className='channel-archived__message'
                     >
-                        <FormattedMarkdownMessage
-                            id={this.props.isGptBot ? 'create_post.deactivated_gpt' : 'create_post.deactivated'}
-                            defaultMessage={this.props.isGptBot ? 'ChatGPT is disabled in your kChat. Contact an administrator to enable this feature.' : 'You are viewing an archived channel with a **deactivated user**. New messages cannot be posted.'}
+                        <FormattedMessage
+                            id='channelView.archivedChannelWithDeactivatedUser'
+                            defaultMessage='You are viewing an archived channel with a <b>deactivated user</b>. New messages cannot be posted.'
+                            values={{
+                                b: (chunks: string) => <b>{chunks}</b>,
+                            }}
                         />
                         <button
                             className='btn btn-primary channel-archived__close-btn'
@@ -154,9 +156,12 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                         id='channelArchivedMessage'
                         className='channel-archived__message'
                     >
-                        <FormattedMarkdownMessage
-                            id='archivedChannelMessage'
-                            defaultMessage='You are viewing an **archived channel**. New messages cannot be posted.'
+                        <FormattedMessage
+                            id='channelView.archivedChannel'
+                            defaultMessage='You are viewing an <b>archived channel</b>. New messages cannot be posted.'
+                            values={{
+                                b: (chunks: string) => <b>{chunks}</b>,
+                            }}
                         />
                         <button
                             className='btn btn-primary channel-archived__close-btn'

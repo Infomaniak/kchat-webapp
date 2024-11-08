@@ -42,7 +42,8 @@ import SidebarMobileRightMenu from 'components/sidebar_mobile_right_menu';
 import webSocketClient from 'client/web_websocket_client';
 import {initializePlugins} from 'plugins';
 import A11yController from 'utils/a11y_controller';
-import Constants, {DesktopThemePreferences, PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
+import {DesktopThemePreferences, PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
+import DesktopApp from 'utils/desktop_api';
 import {IKConstants} from 'utils/constants-ik';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
@@ -355,6 +356,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
             if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
+                DesktopApp.reactAppInitialized();
                 InitialLoadingScreen.stop();
             }
         }
@@ -862,8 +864,7 @@ export default class Root extends React.PureComponent<Props, State> {
 export function doesRouteBelongToTeamControllerRoutes(pathname: RouteComponentProps['location']['pathname']): boolean {
     // Note: we have specifically added admin_console to the negative lookahead as admin_console can have integrations as subpaths (admin_console/integrations/bot_accounts)
     // and we don't want to treat those as team controller routes.
-    // Infomaniak: removed admin console
-    const TEAM_CONTROLLER_PATH_PATTERN = /^\/(channels|messages|threads|drafts|integrations|emoji)(\/.*)?$/;
+    const TEAM_CONTROLLER_PATH_PATTERN = new RegExp(`^/(channels|messages|threads|drafts|integrations|emoji|${SCHEDULED_POST_URL_SUFFIX})(/.*)?$`);
 
     return TEAM_CONTROLLER_PATH_PATTERN.test(pathname);
 }

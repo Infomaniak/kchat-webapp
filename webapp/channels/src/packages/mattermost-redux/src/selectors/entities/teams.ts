@@ -387,3 +387,12 @@ export const getCurrentTeamAccountId = createSelector(
     getCurrentTeam,
     (currentTeam: Team) => currentTeam.account_id,
 );
+
+export function getTeamIdByChannelId(state: GlobalState, channelId: string): string | undefined {
+    const channels = state.entities.channels.channels;
+    if (!channels) {
+        return undefined;
+    }
+    const channel = channels[channelId];
+    return channel ? channel.team_id : undefined;
+}

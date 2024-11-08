@@ -353,12 +353,12 @@ export const getCurrentChannelNameForSearchShortcut: (state: GlobalState) => str
     },
 );
 
-export const getMyChannelMember: (state: GlobalState, channelId: string) => ChannelMembership | undefined | null = createSelector(
+export const getMyChannelMember: (state: GlobalState, channelId: string) => ChannelMembership | undefined = createSelector(
     'getMyChannelMember',
     getMyChannelMemberships,
     (state: GlobalState, channelId: string): string => channelId,
-    (channelMemberships: RelationOneToOne<Channel, ChannelMembership>, channelId: string): ChannelMembership | undefined | null => {
-        return channelMemberships[channelId] || null;
+    (channelMemberships: RelationOneToOne<Channel, ChannelMembership>, channelId: string): ChannelMembership | undefined => {
+        return channelMemberships[channelId];
     },
 );
 
@@ -1448,7 +1448,7 @@ export function searchChannelsInPolicy(state: GlobalState, policyId: string, ter
 
 export function getDirectTeammate(state: GlobalState, channelId: string): UserProfile | undefined {
     const channel = getChannel(state, channelId);
-    if (!channel) {
+    if (!channel || channel.type !== 'D') {
         return undefined;
     }
 
@@ -1553,3 +1553,8 @@ export const getRecentProfilesFromDMs: (state: GlobalState) => UserProfile[] = c
 );
 
 export const getPendingGuestsInChannel = (state: GlobalState, channelId: string) => state.entities.channels.pendingGuests[channelId] ?? {};
+
+export const isDeactivatedDirectChannel = (state: GlobalState, channelId: string) => {
+    const teammate = getDirectTeammate(state, channelId);
+    return Boolean(teammate && teammate.delete_at);
+};

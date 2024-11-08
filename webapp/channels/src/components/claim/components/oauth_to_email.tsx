@@ -15,7 +15,7 @@ import LocalizedInput from 'components/localized_input/localized_input';
 
 import Constants from 'utils/constants';
 import {isValidPassword} from 'utils/password';
-import {localizeMessage, toTitleCase} from 'utils/utils';
+import {toTitleCase} from 'utils/utils';
 
 import ErrorLabel from './error_label';
 
@@ -37,7 +37,7 @@ const OAuthToEmail = (props: Props) => {
 
         const password = passwordInput.current?.value;
         if (!password) {
-            setError(localizeMessage({id: 'claim.oauth_to_email.enterPwd', defaultMessage: 'Please enter a password.'}));
+            setError(intl.formatMessage({id: 'claim.oauth_to_email.enterPwd', defaultMessage: 'Please enter a password.'}));
             return;
         }
 
@@ -51,7 +51,7 @@ const OAuthToEmail = (props: Props) => {
 
         const confirmPassword = passwordConfirmInput.current?.value;
         if (!confirmPassword || password !== confirmPassword) {
-            setError(localizeMessage({id: 'claim.oauth_to_email.pwdNotMatch', defaultMessage: 'Passwords do not match.'}));
+            setError(intl.formatMessage({id: 'claim.oauth_to_email.pwdNotMatch', defaultMessage: 'Passwords do not match.'}));
             return;
         }
 

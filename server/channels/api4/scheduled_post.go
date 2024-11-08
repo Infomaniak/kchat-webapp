@@ -23,6 +23,26 @@ func (api *API) InitScheduledPost() {
 	api.BaseRoutes.Posts.Handle("/scheduled/team/{team_id:[A-Za-z0-9]+}", api.APISessionRequired(getTeamScheduledPosts)).Methods(http.MethodGet)
 }
 
+func scheduledPostChecks(where string, c *Context, scheduledPost *model.ScheduledPost) {
+	// ***************************************************************
+	// NOTE - if you make any change here, please make sure to apply the
+	//	      same change for scheduled posts job as well in the `canPostScheduledPost()` function
+	//	      in app layer.
+	// ***************************************************************
+
+	userCreatePostPermissionCheckWithContext(c, scheduledPost.ChannelId)
+	if c.Err != nil {
+		return
+	}
+
+	postHardenedModeCheckWithContext(where, c, scheduledPost.GetProps())
+	if c.Err != nil {
+		return
+	}
+
+	postPriorityCheckWithContext(where, c, scheduledPost.GetPriority(), scheduledPost.RootId)
+}
+
 func requireScheduledPostsEnabled(c *Context) {
 	if !*c.App.Srv().Config().ServiceSettings.ScheduledPosts {
 		c.Err = model.NewAppError("", "api.scheduled_posts.feature_disabled", nil, "", http.StatusBadRequest)
@@ -41,24 +61,26 @@ func createSchedulePost(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	connectionID := r.Header.Get(model.ConnectionId)
+
 	var scheduledPost model.ScheduledPost
 	if err := json.NewDecoder(r.Body).Decode(&scheduledPost); err != nil {
 		c.SetInvalidParamWithErr("schedule_post", err)
 		return
 	}
 	scheduledPost.UserId = c.AppContext.Session().UserId
+	scheduledPost.SanitizeInput()
 
 	auditRec := c.MakeAuditRecord("createSchedulePost", audit.Fail)
 	defer c.LogAuditRecWithLevel(auditRec, app.LevelContent)
 	audit.AddEventParameterAuditable(auditRec, "scheduledPost", &scheduledPost)
 
-	hasPermissionToCreatePostInChannel := c.App.SessionHasPermissionToChannel(c.AppContext, *c.AppContext.Session(), scheduledPost.ChannelId, model.PermissionCreatePost)
-	if !hasPermissionToCreatePostInChannel {
-		c.SetPermissionError(model.PermissionCreatePost)
+	scheduledPostChecks("Api4.createSchedulePost", c, &scheduledPost)
+	if c.Err != nil {
 		return
 	}
 
-	createdScheduledPost, appErr := c.App.SaveScheduledPost(c.AppContext, &scheduledPost)
+	createdScheduledPost, appErr := c.App.SaveScheduledPost(c.AppContext, &scheduledPost, connectionID)
 	if appErr != nil {
 		c.Err = appErr
 		return
@@ -125,6 +147,8 @@ func updateScheduledPost(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	connectionID := r.Header.Get(model.ConnectionId)
+
 	scheduledPostId := mux.Vars(r)["scheduled_post_id"]
 	if scheduledPostId == "" {
 		c.SetInvalidURLParam("scheduled_post_id")
@@ -146,8 +170,13 @@ func updateScheduledPost(c *Context, w http.ResponseWriter, r *http.Request) {
 	defer c.LogAuditRecWithLevel(auditRec, app.LevelContent)
 	audit.AddEventParameterAuditable(auditRec, "scheduledPost", &scheduledPost)
 
+	scheduledPostChecks("Api4.updateScheduledPost", c, &scheduledPost)
+	if c.Err != nil {
+		return
+	}
+
 	userId := c.AppContext.Session().UserId
-	updatedScheduledPost, appErr := c.App.UpdateScheduledPost(c.AppContext, userId, &scheduledPost)
+	updatedScheduledPost, appErr := c.App.UpdateScheduledPost(c.AppContext, userId, &scheduledPost, connectionID)
 	if appErr != nil {
 		c.Err = appErr
 		return

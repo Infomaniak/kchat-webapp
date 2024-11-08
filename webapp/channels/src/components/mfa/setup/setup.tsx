@@ -2,14 +2,12 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {defineMessage, FormattedMessage} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import ExternalLink from 'components/external_link';
-
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
+import LocalizedPlaceholderInput from 'components/localized_placeholder_input';
 
 type MFAControllerState = {
     enforceMultifactorAuthentication: boolean;
@@ -55,7 +53,7 @@ type Props = {
 type State = {
     secret: string;
     qrCode: string;
-    error?: any | null;
+    error: React.ReactNode;
     serverError?: string;
 }
 
@@ -65,7 +63,11 @@ export default class Setup extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
 
-        this.state = {secret: '', qrCode: ''};
+        this.state = {
+            error: undefined,
+            secret: '',
+            qrCode: '',
+        };
 
         this.input = React.createRef();
     }
@@ -96,7 +98,14 @@ export default class Setup extends React.PureComponent<Props, State> {
         e.preventDefault();
         const code = this.input?.current?.value.replace(/\s/g, '');
         if (!code || code.length === 0) {
-            this.setState({error: Utils.localizeMessage({id: 'mfa.setup.codeError', defaultMessage: 'Please enter the code from Google Authenticator.'})});
+            this.setState({
+                error: (
+                    <FormattedMessage
+                        id='mfa.setup.codeError'
+                        defaultMessage='Please enter the code from Google Authenticator.'
+                    />
+                ),
+            });
             return;
         }
 
@@ -106,7 +115,12 @@ export default class Setup extends React.PureComponent<Props, State> {
             if (error) {
                 if (error.server_error_id === 'ent.mfa.activate.authenticate.app_error') {
                     this.setState({
-                        error: Utils.localizeMessage({id: 'mfa.setup.badCode', defaultMessage: 'Invalid code. If this issue persists, contact your System Administrator.'}),
+                        error: (
+                            <FormattedMessage
+                                id='mfa.setup.badCode'
+                                defaultMessage='Invalid code. If this issue persists, contact your System Administrator.'
+                            />
+                        ),
                     });
                 } else {
                     this.setState({
@@ -217,10 +231,10 @@ export default class Setup extends React.PureComponent<Props, State> {
                         />
                     </p>
                     <p>
-                        <LocalizedInput
+                        <LocalizedPlaceholderInput
                             ref={this.input}
                             className='form-control'
-                            placeholder={{id: t('mfa.setup.code'), defaultMessage: 'MFA Code'}}
+                            placeholder={defineMessage({id: 'mfa.setup.code', defaultMessage: 'MFA Code'})}
                             autoFocus={true}
                         />
                     </p>

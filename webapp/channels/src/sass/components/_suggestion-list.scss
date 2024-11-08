@@ -224,15 +224,8 @@
         }
     }
 
-    .suggestion-list__custom {
-        display: flex;
-        overflow: hidden;
-        width: 100%;
-        color: rgba(var(--center-channel-color-rgb), 0.56);
-        gap: 8px;
-
-        .suggestion-list__main {
-            color: rgba(var(--center-channel-color-rgb), 1);
+        > span:nth-child(2) {
+            overflow: hidden;
             text-overflow: ellipsis;
             display: inline-block;
             white-space: nowrap;

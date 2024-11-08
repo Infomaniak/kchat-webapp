@@ -11,9 +11,6 @@ const webpack = require('webpack');
 const {ModuleFederationPlugin} = require('webpack').container;
 const LiveReloadPlugin = require('webpack-livereload-plugin');
 
-// const WebpackPwaManifest = require('webpack-pwa-manifest');
-// const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
-
 const packageJson = require('./package.json');
 
 const NPM_TARGET = process.env.npm_lifecycle_event;
@@ -139,7 +136,7 @@ var config = {
                         loader: 'sass-loader',
                         options: {
                             sassOptions: {
-                                includePaths: ['src', 'src/sass'],
+                                includePaths: ['src/sass'],
                             },
                         },
                     },
@@ -194,7 +191,7 @@ var config = {
     target: 'web',
     plugins: [
         new webpack.ProvidePlugin({
-            process: 'process/browser',
+            process: 'process/browser.js',
         }),
         new webpack.DefinePlugin({
             COMMIT_HASH: JSON.stringify(childProcess.execSync('git rev-parse HEAD || echo dev').toString()),

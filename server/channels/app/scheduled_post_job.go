@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/mattermost/mattermost/server/v8/platform/services/telemetry"
+
 	"github.com/mattermost/mattermost/server/public/model"
 	"github.com/mattermost/mattermost/server/public/shared/mlog"
 	"github.com/mattermost/mattermost/server/public/shared/request"
@@ -207,7 +209,11 @@ func (a *App) postScheduledPost(rctx request.CTX, scheduledPost *model.Scheduled
 	}
 
 	rctx.Logger().Trace("postScheduledPost posting the scheduled post", mlog.String("scheduled_post_id", scheduledPost.Id))
-	_, appErr = a.CreatePost(rctx, post, channel, true, false)
+	createPostFlags := model.CreatePostFlags{
+		TriggerWebhooks: true,
+		SetOnline:       false,
+	}
+	_, appErr = a.CreatePost(rctx, post, channel, createPostFlags)
 	if appErr != nil {
 		rctx.Logger().Error(
 			"App.processScheduledPostBatch: failed to post scheduled post",
@@ -220,6 +226,9 @@ func (a *App) postScheduledPost(rctx request.CTX, scheduledPost *model.Scheduled
 		scheduledPost.ErrorCode = model.ScheduledPostErrorUnknownError
 		return scheduledPost, appErr
 	}
+
+	// send the WS event to delete the just posted scheduledPost from list
+	a.PublishScheduledPostEvent(rctx, model.WebsocketScheduledPostDeleted, scheduledPost, "")
 
 	return scheduledPost, nil
 }
@@ -254,23 +263,6 @@ func (a *App) canPostScheduledPost(rctx request.CTX, scheduledPost *model.Schedu
 		return model.ScheduledPostErrorCodeChannelArchived, nil
 	}
 
-	_, appErr = a.GetChannelMember(rctx, scheduledPost.ChannelId, scheduledPost.UserId)
-	if appErr != nil {
-		if appErr.Id == MissingChannelMemberError {
-			rctx.Logger().Debug("canPostScheduledPost channel member missing for scheduled post user and channel", mlog.String("scheduled_post_id", scheduledPost.Id), mlog.String("user_id", scheduledPost.UserId), mlog.String("channel_id", scheduledPost.ChannelId), mlog.String("error_code", model.ScheduledPostErrorNoChannelMember))
-			return model.ScheduledPostErrorNoChannelMember, nil
-		}
-
-		rctx.Logger().Error(
-			"App.canPostScheduledPost: failed to get channel member",
-			mlog.String("user_id", scheduledPost.UserId),
-			mlog.String("channel_id", scheduledPost.ChannelId),
-			mlog.String("error_code", model.ScheduledPostErrorUnknownError),
-			mlog.Err(appErr),
-		)
-		return model.ScheduledPostErrorUnknownError, errors.Wrapf(appErr, "App.canPostScheduledPost: failed to get user from database, userId: %s", scheduledPost.UserId)
-	}
-
 	if scheduledPost.RootId != "" {
 		rootPosts, _, appErr := a.GetPostsByIds([]string{scheduledPost.RootId})
 		if appErr != nil {
@@ -297,10 +289,40 @@ func (a *App) canPostScheduledPost(rctx request.CTX, scheduledPost *model.Schedu
 		}
 	}
 
-	hasPermission := a.HasPermissionToChannel(rctx, scheduledPost.UserId, scheduledPost.ChannelId, model.PermissionCreatePost)
-	if !hasPermission {
-		rctx.Logger().Debug("canPostScheduledPost user does not have permission to create post in channel", mlog.String("scheduled_post_id", scheduledPost.Id), mlog.String("user_id", scheduledPost.UserId), mlog.String("channel_id", scheduledPost.ChannelId), mlog.String("error_code", model.ScheduledPostErrorCodeNoChannelPermission))
+	if appErr := userCreatePostPermissionCheckWithApp(rctx, a, scheduledPost.UserId, scheduledPost.ChannelId); appErr != nil {
+		rctx.Logger().Debug(
+			"canPostScheduledPost user does not have permission to create post in channel",
+			mlog.String("scheduled_post_id", scheduledPost.Id),
+			mlog.String("user_id", scheduledPost.UserId),
+			mlog.String("channel_id", scheduledPost.ChannelId),
+			mlog.String("error_code", model.ScheduledPostErrorCodeNoChannelPermission),
+			mlog.Err(appErr),
+		)
 		return model.ScheduledPostErrorCodeNoChannelPermission, nil
+	}
+
+	if appErr := PostHardenedModeCheckWithApp(a, false, scheduledPost.GetProps()); appErr != nil {
+		rctx.Logger().Debug(
+			"canPostScheduledPost hardened mode enabled: post contains props prohibited in hardened mode",
+			mlog.String("scheduled_post_id", scheduledPost.Id),
+			mlog.String("user_id", scheduledPost.UserId),
+			mlog.String("channel_id", scheduledPost.ChannelId),
+			mlog.String("error_code", model.ScheduledPostErrorInvalidPost),
+			mlog.Err(appErr),
+		)
+		return model.ScheduledPostErrorInvalidPost, nil
+	}
+
+	if appErr := PostPriorityCheckWithApp("ScheduledPostJob.postChecks", a, scheduledPost.UserId, scheduledPost.GetPriority(), scheduledPost.RootId); appErr != nil {
+		rctx.Logger().Debug(
+			"canPostScheduledPost post priority check failed",
+			mlog.String("scheduled_post_id", scheduledPost.Id),
+			mlog.String("user_id", scheduledPost.UserId),
+			mlog.String("channel_id", scheduledPost.ChannelId),
+			mlog.String("error_code", model.ScheduledPostErrorInvalidPost),
+			mlog.Err(appErr),
+		)
+		return model.ScheduledPostErrorInvalidPost, nil
 	}
 
 	rctx.Logger().Debug("canPostScheduledPost scheduled post can be posted", mlog.String("scheduled_post_id", scheduledPost.Id))
@@ -320,6 +342,12 @@ func (a *App) handleSuccessfulScheduledPosts(rctx request.CTX, successfulSchedul
 			)
 			return errors.Wrap(err, "App.handleSuccessfulScheduledPosts: failed to delete successfully posted scheduled posts")
 		}
+
+		a.Srv().telemetryService.SendTelemetryForFeature(
+			telemetry.TrackScheduledPosts,
+			"scheduled_posts_success",
+			map[string]any{"count": len(successfulScheduledPostIDs)},
+		)
 	}
 
 	return nil
@@ -336,5 +364,15 @@ func (a *App) handleFailedScheduledPosts(rctx request.CTX, failedScheduledPosts 
 				mlog.Err(err),
 			)
 		}
+		// send WS event for updating the scheduled post with the error code
+		a.PublishScheduledPostEvent(rctx, model.WebsocketScheduledPostUpdated, failedScheduledPost, "")
+	}
+
+	if len(failedScheduledPosts) > 0 {
+		a.Srv().telemetryService.SendTelemetryForFeature(
+			telemetry.TrackScheduledPosts,
+			"scheduled_posts_failed",
+			map[string]any{"count": len(failedScheduledPosts)},
+		)
 	}
 }

@@ -44,9 +44,7 @@ exports[`components/widgets/loading/LoadingWrapper showing spinner without text 
   loading={true}
   text={null}
 >
-  <Memo(LoadingSpinner)
-    text={null}
-  >
+  <Memo(LoadingSpinner)>
     <span
       className="LoadingSpinner"
       data-testid="loadingSpinner"

@@ -18,7 +18,7 @@ import WithTooltip from 'components/with_tooltip';
 import type {ShortcutDefinition} from 'components/with_tooltip/shortcut';
 import {ShortcutKeys} from 'components/with_tooltip/shortcut';
 
-import './style.scss';
+import './send_button.scss';
 
 type SendButtonProps = {
     handleSubmit: (schedulingInfo?: SchedulingInfo) => void;
@@ -63,7 +63,7 @@ const SendButton = ({disabled, handleSubmit, channelId}: SendButtonProps) => {
     }, [sendOnCtrlEnter]);
 
     return (
-        <div className={classNames('splitSendButton', {disabled})}>
+        <div className={classNames('splitSendButton', {disabled, scheduledPost: isScheduledPostEnabled})}>
             <WithTooltip
                 placement='top'
                 id='send_post_now_tooltip'

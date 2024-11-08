@@ -4,7 +4,7 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import type {IntlShape} from 'react-intl';
-import {injectIntl, FormattedMessage} from 'react-intl';
+import {injectIntl, FormattedMessage, defineMessage} from 'react-intl';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {Group, SyncablePatch} from '@mattermost/types/groups';
@@ -16,7 +16,6 @@ import MultiSelect from 'components/multiselect/multiselect';
 import type {Value} from 'components/multiselect/multiselect';
 
 import Constants from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 import groupsAvatar from 'images/groups-avatar.png';
 
@@ -243,8 +242,8 @@ export class AddGroupsToChannelModal extends React.PureComponent<Props, State> {
             </div>
         );
 
-        const buttonSubmitText = localizeMessage({id: 'multiselect.add', defaultMessage: 'Add'});
-        const buttonSubmitLoadingText = localizeMessage({id: 'multiselect.adding', defaultMessage: 'Adding...'});
+        const buttonSubmitText = defineMessage({id: 'multiselect.add', defaultMessage: 'Add'});
+        const buttonSubmitLoadingText = defineMessage({id: 'multiselect.adding', defaultMessage: 'Adding...'});
 
         let addError = null;
         if (this.state.addError) {
@@ -306,7 +305,7 @@ export class AddGroupsToChannelModal extends React.PureComponent<Props, State> {
                         buttonSubmitLoadingText={buttonSubmitLoadingText}
                         saving={this.state.saving}
                         loading={this.state.loadingGroups}
-                        placeholderText={localizeMessage({id: 'multiselect.addGroupsPlaceholder', defaultMessage: 'Search and add groups'})}
+                        placeholderText={defineMessage({id: 'multiselect.addGroupsPlaceholder', defaultMessage: 'Search and add groups'})}
                     />
                 </Modal.Body>
             </Modal>

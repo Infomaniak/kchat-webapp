@@ -408,6 +408,7 @@ export type ServiceSettings = {
     RefreshPostStatsRunTime: string;
     MaximumPayloadSizeBytes: number;
     EnableAPIPostDeletion: boolean;
+    EnableDesktopLandingPage: boolean;
     MaximumURLLength: number;
 };
 
@@ -772,6 +773,7 @@ export type NativeAppSettings = {
     AppDownloadLink: string;
     AndroidAppDownloadLink: string;
     IosAppDownloadLink: string;
+    MobileExternalBrowser: boolean;
 };
 
 export type ClusterSettings = {
@@ -820,6 +822,7 @@ export type CacheSettings = {
     RedisAddress: string;
     RedisPassword: string;
     RedisDB: number;
+    DisableClientCache: boolean;
 };
 
 export type ElasticsearchSettings = {

@@ -1,9 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ChangeEvent, CSSProperties, MouseEvent, ReactNode, RefObject} from 'react';
 import React, {Component, createRef} from 'react';
-import {FormattedMessage} from 'react-intl';
+import type {ChangeEvent, CSSProperties, MouseEvent, ReactNode, RefObject} from 'react';
+import {defineMessage, FormattedMessage} from 'react-intl';
 
 import FormError from 'components/form_error';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
@@ -172,7 +172,6 @@ export default class SettingPicture extends Component<Props, State> {
                 <div className={`${imageContext}-img-preview`}>
                     <div className='img-preview__image'>
                         <div
-                            alt={`${imageContext} image preview`}
                             style={imageStyles}
                             className={`${imageContext}-img-preview`}
                         />
@@ -255,7 +254,7 @@ export default class SettingPicture extends Component<Props, State> {
     render() {
         const img = this.renderImg();
 
-        let confirmButtonClass = 'btn btn-sm';
+        let confirmButtonClass = 'btn';
         let disableSaveButtonFocus = false;
         if (this.props.submitActive || this.state.removeSrc || this.state.setDefaultSrc) {
             confirmButtonClass += ' btn-primary';
@@ -293,7 +292,7 @@ export default class SettingPicture extends Component<Props, State> {
                     />
                     <button
                         data-testid='inputSettingPictureButton'
-                        className='btn btn-sm btn-primary btn-file sel-btn'
+                        className='btn btn-primary btn-file'
                         disabled={this.props.loadingPicture}
                         onClick={this.handleInputFile}
                         aria-label={localizeMessage({id: 'setting_picture.select', defaultMessage: 'Select'})}
@@ -314,7 +313,7 @@ export default class SettingPicture extends Component<Props, State> {
                     >
                         <LoadingWrapper
                             loading={this.props.loadingPicture}
-                            text={localizeMessage({id: 'setting_picture.uploading', defaultMessage: 'Uploading...'})}
+                            text={defineMessage({id: 'setting_picture.uploading', defaultMessage: 'Uploading...'})}
                         >
                             <FormattedMessage
                                 id='setting_picture.save'
@@ -356,7 +355,7 @@ export default class SettingPicture extends Component<Props, State> {
                             {buttonRender}
                             <button
                                 data-testid='cancelSettingPicture'
-                                className='btn btn-link btn-sm theme'
+                                className='btn btn-tertiary theme ml-2'
                                 onClick={this.handleCancel}
                                 aria-label={localizeMessage({id: 'setting_picture.cancel', defaultMessage: 'Cancel'})}
                             >

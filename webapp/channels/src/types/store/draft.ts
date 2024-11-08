@@ -2,7 +2,8 @@
 // See LICENSE.txt for license information.
 
 import type {FileInfo} from '@mattermost/types/files';
-import type {PostType, PostPriority} from '@mattermost/types/posts';
+import type {PostPriority} from '@mattermost/types/posts';
+import type {ScheduledPost} from '@mattermost/types/schedule_post';
 
 export type DraftInfo = {
     id: string;
@@ -10,27 +11,16 @@ export type DraftInfo = {
 }
 
 export type PostDraft = {
-
-    /**
-     * Every server draft has an id
-     */
-    id?: string;
     message: string;
     fileInfos: FileInfo[];
     uploadsInProgress: string[];
     props?: any;
     caretPosition?: number;
-    postType?: PostType;
     channelId: string;
     rootId: string;
     createAt: number;
     updateAt: number;
     show?: boolean;
-
-    /**
-     * Every scheduled draft as a unix timestamp
-     */
-    timestamp?: number;
     metadata?: {
         priority?: {
             priority: PostPriority|'';
@@ -39,3 +29,19 @@ export type PostDraft = {
         };
     };
 };
+
+export function scheduledPostToPostDraft(scheduledPost: ScheduledPost): PostDraft {
+    return {
+        message: scheduledPost.message,
+        fileInfos: scheduledPost.metadata?.files || [],
+        uploadsInProgress: [],
+        props: scheduledPost.props,
+        channelId: scheduledPost.channel_id,
+        rootId: scheduledPost.root_id,
+        createAt: 0,
+        updateAt: 0,
+        metadata: {
+            priority: scheduledPost.priority,
+        },
+    };
+}
