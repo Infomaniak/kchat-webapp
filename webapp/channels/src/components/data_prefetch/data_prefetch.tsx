@@ -66,14 +66,13 @@ export default class DataPrefetch extends React.PureComponent<Props> {
             this.prefetchData();
         }
 
-        console.log(prefetchQueueObj);
-        console.log(prefetchRequestStatus);
+        // console.log('prefetchQueueObj', prefetchQueueObj);
 
         // Infomaniak: if websocket is connecting at the same time this will delay channel subscriptions until all channels have finished prefetch
         if (prevProps.prefetchQueueObj !== prefetchQueueObj || prevProps.prefetchRequestStatus !== prefetchRequestStatus) {
             const queueCount = Object.values(prefetchQueueObj).map((x) => x.length).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
             const statusCount = Object.keys(prefetchRequestStatus).length;
-            const allStatusSuccessful = !(Object.values(prefetchRequestStatus).some((x) => x !== 'success'))
+            const allStatusSuccessful = !(Object.values(prefetchRequestStatus).some((x) => x !== 'success'));
 
             if (queueCount === statusCount && allStatusSuccessful) {
                 console.log('prefetch complete');
@@ -112,7 +111,6 @@ export default class DataPrefetch extends React.PureComponent<Props> {
                 }
             }
         }
-        console.log('prefetchRequestStatus', prefetchRequestStatus);
     };
 
     render() {

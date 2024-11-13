@@ -345,7 +345,6 @@ export async function reconnect(socketId) {
         // eslint-disable-next-line no-console
         dispatch(checkForModifiedUsers(true));
         dispatch(TeamActions.getMyKSuites());
-        console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
     }
 
     dispatch(resetWsErrorCount());

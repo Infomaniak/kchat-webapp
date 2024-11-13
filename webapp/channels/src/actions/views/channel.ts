@@ -423,6 +423,8 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
             sinceTimeToGetPosts = lastPostsApiCallForChannel;
         }
 
+        console.log('sinceTimeToGetPosts', channelId, sinceTimeToGetPosts, 'prefetch', prefetch);
+
         if (prefetch) {
             dispatch({
                 type: ActionTypes.PREFETCH_POSTS_FOR_CHANNEL,
