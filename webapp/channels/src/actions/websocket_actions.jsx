@@ -243,6 +243,13 @@ function restart() {
     dispatch(getClientConfig());
 }
 
+export function reconnectWsChannels() {
+    console.log('[websocket_actions] reconnectWsChannels - WebSocketClient.reconnecting', WebSocketClient.reconnecting);
+    if (WebSocketClient.reconnecting) {
+        WebSocketClient.reconnectAllChannels();
+    }
+}
+
 export async function reconnect(socketId) {
     // eslint-disable-next-line
     console.log('Reconnecting WebSocket');
@@ -338,7 +345,6 @@ export async function reconnect(socketId) {
         // eslint-disable-next-line no-console
         dispatch(checkForModifiedUsers(true));
         dispatch(TeamActions.getMyKSuites());
-        console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
     }
 
     dispatch(resetWsErrorCount());

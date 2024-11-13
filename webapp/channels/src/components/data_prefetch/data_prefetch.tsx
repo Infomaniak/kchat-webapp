@@ -9,6 +9,7 @@ import type {Channel} from '@mattermost/types/channels';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {loadProfilesForSidebar} from 'actions/user_actions';
+import {reconnectWsChannels} from 'actions/websocket_actions';
 
 import {Constants} from 'utils/constants';
 
@@ -54,7 +55,7 @@ export default class DataPrefetch extends React.PureComponent<Props> {
     private prefetchTimeout?: number;
 
     async componentDidUpdate(prevProps: Props) {
-        const {currentChannelId, prefetchQueueObj, sidebarLoaded} = this.props;
+        const {currentChannelId, prefetchQueueObj, sidebarLoaded, prefetchRequestStatus} = this.props;
         if (currentChannelId && sidebarLoaded && (!prevProps.currentChannelId || !prevProps.sidebarLoaded)) {
             queue.add(async () => this.prefetchPosts(currentChannelId));
             await loadProfilesForSidebar();
@@ -63,6 +64,20 @@ export default class DataPrefetch extends React.PureComponent<Props> {
             clearTimeout(this.prefetchTimeout);
             await queue.clear();
             this.prefetchData();
+        }
+
+        // console.log('prefetchQueueObj', prefetchQueueObj);
+
+        // Infomaniak: if websocket is connecting at the same time this will delay channel subscriptions until all channels have finished prefetch
+        if (prevProps.prefetchQueueObj !== prefetchQueueObj || prevProps.prefetchRequestStatus !== prefetchRequestStatus) {
+            const queueCount = Object.values(prefetchQueueObj).map((x) => x.length).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+            const statusCount = Object.keys(prefetchRequestStatus).length;
+            const allStatusSuccessful = !(Object.values(prefetchRequestStatus).some((x) => x !== 'success'));
+
+            if (queueCount === statusCount && allStatusSuccessful) {
+                console.log('prefetch complete');
+                reconnectWsChannels();
+            }
         }
 
         if (currentChannelId && sidebarLoaded && (!prevProps.currentChannelId || !prevProps.sidebarLoaded)) {

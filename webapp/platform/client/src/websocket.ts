@@ -93,6 +93,16 @@ export default class WebSocketClient {
 
     private connectionId: string | null;
 
+    private _teamId: string | undefined;
+    private _userId: number | undefined;
+    private _userTeamId: string | undefined;
+    // TODO type this
+    private _currentUserId: any;
+    private _currentUserTeamId: any;
+    private _presenceChannelId: any;
+
+    reconnecting: boolean = false;
+
     constructor() {
         this.conn = null;
         this.teamChannel = null;
@@ -111,8 +121,15 @@ export default class WebSocketClient {
         this.currentUser = null;
         this.currentTeamUser = '';
         this.currentTeam = '';
-        this.otherTeams = []
-        this.otherTeamsChannel = {}
+        this.otherTeams = [];
+        this.otherTeamsChannel = {};
+
+        this._teamId = undefined;
+        this._userId = undefined;
+        this._currentUserId = undefined;
+        this._userTeamId = undefined;
+        this._currentUserTeamId = undefined;
+        this._presenceChannelId = undefined;
     }
 
     unbindPusherEvents() {
@@ -236,33 +253,59 @@ export default class WebSocketClient {
         });
 
         this.conn.connection.bind('connected', () => {
-            this.subscribeToTeamChannel(teamId as string);
-            this.subscribeToUserChannel(userId || currentUserId);
-            this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId);
-            this.subscribeToOtherTeams(this.otherTeams, teamId)
+            console.log('[websocket] socketId', this.conn?.connection.socket_id);
 
-            // There is a case where presenceChannelId can be undefined on first connect and will be set by the bind function later.
-            const presenceChannel = presenceChannelId || this.currentPresence;
-            if (presenceChannel) {
-                this.bindPresenceChannel(presenceChannel);
-            }
+            // TODO: temp bind just to keep consistence with old code
+            this._teamId = teamId;
+            this._userId = userId;
+            this._currentUserId = currentUserId;
+            this._userTeamId = userTeamId;
+            this._currentUserTeamId = currentUserTeamId;
+            this._presenceChannelId = presenceChannelId;
 
-            console.log('[websocket] re-established connection');
             if (this.connectFailCount > 0) {
                 console.log('[websocket] calling reconnect callbacks');
-                console.log('[websocket] socketId', this.conn?.connection.socket_id);
+                // used by websocket_actions to determine whether to call reconnectAllChannels after preload
+                this.reconnecting = true;
+                console.log('[websocket] reconnecting');
                 this.reconnectCallback?.(this.conn?.connection.socket_id);
                 this.reconnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
+                // if first connect manually call reconnectAllChannels
+                this.reconnectAllChannels();
                 console.log('[websocket] calling first connect callbacks');
-                console.log('[websocket] socketId', this.conn?.connection.socket_id);
                 this.firstConnectCallback?.(this.conn?.connection.socket_id);
                 this.firstConnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
             }
+
             this.connectFailCount = 0;
             this.errorCount = 0;
             this.socketId = this.conn?.connection.socket_id as string;
         });
+    }
+
+    reconnectAllChannels() {
+        console.log('[websocket] reconnectAllChannels state', this.conn?.connection.state)
+        if (this.conn?.connection.state !== 'connected') {
+            console.log('[websocket] reconnectAllChannels retrying');
+            setTimeout(() => {
+                this.reconnectAllChannels();
+            }, 2000);
+
+            return;
+        }
+        this.subscribeToTeamChannel(this._teamId as string);
+        this.subscribeToUserChannel(this._userId || this._currentUserId);
+        this.subscribeToUserTeamScopedChannel(this._userTeamId || this._currentUserTeamId);
+        this.subscribeToOtherTeams(this.otherTeams, this._teamId);
+
+        const presenceChannel = this._presenceChannelId || this.currentPresence;
+        if (presenceChannel) {
+            this.bindPresenceChannel(presenceChannel);
+        }
+
+        this.reconnecting = false;
+        console.log('[websocket] connected at', Date.now());
     }
 
     updateToken(token: string) {
