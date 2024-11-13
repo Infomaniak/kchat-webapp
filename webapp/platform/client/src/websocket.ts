@@ -270,7 +270,7 @@ export default class WebSocketClient {
                 console.log('[websocket] reconnecting');
                 this.reconnectCallback?.(this.conn?.connection.socket_id);
                 this.reconnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
-            } else {
+            } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
                 // if first connect manually call reconnectAllChannels
                 this.reconnectAllChannels();
                 console.log('[websocket] calling first connect callbacks');
