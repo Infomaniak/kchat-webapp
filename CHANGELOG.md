@@ -1,3 +1,9 @@
+## 2.10.0-rc.40 (2024-11-13)
+
+### Changed (1 change)
+
+- [delay ws channel resubs on reconnect until post prefetch finished](kchat/webapp@4eabf5ba31a899be32ebd65bd4c8467d1d0ef979) by @antonbuksa ([merge request](kchat/webapp!965))
+
 ## 2.10.0-rc.39 (2024-11-07)
 
 ### Fixed (1 change)
