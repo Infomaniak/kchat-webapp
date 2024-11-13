@@ -243,6 +243,13 @@ function restart() {
     dispatch(getClientConfig());
 }
 
+export function reconnectWsChannels() {
+    console.log('[websocket_actions] reconnectWsChannels - WebSocketClient.reconnecting', WebSocketClient.reconnecting);
+    if (WebSocketClient.reconnecting) {
+        WebSocketClient.reconnectAllChannels();
+    }
+}
+
 export async function reconnect(socketId) {
     // eslint-disable-next-line
     console.log('Reconnecting WebSocket');

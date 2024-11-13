@@ -448,6 +448,7 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
                     status: RequestStatus.FAILURE,
                 });
             } else {
+                console.log('PREFETCH_POSTS_FOR_CHANNEL', channelId, 'RequestStatus.SUCCESS', Date.now());
                 actions.push({
                     type: ActionTypes.PREFETCH_POSTS_FOR_CHANNEL,
                     channelId,
