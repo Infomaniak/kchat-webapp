@@ -1,3 +1,9 @@
+## 2.10.0-rc.41 (2024-11-18)
+
+### Removed (1 change)
+
+- [hide broken help link](kchat/webapp@b5b69c065f5cf71b9b842bb88ea2413e6111262e) by @antonbuksa ([merge request](kchat/webapp!963))
+
 ## 2.10.0-rc.40 (2024-11-13)
 
 ### Changed (1 change)
