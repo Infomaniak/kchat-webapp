@@ -210,8 +210,8 @@ build:front:
 #     when: always
 
 # Build front using kaniko and store the image in the gitlab registry
-build:image:
-  stage: build
+deploy:image:
+  stage: deploy
   image:
     name: gcr.io/kaniko-project/executor:${KANIKO_VERSION}
     entrypoint: [""]
@@ -219,8 +219,7 @@ build:image:
     - kubernetes
   rules:
     - if: *if-tag
-      when: manual
-      allow_failure: false
+      when: on_success
     - when: never
   before_script:
     - *script-configure-kaniko
