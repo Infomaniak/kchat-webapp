@@ -47,7 +47,7 @@ export default class AppNameDisplay extends React.PureComponent<Props> {
                 />
                 {!isDesktopApp() && (
                     <span className='app-name__title'>
-                        {appName}
+                        {appName} {":)"}
                     </span>
                 )}
             </div>
