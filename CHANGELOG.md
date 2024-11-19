@@ -258,6 +258,17 @@ No changes.
 
 No changes.
 
+## 2.9.21-next.2 (2024-11-19)
+
+### Changed (2 changes)
+
+- [ci: invalidate nginx cache on deploy](kchat/webapp@8d7a9977977236512f8e620be3e003ffc6c1b855) by @leopold.jacquot ([merge request](kchat/webapp!966))
+- [delay ws channel resubs on reconnect until post prefetch finished](kchat/webapp@4eabf5ba31a899be32ebd65bd4c8467d1d0ef979) by @antonbuksa ([merge request](kchat/webapp!965))
+
+### Removed (1 change)
+
+- [hide broken help link](kchat/webapp@b5b69c065f5cf71b9b842bb88ea2413e6111262e) by @antonbuksa ([merge request](kchat/webapp!963))
+
 ## 2.9.21-next.1 (2024-11-07)
 
 ### Fixed (1 change)
