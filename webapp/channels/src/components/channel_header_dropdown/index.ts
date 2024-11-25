@@ -66,19 +66,29 @@ const getTeammateStatus = createSelector(
 const mapStateToProps = (state: GlobalState) => {
     const user = getCurrentUser(state);
     const channel = getCurrentChannel(state);
+
+    // Handle the case where channel is undefined (e.g the user leave the channel)
+    const channelId = channel?.id || '';
+    const channelName = channel?.name || '';
+    const isDefault = channel ? isCurrentChannelDefault(state) : false;
+    const isFavorite = channel ? isCurrentChannelFavorite(state) : false;
+    const isMuted = channel ? isCurrentChannelMuted(state) : false;
+    const isArchived = channel ? isCurrentChannelArchived(state) : false;
+    const hasCall = channel ? getConferenceByChannelId(state, channelId) != null : false;
+
     return {
         user,
         channel,
-        dmUserId: getUserIdFromChannelName(user.id, channel.name),
-        isDefault: isCurrentChannelDefault(state),
-        isFavorite: isCurrentChannelFavorite(state),
-        isMuted: isCurrentChannelMuted(state),
+        dmUserId: getUserIdFromChannelName(user.id, channelName),
+        isDefault,
+        isFavorite,
+        isMuted,
         isReadonly: false,
-        isArchived: isCurrentChannelArchived(state),
+        isArchived,
         penultimateViewedChannelName: getPenultimateViewedChannelName(state) || getRedirectChannelNameForTeam(state, getCurrentTeamId(state)),
         pluginMenuItems: getChannelHeaderMenuPluginComponents(state),
         isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
-        hasCall: getConferenceByChannelId(state, channel.id) != null,
+        hasCall,
     };
 };
 
