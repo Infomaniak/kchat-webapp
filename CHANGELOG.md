@@ -1,3 +1,14 @@
+## 2.10.0-rc.43 (2024-11-25)
+
+### Fixed (2 changes)
+
+- [fix: handle case where channel is undefined for channel header dropdown](kchat/webapp@6bd80ba42c323d68702ad7248848baf62738d2db) by @boris.trombert ([merge request](kchat/webapp!968))
+- [refactor createOption function to preserve original label value for keywords settings](kchat/webapp@6c5838606046c6c94d32005e1050797e30e4d448) by @boris.trombert ([merge request](kchat/webapp!967))
+
+### Changed (1 change)
+
+- [ci: invalidate nginx cache on deploy](kchat/webapp@8d7a9977977236512f8e620be3e003ffc6c1b855) by @leopold.jacquot ([merge request](kchat/webapp!966))
+
 ## 2.10.0-rc.42 (2024-11-18)
 
 No changes.
