@@ -368,7 +368,7 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
 
     createOption = (label: string) => ({
         label,
-        value: label.toLowerCase().replace(/\W/g, ''),
+        value: label,
     });
 
     createInput(props: InputProps) {
