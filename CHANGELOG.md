@@ -269,6 +269,13 @@ No changes.
 
 No changes.
 
+## 2.9.22-next.1 (2024-11-25)
+
+### Fixed (2 changes)
+
+- [fix: handle case where channel is undefined for channel header dropdown](kchat/webapp@6bd80ba42c323d68702ad7248848baf62738d2db) by @boris.trombert ([merge request](kchat/webapp!968))
+- [refactor createOption function to preserve original label value for keywords settings](kchat/webapp@6c5838606046c6c94d32005e1050797e30e4d448) by @boris.trombert ([merge request](kchat/webapp!967))
+
 ## 2.9.21-next.2 (2024-11-19)
 
 ### Changed (2 changes)
