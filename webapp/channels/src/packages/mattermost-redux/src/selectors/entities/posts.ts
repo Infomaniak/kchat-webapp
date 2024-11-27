@@ -589,6 +589,16 @@ export function getRecentPostsChunkInChannel(state: GlobalState, channelId: Chan
     return postsForChannel.find((block) => block.recent);
 }
 
+export function getNotRecentPostsChunkInChannel(state: GlobalState, channelId: Channel['id']): PostOrderBlock | null | undefined {
+    const postsForChannel = state.entities.posts.postsInChannel[channelId];
+
+    if (!postsForChannel) {
+        return null;
+    }
+
+    return postsForChannel.find((block) => !block.recent);
+}
+
 export function getOldestPostsChunkInChannel(state: GlobalState, channelId: Channel['id']): PostOrderBlock | null | undefined {
     const postsForChannel = state.entities.posts.postsInChannel[channelId];
 
