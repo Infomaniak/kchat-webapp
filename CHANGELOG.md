@@ -1,3 +1,9 @@
+## 2.10.0-rc.47 (2024-11-29)
+
+### Fixed (1 change)
+
+- [missing traductions when starting a call on a channel](kchat/webapp@27c438d314b28049000df4cf1c73877c92dcecc3) by @boris.trombert ([merge request](kchat/webapp!972))
+
 ## 2.10.0-rc.46 (2024-11-29)
 
 ### Fixed (2 changes)
