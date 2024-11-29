@@ -295,6 +295,16 @@ No changes.
 
 No changes.
 
+## 2.9.22-next.2 (2024-11-29)
+
+### Fixed (5 changes)
+
+- [missing traductions when starting a call on a channel](kchat/webapp@27c438d314b28049000df4cf1c73877c92dcecc3) by @boris.trombert ([merge request](kchat/webapp!972))
+- [set schedule message to 8 am](kchat/webapp@98e261a3d0b32a230d753b2a0034bebcb40713e7) by @boris.trombert ([merge request](kchat/webapp!971))
+- [fetch missing posts in channel if we found chunk with next_post_id](kchat/webapp@fce43a0d7288e72e7f8eafc8392109c6c5676710) by @boris.trombert ([merge request](kchat/webapp!970))
+- [remove glitching border in timepicker for reminder](kchat/webapp@582d0266fb7d5acb9b08979abaed64ed1ef3c144) by @boris.trombert ([merge request](kchat/webapp!969))
+- [edit post emoji according to cursor position](kchat/webapp@ca75615cdf59c3e4b4495ce5d808ac0a0dcd7ab6) by @boris.trombert ([merge request](kchat/webapp!962))
+
 ## 2.9.22-next.1 (2024-11-25)
 
 ### Fixed (2 changes)
