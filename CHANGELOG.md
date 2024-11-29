@@ -1,3 +1,10 @@
+## 2.10.0-rc.46 (2024-11-29)
+
+### Fixed (2 changes)
+
+- [set schedule message to 8 am](kchat/webapp@98e261a3d0b32a230d753b2a0034bebcb40713e7) by @boris.trombert ([merge request](kchat/webapp!971))
+- [edit post emoji according to cursor position](kchat/webapp@ca75615cdf59c3e4b4495ce5d808ac0a0dcd7ab6) by @boris.trombert ([merge request](kchat/webapp!962))
+
 ## 2.10.0-rc.45 (2024-11-29)
 
 ### Fixed (1 change)
