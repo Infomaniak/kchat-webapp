@@ -1,3 +1,10 @@
+## 2.10.0-rc.44 (2024-11-29)
+
+### Fixed (2 changes)
+
+- [fetch missing posts in channel if we found chunk with next_post_id](kchat/webapp@fce43a0d7288e72e7f8eafc8392109c6c5676710) by @boris.trombert ([merge request](kchat/webapp!970))
+- [remove glitching border in timepicker for reminder](kchat/webapp@582d0266fb7d5acb9b08979abaed64ed1ef3c144) by @boris.trombert ([merge request](kchat/webapp!969))
+
 ## 2.10.0-rc.43 (2024-11-25)
 
 ### Fixed (2 changes)
