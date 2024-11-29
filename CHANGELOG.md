@@ -1,3 +1,9 @@
+## 2.10.0-rc.45 (2024-11-29)
+
+### Fixed (1 change)
+
+- [remove glitching border in timepicker for reminder](kchat/webapp@582d0266fb7d5acb9b08979abaed64ed1ef3c144) by @boris.trombert ([merge request](kchat/webapp!969))
+
 ## 2.10.0-rc.44 (2024-11-29)
 
 ### Fixed (2 changes)
