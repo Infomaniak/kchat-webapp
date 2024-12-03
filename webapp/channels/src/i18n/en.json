@@ -3143,7 +3143,7 @@
   "channel_limitation.messages": "Messages and files older than 3 months are hidden. To view more posts, {isAdmin, select, true {subscribe to a higher offer. <modifyOffer>Change my offer</modifyOffer>} other {contact an administrator to subscribe to a higher offer}}",
   "channel_loader.posted": "Posted",
   "channel_loader.postedImage": " posted an image",
-  "channel_loader.socketError": "Please check connection, kChat unreachable. If issue persists, ask administrator to [check WebSocket port](!https://docs.mattermost.com/install/troubleshooting.html#please-check-connection-mattermost-unreachable-if-issue-persists-ask-administrator-to-check-websocket-port).",
+  "channel_loader.socketError": "Please check connection, kChat unreachable.",
   "channel_loader.someone": "Someone",
   "channel_loader.something": " did something new",
   "channel_loader.unknown_error": "We received an unexpected status code from the server.",
