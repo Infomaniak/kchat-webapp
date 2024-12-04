@@ -4510,8 +4510,6 @@ export default class Client4 {
     };
 
     private doFetchWithRetry = async <ClientDataResponse>(url: string, options: Options): Promise<ClientDataResponse> => {
-        console.log('url', url);
-        console.log('options', options);
         const {data} = await this.doFetchWithResponseAndRetry<ClientDataResponse>(url, options);
 
         return data;
