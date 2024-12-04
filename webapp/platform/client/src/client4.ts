@@ -913,7 +913,7 @@ export default class Client4 {
     };
 
     getProfilesByIds = (userIds: string[], options = {}) => {
-        return this.doFetch<UserProfile[]>(
+        return this.doFetchWithRetry<UserProfile[]>(
             `${this.getUsersRoute()}/ids${buildQueryString(options)}`,
             {method: 'post', body: JSON.stringify(userIds)},
         );
@@ -955,7 +955,7 @@ export default class Client4 {
     getProfilesInChannel = (channelId: string, page = 0, perPage = PER_PAGE_DEFAULT, sort = '', options: {active?: boolean} = {}) => {
         const queryStringObj = {in_channel: channelId, page, per_page: perPage, sort};
 
-        return this.doFetch<UserProfile[]>(
+        return this.doFetchWithRetry<UserProfile[]>(
             `${this.getUsersRoute()}${buildQueryString({...queryStringObj, ...options})}`,
             {method: 'get'},
         );
@@ -2234,14 +2234,14 @@ export default class Client4 {
     };
 
     getPostsUnread = (channelId: string, userId: string, limitAfter = DEFAULT_LIMIT_AFTER, limitBefore = DEFAULT_LIMIT_BEFORE, fetchThreads = true, collapsedThreads = false, collapsedThreadsExtended = false) => {
-        return this.doFetch<PostList>(
+        return this.doFetchWithRetry<PostList>(
             `${this.getUserRoute(userId)}/channels/${channelId}/posts/unread${buildQueryString({limit_after: limitAfter, limit_before: limitBefore, skipFetchThreads: !fetchThreads, collapsedThreads, collapsedThreadsExtended})}`,
             {method: 'get'},
         );
     };
 
     getPostsSince = (channelId: string, since: number, fetchThreads = true, collapsedThreads = false, collapsedThreadsExtended = false) => {
-        return this.doFetch<PostList>(
+        return this.doFetchWithRetry<PostList>(
             `${this.getChannelRoute(channelId)}/posts${buildQueryString({since, skipFetchThreads: !fetchThreads, collapsedThreads, collapsedThreadsExtended})}`,
             {method: 'get'},
         );
@@ -4509,6 +4509,12 @@ export default class Client4 {
         return data;
     };
 
+    private doFetchWithRetry = async <ClientDataResponse>(url: string, options: Options): Promise<ClientDataResponse> => {
+        const {data} = await this.doFetchWithResponseAndRetry<ClientDataResponse>(url, options);
+
+        return data;
+    };
+
     private doFetchWithResponse = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse>> => {
         const response = await fetch(url, this.getOptions(options));
         const headers = parseAndMergeNestedHeaders(response.headers);
@@ -4565,6 +4571,30 @@ export default class Client4 {
             error: data.error ? data.error : null,
             url,
         });
+    };
+
+    // Ik changes : error handling when request fails, retrying request 3 times with 0,5s delay, only apply this to data_prefetch API calls.
+    doFetchWithResponseAndRetry = async <ClientDataResponse>(url: string, options: Options, retries = 3): Promise<ClientResponse<ClientDataResponse>> => {
+        const RETRY_TIME = 1000; // 1 sec
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            if (attempt > 0) {
+                console.log('retry #', attempt, options.method, url, 'at', Date.now());
+            }
+            try {
+                const response = await this.doFetchWithResponse<ClientDataResponse>(url, options);
+                return response;
+            } catch (err) {
+                console.log(options.method, url, 'retry #', attempt, 'fail at', Date.now());
+
+                if (attempt < retries) {
+                    await new Promise(resolve => setTimeout(resolve, RETRY_TIME));
+                } else {
+                    console.log('all retry attempts for', options.method, url, 'failed');
+                    throw err;
+                }
+            }
+        }
+        throw new Error('request retry failed.');
     };
 
     trackEvent(category: string, event: string, props?: any) {
