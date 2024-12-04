@@ -4572,35 +4572,31 @@ export default class Client4 {
             status_code: data.status_code ? data.status_code : response.status,
             error: data.error ? data.error : null,
             url,
-        });      
-    };  
+        });
+    };
 
     // Ik changes : error handling when request fails, retrying request 3 times with 0,5s delay, only apply this to data_prefetch API calls.
     private doFetchWithResponseAndRetry = async <ClientDataResponse>(url: string, options: Options, retries = 3): Promise<ClientResponse<ClientDataResponse>> => {
+        const RETRY_TIME = 1000; // 1 sec
         for (let attempt = 0; attempt <= retries; attempt++) {
             if (attempt > 0) {
-                console.log('API URL', url);
-                console.log('Call options', options);
-                console.log('Timestamp of retry', Date.now());
+                console.log('retry #', attempt, options.method, url, 'at', Date.now());
             }
             try {
-                console.log('Attempt of retry', attempt + 1);
                 const response = await this.doFetchWithResponse<ClientDataResponse>(url, options);
-                console.log('Successful attempt of retry', attempt + 1);
                 return response;
             } catch (err) {
-                console.log('Attempt', attempt + 1, 'failed:', err);
+                console.log(options.method, url, 'retry #', attempt, 'fail at', Date.now());
 
                 if (attempt < retries) {
-                    console.log('Retrying request in 1 second...');
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    await new Promise(resolve => setTimeout(resolve, RETRY_TIME));
                 } else {
-                    console.log('All retry attempts failed.');
+                    console.log('all retry attempts for', options.method, url, 'failed');
                     throw err;
                 }
             }
         }
-        throw new Error('All retry attempts failed.');
+        throw new Error('request retry failed.');
     };
 
     trackEvent(category: string, event: string, props?: any) {
