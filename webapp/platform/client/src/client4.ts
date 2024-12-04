@@ -4576,7 +4576,7 @@ export default class Client4 {
     };
 
     // Ik changes : error handling when request fails, retrying request 3 times with 0,5s delay, only apply this to data_prefetch API calls.
-    private doFetchWithResponseAndRetry = async <ClientDataResponse>(url: string, options: Options, retries = 3): Promise<ClientResponse<ClientDataResponse>> => {
+    doFetchWithResponseAndRetry = async <ClientDataResponse>(url: string, options: Options, retries = 3): Promise<ClientResponse<ClientDataResponse>> => {
         const RETRY_TIME = 1000; // 1 sec
         for (let attempt = 0; attempt <= retries; attempt++) {
             if (attempt > 0) {
