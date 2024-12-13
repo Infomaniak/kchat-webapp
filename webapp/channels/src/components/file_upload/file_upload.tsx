@@ -15,10 +15,12 @@ import type {UploadFile} from 'actions/file_actions';
 
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import * as Menu from 'components/menu';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import Menu from 'components/widgets/menu/menu';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+// import Menu from 'components/widgets/menu/menu';
+// import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
 import Constants from 'utils/constants';
 import DelayedAction from 'utils/delayed_action';
@@ -658,7 +660,7 @@ export class FileUpload extends PureComponent<Props, State> {
         } else {
             const pluginFileUploadMethods = this.props.pluginFileUploadMethods.map((item) => {
                 return (
-                    <li
+                    <Menu.Item
                         key={item.pluginId + '_fileuploadpluginmenuitem'}
                         onClick={() => {
                             if (item.action) {
@@ -680,10 +682,7 @@ export class FileUpload extends PureComponent<Props, State> {
                             this.setState({menuOpen: false});
                         }}
                     >
-                        <a
-                            href='#'
-                            style={{display: 'flex', alignItems: 'center'}}
-                        >
+                        <div style={{display: 'flex', alignItems: 'center'}}>
                             <span
                                 className='mr-2'
                                 style={{marginLeft: -3, height: 20}}
@@ -691,8 +690,8 @@ export class FileUpload extends PureComponent<Props, State> {
                                 {item.icon}
                             </span>
                             {item.text}
-                        </a>
-                    </li>
+                        </div>
+                    </Menu.Item>
                 );
             });
             bodyAction = (
@@ -709,7 +708,45 @@ export class FileUpload extends PureComponent<Props, State> {
                         accept={accept}
                         disabled={this.props.disabled}
                     />
-                    <MenuWrapper>
+                    <Menu.Container
+                        menuButton={{
+                            id: 'FileUploadMenu',
+                            'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}),
+                            class: 'SidebarMenu_menuButton',
+                            children: <PaperclipIcon size={16}/>,
+                        }}
+                        menuButtonTooltip={{
+                            id: 'FileUploadMenuBT',
+                            text: formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}),
+                            class: 'hidden-xs',
+                        }}
+                        menu={{
+                            id: 'FileUploadMenuMenu',
+                            'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.dropdownAriaLabel', defaultMessage: 'Edit category menu'}),
+
+                            // onToggle: this.handleMenuToggle,
+                        }}
+
+                        // menuButtonRef={anchorEl}
+                    >
+                        <Menu.Item>
+                            <div
+                                onClick={this.simulateInputClick}
+                                onTouchEnd={this.simulateInputClick}
+                                disabled={this.props.disabled}
+                            >
+                                <span className='mr-2'>
+                                    <i className='fa fa-laptop'/>
+                                </span>
+                                <FormattedMessage
+                                    id='yourcomputer'
+                                    defaultMessage='Your computer'
+                                />
+                            </div>
+                        </Menu.Item>
+                        {pluginFileUploadMethods}
+                    </Menu.Container>
+                    {/* <MenuWrapper>
                         <OverlayTrigger
                             delayShow={Constants.OVERLAY_TIME_DELAY}
                             placement='top'
@@ -763,7 +800,7 @@ export class FileUpload extends PureComponent<Props, State> {
                             </li>
                             {pluginFileUploadMethods}
                         </Menu>
-                    </MenuWrapper>
+                    </MenuWrapper> */}
                 </div>
             );
         }
