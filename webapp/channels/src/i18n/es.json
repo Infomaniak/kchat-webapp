@@ -2819,7 +2819,7 @@
   "channel_invite.no_options_message": "No se encontraron coincidencias",
   "channel_loader.posted": "Publicó",
   "channel_loader.postedImage": " publicó una imagen",
-  "channel_loader.socketError": "Por favor, revisa tu conexión, kChat inalcanzable. Si el problema persiste, solicite al administrador [revisar el puerto del WebSocket](https://docs.mattermost.com/install/troubleshooting.html#please-check-connection-mattermost-unreachable-if-issue-persists-ask-administrator-to-check-websocket-port).",
+  "channel_loader.socketError": "Por favor, verifique la conexión, kChat no es accesible.",
   "channel_loader.someone": "Alguien",
   "channel_loader.something": " hizo algo nuevo",
   "channel_loader.unknown_error": "Hemos recibido un código de estado inesperado del servidor.",
