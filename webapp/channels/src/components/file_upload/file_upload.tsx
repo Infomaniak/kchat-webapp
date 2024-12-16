@@ -41,6 +41,7 @@ import {
 } from 'utils/utils';
 
 import type {FilesWillUploadHook, PluginComponent} from 'types/store/plugins';
+import { IconContainer } from 'components/advanced_text_editor/formatting_bar/formatting_icon';
 
 const holders = defineMessages({
     limited: {
@@ -681,8 +682,10 @@ export class FileUpload extends PureComponent<Props, State> {
                             }
                             this.setState({menuOpen: false});
                         }}
+                        labels={<span>{item.text}</span>}
+                        leadingElement={item.icon}
                     >
-                        <div style={{display: 'flex', alignItems: 'center'}}>
+                        {/* <div style={{display: 'flex', alignItems: 'center'}}>
                             <span
                                 className='mr-2'
                                 style={{marginLeft: -3, height: 20}}
@@ -690,7 +693,7 @@ export class FileUpload extends PureComponent<Props, State> {
                                 {item.icon}
                             </span>
                             {item.text}
-                        </div>
+                        </div> */}
                     </Menu.Item>
                 );
             });
@@ -712,7 +715,7 @@ export class FileUpload extends PureComponent<Props, State> {
                         menuButton={{
                             id: 'FileUploadMenu',
                             'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}),
-                            class: 'SidebarMenu_menuButton',
+                            class: 'AdvancedTextEditor__action-button',
                             children: <PaperclipIcon size={16}/>,
                         }}
                         menuButtonTooltip={{
@@ -723,14 +726,25 @@ export class FileUpload extends PureComponent<Props, State> {
                         menu={{
                             id: 'FileUploadMenuMenu',
                             'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.dropdownAriaLabel', defaultMessage: 'Edit category menu'}),
-
-                            // onToggle: this.handleMenuToggle,
+                            transformOrigin: {
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            },
                         }}
-
-                        // menuButtonRef={anchorEl}
                     >
-                        <Menu.Item>
-                            <div
+                        <Menu.Item
+                            onClick={this.simulateInputClick}
+                            labels={
+                                <FormattedMessage
+                                    id='yourcomputer'
+                                    defaultMessage='Your computer'
+                                />
+                            }
+                            leadingElement={
+                                <i className='fa fa-laptop'/>
+                            }
+                        >
+                            {/* <div
                                 onClick={this.simulateInputClick}
                                 onTouchEnd={this.simulateInputClick}
                                 disabled={this.props.disabled}
@@ -742,7 +756,7 @@ export class FileUpload extends PureComponent<Props, State> {
                                     id='yourcomputer'
                                     defaultMessage='Your computer'
                                 />
-                            </div>
+                            </div> */}
                         </Menu.Item>
                         {pluginFileUploadMethods}
                     </Menu.Container>
