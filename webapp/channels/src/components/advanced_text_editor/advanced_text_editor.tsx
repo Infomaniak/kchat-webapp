@@ -380,10 +380,11 @@ const AdvanceTextEditor = ({
     ) : null;
     const disableSendButton = Boolean(readOnlyChannel || (!message.trim().length && !draft.fileInfos.length)) ||
         voiceMessageState === VoiceMessageStates.RECORDING || voiceMessageState === VoiceMessageStates.UPLOADING || disableSend;
+    const isSchedulableAdjusted = draft.postType === 'voice' ? false : isSchedulable;
     const sendButton = readOnlyChannel ? null : (
         <SendButton
             disabled={disableSendButton}
-            isSchedulable={isSchedulable}
+            isSchedulable={isSchedulableAdjusted}
             handleSubmit={handleSubmit}
             handleSchedulePost={handleSchedulePost}
         />
