@@ -64,11 +64,11 @@ function PostReminderSubmenu(props: Props) {
                 // add 2 hours in current time
                 endTime = currentDate.add(2, 'hours');
             } else if (id === PostReminders.TOMORROW) {
-                // set to next day 9 in the morning
-                endTime = currentDate.add(1, 'day').set({hour: 9, minute: 0});
+                // set to next day 8 in the morning
+                endTime = currentDate.add(1, 'day').set({hour: 8, minute: 0});
             } else if (id === PostReminders.MONDAY) {
-                // set to next Monday 9 in the morning
-                endTime = currentDate.add(1, 'week').isoWeekday(1).set({hour: 9, minute: 0});
+                // set to next Monday 8 in the morning
+                endTime = currentDate.add(1, 'week').isoWeekday(1).set({hour: 8, minute: 0});
             }
 
             dispatch(addPostReminder(props.userId, props.post.id, toUTCUnix(endTime.toDate())));
@@ -123,7 +123,7 @@ function PostReminderSubmenu(props: Props) {
 
         let trailingElements = null;
         if (postReminder === PostReminders.TOMORROW) {
-            const tomorrow = getCurrentMomentForTimezone(props.timezone).add(1, 'day').set({hour: 9, minute: 0}).toDate();
+            const tomorrow = getCurrentMomentForTimezone(props.timezone).add(1, 'day').set({hour: 8, minute: 0}).toDate();
 
             trailingElements = (
                 <span className={`postReminder-${postReminder}_timestamp`}>
@@ -144,7 +144,7 @@ function PostReminderSubmenu(props: Props) {
         }
 
         if (postReminder === PostReminders.MONDAY) {
-            const monday = getCurrentMomentForTimezone(props.timezone).add(1, 'week').isoWeekday(1).set({hour: 9, minute: 0}).toDate();
+            const monday = getCurrentMomentForTimezone(props.timezone).add(1, 'week').isoWeekday(1).set({hour: 8, minute: 0}).toDate();
 
             trailingElements = (
                 <span className={`postReminder-${postReminder}_timestamp`}>
