@@ -4,6 +4,8 @@
 import React from 'react';
 
 import type {ClientLicense, ClientConfig, WarnMetricStatus} from '@mattermost/types/config';
+import {injectIntl} from 'react-intl';
+import type {IntlShape} from 'react-intl';
 
 import withGetCloudSubscription from 'components/common/hocs/cloud/with_get_cloud_subscription';
 
@@ -25,6 +27,7 @@ import VersionBar from './version_bar';
 // import PaymentAnnouncementBar from './payment_announcement_bar';
 
 type Props = {
+    intl: IntlShape;
     license?: ClientLicense;
     config?: Partial<ClientConfig>;
     canViewSystemErrors: boolean;
@@ -56,10 +59,15 @@ class AnnouncementBarController extends React.PureComponent<Props> {
 
         let errorBar = null;
         if (this.props.latestError) {
+             // IK: to translate the red announcement bar javascript error  
+            const defaultMessage = this.props.latestError.error.message;
+            const messageId = this.props.latestError.error.intlId;
+            const message = messageId ? this.props.intl.formatMessage({ id: messageId, defaultMessage }) : defaultMessage;
+
             errorBar = (
                 <AnnouncementBar
                     type={this.props.latestError.error.type}
-                    message={this.props.latestError.error.message}
+                    message={message}
                     showCloseButton={true}
                     handleClose={this.props.actions.dismissError}
                 />
@@ -90,7 +98,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
             // cloudRenewalAnnouncementBar = (
             //     <CloudAnnualRenewalAnnouncementBar/>
             // );
-            toPaidPlanNudgeBannerDismissable = (<ToPaidPlanBannerDismissable/>);
+            // toPaidPlanNudgeBannerDismissable = (<ToPaidPlanBannerDismissable/>);
         }
 
         let autoStartTrialModal = null;
@@ -127,4 +135,4 @@ class AnnouncementBarController extends React.PureComponent<Props> {
     }
 }
 
-export default withGetCloudSubscription(AnnouncementBarController);
+export default withGetCloudSubscription(injectIntl(AnnouncementBarController));

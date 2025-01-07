@@ -2805,6 +2805,7 @@
   "apps.error.form.required_fields_empty": "Bitte behebe alle Fehler in den Feldern",
   "apps.error.form.submit.pretext": "Es ist ein Fehler beim Absenden des Modals aufgetreten. Kontaktiere bitte den App-Entwickler. Details: {details}",
   "apps.error.form.update": "Beim Aktualisieren des Dialogs ist ein Fehler aufgetreten. Kontaktiere bitte den App Entwickler. Details: {details}",
+  "apps.error.javascript": "Ein Fehler ist aufgetreten. Bitte verwenden Sie die Browserkonsole, um den Fehler zu erfassen und zu melden.",
   "apps.error.lookup.error_preparing_request": "Fehler beim Vorbereiten der Suchabfrage: {errorMessage}",
   "apps.error.malformed_binding": "Diese Bindung ist nicht korrekt formatiert. Bitte den App-Entwickler kontaktieren.",
   "apps.error.parser": "Parsing-Fehler: {error}",
