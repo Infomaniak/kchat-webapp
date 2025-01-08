@@ -1,3 +1,22 @@
+## 2.10.0-rc.48 (2025-01-08)
+
+### Fixed (4 changes)
+
+- [disable schedule message for audio type messages](kchat/webapp@342eba6b9bbcade0c2f426bbbe4dc5fc24b8164d) by @boris.trombert ([merge request](kchat/webapp!978))
+- [change reminder to 8am instead of 9am](kchat/webapp@dad23dd8edcbf51e0de859411fc36c56ddada46c) by @boris.trombert ([merge request](kchat/webapp!976))
+- [handling fail requests during data prefetch](kchat/webapp@344a64fbabbec25f9bdb1763e5e032bb12f5b94e) by @boris.trombert ([merge request](kchat/webapp!975))
+- [change socket error traduction](kchat/webapp@439535234ee8531d1c3a1c7a2fe4e85f2f9290f2) by @boris.trombert ([merge request](kchat/webapp!974))
+
+### Changed (3 changes)
+
+- [Add tooltip to AI actions button](kchat/webapp@ea2e0317664c7af0b9c919f1d7ef357c88e2915c) by @dimitar.slaev ([merge request](kchat/webapp!981))
+- [improve javascript error alert](kchat/webapp@6eb75fdcd1581e192e3308275be9a28aac1d6f6b) by @dimitar.slaev ([merge request](kchat/webapp!980))
+- [comment gh ci until we improve it to not fail](kchat/webapp@ed36f3b24c2391e4bc7fc63a23d225424fcee628) by @antonbuksa
+
+### Removed (1 change)
+
+- [remove gh ci file](kchat/webapp@3a58562a2c474721b1da77952fab809f55f1b661) by @antonbuksa
+
 ## 2.10.0-rc.47 (2024-11-29)
 
 ### Fixed (1 change)
