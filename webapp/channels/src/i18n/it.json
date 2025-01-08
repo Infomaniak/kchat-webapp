@@ -1922,6 +1922,7 @@
   "apps.error.form.no_source": "`source` non è definito.",
   "apps.error.form.refresh_no_refresh": "Chiamata di aggiornamento su un campo non aggiornato.",
   "apps.error.form.submit.pretext": "Si è verificato un errore nell'invio della modale. Contattare lo sviluppatore dell'app. Dettagli: {details}",
+  "apps.error.javascript": "Si è verificato un errore. Utilizza la console del browser per catturare e segnalare l'errore.",
   "apps.error.lookup.error_preparing_request": "Errore nella preparazione della richiesta di ricerca: {errorMessage}",
   "apps.error.malformed_binding": "Questo legame non è formato correttamente. Contattare lo sviluppatore dell'app.",
   "apps.error.parser": "Errore di parsing: {error}",

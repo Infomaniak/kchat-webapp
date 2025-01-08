@@ -2884,6 +2884,7 @@
   "apps.error.form.required_fields_empty": "Please fix all field errors",
   "apps.error.form.submit.pretext": "There has been an error submitting the modal. Contact the app developer. Details: {details}",
   "apps.error.form.update": "There has been an error updating the modal. Contact the app developer. Details: {details}",
+  "apps.error.javascript": "An error has occurred. Please use the browser console to capture and report the error.",
   "apps.error.lookup.error_preparing_request": "Error preparing lookup request: {errorMessage}",
   "apps.error.malformed_binding": "This binding is not properly formed. Contact the App developer.",
   "apps.error.parser": "Parsing error: {error}",

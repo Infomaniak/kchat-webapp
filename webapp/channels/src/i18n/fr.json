@@ -2523,6 +2523,7 @@
   "apps.error.form.refresh": "Il y a eu une erreur lors de la mise à jour de la boîte de dialogue. Contactez le développeur de l'application. Détails : {details}",
   "apps.error.form.refresh_no_refresh": "Un rafraîchissement a été appelé sur un champ qui ne prend pas en charge le rafraîchissement.",
   "apps.error.form.submit.pretext": "Une erreur s'est produite lors de l'envoi du formulaire. Veuillez contacter le développeur de l'application. Détails : {details}",
+  "apps.error.javascript": "Une erreur s'est produite. Veuillez utiliser la console du navigateur pour capturer et signaler l'erreur.",
   "apps.error.lookup.error_preparing_request": "Une erreur s'est produite lors de la préparation de la requête de recherche : {errorMessage}",
   "apps.error.malformed_binding": "La connexion n'est pas correctement mise en forme. Contactez le développeur de l'App.",
   "apps.error.parser": "Erreur d'interprétation : {error}",

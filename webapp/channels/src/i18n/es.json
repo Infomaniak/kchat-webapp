@@ -2567,6 +2567,7 @@
   "apps.error.form.refresh": "Se ha producido un error al enviar el modal. Póngase en contacto con el desarrollador de la aplicación. Detalles: {details}",
   "apps.error.form.refresh_no_refresh": "Llamada de refresco en un campo no refrescado.",
   "apps.error.form.submit.pretext": "Se ha producido un error al enviar el modal. Póngase en contacto con el desarrollador de la aplicación. Detalles: {details}",
+  "apps.error.javascript": "Se ha producido un error. Utilice la consola del navegador para capturar y reportar el error.",
   "apps.error.lookup.error_preparing_request": "Error al preparar la solicitud de búsqueda: {errorMessage}",
   "apps.error.malformed_binding": "Este enlace no está bien formado. Póngase en contacto con el desarrollador de la aplicación.",
   "apps.error.parser": "Error de análisis: {error}",
