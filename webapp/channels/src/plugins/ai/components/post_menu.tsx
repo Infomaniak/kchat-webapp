@@ -76,7 +76,6 @@ const PostMenu = (props: Props) => {
     return (
         <DotMenu
             icon={<IconAI/>}
-            title={intl.formatMessage({id: 'ai.actions', defaultMessage: 'AI Actions'})}
             dropdownMenu={StyledDropdownMenu}
         >
             {/* <DropdownBotSelector
