@@ -2,14 +2,17 @@
 // See LICENSE.txt for license information.
 
 import React, {ComponentProps, useState} from 'react';
+import {FormattedMessage} from 'react-intl';
 import styled, {css} from 'styled-components';
 
 import {useUpdateEffect} from 'react-use';
 
 import Dropdown from './dropdown';
 import {PrimaryButton} from './assets/buttons';
+import OverlayTrigger from 'components/overlay_trigger';
+import Tooltip from 'components/tooltip';
 
-export const DotMenuButton = styled.div<{isActive: boolean}>`
+export const DotMenuButton = styled.button<{isActive: boolean}>`
     display: inline-flex;
     padding: 0;
     border: none;
@@ -93,16 +96,15 @@ const DotMenu = ({
 
     const button = (
 
-        // @ts-ignore
-        <MenuButton
+        <MenuButton 
             title={title}
             isActive={(isActive ?? false) || isOpen}
-            onClick={(e: MouseEvent) => {
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
                 e.stopPropagation();
                 toggleOpen();
             }}
-            onKeyDown={(e: KeyboardEvent) => {
+            onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
                 // Handle Enter and Space as clicking on the button
                 if (e.key === 'Space' || e.key === 'Enter') {
                     e.stopPropagation();
@@ -115,7 +117,27 @@ const DotMenu = ({
             disabled={disabled ?? false}
             data-testid={'menuButton' + (title ?? '')}
         >
-            {icon}
+            <OverlayTrigger
+                className='hidden-xs'
+                delayShow={500}
+                placement='top'
+                overlay={
+                    <Tooltip
+                        id='reaction-icon-tooltip'
+                        className='hidden-xs'
+                    >
+                        <FormattedMessage
+                            id='ai.actions'
+                            defaultMessage='AI Actions'
+                        />
+                    </Tooltip>
+                }
+            >
+                {/* // without this span, dropdown menu won't work  */}
+                <span className='d-flex'>
+                    {icon}
+                </span>
+            </OverlayTrigger>
         </MenuButton>
     );
 
