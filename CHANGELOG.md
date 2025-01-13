@@ -1,3 +1,13 @@
+## 2.10.0-rc.49 (2025-01-13)
+
+### Fixed (1 change)
+
+- [Hide text input if sending a voice message](kchat/webapp@6645f9e676037ef963c2d2b0ccc620579bf1c69d) by @dimitar.slaev ([merge request](kchat/webapp!983))
+
+### Changed (1 change)
+
+- [upload menu refactor](kchat/webapp@e43981a7c2435d10a38e402d8676bb498a1b5942) by @antonbuksa ([merge request](kchat/webapp!984))
+
 ## 2.10.0-rc.48 (2025-01-08)
 
 ### Fixed (4 changes)
