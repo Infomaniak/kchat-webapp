@@ -13,7 +13,6 @@ import type {FileInfo, FileUploadResponse} from '@mattermost/types/files';
 
 import type {UploadFile} from 'actions/file_actions';
 
-import {IconContainer} from 'components/advanced_text_editor/formatting_bar/formatting_icon';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import * as Menu from 'components/menu';
@@ -715,7 +714,7 @@ export class FileUpload extends PureComponent<Props, State> {
                         }}
                         menu={{
                             id: 'FileUploadMenuMenu',
-                            'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.dropdownAriaLabel', defaultMessage: 'Edit category menu'}),
+                            'aria-label': formatMessage({id: 'file_upload.upload_files', defaultMessage: 'Upload files'}),
                             transformOrigin: {
                                 vertical: 'bottom',
                                 horizontal: 'left',
@@ -736,61 +735,6 @@ export class FileUpload extends PureComponent<Props, State> {
                         />
                         {pluginFileUploadMethods}
                     </Menu.Container>
-                    {/* <MenuWrapper>
-                        <OverlayTrigger
-                            delayShow={Constants.OVERLAY_TIME_DELAY}
-                            placement='top'
-                            trigger={['hover', 'focus']}
-                            overlay={
-                                <Tooltip id='upload-tooltip'>
-                                    <KeyboardShortcutSequence
-                                        shortcut={KEYBOARD_SHORTCUTS.filesUpload}
-                                        hoistDescription={true}
-                                        isInsideTooltip={true}
-                                    />
-                                </Tooltip>
-                            }
-                        >
-                            <button
-                                type='button'
-                                id='fileUploadButton'
-                                aria-label={buttonAriaLabel}
-                                disabled={this.props.disabled}
-                                className='style--none AdvancedTextEditor__action-button'
-                            >
-                                <PaperclipIcon
-                                    size={18}
-                                    color={'currentColor'}
-                                    aria-label={iconAriaLabel}
-                                />
-                            </button>
-                        </OverlayTrigger>
-                        <Menu
-                            id='fileUploadOptions'
-                            openLeft={true}
-                            openUp={true}
-                            ariaLabel={formatMessage({id: 'file_upload.menuAriaLabel', defaultMessage: 'Upload type selector'})}
-                            customStyles={customStyles}
-                        >
-                            <li>
-                                <a
-                                    href='#'
-                                    onClick={this.simulateInputClick}
-                                    onTouchEnd={this.simulateInputClick}
-                                    disabled={this.props.disabled}
-                                >
-                                    <span className='mr-2'>
-                                        <i className='fa fa-laptop'/>
-                                    </span>
-                                    <FormattedMessage
-                                        id='yourcomputer'
-                                        defaultMessage='Your computer'
-                                    />
-                                </a>
-                            </li>
-                            {pluginFileUploadMethods}
-                        </Menu>
-                    </MenuWrapper> */}
                 </div>
             );
         }
