@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {PaperclipIcon} from '@infomaniak/compass-icons/components';
+import {LaptopIcon, PaperclipIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {PureComponent} from 'react';
 import type {ChangeEvent, DragEvent, MouseEvent, TouchEvent, RefObject} from 'react';
@@ -13,6 +13,7 @@ import type {FileInfo, FileUploadResponse} from '@mattermost/types/files';
 
 import type {UploadFile} from 'actions/file_actions';
 
+import {IconContainer} from 'components/advanced_text_editor/formatting_bar/formatting_icon';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import * as Menu from 'components/menu';
@@ -41,7 +42,6 @@ import {
 } from 'utils/utils';
 
 import type {FilesWillUploadHook, PluginComponent} from 'types/store/plugins';
-import { IconContainer } from 'components/advanced_text_editor/formatting_bar/formatting_icon';
 
 const holders = defineMessages({
     limited: {
@@ -684,17 +684,7 @@ export class FileUpload extends PureComponent<Props, State> {
                         }}
                         labels={<span>{item.text}</span>}
                         leadingElement={item.icon}
-                    >
-                        {/* <div style={{display: 'flex', alignItems: 'center'}}>
-                            <span
-                                className='mr-2'
-                                style={{marginLeft: -3, height: 20}}
-                            >
-                                {item.icon}
-                            </span>
-                            {item.text}
-                        </div> */}
-                    </Menu.Item>
+                    />
                 );
             });
             bodyAction = (
@@ -714,13 +704,13 @@ export class FileUpload extends PureComponent<Props, State> {
                     <Menu.Container
                         menuButton={{
                             id: 'FileUploadMenu',
-                            'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}),
+                            'aria-label': formatMessage({id: 'file_upload.upload_files', defaultMessage: 'Upload files'}),
                             class: 'AdvancedTextEditor__action-button',
                             children: <PaperclipIcon size={16}/>,
                         }}
                         menuButtonTooltip={{
                             id: 'FileUploadMenuBT',
-                            text: formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}),
+                            text: formatMessage({id: 'file_upload.upload_files', defaultMessage: 'Upload files'}),
                             class: 'hidden-xs',
                         }}
                         menu={{
@@ -741,23 +731,9 @@ export class FileUpload extends PureComponent<Props, State> {
                                 />
                             }
                             leadingElement={
-                                <i className='fa fa-laptop'/>
+                                <LaptopIcon size={16}/>
                             }
-                        >
-                            {/* <div
-                                onClick={this.simulateInputClick}
-                                onTouchEnd={this.simulateInputClick}
-                                disabled={this.props.disabled}
-                            >
-                                <span className='mr-2'>
-                                    <i className='fa fa-laptop'/>
-                                </span>
-                                <FormattedMessage
-                                    id='yourcomputer'
-                                    defaultMessage='Your computer'
-                                />
-                            </div> */}
-                        </Menu.Item>
+                        />
                         {pluginFileUploadMethods}
                     </Menu.Container>
                     {/* <MenuWrapper>
