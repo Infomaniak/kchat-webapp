@@ -2,10 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
-import type {ClientLicense, ClientConfig, WarnMetricStatus} from '@mattermost/types/config';
 import {injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
+
+import type {ClientLicense, ClientConfig, WarnMetricStatus} from '@mattermost/types/config';
 
 import withGetCloudSubscription from 'components/common/hocs/cloud/with_get_cloud_subscription';
 
@@ -59,10 +59,10 @@ class AnnouncementBarController extends React.PureComponent<Props> {
 
         let errorBar = null;
         if (this.props.latestError) {
-             // IK: to translate the red announcement bar javascript error  
+            // IK: to translate the red announcement bar javascript error
             const defaultMessage = this.props.latestError.error.message;
             const messageId = this.props.latestError.error.intlId;
-            const message = messageId ? this.props.intl.formatMessage({ id: messageId, defaultMessage }) : defaultMessage;
+            const message = messageId ? this.props.intl.formatMessage({id: messageId, defaultMessage}) : defaultMessage;
 
             errorBar = (
                 <AnnouncementBar
