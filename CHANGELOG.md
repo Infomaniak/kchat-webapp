@@ -1,3 +1,13 @@
+## 2.10.0-rc.50 (2025-01-14)
+
+### Chore (1 change)
+
+- [build(deps): bump ksuite bridge version to 0.3.6](kchat/webapp@39d70ac02fe0724db2ff625e90115f5e1c25ed54) by @charbel.naoum ([merge request](kchat/webapp!986))
+
+### change (1 change)
+
+- [FIx post input width in center mode](kchat/webapp@46bf456fa0f37d23b97e4629bae60fecae750459) by @dimitar.slaev ([merge request](kchat/webapp!985))
+
 ## 2.10.0-rc.49 (2025-01-13)
 
 ### Fixed (1 change)
