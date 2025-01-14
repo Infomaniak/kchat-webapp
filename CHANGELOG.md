@@ -1,3 +1,9 @@
+## 2.10.0-rc.51 (2025-01-14)
+
+### Chore (1 change)
+
+- [clean eslint errors in announcement bar](kchat/webapp@8d984ab4cd40243f94347258d1634dad747220f0) by @antonbuksa
+
 ## 2.10.0-rc.50 (2025-01-14)
 
 ### Chore (1 change)
