@@ -12,9 +12,10 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import type {Props} from 'components/advanced_create_comment/advanced_create_comment';
 import AdvancedCreateComment from 'components/advanced_create_comment/advanced_create_comment';
 
-import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
 
 import type {PostDraft} from 'types/store/draft';
 
@@ -46,7 +47,7 @@ describe('components/AdvancedCreateComment', () => {
 
     const emptyDraft: PostDraft = TestHelper.getPostDraftMock({message: ''});
     const defaultFileInfo: FileInfo = TestHelper.getFileInfoMock();
-const mockEmoji = TestHelper.getSystemEmojiMock({name: 'smile', short_name: 'smile'});
+    const mockEmoji = TestHelper.getSystemEmojiMock({name: 'smile', short_name: 'smile'});
 
     const baseProps: Props = {
         channelId,
@@ -100,6 +101,7 @@ const mockEmoji = TestHelper.getSystemEmojiMock({name: 'smile', short_name: 'smi
         savePreferences(): Promise<ActionResult> {
             throw new Error('Function not implemented.');
         },
+        center: false,
     };
 
     const submitEvent = {
