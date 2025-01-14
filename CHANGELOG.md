@@ -340,6 +340,25 @@ No changes.
 
 No changes.
 
+## 2.9.22-next.4 (2025-01-14)
+
+### Fixed (1 change)
+
+- [Hide text input if sending a voice message](kchat/webapp@6645f9e676037ef963c2d2b0ccc620579bf1c69d) by @dimitar.slaev ([merge request](kchat/webapp!983))
+
+### Changed (1 change)
+
+- [upload menu refactor](kchat/webapp@e43981a7c2435d10a38e402d8676bb498a1b5942) by @antonbuksa ([merge request](kchat/webapp!984))
+
+### Chore (2 changes)
+
+- [clean eslint errors in announcement bar](kchat/webapp@8d984ab4cd40243f94347258d1634dad747220f0) by @antonbuksa
+- [build(deps): bump ksuite bridge version to 0.3.6](kchat/webapp@39d70ac02fe0724db2ff625e90115f5e1c25ed54) by @charbel.naoum ([merge request](kchat/webapp!986))
+
+### change (1 change)
+
+- [FIx post input width in center mode](kchat/webapp@46bf456fa0f37d23b97e4629bae60fecae750459) by @dimitar.slaev ([merge request](kchat/webapp!985))
+
 ## 2.9.22-next.3 (2025-01-08)
 
 ### Fixed (4 changes)
