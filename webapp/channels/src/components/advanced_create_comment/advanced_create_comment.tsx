@@ -106,6 +106,9 @@ export type Props = {
     // Determines if the user is allowed to upload files
     canUploadFiles: boolean;
 
+    // Determines if the post container is full-width or centered
+    center: boolean;
+
     // Called to clear file uploads in progress
     clearCommentDraftUploads: () => void;
 
@@ -1114,7 +1117,10 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             });
 
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form
+                onSubmit={this.handleSubmit}
+                className={this.props.center ? 'center' : undefined}
+            >
                 {
                     this.props.canPost &&
                     (this.props.draft.fileInfos.length > 0 || this.props.draft.uploadsInProgress.length > 0) &&
