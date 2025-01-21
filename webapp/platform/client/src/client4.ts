@@ -217,6 +217,8 @@ export default class Client4 {
 
     useBoardsProduct = false;
     emitUserLoggedOutEvent: LogoutFunc | undefined = undefined;
+    emitRedirectEvent: LogoutFunc | undefined = undefined;
+
 
     isIkBaseUrl() {
         const whitelist = [
@@ -317,6 +319,10 @@ export default class Client4 {
 
     bindEmitUserLoggedOutEvent(func: LogoutFunc) {
         this.emitUserLoggedOutEvent = func;
+    }
+
+    bindEmitRedirectEvent(func: LogoutFunc) {
+        this.emitRedirectEvent = func;
     }
 
     getServerVersion() {
@@ -995,7 +1001,7 @@ export default class Client4 {
     };
 
     getMe = () => {
-        return this.doFetch<UserProfile>(
+        return this.doFetchWithRedirect<UserProfile>(
             `${this.getUserRoute('me')}`,
             {method: 'get'},
         );
@@ -1451,7 +1457,7 @@ export default class Client4 {
     };
 
     getMyKSuites = (getParams = false) => {
-        return this.doFetch<Team[]>(
+        return this.doFetchWithRedirect<Team[]>(
             `${this.getUserRoute('me')}/servers${getParams ? buildQueryString({user: true, status: true}) : ''}`,
             {method: 'get'},
         );
@@ -1465,14 +1471,14 @@ export default class Client4 {
     };
 
     getMyTeamMembers = () => {
-        return this.doFetch<TeamMembership[]>(
+        return this.doFetchWithRedirect<TeamMembership[]>(
             `${this.getUserRoute('me')}/teams/members`,
             {method: 'get'},
         );
     };
 
     getMyTeamUnreads = (includeCollapsedThreads = false) => {
-        return this.doFetch<TeamUnread[]>(
+        return this.doFetchWithRedirect<TeamUnread[]>(
             `${this.getUserRoute('me')}/teams/unread${buildQueryString({include_collapsed_threads: includeCollapsedThreads})}`,
             {method: 'get'},
         );
@@ -1878,7 +1884,7 @@ export default class Client4 {
     };
 
     getMyChannels = (teamId: string, includeDeleted = false) => {
-        return this.doFetch<ServerChannel[]>(
+        return this.doFetchWithRedirect<ServerChannel[]>(
             `${this.getUserRoute('me')}/teams/${teamId}/channels${buildQueryString({include_deleted: includeDeleted})}`,
             {method: 'get'},
         );
@@ -1899,7 +1905,7 @@ export default class Client4 {
     };
 
     getMyChannelMembers = (teamId: string) => {
-        return this.doFetch<ChannelMembership[]>(
+        return this.doFetchWithRedirect<ChannelMembership[]>(
             `${this.getUserRoute('me')}/teams/${teamId}/channels/members`,
             {method: 'get'},
         );
@@ -2092,7 +2098,7 @@ export default class Client4 {
     // Channel Category Routes
 
     getChannelCategories = (userId: string, teamId: string) => {
-        return this.doFetch<OrderedChannelCategories>(
+        return this.doFetchWithRedirect<OrderedChannelCategories>(
             `${this.getChannelCategoriesRoute(userId, teamId)}`,
             {method: 'get'},
         );
@@ -2227,7 +2233,7 @@ export default class Client4 {
     };
 
     getPosts = (channelId: string, page = 0, perPage = PER_PAGE_DEFAULT, fetchThreads = true, collapsedThreads = false, collapsedThreadsExtended = false) => {
-        return this.doFetch<PostList>(
+        return this.doFetchWithRedirect<PostList>(
             `${this.getChannelRoute(channelId)}/posts${buildQueryString({page, per_page: perPage, skipFetchThreads: !fetchThreads, collapsedThreads, collapsedThreadsExtended})}`,
             {method: 'get'},
         );
@@ -2255,7 +2261,7 @@ export default class Client4 {
     };
 
     getDeletedPostsIds = async (channelId: string, since?: number): Promise<Array<string>> => {
-        return this.doFetch(
+        return this.doFetchWithRedirect(
             `${this.getChannelRoute(channelId)}/deleted_posts${buildQueryString({since})}`,
             {method: 'get'},
         );
@@ -2650,7 +2656,7 @@ export default class Client4 {
     };
 
     getMyPreferences = () => {
-        return this.doFetch<PreferenceType>(
+        return this.doFetchWithRedirect<PreferenceType>(
             `${this.getPreferencesRoute('me')}`,
             {method: 'get'},
         );
@@ -2720,14 +2726,14 @@ export default class Client4 {
     };
 
     getClientConfigOld = () => {
-        return this.doFetch<ClientConfig>(
+        return this.doFetchWithRedirect<ClientConfig>(
             `${this.getBaseRoute()}/config/client?format=old`,
             {method: 'get'},
         );
     };
 
     getClientLicenseOld = () => {
-        return this.doFetch<ClientLicense>(
+        return this.doFetchWithRedirect<ClientLicense>(
             `${this.getBaseRoute()}/license/client?format=old`,
             {method: 'get'},
         );
@@ -4413,7 +4419,7 @@ export default class Client4 {
     }
 
     getMeets = () => {
-        return this.doFetch<Array<{
+        return this.doFetchWithRedirect<Array<{
             channel_id: string;
             create_at: number;
             id: string;
@@ -4515,6 +4521,77 @@ export default class Client4 {
         return data;
     };
 
+    // IK changes : Helper to redirect user on 404
+    private doFetchWithRedirect = async <ClientDataResponse>(url: string, options: Options): Promise<ClientDataResponse> => {
+        const {data} = await this.doFetchWithRedirectError<ClientDataResponse>(url, options);
+
+        return data;
+    };
+
+    private doFetchWithRedirectError = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse>> => {
+        const response = await fetch(url, this.getOptions(options));
+        const headers = parseAndMergeNestedHeaders(response.headers);
+
+        let data;
+        try {
+            data = await response.json();
+        } catch (err) {
+            throw new ClientError(this.getUrl(), {
+                message: 'Received invalid response from the server.',
+                url,
+            });
+        }
+
+        if (response.status === 404) {
+            if (this.emitRedirectEvent) {
+                this.emitRedirectEvent();
+            }
+        }
+
+        if (response.status === 401 && data?.result === 'redirect') {
+            if (this.emitUserLoggedOutEvent) {
+                this.emitUserLoggedOutEvent(data);
+            }
+        }
+
+        if (headers.has(HEADER_X_VERSION_ID)) {
+            const serverVersion = headers.get(HEADER_X_VERSION_ID);
+
+            if (serverVersion && this.serverVersion !== serverVersion) {
+                this.serverVersion = serverVersion;
+            }
+        }
+
+        if (headers.has(HEADER_X_CLUSTER_ID)) {
+            const clusterId = headers.get(HEADER_X_CLUSTER_ID);
+            if (clusterId && this.clusterId !== clusterId) {
+                this.clusterId = clusterId;
+            }
+        }
+
+        if (response.ok) {
+            return {
+                response,
+                headers,
+                data,
+            };
+        }
+
+        const msg = data.message || '';
+
+        if (this.logToConsole) {
+            console.error(msg); // eslint-disable-line no-console
+        }
+
+        throw new ClientError(this.getUrl(), {
+            message: msg,
+            server_error_id: data.id,
+            status_code: data.status_code ? data.status_code : response.status,
+            error: data.error ? data.error : null,
+            url,
+        });
+    };
+
     private doFetchWithResponse = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse>> => {
         const response = await fetch(url, this.getOptions(options));
         const headers = parseAndMergeNestedHeaders(response.headers);
@@ -4527,6 +4604,12 @@ export default class Client4 {
                 message: 'Received invalid response from the server.',
                 url,
             });
+        }
+
+        if (response.status === 404) {
+            if (this.emitRedirectEvent) {
+                this.emitRedirectEvent();
+            }
         }
 
         if (response.status === 401 && data?.result === 'redirect') {
@@ -4779,7 +4862,7 @@ export default class Client4 {
     }
 
     getUserDrafts = (teamId: Team['id']) => {
-        return this.doFetch<Draft[]>(
+        return this.doFetchWithRedirect<Draft[]>(
             `${this.getUserRoute('me')}/teams/${teamId}/drafts`,
             {method: 'get'},
         );
