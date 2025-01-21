@@ -19,6 +19,7 @@ import {getFilesDropdownPluginMenuItems} from 'selectors/plugins';
 import FileSearchResultItem from 'components/file_search_results';
 import NoResultsIndicator from 'components/no_results_indicator/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
+import ChannelMessageLimitationBanner from 'components/post_view/channel_message_limitation_banner/channel_message_limitation_banner';
 import SearchHint from 'components/search_hint/search_hint';
 import SearchResultsHeader from 'components/search_results_header';
 import LoadingSpinner from 'components/widgets/loading/loading_wrapper';
@@ -35,7 +36,6 @@ import SearchLimitsBanner from './search_limits_banner';
 import type {Props} from './types';
 
 import './search_results.scss';
-import ChannelMessageLimitationBanner from 'components/post_view/channel_message_limitation_banner/channel_message_limitation_banner';
 
 const GET_MORE_BUFFER = 30;
 
@@ -318,17 +318,26 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
         }
 
         contentItems = sortedResults.map((item: Post|FileSearchResultItemType, index: number) => {
+            // Get the previous post date to determine if we need to show the date separator
+            const previousItem = sortedResults[index - 1];
+            let previousPostDate = null;
+
+            // If the previous item is a post, get the create_at date
+            if (previousItem) {
+                previousPostDate = new Date(previousItem.create_at);
+            }
             if (searchType === DataSearchTypes.MESSAGES_SEARCH_TYPE && !props.isChannelFiles) {
                 return (
                     <PostSearchResultsItem
                         key={item.id}
                         post={item as Post}
-                        matches={props.matches[item.id]}
+                        matches={props.matches[item.id] || []}
                         searchTerm={searchTerms}
                         isFlaggedPosts={props.isFlaggedPosts}
                         isMentionSearch={props.isMentionSearch}
                         isPinnedPosts={props.isPinnedPosts}
                         a11yIndex={index}
+                        previousPostDate={previousPostDate}
                     />
                 );
             }
