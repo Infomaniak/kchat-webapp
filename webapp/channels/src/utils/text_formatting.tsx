@@ -261,11 +261,15 @@ export function formatText(
     inputOptions: TextFormattingOptions = DEFAULT_OPTIONS,
     emojiMap: EmojiMap,
 ): string {
-    if (!text) {
+    // IK: fix related to poll dialog where some form elements are subtype number
+    let output = text;
+    if (typeof output === 'number') {
+        output = (output as number).toString();
+    }
+    if (typeof output !== 'string' || !output.length) {
         return '';
     }
 
-    let output = text;
     const options = Object.assign({}, inputOptions);
     const hasPhrases = (/"([^"]*)"/).test(options.searchTerm || '');
 
