@@ -254,6 +254,20 @@ export async function reconnect(socketId) {
     // eslint-disable-next-line
     console.log('Reconnecting WebSocket');
     if (isDesktopApp()) {
+        const currentTeams = getMyKSuites(getState());
+        const currentTeamId = getCurrentTeamId(getState());
+        const newTeams = currentTeams.filter((team) => team.id !== currentTeamId);
+
+        window.postMessage(
+            {
+                type: 'update-teams',
+                message: {
+                    teams: newTeams,
+                },
+            },
+            window.origin,
+        );
+
         const token = localStorage.getItem('IKToken');
         if (!token) {
             // eslint-disable-next-line no-console
