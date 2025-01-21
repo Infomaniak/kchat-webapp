@@ -305,7 +305,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
             {
                 recentCustomStatuses.map((status: UserCustomStatus, index: number) => (
                     <CustomStatusSuggestion
-                        key={`recent-${status.text}-${index + 1}`}
+                        key={`recent-${status.text || index}-${index + 1}`}
                         handleSuggestionClick={handleSuggestionClick}
                         handleClear={handleRecentCustomStatusClear}
                         status={status}
@@ -326,7 +326,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
             filter((status: UserCustomStatus) => !recentCustomStatusTexts.includes(status.text)).
             map((status: UserCustomStatus, index: number) => (
                 <CustomStatusSuggestion
-                    key={`suggested-${status.text}-${index + 1}`}
+                    key={`suggested-${status.text || index}-${index + 1}`}
                     handleSuggestionClick={handleSuggestionClick}
                     status={status}
                 />
