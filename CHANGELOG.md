@@ -353,6 +353,14 @@ No changes.
 
 No changes.
 
+## 2.9.22-next.5 (2025-01-21)
+
+### Fixed (3 changes)
+
+- [Fixed: Duplicated keys in component array.](kchat/webapp@54a23db0b2fc84756f7c0268db5e4d3aeb22af16) by @andy.lerandy ([merge request](kchat/webapp!989))
+- [Fixed: Incorrect z-index for `new_replies_banner`.](kchat/webapp@0738d1ba82b4b696725821165a6e062ce32ece96) by @andy.lerandy ([merge request](kchat/webapp!988))
+- [Fixed: Missing translation keys.](kchat/webapp@0dba7b72c821304aecae3d8c80446c61d2f42925) by @andy.lerandy ([merge request](kchat/webapp!987))
+
 ## 2.9.22-next.4 (2025-01-14)
 
 ### Fixed (1 change)
