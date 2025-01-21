@@ -19,6 +19,7 @@ import {getFilesDropdownPluginMenuItems} from 'selectors/plugins';
 import FileSearchResultItem from 'components/file_search_results';
 import NoResultsIndicator from 'components/no_results_indicator/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
+import ChannelMessageLimitationBanner from 'components/post_view/channel_message_limitation_banner/channel_message_limitation_banner';
 import SearchHint from 'components/search_hint/search_hint';
 import SearchResultsHeader from 'components/search_results_header';
 import LoadingSpinner from 'components/widgets/loading/loading_wrapper';
@@ -35,7 +36,6 @@ import SearchLimitsBanner from './search_limits_banner';
 import type {Props} from './types';
 
 import './search_results.scss';
-import ChannelMessageLimitationBanner from 'components/post_view/channel_message_limitation_banner/channel_message_limitation_banner';
 
 const GET_MORE_BUFFER = 30;
 
@@ -331,7 +331,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                     <PostSearchResultsItem
                         key={item.id}
                         post={item as Post}
-                        matches={props.matches[item.id]}
+                        matches={props.matches[item.id] || []}
                         searchTerm={searchTerms}
                         isFlaggedPosts={props.isFlaggedPosts}
                         isMentionSearch={props.isMentionSearch}
