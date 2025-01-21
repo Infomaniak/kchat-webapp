@@ -1,3 +1,9 @@
+## 2.10.0-rc.53 (2025-01-21)
+
+### Fixed (1 change)
+
+- [Fixed: Duplicated keys in component array.](kchat/webapp@54a23db0b2fc84756f7c0268db5e4d3aeb22af16) by @andy.lerandy ([merge request](kchat/webapp!989))
+
 ## 2.10.0-rc.52 (2025-01-21)
 
 ### Fixed (2 changes)
