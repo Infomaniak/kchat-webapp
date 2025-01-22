@@ -23,7 +23,7 @@ import {General} from 'mattermost-redux/constants';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getActiveTeamsList, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
+import {getActiveTeamsList} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, isCurrentUserSystemAdmin, checkIsFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
@@ -167,7 +167,6 @@ export type Actions = {
 type Props = {
     theme: Theme;
     currentTeam: Team;
-    currentTeams: Team[];
     teamsOrderPreference: PreferenceType;
     telemetryEnabled: boolean;
     telemetryId?: string;
@@ -735,12 +734,6 @@ export default class Root extends React.PureComponent<Props, State> {
                     await window.authManager.logout();
                 }
             }
-        });
-
-        // Binds a handler for redirecting to login on desktop when getting a 404.
-        Client4.bindEmitRedirectEvent(async () => {
-            // eslint-disable-next-line no-negated-condition
-            GlobalActions.trySwitchToNextServer(this.props.currentTeams);
         });
 
         const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env

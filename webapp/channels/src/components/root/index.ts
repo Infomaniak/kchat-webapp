@@ -12,7 +12,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUserLocale} from 'mattermost-redux/selectors/entities/i18n';
 import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {getTeamsOrderPreference, getTheme} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTeam, getMyKSuites, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {shouldShowTermsOfService, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {migrateRecentEmojis} from 'actions/emoji_actions';
@@ -46,7 +46,6 @@ function mapStateToProps(state: GlobalState) {
     return {
         theme: getTheme(state),
         currentTeam: getCurrentTeam(state),
-        currentTeams: getMyKSuites(state),
         userLocale: getCurrentUserLocale(state),
         teamsOrderPreference: getTeamsOrderPreference(state),
         telemetryEnabled: config.DiagnosticsEnabled === 'true',

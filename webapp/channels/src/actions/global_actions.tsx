@@ -466,38 +466,24 @@ export async function redirectDesktopUserToDefaultTeam() {
     }
 }
 
-export async function trySwitchToNextServer(teams: Team[]) {
-    for (const team of teams) {
-        console.log('Trying team:', team.display_name);
+export async function trySwitchToNextServer(teams: Team[], myTeam: Team) {
+    const currentTeamIndex = teams.findIndex((team) => team.id === myTeam.id);
 
-        // eslint-disable-next-line no-await-in-loop
-        const switchSuccessful = await checkIfSwitchSuccessful(team.id);
-        console.log('switchSuccessful', switchSuccessful);
+    // eslint-disable-next-line no-negated-condition
+    if (currentTeamIndex !== -1) {
+        const nextTeamIndex = (currentTeamIndex + 1) % teams.length;
+        const nextTeam = teams[nextTeamIndex];
 
-        if (switchSuccessful) {
-            window.postMessage(
-                {
-                    type: 'switch-server',
-                    data: team.display_name,
-                },
-                window.origin,
-            );
-            console.log('Switched to team:', team.display_name);
-            return;
-        }
-    }
-
-    console.log('No valid team found, redirecting to error page');
-    getHistory().push('/error?type=page_not_found');
-}
-
-async function checkIfSwitchSuccessful(teamId: string): Promise<boolean> {
-    try {
-        const response = await Client4.getTeam(teamId);
-        return response.id === teamId;
-    } catch (error) {
-        console.error('Error checking team switch:', error);
-        return false;
+        window.postMessage(
+            {
+                type: 'switch-server',
+                data: nextTeam.display_name,
+            },
+            window.origin,
+        );
+        console.log('Switched to team:', nextTeam.display_name);
+    } else {
+        console.log('Current team not found in the list of teams');
     }
 }
 
