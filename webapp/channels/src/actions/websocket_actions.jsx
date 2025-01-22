@@ -246,7 +246,9 @@ function restart() {
 export function reconnectWsChannels() {
     console.log('[websocket_actions] reconnectWsChannels - WebSocketClient.reconnecting', WebSocketClient.reconnecting);
     if (WebSocketClient.reconnecting) {
-        WebSocketClient.reconnectAllChannels();
+        const user = getCurrentUser(getState());
+        const currentChannelId = getCurrentChannelId(getState());
+        WebSocketClient.reconnectAllChannels(user.user_id, user.id, user.team_id, currentChannelId);
     }
 }
 
@@ -337,8 +339,8 @@ export async function reconnect(socketId) {
         }
 
         // Re-syncing the current channel and team ids.
-        WebSocketClient.updateActiveChannel(currentChannelId);
-        WebSocketClient.updateActiveTeam(currentTeamId);
+        // WebSocketClient.updateActiveChannel(currentChannelId);
+        // WebSocketClient.updateActiveTeam(currentTeamId);
     }
 
     loadPluginsIfNecessary();
