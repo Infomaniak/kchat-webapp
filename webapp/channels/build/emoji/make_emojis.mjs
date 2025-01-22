@@ -124,10 +124,6 @@ readMissingDirPromise.then(() => {
     }
 });
 
-// Copy mattermost emoji image
-const webappImagesDir = path.resolve(webappRootDir, 'channels', 'src', 'images');
-endResults.push(copyFileAndPrint(path.resolve(webappImagesDir, 'icon64x64.png'), path.resolve(webappImagesDir, 'emoji/mattermost.png'), 'mattermost-emoji'));
-
 const sheetSource = path.resolve(rootDir, `node_modules/emoji-datasource-apple/img/apple/sheets/${EMOJI_SIZE}.png`);
 const sheetAbsoluteFile = path.resolve(webappRootDir, 'channels', 'src', 'images/emoji-sheets/apple-sheet.png');
 const sheetFile = 'images/emoji-sheets/apple-sheet.png';
@@ -541,8 +537,7 @@ for (const key of emojiFilePositions.keys()) {
     cssEmojis.push(`.emoji-${key} { background-position: ${emojiFilePositions.get(key)} }`);
 }
 
-const cssRules = `
-@charset "UTF-8";
+const cssRules = `@charset "UTF-8";
 
 .emojisprite-preview {
     width: ${EMOJI_SIZE_PADDED}px;
@@ -551,8 +546,14 @@ const cssRules = `
     background-repeat: no-repeat;
     cursor: pointer;
     -moz-transform: scale(0.5);
+    transform: scale(0.5);
     transform-origin: 0 0;
-    transform: scale(0.5); // IK modifications : use transform: scale() instead of zoom for browser compatibility
+
+    @supports (zoom: 0.5) {
+        -moz-transform: none;
+        transform: none;
+        zoom: 0.5;
+    }
 }
 
 .emojisprite {
@@ -563,7 +564,7 @@ const cssRules = `
     border-radius: 18px;
     cursor: pointer;
     -moz-transform: scale(0.35);
-    transform: scale(0.35); // IK modifications : use transform: scale() instead of zoom for browser compatibility
+    transform: scale(0.35);
 }
 
 .emojisprite-loading {
@@ -575,7 +576,16 @@ const cssRules = `
     border-radius: 18px;
     cursor: pointer;
     -moz-transform: scale(0.35);
-    transform: scale(0.35); // IK modifications : use transform: scale() instead of zoom for browser compatibility
+    transform: scale(0.35);
+}
+
+@supports (zoom: 0.35) {
+    .emojisprite,
+    .emojisprite-loading {
+        -moz-transform: none;
+        transform: none;
+        zoom: 0.35;
+    }
 }
 
 ${cssCats.join('\n')}
