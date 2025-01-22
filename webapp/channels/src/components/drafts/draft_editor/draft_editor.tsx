@@ -3,8 +3,7 @@
 
 /* eslint-disable max-lines */
 
-import {AlertCircleOutlineIcon, CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
-import classNames from 'classnames';
+import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
@@ -21,12 +20,10 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
 
 import AdvancedTextEditor from 'components/advanced_text_editor/advanced_text_editor';
-import {IconContainer} from 'components/advanced_text_editor/formatting_bar/formatting_icon';
 import EditPostFooter from 'components/edit_post/edit_post_footer';
 import FileLimitStickyBanner from 'components/file_limit_sticky_banner';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
-import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import NotifyConfirmModal from 'components/notify_confirm_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import PriorityLabel from 'components/post_priority/post_priority_label';
@@ -570,10 +567,6 @@ class DraftEditor extends React.PureComponent<Props, State> {
         this.focusTextbox();
     };
 
-    togglePostPriorityPicker = () => this.setState({showPostPriorityPicker: !this.state.showPostPriorityPicker});
-
-    getPostPriorityPickerRef = () => this.postPriorityPickerRef.current;
-
     handleUploadStart = (clientIds: string[]) => {
         const draft = {
             ...this.state.draft,
@@ -860,39 +853,10 @@ class DraftEditor extends React.PureComponent<Props, State> {
                             <React.Fragment key='PostPriorityPicker'>
                                 <PostPriorityPickerOverlay
                                     settings={this.state.draft?.metadata?.priority}
-                                    show={this.state.showPostPriorityPicker}
-                                    target={this.getPostPriorityPickerRef}
+                                    disabled={false}
                                     onApply={this.handlePostPriorityApply}
-                                    onHide={this.handlePostPriorityHide}
-                                    defaultHorizontalPosition='left'
+                                    onClose={this.handlePostPriorityHide}
                                 />
-                                <OverlayTrigger
-                                    placement='top'
-                                    delayShow={Constants.OVERLAY_TIME_DELAY}
-                                    trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
-                                    overlay={(
-                                        <Tooltip id='post-priority-picker-tooltip'>
-                                            <KeyboardShortcutSequence
-                                                shortcut={KEYBOARD_SHORTCUTS.msgPostPriority}
-                                                hoistDescription={true}
-                                                isInsideTooltip={true}
-                                            />
-                                        </Tooltip>
-                                    )}
-                                >
-                                    <IconContainer
-                                        ref={this.postPriorityPickerRef}
-                                        className={classNames({control: true, active: this.state.showPostPriorityPicker})}
-                                        disabled={this.state.showPreview}
-                                        type='button'
-                                        onClick={this.togglePostPriorityPicker}
-                                    >
-                                        <AlertCircleOutlineIcon
-                                            size={18}
-                                            color='currentColor'
-                                        />
-                                    </IconContainer>
-                                </OverlayTrigger>
                             </React.Fragment>
                         ),
                     ].filter(Boolean)}
