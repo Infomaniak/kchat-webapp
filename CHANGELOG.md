@@ -1,3 +1,10 @@
+## 2.10.0-rc.55 (2025-01-22)
+
+### Fixed (2 changes)
+
+- [sound notifications works properly when there are attachement with texts messages](kchat/webapp@1a1fac4599ee74b8c27f81b85141384a1cdb8294) by @cyril.gromoff ([merge request](kchat/webapp!949))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
 ## 2.10.0-rc.54 (2025-01-22)
 
 ### Fixed (4 changes)
