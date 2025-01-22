@@ -58,23 +58,6 @@ const getNotificationSoundFromChannelMemberAndUser = (member, user) => {
     return user.notify_props?.desktop_notification_sound ? user.notify_props.desktop_notification_sound : 'Bing';
 };
 
-const formatAttachmentFields = (fields) =>
-    fields?.map((field) => `${field.title}: ${field.value}`).join(', ') || '';
-
-const getAttachmentText = (attachment) => {
-    if (attachment.fallback) {
-        return attachment.fallback;
-    }
-    return [
-        attachment.pretext,
-        attachment.title,
-        attachment.text,
-        attachment.footer,
-        formatAttachmentFields(attachment.fields),
-        attachment.image_url ? '[Image Attached]' : '',
-    ].filter(Boolean).join(' ');
-};
-
 /**
  * @returns {import('mattermost-redux/types/actions').ThunkActionFunc<void>}
  */
@@ -143,7 +126,7 @@ export function sendDesktopNotification(post, msgProps) {
 
             // We do this on a try catch block to avoid errors from malformed props
             try {
-                if (post.props && post.props.attachments && post.props.attachments.length > 0) {
+                if (post.props && post.props.attachments) {
                     const attachments = post.props.attachments;
                     function appendText(toAppend) {
                         if (toAppend) {
@@ -256,23 +239,17 @@ export function sendDesktopNotification(post, msgProps) {
 
         let notifyText = post.message;
 
-        // If the post has attachments, add their text to the notification message
-        if (post?.props?.attachments?.length > 0) {
-            // Collect the text from each attachment
-            const attachmentTexts = post.props.attachments.map(getAttachmentText).join('\n');
-            if (attachmentTexts) {
-                notifyText = notifyText ? `${notifyText}\n${attachmentTexts}` : attachmentTexts;
-            }
-        }
-
-        // Check for image presence and update notifyText if empty
+        const msgPropsPost = msgProps.post;
+        const attachments = msgPropsPost && msgPropsPost.props && msgPropsPost.props.attachments ? msgPropsPost.props.attachments : [];
         let image = false;
-        if (msgProps?.post?.props?.attachments?.length > 0) {
-            if (!notifyText) {
-                notifyText = msgProps.post.props.attachments.map(getAttachmentText).join('\n');
+        attachments.forEach((attachment) => {
+            if (notifyText.length === 0) {
+                notifyText = attachment.fallback ||
+                    attachment.pretext ||
+                    attachment.text;
             }
-            image = msgProps.post.props.attachments.some((attachment) => attachment.image_url?.length > 0);
-        }
+            image |= attachment.image_url?.length > 0;
+        });
 
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);
 
