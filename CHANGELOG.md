@@ -1,3 +1,32 @@
+## 2.10.0-rc.55 (2025-01-22)
+
+### Fixed (2 changes)
+
+- [sound notifications works properly when there are attachement with texts messages](kchat/webapp@1a1fac4599ee74b8c27f81b85141384a1cdb8294) by @cyril.gromoff ([merge request](kchat/webapp!949))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
+## 2.10.0-rc.54 (2025-01-22)
+
+### Fixed (4 changes)
+
+- [fix kdrive import button click handler](kchat/webapp@33b03b07172ecd8913ee431ac37da5149e34c1c9) by @antonbuksa ([merge request](kchat/webapp!991))
+- [Fixed: Duplicated keys in component array.](kchat/webapp@da2f277eaddc551b71192739de62c44c2c839167) by @andy.lerandy ([merge request](kchat/webapp!937))
+- [remove multiple instances of the same date separator in saved messages](kchat/webapp@5976ae806db349fb0032d6989bb910660cb85d8f) by @cyril.gromoff ([merge request](kchat/webapp!937))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
+## 2.10.0-rc.53 (2025-01-21)
+
+### Fixed (1 change)
+
+- [Fixed: Duplicated keys in component array.](kchat/webapp@54a23db0b2fc84756f7c0268db5e4d3aeb22af16) by @andy.lerandy ([merge request](kchat/webapp!989))
+
+## 2.10.0-rc.52 (2025-01-21)
+
+### Fixed (2 changes)
+
+- [Fixed: Incorrect z-index for `new_replies_banner`.](kchat/webapp@0738d1ba82b4b696725821165a6e062ce32ece96) by @andy.lerandy ([merge request](kchat/webapp!988))
+- [Fixed: Missing translation keys.](kchat/webapp@0dba7b72c821304aecae3d8c80446c61d2f42925) by @andy.lerandy ([merge request](kchat/webapp!987))
+
 ## 2.10.0-rc.51 (2025-01-14)
 
 ### Chore (1 change)
@@ -339,6 +368,24 @@ No changes.
 ## 2.10.0-rc.2 (2024-09-04)
 
 No changes.
+
+## 2.9.22-next.6 (2025-01-22)
+
+### Fixed (5 changes)
+
+- [fix kdrive import button click handler](kchat/webapp@33b03b07172ecd8913ee431ac37da5149e34c1c9) by @antonbuksa ([merge request](kchat/webapp!991))
+- [Fixed: Duplicated keys in component array.](kchat/webapp@da2f277eaddc551b71192739de62c44c2c839167) by @andy.lerandy ([merge request](kchat/webapp!937))
+- [remove multiple instances of the same date separator in saved messages](kchat/webapp@5976ae806db349fb0032d6989bb910660cb85d8f) by @cyril.gromoff ([merge request](kchat/webapp!937))
+- [sound notifications works properly when there are attachement with texts messages](kchat/webapp@1a1fac4599ee74b8c27f81b85141384a1cdb8294) by @cyril.gromoff ([merge request](kchat/webapp!949))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
+## 2.9.22-next.5 (2025-01-21)
+
+### Fixed (3 changes)
+
+- [Fixed: Duplicated keys in component array.](kchat/webapp@54a23db0b2fc84756f7c0268db5e4d3aeb22af16) by @andy.lerandy ([merge request](kchat/webapp!989))
+- [Fixed: Incorrect z-index for `new_replies_banner`.](kchat/webapp@0738d1ba82b4b696725821165a6e062ce32ece96) by @andy.lerandy ([merge request](kchat/webapp!988))
+- [Fixed: Missing translation keys.](kchat/webapp@0dba7b72c821304aecae3d8c80446c61d2f42925) by @andy.lerandy ([merge request](kchat/webapp!987))
 
 ## 2.9.22-next.4 (2025-01-14)
 
