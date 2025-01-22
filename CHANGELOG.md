@@ -1,3 +1,12 @@
+## 2.10.0-rc.54 (2025-01-22)
+
+### Fixed (4 changes)
+
+- [fix kdrive import button click handler](kchat/webapp@33b03b07172ecd8913ee431ac37da5149e34c1c9) by @antonbuksa ([merge request](kchat/webapp!991))
+- [Fixed: Duplicated keys in component array.](kchat/webapp@da2f277eaddc551b71192739de62c44c2c839167) by @andy.lerandy ([merge request](kchat/webapp!937))
+- [remove multiple instances of the same date separator in saved messages](kchat/webapp@5976ae806db349fb0032d6989bb910660cb85d8f) by @cyril.gromoff ([merge request](kchat/webapp!937))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
 ## 2.10.0-rc.53 (2025-01-21)
 
 ### Fixed (1 change)
