@@ -318,7 +318,13 @@ const PostComponent = (props: Props): JSX.Element => {
             togglePostMenu(opened);
         }
         setDropdownOpened(opened);
-    }, [togglePostMenu]);
+
+        // IK: Handle case where clicking an item in dropdown outside post doesn't trigger mouse leave, 
+        // e.g., when threads are open.
+        if (!opened && hover) {
+            setHover(false)
+        }
+    }, [togglePostMenu, hover]);
 
     const handleMouseOver = useCallback((e: MouseEvent<HTMLDivElement>) => {
         setHover(true);
