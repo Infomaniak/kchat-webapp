@@ -248,7 +248,7 @@ export function sendDesktopNotification(post, msgProps) {
                     attachment.pretext ||
                     attachment.text;
             }
-            image |= attachment.image_url.length > 0;
+            image |= attachment.image_url?.length > 0;
         });
 
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);
