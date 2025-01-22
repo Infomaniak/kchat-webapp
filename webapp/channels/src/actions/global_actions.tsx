@@ -494,7 +494,10 @@ export async function trySwitchToNextServer(teams: Team[]) {
 async function checkIfSwitchSuccessful(teamId: string): Promise<boolean> {
     try {
         const response = await Client4.getTeam(teamId);
-        return response.id === teamId;
+        if (response.id) {
+            return true;
+        }
+        return false;
     } catch (error) {
         console.error('Error checking team switch:', error);
         return false;
