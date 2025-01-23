@@ -1,3 +1,9 @@
+## 2.10.0-rc.58 (2025-01-23)
+
+### Fixed (1 change)
+
+- [Fixed: Untranslated button & broken ellipsis.](kchat/webapp@0d06efe8ff2f999589fc0aaaaab19390bc13f671) by @andy.lerandy ([merge request](kchat/webapp!992))
+
 ## 2.10.0-rc.57 (2025-01-23)
 
 No changes.
