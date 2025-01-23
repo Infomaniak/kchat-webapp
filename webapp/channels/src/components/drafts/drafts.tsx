@@ -12,7 +12,6 @@ import {selectLhsItem} from 'actions/views/lhs';
 import {suppressRHS, unsuppressRHS} from 'actions/views/rhs';
 import type {Draft} from 'selectors/drafts';
 
-import SettingsButton from 'components/global_header/right_controls/settings_button';
 import NoResultsIndicator from 'components/no_results_indicator';
 import Header from 'components/widgets/header';
 
@@ -141,7 +140,9 @@ function Drafts({
                         key={d.key}
                         displayName={displayName}
                         draft={d}
-                        isRemote={draftRemotes[d.key]}
+
+                        // IK modification: Avoid console warning if empty.
+                        isRemote={draftRemotes[d.key] || false}
                         user={user}
                         status={status}
                     />

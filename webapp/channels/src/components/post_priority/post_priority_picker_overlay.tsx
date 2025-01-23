@@ -74,7 +74,7 @@ function PostPriorityPickerOverlay({
         middleware: [
             offset({mainAxis: 4}),
             flip({
-                fallbackPlacements: ['top'],
+                fallbackPlacements: ['top', 'bottom-start'],
             }),
             shift({
                 padding: 16,
