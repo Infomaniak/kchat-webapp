@@ -1,3 +1,11 @@
+## 2.10.0-rc.59 (2025-01-23)
+
+### Fixed (3 changes)
+
+- [Fixed: Missing translation.](kchat/webapp@e018ca5b90f4a3f905f6aaa096a16f7356388424) by @andy.lerandy ([merge request](kchat/webapp!995))
+- [Removed: Duplicated important button.](kchat/webapp@a1cb1a202ec81e5232bbe9042d4915137f1ac8a1) by @andy.lerandy ([merge request](kchat/webapp!993))
+- [Fixed: Untranslated button & broken ellipsis.](kchat/webapp@0d06efe8ff2f999589fc0aaaaab19390bc13f671) by @andy.lerandy ([merge request](kchat/webapp!992))
+
 ## 2.10.0-rc.58 (2025-01-23)
 
 ### Fixed (1 change)
