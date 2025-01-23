@@ -80,7 +80,7 @@ import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getMyKSuites, getRelativeTeamUrl, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTeam, getMyKSuites, getTeam, getRelativeTeamUrl, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, getUserById} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
@@ -90,6 +90,7 @@ import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
+import * as GlobalActions from 'actions/global_actions';
 import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
@@ -286,6 +287,18 @@ export async function reconnect(socketId) {
     }
 
     const state = getState();
+
+    const currentTeam = getCurrentTeam(state);
+    const currentTeams = getMyKSuites(state);
+
+    // GlobalActions.trySwitchToNextServer(this.props.currentTeams);
+
+    // Binds a handler for redirecting to login on desktop when getting a 404.
+    Client4.bindEmitRedirectEvent(async (data) => {
+        console.log('data', data); // eslint-disable-line no-console
+        GlobalActions.trySwitchToNextServer(currentTeams, currentTeam);
+    });
+
     const currentTeamId = getCurrentTeamId(state);
     if (currentTeamId) {
         const currentUserId = getCurrentUserId(state);

@@ -218,6 +218,7 @@ export default class Client4 {
     useBoardsProduct = false;
     emitUserLoggedOutEvent: LogoutFunc | undefined = undefined;
     emitRedirectEvent: LogoutFunc | undefined = undefined;
+    emitUnbindRedirectEvent: LogoutFunc | undefined = undefined
 
 
     isIkBaseUrl() {
@@ -323,6 +324,10 @@ export default class Client4 {
 
     bindEmitRedirectEvent(func: LogoutFunc) {
         this.emitRedirectEvent = func;
+    }
+
+    unbindEmitRedirectEvent() {
+        this.emitRedirectEvent = undefined;
     }
 
     getServerVersion() {
@@ -2098,7 +2103,7 @@ export default class Client4 {
     // Channel Category Routes
 
     getChannelCategories = (userId: string, teamId: string) => {
-        return this.doFetch<OrderedChannelCategories>(
+        return this.doFetchWithRedirect<OrderedChannelCategories>(
             `${this.getChannelCategoriesRoute(userId, teamId)}`,
             {method: 'get'},
         );

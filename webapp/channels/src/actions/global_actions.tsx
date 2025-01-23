@@ -466,31 +466,30 @@ export async function redirectDesktopUserToDefaultTeam() {
     }
 }
 
-export async function trySwitchToNextServer(teams: Team[], testedTeams: Set<string> = new Set()) {
-    for (const team of teams) {
-        if (testedTeams.has(team.id)) {
-            console.log('team already tested', team.display_name);
-            continue;
-        }
+export async function trySwitchToNextServer(teams: Team[], myTeam: Team) {
+    console.log('teams', teams);
+    console.log('myTeam', myTeam);
 
-        console.log('switching to team');
+    const currentTeamIndex = teams.findIndex((team) => team.id === myTeam.id);
+    console.log('currentTeamIndex', currentTeamIndex);
+
+    // eslint-disable-next-line no-negated-condition
+    if (currentTeamIndex !== -1) {
+        const nextTeamIndex = (currentTeamIndex + 1) % teams.length;
+        const nextTeam = teams[nextTeamIndex];
+
+        console.log('switching to team:', nextTeam.display_name);
+
         window.postMessage(
             {
                 type: 'switch-server',
-                data: team.display_name,
+                data: nextTeam.display_name,
             },
             window.origin,
         );
-        console.log('Switched to team:', team.display_name);
-        return;
-    }
-
-    if (testedTeams.size >= teams.length) {
-        console.log('No valid team found, redirecting to error page');
-        getHistory().push('/error?type=page_not_found');
+        console.log('Switched to team:', nextTeam.display_name);
     } else {
-        // Retry with the updated testedTeams set
-        await trySwitchToNextServer(teams, testedTeams);
+        console.log('Current team not found in the list of teams');
     }
 }
 

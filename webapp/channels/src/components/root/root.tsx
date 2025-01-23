@@ -737,13 +737,6 @@ export default class Root extends React.PureComponent<Props, State> {
             }
         });
 
-        // Binds a handler for redirecting to login on desktop when getting a 404.
-        Client4.bindEmitRedirectEvent(async (data) => {
-            console.log('data', data); // eslint-disable-line no-console
-            console.log('this.props.currentTeams', this.props.currentTeams); // eslint-disable-line no-console
-            GlobalActions.trySwitchToNextServer(this.props.currentTeams);
-        });
-
         const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch, store.getState);
 
