@@ -58,6 +58,14 @@ export default class AudioVideoPreview extends React.PureComponent<Props, State>
         this.setState({
             canPlay: true,
         });
+
+        // IK: Prevent displaying unsupported video stream
+        const clone = document.createElement('video');
+        clone.setAttribute('src', this.props.fileUrl);
+        clone.play().
+            then(() => clone.pause()).
+            catch(() => this.handleLoadError()).
+            finally(() => clone.remove());
     };
 
     handleLoadError = () => {
