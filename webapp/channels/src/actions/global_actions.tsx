@@ -454,8 +454,6 @@ export async function redirectDesktopUserToDefaultTeam() {
     const newCurrentTeam = orderedTeams[0];
 
     if (newCurrentTeam) {
-        console.log('newCurrentTeam dff', newCurrentTeam);
-        console.log('je suis déclenché');
         window.postMessage(
             {
                 type: 'switch-server',
@@ -470,32 +468,21 @@ export async function redirectDesktopUserToDefaultTeam() {
 
 export async function trySwitchToNextServer(teams: Team[], testedTeams: Set<string> = new Set()) {
     for (const team of teams) {
-        console.log('testedTeams', testedTeams);
         if (testedTeams.has(team.id)) {
             console.log('team already tested', team.display_name);
             continue;
         }
 
-        console.log('Trying team:', team.display_name);
-
-        // eslint-disable-next-line no-await-in-loop
-        const switchSuccessful = await checkIfSwitchSuccessful(team.id);
-
-        console.log('switchSuccessful', switchSuccessful);
-
-        if (switchSuccessful) {
-            console.log('switching to team');
-            window.postMessage(
-                {
-                    type: 'switch-server',
-                    data: team.display_name,
-                },
-                window.origin,
-            );
-            console.log('Switched to team:', team.display_name);
-            return;
-        }
-        testedTeams.add(team.id);
+        console.log('switching to team');
+        window.postMessage(
+            {
+                type: 'switch-server',
+                data: team.display_name,
+            },
+            window.origin,
+        );
+        console.log('Switched to team:', team.display_name);
+        return;
     }
 
     if (testedTeams.size >= teams.length) {
@@ -504,20 +491,6 @@ export async function trySwitchToNextServer(teams: Team[], testedTeams: Set<stri
     } else {
         // Retry with the updated testedTeams set
         await trySwitchToNextServer(teams, testedTeams);
-    }
-}
-
-async function checkIfSwitchSuccessful(teamId: string): Promise<boolean> {
-    try {
-        const response = await Client4.getTeam(teamId);
-        console.log('response', response);
-        if (response.id) {
-            return true;
-        }
-        return false;
-    } catch (error) {
-        console.error('Error checking team switch:', error);
-        return false;
     }
 }
 
