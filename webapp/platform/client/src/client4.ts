@@ -1457,7 +1457,7 @@ export default class Client4 {
     };
 
     getMyKSuites = (getParams = false) => {
-        return this.doFetchWithRedirect<Team[]>(
+        return this.doFetch<Team[]>(
             `${this.getUserRoute('me')}/servers${getParams ? buildQueryString({user: true, status: true}) : ''}`,
             {method: 'get'},
         );
@@ -1471,14 +1471,14 @@ export default class Client4 {
     };
 
     getMyTeamMembers = () => {
-        return this.doFetchWithRedirect<TeamMembership[]>(
+        return this.doFetch<TeamMembership[]>(
             `${this.getUserRoute('me')}/teams/members`,
             {method: 'get'},
         );
     };
 
     getMyTeamUnreads = (includeCollapsedThreads = false) => {
-        return this.doFetchWithRedirect<TeamUnread[]>(
+        return this.doFetch<TeamUnread[]>(
             `${this.getUserRoute('me')}/teams/unread${buildQueryString({include_collapsed_threads: includeCollapsedThreads})}`,
             {method: 'get'},
         );
@@ -1884,7 +1884,7 @@ export default class Client4 {
     };
 
     getMyChannels = (teamId: string, includeDeleted = false) => {
-        return this.doFetchWithRedirect<ServerChannel[]>(
+        return this.doFetch<ServerChannel[]>(
             `${this.getUserRoute('me')}/teams/${teamId}/channels${buildQueryString({include_deleted: includeDeleted})}`,
             {method: 'get'},
         );
@@ -1905,7 +1905,7 @@ export default class Client4 {
     };
 
     getMyChannelMembers = (teamId: string) => {
-        return this.doFetchWithRedirect<ChannelMembership[]>(
+        return this.doFetch<ChannelMembership[]>(
             `${this.getUserRoute('me')}/teams/${teamId}/channels/members`,
             {method: 'get'},
         );
@@ -2098,7 +2098,7 @@ export default class Client4 {
     // Channel Category Routes
 
     getChannelCategories = (userId: string, teamId: string) => {
-        return this.doFetchWithRedirect<OrderedChannelCategories>(
+        return this.doFetch<OrderedChannelCategories>(
             `${this.getChannelCategoriesRoute(userId, teamId)}`,
             {method: 'get'},
         );
@@ -2233,7 +2233,7 @@ export default class Client4 {
     };
 
     getPosts = (channelId: string, page = 0, perPage = PER_PAGE_DEFAULT, fetchThreads = true, collapsedThreads = false, collapsedThreadsExtended = false) => {
-        return this.doFetchWithRedirect<PostList>(
+        return this.doFetch<PostList>(
             `${this.getChannelRoute(channelId)}/posts${buildQueryString({page, per_page: perPage, skipFetchThreads: !fetchThreads, collapsedThreads, collapsedThreadsExtended})}`,
             {method: 'get'},
         );
@@ -2261,7 +2261,7 @@ export default class Client4 {
     };
 
     getDeletedPostsIds = async (channelId: string, since?: number): Promise<Array<string>> => {
-        return this.doFetchWithRedirect(
+        return this.doFetch(
             `${this.getChannelRoute(channelId)}/deleted_posts${buildQueryString({since})}`,
             {method: 'get'},
         );
@@ -2656,7 +2656,7 @@ export default class Client4 {
     };
 
     getMyPreferences = () => {
-        return this.doFetchWithRedirect<PreferenceType>(
+        return this.doFetch<PreferenceType>(
             `${this.getPreferencesRoute('me')}`,
             {method: 'get'},
         );
@@ -4419,7 +4419,7 @@ export default class Client4 {
     }
 
     getMeets = () => {
-        return this.doFetchWithRedirect<Array<{
+        return this.doFetch<Array<{
             channel_id: string;
             create_at: number;
             id: string;
@@ -4544,7 +4544,7 @@ export default class Client4 {
 
         if (response.status === 404) {
             if (this.emitRedirectEvent) {
-                this.emitRedirectEvent();
+                this.emitRedirectEvent(data);
             }
         }
 
@@ -4862,7 +4862,7 @@ export default class Client4 {
     }
 
     getUserDrafts = (teamId: Team['id']) => {
-        return this.doFetchWithRedirect<Draft[]>(
+        return this.doFetch<Draft[]>(
             `${this.getUserRoute('me')}/teams/${teamId}/drafts`,
             {method: 'get'},
         );
