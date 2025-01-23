@@ -391,6 +391,16 @@ No changes.
 
 No changes.
 
+## 2.9.23-next.1 (2025-01-23)
+
+### Fixed (5 changes)
+
+- [Fixed: Missing translation.](kchat/webapp@e018ca5b90f4a3f905f6aaa096a16f7356388424) by @andy.lerandy ([merge request](kchat/webapp!995))
+- [Removed: Duplicated important button.](kchat/webapp@a1cb1a202ec81e5232bbe9042d4915137f1ac8a1) by @andy.lerandy ([merge request](kchat/webapp!993))
+- [Fixed: Untranslated button & broken ellipsis.](kchat/webapp@0d06efe8ff2f999589fc0aaaaab19390bc13f671) by @andy.lerandy ([merge request](kchat/webapp!992))
+- [sound notifications works properly when there are attachement with texts messages](kchat/webapp@1a1fac4599ee74b8c27f81b85141384a1cdb8294) by @cyril.gromoff ([merge request](kchat/webapp!949))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
 ## 2.9.22 (2025-01-22)
 
 ### Fixed (20 changes)
