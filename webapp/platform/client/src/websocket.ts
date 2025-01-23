@@ -25,8 +25,8 @@ export type MissedMessageListener = () => void;
 export type ErrorListener = (event: Event) => void;
 export type CloseListener = (connectFailCount: number) => void;
 export type OtherTeam = { userId: string, teamId: string }
-export type ChannelKey = 'teamChannel' | 'userChannel' | 'userTeamChannel' | 'presenceChannel';
 
+export type ChannelKey = 'teamChannel' | 'userChannel' | 'userTeamChannel' | 'presenceChannel';
 const CHANNEL_NAMES: Record<ChannelKey, string> = {
     teamChannel: 'private-team', 
     userChannel: 'presence-user', 
@@ -103,6 +103,12 @@ export default class WebSocketClient {
 
     reconnecting: boolean = false;
     private reconnectingTimeout: NodeJS.Timeout | null = null; 
+    private reconnectingChannelTimeouts: Record<ChannelKey, NodeJS.Timeout | null> = {
+        teamChannel: null, 
+        userChannel: null, 
+        userTeamChannel: null,
+        presenceChannel: null
+    };
 
     constructor() {
         this.conn = null;
@@ -166,7 +172,6 @@ export default class WebSocketClient {
         this.currentUser = userId;
         this.currentTeamUser = userTeamId;
         this.currentTeam = teamId;
-
         if (presenceChannelId) {
             this.currentPresence = presenceChannelId;
         }
@@ -216,10 +221,8 @@ export default class WebSocketClient {
                 this.connectFailCount++;
                 console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
 
-                this.disconnectChannel('userChannel');
-                this.disconnectChannel('userTeamChannel');
-                this.disconnectChannel('teamChannel');
-                this.disconnectChannel('presenceChannel');
+                // IK: disconnect on error to avoid old pusher callbacks running on reconnect
+                this.disconnectAllChannels();
 
                 this.closeCallback?.(this.connectFailCount);
                 this.closeListeners.forEach((listener) => listener(this.connectFailCount));
@@ -231,10 +234,8 @@ export default class WebSocketClient {
             this.errorCount++;
             this.connectFailCount++;
 
-            this.disconnectChannel('userChannel');
-            this.disconnectChannel('userTeamChannel');
-            this.disconnectChannel('teamChannel');
-            this.disconnectChannel('presenceChannel');
+            // IK: disconnect on error to avoid old pusher callbacks running on reconnect
+            this.disconnectAllChannels();
 
             this.closeCallback?.(this.connectFailCount);
             this.closeListeners.forEach((listener) => listener(this.connectFailCount));
@@ -280,11 +281,6 @@ export default class WebSocketClient {
             return;
         }
 
-        this.disconnectChannel('userChannel');
-        this.disconnectChannel('userTeamChannel');
-        this.disconnectChannel('teamChannel');
-        this.disconnectChannel('presenceChannel');
-
         this.connectChannel('userChannel', userId);
         this.connectChannel('userTeamChannel', userTeamId);
         this.connectChannel('teamChannel', teamId);
@@ -297,15 +293,6 @@ export default class WebSocketClient {
         console.log('[websocket] connected at', Date.now());
     }
 
-    disconnectChannel(channelKey: ChannelKey) {
-        const channel = this[channelKey];
-        if (channel) {
-            console.log(`[websocket] disconnecting ${channel.name}`);
-            this.conn?.unsubscribe(channel.name);
-            channel.unbind_all();
-            this[channelKey] = null;
-        }
-    }
 
     connectChannel(channelKey: ChannelKey, channelId: string | number) {
         const channelName = `${CHANNEL_NAMES[channelKey]}.${channelId}`;
@@ -313,6 +300,19 @@ export default class WebSocketClient {
 
         const channel = this.conn?.subscribe(channelName);
         this[channelKey] = channel || null;
+
+        if (channelKey === 'teamChannel') {
+            this.currentTeam = channelId as string;
+        }
+        if (channelKey === 'userChannel') {
+            this.currentUser = channelId as number;
+        }
+        if (channelKey === 'userTeamChannel') {
+            this.currentTeamUser = channelId as string;
+        }
+        if (channelKey === 'presenceChannel') {
+            this.currentPresence = channelId as string;
+        }
         
         channel?.bind('pusher:subscription_succeeded', () => {
             console.log(`[websocket] subscribed successfully to ${channelName}`);
@@ -321,7 +321,31 @@ export default class WebSocketClient {
         
         channel?.bind('pusher:subscription_error', () => {
             console.warn(`[websocket] failed to subscribe to ${channelName}`);
+            if (this.reconnectingChannelTimeouts[channelKey]) {
+                clearTimeout(this.reconnectingChannelTimeouts[channelKey]!);
+            }
+            this.reconnectingChannelTimeouts[channelKey] = setTimeout(()=> {
+                this.disconnectChannel(channelKey);
+                this.connectChannel(channelKey, channelId);
+            }, JITTER_RANGE);
         });
+    }
+
+    disconnectAllChannels() {
+        this.disconnectChannel('userChannel');
+        this.disconnectChannel('userTeamChannel');
+        this.disconnectChannel('teamChannel');
+        this.disconnectChannel('presenceChannel');
+    }
+
+    disconnectChannel(channelKey: ChannelKey) {
+        const channel = this[channelKey];
+        if (channel) {
+            console.log(`[websocket] disconnecting ${channel.name}`);
+            this.conn?.unsubscribe(channel.name);
+            channel.unbind_all();
+            this[channelKey] = null;
+        }
     }
 
     updateToken(token: string) {

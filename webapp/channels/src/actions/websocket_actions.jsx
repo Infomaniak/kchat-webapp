@@ -248,6 +248,7 @@ export function reconnectWsChannels() {
     if (WebSocketClient.reconnecting) {
         const user = getCurrentUser(getState());
         const currentChannelId = getCurrentChannelId(getState());
+        WebSocketClient.disconnectAllChannels();
         WebSocketClient.reconnectAllChannels(user.user_id, user.id, user.team_id, currentChannelId);
     }
 }
