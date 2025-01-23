@@ -368,9 +368,9 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                     ariaLabel={customStatusText || customStatusHelpText}
                     modalId={ModalIdentifiers.CUSTOM_STATUS}
                     dialogType={CustomStatusModal}
-                    className={classNames('MenuItem__primary-text custom_status__row', {
-                        flex: customStatus?.text.length === 0,
-                    })}
+
+                    // IK: French or other longer language break responsive (ellipsis)
+                    className={classNames('MenuItem__primary-text custom_status__row')}
                     id={'status-menu-custom-status'}
                 >
                     <span className='custom_status__container'>
@@ -378,14 +378,11 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                             {customStatusEmoji}
                         </span>
                         <CustomStatusText
-                            text={customStatusText}
+
+                            // IK: French or other longer language break responsive (ellipsis)
+                            text={customStatusText || customStatusHelpText}
                             className='custom_status__text'
                         />
-                        <Text
-                            margin='none'
-                        >
-                            {customStatusHelpText}
-                        </Text>
                         {clearButton}
                         {pulsatingDot}
                     </span>
