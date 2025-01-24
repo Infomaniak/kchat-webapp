@@ -49,6 +49,17 @@ export default class AudioVideoPreview extends React.PureComponent<Props, State>
         }
     }
 
+    // IK: Prevent displaying unsupported video stream
+    testVideo() {
+        const clone = document.createElement('video');
+        clone.setAttribute('src', this.props.fileUrl);
+        clone.
+            play().
+            then(() => clone.pause()).
+            catch(() => this.handleLoadError()).
+            finally(() => clone.remove());
+    }
+
     handleFileInfoChanged = () => {
         let video = this.videoRef.current;
         if (!video) {
@@ -59,13 +70,7 @@ export default class AudioVideoPreview extends React.PureComponent<Props, State>
             canPlay: true,
         });
 
-        // IK: Prevent displaying unsupported video stream
-        const clone = document.createElement('video');
-        clone.setAttribute('src', this.props.fileUrl);
-        clone.play().
-            then(() => clone.pause()).
-            catch(() => this.handleLoadError()).
-            finally(() => clone.remove());
+        this.testVideo();
     };
 
     handleLoadError = () => {
