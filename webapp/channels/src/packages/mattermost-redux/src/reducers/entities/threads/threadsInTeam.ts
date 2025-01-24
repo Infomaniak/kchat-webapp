@@ -270,6 +270,7 @@ export const threadsInTeamReducer = (state: ThreadsState['threadsInTeam'] = {}, 
     switch (action.type) {
     case ThreadTypes.RECEIVED_THREAD:
         return handleReceivedThread(state, action, extra);
+    case PostTypes.POST_DELETED:
     case PostTypes.POST_REMOVED:
         return handlePostRemoved(state, action);
     case ThreadTypes.RECEIVED_THREADS:
@@ -307,6 +308,7 @@ export const unreadThreadsInTeamReducer = (state: ThreadsState['unreadThreadsInT
             return handleReceivedThread(state, action, extra);
         }
         return state;
+    case PostTypes.POST_DELETED:
     case PostTypes.POST_REMOVED:
         return handlePostRemoved(state, action);
     case ThreadTypes.RECEIVED_UNREAD_THREADS:
