@@ -305,14 +305,17 @@ export async function reconnect(socketId) {
 
         if (mostRecentPost) {
             // eslint-disable-next-line no-console
-            // IK: await to avoid conflicts with DataPrefetch
-            await dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
+            dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at)).then(() => {
+                // IK: re-activate prefetching in DataPrefetch
+                WebSocketClient.reconnecting = false;
+            });
             dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
-            // IK: await to avoid conflicts with DataPrefetch
-            // if network timed-out the first time when loading a channel
             // we can request for getPosts again when socket is connected
-            await dispatch(getPosts(currentChannelId));
+            dispatch(getPosts(currentChannelId)).then(() => {
+                // IK: re-activate prefetching in DataPrefetch
+                WebSocketClient.reconnecting = false;
+            });
         }
         dispatch(StatusActions.loadStatusesForChannelAndSidebar());
 
@@ -356,9 +359,6 @@ export async function reconnect(socketId) {
 
     dispatch(getDrafts(currentTeamId));
     dispatch(getMyMeets());
-
-    WebSocketClient.reconnecting = false;
-    console.log('[websocket actions] reconnect end');
 }
 
 function syncThreads(teamId, userId) {
