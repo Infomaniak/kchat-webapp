@@ -92,6 +92,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
     };
 
     componentDidUpdate(prevProps: Props) {
+        // TODO: debounce
         if (prevProps.channelId !== this.props.channelId && this.props.enableWebSocketEventScope) {
             WebSocketClient.updateActiveChannel(this.props.channelId);
         }
@@ -100,10 +101,10 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                 this.props.goToLastViewedChannel();
             }
             if (prevProps.channelId) {
-                WebSocketClient.disconnectChannel('presenceChannel');
+                WebSocketClient.unbindPresenceChannel(prevProps.channelId);
             }
             if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
-                WebSocketClient.connectChannel('presenceChannel', this.props.channelId);
+                WebSocketClient.bindPresenceChannel(this.props.channelId);
             }
         }
     }
