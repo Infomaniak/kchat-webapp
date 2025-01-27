@@ -4,7 +4,7 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
-// import * as Sentry from '@sentry/react';
+import * as Sentry from '@sentry/react';
 
 const MAX_WEBSOCKET_FAILS = 7;
 const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
@@ -61,35 +61,6 @@ export default class WebSocketClient {
     private errorCount: number;
     private responseCallbacks: {[x: number]: ((msg: any) => void)};
 
-    /**
-     * @deprecated Use messageListeners instead
-     */
-    private eventCallback: MessageListener | null = null;
-
-    /**
-     * @deprecated Use firstConnectListeners instead
-     */
-    private firstConnectCallback: FirstConnectListener | null = null;
-
-    /**
-     * @deprecated Use reconnectListeners instead
-     */
-    private reconnectCallback: ReconnectListener | null = null;
-
-    /**
-     * @deprecated Use missedMessageListeners instead
-     */
-    private missedEventCallback: MissedMessageListener | null = null;
-
-    /**
-     * @deprecated Use errorListeners instead
-     */
-    private errorCallback: ErrorListener | null = null;
-
-    /**
-     * @deprecated Use closeListeners instead
-     */
-    private closeCallback: CloseListener | null = null;
 
     private messageListeners = new Set<MessageListener>();
     private firstConnectListeners = new Set<FirstConnectListener>();
@@ -99,16 +70,7 @@ export default class WebSocketClient {
     private closeListeners = new Set<CloseListener>();
     private otherServersMessageListeners = new Set<MessageListener>();
 
-    private connectionId: string | null;
-
     reconnecting: boolean = false;
-    private reconnectingTimeout: NodeJS.Timeout | null = null; 
-    private reconnectingChannelTimeouts: Record<ChannelKey, NodeJS.Timeout | null> = {
-        teamChannel: null, 
-        userChannel: null, 
-        userTeamChannel: null,
-        presenceChannel: null
-    };
 
     constructor() {
         this.conn = null;
@@ -122,7 +84,6 @@ export default class WebSocketClient {
         this.connectFailCount = 0;
         this.errorCount = 0;
         this.responseCallbacks = {};
-        this.connectionId = '';
         this.socketId = null;
         this.currentPresence = '';
         this.currentUser = null;
@@ -166,15 +127,10 @@ export default class WebSocketClient {
         authToken?: string,
         presenceChannelId?: string,
     ) {
-        console.log('[websocket] initialize', connectionUrl, userId, userTeamId, teamId, presenceChannelId);
-
-        // Store this for onmessage reconnect
-        this.currentUser = userId;
-        this.currentTeamUser = userTeamId;
-        this.currentTeam = teamId;
-        if (presenceChannelId) {
-            this.currentPresence = presenceChannelId;
-        }
+        this.currentUser = userId || this.currentUser;
+        this.currentTeamUser = userTeamId || this.currentTeamUser; 
+        this.currentTeam = teamId || this.currentTeam;  
+        this.currentPresence = presenceChannelId || this.currentPresence;
 
         if (this.conn) {
             return;
@@ -218,42 +174,25 @@ export default class WebSocketClient {
             console.log('[websocket] current state is: ', states.current);
 
             if (states.current === 'unavailable' || states.current === 'failed' || (states.previous === 'connected' && states.current === 'connecting')) {
-                this.connectFailCount++;
-                console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
-
-                // IK: disconnect on error to avoid old pusher callbacks running on reconnect
-                this.disconnectAllChannels();
-
-                this.closeCallback?.(this.connectFailCount);
-                this.closeListeners.forEach((listener) => listener(this.connectFailCount));
+                this.onDisconnect();
             }
         });
 
-        this.conn.connection.bind('error', (evt: any) => {
-            console.log('[websocket] unexpected error: ', evt);
-            this.errorCount++;
-            this.connectFailCount++;
-
-            // IK: disconnect on error to avoid old pusher callbacks running on reconnect
-            this.disconnectAllChannels();
-
-            this.closeCallback?.(this.connectFailCount);
-            this.closeListeners.forEach((listener) => listener(this.connectFailCount));
+        this.conn.connection.bind('error', (evt: any)=> {
+            this.onDisconnect(evt);
         });
 
         this.conn.connection.bind('connected', () => {
             console.log('[websocket] socketId', this.conn?.connection.socket_id);
             if (this.connectFailCount > 0) {
-                console.log('[websocket] calling reconnect callbacks');
-                // used by websocket_actions to determine whether to call reconnectAllChannels after preload
-                this.reconnecting = true;
-                this.reconnectCallback?.(this.conn?.connection.socket_id);
+                if (!this.presenceChannel && this.currentPresence) {
+                    this.connectChannel('presenceChannel', this.currentPresence);
+                }
                 this.reconnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
-            } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
+            } else if (this.firstConnectListeners.size > 0) {
                 // if first connect manually call reconnectAllChannels
+                this.connectAllChannels();
                 console.log('[websocket] calling first connect callbacks');
-                this.reconnectAllChannels(this.currentUser!, this.currentTeamUser, this.currentTeam, this.currentPresence);
-                this.firstConnectCallback?.(this.conn?.connection.socket_id);
                 this.firstConnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
             }
 
@@ -263,79 +202,46 @@ export default class WebSocketClient {
         });
     }
 
-    reconnectAllChannels(
-        userId: number,
-        userTeamId: string,
-        teamId: string,
-        presenceChannelId?: string,
-    ) {
-        console.log('[websocket] reconnectAllChannels state', this.conn?.connection.state)
-        if (this.conn?.connection.state !== 'connected') {
-            console.log('[websocket] reconnectAllChannels retrying');
-            if (this.reconnectingTimeout) {
-                clearTimeout(this.reconnectingTimeout);
-            }
-            this.reconnectingTimeout = setTimeout(() => {
-                this.reconnectAllChannels(userId, userTeamId, teamId, presenceChannelId);
-            }, 1000);
-            return;
+    connectAllChannels() {
+        console.log('[websocket] connectAllChannels');
+        this.connectChannel('userChannel', this.currentUser!);
+        this.connectChannel('userTeamChannel', this.currentTeamUser);
+        this.connectChannel('teamChannel', this.currentTeam);
+        this.subscribeToOtherTeams(this.otherTeams, this.currentTeam);
+        if (this.currentPresence) {
+            this.connectChannel('presenceChannel', this.currentPresence);
         }
-
-        this.connectChannel('userChannel', userId);
-        this.connectChannel('userTeamChannel', userTeamId);
-        this.connectChannel('teamChannel', teamId);
-        if (presenceChannelId) {
-            this.connectChannel('presenceChannel', presenceChannelId);
-        }
-
-        this.reconnecting = false;
-        this.reconnectingTimeout = null;
         console.log('[websocket] connected at', Date.now());
     }
-
 
     connectChannel(channelKey: ChannelKey, channelId: string | number) {
         const channelName = `${CHANNEL_NAMES[channelKey]}.${channelId}`;
         console.log(`[websocket] connecting channel ${channelName}`);
-
         const channel = this.conn?.subscribe(channelName);
-        this[channelKey] = channel || null;
-
-        if (channelKey === 'teamChannel') {
-            this.currentTeam = channelId as string;
-        }
-        if (channelKey === 'userChannel') {
-            this.currentUser = channelId as number;
-        }
-        if (channelKey === 'userTeamChannel') {
-            this.currentTeamUser = channelId as string;
-        }
-        if (channelKey === 'presenceChannel') {
-            this.currentPresence = channelId as string;
-        }
-        
-        channel?.bind('pusher:subscription_succeeded', () => {
-            console.log(`[websocket] subscribed successfully to ${channelName}`);
-            this.bindChannelGlobally(channel);
-        });
-        
-        channel?.bind('pusher:subscription_error', () => {
-            console.warn(`[websocket] failed to subscribe to ${channelName}`);
-            if (this.reconnectingChannelTimeouts[channelKey]) {
-                clearTimeout(this.reconnectingChannelTimeouts[channelKey]!);
+        if (channel) {
+            if (channelKey === 'userChannel') {
+                this.currentUser = channelId as number;
             }
-            this.reconnectingChannelTimeouts[channelKey] = setTimeout(()=> {
-                this.disconnectChannel(channelKey);
-                this.connectChannel(channelKey, channelId);
-            }, JITTER_RANGE);
-        });
-    }
+            if (channelKey === 'userTeamChannel') {
+                this.currentTeamUser = channelId as string;
+            }
+            if (channelKey === 'teamChannel') {
+                this.currentTeam = channelId as string;
+            }
+            if (channelKey === 'presenceChannel') {
+                this.currentPresence = channelId as string;
+            }
+            this[channelKey] = channel;
+            this.bindChannelGlobally(channel);
 
-    disconnectAllChannels() {
-        this.disconnectChannel('userChannel');
-        this.disconnectChannel('userTeamChannel');
-        this.disconnectChannel('teamChannel');
-        this.disconnectChannel('presenceChannel');
+            channel.bind('pusher:subscription_error', (evt: any) => {
+                // @TODO: verify error is reported in Sentry
+                const errorMessage =`[websocket] failed to subscribe to ${channelName} ${evt?.error || ''}`
+                console.log(errorMessage);
+                Sentry.captureException(new Error(errorMessage));
+                this.disconnectChannel(channelKey);
+            });
+        }
     }
 
     disconnectChannel(channelKey: ChannelKey) {
@@ -346,6 +252,23 @@ export default class WebSocketClient {
             channel.unbind_all();
             this[channelKey] = null;
         }
+    }
+
+    onDisconnect(error?: any) {
+        this.connectFailCount++;
+        console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
+
+        if (error) {
+            console.log('[websocket] unexpected error: ', error);
+            this.errorCount++;
+        }
+
+        if (this.presenceChannel) {
+            this.disconnectChannel('presenceChannel');
+        }
+
+        console.log('[websocket] calling close callbacks');
+        this.closeListeners.forEach((listener) => listener(this.connectFailCount));
     }
 
     updateToken(token: string) {
@@ -385,10 +308,7 @@ export default class WebSocketClient {
                     this.responseCallbacks[data.seq_reply](data);
                     Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
                 }
-            } else if (this.eventCallback || this.messageListeners.size > 0) {
-                // @ts-ignore
-                this.eventCallback?.({event: evt, data});
-
+            } else if (this.messageListeners.size > 0) {
                 // @ts-ignore
                 this.messageListeners.forEach((listener) => listener({event: evt, data}));
             }
@@ -397,7 +317,7 @@ export default class WebSocketClient {
 
     unbindChannelGlobally(channel: Channel | null) {
         // @ts-ignore
-        channel.unbind_global((evt, data) => {
+        channel.unbind_global((_evt, data) => {
             if (!data) {
                 return;
             }
@@ -410,12 +330,6 @@ export default class WebSocketClient {
                     this.responseCallbacks[data.seq_reply](data);
                     Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
                 }
-            } else if (this.eventCallback) {
-                // @ts-ignore
-                this.serverSequence = data.seq + 1;
-
-                // @ts-ignore
-                this.eventCallback({event: evt, data});
             }
         });
     }
@@ -444,13 +358,6 @@ export default class WebSocketClient {
         })
     }
 
-    /**
-     * @deprecated Use addMessageListener instead
-     */
-    setEventCallback(callback: MessageListener) {
-        this.eventCallback = callback;
-    }
-
     addMessageListener(listener: MessageListener) {
         this.messageListeners.add(listener);
 
@@ -477,13 +384,6 @@ export default class WebSocketClient {
         this.otherServersMessageListeners.delete(listener);
     }
 
-    /**
-     * @deprecated Use addFirstConnectListener instead
-     */
-    setFirstConnectCallback(callback: FirstConnectListener) {
-        this.firstConnectCallback = callback;
-    }
-
     addFirstConnectListener(listener: FirstConnectListener) {
         this.firstConnectListeners.add(listener);
 
@@ -495,13 +395,6 @@ export default class WebSocketClient {
 
     removeFirstConnectListener(listener: FirstConnectListener) {
         this.firstConnectListeners.delete(listener);
-    }
-
-    /**
-     * @deprecated Use addReconnectListener instead
-     */
-    setReconnectCallback(callback: ReconnectListener) {
-        this.reconnectCallback = callback;
     }
 
     addReconnectListener(listener: ReconnectListener) {
@@ -517,13 +410,6 @@ export default class WebSocketClient {
         this.reconnectListeners.delete(listener);
     }
 
-    /**
-     * @deprecated Use addMissedMessageListener instead
-     */
-    setMissedEventCallback(callback: MissedMessageListener) {
-        this.missedEventCallback = callback;
-    }
-
     addMissedMessageListener(listener: MissedMessageListener) {
         this.missedMessageListeners.add(listener);
 
@@ -537,13 +423,6 @@ export default class WebSocketClient {
         this.missedMessageListeners.delete(listener);
     }
 
-    /**
-     * @deprecated Use addErrorListener instead
-     */
-    setErrorCallback(callback: ErrorListener) {
-        this.errorCallback = callback;
-    }
-
     addErrorListener(listener: ErrorListener) {
         this.errorListeners.add(listener);
 
@@ -555,13 +434,6 @@ export default class WebSocketClient {
 
     removeErrorListener(listener: ErrorListener) {
         this.errorListeners.delete(listener);
-    }
-
-    /**
-     * @deprecated Use addCloseListener instead
-     */
-    setCloseCallback(callback: CloseListener) {
-        this.closeCallback = callback;
     }
 
     addCloseListener(listener: CloseListener) {

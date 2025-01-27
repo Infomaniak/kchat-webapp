@@ -243,19 +243,9 @@ function restart() {
     dispatch(getClientConfig());
 }
 
-export function reconnectWsChannels() {
-    console.log('[websocket_actions] reconnectWsChannels - WebSocketClient.reconnecting', WebSocketClient.reconnecting);
-    if (WebSocketClient.reconnecting) {
-        const user = getCurrentUser(getState());
-        const currentChannelId = getCurrentChannelId(getState());
-        WebSocketClient.disconnectAllChannels();
-        WebSocketClient.reconnectAllChannels(user.user_id, user.id, user.team_id, currentChannelId);
-    }
-}
-
 export async function reconnect(socketId) {
-    // eslint-disable-next-line
-    console.log('Reconnecting WebSocket');
+    console.log('[websocket actions] reconnect');
+    WebSocketClient.reconnecting = true;
     if (isDesktopApp()) {
         const token = localStorage.getItem('IKToken');
         if (!token) {
@@ -315,13 +305,14 @@ export async function reconnect(socketId) {
 
         if (mostRecentPost) {
             // eslint-disable-next-line no-console
-            console.log('[websocket_actions] dispatch syncPostsInChannel');
-            dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
+            // IK: await to avoid conflicts with DataPrefetch
+            await dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
             dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
+            // IK: await to avoid conflicts with DataPrefetch
             // if network timed-out the first time when loading a channel
             // we can request for getPosts again when socket is connected
-            dispatch(getPosts(currentChannelId));
+            await dispatch(getPosts(currentChannelId));
         }
         dispatch(StatusActions.loadStatusesForChannelAndSidebar());
 
@@ -365,6 +356,9 @@ export async function reconnect(socketId) {
 
     dispatch(getDrafts(currentTeamId));
     dispatch(getMyMeets());
+
+    WebSocketClient.reconnecting = false;
+    console.log('[websocket actions] reconnect end');
 }
 
 function syncThreads(teamId, userId) {

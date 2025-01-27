@@ -58,7 +58,6 @@ import LocalStorageStore from 'stores/local_storage_store';
 import {getHistory} from 'utils/browser_history';
 import {isArchivedChannel} from 'utils/channel_utils';
 import {Constants, ActionTypes, EventTypes, PostRequestTypes} from 'utils/constants';
-import {isMobile} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -238,7 +237,6 @@ export function autocompleteUsersInChannel(prefix: string, channelId: string): A
 
 export function loadUnreads(channelId: string, prefetch = false): ActionFuncAsync<{atLatestMessage: boolean; atOldestMessage: boolean}> {
     return async (dispatch) => {
-        const time = Date.now();
         if (prefetch) {
             dispatch({
                 type: ActionTypes.PREFETCH_POSTS_FOR_CHANNEL,
@@ -282,7 +280,7 @@ export function loadUnreads(channelId: string, prefetch = false): ActionFuncAsyn
             actions.push({
                 type: ActionTypes.RECEIVED_POSTS_FOR_CHANNEL_AT_TIME,
                 channelId,
-                time,
+                time: Date.now(),
             });
         }
 
@@ -319,7 +317,6 @@ export function loadPostsAround(channelId: string, focusedPostId: string): Actio
 
 export function loadLatestPosts(channelId: string): ActionFuncAsync {
     return async (dispatch) => {
-        const time = Date.now();
         const {data, error} = await dispatch(PostActions.getPosts(channelId, 0, Posts.POST_CHUNK_SIZE / 2));
 
         if (error) {
@@ -333,7 +330,7 @@ export function loadLatestPosts(channelId: string): ActionFuncAsync {
         dispatch({
             type: ActionTypes.RECEIVED_POSTS_FOR_CHANNEL_AT_TIME,
             channelId,
-            time,
+            time: Date.now(),
         });
 
         return {
@@ -412,7 +409,6 @@ export function loadPosts({
 
 export function syncPostsInChannel(channelId: string, since: number, prefetch = false): ActionFuncAsync {
     return async (dispatch, getState) => {
-        const time = Date.now();
         const state = getState();
         const socketStatus = getSocketStatus(state as GlobalState);
         let sinceTimeToGetPosts = since;
@@ -423,7 +419,7 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
             sinceTimeToGetPosts = lastPostsApiCallForChannel;
         }
 
-        console.log('sinceTimeToGetPosts', channelId, sinceTimeToGetPosts, 'prefetch', prefetch);
+        console.log('[websocket actions] sinceTimeToGetPosts', channelId, new Date(sinceTimeToGetPosts).toLocaleTimeString(), 'prefetch', prefetch);
 
         if (prefetch) {
             dispatch({
@@ -438,7 +434,7 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
             actions.push({
                 type: ActionTypes.RECEIVED_POSTS_FOR_CHANNEL_AT_TIME,
                 channelId,
-                time,
+                time: Date.now(),
             });
         }
 
