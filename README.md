@@ -61,3 +61,7 @@ fix :
 ```shell
 brew install pkg-config cairo pango libpng jpeg giflib librsvg
 ```
+If problem persists (Require C++ compiler) :
+```shell
+yarn --cwd node_modules/canvas run install --build-from-source
+```
