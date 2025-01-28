@@ -3,6 +3,8 @@
 
 /* eslint-disable max-lines */
 
+import WebSocketClient from 'client/web_websocket_client';
+import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 import {lazy} from 'react';
 import {batchActions} from 'redux-batched-actions';
 
@@ -61,7 +63,7 @@ import {
     decrementThreadCounts,
 } from 'mattermost-redux/actions/threads';
 import {
-    checkForModifiedUsers,
+    checkForModifiedUsers, getProfilesInGroup as fetchProfilesInGroup,
     getUser as loadUser,
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
@@ -82,7 +84,7 @@ import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/se
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getMyKSuites, getRelativeTeamUrl, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
-import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, getUserById} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, getUserById, getProfilesInGroup} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_actions';
@@ -118,9 +120,6 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 import {logTimestamp} from 'utils/utils';
-
-import WebSocketClient from 'client/web_websocket_client';
-import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
 import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';
@@ -1572,6 +1571,9 @@ function handleGroupAddedMemberEvent(msg) {
         const currentUserId = getCurrentUserId(state);
         const data = msg.data.group_member;
 
+        doDispatch(fetchProfilesInGroup(data.group_id));
+        doDispatch(fetchGroup(data.group_id));
+
         if (currentUserId === data.user_id) {
             dispatch(
                 {
@@ -1589,6 +1591,9 @@ function handleGroupDeletedMemberEvent(msg) {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
         const data = msg.data.group_member;
+
+        doDispatch(fetchProfilesInGroup(data.group_id));
+        doDispatch(fetchGroup(data.group_id));
 
         if (currentUserId === data.user_id) {
             dispatch(
