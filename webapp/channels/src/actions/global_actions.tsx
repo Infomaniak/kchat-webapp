@@ -18,6 +18,7 @@ import {
     selectChannel,
 } from 'mattermost-redux/actions/channels';
 import {logout, loadMe} from 'mattermost-redux/actions/users';
+import {Client4} from 'mattermost-redux/client';
 import {Preferences} from 'mattermost-redux/constants';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedirectChannelNameForTeam, getChannelsNameMapInTeam, getAllDirectChannels, getChannelMessageCount} from 'mattermost-redux/selectors/entities/channels';
@@ -462,6 +463,27 @@ export async function redirectDesktopUserToDefaultTeam() {
         );
     } else {
         getHistory().push('/error?type=page_not_found');
+    }
+}
+
+export async function trySwitchToNextServer(teams: Team[], myTeam: Team) {
+    const currentTeamIndex = teams.findIndex((team) => team.id === myTeam.id);
+
+    // eslint-disable-next-line no-negated-condition
+    if (currentTeamIndex !== -1) {
+        const nextTeamIndex = (currentTeamIndex + 1) % teams.length;
+        const nextTeam = teams[nextTeamIndex];
+
+        window.postMessage(
+            {
+                type: 'switch-server',
+                data: nextTeam.display_name,
+            },
+            window.origin,
+        );
+        console.log('Switched to team:', nextTeam.display_name);
+    } else {
+        console.log('Current team not found in the list of teams');
     }
 }
 
