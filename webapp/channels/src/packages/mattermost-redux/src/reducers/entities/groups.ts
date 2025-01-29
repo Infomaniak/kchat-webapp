@@ -253,6 +253,11 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
         const dataInfo: GroupMemberInfo = action.data;
 
         const group = state[dataInfo.group_id];
+        if (!group) {
+            // Do not have group in cache - Skipping update
+            return state;
+        }
+
         if (group.member_ids?.length > 0) {
             const newMemberIds = new Set(group.member_ids);
             newMemberIds.delete(dataInfo.user_id);
@@ -279,6 +284,11 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
         const {group_id: groupId, user_id: userId}: GroupMemberInfo = action.data;
 
         const group = state[groupId];
+        if (!group) {
+            // Do not have group in cache - Skipping update
+            return state;
+        }
+
         if (group.member_ids?.length > 0) {
             const newMemberIds = new Set(group.member_ids);
             newMemberIds.add(userId);
