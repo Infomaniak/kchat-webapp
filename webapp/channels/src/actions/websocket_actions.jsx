@@ -63,7 +63,7 @@ import {
     decrementThreadCounts,
 } from 'mattermost-redux/actions/threads';
 import {
-    checkForModifiedUsers, getProfilesInGroup as fetchProfilesInGroup,
+    checkForModifiedUsers,
     getUser as loadUser,
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
@@ -84,7 +84,7 @@ import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/se
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getMyKSuites, getRelativeTeamUrl, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
-import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, getUserById, getProfilesInGroup} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, getUserById} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_actions';
@@ -1570,9 +1570,7 @@ function handleGroupAddedMemberEvent(msg) {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
         const data = msg.data.group_member;
-
-        doDispatch(fetchProfilesInGroup(data.group_id));
-        doDispatch(fetchGroup(data.group_id));
+        const receivedProfile = getUser(state, data.user_id);
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1583,6 +1581,19 @@ function handleGroupAddedMemberEvent(msg) {
                 },
             );
         }
+        dispatch(batchActions([
+            {
+                type: GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP,
+                data,
+                id: data.group_id,
+            },
+            {
+                type: UserTypes.RECEIVED_PROFILES_FOR_GROUP,
+                data: [receivedProfile],
+                id: data.group_id,
+            },
+        ]),
+        );
     };
 }
 
@@ -1591,9 +1602,6 @@ function handleGroupDeletedMemberEvent(msg) {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
         const data = msg.data.group_member;
-
-        doDispatch(fetchProfilesInGroup(data.group_id));
-        doDispatch(fetchGroup(data.group_id));
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1604,6 +1612,19 @@ function handleGroupDeletedMemberEvent(msg) {
                 },
             );
         }
+        dispatch(batchActions([
+            {
+                type: UserTypes.RECEIVED_PROFILES_LIST_TO_REMOVE_FROM_GROUP,
+                data: [data],
+                id: data.group_id,
+            },
+            {
+                type: GroupTypes.RECEIVED_MEMBER_TO_REMOVE_FROM_GROUP,
+                data,
+                id: data.group_id,
+            },
+        ]),
+        );
     };
 }
 
