@@ -258,7 +258,7 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
             return state;
         }
 
-        if (group.member_ids?.length > 0) {
+        if (Array.isArray(group.member_ids)) {
             const newMemberIds = new Set(group.member_ids);
             newMemberIds.delete(dataInfo.user_id);
             const newGroup = {...group,
@@ -289,7 +289,7 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
             return state;
         }
 
-        if (group.member_ids?.length > 0) {
+        if (Array.isArray(group.member_ids)) {
             const newMemberIds = new Set(group.member_ids);
             newMemberIds.add(userId);
             const newGroup = {...group,
