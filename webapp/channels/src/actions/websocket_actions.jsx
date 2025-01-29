@@ -243,16 +243,9 @@ function restart() {
     dispatch(getClientConfig());
 }
 
-export function reconnectWsChannels() {
-    console.log('[websocket_actions] reconnectWsChannels - WebSocketClient.reconnecting', WebSocketClient.reconnecting);
-    if (WebSocketClient.reconnecting) {
-        WebSocketClient.reconnectAllChannels();
-    }
-}
-
 export async function reconnect(socketId) {
-    // eslint-disable-next-line
-    console.log('Reconnecting WebSocket');
+    console.log('[websocket actions] reconnect');
+    WebSocketClient.reconnecting = true;
     if (isDesktopApp()) {
         const token = localStorage.getItem('IKToken');
         if (!token) {
@@ -312,13 +305,17 @@ export async function reconnect(socketId) {
 
         if (mostRecentPost) {
             // eslint-disable-next-line no-console
-            console.log('[websocket_actions] dispatch syncPostsInChannel');
-            dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
+            dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at)).then(() => {
+                // IK: re-activate prefetching in DataPrefetch
+                WebSocketClient.reconnecting = false;
+            });
             dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
-            // if network timed-out the first time when loading a channel
             // we can request for getPosts again when socket is connected
-            dispatch(getPosts(currentChannelId));
+            dispatch(getPosts(currentChannelId)).then(() => {
+                // IK: re-activate prefetching in DataPrefetch
+                WebSocketClient.reconnecting = false;
+            });
         }
         dispatch(StatusActions.loadStatusesForChannelAndSidebar());
 

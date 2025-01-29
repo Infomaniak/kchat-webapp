@@ -4,7 +4,7 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
-// import * as Sentry from '@sentry/react';
+import * as Sentry from '@sentry/react';
 
 const MAX_WEBSOCKET_FAILS = 7;
 const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
@@ -265,9 +265,6 @@ export default class WebSocketClient {
 
             if (this.connectFailCount > 0) {
                 console.log('[websocket] calling reconnect callbacks');
-                // used by websocket_actions to determine whether to call reconnectAllChannels after preload
-                this.reconnecting = true;
-                console.log('[websocket] reconnecting');
                 this.reconnectCallback?.(this.conn?.connection.socket_id);
                 this.reconnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
@@ -285,15 +282,6 @@ export default class WebSocketClient {
     }
 
     reconnectAllChannels() {
-        console.log('[websocket] reconnectAllChannels state', this.conn?.connection.state)
-        if (this.conn?.connection.state !== 'connected') {
-            console.log('[websocket] reconnectAllChannels retrying');
-            setTimeout(() => {
-                this.reconnectAllChannels();
-            }, 2000);
-
-            return;
-        }
         this.subscribeToTeamChannel(this._teamId as string);
         this.subscribeToUserChannel(this._userId || this._currentUserId);
         this.subscribeToUserTeamScopedChannel(this._userTeamId || this._currentUserTeamId);
@@ -303,8 +291,7 @@ export default class WebSocketClient {
         if (presenceChannel) {
             this.bindPresenceChannel(presenceChannel);
         }
-
-        this.reconnecting = false;
+ 
         console.log('[websocket] connected at', Date.now());
     }
 
@@ -333,13 +320,12 @@ export default class WebSocketClient {
         console.log(`[websocket] subscribeToTeamChannel ~ private-team.${teamId}`)
         this.currentTeam = teamId;
         this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
-        this.teamChannel?.bind('pusher:subscription_succeeded', () => {
-            console.log(`[websocket] subscribed successfully to private-team.${teamId}`)
-            this.bindChannelGlobally(this.teamChannel);
-        })
+        this.bindChannelGlobally(this.teamChannel);
 
         this.teamChannel?.bind('pusher:subscription_error', () => {
-            console.log(`[websocket] failed to subscribe to private-team.${teamId} queing retry`)
+            const msg = `[websocket] failed to subscribe to private-team.${teamId} queing retry`;
+            console.log(msg);
+            Sentry.captureException(new Error(msg));
 
             setTimeout(() => {
                 this.subscribeToTeamChannel(teamId);
@@ -357,13 +343,12 @@ export default class WebSocketClient {
         console.log(`[websocket] subscribeToUserChannel ~ presence-user.${userId}`)
         this.currentUser = userId;
         this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
-        this.userChannel?.bind('pusher:subscription_succeeded', () => {
-            console.log(`[websocket] subscribed successfully to presence-user.${userId}`)
-            this.bindChannelGlobally(this.userChannel);
-        })
+        this.bindChannelGlobally(this.userChannel);
 
         this.userChannel?.bind('pusher:subscription_error', () => {
-            console.log(`[websocket] failed to subscribe to presence-user.${userId} queing retry`)
+            const msg = `[websocket] failed to subscribe to presence-user.${userId} queing retry`;
+            console.log(msg);
+            Sentry.captureException(new Error(msg));
 
             setTimeout(() => {
                 this.subscribeToUserChannel(userId);
@@ -381,13 +366,12 @@ export default class WebSocketClient {
         console.log(`[websocket] subscribeToUserTeamScopedChannel ~ presence-teamUser.${teamUserId}`)
         this.currentTeamUser = teamUserId;
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
-        this.userTeamChannel?.bind('pusher:subscription_succeeded', () => {
-            console.log(`[websocket] subscribed successfully to presence-teamUser.${teamUserId}`)
-            this.bindChannelGlobally(this.userTeamChannel);
-        })
+        this.bindChannelGlobally(this.userTeamChannel);
 
         this.userTeamChannel.bind('pusher:subscription_error', () => {
-            console.log(`[websocket] failed to subscribe to presence-teamUser.${teamUserId} queing retry`)
+            const msg = `[websocket] failed to subscribe to presence-teamUser.${teamUserId} queing retry`;
+            console.log(msg);
+            Sentry.captureException(new Error(msg));
 
             setTimeout(() => {
                 this.subscribeToUserTeamScopedChannel(teamUserId);

@@ -11,6 +11,10 @@ jest.mock('react', () => ({
     useMemo: (fn: () => LimitSummary) => fn(),
 }));
 
+jest.mock('@sentry/react', () => ({
+    captureException: () => undefined,
+}));
+
 const zeroUsage = {
     files: {
         totalStorage: 0,
