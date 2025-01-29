@@ -1,3 +1,15 @@
+## 2.10.0-rc.60 (2025-01-29)
+
+### Fixed (7 changes)
+
+- [Fix receiving double notifications](kchat/webapp@e07cc70c8b9679d81674fccfcd6f1ce5081137a6) by @dimitar.slaev ([merge request](kchat/webapp!994))
+- [Fixed: Inline Text set as table.](kchat/webapp@6df2a19067e3ad5d2c77107d82884c67e5d76659) by @andy.lerandy ([merge request](kchat/webapp!998))
+- [Fixed: Viewport of kdrive svg for file preview.](kchat/webapp@f76294b09a318b185f9af12ffc31c448950a1887) by @andy.lerandy ([merge request](kchat/webapp!997))
+- [Fixed: Missing translation.](kchat/webapp@e018ca5b90f4a3f905f6aaa096a16f7356388424) by @andy.lerandy ([merge request](kchat/webapp!995))
+- [redirect to default team when 404 on reconnect and loadMe](kchat/webapp@d1bca23b33e79d6df79d18514b1456c99260fd06) by @dev_bot ([merge request](kchat/webapp!990))
+- [redirect to default team when 404 on reconnect and loadMe](kchat/webapp@92c518094689cc4a908ba36bcb0bdf696101c502) by @dev_bot ([merge request](kchat/webapp!990))
+- [remove old calendar emoji to avoid duplication](kchat/webapp@25e0771950978aabdf6c5f76e9fd288627ccbd00) by @cyril.gromoff ([merge request](kchat/webapp!939))
+
 ## 2.10.0-rc.59 (2025-01-23)
 
 ### Fixed (3 changes)
