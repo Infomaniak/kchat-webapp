@@ -1,3 +1,10 @@
+## 2.10.0-rc.61 (2025-01-30)
+
+### Fixed (2 changes)
+
+- [delete team from desktop list when 404](kchat/webapp@0479cbdb42585e30b3b68dd725dc0a3689afb957) by @boris.trombert ([merge request](kchat/webapp!999))
+- [update desktop cache when reconnecting ws](kchat/webapp@ea324e3751f664e69f85ac98ad7a9b1e09012fb5) by @boris.trombert ([merge request](kchat/webapp!999))
+
 ## 2.10.0-rc.60 (2025-01-29)
 
 ### Fixed (7 changes)
