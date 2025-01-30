@@ -113,7 +113,7 @@ import InteractiveDialog from 'components/interactive_dialog';
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
 import {getHistory} from 'utils/browser_history';
-import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, StoragePrefixes} from 'utils/constants';
+import {ActionTypes, Constants, AnnouncementBarMessages, AnnouncementBarTypes, SocketEvents, UserStatuses, ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
@@ -204,6 +204,7 @@ export function initialize() {
     WebSocketClient.addReconnectListener(reconnect);
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
+    WebSocketClient.addErrorListener(handleError);
     WebSocketClient.addOtherServerMessageListener(handleServerEvent);
 
     WebSocketClient.initialize(
@@ -241,6 +242,12 @@ function restart() {
 
     // We fetch the client config again on the server restart.
     dispatch(getClientConfig());
+}
+
+function reconnectWsChannels() {
+    console.log('[websocket actions] reconnectWsChannels');
+    WebSocketClient.reconnectAllChannels();
+    WebSocketClient.reconnecting = false;
 }
 
 export async function reconnect(socketId) {
@@ -289,6 +296,8 @@ export async function reconnect(socketId) {
         });
     }
 
+    let shouldReconnectAfterSync = false;
+
     const currentTeamId = getCurrentTeamId(state);
     if (currentTeamId) {
         const currentUserId = getCurrentUserId(state);
@@ -304,18 +313,14 @@ export async function reconnect(socketId) {
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
-            // eslint-disable-next-line no-console
-            dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at)).then(() => {
-                // IK: re-activate prefetching in DataPrefetch
-                WebSocketClient.reconnecting = false;
-            });
-            dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
+            shouldReconnectAfterSync = true;
+            Promise.all([
+                dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at)),
+                dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at)),
+            ]).then(reconnectWsChannels);
         } else if (currentChannelId) {
             // we can request for getPosts again when socket is connected
-            dispatch(getPosts(currentChannelId)).then(() => {
-                // IK: re-activate prefetching in DataPrefetch
-                WebSocketClient.reconnecting = false;
-            });
+            dispatch(getPosts(currentChannelId));
         }
         dispatch(StatusActions.loadStatusesForChannelAndSidebar());
 
@@ -336,6 +341,10 @@ export async function reconnect(socketId) {
         // Re-syncing the current channel and team ids.
         WebSocketClient.updateActiveChannel(currentChannelId);
         WebSocketClient.updateActiveTeam(currentTeamId);
+    }
+
+    if (!shouldReconnectAfterSync) {
+        reconnectWsChannels();
     }
 
     loadPluginsIfNecessary();
@@ -427,6 +436,12 @@ function handleClose(failCount) {
         },
         incrementWsErrorCount(),
     ]));
+}
+
+function handleError(event) {
+    if (event.type === 'pusher:subscription_error') {
+        dispatch(logError({type: 'critical', intlId: 'apps.error.javascript', message: AnnouncementBarTypes.DEVELOPER}, true, true));
+    }
 }
 
 export function handleEvent(msg) {

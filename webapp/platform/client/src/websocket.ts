@@ -4,7 +4,7 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
-import * as Sentry from '@sentry/react';
+// import * as Sentry from '@sentry/react';
 
 const MAX_WEBSOCKET_FAILS = 7;
 const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
@@ -322,14 +322,9 @@ export default class WebSocketClient {
         this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
         this.bindChannelGlobally(this.teamChannel);
 
-        this.teamChannel?.bind('pusher:subscription_error', () => {
-            const msg = `[websocket] failed to subscribe to private-team.${teamId} queing retry`;
-            console.log(msg);
-            Sentry.captureException(new Error(msg));
-
-            setTimeout(() => {
-                this.subscribeToTeamChannel(teamId);
-            }, JITTER_RANGE)
+        this.teamChannel?.bind('pusher:subscription_error', (evt: any) => {
+            console.log(`[websocket] failed to subscribe to private-team.${teamId} | error: ${String(evt)}`);
+            this.errorListeners.forEach((listener) => listener(new Event('pusher:subscription_error')));
         })
     }
 
@@ -345,14 +340,9 @@ export default class WebSocketClient {
         this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
         this.bindChannelGlobally(this.userChannel);
 
-        this.userChannel?.bind('pusher:subscription_error', () => {
-            const msg = `[websocket] failed to subscribe to presence-user.${userId} queing retry`;
-            console.log(msg);
-            Sentry.captureException(new Error(msg));
-
-            setTimeout(() => {
-                this.subscribeToUserChannel(userId);
-            }, JITTER_RANGE)
+        this.userChannel?.bind('pusher:subscription_error', (evt: any) => {
+            console.log(`[websocket] failed to subscribe to presence-user.${userId} | error: ${String(evt)}`);
+            this.errorListeners.forEach((listener) => listener(new Event('pusher:subscription_error')));
         })
     }
 
@@ -368,14 +358,9 @@ export default class WebSocketClient {
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
         this.bindChannelGlobally(this.userTeamChannel);
 
-        this.userTeamChannel.bind('pusher:subscription_error', () => {
-            const msg = `[websocket] failed to subscribe to presence-teamUser.${teamUserId} queing retry`;
-            console.log(msg);
-            Sentry.captureException(new Error(msg));
-
-            setTimeout(() => {
-                this.subscribeToUserTeamScopedChannel(teamUserId);
-            }, JITTER_RANGE)
+        this.userTeamChannel?.bind('pusher:subscription_error', (evt: any) => {
+            console.log(`[websocket] failed to subscribe to presence-teamUser.${teamUserId} | error: ${String(evt)}`);
+            this.errorListeners.forEach((listener) => listener(new Event('pusher:subscription_error')));
         })
     }
 
