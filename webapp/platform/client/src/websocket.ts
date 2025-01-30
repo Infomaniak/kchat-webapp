@@ -821,11 +821,17 @@ export default class WebSocketClient {
             const privateTeamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
 
             presenceTeamUserChannel.callbacks.remove('badge_updated');
+            presenceTeamUserChannel.callbacks.remove('conference_added');
             privateTeamChannel.callbacks.remove('team_status_changed');
 
             this.bindChannelToEvent(presenceTeamUserChannel, 'badge_updated', (data) => {
                 // @ts-expect-error old error ignore
                 this.otherServersMessageListeners.forEach((listener) => listener({event: 'badge_updated', data, serverId: teamId}));
+            });
+
+            this.bindChannelToEvent(presenceTeamUserChannel, 'conference_added', (data) => {
+                // @ts-ignore
+                this.otherServersMessageListeners.forEach((listener) => listener({event: 'conference_added', data}));
             });
 
             this.bindChannelToEvent(privateTeamChannel, 'team_status_changed', (data) => {

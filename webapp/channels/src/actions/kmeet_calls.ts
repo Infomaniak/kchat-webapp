@@ -69,6 +69,29 @@ export function openCallDialingModal(channelId: string) {
     };
 }
 
+export function openCallDialingModalFromOtherServer(msg: any, otherServer: boolean) {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const state = getState();
+        const isCurrentUserAlreadyInCall = getIsCurrentUserInCall(state);
+        if (isCurrentUserAlreadyInCall) {
+            return;
+        }
+        const channelId = msg.channelId;
+
+        dispatch(openModal(
+            {
+                modalId: ModalIdentifiers.INCOMING_CALL,
+                dialogType: KmeetModal,
+                dialogProps: {
+                    channelId,
+                    otherServer,
+                    msg,
+                },
+            },
+        ));
+    };
+}
+
 export function externalJoinCall(msg: any) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
@@ -103,6 +126,23 @@ export function joinCall(channelId: string) {
             // eslint-disable-next-line no-console
             console.warn('cant join, call no longer exists', error);
             dispatch(deleteConference(conference.id, channelId));
+        }
+    };
+}
+
+export function handleCallFromUrl() {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const conferenceId = urlParams.get('cid');
+
+        if (conferenceId) {
+            const state = getState();
+            const conference = getConferenceByChannelId(state, conferenceId);
+            if (!conference) {
+                console.log('Conference not found');
+                return;
+            }
+            await dispatch(joinCall(conference.channel_id));
         }
     };
 }

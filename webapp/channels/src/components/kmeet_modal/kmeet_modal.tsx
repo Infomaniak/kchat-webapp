@@ -8,16 +8,19 @@ import {GenericModal} from '@mattermost/components';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users.js';
 
+import {bridgeRecreate} from 'mattermost-redux/actions/ksuiteBridge';
 import {getUser} from 'mattermost-redux/actions/users';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
 import {joinCall, declineCall, cancelCall} from 'actions/kmeet_calls';
+import {switchTeam} from 'actions/team_actions';
 import {closeModal} from 'actions/views/modals';
 
 import Avatars from 'components/kmeet_conference/avatars';
 import CallAccept from 'components/widgets/icons/call_accept';
 import CallHangUp from 'components/widgets/icons/call_hang_up';
 
-import {ModalIdentifiers} from 'utils/constants';
+import Constants, {ModalIdentifiers} from 'utils/constants';
 import {ring, stopRing} from 'utils/notification_sounds';
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -27,35 +30,48 @@ import './kmeet_modal.scss';
 
 type Props = {
     user: UserProfile;
-    channel: Channel;
+    channel?: Channel;
     conference?: Conference;
     caller?: UserProfile;
     users?: UserProfile[];
+    otherServer?: boolean;
+    msg: any;
+    serverSwitch: any;
 }
 
-const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
+const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, otherServer = false, msg, serverSwitch}) => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const modalRef = React.useRef<HTMLDivElement>(null);
-
     const isCallerCurrentUser = useMemo(() => caller?.id === user.id, [caller, user]);
-    const participants = useMemo(() => (users ? users.filter((u) => u.id !== user.id) : []), [users, user]);
+    const participants = useMemo(() => {
+        if (!users || !user) {
+            return [];
+        }
+        return users.filter((u) => u && u.id !== user.id);
+    }, [users, user]);
 
     const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
     const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
     const textButtonCancel = formatMessage({id: 'calling_modal.button.cancel', defaultMessage: 'Cancel'});
 
     const onHandleAccept = React.useCallback(() => {
-        if (conference) {
+        if (conference && !otherServer) {
             dispatch(joinCall(conference.channel_id));
         }
-    }, [dispatch, conference]);
+        bridgeRecreate(serverSwitch.url);
+        switchTeam(serverSwitch.url, serverSwitch);
+        setLastKSuiteSeenCookie(serverSwitch.id);
+        const urlWithConferenceId = `${serverSwitch.url}/${serverSwitch.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${msg.data.channel_id}`;
+        window.location.href = urlWithConferenceId;
+    }, [conference, otherServer, serverSwitch, msg, dispatch]);
 
     const onHandleDecline = React.useCallback(() => {
-        if (conference) {
+        if (conference && !otherServer) {
             dispatch(declineCall(conference.channel_id));
         }
-    }, [dispatch, conference]);
+        dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+    }, [conference, otherServer, serverSwitch, msg, dispatch]);
 
     const onHandleCancel = React.useCallback(() => {
         if (conference) {
@@ -98,7 +114,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
     };
 
     const text = () => {
-        switch (channel.type) {
+        switch (channel?.type) {
         case 'O':
         case 'P':
             return (<>
@@ -121,6 +137,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                     </span>
                 </div>
             </>);
+
         case 'G':
         case 'D':
             return (
@@ -175,13 +192,16 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
                 <div
                     className='call-modal__header'
                 >
-                    <Avatars
-                        channelId={channel.id}
-                        showCurrentUser={false}
-                        size='lg'
-                        disableProfileOverlay={false}
-                        displayProfileStatus={false}
-                    />
+                    {!otherServer && channel && (
+                        <Avatars
+                            channelId={channel.id}
+                            showCurrentUser={false}
+                            size='lg'
+                            disableProfileOverlay={false}
+                            displayProfileStatus={false}
+                        />
+                    )
+                    }
                 </div>
                 <div className='call-modal__text'>
                     {text()}

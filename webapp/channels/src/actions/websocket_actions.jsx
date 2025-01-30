@@ -107,6 +107,7 @@ import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_acti
 import {getTeamsUsage} from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
+import {handleCallFromUrl, closeRingModal, deleteConference, externalJoinCall} from 'actions/kmeet_calls';
 import {sendDesktopNotification} from 'actions/notification_actions';
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
@@ -139,7 +140,6 @@ import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
-import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';
 import {handleServerEvent} from './servers_actions';
 
 const RemovedFromChannelModal = withSuspense(lazy(() => import('components/removed_from_channel_modal')));
@@ -217,6 +217,7 @@ export function initialize() {
 
     // eslint-disable-next-line no-console
     console.log(`${debugId} WebSocket initialization complete`);
+    dispatch(handleCallFromUrl());
 }
 
 export function close() {
