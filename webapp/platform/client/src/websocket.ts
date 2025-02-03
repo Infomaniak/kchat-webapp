@@ -291,7 +291,6 @@ export default class WebSocketClient {
         if (presenceChannel) {
             this.bindPresenceChannel(presenceChannel);
         }
- 
         console.log('[websocket] connected at', Date.now());
     }
 
@@ -323,7 +322,7 @@ export default class WebSocketClient {
         this.bindChannelGlobally(this.teamChannel);
 
         this.teamChannel?.bind('pusher:subscription_error', (evt: any) => {
-            console.log(`[websocket] failed to subscribe to private-team.${teamId} | error: ${String(evt)}`);
+            console.log(`[websocket] failed to subscribe to private-team.${teamId} | error: ${evt?.error}`);
             this.errorListeners.forEach((listener) => listener(new Event('pusher:subscription_error')));
         })
     }
@@ -341,7 +340,7 @@ export default class WebSocketClient {
         this.bindChannelGlobally(this.userChannel);
 
         this.userChannel?.bind('pusher:subscription_error', (evt: any) => {
-            console.log(`[websocket] failed to subscribe to presence-user.${userId} | error: ${String(evt)}`);
+            console.log(`[websocket] failed to subscribe to presence-user.${userId} | error: ${evt?.error}`);
             this.errorListeners.forEach((listener) => listener(new Event('pusher:subscription_error')));
         })
     }
@@ -359,7 +358,7 @@ export default class WebSocketClient {
         this.bindChannelGlobally(this.userTeamChannel);
 
         this.userTeamChannel?.bind('pusher:subscription_error', (evt: any) => {
-            console.log(`[websocket] failed to subscribe to presence-teamUser.${teamUserId} | error: ${String(evt)}`);
+            console.log(`[websocket] failed to subscribe to presence-teamUser.${teamUserId} | error: ${evt?.error}`);
             this.errorListeners.forEach((listener) => listener(new Event('pusher:subscription_error')));
         })
     }
