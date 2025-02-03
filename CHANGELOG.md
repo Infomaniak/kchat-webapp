@@ -1,3 +1,9 @@
+## 2.10.0-rc.62 (2025-02-03)
+
+### change (1 change)
+
+- [revert: redirect team when 404](kchat/webapp@45c9412876667a9e0a4ead963af392787f317baf) by @dimitar.slaev ([merge request](kchat/webapp!1004))
+
 ## 2.10.0-rc.61 (2025-01-30)
 
 ### Fixed (2 changes)
