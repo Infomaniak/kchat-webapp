@@ -117,6 +117,7 @@ import {ActionTypes, Constants, AnnouncementBarMessages, AnnouncementBarTypes, S
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
+import {logTimestamp} from 'utils/utils';
 
 import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
@@ -224,6 +225,7 @@ export function close() {
     WebSocketClient.removeReconnectListener(reconnect);
     WebSocketClient.removeMissedMessageListener(restart);
     WebSocketClient.removeCloseListener(handleClose);
+    WebSocketClient.removeErrorListener(handleError);
     WebSocketClient.removeOtherServerMessageListener(handleServerEvent);
 }
 
@@ -296,6 +298,8 @@ export async function reconnect(socketId) {
         const mostRecentId = getMostRecentPostIdInChannel(state, currentChannelId);
         const mostRecentPost = getPost(state, mostRecentId);
 
+        console.log(`[websocket actions] currentTeamId: ${currentTeamId} currentChannelId: ${currentChannelId} mostRecentPostId: ${mostRecentPost.id}`);
+
         // if (appsFeatureFlagEnabled(state)) {
         //     dispatch(handleRefreshAppsBindings());
         // }
@@ -347,8 +351,8 @@ export async function reconnect(socketId) {
     });
 
     if (state.websocket.lastDisconnectAt) {
-        console.log('lastConnectAt', state.websocket.lastConnectAt);
-        console.log('lastDisconnectAt', state.websocket.lastDisconnectAt);
+        logTimestamp('lastConnectAt', state.websocket.lastConnectAt);
+        logTimestamp('lastDisconnectAt', state.websocket.lastDisconnectAt);
         // eslint-disable-next-line no-console
         dispatch(checkForModifiedUsers(true));
         dispatch(TeamActions.getMyKSuites());

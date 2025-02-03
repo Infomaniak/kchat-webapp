@@ -58,6 +58,7 @@ import LocalStorageStore from 'stores/local_storage_store';
 import {getHistory} from 'utils/browser_history';
 import {isArchivedChannel} from 'utils/channel_utils';
 import {Constants, ActionTypes, EventTypes, PostRequestTypes} from 'utils/constants';
+import {logTimestamp} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -415,6 +416,8 @@ export function loadPosts({
 
 export function syncPostsInChannel(channelId: string, since: number, prefetch = false): ActionFuncAsync {
     return async (dispatch, getState) => {
+        console.log('sinceTimeToGetPosts', ` channelId: ${channelId}`, `prefetch: ${prefetch}`);
+
         // IK: Set the time only after the request succeeds to avoid a misleading timestamp
         // in syncPostsInChannel > getLastPostsApiTimeForChannel without results in the store.
         // const time = Date.now();
@@ -426,9 +429,10 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
 
         if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < socketStatus.lastDisconnectAt) {
             sinceTimeToGetPosts = lastPostsApiCallForChannel;
+            logTimestamp('sinceTimeToGetPosts last api call', lastPostsApiCallForChannel);
+        } else {
+            logTimestamp('sinceTimeToGetPosts since', since);
         }
-
-        console.log('sinceTimeToGetPosts', channelId, sinceTimeToGetPosts, 'prefetch', prefetch);
 
         if (prefetch) {
             dispatch({
