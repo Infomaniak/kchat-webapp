@@ -217,8 +217,6 @@ export default class Client4 {
 
     useBoardsProduct = false;
     emitUserLoggedOutEvent: LogoutFunc | undefined = undefined;
-    emitRedirectEvent: LogoutFunc | undefined = undefined;
-
 
     isIkBaseUrl() {
         const whitelist = [
@@ -319,10 +317,6 @@ export default class Client4 {
 
     bindEmitUserLoggedOutEvent(func: LogoutFunc) {
         this.emitUserLoggedOutEvent = func;
-    }
-
-    bindEmitRedirectEvent(func: LogoutFunc) {
-        this.emitRedirectEvent = func;
     }
 
     getServerVersion() {
@@ -1001,7 +995,7 @@ export default class Client4 {
     };
 
     getMe = () => {
-        return this.doFetchWithRedirect<UserProfile>(
+        return this.doFetch<UserProfile>(
             `${this.getUserRoute('me')}`,
             {method: 'get'},
         );
@@ -2098,7 +2092,7 @@ export default class Client4 {
     // Channel Category Routes
 
     getChannelCategories = (userId: string, teamId: string) => {
-        return this.doFetchWithRedirect<OrderedChannelCategories>(
+        return this.doFetch<OrderedChannelCategories>(
             `${this.getChannelCategoriesRoute(userId, teamId)}`,
             {method: 'get'},
         );
@@ -2726,14 +2720,14 @@ export default class Client4 {
     };
 
     getClientConfigOld = () => {
-        return this.doFetchWithRedirect<ClientConfig>(
+        return this.doFetch<ClientConfig>(
             `${this.getBaseRoute()}/config/client?format=old`,
             {method: 'get'},
         );
     };
 
     getClientLicenseOld = () => {
-        return this.doFetchWithRedirect<ClientLicense>(
+        return this.doFetch<ClientLicense>(
             `${this.getBaseRoute()}/license/client?format=old`,
             {method: 'get'},
         );
@@ -4519,77 +4513,6 @@ export default class Client4 {
         const {data} = await this.doFetchWithResponseAndRetry<ClientDataResponse>(url, options);
 
         return data;
-    };
-
-    // IK changes : Helper to redirect user on 404
-    private doFetchWithRedirect = async <ClientDataResponse>(url: string, options: Options): Promise<ClientDataResponse> => {
-        const {data} = await this.doFetchWithRedirectError<ClientDataResponse>(url, options);
-
-        return data;
-    };
-
-    private doFetchWithRedirectError = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse>> => {
-        const response = await fetch(url, this.getOptions(options));
-        const headers = parseAndMergeNestedHeaders(response.headers);
-
-        let data;
-        try {
-            data = await response.json();
-        } catch (err) {
-            throw new ClientError(this.getUrl(), {
-                message: 'Received invalid response from the server.',
-                url,
-            });
-        }
-
-        if (response.status === 404) {
-            if (this.emitRedirectEvent) {
-                this.emitRedirectEvent(data);
-            }
-        }
-
-        if (response.status === 401 && data?.result === 'redirect') {
-            if (this.emitUserLoggedOutEvent) {
-                this.emitUserLoggedOutEvent(data);
-            }
-        }
-
-        if (headers.has(HEADER_X_VERSION_ID)) {
-            const serverVersion = headers.get(HEADER_X_VERSION_ID);
-
-            if (serverVersion && this.serverVersion !== serverVersion) {
-                this.serverVersion = serverVersion;
-            }
-        }
-
-        if (headers.has(HEADER_X_CLUSTER_ID)) {
-            const clusterId = headers.get(HEADER_X_CLUSTER_ID);
-            if (clusterId && this.clusterId !== clusterId) {
-                this.clusterId = clusterId;
-            }
-        }
-
-        if (response.ok) {
-            return {
-                response,
-                headers,
-                data,
-            };
-        }
-
-        const msg = data.message || '';
-
-        if (this.logToConsole) {
-            console.error(msg); // eslint-disable-line no-console
-        }
-
-        throw new ClientError(this.getUrl(), {
-            message: msg,
-            server_error_id: data.id,
-            status_code: data.status_code ? data.status_code : response.status,
-            error: data.error ? data.error : null,
-            url,
-        });
     };
 
     private doFetchWithResponse = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse>> => {

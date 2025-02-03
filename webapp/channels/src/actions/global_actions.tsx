@@ -465,43 +465,6 @@ export async function redirectDesktopUserToDefaultTeam() {
     }
 }
 
-export async function trySwitchToNextServer(teams: Team[], myTeam: Team) {
-    const currentTeamIndex = teams.findIndex((team) => team.id === myTeam.id);
-
-    // eslint-disable-next-line no-negated-condition
-    if (currentTeamIndex !== -1) {
-        let newTeams: Team[];
-        if (teams.length === 1) {
-            newTeams = [];
-        } else {
-            const nextTeamIndex = (currentTeamIndex + 1) % teams.length;
-            const nextTeam = teams[nextTeamIndex];
-            newTeams = teams.filter((team) => team.id !== myTeam.id);
-
-            window.postMessage(
-                {
-                    type: 'switch-server',
-                    data: nextTeam.display_name,
-                },
-                window.origin,
-            );
-            console.log('Switched to team:', nextTeam.display_name);
-        }
-
-        window.postMessage(
-            {
-                type: 'update-teams',
-                message: {
-                    teams: newTeams,
-                },
-            },
-            window.origin,
-        );
-    } else {
-        console.log('Current team not found in the list of teams');
-    }
-}
-
 export function joinChannel(channelId: string) {
     dispatch(joinChannelById(channelId));
 }
