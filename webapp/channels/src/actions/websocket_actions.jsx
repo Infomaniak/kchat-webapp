@@ -80,7 +80,7 @@ import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentTeam, getMyKSuites, getTeam, getRelativeTeamUrl, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl} from 'mattermost-redux/selectors/entities/teams';
+import {getMyKSuites, getRelativeTeamUrl, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, getUserById} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
@@ -90,7 +90,7 @@ import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
-import {trySwitchToNextServer, redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
+import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
 import {setGlobalItem} from 'actions/storage';
@@ -286,15 +286,6 @@ export async function reconnect(socketId) {
     }
 
     const state = getState();
-    const currentTeam = getCurrentTeam(state);
-    const currentTeams = getMyKSuites(state);
-
-    // Binds a handler for redirecting to login on desktop when getting a 404.
-    if (isDesktopApp()) {
-        Client4.bindEmitRedirectEvent(async () => {
-            trySwitchToNextServer(currentTeams, currentTeam);
-        });
-    }
 
     let shouldReconnectAfterSync = false;
 
