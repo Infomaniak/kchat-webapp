@@ -1,3 +1,9 @@
+## 2.10.0-rc.63 (2025-02-03)
+
+### Changed (1 change)
+
+- [improve logs to debug syncro bugs](kchat/webapp@cdee4f5636ac84e19327cbe50bb3907b7e3a8611) by @dimitar.slaev ([merge request](kchat/webapp!1005))
+
 ## 2.10.0-rc.62 (2025-02-03)
 
 ### change (1 change)
