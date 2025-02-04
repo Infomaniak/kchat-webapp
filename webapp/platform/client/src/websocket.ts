@@ -264,7 +264,9 @@ export default class WebSocketClient {
             this._presenceChannelId = presenceChannelId;
 
             if (this.connectFailCount > 0) {
-                console.log('[websocket] calling reconnect callbacks');
+                // used by websocket_actions to determine whether to call reconnectAllChannels after preload
+                this.reconnecting = true;
+                console.log('[websocket] reconnecting');
                 this.reconnectCallback?.(this.conn?.connection.socket_id);
                 this.reconnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
@@ -282,6 +284,15 @@ export default class WebSocketClient {
     }
 
     reconnectAllChannels() {
+        console.log('[websocket] reconnectAllChannels state', this.conn?.connection.state)
+        if (this.conn?.connection.state !== 'connected') {
+            console.log('[websocket] reconnectAllChannels retrying');
+            setTimeout(() => {
+                this.reconnectAllChannels();
+            }, 2000);
+
+            return;
+        }
         this.subscribeToTeamChannel(this._teamId as string);
         this.subscribeToUserChannel(this._userId || this._currentUserId);
         this.subscribeToUserTeamScopedChannel(this._userTeamId || this._currentUserTeamId);
@@ -291,6 +302,9 @@ export default class WebSocketClient {
         if (presenceChannel) {
             this.bindPresenceChannel(presenceChannel);
         }
+
+        this.reconnecting = false;
+
         console.log('[websocket] connected at', Date.now());
     }
 
@@ -321,9 +335,12 @@ export default class WebSocketClient {
         this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
         this.bindChannelGlobally(this.teamChannel);
 
-        this.teamChannel?.bind('pusher:subscription_error', (evt: any) => {
-            console.log(`[websocket] failed to subscribe to private-team.${teamId} | error: ${evt?.error}`);
-            this.errorListeners.forEach((listener) => listener(new Event('pusher:subscription_error')));
+        this.teamChannel?.bind('pusher:subscription_error', () => {
+            console.log(`[websocket] failed to subscribe to private-team.${teamId} queing retry`);
+
+            setTimeout(() => {
+                this.subscribeToTeamChannel(teamId);
+            }, JITTER_RANGE)
         })
     }
 
@@ -339,9 +356,12 @@ export default class WebSocketClient {
         this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
         this.bindChannelGlobally(this.userChannel);
 
-        this.userChannel?.bind('pusher:subscription_error', (evt: any) => {
-            console.log(`[websocket] failed to subscribe to presence-user.${userId} | error: ${evt?.error}`);
-            this.errorListeners.forEach((listener) => listener(new Event('pusher:subscription_error')));
+        this.userChannel?.bind('pusher:subscription_error', () => {
+            console.log(`[websocket] failed to subscribe to presence-user.${userId} queing retry`);
+
+            setTimeout(() => {
+                this.subscribeToUserChannel(userId);
+            }, JITTER_RANGE)
         })
     }
 
@@ -357,9 +377,12 @@ export default class WebSocketClient {
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
         this.bindChannelGlobally(this.userTeamChannel);
 
-        this.userTeamChannel?.bind('pusher:subscription_error', (evt: any) => {
-            console.log(`[websocket] failed to subscribe to presence-teamUser.${teamUserId} | error: ${evt?.error}`);
-            this.errorListeners.forEach((listener) => listener(new Event('pusher:subscription_error')));
+        this.userTeamChannel?.bind('pusher:subscription_error', () => {
+            console.log(`[websocket] failed to subscribe to presence-teamUser.${teamUserId} queing retry`);
+
+            setTimeout(() => {
+                this.subscribeToUserTeamScopedChannel(teamUserId);
+            }, JITTER_RANGE)
         })
     }
 

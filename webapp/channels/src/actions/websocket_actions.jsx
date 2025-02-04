@@ -113,7 +113,7 @@ import InteractiveDialog from 'components/interactive_dialog';
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
 import {getHistory} from 'utils/browser_history';
-import {ActionTypes, Constants, AnnouncementBarMessages, AnnouncementBarTypes, SocketEvents, UserStatuses, ModalIdentifiers, StoragePrefixes} from 'utils/constants';
+import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
@@ -205,7 +205,6 @@ export function initialize() {
     WebSocketClient.addReconnectListener(reconnect);
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
-    WebSocketClient.addErrorListener(handleError);
     WebSocketClient.addOtherServerMessageListener(handleServerEvent);
 
     WebSocketClient.initialize(
@@ -225,7 +224,6 @@ export function close() {
     WebSocketClient.removeReconnectListener(reconnect);
     WebSocketClient.removeMissedMessageListener(restart);
     WebSocketClient.removeCloseListener(handleClose);
-    WebSocketClient.removeErrorListener(handleError);
     WebSocketClient.removeOtherServerMessageListener(handleServerEvent);
 }
 
@@ -246,15 +244,15 @@ function restart() {
     dispatch(getClientConfig());
 }
 
-function reconnectWsChannels() {
-    console.log('[websocket actions] reconnectWsChannels');
-    WebSocketClient.reconnectAllChannels();
-    WebSocketClient.reconnecting = false;
+export function reconnectWsChannels() {
+    console.log('[websocket_actions] reconnectWsChannels - WebSocketClient.reconnecting', WebSocketClient.reconnecting);
+    if (WebSocketClient.reconnecting) {
+        WebSocketClient.reconnectAllChannels();
+    }
 }
 
 export async function reconnect(socketId) {
     console.log('[websocket actions] reconnect');
-    WebSocketClient.reconnecting = true;
     if (isDesktopApp()) {
         const token = localStorage.getItem('IKToken');
         if (!token) {
@@ -288,9 +286,6 @@ export async function reconnect(socketId) {
     }
 
     const state = getState();
-
-    let shouldReconnectAfterSync = false;
-
     const currentTeamId = getCurrentTeamId(state);
     if (currentTeamId) {
         const currentUserId = getCurrentUserId(state);
@@ -308,11 +303,8 @@ export async function reconnect(socketId) {
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
-            shouldReconnectAfterSync = true;
-            Promise.all([
-                dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at)),
-                dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at)),
-            ]).then(reconnectWsChannels);
+            dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
+            dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
             // we can request for getPosts again when socket is connected
             dispatch(getPosts(currentChannelId));
@@ -336,10 +328,6 @@ export async function reconnect(socketId) {
         // Re-syncing the current channel and team ids.
         WebSocketClient.updateActiveChannel(currentChannelId);
         WebSocketClient.updateActiveTeam(currentTeamId);
-    }
-
-    if (!shouldReconnectAfterSync) {
-        reconnectWsChannels();
     }
 
     loadPluginsIfNecessary();
@@ -431,12 +419,6 @@ function handleClose(failCount) {
         },
         incrementWsErrorCount(),
     ]));
-}
-
-function handleError(event) {
-    if (event.type === 'pusher:subscription_error') {
-        dispatch(logError({type: 'critical', intlId: 'apps.error.javascript', message: AnnouncementBarTypes.DEVELOPER}, true, true));
-    }
 }
 
 export function handleEvent(msg) {
