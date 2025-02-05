@@ -3,6 +3,7 @@
 
 import caps from 'lodash/capitalize';
 import isArray from 'lodash/isArray';
+import upperFirst from 'lodash/upperFirst';
 import type {Moment} from 'moment-timezone';
 import moment from 'moment-timezone';
 import React, {PureComponent} from 'react';
@@ -394,10 +395,12 @@ class Timestamp extends PureComponent<Props, State> {
 
     static format({relative, date, time}: FormattedParts, capitalize?: boolean): ReactNode {
         let relativeOrDate = relative || date;
-        if (capitalize && relativeOrDate && typeof relativeOrDate === 'string') {
-            relativeOrDate = caps(relativeOrDate);
+
+        if (typeof relativeOrDate === 'string') {
+            relativeOrDate = capitalize === false ? relativeOrDate.toLowerCase() : upperFirst(relativeOrDate);
         }
-        return (relativeOrDate) && time ? (
+
+        return relativeOrDate && time ? (
             <FormattedMessage
                 id='timestamp.datetime'
                 defaultMessage='{relativeOrDate} at {time}'
