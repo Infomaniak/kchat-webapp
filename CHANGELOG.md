@@ -1,3 +1,9 @@
+## 2.10.0-rc.64 (2025-02-05)
+
+### Fixed (1 change)
+
+- [revert all changes except binding channels synchronously](kchat/webapp@0859c4eee982d9c65dc91c3347404fc63907a8c6) by @dimitar.slaev ([merge request](kchat/webapp!1006))
+
 ## 2.10.0-rc.63 (2025-02-03)
 
 ### Changed (1 change)
