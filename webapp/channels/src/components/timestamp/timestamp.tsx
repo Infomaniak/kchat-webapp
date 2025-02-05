@@ -346,13 +346,13 @@ class Timestamp extends PureComponent<Props, State> {
             timeZone,
             useDate = (): ResolvedFormats['date'] => {
                 if (isWithin(value, this.state.now, timeZone, 'day', -6)) {
-                    return {weekday, day};
+                    return {weekday, day, month};
                 }
                 if (isSameYear(value)) {
                     return {weekday, day, month};
                 }
 
-                return {weekday, year, month, day};
+                return {year, month, day};
             },
             useTime = {hour, minute},
         } = this.props;
