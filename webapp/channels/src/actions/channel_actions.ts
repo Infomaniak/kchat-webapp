@@ -14,7 +14,7 @@ import {fetchDeletedPostsIds, postDeleted} from 'mattermost-redux/actions/posts'
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getChannelByName, getUnreadChannelIds, getChannel, getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
 import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
-import {getPost} from 'mattermost-redux/selectors/entities/posts';
+import {getPost, getPostIdsInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentTeamUrl, getCurrentTeamId, getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync, ActionResult} from 'mattermost-redux/types/actions';
@@ -103,7 +103,17 @@ export function loadDeletedPosts(channelId: string, lastDisconnectAt: number): A
     return async (dispatch, getState) => {
         const state = getState();
 
-        const results = await dispatch(fetchDeletedPostsIds(channelId, lastDisconnectAt)) as ActionResult<string[] | null, ClientError>;
+        // IK: Use the same since timestamp as in syncPostsInChannel
+        let since = lastDisconnectAt;
+        const postsInChannel = getPostIdsInChannel(state, channelId);
+        const mostRecentIds = postsInChannel?.slice(0, 15) || [];
+        const oldestMostRecentId = mostRecentIds[mostRecentIds.length - 1] || '';
+        const oldestMostRecentPost = getPost(state, oldestMostRecentId);
+        if (oldestMostRecentPost) {
+            since = oldestMostRecentPost.create_at;
+        }
+
+        const results = await dispatch(fetchDeletedPostsIds(channelId, since)) as ActionResult<string[] | null, ClientError>;
         const error = results.error;
 
         if (error && error.status_code === 403) {

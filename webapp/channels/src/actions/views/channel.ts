@@ -32,7 +32,7 @@ import {
     isManuallyUnread,
     getCurrentChannelId,
 } from 'mattermost-redux/selectors/entities/channels';
-import {getMostRecentPostIdInChannel, getPost} from 'mattermost-redux/selectors/entities/posts';
+import {getMostRecentPostIdInChannel, getPost, getPostIdsInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {
     getCurrentRelativeTeamUrl,
     getCurrentTeam,
@@ -51,9 +51,10 @@ import {loadCustomStatusEmojisForPostList} from 'actions/emoji_actions';
 import {closeRightHandSide} from 'actions/views/rhs';
 import {getLastViewedChannelName} from 'selectors/local_storage';
 import {getSelectedPost, getSelectedPostId} from 'selectors/rhs';
-import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
-import {getSocketStatus} from 'selectors/views/websocket';
 import LocalStorageStore from 'stores/local_storage_store';
+
+// import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
+// import {getSocketStatus} from 'selectors/views/websocket';
 
 import {getHistory} from 'utils/browser_history';
 import {isArchivedChannel} from 'utils/channel_utils';
@@ -415,14 +416,28 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
         console.log('sinceTimeToGetPosts', ` channelId: ${channelId}`, `prefetch: ${prefetch}`);
         const time = Date.now();
         const state = getState();
-        const socketStatus = getSocketStatus(state as GlobalState);
+
+        // const socketStatus = getSocketStatus(state as GlobalState);
         let sinceTimeToGetPosts = since;
-        const lastPostsApiCallForChannel = getLastPostsApiTimeForChannel(state as GlobalState, channelId);
+
+        // const lastPostsApiCallForChannel = getLastPostsApiTimeForChannel(state as GlobalState, channelId);
         const actions = [];
 
-        if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < socketStatus.lastDisconnectAt) {
-            sinceTimeToGetPosts = lastPostsApiCallForChannel;
-            logTimestamp('sinceTimeToGetPosts last api call', lastPostsApiCallForChannel);
+        // if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < socketStatus.lastDisconnectAt) {
+        //     sinceTimeToGetPosts = lastPostsApiCallForChannel;
+        //     logTimestamp('sinceTimeToGetPosts last api call', lastPostsApiCallForChannel);
+        // } else {
+        //     logTimestamp('sinceTimeToGetPosts since', since);
+        // }
+
+        // IK: Use a post older than the most recent one to prevent gaps in messages
+        const postsInChannel = getPostIdsInChannel(state, channelId);
+        const mostRecentIds = postsInChannel?.slice(0, 15) || [];
+        const oldestMostRecentId = mostRecentIds[mostRecentIds.length - 1] || '';
+        const oldestMostRecentPost = getPost(state, oldestMostRecentId);
+        if (oldestMostRecentPost) {
+            sinceTimeToGetPosts = oldestMostRecentPost.create_at;
+            logTimestamp('sinceTimeToGetPosts oldestRecentPost', sinceTimeToGetPosts);
         } else {
             logTimestamp('sinceTimeToGetPosts since', since);
         }
