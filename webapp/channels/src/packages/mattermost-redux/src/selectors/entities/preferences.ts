@@ -324,7 +324,9 @@ export function localDraftsAreEnabled(state: GlobalState): boolean {
 
 export function getVisibleDmGmLimit(state: GlobalState) {
     const defaultLimit = 40;
-    return getInt(state, Preferences.CATEGORY_SIDEBAR_SETTINGS, Preferences.LIMIT_VISIBLE_DMS_GMS, defaultLimit);
+
+    // IK: Until backend changes:
+    return Math.min(defaultLimit, getInt(state, Preferences.CATEGORY_SIDEBAR_SETTINGS, Preferences.LIMIT_VISIBLE_DMS_GMS, defaultLimit));
 }
 
 export function onboardingTourTipsEnabled(state: GlobalState): boolean {
