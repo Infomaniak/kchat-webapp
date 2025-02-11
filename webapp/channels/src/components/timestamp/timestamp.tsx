@@ -344,10 +344,8 @@ class Timestamp extends PureComponent<Props, State> {
             weekday,
             hour,
             minute,
-            timeZone,
             useDate = (): ResolvedFormats['date'] => {
-                const isWithinWeek = isWithin(value, this.state.now, timeZone, 'day', -6);
-                if (isWithinWeek || isSameYear(value)) {
+                if (isSameYear(value)) {
                     return {weekday, day, month};
                 }
 
@@ -391,11 +389,11 @@ class Timestamp extends PureComponent<Props, State> {
         }, relative.updateIntervalInSeconds * 1000);
     }
 
-    static format({relative, date, time}: FormattedParts, capitalize = true): ReactNode {
+    static format({relative, date, time}: FormattedParts, capitalize?: boolean): ReactNode {
         let relativeOrDate = relative || date;
 
         if (typeof relativeOrDate === 'string') {
-            relativeOrDate = capitalize ? upperFirst(relativeOrDate) : relativeOrDate.toLowerCase();
+            relativeOrDate = capitalize ? upperFirst(relativeOrDate) : relativeOrDate;
         }
 
         return relativeOrDate && time ? (
