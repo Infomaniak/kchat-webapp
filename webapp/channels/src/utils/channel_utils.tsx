@@ -8,6 +8,7 @@ import {TeamTypes} from 'mattermost-redux/action_types';
 import {removeUserFromTeam} from 'mattermost-redux/actions/teams';
 import Permissions from 'mattermost-redux/constants/permissions';
 import {getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
+import {getPost, getPostIdsInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
@@ -131,3 +132,9 @@ export function makeNewEmptyChannel(displayName: string, teamId: string): Channe
         update_at: 0,
     };
 }
+
+export const getNthMostRecentPost = (state: GlobalState, channelId: Channel['id'], n: number) => {
+    const postsInChannel = getPostIdsInChannel(state, channelId);
+    const mostRecentIds = postsInChannel?.slice(0, n) || [];
+    return getPost(state, mostRecentIds[mostRecentIds.length - 1]);
+};

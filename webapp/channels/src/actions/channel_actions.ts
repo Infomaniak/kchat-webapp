@@ -14,7 +14,7 @@ import {fetchDeletedPostsIds, postDeleted} from 'mattermost-redux/actions/posts'
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getChannelByName, getUnreadChannelIds, getChannel, getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
 import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
-import {getPost, getPostIdsInChannel} from 'mattermost-redux/selectors/entities/posts';
+import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentTeamUrl, getCurrentTeamId, getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync, ActionResult} from 'mattermost-redux/types/actions';
@@ -23,8 +23,11 @@ import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {loadNewDMIfNeeded, loadNewGMIfNeeded, loadProfilesForSidebar} from 'actions/user_actions';
 
 import {getHistory} from 'utils/browser_history';
+import {getNthMostRecentPost} from 'utils/channel_utils';
 import {Constants, Preferences, NotificationLevels} from 'utils/constants';
 import {getDirectChannelName} from 'utils/utils';
+
+import type {GlobalState} from 'types/store';
 
 export function openDirectChannelToUserId(userId: UserProfile['id']): ActionFuncAsync<Channel> {
     return async (dispatch, getState) => {
@@ -104,14 +107,7 @@ export function loadDeletedPosts(channelId: string, lastDisconnectAt: number): A
         const state = getState();
 
         // IK: Use the same since timestamp as in syncPostsInChannel
-        let since = lastDisconnectAt;
-        const postsInChannel = getPostIdsInChannel(state, channelId);
-        const mostRecentIds = postsInChannel?.slice(0, 15) || [];
-        const oldestMostRecentId = mostRecentIds[mostRecentIds.length - 1] || '';
-        const oldestMostRecentPost = getPost(state, oldestMostRecentId);
-        if (oldestMostRecentPost) {
-            since = oldestMostRecentPost.create_at;
-        }
+        const since = getNthMostRecentPost(state as GlobalState, channelId, 15)?.create_at || lastDisconnectAt;
 
         const results = await dispatch(fetchDeletedPostsIds(channelId, since)) as ActionResult<string[] | null, ClientError>;
         const error = results.error;

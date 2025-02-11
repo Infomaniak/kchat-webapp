@@ -32,7 +32,7 @@ import {
     isManuallyUnread,
     getCurrentChannelId,
 } from 'mattermost-redux/selectors/entities/channels';
-import {getMostRecentPostIdInChannel, getPost, getPostIdsInChannel} from 'mattermost-redux/selectors/entities/posts';
+import {getMostRecentPostIdInChannel, getPost} from 'mattermost-redux/selectors/entities/posts';
 import {
     getCurrentRelativeTeamUrl,
     getCurrentTeam,
@@ -57,7 +57,7 @@ import LocalStorageStore from 'stores/local_storage_store';
 // import {getSocketStatus} from 'selectors/views/websocket';
 
 import {getHistory} from 'utils/browser_history';
-import {isArchivedChannel} from 'utils/channel_utils';
+import {getNthMostRecentPost, isArchivedChannel} from 'utils/channel_utils';
 import {Constants, ActionTypes, EventTypes, PostRequestTypes} from 'utils/constants';
 import {logTimestamp} from 'utils/utils';
 
@@ -431,10 +431,7 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
         // }
 
         // IK: Use a post older than the most recent one to prevent gaps in messages
-        const postsInChannel = getPostIdsInChannel(state, channelId);
-        const mostRecentIds = postsInChannel?.slice(0, 15) || [];
-        const oldestMostRecentId = mostRecentIds[mostRecentIds.length - 1] || '';
-        const oldestMostRecentPost = getPost(state, oldestMostRecentId);
+        const oldestMostRecentPost = getNthMostRecentPost(state as GlobalState, channelId, 15);
         if (oldestMostRecentPost) {
             sinceTimeToGetPosts = oldestMostRecentPost.create_at;
             logTimestamp('sinceTimeToGetPosts oldestRecentPost', sinceTimeToGetPosts);
