@@ -1,8 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import PQueue from 'p-queue';
-
 import type {UserAutocomplete} from '@mattermost/types/autocomplete';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
@@ -11,7 +9,7 @@ import {getChannelAndMyMember, getChannelMembersByIds} from 'mattermost-redux/ac
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getTeamMembersByIds} from 'mattermost-redux/actions/teams';
 import * as UserActions from 'mattermost-redux/actions/users';
-import {Preferences as PreferencesRedux} from 'mattermost-redux/constants';
+import {Preferences as PreferencesRedux, General} from 'mattermost-redux/constants';
 import {
     getChannel,
     getChannelMembersInChannels,
@@ -29,7 +27,7 @@ import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
 import {loadCustomEmojisForCustomStatusesByUserIds} from 'actions/emoji_actions';
 import {loadStatusesForProfilesList, loadStatusesForProfilesMap} from 'actions/status_actions';
-import {getSidebarGroupChannels} from 'selectors/views/channel_sidebar';
+import {getDisplayedChannels} from 'selectors/views/channel_sidebar';
 import store from 'stores/redux_store';
 
 import {Constants, Preferences, UserStatuses} from 'utils/constants';
@@ -37,7 +35,6 @@ import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
-export const queue = new PQueue({concurrency: 4});
 const dispatch = store.dispatch;
 const getState = store.getState;
 
@@ -295,7 +292,13 @@ export async function loadProfilesForSidebar() {
 }
 
 export const getGMsForLoading = (state: GlobalState) => {
-    return getSidebarGroupChannels(state);
+    // Get all channels visible on the current team which doesn't include hidden GMs/DMs
+    let channels = getDisplayedChannels(state);
+
+    // Make sure we only have GMs
+    channels = channels.filter((channel) => channel.type === General.GM_CHANNEL);
+
+    return channels;
 };
 
 export async function loadProfilesForGM() {
@@ -306,9 +309,9 @@ export async function loadProfilesForGM() {
     const collapsedThreads = isCollapsedThreadsEnabled(state);
 
     const userIdsForLoadingCustomEmojis = new Set();
+    const channelUsersToLoad: string[] = [];
     for (const channel of getGMsForLoading(state)) {
         const userIds = userIdsInChannels[channel.id] || new Set();
-
         userIds.forEach((userId) => userIdsForLoadingCustomEmojis.add(userId));
 
         if (userIds.size >= Constants.MIN_USERS_IN_GM) {
@@ -317,11 +320,7 @@ export async function loadProfilesForGM() {
 
         const isVisible = getBool(state, Preferences.CATEGORY_GROUP_CHANNEL_SHOW, channel.id);
 
-        // IK: Avoid populating Cache if GM won't be visible.
-        if (isVisible) {
-            const getProfilesAction = UserActions.getProfilesInChannel(channel.id, 0, Constants.MAX_USERS_IN_GM);
-            queue.add(() => dispatch(getProfilesAction));
-        } else {
+        if (!isVisible) {
             const messageCount = getChannelMessageCount(state, channel.id);
             const member = getMyChannelMember(state, channel.id);
 
@@ -338,9 +337,14 @@ export async function loadProfilesForGM() {
                 value: 'true',
             });
         }
+        if (userIds.size === 0) {
+            channelUsersToLoad.push(channel.id);
+        }
     }
 
-    await queue.onEmpty();
+    if (channelUsersToLoad.length > 0) {
+        await dispatch(UserActions.getProfilesInGroupChannels(channelUsersToLoad));
+    }
 
     if (userIdsForLoadingCustomEmojis.size > 0) {
         dispatch(loadCustomEmojisForCustomStatusesByUserIds(userIdsForLoadingCustomEmojis));
