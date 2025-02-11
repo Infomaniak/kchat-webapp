@@ -133,7 +133,9 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
                     async () => {
                         this.setUsersLoadingState(true);
                         const [{data: profilesData}, {data: groupChannelsData}] = await Promise.all([
-                            this.props.actions.searchProfiles(searchTerm, {team_id: teamId}),
+
+                            // IK: Limit chances to trigger a `group_channels` call if group won't be shown.
+                            this.props.actions.searchProfiles(searchTerm, {team_id: teamId, limit: USERS_PER_PAGE}),
                             this.props.actions.searchGroupChannels(searchTerm),
                         ]);
                         if (profilesData) {

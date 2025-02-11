@@ -317,7 +317,11 @@ export async function loadProfilesForGM() {
 
         const isVisible = getBool(state, Preferences.CATEGORY_GROUP_CHANNEL_SHOW, channel.id);
 
-        if (!isVisible) {
+        // IK: Avoid populating Cache if GM won't be visible.
+        if (isVisible) {
+            const getProfilesAction = UserActions.getProfilesInChannel(channel.id, 0, Constants.MAX_USERS_IN_GM);
+            queue.add(() => dispatch(getProfilesAction));
+        } else {
             const messageCount = getChannelMessageCount(state, channel.id);
             const member = getMyChannelMember(state, channel.id);
 
@@ -334,9 +338,6 @@ export async function loadProfilesForGM() {
                 value: 'true',
             });
         }
-
-        const getProfilesAction = UserActions.getProfilesInChannel(channel.id, 0, Constants.MAX_USERS_IN_GM);
-        queue.add(() => dispatch(getProfilesAction));
     }
 
     await queue.onEmpty();
