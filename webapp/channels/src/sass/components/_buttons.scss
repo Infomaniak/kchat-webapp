@@ -354,7 +354,17 @@ button {
             margin-left: 6px;
         }
     }
-    
+
+    // IK button
+    &.btn-outline {
+        background: $white;
+        border: 1px solid var(--sidebar-text);
+
+        &:hover {
+            border-color: var(--center-channel-color);
+        }
+    }
+
 }
 
 .btn-leave {

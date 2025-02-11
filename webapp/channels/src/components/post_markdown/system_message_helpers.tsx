@@ -420,6 +420,7 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
     [Posts.POST_TYPES.VOICE]: renderVoiceMessage,
     [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
+    [Posts.POST_TYPES.SYSTEM_WELCOME_MESSAGE]: renderWelcomeSystemBotMessage,
     [Posts.POST_TYPES.CHANGE_CHANNEL_PRIVACY]: renderChangeChannelPrivacyMessage,
 };
 
@@ -556,7 +557,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
         case 0:
             endReminderTime = (
                 <FormattedMessage
-                    id='post.reminder.systemBot.time'
+                    id='post.systemBot.reminder.time'
                     defaultMessage='at {time}'
                     values={{time: <FormattedTime value={targetTime}/>}}
                 />
@@ -565,7 +566,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
         case 1:
             endReminderTime = (
                 <FormattedMessage
-                    id='post.reminder.systemBot.tomorrow'
+                    id='post.systemBot.reminder.tomorrow'
                     defaultMessage='tomorrow at {time}'
                     values={{time: <FormattedTime value={targetTime}/>}}
                 />
@@ -586,7 +587,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
     if (post.props.reschedule) {
         return (
             <FormattedMessage
-                id={'post.reminder.systemBot.reschedule'}
+                id={'post.systemBot.reminder.reschedule'}
                 defaultMessage='Alright, I will remind you of <a>this message</a> {endReminderTime}'
                 values={{
                     permaLink,
@@ -600,7 +601,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
     if (post.props.completed) {
         return (
             <FormattedMessage
-                id={'post.reminder.systemBot.completed'}
+                id={'post.systemBot.reminder.completed'}
                 defaultMessage='Alright, I have marked the reminder for <a>this message</a> as completed!'
                 values={{
                     permaLink,
@@ -620,6 +621,12 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
             }}
         />
     );
+}
+
+// Infomaniak: ui is rendered by ik_welcome_buttons.tsx
+// return fragment to avoid displaying message from backend
+export function renderWelcomeSystemBotMessage(): ReactNode {
+    return <></>;
 }
 
 t('app.post.move_thread_command.direct_or_group.multiple_messages');

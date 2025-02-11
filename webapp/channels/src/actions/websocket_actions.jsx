@@ -813,6 +813,15 @@ export function handleNewPostEvent(msg) {
             // eslint-disable-next-line no-console
             console.log('handleNewPostEvent - new post received', post);
         }
+
+        // @TODO - remove this before merge
+        if (post.message === 'system_welcome_message') {
+            post.type = 'system_welcome_message';
+        }
+        if (post.message === 'system_post_reminder') {
+            post.type = 'system_post_reminder';
+        }
+
         myDispatch(handleNewPost(post, msg));
 
         getMentionsAndStatusesForPosts([post], myDispatch, myGetState);

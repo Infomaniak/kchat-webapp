@@ -22,6 +22,7 @@ import AutoHeightSwitcher, {AutoHeightSlots} from 'components/common/auto_height
 import EditPost from 'components/edit_post';
 import FileAttachmentListContainer from 'components/file_attachment_list';
 import IkPostponeReminderButtons from 'components/ik_postpone_reminder_buttons/index';
+import IkWelcomeButtons from 'components/ik_welcome_buttons/index';
 import MessageWithAdditionalContent from 'components/message_with_additional_content';
 import OverlayTrigger from 'components/overlay_trigger';
 import PriorityLabel from 'components/post_priority/post_priority_label';
@@ -319,7 +320,7 @@ const PostComponent = (props: Props): JSX.Element => {
         }
         setDropdownOpened(opened);
 
-        // IK: Handle case where clicking an item in dropdown outside post doesn't trigger mouse leave, 
+        // IK: Handle case where clicking an item in dropdown outside post doesn't trigger mouse leave,
         // e.g., when threads are open.
         if (!opened && hover) {
             setHover(false)
@@ -664,6 +665,7 @@ const PostComponent = (props: Props): JSX.Element => {
                             />
                             }
                             {(post.type === Posts.POST_TYPES.SYSTEM_POST_REMINDER && !(post.props.reschedule || post.props.completed)) ? <IkPostponeReminderButtons post={post}/> : null}
+                            {(post.type === Posts.POST_TYPES.SYSTEM_WELCOME_MESSAGE) ? <IkWelcomeButtons/> : null}
                             <div className='post__body-reactions-acks'>
                                 {props.isPostAcknowledgementsEnabled && post.metadata?.priority?.requested_ack && (
                                     <PostAcknowledgements
