@@ -408,14 +408,10 @@ function handleClose(failCount) {
         dispatch(logError({type: 'critical', message: AnnouncementBarMessages.WEBSOCKET_PORT_ERROR}, true));
     }
 
-    // Subtract 30 sec to account for ws disconnection timeout
-    const nowTimestamp = Date.now();
-    const thirtySecondsAgoTimestamp = nowTimestamp - (30 * 1000);
-
     dispatch(batchActions([
         {
             type: GeneralTypes.WEBSOCKET_FAILURE,
-            timestamp: thirtySecondsAgoTimestamp,
+            timestamp: Date.now(),
         },
         incrementWsErrorCount(),
     ]));
