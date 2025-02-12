@@ -51,13 +51,12 @@ import {loadCustomStatusEmojisForPostList} from 'actions/emoji_actions';
 import {closeRightHandSide} from 'actions/views/rhs';
 import {getLastViewedChannelName} from 'selectors/local_storage';
 import {getSelectedPost, getSelectedPostId} from 'selectors/rhs';
+import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
+import {getSocketStatus} from 'selectors/views/websocket';
 import LocalStorageStore from 'stores/local_storage_store';
 
-// import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
-// import {getSocketStatus} from 'selectors/views/websocket';
-
 import {getHistory} from 'utils/browser_history';
-import {getNthMostRecentPost, isArchivedChannel} from 'utils/channel_utils';
+import {isArchivedChannel} from 'utils/channel_utils';
 import {Constants, ActionTypes, EventTypes, PostRequestTypes} from 'utils/constants';
 import {logTimestamp} from 'utils/utils';
 
@@ -416,25 +415,14 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
         console.log('sinceTimeToGetPosts', ` channelId: ${channelId}`, `prefetch: ${prefetch}`);
         const time = Date.now();
         const state = getState();
-
-        // const socketStatus = getSocketStatus(state as GlobalState);
+        const socketStatus = getSocketStatus(state as GlobalState);
         let sinceTimeToGetPosts = since;
-
-        // const lastPostsApiCallForChannel = getLastPostsApiTimeForChannel(state as GlobalState, channelId);
+        const lastPostsApiCallForChannel = getLastPostsApiTimeForChannel(state as GlobalState, channelId);
         const actions = [];
 
-        // if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < socketStatus.lastDisconnectAt) {
-        //     sinceTimeToGetPosts = lastPostsApiCallForChannel;
-        //     logTimestamp('sinceTimeToGetPosts last api call', lastPostsApiCallForChannel);
-        // } else {
-        //     logTimestamp('sinceTimeToGetPosts since', since);
-        // }
-
-        // IK: Use a post older than the most recent one to prevent gaps in messages
-        const oldestMostRecentPost = getNthMostRecentPost(state as GlobalState, channelId, 15);
-        if (oldestMostRecentPost) {
-            sinceTimeToGetPosts = oldestMostRecentPost.create_at;
-            logTimestamp('sinceTimeToGetPosts oldestRecentPost', sinceTimeToGetPosts);
+        if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < socketStatus.lastDisconnectAt) {
+            sinceTimeToGetPosts = lastPostsApiCallForChannel;
+            logTimestamp('sinceTimeToGetPosts last api call', lastPostsApiCallForChannel);
         } else {
             logTimestamp('sinceTimeToGetPosts since', since);
         }

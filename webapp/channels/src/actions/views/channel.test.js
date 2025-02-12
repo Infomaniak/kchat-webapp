@@ -562,30 +562,29 @@ describe('channel view actions', () => {
             expect(PostActions.getPostsSince).toHaveBeenCalledWith(channelId, 12350);
         });
 
-        // IK: changed logic, see syncPostsInChannel
-        // test('should call getPostsSince with lastDisconnect time as last discconet was later than lastGetPosts', async () => {
-        //     const channelId = 'channel1';
-        //     PostActions.getPostsSince.mockReturnValue(() => ({data: []}));
+        test('should call getPostsSince with lastDisconnect time as last discconet was later than lastGetPosts', async () => {
+            const channelId = 'channel1';
+            PostActions.getPostsSince.mockReturnValue(() => ({data: []}));
 
-        //     store = mockStore({
-        //         ...initialState,
-        //         views: {
-        //             ...initialState.views,
-        //             channel: {
-        //                 ...initialState.views.channel,
-        //                 lastGetPosts: {
-        //                     [channelId]: 12343,
-        //                 },
-        //             },
-        //         },
-        //         websocket: {
-        //             lastDisconnectAt: 12344,
-        //         },
-        //     });
+            store = mockStore({
+                ...initialState,
+                views: {
+                    ...initialState.views,
+                    channel: {
+                        ...initialState.views.channel,
+                        lastGetPosts: {
+                            [channelId]: 12343,
+                        },
+                    },
+                },
+                websocket: {
+                    lastDisconnectAt: 12344,
+                },
+            });
 
-        //     await store.dispatch(Actions.syncPostsInChannel(channelId, 12355));
-        //     expect(PostActions.getPostsSince).toHaveBeenCalledWith(channelId, 12343);
-        // });
+            await store.dispatch(Actions.syncPostsInChannel(channelId, 12355));
+            expect(PostActions.getPostsSince).toHaveBeenCalledWith(channelId, 12343);
+        });
     });
 
     describe('markChannelAsReadOnFocus', () => {

@@ -23,11 +23,8 @@ import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {loadNewDMIfNeeded, loadNewGMIfNeeded, loadProfilesForSidebar} from 'actions/user_actions';
 
 import {getHistory} from 'utils/browser_history';
-import {getNthMostRecentPost} from 'utils/channel_utils';
 import {Constants, Preferences, NotificationLevels} from 'utils/constants';
 import {getDirectChannelName} from 'utils/utils';
-
-import type {GlobalState} from 'types/store';
 
 export function openDirectChannelToUserId(userId: UserProfile['id']): ActionFuncAsync<Channel> {
     return async (dispatch, getState) => {
@@ -106,10 +103,7 @@ export function loadDeletedPosts(channelId: string, lastDisconnectAt: number): A
     return async (dispatch, getState) => {
         const state = getState();
 
-        // IK: Use the same since timestamp as in syncPostsInChannel
-        const since = getNthMostRecentPost(state as GlobalState, channelId, 15)?.create_at || lastDisconnectAt;
-
-        const results = await dispatch(fetchDeletedPostsIds(channelId, since)) as ActionResult<string[] | null, ClientError>;
+        const results = await dispatch(fetchDeletedPostsIds(channelId, lastDisconnectAt)) as ActionResult<string[] | null, ClientError>;
         const error = results.error;
 
         if (error && error.status_code === 403) {
