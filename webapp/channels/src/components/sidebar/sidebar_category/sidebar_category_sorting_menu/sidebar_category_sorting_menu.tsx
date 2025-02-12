@@ -147,17 +147,6 @@ const SidebarCategorySortingMenu = (props: Props) => {
             menuId={`showMessagesCount-${props.category.id}-menu`}
             parentMenuId={menuId}
         >
-            <Menu.Item
-                id={`showAllDms-${props.category.id}`}
-                labels={(
-                    <FormattedMessage
-                        id='sidebar.allDirectMessages'
-                        defaultMessage='All direct messages'
-                    />
-                )}
-                onClick={(event) => handlelimitVisibleDMsGMs(event, Constants.HIGHEST_DM_SHOW_COUNT)}
-            />
-            <Menu.Separator/>
             {Constants.DM_AND_GM_SHOW_COUNTS.map((dmGmShowCount) => (
                 <Menu.Item
                     id={`showDmCount-${props.category.id}-${dmGmShowCount}`}
