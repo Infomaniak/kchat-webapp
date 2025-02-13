@@ -423,8 +423,6 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
         const lastPostsApiCallForChannel = getLastPostsApiTimeForChannel(state as GlobalState, channelId);
         const actions = [];
 
-        logTimestamp('lastDisconnectAt', socketStatus.lastDisconnectAt);
-
         if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < socketStatus.lastDisconnectAt) {
             sinceTimeToGetPosts = lastPostsApiCallForChannel;
             logTimestamp('sinceTimeToGetPosts last api call', lastPostsApiCallForChannel);

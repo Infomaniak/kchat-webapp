@@ -341,8 +341,9 @@ export async function reconnect(socketId) {
     if (state.websocket.lastDisconnectAt) {
         logTimestamp('lastConnectAt', state.websocket.lastConnectAt);
         logTimestamp('lastDisconnectAt', state.websocket.lastDisconnectAt);
-        // eslint-disable-next-line no-console
-        dispatch(checkForModifiedUsers(true));
+
+        // IK: Subtract 30 sec to account for ws disconnection timeout
+        dispatch(checkForModifiedUsers(state.websocket.lastDisconnectAt - (30 * 1000)));
         dispatch(TeamActions.getMyKSuites());
     }
 
