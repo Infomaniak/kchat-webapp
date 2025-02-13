@@ -1,3 +1,9 @@
+## 2.10.0-rc.65 (2025-02-13)
+
+### Changed (1 change)
+
+- [Fix missing messages on reconnect](kchat/webapp@2a0764380fb0216318e26f2556bc99eb727ae649) by @dimitar.slaev ([merge request](kchat/webapp!1009))
+
 ## 2.10.0-rc.64 (2025-02-05)
 
 ### Fixed (1 change)
