@@ -239,6 +239,9 @@ export function autocompleteUsersInChannel(prefix: string, channelId: string): A
 export function loadUnreads(channelId: string, prefetch = false): ActionFuncAsync<{atLatestMessage: boolean; atOldestMessage: boolean}> {
     return async (dispatch) => {
         const time = Date.now();
+
+        logTimestamp(`loadUnreads channel ${channelId} prefetch ${prefetch}`, time);
+
         if (prefetch) {
             dispatch({
                 type: ActionTypes.PREFETCH_POSTS_FOR_CHANNEL,

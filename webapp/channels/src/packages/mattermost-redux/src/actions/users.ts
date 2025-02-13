@@ -1361,16 +1361,16 @@ export function clearUserAccessTokens(): ActionFuncAsync {
     };
 }
 
-export function checkForModifiedUsers(): ActionFuncAsync {
+export function checkForModifiedUsers(since: number): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const users = getUsers(state);
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
         const userIds = Object.keys(users);
-        console.log('checking for modified users with lastDisconnect:', lastDisconnectAt);
+        console.log('checking for modified users since', since || lastDisconnectAt);
         console.log('fetch profile count:', userIds.length);
 
-        await dispatch(getProfilesByIds(userIds, {since: lastDisconnectAt}));
+        await dispatch(getProfilesByIds(userIds, {since: since || lastDisconnectAt}));
         return {data: true};
     };
 }

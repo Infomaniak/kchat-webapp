@@ -25,7 +25,7 @@ export default function reducer(state = getInitialState(), action: AnyAction) {
         return {
             ...state,
             connected: false,
-            lastDisconnectAt: state.lastDisconnectAt || action.timestamp,
+            lastDisconnectAt: action.timestamp,
         };
     }
 
