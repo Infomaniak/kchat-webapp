@@ -25,9 +25,7 @@ export default function reducer(state = getInitialState(), action: AnyAction) {
         return {
             ...state,
             connected: false,
-
-            // IK: the action may be dispatched multiple times on disconnect, use the timestamp of the first disconnect
-            lastDisconnectAt: state.lastDisconnectAt > state.lastConnectAt ? state.lastDisconnectAt : action.timestamp,
+            lastDisconnectAt: action.timestamp,
         };
     }
 
