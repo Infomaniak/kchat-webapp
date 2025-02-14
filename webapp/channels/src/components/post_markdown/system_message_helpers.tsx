@@ -420,7 +420,7 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
     [Posts.POST_TYPES.VOICE]: renderVoiceMessage,
     [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
-    [Posts.POST_TYPES.SYSTEM_WELCOME_MESSAGE]: renderWelcomeSystemBotMessage,
+    [Posts.POST_TYPES.SYSTEM_WELCOME_MESSAGE]: () => <></>, // Infomaniak: return fragment to avoid displaying message from backend
     [Posts.POST_TYPES.CHANGE_CHANNEL_PRIVACY]: renderChangeChannelPrivacyMessage,
 };
 
@@ -621,12 +621,6 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
             }}
         />
     );
-}
-
-// Infomaniak: ui is rendered by ik_welcome_buttons.tsx
-// return fragment to avoid displaying message from backend
-export function renderWelcomeSystemBotMessage(): ReactNode {
-    return <></>;
 }
 
 t('app.post.move_thread_command.direct_or_group.multiple_messages');

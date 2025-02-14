@@ -43,13 +43,6 @@ const actions: Action[] = [
     },
 ];
 
-const messages = [
-    'Hello! Happy to see you here and welcome <emoji>blush</emoji>',
-    'I\'m here to answer your questions and send you reminders and notifications about your kSuite products when needed.',
-    '<b>To get started</b>, here are some quick actions to explore kChat',
-    '<emoji>arrow_down</emoji> Or <b>ask me a question</b> directly here!',
-];
-
 const IkWelcomeButtons = (props: Props) => {
     const handleClick = (type: Action['type']) => {
         switch (type) {
@@ -57,6 +50,7 @@ const IkWelcomeButtons = (props: Props) => {
             props.actions.openModal({
                 modalId: ModalIdentifiers.CREATE_DM_CHANNEL,
                 dialogType: MoreDirectChannels,
+                dialogProps: {isExistingChannel: false},
             });
             break;
         case 'browse_channels':
@@ -76,7 +70,6 @@ const IkWelcomeButtons = (props: Props) => {
         const backgroundImage = emoji ? `url(${getEmojiImageUrl(emoji)})` : '';
         return (
             <span
-                key={`welcome-icon-${icon}`}
                 className={`emoticon emoticon--${icon}`}
                 style={{backgroundImage}}
             />
@@ -86,7 +79,8 @@ const IkWelcomeButtons = (props: Props) => {
     const formatter = {
         b: (chunks: React.ReactNode) => (<b>{chunks}</b>),
         span: (chunks: React.ReactNode) => (<span>{chunks}</span>),
-        emoji: (chunks: React.ReactNode) => (chunks as string[]).map(renderIcon),
+        emoji: (chunks: React.ReactNode) => (Array.isArray(chunks) && typeof chunks[0] === 'string' ? renderIcon(chunks[0]) : ''),
+
     };
 
     return (
@@ -94,13 +88,13 @@ const IkWelcomeButtons = (props: Props) => {
             <p>
                 <FormattedMessage
                     id='post.systemBot.welcome.line1'
-                    defaultMessage={messages[0]}
+                    defaultMessage={'Hello! Happy to see you here and welcome <emoji>blush</emoji>'}
                     values={formatter}
                 />
                 <br/>
                 <FormattedMessage
                     id='post.systemBot.welcome.line2'
-                    defaultMessage={messages[1]}
+                    defaultMessage={'I\'m here to answer your questions and send you reminders and notifications about your kSuite products when needed.'}
                     values={formatter}
                 />
             </p>
@@ -108,7 +102,7 @@ const IkWelcomeButtons = (props: Props) => {
             <p className='mt-2'>
                 <FormattedMessage
                     id='post.systemBot.welcome.line3'
-                    defaultMessage={messages[2]}
+                    defaultMessage={'<b>To get started</b>, here are some quick actions to explore kChat'}
                     values={formatter}
                 />
             </p>
@@ -136,7 +130,7 @@ const IkWelcomeButtons = (props: Props) => {
             <p className='mt-1 mb-2'>
                 <FormattedMessage
                     id='post.systemBot.welcome.line4'
-                    defaultMessage={messages[3]}
+                    defaultMessage={'<emoji>arrow_down</emoji> Or <b>ask me a question</b> directly here!'}
                     values={formatter}
                 />
             </p>
