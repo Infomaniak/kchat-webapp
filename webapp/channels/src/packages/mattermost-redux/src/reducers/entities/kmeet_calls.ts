@@ -4,11 +4,13 @@
 import {combineReducers} from 'redux';
 import type {AnyAction} from 'redux';
 
+import type {GlobalState} from '@mattermost/types/store';
+
+// eslint-disable-next-line no-restricted-imports
 import {ActionTypes} from 'utils/constants';
 
-import type {ViewsState} from 'types/store/views';
-
-const conferences = (state: ViewsState['kmeetCalls']['conferences'] = {}, action: AnyAction) => {
+const conferences = (state: GlobalState['entities']['kmeetCalls']['conferences'] = {}, action: AnyAction) => {
+    console.log('action', action);
     switch (action.type) {
     case ActionTypes.VOICE_CHANNELS_RECEIVED: {
         const nextState = {};

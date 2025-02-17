@@ -14,6 +14,7 @@ import {
     isCurrentChannelArchived,
     getRedirectChannelNameForTeam,
 } from 'mattermost-redux/selectors/entities/channels';
+import {getConferenceByChannelId} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {
     getUser,
@@ -24,7 +25,6 @@ import {
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 
 import {startOrJoinCallInChannelV2} from 'actions/calls';
-import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 import {getPenultimateViewedChannelName} from 'selectors/local_storage';
 import {getChannelHeaderMenuPluginComponents} from 'selectors/plugins';
 

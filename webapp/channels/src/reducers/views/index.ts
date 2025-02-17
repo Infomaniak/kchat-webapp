@@ -15,7 +15,6 @@ import channelSidebar from './channel_sidebar';
 import drafts from './drafts';
 import emoji from './emoji';
 import i18n from './i18n';
-import kmeetCalls from './kmeet_calls';
 import lhs from './lhs';
 import marketplace from './marketplace';
 import modals from './modals';
@@ -62,7 +61,6 @@ export default combineReducers({
     productMenu,
     drafts,
     calls,
-    kmeetCalls,
     theme,
     servers,
 });

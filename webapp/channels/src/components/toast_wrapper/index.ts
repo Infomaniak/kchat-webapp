@@ -9,13 +9,13 @@ import {bindActionCreators} from 'redux';
 import {Posts} from 'mattermost-redux/constants';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getCurrentChannel, countCurrentChannelUnreadMessages, isManuallyUnread} from 'mattermost-redux/selectors/entities/channels';
+import {getIsCurrentUserInCall} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {getAllPosts, getPostIdsInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {getUnreadScrollPositionPreference, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {makePreparePostIdsForPostList} from 'mattermost-redux/utils/post_list';
 
 import {updateToastStatus} from 'actions/views/channel';
-import {getIsCurrentUserInCall} from 'selectors/kmeet_calls';
 
 import type {GlobalState} from 'types/store/index';
 
