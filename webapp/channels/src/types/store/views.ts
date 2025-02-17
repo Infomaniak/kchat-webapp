@@ -116,12 +116,6 @@ export type ViewsState = {
         callParameters: {users: UserProfile[]; caller: UserProfile; channel: ServerChannel; msg: Call};
     };
 
-    kmeetCalls: {
-        conferences: {
-            [channelId: string]: Conference;
-        };
-    };
-
     drafts: {
         remotes: {
             [storageKey: string]: boolean;

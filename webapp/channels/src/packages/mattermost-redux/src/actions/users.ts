@@ -26,6 +26,9 @@ import {getCurrentUserId, getUser as selectUser, getUsers, getUsersByUsername} f
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
 
+// TODO fix import restriction
+import {getMyMeets} from 'actions/calls';
+import {handleCallFromUrl} from 'actions/kmeet_calls';
 import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
 
 import {getHistory} from 'utils/browser_history';

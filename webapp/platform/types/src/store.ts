@@ -89,6 +89,11 @@ export type GlobalState = {
             spaceId: string;
             ksuiteMode: string;
         };
+        kmeetCalls: {
+            conferences: {
+                [channelId: string]: Conference;
+            };
+        };
     };
     errors: any[];
     requests: {

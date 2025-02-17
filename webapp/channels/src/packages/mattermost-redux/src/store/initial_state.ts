@@ -293,6 +293,9 @@ const state: GlobalState = {
             spaceId: '',
             ksuiteMode: '',
         },
+        kmeetCalls: {
+            conferences: {},
+        },
     },
     errors: [],
     requests: {

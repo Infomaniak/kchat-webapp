@@ -35,11 +35,12 @@ type Props = {
     caller?: UserProfile;
     users?: UserProfile[];
     otherServer?: boolean;
-    msg: any;
+    eventOtherServer: any;
     serverSwitch: any;
+    otherServerName: string | undefined;
 }
 
-const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, otherServer = false, msg, serverSwitch}) => {
+const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, otherServer = false, eventOtherServer, serverSwitch, otherServerName}) => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const modalRef = React.useRef<HTMLDivElement>(null);
@@ -58,20 +59,22 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, otherS
     const onHandleAccept = React.useCallback(() => {
         if (conference && !otherServer) {
             dispatch(joinCall(conference.channel_id));
+        } else {
+            bridgeRecreate(serverSwitch.url);
+            switchTeam(serverSwitch.url, serverSwitch);
+            setLastKSuiteSeenCookie(serverSwitch.id);
+            const urlWithConferenceId = `${serverSwitch.url}/${serverSwitch.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${eventOtherServer.data.channel_id}`;
+            window.location.href = urlWithConferenceId;
         }
-        bridgeRecreate(serverSwitch.url);
-        switchTeam(serverSwitch.url, serverSwitch);
-        setLastKSuiteSeenCookie(serverSwitch.id);
-        const urlWithConferenceId = `${serverSwitch.url}/${serverSwitch.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${msg.data.channel_id}`;
-        window.location.href = urlWithConferenceId;
-    }, [conference, otherServer, serverSwitch, msg, dispatch]);
+    }, [conference, otherServer, serverSwitch, eventOtherServer, dispatch]);
 
     const onHandleDecline = React.useCallback(() => {
         if (conference && !otherServer) {
             dispatch(declineCall(conference.channel_id));
+        } else {
+            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         }
-        dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-    }, [conference, otherServer, serverSwitch, msg, dispatch]);
+    }, [conference, otherServer, dispatch]);
 
     const onHandleCancel = React.useCallback(() => {
         if (conference) {
@@ -114,6 +117,33 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, otherS
     };
 
     const text = () => {
+        if (otherServer) {
+            return (
+                <>
+                    <div className='call-modal__calling-user'>
+                        <span>
+                            {eventOtherServer.data.name}
+                            {otherServerName && ` (${otherServerName})`}
+                        </span>
+                    </div>
+                    <div className='call-modal__calling-info'>
+                        {
+                            isCallerCurrentUser ? (
+                                <FormattedMessage
+                                    id='calling_modal.call_in_progress'
+                                    defaultMessage='call in progress...'
+                                />
+                            ) : (
+                                <FormattedMessage
+                                    id='calling_modal.calling'
+                                    defaultMessage='is calling...'
+                                />
+                            )
+                        }
+                    </div>
+                </>
+            );
+        }
         switch (channel?.type) {
         case 'O':
         case 'P':

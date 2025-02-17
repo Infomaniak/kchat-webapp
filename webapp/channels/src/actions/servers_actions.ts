@@ -5,9 +5,10 @@
 
 import store from 'stores/redux_store';
 
-import {SocketEvents} from 'utils/constants';
+import {ModalIdentifiers, SocketEvents} from 'utils/constants';
 
 import {openCallDialingModalFromOtherServer} from './kmeet_calls';
+import {closeModal} from './views/modals';
 import {changeStatus, setBadges} from './views/servers';
 
 const dispatch = store.dispatch;
@@ -22,6 +23,9 @@ export function handleServerEvent(msg: ServerMessage<any>) {
     switch (msg.event) {
     case SocketEvents.CONFERENCE_ADDED:
         dispatch(openCallDialingModalFromOtherServer(msg, true));
+        break;
+    case SocketEvents.CONFERENCE_DELETED:
+        dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         break;
     case SocketEvents.BADGE_UPDATED:
         handleBadgeUpdated(msg);

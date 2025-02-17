@@ -217,7 +217,6 @@ export function initialize() {
 
     // eslint-disable-next-line no-console
     console.log(`${debugId} WebSocket initialization complete`);
-    dispatch(handleCallFromUrl());
 }
 
 export function close() {

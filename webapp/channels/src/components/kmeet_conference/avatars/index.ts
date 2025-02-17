@@ -3,9 +3,8 @@
 
 import {connect} from 'react-redux';
 
+import {getConferenceByChannelId} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-
-import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 
 import type {GlobalState} from 'types/store';
 
