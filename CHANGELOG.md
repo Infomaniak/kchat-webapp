@@ -1,3 +1,9 @@
+## 2.10.0-rc.66 (2025-02-17)
+
+### Fixed (1 change)
+
+- [Updated: Reduced number of calls on startup.](kchat/webapp@d7f2221482224033196afa8693710dfb8f1abe83) by @andy.lerandy ([merge request](kchat/webapp!1010))
+
 ## 2.10.0-rc.65 (2025-02-13)
 
 ### Changed (1 change)
