@@ -33,6 +33,8 @@ import {InsightsState} from './insights';
 import {GifsState} from './gifs';
 import {LimitsState} from './limits';
 import {Recording} from './recording';
+import type {Conference} from './conference';
+
 
 export type GlobalState = {
     entities: {
@@ -80,6 +82,11 @@ export type GlobalState = {
             spaceId: string;
             ksuiteMode: string;
         }
+        kmeetCalls: {
+            conferences: {
+                [channelId: string]: Conference;
+            };
+        };    
     };
     errors: any[];
     requests: {

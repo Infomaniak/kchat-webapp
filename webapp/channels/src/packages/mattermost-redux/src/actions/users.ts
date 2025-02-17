@@ -28,6 +28,7 @@ import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
 // TODO fix import restriction
 import {getMyMeets} from 'actions/calls';
+import {handleCallFromUrl} from 'actions/kmeet_calls';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
@@ -126,6 +127,7 @@ export function loadMe(): ActionFuncAsync<boolean> {
                         dispatch(getMyTeamMembers()),
                         dispatch(getMyMeets()),
                     ]);
+                    dispatch(handleCallFromUrl());
 
                     const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
                     await dispatch(getMyTeamUnreads(isCollapsedThreads));

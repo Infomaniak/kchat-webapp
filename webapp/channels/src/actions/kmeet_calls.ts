@@ -4,13 +4,12 @@
 import {lazy} from 'react';
 
 import {Client4} from 'mattermost-redux/client';
-import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getConferenceByChannelId, getIsCurrentUserInCall} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {getUserById} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import type {ActionFuncAsync, DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
-import {getConferenceByChannelId, getIsCurrentUserInCall} from 'selectors/kmeet_calls';
 import {isModalOpen} from 'selectors/views/modals';
 
 import {withSuspense} from 'components/common/hocs/with_suspense';
@@ -30,7 +29,7 @@ export function openCallDialingModal(channelId: string) {
         const state = getState();
         const isCurrentUserAlreadyInCall = getIsCurrentUserInCall(state);
         if (isCurrentUserAlreadyInCall) {
-            return;
+            return {data: false};
         }
 
         if (isDesktopApp()) {
@@ -53,30 +52,32 @@ export function openCallDialingModal(channelId: string) {
                 users,
                 channelId,
             });
-        } else {
-            if (isModalOpen(getState(), ModalIdentifiers.INCOMING_CALL)) {
-                return;
-            }
 
-            dispatch(openModal(
-                {
-                    modalId: ModalIdentifiers.INCOMING_CALL,
-                    dialogType: KmeetModal,
-                    dialogProps: {
-                        channelId,
-                    },
-                },
-            ));
+            return {data: true};
         }
+        if (isModalOpen(state, ModalIdentifiers.INCOMING_CALL)) {
+            return {data: true};
+        }
+
+        dispatch(openModal(
+            {
+                modalId: ModalIdentifiers.INCOMING_CALL,
+                dialogType: KmeetModal,
+                dialogProps: {
+                    channelId,
+                },
+            },
+        ));
+        return {data: true};
     };
 }
 
-export function openCallDialingModalFromOtherServer(msg: any, otherServer: boolean) {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+export function openCallDialingModalFromOtherServer(msg: any, otherServer: boolean): ActionFuncAsync {
+    return async (dispatch: DispatchFunc, getState) => {
         const state = getState();
         const isCurrentUserAlreadyInCall = getIsCurrentUserInCall(state);
         if (isCurrentUserAlreadyInCall) {
-            return;
+            return {data: false};
         }
         const channelId = msg.channelId;
 
@@ -91,17 +92,19 @@ export function openCallDialingModalFromOtherServer(msg: any, otherServer: boole
                 },
             },
         ));
+
+        return {data: true};
     };
 }
 
-export function externalJoinCall(msg: any) {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+export function externalJoinCall(msg: any): ActionFuncAsync {
+    return async (dispatch: DispatchFunc, getState) => {
         const state = getState();
         const conference = getConferenceByChannelId(state, msg.data.channel_id);
         const currentUserId = getCurrentUserId(state);
 
         if (!conference) {
-            return;
+            return {data: false};
         }
 
         if (conference.user_id === currentUserId && msg.data.user_id !== currentUserId) {
@@ -115,11 +118,12 @@ export function externalJoinCall(msg: any) {
                 userId: msg.data.user_id,
             },
         });
+        return {data: true};
     };
 }
 
-export function joinCall(channelId: string) {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+export function joinCall(channelId: string): ActionFuncAsync {
+    return async (dispatch: DispatchFunc, getState) => {
         const conference = getConferenceByChannelId(getState(), channelId);
         try {
             const answer = await Client4.acceptIncomingMeetCall(conference.id);
@@ -128,11 +132,12 @@ export function joinCall(channelId: string) {
             console.warn('cant join, call no longer exists', error);
             dispatch(deleteConference(conference.id, channelId));
         }
+        return {data: true};
     };
 }
 
-export function handleCallFromUrl() {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+export function handleCallFromUrl(): ActionFuncAsync {
+    return async (dispatch: DispatchFunc, getState) => {
         const urlParams = new URLSearchParams(window.location.search);
         const conferenceId = urlParams.get('cid');
 
@@ -141,15 +146,16 @@ export function handleCallFromUrl() {
             const conference = getConferenceByChannelId(state, conferenceId);
             if (!conference) {
                 console.log('Conference not found');
-                return;
             }
             await dispatch(joinCall(conference.channel_id));
         }
+        return {data: true};
     };
 }
 
 export function joinCallIfModalOpen(channelId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const state = getState();
         if (isDesktopApp()) {
             const isOpen = await window.desktopAPI?.isRingCallWindowOpen?.();
 
@@ -157,20 +163,21 @@ export function joinCallIfModalOpen(channelId: string) {
                 dispatch(joinCall(channelId));
             }
         } else {
-            const isOpen = isModalOpen(getState(), ModalIdentifiers.INCOMING_CALL);
+            const isOpen = isModalOpen(state, ModalIdentifiers.INCOMING_CALL);
             if (isOpen) {
                 dispatch(joinCall(channelId));
             }
         }
+        return {data: true};
     };
 }
 
-export function declineCall(channelId: string) {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+export function declineCall(channelId: string): ActionFuncAsync {
+    return async (dispatch: DispatchFunc, getState) => {
         const conference = getConferenceByChannelId(getState(), channelId);
 
         if (!conference) {
-            return;
+            return {data: false};
         }
 
         await Client4.declineIncomingMeetCall(conference.id);
@@ -180,11 +187,12 @@ export function declineCall(channelId: string) {
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         }
+        return {data: true};
     };
 }
 
-export function cancelCall(channelId: string) {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+export function cancelCall(channelId: string): ActionFuncAsync {
+    return async (dispatch: DispatchFunc, getState) => {
         const state = getState();
         const conference = getConferenceByChannelId(state, channelId);
         const currentUserId = getCurrentUserId(getState());
@@ -225,8 +233,8 @@ export function startCall(channelId: string, jwt: string, url: string, subject: 
     };
 }
 
-export function startDesktopCall(channelId: string, jwt: string, subject: string) {
-    return async (_: DispatchFunc, getState: () => GlobalState) => {
+export function startDesktopCall(channelId: string, jwt: string, subject: string): ActionFuncAsync {
+    return async (_: DispatchFunc, getState) => {
         const state = getState();
         const user = getCurrentUser(state);
         const conference = getConferenceByChannelId(state, channelId);
@@ -234,6 +242,7 @@ export function startDesktopCall(channelId: string, jwt: string, subject: string
         const locale = getCurrentLocale(state);
 
         window.desktopAPI?.openKmeetCallWindow?.({avatar, user, channelID: conference.channel_id, conferenceId: conference.id, name: subject, locale, jwt});
+        return {data: true};
     };
 }
 
@@ -252,6 +261,7 @@ export function deleteConference(callId: string, channelId: string) {
         const state = getState();
         if (!isDesktopApp() && state.views.modals.modalState[ModalIdentifiers.INCOMING_CALL]?.dialogProps?.channelId === channelId) {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+            return {data: true};
         }
         dispatch({
             type: ActionTypes.VOICE_CHANNEL_DELETED,
@@ -260,5 +270,6 @@ export function deleteConference(callId: string, channelId: string) {
                 channelID: channelId,
             },
         });
+        return {data: true};
     };
 }
