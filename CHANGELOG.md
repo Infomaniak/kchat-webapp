@@ -440,6 +440,30 @@ No changes.
 
 No changes.
 
+## 2.9.23-next.2 (2025-02-17)
+
+### Fixed (10 changes)
+
+- [Updated: Reduced number of calls on startup.](kchat/webapp@d7f2221482224033196afa8693710dfb8f1abe83) by @andy.lerandy ([merge request](kchat/webapp!1010))
+- [revert all changes except binding channels synchronously](kchat/webapp@0859c4eee982d9c65dc91c3347404fc63907a8c6) by @dimitar.slaev ([merge request](kchat/webapp!1006))
+- [delete team from desktop list when 404](kchat/webapp@0479cbdb42585e30b3b68dd725dc0a3689afb957) by @boris.trombert ([merge request](kchat/webapp!999))
+- [update desktop cache when reconnecting ws](kchat/webapp@ea324e3751f664e69f85ac98ad7a9b1e09012fb5) by @boris.trombert ([merge request](kchat/webapp!999))
+- [Fix receiving double notifications](kchat/webapp@e07cc70c8b9679d81674fccfcd6f1ce5081137a6) by @dimitar.slaev ([merge request](kchat/webapp!994))
+- [Fixed: Inline Text set as table.](kchat/webapp@6df2a19067e3ad5d2c77107d82884c67e5d76659) by @andy.lerandy ([merge request](kchat/webapp!998))
+- [Fixed: Viewport of kdrive svg for file preview.](kchat/webapp@f76294b09a318b185f9af12ffc31c448950a1887) by @andy.lerandy ([merge request](kchat/webapp!997))
+- [redirect to default team when 404 on reconnect and loadMe](kchat/webapp@d1bca23b33e79d6df79d18514b1456c99260fd06) by @dev_bot ([merge request](kchat/webapp!990))
+- [redirect to default team when 404 on reconnect and loadMe](kchat/webapp@92c518094689cc4a908ba36bcb0bdf696101c502) by @dev_bot ([merge request](kchat/webapp!990))
+- [remove old calendar emoji to avoid duplication](kchat/webapp@25e0771950978aabdf6c5f76e9fd288627ccbd00) by @cyril.gromoff ([merge request](kchat/webapp!939))
+
+### Changed (2 changes)
+
+- [Fix missing messages on reconnect](kchat/webapp@2a0764380fb0216318e26f2556bc99eb727ae649) by @dimitar.slaev ([merge request](kchat/webapp!1009))
+- [improve logs to debug syncro bugs](kchat/webapp@cdee4f5636ac84e19327cbe50bb3907b7e3a8611) by @dimitar.slaev ([merge request](kchat/webapp!1005))
+
+### change (1 change)
+
+- [revert: redirect team when 404](kchat/webapp@45c9412876667a9e0a4ead963af392787f317baf) by @dimitar.slaev ([merge request](kchat/webapp!1004))
+
 ## 2.9.23-next.1 (2025-01-23)
 
 ### Fixed (5 changes)
