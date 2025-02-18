@@ -548,12 +548,6 @@ const cssRules = `@charset "UTF-8";
     -moz-transform: scale(0.5);
     transform: scale(0.5);
     transform-origin: 0 0;
-
-    @supports (zoom: 0.5) {
-        -moz-transform: none;
-        transform: none;
-        zoom: 0.5;
-    }
 }
 
 .emojisprite {
@@ -577,15 +571,6 @@ const cssRules = `@charset "UTF-8";
     cursor: pointer;
     -moz-transform: scale(0.35);
     transform: scale(0.35);
-}
-
-@supports (zoom: 0.35) {
-    .emojisprite,
-    .emojisprite-loading {
-        -moz-transform: none;
-        transform: none;
-        zoom: 0.35;
-    }
 }
 
 ${cssCats.join('\n')}
