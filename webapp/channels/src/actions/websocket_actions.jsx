@@ -293,7 +293,7 @@ export async function reconnect(socketId) {
         const mostRecentId = getMostRecentPostIdInChannel(state, currentChannelId);
         const mostRecentPost = getPost(state, mostRecentId);
 
-        console.log(`[websocket actions] currentTeamId: ${currentTeamId} currentChannelId: ${currentChannelId} mostRecentPostId: ${mostRecentPost.id}`);
+        console.log(`[websocket actions] currentTeamId: ${currentTeamId} currentChannelId: ${currentChannelId} mostRecentPostId: ${mostRecentPost?.id}`);
 
         // if (appsFeatureFlagEnabled(state)) {
         //     dispatch(handleRefreshAppsBindings());
