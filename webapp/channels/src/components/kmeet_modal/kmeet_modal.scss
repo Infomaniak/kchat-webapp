@@ -40,9 +40,14 @@
     &__calling-user {
         display: block;
         color: rgb(var(--center-channel-color-rgb));
-        font-size: 14px;
+        font-size: 16px;
         font-weight: bold;
         margin-top: 8px;
+    }
+
+    &__other-server-name {
+        color: rgb(var(--center-channel-color-rgb));
+        font-size: 12px;
     }
 
     &__calling-info {
@@ -52,7 +57,7 @@
     &__actions {
         display: flex;
         align-items: center;
-        margin-top: 24px;
+        margin-top: 18px;
         gap: 16px;
 
         > * {

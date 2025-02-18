@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import type {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
@@ -12,7 +12,7 @@ import {bridgeRecreate} from 'mattermost-redux/actions/ksuiteBridge';
 import {getUser} from 'mattermost-redux/actions/users';
 import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
-import {joinCall, declineCall, cancelCall} from 'actions/kmeet_calls';
+import {joinCall, declineCall, cancelCall, getUserCustom} from 'actions/kmeet_calls';
 import {switchTeam} from 'actions/team_actions';
 import {closeModal} from 'actions/views/modals';
 
@@ -34,13 +34,13 @@ type Props = {
     conference?: Conference;
     caller?: UserProfile;
     users?: UserProfile[];
-    otherServer?: boolean;
+    isOtherServer?: boolean;
     eventOtherServer: any;
-    serverSwitch: any;
+    otherServer: any;
     otherServerName: string | undefined;
 }
 
-const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, otherServer = false, eventOtherServer, serverSwitch, otherServerName}) => {
+const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOtherServer = false, eventOtherServer, otherServer, otherServerName}) => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const modalRef = React.useRef<HTMLDivElement>(null);
@@ -51,30 +51,30 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, otherS
         }
         return users.filter((u) => u && u.id !== user.id);
     }, [users, user]);
-
     const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
     const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
     const textButtonCancel = formatMessage({id: 'calling_modal.button.cancel', defaultMessage: 'Cancel'});
+    const [otherServerParticipants, setOtherServerParticipants] = useState<UserProfile[]>([]);
 
     const onHandleAccept = React.useCallback(() => {
-        if (conference && !otherServer) {
+        if (conference && !isOtherServer) {
             dispatch(joinCall(conference.channel_id));
         } else {
-            bridgeRecreate(serverSwitch.url);
-            switchTeam(serverSwitch.url, serverSwitch);
-            setLastKSuiteSeenCookie(serverSwitch.id);
-            const urlWithConferenceId = `${serverSwitch.url}/${serverSwitch.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${eventOtherServer.data.channel_id}`;
+            bridgeRecreate(otherServer.url);
+            switchTeam(otherServer.url, otherServer);
+            setLastKSuiteSeenCookie(otherServer.id);
+            const urlWithConferenceId = `${otherServer.url}/${otherServer.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${eventOtherServer.data.channel_id}`;
             window.location.href = urlWithConferenceId;
         }
-    }, [conference, otherServer, serverSwitch, eventOtherServer, dispatch]);
+    }, [conference, isOtherServer, otherServer, eventOtherServer, dispatch]);
 
     const onHandleDecline = React.useCallback(() => {
-        if (conference && !otherServer) {
+        if (conference && !isOtherServer) {
             dispatch(declineCall(conference.channel_id));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         }
-    }, [conference, otherServer, dispatch]);
+    }, [conference, isOtherServer, dispatch]);
 
     const onHandleCancel = React.useCallback(() => {
         if (conference) {
@@ -95,6 +95,37 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, otherS
     useEffect(() => {
         window.addEventListener('offline', onHandleDecline);
         return () => window.removeEventListener('offline', onHandleDecline);
+        const fetchParticipants = async () => {
+            if (isOtherServer) {
+                const userIds = eventOtherServer.data.participants;
+                try {
+                    const data = await getUserCustom(otherServerName, userIds);
+                    const filteredData = data.filter((participant) => participant.nickname !== user.nickname);
+                    setOtherServerParticipants(filteredData);
+                } catch (error) {
+                    console.error('Error fetching participants:', error);
+                }
+            }
+        };
+        fetchParticipants();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener('offline', () => {
+            onHandleDecline();
+        });
+
+        // document.addEventListener('click', handleClickOutsideModal);
+
+        // const timeout = setTimeout(() => {
+        //     onHandleDecline();
+        // }, 30000);
+
+        // return () => {
+        //     // document.removeEventListener('click', handleClickOutsideModal);
+        //     clearTimeout(timeout);
+        // };
     }, [onHandleDecline]);
 
     useEffect(() => {
@@ -117,14 +148,16 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, otherS
     };
 
     const text = () => {
-        if (otherServer) {
+        if (isOtherServer) {
             return (
                 <>
                     <div className='call-modal__calling-user'>
                         <span>
-                            {eventOtherServer.data.name}
-                            {otherServerName && ` (${otherServerName})`}
+                            {otherServerParticipants && getUsersNicknames(otherServerParticipants)}
                         </span>
+                    </div>
+                    <div className='call-modal__other-server-name'>
+                        {otherServerName && `${otherServerName}`}
                     </div>
                     <div className='call-modal__calling-info'>
                         {
@@ -222,16 +255,14 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, otherS
                 <div
                     className='call-modal__header'
                 >
-                    {!otherServer && channel && (
-                        <Avatars
-                            channelId={channel.id}
-                            showCurrentUser={false}
-                            size='lg'
-                            disableProfileOverlay={false}
-                            displayProfileStatus={false}
-                        />
-                    )
-                    }
+                    <Avatars
+                        otherServerParticipants={otherServerParticipants}
+                        channelId={channel?.id}
+                        showCurrentUser={false}
+                        size='lg'
+                        disableProfileOverlay={false}
+                        displayProfileStatus={false}
+                    />
                 </div>
                 <div className='call-modal__text'>
                     {text()}

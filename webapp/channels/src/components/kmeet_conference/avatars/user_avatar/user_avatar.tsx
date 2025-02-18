@@ -3,12 +3,9 @@
 
 import React, {memo, useRef} from 'react';
 import type {ComponentProps} from 'react';
-import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 
 import type {UserProfile} from '@mattermost/types/users';
-
-import {getUser as selectUser, makeDisplayNameGetter} from 'mattermost-redux/selectors/entities/users';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
@@ -19,7 +16,6 @@ import Avatar from 'components/widgets/users/avatar';
 import {imageURLForUser} from 'utils/utils';
 
 import type {Registrant} from 'types/conference';
-import type {GlobalState} from 'types/store';
 
 import Status from '../status';
 
@@ -28,14 +24,14 @@ type Props = {
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
     displayProfileOverlay: boolean;
     displayProfileStatus: boolean;
-    status: Registrant;
+    status?: Registrant;
+    user: UserProfile;
+    name: string | undefined;
 } & ComponentProps<typeof Avatar>
 
 interface MMOverlayTrigger extends BaseOverlayTrigger {
     hide: () => void;
 }
-
-const displayNameGetter = makeDisplayNameGetter();
 
 function UserAvatar({
     userId,
@@ -43,11 +39,10 @@ function UserAvatar({
     displayProfileOverlay,
     displayProfileStatus,
     status,
+    user,
+    name,
     ...props
 }: Props) {
-    const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
-    const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
-
     const profilePictureURL = userId ? imageURLForUser(userId) : '';
 
     const overlay = useRef<MMOverlayTrigger>(null);
@@ -86,7 +81,7 @@ function UserAvatar({
                         registrant={status}
                     >
                         <Avatar
-                            url={imageURLForUser(userId, user?.last_picture_update)}
+                            url={(user && user.public_picture_url) || imageURLForUser(userId, user?.last_picture_update)}
                             tabIndex={-1}
                             {...props}
                         />

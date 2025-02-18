@@ -1016,6 +1016,15 @@ export default class Client4 {
         );
     };
 
+    getCustomUser = (customUrl: string | undefined, userIds: string[], options = {}): Promise<UserProfile[]> => {
+        const baseUrl = `https://${customUrl}.kchat.preprod.dev.infomaniak.ch${this.urlVersion}`; 
+        console.log('baseUrl', `${baseUrl}/users/ids${buildQueryString(options)}`);
+        return this.doFetchWithRetry<UserProfile[]>(
+            `${baseUrl}/users/ids${buildQueryString(options)}`,
+            {method: 'post', body: JSON.stringify(userIds)},
+        );
+    };
+
     getUser = (userId: string) => {
         return this.doFetch<UserProfile>(
             `${this.getUserRoute(userId)}`,

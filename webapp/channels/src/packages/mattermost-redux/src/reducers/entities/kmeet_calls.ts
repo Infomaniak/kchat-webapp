@@ -10,7 +10,6 @@ import type {GlobalState} from '@mattermost/types/store';
 import {ActionTypes} from 'utils/constants';
 
 const conferences = (state: GlobalState['entities']['kmeetCalls']['conferences'] = {}, action: AnyAction) => {
-    console.log('action', action);
     switch (action.type) {
     case ActionTypes.VOICE_CHANNELS_RECEIVED: {
         const nextState = {};

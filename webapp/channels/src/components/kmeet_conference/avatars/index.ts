@@ -11,11 +11,12 @@ import type {GlobalState} from 'types/store';
 import Avatars from './avatars';
 
 type OwnProps = {
-    channelId: string;
+    channelId?: string;
+    otherServerParticipants: any;
 }
 
 const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
-    const conference = getConferenceByChannelId(state, ownProps.channelId);
+    const conference = ownProps.otherServerParticipants && ownProps.otherServerParticipants.length > 0 ? ownProps.otherServerParticipants : (ownProps.channelId ? getConferenceByChannelId(state, ownProps.channelId) : []) || [];
     const currentUser = getCurrentUser(state);
 
     return {

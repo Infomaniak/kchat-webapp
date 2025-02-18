@@ -71,14 +71,14 @@ export function openCallDialingModal(channelId: string) {
     };
 }
 
-export function openCallDialingModalFromOtherServer(msg: any, otherServer: boolean): ActionFuncAsync {
+export function openCallDialingModalFromOtherServer(eventOtherServer: any, isOtherServer: boolean): ActionFuncAsync {
     return async (dispatch: DispatchFunc, getState) => {
         const state = getState();
         const isCurrentUserAlreadyInCall = getIsCurrentUserInCall(state);
         if (isCurrentUserAlreadyInCall) {
             return {data: false};
         }
-        const channelId = msg.channelId;
+        const channelId = eventOtherServer.channelId;
 
         dispatch(openModal(
             {
@@ -86,8 +86,8 @@ export function openCallDialingModalFromOtherServer(msg: any, otherServer: boole
                 dialogType: KmeetModal,
                 dialogProps: {
                     channelId,
-                    otherServer,
-                    msg,
+                    isOtherServer,
+                    eventOtherServer,
                 },
             },
         ));
@@ -170,6 +170,11 @@ export function joinCallIfModalOpen(channelId: string) {
         }
         return {data: true};
     };
+}
+
+export async function getUserCustom(serverUrl: string | undefined, userIds: []) {
+    const data = await Client4.getCustomUser(serverUrl, userIds);
+    return data;
 }
 
 export function declineCall(channelId: string): ActionFuncAsync {
