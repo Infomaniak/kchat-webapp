@@ -15,7 +15,7 @@ import KmeetModal from './kmeet_modal';
 type OwnProps = {
     channelId: string;
     eventOtherServer: any;
-    otherServer: boolean;
+    isOtherServer: boolean;
 }
 
 function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
@@ -26,16 +26,16 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     const caller = getUserById(state, conference?.user_id);
     const users = conference?.participants.map((id) => getUserById(state, id));
     let otherServerName;
-    let serverSwitch;
+    let otherServer;
 
-    if (ownProps.otherServer) {
-        serverSwitch = getServerUrlByTeamId(state, ownProps.eventOtherServer.data.team_id);
+    if (ownProps.isOtherServer) {
+        otherServer = getServerUrlByTeamId(state, ownProps.eventOtherServer.data.team_id);
         otherServerName = getServerUrlByTeamId(state, ownProps.eventOtherServer.data.team_id)?.name;
     }
 
     return {
         otherServerName,
-        serverSwitch,
+        otherServer,
         user,
         locale,
         channel,

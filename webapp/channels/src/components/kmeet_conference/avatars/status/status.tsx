@@ -5,12 +5,16 @@ import type {Registrant} from 'types/conference';
 import * as Sc from './styled';
 
 type Props = {
-    registrant: Registrant;
+    registrant?: Registrant;
     showStatus: boolean;
     children: React.ReactChild;
 }
 
 const Status: FC<Props> = ({registrant, showStatus, children}) => {
+    if (!registrant) {
+        return <>{children}</>;
+    }
+
     return (
         <Sc.Container grayscale={!registrant.present && registrant.status === 'approved'}>
             {showStatus && (

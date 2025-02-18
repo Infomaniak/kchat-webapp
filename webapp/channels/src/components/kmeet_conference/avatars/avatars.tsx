@@ -36,6 +36,7 @@ type Props = {
     fetchMissingUsers?: boolean;
     disableProfileOverlay?: boolean;
     displayProfileStatus?: boolean;
+    otherServerParticipants: UserProfile[];
 };
 
 const OTHERS_DISPLAY_LIMIT = 99;
@@ -51,20 +52,24 @@ function Avatars({
     fetchMissingUsers,
     showCurrentUser = true,
     breakAt,
+    otherServerParticipants,
 }: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
-
     const usersIds = useMemo(() => {
-        const ids = Object.keys(conference.registrants);
-
-        if (currentUser && !showCurrentUser) {
-            return ids.filter((id) => id !== currentUser.id);
+        if (otherServerParticipants && !conference) {
+            return otherServerParticipants.map((user) => user.id);
         }
+        if (conference && conference.registrants) {
+            const ids = Object.keys(conference.registrants);
+            if (currentUser && !showCurrentUser) {
+                return ids.filter((id) => id !== currentUser.id);
+            }
 
-        return ids;
-    }, [conference, currentUser, showCurrentUser]);
-
+            return ids;
+        }
+        return [];
+    }, [otherServerParticipants, conference, currentUser, showCurrentUser]);
     const [overlayProps, setImmediate] = useSynchronizedImmediate();
     const [displayUserIds, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(usersIds, breakAt);
     const overflowNames = useSelector((state: GlobalState) => {
@@ -91,18 +96,34 @@ function Avatars({
             className={`Avatars Avatars___${size}`}
             onMouseLeave={() => setImmediate(false)}
         >
-            {displayUserIds.map((id) => (
-                <UserAvatar
-                    style={avatarStyle}
-                    key={id}
-                    userId={id}
-                    size={size}
-                    overlayProps={overlayProps}
-                    status={conference.registrants[id]}
-                    displayProfileOverlay={Boolean(disableProfileOverlay)}
-                    displayProfileStatus={Boolean(displayProfileStatus)}
-                />
-            ))}
+            {otherServerParticipants && otherServerParticipants.length > 0 ? (
+                otherServerParticipants.map((user) => (
+                    <UserAvatar
+                        user={user}
+                        name={user.nickname}
+                        style={avatarStyle}
+                        key={user.id}
+                        userId={user.id}
+                        size={size}
+                        overlayProps={overlayProps}
+                        displayProfileOverlay={Boolean(disableProfileOverlay)}
+                        displayProfileStatus={Boolean(displayProfileStatus)}
+                    />
+                ))
+            ) : (
+                displayUserIds.map((id) => (
+                    <UserAvatar
+                        style={avatarStyle}
+                        key={id}
+                        userId={id}
+                        size={size}
+                        overlayProps={overlayProps}
+                        status={conference.registrants[id]}
+                        displayProfileOverlay={Boolean(disableProfileOverlay)}
+                        displayProfileStatus={Boolean(displayProfileStatus)}
+                    />
+                ))
+            )}
             {Boolean(nonDisplayCount) && (
                 <SimpleTooltip
                     id={'names-overflow'}
