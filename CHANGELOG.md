@@ -1,3 +1,9 @@
+## 2.10.0-rc.68 (2025-02-18)
+
+### Fixed (1 change)
+
+- [Fixed: Emojis zoom out on hover.](kchat/webapp@b2b08d853ee0120bde1db3812a16efc0647035cf) by @andy.lerandy ([merge request](kchat/webapp!1014))
+
 ## 2.10.0-rc.67 (2025-02-18)
 
 No changes.
