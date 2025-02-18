@@ -444,6 +444,10 @@ No changes.
 
 No changes.
 
+## 2.9.23-next.3 (2025-02-18)
+
+No changes.
+
 ## 2.9.23-next.2 (2025-02-17)
 
 ### Fixed (10 changes)
