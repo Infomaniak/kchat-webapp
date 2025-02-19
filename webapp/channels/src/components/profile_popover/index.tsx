@@ -86,6 +86,8 @@ export interface ProfilePopoverProps extends Omit<React.ComponentProps<typeof Po
      * The overwritten username that should be shown at the top of the popover
      */
     overwriteName?: string;
+
+    disableFetch?: boolean;
 }
 
 function getDefaultChannelId(state: GlobalState) {
@@ -107,6 +109,7 @@ const ProfilePopover = ({
     src,
     hideStatus,
     fromWebhook,
+    disableFetch = false,
     ...restProps
 }: ProfilePopoverProps) => {
     const {formatMessage} = useIntl();
@@ -187,7 +190,7 @@ const ProfilePopover = ({
     }, [hide, returnFocus]);
 
     useEffect(() => {
-        if (currentTeamId && userId) {
+        if (currentTeamId && userId && !disableFetch) {
             dispatch(getMembershipForEntities(
                 currentTeamId,
                 userId,
