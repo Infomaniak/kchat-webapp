@@ -245,7 +245,6 @@ function restart() {
 }
 
 export function reconnectWsChannels() {
-    console.log('[websocket_actions] reconnectWsChannels - WebSocketClient.reconnecting', WebSocketClient.reconnecting);
     if (WebSocketClient.reconnecting) {
         WebSocketClient.reconnectAllChannels();
     }

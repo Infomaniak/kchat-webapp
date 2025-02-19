@@ -70,7 +70,6 @@ export default class DataPrefetch extends React.PureComponent<Props> {
             const allStatusSuccessful = !(Object.values(prefetchRequestStatus).some((x) => x !== 'success'));
 
             if (queueCount === statusCount && allStatusSuccessful) {
-                console.log('prefetch complete');
                 reconnectWsChannels();
             }
         }
