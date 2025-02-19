@@ -24,6 +24,8 @@ type Props = {
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
     displayProfileOverlay: boolean;
     displayProfileStatus: boolean;
+    disableFetch?: boolean;
+    rootClose?: boolean;
     status?: Registrant;
     user: UserProfile;
     name: string | undefined;
@@ -38,9 +40,11 @@ function UserAvatar({
     overlayProps,
     displayProfileOverlay,
     displayProfileStatus,
+    disableFetch,
     status,
     user,
     name,
+    rootClose = true,
     ...props
 }: Props) {
     const profilePictureURL = userId ? imageURLForUser(userId) : '';
@@ -50,13 +54,13 @@ function UserAvatar({
     const hideProfilePopover = () => {
         overlay.current?.hide();
     };
-
+    console.log('rootClose', rootClose);
     return (
         <OverlayTrigger
             trigger='click'
             disabled={!displayProfileOverlay}
             placement='right'
-            rootClose={true}
+            rootClose={rootClose}
             ref={overlay}
             overlay={
                 <ProfilePopover
@@ -64,6 +68,7 @@ function UserAvatar({
                     userId={userId}
                     src={profilePictureURL}
                     hide={hideProfilePopover}
+                    disableFetch={disableFetch}
                 />
             }
         >
