@@ -1017,8 +1017,10 @@ export default class Client4 {
     };
 
     getCustomUser = (customUrl: string | undefined, userIds: string[], options = {}): Promise<UserProfile[]> => {
-        const baseUrl = `https://${customUrl}.kchat.preprod.dev.infomaniak.ch${this.urlVersion}`; 
-        console.log('baseUrl', `${baseUrl}/users/ids${buildQueryString(options)}`);
+        const url = new URL(this.url);
+        const baseDomain = url.hostname.split('.').slice(1).join('.'); 
+        const baseUrl = `https://${customUrl}.${baseDomain}${this.urlVersion}`;
+        
         return this.doFetchWithRetry<UserProfile[]>(
             `${baseUrl}/users/ids${buildQueryString(options)}`,
             {method: 'post', body: JSON.stringify(userIds)},
