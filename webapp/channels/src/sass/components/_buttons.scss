@@ -357,11 +357,19 @@ button {
 
     // IK button
     &.btn-outline {
-        background: $white;
-        border: 1px solid var(--sidebar-text);
+        color: var(--center-channel-text);
+        background: var(--center-channel-bg);
 
+        border: 1px solid var(--sidebar-text);
         &:hover {
             border-color: var(--center-channel-color);
+        }
+
+        .kchat-dark-theme & {
+            border: 1px solid rgba(var(--sidebar-text-rgb), 0.64);
+            &:hover {
+                border-color: var(--sidebar-text);
+            }
         }
     }
 
