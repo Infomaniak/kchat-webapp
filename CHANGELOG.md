@@ -1,3 +1,13 @@
+## 2.10.0-rc.69 (2025-02-19)
+
+### Fixed (1 change)
+
+- [fix: set max height with vh instead of element.clientHeight](kchat/webapp@2edb2d39a1bfe46a47f906d12fbcb479c8c43523) by @boris.trombert ([merge request](kchat/webapp!1017))
+
+### Removed (1 change)
+
+- [removed unnecessary websocket logs](kchat/webapp@727d9ae10091dc15b22675c5763d2b52ecd2bdd8) by @dimitar.slaev ([merge request](kchat/webapp!1016))
+
 ## 2.10.0-rc.68 (2025-02-18)
 
 ### Fixed (1 change)
