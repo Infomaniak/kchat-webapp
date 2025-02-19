@@ -3,6 +3,8 @@
 
 import {connect} from 'react-redux';
 
+import type {Conference} from '@mattermost/types/conference';
+
 import {getConferenceByChannelId} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
@@ -16,8 +18,8 @@ type OwnProps = {
 }
 
 const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
-    const conference = ownProps.otherServerParticipants && ownProps.otherServerParticipants.length > 0 ? ownProps.otherServerParticipants : (ownProps.channelId ? getConferenceByChannelId(state, ownProps.channelId) : []) || [];
     const currentUser = getCurrentUser(state);
+    const conference = ownProps.channelId ? getConferenceByChannelId(state, ownProps.channelId) : {} as Conference;
 
     return {
         conference,

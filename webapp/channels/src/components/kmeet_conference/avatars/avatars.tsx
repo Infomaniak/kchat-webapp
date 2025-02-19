@@ -91,13 +91,14 @@ function Avatars({
         return <></>;
     }
 
-    const renderUserAvatar = (userOrId: any, isUser: boolean) => {
-        const user = isUser ? userOrId : null;
-        const id = isUser ? user.id : userOrId;
-        const status = isUser ? undefined : conference.registrants[id];
-        const name = isUser ? user.nickname : undefined;
-        const rootClose = !isUser;
-        const disableFetch = isUser;
+    const renderUserAvatar = (userOrId: UserProfile | string) => {
+        const isUserProfile = (userOrId: UserProfile | string): userOrId is UserProfile => typeof userOrId !== 'string';
+        const user = isUserProfile(userOrId) ? userOrId : undefined;
+        const id = isUserProfile(userOrId) ? userOrId.id : userOrId;
+        const status = isUserProfile(userOrId) ? undefined : conference.registrants[id];
+        const name = user ? user.nickname : undefined;
+        const rootClose = !user;
+        const disableFetch = Boolean(user);
 
         return (
             <UserAvatar
@@ -122,7 +123,7 @@ function Avatars({
             className={`Avatars Avatars___${size}`}
             onMouseLeave={() => setImmediate(false)}
         >
-            {otherServerParticipants && otherServerParticipants.length > 0 ? otherServerParticipants.map((user) => renderUserAvatar(user, true)) : displayUserIds.map((id) => renderUserAvatar(id, false))}
+            {(otherServerParticipants?.length > 0 ? otherServerParticipants : displayUserIds).map(renderUserAvatar)}
             {Boolean(nonDisplayCount) && (
                 <SimpleTooltip
                     id={'names-overflow'}
