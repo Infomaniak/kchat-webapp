@@ -91,39 +91,38 @@ function Avatars({
         return <></>;
     }
 
+    const renderUserAvatar = (userOrId: any, isUser: boolean) => {
+        const user = isUser ? userOrId : null;
+        const id = isUser ? user.id : userOrId;
+        const status = isUser ? undefined : conference.registrants[id];
+        const name = isUser ? user.nickname : undefined;
+        const rootClose = !isUser;
+        const disableFetch = isUser;
+
+        return (
+            <UserAvatar
+                key={id}
+                user={user}
+                name={name}
+                style={avatarStyle}
+                userId={id}
+                size={size}
+                overlayProps={overlayProps}
+                rootClose={rootClose}
+                disableFetch={disableFetch}
+                status={status}
+                displayProfileOverlay={Boolean(disableProfileOverlay)}
+                displayProfileStatus={Boolean(displayProfileStatus)}
+            />
+        );
+    };
+
     return (
         <div
             className={`Avatars Avatars___${size}`}
             onMouseLeave={() => setImmediate(false)}
         >
-            {otherServerParticipants && otherServerParticipants.length > 0 ? (
-                otherServerParticipants.map((user) => (
-                    <UserAvatar
-                        user={user}
-                        name={user.nickname}
-                        style={avatarStyle}
-                        key={user.id}
-                        userId={user.id}
-                        size={size}
-                        overlayProps={overlayProps}
-                        displayProfileOverlay={Boolean(disableProfileOverlay)}
-                        displayProfileStatus={Boolean(displayProfileStatus)}
-                    />
-                ))
-            ) : (
-                displayUserIds.map((id) => (
-                    <UserAvatar
-                        style={avatarStyle}
-                        key={id}
-                        userId={id}
-                        size={size}
-                        overlayProps={overlayProps}
-                        status={conference.registrants[id]}
-                        displayProfileOverlay={Boolean(disableProfileOverlay)}
-                        displayProfileStatus={Boolean(displayProfileStatus)}
-                    />
-                ))
-            )}
+            {otherServerParticipants && otherServerParticipants.length > 0 ? otherServerParticipants.map((user) => renderUserAvatar(user, true)) : displayUserIds.map((id) => renderUserAvatar(id, false))}
             {Boolean(nonDisplayCount) && (
                 <SimpleTooltip
                     id={'names-overflow'}
