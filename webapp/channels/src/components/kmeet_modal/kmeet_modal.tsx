@@ -25,6 +25,7 @@ import {ring, stopRing} from 'utils/notification_sounds';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {Conference} from 'types/conference';
+import type {Server} from 'types/store/servers';
 
 import './kmeet_modal.scss';
 
@@ -36,7 +37,7 @@ type Props = {
     users?: UserProfile[];
     isOtherServer?: boolean;
     eventOtherServer: any;
-    otherServer: any;
+    otherServer: Server | null | undefined;
     otherServerName: string | undefined;
 }
 
@@ -60,6 +61,9 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOthe
         if (conference && !isOtherServer) {
             dispatch(joinCall(conference.channel_id));
         } else {
+            if (!otherServer) {
+                return;
+            }
             bridgeRecreate(otherServer.url);
             switchTeam(otherServer.url, otherServer);
             setLastKSuiteSeenCookie(otherServer.id);

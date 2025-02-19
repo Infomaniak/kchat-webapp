@@ -54,7 +54,7 @@ function UserAvatar({
     const hideProfilePopover = () => {
         overlay.current?.hide();
     };
-    console.log('rootClose', rootClose);
+
     return (
         <OverlayTrigger
             trigger='click'
