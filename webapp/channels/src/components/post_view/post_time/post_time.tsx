@@ -107,6 +107,7 @@ export default class PostTime extends React.PureComponent<Props> {
                             ranges={POST_TOOLTIP_RANGES}
                             useSemanticOutput={false}
                             useTime={getTimeFormat}
+                            capitalize={true}
                         />
                     </Tooltip>
                 }
