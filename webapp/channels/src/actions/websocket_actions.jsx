@@ -214,8 +214,6 @@ export function initialize() {
         token,
         currentChannelId,
     );
-
-    dispatch(handleCallFromUrl());
 }
 
 export function close() {
