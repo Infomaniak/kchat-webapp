@@ -39,6 +39,7 @@ export const PostTypes = {
     // Infomaniak
     CALL: 'custom_call' as PostType,
     SYSTEM_POST_REMINDER: 'system_post_reminder' as PostType,
+    SYSTEM_WELCOME_MESSAGE: 'system_welcome_message' as PostType,
     CHANGE_CHANNEL_PRIVACY: 'system_change_chan_privacy' as PostType,
     VOICE: 'voice' as PostType,
 };
