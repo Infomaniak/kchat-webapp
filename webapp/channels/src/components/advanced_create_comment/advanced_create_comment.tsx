@@ -692,9 +692,11 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         const fasterThanHumanWillClick = 150;
         const forceFocus = (Date.now() - this.lastBlurAt < fasterThanHumanWillClick);
         this.focusTextbox(forceFocus);
-
         if (isSchedule) {
             draft.timestamp = scheduleUTCTimestamp;
+            if (this.props.draft?.id) {
+                draft.id = this.props.draft.id;
+            }
         }
 
         const serverError = this.state.serverError;
