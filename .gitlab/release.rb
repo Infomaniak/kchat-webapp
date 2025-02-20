@@ -150,16 +150,17 @@ def create_changelog(tag, branch)
   puts "Creating changelog for tag #{tag}"
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
-  commit_sha = get_commit_sha(last_tag)
-  bot_message = "Add changelog for version #{tag} [skip ci]"
+  from_commit_sha = get_commit_sha(last_tag)
+  to_commit_sha = get_commit_sha(tag)
+  # bot_message = "Add changelog for version #{tag} [skip ci]"
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
-  request = Net::HTTP::Post.new(uri.request_uri)
+  request = Net::HTTP::Get.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  # "branch" => branch,
-  request.set_form_data("version" => tag, "from" => commit_sha, "message" => bot_message)
+  # "message" => bot_message
+  request.set_form_data("version" => tag, "from" => from_commit_sha, "to" => to_commit_sha)
 
   response = get_http(uri).request(request)
-  response.body if response.code.to_i == 201
+  response.body if response.code.to_i == 200
 end
 
 =begin
