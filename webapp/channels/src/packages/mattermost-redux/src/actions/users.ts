@@ -1368,13 +1368,18 @@ export function checkForModifiedUsers(channelId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const users = getUsers(state);
-        const lastDisconnectAt = state.websocket.lastDisconnectAtCheckUsers;
+        const firstDisconnectAt = state.websocket.firstDisconnect;
+        const lastDisconnectAt = state.websocket.lastDisconnectAt;
         const lastPostsApiCallForChannel = getLastPostsApiTimeForChannel(state as GlobalState, channelId);
+        let since = firstDisconnectAt;
+        if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < lastDisconnectAt) {
+            since = lastPostsApiCallForChannel;
+        }
         const userIds = Object.keys(users);
-        console.log('checking for modified users since', lastDisconnectAt);
+        console.log('checking for modified users since', since);
         console.log('fetch profile count:', userIds.length);
 
-        await dispatch(getProfilesByIds(userIds, {since: lastPostsApiCallForChannel || lastDisconnectAt}));
+        await dispatch(getProfilesByIds(userIds, {since}));
         return {data: true};
     };
 }

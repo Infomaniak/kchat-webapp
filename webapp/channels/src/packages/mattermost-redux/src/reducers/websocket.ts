@@ -9,7 +9,7 @@ function getInitialState() {
     return {
         connected: false,
         lastConnectAt: 0,
-        lastDisconnectAtCheckUsers: 0,
+        firstDisconnect: 0,
         lastDisconnectAt: 0,
         connectionId: '',
     };
@@ -27,7 +27,7 @@ export default function reducer(state = getInitialState(), action: AnyAction) {
             ...state,
             connected: false,
             lastDisconnectAt: action.timestamp,
-            lastDisconnectAtCheckUsers: state.lastDisconnectAt || action.timestamp,
+            firstDisconnect: state.lastDisconnectAt || action.timestamp,
         };
     }
 
