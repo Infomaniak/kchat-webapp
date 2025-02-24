@@ -336,12 +336,12 @@ export async function reconnect(socketId) {
         }
     });
 
-    if (state.websocket.lastDisconnectAt) {
+    if (state.websocket.lastDisconnectAtCheckUsers) {
         logTimestamp('lastConnectAt', state.websocket.lastConnectAt);
-        logTimestamp('lastDisconnectAt', state.websocket.lastDisconnectAt);
+        logTimestamp('lastDisconnectAt', state.websocket.lastDisconnectAtCheckUsers);
 
         // IK: Subtract 30 sec to account for ws disconnection timeout
-        dispatch(checkForModifiedUsers(state.websocket.lastDisconnectAt - (30 * 1000)));
+        dispatch(checkForModifiedUsers());
         dispatch(TeamActions.getMyKSuites());
     }
 
