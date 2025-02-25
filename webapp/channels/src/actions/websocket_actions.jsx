@@ -338,7 +338,6 @@ export async function reconnect(socketId) {
 
     const currentChannelId = getCurrentChannelId(state);
 
-    // IK: Subtract 30 sec to account for ws disconnection timeout
     dispatch(checkForModifiedUsers(currentChannelId));
     dispatch(TeamActions.getMyKSuites());
 
