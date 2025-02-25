@@ -3,6 +3,8 @@
 
 /* eslint-disable max-lines */
 
+import WebSocketClient from 'client/web_websocket_client';
+import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 import {lazy} from 'react';
 import {batchActions} from 'redux-batched-actions';
 
@@ -118,9 +120,6 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 import {logTimestamp} from 'utils/utils';
-
-import WebSocketClient from 'client/web_websocket_client';
-import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
 import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';
@@ -1570,6 +1569,7 @@ function handleGroupAddedMemberEvent(msg) {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
         const data = msg.data.group_member;
+        const receivedProfile = getUser(state, data.user_id);
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1580,6 +1580,19 @@ function handleGroupAddedMemberEvent(msg) {
                 },
             );
         }
+        dispatch(batchActions([
+            {
+                type: GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP,
+                data,
+                id: data.group_id,
+            },
+            {
+                type: UserTypes.RECEIVED_PROFILES_FOR_GROUP,
+                data: [receivedProfile],
+                id: data.group_id,
+            },
+        ]),
+        );
     };
 }
 
@@ -1598,6 +1611,19 @@ function handleGroupDeletedMemberEvent(msg) {
                 },
             );
         }
+        dispatch(batchActions([
+            {
+                type: UserTypes.RECEIVED_PROFILES_LIST_TO_REMOVE_FROM_GROUP,
+                data: [data],
+                id: data.group_id,
+            },
+            {
+                type: GroupTypes.RECEIVED_MEMBER_TO_REMOVE_FROM_GROUP,
+                data,
+                id: data.group_id,
+            },
+        ]),
+        );
     };
 }
 
