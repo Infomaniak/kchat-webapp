@@ -21,45 +21,82 @@ type Props = {
     userStartedRecording: (userId: string, channelId: string, rootId: string, now: number) => void;
 }
 
+function extractMessageData(msg: WebSocketMessage) {
+    const now = Date.now();
+
+    switch (msg.event) {
+    case SocketEvents.TYPING:
+    case SocketEvents.RECORDING:
+        return {channelId: msg.data.data.channel_id, rootId: msg.data.data.parent_id, userId: msg.data.data.user_id, date: now};
+    case SocketEvents.POSTED:
+        return {channelId: msg.data.post.channel_id, rootId: msg.data.post.root_id, userId: msg.data.post.user_id, date: now};
+    default: return null;
+    }
+}
+
+type EventType = 'typing' | 'recording'
+function getMessages(eventType: EventType) {
+    switch (eventType) {
+    case 'typing':
+        return {
+            simpleMessage: 'msg_typing.isTyping',
+            multipleMessage: 'msg_typing.areTyping',
+            defaultSimpleMessage: '{user} is typing...',
+            defaultMultipleMessage: '{users} and {last} are typing...',
+        };
+    case 'recording':
+        return {
+            simpleMessage: 'msg_recording.isRecording',
+            multipleMessage: 'msg_recording.areRecording',
+            defaultSimpleMessage: '{user} is recording...',
+            defaultMultipleMessage: '{users} and {last} are recording...',
+        };
+    default:
+        throw new Error('no messages found');
+    }
+}
+
 export default function MsgTyping(props: Props) {
     const {userStartedTyping, userStoppedTyping, currentUserId, userStoppedRecording, userStartedRecording} = props;
 
     useWebSocket({
         handler: useCallback((msg: WebSocketMessage) => {
-            if (msg.event === SocketEvents.TYPING || msg.event === SocketEvents.RECORDING) {
-                const channelId = msg.data.data.channel_id;
-                const rootId = msg.data.data.parent_id;
-                const userId = msg.data.data.user_id;
-                switch (msg.event) {
-                case SocketEvents.TYPING:
-                    userStartedTyping(userId, channelId, rootId, Date.now());
-                    break;
-                case SocketEvents.RECORDING:
-                    userStartedRecording(userId, channelId, rootId, Date.now());
-                    break;
-                default:
-                    break;
-                }
-            } else if (msg.event === SocketEvents.POSTED) {
-                const post = msg.data.post;
+            const messageData = extractMessageData(msg);
+            if (!messageData) {
+                return;
+            }
 
-                const channelId = post.channel_id;
-                const rootId = post.root_id;
-                const userId = post.user_id;
+            const {channelId, rootId, userId, date} = messageData;
 
+            const isSameUser = userId === currentUserId;
+            if (isSameUser) {
+                return;
+            }
+
+            switch (msg.event) {
+            case SocketEvents.TYPING:
+                userStartedTyping(userId, channelId, rootId, date);
+                break;
+            case SocketEvents.RECORDING:
+                userStartedRecording(userId, channelId, rootId, date);
+                break;
+            case SocketEvents.POSTED:
                 if (props.channelId === channelId && props.postId === rootId) {
-                    userStoppedTyping(userId, channelId, rootId, Date.now());
-                    userStoppedRecording(userId, channelId, rootId, Date.now());
+                    userStoppedTyping(userId, channelId, rootId, date);
+                    userStoppedRecording(userId, channelId, rootId, date);
                 }
+                break;
+            default:
+                break;
             }
         }, [props.channelId, props.postId, userStartedTyping, userStartedRecording, userStoppedTyping,
-            userStoppedRecording]),
+            userStoppedRecording, currentUserId]),
     });
 
-    const getInputText = (users: string[], currentWriterId: string, eventType = 'typing') => {
-        const numUsers = users.filter((u) => u !== currentWriterId).length;
+    const getInputText = (users: string[], eventType: EventType) => {
+        const numUsers = users.length;
         if (numUsers === 0) {
-            return '';
+            return null;
         }
         const {simpleMessage, multipleMessage, defaultSimpleMessage, defaultMultipleMessage} = getMessages(eventType);
 
@@ -87,29 +124,8 @@ export default function MsgTyping(props: Props) {
         );
     };
 
-    const getMessages = (eventType = 'typing') => {
-        switch (eventType) {
-        case 'typing':
-            return {
-                simpleMessage: 'msg_typing.isTyping',
-                multipleMessage: 'msg_typing.areTyping',
-                defaultSimpleMessage: '{user} is typing...',
-                defaultMultipleMessage: '{users} and {last} are typing...',
-            };
-        case 'recording':
-            return {
-                simpleMessage: 'msg_recording.isRecording',
-                multipleMessage: 'msg_recording.areRecording',
-                defaultSimpleMessage: '{user} is recording...',
-                defaultMultipleMessage: '{users} and {last} are recording...',
-            };
-        default:
-            throw new Error('no messages found');
-        }
-    };
-
-    const typingText = getInputText([...props.typingUsers], currentUserId, 'typing');
-    const recordingText = getInputText([...props.recordingUsers], currentUserId, 'recording');
+    const typingText = getInputText([...props.typingUsers], 'typing');
+    const recordingText = getInputText([...props.recordingUsers], 'recording');
 
     if (typingText) {
         return <span className='msg-typing'>{typingText}</span>;
