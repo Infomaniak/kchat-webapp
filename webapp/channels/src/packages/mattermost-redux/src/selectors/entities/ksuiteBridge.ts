@@ -1,23 +1,19 @@
-
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
-
 import type {KSuiteBridge} from '@infomaniak/ksuite-bridge';
 
-import type {GlobalState} from 'types/store';
+import type {GlobalState} from '@mattermost/types/store';
 
 export function getKSuiteBridge(state: GlobalState): KSuiteBridge {
-    return state.ksuite_bridge.bridge;
+    return state.entities.ksuiteBridge.bridge;
 }
 
 export function getKSuiteDnd(state: GlobalState): boolean {
-    return state.ksuite_bridge.dnd;
+    return state.entities.ksuiteBridge.dnd;
 }
 
 export function getKSuiteMode(state: GlobalState): string {
-    return state.ksuite_bridge.ksuiteMode;
+    return state.entities.ksuiteBridge.ksuiteMode;
 }
 
 export function getKSuiteSpaceId(state: GlobalState): string {
-    return state.ksuite_bridge.spaceId;
+    return state.entities.ksuiteBridge.spaceId;
 }

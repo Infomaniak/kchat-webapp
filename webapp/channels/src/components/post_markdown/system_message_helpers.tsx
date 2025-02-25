@@ -18,6 +18,7 @@ import CombinedSystemMessage from 'components/post_view/combined_system_message'
 import GMConversionMessage from 'components/post_view/gm_conversion_message/gm_conversion_message';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member';
 import PostNotifyChannelMember from 'components/post_view/post_notify_channel_member/post_notify_channel_member';
+import VoiceMessageAttachmentPlayer from 'components/voice/post_type';
 
 import {t} from 'utils/i18n';
 import type {TextFormattingOptions} from 'utils/text_formatting';
@@ -371,6 +372,12 @@ function renderCallNotificationMessage(post: Post): ReactNode {
     );
 }
 
+function renderVoiceMessage(post: Post): ReactNode {
+    return (
+        <VoiceMessageAttachmentPlayer post={post}/>
+    );
+}
+
 function renderMeMessage(post: Post): ReactNode {
     // Trim off the leading and trailing asterisk added to /me messages
     const message = post.message.replace(/^\*|\*$/g, '');
@@ -411,7 +418,9 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CHANNEL_UNARCHIVED]: renderChannelUnarchivedMessage,
     [Posts.POST_TYPES.ME]: renderMeMessage,
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
+    [Posts.POST_TYPES.VOICE]: renderVoiceMessage,
     [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
+    [Posts.POST_TYPES.SYSTEM_WELCOME_MESSAGE]: () => <></>, // Infomaniak: return fragment to avoid displaying message from backend
     [Posts.POST_TYPES.CHANGE_CHANNEL_PRIVACY]: renderChangeChannelPrivacyMessage,
 };
 
@@ -536,6 +545,72 @@ function renderReminderACKMessage(post: Post, currentTeam: Team, isMilitaryTime:
 export function renderReminderSystemBotMessage(post: Post): ReactNode {
     const username = post.props.username ? renderUsername(post.props.username) : '';
     const permaLink = renderFormattedText(`[${post.props.link}](${post.props.link})`);
+    let endReminderTime;
+
+    if (post.props.target_time) {
+        const targetTime = new Date(post.props.target_time);
+        const now = new Date();
+        const diffInMs = targetTime.getTime() - now.getTime();
+        const diffInDays = Math.round(Math.abs(diffInMs) / (1000 * 60 * 60 * 24));
+
+        switch (diffInDays) {
+        case 0:
+            endReminderTime = (
+                <FormattedMessage
+                    id='post.systemBot.reminder.time'
+                    defaultMessage='at {time}'
+                    values={{time: <FormattedTime value={targetTime}/>}}
+                />
+            );
+            break;
+        case 1:
+            endReminderTime = (
+                <FormattedMessage
+                    id='post.systemBot.reminder.tomorrow'
+                    defaultMessage='tomorrow at {time}'
+                    values={{time: <FormattedTime value={targetTime}/>}}
+                />
+            );
+            break;
+        default:
+            endReminderTime = (
+                <FormattedDate
+                    value={targetTime}
+                    weekday='long'
+                    day='2-digit'
+                    month='short'
+                />
+            );
+        }
+    }
+
+    if (post.props.reschedule) {
+        return (
+            <FormattedMessage
+                id={'post.systemBot.reminder.reschedule'}
+                defaultMessage='Alright, I will remind you of <a>this message</a> {endReminderTime}'
+                values={{
+                    permaLink,
+                    endReminderTime,
+                    a: (chunks: React.ReactNode) => <a href={post.props.link}>{chunks}</a>,
+                }}
+            />
+        );
+    }
+
+    if (post.props.completed) {
+        return (
+            <FormattedMessage
+                id={'post.systemBot.reminder.completed'}
+                defaultMessage='Alright, I have marked the reminder for <a>this message</a> as completed!'
+                values={{
+                    permaLink,
+                    a: (chunks: React.ReactNode) => <a href={post.props.link}>{chunks}</a>,
+                }}
+            />
+        );
+    }
+
     return (
         <FormattedMessage
             id={'post.reminder.systemBot'}

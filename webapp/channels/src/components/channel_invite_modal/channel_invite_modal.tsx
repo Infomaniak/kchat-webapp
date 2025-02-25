@@ -384,9 +384,12 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             const ProfilesInGroup = this.props.profilesInCurrentChannel.map((user) => user.id);
 
             const userMapping: Record<string, string> = {};
-            for (let i = 0; i < ProfilesInGroup.length; i++) {
-                userMapping[ProfilesInGroup[i]] = 'Already in channel';
-            }
+            ProfilesInGroup.forEach((id) => {
+                userMapping[id] = this.props.intl.formatMessage({
+                    id: 'channel_invite.already_in_channel',
+                    defaultMessage: 'Already in channel',
+                });
+            });
             const displayName = displayUsername(option, this.props.teammateNameDisplaySetting);
             return (
                 <div

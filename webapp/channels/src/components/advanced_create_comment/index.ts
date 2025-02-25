@@ -14,7 +14,7 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getAssociatedGroupsForReferenceByMention} from 'mattermost-redux/selectors/entities/groups';
 import {makeGetMessageInHistoryItem} from 'mattermost-redux/selectors/entities/posts';
-import {getBool, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {get, getBool, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission, haveIOnlyPermissionsByChannel} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
@@ -108,6 +108,7 @@ function makeMapStateToProps() {
             useCustomGroupMentions,
             canUploadFiles: canUploadFiles(config),
             postEditorActions,
+            center: get(state, Constants.Preferences.CATEGORY_DISPLAY_SETTINGS, Constants.Preferences.CHANNEL_DISPLAY_MODE, Constants.Preferences.CHANNEL_DISPLAY_MODE_DEFAULT) === Constants.Preferences.CHANNEL_DISPLAY_MODE_CENTERED,
         };
     };
 }

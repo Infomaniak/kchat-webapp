@@ -41,6 +41,12 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
     <ProfilePopoverPlugin
       webSocketClient={
         WebSocketClient {
+          "_currentUserId": undefined,
+          "_currentUserTeamId": undefined,
+          "_presenceChannelId": undefined,
+          "_teamId": undefined,
+          "_userId": undefined,
+          "_userTeamId": undefined,
           "closeCallback": null,
           "closeListeners": Set {},
           "conn": null,
@@ -66,6 +72,7 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
           "presenceChannel": null,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
+          "reconnecting": false,
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
@@ -127,6 +134,12 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
     <ProfilePopoverPlugin
       webSocketClient={
         WebSocketClient {
+          "_currentUserId": undefined,
+          "_currentUserTeamId": undefined,
+          "_presenceChannelId": undefined,
+          "_teamId": undefined,
+          "_userId": undefined,
+          "_userTeamId": undefined,
           "closeCallback": null,
           "closeListeners": Set {},
           "conn": null,
@@ -152,6 +165,7 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
           "presenceChannel": null,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
+          "reconnecting": false,
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
@@ -279,6 +293,12 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
     <ProfilePopoverPlugin
       webSocketClient={
         WebSocketClient {
+          "_currentUserId": undefined,
+          "_currentUserTeamId": undefined,
+          "_presenceChannelId": undefined,
+          "_teamId": undefined,
+          "_userId": undefined,
+          "_userTeamId": undefined,
           "closeCallback": null,
           "closeListeners": Set {},
           "conn": null,
@@ -304,6 +324,7 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
           "presenceChannel": null,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
+          "reconnecting": false,
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
@@ -366,6 +387,12 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
     <ProfilePopoverPlugin
       webSocketClient={
         WebSocketClient {
+          "_currentUserId": undefined,
+          "_currentUserTeamId": undefined,
+          "_presenceChannelId": undefined,
+          "_teamId": undefined,
+          "_userId": undefined,
+          "_userTeamId": undefined,
           "closeCallback": null,
           "closeListeners": Set {},
           "conn": null,
@@ -391,6 +418,7 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
           "presenceChannel": null,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
+          "reconnecting": false,
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,

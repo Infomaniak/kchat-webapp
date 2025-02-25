@@ -8,6 +8,12 @@ import type {GroupChannel, GroupSyncablesState, GroupTeam, Group} from '@matterm
 
 import {GroupTypes} from 'mattermost-redux/action_types';
 
+interface GroupMemberInfo {
+    id: string;
+    group_id: string;
+    user_id: string;
+}
+
 function syncables(state: Record<string, GroupSyncablesState> = {}, action: AnyAction) {
     switch (action.type) {
     case GroupTypes.RECEIVED_GROUP_TEAMS: {
@@ -242,6 +248,69 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
         }
 
         return nextState;
+    }
+    case GroupTypes.RECEIVED_MEMBER_TO_REMOVE_FROM_GROUP: {
+        const dataInfo: GroupMemberInfo = action.data;
+
+        const group = state[dataInfo.group_id];
+        if (!group) {
+            // Do not have group in cache - Skipping update
+            return state;
+        }
+
+        if (Array.isArray(group.member_ids)) {
+            const newMemberIds = new Set(group.member_ids);
+            newMemberIds.delete(dataInfo.user_id);
+            const newGroup = {...group,
+                member_ids: [...newMemberIds],
+                member_count: newMemberIds.size,
+            };
+            return {
+                ...state,
+                [group.id]: newGroup,
+            };
+        }
+        const count = group.member_count;
+
+        return {
+            ...state,
+            [group.id]: {
+                ...group,
+                member_count: count > 1 ? count - 1 : 0,
+            },
+        };
+    }
+    case GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP: {
+        const {group_id: groupId, user_id: userId}: GroupMemberInfo = action.data;
+
+        const group = state[groupId];
+        if (!group) {
+            // Do not have group in cache - Skipping update
+            return state;
+        }
+
+        if (Array.isArray(group.member_ids)) {
+            const newMemberIds = new Set(group.member_ids);
+            newMemberIds.add(userId);
+            const newGroup = {...group,
+                member_ids: [...newMemberIds],
+                member_count: newMemberIds.size,
+            };
+            return {
+                ...state,
+                [group.id]: newGroup,
+            };
+        }
+
+        const count = group.member_count;
+
+        return {
+            ...state,
+            [group.id]: {
+                ...group,
+                member_count: count + 1,
+            },
+        };
     }
     default:
         return state;

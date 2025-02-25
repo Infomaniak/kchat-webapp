@@ -78,7 +78,9 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
               onClick={[Function]}
               style={
                 Object {
+                  "height": "20px",
                   "transform": "scale(1.5)",
+                  "width": "20px",
                 }
               }
             />
@@ -246,7 +248,9 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
               onClick={[Function]}
               style={
                 Object {
+                  "height": "20px",
                   "transform": "scale(1.5)",
+                  "width": "20px",
                 }
               }
             />
@@ -427,7 +431,9 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
               onClick={[Function]}
               style={
                 Object {
+                  "height": "20px",
                   "transform": "scale(1.5)",
+                  "width": "20px",
                 }
               }
             />

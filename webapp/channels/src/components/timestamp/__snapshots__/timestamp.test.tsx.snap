@@ -6,8 +6,8 @@ exports[`components/timestamp/Timestamp should be wrapped in SemanticTime and su
   className="test class"
   value={2019-05-03T13:20:00.000Z}
 >
-  Friday
+  Friday, May 03
 </Memo(SemanticTime)>
 `;
 
-exports[`components/timestamp/Timestamp should not be wrapped in SemanticTime 1`] = `"Friday"`;
+exports[`components/timestamp/Timestamp should not be wrapped in SemanticTime 1`] = `"Friday, May 03"`;

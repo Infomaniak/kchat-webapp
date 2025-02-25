@@ -25,6 +25,7 @@ import {
     getLatestReplyablePostId,
     makeGetMessageInHistoryItem,
     isPostPriorityEnabled,
+    isPollsEnabled,
 } from 'mattermost-redux/selectors/entities/posts';
 import {get, getInt, getBool, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveICurrentChannelPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -131,6 +132,7 @@ function makeMapStateToProps() {
             isLDAPEnabled,
             useCustomGroupMentions,
             isPostPriorityEnabled: isPostPriorityEnabled(state),
+            isPollsEnabled: isPollsEnabled(state),
             postEditorActions,
         };
     };

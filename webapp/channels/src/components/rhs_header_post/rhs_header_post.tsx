@@ -18,6 +18,8 @@ import CRTThreadsPaneTutorialTip
 import {getHistory} from 'utils/browser_history';
 import Constants, {RHSStates} from 'utils/constants';
 
+import RHSHeader from 'plugins/ai/components/rhs/rhs_header';
+
 import type {RhsState} from 'types/store/rhs';
 
 interface Props extends WrappedComponentProps {
@@ -41,6 +43,7 @@ interface Props extends WrappedComponentProps {
     closeRightHandSide: (e?: React.MouseEvent) => void;
     toggleRhsExpanded: (e: React.MouseEvent) => void;
     setThreadFollow: (userId: string, teamId: string, threadId: string, newState: boolean) => void;
+    onChatHistoryClick?: () => void;
 }
 
 class RhsHeaderPost extends React.PureComponent<Props> {
@@ -174,74 +177,83 @@ class RhsHeaderPost extends React.PureComponent<Props> {
         }
 
         return (
-            <div className='sidebar--right__header'>
-                <span className='sidebar--right__title'>
-                    {back}
-                    <FormattedMessage
-                        id='rhs_header.details'
-                        defaultMessage='Thread'
-                    />
-                    {channelName &&
+            <>
+                <div className='sidebar--right__header'>
+                    <span className='sidebar--right__title'>
+                        {back}
+                        <FormattedMessage
+                            id='rhs_header.details'
+                            defaultMessage='Thread'
+                        />
+                        {channelName &&
                         <button
                             onClick={this.handleJumpClick}
                             className='style--none sidebar--right__title__channel'
                         >
                             {channelName}
                         </button>
-                    }
-                </span>
-                <div className='controls'>
-                    {this.props.isCollapsedThreadsEnabled ? (
-                        <FollowButton
-                            className='sidebar--right__follow__thread'
-                            isFollowing={isFollowingThread}
-                            onClick={this.handleFollowChange}
-                        />
-                    ) : null}
+                        }
+                    </span>
 
-                    <OverlayTrigger
-                        delayShow={Constants.OVERLAY_TIME_DELAY}
-                        placement='bottom'
-                        overlay={this.props.isExpanded ? shrinkSidebarTooltip : expandSidebarTooltip}
-                    >
-                        <button
-                            type='button'
-                            className='sidebar--right__expand btn btn-icon btn-sm'
-                            aria-label='Expand'
-                            onClick={this.props.toggleRhsExpanded}
-                        >
-                            <i
-                                className='icon icon-arrow-expand'
-                                aria-label={formatMessage({id: 'rhs_header.expandSidebarTooltip.icon', defaultMessage: 'Expand Sidebar Icon'})}
+                    <div className='controls'>
+                        {this.props.isCollapsedThreadsEnabled ? (
+                            <FollowButton
+                                className='sidebar--right__follow__thread'
+                                isFollowing={isFollowingThread}
+                                onClick={this.handleFollowChange}
                             />
-                            <i
-                                className='icon icon-arrow-collapse'
-                                aria-label={formatMessage({id: 'rhs_header.collapseSidebarTooltip.icon', defaultMessage: 'Collapse Sidebar Icon'})}
-                            />
-                        </button>
-                    </OverlayTrigger>
+                        ) : null}
 
-                    <OverlayTrigger
-                        delayShow={Constants.OVERLAY_TIME_DELAY}
-                        placement='top'
-                        overlay={closeSidebarTooltip}
-                    >
-                        <button
-                            id='rhsCloseButton'
-                            type='button'
-                            className='sidebar--right__close btn btn-icon btn-sm'
-                            aria-label='Close'
-                            onClick={this.props.closeRightHandSide}
+                        <OverlayTrigger
+                            delayShow={Constants.OVERLAY_TIME_DELAY}
+                            placement='bottom'
+                            overlay={this.props.isExpanded ? shrinkSidebarTooltip : expandSidebarTooltip}
                         >
-                            <i
-                                className='icon icon-close'
-                                aria-label={formatMessage({id: 'rhs_header.closeTooltip.icon', defaultMessage: 'Close Sidebar Icon'})}
-                            />
-                        </button>
-                    </OverlayTrigger>
+                            <button
+                                type='button'
+                                className='sidebar--right__expand btn btn-icon btn-sm'
+                                aria-label='Expand'
+                                onClick={this.props.toggleRhsExpanded}
+                            >
+                                <i
+                                    className='icon icon-arrow-expand'
+                                    aria-label={formatMessage({id: 'rhs_header.expandSidebarTooltip.icon', defaultMessage: 'Expand Sidebar Icon'})}
+                                />
+                                <i
+                                    className='icon icon-arrow-collapse'
+                                    aria-label={formatMessage({id: 'rhs_header.collapseSidebarTooltip.icon', defaultMessage: 'Collapse Sidebar Icon'})}
+                                />
+                            </button>
+                        </OverlayTrigger>
+
+                        <OverlayTrigger
+                            delayShow={Constants.OVERLAY_TIME_DELAY}
+                            placement='top'
+                            overlay={closeSidebarTooltip}
+                        >
+                            <button
+                                id='rhsCloseButton'
+                                type='button'
+                                className='sidebar--right__close btn btn-icon btn-sm'
+                                aria-label='Close'
+                                onClick={this.props.closeRightHandSide}
+                            >
+                                <i
+                                    className='icon icon-close'
+                                    aria-label={formatMessage({id: 'rhs_header.closeTooltip.icon', defaultMessage: 'Close Sidebar Icon'})}
+                                />
+                            </button>
+                        </OverlayTrigger>
+                    </div>
+                    {this.props.showThreadsTutorialTip && <CRTThreadsPaneTutorialTip/>}
                 </div>
-                {this.props.showThreadsTutorialTip && <CRTThreadsPaneTutorialTip/>}
-            </div>
+                {this.props.channel.display_name === 'kChat Bot' && (
+                    <RHSHeader
+                        onChatHistoryClick={this.props.onChatHistoryClick}
+                        channelName={this.props.channel.name}
+                    />
+                )}
+            </>
         );
     }
 }

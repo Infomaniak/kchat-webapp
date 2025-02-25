@@ -79,29 +79,29 @@ function CustomStatusEmoji({
                     <div className='custom-status'>
                         <RenderEmoji
                             emojiName={customStatus.emoji}
-                            size={expires ? 14 : 28}
+                            size={28}
                             emojiStyle={{
                                 marginTop: 2,
                             }}
                         />
-                        {customStatus.text &&
+                        <div
+                            className='custom-status-text-container'
+                        >
                             <span
                                 className='custom-status-text'
-                                style={{marginLeft: 5}}
                             >
-                                {customStatus.text}
+                                {customStatus?.text === '' ? `:${customStatus?.emoji}:` : customStatus?.text}
                             </span>
-                        }
-                    </div>
-                    {expires &&
-                        <div>
-                            <ExpiryTime
-                                time={customStatus.expires_at}
-                                timezone={timezone}
-                                className='custom-status-expiry'
-                            />
+
+                            {expires && (
+                                <ExpiryTime
+                                    time={customStatus.expires_at}
+                                    timezone={timezone}
+                                    className='custom-status-expiry'
+                                />
+                            )}
                         </div>
-                    }
+                    </div>
                 </Tooltip>
             }
         >

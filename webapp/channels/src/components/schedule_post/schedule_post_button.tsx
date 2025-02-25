@@ -111,10 +111,10 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
         const timestamp = getCurrentMomentForTimezone(timezone);
         switch (optionName) {
         case 'tomorrow':
-            timestamp.add(1, 'day').hours(9).minutes(0).seconds(0);
+            timestamp.add(1, 'day').hours(8).minutes(0).seconds(0);
             break;
         case 'monday':
-            timestamp.add(1, 'week').isoWeekday(1).hours(9).minutes(0).seconds(0);
+            timestamp.add(1, 'week').isoWeekday(1).hours(8).minutes(0).seconds(0);
             break;
         case 'custom':
             dispatch(openModal({
@@ -137,7 +137,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
                 overlay={tooltip}
                 delayShow={Constants.OVERLAY_TIME_DELAY}
                 placement='top'
-                trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
+                trigger={['hover']}
             >
                 <StyledSchedulePostButton
                     disableRipple={true}

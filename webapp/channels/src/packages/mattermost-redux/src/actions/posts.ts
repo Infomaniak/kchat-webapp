@@ -1246,10 +1246,23 @@ export function unflagPost(postId: string): ActionFuncAsync {
     };
 }
 
-export function addPostReminder(userId: string, postId: string, timestamp: number): ActionFuncAsync {
+export function markPostReminderAsDone(userId: string, postId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         try {
-            await Client4.addPostReminder(userId, postId, timestamp);
+            await Client4.markPostReminderAsDone(userId, postId);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error};
+        }
+        return {data: true};
+    };
+}
+
+export function addPostReminder(userId: string, postId: string, timestamp: number, reschedule?: boolean, reminderPostId?: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
+        try {
+            await Client4.addPostReminder(userId, postId, timestamp, reschedule, reminderPostId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));

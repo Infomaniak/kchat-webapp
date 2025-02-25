@@ -3,7 +3,8 @@
 
 import {KSuiteBridge} from '@infomaniak/ksuite-bridge';
 
-import {storeBridge} from 'actions/ksuite_bridge_actions';
+import {storeBridge} from 'mattermost-redux/actions/ksuiteBridge';
+
 import * as Actions from 'actions/views/root';
 import * as i18nSelectors from 'selectors/i18n';
 

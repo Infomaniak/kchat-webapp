@@ -396,15 +396,14 @@ const EditPost = ({editingPost, actions, canEditPost, config, channelId, draft, 
             //Oops.. There went something wrong
             return;
         }
-
+        const textarea = document.getElementById('edit_textbox') as HTMLTextAreaElement | null;
+        const cursorPosition = textarea?.selectionStart || 0;
         let newMessage = `:${emojiAlias}: `;
         let newCaretPosition = newMessage.length;
 
         if (editText.length > 0) {
-            const {firstPiece, lastPiece} = splitMessageBasedOnCaretPosition(
-                selectionRange.start,
-                editText,
-            );
+            const firstPiece = editText.substring(0, cursorPosition);
+            const lastPiece = editText.substring(cursorPosition);
 
             // check whether the first piece of the message is empty when cursor
             // is placed at beginning of message and avoid adding an empty string at the beginning of the message

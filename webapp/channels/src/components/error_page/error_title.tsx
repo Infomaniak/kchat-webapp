@@ -112,6 +112,14 @@ const ErrorTitle: React.FC<Props> = ({type, title, groupName}: Props) => {
                 />
             );
             break;
+        case ErrorPageTypes.FORCE_MIGRATION:
+            errorTitle = (
+                <FormattedMessage
+                    id='error.force_migration.title'
+                    defaultMessage='Download the new version of the kChat application'
+                />
+            );
+            break;
         case ErrorPageTypes.PAGE_NOT_FOUND:
         default:
             errorTitle = (

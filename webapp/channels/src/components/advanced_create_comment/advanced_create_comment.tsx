@@ -11,6 +11,7 @@ import type {ServerError} from '@mattermost/types/errors';
 import type {FileInfo} from '@mattermost/types/files';
 import {GroupSource} from '@mattermost/types/groups';
 import type {Group} from '@mattermost/types/groups';
+import type {Post} from '@mattermost/types/posts';
 import type {PreferenceType} from '@mattermost/types/preferences';
 
 import {Posts} from 'mattermost-redux/constants';
@@ -26,6 +27,7 @@ import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
 import NotifyConfirmModal from 'components/notify_confirm_modal';
 import PostDeletedModal from 'components/post_deleted_modal';
+import Poll from 'components/post_poll/';
 import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 import type {TextboxClass, TextboxElement} from 'components/textbox';
 
@@ -103,6 +105,9 @@ export type Props = {
 
     // Determines if the user is allowed to upload files
     canUploadFiles: boolean;
+
+    // Determines if the post container is full-width or centered
+    center: boolean;
 
     // Called to clear file uploads in progress
     clearCommentDraftUploads: () => void;
@@ -687,9 +692,11 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         const fasterThanHumanWillClick = 150;
         const forceFocus = (Date.now() - this.lastBlurAt < fasterThanHumanWillClick);
         this.focusTextbox(forceFocus);
-
         if (isSchedule) {
             draft.timestamp = scheduleUTCTimestamp;
+            if (this.props.draft?.id) {
+                draft.id = this.props.draft.id;
+            }
         }
 
         const serverError = this.state.serverError;
@@ -766,9 +773,9 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         emitShortcutReactToLastPostFrom(Locations.RHS_ROOT);
     };
 
-    emitTypingEvent = () => {
+    emitTypingEvent = (eventType = 'typing') => {
         const {channelId, rootId} = this.props;
-        GlobalActions.emitLocalUserTypingEvent(channelId, rootId);
+        GlobalActions.emitLocalUserTypingEvent(eventType, channelId, rootId);
     };
 
     handleChange = (e: React.ChangeEvent<TextboxElement>) => {
@@ -1112,7 +1119,10 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             });
 
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form
+                onSubmit={this.handleSubmit}
+                className={this.props.center ? 'center' : undefined}
+            >
                 {
                     this.props.canPost &&
                     (this.props.draft.fileInfos.length > 0 || this.props.draft.uploadsInProgress.length > 0) &&

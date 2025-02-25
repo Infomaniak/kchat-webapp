@@ -12,6 +12,7 @@ import {UserTypes, AdminTypes} from 'mattermost-redux/action_types';
 import {logError} from 'mattermost-redux/actions/errors';
 import {setServerVersion, getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
 import {bindClientFunc, forceLogoutIfNecessary, debounce} from 'mattermost-redux/actions/helpers';
+import {bridgeRecreate} from 'mattermost-redux/actions/ksuiteBridge';
 import {getUsersLimits} from 'mattermost-redux/actions/limits';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
@@ -27,7 +28,6 @@ import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
 // TODO fix import restriction
 import {getMyMeets} from 'actions/calls';
-import {bridgeRecreate} from 'actions/ksuite_bridge_actions';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
@@ -73,6 +73,15 @@ export function loadMe(): ActionFuncAsync<boolean> {
         // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
         const serverVersion = Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
+
+        const bridge = getState().entities.ksuiteBridge.bridge;
+
+        if (!bridge.isConnected && !isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+            // eslint-disable-next-line no-process-env
+            window.location.assign(`https://ksuite.${process.env.BASE_URL?.split('kchat.')[1]}/kchat`);
+
+            return;
+        }
 
         try {
             const kSuiteCall = await dispatch(getMyKSuites());
@@ -1352,16 +1361,16 @@ export function clearUserAccessTokens(): ActionFuncAsync {
     };
 }
 
-export function checkForModifiedUsers(): ActionFuncAsync {
+export function checkForModifiedUsers(since: number): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const users = getUsers(state);
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
         const userIds = Object.keys(users);
-        console.log('checking for modified users with lastDisconnect:', lastDisconnectAt);
+        console.log('checking for modified users since', since || lastDisconnectAt);
         console.log('fetch profile count:', userIds.length);
 
-        await dispatch(getProfilesByIds(userIds, {since: lastDisconnectAt}));
+        await dispatch(getProfilesByIds(userIds, {since: since || lastDisconnectAt}));
         return {data: true};
     };
 }

@@ -589,6 +589,16 @@ export function getRecentPostsChunkInChannel(state: GlobalState, channelId: Chan
     return postsForChannel.find((block) => block.recent);
 }
 
+export function getNotRecentPostsChunkInChannel(state: GlobalState, channelId: Channel['id']): PostOrderBlock | null | undefined {
+    const postsForChannel = state.entities.posts.postsInChannel[channelId];
+
+    if (!postsForChannel) {
+        return null;
+    }
+
+    return postsForChannel.find((block) => !block.recent);
+}
+
 export function getOldestPostsChunkInChannel(state: GlobalState, channelId: Channel['id']): PostOrderBlock | null | undefined {
     const postsForChannel = state.entities.posts.postsInChannel[channelId];
 
@@ -770,6 +780,10 @@ export function getLimitedViews(state: GlobalState): GlobalState['entities']['po
 
 export function isPostPriorityEnabled(state: GlobalState) {
     return getConfig(state).PostPriority === 'true';
+}
+
+export function isPollsEnabled(state: GlobalState) {
+    return getConfig(state).AllowPolls === 'true';
 }
 
 export function isPostAcknowledgementsEnabled(state: GlobalState) {

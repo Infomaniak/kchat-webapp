@@ -7,13 +7,14 @@
   "private": true,
   "dependencies": {
     "@floating-ui/react": "0.26.6",
+    "@floating-ui/react-dom-interactions": "0.13.3",
     "@giphy/js-fetch-api": "5.1.0",
     "@giphy/react-components": "8.1.0",
     "@guyplusplus/turndown-plugin-gfm": "1.0.7",
     "@infomaniak/compass-components": "0.17.0",
     "@infomaniak/compass-icons": "0.13.0",
     "@infomaniak/font-suisse": "https://verdaccio.dev.infomaniak.ch/@infomaniak/font-suisse/-/font-suisse-1.0.0.tgz",
-    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.3.1.tgz",
+    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.3.6.tgz",
     "@infomaniak/marked": "^0.2.0",
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client",
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types",
@@ -240,7 +241,7 @@
     "i18n-clean-empty": "npm run mmjstool -- i18n clean-empty --webapp-dir ./src",
     "i18n-check-empty-src": "npm run mmjstool -- i18n check-empty-src --webapp-dir ./src",
     "check-types": "tsc -b",
-    "make-emojis": "node --experimental-json-modules build/emoji/make_emojis.mjs"
+    "make-emojis": "node --experimental-json-modules build/emoji/make_emojis.mjs --excluded-emoji-file excludedEmojis"
   },
   "packageManager": "yarn@4.0.1"
 }

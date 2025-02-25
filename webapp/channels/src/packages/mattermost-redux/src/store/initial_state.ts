@@ -154,6 +154,7 @@ const state: GlobalState = {
             // isLimitedResults: -1,
         },
         typing: {},
+        recording: {},
         roles: {
             roles: {},
             pending: new Set(),
@@ -277,6 +278,12 @@ const state: GlobalState = {
         insights: {
             topReactions: {},
             myTopReactions: {},
+        },
+        ksuiteBridge: {
+            bridge: undefined,
+            dnd: false,
+            spaceId: '',
+            ksuiteMode: '',
         },
     },
     errors: [],

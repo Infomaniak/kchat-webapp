@@ -3,6 +3,8 @@
 
 /* eslint-disable max-lines */
 
+import WebSocketClient from 'client/web_websocket_client';
+import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 import {lazy} from 'react';
 import {batchActions} from 'redux-batched-actions';
 
@@ -117,9 +119,7 @@ import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatu
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
-
-import WebSocketClient from 'client/web_websocket_client';
-import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
+import {logTimestamp} from 'utils/utils';
 
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
 import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';
@@ -243,9 +243,14 @@ function restart() {
     dispatch(getClientConfig());
 }
 
+export function reconnectWsChannels() {
+    if (WebSocketClient.reconnecting) {
+        WebSocketClient.reconnectAllChannels();
+    }
+}
+
 export async function reconnect(socketId) {
-    // eslint-disable-next-line
-    console.log('Reconnecting WebSocket');
+    console.log('[websocket actions] reconnect');
     if (isDesktopApp()) {
         const token = localStorage.getItem('IKToken');
         if (!token) {
@@ -286,6 +291,8 @@ export async function reconnect(socketId) {
         const mostRecentId = getMostRecentPostIdInChannel(state, currentChannelId);
         const mostRecentPost = getPost(state, mostRecentId);
 
+        console.log(`[websocket actions] currentTeamId: ${currentTeamId} currentChannelId: ${currentChannelId} mostRecentPostId: ${mostRecentPost?.id}`);
+
         // if (appsFeatureFlagEnabled(state)) {
         //     dispatch(handleRefreshAppsBindings());
         // }
@@ -294,12 +301,9 @@ export async function reconnect(socketId) {
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
-            // eslint-disable-next-line no-console
-            console.log('[websocket_actions] dispatch syncPostsInChannel');
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
             dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
-            // if network timed-out the first time when loading a channel
             // we can request for getPosts again when socket is connected
             dispatch(getPosts(currentChannelId));
         }
@@ -333,9 +337,11 @@ export async function reconnect(socketId) {
     });
 
     if (state.websocket.lastDisconnectAt) {
-        // eslint-disable-next-line no-console
-        console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
-        dispatch(checkForModifiedUsers(true));
+        logTimestamp('lastConnectAt', state.websocket.lastConnectAt);
+        logTimestamp('lastDisconnectAt', state.websocket.lastDisconnectAt);
+
+        // IK: Subtract 30 sec to account for ws disconnection timeout
+        dispatch(checkForModifiedUsers(state.websocket.lastDisconnectAt - (30 * 1000)));
         dispatch(TeamActions.getMyKSuites());
     }
 
@@ -401,14 +407,10 @@ function handleClose(failCount) {
         dispatch(logError({type: 'critical', message: AnnouncementBarMessages.WEBSOCKET_PORT_ERROR}, true));
     }
 
-    // Subtract 30 sec to account for ws disconnection timeout
-    const nowTimestamp = Date.now();
-    const thirtySecondsAgoTimestamp = nowTimestamp - (30 * 1000);
-
     dispatch(batchActions([
         {
             type: GeneralTypes.WEBSOCKET_FAILURE,
-            timestamp: thirtySecondsAgoTimestamp,
+            timestamp: Date.now(),
         },
         incrementWsErrorCount(),
     ]));
@@ -715,7 +717,7 @@ function handleChannelConvertedEvent(msg) {
         if (channel) {
             dispatch({
                 type: ChannelTypes.RECEIVED_CHANNEL,
-                data: {...channel, type: General.PRIVATE_CHANNEL},
+                data: channel, //Infomaniak : change from {...channel, type: General.PRIVATE_CHANNEL},
             });
         }
     }
@@ -1567,6 +1569,7 @@ function handleGroupAddedMemberEvent(msg) {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
         const data = msg.data.group_member;
+        const receivedProfile = getUser(state, data.user_id);
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1577,6 +1580,19 @@ function handleGroupAddedMemberEvent(msg) {
                 },
             );
         }
+        dispatch(batchActions([
+            {
+                type: GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP,
+                data,
+                id: data.group_id,
+            },
+            {
+                type: UserTypes.RECEIVED_PROFILES_FOR_GROUP,
+                data: [receivedProfile],
+                id: data.group_id,
+            },
+        ]),
+        );
     };
 }
 
@@ -1595,6 +1611,19 @@ function handleGroupDeletedMemberEvent(msg) {
                 },
             );
         }
+        dispatch(batchActions([
+            {
+                type: UserTypes.RECEIVED_PROFILES_LIST_TO_REMOVE_FROM_GROUP,
+                data: [data],
+                id: data.group_id,
+            },
+            {
+                type: GroupTypes.RECEIVED_MEMBER_TO_REMOVE_FROM_GROUP,
+                data,
+                id: data.group_id,
+            },
+        ]),
+        );
     };
 }
 

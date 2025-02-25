@@ -45,6 +45,7 @@ function preRenderSetup(callwhendone: () => void) {
                 {
                     type: AnnouncementBarTypes.DEVELOPER,
                     message: 'A JavaScript error in the webapp client has occurred. (msg: ' + msg + ', row: ' + line + ', col: ' + column + ').',
+                    intlId: 'apps.error.javascript',
                     stack: error?.stack,
                     url,
                 },

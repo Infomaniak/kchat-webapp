@@ -327,9 +327,6 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
             text="In a meeting"
             tooltipDirection="bottom"
           />
-          <Text
-            margin="none"
-          />
           <div
             className="status-dropdown-menu__clear-container input-clear visible"
             onClick={[Function]}
@@ -624,14 +621,9 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
           </span>
           <CustomStatusText
             className="custom_status__text"
-            text=""
+            text="Set a custom status"
             tooltipDirection="bottom"
           />
-          <Text
-            margin="none"
-          >
-            Set a custom status
-          </Text>
         </span>
       </MenuItemToggleModalRedux>
     </Memo(MenuGroup)>
@@ -885,14 +877,9 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
           </span>
           <CustomStatusText
             className="custom_status__text"
-            text=""
+            text="Set a custom status"
             tooltipDirection="bottom"
           />
-          <Text
-            margin="none"
-          >
-            Set a custom status
-          </Text>
         </span>
       </MenuItemToggleModalRedux>
     </Memo(MenuGroup)>
@@ -1146,14 +1133,9 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
           </span>
           <CustomStatusText
             className="custom_status__text"
-            text=""
+            text="Set a custom status"
             tooltipDirection="bottom"
           />
-          <Text
-            margin="none"
-          >
-            Set a custom status
-          </Text>
           <PulsatingDot />
         </span>
       </MenuItemToggleModalRedux>
@@ -1874,14 +1856,9 @@ exports[`components/StatusDropdown should not show clear status button when cust
           </span>
           <CustomStatusText
             className="custom_status__text"
-            text=""
+            text="Set a custom status"
             tooltipDirection="bottom"
           />
-          <Text
-            margin="none"
-          >
-            Set a custom status
-          </Text>
         </span>
       </MenuItemToggleModalRedux>
     </Memo(MenuGroup)>
@@ -2146,9 +2123,6 @@ exports[`components/StatusDropdown should show clear status button when custom s
             className="custom_status__text"
             text="In a meeting"
             tooltipDirection="bottom"
-          />
-          <Text
-            margin="none"
           />
           <div
             className="status-dropdown-menu__clear-container input-clear visible"

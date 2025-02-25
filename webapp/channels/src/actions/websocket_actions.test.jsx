@@ -175,7 +175,7 @@ let mockState = {
 
 jest.mock('stores/redux_store', () => {
     return {
-        dispatch: jest.fn(),
+        dispatch: jest.fn(() => Promise.resolve()),
         getState: () => mockState,
     };
 });

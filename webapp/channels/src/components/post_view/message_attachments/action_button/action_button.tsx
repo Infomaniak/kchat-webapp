@@ -60,7 +60,7 @@ export default class ActionButton extends React.PureComponent<Props> {
                     text={this.props.actionExecutingMessage}
                 >
                     <Markdown
-                        message={action.name}
+                        message={String(action.name)}
                         options={{
                             mentionHighlight: false,
                             markdown: false,

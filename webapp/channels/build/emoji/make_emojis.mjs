@@ -124,10 +124,6 @@ readMissingDirPromise.then(() => {
     }
 });
 
-// Copy mattermost emoji image
-const webappImagesDir = path.resolve(webappRootDir, 'channels', 'src', 'images');
-endResults.push(copyFileAndPrint(path.resolve(webappImagesDir, 'icon64x64.png'), path.resolve(webappImagesDir, 'emoji/mattermost.png'), 'mattermost-emoji'));
-
 const sheetSource = path.resolve(rootDir, `node_modules/emoji-datasource-apple/img/apple/sheets/${EMOJI_SIZE}.png`);
 const sheetAbsoluteFile = path.resolve(webappRootDir, 'channels', 'src', 'images/emoji-sheets/apple-sheet.png');
 const sheetFile = 'images/emoji-sheets/apple-sheet.png';
@@ -249,21 +245,21 @@ fullEmoji.push({
     category: 'custom',
 });
 fullEmoji.push({
-    id: 'contact',
-    name: 'contact',
-    unified: 'contact',
-    image: 'contact.png',
-    short_name: 'contact',
-    short_names: ['contact'],
+    id: 'contacts',
+    name: 'contacts',
+    unified: 'contacts',
+    image: 'contacts.png',
+    short_name: 'contacts',
+    short_names: ['contacts'],
     category: 'custom',
 });
 fullEmoji.push({
-    id: 'drive',
-    name: 'drive',
-    unified: 'drive',
-    image: 'drive.png',
-    short_name: 'drive',
-    short_names: ['drive'],
+    id: 'kdrive',
+    name: 'kdrive',
+    unified: 'kdrive',
+    image: 'kdrive.png',
+    short_name: 'kdrive',
+    short_names: ['kdrive'],
     category: 'custom',
 });
 fullEmoji.push({
@@ -285,12 +281,12 @@ fullEmoji.push({
     category: 'custom',
 });
 fullEmoji.push({
-    id: 'paste',
-    name: 'paste',
-    unified: 'paste',
-    image: 'paste.png',
-    short_name: 'paste',
-    short_names: ['paste'],
+    id: 'kpaste',
+    name: 'kpaste',
+    unified: 'kpaste',
+    image: 'kpaste.png',
+    short_name: 'kpaste',
+    short_names: ['kpaste'],
     category: 'custom',
 });
 fullEmoji.push({
@@ -541,8 +537,7 @@ for (const key of emojiFilePositions.keys()) {
     cssEmojis.push(`.emoji-${key} { background-position: ${emojiFilePositions.get(key)} }`);
 }
 
-const cssRules = `
-@charset "UTF-8";
+const cssRules = `@charset "UTF-8";
 
 .emojisprite-preview {
     width: ${EMOJI_SIZE_PADDED}px;
@@ -551,9 +546,8 @@ const cssRules = `
     background-repeat: no-repeat;
     cursor: pointer;
     -moz-transform: scale(0.5);
+    transform: scale(0.5);
     transform-origin: 0 0;
-    // Using zoom for now as it results in less blurry emojis on Chrome - MM-34178
-    zoom: 0.5;
 }
 
 .emojisprite {
@@ -564,7 +558,7 @@ const cssRules = `
     border-radius: 18px;
     cursor: pointer;
     -moz-transform: scale(0.35);
-    zoom: 0.35;
+    transform: scale(0.35);
 }
 
 .emojisprite-loading {
@@ -576,7 +570,7 @@ const cssRules = `
     border-radius: 18px;
     cursor: pointer;
     -moz-transform: scale(0.35);
-    zoom: 0.35;
+    transform: scale(0.35);
 }
 
 ${cssCats.join('\n')}

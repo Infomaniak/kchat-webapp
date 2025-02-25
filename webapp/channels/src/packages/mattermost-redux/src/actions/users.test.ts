@@ -8,6 +8,7 @@ import nock from 'nock';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {UserTypes} from 'mattermost-redux/action_types';
+import ksuiteBridge from 'mattermost-redux/action_types/ksuiteBridge';
 import * as Actions from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
@@ -30,6 +31,13 @@ describe('Actions.Users', () => {
                 general: {
                     config: {
                         CollapsedThreads: 'always_on',
+                    },
+                },
+
+                // Infomaniak specific mock
+                ksuiteBridge: {
+                    bridge: {
+                        isConnected: false,
                     },
                 },
             },

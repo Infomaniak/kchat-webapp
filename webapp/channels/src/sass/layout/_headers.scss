@@ -447,8 +447,8 @@
                     display: none;
                 }
 
-                &:focus,
-                &:hover {
+                &:not(.disabled):focus,
+                &:not(.disabled):hover {
                     color: rgba(var(--center-channel-color-rgb), 0.88);
                     text-decoration: none;
 

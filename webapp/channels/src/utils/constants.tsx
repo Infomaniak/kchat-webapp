@@ -701,6 +701,7 @@ export const SocketEvents = {
     ROLE_REMOVED: 'role_removed',
     ROLE_UPDATED: 'role_updated',
     TYPING: 'client-user_typing',
+    RECORDING: 'client-user_recording',
     PREFERENCE_CHANGED: 'preference_changed',
     PREFERENCES_CHANGED: 'preferences_changed',
     PREFERENCES_DELETED: 'preferences_deleted',
@@ -1022,6 +1023,7 @@ export const ErrorPageTypes = {
     NO_KSUITE: 'no_ksuite',
     MAINTENANCE: 'maintenance',
     BLOCKED: 'blocked',
+    FORCE_MIGRATION: 'force_migration',
 };
 
 export const JobTypes = {
@@ -1596,7 +1598,7 @@ export const Constants = {
     DEFAULT_CHARACTER_LIMIT: 4000,
     IMAGE_TYPE_GIF: 'gif',
     TEXT_TYPES: ['txt', 'rtf', 'vtt'],
-    IMAGE_TYPES: ['jpg', 'gif', 'bmp', 'png', 'jpeg', 'tiff', 'tif', 'psd', 'heic', 'HEIC', 'avif'],
+    IMAGE_TYPES: ['jpg', 'gif', 'bmp', 'png', 'jpeg', 'tiff', 'tif', 'psd', 'heic', 'HEIC', 'avif', 'webp'],
     AUDIO_TYPES: [AudioFileExtensions.MP3, AudioFileExtensions.WAV, AudioFileExtensions.WMA, AudioFileExtensions.M4A, AudioFileExtensions.FLAC, AudioFileExtensions.AAC, AudioFileExtensions.OGG, AudioFileExtensions.M4R],
     VIDEO_TYPES: ['mp4', 'avi', 'webm', 'mkv', 'wmv', 'mpg', 'mov', 'flv'],
     PRESENTATION_TYPES: ['ppt', 'pptx'],
@@ -2221,7 +2223,7 @@ export const WindowSizes = {
     DESKTOP_VIEW: 'desktopView',
 };
 
-export const AcceptedProfileImageTypes = ['image/jpeg', 'image/png', 'image/bmp'];
+export const AcceptedProfileImageTypes = ['image/jpeg', 'image/png', 'image/bmp', 'image/gif'];
 
 export const searchHintOptions = [{searchTerm: 'From:', message: {id: t('search_list_option.from'), defaultMessage: 'Messages from a user'}},
     {searchTerm: 'In:', message: {id: t('search_list_option.in'), defaultMessage: 'Messages in a channel'}},

@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {PaperclipIcon} from '@infomaniak/compass-icons/components';
+import {LaptopIcon, PaperclipIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {PureComponent} from 'react';
 import type {ChangeEvent, DragEvent, MouseEvent, TouchEvent, RefObject} from 'react';
@@ -15,10 +15,12 @@ import type {UploadFile} from 'actions/file_actions';
 
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import * as Menu from 'components/menu';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import Menu from 'components/widgets/menu/menu';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+// import Menu from 'components/widgets/menu/menu';
+// import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
 import Constants from 'utils/constants';
 import DelayedAction from 'utils/delayed_action';
@@ -658,7 +660,7 @@ export class FileUpload extends PureComponent<Props, State> {
         } else {
             const pluginFileUploadMethods = this.props.pluginFileUploadMethods.map((item) => {
                 return (
-                    <li
+                    <Menu.Item
                         key={item.pluginId + '_fileuploadpluginmenuitem'}
                         onClick={() => {
                             if (item.action) {
@@ -679,20 +681,9 @@ export class FileUpload extends PureComponent<Props, State> {
                             }
                             this.setState({menuOpen: false});
                         }}
-                    >
-                        <a
-                            href='#'
-                            style={{display: 'flex', alignItems: 'center'}}
-                        >
-                            <span
-                                className='mr-2'
-                                style={{marginLeft: -3, height: 20}}
-                            >
-                                {item.icon}
-                            </span>
-                            {item.text}
-                        </a>
-                    </li>
+                        labels={<span>{item.text}</span>}
+                        leadingElement={item.icon}
+                    />
                 );
             });
             bodyAction = (
@@ -709,61 +700,41 @@ export class FileUpload extends PureComponent<Props, State> {
                         accept={accept}
                         disabled={this.props.disabled}
                     />
-                    <MenuWrapper>
-                        <OverlayTrigger
-                            delayShow={Constants.OVERLAY_TIME_DELAY}
-                            placement='top'
-                            trigger={['hover', 'focus']}
-                            overlay={
-                                <Tooltip id='upload-tooltip'>
-                                    <KeyboardShortcutSequence
-                                        shortcut={KEYBOARD_SHORTCUTS.filesUpload}
-                                        hoistDescription={true}
-                                        isInsideTooltip={true}
-                                    />
-                                </Tooltip>
-                            }
-                        >
-                            <button
-                                type='button'
-                                id='fileUploadButton'
-                                aria-label={buttonAriaLabel}
-                                disabled={this.props.disabled}
-                                className='style--none AdvancedTextEditor__action-button'
-                            >
-                                <PaperclipIcon
-                                    size={18}
-                                    color={'currentColor'}
-                                    aria-label={iconAriaLabel}
+                    <Menu.Container
+                        menuButton={{
+                            id: 'FileUploadMenu',
+                            'aria-label': formatMessage({id: 'file_upload.upload_files', defaultMessage: 'Upload files'}),
+                            class: 'AdvancedTextEditor__action-button',
+                            children: <PaperclipIcon size={16}/>,
+                        }}
+                        menuButtonTooltip={{
+                            id: 'FileUploadMenuBT',
+                            text: formatMessage({id: 'file_upload.upload_files', defaultMessage: 'Upload files'}),
+                            class: 'hidden-xs',
+                        }}
+                        menu={{
+                            id: 'FileUploadMenuMenu',
+                            'aria-label': formatMessage({id: 'file_upload.upload_files', defaultMessage: 'Upload files'}),
+                            transformOrigin: {
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            },
+                        }}
+                    >
+                        <Menu.Item
+                            onClick={this.simulateInputClick}
+                            labels={
+                                <FormattedMessage
+                                    id='yourcomputer'
+                                    defaultMessage='Your computer'
                                 />
-                            </button>
-                        </OverlayTrigger>
-                        <Menu
-                            id='fileUploadOptions'
-                            openLeft={true}
-                            openUp={true}
-                            ariaLabel={formatMessage({id: 'file_upload.menuAriaLabel', defaultMessage: 'Upload type selector'})}
-                            customStyles={customStyles}
-                        >
-                            <li>
-                                <a
-                                    href='#'
-                                    onClick={this.simulateInputClick}
-                                    onTouchEnd={this.simulateInputClick}
-                                    disabled={this.props.disabled}
-                                >
-                                    <span className='mr-2'>
-                                        <i className='fa fa-laptop'/>
-                                    </span>
-                                    <FormattedMessage
-                                        id='yourcomputer'
-                                        defaultMessage='Your computer'
-                                    />
-                                </a>
-                            </li>
-                            {pluginFileUploadMethods}
-                        </Menu>
-                    </MenuWrapper>
+                            }
+                            leadingElement={
+                                <LaptopIcon size={16}/>
+                            }
+                        />
+                        {pluginFileUploadMethods}
+                    </Menu.Container>
                 </div>
             );
         }

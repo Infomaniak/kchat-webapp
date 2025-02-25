@@ -94,7 +94,7 @@ type Props = {
     enableGifPicker: boolean;
     handleBlur: () => void;
     handlePostError: (postError: React.ReactNode) => void;
-    emitTypingEvent: () => void;
+    emitTypingEvent: (eventType: string) => void;
     handleMouseUpKeyUp: (e: React.MouseEvent<TextboxElement> | React.KeyboardEvent<TextboxElement>) => void;
     postMsgKeyPress: (e: React.KeyboardEvent<TextboxElement>) => void;
     handleChange: (e: React.ChangeEvent<TextboxElement>) => void;
@@ -263,6 +263,9 @@ const AdvanceTextEditor = ({
                     onUploadError={handleUploadError}
                     onRemoveDraft={removePreview}
                     onSubmit={handleSubmit}
+                    onStarted={emitTypingEvent}
+                    onCancel={emitTypingEvent}
+                    onComplete={emitTypingEvent}
                 />
             </div>
         );
@@ -377,10 +380,11 @@ const AdvanceTextEditor = ({
     ) : null;
     const disableSendButton = Boolean(readOnlyChannel || (!message.trim().length && !draft.fileInfos.length)) ||
         voiceMessageState === VoiceMessageStates.RECORDING || voiceMessageState === VoiceMessageStates.UPLOADING || disableSend;
+    const isSchedulableAdjusted = draft.postType === 'voice' ? false : isSchedulable;
     const sendButton = readOnlyChannel ? null : (
         <SendButton
             disabled={disableSendButton}
-            isSchedulable={isSchedulable}
+            isSchedulable={isSchedulableAdjusted}
             handleSubmit={handleSubmit}
             handleSchedulePost={handleSchedulePost}
         />
@@ -758,35 +762,36 @@ const AdvanceTextEditor = ({
                         className='AdvancedTextEditor__cell a11y__region'
                     >
                         {labels}
-                        <Textbox
-                            hasLabels={Boolean(labels)}
-                            suggestionList={location === Locations.RHS_COMMENT ? RhsSuggestionList : SuggestionList}
-                            onChange={handleChange}
-                            onKeyPress={postMsgKeyPress}
-                            onKeyDown={handleKeyDown}
-                            onMouseUp={handleMouseUpKeyUp}
-                            onKeyUp={handleMouseUpKeyUp}
-                            onComposition={emitTypingEvent}
-                            onHeightChange={handleHeightChange}
-                            handlePostError={handlePostError}
-                            value={messageValue}
-                            onBlur={handleBlur}
-                            onFocus={handleFocus}
-                            emojiEnabled={enableEmojiPicker}
-                            createMessage={createMessage}
-                            channelId={channelId}
-                            id={textboxId}
-                            ref={textboxRef!}
-                            disabled={readOnlyChannel}
-
-                            // hidden={draft.postType === Constants.PostTypes.VOICE}
-                            characterLimit={maxPostSize}
-                            preview={shouldShowPreview}
-                            badConnection={badConnection}
-                            useChannelMentions={useChannelMentions}
-                            rootId={postId}
-                            onWidthChange={handleWidthChange}
-                        />
+                        {/* IK: hide the input if sending a voice message */}
+                        {draft.postType !== Constants.PostTypes.VOICE && (
+                            <Textbox
+                                hasLabels={Boolean(labels)}
+                                suggestionList={location === Locations.RHS_COMMENT ? RhsSuggestionList : SuggestionList}
+                                onChange={handleChange}
+                                onKeyPress={postMsgKeyPress}
+                                onKeyDown={handleKeyDown}
+                                onMouseUp={handleMouseUpKeyUp}
+                                onKeyUp={handleMouseUpKeyUp}
+                                onComposition={emitTypingEvent}
+                                onHeightChange={handleHeightChange}
+                                handlePostError={handlePostError}
+                                value={messageValue}
+                                onBlur={handleBlur}
+                                onFocus={handleFocus}
+                                emojiEnabled={enableEmojiPicker}
+                                createMessage={createMessage}
+                                channelId={channelId}
+                                id={textboxId}
+                                ref={textboxRef!}
+                                disabled={readOnlyChannel}
+                                characterLimit={maxPostSize}
+                                preview={shouldShowPreview}
+                                badConnection={badConnection}
+                                useChannelMentions={useChannelMentions}
+                                rootId={postId}
+                                onWidthChange={handleWidthChange}
+                            />
+                        )}
                         {attachmentPreview}
                         {!readOnlyChannel && (showFormattingBar || shouldShowPreview) && (
                             <TexteditorActions

@@ -32,7 +32,7 @@ jest.mock('@infomaniak/ksuite-bridge', () => ({
     })),
 }));
 
-jest.mock('actions/ksuite_bridge_actions', () => ({
+jest.mock('mattermost-redux/actions/ksuiteBridge', () => ({
     storeBridge: (...args: any[]) => jest.fn().mockReturnValue({type: 'STORE_BRIDGE', args}),
 }));
 
@@ -106,9 +106,11 @@ describe('components/Root', () => {
         rhsIsOpen: false,
         shouldShowAppBar: false,
         currentTeam: {} as Team,
-        ksuiteBridge: {sendMessage: jest.fn()} as unknown as KSuiteBridge,
         teamsOrderPreference: {} as PreferenceType,
         userLocale: 'fr',
+
+        // Infomaniak specific mock
+        ksuiteBridge: {sendMessage: jest.fn()} as unknown as KSuiteBridge,
     };
 
     // test('should load config and license on mount and redirect to sign-up page', () => {

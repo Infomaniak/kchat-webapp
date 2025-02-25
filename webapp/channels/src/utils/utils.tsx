@@ -1909,3 +1909,15 @@ export const initLoggers = (): void => {
         Object.assign(console, mergedLoggers());
     }
 };
+
+export function logTimestamp(label: string, timestamp: number | undefined) {
+    let time = '';
+    if (timestamp === 0) {
+        time = '0';
+    } else if (typeof timestamp !== 'undefined') {
+        const date = new Date(timestamp);
+        time += `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        time += ` ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+    }
+    console.log(label, timestamp, time);
+}

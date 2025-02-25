@@ -9,9 +9,9 @@ import {bindActionCreators} from 'redux';
 
 import type {Team} from '@mattermost/types/teams';
 
+import {bridgeRecreate} from 'mattermost-redux/actions/ksuiteBridge';
 import type {GetStateFunc} from 'mattermost-redux/types/actions';
 
-import {bridgeRecreate} from 'actions/ksuite_bridge_actions';
 import {switchTeam} from 'actions/team_actions';
 import {makeGetBadgeCountForServerId} from 'selectors/views/servers';
 

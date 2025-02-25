@@ -106,10 +106,12 @@ export interface Props {
 
     lastViewedAt: number;
 
+    latestPostNoChunkId?: string;
+
     toggleShouldStartFromBottomWhenUnread: () => void;
     shouldStartFromBottomWhenUnread: boolean;
     hasInaccessiblePosts: boolean;
-
+    isThreadView?: boolean;
     actions: {
 
         /*
@@ -204,6 +206,9 @@ export default class PostList extends React.PureComponent<Props, State> {
         if (this.props.channelId !== prevProps.channelId) {
             this.postsOnLoad(this.props.channelId);
         }
+        if (this.props.latestPostNoChunkId !== prevProps.latestPostNoChunkId && this.props.latestPostNoChunkId) {
+            this.loadMissingPosts();
+        }
         if (this.props.postListIds != null && prevProps.postListIds == null) {
             markAndMeasureChannelSwitchEnd(true);
         }
@@ -212,6 +217,12 @@ export default class PostList extends React.PureComponent<Props, State> {
     componentWillUnmount() {
         this.mounted = false;
     }
+
+    loadMissingPosts = async () => {
+        if (this.props.latestPostNoChunkId) {
+            await this.props.actions.loadPostsAround(this.props.channelId, this.props.latestPostNoChunkId);
+        }
+    };
 
     postsOnLoad = async (channelId: string) => {
         const {focusedPostId, isFirstLoad, latestPostTimeStamp, isPrefetchingInProcess, actions} = this.props;
@@ -376,6 +387,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                             latestPostTimeStamp={this.props.latestPostTimeStamp}
                             isMobileView={this.props.isMobileView}
                             lastViewedAt={this.props.lastViewedAt}
+                            isThreadView={this.props.isThreadView}
                         />
                     </div>
                 </div>

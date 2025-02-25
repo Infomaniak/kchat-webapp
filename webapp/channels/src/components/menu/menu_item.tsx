@@ -249,6 +249,13 @@ export const MenuItemStyled = styled(MuiMenuItem, {
                     height: '18px',
                     marginInlineEnd: '10px',
                     color: isRegular ? 'rgba(var(--center-channel-color-rgb), 0.64)' : 'var(--error-text)',
+
+                    // TODO: Move this somewhere less generic
+                    '& .file-kdrive__icon--svg': {
+                        transform: 'scale(1.1)',
+                        marginTop: '-3px',
+                        marginLeft: '-3px',
+                    },
                 },
                 '&:hover .leading-element': {
                     color: isRegular ? 'rgba(var(--center-channel-color-rgb), 0.8)' : 'var(--button-color)',

@@ -39,6 +39,7 @@ type Props = {
     shouldShowActionsMenu?: boolean;
     oneClickReactionsEnabled?: boolean;
     recentEmojis: Emoji[];
+    isBot: boolean;
     isExpanded?: boolean;
     hover?: boolean;
     isMobileView: boolean;
@@ -193,6 +194,7 @@ const PostOptions = (props: Props): JSX.Element => {
                     const Component = item.component as any;
                     return (
                         <Component
+                            location={props.location}
                             post={props.post}
                             key={item.id}
                         />

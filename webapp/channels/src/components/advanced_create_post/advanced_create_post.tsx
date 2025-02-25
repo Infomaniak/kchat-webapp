@@ -30,6 +30,7 @@ import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
 import NotifyConfirmModal from 'components/notify_confirm_modal';
 import PersistNotificationConfirmModal from 'components/persist_notification_confirm_modal';
+import Poll from 'components/post_poll';
 import PostPriorityPickerOverlay from 'components/post_priority/post_priority_picker_overlay';
 import ResetStatusModal from 'components/reset_status_modal';
 import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
@@ -162,6 +163,8 @@ export type Props = {
     isFormattingBarHidden: boolean;
 
     isPostPriorityEnabled: boolean;
+
+    isPollsEnabled: boolean;
 
     actions: {
 
@@ -534,7 +537,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             const updatedDraft = {
                 ...this.props.draft,
                 ...this.draftsForChannel[channelId],
-                id: this.draftsForChannel[channelId]?.id ?? this.props.draft.id,
+                id: this.props.draft.id,
                 timestamp: scheduleUTCTimestamp,
                 channelId,
                 remote: false,
@@ -901,9 +904,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.emitTypingEvent();
     };
 
-    emitTypingEvent = () => {
+    emitTypingEvent = (eventType = 'typing') => {
         const channelId = this.props.currentChannel.id;
-        GlobalActions.emitLocalUserTypingEvent(channelId, '');
+        GlobalActions.emitLocalUserTypingEvent(eventType, channelId, '');
     };
 
     setDraftAsPostType = (channelId: Channel['id'], draft: PostDraft, postType?: PostDraft['postType']) => {
@@ -1560,6 +1563,12 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                                 settings={draft?.metadata?.priority}
                                 onApply={this.handlePostPriorityApply}
                                 onClose={this.handlePostPriorityHide}
+                                disabled={this.props.shouldShowPreview}
+                            />
+                        ),
+                        this.props.isPollsEnabled && (
+                            <Poll
+                                key='poll'
                                 disabled={this.props.shouldShowPreview}
                             />
                         ),

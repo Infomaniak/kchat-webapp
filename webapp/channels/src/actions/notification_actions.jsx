@@ -7,6 +7,7 @@ import {logError} from 'mattermost-redux/actions/errors';
 import {getProfilesByIds} from 'mattermost-redux/actions/users';
 import {getCurrentChannel, getMyChannelMember, makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getKSuiteBridge, getKSuiteDnd} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {
     getTeammateNameDisplaySetting,
     isCollapsedThreadsEnabled,
@@ -17,7 +18,6 @@ import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 import {isSystemMessage, isUserAddedInChannel} from 'mattermost-redux/utils/post_utils';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
-import {getKSuiteBridge, getKSuiteDnd} from 'selectors/ksuite_bridge';
 import {getChannelURL, getPermalinkURL} from 'selectors/urls';
 import {isThreadOpen} from 'selectors/views/threads';
 
@@ -237,7 +237,7 @@ export function sendDesktopNotification(post, msgProps) {
             title = Utils.localizeAndFormatMessage(t('notification.crt'), 'Reply in {title}', {title});
         }
 
-        let notifyText = post.message;
+        let notifyText = post.message || '';
 
         const msgPropsPost = msgProps.post;
         const attachments = msgPropsPost && msgPropsPost.props && msgPropsPost.props.attachments ? msgPropsPost.props.attachments : [];
@@ -248,7 +248,7 @@ export function sendDesktopNotification(post, msgProps) {
                     attachment.pretext ||
                     attachment.text;
             }
-            image |= attachment.image_url.length > 0;
+            image |= attachment.image_url?.length > 0;
         });
 
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);

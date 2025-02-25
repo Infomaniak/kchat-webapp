@@ -326,6 +326,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with one extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid"
             onBlur={[Function]}
             onClick={[Function]}
@@ -651,6 +652,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid"
             onBlur={[Function]}
             onClick={[Function]}
@@ -764,6 +766,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid2"
             onBlur={[Function]}
             onClick={[Function]}
@@ -877,6 +880,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid3"
             onBlur={[Function]}
             onClick={[Function]}
@@ -990,6 +994,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid4"
             onBlur={[Function]}
             onClick={[Function]}
@@ -1103,6 +1108,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid5"
             onBlur={[Function]}
             onClick={[Function]}
@@ -1216,6 +1222,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid6"
             onBlur={[Function]}
             onClick={[Function]}
@@ -1329,6 +1336,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid7"
             onBlur={[Function]}
             onClick={[Function]}
@@ -1442,6 +1450,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid8"
             onBlur={[Function]}
             onClick={[Function]}
@@ -1555,6 +1564,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid9"
             onBlur={[Function]}
             onClick={[Function]}
@@ -1668,6 +1678,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid10"
             onBlur={[Function]}
             onClick={[Function]}
@@ -1781,6 +1792,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid11"
             onBlur={[Function]}
             onClick={[Function]}
@@ -1894,6 +1906,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid12"
             onBlur={[Function]}
             onClick={[Function]}
@@ -2007,6 +2020,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid13"
             onBlur={[Function]}
             onClick={[Function]}
@@ -2120,6 +2134,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid14"
             onBlur={[Function]}
             onClick={[Function]}
@@ -2233,6 +2248,7 @@ exports[`plugins/ChannelHeaderPlug should match snapshot with six extended compo
         >
           <button
             className="channel-header__icon"
+            disabled={false}
             id="someid15"
             onBlur={[Function]}
             onClick={[Function]}

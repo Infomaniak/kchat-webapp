@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+@import 'utils/mixins';
+
+.system-bot-message {
+    color: var(--center-channel-text);
+
+    &__buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 0;
+
+        .btn + .btn {
+            margin: 0!important;
+        }
+
+        .btn-sm:has(.emoticon) {
+            padding: 0 12px;
+        }
+
+        .emoticon {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            min-height: 18px;
+        }
+    }
+}

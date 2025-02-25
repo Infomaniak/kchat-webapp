@@ -18,9 +18,11 @@ import hostedCustomer from './hosted_customer';
 import insights from './insights';
 import integrations from './integrations';
 import jobs from './jobs';
+import ksuiteBridge from './ksuiteBridge';
 import limits from './limits';
 import posts from './posts';
 import preferences from './preferences';
+import recording from './recording';
 import roles from './roles';
 import schemes from './schemes';
 import search from './search';
@@ -40,6 +42,7 @@ export default combineReducers({
     files,
     preferences,
     typing,
+    recording,
     integrations,
     emojis,
     gifs,
@@ -57,4 +60,5 @@ export default combineReducers({
     insights,
     usage,
     hostedCustomer,
+    ksuiteBridge,
 });

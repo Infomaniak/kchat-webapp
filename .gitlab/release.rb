@@ -10,8 +10,8 @@ REDMINE_API_KEY = ENV['REDMINE_API_KEY']
 GIT_RELEASE_TAG = ARGV[0]
 MILESTONE = ARGV[1]
 NOTIFY_CHANNEL = ARGV[2]
-STABLE_BRANCH = 'stable'
-NEXT_BRANCH = 'next'
+
+# NEXT_BRANCH = 'next'
 
 =begin
 # Creates and configures a new instance of the Net::HTTP class.
@@ -150,34 +150,34 @@ def create_changelog(tag, branch)
   puts "Creating changelog for tag #{tag}"
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
-  commit_sha = get_commit_sha(last_tag)
+  from_commit_sha = get_commit_sha(last_tag)
+  to_commit_sha = get_commit_sha(tag)
   bot_message = "Add changelog for version #{tag} [skip ci]"
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Post.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  # "branch" => branch,
-  request.set_form_data("version" => tag, "from" => commit_sha, "message" => bot_message)
+  request.set_form_data("version" => tag, "from" => from_commit_sha, "to" => to_commit_sha, "message" => bot_message)
 
   response = get_http(uri).request(request)
   response.body if response.code.to_i == 201
 end
 
 =begin
-# Sends a GET request to fetch the changelog for a given tag on a specific branch.
+# Sends a GET request to fetch the changelog for a given tag.
 #
 # @param tag [String] The tag for which to fetch the changelog.
-# @param branch [String] The branch where the changelog changes were committed.
 # @return [Array, nil] The changelog if the status code is 200, null otherwise.
 =end
 def get_changelog(tag)
   puts "Fetching changelog for tag #{tag}"
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
-  commit_sha = get_commit_sha(last_tag)
+  from_commit_sha = get_commit_sha(last_tag)
+  to_commit_sha = get_commit_sha(tag)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Get.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  request.set_form_data("version" => tag, "from" => commit_sha)
+  request.set_form_data("version" => tag, "from" => from_commit_sha, "to" => to_commit_sha)
 
   response = get_http(uri).request(request)
   JSON.parse(response.body)["notes"] if response.code.to_i == 200
@@ -225,6 +225,26 @@ def get_merge_request(mr_iid)
   JSON.parse(response.body)
 rescue JSON::ParserError
   raise "Invalid JSON response from GitLab API"
+end
+
+# =begin
+# Helper method to fetch current labels with the given IID.
+#
+# @param mr_iid [Integer] The IID of the merge request to update.
+# @return [Array] True if the status code is 200, false otherwise.
+# =end
+def get_merge_request_labels(mr_iid)
+  uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{mr_iid}")
+  request = Net::HTTP::Get.new(uri.request_uri)
+  request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
+
+  response = get_http(uri).request(request)
+  if response.code.to_i == 200
+    merge_request = JSON.parse(response.body)
+    merge_request['labels']
+  else
+    []
+  end
 end
 
 =begin
@@ -300,17 +320,18 @@ end
 # [stable] Update labels and changelog
 if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   puts "Processing full release tag: #{GIT_RELEASE_TAG}"
-  branch = STABLE_BRANCH
-  # Creates the changelog entry on gitlab
-  create_changelog(GIT_RELEASE_TAG, branch)
+
+  # Creates the changelog entry in git
+  # create_changelog(GIT_RELEASE_TAG, branch)
+
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
-  # Redmine
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
+    # Redmine
     redmine_links = extract_redmine_links(mr["description"])
     redmine_links.each do |issue_id|
       leave_comment_on_redmine_ticket(issue_id, "fix released in stable version #{GIT_RELEASE_TAG}")
@@ -318,6 +339,14 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
       # status_id 3 -> Resolved
       update_redmine_ticket_status(issue_id, 3)
       puts "Updated redmine ##{issue_id} status to 3"
+    end
+    # Labels
+    current_labels = get_merge_request_labels(mr_number)
+
+    # Replace 'stage::next' with 'stage::stable'
+    if current_labels.include?('stage::next')
+      current_labels.delete('stage::next')
+      update_merge_request_labels(mr_number, current_labels + ['stage::stable'])
     end
   end
 
@@ -328,51 +357,74 @@ end
 
 # [next] Update labels and changelog
 if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
-  branch = NEXT_BRANCH
+  # branch = NEXT_BRANCH
   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
-  # Creates the changelog entry on gitlab
-  create_changelog(GIT_RELEASE_TAG, branch)
+
+  # Creates the changelog entry in git
+  # create_changelog(GIT_RELEASE_TAG, branch)
+
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
-  # Redmine
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
+    # Redmine
     redmine_links = extract_redmine_links(mr["description"])
     redmine_links.each do |issue_id|
       leave_comment_on_redmine_ticket(issue_id, "fix deployed in next version #{GIT_RELEASE_TAG}")
       puts "Commented redmine ##{issue_id} to notify about canary deploy"
     end
+    # Labels
+    current_labels = get_merge_request_labels(mr_number)
+
+    # Replace 'stage::preprod' with 'stage::next'
+    if current_labels.include?('stage::preprod')
+      current_labels.delete('stage::preprod')
+    end
+
+    update_merge_request_labels(mr_number, current_labels + ['stage::next'])
   end
 
+  # Release
   create_release(changelog)
   puts "Creating release for canary tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
 
 # [preprod] Update labels and changelog
 if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
-  # TODO: clean, not used by function
-  branch = NEXT_BRANCH
+  # branch = NEXT_BRANCH
 
   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
+
   # Creates the changelog entry on gitlab
-  create_changelog(GIT_RELEASE_TAG, branch)
+  # create_changelog(GIT_RELEASE_TAG, branch)
+
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
-  # Redmine
-  # mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
-  # mr_numbers.each do |mr_number|
-  #   mr = get_merge_request(mr_number)
-  #   redmine_links = extract_redmine_links(mr["description"])
-  #   redmine_links.each do |issue_id|
-  #     leave_comment_on_redmine_ticket(issue_id, "fix deployed in preprod version #{GIT_RELEASE_TAG}", true)
-  #     puts "Commented redmine ##{issue_id} to notify about preprod deploy"
-  #   end
-  # end
+  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+  mr_numbers.each do |mr_number|
+    mr = get_merge_request(mr_number)
+    current_labels = get_merge_request_labels(mr_number)
 
+    # Labels
+    # Add 'stage::preprod' if it doesn't exist
+    unless current_labels.include?('stage::preprod')
+      update_merge_request_labels(mr_number, current_labels + ['stage::preprod'])
+    end
+
+    # Redmine
+    #   redmine_links = extract_redmine_links(mr["description"])
+    #   redmine_links.each do |issue_id|
+    #     leave_comment_on_redmine_ticket(issue_id, "fix deployed in preprod version #{GIT_RELEASE_TAG}", true)
+    #     puts "Commented redmine ##{issue_id} to notify about preprod deploy"
+    #   end
+
+  end
+
+  # Release
   create_release(changelog)
   puts "Creating release for preprod tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
