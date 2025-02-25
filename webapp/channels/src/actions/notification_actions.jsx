@@ -237,7 +237,7 @@ export function sendDesktopNotification(post, msgProps) {
             title = Utils.localizeAndFormatMessage(t('notification.crt'), 'Reply in {title}', {title});
         }
 
-        let notifyText = post.message;
+        let notifyText = post.message || '';
 
         const msgPropsPost = msgProps.post;
         const attachments = msgPropsPost && msgPropsPost.props && msgPropsPost.props.attachments ? msgPropsPost.props.attachments : [];
