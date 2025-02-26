@@ -1569,7 +1569,6 @@ function handleGroupAddedMemberEvent(msg) {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
         const data = msg.data.group_member;
-        const receivedProfile = getUser(state, data.user_id);
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1588,7 +1587,7 @@ function handleGroupAddedMemberEvent(msg) {
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_FOR_GROUP,
-                data: [receivedProfile],
+                data: [data].filter(Boolean),
                 id: data.group_id,
             },
         ]),
@@ -1614,7 +1613,7 @@ function handleGroupDeletedMemberEvent(msg) {
         dispatch(batchActions([
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST_TO_REMOVE_FROM_GROUP,
-                data: [data],
+                data: [data].filter(Boolean),
                 id: data.group_id,
             },
             {
