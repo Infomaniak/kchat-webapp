@@ -5019,7 +5019,7 @@
   "user_list.notFound": "No se encontraron usuarios",
   "user_profile.account.editProfile": "Editar perfil",
   "user_profile.account.localTime": "Hora Local",
-  "user_profile.account.post_was_created": "Este mensaje fue creado por una integración de",
+  "user_profile.account.post_was_created": "Este mensaje fue creado por una integración de @{username}",
   "user_profile.add_user_to_channel": "Agregar al Canal",
   "user_profile.add_user_to_channel.icon": "Icono de Agregar Usuario al Canal",
   "user_profile.custom_status": "Estado",
