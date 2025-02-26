@@ -21,6 +21,7 @@ import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
 import * as GlobalActions from 'actions/global_actions';
 import * as PostActions from 'actions/post_actions';
+import {leaveChannel} from 'actions/views/channel';
 import {openModal} from 'actions/views/modals';
 
 import {withSuspense} from 'components/common/hocs/with_suspense';
@@ -91,6 +92,10 @@ export function executeCommand(message: string, args: CommandArgs): ActionFuncAs
                 return {data: true};
             }
             const channel = getCurrentChannel(state) || {};
+            if (channel.type === Constants.OPEN_CHANNEL) {
+                dispatch(leaveChannel(channel.id));
+                return {data: true};
+            }
             if (channel.type === Constants.PRIVATE_CHANNEL) {
                 dispatch(openModal({modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL, dialogType: IkLeaveChannelModal, dialogProps: {channel}}));
                 return {data: true};
