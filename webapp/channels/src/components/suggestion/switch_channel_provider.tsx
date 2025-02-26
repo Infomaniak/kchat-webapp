@@ -59,7 +59,6 @@ import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
 
 import {Constants, StoragePrefixes} from 'utils/constants';
-import {t} from 'utils/i18n';
 import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
@@ -284,7 +283,7 @@ const SwitchChannelSuggestion = React.forwardRef<HTMLDivElement, Props>((props, 
             <div className='suggestion-list__ellipsis suggestion-list__flex'>
                 <span className='suggestion-list__main'>
                     <span className={classNames({'suggestion-list__unread': item.unread && !channelIsArchived})}>
-                        {name === ThreadsChannel.display_name ? formatMessage({id: t('globalThreads.sidebarLink'), defaultMessage: 'Threads'}) : name}
+                        {name === ThreadsChannel.display_name ? formatMessage({id: 'globalThreads.sidebarLink', defaultMessage: 'Threads'}) : name}
                     </span>
                     {showSlug && description && <span className='ml-2 suggestion-list__desc'>{description}</span>}
                 </span>
