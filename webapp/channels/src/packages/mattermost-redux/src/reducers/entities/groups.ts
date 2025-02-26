@@ -4,15 +4,9 @@
 import type {AnyAction} from 'redux';
 import {combineReducers} from 'redux';
 
-import type {GroupChannel, GroupSyncablesState, GroupTeam, Group} from '@mattermost/types/groups';
+import type {GroupChannel, GroupSyncablesState, GroupTeam, Group, GroupMember} from '@mattermost/types/groups';
 
 import {GroupTypes} from 'mattermost-redux/action_types';
-
-interface GroupMemberInfo {
-    id: string;
-    group_id: string;
-    user_id: string;
-}
 
 function syncables(state: Record<string, GroupSyncablesState> = {}, action: AnyAction) {
     switch (action.type) {
@@ -250,7 +244,7 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
         return nextState;
     }
     case GroupTypes.RECEIVED_MEMBER_TO_REMOVE_FROM_GROUP: {
-        const dataInfo: GroupMemberInfo = action.data;
+        const dataInfo: GroupMember = action.data;
 
         const group = state[dataInfo.group_id];
         if (!group) {
@@ -281,7 +275,7 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
         };
     }
     case GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP: {
-        const {group_id: groupId, user_id: userId}: GroupMemberInfo = action.data;
+        const {group_id: groupId, user_id: userId}: GroupMember = action.data;
 
         const group = state[groupId];
         if (!group) {

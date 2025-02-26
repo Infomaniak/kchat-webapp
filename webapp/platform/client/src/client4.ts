@@ -84,6 +84,7 @@ import {
     GetGroupsForUserParams,
     GroupStats,
     GetGroupsParams,
+    GroupMember,
 } from '@mattermost/types/groups';
 import {PostActionResponse} from '@mattermost/types/integration_actions';
 import {
@@ -3912,14 +3913,14 @@ export default class Client4 {
     }
 
     addUsersToGroup = (groupId: string, userIds: string[]) => {
-        return this.doFetch<UserProfile[]>(
+        return this.doFetch<GroupMember[]>(
             `${this.getGroupRoute(groupId)}/members`,
             {method: 'post', body: JSON.stringify({user_ids: userIds})},
         );
     }
 
     removeUsersFromGroup = (groupId: string, userIds: string[]) => {
-        return this.doFetch<UserProfile[]>(
+        return this.doFetch<GroupMember[]>(
             `${this.getGroupRoute(groupId)}/members`,
             {method: 'delete', body: JSON.stringify({user_ids: userIds})},
         );

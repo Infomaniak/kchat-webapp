@@ -172,6 +172,13 @@ export type GroupSearchParams = GetGroupsParams & {
     include_channel_member_count?: string;
 }
 
+export type GroupMember = {
+    user_id: string;
+    group_id: string;
+    created_at: number;
+    deleted_at: number;
+}
+
 export type GroupMembership = {
     user_id: string;
     roles: string;
