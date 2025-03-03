@@ -84,7 +84,6 @@ import {
     GetGroupsForUserParams,
     GroupStats,
     GetGroupsParams,
-    GroupMember,
 } from '@mattermost/types/groups';
 import {PostActionResponse} from '@mattermost/types/integration_actions';
 import {
@@ -157,7 +156,7 @@ import {UsersLimits} from '@mattermost/types/limits';
 
 
 import {cleanUrlForLogging} from './errors';
-import {buildQueryString} from './helpers';
+import {buildQueryString, setUserAgent} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
 
@@ -253,7 +252,11 @@ export default class Client4 {
     }
 
     setUserAgent(userAgent: string) {
-        this.userAgent = userAgent;
+        if (userAgent) {
+            this.userAgent = userAgent;
+            this.setHeader(HEADER_USER_AGENT, userAgent);
+            setUserAgent(window, userAgent);
+        }
     }
 
     getToken() {
@@ -3912,20 +3915,6 @@ export default class Client4 {
         );
     }
 
-    addUsersToGroup = (groupId: string, userIds: string[]) => {
-        return this.doFetch<GroupMember[]>(
-            `${this.getGroupRoute(groupId)}/members`,
-            {method: 'post', body: JSON.stringify({user_ids: userIds})},
-        );
-    }
-
-    removeUsersFromGroup = (groupId: string, userIds: string[]) => {
-        return this.doFetch<GroupMember[]>(
-            `${this.getGroupRoute(groupId)}/members`,
-            {method: 'delete', body: JSON.stringify({user_ids: userIds})},
-        );
-    }
-
     searchGroups = (params: GroupSearchParams) => {
         return this.doFetch<Group[]>(
             `${this.getGroupsRoute()}${buildQueryString(params)}`,
@@ -4517,7 +4506,8 @@ export default class Client4 {
     };
 
     private doFetchWithResponse = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse>> => {
-        const response = await fetch(url, this.getOptions(options));
+        const formattedOptions = this.getOptions(options);
+        const response = await fetch(url, formattedOptions);
         const headers = parseAndMergeNestedHeaders(response.headers);
 
         let data;

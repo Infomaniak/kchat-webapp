@@ -39,6 +39,8 @@ export function storeTokenResponse(response: { expires_in?: number; access_token
 
     console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
     Client4.setWebappVersion(GIT_RELEASE);
+    const userAgent = [window?.navigator?.userAgent, `kChat/${GIT_RELEASE?.trim()}`, `Build/${COMMIT_HASH?.trim()}`].join(' ');
+    Client4.setUserAgent(userAgent);
 }
 
 /**
