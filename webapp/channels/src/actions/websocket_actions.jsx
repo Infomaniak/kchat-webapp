@@ -336,14 +336,10 @@ export async function reconnect(socketId) {
         }
     });
 
-    if (state.websocket.lastDisconnectAt) {
-        logTimestamp('lastConnectAt', state.websocket.lastConnectAt);
-        logTimestamp('lastDisconnectAt', state.websocket.lastDisconnectAt);
+    const currentChannelId = getCurrentChannelId(state);
 
-        // IK: Subtract 30 sec to account for ws disconnection timeout
-        dispatch(checkForModifiedUsers(state.websocket.lastDisconnectAt - (30 * 1000)));
-        dispatch(TeamActions.getMyKSuites());
-    }
+    dispatch(checkForModifiedUsers(currentChannelId));
+    dispatch(TeamActions.getMyKSuites());
 
     dispatch(resetWsErrorCount());
     dispatch(clearErrors());

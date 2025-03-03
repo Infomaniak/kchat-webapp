@@ -394,6 +394,7 @@ const state: GlobalState = {
         lastConnectAt: 0,
         lastDisconnectAt: 0,
         connectionId: '',
+        firstDisconnect: 0,
     },
 };
 export default state;

@@ -28,9 +28,12 @@ import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
 // TODO fix import restriction
 import {getMyMeets} from 'actions/calls';
+import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
+
+import type {GlobalState} from 'types/store';
 
 // import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
 // import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
@@ -1361,16 +1364,22 @@ export function clearUserAccessTokens(): ActionFuncAsync {
     };
 }
 
-export function checkForModifiedUsers(since: number): ActionFuncAsync {
+export function checkForModifiedUsers(channelId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const users = getUsers(state);
+        const firstDisconnectAt = state.websocket.firstDisconnect;
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
+        const lastPostsApiCallForChannel = getLastPostsApiTimeForChannel(state as GlobalState, channelId);
+        let since = firstDisconnectAt;
+        if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < lastDisconnectAt) {
+            since = lastPostsApiCallForChannel;
+        }
         const userIds = Object.keys(users);
-        console.log('checking for modified users since', since || lastDisconnectAt);
+        console.log('checking for modified users since', since);
         console.log('fetch profile count:', userIds.length);
 
-        await dispatch(getProfilesByIds(userIds, {since: since || lastDisconnectAt}));
+        await dispatch(getProfilesByIds(userIds, {since}));
         return {data: true};
     };
 }
