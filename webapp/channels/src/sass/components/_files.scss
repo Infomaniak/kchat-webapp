@@ -157,6 +157,13 @@
         .image-header {
             display: flex;
             align-items: baseline;
+        
+            &.transcript {
+                cursor: pointer;
+                display: flex;
+                align-items: flex-end;
+            }
+
         }
 
         .image-name {

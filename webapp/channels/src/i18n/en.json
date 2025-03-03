@@ -6061,7 +6061,7 @@
   "view_image.zoom_in": "Zoom In",
   "view_image.zoom_out": "Zoom Out",
   "view_image.zoom_reset": "Reset Zoom",
-  "vocals.loading_transcript": "View the transcript...",
+  "vocals.loading_transcript": "Show more",
   "vocals.transcript_title": "Audio transcription (automatically generated)",
   "vocals.transcript_loading": "Audio transcription in progress...",
   "vocals.transcript.error": "The audio is empty.",

@@ -20,7 +20,6 @@ import {
     useAudioPlayer,
 } from 'components/common/hooks/useAudioPlayer';
 import * as Menu from 'components/menu';
-import TranscriptComponent from 'components/transcript/transcript';
 import TranscriptSpinner from 'components/widgets/loading/loading_transcript_spinner';
 
 import {convertSecondsToMSS} from 'utils/datetime';
@@ -42,14 +41,13 @@ function VoiceMessageAttachmentPlayer(props: Props) {
         }
     }, [post?.metadata]);
 
-    const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null);
-    const [isTranscriptModalOpen, setIsTranscriptModalOpen] = useState(true);
+    const [isTranscriptOpen, setIsTranscriptOpen] = useState(true);
+    const [showFullTranscript, setShowFullTranscript] = useState(false);
     const fileId = props.fileId ? props.fileId : post?.file_ids![0]; // There is always one file id for type voice.
     const transcript = (props.fileId || isLoading) ? null : post?.metadata?.files[0]?.transcript;
     const {formatMessage} = useIntl();
     const {playerState, duration, elapsed, togglePlayPause} = useAudioPlayer(fileId ? `/api/v4/files/${fileId}` : '');
     const progressValue = elapsed === 0 || duration === 0 ? '0' : (elapsed / duration).toFixed(2);
-    const open = Boolean(anchorEl);
 
     function downloadFile() {
         if (!fileId) {
@@ -59,15 +57,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     }
 
     const toggleTranscriptModal = () => {
-        setIsTranscriptModalOpen(!isTranscriptModalOpen);
-    };
-
-    const handleClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
+        setIsTranscriptOpen(!isTranscriptOpen);
     };
 
     const handleTranscriptClick = () => {
@@ -103,7 +93,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                         <TranscriptSpinner/>
                     </div>
                 ) : (
-                    <span className={`icon ${(isTranscriptModalOpen) ? 'icon-menu-down' : 'icon-menu-right'}`}/>
+                    <span className={`icon ${(isTranscriptOpen) ? 'icon-menu-down' : 'icon-menu-right'}`}/>
                 )
             )}
         </button>
@@ -112,8 +102,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     const transcriptHeader = (
         ((!props.isPreview && transcript?.text?.length !== 0 && transcript?.text?.length !== undefined) || (isLoading && !props.isPreview)) && (
             <div
-                className='image-header'
-                style={{cursor: 'pointer', display: 'flex'}}
+                className='image-header transcript'
                 onClick={handleTranscriptClick}
             >
                 {toggle}
@@ -235,29 +224,26 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                     {!props.isPreview && !isLoading && (
                         <div >
                             <>
-                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && isTranscriptModalOpen && (
+                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && isTranscriptOpen && (
                                     <div style={{paddingTop: '5px'}}>
-                                        {transcript?.text?.length > 300 ? transcript?.text.substring(0, 300) + '... ' : transcript?.text + ' '}
-                                        <a
-                                            className='transcript-link-view'
-                                            onClick={(event) => {
-                                                handleClick(event);
-                                            }}
-                                        >
-                                            <FormattedMessage
-                                                id={'vocals.loading_transcript'}
-                                                defaultMessage={'View the transcript'}
-                                            />
-                                        </a>
+                                        {showFullTranscript || transcript.text.length <= 300 ? (
+                                            `${transcript.text} `
+                                        ) : (
+                                            <>
+                                                {transcript.text.substring(0, 300)}{'... '}
+                                                <a
+                                                    onClick={() => {
+                                                        setShowFullTranscript(true);
+                                                    }}
+                                                >
+                                                    <FormattedMessage
+                                                        id={'vocals.loading_transcript'}
+                                                        defaultMessage={'Afficher plus'}
+                                                    />
+                                                </a>
+                                            </>
+                                        )}
                                     </div>
-                                )}
-                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && (
-                                    <TranscriptComponent
-                                        transcriptDatas={transcript}
-                                        handleClose={handleClose}
-                                        open={open}
-                                        anchorEl={anchorEl}
-                                    />
                                 )}
                             </>
                         </div>
