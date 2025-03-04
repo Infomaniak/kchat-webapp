@@ -49,7 +49,11 @@ export default class VersionBar extends React.PureComponent <Props, State> {
             return null;
         }
 
-        if (buildHashOnAppLoad !== buildHash && ((isNewVersionCanaryOnly && isCanary) || (!isNewVersionCanaryOnly && !isCanary))) {
+        // IK: Always show update banner if Canary
+        const hasUpdate = buildHashOnAppLoad !== buildHash;
+        const isStableUpdate = !isNewVersionCanaryOnly && !isCanary;
+
+        if (hasUpdate && (isCanary || isStableUpdate)) {
             return (
                 <AnnouncementBar
                     type={AnnouncementBarTypes.ANNOUNCEMENT}

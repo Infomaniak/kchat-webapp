@@ -300,6 +300,11 @@ export async function reconnect(socketId) {
         dispatch(fetchMyCategories(currentTeamId));
         dispatch(loadChannelsForCurrentUser());
 
+        // IK: For now, only call for Canary
+        if (document.cookie.indexOf('KCHAT_NEXT=always') !== -1) {
+            dispatch(getClientConfig());
+        }
+
         if (mostRecentPost) {
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
             dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
