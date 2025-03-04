@@ -1533,7 +1533,7 @@ function handleUserRoleUpdated(msg) {
 }
 
 function handleConfigChanged(msg) {
-    store.dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data: {...msg.data.config, IsNewVersionCanaryOnly: msg.data.canary}});
+    store.dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data: {...msg.data.config, IsNewVersionCanaryOnly: Boolean(msg.data.canary)}});
 }
 
 function handleLicenseChanged(msg) {

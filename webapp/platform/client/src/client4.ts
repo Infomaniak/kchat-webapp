@@ -4521,8 +4521,7 @@ export default class Client4 {
     };
 
     private doFetchWithResponse = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse>> => {
-        const formattedOptions = this.getOptions(options);
-        const response = await fetch(url, formattedOptions);
+        const response = await fetch(url, this.getOptions(options));
         const headers = parseAndMergeNestedHeaders(response.headers);
 
         let data;

@@ -45,15 +45,15 @@ export default class VersionBar extends React.PureComponent <Props, State> {
         const {buildHash, isNewVersionCanaryOnly} = this.props;
         const isCanary = document.cookie.indexOf('KCHAT_NEXT=always') !== -1;
 
-        if (!buildHashOnAppLoad) {
+        // IK: isNewVersionCanaryOnly is populated only on WS
+        const isStableUpdate = !isCanary && isNewVersionCanaryOnly !== true;
+        const isNextUpdate = isCanary && isNewVersionCanaryOnly !== false;
+
+        if (!buildHashOnAppLoad || !buildHash) {
             return null;
         }
 
-        // IK: Always show update banner if Canary
-        const hasUpdate = buildHashOnAppLoad !== buildHash;
-        const isStableUpdate = !isNewVersionCanaryOnly && !isCanary;
-
-        if (hasUpdate && (isCanary || isStableUpdate)) {
+        if (buildHashOnAppLoad !== buildHash && (isNextUpdate || isStableUpdate)) {
             return (
                 <AnnouncementBar
                     type={AnnouncementBarTypes.ANNOUNCEMENT}
