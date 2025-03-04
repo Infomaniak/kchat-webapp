@@ -196,8 +196,7 @@ def create_release(changelog)
   request.set_form_data({
     "name" => GIT_RELEASE_TAG,
     "tag_name" => GIT_RELEASE_TAG,
-    "description" => changelog,
-    "milestones" => MILESTONE
+    "description" => changelog
   })
 
   response = get_http(uri).request(request)
