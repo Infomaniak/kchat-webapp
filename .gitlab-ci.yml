@@ -359,7 +359,7 @@ release:front:
 
 # Publish changelog to kChat
 release:changelog:
-  stage: release
+  stage: .post
   image: ruby:${RUBY_VERSION}
   needs: ["release:front"]
   rules:
