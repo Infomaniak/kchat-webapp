@@ -3,16 +3,13 @@
 
 import React from 'react';
 import type {ReactNode} from 'react';
-import {FormattedMessage, injectIntl, useIntl} from 'react-intl';
-import {connect} from 'react-redux';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
-import SharedUserIndicator from 'components/shared_user_indicator';
 import StatusIcon from 'components/status_icon';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
@@ -22,10 +19,8 @@ import Avatar from 'components/widgets/users/avatar';
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
-import type {GlobalState} from 'types/store';
-
-import {SuggestionContainer} from '../suggestion';
-import type {SuggestionProps} from '../suggestion';
+import {SuggestionContainer} from '../../suggestion';
+import type {SuggestionProps} from '../../suggestion';
 
 export interface Item extends UserProfile {
     display_name: string;
@@ -35,13 +30,12 @@ export interface Item extends UserProfile {
     status?: string;
 }
 
-interface AtMentionSuggestionProps extends SuggestionProps<Item> {
+export interface AtMentionSuggestionProps extends SuggestionProps<Item> {
     status?: string;
 }
 
-const AtMentionSuggestion = React.forwardRef<HTMLDivElement, AtMentionSuggestionProps>((props, ref) => {
+export const AtMentionSuggestion = React.forwardRef<HTMLDivElement, AtMentionSuggestionProps>((props, ref) => {
     const {item} = props;
-
     const intl = useIntl();
 
     let itemname: string;
@@ -192,22 +186,3 @@ const AtMentionSuggestion = React.forwardRef<HTMLDivElement, AtMentionSuggestion
         </SuggestionContainer>
     );
 });
-
-type OwnProps = {
-    item: {
-        user_id?: string;
-        id?: string;
-    };
-}
-
-function mapStateToPropsForAtMentionSuggestion(state: GlobalState, ownProps: OwnProps) {
-    const status = ownProps.item?.user_id && ownProps.item?.id ? getStatusForUserId(state, ownProps.item.id) : undefined;
-
-    return {
-        status,
-    };
-}
-
-const ConnectedAtMentionSuggestion = connect(mapStateToPropsForAtMentionSuggestion, null, null, {forwardRef: true})(AtMentionSuggestion);
-
-export default ConnectedAtMentionSuggestion;
