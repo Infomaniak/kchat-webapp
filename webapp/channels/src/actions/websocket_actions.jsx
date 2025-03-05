@@ -328,6 +328,12 @@ export async function reconnect(socketId) {
         WebSocketClient.updateActiveTeam(currentTeamId);
     }
 
+    const currentChannelId = getCurrentChannelId(state);
+
+    // IK: call these methods before loading any plugins to fix unhandled errors
+    dispatch(checkForModifiedUsers(currentChannelId));
+    dispatch(TeamActions.getMyKSuites());
+
     loadPluginsIfNecessary();
 
     Object.values(pluginReconnectHandlers).forEach((handler) => {
@@ -335,11 +341,6 @@ export async function reconnect(socketId) {
             handler();
         }
     });
-
-    const currentChannelId = getCurrentChannelId(state);
-
-    dispatch(checkForModifiedUsers(currentChannelId));
-    dispatch(TeamActions.getMyKSuites());
 
     dispatch(resetWsErrorCount());
     dispatch(clearErrors());
