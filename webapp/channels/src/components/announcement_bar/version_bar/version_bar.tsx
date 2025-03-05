@@ -46,6 +46,9 @@ export default class VersionBar extends React.PureComponent <Props, State> {
         const isCanary = document.cookie.indexOf('KCHAT_NEXT=always') !== -1;
 
         // IK: isNewVersionCanaryOnly is populated only on WS
+        // For example, this variable is needed if WS trigger update for Canary, but not stable
+        // If Client receive this message, but it is on stable, the update will be ignored
+        // Otherwise, API call to check for update based on which one requested it - isNewVersionCanaryOnly will be undefined
         const isStableUpdate = !isCanary && isNewVersionCanaryOnly !== true;
         const isNextUpdate = isCanary && isNewVersionCanaryOnly !== false;
 

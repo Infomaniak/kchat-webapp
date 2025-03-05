@@ -7,11 +7,12 @@ import {
     DEFAULT_LIMIT_BEFORE,
 } from '@mattermost/client';
 
+import getUserAgentWithVersion from '../../../../utils/get_user_agent_with_version';
+
 const Client4 = new ClientClass4();
 Client4.setWebappVersion(GIT_RELEASE);
 
-const userAgent = [window?.navigator?.userAgent, `kChat/${GIT_RELEASE?.trim()}`, `Build/${COMMIT_HASH?.trim()}`].filter(Boolean).join(' ');
-Client4.setUserAgent(userAgent);
+Client4.setUserAgent(getUserAgentWithVersion());
 
 export {
     Client4,

@@ -253,11 +253,10 @@ export default class Client4 {
     }
 
     setUserAgent(userAgent: string) {
-        if (userAgent) {
-            this.userAgent = userAgent;
-            this.setHeader(HEADER_USER_AGENT, userAgent);
-            setUserAgent(window, userAgent);
-        }
+        this.userAgent = userAgent;
+
+        // IK: Overlap new user agent which can be consumed by bridge or bug tracker
+        setUserAgent(window, userAgent);
     }
 
     getToken() {

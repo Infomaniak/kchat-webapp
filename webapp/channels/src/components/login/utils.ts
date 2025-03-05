@@ -11,6 +11,8 @@ import {IKConstants} from 'utils/constants-ik';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion} from 'utils/user_agent';
 
+import getUserAgentWithVersion from '../../utils/get_user_agent_with_version';
+
 // eslint-disable-next-line no-process-env
 const v2DefaultAuthServer = process.env.BASE_URL;
 
@@ -39,8 +41,7 @@ export function storeTokenResponse(response: { expires_in?: number; access_token
 
     console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
     Client4.setWebappVersion(GIT_RELEASE);
-    const userAgent = [window?.navigator?.userAgent, `kChat/${GIT_RELEASE?.trim()}`, `Build/${COMMIT_HASH?.trim()}`].join(' ');
-    Client4.setUserAgent(userAgent);
+    Client4.setUserAgent(getUserAgentWithVersion());
 }
 
 /**
