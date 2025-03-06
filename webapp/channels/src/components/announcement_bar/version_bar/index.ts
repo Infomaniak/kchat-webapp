@@ -10,10 +10,8 @@ import VersionBar from './version_bar';
 function mapStateToProps(state: GlobalState) {
     const {BuildHash, IsNewVersionCanaryOnly} = state.entities.general.config;
 
-    // IK: In case of unknown hash, 'none' is received - We ignore it
-    const buildHash = BuildHash === 'none' ? undefined : BuildHash;
     return {
-        buildHash,
+        buildHash: BuildHash,
         isNewVersionCanaryOnly: IsNewVersionCanaryOnly,
     };
 }

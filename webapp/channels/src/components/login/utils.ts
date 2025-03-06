@@ -8,10 +8,9 @@ import {Client4} from 'mattermost-redux/client';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 
 import {IKConstants} from 'utils/constants-ik';
+import getUserAgentWithVersion from 'utils/get_user_agent_with_version';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion} from 'utils/user_agent';
-
-import getUserAgentWithVersion from '../../utils/get_user_agent_with_version';
 
 // eslint-disable-next-line no-process-env
 const v2DefaultAuthServer = process.env.BASE_URL;

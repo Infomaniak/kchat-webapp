@@ -52,7 +52,7 @@ export default class VersionBar extends React.PureComponent <Props, State> {
         const isStableUpdate = !isCanary && isNewVersionCanaryOnly !== true;
         const isNextUpdate = isCanary && isNewVersionCanaryOnly !== false;
 
-        if (!buildHashOnAppLoad || !buildHash) {
+        if (!buildHashOnAppLoad || buildHash === 'none') {
             return null;
         }
 
