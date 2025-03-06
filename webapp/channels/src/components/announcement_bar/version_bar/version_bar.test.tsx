@@ -71,4 +71,20 @@ describe('components/VersionBar', () => {
         expect(wrapper).toMatchSnapshot();
         expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
     });
+
+    test('should match snapshot - On mount `none` become `GIT_REALEASE`', () => {
+        const wrapper = shallow(
+            <VersionBar buildHash='none'/>,
+        );
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+
+        wrapper.setProps({buildHash: GIT_RELEASE});
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+
+        wrapper.setProps({buildHash: '83ea110da12da84442f92b4634a1e0e2'});
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(true);
+    });
 });

@@ -22,7 +22,7 @@ export default class VersionBar extends React.PureComponent <Props, State> {
         super(props);
 
         this.state = {
-            buildHashOnAppLoad: props.buildHash,
+            buildHashOnAppLoad: props.buildHash === 'none' ? GIT_RELEASE : props.buildHash,
         };
     }
 
