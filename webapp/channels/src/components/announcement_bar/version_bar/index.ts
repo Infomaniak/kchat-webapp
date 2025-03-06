@@ -9,7 +9,6 @@ import VersionBar from './version_bar';
 
 function mapStateToProps(state: GlobalState) {
     const {BuildHash, IsNewVersionCanaryOnly} = state.entities.general.config;
-
     return {
         buildHash: BuildHash,
         isNewVersionCanaryOnly: IsNewVersionCanaryOnly,
