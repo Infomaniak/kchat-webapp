@@ -8,7 +8,8 @@ import {
     DownloadOutlineIcon,
     CloseIcon,
 } from '@infomaniak/compass-icons/components';
-import React, {useState, useEffect} from 'react';
+import classNames from 'classnames';
+import React, {useState, useEffect, useReducer} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {Post} from '@mattermost/types/posts';
@@ -20,7 +21,6 @@ import {
     useAudioPlayer,
 } from 'components/common/hooks/useAudioPlayer';
 import * as Menu from 'components/menu';
-import TranscriptComponent from 'components/transcript/transcript';
 import TranscriptSpinner from 'components/widgets/loading/loading_transcript_spinner';
 
 import {convertSecondsToMSS} from 'utils/datetime';
@@ -42,14 +42,13 @@ function VoiceMessageAttachmentPlayer(props: Props) {
         }
     }, [post?.metadata]);
 
-    const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null);
-    const [isTranscriptModalOpen, setIsTranscriptModalOpen] = useState(true);
+    const [isTranscript, toggleTranscript] = useReducer((state) => !state, true);
+    const [showFullTranscript, toggleFullTranscript] = useReducer((state) => !state, false);
     const fileId = props.fileId ? props.fileId : post?.file_ids![0]; // There is always one file id for type voice.
     const transcript = (props.fileId || isLoading) ? null : post?.metadata?.files[0]?.transcript;
     const {formatMessage} = useIntl();
     const {playerState, duration, elapsed, togglePlayPause} = useAudioPlayer(fileId ? `/api/v4/files/${fileId}` : '');
     const progressValue = elapsed === 0 || duration === 0 ? '0' : (elapsed / duration).toFixed(2);
-    const open = Boolean(anchorEl);
 
     function downloadFile() {
         if (!fileId) {
@@ -58,21 +57,9 @@ function VoiceMessageAttachmentPlayer(props: Props) {
         window.location.assign(getFileDownloadUrl(fileId));
     }
 
-    const toggleTranscriptModal = () => {
-        setIsTranscriptModalOpen(!isTranscriptModalOpen);
-    };
-
-    const handleClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
     const handleTranscriptClick = () => {
         if (typeof transcript === 'object') {
-            toggleTranscriptModal();
+            toggleTranscript();
         }
     };
 
@@ -95,7 +82,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             key='toggle'
             className='style--none single-image-view__toggle'
             aria-label='Toggle Embed Visibility'
-            onClick={toggleTranscriptModal}
+            onClick={toggleTranscript}
         >
             {!props.fileId && (
                 isLoading ? (
@@ -103,7 +90,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                         <TranscriptSpinner/>
                     </div>
                 ) : (
-                    <span className={`icon ${(isTranscriptModalOpen) ? 'icon-menu-down' : 'icon-menu-right'}`}/>
+                    <span className={classNames('icon', isTranscript ? 'icon-menu-down' : 'icon-menu-right')}/>
                 )
             )}
         </button>
@@ -112,8 +99,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     const transcriptHeader = (
         ((!props.isPreview && transcript?.text?.length !== 0 && transcript?.text?.length !== undefined) || (isLoading && !props.isPreview)) && (
             <div
-                className='image-header'
-                style={{cursor: 'pointer', display: 'flex'}}
+                className='image-header transcript'
                 onClick={handleTranscriptClick}
             >
                 {toggle}
@@ -235,29 +221,26 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                     {!props.isPreview && !isLoading && (
                         <div >
                             <>
-                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && isTranscriptModalOpen && (
+                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && isTranscript && (
                                     <div style={{paddingTop: '5px'}}>
-                                        {transcript?.text?.length > 300 ? transcript?.text.substring(0, 300) + '... ' : transcript?.text + ' '}
-                                        <a
-                                            className='transcript-link-view'
-                                            onClick={(event) => {
-                                                handleClick(event);
-                                            }}
-                                        >
-                                            <FormattedMessage
-                                                id={'vocals.loading_transcript'}
-                                                defaultMessage={'View the transcript'}
-                                            />
-                                        </a>
+                                        {showFullTranscript || transcript.text.length <= 300 ? (
+                                            `${transcript.text} `
+                                        ) : (
+                                            <>
+                                                {`${transcript.text.substring(0, 300)}... `}
+                                                <a
+                                                    onClick={() => {
+                                                        toggleFullTranscript();
+                                                    }}
+                                                >
+                                                    <FormattedMessage
+                                                        id={'vocals.loading_transcript'}
+                                                        defaultMessage={'Afficher plus'}
+                                                    />
+                                                </a>
+                                            </>
+                                        )}
                                     </div>
-                                )}
-                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && (
-                                    <TranscriptComponent
-                                        transcriptDatas={transcript}
-                                        handleClose={handleClose}
-                                        open={open}
-                                        anchorEl={anchorEl}
-                                    />
                                 )}
                             </>
                         </div>
