@@ -8,7 +8,8 @@ import {
     DownloadOutlineIcon,
     CloseIcon,
 } from '@infomaniak/compass-icons/components';
-import React, {useState, useEffect} from 'react';
+import classNames from 'classnames';
+import React, {useState, useEffect, useReducer} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {Post} from '@mattermost/types/posts';
@@ -41,8 +42,8 @@ function VoiceMessageAttachmentPlayer(props: Props) {
         }
     }, [post?.metadata]);
 
-    const [isTranscriptOpen, setIsTranscriptOpen] = useState(true);
-    const [showFullTranscript, setShowFullTranscript] = useState(false);
+    const [isTranscript, toggleTranscript] = useReducer((state) => !state, true);
+    const [showFullTranscript, toggleFullTranscript] = useReducer((state) => !state, false);
     const fileId = props.fileId ? props.fileId : post?.file_ids![0]; // There is always one file id for type voice.
     const transcript = (props.fileId || isLoading) ? null : post?.metadata?.files[0]?.transcript;
     const {formatMessage} = useIntl();
@@ -56,13 +57,9 @@ function VoiceMessageAttachmentPlayer(props: Props) {
         window.location.assign(getFileDownloadUrl(fileId));
     }
 
-    const toggleTranscriptModal = () => {
-        setIsTranscriptOpen(!isTranscriptOpen);
-    };
-
     const handleTranscriptClick = () => {
         if (typeof transcript === 'object') {
-            toggleTranscriptModal();
+            toggleTranscript();
         }
     };
 
@@ -85,7 +82,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             key='toggle'
             className='style--none single-image-view__toggle'
             aria-label='Toggle Embed Visibility'
-            onClick={toggleTranscriptModal}
+            onClick={toggleTranscript}
         >
             {!props.fileId && (
                 isLoading ? (
@@ -93,7 +90,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                         <TranscriptSpinner/>
                     </div>
                 ) : (
-                    <span className={`icon ${(isTranscriptOpen) ? 'icon-menu-down' : 'icon-menu-right'}`}/>
+                    <span className={classNames('icon', isTranscript ? 'icon-menu-down' : 'icon-menu-right')}/>
                 )
             )}
         </button>
@@ -224,16 +221,16 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                     {!props.isPreview && !isLoading && (
                         <div >
                             <>
-                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && isTranscriptOpen && (
+                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && isTranscript && (
                                     <div style={{paddingTop: '5px'}}>
                                         {showFullTranscript || transcript.text.length <= 300 ? (
                                             `${transcript.text} `
                                         ) : (
                                             <>
-                                                {transcript.text.substring(0, 300)}{'... '}
+                                                {`${transcript.text.substring(0, 300)}... `}
                                                 <a
                                                     onClick={() => {
-                                                        setShowFullTranscript(true);
+                                                        toggleFullTranscript();
                                                     }}
                                                 >
                                                     <FormattedMessage
