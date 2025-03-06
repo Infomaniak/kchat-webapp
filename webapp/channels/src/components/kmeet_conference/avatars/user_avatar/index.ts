@@ -21,12 +21,11 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     let user;
     let name;
 
-    // eslint-disable-next-line no-negated-condition
-    if (!ownProps.user) {
-        user = selectUser(state, ownProps.userId);
-    } else {
+    if (ownProps.user) {
         user = ownProps.user;
         name = ownProps.name;
+    } else {
+        user = selectUser(state, ownProps.userId);
     }
 
     return {

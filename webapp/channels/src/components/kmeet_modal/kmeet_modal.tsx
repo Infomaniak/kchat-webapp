@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState, useRef} from 'react';
 import type {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
@@ -45,6 +45,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOthe
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const modalRef = React.useRef<HTMLDivElement>(null);
+    const mountedRef = useRef(false);
     const isCallerCurrentUser = useMemo(() => caller?.id === user.id, [caller, user]);
     const participants = useMemo(() => {
         if (!users || !user) {
@@ -99,13 +100,26 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOthe
     useEffect(() => {
         window.addEventListener('offline', onHandleDecline);
         return () => window.removeEventListener('offline', onHandleDecline);
+    }, []);
+
+    useEffect(() => {
+        mountedRef.current = true;
+
+        return () => {
+            mountedRef.current = false;
+        };
+    }, []);
+
+    useEffect(() => {
         const fetchParticipants = async () => {
             if (isOtherServer) {
                 const userIds = eventOtherServer.data.participants;
                 try {
                     const data = await getUserCustom(otherServerName, userIds);
                     const filteredData = data.filter((participant) => participant.nickname !== user.nickname);
-                    setOtherServerParticipants(filteredData);
+                    if (mountedRef.current) {
+                        setOtherServerParticipants(filteredData);
+                    }
                 } catch (error) {
                     console.error('Error fetching participants:', error);
                 }
