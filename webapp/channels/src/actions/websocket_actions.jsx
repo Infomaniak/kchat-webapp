@@ -312,15 +312,7 @@ export async function reconnect(socketId) {
         const crtEnabled = isCollapsedThreadsEnabled(state);
         dispatch(TeamActions.getMyTeamUnreads(crtEnabled, true));
         if (crtEnabled) {
-            const teams = getMyKSuites(state);
             syncThreads(currentTeamId, currentUserId);
-
-            for (const team of teams) {
-                if (team.id === currentTeamId) {
-                    continue;
-                }
-                syncThreads(team.id, currentUserId);
-            }
         }
 
         // Re-syncing the current channel and team ids.
