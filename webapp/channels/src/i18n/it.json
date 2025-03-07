@@ -3358,7 +3358,7 @@
   "status_dropdown.menuAriaLabel": "imposta stato",
   "status_dropdown.set_away": "Assente",
   "status_dropdown.set_dnd": "Non disturbare",
-  "status_dropdown.set_dnd.extra": "Disattiva le notifiche desktop e mobile",
+  "status_dropdown.set_dnd.extra": "Disattiva tutte le notifiche",
   "status_dropdown.set_offline": "Offline",
   "status_dropdown.set_online": "Online",
   "status_dropdown.set_ooo": "Fuori sede",
