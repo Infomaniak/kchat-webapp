@@ -4377,7 +4377,7 @@
   "status_dropdown.set_custom": "Choisir un statut personnalisé",
   "status_dropdown.set_custom_text": "Définir un texte de statut personnalisé…",
   "status_dropdown.set_dnd": "Ne pas déranger",
-  "status_dropdown.set_dnd.extra": "Ne pas expirer",
+  "status_dropdown.set_dnd.extra": "Désactive toutes les notifications",
   "status_dropdown.set_offline": "Hors ligne",
   "status_dropdown.set_online": "En ligne",
   "status_dropdown.set_ooo": "Absent du bureau",

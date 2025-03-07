@@ -4449,7 +4449,7 @@
   "status_dropdown.set_custom": "Establece un estado personalizado",
   "status_dropdown.set_custom_text": "Establece el Texto de Estado Personalizado...",
   "status_dropdown.set_dnd": "No Molestar",
-  "status_dropdown.set_dnd.extra": "Desactiva las Notificaciones de Escritorio y Móviles",
+  "status_dropdown.set_dnd.extra": "Desactiva todas las notificaciones",
   "status_dropdown.set_offline": "Desconectado",
   "status_dropdown.set_online": "Conectado",
   "status_dropdown.set_ooo": "Fuera de Oficina",

@@ -5415,7 +5415,7 @@
   "status_dropdown.set_custom": "Eigenen Status setzen",
   "status_dropdown.set_custom_text": "Setze eigenen Statustext...",
   "status_dropdown.set_dnd": "Nicht stören",
-  "status_dropdown.set_dnd.extra": "Deaktiviert Desktop- und Push-Benachrichtigungen",
+  "status_dropdown.set_dnd.extra": "Deaktiviert alle Benachrichtigungen",
   "status_dropdown.set_offline": "Offline",
   "status_dropdown.set_online": "Online",
   "status_dropdown.set_ooo": "Nicht im Büro",
