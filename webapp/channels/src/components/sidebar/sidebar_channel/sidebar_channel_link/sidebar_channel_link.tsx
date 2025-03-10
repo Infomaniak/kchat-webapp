@@ -293,12 +293,6 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 aria-label={this.getAriaLabel()}
                 to={link}
                 onClick={this.handleChannelClick}
-                onContextMenu={(event) => {
-                    event.preventDefault();
-                    if (this.menuTriggerRef) {
-                        this.menuTriggerRef.current?.click();
-                    }
-                }}
                 tabIndex={0}
             >
                 {content}
