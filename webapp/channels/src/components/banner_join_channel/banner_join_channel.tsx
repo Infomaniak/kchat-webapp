@@ -12,7 +12,7 @@ export type BannerJoinChannelProps = {
 const BannerJoinChannel: FC<BannerJoinChannelProps> = ({onButtonClick}) => {
     return (
         <div
-            className='post-create__container'
+            className='post-create__container post-create__container--banner-join-channel'
             id='post-create'
         >
             <div
