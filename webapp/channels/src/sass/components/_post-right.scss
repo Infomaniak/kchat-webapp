@@ -170,6 +170,10 @@
     .post-create__container {
         width: 100%;
 
+        &--banner-join-channel {
+            margin-top: 7px;
+        }
+
         .btn {
             margin-bottom: 10px;
 
