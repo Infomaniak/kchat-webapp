@@ -3773,6 +3773,7 @@
   "globalThreads.threadPane.unselectedTitle": "Wählen Sie einen Thread",
   "globalThreads.title": "{prefix} Unterhaltungen - {displayName} {siteName}",
   "global_header.productSettings": "Einstellungen",
+  "global_header.ikProduct": "Ihre Produkte",
   "global_header.productSwitchMenu": "Produktwechsel Menü",
   "group_list_modal.addGroupButton": "Gruppen hinzufügen",
   "group_list_modal.removeGroupButton": "Gruppe entfernen",

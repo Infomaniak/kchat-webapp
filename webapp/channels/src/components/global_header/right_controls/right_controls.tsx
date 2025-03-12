@@ -22,6 +22,7 @@ import {
     SettingsTour,
     useShowOnboardingTutorialStep,
 } from 'components/tours/onboarding_tour';
+import WithTooltip from 'components/with_tooltip';
 
 import Constants from 'utils/constants';
 import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
@@ -188,18 +189,29 @@ const RightControls = (): JSX.Element => {
                 <SettingsButton/>
             </ButtonWrapper>
             {!isDesktopApp && (
-                <div style={{position: 'relative'}}>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                    <module-products-component
-                        position='right'
-                        style={{height: '100%'}}
-                    >
-                        {trigger}
+                <WithTooltip
+                    id='rightControl__tooltip'
+                    title={
+                        <FormattedMessage
+                            id='global_header.ikProduct'
+                            defaultMessage='Your products'
+                        />
+                    }
+                    placement='bottom'
+                >
+                    <div style={{position: 'relative'}}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                         {/* @ts-ignore */}
-                    </module-products-component>
-                </div>
+                        <module-products-component
+                            position='right'
+                            style={{height: '100%'}}
+                        >
+                            {trigger}
+                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                            {/* @ts-ignore */}
+                        </module-products-component>
+                    </div>
+                </WithTooltip>
             )}
             <StatusDropdown/>
             <FlagNext/>
