@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {RefObject} from 'react';
 import type {ConnectedProps} from 'react-redux';
 import {connect} from 'react-redux';
 
@@ -32,7 +31,6 @@ export type OwnProps = {
     channel: Channel;
     channelLink: string;
     isUnread: boolean;
-    menuTriggerRef: React.RefObject<HTMLButtonElement>;
     channelLeaveHandler?: (callback: () => void) => void;
     onMenuToggle: (open: boolean) => void;
 }
