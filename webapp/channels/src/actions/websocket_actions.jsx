@@ -3,8 +3,6 @@
 
 /* eslint-disable max-lines */
 
-import WebSocketClient from 'client/web_websocket_client';
-import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 import {lazy} from 'react';
 import {batchActions} from 'redux-batched-actions';
 
@@ -49,6 +47,7 @@ import {
     receivedNewPost,
     receivedPost,
 } from 'mattermost-redux/actions/posts';
+import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 import * as TeamActions from 'mattermost-redux/actions/teams';
 import {
@@ -120,6 +119,9 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 import {logTimestamp} from 'utils/utils';
+
+import WebSocketClient from 'client/web_websocket_client';
+import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
 import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';
@@ -298,6 +300,7 @@ export async function reconnect(socketId) {
         // }
 
         dispatch(fetchMyCategories(currentTeamId));
+        dispatch(getMyPreferences());
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
