@@ -81,10 +81,9 @@
             overflow: hidden;
             width: 100%;
             align-items: center;
-            // Infomaniak edit
             padding: 0px 10px;
             clear: both;
-            color: rgba(var(--center-channel-color-rgb));
+            color: inherit;
             cursor: pointer;
             font-weight: normal;
             line-height: 28px;
