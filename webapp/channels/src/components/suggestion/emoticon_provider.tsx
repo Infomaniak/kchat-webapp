@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import debounce from 'lodash/debounce';
 import React from 'react';
 import {defineMessages} from 'react-intl';
 
@@ -63,6 +64,18 @@ export default class EmoticonProvider extends Provider {
         this.triggerCharacter = ':';
     }
 
+    AUTOCOMPLETE_DEBOUNCE_DELAY = 250;
+
+    debouncedAutocompleteAndSuggestEmojis = debounce((partialName: string, text: string, resultsCallback: ResultsCallback<EmojiItem>) => {
+        store.dispatch(autocompleteCustomEmojis(partialName)).then(() => {
+            this.findAndSuggestEmojis(text, partialName, resultsCallback);
+        });
+    }, this.AUTOCOMPLETE_DEBOUNCE_DELAY);
+
+    debouncedFindAndSuggestEmojis = debounce((partialName: string, text: string, resultsCallback: ResultsCallback<EmojiItem>) => {
+        this.findAndSuggestEmojis(text, partialName, resultsCallback);
+    }, this.AUTOCOMPLETE_DEBOUNCE_DELAY);
+
     handlePretextChanged(pretext: string, resultsCallback: ResultsCallback<EmojiItem>) {
         // Look for the potential emoticons at the start of the text, after whitespace, and at the start of emoji reaction commands
         const captured = (/(^|\s|^\+|^-)(:([^:\s]*))$/g).exec(pretext.toLowerCase());
@@ -89,9 +102,9 @@ export default class EmoticonProvider extends Provider {
         }
 
         if (store.getState().entities.general.config.EnableCustomEmoji === 'true') {
-            store.dispatch(autocompleteCustomEmojis(partialName)).then(() => this.findAndSuggestEmojis(text, partialName, resultsCallback));
+            this.debouncedAutocompleteAndSuggestEmojis(partialName, text, resultsCallback);
         } else {
-            this.findAndSuggestEmojis(text, partialName, resultsCallback);
+            this.debouncedFindAndSuggestEmojis(partialName, text, resultsCallback);
         }
 
         return true;
