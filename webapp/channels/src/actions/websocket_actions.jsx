@@ -303,6 +303,9 @@ export async function reconnect(socketId) {
         dispatch(getMyPreferences());
         dispatch(loadChannelsForCurrentUser());
 
+        // IK: Verify version on reconnect
+        dispatch(getClientConfig());
+
         if (mostRecentPost) {
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
             dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
@@ -1520,7 +1523,7 @@ function handleUserRoleUpdated(msg) {
 }
 
 function handleConfigChanged(msg) {
-    store.dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data: {...msg.data.config, IsNewVersionCanaryOnly: msg.data.canary}});
+    store.dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data: {...msg.data.config, IsNewVersionCanaryOnly: Boolean(msg.data.canary)}});
 }
 
 function handleLicenseChanged(msg) {

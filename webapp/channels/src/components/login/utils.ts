@@ -8,6 +8,7 @@ import {Client4} from 'mattermost-redux/client';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 
 import {IKConstants} from 'utils/constants-ik';
+import getUserAgentWithVersion from 'utils/get_user_agent_with_version';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion} from 'utils/user_agent';
 
@@ -39,6 +40,7 @@ export function storeTokenResponse(response: { expires_in?: number; access_token
 
     console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
     Client4.setWebappVersion(GIT_RELEASE);
+    Client4.setUserAgent(getUserAgentWithVersion());
 }
 
 /**

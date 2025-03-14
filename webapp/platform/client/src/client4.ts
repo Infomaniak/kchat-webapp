@@ -157,7 +157,7 @@ import {UsersLimits} from '@mattermost/types/limits';
 
 
 import {cleanUrlForLogging} from './errors';
-import {buildQueryString} from './helpers';
+import {buildQueryString, setUserAgent} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
 
@@ -254,6 +254,9 @@ export default class Client4 {
 
     setUserAgent(userAgent: string) {
         this.userAgent = userAgent;
+
+        // IK: Overlap new user agent which can be consumed by bridge or bug tracker
+        setUserAgent(window, userAgent);
     }
 
     getToken() {

@@ -25,7 +25,8 @@ export function getClientConfig(): ActionFuncAsync {
         Client4.setEnableLogging(data.EnableDeveloper === 'true');
         Client4.setDiagnosticId(data.DiagnosticId);
 
-        dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data});
+        // IK: We need to reset IsNewVersionCanaryOnly when it's an API call
+        dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data: {...data, IsNewVersionCanaryOnly: undefined}});
 
         return {data};
     };
