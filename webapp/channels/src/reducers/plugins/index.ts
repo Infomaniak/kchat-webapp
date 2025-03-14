@@ -203,6 +203,18 @@ function components(state: PluginsState['components'] = initialComponents, actio
             const currentArray = nextState[action.name] || [];
             const nextArray = [...currentArray];
             let actionData = action.data;
+
+            // IK changes : don't add the component if it already exists, but only for kdrive plugin
+            const componentExists = nextArray.some((component) =>
+                component.pluginId === actionData.pluginId &&
+                component.id === actionData.id,
+            );
+
+            if (componentExists && actionData.pluginId === 'kdrive') {
+                console.log(`Component already exists: ${actionData.pluginId} - ${actionData.id}`);
+                return state;
+            }
+
             if (action.name === 'PostDropdownMenu' && actionData.parentMenuId) {
                 // Remove the menu from nextArray to rebuild it later.
                 const menu = remove(nextArray, (c) => hasMenuId(c, actionData.parentMenuId) && c.pluginId === actionData.pluginId);
