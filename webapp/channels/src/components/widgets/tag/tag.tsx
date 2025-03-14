@@ -58,7 +58,7 @@ const TagWrapper = styled.div<TagWrapperProps>`
     &.Tag--xs {
         height: 16px;
         font-size: 10px;
-        line-height: 12px;
+        line-height: 1;
         padding: 1px 4px;
     }
 
