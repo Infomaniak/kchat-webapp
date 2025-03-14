@@ -3362,6 +3362,7 @@
   "globalThreads.threadPane.unselectedTitle": "Sélectionnez un Fil de Discussion",
   "globalThreads.title": "{prefix}Fils de discussion - {displayName} {siteName}",
   "global_header.productSettings": "Paramètres",
+  "global_header.ikProduct": "Vos produits",
   "group_list_modal.addGroupButton": "Ajouter des groupes",
   "group_list_modal.removeGroupButton": "Supprimer le groupe",
   "imageToolbarZoomDropdown.automatic": "Automatique",

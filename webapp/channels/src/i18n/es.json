@@ -3403,6 +3403,7 @@
   "globalThreads.threadPane.unselectedTitle": "Seleccione un hilo",
   "globalThreads.title": "{prefix}Hilos - {displayName} {siteName}",
   "global_header.productSettings": "Ajustes",
+  "global_header.ikProduct": "Tus productos",
   "group_list_modal.addGroupButton": "Agregar Grupos",
   "group_list_modal.removeGroupButton": "Eliminar Grupo",
   "group_member_list.retryLoadButton": "Reintentar",

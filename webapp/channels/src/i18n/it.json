@@ -2572,6 +2572,7 @@
   "globalThreads.threadPane.unselectedTitle": "Seleccione un hilo",
   "globalThreads.title": "{prefix}Hilos - {displayName} {siteName}",
   "global_header.productSettings": "Ajustes",
+  "global_header.ikProduct": "I tuoi prodotti",
   "group_list_modal.addGroupButton": "Aggiungi Gruppi",
   "group_list_modal.removeGroupButton": "Rimuovi Gruppo",
   "imageToolbarZoomDropdown.automatic": "Automatico",
