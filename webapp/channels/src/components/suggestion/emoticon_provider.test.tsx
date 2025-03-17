@@ -9,7 +9,7 @@ import EmojiMap from 'utils/emoji_map';
 
 import EmoticonProvider, {
     MIN_EMOTICON_LENGTH,
-    EMOJI_CATEGORY_SUGGESTION_BLOCKLIST,
+    EMOJI_CATEGORY_SUGGESTION_BLOCKLIST, AUTOCOMPLETE_DEBOUNCE_DELAY,
 } from './emoticon_provider';
 
 jest.mock('selectors/emojis', () => ({
@@ -33,6 +33,14 @@ describe('components/EmoticonProvider', () => {
     ]);
     const emojiMap = new EmojiMap(customEmojis);
 
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        jest.useRealTimers();
+    });
+
     it('should not suggest emojis when partial name < MIN_EMOTICON_LENGTH', () => {
         for (let i = 0; i < MIN_EMOTICON_LENGTH; i++) {
             const pretext = `:${'s'.repeat(i)}`;
@@ -41,7 +49,7 @@ describe('components/EmoticonProvider', () => {
         }
     });
 
-    it('should suggest emojis when partial name >= MIN_EMOTICON_LENGTH', () => {
+    it('should suggest emojis when partial name >= MIN_EMOTICON_LENGTH', async () => {
         mockedGetEmojiMap.mockReturnValue(emojiMap);
         mockedGetRecentEmojisNames.mockReturnValue([]);
 
@@ -49,6 +57,7 @@ describe('components/EmoticonProvider', () => {
             const pretext = `:${'s'.repeat(i)}`;
 
             emoticonProvider.handlePretextChanged(pretext, resultsCallback);
+            jest.advanceTimersByTime(AUTOCOMPLETE_DEBOUNCE_DELAY);
             expect(resultsCallback).toHaveBeenCalled();
         }
     });
@@ -60,6 +69,7 @@ describe('components/EmoticonProvider', () => {
         mockedGetRecentEmojisNames.mockReturnValue(recentEmojis);
 
         emoticonProvider.handlePretextChanged(pretext, resultsCallback);
+        jest.advanceTimersByTime(AUTOCOMPLETE_DEBOUNCE_DELAY);
         expect(resultsCallback).toHaveBeenCalled();
         const args = resultsCallback.mock.calls[0][0];
         const results = args.items.filter(
@@ -84,6 +94,7 @@ describe('components/EmoticonProvider', () => {
         mockedGetRecentEmojisNames.mockReturnValue(recentEmojis);
 
         emoticonProvider.handlePretextChanged(pretext, resultsCallback);
+        jest.advanceTimersByTime(AUTOCOMPLETE_DEBOUNCE_DELAY);
         expect(resultsCallback).toHaveBeenCalled();
         const args = resultsCallback.mock.calls[0][0];
         expect(args.items.length).toEqual(0);
@@ -112,6 +123,7 @@ describe('components/EmoticonProvider', () => {
         mockedGetRecentEmojisNames.mockReturnValue(recentEmojis);
 
         emoticonProvider.handlePretextChanged(pretext, resultsCallback);
+        jest.advanceTimersByTime(AUTOCOMPLETE_DEBOUNCE_DELAY);
         expect(resultsCallback).toHaveBeenCalled();
         const args = resultsCallback.mock.calls[0][0];
         expect(args.items.length).toEqual(1);
@@ -127,6 +139,7 @@ describe('components/EmoticonProvider', () => {
             mockedGetRecentEmojisNames.mockReturnValue(recentEmojis);
 
             emoticonProvider.handlePretextChanged(pretext, resultsCallback);
+            jest.advanceTimersByTime(AUTOCOMPLETE_DEBOUNCE_DELAY);
             expect(resultsCallback).toHaveBeenCalled();
             const args = resultsCallback.mock.calls[0][0];
             const results = args.items.filter(
@@ -151,6 +164,7 @@ describe('components/EmoticonProvider', () => {
         mockedGetRecentEmojisNames.mockReturnValue(recentEmojis);
 
         emoticonProvider.handlePretextChanged(pretext, resultsCallback);
+        jest.advanceTimersByTime(AUTOCOMPLETE_DEBOUNCE_DELAY);
         expect(resultsCallback).toHaveBeenCalled();
         const args = resultsCallback.mock.calls[0][0];
         const results = args.items.filter(
@@ -180,6 +194,7 @@ describe('components/EmoticonProvider', () => {
         mockedGetRecentEmojisNames.mockReturnValue(recentEmojis);
 
         emoticonProvider.handlePretextChanged(pretext, resultsCallback);
+        jest.advanceTimersByTime(AUTOCOMPLETE_DEBOUNCE_DELAY);
         expect(resultsCallback).toHaveBeenCalled();
         const args = resultsCallback.mock.calls[0][0];
         const results = args.items.filter(
@@ -208,6 +223,7 @@ describe('components/EmoticonProvider', () => {
         mockedGetRecentEmojisNames.mockReturnValue(recentEmojis);
 
         emoticonProvider.handlePretextChanged(pretext, resultsCallback);
+        jest.advanceTimersByTime(AUTOCOMPLETE_DEBOUNCE_DELAY);
         expect(resultsCallback).toHaveBeenCalled();
         const args = resultsCallback.mock.calls[0][0];
         const results = args.items.filter(

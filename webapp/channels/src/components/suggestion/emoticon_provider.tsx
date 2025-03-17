@@ -23,6 +23,7 @@ import type {SuggestionProps} from './suggestion';
 
 export const MIN_EMOTICON_LENGTH = 2;
 export const EMOJI_CATEGORY_SUGGESTION_BLOCKLIST = ['skintone'];
+export const AUTOCOMPLETE_DEBOUNCE_DELAY = 250;
 
 type EmojiItem = {
     name: string;
@@ -64,17 +65,15 @@ export default class EmoticonProvider extends Provider {
         this.triggerCharacter = ':';
     }
 
-    AUTOCOMPLETE_DEBOUNCE_DELAY = 250;
-
     debouncedAutocompleteAndSuggestEmojis = debounce((partialName: string, text: string, resultsCallback: ResultsCallback<EmojiItem>) => {
         store.dispatch(autocompleteCustomEmojis(partialName)).then(() => {
             this.findAndSuggestEmojis(text, partialName, resultsCallback);
         });
-    }, this.AUTOCOMPLETE_DEBOUNCE_DELAY);
+    }, AUTOCOMPLETE_DEBOUNCE_DELAY);
 
     debouncedFindAndSuggestEmojis = debounce((partialName: string, text: string, resultsCallback: ResultsCallback<EmojiItem>) => {
         this.findAndSuggestEmojis(text, partialName, resultsCallback);
-    }, this.AUTOCOMPLETE_DEBOUNCE_DELAY);
+    }, AUTOCOMPLETE_DEBOUNCE_DELAY);
 
     handlePretextChanged(pretext: string, resultsCallback: ResultsCallback<EmojiItem>) {
         // Look for the potential emoticons at the start of the text, after whitespace, and at the start of emoji reaction commands
