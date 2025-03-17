@@ -129,6 +129,9 @@ exports[`components/TextBox should match snapshot with additional, optional prop
           "triggerCharacter": "~",
         },
         EmoticonProvider {
+          "AUTOCOMPLETE_DEBOUNCE_DELAY": 250,
+          "debouncedAutocompleteAndSuggestEmojis": [Function],
+          "debouncedFindAndSuggestEmojis": [Function],
           "disableDispatches": false,
           "forceDispatch": false,
           "latestComplete": true,
@@ -278,6 +281,9 @@ exports[`components/TextBox should match snapshot with required props 1`] = `
           "triggerCharacter": "~",
         },
         EmoticonProvider {
+          "AUTOCOMPLETE_DEBOUNCE_DELAY": 250,
+          "debouncedAutocompleteAndSuggestEmojis": [Function],
+          "debouncedFindAndSuggestEmojis": [Function],
           "disableDispatches": false,
           "forceDispatch": false,
           "latestComplete": true,
@@ -427,6 +433,9 @@ exports[`components/TextBox should throw error when new property is too long 1`]
           "triggerCharacter": "~",
         },
         EmoticonProvider {
+          "AUTOCOMPLETE_DEBOUNCE_DELAY": 250,
+          "debouncedAutocompleteAndSuggestEmojis": [Function],
+          "debouncedFindAndSuggestEmojis": [Function],
           "disableDispatches": false,
           "forceDispatch": false,
           "latestComplete": true,
@@ -576,6 +585,9 @@ exports[`components/TextBox should throw error when value is too long 1`] = `
           "triggerCharacter": "~",
         },
         EmoticonProvider {
+          "AUTOCOMPLETE_DEBOUNCE_DELAY": 250,
+          "debouncedAutocompleteAndSuggestEmojis": [Function],
+          "debouncedFindAndSuggestEmojis": [Function],
           "disableDispatches": false,
           "forceDispatch": false,
           "latestComplete": true,
