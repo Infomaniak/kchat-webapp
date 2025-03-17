@@ -63,6 +63,9 @@ export class DesktopAppAPI {
 
             window.desktop.version = semver.valid(semver.coerce(version));
             if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.1.0') && 'theme' in rest) {
+                if (rest.theme === undefined) {
+                    return;
+                }
                 window.desktop.theme = rest.theme as Theme;
                 dispatch(setTheme(window.desktop.theme as Theme));
             }
