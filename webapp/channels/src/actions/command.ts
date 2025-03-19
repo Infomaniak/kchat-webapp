@@ -92,6 +92,8 @@ export function executeCommand(message: string, args: CommandArgs): ActionFuncAs
                 return {data: true};
             }
             const channel = getCurrentChannel(state) || {};
+
+            // IK: use the same action as when leaving channel from the sidebar dropdown
             if (channel.type === Constants.OPEN_CHANNEL) {
                 dispatch(leaveChannel(channel.id));
                 return {data: true};
