@@ -3636,6 +3636,7 @@
   "leave_private_channel_modal.last_admin": "En tant que dernier administrateur de ce canal, attribuez des droits d’administration à un autre membre avant de quitter ce canal.",
   "leave_private_channel_modal.one_admin": "En tant que dernier utilisateur, vous ne pouvez pas quitter ce canal privé mais uniquement l'archiver. Vous, ou un administrateur, pourrez toujours le désarchiver.",
   "leave_private_channel_modal.which_user": "A quel utilisateur souhaitez-vous accorder un droit d’administrateur sur ce canal ?",
+  "leave_public_channel_error.default_channel": "Impossible de quitter le canal par défaut.",
   "leave_public_channel_modal.message": "Êtes-vous sûr de vouloir quitter le canal {channel} ? Vous pouvez rejoindre ce canal à l'avenir si vous changez d'avis.",
   "leave_public_channel_modal.title": "Quitter le canal {channel}",
   "leave_team_modal.desc": "**Vous allez être retiré de {num_of_public_channels} { num_of_public_channels,plural,one {canal public} other {canaux publics}} et {num_of_private_channels} { num_of_private_channels,plural,one {canal privé} other {canaux privés}} de cette équipe.** Si l'équipe est privée, vous ne serez pas en mesure de rejoindre l'équipe à nouveau sans une invitation d'un autre membre de l'équipe. Voulez-vous continuer ?",

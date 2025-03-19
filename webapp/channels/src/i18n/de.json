@@ -4237,6 +4237,7 @@
   "leave_private_channel_modal.last_admin": "Als letzter Administrator dieses Kanals weisen Sie einem anderen Mitglied administrative Rechte zu, bevor Sie diesen Kanal verlassen.",
   "leave_private_channel_modal.one_admin": "Als letzter Benutzer können Sie diesen privaten Kanal nicht verlassen, sondern nur archivieren. Sie oder ein Administrator können ihn jederzeit wiederherstellen.",
   "leave_private_channel_modal.which_user": "Welchem Benutzer möchten Sie administrative Rechte auf diesem Kanal gewähren?",
+  "leave_public_channel_error.default_channel": "Der Standardkanal kann nicht verlassen werden.",
   "leave_public_channel_modal.message": "Bist du sicher, dass du den Kanal {channel} verlassen möchtest? Du kannst diesem Kanal in Zukunft wieder beitreten, wenn du deine Meinung änderst.",
   "leave_public_channel_modal.title": "Kanal {channel} verlassen",
   "leave_team_modal.desc": "**Du wirst aus {num_of_public_channels} öffentlichen { num_of_public_channels,plural,one {Kanal} other {Kanälen}} und {num_of_private_channels} privaten { num_of_private_channels,plural,one {Kanal} other {Kanälen}} in diesem Team entfernt.** Wenn das Team private ist, wirst ohne eine Einladung eines Teammitglieds nicht wieder beitreten können. Bist du sicher?",

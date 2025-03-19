@@ -9,7 +9,7 @@ import {IntegrationTypes} from 'mattermost-redux/action_types';
 import {unfavoriteChannel} from 'mattermost-redux/actions/channels';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Client4} from 'mattermost-redux/client';
-import {Permissions} from 'mattermost-redux/constants';
+import {General, Permissions} from 'mattermost-redux/constants';
 import {AppCallResponseTypes} from 'mattermost-redux/constants/apps';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {getCurrentChannel, getRedirectChannelNameForTeam, isFavoriteChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -95,9 +95,15 @@ export function executeCommand(message: string, args: CommandArgs): ActionFuncAs
 
             // IK: use the same action as when leaving channel from the sidebar dropdown
             if (channel.type === Constants.OPEN_CHANNEL) {
-                dispatch(leaveChannel(channel.id));
+                if (channel.name === General.DEFAULT_CHANNEL) {
+                    const message = localizeMessage('leave_public_channel_error.default_channel', 'Unable to leave the default channel.');
+                    dispatch(GlobalActions.sendEphemeralPost(message));
+                } else {
+                    dispatch(leaveChannel(channel.id));
+                }
                 return {data: true};
             }
+
             if (channel.type === Constants.PRIVATE_CHANNEL) {
                 dispatch(openModal({modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL, dialogType: IkLeaveChannelModal, dialogProps: {channel}}));
                 return {data: true};
