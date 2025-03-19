@@ -29,6 +29,7 @@ import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entitie
 import {getCustomEmojisByName as selectCustomEmojisByName} from 'mattermost-redux/selectors/entities/emojis';
 import {getAllGroupsByName} from 'mattermost-redux/selectors/entities/groups';
 import * as PostSelectors from 'mattermost-redux/selectors/entities/posts';
+import {getPostAttachmentsPollId} from 'mattermost-redux/selectors/entities/posts';
 import {getUnreadScrollPositionPreference, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult, DispatchFunc, GetStateFunc, ActionFunc, ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
@@ -1295,6 +1296,34 @@ export function doPostActionWithCookie(postId: string, actionId: string, actionC
         }
 
         return {data};
+    };
+}
+
+export function fetchMetadataIfPostIsPoll(postId: string): ActionFuncAsync<boolean> {
+    return async (dispatch, getState) => {
+        const pollId = getPostAttachmentsPollId(getState(), postId);
+
+        if (!pollId) {
+            return {data: false};
+        }
+
+        try {
+            const metadata = await Client4.getPollMetadata(pollId);
+
+            const data = {
+                metadata,
+                postId,
+            };
+
+            dispatch({
+                type: PostTypes.IK_RECEIVED_POLL_METADATA,
+                data,
+            });
+        } catch (error) {
+            return {error};
+        }
+
+        return {data: true};
     };
 }
 

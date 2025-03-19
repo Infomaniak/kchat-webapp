@@ -36,6 +36,7 @@ describe('components/post_view/MessageAttachment', () => {
         actions: {
             doPostActionWithCookie: jest.fn(),
             openModal: jest.fn(),
+            fetchMetadataIfPostIsPoll: jest.fn(),
         },
         imagesMetadata: {
             image_url: {
@@ -85,16 +86,27 @@ describe('components/post_view/MessageAttachment', () => {
         expect(wrapper.instance().renderPostActions()).toMatchSnapshot();
     });
 
+    test('should call actions.fetchMetadataIfPostIsPoll on mount', () => {
+        const fetchMetadataIfPostIsPoll = jest.fn();
+        const props = {...baseProps, actions: {...baseProps.actions, fetchMetadataIfPostIsPoll}};
+
+        shallow<MessageAttachment>(<MessageAttachment {...props}/>);
+
+        expect(fetchMetadataIfPostIsPoll).toHaveBeenCalledTimes(1);
+        expect(fetchMetadataIfPostIsPoll).toBeCalledWith(props.postId);
+    });
+
     test('should call actions.doPostActionWithCookie on handleAction', () => {
         const promise = Promise.resolve({data: 123});
         const doPostActionWithCookie = jest.fn(() => promise);
         const openModal = jest.fn();
+        const fetchMetadataIfPostIsPoll = jest.fn();
         const actionId = 'action_id_1';
         const newAttachment = {
             ...attachment,
             actions: [{id: actionId, name: 'action_name_1', cookie: 'cookie-contents'}] as PostAction[],
         };
-        const props = {...baseProps, actions: {doPostActionWithCookie, openModal}, attachment: newAttachment};
+        const props = {...baseProps, actions: {doPostActionWithCookie, openModal, fetchMetadataIfPostIsPoll}, attachment: newAttachment};
         const wrapper = shallow<MessageAttachment>(<MessageAttachment {...props}/>);
         expect(wrapper).toMatchSnapshot();
         wrapper.instance().handleAction({

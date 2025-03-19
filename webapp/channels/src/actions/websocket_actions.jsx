@@ -46,6 +46,7 @@ import {
     postDeleted,
     receivedNewPost,
     receivedPost,
+    fetchMetadataIfPostIsPoll,
 } from 'mattermost-redux/actions/posts';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
@@ -862,6 +863,8 @@ export function handlePostEditEvent(msg) {
 
     const crtEnabled = isCollapsedThreadsEnabled(getState());
     dispatch(receivedPost(post, crtEnabled));
+
+    dispatch(fetchMetadataIfPostIsPoll(post.id));
 
     getMentionsAndStatusesForPosts([post], dispatch, getState);
 }

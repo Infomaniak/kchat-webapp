@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classnames from 'classnames';
 import React from 'react';
 import styled, {css} from 'styled-components';
 
@@ -47,13 +48,13 @@ export default class ActionButton extends React.PureComponent<Props> {
 
         return (
             <ActionBtn
+                className={classnames('btn', 'btn-sm', 'btn-outline', action.isVoted && 'voted')}
+                onClick={(e) => handleAction(e, this.props.action.options)}
                 data-action-id={action.id}
                 data-action-cookie={action.cookie}
                 disabled={disabled}
-                key={action.id}
-                onClick={(e) => handleAction(e, this.props.action.options)}
-                className='btn btn-sm'
                 hexColor={hexColor}
+                key={action.id}
             >
                 <LoadingWrapper
                     loading={this.props.actionExecuting}
@@ -69,11 +70,14 @@ export default class ActionButton extends React.PureComponent<Props> {
                     />
                 </LoadingWrapper>
             </ActionBtn>
+
         );
     }
 }
 
 type ActionBtnProps = {hexColor: string | null | undefined};
+
+//IK: The 'poll' scenario is handled uniquely, thus it doesn't require a hexColor. I've differentiated between the two styling cases below.
 const ActionBtn = styled.button<ActionBtnProps>`
     ${({hexColor}) => hexColor && css`
         background-color: ${changeOpacity(hexColor, 0.08)} !important;
@@ -83,6 +87,16 @@ const ActionBtn = styled.button<ActionBtnProps>`
         }
         &:active {
             background-color: ${changeOpacity(hexColor, 0.16)} !important;
+        }
+    `}
+    ${({hexColor}) => !hexColor && css`
+        &.voted {
+            border-color: var(--button-bg) !important;
+            color: var(--button-bg) !important;
+        }
+        &:hover {
+            color: var(--button-bg) !important;
+            border-color: var(--button-bg) !important;
         }
     `}
 `;
