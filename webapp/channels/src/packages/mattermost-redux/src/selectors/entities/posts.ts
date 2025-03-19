@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {Channel} from '@mattermost/types/channels';
+import type {MessageAttachment} from '@mattermost/types/message_attachments';
 import type {
     MessageHistory,
     OpenGraphMetadata,
@@ -51,6 +52,14 @@ export type UserActivityPost = Post & {
 
 export function getPost(state: GlobalState, postId: Post['id']): Post {
     return getAllPosts(state)[postId];
+}
+
+export function getPostAttachments(state: GlobalState, postId: Post['id']): MessageAttachment[] | undefined {
+    return getPost(state, postId)?.props?.attachments;
+}
+
+export function getPostAttachmentsPollId(state: GlobalState, postId: Post['id']): string | undefined {
+    return getPostAttachments(state, postId)?.[0]?.actions?.[0]?.integration?.context?.['poll-id'];
 }
 
 export function getPostRepliesCount(state: GlobalState, postId: Post['id']): number {

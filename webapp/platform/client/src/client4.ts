@@ -154,6 +154,7 @@ import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/
 import {LeastActiveChannelsResponse, TopChannelResponse, TopReactionResponse, TopThreadResponse, TopDMsResponse} from '@mattermost/types/insights';
 import {UserReportOptions} from '@mattermost/types/reports'
 import {UsersLimits} from '@mattermost/types/limits';
+import {PollMetadata} from '@mattermost/types/pollMetadata';
 
 
 import {cleanUrlForLogging} from './errors';
@@ -2574,6 +2575,17 @@ export default class Client4 {
             {method: 'post', body: JSON.stringify(msg)},
         );
     };
+
+    // Poll Routes
+
+    getPollsRoute() {
+        return `${this.getBaseRoute()}/polls`;
+    }
+
+    getPollMetadata = (pollId: string) => {
+        const url = `${this.getPollsRoute()}/${pollId}`
+        return this.doFetch<PollMetadata>(url, {method: 'get'});
+    }
 
     // Files Routes
 

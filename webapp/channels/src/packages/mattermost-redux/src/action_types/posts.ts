@@ -62,4 +62,7 @@ export default keyMirror({
 
     MOVE_POST_SUCCESS: null,
     MOVE_POST_FAILURE: null,
+
+    // receive poll metadata (to show votedAnswer)
+    IK_RECEIVED_POLL_METADATA: null,
 });

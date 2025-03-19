@@ -12,6 +12,8 @@ export type PostAction = {
     default_option?: string;
     integration?: PostActionIntegration;
     cookie?: string;
+
+    isVoted?:boolean; // IK: quick way of knowing which Action is voted for polls
 };
 
 export type PostActionOption = {
