@@ -57,7 +57,7 @@ export function onChannelByIdentifierEnter({match, history, location}: MatchAndH
             dispatch(goToGroupChannelByGroupId(match, history));
             break;
         case 'direct_channel_username':
-            dispatch(goToDirectChannelByUsername(match, history, location));
+            dispatch(goToDirectChannelByUsername(match, history));
             break;
         case 'direct_channel_email':
             dispatch(goToDirectChannelByEmail(match, history));
@@ -230,7 +230,7 @@ export function goToChannelByChannelName(match: Match, history: History): Action
     };
 }
 
-function goToDirectChannelByUsername(match: Match, history: History, location: Location): ActionFuncAsync {
+function goToDirectChannelByUsername(match: Match, history: History): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const {team, identifier} = match.params;
@@ -256,14 +256,6 @@ function goToDirectChannelByUsername(match: Match, history: History, location: L
         }
 
         doChannelChange(directChannelDispatchRes.data!);
-
-        //Ik: Initialize a kmeet call directly if there is a specific query parameter in the URL
-        const channelId = directChannelDispatchRes.data!.id;
-        const searchParams = new URLSearchParams(location.search);
-        const triggerCall = searchParams.has('triggerCall');
-        if (triggerCall && channelId) {
-            await dispatch(startOrJoinCallInChannelV2(channelId));
-        }
 
         return {data: undefined};
     };
