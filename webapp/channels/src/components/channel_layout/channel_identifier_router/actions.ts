@@ -255,7 +255,6 @@ function goToDirectChannelByUsername(match: Match, history: History): ActionFunc
         }
 
         doChannelChange(directChannelDispatchRes.data!);
-
         return {data: undefined};
     };
 }
