@@ -15,7 +15,6 @@ import {getCurrentUser, getCurrentUserId, getUserByUsername as selectUserByUsern
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
-import {startOrJoinCallInChannelV2} from 'actions/calls';
 import {openDirectChannelToUserId} from 'actions/channel_actions';
 import * as GlobalActions from 'actions/global_actions';
 
@@ -23,14 +22,14 @@ import {joinPrivateChannelPrompt} from 'utils/channel_utils';
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
-import type {Match, MatchAndHistoryWithLocation} from './channel_identifier_router';
+import type {Match, MatchAndHistory} from './channel_identifier_router';
 
 const LENGTH_OF_ID = 36;
 const LENGTH_OF_GROUP_ID = 40;
 const LENGTH_OF_USER_ID_PAIR = 74;
 const USER_ID_PAIR_REGEXP = new RegExp(`^[a-zA-Z0-9-]{${LENGTH_OF_ID}}__[a-zA-Z0-9-]{${LENGTH_OF_ID}}$`);
 
-export function onChannelByIdentifierEnter({match, history, location}: MatchAndHistoryWithLocation): ActionFuncAsync {
+export function onChannelByIdentifierEnter({match, history}: MatchAndHistory): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const {path, identifier, team} = match.params;
@@ -57,7 +56,7 @@ export function onChannelByIdentifierEnter({match, history, location}: MatchAndH
             dispatch(goToGroupChannelByGroupId(match, history));
             break;
         case 'direct_channel_username':
-            dispatch(goToDirectChannelByUsername(match, history, location));
+            dispatch(goToDirectChannelByUsername(match, history));
             break;
         case 'direct_channel_email':
             dispatch(goToDirectChannelByEmail(match, history));
@@ -230,7 +229,7 @@ export function goToChannelByChannelName(match: Match, history: History): Action
     };
 }
 
-function goToDirectChannelByUsername(match: Match, history: History, location: Location): ActionFuncAsync {
+function goToDirectChannelByUsername(match: Match, history: History): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const {team, identifier} = match.params;
@@ -256,15 +255,6 @@ function goToDirectChannelByUsername(match: Match, history: History, location: L
         }
 
         doChannelChange(directChannelDispatchRes.data!);
-
-        //Ik: Initialize a kmeet call directly if there is a specific query parameter in the URL
-        const channelId = directChannelDispatchRes.data!.id;
-        const searchParams = new URLSearchParams(location.search);
-        const triggerCall = searchParams.has('triggerCall');
-        if (triggerCall && channelId) {
-            await dispatch(startOrJoinCallInChannelV2(channelId));
-        }
-
         return {data: undefined};
     };
 }
