@@ -18,14 +18,15 @@ export interface Match {
     url: string;
 }
 
-export type MatchAndHistory = Pick<Props, 'match' | 'history'>
+export type MatchAndHistoryWithLocation = Pick<Props, 'match' | 'history' | 'location'>
 
 interface Props {
     match: Match;
     actions: {
-        onChannelByIdentifierEnter: (props: MatchAndHistory) => any;
+        onChannelByIdentifierEnter: (props: MatchAndHistoryWithLocation) => any;
     };
     history: any;
+    location: Location;
 }
 
 export default class ChannelIdentifierRouter extends React.PureComponent<Props> {
