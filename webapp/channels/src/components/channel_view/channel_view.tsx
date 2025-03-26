@@ -17,6 +17,8 @@ import PostView from 'components/post_view';
 
 import {getHistory} from 'utils/browser_history';
 
+import WebSocketClient from 'client/web_websocket_client';
+
 import type {PropsFromRedux} from './index';
 
 export type Props = PropsFromRedux & RouteComponentProps<{
