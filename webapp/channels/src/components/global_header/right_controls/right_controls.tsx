@@ -13,7 +13,7 @@ import {getCurrentLocale} from 'selectors/i18n';
 
 import FlagNext from 'components/flag_next';
 import OverlayTrigger from 'components/overlay_trigger';
-import StatusDropdown from 'components/status_dropdown';
+// import StatusDropdown from 'components/status_dropdown';
 import Tooltip from 'components/tooltip';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {
@@ -22,6 +22,7 @@ import {
     SettingsTour,
     useShowOnboardingTutorialStep,
 } from 'components/tours/onboarding_tour';
+import UserAccountMenu from 'components/user_account_menu';
 
 import Constants from 'utils/constants';
 import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
@@ -105,6 +106,9 @@ const userReportHrefs: Record<string, string> = {
     it: 'https://feedback.userreport.com/066a68a7-e8f9-47a3-8099-18591dbdfd1f#ideas/popular',
     de: 'https://feedback.userreport.com/e68afd5f-31f2-4327-af79-fb0b665aee68#ideas/popular',
 };
+export type Props = {
+    productId?: ProductIdentifier;
+}
 
 const RightControls = (): JSX.Element => {
     // guest validation to see which point the messaging tour tip starts
@@ -202,7 +206,7 @@ const RightControls = (): JSX.Element => {
                     </module-products-component>
                 </div>
             )}
-            <StatusDropdown/>
+            {/* <StatusDropdown/> */}
             <FlagNext/>
         </RightControlsContainer>
     );

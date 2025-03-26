@@ -15,12 +15,14 @@ type Props = {
     id: string;
     menuTriggerRef: React.RefObject<HTMLButtonElement>;
     children: React.ReactNode[];
+    name: string;
 };
 
 const SidebarCategoryGenericMenu = ({
     id,
     menuTriggerRef,
     children,
+    name,
 }: Props) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -44,13 +46,12 @@ const SidebarCategoryGenericMenu = ({
             <Menu.Container
                 menuButton={{
                     id: `SidebarCategoryMenu-Button-${id}`,
-                    'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}),
+                    'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}, {name}),
                     class: 'SidebarMenu_menuButton',
                     children: <DotsVerticalIcon size={16}/>,
                 }}
                 menuButtonTooltip={{
-                    id: `SidebarCategoryMenu-ButtonTooltip-${id}`,
-                    text: formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}),
+                    text: formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}, {name}),
                     class: 'hidden-xs',
                 }}
                 menu={{

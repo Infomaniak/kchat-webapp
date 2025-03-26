@@ -99,16 +99,19 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
       WebSocketClient {
         "closeCallback": null,
         "closeListeners": Set {},
+        "config": Object {
+          "clientPingInterval": 30000,
+          "maxWebSocketFails": 7,
+          "maxWebSocketRetryTime": 300000,
+          "minWebSocketRetryTime": 3000,
+          "newWebSocketFn": [Function],
+          "reconnectJitterRange": 2000,
+        },
         "conn": null,
         "connectFailCount": 0,
         "connectionId": "",
         "connectionUrl": null,
-        "currentPresence": "",
-        "currentTeam": "",
-        "currentTeamUser": "",
-        "currentUser": null,
         "errorCallback": null,
-        "errorCount": 0,
         "errorListeners": Set {},
         "eventCallback": null,
         "firstConnectCallback": null,
@@ -116,19 +119,15 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "messageListeners": Set {},
         "missedEventCallback": null,
         "missedMessageListeners": Set {},
-        "otherServersMessageListeners": Set {},
-        "otherTeams": Array [],
-        "otherTeamsChannel": Object {},
-        "presenceChannel": null,
+        "pingInterval": null,
+        "postedAck": false,
         "reconnectCallback": null,
         "reconnectListeners": Set {},
+        "reconnectTimeout": null,
         "responseCallbacks": Object {},
         "responseSequence": 1,
+        "serverHostname": "",
         "serverSequence": 0,
-        "socketId": null,
-        "teamChannel": null,
-        "userChannel": null,
-        "userTeamChannel": null,
       }
     }
   />
@@ -158,16 +157,19 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
       WebSocketClient {
         "closeCallback": null,
         "closeListeners": Set {},
+        "config": Object {
+          "clientPingInterval": 30000,
+          "maxWebSocketFails": 7,
+          "maxWebSocketRetryTime": 300000,
+          "minWebSocketRetryTime": 3000,
+          "newWebSocketFn": [Function],
+          "reconnectJitterRange": 2000,
+        },
         "conn": null,
         "connectFailCount": 0,
         "connectionId": "",
         "connectionUrl": null,
-        "currentPresence": "",
-        "currentTeam": "",
-        "currentTeamUser": "",
-        "currentUser": null,
         "errorCallback": null,
-        "errorCount": 0,
         "errorListeners": Set {},
         "eventCallback": null,
         "firstConnectCallback": null,
@@ -175,19 +177,15 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "messageListeners": Set {},
         "missedEventCallback": null,
         "missedMessageListeners": Set {},
-        "otherServersMessageListeners": Set {},
-        "otherTeams": Array [],
-        "otherTeamsChannel": Object {},
-        "presenceChannel": null,
+        "pingInterval": null,
+        "postedAck": false,
         "reconnectCallback": null,
         "reconnectListeners": Set {},
+        "reconnectTimeout": null,
         "responseCallbacks": Object {},
         "responseSequence": 1,
+        "serverHostname": "",
         "serverSequence": 0,
-        "socketId": null,
-        "teamChannel": null,
-        "userChannel": null,
-        "userTeamChannel": null,
       }
     }
   />
@@ -199,6 +197,18 @@ exports[`PostBodyAdditionalContent with a permalinklink Render permalink preview
   <span>
     some children
   </span>
+  <Connect(PostMessagePreview)
+    handleFileDropdownOpened={[MockFunction]}
+    metadata={
+      Object {
+        "channel_display_name": "channel1",
+        "channel_id": "channel_id",
+        "channel_type": "O",
+        "post_id": "post_id123",
+        "team_name": "core",
+      }
+    }
+  />
 </div>
 `;
 

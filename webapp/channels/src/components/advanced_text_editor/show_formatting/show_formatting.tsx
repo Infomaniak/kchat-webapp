@@ -24,7 +24,6 @@ const ShowFormatting = (props: ShowFormatProps): JSX.Element => {
 
     return (
         <WithTooltip
-            id='PreviewInputTextButtonTooltip'
             title={
                 <KeyboardShortcutSequence
                     shortcut={KEYBOARD_SHORTCUTS.msgMarkdownPreview}
@@ -32,7 +31,6 @@ const ShowFormatting = (props: ShowFormatProps): JSX.Element => {
                     isInsideTooltip={true}
                 />
             }
-            placement='left'
         >
             <IconContainer
                 type='button'

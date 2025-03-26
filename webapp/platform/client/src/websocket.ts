@@ -26,12 +26,34 @@ export type ErrorListener = (event: Event) => void;
 export type CloseListener = (connectFailCount: number) => void;
 export type OtherTeam = { userId: string, teamId: string }
 
+export type WebSocketClientConfig = {
+    maxWebSocketFails: number;
+    minWebSocketRetryTime: number;
+    maxWebSocketRetryTime: number;
+    reconnectJitterRange: number;
+    newWebSocketFn: (url: string) => WebSocket;
+    clientPingInterval: number;
+}
+
+const defaultWebSocketClientConfig: WebSocketClientConfig = {
+    maxWebSocketFails: 7,
+    minWebSocketRetryTime: 3000, // 3 seconds
+    maxWebSocketRetryTime: 300000, // 5 minutes
+    reconnectJitterRange: 2000, // 2 seconds
+    newWebSocketFn: (url: string) => {
+        return new WebSocket(url);
+    },
+    clientPingInterval: 30000, // 30 seconds
+};
+
 export default class WebSocketClient {
     private conn: Pusher | null;
     private teamChannel: Channel | null;
     private userChannel: Channel | null;
     private userTeamChannel: Channel | null;
     private presenceChannel: Channel | null;
+    private config: WebSocketClientConfig;
+
     private connectionUrl: string | null;
     private socketId: string | null;
     private currentPresence: string;
@@ -92,8 +114,14 @@ export default class WebSocketClient {
     private otherServersMessageListeners = new Set<MessageListener>();
 
     private connectionId: string | null;
+    private serverHostname: string | null;
+    private postedAck: boolean;
 
-    constructor() {
+    private pingInterval: ReturnType<typeof setInterval> | null;
+
+    private reconnectTimeout: ReturnType<typeof setTimeout> | null;
+
+    constructor(config?: Partial<WebSocketClientConfig>) {
         this.conn = null;
         this.teamChannel = null;
         this.userChannel = null;
@@ -136,6 +164,11 @@ export default class WebSocketClient {
         this.userTeamChannel = null;
         this.presenceChannel = null;
         this.otherTeamsChannel = {}
+        this.serverHostname = '';
+        this.postedAck = false;
+        this.reconnectTimeout = null;
+        this.config = {...defaultWebSocketClientConfig, ...config};
+        this.pingInterval = null;
     }
 
     // on connect, only send auth cookie and blank state.
@@ -166,6 +199,13 @@ export default class WebSocketClient {
         }
 
         if (this.conn) {
+            return;
+        }
+
+        // We have a timeout waiting to re-initialize the websocket.
+        // We should wait until that fires before initializing,
+        // otherwise we may not respect the configured backoff.
+        if (this.reconnectTimeout) {
             return;
         }
 
@@ -592,6 +632,28 @@ export default class WebSocketClient {
             this.conn.disconnect();
             // this.conn = null;
             console.log('websocket closed'); //eslint-disable-line no-console
+        }
+    }
+
+    stopPingInterval() {
+        if (this.pingInterval) {
+            clearInterval(this.pingInterval);
+            this.pingInterval = null;
+        }
+    }
+
+    ping(responseCallback?: (msg: any) => void) {
+        const msg = {
+            action: 'ping',
+            seq: this.responseSequence++,
+        };
+
+        if (responseCallback) {
+            this.responseCallbacks[msg.seq] = responseCallback;
+        }
+
+        if (this.conn && this.conn.readyState === WebSocket.OPEN) {
+            this.conn.send(JSON.stringify(msg));
         }
     }
 

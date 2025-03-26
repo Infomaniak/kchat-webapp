@@ -49,8 +49,9 @@ import * as PostUtils from 'utils/post_utils';
 import {isDesktopApp} from 'utils/user_agent';
 import {getDateForUnixTicks, makeIsEligibleForClick} from 'utils/utils';
 
-import type {PostPluginComponent, PluginComponent} from 'types/store/plugins';
+import type {PostActionComponent, PostPluginComponent} from 'types/store/plugins';
 
+import {withPostErrorBoundary} from './post_error_boundary';
 import PostOptions from './post_options';
 import PostUserProfile from './user_profile';
 
@@ -118,10 +119,10 @@ export type Props = {
     isPostPriorityEnabled: boolean;
     isCardOpen?: boolean;
     canDelete?: boolean;
-    pluginActions: PluginComponent[];
+    pluginActions: PostActionComponent[];
 };
 
-const PostComponent = (props: Props): JSX.Element => {
+function PostComponent(props: Props) {
     const {post, shouldHighlight, togglePostMenu} = props;
 
     const isSearchResultItem = (props.matches && props.matches.length > 0) || props.isMentionSearch || (props.term && props.term.length > 0);
@@ -384,14 +385,16 @@ const PostComponent = (props: Props): JSX.Element => {
         getHistory().push(`/${props.teamName}/pl/${post.id}`);
     }, [props.isMobileView, props.actions, props.teamName, post?.id]);
 
+    const {selectPostFromRightHandSideSearch} = props.actions;
+
     const handleCommentClick = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
 
         if (!post) {
             return;
         }
-        props.actions.selectPostFromRightHandSideSearch(post);
-    }, [post, props.actions, props.actions.selectPostFromRightHandSideSearch]);
+        selectPostFromRightHandSideSearch(post);
+    }, [post, selectPostFromRightHandSideSearch]);
 
     const handleThreadClick = useCallback((e: React.MouseEvent) => {
         if (props.currentTeam?.id === teamId) {
@@ -475,7 +478,7 @@ const PostComponent = (props: Props): JSX.Element => {
         />
     );
 
-    const showSlot = props.isPostBeingEdited ? AutoHeightSlots.SLOT2 : AutoHeightSlots.SLOT1;
+    const slotBasedOnEditOrMessageView = props.isPostBeingEdited ? AutoHeightSlots.SLOT2 : AutoHeightSlots.SLOT1;
     const threadFooter = props.location !== Locations.RHS_ROOT && props.isCollapsedThreadsEnabled && !post.root_id && (props.hasReplies || post.is_following) ? (
         <ThreadFooter
             threadId={post.id}
@@ -519,6 +522,8 @@ const PostComponent = (props: Props): JSX.Element => {
         postAriaLabelDivTestId = 'rhsPostView';
     }
 
+    const showFileAttachments = post.file_ids && post.file_ids.length > 0 && !props.isPostBeingEdited;
+
     return (
         <>
             {(isSearchResultItem || (props.location !== Locations.CENTER && (props.isPinnedPosts || props.isFlaggedPosts))) && <DateSeparator date={currentPostDay}/>}
@@ -526,7 +531,6 @@ const PostComponent = (props: Props): JSX.Element => {
                 ref={postRef}
                 id={getTestId()}
                 data-testid={postAriaLabelDivTestId}
-                tabIndex={0}
                 post={post}
                 className={getClassName()}
                 onClick={handlePostClick}
@@ -567,7 +571,6 @@ const PostComponent = (props: Props): JSX.Element => {
                     channelId={post.channel_id}
                 />
                 <div
-                    role='application'
                     className={`post__content ${props.center ? 'center' : ''}`}
                     data-testid='postContent'
                 >
@@ -597,14 +600,12 @@ const PostComponent = (props: Props): JSX.Element => {
                                 {priority}
                                 {post.props && post.props.card &&
                                     <WithTooltip
-                                        id='post_info.info.view_additional_info'
                                         title={
                                             <FormattedMessage
                                                 id='post_info.info.view_additional_info'
                                                 defaultMessage='View additional info'
                                             />
                                         }
-                                        placement='top'
                                     >
                                         <button
                                             className={'card-icon__container icon--show style--none ' + (props.isCardOpen ? 'active' : '')}
@@ -642,18 +643,19 @@ const PostComponent = (props: Props): JSX.Element => {
                         >
                             {post.failed && <FailedPostOptions post={post}/>}
                             <AutoHeightSwitcher
-                                showSlot={showSlot}
+                                showSlot={slotBasedOnEditOrMessageView}
                                 shouldScrollIntoView={props.isPostBeingEdited}
                                 slot1={message}
                                 slot2={<EditPost/>}
                                 onTransitionEnd={() => document.dispatchEvent(new Event(AppEvents.FOCUS_EDIT_TEXTBOX))}
                             />
-                            {post.file_ids && post.file_ids.length > 0 &&
-                            <FileAttachmentListContainer
-                                post={post}
-                                compactDisplay={props.compactDisplay}
-                                handleFileDropdownOpened={handleFileDropdownOpened}
-                            />
+                            {
+                                showFileAttachments &&
+                                <FileAttachmentListContainer
+                                    post={post}
+                                    compactDisplay={props.compactDisplay}
+                                    handleFileDropdownOpened={handleFileDropdownOpened}
+                                />
                             }
                             {(post.type === Posts.POST_TYPES.SYSTEM_POST_REMINDER && !(post.props.reschedule || post.props.completed)) ? <IkPostponeReminderButtons post={post}/> : null}
                             <div className='post__body-reactions-acks'>
@@ -673,6 +675,6 @@ const PostComponent = (props: Props): JSX.Element => {
             </PostAriaLabelDiv>
         </>
     );
-};
+}
 
-export default PostComponent;
+export default withPostErrorBoundary(PostComponent);

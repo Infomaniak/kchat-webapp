@@ -8,6 +8,7 @@ import {FormattedMessage} from 'react-intl';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {General} from 'mattermost-redux/constants';
+import {ensureString} from 'mattermost-redux/utils/post_utils';
 
 import FileAttachmentListContainer from 'components/file_attachment_list';
 import PriorityLabel from 'components/post_priority/post_priority_label';
@@ -54,12 +55,8 @@ const PostMessagePreview = (props: Props) => {
     const getPostIconURL = (defaultURL: string, fromAutoResponder: boolean, fromWebhook: boolean): string => {
         const {enablePostIconOverride, hasImageProxy, previewPost} = props;
         const postProps = previewPost?.props;
-        let postIconOverrideURL = '';
-        let useUserIcon = '';
-        if (postProps) {
-            postIconOverrideURL = postProps.override_icon_url;
-            useUserIcon = postProps.use_user_icon;
-        }
+        const postIconOverrideURL = ensureString(postProps?.override_icon_url);
+        const useUserIcon = ensureString(postProps?.use_user_icon);
 
         if (!fromAutoResponder && fromWebhook && !useUserIcon && enablePostIconOverride) {
             if (postIconOverrideURL && postIconOverrideURL !== '') {
@@ -167,6 +164,8 @@ const PostMessagePreview = (props: Props) => {
         </div>
     ) : null;
 
+    const overwriteName = ensureString(previewPost.props?.override_username);
+
     return (
         <PostAttachmentContainer
             className='permalink'
@@ -186,7 +185,7 @@ const PostMessagePreview = (props: Props) => {
                         <UserProfileComponent
                             userId={user?.id ?? ''}
                             disablePopover={true}
-                            overwriteName={previewPost.props?.override_username || ''}
+                            overwriteName={overwriteName}
                         />
                     </div>
                     <div className='col d-flex align-items-center'>

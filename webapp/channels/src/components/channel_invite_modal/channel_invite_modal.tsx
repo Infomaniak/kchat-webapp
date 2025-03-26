@@ -411,13 +411,9 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                                 {displayName}
                                 {option.is_bot && <BotTag/>}
                                 {isGuest(option.roles) && <GuestTag className='popoverlist'/>}
-                                {displayName === option.username ?
-                                    null :
-                                    <UsernameSpan
-                                        className='ml-2 light'
-                                    >
-                                        {'@'}{option.username}
-                                    </UsernameSpan>
+                                {displayName === option.username ? null : <UsernameSpan className='ml-2 light'>
+                                    {'@'}{option.username}
+                                </UsernameSpan>
                                 }
                                 <UserMappingSpan
                                     className='light'
@@ -428,11 +424,14 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                     <div className='more-modal__actions'>
-                        <div className='more-modal__actions--round'>
+                        <button
+                            className='more-modal__actions--round'
+                            aria-label='Add channel to invite'
+                        >
                             <i
                                 className='icon icon-plus'
                             />
-                        </div>
+                        </button>
                     </div>
                 </div>
             );
@@ -502,10 +501,9 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             this.props.actions.closeModal(ModalIdentifiers.CHANNEL_INVITE);
         };
 
-        const InviteModalLink = (props: {inviteAsGuest?: boolean; children: React.ReactNode}) => {
+        const InviteModalLink = (props: {inviteAsGuest?: boolean; children: React.ReactNode; id?: string}) => {
             return (
                 <ToggleModalButton
-                    id='inviteGuest'
                     className={`${props.inviteAsGuest ? 'invite-as-guest' : ''} btn btn-link`}
                     modalId={ModalIdentifiers.INVITATION}
                     dialogType={InvitationModal}
@@ -513,8 +511,10 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                         channelToInvite: this.props.channel,
                         initialValue: this.state.term,
                         inviteAsGuest: props.inviteAsGuest,
+                        focusOriginElement: 'customNoOptionsMessageLink',
                     }}
                     onClick={closeMembersInviteModal}
+                    id={props.id}
                 >
                     {props.children}
                 </ToggleModalButton>
@@ -522,7 +522,9 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         };
 
         const customNoOptionsMessage = (
-            <div className='custom-no-options-message'>
+            <div
+                className='custom-no-options-message'
+            >
                 <FormattedMessage
                     id='channel_invite.no_options_message'
                     defaultMessage='No matches found'
@@ -576,7 +578,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                 show={this.state.show}
                 onHide={this.onHide}
                 onExited={this.props.onExited}
-                role='dialog'
+                role='none'
                 aria-labelledby='channelInviteModalLabel'
             >
                 <Modal.Header

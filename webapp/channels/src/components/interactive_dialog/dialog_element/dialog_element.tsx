@@ -124,7 +124,7 @@ export default class DialogElement extends React.PureComponent<Props, State> {
         let displayNameContent: React.ReactNode = displayName;
         if (optional) {
             displayNameContent = (
-                <React.Fragment>
+                <>
                     {displayName + ' '}
                     <span className='font-weight--normal light'>
                         <FormattedMessage
@@ -132,26 +132,26 @@ export default class DialogElement extends React.PureComponent<Props, State> {
                             defaultMessage='(optional)'
                         />
                     </span>
-                </React.Fragment>
+                </>
             );
         } else {
             displayNameContent = (
-                <React.Fragment>
+                <>
                     {displayName}
                     <span className='error-text'>{' *'}</span>
-                </React.Fragment>
+                </>
             );
         }
 
         let helpTextContent: React.ReactNode = helpText;
         if (errorText) {
             helpTextContent = (
-                <React.Fragment>
+                <>
                     {helpText}
                     <div className='error-text mt-3'>
                         {errorText}
                     </div>
-                </React.Fragment>
+                </>
             );
         }
 

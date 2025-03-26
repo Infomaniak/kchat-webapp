@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {defineMessage, FormattedMessage} from 'react-intl';
 
 import {Client4} from 'mattermost-redux/client';
 
@@ -150,9 +150,7 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                     </div>
                     {this.props.fileInfo.post_id && (
                         <WithTooltip
-                            id='file-name__tooltip'
-                            title={localizeMessage({id: 'file_search_result_item.more_actions', defaultMessage: 'More Actions'})}
-                            placement={'top'}
+                            title={defineMessage({id: 'file_search_result_item.more_actions', defaultMessage: 'More Actions'})}
                         >
                             <MenuWrapper
                                 onToggle={this.keepOpen}
@@ -184,9 +182,7 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                         </WithTooltip>
                     )}
                     <WithTooltip
-                        id='file-name__tooltip'
-                        title={localizeMessage({id: 'file_search_result_item.download', defaultMessage: 'Download'})}
-                        placement={'top'}
+                        title={defineMessage({id: 'file_search_result_item.download', defaultMessage: 'Download'})}
                     >
                         <a
                             className='action-icon download-icon'

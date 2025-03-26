@@ -83,7 +83,7 @@ exports[`messageHtmlToComponent Inline markdown image 1`] = `
    and a 
   <a
     className="theme markdown__link"
-    href="https://link"
+    href="http://link"
     rel="noreferrer"
     target="_blank"
   >
@@ -98,7 +98,7 @@ exports[`messageHtmlToComponent Inline markdown image where image is link 1`] = 
 >
   <a
     className="theme markdown__link"
-    href="https://images/icon.png"
+    href="http://images/icon.png"
     rel="noreferrer"
     target="_blank"
   >
@@ -144,26 +144,18 @@ Array [
 exports[`messageHtmlToComponent link with enabled a tooltip plugin 1`] = `
 <p>
   lorem ipsum 
-  <a
-    className="theme markdown__link"
-    href="https://www.dolor.com"
-    rel="noreferrer"
-    target="_blank"
-  >
-    <LinkTooltip
-      attributes={
-        Object {
-          "class": "theme markdown__link",
-          "href": "https://www.dolor.com",
-          "rel": "noreferrer",
-          "target": "_blank",
-        }
+  <PluginLinkTooltip
+    nodeAttributes={
+      Object {
+        "className": "theme markdown__link",
+        "href": "http://www.dolor.com",
+        "rel": "noreferrer",
+        "target": "_blank",
       }
-      href="https://www.dolor.com"
-    >
-      www.dolor.com
-    </LinkTooltip>
-  </a>
+    }
+  >
+    www.dolor.com
+  </PluginLinkTooltip>
    sit amet
 </p>
 `;
@@ -173,7 +165,7 @@ exports[`messageHtmlToComponent link without enabled tooltip plugins 1`] = `
   lorem ipsum 
   <a
     className="theme markdown__link"
-    href="https://www.dolor.com"
+    href="http://www.dolor.com"
     rel="noreferrer"
     target="_blank"
   >

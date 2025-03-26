@@ -48,14 +48,6 @@ import {getGlobalItem} from '../../selectors/storage';
 
 type Props = {
     post: Post;
-    isFlagged?: boolean;
-    handleCommentClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
-    handleCardClick?: (post: Post) => void;
-    handleDropdownOpened: (open: boolean) => void;
-    handleAddReactionClick?: () => void;
-    isMenuOpen: boolean;
-    isReadOnly?: boolean;
-    enableEmojiPicker?: boolean;
     location?: ComponentProps<typeof DotMenu>['location'];
 };
 

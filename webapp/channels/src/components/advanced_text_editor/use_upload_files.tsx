@@ -14,7 +14,7 @@ import {getCurrentLocale} from 'selectors/i18n';
 import FilePreview from 'components/file_preview';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import FileUpload from 'components/file_upload';
-import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
+import type {FileUpload as FileUploadClass, TextEditorLocationType} from 'components/file_upload/file_upload';
 import type TextboxClass from 'components/textbox/textbox';
 
 import type {PostDraft} from 'types/store/draft';
@@ -34,7 +34,8 @@ const useUploadFiles = (
     handleDraftChange: (draft: PostDraft, options?: {instant?: boolean; show?: boolean}) => void,
     focusTextbox: (forceFocust?: boolean) => void,
     setServerError: (err: (ServerError & { submittedMessage?: string }) | null) => void,
-): [React.ReactNode, React.ReactNode, Function, Function, Function, Function, Record<string, FilePreviewInfo>] => {
+    isPostBeingEdited?: boolean,
+): [React.ReactNode, React.ReactNode] => {
     const locale = useSelector(getCurrentLocale);
 
     const [uploadsProgressPercent, setUploadsProgressPercent] = useState<{ [clientID: string]: FilePreviewInfo }>({});
@@ -152,8 +153,10 @@ const useUploadFiles = (
         );
     }
 
-    let postType = 'post';
-    if (postId) {
+    let postType: TextEditorLocationType = 'post';
+    if (isPostBeingEdited) {
+        postType = 'edit_post';
+    } else if (postId) {
         postType = isThreadView ? 'thread' : 'comment';
     }
 

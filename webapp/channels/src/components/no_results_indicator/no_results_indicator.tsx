@@ -39,7 +39,7 @@ const iconMap: {[key in NoResultsVariant]: React.ReactNode } = {
     // [NoResultsVariant.ChannelFiles]: <ChannelFilesSVG className='no-results__icon'/>,
     // [NoResultsVariant.ChannelFilesFiltered]: <ChannelFilesSVG className='no-results__icon'/>,
     [NoResultsVariant.UserGroups]: <UserGroupsSVG className='no-results__icon'/>,
-    [NoResultsVariant.UserGroupMembers]: <UserGroupMembersSVG className='no-results__icon'/>,
+    [NoResultsVariant.UserGroupMembers]: <UserGroupsSVG className='no-results__icon'/>,
     [NoResultsVariant.UserGroupsArchived]: <UserGroupsSVG className='no-results__icon'/>,
     [NoResultsVariant.FlaggedPosts]: <IKFlagIcon/>,
     [NoResultsVariant.PinnedPosts]: <PinIcon/>,

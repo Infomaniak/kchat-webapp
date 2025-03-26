@@ -18,10 +18,14 @@ const GIT_RELEASE = JSON.stringify(childProcess.execSync('git describe --tags --
 const IS_CANARY = GIT_RELEASE.includes('-next');
 const IS_PREPROD = GIT_RELEASE.includes('-rc');
 
+// list of known code editors that set an environment variable.
+const knownCodeEditors = ['VSCODE_CWD', 'INSIDE_EMACS'];
+const isInsideCodeEditor = knownCodeEditors.some((editor) => process.env[editor]);
+
 const targetIsRun = NPM_TARGET?.startsWith('run');
 const targetIsStats = NPM_TARGET === 'stats';
 const targetIsDevServer = NPM_TARGET?.startsWith('dev-server');
-const targetIsEslint = NPM_TARGET?.startsWith('check') || NPM_TARGET === 'fix' || process.env.VSCODE_CWD;
+const targetIsEslint = NPM_TARGET?.startsWith('check') || NPM_TARGET === 'fix' || isInsideCodeEditor;
 
 const DEV = targetIsRun || targetIsStats || targetIsDevServer;
 
@@ -136,7 +140,7 @@ var config = {
                         loader: 'sass-loader',
                         options: {
                             sassOptions: {
-                                includePaths: ['src/sass'],
+                                loadPaths: ['src/sass'],
                             },
                         },
                     },
@@ -507,7 +511,7 @@ if (targetIsDevServer) {
                 return '/static/root.html';
             },
             logLevel: 'silent',
-            target: process.env.BASE_URL || 'https://infomaniak.kchat.preprod.dev.infomaniak.ch/', //eslint-disable-line no-process-env
+            target: process.env.BASE_URL || 'https://infomaniak.kchat.staging-88850.dev.infomaniak.ch/', //eslint-disable-line no-process-env
             changeOrigin: true,
             xfwd: true,
             ws: false,

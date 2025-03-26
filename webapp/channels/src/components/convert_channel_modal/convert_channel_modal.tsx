@@ -74,7 +74,7 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                 show={this.state.show}
                 onHide={this.onHide}
                 onExited={onExited}
-                role='dialog'
+                role='none'
                 aria-labelledby='convertChannelModalLabel'
             >
                 <Modal.Header closeButton={true}>
@@ -115,22 +115,13 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                             }}
                         />
                     </p>
-                    <p>
-                        <FormattedMessage
-                            id='convertChannel.question3'
-                            defaultMessage='Are you sure you want to convert <b>{display_name}</b> to a private channel?'
-                            values={{
-                                display_name: channelDisplayName,
-                                b: (chunks: string) => <b>{chunks}</b>,
-                            }}
-                        />
-                    </p>
                 </Modal.Body>
                 <Modal.Footer>
                     <button
                         type='button'
                         className='btn btn-link secondary'
                         onClick={this.onHide}
+                        data-testid='convertChannelCancel'
                     >
                         <FormattedMessage
                             id='convert_channel.cancel'

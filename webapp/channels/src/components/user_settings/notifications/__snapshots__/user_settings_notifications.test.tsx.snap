@@ -6,7 +6,9 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        id="notificationSettings"
+        aria-labelledby="notificationsButton"
+        id="notificationsSettings"
+        role="tabpanel"
       >
         <div
           class="modal-header"
@@ -310,7 +312,9 @@ Object {
   </body>,
   "container": <div>
     <div
-      id="notificationSettings"
+      aria-labelledby="notificationsButton"
+      id="notificationsSettings"
+      role="tabpanel"
     >
       <div
         class="modal-header"
@@ -673,7 +677,9 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        id="notificationSettings"
+        aria-labelledby="notificationsButton"
+        id="notificationsSettings"
+        role="tabpanel"
       >
         <div
           class="modal-header"
@@ -965,7 +971,9 @@ Object {
   </body>,
   "container": <div>
     <div
-      id="notificationSettings"
+      aria-labelledby="notificationsButton"
+      id="notificationsSettings"
+      role="tabpanel"
     >
       <div
         class="modal-header"
@@ -1316,7 +1324,9 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        id="notificationSettings"
+        aria-labelledby="notificationsButton"
+        id="notificationsSettings"
+        role="tabpanel"
       >
         <div
           class="modal-header"
@@ -1585,7 +1595,9 @@ Object {
   </body>,
   "container": <div>
     <div
-      id="notificationSettings"
+      aria-labelledby="notificationsButton"
+      id="notificationsSettings"
+      role="tabpanel"
     >
       <div
         class="modal-header"

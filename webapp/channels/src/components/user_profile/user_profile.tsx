@@ -87,7 +87,6 @@ export default function UserProfile({
             </ProfilePopover>
             {userIsRemote &&
             <SharedUserIndicator
-                id={`sharedUserIndicator-${userId}`}
                 className='shared-user-icon'
                 withTooltip={true}
             />

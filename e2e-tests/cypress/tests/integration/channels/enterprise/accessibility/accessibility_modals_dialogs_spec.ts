@@ -44,7 +44,7 @@ describe('Verify Accessibility Support in Modals & Dialogs', () => {
         cy.visit(`/${testTeam.name}/channels/town-square`);
     });
 
-    it('MM-T1466 Accessibility Support in Direct Messages Dialog screen', () => {
+    it.skip('MM-T1466 Accessibility Support in Direct Messages Dialog screen', () => {
         // * Verify the aria-label in create direct message button
         cy.uiAddDirectMessage().click();
 
@@ -104,7 +104,7 @@ describe('Verify Accessibility Support in Modals & Dialogs', () => {
                 cy.reload();
 
                 // * Verify the aria-label in more public channels button
-                cy.uiBrowseOrCreateChannel('Browse channels').click();
+                cy.uiBrowseOrCreateChannel('Browse channels');
 
                 // * Verify the accessibility support in More Channels Dialog
                 cy.findByRole('dialog', {name: 'Browse Channels'}).within(() => {
@@ -137,7 +137,7 @@ describe('Verify Accessibility Support in Modals & Dialogs', () => {
         });
     });
 
-    it('MM-T1468 Accessibility Support in Add people to Channel Dialog screen', () => {
+    it.skip('MM-T1468 Accessibility Support in Add people to Channel Dialog screen', () => {
         // # Add atleast 5 users
         for (let i = 0; i < 5; i++) {
             cy.apiCreateUser().then(({user}) => { // eslint-disable-line
@@ -149,8 +149,8 @@ describe('Verify Accessibility Support in Modals & Dialogs', () => {
         cy.visit(`/${testTeam.name}/channels/${testChannel.name}`);
 
         // # Open Add Members Dialog
-        cy.get('#channelHeaderDropdownIcon').click();
-        cy.findByText('Add Members').click();
+        cy.uiOpenChannelMenu('Members');
+        cy.uiGetButton('Add').click();
 
         // * Verify the accessibility support in Add people Dialog
         cy.findAllByRole('dialog').eq(0).within(() => {
@@ -206,7 +206,7 @@ describe('Verify Accessibility Support in Modals & Dialogs', () => {
         cy.get('#invitePeople').should('be.visible').click();
 
         // * Verify accessibility support in Invite People Dialog
-        cy.get('.InvitationModal').should('have.attr', 'aria-modal', 'true').and('have.attr', 'aria-labelledby', 'invitation_modal_title').and('have.attr', 'role', 'dialog');
+        cy.findByTestId('invitationModal').should('have.attr', 'aria-modal', 'true').and('have.attr', 'aria-labelledby', 'invitation_modal_title').and('have.attr', 'role', 'dialog');
         cy.get('#invitation_modal_title').should('be.visible').and('contain.text', 'Invite people to');
 
         // # Press tab

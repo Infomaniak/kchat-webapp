@@ -28,7 +28,7 @@ exports[`components/FilePreviewModal should fall back to default preview if plug
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -66,6 +66,7 @@ exports[`components/FilePreviewModal should fall back to default preview if plug
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -171,7 +172,7 @@ exports[`components/FilePreviewModal should match snapshot 1`] = `
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -209,6 +210,7 @@ exports[`components/FilePreviewModal should match snapshot 1`] = `
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -314,7 +316,7 @@ exports[`components/FilePreviewModal should match snapshot for external file 1`]
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -352,6 +354,7 @@ exports[`components/FilePreviewModal should match snapshot for external file 1`]
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -457,7 +460,7 @@ exports[`components/FilePreviewModal should match snapshot when plugin overrides
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -495,6 +498,7 @@ exports[`components/FilePreviewModal should match snapshot when plugin overrides
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -559,6 +563,7 @@ exports[`components/FilePreviewModal should match snapshot when plugin overrides
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -638,7 +643,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -676,6 +681,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -740,6 +746,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -793,7 +800,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -831,6 +838,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -895,6 +903,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -948,7 +957,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .js file
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -986,6 +995,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .js file
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1051,6 +1061,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .js file
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1104,7 +1115,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .m4a fil
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -1142,6 +1153,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .m4a fil
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1206,6 +1218,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .m4a fil
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1258,7 +1271,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .mov fil
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -1296,6 +1309,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .mov fil
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1360,6 +1374,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .mov fil
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1412,7 +1427,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -1450,6 +1465,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1514,6 +1530,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1567,7 +1584,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -1605,6 +1622,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1669,6 +1687,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1722,7 +1741,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with other fi
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
   style={
     Object {
@@ -1760,6 +1779,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with other fi
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1824,6 +1844,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with other fi
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,

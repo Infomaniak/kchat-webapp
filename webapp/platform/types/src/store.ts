@@ -100,5 +100,6 @@ export type GlobalState = {
         lastConnectAt: number;
         lastDisconnectAt: number;
         connectionId: string;
+        serverHostname: string;
     };
 };

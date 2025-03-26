@@ -14,6 +14,11 @@ import type {FileInfo, FileUploadResponse} from '@mattermost/types/files';
 import type {UploadFile} from 'actions/file_actions';
 
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
+import {
+    DropOverlayIdCreateComment,
+    DropOverlayIdEditPost,
+    DropOverlayIdRHS,
+} from 'components/file_upload_overlay/file_upload_overlay';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
@@ -37,7 +42,7 @@ import {
     isTextDroppableEvent,
 } from 'utils/utils';
 
-import type {FilesWillUploadHook, PluginComponent} from 'types/store/plugins';
+import type {FilesWillUploadHook, FileUploadMethodAction} from 'types/store/plugins';
 
 const holders = defineMessages({
     limited: {
@@ -74,6 +79,8 @@ const customStyles = {
     bottom: '100%',
     top: 'auto',
 };
+
+export type TextEditorLocationType = 'post' | 'comment' | 'thread' | 'edit_post';
 
 export type Props = {
     channelId: string;
@@ -126,7 +133,7 @@ export type Props = {
     /**
      * Type of the object which the uploaded file is attached to
      */
-    postType: string;
+    postType: TextEditorLocationType;
 
     /**
      * The maximum uploaded file size.
@@ -141,7 +148,7 @@ export type Props = {
     /**
      * Plugin file upload methods to be added
      */
-    pluginFileUploadMethods: PluginComponent[];
+    pluginFileUploadMethods: FileUploadMethodAction[];
     pluginFilesWillUploadHooks: FilesWillUploadHook[];
 
     /**
@@ -155,6 +162,8 @@ export type Props = {
     message: string;
     caretPosition: number;
     handleDriveSharelink: (e: React.ChangeEvent<TextboxElement>) => void;
+    centerChannelPostBeingEdited: boolean;
+    rhsPostBeingEdited: boolean;
 
     actions: {
 
@@ -188,17 +197,58 @@ export class FileUpload extends PureComponent<Props, State> {
         this.fileInput = React.createRef();
     }
 
-    componentDidMount() {
-        if (this.props.postType === 'post') {
-            this.registerDragEvents('.row.main', '.center-file-overlay');
-        } else if (this.props.postType === 'comment') {
-            this.registerDragEvents('.post-right__container', '.right-file-overlay');
-        } else if (this.props.postType === 'thread') {
-            this.registerDragEvents('.ThreadPane', '.right-file-overlay');
+    getDragEventDefinition = () => {
+        let containerSelector: string;
+        let overlaySelector: string;
+
+        switch (this.props.postType) {
+        case 'post': {
+            containerSelector = this.props.centerChannelPostBeingEdited ? 'form#create_post .AdvancedTextEditor__body' : '.row.main';
+            overlaySelector = this.props.centerChannelPostBeingEdited ? '#createPostFileDropOverlay' : '.center-file-overlay';
+            break;
         }
+        case 'comment': {
+            containerSelector = this.props.rhsPostBeingEdited ? '#sidebar-right .post-create__container .AdvancedTextEditor__body' : '.post-right__container';
+            overlaySelector = this.props.rhsPostBeingEdited ? '#' + DropOverlayIdCreateComment : '#' + DropOverlayIdRHS;
+            break;
+        }
+        case 'thread': {
+            containerSelector = this.props.rhsPostBeingEdited ? '.post-create__container .AdvancedTextEditor__body' : '.ThreadPane';
+            overlaySelector = this.props.rhsPostBeingEdited ? '#createPostFileDropOverlay' : '.right-file-overlay';
+            break;
+        }
+        case 'edit_post': {
+            containerSelector = '.post--editing';
+            overlaySelector = '#' + DropOverlayIdEditPost;
+            break;
+        }
+        }
+
+        return {
+            containerSelector,
+            overlaySelector,
+        };
+    };
+
+    componentDidMount() {
+        const {containerSelector, overlaySelector} = this.getDragEventDefinition();
+        this.registerDragEvents(containerSelector, overlaySelector);
 
         document.addEventListener('paste', this.pasteUpload);
         document.addEventListener('keydown', this.keyUpload);
+    }
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
+        // when a post starts or finishes being edited, we need to
+        // clear existing drag handlers and register fresh ones in the right place.
+        if (
+            prevProps.centerChannelPostBeingEdited !== this.props.centerChannelPostBeingEdited ||
+            prevProps.rhsPostBeingEdited !== this.props.rhsPostBeingEdited
+        ) {
+            this.unbindDragsterEvents?.();
+            const {containerSelector, overlaySelector} = this.getDragEventDefinition();
+            this.registerDragEvents(containerSelector, overlaySelector);
+        }
     }
 
     componentWillUnmount() {
@@ -377,13 +427,19 @@ export class FileUpload extends PureComponent<Props, State> {
     };
 
     registerDragEvents = (containerSelector: string, overlaySelector: string) => {
-        const overlay = document.querySelector(overlaySelector);
+        let overlay = document.querySelector(overlaySelector);
 
         const dragTimeout = new DelayedAction(() => {
             overlay?.classList.add('hidden');
         });
 
         const enter = (e: CustomEvent) => {
+            // this null check is to deal with the race condition between rendering the post edit advanced text editor
+            // and this hook querying the same in DOM to register event handler on it.
+            if (!overlay) {
+                overlay = document.querySelector(overlaySelector);
+            }
+
             const files = e.detail.dataTransfer;
             if (!isUriDrop(files) && isFileTransfer(files)) {
                 overlay?.classList.remove('hidden');
@@ -609,8 +665,6 @@ export class FileUpload extends PureComponent<Props, State> {
             bodyAction = (
                 <div>
                     <WithTooltip
-                        id='upload-tooltip'
-                        placement='top'
                         title={
                             <KeyboardShortcutSequence
                                 shortcut={KEYBOARD_SHORTCUTS.filesUpload}
@@ -707,8 +761,6 @@ export class FileUpload extends PureComponent<Props, State> {
                     />
                     <MenuWrapper>
                         <WithTooltip
-                            id='upload-tooltip'
-                            placement='top'
                             title={
                                 <KeyboardShortcutSequence
                                     shortcut={KEYBOARD_SHORTCUTS.filesUpload}

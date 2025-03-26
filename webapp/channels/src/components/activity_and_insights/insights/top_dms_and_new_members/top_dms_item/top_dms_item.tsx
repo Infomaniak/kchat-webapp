@@ -15,8 +15,8 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+// import OverlayTrigger from 'components/overlay_trigger';
+// import Tooltip from 'components/tooltip';
 import Avatar from 'components/widgets/users/avatar';
 
 import Constants from 'utils/constants';
@@ -35,17 +35,18 @@ const TopDMsItem = ({dm, barSize, team}: Props) => {
 
     const tooltip = useCallback((messageCount: number) => {
         return (
-            <Tooltip
-                id='total-messages'
-            >
-                <FormattedMessage
-                    id='insights.topChannels.messageCount'
-                    defaultMessage='{messageCount} total messages'
-                    values={{
-                        messageCount,
-                    }}
-                />
-            </Tooltip>
+            // <Tooltip
+            //     id='total-messages'
+            // >
+            //     <FormattedMessage
+            //         id='insights.topChannels.messageCount'
+            //         defaultMessage='{messageCount} total messages'
+            //         values={{
+            //             messageCount,
+            //         }}
+            //     />
+            // </Tooltip>
+            <></>
         );
     }, []);
 
@@ -71,7 +72,7 @@ const TopDMsItem = ({dm, barSize, team}: Props) => {
                 </div>
                 <span className='dm-role'>{dm.second_participant.position}</span>
                 <div className='channel-message-count'>
-                    <OverlayTrigger
+                    {/* <OverlayTrigger
                         trigger={['hover']}
                         delayShow={Constants.OVERLAY_TIME_DELAY}
                         placement='top'
@@ -84,7 +85,7 @@ const TopDMsItem = ({dm, barSize, team}: Props) => {
                         style={{
                             flex: `${barSize} 0`,
                         }}
-                    />
+                    /> */}
                 </div>
             </div>
 

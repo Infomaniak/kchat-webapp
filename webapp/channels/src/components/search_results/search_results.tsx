@@ -128,6 +128,10 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
         }
     };
 
+    const setSearchTeam = (teamId: string): void => {
+        props.updateSearchTeam(teamId);
+    };
+
     const loadMorePosts = debounce(
         () => {
             props.getMorePostsForSearch();
@@ -306,6 +310,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                     'sidebar--right__subheader a11y__section',
                     {'sidebar-expanded': isSideBarExpanded},
                 ])}
+                aria-live='polite'
             >
                 <NoResultsIndicator
                     style={{padding: '48px'}}
@@ -321,6 +326,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                     'sidebar--right__subheader a11y__section',
                     {'sidebar-expanded': isSideBarExpanded},
                 ])}
+                aria-live='polite'
             >
                 <NoResultsIndicator
                     style={{padding: '48px'}}
@@ -377,9 +383,9 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
             className='SearchResults sidebar-right__body'
         >
             <SearchResultsHeader>
-                <span>
+                <h2 id='rhsPanelTitle'>
                     {formattedTitle}
-                </span>
+                </h2>
                 {props.channelDisplayName && <div className='sidebar--right__title__channel'>{props.channelDisplayName}</div>}
             </SearchResultsHeader>
             {isMessagesSearch &&
@@ -391,6 +397,8 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                     filesCounter={isSearchFilesAtEnd || props.searchPage === 0 ? `${fileResults.length}` : `${fileResults.length}+`}
                     onChange={setSearchType}
                     onFilter={setSearchFilterType}
+                    onTeamChange={setSearchTeam}
+                    crossTeamSearchEnabled={props.crossTeamSearchEnabled}
                 />}
             {isChannelFiles &&
                 <div className='channel-files__header'>
@@ -420,7 +428,6 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
             >
                 <div
                     id='search-items-container'
-                    role='application'
                     className={classNames([
                         'search-items-container post-list__table a11y__region',
                         {
@@ -438,7 +445,12 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                         regionTitle: formattedTitle,
                     })}
                 >
-                    {contentItems}
+                    <div
+                        id={`${searchType}Panel`}
+                        className='files-or-messages-panel'
+                    >
+                        {contentItems}
+                    </div>
                     {loadingMorePostsComponent}
                 </div>
             </Scrollbars>
@@ -451,11 +463,11 @@ SearchResults.defaultProps = defaultProps;
 export const arePropsEqual = (props: Props, nextProps: Props): boolean => {
     // Shallow compare for all props except 'results' and 'fileResults'
     for (const key in nextProps) {
-        if (!Object.prototype.hasOwnProperty.call(nextProps, key) || key === 'results') {
+        if (!Object.hasOwn(nextProps, key) || key === 'results') {
             continue;
         }
 
-        if (!Object.prototype.hasOwnProperty.call(nextProps, key) || key === 'fileResults') {
+        if (!Object.hasOwn(nextProps, key) || key === 'fileResults') {
             continue;
         }
 

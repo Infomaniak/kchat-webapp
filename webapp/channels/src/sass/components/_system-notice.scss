@@ -1,4 +1,4 @@
-@charset 'UTF-8';
+@use "utils/variables";
 
 .system-notice {
     position: absolute;
@@ -51,7 +51,7 @@
 
 .system-notice__footer {
     display: flex;
-    border-top: 1px solid alpha-color($black, 0.2);
+    border-top: 1px solid alpha-color(variables.$black, 0.2);
     margin: 0 -20px;
 
     .btn {
@@ -61,7 +61,7 @@
 
         &:hover {
             background: rgb(22, 109, 224);
-            color: $white;
+            color: variables.$white;
         }
 
         &:first-child {
@@ -69,7 +69,7 @@
         }
 
         &:last-child {
-            border-left: 1px solid alpha-color($black, 0.2);
+            border-left: 1px solid alpha-color(variables.$black, 0.2);
             border-radius: 0 0 4px 0;
         }
     }

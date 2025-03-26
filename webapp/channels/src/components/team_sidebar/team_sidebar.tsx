@@ -7,6 +7,8 @@ import React from 'react';
 import type {DroppableProvided, DropResult} from 'react-beautiful-dnd';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Scrollbars from 'react-custom-scrollbars';
+import {injectIntl, FormattedMessage} from 'react-intl';
+import type {WrappedComponentProps} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
 import type {Team} from '@mattermost/types/teams';
@@ -59,7 +61,7 @@ export function renderThumbVertical(props: Props) {
     );
 }
 
-export default class TeamSidebar extends React.PureComponent<Props, State> {
+export class TeamSidebar extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
@@ -214,6 +216,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         // if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
         //     return null;
         // }
+        const {intl} = this.props;
         const root: Element | null = document.querySelector('#root');
         if (this.props.myTeams.length <= 1) {
             root!.classList.remove('multi-teams');
@@ -359,3 +362,5 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         );
     }
 }
+
+export default injectIntl(TeamSidebar);

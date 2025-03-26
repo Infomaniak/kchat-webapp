@@ -2,11 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React, {useRef, useCallback, useEffect, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled, {css} from 'styled-components';
 
-import {CloseIcon, PlayIcon, PlaylistCheckIcon} from '@mattermost/compass-icons/components';
+import {CloseIcon, PlaylistCheckIcon} from '@mattermost/compass-icons/components';
 
 import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {getMyPreferences, savePreferences} from 'mattermost-redux/actions/preferences';
@@ -19,7 +19,6 @@ import {
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {trackEvent} from 'actions/telemetry_actions';
-import {openModal} from 'actions/views/modals';
 import {getShowTaskListBool} from 'selectors/onboarding';
 
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
@@ -31,7 +30,6 @@ import {
 } from 'components/onboarding_tasks';
 import {useHandleOnBoardingTaskTrigger} from 'components/onboarding_tasks/onboarding_tasks_manager';
 
-import checklistImg from 'images/onboarding-checklist.svg';
 import {Preferences, RecommendedNextStepsLegacy} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
@@ -55,10 +53,12 @@ const TaskItems = styled.div`
     transform-origin: left bottom;
     max-height: ${document.documentElement.clientHeight}px;
     overflow-y: auto;
+    display: none;
 
     &.open {
         transform: scale(1);
         opacity: 1;
+        display: block;
     }
 
     h1 {
@@ -126,14 +126,8 @@ const Button = styled.button<{open: boolean}>(({open}) => {
     `;
 });
 
-const Skeleton = styled.div`
-    height: auto;
-    margin: 0 auto;
-    padding: 0 20px;
-    position: relative;
-`;
-
 const OnBoardingTaskList = (): JSX.Element | null => {
+    const {formatMessage} = useIntl();
     const hasPreferences = useSelector((state: GlobalState) => Object.keys(getMyPreferencesSelector(state)).length !== 0);
 
     useEffect(() => {
@@ -261,15 +255,6 @@ const OnBoardingTaskList = (): JSX.Element | null => {
         trackEvent(OnboardingTaskCategory, open ? OnboardingTaskList.ONBOARDING_TASK_LIST_CLOSE : OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN);
     }, [open, currentUserId]);
 
-    const openVideoModal = useCallback(() => {
-        toggleTaskList();
-        dispatch(openModal({
-            modalId: OnboardingTaskList.ONBOARDING_VIDEO_MODAL,
-            dialogType: OnBoardingVideoModal,
-            dialogProps: {},
-        }));
-    }, []);
-
     if (!hasPreferences || !showTaskList || !isEnableOnboardingFlow) {
         return null;
     }
@@ -282,6 +267,7 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                 ref={trigger}
                 open={open}
                 data-cy='onboarding-task-list-action-button'
+                aria-label={formatMessage({id: 'onboardingTask.checklist.start_onboarding_process', defaultMessage: 'Start the onboarding process.'})}
             >
                 {open ? <CloseIcon size={20}/> : <PlaylistCheckIcon size={20}/>}
                 {itemsLeft !== 0 && (<span>{itemsLeft}</span>)}
@@ -311,10 +297,7 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                                     id='onboardingTour.taskList.subtitle'
                                     defaultMessage="Let's get up and running."
                                 />
-                                                                   </p>
-                            <Skeleton>
-                                                                       <TasklistIcon/>
-                                                                   </Skeleton>
+                            </p>
                             {tasksList.map((task) => (
                                 <Task
                                     key={OnboardingTaskCategory + task.name}

@@ -42,7 +42,9 @@ const Header = ({channel, isArchived, isMobile, onClose}: Props) => {
                         />
                     </button>
                 )}
-                <HeaderTitle>
+                <HeaderTitle
+                    id='rhsPanelTitle'
+                >
                     <FormattedMessage
                         id='channel_info_rhs.header.title'
                         defaultMessage='Info'
@@ -60,8 +62,6 @@ const Header = ({channel, isArchived, isMobile, onClose}: Props) => {
             </span>
 
             <WithTooltip
-                id='closeSidebarTooltip'
-                placement='top'
                 title={
                     <FormattedMessage
                         id='rhs_header.closeSidebarTooltip'

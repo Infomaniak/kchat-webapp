@@ -153,7 +153,7 @@ export default class Bots extends React.PureComponent<Props, State> {
             return React.cloneElement(child, {filter: props.filter});
         });
         return (
-            <React.Fragment>
+            <>
                 <div className='bot-disabled'>
                     <FormattedMessage
                         id='bots.disabled'
@@ -163,7 +163,7 @@ export default class Bots extends React.PureComponent<Props, State> {
                 <div className='bot-list__disabled'>
                     {botsToDisplay}
                 </div>
-            </React.Fragment>
+            </>
         );
     }
 
@@ -246,7 +246,7 @@ export default class Bots extends React.PureComponent<Props, State> {
                     />
                 }
                 helpText={
-                    <React.Fragment>
+                    <>
                         <FormattedMessage
                             id='bots.manage.help1'
                             defaultMessage='Use {botAccounts} to integrate with Mattermost through plugins or the API. Bot accounts are available to everyone on your server. {learnMore}'
@@ -267,7 +267,7 @@ export default class Bots extends React.PureComponent<Props, State> {
                                 ),
                             }}
                         />
-                    </React.Fragment>
+                    </>
                 }
                 searchPlaceholder={Utils.localizeMessage({id: 'bots.manage.search', defaultMessage: 'Search Bot Accounts'})}
                 loading={this.state.loading}

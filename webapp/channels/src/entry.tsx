@@ -4,7 +4,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {logError} from 'mattermost-redux/actions/errors';
+import {logError, LogErrorBarMode} from 'mattermost-redux/actions/errors';
 
 import store from 'stores/redux_store';
 
@@ -48,8 +48,7 @@ function preRenderSetup(onPreRenderSetupReady: () => void) {
                     stack: error?.stack,
                     url,
                 },
-                true,
-                true,
+                {errorBarMode: LogErrorBarMode.InDevMode},
             ),
         );
     };

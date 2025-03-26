@@ -86,6 +86,7 @@ import type {
     GetGroupsForUserParams,
     GroupStats,
     GetGroupsParams,
+    GroupMember,
 } from '@mattermost/types/groups';
 import type {TopReactionResponse, TopChannelResponse, TopThreadResponse, LeastActiveChannelsResponse, TopDMsResponse} from '@mattermost/types/insights';
 import type {PostActionResponse} from '@mattermost/types/integration_actions';
@@ -117,6 +118,7 @@ import type {
 import type {Post, PostList, PostSearchResults, PostsUsageResponse, TeamsUsageResponse, PaginatedPostList, FilesUsageResponse, PostAcknowledgement, PostAnalytics, PostInfo} from '@mattermost/types/posts';
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {ProductNotices} from '@mattermost/types/product_notices';
+import type {UserPropertyField, UserPropertyFieldPatch} from '@mattermost/types/properties';
 import type {Reaction} from '@mattermost/types/reactions';
 import type {RemoteCluster, RemoteClusterAcceptInvite, RemoteClusterPatch, RemoteClusterWithPassword} from '@mattermost/types/remote_clusters';
 import type {UserReport, UserReportFilter, UserReportOptions} from '@mattermost/types/reports';
@@ -406,6 +408,18 @@ export default class Client4 {
         return `${this.getRemoteClustersRoute()}/${remoteId}`;
     }
 
+    getCustomProfileAttributeFieldsRoute() {
+        return `${this.getBaseRoute()}/custom_profile_attributes/fields`;
+    }
+
+    getCustomProfileAttributeFieldRoute(propertyFieldId: string) {
+        return `${this.getCustomProfileAttributeFieldsRoute()}/${propertyFieldId}`;
+    }
+
+    getCustomProfileAttributeValuesRoute() {
+        return `${this.getBaseRoute()}/custom_profile_attributes/values`;
+    }
+
     getPostsRoute() {
         return `${this.getBaseRoute()}/posts`;
     }
@@ -651,8 +665,6 @@ export default class Client4 {
     // User Routes
 
     createUser = (user: UserProfile, token: string, inviteId: string, redirect?: string) => {
-        this.trackEvent('api', 'api_users_create');
-
         const queryParams: any = {};
 
         if (token) {
@@ -680,9 +692,7 @@ export default class Client4 {
         );
     };
 
-    patchUser = (userPatch: Partial<UserProfile> & {id: string}) => {
-        this.trackEvent('api', 'api_users_patch');
-
+    patchUser = (userPatch: PartialExcept<UserProfile, 'id'>) => {
         return this.doFetch<UserProfile>(
             `${this.getUserRoute(userPatch.id)}/patch`,
             {method: 'put', body: JSON.stringify(userPatch)},
@@ -690,8 +700,6 @@ export default class Client4 {
     };
 
     updateUser = (user: UserProfile) => {
-        this.trackEvent('api', 'api_users_update');
-
         return this.doFetch<UserProfile>(
             `${this.getUserRoute(user.id)}`,
             {method: 'put', body: JSON.stringify(user)},
@@ -699,8 +707,6 @@ export default class Client4 {
     };
 
     promoteGuestToUser = (userId: string) => {
-        this.trackEvent('api', 'api_users_promote_guest_to_user');
-
         return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/promote`,
             {method: 'post'},
@@ -708,8 +714,6 @@ export default class Client4 {
     };
 
     demoteUserToGuest = (userId: string) => {
-        this.trackEvent('api', 'api_users_demote_user_to_guest');
-
         return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/demote`,
             {method: 'post'},
@@ -717,8 +721,6 @@ export default class Client4 {
     };
 
     updateUserRoles = (userId: string, roles: string) => {
-        this.trackEvent('api', 'api_users_update_roles');
-
         return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/roles`,
             {method: 'put', body: JSON.stringify({roles})},
@@ -741,8 +743,6 @@ export default class Client4 {
     };
 
     updateUserPassword = (userId: string, currentPassword: string, newPassword: string) => {
-        this.trackEvent('api', 'api_users_newpassword');
-
         return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/password`,
             {method: 'put', body: JSON.stringify({current_password: currentPassword, new_password: newPassword})},
@@ -750,11 +750,16 @@ export default class Client4 {
     };
 
     resetUserPassword = (token: string, newPassword: string) => {
-        this.trackEvent('api', 'api_users_reset_password');
-
         return this.doFetch<StatusOK>(
             `${this.getUsersRoute()}/password/reset`,
             {method: 'post', body: JSON.stringify({token, new_password: newPassword})},
+        );
+    };
+
+    resetFailedAttempts = (userId: string) => {
+        return this.doFetch<StatusOK>(
+            `${this.getUserRoute(userId)}/reset_failed_attempts`,
+            {method: 'post'},
         );
     };
 
@@ -766,8 +771,6 @@ export default class Client4 {
     };
 
     sendPasswordResetEmail = (email: string) => {
-        this.trackEvent('api', 'api_users_send_password_reset');
-
         return this.doFetch<StatusOK>(
             `${this.getUsersRoute()}/password/reset/send`,
             {method: 'post', body: JSON.stringify({email})},
@@ -775,8 +778,6 @@ export default class Client4 {
     };
 
     updateUserActive = (userId: string, active: boolean) => {
-        this.trackEvent('api', 'api_users_update_active');
-
         return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/active`,
             {method: 'put', body: JSON.stringify({active})},
@@ -784,8 +785,6 @@ export default class Client4 {
     };
 
     uploadProfileImage = (userId: string, imageData: File) => {
-        this.trackEvent('api', 'api_users_update_profile_picture');
-
         const formData = new FormData();
         formData.append('image', imageData);
         const request: any = {
@@ -800,8 +799,6 @@ export default class Client4 {
     };
 
     setDefaultProfileImage = (userId: string) => {
-        this.trackEvent('api', 'api_users_set_default_profile_picture');
-
         return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/image`,
             {method: 'delete'},
@@ -844,12 +841,6 @@ export default class Client4 {
     };
 
     login = async (loginId: string, password: string, token = '', ldapOnly = false) => {
-        this.trackEvent('api', 'api_users_login');
-
-        if (ldapOnly) {
-            this.trackEvent('api', 'api_users_login_ldap');
-        }
-
         const body: any = {
             login_id: loginId,
             password,
@@ -889,7 +880,6 @@ export default class Client4 {
     };
 
     loginById = (id: string, password: string, token = '') => {
-        this.trackEvent('api', 'api_users_login');
         const body: any = {
             id,
             password,
@@ -915,8 +905,6 @@ export default class Client4 {
     };
 
     logout = async () => {
-        this.trackEvent('api', 'api_users_logout');
-
         const {response} = await this.doFetchWithResponse(
             `${this.getUsersRoute()}/logout`,
             {method: 'post'},
@@ -1169,8 +1157,6 @@ export default class Client4 {
     };
 
     searchUsers = (term: string, options: any) => {
-        this.trackEvent('api', 'api_search_users');
-
         return this.doFetch<UserProfile[]>(
             `${this.getUsersRoute()}/search`,
             {method: 'post', body: JSON.stringify({term, ...options})},
@@ -1228,8 +1214,6 @@ export default class Client4 {
     };
 
     switchEmailToOAuth = (service: string, email: string, password: string, mfaCode = '') => {
-        this.trackEvent('api', 'api_users_email_to_oauth');
-
         return this.doFetch<AuthChangeResponse>(
             `${this.getUsersRoute()}/login/switch`,
             {method: 'post', body: JSON.stringify({current_service: 'email', new_service: service, email, password, mfa_code: mfaCode})},
@@ -1237,8 +1221,6 @@ export default class Client4 {
     };
 
     switchOAuthToEmail = (currentService: string, email: string, password: string) => {
-        this.trackEvent('api', 'api_users_oauth_to_email');
-
         return this.doFetch<AuthChangeResponse>(
             `${this.getUsersRoute()}/login/switch`,
             {method: 'post', body: JSON.stringify({current_service: currentService, new_service: 'email', email, new_password: password})},
@@ -1246,8 +1228,6 @@ export default class Client4 {
     };
 
     switchEmailToLdap = (email: string, emailPassword: string, ldapId: string, ldapPassword: string, mfaCode = '') => {
-        this.trackEvent('api', 'api_users_email_to_ldap');
-
         return this.doFetch<AuthChangeResponse>(
             `${this.getUsersRoute()}/login/switch`,
             {method: 'post', body: JSON.stringify({current_service: 'email', new_service: 'ldap', email, password: emailPassword, ldap_id: ldapId, new_password: ldapPassword, mfa_code: mfaCode})},
@@ -1255,8 +1235,6 @@ export default class Client4 {
     };
 
     switchLdapToEmail = (ldapPassword: string, email: string, emailPassword: string, mfaCode = '') => {
-        this.trackEvent('api', 'api_users_ldap_to_email');
-
         return this.doFetch<AuthChangeResponse>(
             `${this.getUsersRoute()}/login/switch`,
             {method: 'post', body: JSON.stringify({current_service: 'ldap', new_service: 'email', email, password: ldapPassword, new_password: emailPassword, mfa_code: mfaCode})},
@@ -1285,8 +1263,6 @@ export default class Client4 {
     };
 
     createUserAccessToken = (userId: string, description: string) => {
-        this.trackEvent('api', 'api_users_create_access_token');
-
         return this.doFetch<UserAccessToken>(
             `${this.getUserRoute(userId)}/tokens`,
             {method: 'post', body: JSON.stringify({description})},
@@ -1315,8 +1291,6 @@ export default class Client4 {
     };
 
     revokeUserAccessToken = (tokenId: string) => {
-        this.trackEvent('api', 'api_users_revoke_access_token');
-
         return this.doFetch<StatusOK>(
             `${this.getUsersRoute()}/tokens/revoke`,
             {method: 'post', body: JSON.stringify({token_id: tokenId})},
@@ -1351,8 +1325,6 @@ export default class Client4 {
     // Team Routes
 
     createTeam = (team: Team) => {
-        this.trackEvent('api', 'api_teams_create');
-
         return this.doFetch<Team>(
             `${this.getTeamsRoute()}`,
             {method: 'post', body: JSON.stringify(team)},
@@ -1360,8 +1332,6 @@ export default class Client4 {
     };
 
     deleteTeam = (teamId: string) => {
-        this.trackEvent('api', 'api_teams_delete');
-
         return this.doFetch<StatusOK>(
             `${this.getTeamRoute(teamId)}`,
             {method: 'delete'},
@@ -1383,17 +1353,13 @@ export default class Client4 {
     };
 
     updateTeam = (team: Team) => {
-        this.trackEvent('api', 'api_teams_update_name', {team_id: team.id});
-
         return this.doFetch<Team>(
             `${this.getTeamRoute(team.id)}`,
             {method: 'put', body: JSON.stringify(team)},
         );
     };
 
-    patchTeam = (team: Partial<Team> & {id: string}) => {
-        this.trackEvent('api', 'api_teams_patch_name', {team_id: team.id});
-
+    patchTeam = (team: PartialExcept<Team, 'id'>) => {
         return this.doFetch<Team>(
             `${this.getTeamRoute(team.id)}/patch`,
             {method: 'put', body: JSON.stringify(team)},
@@ -1401,8 +1367,6 @@ export default class Client4 {
     };
 
     regenerateTeamInviteId = (teamId: string) => {
-        this.trackEvent('api', 'api_teams_regenerate_invite_id', {team_id: teamId});
-
         return this.doFetch<Team>(
             `${this.getTeamRoute(teamId)}/regenerate_invite_id`,
             {method: 'post'},
@@ -1411,8 +1375,6 @@ export default class Client4 {
 
     updateTeamScheme = (teamId: string, schemeId: string) => {
         const patch = {scheme_id: schemeId};
-
-        this.trackEvent('api', 'api_teams_update_scheme', {team_id: teamId, ...patch});
 
         return this.doFetch<StatusOK>(
             `${this.getTeamSchemeRoute(teamId)}`,
@@ -1444,8 +1406,6 @@ export default class Client4 {
     searchTeams(term: string, opts: PagedTeamSearchOpts): Promise<Team[]>;
     searchTeams(term: string, opts: NotPagedTeamSearchOpts): Promise<TeamsWithCount>;
     searchTeams(term: string, opts: TeamSearchOpts): Promise<Team[] | TeamsWithCount> {
-        this.trackEvent('api', 'api_search_teams');
-
         return this.doFetch<Team[] | TeamsWithCount>(
             `${this.getTeamsRoute()}/search`,
             {method: 'post', body: JSON.stringify({term, ...opts})},
@@ -1460,8 +1420,6 @@ export default class Client4 {
     };
 
     getTeamByName = (teamName: string) => {
-        this.trackEvent('api', 'api_teams_get_team_by_name');
-
         return this.doFetch<Team>(
             this.getTeamNameRoute(teamName),
             {method: 'get'},
@@ -1532,8 +1490,6 @@ export default class Client4 {
     };
 
     addToTeam = (teamId: string, userId: string) => {
-        this.trackEvent('api', 'api_teams_invite_members', {team_id: teamId});
-
         const member = {user_id: userId, team_id: teamId};
         return this.doFetch<TeamMembership>(
             `${this.getTeamMembersRoute(teamId)}`,
@@ -1542,8 +1498,6 @@ export default class Client4 {
     };
 
     addToTeamFromInvite = (token = '', inviteId = '') => {
-        this.trackEvent('api', 'api_teams_invite_members');
-
         const query = buildQueryString({token, invite_id: inviteId});
         return this.doFetch<TeamMembership>(
             `${this.getTeamsRoute()}/members/invite${query}`,
@@ -1552,8 +1506,6 @@ export default class Client4 {
     };
 
     addUsersToTeam = (teamId: string, userIds: string[]) => {
-        this.trackEvent('api', 'api_teams_batch_add_members', {team_id: teamId, count: userIds.length});
-
         const members: any = [];
         userIds.forEach((id) => members.push({team_id: teamId, user_id: id}));
         return this.doFetch<TeamMembership[]>(
@@ -1563,8 +1515,6 @@ export default class Client4 {
     };
 
     addUsersToTeamGracefully = (teamId: string, userIds: string[]) => {
-        this.trackEvent('api', 'api_teams_batch_add_members', {team_id: teamId, count: userIds.length});
-
         const members: any = [];
         userIds.forEach((id) => members.push({team_id: teamId, user_id: id}));
         return this.doFetch<TeamMemberWithError[]>(
@@ -1582,8 +1532,6 @@ export default class Client4 {
     };
 
     removeFromTeam = (teamId: string, userId: string) => {
-        this.trackEvent('api', 'api_teams_remove_members', {team_id: teamId});
-
         return this.doFetch<StatusOK>(
             `${this.getTeamMemberRoute(teamId, userId)}`,
             {method: 'delete'},
@@ -1631,8 +1579,6 @@ export default class Client4 {
     };
 
     updateTeamMemberRoles = (teamId: string, userId: string, roles: string[]) => {
-        this.trackEvent('api', 'api_teams_update_member_roles', {team_id: teamId});
-
         return this.doFetch<StatusOK>(
             `${this.getTeamMemberRoute(teamId, userId)}/roles`,
             {method: 'put', body: JSON.stringify({roles})},
@@ -1640,8 +1586,6 @@ export default class Client4 {
     };
 
     sendEmailInvitesToTeam = (teamId: string, emails: string[]) => {
-        this.trackEvent('api', 'api_teams_invite_members', {team_id: teamId});
-
         return this.doFetch<StatusOK>(
             `${this.getTeamRoute(teamId)}/invite/email`,
             {method: 'post', body: JSON.stringify(emails)},
@@ -1658,8 +1602,6 @@ export default class Client4 {
     };
 
     sendEmailInvitesToTeamGracefully = (teamId: string, emails: string[]) => {
-        this.trackEvent('api', 'api_teams_invite_members', {team_id: teamId});
-
         return this.doFetch<TeamInviteWithError[]>(
             `${this.getTeamRoute(teamId)}/invite/email?graceful=true`,
             {method: 'post', body: JSON.stringify(emails)},
@@ -1672,8 +1614,6 @@ export default class Client4 {
         emails: string[],
         message: string,
     ) => {
-        this.trackEvent('api', 'api_teams_invite_members_to_channels', {team_id: teamId, channel_len: channelIds.length});
-
         return this.doFetch<TeamInviteWithError[]>(
             `${this.getTeamRoute(teamId)}/invite/email?graceful=true`,
             {method: 'post', body: JSON.stringify({emails, channelIds, message})},
@@ -1699,8 +1639,6 @@ export default class Client4 {
     };
 
     setTeamIcon = (teamId: string, imageData: File) => {
-        this.trackEvent('api', 'api_team_set_team_icon');
-
         const formData = new FormData();
         formData.append('image', imageData);
 
@@ -1716,8 +1654,6 @@ export default class Client4 {
     };
 
     removeTeamIcon = (teamId: string) => {
-        this.trackEvent('api', 'api_team_remove_team_icon');
-
         return this.doFetch<StatusOK>(
             `${this.getTeamRoute(teamId)}/image`,
             {method: 'delete'},
@@ -1776,9 +1712,7 @@ export default class Client4 {
         );
     }
 
-    createChannel = (channel: Channel) => {
-        this.trackEvent('api', 'api_channels_create', {team_id: channel.team_id});
-
+    createChannel = (channel: PartialExcept<Channel, 'name' | 'display_name' | 'type' | 'team_id'>) => {
         return this.doFetch<ServerChannel>(
             `${this.getChannelsRoute()}`,
             {method: 'post', body: JSON.stringify(channel)},
@@ -1786,8 +1720,6 @@ export default class Client4 {
     };
 
     createDirectChannel = (userIds: string[]) => {
-        this.trackEvent('api', 'api_channels_create_direct');
-
         return this.doFetch<ServerChannel>(
             `${this.getChannelsRoute()}/direct`,
             {method: 'post', body: JSON.stringify(userIds)},
@@ -1795,8 +1727,6 @@ export default class Client4 {
     };
 
     createGroupChannel = (userIds: string[]) => {
-        this.trackEvent('api', 'api_channels_create_group');
-
         return this.doFetch<ServerChannel>(
             `${this.getChannelsRoute()}/group`,
             {method: 'post', body: JSON.stringify(userIds)},
@@ -1804,8 +1734,6 @@ export default class Client4 {
     };
 
     deleteChannel = (channelId: string) => {
-        this.trackEvent('api', 'api_channels_delete', {channel_id: channelId});
-
         return this.doFetch<StatusOK>(
             `${this.getChannelRoute(channelId)}`,
             {method: 'delete'},
@@ -1813,8 +1741,6 @@ export default class Client4 {
     };
 
     unarchiveChannel = (channelId: string) => {
-        this.trackEvent('api', 'api_channels_unarchive', {channel_id: channelId});
-
         return this.doFetch<ServerChannel>(
             `${this.getChannelRoute(channelId)}/restore`,
             {method: 'post'},
@@ -1822,8 +1748,6 @@ export default class Client4 {
     };
 
     updateChannel = (channel: Channel) => {
-        this.trackEvent('api', 'api_channels_update', {channel_id: channel.id});
-
         return this.doFetch<ServerChannel>(
             `${this.getChannelRoute(channel.id)}`,
             {method: 'put', body: JSON.stringify(channel)},
@@ -1831,8 +1755,6 @@ export default class Client4 {
     };
 
     updateChannelPrivacy = (channelId: string, privacy: any) => {
-        this.trackEvent('api', 'api_channels_update_privacy', {channel_id: channelId, privacy});
-
         return this.doFetch<ServerChannel>(
             `${this.getChannelRoute(channelId)}/privacy`,
             {method: 'put', body: JSON.stringify({privacy})},
@@ -1840,8 +1762,6 @@ export default class Client4 {
     };
 
     patchChannel = (channelId: string, channelPatch: Partial<Channel>) => {
-        this.trackEvent('api', 'api_channels_patch', {channel_id: channelId});
-
         return this.doFetch<ServerChannel>(
             `${this.getChannelRoute(channelId)}/patch`,
             {method: 'put', body: JSON.stringify(channelPatch)},
@@ -1849,8 +1769,6 @@ export default class Client4 {
     };
 
     updateChannelNotifyProps = (props: any) => {
-        this.trackEvent('api', 'api_users_update_channel_notifications', {channel_id: props.channel_id});
-
         return this.doFetch<StatusOK>(
             `${this.getChannelMemberRoute(props.channel_id, props.user_id)}/notify_props`,
             {method: 'put', body: JSON.stringify(props)},
@@ -1859,8 +1777,6 @@ export default class Client4 {
 
     updateChannelScheme = (channelId: string, schemeId: string) => {
         const patch = {scheme_id: schemeId};
-
-        this.trackEvent('api', 'api_channels_update_scheme', {channel_id: channelId, ...patch});
 
         return this.doFetch<StatusOK>(
             `${this.getChannelSchemeRoute(channelId)}`,
@@ -1974,8 +1890,6 @@ export default class Client4 {
     };
 
     addToChannels = (userIds: string[], channelId: string, postRootId = '') => {
-        this.trackEvent('api', 'api_channels_add_members', {channel_id: channelId});
-
         const members = {user_ids: userIds, channel_id: channelId, post_root_id: postRootId};
         return this.doFetch<ChannelMembership[]>(
             `${this.getChannelMembersRoute(channelId)}`,
@@ -1984,8 +1898,6 @@ export default class Client4 {
     };
 
     addToChannel = (userId: string, channelId: string, postRootId = '') => {
-        this.trackEvent('api', 'api_channels_add_member', {channel_id: channelId});
-
         const member = {user_id: userId, channel_id: channelId, post_root_id: postRootId};
         return this.doFetch<ChannelMembership>(
             `${this.getChannelMembersRoute(channelId)}`,
@@ -2002,8 +1914,6 @@ export default class Client4 {
     };
 
     removeFromChannel = (userId: string, channelId: string) => {
-        this.trackEvent('api', 'api_channels_remove_member', {channel_id: channelId});
-
         return this.doFetch<StatusOK>(
             `${this.getChannelMemberRoute(channelId, userId)}`,
             {method: 'delete'},
@@ -2310,31 +2220,78 @@ export default class Client4 {
         );
     };
 
+    // System Properties Routes
+
+    getCustomProfileAttributeFields = async () => {
+        return this.doFetch<UserPropertyField[]>(
+            `${this.getCustomProfileAttributeFieldsRoute()}`,
+            {method: 'GET'},
+        );
+    };
+
+    createCustomProfileAttributeField = async (patch: UserPropertyFieldPatch) => {
+        return this.doFetch<UserPropertyField>(
+            `${this.getCustomProfileAttributeFieldsRoute()}`,
+            {method: 'POST', body: JSON.stringify(patch)},
+        );
+    };
+
+    patchCustomProfileAttributeField = async (fieldId: string, patch: UserPropertyFieldPatch) => {
+        return this.doFetch<UserPropertyField>(
+            `${this.getCustomProfileAttributeFieldRoute(fieldId)}`,
+            {method: 'PATCH', body: JSON.stringify(patch)},
+        );
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    deleteCustomProfileAttributeField = async (fieldId: string) => {
+        return this.doFetch<StatusOK>(
+            `${this.getCustomProfileAttributeFieldRoute(fieldId)}`,
+            {method: 'DELETE'},
+        );
+    };
+
+    updateCustomProfileAttributeValues = (attributeValues: Record<string, string>) => {
+        return this.doFetch<Record<string, string>>(
+            `${this.getCustomProfileAttributeValuesRoute()}`,
+            {method: 'PATCH', body: JSON.stringify(attributeValues)},
+        );
+    };
+
+    getUserCustomProfileAttributesValues = async (userID: string) => {
+        const data = await this.doFetch<Record<string, string>>(
+            `${this.getUserRoute(userID)}/custom_profile_attributes`,
+            {method: 'GET'},
+        );
+        return data;
+    };
+
     // Post Routes
 
-    createPost = async (post: Post) => {
+    createPost = async (post: PartialExcept<Post, 'channel_id' | 'message'>) => {
         const result = await this.doFetch<Post>(
             `${this.getPostsRoute()}`,
             {method: 'post', body: JSON.stringify(post)},
         );
-        const analyticsData = {channel_id: result.channel_id, post_id: result.id, [TrackPropertyUser]: result.user_id, root_id: result.root_id} as PostAnalytics;
+        const analyticsData = {channel_id: result.channel_id, post_id: result.id, user_actual_id: result.user_id, root_id: result.root_id} as PostAnalytics;
         if (post.metadata?.priority) {
             analyticsData.priority = post.metadata.priority.priority;
             analyticsData.requested_ack = post.metadata.priority.requested_ack;
             analyticsData.persistent_notifications = post.metadata.priority.persistent_notifications;
-        }
-
-        this.trackEvent('api', 'api_posts_create', analyticsData);
-
-        if (result.root_id != null && result.root_id !== '') {
-            this.trackEvent('api', 'api_posts_replied', analyticsData);
+            this.trackEvent('api', 'api_posts_create', analyticsData);
         }
         return result;
     };
 
-    updatePost = (post: Post) => {
-        this.trackEvent('api', 'api_posts_update', {channel_id: post.channel_id, post_id: post.id});
+    createPostEphemeral = async (userID: string, post: PartialExcept<Post, 'channel_id' | 'message'>) => {
+        const result = await this.doFetch<Post>(
+            `${this.getPostsRoute()}/ephemeral`,
+            {method: 'post', body: JSON.stringify({user_id: userID, post})},
+        );
+        return result;
+    };
 
+    updatePost = (post: Post) => {
         return this.doFetch<Post>(
             `${this.getPostRoute(post.id)}`,
             {method: 'put', body: JSON.stringify(post)},
@@ -2348,9 +2305,7 @@ export default class Client4 {
         );
     };
 
-    patchPost = (postPatch: Partial<Post> & {id: string}) => {
-        this.trackEvent('api', 'api_posts_patch', {channel_id: postPatch.channel_id, post_id: postPatch.id});
-
+    patchPost = (postPatch: PartialExcept<Post, 'id'>) => {
         return this.doFetch<Post>(
             `${this.getPostRoute(postPatch.id)}/patch`,
             {method: 'put', body: JSON.stringify(postPatch)},
@@ -2358,8 +2313,6 @@ export default class Client4 {
     };
 
     deletePost = (postId: string) => {
-        this.trackEvent('api', 'api_posts_delete');
-
         return this.doFetch<StatusOK>(
             `${this.getPostRoute(postId)}`,
             {method: 'delete'},
@@ -2507,8 +2460,6 @@ export default class Client4 {
     };
 
     getFlaggedPosts = (userId: string, channelId = '', teamId = '', page = 0, perPage = PER_PAGE_DEFAULT) => {
-        this.trackEvent('api', 'api_posts_get_flagged', {team_id: teamId});
-
         return this.doFetch<PostList>(
             `${this.getUserRoute(userId)}/posts/flagged${buildQueryString({channel_id: channelId, team_id: teamId, page, per_page: perPage})}`,
             {method: 'get'},
@@ -2516,7 +2467,6 @@ export default class Client4 {
     };
 
     getPinnedPosts = (channelId: string) => {
-        this.trackEvent('api', 'api_posts_get_pinned', {channel_id: channelId});
         return this.doFetch<PostList>(
             `${this.getChannelRoute(channelId)}/pinned`,
             {method: 'get'},
@@ -2524,8 +2474,6 @@ export default class Client4 {
     };
 
     markPostAsUnread = (userId: string, postId: string) => {
-        this.trackEvent('api', 'api_post_set_unread_post');
-
         return this.doFetch<ChannelUnread>(
             `${this.getUserRoute(userId)}/posts/${postId}/set_unread`,
             {method: 'post', body: JSON.stringify({collapsed_threads_supported: true})},
@@ -2549,8 +2497,6 @@ export default class Client4 {
     };
 
     pinPost = (postId: string) => {
-        this.trackEvent('api', 'api_posts_pin');
-
         return this.doFetch<StatusOK>(
             `${this.getPostRoute(postId)}/pin`,
             {method: 'post'},
@@ -2558,8 +2504,6 @@ export default class Client4 {
     };
 
     unpinPost = (postId: string) => {
-        this.trackEvent('api', 'api_posts_unpin');
-
         return this.doFetch<StatusOK>(
             `${this.getPostRoute(postId)}/unpin`,
             {method: 'post'},
@@ -2588,8 +2532,6 @@ export default class Client4 {
     };
 
     addReaction = (userId: string, postId: string, emojiName: string) => {
-        this.trackEvent('api', 'api_reactions_save', {post_id: postId});
-
         return this.doFetch<Reaction>(
             `${this.getReactionsRoute()}`,
             {method: 'post', body: JSON.stringify({user_id: userId, post_id: postId, emoji_name: emojiName})},
@@ -2597,8 +2539,6 @@ export default class Client4 {
     };
 
     removeReaction = (userId: string, postId: string, emojiName: string) => {
-        this.trackEvent('api', 'api_reactions_delete', {post_id: postId});
-
         return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/posts/${postId}/reactions/${emojiName}`,
             {method: 'delete'},
@@ -2681,8 +2621,6 @@ export default class Client4 {
     };
 
     searchPostsWithParams = (teamId: string, params: any) => {
-        this.trackEvent('api', 'api_posts_search', {team_id: teamId});
-
         let route = `${this.getPostsRoute()}/search`;
         if (teamId) {
             route = `${this.getTeamRoute(teamId)}/posts/search`;
@@ -2699,10 +2637,13 @@ export default class Client4 {
     };
 
     searchFilesWithParams = (teamId: string, params: any) => {
-        this.trackEvent('api', 'api_files_search', {team_id: teamId});
+        let route = `${this.getFilesRoute()}/search`;
+        if (teamId) {
+            route = `${this.getTeamRoute(teamId)}/files/search`;
+        }
 
         return this.doFetch<FileSearchResults>(
-            `${this.getTeamRoute(teamId)}/files/search`,
+            route,
             {method: 'post', body: JSON.stringify(params)},
         );
     };
@@ -2716,12 +2657,6 @@ export default class Client4 {
     };
 
     doPostActionWithCookie = (postId: string, actionId: string, actionCookie: string, selectedOption = '') => {
-        if (selectedOption) {
-            this.trackEvent('api', 'api_interactive_messages_menu_selected');
-        } else {
-            this.trackEvent('api', 'api_interactive_messages_button_clicked');
-        }
-
         const msg: any = {
             selected_option: selectedOption,
         };
@@ -2764,7 +2699,6 @@ export default class Client4 {
     }
 
     uploadFile = (fileFormData: any, isBookmark?: boolean) => {
-        this.trackEvent('api', 'api_files_upload');
         const request: any = {
             method: 'post',
             body: fileFormData,
@@ -2795,8 +2729,6 @@ export default class Client4 {
     };
 
     unacknowledgePost = (postId: string, userId: string) => {
-        this.trackEvent('api', 'api_posts_unack');
-
         return this.doFetch<null>(
             `${this.getUserRoute(userId)}/posts/${postId}/ack`,
             {method: 'delete'},
@@ -2938,9 +2870,7 @@ export default class Client4 {
 
     // Integration Routes
 
-    createIncomingWebhook = (hook: IncomingWebhook) => {
-        this.trackEvent('api', 'api_integrations_created', {team_id: hook.team_id});
-
+    createIncomingWebhook = (hook: PartialExcept<IncomingWebhook, 'channel_id'>) => {
         return this.doFetch<IncomingWebhook>(
             `${this.getIncomingHooksRoute()}`,
             {method: 'post', body: JSON.stringify(hook)},
@@ -2972,8 +2902,6 @@ export default class Client4 {
     };
 
     removeIncomingWebhook = (hookId: string) => {
-        this.trackEvent('api', 'api_integrations_deleted');
-
         return this.doFetch<StatusOK>(
             `${this.getIncomingHookRoute(hookId)}`,
             {method: 'delete'},
@@ -2981,8 +2909,6 @@ export default class Client4 {
     };
 
     updateIncomingWebhook = (hook: IncomingWebhook) => {
-        this.trackEvent('api', 'api_integrations_updated', {team_id: hook.team_id});
-
         return this.doFetch<IncomingWebhook>(
             `${this.getIncomingHookRoute(hook.id)}`,
             {method: 'put', body: JSON.stringify(hook)},
@@ -2990,8 +2916,6 @@ export default class Client4 {
     };
 
     createOutgoingWebhook = (hook: OutgoingWebhook) => {
-        this.trackEvent('api', 'api_integrations_created', {team_id: hook.team_id});
-
         return this.doFetch<OutgoingWebhook>(
             `${this.getOutgoingHooksRoute()}`,
             {method: 'post', body: JSON.stringify(hook)},
@@ -3026,8 +2950,6 @@ export default class Client4 {
     };
 
     removeOutgoingWebhook = (hookId: string) => {
-        this.trackEvent('api', 'api_integrations_deleted');
-
         return this.doFetch<StatusOK>(
             `${this.getOutgoingHookRoute(hookId)}`,
             {method: 'delete'},
@@ -3035,8 +2957,6 @@ export default class Client4 {
     };
 
     updateOutgoingWebhook = (hook: OutgoingWebhook) => {
-        this.trackEvent('api', 'api_integrations_updated', {team_id: hook.team_id});
-
         return this.doFetch<OutgoingWebhook>(
             `${this.getOutgoingHookRoute(hook.id)}`,
             {method: 'put', body: JSON.stringify(hook)},
@@ -3079,8 +2999,6 @@ export default class Client4 {
     };
 
     executeCommand = (command: string, commandArgs: CommandArgs) => {
-        this.trackEvent('api', 'api_integrations_used');
-
         return this.doFetch<CommandResponse>(
             `${this.getCommandsRoute()}/execute`,
             {method: 'post', body: JSON.stringify({command, ...commandArgs})},
@@ -3088,8 +3006,6 @@ export default class Client4 {
     };
 
     addCommand = (command: Command) => {
-        this.trackEvent('api', 'api_integrations_created');
-
         return this.doFetch<Command>(
             `${this.getCommandsRoute()}`,
             {method: 'post', body: JSON.stringify(command)},
@@ -3097,8 +3013,6 @@ export default class Client4 {
     };
 
     editCommand = (command: Command) => {
-        this.trackEvent('api', 'api_integrations_created');
-
         return this.doFetch<Command>(
             `${this.getCommandsRoute()}/${command.id}`,
             {method: 'put', body: JSON.stringify(command)},
@@ -3115,17 +3029,13 @@ export default class Client4 {
     };
 
     deleteCommand = (id: string) => {
-        this.trackEvent('api', 'api_integrations_deleted');
-
         return this.doFetch<StatusOK>(
             `${this.getCommandsRoute()}/${id}`,
             {method: 'delete'},
         );
     };
 
-    createOAuthApp = (app: OAuthApp) => {
-        this.trackEvent('api', 'api_apps_register');
-
+    createOAuthApp = (app: PartialExcept<OAuthApp, 'name' | 'description' | 'callback_urls' | 'homepage'>) => {
         return this.doFetch<OAuthApp>(
             `${this.getOAuthAppsRoute()}`,
             {method: 'post', body: JSON.stringify(app)},
@@ -3189,8 +3099,6 @@ export default class Client4 {
     };
 
     createOutgoingOAuthConnection = (teamId: string, connection: OutgoingOAuthConnection) => {
-        this.trackEvent('api', 'api_outgoing_oauth_connection_register');
-
         return this.doFetch<OutgoingOAuthConnection>(
             `${this.getOutgoingOAuthConnectionsRoute()}${buildQueryString({team_id: teamId})}`,
             {method: 'post', body: JSON.stringify(connection)},
@@ -3219,8 +3127,6 @@ export default class Client4 {
     };
 
     deleteOAuthApp = (appId: string) => {
-        this.trackEvent('api', 'api_apps_delete');
-
         return this.doFetch<StatusOK>(
             `${this.getOAuthAppRoute(appId)}`,
             {method: 'delete'},
@@ -3235,8 +3141,6 @@ export default class Client4 {
     };
 
     deleteOutgoingOAuthConnection = (connectionId: string) => {
-        this.trackEvent('api', 'api_apps_delete');
-
         return this.doFetch<StatusOK>(
             `${this.getOutgoingOAuthConnectionRoute(connectionId)}`,
             {method: 'delete'},
@@ -3244,7 +3148,6 @@ export default class Client4 {
     };
 
     submitInteractiveDialog = (data: DialogSubmission) => {
-        this.trackEvent('api', 'api_interactive_messages_dialog_submitted');
         return this.doFetch<SubmitDialogResponse>(
             `${this.getBaseRoute()}/actions/dialogs/submit`,
             {method: 'post', body: JSON.stringify(data)},
@@ -3253,9 +3156,7 @@ export default class Client4 {
 
     // Emoji Routes
 
-    createCustomEmoji = (emoji: CustomEmoji, imageData: File) => {
-        this.trackEvent('api', 'api_emoji_custom_add');
-
+    createCustomEmoji = (emoji: PartialExcept<CustomEmoji, 'name' | 'creator_id'>, imageData: File) => {
         const formData = new FormData();
         formData.append('image', imageData);
         formData.append('emoji', JSON.stringify(emoji));
@@ -3299,8 +3200,6 @@ export default class Client4 {
     };
 
     deleteCustomEmoji = (emojiId: string) => {
-        this.trackEvent('api', 'api_emoji_custom_delete');
-
         return this.doFetch<StatusOK>(
             `${this.getEmojiRoute(emojiId)}`,
             {method: 'delete'},
@@ -3772,8 +3671,6 @@ export default class Client4 {
     };
 
     uploadLicense = (fileData: File) => {
-        this.trackEvent('api', 'api_license_upload');
-
         const formData = new FormData();
         formData.append('license', fileData);
 
@@ -3855,9 +3752,7 @@ export default class Client4 {
         );
     };
 
-    createScheme = (scheme: Scheme) => {
-        this.trackEvent('api', 'api_schemes_create');
-
+    createScheme = (scheme: PartialExcept<Scheme, 'display_name' | 'scope'>) => {
         return this.doFetch<Scheme>(
             `${this.getSchemesRoute()}`,
             {method: 'post', body: JSON.stringify(scheme)},
@@ -3872,8 +3767,6 @@ export default class Client4 {
     };
 
     deleteScheme = (schemeId: string) => {
-        this.trackEvent('api', 'api_schemes_delete');
-
         return this.doFetch<StatusOK>(
             `${this.getSchemesRoute()}/${schemeId}`,
             {method: 'delete'},
@@ -3881,8 +3774,6 @@ export default class Client4 {
     };
 
     patchScheme = (schemeId: string, schemePatch: Partial<Scheme>) => {
-        this.trackEvent('api', 'api_schemes_patch', {scheme_id: schemeId});
-
         return this.doFetch<Scheme>(
             `${this.getSchemesRoute()}/${schemeId}/patch`,
             {method: 'put', body: JSON.stringify(schemePatch)},
@@ -3906,8 +3797,6 @@ export default class Client4 {
     // Plugin Routes
 
     uploadPlugin = async (fileData: File, force = false) => {
-        this.trackEvent('api', 'api_plugin_upload');
-
         const formData = new FormData();
         if (force) {
             formData.append('force', 'true');
@@ -3926,8 +3815,6 @@ export default class Client4 {
     };
 
     installPluginFromUrl = (pluginDownloadUrl: string, force = false) => {
-        this.trackEvent('api', 'api_install_plugin');
-
         const queryParams = {plugin_download_url: pluginDownloadUrl, force};
 
         return this.doFetch<PluginManifest>(
@@ -3958,8 +3845,6 @@ export default class Client4 {
     };
 
     installMarketplacePlugin = (id: string) => {
-        this.trackEvent('api', 'api_install_marketplace_plugin');
-
         return this.doFetch<MarketplacePlugin>(
             `${this.getPluginsMarketplaceRoute()}`,
             {method: 'post', body: JSON.stringify({id})},
@@ -4058,16 +3943,14 @@ export default class Client4 {
         );
     };
 
-    getGroupsNotAssociatedToTeam = (teamID: string, q = '', page = 0, perPage = PER_PAGE_DEFAULT, source = 'ldap') => {
-        this.trackEvent('api', 'api_groups_get_not_associated_to_team', {team_id: teamID});
+    getGroupsNotAssociatedToTeam = (teamID: string, q = '', page = 0, perPage = PER_PAGE_DEFAULT, source = 'ldap', onlySyncableSources = false) => {
         return this.doFetch<Group[]>(
-            `${this.getGroupsRoute()}${buildQueryString({not_associated_to_team: teamID, page, per_page: perPage, q, include_member_count: true, group_source: source})}`,
+            `${this.getGroupsRoute()}${buildQueryString({not_associated_to_team: teamID, page, per_page: perPage, q, include_member_count: true, group_source: source, only_syncable_sources: onlySyncableSources})}`,
             {method: 'get'},
         );
     };
 
-    getGroupsNotAssociatedToChannel = (channelID: string, q = '', page = 0, perPage = PER_PAGE_DEFAULT, filterParentTeamPermitted = false, source = 'ldap') => {
-        this.trackEvent('api', 'api_groups_get_not_associated_to_channel', {channel_id: channelID});
+    getGroupsNotAssociatedToChannel = (channelID: string, q = '', page = 0, perPage = PER_PAGE_DEFAULT, filterParentTeamPermitted = false, source = 'ldap', onlySyncableSources = false) => {
         const query = {
             not_associated_to_channel: channelID,
             page,
@@ -4076,6 +3959,7 @@ export default class Client4 {
             include_member_count: true,
             filter_parent_team_permitted: filterParentTeamPermitted,
             group_source: source,
+            only_syncable_sources: onlySyncableSources,
         };
         return this.doFetch<Group[]>(
             `${this.getGroupsRoute()}${buildQueryString(query)}`,
@@ -4091,14 +3975,14 @@ export default class Client4 {
     };
 
     addUsersToGroup = (groupId: string, userIds: string[]) => {
-        return this.doFetch<UserProfile[]>(
+        return this.doFetch<GroupMember[]>(
             `${this.getGroupRoute(groupId)}/members`,
             {method: 'post', body: JSON.stringify({user_ids: userIds})},
         );
     };
 
     removeUsersFromGroup = (groupId: string, userIds: string[]) => {
-        return this.doFetch<UserProfile[]>(
+        return this.doFetch<GroupMember[]>(
             `${this.getGroupRoute(groupId)}/members`,
             {method: 'delete', body: JSON.stringify({user_ids: userIds})},
         );
@@ -4117,7 +4001,7 @@ export default class Client4 {
             context: {
                 ...call.context,
                 track_as_submit: trackAsSubmit,
-                [TrackPropertyUserAgent]: 'webapp',
+                user_agent: 'webapp',
             },
         };
         return this.doFetch<AppCallResponse>(
@@ -4130,7 +4014,7 @@ export default class Client4 {
         const params = {
             channel_id: channelID,
             team_id: teamID,
-            [TrackPropertyUserAgent]: 'webapp',
+            user_agent: 'webapp',
         };
 
         return this.doFetch<AppBinding[]>(
@@ -4140,8 +4024,6 @@ export default class Client4 {
     };
 
     getGroupsAssociatedToTeam = (teamID: string, q = '', page = 0, perPage = PER_PAGE_DEFAULT, filterAllowReference = false) => {
-        this.trackEvent('api', 'api_groups_get_associated_to_team', {team_id: teamID});
-
         return this.doFetch<{
             groups: Group[];
             total_group_count: number;
@@ -4984,8 +4866,8 @@ export default class Client4 {
     }
 
     // Schedule Post methods
-    createScheduledPost = (schedulePost: ScheduledPost, connectionId: string) => {
-        this.trackFeatureEvent(TrackScheduledPostsFeature, 'create_scheduled_post', {[TrackPropertyUser]: schedulePost.user_id, [TrackPropertyUserAgent]: 'desktop'});
+    createScheduledPost = (schedulePost: PartialExcept<ScheduledPost, 'channel_id' | 'message' | 'scheduled_at'>, connectionId: string) => {
+        this.trackFeatureEvent('scheduled_posts', 'create_scheduled_post', {actual_user_id: schedulePost.user_id, user_agent: 'desktop'});
 
         return this.doFetchWithResponse<ScheduledPost>(
             `${this.getPostsRoute()}/schedule`,
@@ -5002,7 +4884,7 @@ export default class Client4 {
     };
 
     updateScheduledPost = (schedulePost: ScheduledPost, connectionId: string) => {
-        this.trackFeatureEvent(TrackScheduledPostsFeature, 'update_scheduled_post', {[TrackPropertyUser]: schedulePost.user_id, [TrackPropertyUserAgent]: 'desktop'});
+        this.trackFeatureEvent('scheduled_posts', 'update_scheduled_post', {actual_user_id: schedulePost.user_id, user_agent: 'desktop'});
 
         return this.doFetchWithResponse<ScheduledPost>(
             `${this.getPostsRoute()}/schedule/${schedulePost.id}`,
@@ -5011,11 +4893,18 @@ export default class Client4 {
     };
 
     deleteScheduledPost = (userId: string, schedulePostId: string, connectionId: string) => {
-        this.trackFeatureEvent(TrackScheduledPostsFeature, 'delete_scheduled_post', {[TrackPropertyUser]: userId, [TrackPropertyUserAgent]: 'desktop'});
+        this.trackFeatureEvent('scheduled_posts', 'delete_scheduled_post', {actual_user_id: userId, user_agent: 'desktop'});
 
         return this.doFetchWithResponse<ScheduledPost>(
             `${this.getPostsRoute()}/schedule/${schedulePostId}`,
             {method: 'delete', headers: {'Connection-Id': connectionId}},
+        );
+    };
+
+    restorePostVersion = (postId: string, restoreVersionId: string, connectionId: string) => {
+        return this.doFetchWithResponse<Post>(
+            `${this.getPostRoute(postId)}/restore/${restoreVersionId}`,
+            {method: 'post', headers: {'Connection-Id': connectionId}},
         );
     };
 }

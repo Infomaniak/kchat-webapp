@@ -24,16 +24,8 @@ exports[`components/PluginManagement should match snapshot 1`] = `
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -54,22 +46,10 @@ exports[`components/PluginManagement should match snapshot 1`] = `
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -90,22 +70,10 @@ exports[`components/PluginManagement should match snapshot 1`] = `
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -121,83 +89,63 @@ exports[`components/PluginManagement should match snapshot 1`] = `
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -218,22 +166,10 @@ exports[`components/PluginManagement should match snapshot 1`] = `
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -249,12 +185,6 @@ exports[`components/PluginManagement should match snapshot 1`] = `
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -278,31 +208,24 @@ exports[`components/PluginManagement should match snapshot 1`] = `
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-            </div>
-          </div>
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -310,40 +233,27 @@ exports[`components/PluginManagement should match snapshot 1`] = `
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -373,16 +283,8 @@ exports[`components/PluginManagement should match snapshot when \`Enable Marketp
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -403,22 +305,10 @@ exports[`components/PluginManagement should match snapshot when \`Enable Marketp
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -439,22 +329,10 @@ exports[`components/PluginManagement should match snapshot when \`Enable Marketp
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -470,83 +348,63 @@ exports[`components/PluginManagement should match snapshot when \`Enable Marketp
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -567,22 +425,10 @@ exports[`components/PluginManagement should match snapshot when \`Enable Marketp
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={true}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -598,12 +444,6 @@ exports[`components/PluginManagement should match snapshot when \`Enable Marketp
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -627,31 +467,24 @@ exports[`components/PluginManagement should match snapshot when \`Enable Marketp
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-            </div>
-          </div>
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -659,40 +492,27 @@ exports[`components/PluginManagement should match snapshot when \`Enable Marketp
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -722,33 +542,25 @@ exports[`components/PluginManagement should match snapshot when \`Enable Plugins
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-            </div>
-          </div>
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -756,40 +568,27 @@ exports[`components/PluginManagement should match snapshot when \`Enable Plugins
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -819,16 +618,8 @@ exports[`components/PluginManagement should match snapshot when \`Enable Remote 
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -849,22 +640,10 @@ exports[`components/PluginManagement should match snapshot when \`Enable Remote 
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -885,22 +664,10 @@ exports[`components/PluginManagement should match snapshot when \`Enable Remote 
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -916,83 +683,63 @@ exports[`components/PluginManagement should match snapshot when \`Enable Remote 
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -1013,22 +760,10 @@ exports[`components/PluginManagement should match snapshot when \`Enable Remote 
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -1044,12 +779,6 @@ exports[`components/PluginManagement should match snapshot when \`Enable Remote 
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
           <AdminTextSetting
@@ -1073,31 +802,24 @@ exports[`components/PluginManagement should match snapshot when \`Enable Remote 
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-            </div>
-          </div>
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -1105,40 +827,27 @@ exports[`components/PluginManagement should match snapshot when \`Enable Remote 
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -1168,16 +877,8 @@ exports[`components/PluginManagement should match snapshot when \`Require Signat
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -1198,22 +899,10 @@ exports[`components/PluginManagement should match snapshot when \`Require Signat
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -1234,22 +923,10 @@ exports[`components/PluginManagement should match snapshot when \`Require Signat
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -1265,85 +942,65 @@ exports[`components/PluginManagement should match snapshot when \`Require Signat
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  disabled={true}
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  disabled={true}
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
+                className="btn btn-tertiary"
                 disabled={true}
-                id="uploadPlugin"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                disabled={true}
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -1364,22 +1021,10 @@ exports[`components/PluginManagement should match snapshot when \`Require Signat
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -1395,12 +1040,6 @@ exports[`components/PluginManagement should match snapshot when \`Require Signat
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -1424,31 +1063,24 @@ exports[`components/PluginManagement should match snapshot when \`Require Signat
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-            </div>
-          </div>
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -1456,40 +1088,27 @@ exports[`components/PluginManagement should match snapshot when \`Require Signat
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -1519,16 +1138,8 @@ exports[`components/PluginManagement should match snapshot, No installed plugins
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -1549,22 +1160,10 @@ exports[`components/PluginManagement should match snapshot, No installed plugins
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -1585,22 +1184,10 @@ exports[`components/PluginManagement should match snapshot, No installed plugins
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -1616,83 +1203,63 @@ exports[`components/PluginManagement should match snapshot, No installed plugins
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -1713,22 +1280,10 @@ exports[`components/PluginManagement should match snapshot, No installed plugins
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -1744,12 +1299,6 @@ exports[`components/PluginManagement should match snapshot, No installed plugins
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -1773,35 +1322,28 @@ exports[`components/PluginManagement should match snapshot, No installed plugins
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
               <MemoizedFormattedMessage
-                defaultMessage="No installed plugins."
-                id="admin.plugin.no_plugins"
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
               />
-            </div>
-          </div>
+            </p>
+            <br />
+            <MemoizedFormattedMessage
+              defaultMessage="No installed plugins."
+              id="admin.plugin.no_plugins"
+            />
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -1809,40 +1351,27 @@ exports[`components/PluginManagement should match snapshot, No installed plugins
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -1872,16 +1401,8 @@ exports[`components/PluginManagement should match snapshot, allow insecure URL e
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -1902,22 +1423,10 @@ exports[`components/PluginManagement should match snapshot, allow insecure URL e
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -1938,22 +1447,10 @@ exports[`components/PluginManagement should match snapshot, allow insecure URL e
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -1969,83 +1466,63 @@ exports[`components/PluginManagement should match snapshot, allow insecure URL e
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -2066,22 +1543,10 @@ exports[`components/PluginManagement should match snapshot, allow insecure URL e
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -2097,12 +1562,6 @@ exports[`components/PluginManagement should match snapshot, allow insecure URL e
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -2126,31 +1585,24 @@ exports[`components/PluginManagement should match snapshot, allow insecure URL e
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-            </div>
-          </div>
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -2158,40 +1610,27 @@ exports[`components/PluginManagement should match snapshot, allow insecure URL e
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -2221,16 +1660,8 @@ exports[`components/PluginManagement should match snapshot, disabled 1`] = `
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -2251,22 +1682,10 @@ exports[`components/PluginManagement should match snapshot, disabled 1`] = `
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={true}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -2287,22 +1706,10 @@ exports[`components/PluginManagement should match snapshot, disabled 1`] = `
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={true}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -2318,85 +1725,65 @@ exports[`components/PluginManagement should match snapshot, disabled 1`] = `
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="To enable plugins, set **Enable Plugins** to true. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadAndPluginDisabledDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  disabled={true}
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  disabled={true}
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
+                className="btn btn-tertiary"
                 disabled={true}
-                id="uploadPlugin"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                disabled={true}
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="To enable plugins, set **Enable Plugins** to true. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadAndPluginDisabledDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={true}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={true}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -2417,22 +1804,10 @@ exports[`components/PluginManagement should match snapshot, disabled 1`] = `
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={true}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -2448,12 +1823,6 @@ exports[`components/PluginManagement should match snapshot, disabled 1`] = `
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -2484,40 +1853,27 @@ exports[`components/PluginManagement should match snapshot, disabled 1`] = `
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -2547,16 +1903,8 @@ exports[`components/PluginManagement should match snapshot, text entered into th
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -2577,22 +1925,10 @@ exports[`components/PluginManagement should match snapshot, text entered into th
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -2613,22 +1949,10 @@ exports[`components/PluginManagement should match snapshot, text entered into th
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -2644,83 +1968,63 @@ exports[`components/PluginManagement should match snapshot, text entered into th
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -2741,22 +2045,10 @@ exports[`components/PluginManagement should match snapshot, text entered into th
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -2772,12 +2064,6 @@ exports[`components/PluginManagement should match snapshot, text entered into th
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -2801,31 +2087,24 @@ exports[`components/PluginManagement should match snapshot, text entered into th
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-            </div>
-          </div>
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -2833,40 +2112,27 @@ exports[`components/PluginManagement should match snapshot, text entered into th
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -2896,16 +2162,8 @@ exports[`components/PluginManagement should match snapshot, upload disabled 1`] 
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -2926,22 +2184,10 @@ exports[`components/PluginManagement should match snapshot, upload disabled 1`] 
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -2962,22 +2208,10 @@ exports[`components/PluginManagement should match snapshot, upload disabled 1`] 
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -2993,85 +2227,65 @@ exports[`components/PluginManagement should match snapshot, upload disabled 1`] 
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Enable plugin uploads in config.json. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDisabledDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn"
-                  disabled={true}
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  disabled={true}
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
+                className="btn"
                 disabled={true}
-                id="uploadPlugin"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                disabled={true}
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Enable plugin uploads in config.json. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDisabledDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -3092,22 +2306,10 @@ exports[`components/PluginManagement should match snapshot, upload disabled 1`] 
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={true}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -3123,12 +2325,6 @@ exports[`components/PluginManagement should match snapshot, upload disabled 1`] 
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -3157,31 +2353,24 @@ exports[`components/PluginManagement should match snapshot, upload disabled 1`] 
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-            </div>
-          </div>
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -3189,40 +2378,27 @@ exports[`components/PluginManagement should match snapshot, upload disabled 1`] 
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -3252,16 +2428,8 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -3282,22 +2450,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -3318,22 +2474,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -3349,83 +2493,63 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -3446,22 +2570,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -3477,12 +2589,6 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -3506,94 +2612,87 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-              <div
-                className="alert alert-transparent"
-              >
-                <PluginItem
-                  appsFeatureFlagEnabled={false}
-                  handleDisable={[Function]}
-                  handleEnable={[Function]}
-                  handleRemove={[Function]}
-                  hasSettings={true}
-                  key="plugin_0"
-                  pluginStatus={
-                    Object {
-                      "active": false,
-                      "description": "The plugin 0.",
-                      "id": "plugin_0",
-                      "instances": Array [
-                        Object {
-                          "cluster_id": "cluster_id_1",
-                          "state": 0,
-                          "version": "0.1.0",
-                        },
-                      ],
-                      "name": "Plugin 0",
-                      "state": 0,
-                      "version": "0.1.0",
-                    }
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+            <div
+              className="alert alert-transparent"
+            >
+              <PluginItem
+                appsFeatureFlagEnabled={false}
+                handleDisable={[Function]}
+                handleEnable={[Function]}
+                handleRemove={[Function]}
+                hasSettings={true}
+                key="plugin_0"
+                pluginStatus={
+                  Object {
+                    "active": false,
+                    "description": "The plugin 0.",
+                    "id": "plugin_0",
+                    "instances": Array [
+                      Object {
+                        "cluster_id": "cluster_id_1",
+                        "state": 0,
+                        "version": "0.1.0",
+                      },
+                    ],
+                    "name": "Plugin 0",
+                    "state": 0,
+                    "version": "0.1.0",
                   }
-                  removing={false}
-                  showInstances={true}
-                />
-                <PluginItem
-                  appsFeatureFlagEnabled={false}
-                  handleDisable={[Function]}
-                  handleEnable={[Function]}
-                  handleRemove={[Function]}
-                  hasSettings={true}
-                  key="plugin_1"
-                  pluginStatus={
-                    Object {
-                      "active": true,
-                      "description": "The plugin.",
-                      "id": "plugin_1",
-                      "instances": Array [
-                        Object {
-                          "cluster_id": "cluster_id_1",
-                          "state": 0,
-                          "version": "0.0.1",
-                        },
-                        Object {
-                          "cluster_id": "cluster_id_2",
-                          "state": 2,
-                          "version": "0.0.2",
-                        },
-                      ],
-                      "name": "Plugin 1",
-                      "state": 5,
-                      "version": "0.0.1",
-                    }
+                }
+                removing={false}
+                showInstances={true}
+              />
+              <PluginItem
+                appsFeatureFlagEnabled={false}
+                handleDisable={[Function]}
+                handleEnable={[Function]}
+                handleRemove={[Function]}
+                hasSettings={true}
+                key="plugin_1"
+                pluginStatus={
+                  Object {
+                    "active": true,
+                    "description": "The plugin.",
+                    "id": "plugin_1",
+                    "instances": Array [
+                      Object {
+                        "cluster_id": "cluster_id_1",
+                        "state": 0,
+                        "version": "0.0.1",
+                      },
+                      Object {
+                        "cluster_id": "cluster_id_2",
+                        "state": 2,
+                        "version": "0.0.2",
+                      },
+                    ],
+                    "name": "Plugin 1",
+                    "state": 5,
+                    "version": "0.0.1",
                   }
-                  removing={false}
-                  showInstances={true}
-                />
-              </div>
+                }
+                removing={false}
+                showInstances={true}
+              />
             </div>
-          </div>
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -3601,40 +2700,27 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -3664,16 +2750,8 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -3694,22 +2772,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -3730,22 +2796,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -3761,83 +2815,63 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -3858,22 +2892,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -3889,12 +2911,6 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -3918,62 +2934,55 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-              <div
-                className="alert alert-transparent"
-              >
-                <PluginItem
-                  appsFeatureFlagEnabled={false}
-                  handleDisable={[Function]}
-                  handleEnable={[Function]}
-                  handleRemove={[Function]}
-                  hasSettings={true}
-                  key="plugin_0"
-                  pluginStatus={
-                    Object {
-                      "active": false,
-                      "description": "The plugin 0.",
-                      "id": "plugin_0",
-                      "instances": Array [
-                        Object {
-                          "cluster_id": "cluster_id_1",
-                          "state": 0,
-                          "version": "0.1.0",
-                        },
-                      ],
-                      "name": "Plugin 0",
-                      "state": 0,
-                      "version": "0.1.0",
-                    }
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+            <div
+              className="alert alert-transparent"
+            >
+              <PluginItem
+                appsFeatureFlagEnabled={false}
+                handleDisable={[Function]}
+                handleEnable={[Function]}
+                handleRemove={[Function]}
+                hasSettings={true}
+                key="plugin_0"
+                pluginStatus={
+                  Object {
+                    "active": false,
+                    "description": "The plugin 0.",
+                    "id": "plugin_0",
+                    "instances": Array [
+                      Object {
+                        "cluster_id": "cluster_id_1",
+                        "state": 0,
+                        "version": "0.1.0",
+                      },
+                    ],
+                    "name": "Plugin 0",
+                    "state": 0,
+                    "version": "0.1.0",
                   }
-                  removing={false}
-                  showInstances={false}
-                />
-              </div>
+                }
+                removing={false}
+                showInstances={false}
+              />
             </div>
-          </div>
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -3981,40 +2990,27 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -4044,16 +3040,8 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -4074,22 +3062,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -4110,22 +3086,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -4141,83 +3105,63 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -4238,22 +3182,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -4269,12 +3201,6 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -4298,62 +3224,55 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-              <div
-                className="alert alert-transparent"
-              >
-                <PluginItem
-                  appsFeatureFlagEnabled={false}
-                  handleDisable={[Function]}
-                  handleEnable={[Function]}
-                  handleRemove={[Function]}
-                  hasSettings={true}
-                  key="plugin_0"
-                  pluginStatus={
-                    Object {
-                      "active": false,
-                      "description": "The plugin 0.",
-                      "id": "plugin_0",
-                      "instances": Array [
-                        Object {
-                          "cluster_id": "cluster_id_1",
-                          "state": 0,
-                          "version": "0.1.0",
-                        },
-                      ],
-                      "name": "Plugin 0",
-                      "state": 0,
-                      "version": "0.1.0",
-                    }
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+            <div
+              className="alert alert-transparent"
+            >
+              <PluginItem
+                appsFeatureFlagEnabled={false}
+                handleDisable={[Function]}
+                handleEnable={[Function]}
+                handleRemove={[Function]}
+                hasSettings={true}
+                key="plugin_0"
+                pluginStatus={
+                  Object {
+                    "active": false,
+                    "description": "The plugin 0.",
+                    "id": "plugin_0",
+                    "instances": Array [
+                      Object {
+                        "cluster_id": "cluster_id_1",
+                        "state": 0,
+                        "version": "0.1.0",
+                      },
+                    ],
+                    "name": "Plugin 0",
+                    "state": 0,
+                    "version": "0.1.0",
                   }
-                  removing={false}
-                  showInstances={false}
-                />
-              </div>
+                }
+                removing={false}
+                showInstances={false}
+              />
             </div>
-          </div>
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -4361,40 +3280,27 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -4424,16 +3330,8 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -4454,22 +3352,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -4490,22 +3376,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -4521,83 +3395,63 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -4618,22 +3472,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -4649,12 +3491,6 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -4678,62 +3514,55 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-              <div
-                className="alert alert-transparent"
-              >
-                <PluginItem
-                  appsFeatureFlagEnabled={false}
-                  handleDisable={[Function]}
-                  handleEnable={[Function]}
-                  handleRemove={[Function]}
-                  hasSettings={true}
-                  key="plugin_0"
-                  pluginStatus={
-                    Object {
-                      "active": false,
-                      "description": "The plugin 0.",
-                      "id": "plugin_0",
-                      "instances": Array [
-                        Object {
-                          "cluster_id": "cluster_id_1",
-                          "state": 0,
-                          "version": "0.1.0",
-                        },
-                      ],
-                      "name": "Plugin 0",
-                      "state": 0,
-                      "version": "0.1.0",
-                    }
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+            <div
+              className="alert alert-transparent"
+            >
+              <PluginItem
+                appsFeatureFlagEnabled={false}
+                handleDisable={[Function]}
+                handleEnable={[Function]}
+                handleRemove={[Function]}
+                hasSettings={true}
+                key="plugin_0"
+                pluginStatus={
+                  Object {
+                    "active": false,
+                    "description": "The plugin 0.",
+                    "id": "plugin_0",
+                    "instances": Array [
+                      Object {
+                        "cluster_id": "cluster_id_1",
+                        "state": 0,
+                        "version": "0.1.0",
+                      },
+                    ],
+                    "name": "Plugin 0",
+                    "state": 0,
+                    "version": "0.1.0",
                   }
-                  removing={false}
-                  showInstances={false}
-                />
-              </div>
+                }
+                removing={false}
+                showInstances={false}
+              />
             </div>
-          </div>
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -4741,40 +3570,27 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -4804,16 +3620,8 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
         <Memo(SettingsGroup)
           container={false}
           id="PluginSettings"
-          show={true}
         >
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
+          <Memo(BooleanSetting)
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables plugins on your Mattermost server. Use plugins to integrate with third-party systems, extend functionality, or customize the user interface of your Mattermost server. See <link>documentation</link> to learn more."
@@ -4834,22 +3642,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See <link>documentation</link> to learn more."
@@ -4870,22 +3666,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, automatically installs any prepackaged plugin found to be enabled in the server configuration."
@@ -4901,83 +3685,63 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            helpText={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
+                id="admin.plugin.uploadDesc"
+                values={
+                  Object {
+                    "link": [Function],
+                  }
+                }
+              />
+            }
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Upload Plugin: "
                 id="admin.plugin.uploadTitle"
               />
-            </label>
+            }
+          >
             <div
-              className="col-sm-8"
+              className="file__upload"
             >
-              <div
-                className="file__upload"
-              >
-                <button
-                  className="btn btn-tertiary"
-                  type="button"
-                >
-                  <MemoizedFormattedMessage
-                    defaultMessage="Choose File"
-                    id="admin.plugin.choose"
-                  />
-                </button>
-                <input
-                  accept=".gz"
-                  onChange={[Function]}
-                  type="file"
-                />
-              </div>
               <button
-                className="btn btn-primary"
-                disabled={true}
-                id="uploadPlugin"
+                className="btn btn-tertiary"
                 onClick={[Function]}
+                type="button"
               >
                 <MemoizedFormattedMessage
-                  defaultMessage="Upload"
-                  id="admin.plugin.upload"
+                  defaultMessage="Choose File"
+                  id="admin.plugin.choose"
                 />
               </button>
-              <div
-                className="help-text m-0"
+              <input
+                accept=".gz"
+                onChange={[Function]}
+                type="file"
               />
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Upload a plugin for your Mattermost server. See <link>documentation</link> to learn more."
-                  id="admin.plugin.uploadDesc"
-                  values={
-                    Object {
-                      "link": [Function],
-                    }
-                  }
-                />
-              </p>
             </div>
-          </div>
-          <BooleanSetting
-            disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
+            <button
+              className="btn btn-primary"
+              disabled={true}
+              id="uploadPlugin"
+              onClick={[Function]}
+            >
+              <MemoizedFormattedMessage
+                defaultMessage="Upload"
+                id="admin.plugin.upload"
               />
-            }
+            </button>
+            <div
+              className="help-text m-0"
+            />
+          </SettingSet>
+          <Memo(BooleanSetting)
+            disabled={false}
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, enables System Administrators to install plugins from the <link>marketplace</link>."
@@ -4998,22 +3762,10 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <Memo(MemoizedFormattedMessage)
                 defaultMessage="When true, marketplace fetches latest plugins from the configured Marketplace URL."
@@ -5029,12 +3781,6 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             }
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <AdminTextSetting
@@ -5058,94 +3804,87 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
             setByEnv={false}
             value="marketplace.example.com"
           />
-          <div
-            className="form-group"
-          >
-            <label
-              className="control-label col-sm-4"
-            >
-              <MemoizedFormattedMessage
+          <SettingSet
+            label={
+              <Memo(MemoizedFormattedMessage)
                 defaultMessage="Installed Plugins: "
                 id="admin.plugin.installedTitle"
               />
-            </label>
-            <div
-              className="col-sm-8"
+            }
+          >
+            <p
+              className="help-text"
             >
-              <p
-                className="help-text"
-              >
-                <MemoizedFormattedMessage
-                  defaultMessage="Installed plugins on your Mattermost server."
-                  id="admin.plugin.installedDesc"
-                />
-              </p>
-              <br />
-              <div
-                className="alert alert-transparent"
-              >
-                <PluginItem
-                  appsFeatureFlagEnabled={false}
-                  handleDisable={[Function]}
-                  handleEnable={[Function]}
-                  handleRemove={[Function]}
-                  hasSettings={false}
-                  key="plugin_0"
-                  pluginStatus={
-                    Object {
-                      "active": false,
-                      "description": "The plugin 0.",
-                      "id": "plugin_0",
-                      "instances": Array [
-                        Object {
-                          "cluster_id": "cluster_id_1",
-                          "state": 0,
-                          "version": "0.1.0",
-                        },
-                      ],
-                      "name": "Plugin 0",
-                      "state": 0,
-                      "version": "0.1.0",
-                    }
+              <MemoizedFormattedMessage
+                defaultMessage="Installed plugins on your Mattermost server."
+                id="admin.plugin.installedDesc"
+              />
+            </p>
+            <br />
+            <div
+              className="alert alert-transparent"
+            >
+              <PluginItem
+                appsFeatureFlagEnabled={false}
+                handleDisable={[Function]}
+                handleEnable={[Function]}
+                handleRemove={[Function]}
+                hasSettings={false}
+                key="plugin_0"
+                pluginStatus={
+                  Object {
+                    "active": false,
+                    "description": "The plugin 0.",
+                    "id": "plugin_0",
+                    "instances": Array [
+                      Object {
+                        "cluster_id": "cluster_id_1",
+                        "state": 0,
+                        "version": "0.1.0",
+                      },
+                    ],
+                    "name": "Plugin 0",
+                    "state": 0,
+                    "version": "0.1.0",
                   }
-                  removing={false}
-                  showInstances={true}
-                />
-                <PluginItem
-                  appsFeatureFlagEnabled={false}
-                  handleDisable={[Function]}
-                  handleEnable={[Function]}
-                  handleRemove={[Function]}
-                  hasSettings={false}
-                  key="plugin_1"
-                  pluginStatus={
-                    Object {
-                      "active": true,
-                      "description": "The plugin.",
-                      "id": "plugin_1",
-                      "instances": Array [
-                        Object {
-                          "cluster_id": "cluster_id_1",
-                          "state": 0,
-                          "version": "0.0.1",
-                        },
-                        Object {
-                          "cluster_id": "cluster_id_2",
-                          "state": 2,
-                          "version": "0.0.2",
-                        },
-                      ],
-                      "name": "Plugin 1",
-                      "state": 5,
-                      "version": "0.0.1",
-                    }
+                }
+                removing={false}
+                showInstances={true}
+              />
+              <PluginItem
+                appsFeatureFlagEnabled={false}
+                handleDisable={[Function]}
+                handleEnable={[Function]}
+                handleRemove={[Function]}
+                hasSettings={false}
+                key="plugin_1"
+                pluginStatus={
+                  Object {
+                    "active": true,
+                    "description": "The plugin.",
+                    "id": "plugin_1",
+                    "instances": Array [
+                      Object {
+                        "cluster_id": "cluster_id_1",
+                        "state": 0,
+                        "version": "0.0.1",
+                      },
+                      Object {
+                        "cluster_id": "cluster_id_2",
+                        "state": 2,
+                        "version": "0.0.2",
+                      },
+                    ],
+                    "name": "Plugin 1",
+                    "state": 5,
+                    "version": "0.0.1",
                   }
-                  removing={false}
-                  showInstances={true}
-                />
-              </div>
+                }
+                removing={false}
+                showInstances={true}
+              />
             </div>
-          </div>
+          </SettingSet>
         </Memo(SettingsGroup)>
       </div>
     </div>
@@ -5153,40 +3892,27 @@ exports[`components/PluginManagement should match snapshot, with installed plugi
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>

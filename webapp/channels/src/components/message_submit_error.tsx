@@ -58,9 +58,25 @@ class MessageSubmitError extends React.PureComponent<MessageSubmitErrorProps> {
 
         return (
             <div className='has-error'>
-                <label className='control-label'>
-                    {errorContent}
-                </label>
+                <div className='control-label'>
+                    <FormattedMessage
+                        id='message_submit_error.invalidCommand'
+                        defaultMessage="Command with a trigger of ''{slashCommand}'' not found. "
+                        values={{
+                            slashCommand,
+                        }}
+                    />
+                    <a
+                        href='#'
+                        role='button'
+                        onClick={props.handleSubmit}
+                    >
+                        <FormattedMessage
+                            id='message_submit_error.sendAsMessageLink'
+                            defaultMessage='Click here to send as a message.'
+                        />
+                    </a>
+                </div>
             </div>
         );
     }

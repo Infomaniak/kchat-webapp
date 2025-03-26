@@ -19,12 +19,13 @@ import SystemPermissionGate from 'components/permissions_gates/system_permission
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import TeamGroupsManageModal from 'components/team_groups_manage_modal';
 import Menu from 'components/widgets/menu/menu';
+import UserSettingsModal from 'components/user_settings/modal';
 
 import {Constants, ModalIdentifiers} from 'utils/constants';
 import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 
 import type {ModalData} from 'types/actions';
-import type {PluginComponent} from 'types/store/plugins';
+import type {MainMenuAction} from 'types/store/plugins';
 
 import {IKConstants} from '../../utils/constants-ik';
 
@@ -51,6 +52,8 @@ export type Props = {
     // helpLink?: string;
     // reportAProblemLink?: string;
     pluginMenuItems?: PluginComponent[];
+    moreTeamsToJoin: boolean;
+    pluginMenuItems?: MainMenuAction[];
     isMentionSearch?: boolean;
     isRhsSettings?: boolean;
     teamIsGroupConstrained: boolean;
@@ -92,11 +95,7 @@ export class MainMenu extends React.PureComponent<Props> {
     handleKeyDown = (e: KeyboardEvent): void => {
         if (cmdOrCtrlPressed(e) && e.shiftKey && isKeyPressed(e, Constants.KeyCodes.A)) {
             e.preventDefault();
-            if (this.props.isRhsSettings) {
-                this.props.actions.closeRightHandSide();
-            } else {
-                this.props.actions.showSettings();
-            }
+            this.props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true, focusOriginElement: 'userAccountMenuButton'}});
         }
     };
 

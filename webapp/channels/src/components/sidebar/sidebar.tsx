@@ -54,7 +54,6 @@ type Props = {
     unreadFilterEnabled: boolean;
     isMobileView: boolean;
     isKeyBoardShortcutModalOpen: boolean;
-    userGroupsEnabled: boolean;
     canCreateCustomGroups: boolean;
     rhsState?: RhsState;
     rhsOpen?: boolean;
@@ -170,6 +169,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
         this.props.actions.openModal({
             modalId: ModalIdentifiers.INVITATION,
             dialogType: InvitationModal,
+            dialogProps: {focusOriginElement: 'browseOrAddChannelMenuButton'},
         });
         trackEvent('ui', 'ui_channels_dropdown_invite_people');
     };
@@ -191,8 +191,8 @@ export default class Sidebar extends React.PureComponent<Props, State> {
         trackEvent('ui', 'ui_channels_create_user_group');
     };
 
-    handleOpenMoreDirectChannelsModal = (e: Event) => {
-        e.preventDefault();
+    handleOpenMoreDirectChannelsModal = (e?: Event) => {
+        e?.preventDefault();
         if (this.state.showDirectChannelsModal) {
             this.hideMoreDirectChannelsModal();
         } else {
@@ -216,14 +216,15 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                 <MoreDirectChannels
                     onModalDismissed={this.hideMoreDirectChannelsModal}
                     isExistingChannel={false}
+                    focusOriginElement='newDirectMessageButton'
                 />
             );
         }
 
         return (
-            <React.Fragment>
+            <>
                 {moreDirectChannelsModal}
-            </React.Fragment>
+            </>
         );
     };
 
@@ -260,7 +261,6 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                         canJoinPublicChannel={this.props.canJoinPublicChannel}
                         handleOpenDirectMessagesModal={this.handleOpenMoreDirectChannelsModal}
                         unreadFilterEnabled={this.props.unreadFilterEnabled}
-                        userGroupsEnabled={this.props.userGroupsEnabled}
                         canCreateCustomGroups={this.props.canCreateCustomGroups}
                     />
                 )}

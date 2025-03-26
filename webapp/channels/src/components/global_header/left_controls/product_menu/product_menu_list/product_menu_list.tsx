@@ -4,10 +4,12 @@
 import Icon from '@infomaniak/compass-components/foundations/icon';
 import React, {useEffect} from 'react';
 import {useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Permissions} from 'mattermost-redux/constants';
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import AboutBuildModal from 'components/about_build_modal';
 import {VisitSystemConsoleTour} from 'components/onboarding_tasks';
@@ -77,6 +79,7 @@ const ProductMenuList = (props: Props): JSX.Element | null => {
         enableCustomUserGroups,
     } = props;
     const {formatMessage} = useIntl();
+    const isAdmin = useSelector(isCurrentUserSystemAdmin);
 
     useEffect(() => {
         props.actions.getPrevTrialLicense();

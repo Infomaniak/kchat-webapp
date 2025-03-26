@@ -4,7 +4,8 @@
 import classNames from 'classnames';
 import React from 'react';
 import type {KeyboardEvent, MouseEvent, SyntheticEvent} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import type {WrappedComponentProps} from 'react-intl';
 
 import {DownloadOutlineIcon, LinkVariantIcon, CheckIcon} from '@infomaniak/compass-icons/components';
 import type {FileInfo} from '@mattermost/types/files';
@@ -20,13 +21,13 @@ import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
 import {FileTypes} from 'utils/constants';
-import {localizeMessage, copyToClipboard, getFileType} from 'utils/utils';
+import {copyToClipboard, getFileType} from 'utils/utils';
 
 const MIN_IMAGE_SIZE = 48;
 const MIN_IMAGE_SIZE_FOR_INTERNAL_BUTTONS = 100;
 const MAX_IMAGE_HEIGHT = 350;
 
-export type Props = {
+export type Props = WrappedComponentProps & {
 
     /*
     * The source URL of the image
@@ -87,7 +88,7 @@ export type Props = {
     /**
     * Action to fetch public link of an image from server.
     */
-    getFilePublicLink?: () => Promise<ActionResult<{link: string}>>;
+    getFilePublicLink?: () => Promise<ActionResult<{ link: string }>>;
 
     /*
     * Prevents display of utility buttons when image in a location that makes them inappropriate
@@ -106,10 +107,10 @@ type State = {
 
 // SizeAwareImage is a component used for rendering images where the dimensions of the image are important for
 // ensuring that the page is laid out correctly.
-export default class SizeAwareImage extends React.PureComponent<Props, State> {
+export class SizeAwareImage extends React.PureComponent<Props, State> {
     public heightTimeout = 0;
     public mounted = false;
-    public timeout: NodeJS.Timeout|null = null;
+    public timeout: NodeJS.Timeout | null = null;
 
     constructor(props: Props) {
         super(props);
@@ -200,6 +201,7 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
             src,
             fileURL,
             enablePublicLink,
+            intl,
             ...props
         } = this.props;
         Reflect.deleteProperty(props, 'showLoader');
@@ -211,8 +213,9 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
         Reflect.deleteProperty(props, 'onClick');
         Reflect.deleteProperty(props, 'hideUtilities');
         Reflect.deleteProperty(props, 'getFilePublicLink');
+        Reflect.deleteProperty(props, 'intl');
 
-        let ariaLabelImage = localizeMessage({id: 'file_attachment.thumbnail', defaultMessage: 'file thumbnail'});
+        let ariaLabelImage = intl.formatMessage({id: 'file_attachment.thumbnail', defaultMessage: 'file thumbnail'});
         if (fileInfo) {
             ariaLabelImage += ` ${fileInfo.name}`.toLowerCase();
         }
@@ -263,15 +266,13 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
         );
         const copyLink = (
             <WithTooltip
-                id='single_image_view.copy_link_tooltip.text'
                 title={copyLinkTooltipText}
-                placement='top'
             >
                 <button
                     className={classNames('style--none', 'size-aware-image__copy_link', {
                         'size-aware-image__copy_link--recently_copied': this.state.linkCopiedRecently,
                     })}
-                    aria-label={localizeMessage({id: 'single_image_view.copy_link_tooltip', defaultMessage: 'Copy link'})}
+                    aria-label={intl.formatMessage({id: 'single_image_view.copy_link_tooltip', defaultMessage: 'Copy link'})}
                     onClick={this.copyLinkToAsset}
                 >
                     {this.state.linkCopiedRecently ? (
@@ -297,8 +298,6 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
         );
         const download = (
             <WithTooltip
-                id='single_image_view.download_tooltip.text'
-                placement='top'
                 title={downloadTooltipText}
             >
                 <a
@@ -308,7 +307,7 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
                     className='style--none size-aware-image__download'
                     download={true}
                     role={this.isInternalImage ? 'button' : undefined}
-                    aria-label={localizeMessage({id: 'single_image_view.download_tooltip', defaultMessage: 'Download'})}
+                    aria-label={intl.formatMessage({id: 'single_image_view.download_tooltip', defaultMessage: 'Download'})}
                 >
                     <DownloadOutlineIcon
                         className={'style--none'}
@@ -427,7 +426,7 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
             fileInfo,
         } = this.props;
 
-        let ariaLabelImage = localizeMessage({id: 'file_attachment.thumbnail', defaultMessage: 'file thumbnail'});
+        let ariaLabelImage = this.props.intl.formatMessage({id: 'file_attachment.thumbnail', defaultMessage: 'file thumbnail'});
         if (fileInfo) {
             ariaLabelImage += ` ${fileInfo.name}`.toLowerCase();
         }
@@ -477,7 +476,7 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
         const shouldShowImg = !this.dimensionsAvailable(dimensions) || this.state.loaded;
 
         return (
-            <React.Fragment>
+            <>
                 {fallback}
                 <div
                     className='file-preview__button'
@@ -485,7 +484,7 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
                 >
                     {this.renderImageWithContainerIfNeeded()}
                 </div>
-            </React.Fragment>
+            </>
         );
     };
 
@@ -531,3 +530,5 @@ export default class SizeAwareImage extends React.PureComponent<Props, State> {
         );
     }
 }
+
+export default injectIntl(SizeAwareImage);

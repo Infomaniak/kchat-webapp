@@ -54,7 +54,7 @@ export default class UnarchiveChannelModal extends React.PureComponent<Props, St
                 show={this.state.show}
                 onHide={this.onHide}
                 onExited={this.props.onExited}
-                role='dialog'
+                role='none'
                 aria-labelledby='unarchiveChannelModalLabel'
                 id='unarchiveChannelModal'
             >

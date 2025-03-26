@@ -62,14 +62,12 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
 
     return (
         <WithTooltip
-            id='productSettings'
             title={
                 <FormattedMessage
                     id='global_header.productSettings'
                     defaultMessage='Settings'
                 />
             }
-            placement='bottom'
         >
             <IconButton
                 id='right-controls-settings'

@@ -86,7 +86,7 @@ export function isYesterday(date: Date): boolean {
     return isSameDay(date, yesterday);
 }
 
-export function toUTCUnix(date: Date): number {
+export function toUTCUnixInSeconds(date: Date): number {
     return Math.round(new Date(date.toISOString()).getTime() / 1000);
 }
 
@@ -99,7 +99,7 @@ export function convertSecondsToMSS(seconds: number) {
     return `${minutes}:${secondsPadded}`;
 }
 
-export function relativeFormatDate(date: Moment, formatMessage: ReturnType<typeof useIntl>['formatMessage'], format = 'yyyy-MM-dd'): string {
+export function relativeFormatDate(date: Moment, formatMessage: ReturnType<typeof useIntl>['formatMessage'], format?: string): string {
     const now = moment();
     const inputDate = moment(date);
 
@@ -110,5 +110,10 @@ export function relativeFormatDate(date: Moment, formatMessage: ReturnType<typeo
     } else if (inputDate.isSame(now.clone().add(1, 'days'), 'day')) {
         return formatMessage({id: 'date_separator.tomorrow', defaultMessage: 'Tomorrow'});
     }
-    return DateTime.fromJSDate(date.toDate()).toFormat(format);
+
+    if (format) {
+        return DateTime.fromJSDate(date.toDate()).toFormat(format);
+    }
+
+    return DateTime.fromJSDate(date.toDate()).toLocaleString();
 }

@@ -8,7 +8,6 @@ import {getCloudCustomer, getCloudProducts, getCloudSubscription, getInvoices} f
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {getCloudErrors} from 'mattermost-redux/selectors/entities/cloud';
-import type {ActionFunc, ThunkActionFunc} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {isModalOpen} from 'selectors/views/modals';
@@ -19,6 +18,7 @@ import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_mo
 import {closeModal, openModal} from './views/modals';
 import {isLimitExceeded} from 'utils/limits';
 import {ChannelType} from '@mattermost/types/channels';
+import type {ActionFunc, ThunkActionFunc} from 'types/store';
 
 export function getInstallation() {
     return async () => {
@@ -170,7 +170,7 @@ export function getTeamsUsage(): ThunkActionFunc<Promise<boolean | ServerError>>
     };
 }
 
-export function retryFailedCloudFetches(): ActionFunc<boolean, GlobalState> {
+export function retryFailedCloudFetches(): ActionFunc<boolean> {
     return (dispatch, getState) => {
         const errors = getCloudErrors(getState());
         if (Object.keys(errors).length === 0) {

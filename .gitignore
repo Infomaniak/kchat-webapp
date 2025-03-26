@@ -172,3 +172,5 @@ yarn-error.log
 ## Notice Folders
 .notice/
 .notice-work/
+.aider*
+.env

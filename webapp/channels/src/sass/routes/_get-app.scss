@@ -1,3 +1,5 @@
+@use "utils/variables";
+
 .get-app {
     min-height: 100vh;
     background-color: #fff;
@@ -188,7 +190,7 @@
     opacity: 0.8;
 
     > span > a {
-        color: $primary-color;
+        color: variables.$primary-color;
         text-decoration: none;
     }
 

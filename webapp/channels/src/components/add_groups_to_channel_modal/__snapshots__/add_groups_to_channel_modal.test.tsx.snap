@@ -145,13 +145,14 @@ exports[`components/AddGroupsToChannelModal should match when renderOption is ca
   <div
     className="more-modal__actions"
   >
-    <div
+    <button
+      aria-label="Add groups to channel"
       className="more-modal__actions--round"
     >
       <i
         className="icon icon-plus"
       />
-    </div>
+    </button>
   </div>
 </div>
 `;
@@ -194,13 +195,14 @@ exports[`components/AddGroupsToChannelModal should match when renderOption is ca
   <div
     className="more-modal__actions"
   >
-    <div
+    <button
+      aria-label="Add groups to channel"
       className="more-modal__actions--round"
     >
       <i
         className="icon icon-plus"
       />
-    </div>
+    </button>
   </div>
 </div>
 `;
@@ -243,13 +245,14 @@ exports[`components/AddGroupsToChannelModal should match when renderOption is ca
   <div
     className="more-modal__actions"
   >
-    <div
+    <button
+      aria-label="Add groups to channel"
       className="more-modal__actions--round"
     >
       <i
         className="icon icon-plus"
       />
-    </div>
+    </button>
   </div>
 </div>
 `;

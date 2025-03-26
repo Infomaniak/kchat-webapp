@@ -223,7 +223,7 @@ export default function ChannelMembersRHS({
             return actions.openModal({
                 modalId: ModalIdentifiers.CREATE_DM_CHANNEL,
                 dialogType: MoreDirectChannels,
-                dialogProps: {isExistingChannel: true},
+                dialogProps: {isExistingChannel: true, focusOriginElement: 'channelInfoRHSAddPeopleButton'},
             });
         }
 

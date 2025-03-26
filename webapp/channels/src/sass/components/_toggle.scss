@@ -1,3 +1,5 @@
+@use "utils/variables";
+
 @use 'sass:color';
 
 // Based on https://codepen.io/aanjulena/pen/ZLZjzV
@@ -9,7 +11,7 @@ $gray-light: color.adjust($gray, $lightness: 15%);
 $gray-lighter: #e0e0e0;
 
 // Button Colors
-$btn-default-color: $gray;
+$btn-default-color: variables.$gray;
 $btn-default-bg: $gray-lighter;
 
 // Toggle Sizes

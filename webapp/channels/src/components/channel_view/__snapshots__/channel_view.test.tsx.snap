@@ -6,9 +6,10 @@ exports[`components/channel_view Should match snapshot if channel is archived 1`
   id="app-content"
 >
   <FileUploadOverlay
+    id="centerChannelFileDropOverlay"
     overlayType="center"
   />
-  <withRouter(Connect(injectIntl(ChannelHeader)))
+  <ChannelHeader
     channelId="channelId"
     channelIsArchived={true}
     deactivatedChannel={false}
@@ -16,6 +17,7 @@ exports[`components/channel_view Should match snapshot if channel is archived 1`
     enableWebSocketEventScope={false}
     goToLastViewedChannel={[MockFunction]}
     history={Object {}}
+    isChannelBookmarksEnabled={false}
     isCloud={false}
     isFirstAdmin={false}
     location={Object {}}
@@ -25,18 +27,15 @@ exports[`components/channel_view Should match snapshot if channel is archived 1`
         "url": "/team/channel/channelId",
       }
     }
+    missingChannelRole={false}
     teamUrl="/team"
     viewArchivedChannels={false}
-  />
-  <ChannelBookmarks
-    channelId="channelId"
   />
   <DeferredRenderWrapper
     channelId="channelId"
   />
   <div
     className="post-create__container"
-    data-testid="post-create"
     id="post-create"
   >
     <div
@@ -72,9 +71,10 @@ exports[`components/channel_view Should match snapshot if channel is deactivated
   id="app-content"
 >
   <FileUploadOverlay
+    id="centerChannelFileDropOverlay"
     overlayType="center"
   />
-  <withRouter(Connect(injectIntl(ChannelHeader)))
+  <ChannelHeader
     channelId="channelId"
     channelIsArchived={false}
     deactivatedChannel={true}
@@ -82,6 +82,7 @@ exports[`components/channel_view Should match snapshot if channel is deactivated
     enableWebSocketEventScope={false}
     goToLastViewedChannel={[MockFunction]}
     history={Object {}}
+    isChannelBookmarksEnabled={false}
     isCloud={false}
     isFirstAdmin={false}
     location={Object {}}
@@ -91,18 +92,15 @@ exports[`components/channel_view Should match snapshot if channel is deactivated
         "url": "/team/channel/channelId",
       }
     }
+    missingChannelRole={false}
     teamUrl="/team"
     viewArchivedChannels={false}
-  />
-  <ChannelBookmarks
-    channelId="channelId"
   />
   <DeferredRenderWrapper
     channelId="channelId"
   />
   <div
-    className="post-create__container"
-    data-testid="post-create"
+    className="post-create__container AdvancedTextEditor__ctr"
     id="post-create"
   >
     <div
@@ -137,9 +135,10 @@ exports[`components/channel_view Should match snapshot with base props 1`] = `
   id="app-content"
 >
   <FileUploadOverlay
+    id="centerChannelFileDropOverlay"
     overlayType="center"
   />
-  <withRouter(Connect(injectIntl(ChannelHeader)))
+  <ChannelHeader
     channelId="channelId"
     channelIsArchived={false}
     deactivatedChannel={false}
@@ -147,6 +146,7 @@ exports[`components/channel_view Should match snapshot with base props 1`] = `
     enableWebSocketEventScope={false}
     goToLastViewedChannel={[MockFunction]}
     history={Object {}}
+    isChannelBookmarksEnabled={false}
     isCloud={false}
     isFirstAdmin={false}
     location={Object {}}
@@ -156,17 +156,19 @@ exports[`components/channel_view Should match snapshot with base props 1`] = `
         "url": "/team/channel/channelId",
       }
     }
+    missingChannelRole={false}
     teamUrl="/team"
     viewArchivedChannels={false}
-  />
-  <ChannelBookmarks
-    channelId="channelId"
   />
   <DeferredRenderWrapper
     channelId="channelId"
   />
-  <BannerJoinChannel
-    onButtonClick={[Function]}
-  />
+  <div
+    className="post-create__container AdvancedTextEditor__ctr"
+    data-testid="post-create"
+    id="post-create"
+  >
+    <AdvancedCreatePost />
+  </div>
 </div>
 `;

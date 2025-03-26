@@ -108,7 +108,6 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
       >
         <Memo(SettingsGroup)
           container={false}
-          show={true}
         >
           <AdminTextSetting
             disabled={false}
@@ -127,14 +126,8 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
             type="text"
             value="fsdsdg"
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <SchemaText
                 text="help-text-b"
@@ -145,15 +138,9 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
             label="label-b"
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={false}
           />
-          <DropdownSetting
+          <Memo(DropdownSetting)
             disabled={false}
             helpText={
               <SchemaText
@@ -161,7 +148,6 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
               />
             }
             id="FirstSettings.settingc"
-            isDisabled={false}
             key="Config_dropdown_FirstSettings.settingc"
             label="label-c"
             onChange={[Function]}
@@ -298,7 +284,7 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
               </span>
             </div>
           </div>
-          <DropdownSetting
+          <Memo(DropdownSetting)
             disabled={false}
             helpText={
               <SchemaText
@@ -306,7 +292,6 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
               />
             }
             id="SecondSettings.settingi"
-            isDisabled={false}
             key="Config_language_SecondSettings.settingi"
             label="label-i"
             onChange={[Function]}
@@ -331,7 +316,7 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
                 },
                 Object {
                   "order": 3,
-                  "text": "Español (Beta)",
+                  "text": "Español (Alpha)",
                   "value": "es",
                 },
                 Object {
@@ -376,31 +361,36 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
                 },
                 Object {
                   "order": 12,
+                  "text": "Tiếng Việt (Beta)",
+                  "value": "vi",
+                },
+                Object {
+                  "order": 13,
                   "text": "Türkçe",
                   "value": "tr",
                 },
                 Object {
-                  "order": 13,
+                  "order": 14,
                   "text": "Български (Alpha)",
                   "value": "bg",
                 },
                 Object {
-                  "order": 14,
+                  "order": 15,
                   "text": "Pусский",
                   "value": "ru",
                 },
                 Object {
-                  "order": 15,
-                  "text": "Yкраїнська (Alpha)",
+                  "order": 16,
+                  "text": "Yкраїнська",
                   "value": "uk",
                 },
                 Object {
-                  "order": 16,
+                  "order": 17,
                   "text": "فارسی (Alpha)",
                   "value": "fa",
                 },
                 Object {
-                  "order": 17,
+                  "order": 18,
                   "text": "한국어 (Alpha)",
                   "value": "ko",
                 },
@@ -410,19 +400,19 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
                   "value": "zh-CN",
                 },
                 Object {
-                  "order": 19,
-                  "text": "中文 (繁體)",
+                  "order": 20,
+                  "text": "中文 (繁體) (Beta)",
                   "value": "zh-TW",
                 },
                 Object {
-                  "order": 20,
+                  "order": 21,
                   "text": "日本語",
                   "value": "ja",
                 },
               ]
             }
           />
-          <MultiSelectSetting
+          <Memo(MultiSelectSetting)
             disabled={false}
             helpText={
               <SchemaText
@@ -432,7 +422,7 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
             id="SecondSettings.settingj"
             key="Config_language_SecondSettings.settingj"
             label="label-j"
-            noResultText="no-result-j"
+            noOptionsMessage="no-result-j"
             onChange={[Function]}
             selected={Array []}
             setByEnv={false}
@@ -455,7 +445,7 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
                 },
                 Object {
                   "order": 3,
-                  "text": "Español (Beta)",
+                  "text": "Español (Alpha)",
                   "value": "es",
                 },
                 Object {
@@ -500,31 +490,36 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
                 },
                 Object {
                   "order": 12,
+                  "text": "Tiếng Việt (Beta)",
+                  "value": "vi",
+                },
+                Object {
+                  "order": 13,
                   "text": "Türkçe",
                   "value": "tr",
                 },
                 Object {
-                  "order": 13,
+                  "order": 14,
                   "text": "Български (Alpha)",
                   "value": "bg",
                 },
                 Object {
-                  "order": 14,
+                  "order": 15,
                   "text": "Pусский",
                   "value": "ru",
                 },
                 Object {
-                  "order": 15,
-                  "text": "Yкраїнська (Alpha)",
+                  "order": 16,
+                  "text": "Yкраїнська",
                   "value": "uk",
                 },
                 Object {
-                  "order": 16,
+                  "order": 17,
                   "text": "فارسی (Alpha)",
                   "value": "fa",
                 },
                 Object {
-                  "order": 17,
+                  "order": 18,
                   "text": "한국어 (Alpha)",
                   "value": "ko",
                 },
@@ -534,12 +529,12 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
                   "value": "zh-CN",
                 },
                 Object {
-                  "order": 19,
-                  "text": "中文 (繁體)",
+                  "order": 20,
+                  "text": "中文 (繁體) (Beta)",
                   "value": "zh-TW",
                 },
                 Object {
-                  "order": 20,
+                  "order": 21,
                   "text": "日本語",
                   "value": "ja",
                 },
@@ -572,14 +567,8 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
               }
             }
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <SchemaText
                 text="help-text-l"
@@ -590,12 +579,6 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
             label="label-l"
             onChange={[Function]}
             setByEnv={true}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
           <Memo(ColorSetting)
@@ -664,14 +647,8 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
             jobType="test"
             key="Config_jobstable_undefined"
           />
-          <BooleanSetting
+          <Memo(BooleanSetting)
             disabled={false}
-            falseText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="False"
-                id="admin.false"
-              />
-            }
             helpText={
               <SchemaText
                 text="escaped-help-text-a"
@@ -682,12 +659,6 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
             label="escaped-label-a"
             onChange={[Function]}
             setByEnv={false}
-            trueText={
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="True"
-                id="admin.true"
-              />
-            }
             value={true}
           />
         </Memo(SettingsGroup)>
@@ -698,47 +669,28 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
     className="admin-console-save"
   >
     <SaveButton
-      btnClass="btn-primary"
-      defaultMessage={
-        <Memo(MemoizedFormattedMessage)
-          defaultMessage="Save"
-          id="save_button.save"
-        />
-      }
       disabled={true}
-      extraClasses=""
       onClick={[Function]}
       saving={false}
       savingMessage="Saving Config..."
     />
-    <div
-      className="error-message"
-      data-testid="errorMessage"
-      onMouseOut={[Function]}
-      onMouseOver={[Function]}
+    <WithTooltip
+      title=""
     >
-      <FormError
-        error=""
-        errors={Array []}
-        iconClassName="fa-exclamation-triangle"
-        textClassName="has-warning"
-      />
-      <FormError
-        error={null}
-        errors={Array []}
-      />
-    </div>
-    <Overlay
-      animation={[Function]}
-      placement="top"
-      rootClose={false}
-      show={false}
-      target={null}
-    >
-      <Tooltip
-        id="error-tooltip"
-      />
-    </Overlay>
+      <div
+        className="error-message"
+        data-testid="errorMessage"
+      >
+        <Memo(FormError)
+          error=""
+          iconClassName="fa-exclamation-triangle"
+          textClassName="has-warning"
+        />
+        <Memo(FormError)
+          error={null}
+        />
+      </div>
+    </WithTooltip>
   </div>
 </div>
 `;

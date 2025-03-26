@@ -16,7 +16,7 @@ import {ServiceEnvironment} from '@mattermost/types/config';
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
 import {Client4} from 'mattermost-redux/client';
-import {rudderAnalytics, RudderTelemetryHandler} from 'mattermost-redux/client/rudder';
+import {Preferences} from 'mattermost-redux/constants';
 
 import {storeBridge, storeBridgeParam} from 'actions/ksuite_bridge_actions';
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
@@ -27,8 +27,7 @@ import BrowserStore from 'stores/browser_store';
 import LocalStorageStore from 'stores/local_storage_store';
 import store from 'stores/redux_store';
 
-import {makeAsyncComponent} from 'components/async_load';
-import OpenPluginInstallPost from 'components/custom_open_plugin_install_post_renderer';
+import {makeAsyncComponent, makeAsyncPluggableComponent} from 'components/async_load';
 import GlobalHeader from 'components/global_header/global_header';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
 import {HFTRoute, LoggedInHFTRoute} from 'components/header_footer_template_route';
@@ -41,13 +40,14 @@ import SidebarMobileRightMenu from 'components/sidebar_mobile_right_menu';
 
 import webSocketClient from 'client/web_websocket_client';
 import {initializePlugins} from 'plugins';
-import A11yController from 'utils/a11y_controller';
-import {DesktopThemePreferences, PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
+import 'utils/a11y_controller_instance';
+import Constants, {DesktopThemePreferences, PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
 import DesktopApp from 'utils/desktop_api';
 import {IKConstants} from 'utils/constants-ik';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {rudderAnalytics, RudderTelemetryHandler} from 'utils/rudder';
 import {getSiteURL} from 'utils/url';
 import {getDesktopVersion, isAndroidWeb, isChromebook, isDesktopApp, isIosWeb} from 'utils/user_agent';
 import {applyTheme, injectWebcomponentInit, isTextDroppableEvent} from 'utils/utils';
@@ -60,7 +60,7 @@ import RootRedirect from './root_redirect';
 import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 import type {PropsFromRedux} from './index';
 
-import 'plugins/export.js';
+import 'plugins/export';
 import {LLMBotPost} from 'plugins/ai/components/llmbot_post';
 
 const MobileViewWatcher = makeAsyncComponent('MobileViewWatcher', lazy(() => import('components/mobile_view_watcher')));
@@ -82,7 +82,6 @@ const AccessProblem = makeAsyncComponent('AccessProblem', lazy(() => import('com
 // const CreateTeam = makeAsyncComponent('CreateTeam', lazy(() => import('components/create_team')));
 // const Mfa = makeAsyncComponent('Mfa', lazy(() => import('components/mfa/mfa_controller')));
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', lazy(() => import('components/preparing_workspace')));
-const Pluggable = makeAsyncComponent('Pluggable', lazy(() => import('plugins/pluggable')));
 const LaunchingWorkspace = makeAsyncComponent('LaunchingWorkspace', lazy(() => import('components/preparing_workspace/launching_workspace')));
 const CompassThemeProvider = makeAsyncComponent('CompassThemeProvider', lazy(() => import('components/compass_theme_provider/compass_theme_provider')));
 const TeamController = makeAsyncComponent('TeamController', lazy(() => import('components/team_controller')));
@@ -93,6 +92,9 @@ const TeamSidebar = makeAsyncComponent('TeamSidebar', lazy(() => import('compone
 const SidebarRight = makeAsyncComponent('SidebarRight', lazy(() => import('components/sidebar_right')));
 const ModalController = makeAsyncComponent('ModalController', lazy(() => import('components/modal_controller')));
 const AppBar = makeAsyncComponent('AppBar', lazy(() => import('components/app_bar/app_bar')));
+const ComponentLibrary = makeAsyncComponent('ComponentLibrary', lazy(() => import('components/component_library')));
+
+const Pluggable = makeAsyncPluggableComponent();
 
 const noop = () => {};
 
@@ -110,6 +112,8 @@ export default class Root extends React.PureComponent<Props, State> {
     // Whether the app is running in an iframe.
     private embeddedInIFrame: boolean;
 
+    // The constructor adds a bunch of event listeners,
+    // so we do need this.
     constructor(props: Props) {
         super(props);
         this.mounted = false;
@@ -129,8 +133,6 @@ export default class Root extends React.PureComponent<Props, State> {
         this.state = {
             shouldMountAppRoutes: false,
         };
-
-        this.a11yController = new A11yController();
 
         this.smallDesktopMediaQuery = window.matchMedia(`(min-width: ${Constants.TABLET_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.DESKTOP_SCREEN_WIDTH}px)`);
         this.tabletMediaQuery = window.matchMedia(`(min-width: ${Constants.MOBILE_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.TABLET_SCREEN_WIDTH}px)`);
@@ -219,6 +221,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
         this.props.actions.migrateRecentEmojis();
         this.props.actions.loadRecentlyUsedCustomEmojis();
+        this.props.actions.getCustomProfileAttributeFields();
 
         this.showLandingPageIfNecessary();
 
@@ -242,7 +245,7 @@ export default class Root extends React.PureComponent<Props, State> {
             }, window.origin);
         }
 
-        applyTheme(this.props.theme);
+        this.applyTheme();
     };
 
     private showLandingPageIfNecessary = () => {
@@ -306,6 +309,16 @@ export default class Root extends React.PureComponent<Props, State> {
         BrowserStore.setLandingPageSeen(true);
     };
 
+    applyTheme() {
+        // don't apply theme when in system console; system console hardcoded to THEMES.denim
+        // AdminConsole will apply denim on mount re-apply user theme on unmount
+        if (this.props.location.pathname.startsWith('/admin_console')) {
+            return;
+        }
+
+        applyTheme(this.props.theme);
+    }
+
     componentDidUpdate(prevProps: Props, prevState: State) {
         if (!deepEqual(prevProps.theme, this.props.theme) || !deepEqual(prevProps.currentTeam, this.props.currentTeam)) {
             // add body class for webcomponents theming
@@ -325,7 +338,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 }, window.origin);
             }
 
-            applyTheme(this.props.theme);
+            this.applyTheme();
         }
         if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
             if (!deepEqual(prevProps.teamsOrderPreference, this.props.teamsOrderPreference)) {
@@ -357,7 +370,7 @@ export default class Root extends React.PureComponent<Props, State> {
         if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
             if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
                 DesktopApp.reactAppInitialized();
-                InitialLoadingScreen.stop();
+                InitialLoadingScreen.stop('root');
             }
         }
     }
@@ -831,7 +844,7 @@ export default class Root extends React.PureComponent<Props, State> {
                                 {this.props.plugins?.map((plugin) => (
                                     <Route
                                         key={plugin.id}
-                                        path={'/plug/' + (plugin as any).route}
+                                        path={'/plug/' + plugin.route}
                                         render={() => (
                                             <Pluggable
                                                 pluggableName={'CustomRouteComponent'}

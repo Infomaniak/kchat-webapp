@@ -73,8 +73,6 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
       >
         <WithTooltip
-          id="single_image_view.copy_link_tooltip.text"
-          placement="top"
           title={
             <Memo(MemoizedFormattedMessage)
               defaultMessage="Copy link"
@@ -94,8 +92,6 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
           </button>
         </WithTooltip>
         <WithTooltip
-          id="single_image_view.download_tooltip.text"
-          placement="top"
           title={
             <Memo(MemoizedFormattedMessage)
               defaultMessage="Download"
@@ -197,8 +193,6 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
       >
         <WithTooltip
-          id="single_image_view.copy_link_tooltip.text"
-          placement="top"
           title={
             <Memo(MemoizedFormattedMessage)
               defaultMessage="Copy link"
@@ -218,8 +212,6 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
           </button>
         </WithTooltip>
         <WithTooltip
-          id="single_image_view.download_tooltip.text"
-          placement="top"
           title={
             <Memo(MemoizedFormattedMessage)
               defaultMessage="Download"
@@ -334,8 +326,6 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
       >
         <WithTooltip
-          id="single_image_view.copy_link_tooltip.text"
-          placement="top"
           title={
             <Memo(MemoizedFormattedMessage)
               defaultMessage="Copy link"
@@ -355,8 +345,6 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
           </button>
         </WithTooltip>
         <WithTooltip
-          id="single_image_view.download_tooltip.text"
-          placement="top"
           title={
             <Memo(MemoizedFormattedMessage)
               defaultMessage="Download"

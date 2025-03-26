@@ -95,7 +95,6 @@ type Props = OwnProps & {
     closeModal: () => void;
     collapseModal: () => void;
     setRequireConfirm?: () => void;
-    setEnforceFocus?: () => void;
     timezones: Timezone[];
     userTimezone: UserTimezone;
     allowCustomThemes: boolean;
@@ -1106,7 +1105,6 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                         areAllSectionsInactive={this.props.activeSection === ''}
                         updateSection={this.updateSection}
                         setRequireConfirm={this.props.setRequireConfirm}
-                        setEnforceFocus={this.props.setEnforceFocus}
                         allowCustomThemes={this.props.allowCustomThemes}
                     />
                     <div className='divider-dark'/>
@@ -1151,7 +1149,11 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
         }
 
         return (
-            <div id='displaySettings'>
+            <div
+                id='displaySettings'
+                aria-labelledby='displayButton'
+                role='tabpanel'
+            >
                 <SettingMobileHeader
                     closeModal={this.props.closeModal}
                     collapseModal={this.props.collapseModal}

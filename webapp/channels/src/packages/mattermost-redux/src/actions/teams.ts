@@ -81,10 +81,7 @@ export function getMyKSuites() {
     });
 }
 
-// The argument skipCurrentTeam is a (not ideal) workaround for CRT mention counts. Unread mentions are stored in the reducer per
-// team but we do not track unread mentions for DMs/GMs independently. This results in a bit of funky logic and edge case bugs
-// that need workarounds like this. In the future we should fix the root cause with better APIs and redux state.
-export function getMyTeamUnreads(collapsedThreads: boolean, skipCurrentTeam = false): ActionFuncAsync {
+export function getMyTeamUnreads(collapsedThreads: boolean): ActionFuncAsync {
     return async (dispatch, getState) => {
         let unreads;
         try {
@@ -93,16 +90,6 @@ export function getMyTeamUnreads(collapsedThreads: boolean, skipCurrentTeam = fa
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
             return {error};
-        }
-
-        if (skipCurrentTeam) {
-            const currentTeamId = getCurrentTeamId(getState());
-            if (currentTeamId) {
-                const index = unreads.findIndex((member) => member.team_id === currentTeamId);
-                if (index >= 0) {
-                    unreads.splice(index, 1);
-                }
-            }
         }
 
         dispatch(

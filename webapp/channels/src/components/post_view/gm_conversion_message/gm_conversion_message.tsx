@@ -6,6 +6,7 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import type {Post} from '@mattermost/types/posts';
+import {isStringArray} from '@mattermost/types/utilities';
 
 import {getMissingProfilesByIds} from 'mattermost-redux/actions/users';
 import {makeGetProfilesByIdsAndUsernames} from 'mattermost-redux/selectors/entities/users';

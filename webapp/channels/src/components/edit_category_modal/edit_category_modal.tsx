@@ -123,7 +123,6 @@ export default class EditCategoryModal extends React.PureComponent<Props, State>
         return (
             <GenericModal
                 id='editCategoryModal'
-                ariaLabel={localizeMessage({id: 'rename_category_modal.renameCategory', defaultMessage: 'Rename Category'})}
                 modalHeaderText={modalHeaderText}
                 confirmButtonText={editButtonText}
                 compassDesign={true}

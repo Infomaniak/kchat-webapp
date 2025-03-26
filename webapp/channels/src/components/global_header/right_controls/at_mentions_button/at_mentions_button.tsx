@@ -32,8 +32,6 @@ const AtMentionsButton = (): JSX.Element => {
 
     return (
         <WithTooltip
-            id='recentMentions'
-            placement='bottom'
             title={
                 <>
                     <FormattedMessage

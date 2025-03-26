@@ -24,6 +24,7 @@ import (
 	"github.com/mattermost/mattermost/server/public/shared/markdown"
 	"github.com/mattermost/mattermost/server/public/shared/mlog"
 	"github.com/mattermost/mattermost/server/public/shared/request"
+	"github.com/mattermost/mattermost/server/v8/channels/app/imaging"
 	"github.com/mattermost/mattermost/server/v8/channels/app/oembed"
 	"github.com/mattermost/mattermost/server/v8/channels/app/platform"
 	"github.com/mattermost/mattermost/server/v8/channels/utils/imgutils"
@@ -37,8 +38,6 @@ type linkMetadataCache struct {
 
 const MaxMetadataImageSize = MaxOpenGraphResponseSize
 
-const UnsafeLinksPostProp = "unsafe_links"
-
 func (s *Server) initPostMetadata() {
 	// Dump any cached links if the proxy settings have changed so image URLs can be updated
 	s.platform.AddConfigListener(func(before, after *model.Config) {
@@ -46,7 +45,9 @@ func (s *Server) initPostMetadata() {
 			(before.ImageProxySettings.ImageProxyType != after.ImageProxySettings.ImageProxyType) ||
 			(before.ImageProxySettings.RemoteImageProxyURL != after.ImageProxySettings.RemoteImageProxyURL) ||
 			(before.ImageProxySettings.RemoteImageProxyOptions != after.ImageProxySettings.RemoteImageProxyOptions) {
-			platform.PurgeLinkCache()
+			if err := platform.PurgeLinkCache(); err != nil {
+				mlog.Warn("Failed to remove cached links when the proxy settings changed", mlog.Err(err))
+			}
 		}
 	})
 }
@@ -180,7 +181,7 @@ func (a *App) getEmbedsAndImages(c request.CTX, post *model.Post, isNewPost bool
 	// Embeds and image dimensions
 	firstLink, images := a.getFirstLinkAndImages(c, post.Message)
 
-	if unsafeLinksProp := post.GetProp(UnsafeLinksPostProp); unsafeLinksProp != nil {
+	if unsafeLinksProp := post.GetProp(model.PostPropsUnsafeLinks); unsafeLinksProp != nil {
 		if prop, ok := unsafeLinksProp.(string); ok && prop == "true" {
 			images = []string{}
 			if !looksLikeAPermalink(firstLink, *a.Config().ServiceSettings.SiteURL) {
@@ -299,7 +300,7 @@ func (a *App) getEmojisAndReactionsForPost(c request.CTX, post *model.Post) ([]*
 }
 
 func (a *App) getEmbedForPost(c request.CTX, post *model.Post, firstLink string, isNewPost bool) (*model.PostEmbed, error) {
-	if _, ok := post.GetProps()["attachments"]; ok {
+	if _, ok := post.GetProps()[model.PostPropsAttachments]; ok {
 		return &model.PostEmbed{
 			Type: model.PostEmbedMessageAttachment,
 		}, nil
@@ -641,7 +642,7 @@ func (a *App) getLinkMetadata(c request.CTX, requestURL string, timestamp int64,
 	if !isNewPost {
 		og, image, ok = a.getLinkMetadataFromDatabase(requestURL, timestamp)
 		if ok && previewedPostPropVal == "" {
-			cacheLinkMetadata(requestURL, timestamp, og, image, nil)
+			cacheLinkMetadata(c, requestURL, timestamp, og, image, nil)
 			return og, image, nil, nil
 		}
 	}
@@ -664,7 +665,7 @@ func (a *App) getLinkMetadata(c request.CTX, requestURL string, timestamp int64,
 	}
 
 	// Write back to cache and database, even if there was an error and the results are nil
-	cacheLinkMetadata(requestURL, timestamp, og, image, permalink)
+	cacheLinkMetadata(c, requestURL, timestamp, og, image, permalink)
 
 	return og, image, permalink, err
 }
@@ -726,7 +727,9 @@ func (a *App) getLinkMetadataFromOEmbed(c request.CTX, requestURL string, provid
 	}
 
 	defer func() {
-		io.Copy(io.Discard, res.Body)
+		if _, err = io.Copy(io.Discard, res.Body); err != nil {
+			c.Logger().Warn("error discarding oEmbed response body", mlog.Err(err))
+		}
 		res.Body.Close()
 	}()
 
@@ -769,7 +772,9 @@ func (a *App) getLinkMetadataForURL(c request.CTX, requestURL string) (*opengrap
 
 	if body != nil {
 		defer func() {
-			io.Copy(io.Discard, body)
+			if _, err = io.Copy(io.Discard, body); err != nil {
+				c.Logger().Warn("error discarding OG image response body", mlog.Err(err))
+			}
 			body.Close()
 		}()
 	}
@@ -851,14 +856,16 @@ func (a *App) saveLinkMetadataToDatabase(requestURL string, timestamp int64, og 
 	}
 }
 
-func cacheLinkMetadata(requestURL string, timestamp int64, og *opengraph.OpenGraph, image *model.PostImage, permalink *model.Permalink) {
+func cacheLinkMetadata(rctx request.CTX, requestURL string, timestamp int64, og *opengraph.OpenGraph, image *model.PostImage, permalink *model.Permalink) {
 	metadata := linkMetadataCache{
 		OpenGraph: og,
 		PostImage: image,
 		Permalink: permalink,
 	}
 
-	platform.LinkCache().SetWithExpiry(strconv.FormatInt(model.GenerateLinkMetadataHash(requestURL, timestamp), 16), metadata, platform.LinkCacheDuration)
+	if err := platform.LinkCache().SetWithExpiry(strconv.FormatInt(model.GenerateLinkMetadataHash(requestURL, timestamp), 16), metadata, platform.LinkCacheDuration); err != nil {
+		rctx.Logger().Warn("Failed to cache link metadata", mlog.String("request_url", requestURL), mlog.Err(err))
+	}
 }
 
 // peekContentType peeks at the first 512 bytes of p, and attempts to detect
@@ -917,6 +924,16 @@ func parseImages(body io.Reader) (*model.PostImage, error) {
 		Width:  config.Width,
 		Height: config.Height,
 		Format: format,
+	}
+
+	if format == "jpeg" {
+		if imageOrientation, err := imaging.GetImageOrientation(io.MultiReader(buf, body)); err == nil &&
+			(imageOrientation == imaging.RotatedCWMirrored ||
+				imageOrientation == imaging.RotatedCCW ||
+				imageOrientation == imaging.RotatedCCWMirrored ||
+				imageOrientation == imaging.RotatedCW) {
+			image.Width, image.Height = image.Height, image.Width
+		}
 	}
 
 	if format == "gif" {

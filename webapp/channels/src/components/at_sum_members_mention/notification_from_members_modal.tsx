@@ -131,7 +131,6 @@ function NotificationFromMembersModal(props: Props) {
             backdrop={true}
             show={show}
             onExited={handleOnClose}
-            aria-modal='true'
             modalHeaderText={modalHeaderText}
         >
             <MembersContainer>

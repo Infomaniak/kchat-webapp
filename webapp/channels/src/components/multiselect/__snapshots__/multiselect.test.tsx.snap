@@ -11,7 +11,7 @@ exports[`components/multiselect/multiselect MultiSelectList should match snapsho
       <div
         className="multi-select__container react-select"
       >
-        <StateManager
+        <ForwardRef
           className=""
           classNamePrefix="react-select-auto react-select"
           components={
@@ -22,9 +22,6 @@ exports[`components/multiselect/multiselect MultiSelectList should match snapsho
               "MultiValueRemove": [Function],
             }
           }
-          defaultInputValue=""
-          defaultMenuIsOpen={false}
-          defaultValue={null}
           getOptionLabel={[Function]}
           getOptionValue={[Function]}
           id="selectItems"
@@ -215,7 +212,7 @@ exports[`components/multiselect/multiselect should match snapshot 1`] = `
       <div
         className="multi-select__container react-select"
       >
-        <StateManager
+        <ForwardRef
           className=""
           classNamePrefix="react-select-auto react-select"
           components={
@@ -226,9 +223,6 @@ exports[`components/multiselect/multiselect should match snapshot 1`] = `
               "MultiValueRemove": [Function],
             }
           }
-          defaultInputValue=""
-          defaultMenuIsOpen={false}
-          defaultValue={null}
           getOptionLabel={[Function]}
           getOptionValue={[Function]}
           id="selectItems"
@@ -410,7 +404,7 @@ exports[`components/multiselect/multiselect should match snapshot for page 2 1`]
       <div
         className="multi-select__container react-select"
       >
-        <StateManager
+        <ForwardRef
           className=""
           classNamePrefix="react-select-auto react-select"
           components={
@@ -421,9 +415,6 @@ exports[`components/multiselect/multiselect should match snapshot for page 2 1`]
               "MultiValueRemove": [Function],
             }
           }
-          defaultInputValue=""
-          defaultMenuIsOpen={false}
-          defaultValue={null}
           getOptionLabel={[Function]}
           getOptionValue={[Function]}
           id="selectItems"

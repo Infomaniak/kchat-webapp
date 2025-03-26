@@ -8,12 +8,14 @@ import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
-import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 import {close as closeLhs, open as openLhs} from 'actions/views/lhs';
 import {switchToChannels} from 'actions/views/onboarding_tasks';
-import {setStatusDropdown} from 'actions/views/status_dropdown';
+// import {setStatusDropdown} from 'actions/views/status_dropdown';
+import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 
+import {openMenu, dismissMenu} from 'components/menu';
 import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from 'components/onboarding_tasks';
+import {ELEMENT_ID_FOR_BROWSE_OR_ADD_CHANNEL_MENU} from 'components/sidebar/sidebar_header/sidebar_browse_or_add_channel_menu';
 
 import {getHistory} from 'utils/browser_history';
 
@@ -59,12 +61,24 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
                 dispatch(setAddChannelDropdown(true));
                 break;
             }
+            case OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES : {
+                dispatch(openLhs());
+                break;
+            }
+            case OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS : {
+                openMenu(ELEMENT_ID_FOR_BROWSE_OR_ADD_CHANNEL_MENU);
+                break;
+            }
+            case OnboardingTourSteps.INVITE_PEOPLE : {
+                openMenu(ELEMENT_ID_FOR_BROWSE_OR_ADD_CHANNEL_MENU);
+                break;
+            }
             case OnboardingTourSteps.CHANNEL_HEADER : {
                 dispatch(switchToChannels());
                 break;
             }
             case OnboardingTourSteps.STATUS : {
-                dispatch(setStatusDropdown(true));
+                // dispatch(setStatusDropdown(true));
                 break;
             }
             case OnboardingTourSteps.PROFILE : {
@@ -117,6 +131,14 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
             switch (lastStep) {
             case OnboardingTourSteps.CHANNELS : {
                 dispatch(setAddChannelDropdown(false));
+                break;
+            }
+            case OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS : {
+                dismissMenu();
+                break;
+            }
+            case OnboardingTourSteps.INVITE_PEOPLE : {
+                dismissMenu();
                 break;
             }
 

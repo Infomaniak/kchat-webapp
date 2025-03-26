@@ -2,7 +2,9 @@
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, channel display mode section 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -168,7 +170,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, clickToReply section 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -261,7 +265,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, clock section 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -354,7 +360,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, collapse section 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -447,7 +455,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, languages section 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -540,7 +550,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, link preview section with EnableLinkPreviews is false 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -633,7 +645,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, link preview section with EnableLinkPreviews is true 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -726,7 +740,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, message display section 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -819,7 +835,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, no active section 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -912,7 +930,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, teammate name display section 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -1005,7 +1025,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, theme section with EnableThemeSelection is false 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -1098,7 +1120,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, theme section with EnableThemeSelection is true 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -1130,7 +1154,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         allowCustomThemes={true}
         areAllSectionsInactive={false}
         selected={true}
-        setEnforceFocus={[MockFunction]}
         setRequireConfirm={[MockFunction]}
         updateSection={[Function]}
       />
@@ -1204,7 +1227,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, timezone section 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}
@@ -1297,7 +1322,9 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
 
 exports[`components/user_settings/display/UserSettingsDisplay should not show last active section 1`] = `
 <div
+  aria-labelledby="displayButton"
   id="displaySettings"
+  role="tabpanel"
 >
   <SettingMobileHeader
     closeModal={[MockFunction]}

@@ -27,6 +27,7 @@ import {getSelectedThreadIdInCurrentTeam} from 'selectors/views/threads';
 import {useGlobalState} from 'stores/hooks';
 import LocalStorageStore from 'stores/local_storage_store';
 
+import ChatIllustration from 'components/common/svg_images_components/chat_illustration';
 import LoadingScreen from 'components/loading_screen';
 import NoResultsIndicator from 'components/no_results_indicator';
 
@@ -59,8 +60,8 @@ const GlobalThreads = () => {
     const selectedThread = useSelector((state: GlobalState) => getThread(state, threadIdentifier));
     const selectedThreadId = useSelector(getSelectedThreadIdInCurrentTeam);
     const selectedPost = useSelector((state: GlobalState) => getPost(state, threadIdentifier!));
-    const threadIds = useSelector((state: GlobalState) => getThreadOrderInCurrentTeam(state, selectedThread?.id), shallowEqual);
-    const unreadThreadIds = useSelector((state: GlobalState) => getUnreadThreadOrderInCurrentTeam(state, selectedThread?.id), shallowEqual);
+    const threadIds = useSelector((state: GlobalState) => getThreadOrderInCurrentTeam(state), shallowEqual);
+    const unreadThreadIds = useSelector((state: GlobalState) => getUnreadThreadOrderInCurrentTeam(state), shallowEqual);
     const numUnread = counts?.total_unread_threads || 0;
     const isRHSOpened = useSelector(getIsRhsOpen);
 
@@ -97,12 +98,8 @@ const GlobalThreads = () => {
 
     const [isLoading, setLoading] = useState(isEmptyList);
 
-    const isOnlySelectedThreadInList = (list: string[]) => {
-        return selectedThreadId && list.length === 1 && list[0] === selectedThreadId;
-    };
-
-    const shouldLoadThreads = isEmpty(threadIds) || isOnlySelectedThreadInList(threadIds);
-    const shouldLoadUnreadThreads = isEmpty(unreadThreadIds) || isOnlySelectedThreadInList(unreadThreadIds);
+    const shouldLoadThreads = isEmpty(threadIds);
+    const shouldLoadUnreadThreads = isEmpty(unreadThreadIds);
 
     useEffect(() => {
         const promises = [];

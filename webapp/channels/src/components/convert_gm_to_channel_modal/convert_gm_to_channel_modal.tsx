@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import type {ComponentProps} from 'react';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
+import {useDispatch} from 'react-redux';
 
 import './convert_gm_to_channel_modal.scss';
 
@@ -15,13 +16,14 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
+import {getGroupMessageMembersCommonTeams} from 'actions/team_actions';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
+import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
-// import NoCommonTeamsError from './no_common_teams/no_common_teams';
-// import TeamSelector from './team_selector/team_selector';
-
+import NoCommonTeamsError from './no_common_teams/no_common_teams';
+import TeamSelector from './team_selector/team_selector';
 import WarningTextSection from './warning_text_section/warning_text_section';
 
 import type {Actions} from './index';
@@ -37,38 +39,84 @@ export type Props = {
     profilesInChannel: UserProfile[];
     teammateNameDisplaySetting: string;
     currentUserId: string;
-    currentTeam: Team;
 }
 
-const ConvertGmToChannelModal = ({onExited, channel, actions, profilesInChannel, teammateNameDisplaySetting, currentUserId, currentTeam}: Props) => {
+const ConvertGmToChannelModal = (props: Props) => {
     const intl = useIntl();
     const {formatMessage} = intl;
-    const channelURL = useRef<string>('');
+
     const [channelName, setChannelName] = useState<string>('');
+    const channelURL = useRef<string>('');
+
     const [urlError, setURLError] = useState('');
-    const [channelMemberNames, setChannelMemberNames] = useState<string[]>([]);
-    const [nameError, setNameError] = useState<boolean>(false);
-    const [conversionError, setConversionError] = useState<string>();
-
-    useEffect(() => {
-        const validProfilesInChannel = profilesInChannel.
-            filter((user) => user.id !== currentUserId && user.delete_at === 0).
-            map((user) => displayUsername(user, teammateNameDisplaySetting));
-
-        setChannelMemberNames(validProfilesInChannel);
-    }, [profilesInChannel]);
-
     const handleChannelURLChange = useCallback((newURL: string) => {
         channelURL.current = newURL;
         setURLError('');
     }, []);
 
+    const [channelMemberNames, setChannelMemberNames] = useState<string[]>([]);
+
+    useEffect(() => {
+        const validProfilesInChannel = props.profilesInChannel.
+            filter((user) => user.id !== props.currentUserId && user.delete_at === 0).
+            map((user) => displayUsername(user, props.teammateNameDisplaySetting));
+
+        setChannelMemberNames(validProfilesInChannel);
+    }, [props.profilesInChannel]);
+
+    const [commonTeamsById, setCommonTeamsById] = useState<{[id: string]: Team}>({});
+    const [commonTeamsFetched, setCommonTeamsFetched] = useState<boolean>(false);
+    const [loadingAnimationTimeout, setLoadingAnimationTimeout] = useState<boolean>(false);
+    const [selectedTeamId, setSelectedTeamId] = useState<string>();
+    const [nameError, setNameError] = useState<boolean>(false);
+    const [conversionError, setConversionError] = useState<string>();
+
+    const dispatch = useDispatch();
+
+    const mounted = useRef(false);
+    useEffect(() => {
+        mounted.current = true;
+        return (() => {
+            mounted.current = false;
+        });
+    }, []);
+
+    useEffect(() => {
+        const work = async () => {
+            const response = await dispatch(getGroupMessageMembersCommonTeams(props.channel.id));
+            if (!mounted.current) {
+                return;
+            }
+
+            if (response.error || !response.data) {
+                return;
+            }
+            const teams = response.data;
+
+            const teamsById: {[id: string]: Team} = {};
+            teams.forEach((team) => {
+                teamsById[team.id] = team;
+            });
+
+            setCommonTeamsById(teamsById);
+            setCommonTeamsFetched(true);
+
+            // if there is only common team, selected it.
+            if (teams.length === 1) {
+                setSelectedTeamId(teams[0].id);
+            }
+        };
+
+        work();
+        setTimeout(() => setLoadingAnimationTimeout(true), 1200);
+    }, []);
+
     const handleConfirm = useCallback(async () => {
-        if (!currentTeam.id) {
+        if (!selectedTeamId) {
             return;
         }
 
-        const {error} = await actions.convertGroupMessageToPrivateChannel(channel.id, currentTeam.id, channelName.trim(), channelURL.current.trim());
+        const {error} = await props.actions.convertGroupMessageToPrivateChannel(props.channel.id, selectedTeamId, channelName.trim(), channelURL.current.trim());
 
         if (error) {
             if (error.server_error_id === ServerErrorId.CHANNEL_NAME_EXISTS) {
@@ -86,56 +134,88 @@ const ConvertGmToChannelModal = ({onExited, channel, actions, profilesInChannel,
         }
 
         setConversionError(undefined);
-        trackEvent('actions', 'convert_group_message_to_private_channel', {channel_id: channel.id});
-        onExited();
-    }, [currentTeam.id, channel.id, channelName, channelURL.current, actions.moveChannelsInSidebar]);
+        trackEvent('actions', 'convert_group_message_to_private_channel', {channel_id: props.channel.id});
+        props.onExited();
+    }, [selectedTeamId, props.channel.id, channelName, channelURL.current, props.actions.moveChannelsInSidebar]);
 
-    const canCreate = currentTeam.id !== undefined && channelName !== '' && !nameError && !urlError;
+    const showLoader = !commonTeamsFetched || !loadingAnimationTimeout;
+    const canCreate = selectedTeamId !== undefined && channelName !== '' && !nameError && !urlError;
     const modalProps: Partial<ComponentProps<typeof GenericModal>> = {};
+    let modalBody;
 
-    modalProps.handleCancel = onExited;
-    modalProps.isDeleteModal = true;
-    modalProps.cancelButtonText = formatMessage({id: 'channel_modal.cancel', defaultMessage: 'Cancel'});
-    modalProps.confirmButtonText = formatMessage({id: 'sidebar_left.sidebar_channel_modal.confirmation_text', defaultMessage: 'Convert to private channel'});
-    modalProps.isConfirmDisabled = !canCreate;
+    if (!showLoader && Object.keys(commonTeamsById).length === 0) {
+        modalProps.confirmButtonText = formatMessage({id: 'generic.okay', defaultMessage: 'Okay'});
+        modalProps.handleConfirm = props.onExited;
 
-    const subBody = (
-        <React.Fragment>
-            <WarningTextSection channelMemberNames={channelMemberNames}/>
+        modalBody = (
+            <div className='convert-gm-to-channel-modal-body error'>
+                <NoCommonTeamsError/>
+            </div>
+        );
+    } else {
+        modalProps.handleCancel = showLoader ? undefined : props.onExited;
+        modalProps.isDeleteModal = true;
+        modalProps.cancelButtonText = formatMessage({id: 'channel_modal.cancel', defaultMessage: 'Cancel'});
+        modalProps.confirmButtonText = formatMessage({id: 'sidebar_left.sidebar_channel_modal.confirmation_text', defaultMessage: 'Convert to private channel'});
+        modalProps.isConfirmDisabled = !canCreate;
 
-            <ChannelNameFormField
-                value={channelName}
-                name='convert-gm-to-channel-modal-channel-name'
-                placeholder={formatMessage({id: 'sidebar_left.sidebar_channel_modal.channel_name_placeholder', defaultMessage: 'Enter a name for the channel'})}
-                autoFocus={false}
-                onDisplayNameChange={setChannelName}
-                onURLChange={handleChannelURLChange}
-                onErrorStateChange={setNameError}
-                team={currentTeam}
-                urlError={urlError}
-            />
-
-            {
-                conversionError &&
-                <div className='conversion-error'>
-                    <i className='icon icon-alert-outline'/>
-                    <span>{conversionError}</span>
+        let subBody;
+        if (showLoader) {
+            subBody = (
+                <div className='loadingIndicator'>
+                    <LoadingSpinner/>
                 </div>
-            }
+            );
+        } else {
+            subBody = (
+                <>
+                    <WarningTextSection channelMemberNames={channelMemberNames}/>
 
-        </React.Fragment>
-    );
+                    {
+                        Object.keys(commonTeamsById).length > 1 &&
+                        <TeamSelector
+                            teamsById={commonTeamsById}
+                            onChange={setSelectedTeamId}
+                        />
+                    }
 
-    const modalBody = (
-        <div
-            className={classNames({
-                'convert-gm-to-channel-modal-body': true,
-                'single-team': true,
-            })}
-        >
-            {subBody}
-        </div>
-    );
+                    <ChannelNameFormField
+                        value={channelName}
+                        name='convert-gm-to-channel-modal-channel-name'
+                        placeholder={formatMessage({id: 'sidebar_left.sidebar_channel_modal.channel_name_placeholder', defaultMessage: 'Enter a name for the channel'})}
+                        autoFocus={false}
+                        onDisplayNameChange={setChannelName}
+                        onURLChange={handleChannelURLChange}
+                        onErrorStateChange={setNameError}
+                        team={selectedTeamId ? commonTeamsById[selectedTeamId] : undefined}
+                        urlError={urlError}
+                    />
+
+                    {
+                        conversionError &&
+                        <div className='conversion-error'>
+                            <i className='icon icon-alert-outline'/>
+                            <span>{conversionError}</span>
+                        </div>
+                    }
+
+                </>
+            );
+        }
+
+        modalBody = (
+            <div
+                className={classNames({
+                    'convert-gm-to-channel-modal-body': true,
+                    loading: showLoader,
+                    'single-team': Object.keys(commonTeamsById).length === 1,
+                    'multi-team': Object.keys(commonTeamsById).length > 1,
+                })}
+            >
+                {subBody}
+            </div>
+        );
+    }
 
     return (
         <GenericModal
@@ -143,8 +223,8 @@ const ConvertGmToChannelModal = ({onExited, channel, actions, profilesInChannel,
             className='convert-gm-to-channel-modal'
             modalHeaderText={formatMessage({id: 'sidebar_left.sidebar_channel_modal.header', defaultMessage: 'Convert to Private Channel'})}
             compassDesign={true}
-            handleConfirm={handleConfirm}
-            onExited={onExited}
+            handleConfirm={showLoader ? undefined : handleConfirm}
+            onExited={props.onExited}
             autoCloseOnConfirmButton={false}
             {...modalProps}
         >
