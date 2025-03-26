@@ -15,6 +15,8 @@ import FileUploadOverlay from 'components/file_upload_overlay';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import PostView from 'components/post_view';
 
+import {getHistory} from 'utils/browser_history';
+
 import WebSocketClient from 'client/web_websocket_client';
 
 import type {PropsFromRedux} from './index';
@@ -91,6 +93,19 @@ export default class ChannelView extends React.PureComponent<Props, State> {
         this.props.goToLastViewedChannel();
     };
 
+    startAutomaticCallIfNeeded = () => {
+        const hash = window.location.hash;
+        const params = new URLSearchParams(hash.slice(1));
+        const shouldStartCall = params.has('call');
+
+        if (shouldStartCall) {
+            this.props.startCall(this.props.channelId);
+
+            const newUrl = window.location.pathname + window.location.search;
+            getHistory().replace(newUrl);
+        }
+    };
+
     componentDidUpdate(prevProps: Props) {
         // TODO: debounce
         if (prevProps.channelId !== this.props.channelId && this.props.enableWebSocketEventScope) {
@@ -105,6 +120,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             }
             if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
                 WebSocketClient.bindPresenceChannel(this.props.channelId);
+                this.startAutomaticCallIfNeeded();
             }
         }
     }
