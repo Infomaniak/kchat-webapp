@@ -27,6 +27,7 @@ export const threadsReducer = (state: ThreadsState['threads'] = {}, action: AnyA
             }, {}),
         };
     }
+    case PostTypes.POST_DELETED:
     case PostTypes.POST_REMOVED: {
         const post = action.data;
 
