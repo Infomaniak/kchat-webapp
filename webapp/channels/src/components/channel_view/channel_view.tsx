@@ -100,7 +100,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             this.props.startCall(this.props.channelId);
 
             const newUrl = window.location.pathname + window.location.search;
-            window.history.replaceState({}, document.title, newUrl);
+            getHistory().replace(newUrl);
         }
     };
 
