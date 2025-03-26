@@ -15,7 +15,7 @@ import FileUploadOverlay from 'components/file_upload_overlay';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import PostView from 'components/post_view';
 
-import WebSocketClient from 'client/web_websocket_client';
+import {getHistory} from 'utils/browser_history';
 
 import type {PropsFromRedux} from './index';
 
