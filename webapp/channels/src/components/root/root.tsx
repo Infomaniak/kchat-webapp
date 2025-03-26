@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {NavigateMessage} from '@infomaniak/ksuite-bridge';
 import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
@@ -56,6 +57,7 @@ import TeamSidebar from 'components/team_sidebar';
 import WindowSizeObserver from 'components/window_size_observer/WindowSizeObserver';
 
 import A11yController from 'utils/a11y_controller';
+import {getHistory} from 'utils/browser_history';
 import Constants, {DesktopThemePreferences, PageLoadContext, StoragePrefixes, WindowSizes} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import {EmojiIndicesByAlias} from 'utils/emoji';
@@ -738,6 +740,11 @@ export default class Root extends React.PureComponent<Props, State> {
 
         const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch, store.getState);
+
+        // this message listener is outside the store because of how is handled navigation
+        ksuiteBridge.on(NavigateMessageKey, (navigateMessage: NavigateMessage) => {
+            getHistory().push(navigateMessage.path);
+        });
 
         const ksuiteMode = (new URLSearchParams(window.location.search)).get('ksuite-mode');
         const spaceId = (new URLSearchParams(window.location.search)).get('space-id');
