@@ -94,14 +94,16 @@ export default class ChannelView extends React.PureComponent<Props, State> {
     };
 
     startAutomaticCallIfNeeded = () => {
-        const hash = window.location.hash;
-        const params = new URLSearchParams(hash.slice(1));
+        const params = new URLSearchParams(window.location.search);
         const shouldStartCall = params.has('call');
 
         if (shouldStartCall) {
             this.props.startCall(this.props.channelId);
 
-            const newUrl = window.location.pathname + window.location.search;
+            params.delete('call');
+
+            // Keep existing params if there is
+            const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
             getHistory().replace(newUrl);
         }
     };
