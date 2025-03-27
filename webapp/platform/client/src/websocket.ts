@@ -52,7 +52,8 @@ export default class WebSocketClient {
     private userChannel: Channel | null;
     private userTeamChannel: Channel | null;
     private presenceChannel: Channel | null;
-    private config: WebSocketClientConfig;
+
+    // private config: WebSocketClientConfig;
 
     private connectionUrl: string | null;
     private socketId: string | null;
@@ -114,12 +115,13 @@ export default class WebSocketClient {
     private otherServersMessageListeners = new Set<MessageListener>();
 
     private connectionId: string | null;
-    private serverHostname: string | null;
-    private postedAck: boolean;
 
-    private pingInterval: ReturnType<typeof setInterval> | null;
+    // private serverHostname: string | null;
+    // private postedAck: boolean;
 
-    private reconnectTimeout: ReturnType<typeof setTimeout> | null;
+    // private pingInterval: ReturnType<typeof setInterval> | null;
+
+    // private reconnectTimeout: ReturnType<typeof setTimeout> | null;
 
     constructor(config?: Partial<WebSocketClientConfig>) {
         this.conn = null;
@@ -163,12 +165,13 @@ export default class WebSocketClient {
         this.userChannel = null;
         this.userTeamChannel = null;
         this.presenceChannel = null;
-        this.otherTeamsChannel = {}
-        this.serverHostname = '';
-        this.postedAck = false;
-        this.reconnectTimeout = null;
-        this.config = {...defaultWebSocketClientConfig, ...config};
-        this.pingInterval = null;
+        this.otherTeamsChannel = {};
+
+        // this.serverHostname = '';
+        // this.postedAck = false;
+        // this.reconnectTimeout = null;
+        // this.config = {...defaultWebSocketClientConfig, ...config};
+        // this.pingInterval = null;
     }
 
     // on connect, only send auth cookie and blank state.
@@ -205,9 +208,9 @@ export default class WebSocketClient {
         // We have a timeout waiting to re-initialize the websocket.
         // We should wait until that fires before initializing,
         // otherwise we may not respect the configured backoff.
-        if (this.reconnectTimeout) {
-            return;
-        }
+        // if (this.reconnectTimeout) {
+        //     return;
+        // }
 
         if (connectionUrl == null) {
             console.log('websocket must have connection url'); //eslint-disable-line no-console
@@ -635,12 +638,12 @@ export default class WebSocketClient {
         }
     }
 
-    stopPingInterval() {
-        if (this.pingInterval) {
-            clearInterval(this.pingInterval);
-            this.pingInterval = null;
-        }
-    }
+    // stopPingInterval() {
+    //     if (this.pingInterval) {
+    //         clearInterval(this.pingInterval);
+    //         this.pingInterval = null;
+    //     }
+    // }
 
     ping(responseCallback?: (msg: any) => void) {
         const msg = {
@@ -652,9 +655,9 @@ export default class WebSocketClient {
             this.responseCallbacks[msg.seq] = responseCallback;
         }
 
-        if (this.conn && this.conn.readyState === WebSocket.OPEN) {
-            this.conn.send(JSON.stringify(msg));
-        }
+        // if (this.conn && this.conn.readyState === WebSocket.OPEN) {
+        //     this.conn.send(JSON.stringify(msg));
+        // }
     }
 
     sendMessage(action: string, data: any, responseCallback?: (msg: any) => void) {

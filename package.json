@@ -7,7 +7,10 @@
     "test:types": "yarn workspace mattermost-webapp check-types",
     "test:webapp": "yarn workspace mattermost-webapp test-ci",
     "test:e2e:cypress": "yarn workspace e2e-cypress test",
-    "test:e2e:playwright": "yarn workspace e2e-playwright test"
+    "test:e2e:playwright": "yarn workspace e2e-playwright test",
+    "clean:all": "yarn workspaces foreach --all run clean && rm -rf node_modules",
+    "build:dependencies": "yarn && yarn workspace @infomaniak/mattermost-types build && yarn workspace @infomaniak/mattermost-client build && yarn workspace @mattermost/components build",
+    "build:full": "yarn clean:all && yarn build:dependencies && yarn dev-server:webapp"
   },
   "resolutions": {
     "@types/react": "17.0.2",
