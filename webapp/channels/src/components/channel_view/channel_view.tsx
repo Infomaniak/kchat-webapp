@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import WebSocketClient from 'client/web_websocket_client';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
@@ -16,8 +17,6 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import PostView from 'components/post_view';
 
 import {getHistory} from 'utils/browser_history';
-
-import WebSocketClient from 'client/web_websocket_client';
 
 import type {PropsFromRedux} from './index';
 
@@ -122,8 +121,11 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             }
             if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
                 WebSocketClient.bindPresenceChannel(this.props.channelId);
-                this.startAutomaticCallIfNeeded();
             }
+        }
+
+        if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived && this.props.location.search !== prevProps.location.search) {
+            this.startAutomaticCallIfNeeded();
         }
     }
 
