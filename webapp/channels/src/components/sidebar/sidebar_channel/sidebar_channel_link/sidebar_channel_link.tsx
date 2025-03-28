@@ -82,11 +82,13 @@ type State = {
 
 export default class SidebarChannelLink extends React.PureComponent<Props, State> {
     labelRef: React.RefObject<HTMLDivElement>;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
 
     constructor(props: Props) {
         super(props);
 
         this.labelRef = React.createRef();
+        this.menuTriggerRef = React.createRef();
 
         this.state = {
             isMenuOpen: false,
@@ -271,6 +273,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                         isUnread={isUnread}
                         channelLeaveHandler={this.props.channelLeaveHandler}
                         onMenuToggle={this.handleMenuToggle}
+                        menuTriggerRef={this.menuTriggerRef}
                     />
                 </div>
             </>
@@ -293,6 +296,12 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 aria-label={this.getAriaLabel()}
                 to={link}
                 onClick={this.handleChannelClick}
+                onContextMenu={(event) => {
+                    event.preventDefault();
+                    if (this.menuTriggerRef) {
+                        this.menuTriggerRef.current?.click();
+                    }
+                }}
                 tabIndex={0}
             >
                 {content}
