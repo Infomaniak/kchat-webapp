@@ -7,34 +7,6 @@ import {AlertCircleOutlineIcon, CheckCircleOutlineIcon} from '@infomaniak/compas
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import type {Channel, ChannelMemberCountsByGroup} from '@mattermost/types/channels';
-import type {Emoji} from '@mattermost/types/emojis';
-import type {ServerError} from '@mattermost/types/errors';
-import type {FileInfo} from '@mattermost/types/files';
-import type {Group} from '@mattermost/types/groups';
-import {GroupSource} from '@mattermost/types/groups';
-import type {PostPriorityMetadata} from '@mattermost/types/posts';
-import type {PreferenceType} from '@mattermost/types/preferences';
-
-import type {ActionResult} from 'mattermost-redux/types/actions';
-import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
-
-import AdvancedTextEditor from 'components/advanced_text_editor/advanced_text_editor';
-import {IconContainer} from 'components/advanced_text_editor/formatting_bar/formatting_icon';
-import EditPostFooter from 'components/edit_post/edit_post_footer';
-import FileLimitStickyBanner from 'components/file_limit_sticky_banner';
-import type {FilePreviewInfo} from 'components/file_preview/file_preview';
-import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
-import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import NotifyConfirmModal from 'components/notify_confirm_modal';
-import OverlayTrigger from 'components/overlay_trigger';
-import PriorityLabel from 'components/post_priority/post_priority_label';
-import PostPriorityPickerOverlay from 'components/post_priority/post_priority_picker_overlay';
-import type {TextboxElement} from 'components/textbox';
-import type TextboxClass from 'components/textbox/textbox';
-import Tooltip from 'components/tooltip';
-
 import Constants, {
     Locations,
     Preferences,
@@ -54,6 +26,32 @@ import {
 } from 'utils/post_utils';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils';
+
+import type {Channel, ChannelMemberCountsByGroup} from '@mattermost/types/channels';
+import type {Emoji} from '@mattermost/types/emojis';
+import type {ServerError} from '@mattermost/types/errors';
+import type {FileInfo} from '@mattermost/types/files';
+import type {Group} from '@mattermost/types/groups';
+import {GroupSource} from '@mattermost/types/groups';
+import type {PostPriorityMetadata} from '@mattermost/types/posts';
+import type {PreferenceType} from '@mattermost/types/preferences';
+
+import type {ActionResult} from 'mattermost-redux/types/actions';
+import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
+
+import AdvancedTextEditor from 'components/advanced_text_editor/advanced_text_editor';
+import EditPostFooter from 'components/advanced_text_editor/edit_post_footer';
+import {IconContainer} from 'components/advanced_text_editor/formatting_bar/formatting_icon';
+import FileLimitStickyBanner from 'components/file_limit_sticky_banner';
+import type {FilePreviewInfo} from 'components/file_preview/file_preview';
+import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
+import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import NotifyConfirmModal from 'components/notify_confirm_modal';
+import PriorityLabel from 'components/post_priority/post_priority_label';
+import PostPriorityPickerOverlay from 'components/post_priority/post_priority_picker_overlay';
+import type {TextboxElement} from 'components/textbox';
+import type TextboxClass from 'components/textbox/textbox';
+import WithTooltip from 'components/with_tooltip';
 
 import type {ModalData} from 'types/actions';
 import type {PostDraft} from 'types/store/draft';
@@ -712,8 +710,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
         this.focusTextbox();
     };
 
-    handleCancel = (e: React.MouseEvent) => {
-        e.preventDefault();
+    handleCancel = () => {
         this.props.onCancel();
     };
 
@@ -733,24 +730,16 @@ class DraftEditor extends React.PureComponent<Props, State> {
                 )}
                 {priority!.requested_ack && (
                     <div className='AdvancedTextEditor__priority-ack'>
-                        <OverlayTrigger
-                            placement='top'
-                            delayShow={Constants.OVERLAY_TIME_DELAY}
-                            trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
-                            overlay={(
-                                <Tooltip
-                                    id='post-priority-picker-ack-tooltip'
-                                    className='AdvancedTextEditor__priority-ack-tooltip'
-                                >
-                                    <FormattedMessage
-                                        id={'post_priority.request_acknowledgement.tooltip'}
-                                        defaultMessage={'Acknowledgement will be requested'}
-                                    />
-                                </Tooltip>
+                        <WithTooltip
+                            title={(
+                                <FormattedMessage
+                                    id={'post_priority.request_acknowledgement.tooltip'}
+                                    defaultMessage={'Acknowledgement will be requested'}
+                                />
                             )}
                         >
                             <CheckCircleOutlineIcon size={14}/>
-                        </OverlayTrigger>
+                        </WithTooltip>
                         {!(priority!.priority) && (
                             <FormattedMessage
                                 id={'post_priority.request_acknowledgement'}
@@ -760,18 +749,13 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     </div>
                 )}
                 {!this.state.showPreview && (
-                    <OverlayTrigger
-                        placement='top'
-                        delayShow={Constants.OVERLAY_TIME_DELAY}
-                        trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
-                        overlay={(
-                            <Tooltip id='post-priority-picker-tooltip'>
-                                <FormattedMessage
-                                    id={'post_priority.remove'}
-                                    defaultMessage={'Remove {priority}'}
-                                    values={{priority: priority!.priority}}
-                                />
-                            </Tooltip>
+                    <WithTooltip
+                        title={(
+                            <FormattedMessage
+                                id={'post_priority.remove'}
+                                defaultMessage={'Remove {priority}'}
+                                values={{priority: priority!.priority}}
+                            />
                         )}
                     >
                         <button
@@ -788,7 +772,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
                                 />
                             </span>
                         </button>
-                    </OverlayTrigger>
+                    </WithTooltip>
                 )}
             </div>
         );
@@ -866,18 +850,13 @@ class DraftEditor extends React.PureComponent<Props, State> {
                                     onHide={this.handlePostPriorityHide}
                                     defaultHorizontalPosition='left'
                                 />
-                                <OverlayTrigger
-                                    placement='top'
-                                    delayShow={Constants.OVERLAY_TIME_DELAY}
-                                    trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
-                                    overlay={(
-                                        <Tooltip id='post-priority-picker-tooltip'>
-                                            <KeyboardShortcutSequence
-                                                shortcut={KEYBOARD_SHORTCUTS.msgPostPriority}
-                                                hoistDescription={true}
-                                                isInsideTooltip={true}
-                                            />
-                                        </Tooltip>
+                                <WithTooltip
+                                    title={(
+                                        <KeyboardShortcutSequence
+                                            shortcut={KEYBOARD_SHORTCUTS.msgPostPriority}
+                                            hoistDescription={true}
+                                            isInsideTooltip={true}
+                                        />
                                     )}
                                 >
                                     <IconContainer
@@ -892,7 +871,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
                                             color='currentColor'
                                         />
                                     </IconContainer>
-                                </OverlayTrigger>
+                                </WithTooltip>
                             </React.Fragment>
                         ),
                     ].filter(Boolean)}

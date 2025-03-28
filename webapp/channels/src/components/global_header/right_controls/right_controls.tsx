@@ -2,19 +2,20 @@
 // See LICENSE.txt for license information.
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
+import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
+import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
 
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {getCurrentLocale} from 'selectors/i18n';
 
 import FlagNext from 'components/flag_next';
-import OverlayTrigger from 'components/overlay_trigger';
+
 // import StatusDropdown from 'components/status_dropdown';
-import Tooltip from 'components/tooltip';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {
     AtMentionsTour,
@@ -23,11 +24,7 @@ import {
     useShowOnboardingTutorialStep,
 } from 'components/tours/onboarding_tour';
 import UserAccountMenu from 'components/user_account_menu';
-
-import Constants from 'utils/constants';
-import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
-
-import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
+import WithTooltip from 'components/with_tooltip';
 
 import type {GlobalState} from 'types/store';
 
@@ -91,12 +88,10 @@ const ReportingToolsWrapper = styled.div`
 `;
 
 const tooltipUserReport = (
-    <Tooltip id='userReport'>
-        <FormattedMessage
-            id='global_header.userReport'
-            defaultMessage='Feedback'
-        />
-    </Tooltip>
+    <FormattedMessage
+        id='global_header.userReport'
+        defaultMessage='Feedback'
+    />
 );
 
 const userReportHrefs: Record<string, string> = {
@@ -153,12 +148,7 @@ const RightControls = (): JSX.Element => {
                 {/* @ts-ignore */}
                 <module-reporting-tools-component size='26'/>
             </ReportingToolsWrapper>
-            <OverlayTrigger
-                trigger={['hover', 'focus']}
-                delayShow={Constants.OVERLAY_TIME_DELAY}
-                placement='bottom'
-                overlay={tooltipUserReport}
-            >
+            <WithTooltip title={tooltipUserReport}>
                 <a
                     className='header-icon grey'
                     style={{height: 45, width: 42, display: 'flex', justifyContent: 'center', alignItems: 'center', textDecoration: 'none'}}
@@ -172,7 +162,7 @@ const RightControls = (): JSX.Element => {
                         alt='User Feedback'
                     />
                 </a>
-            </OverlayTrigger>
+            </WithTooltip>
             <>
                 <ButtonWrapper>
                     {showAtMentionsTutorialStep && <AtMentionsTour/>}

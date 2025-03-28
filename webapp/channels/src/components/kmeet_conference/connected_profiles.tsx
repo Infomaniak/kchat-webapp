@@ -2,12 +2,12 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import Avatar from 'components/widgets/users/avatar';
 import type {TAvatarSizeToken} from 'components/widgets/users/avatar/avatar';
+import WithTooltip from 'components/with_tooltip';
 
 // import Avatar from './avatar/avatar';
 
@@ -25,20 +25,15 @@ const ConnectedProfiles = ({pictures, profiles, maxShowedProfiles, size}: Props)
 
     const els = profiles.map((profile, idx) => {
         return profile && (
-            <OverlayTrigger
-                placement='bottom'
+            <WithTooltip
                 key={'call_thread_profile_' + profile.id}
-                overlay={
-                    <Tooltip id='tooltip-username'>
-                        {profile.username}
-                    </Tooltip>
-                }
+                title={profile.username}
             >
                 <Avatar
                     size={size}
                     url={pictures[idx]}
                 />
-            </OverlayTrigger>
+            </WithTooltip>
         );
     });
 

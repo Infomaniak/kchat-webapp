@@ -2,12 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Tooltip} from 'react-bootstrap';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import OverlayTrigger from 'components/overlay_trigger';
 import Avatar from 'components/widgets/users/avatar';
+import WithTooltip from 'components/with_tooltip';
 
 interface Props {
     pictures: string[];
@@ -22,20 +21,15 @@ const ConnectedProfiles = ({pictures, profiles, maxShowedProfiles}: Props) => {
 
     const els = profiles.map((profile, idx) => {
         return (
-            <OverlayTrigger
-                placement='bottom'
+            <WithTooltip
                 key={'call_thread_profile_' + profile.id}
-                overlay={
-                    <Tooltip id='tooltip-username'>
-                        {profile.username}
-                    </Tooltip>
-                }
+                title={profile.username}
             >
                 <Avatar
                     size='sm'
                     url={pictures[idx]}
                 />
-            </OverlayTrigger>
+            </WithTooltip>
         );
     });
 

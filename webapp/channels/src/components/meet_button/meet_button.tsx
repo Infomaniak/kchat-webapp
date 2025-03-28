@@ -4,20 +4,19 @@
 import React, {useRef} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
+import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import ConfirmModal from 'components/confirm_modal';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {KmeetTour, useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
-
 import './meet_button.scss';
+import WithTooltip from 'components/with_tooltip';
+
 import type {ModalData} from 'types/actions';
 
 import meetSvg from './static/kmeet.svg';
@@ -46,7 +45,7 @@ function MeetButton(props: Props) {
 
     const {startOrJoinCallInChannelV2, joinCall} = actions;
     const ref = useRef<HTMLButtonElement>(null);
-    const timeoutRef = useRef<NodeJS.Timeout|null>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const onClick = () => {
         if (timeoutRef.current) {
@@ -131,23 +130,16 @@ function MeetButton(props: Props) {
     };
 
     const tooltip = (
-        <Tooltip
-            id='call'
-            className='meet-btn__overlay'
-        >
-            <FormattedMessage
-                id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
-                defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
-            />
-        </Tooltip>
+        <FormattedMessage
+            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
+            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
+        />
     );
 
     const btnClasses = 'btn meet-btn';
     return (
-        <OverlayTrigger
-            delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement='bottom'
-            overlay={tooltip}
+        <WithTooltip
+            title={tooltip}
         >
             <div
                 className='meet-btn__wrapper'
@@ -173,7 +165,7 @@ function MeetButton(props: Props) {
                     </span>
                 </button>
             </div>
-        </OverlayTrigger>
+        </WithTooltip>
     );
 }
 

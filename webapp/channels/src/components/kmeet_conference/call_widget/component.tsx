@@ -4,7 +4,8 @@
 import moment from 'moment-timezone';
 import type {CSSProperties} from 'react';
 import React from 'react';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import Constants from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -33,9 +34,7 @@ import ShrinkConvIcon from 'components/widgets/icons/shrink_conv_icon';
 import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
 import Avatar from 'components/widgets/users/avatar';
 import Avatars from 'components/widgets/users/avatars/avatars';
-
-import Constants from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
+import WithTooltip from 'components/with_tooltip';
 
 import type {Team} from 'types/teams';
 
@@ -646,7 +645,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                         <span className='MenuItem__primary-text'>
                             {getUserDisplayName(profile)}
                             { profile.id === this.props.currentUserID &&
-                            <span style={{color: '#333', whiteSpace: 'pre-wrap'}}>{' (you)'}</span>
+                                <span style={{color: '#333', whiteSpace: 'pre-wrap'}}>{' (you)'}</span>
                             }
                         </span>
 
@@ -790,14 +789,14 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
         const MuteIcon = isMuted ? CallMutedIcon : CallUnmutedIcon;
         const onJoinSelf = (
-            <React.Fragment>
+            <>
                 <span>{`You are ${isMuted ? 'muted' : 'unmuted'}. Click `}</span>
                 <MuteIcon
                     fill={isMuted ? '#9F9F9F' : '#0098FF'}
                     style={{width: '11px', height: '11px'}}
                 />
                 <span>{` to ${isMuted ? 'unmute' : 'mute'}.`}</span>
-            </React.Fragment>
+            </>
         );
 
         const notificationContent = onJoinSelf;
@@ -830,16 +829,16 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         });
 
         return (
-            <React.Fragment>
+            <>
                 <div style={{display: 'flex', flexDirection: 'column-reverse'}}>
                     { joinedUsers }
                 </div>
                 { this.state.showUsersJoined.includes(this.props.currentUserID) &&
-                <div className='calls-notification-bar calls-slide-top'>
-                    {notificationContent}
-                </div>
+                    <div className='calls-notification-bar calls-slide-top'>
+                        {notificationContent}
+                    </div>
                 }
-            </React.Fragment>
+            </>
         );
     };
 
@@ -974,7 +973,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
     renderChannelName = (hasTeamSidebar: boolean) => {
         return (
-            <React.Fragment>
+            <>
                 <div style={{margin: '0 2px 0 4px'}}>{'•'}</div>
 
                 <a
@@ -994,7 +993,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                         {this.props.channel.display_name}
                     </span>
                 </a>
-            </React.Fragment>
+            </>
         );
     };
 
@@ -1051,7 +1050,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             channelDisplayName = localizeMessage('callingWidget.waitingForUsers', 'Waiting for users');
         }
         return (
-            <React.Fragment>
+            <>
                 <div
                     id='calls-widget'
                     style={{
@@ -1109,14 +1108,9 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                 className='calls-widget-bottom-bar-left'
                                 style={this.style.bottomBarLeft}
                             >
-                                <OverlayTrigger
+                                <WithTooltip
                                     key='mute'
-                                    placement='top'
-                                    overlay={
-                                        <Tooltip id='tooltip-mute'>
-                                            {muteTooltipText}
-                                        </Tooltip>
-                                    }
+                                    title={muteTooltipText}
                                 >
                                     <button
                                         id='voice-mute-unmute'
@@ -1129,15 +1123,10 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                             style={{width: '16px', height: '16px'}}
                                         />
                                     </button>
-                                </OverlayTrigger>
-                                <OverlayTrigger
+                                </WithTooltip>
+                                <WithTooltip
                                     key='camera'
-                                    placement='top'
-                                    overlay={
-                                        <Tooltip id='tooltip-camera'>
-                                            {cameraTooltipText}
-                                        </Tooltip>
-                                    }
+                                    title={cameraTooltipText}
                                 >
                                     <button
                                         id='camera-on-off'
@@ -1150,15 +1139,10 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                             style={{width: '16px', height: '16px'}}
                                         />
                                     </button>
-                                </OverlayTrigger>
-                                <OverlayTrigger
+                                </WithTooltip>
+                                <WithTooltip
                                     key='screen-sharing'
-                                    placement='top'
-                                    overlay={
-                                        <Tooltip id='tooltip-screen-sharing'>
-                                            {screenSharingTooltipText}
-                                        </Tooltip>
-                                    }
+                                    title={screenSharingTooltipText}
                                 >
                                     <button
                                         id='screen-sharing-on-off'
@@ -1171,17 +1155,12 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                             style={{width: '16px', height: '16px'}}
                                         />
                                     </button>
-                                </OverlayTrigger>
+                                </WithTooltip>
                             </div>
 
-                            <OverlayTrigger
+                            <WithTooltip
                                 key='participants'
-                                placement='top'
-                                overlay={
-                                    <Tooltip id='tooltip-mute'>
-                                        {this.state.showParticipantsList ? 'Hide participants' : 'Show participants'}
-                                    </Tooltip>
-                                }
+                                title={this.state.showParticipantsList ? 'Hide participants' : 'Show participants'}
                             >
                                 <button
                                     className='style--none button-controls button-controls--wide'
@@ -1200,16 +1179,11 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                         style={{fontWeight: 600, color: 'var(--center-channel-color)'}}
                                     >{Object.keys(this.props.profiles).length}</span>
                                 </button>
-                            </OverlayTrigger>
+                            </WithTooltip>
 
-                            <OverlayTrigger
+                            <WithTooltip
                                 key='leave'
-                                placement='top'
-                                overlay={
-                                    <Tooltip id='tooltip-leave'>
-                                        {'Click to leave call'}
-                                    </Tooltip>
-                                }
+                                title={'Click to leave call'}
                             >
 
                                 <button
@@ -1223,12 +1197,12 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                         style={{width: '16px', height: '6px'}}
                                     />
                                 </button>
-                            </OverlayTrigger>
+                            </WithTooltip>
 
                         </div>
                     </div>
                 </div>
-            </React.Fragment>
+            </>
         );
     }
 }
