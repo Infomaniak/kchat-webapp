@@ -1,12 +1,12 @@
+import {CheckIcon, ChevronDownIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
 import styled from 'styled-components';
 
-import {CheckIcon, ChevronDownIcon} from '@infomaniak/compass-icons/components';
 import {Client4} from 'mattermost-redux/client';
 
-import DotMenu, {DotMenuButton, DropdownMenu, DropdownMenuItem} from './dot_menu';
+import type {DotMenuButton} from './dot_menu';
+import DotMenu, {DropdownMenu, DropdownMenuItem} from './dot_menu';
 import {GrayPill} from './pill';
 
 interface LLMBot {
@@ -18,9 +18,9 @@ interface LLMBot {
 }
 
 type DropdownBotSelectorProps = {
-    bots: LLMBot[]
-    activeBot: LLMBot | null
-    setActiveBot: (bot: LLMBot) => void
+    bots: LLMBot[];
+    activeBot: LLMBot | null;
+    setActiveBot: (bot: LLMBot) => void;
 }
 
 export const DropdownBotSelector = (props: DropdownBotSelectorProps) => {
@@ -61,11 +61,11 @@ const BotSelectorContainer = styled.div`
 `;
 
 type BotDropdownProps = {
-    bots: LLMBot[]
-    activeBot: LLMBot | null
-    setActiveBot: (bot: LLMBot) => void
-    container: typeof DotMenuButton
-    children: JSX.Element
+    bots: LLMBot[];
+    activeBot: LLMBot | null;
+    setActiveBot: (bot: LLMBot) => void;
+    container: typeof DotMenuButton;
+    children: JSX.Element;
 }
 
 export const BotDropdown = (props: BotDropdownProps) => {

@@ -1,7 +1,7 @@
+import {LightbulbOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
-import {LightbulbOutlineIcon} from '@infomaniak/compass-icons/components';
 
 const DropdownMenuItemInfo = styled.div`
 	display: flex;

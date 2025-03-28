@@ -7,10 +7,11 @@ import {Provider} from 'react-redux';
 
 import * as actions from 'actions/status_actions';
 
-import {renderWithContext} from 'tests/react_testing_utils';
-import mockStore from 'tests/test_store';
 import Constants from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext} from 'tests/react_testing_utils';
+import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
 

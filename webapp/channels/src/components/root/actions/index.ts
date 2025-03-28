@@ -9,6 +9,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import {GeneralTypes} from 'mattermost-redux/action_types';
 import {logError} from 'mattermost-redux/actions/errors';
 import {getClientConfig, getLicenseConfig, getFirstAdminSetupComplete} from 'mattermost-redux/actions/general';
+import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
 import {getServerLimits} from 'mattermost-redux/actions/limits';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {getMyTeamMembers, getMyTeams, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
@@ -22,12 +23,11 @@ import {checkIsFirstAdmin, getCurrentUser, isCurrentUserSystemAdmin} from 'matte
 import {redirectUserToDefaultTeam, emitUserLoggedOutEvent} from 'actions/global_actions';
 
 import {ActionTypes, StoragePrefixes} from 'utils/constants';
+import {isMacApp, isNotMacMas} from 'utils/user_agent';
 import {doesCookieContainsMMUserId} from 'utils/utils';
 
 import type {ActionFuncAsync, ThunkActionFunc} from 'types/store';
 import type {Translations} from 'types/store/i18n';
-import {isMacApp, isNotMacMas} from 'utils/user_agent';
-import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
 
 export type TranslationPluginFunction = (locale: string) => Translations
 

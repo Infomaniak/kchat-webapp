@@ -18,6 +18,7 @@ import type {TextFormattingOptions} from 'utils/text_formatting';
 import * as Utils from 'utils/utils';
 
 import Pluggable from 'plugins/pluggable';
+
 import type {PostPluginComponent} from 'types/store/plugins';
 
 type Props = {

@@ -21,11 +21,12 @@ import SettingItem from 'components/setting_item';
 import SettingItemMax from 'components/setting_item_max';
 import ThemeSetting from 'components/user_settings/display/user_settings_theme';
 
-import {getLanguageInfo} from 'i18n/i18n';
-import type {Language} from 'i18n/i18n';
 import Constants from 'utils/constants';
 import {getBrowserTimezone} from 'utils/timezone';
 import {a11yFocus} from 'utils/utils';
+
+import type {Language} from 'i18n/i18n';
+import {getLanguageInfo} from 'i18n/i18n';
 
 import ManageLanguages from './manage_languages';
 import ManageTimezones from './manage_timezones';

@@ -5,9 +5,10 @@ import React from 'react';
 
 import * as modalActions from 'actions/views/modals';
 
-import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 import {WindowSizes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 
 import UserAccountOutOfOfficeMenuItem, {type Props} from './user_account_out_of_office_menuitem';
 

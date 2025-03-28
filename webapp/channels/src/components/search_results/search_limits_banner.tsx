@@ -92,9 +92,7 @@ function SearchLimitsBanner(props: Props) {
             ctaAction,
             storage: asGBString(fileStorageLimit, formatNumber),
             a: (chunks: React.ReactNode | React.ReactNodeArray) => (
-                <StyledA
-                    // onClick={() => openPricingModal({trackingLocation: 'file_search_limits_banner'})}
-                >
+                <StyledA >
                     {chunks}
                 </StyledA>
             ),

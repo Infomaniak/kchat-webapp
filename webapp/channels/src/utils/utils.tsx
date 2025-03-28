@@ -58,11 +58,11 @@ import {focusPost} from 'components/permalink_view/actions';
 import type {TextboxElement} from 'components/textbox';
 
 import {getHistory} from 'utils/browser_history';
-import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes, AdvancedTextEditorTextboxIds} from 'utils/constants';
 import type {A11yFocusEventDetail} from 'utils/constants';
+import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes, AdvancedTextEditorTextboxIds} from 'utils/constants';
 import * as Keyboard from 'utils/keyboard';
-import * as UserAgent from 'utils/user_agent';
 import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
+import * as UserAgent from 'utils/user_agent';
 
 import bing from 'sounds/bing.mp3';
 import crackle from 'sounds/crackle.mp3';
@@ -74,7 +74,6 @@ import upstairs from 'sounds/upstairs.mp3';
 
 import {joinPrivateChannelPrompt} from './channel_utils';
 import {isServerVersionGreaterThanOrEqualTo} from './server_version';
-
 
 const CLICKABLE_ELEMENTS = [
     'a',
@@ -143,7 +142,6 @@ export function insertLineBreakFromKeyEvent(e: KeyboardEvent): string {
     // return the updated string so that component state can be updated
     return newValue;
 }
-
 
 export const notificationSounds = new Map([
     ['Bing', bing],

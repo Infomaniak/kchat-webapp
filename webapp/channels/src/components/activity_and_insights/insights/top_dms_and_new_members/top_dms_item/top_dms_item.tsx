@@ -5,7 +5,6 @@ import React, {memo, useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {imageURLForUser} from 'utils/utils';
 
 import type {TopDM} from '@mattermost/types/insights';
 import type {Team} from '@mattermost/types/teams';
@@ -19,6 +18,8 @@ import {trackEvent} from 'actions/telemetry_actions';
 import Avatar from 'components/widgets/users/avatar';
 import './../../../activity_and_insights.scss';
 import WithTooltip from 'components/with_tooltip';
+
+import {imageURLForUser} from 'utils/utils';
 
 type Props = {
     dm: TopDM;

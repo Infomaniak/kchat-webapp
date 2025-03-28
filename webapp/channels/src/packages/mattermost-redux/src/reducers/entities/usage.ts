@@ -41,7 +41,6 @@ export default function usage(state: CloudUsage = emptyUsage, action: MMReduxAct
             ...action.data,
             usageLoaded: true,
         };
-        break;
     case CloudTypes.RECEIVED_MESSAGES_USAGE: {
         return {
             ...state,

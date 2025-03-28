@@ -9,9 +9,10 @@ import type {Channel} from '@mattermost/types/channels';
 import {favoriteChannel, unfavoriteChannel} from 'mattermost-redux/actions/channels';
 import * as channelsSelectors from 'mattermost-redux/selectors/entities/channels';
 
-import {renderWithContext} from 'tests/react_testing_utils';
 import type {A11yFocusEventDetail} from 'utils/constants';
 import {A11yCustomEventTypes} from 'utils/constants';
+
+import {renderWithContext} from 'tests/react_testing_utils';
 
 import ChannelHeaderTitleFavorite from './channel_header_title_favorite';
 

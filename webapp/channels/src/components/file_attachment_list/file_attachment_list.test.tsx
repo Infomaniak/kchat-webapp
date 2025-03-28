@@ -6,8 +6,9 @@ import React from 'react';
 
 import type {PostMetadata} from '@mattermost/types/posts';
 
-import {renderWithContext} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 

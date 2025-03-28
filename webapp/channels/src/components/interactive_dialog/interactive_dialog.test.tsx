@@ -8,9 +8,10 @@ import {Provider} from 'react-redux';
 
 import type {DialogElement as TDialogElement} from '@mattermost/types/integrations';
 
+import EmojiMap from 'utils/emoji_map';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
-import EmojiMap from 'utils/emoji_map';
 
 import type {Props} from './interactive_dialog';
 import InteractiveDialog from './interactive_dialog';

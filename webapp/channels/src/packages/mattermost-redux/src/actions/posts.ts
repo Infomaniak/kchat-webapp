@@ -1357,7 +1357,7 @@ export function fetchDeletedPostsIds(channelId: string, since?: number): ActionF
             dispatch(logError(error));
             return {data: null, error};
         }
-    }
+    };
 }
 
 export function restorePostVersion(postId: string, restoreVersionId: string, connectionId: string): ActionFuncAsync {

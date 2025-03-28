@@ -1,9 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 import {CheckIcon, AlertOutlineIcon, AlertCircleOutlineIcon, MessageTextOutlineIcon, CheckCircleOutlineIcon, BellRingOutlineIcon} from '@infomaniak/compass-icons/components';
+import MenuList from '@mui/material/MenuList';
 import React from 'react';
 import styled from 'styled-components';
-import MenuList from '@mui/material/MenuList';
+
 import {MenuItem} from 'components/menu/menu_item';
 import Toggle from 'components/toggle';
 

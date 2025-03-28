@@ -11,9 +11,10 @@ import type {TeamType} from '@mattermost/types/teams';
 
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import {DraggingStates, DraggingStateTypes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import SidebarList, {type SidebarList as SidebarListComponent} from './sidebar_list';
 

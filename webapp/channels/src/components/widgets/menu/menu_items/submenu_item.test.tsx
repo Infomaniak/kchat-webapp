@@ -3,9 +3,10 @@
 
 import React from 'react';
 
+import Constants from 'utils/constants';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {screen, userEvent, renderWithContext} from 'tests/react_testing_utils';
-import Constants from 'utils/constants';
 
 import SubMenuItem, {SubMenuItem as SubMenuItemClass} from './submenu_item';
 

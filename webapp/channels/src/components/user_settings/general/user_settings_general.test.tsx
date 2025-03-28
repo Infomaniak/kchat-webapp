@@ -9,9 +9,10 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import configureStore from 'store';
 
+import {TestHelper} from 'utils/test_helper';
+
 import {shallowWithIntl, mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
-import {TestHelper} from 'utils/test_helper';
 
 import UserSettingsGeneral from './user_settings_general';
 import type {UserSettingsGeneralTab} from './user_settings_general';

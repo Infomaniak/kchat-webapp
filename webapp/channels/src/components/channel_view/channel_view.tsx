@@ -6,6 +6,7 @@ import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
 import * as GlobalActions from 'actions/global_actions';
+
 import {makeAsyncComponent} from 'components/async_load';
 import {BannerJoinChannel} from 'components/banner_join_channel';
 import deferComponentRender from 'components/deferComponentRender';
@@ -188,7 +189,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             );
         } else if (this.props.missingChannelRole || this.state.waitForLoader) {
             createPost = <InputLoading updateWaitForLoader={this.onUpdateInputShowLoader}/>;
-         } else {
+        } else {
             createPost = (
                 <BannerJoinChannel
                     onButtonClick={() => GlobalActions.joinChannel(this.props.channelId)}

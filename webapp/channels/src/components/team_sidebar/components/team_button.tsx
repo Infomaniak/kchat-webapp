@@ -187,7 +187,6 @@ export default function TeamButton({
         );
     }
 
-
     return isDraggable ? (
         <Draggable
             draggableId={teamId!}

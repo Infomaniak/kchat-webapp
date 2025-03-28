@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {ChannelType} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
 
 import {CloudTypes} from 'mattermost-redux/action_types';
@@ -12,13 +13,14 @@ import {getCloudErrors} from 'mattermost-redux/selectors/entities/cloud';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {isModalOpen} from 'selectors/views/modals';
 
-import type {GlobalState} from 'types/store';
-import {ModalIdentifiers} from 'utils/constants';
 import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
-import {closeModal, openModal} from './views/modals';
+
+import {ModalIdentifiers} from 'utils/constants';
 import {isLimitExceeded} from 'utils/limits';
-import {ChannelType} from '@mattermost/types/channels';
-import type {ActionFunc, ThunkActionFunc} from 'types/store';
+
+import type {GlobalState, ActionFunc, ThunkActionFunc} from 'types/store';
+
+import {closeModal, openModal} from './views/modals';
 
 export function getInstallation() {
     return async () => {

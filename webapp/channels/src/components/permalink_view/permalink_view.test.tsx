@@ -19,11 +19,12 @@ import * as Channels from 'mattermost-redux/selectors/entities/channels';
 import {focusPost} from 'components/permalink_view/actions';
 import PermalinkView from 'components/permalink_view/permalink_view';
 
+import {getHistory} from 'utils/browser_history';
+import {ErrorPageTypes} from 'utils/constants';
+
 import TestHelper from 'packages/mattermost-redux/test/test_helper';
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
-import {getHistory} from 'utils/browser_history';
-import {ErrorPageTypes} from 'utils/constants';
 
 jest.mock('actions/channel_actions', () => ({
     loadChannelsForCurrentUser: jest.fn(() => {

@@ -8,10 +8,10 @@ import type {ClientLicense, ClientConfig, WarnMetricStatus} from '@mattermost/ty
 import withGetCloudSubscription from 'components/common/hocs/cloud/with_get_cloud_subscription';
 
 import AppStoreBar from './appstore_announcement_bar';
-import MASMigrationBar from './mas_migration_bar';
 import CloudTrialAnnouncementBar from './cloud_trial_announcement_bar';
 import ConfigurationAnnouncementBar from './configuration_bar';
 import AnnouncementBar from './default_announcement_bar';
+import MASMigrationBar from './mas_migration_bar';
 import NotificationPermissionBar from './notification_permission_bar';
 import OverageUsersBanner from './overage_users_banner';
 import TextDismissableBar from './text_dismissable_bar';
@@ -63,9 +63,9 @@ class AnnouncementBarController extends React.PureComponent<Props> {
             );
         }
 
-        let paymentAnnouncementBar = null;
-        let cloudTrialAnnouncementBar = null;
-        let cloudTrialEndAnnouncementBar = null;
+        const paymentAnnouncementBar = null;
+        const cloudTrialAnnouncementBar = null;
+        const cloudTrialEndAnnouncementBar = null;
         const notifyAdminDowngradeDelinquencyBar = null;
         const toYearlyNudgeBannerDismissable = null;
         let toPaidPlanNudgeBannerDismissable = null;
@@ -83,7 +83,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
             toPaidPlanNudgeBannerDismissable = (<ToPaidPlanBannerDismissable/>);
         }
 
-        let autoStartTrialModal = null;
+        const autoStartTrialModal = null;
 
         // if (this.props.userIsAdmin) {
         //     autoStartTrialModal = (

@@ -11,7 +11,7 @@ import FileAttachmentListContainer from 'components/file_attachment_list';
 import PostMessageView from 'components/post_view/post_message_view';
 
 import './restore_post_history.scss';
-import { t } from 'utils/i18n';
+import {t} from 'utils/i18n';
 
 const modalMessages = defineMessages({
     title: {

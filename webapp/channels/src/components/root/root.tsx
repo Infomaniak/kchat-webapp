@@ -10,6 +10,7 @@ import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
 import {ServiceEnvironment} from '@mattermost/types/config';
+
 // import type {PreferenceType} from '@mattermost/types/preferences';
 // import type {Team} from '@mattermost/types/teams';
 
@@ -40,14 +41,15 @@ import SidebarMobileRightMenu from 'components/sidebar_mobile_right_menu';
 
 import webSocketClient from 'client/web_websocket_client';
 import {initializePlugins} from 'plugins';
+
 import 'utils/a11y_controller_instance';
 import Constants, {DesktopThemePreferences, PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
-import DesktopApp from 'utils/desktop_api';
 import {IKConstants} from 'utils/constants-ik';
+import DesktopApp from 'utils/desktop_api';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {rudderAnalytics, RudderTelemetryHandler} from 'utils/rudder';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {getDesktopVersion, isAndroidWeb, isChromebook, isDesktopApp, isIosWeb} from 'utils/user_agent';
 import {applyTheme, injectWebcomponentInit, isTextDroppableEvent} from 'utils/utils';
@@ -58,6 +60,7 @@ import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
 
 import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
+
 import type {PropsFromRedux} from './index';
 
 import 'plugins/export';
@@ -68,6 +71,7 @@ const WindowSizeObserver = makeAsyncComponent('WindowSizeObserver', lazy(() => i
 const ErrorPage = makeAsyncComponent('ErrorPage', lazy(() => import('components/error_page')));
 const Login = makeAsyncComponent('LoginController', lazy(() => import('components/login/login')));
 const AccessProblem = makeAsyncComponent('AccessProblem', lazy(() => import('components/access_problem')));
+
 // const PasswordResetSendLink = makeAsyncComponent('PasswordResedSendLink', lazy(() => import('components/password_reset_send_link')));
 // const PasswordResetForm = makeAsyncComponent('PasswordResetForm', lazy(() => import('components/password_reset_form')));
 // const Signup = makeAsyncComponent('SignupController', lazy(() => import('components/signup/signup')));
@@ -87,6 +91,7 @@ const CompassThemeProvider = makeAsyncComponent('CompassThemeProvider', lazy(() 
 const TeamController = makeAsyncComponent('TeamController', lazy(() => import('components/team_controller')));
 const AnnouncementBarController = makeAsyncComponent('AnnouncementBarController', lazy(() => import('components/announcement_bar')));
 const SystemNotice = makeAsyncComponent('SystemNotice', lazy(() => import('components/system_notice')));
+
 // const CloudEffects = makeAsyncComponent('CloudEffects', lazy(() => import('components/cloud_effects')));
 const TeamSidebar = makeAsyncComponent('TeamSidebar', lazy(() => import('components/team_sidebar')));
 const SidebarRight = makeAsyncComponent('SidebarRight', lazy(() => import('components/sidebar_right')));
@@ -173,33 +178,33 @@ export default class Root extends React.PureComponent<Props, State> {
 
             rudderAnalytics.load(rudderKey, rudderUrl || '', rudderCfg);
 
-        //     rudderAnalytics.identify(telemetryId, {}, {
-        //         context: {
-        //             ip: '0.0.0.0',
-        //         },
-        //         page: {
-        //             path: '',
-        //             referrer: '',
-        //             search: '',
-        //             title: '',
-        //             url: '',
-        //         },
-        //         anonymousId: '00000000000000000000000000',
-        //     });
+            //     rudderAnalytics.identify(telemetryId, {}, {
+            //         context: {
+            //             ip: '0.0.0.0',
+            //         },
+            //         page: {
+            //             path: '',
+            //             referrer: '',
+            //             search: '',
+            //             title: '',
+            //             url: '',
+            //         },
+            //         anonymousId: '00000000000000000000000000',
+            //     });
 
-        //     rudderAnalytics.page('ApplicationLoaded', {
-        //         path: '',
-        //         referrer: '',
-        //         search: ('' as any),
-        //         title: '',
-        //         url: '',
-        //     } as any,
-        //     {
-        //         context: {
-        //             ip: '0.0.0.0',
-        //         },
-        //         anonymousId: '00000000000000000000000000',
-        //     });
+            //     rudderAnalytics.page('ApplicationLoaded', {
+            //         path: '',
+            //         referrer: '',
+            //         search: ('' as any),
+            //         title: '',
+            //         url: '',
+            //     } as any,
+            //     {
+            //         context: {
+            //             ip: '0.0.0.0',
+            //         },
+            //         anonymousId: '00000000000000000000000000',
+            //     });
 
             const utmParams = this.captureUTMParams();
             rudderAnalytics.ready(() => {
@@ -411,8 +416,8 @@ export default class Root extends React.PureComponent<Props, State> {
 
     initiateMeRequests = async () => {
         const {isLoaded, isMeRequested} = await this.props.actions.loadConfigAndMe();
-        console.log('isLoaded',isLoaded)
-        console.log('isMeRequested',isMeRequested)
+        console.log('isLoaded', isLoaded);
+        console.log('isMeRequested', isMeRequested);
 
         if (isLoaded) {
             this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
@@ -650,7 +655,6 @@ export default class Root extends React.PureComponent<Props, State> {
         document.addEventListener('drop', this.handleDropEvent);
 
         document.addEventListener('dragover', this.handleDragOverEvent);
-
     };
     componentWillUnmount() {
         this.mounted = false;

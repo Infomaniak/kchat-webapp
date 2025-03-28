@@ -12,8 +12,9 @@ import type {SystemEmoji} from '@mattermost/types/emojis';
 
 import WithTooltip from 'components/with_tooltip';
 
-import imgTrans from 'images/img_trans.gif';
 import * as Emoji from 'utils/emoji';
+
+import imgTrans from 'images/img_trans.gif';
 
 interface SkinTone {
     emoji: SystemEmoji;

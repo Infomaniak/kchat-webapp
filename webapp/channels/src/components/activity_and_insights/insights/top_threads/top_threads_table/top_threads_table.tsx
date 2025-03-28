@@ -107,6 +107,7 @@ const TopThreadsTable = (props: Props) => {
             }));
         } else {
             trackEvent('insights', 'open_thread_from_top_threads_modal');
+
             // dispatch(selectPostAndParentChannel(thread.post));
         }
         closeModal();

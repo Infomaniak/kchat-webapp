@@ -8,14 +8,15 @@ import type {UserCustomStatus} from '@mattermost/types/users';
 
 import ChannelInfoButton from 'components/channel_header/channel_info_button';
 
-import type {MockIntl} from 'tests/helpers/intl-test-helper';
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import Constants, {RHSStates} from 'utils/constants';
 
-import {TestHelper} from '../../utils/test_helper';
+import type {MockIntl} from 'tests/helpers/intl-test-helper';
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import ChannelHeader from './channel_header';
 import type {Props} from './channel_header';
+
+import {TestHelper} from '../../utils/test_helper';
 
 describe('components/ChannelHeader', () => {
     const baseProps: Props = {

@@ -6,8 +6,9 @@ import React from 'react';
 
 import Setup from 'components/mfa/setup/setup';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {TestHelper} from 'utils/test_helper';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 jest.mock('actions/global_actions', () => ({
     redirectUserToDefaultTeam: jest.fn(),

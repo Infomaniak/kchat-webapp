@@ -17,11 +17,12 @@ import {getMembershipForEntities} from 'actions/views/profile_popover';
 import {getSelectedPost} from 'selectors/rhs';
 import {getIsMobileView} from 'selectors/views/browser';
 
-import Pluggable from 'plugins/pluggable';
 import {getHistory} from 'utils/browser_history';
 import {A11yCustomEventTypes, UserStatuses} from 'utils/constants';
 import type {A11yFocusEventDetail} from 'utils/constants';
 import * as Utils from 'utils/utils';
+
+import Pluggable from 'plugins/pluggable';
 
 import type {GlobalState} from 'types/store';
 

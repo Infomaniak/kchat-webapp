@@ -4,8 +4,9 @@
 import {screen} from '@testing-library/react';
 import React from 'react';
 
-import {renderWithContext, userEvent} from 'tests/react_testing_utils';
 import {Locations} from 'utils/constants';
+
+import {renderWithContext, userEvent} from 'tests/react_testing_utils';
 
 import FormattingBar from './formatting_bar';
 import * as Hooks from './hooks';

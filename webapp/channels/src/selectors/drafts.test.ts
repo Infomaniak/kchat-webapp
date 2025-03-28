@@ -3,9 +3,10 @@
 
 import cloneDeep from 'lodash/cloneDeep';
 
-import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 import {StoragePrefixes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 
 import type {GlobalState} from 'types/store';
 

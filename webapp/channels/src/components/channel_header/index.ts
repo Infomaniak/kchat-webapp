@@ -98,6 +98,7 @@ function makeMapStateToProps() {
             gmMembers,
             rhsState: getRhsState(state),
             hasGuests: false,
+
             // hasGuests: stats ? stats.guest_count > 0 : false,
             isChannelMuted: isCurrentChannelMuted(state),
             pinnedPostsCount: stats?.pinnedpost_count || 0,

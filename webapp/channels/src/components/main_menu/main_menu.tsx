@@ -18,8 +18,8 @@ import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import TeamGroupsManageModal from 'components/team_groups_manage_modal';
-import Menu from 'components/widgets/menu/menu';
 import UserSettingsModal from 'components/user_settings/modal';
+import Menu from 'components/widgets/menu/menu';
 
 import {Constants, ModalIdentifiers} from 'utils/constants';
 import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';

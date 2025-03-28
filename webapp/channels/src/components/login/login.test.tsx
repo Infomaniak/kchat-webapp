@@ -10,9 +10,10 @@ import LocalStorageStore from 'stores/local_storage_store';
 
 import Login from 'components/login/login';
 
+import Constants, {WindowSizes} from 'utils/constants';
+
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
-import Constants, {WindowSizes} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -211,7 +212,7 @@ describe('components/login/Login', () => {
             },
         );
 
-    //     expect(LocalStorageStore.getWasLoggedIn()).toEqual(false);
+        //     expect(LocalStorageStore.getWasLoggedIn()).toEqual(false);
 
         expect(await screen.findByText('Sign-in method changed successfully')).toBeVisible();
 

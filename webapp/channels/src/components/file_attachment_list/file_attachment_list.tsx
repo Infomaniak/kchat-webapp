@@ -49,7 +49,7 @@ export default function FileAttachmentList(props: Props) {
                 inPost={true}
             />
         );
-    } 
+    }
 
     if (fileInfos.length === 0) {
         return null;

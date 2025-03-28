@@ -9,9 +9,10 @@ import * as modalActions from 'actions/views/modals';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 
-import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 import {ModalIdentifiers} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 
 import EditConversationHeader from './edit_conversation_header';
 

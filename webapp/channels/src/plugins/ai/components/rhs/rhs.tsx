@@ -3,20 +3,18 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import {GlobalState} from '@mattermost/types/store';
+import type {GlobalState} from '@mattermost/types/store';
 
-import manifest from '@/manifest';
-
-import {getAIThreads, updateRead} from '@/client';
-
-import {useBotlist} from '@/bots';
+import {RHSPaddingContainer, RHSText, RHSTitle} from './common';
+import RHSHeader from './rhs_header';
+import RHSNewTab from './rhs_new_tab';
+import ThreadItem from './thread_item';
 
 import RHSImage from '../assets/rhs_image';
 
-import ThreadItem from './thread_item';
-import RHSHeader from './rhs_header';
-import RHSNewTab from './rhs_new_tab';
-import {RHSPaddingContainer, RHSText, RHSTitle} from './common';
+import {useBotlist} from '@/bots';
+import {getAIThreads, updateRead} from '@/client';
+import manifest from '@/manifest';
 
 const ThreadViewer = (window as any).Components.ThreadViewer && styled((window as any).Components.ThreadViewer)`
     height: 100%;

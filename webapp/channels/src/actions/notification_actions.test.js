@@ -3,11 +3,12 @@
 
 import {MarkUnread} from 'mattermost-redux/constants/channels';
 
-import testConfigureStore from 'tests/test_store';
 import {getHistory} from 'utils/browser_history';
 import Constants, {NotificationLevels, UserStatuses} from 'utils/constants';
 import * as NotificationSounds from 'utils/notification_sounds';
 import * as utils from 'utils/notifications';
+
+import testConfigureStore from 'tests/test_store';
 
 import {sendDesktopNotification, isDesktopSoundEnabled, getDesktopNotificationSound} from './notification_actions';
 

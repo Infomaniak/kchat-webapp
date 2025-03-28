@@ -42,10 +42,11 @@ import {
     updateSearchTeam,
 } from 'actions/views/rhs';
 
-import mockStore from 'tests/test_store';
 import {ActionTypes, RHSStates, Constants} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 import {getBrowserUtcOffset} from 'utils/timezone';
+
+import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
 import type {RhsState} from 'types/store/rhs';

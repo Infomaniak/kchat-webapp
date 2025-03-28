@@ -16,9 +16,10 @@ import {unregisterPluginTranslationsSource} from 'actions/views/root';
 import {unregisterAllPluginWebSocketEvents, unregisterPluginReconnectHandler} from 'actions/websocket_actions';
 import store from 'stores/redux_store';
 
-import PluginRegistry from 'plugins/registry';
 import {ActionTypes} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
+
+import PluginRegistry from 'plugins/registry';
 
 import type {GlobalState, ActionFuncAsync} from 'types/store';
 

@@ -8,9 +8,10 @@ import {Client4} from '@mattermost/client';
 
 import configureStore from 'store';
 
+import {DesktopAppAPI} from 'utils/desktop_api';
+
 import {reset as resetUserAgent, setPlatform, set as setUserAgent} from 'tests/helpers/user_agent_mocks';
 import {waitForObservations} from 'tests/performance_mock';
-import {DesktopAppAPI} from 'utils/desktop_api';
 
 import PerformanceReporter from './reporter';
 

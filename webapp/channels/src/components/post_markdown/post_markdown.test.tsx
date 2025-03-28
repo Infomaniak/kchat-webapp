@@ -8,8 +8,9 @@ import type {Post, PostType} from '@mattermost/types/posts';
 
 import {Posts} from 'mattermost-redux/constants';
 
-import {renderWithContext, screen} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import PostMarkdown from './post_markdown';
 

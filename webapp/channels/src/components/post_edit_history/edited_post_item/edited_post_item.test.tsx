@@ -2,13 +2,13 @@
 // See LICENSE.txt for license information.
 
 import {screen, fireEvent} from '@testing-library/react';
-import React from 'react';
 import type {ComponentProps} from 'react';
 import React from 'react';
 
-import {renderWithContext} from 'tests/react_testing_utils';
 import {ModalIdentifiers} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext} from 'tests/react_testing_utils';
 
 import EditedPostItem from './edited_post_item';
 

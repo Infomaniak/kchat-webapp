@@ -271,12 +271,12 @@ function hasLimitation(state: string | null = null, action: AnyAction) {
 
 function isLimitedResults(state = -1, action: MMReduxAction): number {
     switch (action.type) {
-        case SearchTypes.SEARCH_POSTS_REQUEST: {
-            if (!action.isGettingMore) {
-                return -1;
-            }
-            return state;
+    case SearchTypes.SEARCH_POSTS_REQUEST: {
+        if (!action.isGettingMore) {
+            return -1;
         }
+        return state;
+    }
     }
 }
 

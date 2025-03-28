@@ -6,8 +6,9 @@ import React from 'react';
 
 import TeamGroupsManageModal from 'components/team_groups_manage_modal/team_groups_manage_modal';
 
-import {renderWithContext, userEvent} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, userEvent} from 'tests/react_testing_utils';
 
 describe('components/TeamGroupsManageModal', () => {
     const team = TestHelper.getTeamMock({type: 'O', allowed_domains: '', allow_open_invite: false, scheme_id: undefined});

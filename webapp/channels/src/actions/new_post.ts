@@ -28,8 +28,9 @@ import {sendDesktopNotification} from 'actions/notification_actions';
 import {updateThreadLastOpened} from 'actions/views/threads';
 import {isThreadOpen, makeGetThreadLastViewedAt} from 'selectors/views/threads';
 
-import WebSocketClient from 'client/web_websocket_client';
 import {ActionTypes} from 'utils/constants';
+
+import WebSocketClient from 'client/web_websocket_client';
 
 import type {DispatchFunc, GetStateFunc, ActionFunc, ActionFuncAsync} from 'types/store';
 

@@ -8,9 +8,10 @@ import type {QuickSwitchModal as QuickSwitchModalClass} from 'components/quick_s
 import QuickSwitchModal from 'components/quick_switch_modal/quick_switch_modal';
 import ChannelNavigator from 'components/sidebar/channel_navigator/channel_navigator';
 
+import Constants from 'utils/constants';
+
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
-import Constants from 'utils/constants';
 
 describe('components/QuickSwitchModal', () => {
     const baseProps = {

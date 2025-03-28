@@ -9,8 +9,9 @@ import Permissions from 'mattermost-redux/constants/permissions';
 
 import PermissionSystemSchemeSettings from 'components/admin_console/permission_schemes_settings/permission_system_scheme_settings/permission_system_scheme_settings';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import {DefaultRolePermissions} from 'utils/constants';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 function getAnyInstance(wrapper: any) {
     return wrapper.instance() as any;

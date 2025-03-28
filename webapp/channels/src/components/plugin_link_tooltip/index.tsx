@@ -19,8 +19,9 @@ import {
 import React, {useState} from 'react';
 import type {AnchorHTMLAttributes, ReactElement} from 'react';
 
-import Pluggable from 'plugins/pluggable';
 import {RootHtmlPortalId, OverlaysTimings, OverlayTransitionStyles} from 'utils/constants';
+
+import Pluggable from 'plugins/pluggable';
 
 import './plugin_link_tooltip.scss';
 

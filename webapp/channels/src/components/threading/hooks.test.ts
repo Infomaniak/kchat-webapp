@@ -3,8 +3,9 @@
 
 import type {DeepPartial} from '@mattermost/types/utilities';
 
-import {renderHookWithContext} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderHookWithContext} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 

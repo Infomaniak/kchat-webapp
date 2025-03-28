@@ -10,7 +10,6 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import type {Post} from '@mattermost/types/posts';
 
-
 import {getPostEditHistory, restorePostVersion} from 'mattermost-redux/actions/posts';
 import {ensureString} from 'mattermost-redux/utils/post_utils';
 
@@ -26,8 +25,8 @@ import UserProfileComponent from 'components/user_profile';
 import Avatar from 'components/widgets/users/avatar';
 import WithTooltip from 'components/with_tooltip';
 
-import {t} from 'utils/i18n';
 import {ModalIdentifiers, StoragePrefixes} from 'utils/constants';
+import {t} from 'utils/i18n';
 import {imageURLForUser} from 'utils/utils';
 
 import RestorePostModal from '../restore_post_modal';

@@ -9,8 +9,9 @@ import * as modalActions from 'actions/views/modals';
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 import MoreDirectChannels from 'components/more_direct_channels';
 
-import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 import {ModalIdentifiers} from 'utils/constants';
+
+import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 
 import AddGroupMembers from './add_group_members';
 

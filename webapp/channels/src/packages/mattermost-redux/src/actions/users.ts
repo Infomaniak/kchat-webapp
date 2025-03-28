@@ -21,11 +21,11 @@ import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, getUser as selectUser, getUsers, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
 import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
-import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 
 // TODO fix import restriction
 import {getMyMeets} from 'actions/calls';
@@ -561,7 +561,7 @@ export function getProfilesNotInChannel(teamId: string, channelId: string, group
 
 export function getMe(): ActionFuncAsync<UserProfile> {
     return async (dispatch) => {
-        console.log('getMe')
+        console.log('getMe');
         const getMeFunc = bindClientFunc({
             clientFunc: Client4.getMe,
             onSuccess: UserTypes.RECEIVED_ME,

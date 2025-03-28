@@ -93,6 +93,7 @@ const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0, po
     const editedIndicator = (postOwner && canEdit) ? (
         <button
             className={'style--none'}
+
             // onClick={showPostEditHistory}
             tabIndex={0}
             onKeyUp={handleKeyPress}

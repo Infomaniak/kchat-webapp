@@ -22,9 +22,9 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getBrowserTimezone} from 'utils/timezone';
 import {getDesktopVersion, isAndroid, isDesktopApp, isIos} from 'utils/user_agent';
 
-// import {doesCookieContainsMMUserId} from 'utils/utils';
-
 import WebSocketClient from 'client/web_websocket_client';
+
+// import {doesCookieContainsMMUserId} from 'utils/utils';
 
 declare global {
     interface Window {

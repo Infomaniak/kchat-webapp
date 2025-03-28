@@ -9,8 +9,9 @@ import type {DeepPartial} from '@mattermost/types/utilities';
 import {Client4} from 'mattermost-redux/client';
 import {generateId} from 'mattermost-redux/utils/helpers';
 
-import {renderHookWithContext} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderHookWithContext} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 

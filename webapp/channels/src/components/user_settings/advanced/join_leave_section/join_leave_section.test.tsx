@@ -11,8 +11,9 @@ import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
 import JoinLeaveSection from 'components/user_settings/advanced/join_leave_section/join_leave_section';
 
-import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 import {AdvancedSections} from 'utils/constants';
+
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 
 import type {GlobalState} from 'types/store';
 

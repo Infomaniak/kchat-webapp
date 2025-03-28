@@ -4,7 +4,6 @@
 import React, {useRef} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 
@@ -16,6 +15,8 @@ import {KmeetTour, useShowOnboardingTutorialStep} from 'components/tours/onboard
 
 import './meet_button.scss';
 import WithTooltip from 'components/with_tooltip';
+
+import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import type {ModalData} from 'types/actions';
 

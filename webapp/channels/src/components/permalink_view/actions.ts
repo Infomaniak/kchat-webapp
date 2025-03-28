@@ -141,6 +141,7 @@ export function focusPost(postId: string, returnTo = '', currentUserId: string, 
         const isCollapsed = isCollapsedThreadsEnabled(state);
 
         const channelId = threadData.posts[threadData.order[0]].channel_id;
+
         // let channel = getChannelFromRedux(state, channelId);
         let channel = state.entities.channels.channels[channelId];
 

@@ -7,10 +7,11 @@ import {GeneralTypes} from 'mattermost-redux/action_types';
 
 import store from 'stores/redux_store';
 
-import * as lineBreakHelpers from 'tests/helpers/line_break_helpers';
-import * as ua from 'tests/helpers/user_agent_mocks';
 import Constants, {ValidationErrors, AdvancedTextEditorTextboxIds} from 'utils/constants';
 import * as Utils from 'utils/utils';
+
+import * as lineBreakHelpers from 'tests/helpers/line_break_helpers';
+import * as ua from 'tests/helpers/user_agent_mocks';
 
 describe('Utils.getDisplayNameByUser', () => {
     afterEach(() => {

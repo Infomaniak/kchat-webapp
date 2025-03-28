@@ -32,7 +32,7 @@ export default class SiteNameAndDescription extends React.PureComponent<Props> {
         }
 
         return (
-            <React.Fragment>
+            <>
                 <h1 id='site_name'>{siteName}</h1>
                 <h3
                     id='site_description'
@@ -40,7 +40,7 @@ export default class SiteNameAndDescription extends React.PureComponent<Props> {
                 >
                     {description}
                 </h3>
-            </React.Fragment>
+            </>
         );
     }
 }

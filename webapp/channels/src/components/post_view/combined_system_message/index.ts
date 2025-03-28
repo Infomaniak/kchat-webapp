@@ -28,6 +28,7 @@ function makeMapStateToProps() {
         return {
             currentUserId: currentUser.id,
             currentUsername: currentUser.username,
+
             // showJoinLeave: shouldShowJoinLeaveMessages(state),
             showJoinLeave: true,
             userProfiles: getProfilesByIdsAndUsernames(state, {allUserIds, allUsernames}),

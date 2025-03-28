@@ -9,9 +9,10 @@ import * as modalActions from 'actions/views/modals';
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 import RenameChannelModal from 'components/rename_channel_modal';
 
-import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 import {ModalIdentifiers} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 
 import EditChannelSettings from './edit_channel_settings';
 

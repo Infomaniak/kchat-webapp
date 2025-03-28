@@ -6,9 +6,10 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {sendMembersInvites, sendGuestsInvites} from 'actions/invite_actions';
 
-import mockStore from 'tests/test_store';
 import {ConsolePages} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import mockStore from 'tests/test_store';
 
 jest.mock('actions/team_actions', () => ({
     addUsersToTeam: () => ({ // since we are using addUsersToTeamGracefully, this call will always succeed

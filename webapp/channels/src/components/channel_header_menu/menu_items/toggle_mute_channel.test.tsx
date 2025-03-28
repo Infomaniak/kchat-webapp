@@ -8,9 +8,10 @@ import * as channelActions from 'mattermost-redux/actions/channels';
 
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 
-import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 import {NotificationLevels} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 
 import ToggleMuteChannel from './toggle_mute_channel';
 

@@ -17,8 +17,8 @@ import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import PendingGuestsDropdown from 'components/pending_guests_dropdown';
 import ProfilePicture from 'components/profile_picture';
 import ProfilePopover from 'components/profile_popover';
-import PendingGuestIcon from 'components/widgets/icons/pending_guest_icon';
 import SharedChannelIndicator from 'components/shared_channel_indicator';
+import PendingGuestIcon from 'components/widgets/icons/pending_guest_icon';
 import GuestTag from 'components/widgets/tag/guest_tag';
 import WithTooltip from 'components/with_tooltip';
 

@@ -33,6 +33,7 @@ export function useExternalLink(href: string, location: string = '', overwriteQu
         const existingQueryParamsObj = Object.fromEntries(existingURLSearchParams.entries());
         const queryParams = {
             utm_source: 'kchat',
+
             // utm_medium: isCloud ? 'in-product-cloud' : 'in-product',
             utm_content: location,
             uid: userId,

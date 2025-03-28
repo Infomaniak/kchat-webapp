@@ -4,8 +4,9 @@
 import React from 'react';
 import {defineMessage} from 'react-intl';
 
-import {renderWithContext, screen} from 'tests/react_testing_utils';
 import * as userAgentUtils from 'utils/user_agent';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import TooltipShortcut from './tooltip_shortcut';
 

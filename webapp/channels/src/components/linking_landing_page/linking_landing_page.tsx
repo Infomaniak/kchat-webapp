@@ -8,12 +8,13 @@ import BrowserStore from 'stores/browser_store';
 
 import ExternalLink from 'components/external_link';
 
-import desktopImg from 'images/deep-linking/deeplinking-desktop-img.png';
-import mobileImg from 'images/deep-linking/deeplinking-mobile-img.png';
-import MattermostLogoSvg from 'images/logo.svg';
 import {LandingPreferenceTypes} from 'utils/constants';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils';
+
+import desktopImg from 'images/deep-linking/deeplinking-desktop-img.png';
+import mobileImg from 'images/deep-linking/deeplinking-mobile-img.png';
+import MattermostLogoSvg from 'images/logo.svg';
 
 type Props = {
     defaultTheme: any;

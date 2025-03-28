@@ -11,8 +11,9 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import FormError from 'components/form_error';
 
-import icon50 from 'images/icon50x50.png';
 import {getHistory} from 'utils/browser_history';
+
+import icon50 from 'images/icon50x50.png';
 
 export type Params = {
     responseType: string | null;

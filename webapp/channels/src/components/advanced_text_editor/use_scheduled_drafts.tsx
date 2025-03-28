@@ -2,15 +2,19 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
-import Timestamp from 'components/timestamp';
-import ScheduleIcon from 'components/widgets/icons/schedule_icon';
-import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
+
+import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
+
 import {makeGetDraftsByPrefix} from 'selectors/drafts';
+
+import {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
+import Timestamp from 'components/timestamp';
+import ScheduleIcon from 'components/widgets/icons/schedule_icon';
+
 import {StoragePrefixes} from 'utils/constants';
 
 const useScheduledDrafts = (
@@ -24,10 +28,10 @@ const useScheduledDrafts = (
     const key = prefix + (loc === ScheduledIndicatorType.CHANNEL ? channelId : rootId);
     const teamUrl = useSelector(getCurrentRelativeTeamUrl);
     const getDrafts = makeGetDraftsByPrefix(prefix);
-    const scheduledDrafts = useSelector(getDrafts)
-        .filter((draft) => draft.key.includes(key) && draft.value.timestamp)
-        .map((draft) => draft.value)
-        .sort((a, b) => a.timestamp! - b.timestamp!);
+    const scheduledDrafts = useSelector(getDrafts).
+        filter((draft) => draft.key.includes(key) && draft.value.timestamp).
+        map((draft) => draft.value).
+        sort((a, b) => a.timestamp! - b.timestamp!);
 
     if (scheduledDrafts.length) {
         indicator = (
@@ -54,7 +58,7 @@ const useScheduledDrafts = (
                     }}
                 />
             </div>
-        )
+        );
     }
 
     return [scheduledDrafts, indicator];

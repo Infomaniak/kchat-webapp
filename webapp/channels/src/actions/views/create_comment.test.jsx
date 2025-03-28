@@ -15,9 +15,10 @@ import {
     submitCommand,
 } from 'actions/views/create_comment';
 
-import mockStore from 'tests/test_store';
 import {StoragePrefixes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import mockStore from 'tests/test_store';
 
 /* eslint-disable global-require */
 

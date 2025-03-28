@@ -12,9 +12,10 @@ import {Permissions} from 'mattermost-redux/constants';
 
 import AbstractOutgoingOAuthConnection from 'components/integrations/outgoing_oauth_connections/abstract_outgoing_oauth_connection';
 
+import {TestHelper} from 'utils/test_helper';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
-import {TestHelper} from 'utils/test_helper';
 
 describe('components/integrations/AbstractOutgoingOAuthConnection', () => {
     const header = {id: 'Header', defaultMessage: 'Header'};

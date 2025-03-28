@@ -10,9 +10,10 @@ import * as Actions from 'actions/views/channel';
 import {closeRightHandSide} from 'actions/views/rhs';
 import {markThreadAsRead} from 'actions/views/threads';
 
-import mockStore from 'tests/test_store';
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, PostRequestTypes} from 'utils/constants';
+
+import mockStore from 'tests/test_store';
 
 jest.mock('utils/channel_utils.tsx', () => {
     const original = jest.requireActual('utils/channel_utils.tsx');

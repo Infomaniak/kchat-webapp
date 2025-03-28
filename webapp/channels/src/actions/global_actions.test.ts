@@ -13,6 +13,7 @@ import reduxStore from 'stores/redux_store';
 import {getHistory} from 'utils/browser_history';
 
 import mockStore from 'tests/test_store';
+
 const getState = jest.mocked(reduxStore.getState);
 
 jest.mock('actions/views/rhs', () => ({

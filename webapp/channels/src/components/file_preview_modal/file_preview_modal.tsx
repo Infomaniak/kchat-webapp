@@ -24,9 +24,9 @@ import * as Utils from 'utils/utils';
 
 import type {FilePreviewComponent} from 'types/store/plugins';
 
-import type {ZoomValue} from './file_preview_modal_image_controls/file_preview_modal_image_controls';
 import FilePreviewModalFooter from './file_preview_modal_footer/file_preview_modal_footer';
 import FilePreviewModalHeader from './file_preview_modal_header/file_preview_modal_header';
+import type {ZoomValue} from './file_preview_modal_image_controls/file_preview_modal_image_controls';
 import ImagePreview from './image_preview';
 import PopoverBar from './popover_bar';
 import {isFileInfo} from './types';

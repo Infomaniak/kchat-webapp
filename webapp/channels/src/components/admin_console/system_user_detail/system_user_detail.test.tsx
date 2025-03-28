@@ -12,10 +12,11 @@ import type {UserProfile} from '@mattermost/types/users';
 import SystemUserDetail, {getUserAuthenticationTextField} from 'components/admin_console/system_user_detail/system_user_detail';
 import type {Params, Props} from 'components/admin_console/system_user_detail/system_user_detail';
 
-import type {MockIntl} from 'tests/helpers/intl-test-helper';
-import {renderWithContext, waitFor, within} from 'tests/react_testing_utils';
 import Constants from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import type {MockIntl} from 'tests/helpers/intl-test-helper';
+import {renderWithContext, waitFor, within} from 'tests/react_testing_utils';
 
 // Mock user profile data
 const user = Object.assign(TestHelper.getUserMock(), {auth_service: Constants.EMAIL_SERVICE}) as UserProfile;

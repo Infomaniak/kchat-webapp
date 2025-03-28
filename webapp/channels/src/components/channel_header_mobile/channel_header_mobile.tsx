@@ -9,6 +9,7 @@ import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
 import CloseSuiteSidepanel from 'components/close_suite_sidepanel';
+import FlagNext from 'components/flag_next';
 
 import ChannelInfoButton from './channel_info_button';
 import CollapseLhsButton from './collapse_lhs_button';
@@ -18,7 +19,6 @@ import UnmuteChannelButton from './unmute_channel_button';
 
 import ChannelHeaderMenu from '../channel_header_menu/channel_header_menu';
 import MobileChannelHeaderPlugins from '../channel_header_menu/menu_items/mobile_channel_header_plugins';
-import FlagNext from 'components/flag_next';
 
 type Props = {
     channel?: Channel;

@@ -95,28 +95,28 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                         title={defineMessage({id: 'view_image_popover.download', defaultMessage: 'Download'})}
                     >
                         <>
-                        {(!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) && (
-                            <WithTooltip
-                                id='file-name__tooltip'
-                                title={localizeMessage('kdrive.save', 'Save file to kDrive')}
-                                placement='top'
+                            {(!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) && (
+                                <WithTooltip
+                                    id='file-name__tooltip'
+                                    title={localizeMessage('kdrive.save', 'Save file to kDrive')}
+                                    placement='top'
+                                >
+                                    <span className='file-kdrive__icon--wrapper'>
+                                        <KDriveIcon
+                                            onClick={() => handleKDriveSave?.(fileInfo.id, fileName)}
+                                            className='icon file-kdrive__icon'
+                                        />
+                                    </span>
+                                </WithTooltip>
+                            )}
+                            <ExternalLink
+                                href={getFileDownloadUrl(fileInfo.id)}
+                                aria-label={localizeMessage({id: 'view_image_popover.download', defaultMessage: 'Download'}).toLowerCase()}
+                                download={fileName}
+                                location='filename_overlay'
                             >
-                                <span className='file-kdrive__icon--wrapper'>
-                                    <KDriveIcon
-                                        onClick={() => handleKDriveSave?.(fileInfo.id, fileName)}
-                                        className='icon file-kdrive__icon'
-                                    />
-                                </span>
-                            </WithTooltip>
-                        )}
-                        <ExternalLink
-                            href={getFileDownloadUrl(fileInfo.id)}
-                            aria-label={localizeMessage({id: 'view_image_popover.download', defaultMessage: 'Download'}).toLowerCase()}
-                            download={fileName}
-                            location='filename_overlay'
-                        >
-                            {children || trimmedFilename}
-                        </ExternalLink>
+                                {children || trimmedFilename}
+                            </ExternalLink>
                         </>
                     </WithTooltip>
                 </div>

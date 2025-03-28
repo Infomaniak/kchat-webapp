@@ -11,10 +11,11 @@ import type {TeamType} from '@mattermost/types/teams';
 import UnreadsStatusHandler from 'components/unreads_status_handler/unreads_status_handler';
 import type {UnreadsStatusHandlerClass} from 'components/unreads_status_handler/unreads_status_handler';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import {Constants} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 import {isChrome, isFirefox} from 'utils/user_agent';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 type Props = ComponentProps<typeof UnreadsStatusHandlerClass>;
 

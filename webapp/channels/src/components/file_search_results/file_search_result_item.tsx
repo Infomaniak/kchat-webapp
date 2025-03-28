@@ -12,8 +12,6 @@ import Timestamp, {RelativeRanges} from 'components/timestamp';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
-import type {PropsFromRedux, OwnProps} from './index';
-
 import './file_search_result_item.scss';
 
 import Tag from 'components/widgets/tag/tag';
@@ -24,6 +22,8 @@ import Constants, {ModalIdentifiers} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 import {fileSizeToString, copyToClipboard, localizeMessage} from 'utils/utils';
+
+import type {PropsFromRedux, OwnProps} from './index';
 
 type Props = OwnProps & PropsFromRedux;
 

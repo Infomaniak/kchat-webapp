@@ -3,8 +3,9 @@
 
 import React from 'react';
 
-import {renderWithContext, screen} from 'tests/react_testing_utils';
 import Constants, {NotificationLevels} from 'utils/constants';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import type {SelectOption, Props} from './index';
 import DesktopNotificationSettings, {

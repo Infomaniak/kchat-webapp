@@ -16,8 +16,9 @@ import Nbsp from 'components/html_entities/nbsp';
 import MultiSelect from 'components/multiselect/multiselect';
 import type {Value} from 'components/multiselect/multiselect';
 
-import groupsAvatar from 'images/groups-avatar.png';
 import Constants from 'utils/constants';
+
+import groupsAvatar from 'images/groups-avatar.png';
 
 const GROUPS_PER_PAGE = 50;
 const MAX_SELECTABLE_VALUES = 10;

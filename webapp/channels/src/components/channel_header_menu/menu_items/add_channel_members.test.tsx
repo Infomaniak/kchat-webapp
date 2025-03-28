@@ -9,9 +9,10 @@ import * as modalActions from 'actions/views/modals';
 import ChannelInviteModal from 'components/channel_invite_modal';
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 
-import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 import {ModalIdentifiers} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 
 import AddChannelMembers from './add_channel_members';
 

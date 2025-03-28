@@ -8,8 +8,9 @@ import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import type {UserThread} from '@mattermost/types/threads';
 
-import {fakeDate} from 'tests/helpers/date';
 import {TestHelper} from 'utils/test_helper';
+
+import {fakeDate} from 'tests/helpers/date';
 
 import type {FakePost} from 'types/store/rhs';
 

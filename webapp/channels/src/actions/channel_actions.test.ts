@@ -9,8 +9,9 @@ import {
 } from 'actions/channel_actions';
 import {loadProfilesForSidebar} from 'actions/user_actions';
 
-import mockStore from 'tests/test_store';
 import {TestHelper} from 'utils/test_helper';
+
+import mockStore from 'tests/test_store';
 
 const initialState = {
     entities: {

@@ -34,9 +34,10 @@ import AdminHeader from 'components/widgets/admin_console/admin_header';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
 import WithTooltip from 'components/with_tooltip';
 
-import * as I18n from 'i18n/i18n.jsx';
 import Constants from 'utils/constants';
 import {mappingValueFromRoles, rolesFromMapping} from 'utils/policy_roles_adapter';
+
+import * as I18n from 'i18n/i18n.jsx';
 
 import Setting from './setting';
 import type {AdminDefinitionSetting, AdminDefinitionSettingBanner, AdminDefinitionSettingDropdownOption, AdminDefinitionSubSectionSchema, ConsoleAccess} from './types';

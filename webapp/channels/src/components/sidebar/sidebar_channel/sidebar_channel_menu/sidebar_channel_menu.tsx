@@ -313,7 +313,10 @@ const SidebarChannelMenu = ({
             {favoriteUnfavoriteMenuItem}
             {muteUnmuteChannelMenuItem}
             <Menu.Separator/>
-            <ChannelMoveToSubmenu channel={channel} parentMenuId={menuId}/>
+            <ChannelMoveToSubmenu
+                channel={channel}
+                parentMenuId={menuId}
+            />
             {(copyLinkMenuItem || addMembersMenuItem) && <Menu.Separator/>}
             {copyLinkMenuItem}
             {addMembersMenuItem}

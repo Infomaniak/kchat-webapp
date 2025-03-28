@@ -1,13 +1,18 @@
 import React, {useState} from 'react';
-import type {PostDraft} from 'types/store/draft';
+
+import type {Channel} from '@mattermost/types/channels';
+import type {ServerError} from '@mattermost/types/errors';
+
+import FilePreview from 'components/file_preview';
+import type {FilePreviewInfo} from 'components/file_preview/file_preview';
+
 import Constants, {Locations} from 'utils/constants';
 import {getVoiceMessageStateFromDraft, VoiceMessageStates} from 'utils/post_utils';
-import VoiceMessageButton from './voice_message_button';
-import type {ServerError} from '@mattermost/types/errors';
-import type {FilePreviewInfo} from 'components/file_preview/file_preview';
+
+import type {PostDraft} from 'types/store/draft';
+
 import VoiceMessageAttachment from './voice_message_attachment';
-import FilePreview from 'components/file_preview';
-import {Channel} from '@mattermost/types/channels';
+import VoiceMessageButton from './voice_message_button';
 
 const useVoiceMessage = (
     draft: PostDraft,
@@ -24,7 +29,7 @@ const useVoiceMessage = (
     removePreview: () => void,
     emitTypingEvent: (eventType?: string) => void,
 ) => {
-    const [voiceMessageClientId, setVoiceMessageClientId] = useState('')
+    const [voiceMessageClientId, setVoiceMessageClientId] = useState('');
     const voiceMessageState = getVoiceMessageStateFromDraft(draft);
 
     const handleVoiceMessageUploadStart = (clientId: string, channelId: Channel['id']) => {
@@ -43,7 +48,7 @@ const useVoiceMessage = (
         if (postType) {
             handleDraftChange({...draft, postType: Constants.PostTypes.VOICE as PostDraft['postType']});
         } else {
-            handleDraftChange({...draft, fileInfos: [], uploadsInProgress: [], postType: ''})
+            handleDraftChange({...draft, fileInfos: [], uploadsInProgress: [], postType: ''});
         }
     };
 
@@ -100,7 +105,7 @@ const useVoiceMessage = (
         );
     }
 
-    return [voiceMessageClientId, handleVoiceMessageUploadStart, voiceMessageJSX, voiceAttachmentPreview]
-}
+    return [voiceMessageClientId, handleVoiceMessageUploadStart, voiceMessageJSX, voiceAttachmentPreview];
+};
 
 export default useVoiceMessage;

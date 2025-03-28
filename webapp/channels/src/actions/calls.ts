@@ -197,7 +197,6 @@ export function startOrJoinCallInChannelV2(channelID: string) {
 
                 // keep ringing behaviour for DM and GM
                 dispatch(openCallDialingModal(channelID));
-                return;
             }
         } catch (error) {
             console.error('call could not be started', error);

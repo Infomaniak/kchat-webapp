@@ -14,9 +14,10 @@ import {closeModal} from 'actions/views/modals';
 
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 
-import crtInProductImg from 'images/crt-in-product.gif';
 import {Constants, ModalIdentifiers, Preferences} from 'utils/constants';
 import * as Keyboard from 'utils/keyboard';
+
+import crtInProductImg from 'images/crt-in-product.gif';
 
 import './collapsed_reply_threads_modal.scss';
 import {AutoTourStatus, TTNameMapToATStatusKey, TutorialTourName} from '../constant';

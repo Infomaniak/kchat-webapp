@@ -5,7 +5,6 @@ import {MicrophoneOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {memo} from 'react';
 import {useIntl, FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import Constants, {Locations} from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post, PostType} from '@mattermost/types/posts';
@@ -14,6 +13,8 @@ import {isVoiceMessagesEnabled} from 'selectors/views/textbox';
 
 import {IconContainer} from 'components/advanced_text_editor/formatting_bar/formatting_icon';
 import WithTooltip from 'components/with_tooltip';
+
+import Constants, {Locations} from 'utils/constants';
 
 import type {PostDraft} from 'types/store/draft';
 

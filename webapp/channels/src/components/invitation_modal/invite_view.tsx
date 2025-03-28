@@ -12,6 +12,9 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
+import {trackEvent} from 'actions/telemetry_actions';
+
+import useCopyText from 'components/common/hooks/useCopyText';
 import UsersEmailsInput from 'components/widgets/inputs/users_emails_input';
 
 import {Constants} from 'utils/constants';
@@ -24,8 +27,7 @@ import InviteAs, {InviteType} from './invite_as';
 import OverageUsersBannerNotice from './overage_users_banner_notice';
 
 import './invite_view.scss';
-import useCopyText from 'components/common/hooks/useCopyText';
-import {trackEvent} from 'actions/telemetry_actions';
+
 import {getAnalyticsCategory} from 'components/onboarding_tasks';
 
 export const initializeInviteState = (initialSearchValue = '', inviteAsGuest = false): InviteState => {
@@ -141,7 +143,7 @@ export default function InviteView(props: Props) {
         errorProperties.showError = true;
     }
 
-    let placeholder
+    let placeholder;
     let noMatchMessage;
     if (props.emailInvitationsEnabled) {
         placeholder = props.inviteType === InviteType.GUEST ? formatMessage({

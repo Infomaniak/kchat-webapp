@@ -23,9 +23,10 @@ import LearnAboutTeamsLink from 'components/main_menu/learn_about_teams_link';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import LogoutIcon from 'components/widgets/icons/fa_logout_icon';
 
-import logoImage from 'images/logo.png';
 import Constants from 'utils/constants';
 import * as UserAgent from 'utils/user_agent';
+
+import logoImage from 'images/logo.png';
 
 import SelectTeamItem from './components/select_team_item';
 import './select_team.scss';

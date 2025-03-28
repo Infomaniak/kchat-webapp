@@ -3,8 +3,9 @@
 
 import React from 'react';
 
-import {fireEvent, renderWithContext, screen} from 'tests/react_testing_utils';
 import Constants from 'utils/constants';
+
+import {fireEvent, renderWithContext, screen} from 'tests/react_testing_utils';
 
 import type {Props} from './top_buttons';
 import TopButtons from './top_buttons';

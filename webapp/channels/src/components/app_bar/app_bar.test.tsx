@@ -8,9 +8,10 @@ import type {AppBinding} from '@mattermost/types/apps';
 
 import {AppBindingLocations} from 'mattermost-redux/constants/apps';
 
+import {TestHelper} from 'utils/test_helper';
+
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 import {renderWithContext, screen} from 'tests/react_testing_utils';
-import {TestHelper} from 'utils/test_helper';
 
 import type {ChannelHeaderButtonAction, RightHandSidebarComponent} from 'types/store/plugins';
 

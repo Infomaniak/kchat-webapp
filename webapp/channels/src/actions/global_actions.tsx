@@ -46,8 +46,8 @@ import {clearLocalStorageToken} from 'components/login/utils';
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, PostTypes, RHSStates, ModalIdentifiers, PreviousViewedTypes} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import DesktopApp from 'utils/desktop_api';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
@@ -401,6 +401,7 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
 
     let user = getCurrentUser(state);
     const shouldLoadUser = Utils.isEmptyObject(getTeamMemberships(state)) || !user;
+
     // const onboardingFlowEnabled = getIsOnboardingFlowEnabled(state);
     if (shouldLoadUser) {
         await dispatch(loadMe());

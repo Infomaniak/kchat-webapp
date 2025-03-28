@@ -12,11 +12,11 @@ import {removeDraft, updateDraft} from 'actions/views/drafts';
 import type {FileUpload} from 'components/file_upload/file_upload';
 import type Textbox from 'components/textbox/textbox';
 
+import Constants, {Locations, StoragePrefixes} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 import {renderWithContext, userEvent, screen} from 'tests/react_testing_utils';
-import Constants, {Locations, StoragePrefixes} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
 
 import type {PostDraft} from 'types/store/draft';
 
@@ -31,7 +31,6 @@ jest.mock('actions/views/drafts', () => ({
 
 const mockedRemoveDraft = jest.mocked(removeDraft);
 const mockedUpdateDraft = jest.mocked(updateDraft);
-
 
 jest.mock('wasm-media-encoders', () => ({
     createEncoder: jest.fn(),

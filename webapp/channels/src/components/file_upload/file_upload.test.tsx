@@ -8,8 +8,9 @@ import type {FileInfo} from '@mattermost/types/files';
 
 import {General} from 'mattermost-redux/constants';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import {clearFileInput} from 'utils/utils';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import type {FilesWillUploadHook} from 'types/store/plugins';
 

@@ -10,8 +10,9 @@ import type {ShallowWrapper} from 'enzyme';
 import {shallow} from 'enzyme';
 import type React from 'react';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import Constants from 'utils/constants';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 export const INPUT = 'Hello world!';
 export const OUTPUT_APPEND = 'Hello world!\n';

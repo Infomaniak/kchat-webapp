@@ -4,8 +4,6 @@
 import moment from 'moment-timezone';
 import type {CSSProperties} from 'react';
 import React from 'react';
-import Constants from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -35,6 +33,9 @@ import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
 import Avatar from 'components/widgets/users/avatar';
 import Avatars from 'components/widgets/users/avatars/avatars';
 import WithTooltip from 'components/with_tooltip';
+
+import Constants from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
 
 import type {Team} from 'types/teams';
 

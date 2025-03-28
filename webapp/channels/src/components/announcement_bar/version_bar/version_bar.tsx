@@ -19,7 +19,7 @@ const reloadPage = () => {
 
 const VersionBar = ({
     buildHash,
-    isNewVersionCanaryOnly
+    isNewVersionCanaryOnly,
 }: Props) => {
     const [buildHashOnAppLoad, setBuildHashOnAppLoad] = useState<string|undefined>(buildHash);
 

@@ -15,8 +15,9 @@ import {openModal} from 'actions/views/modals';
 
 import ModalController from 'components/modal_controller';
 
-import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 import {TestHelper} from 'utils/test_helper';
+
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 
 import type {GlobalState} from 'types/store';
 

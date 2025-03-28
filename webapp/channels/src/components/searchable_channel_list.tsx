@@ -126,7 +126,7 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
             () => {
                 this.setState({joiningChannel: ''});
             },
-            true
+            true,
         );
         this.props.closeModal(ModalIdentifiers.MORE_CHANNELS);
     };

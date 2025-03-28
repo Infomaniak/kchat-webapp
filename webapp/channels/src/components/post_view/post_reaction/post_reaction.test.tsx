@@ -5,8 +5,9 @@ import React from 'react';
 
 import {Permissions} from 'mattermost-redux/constants';
 
-import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 
 import PostReaction from './post_reaction';
 

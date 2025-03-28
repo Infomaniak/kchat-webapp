@@ -6,10 +6,10 @@ import React from 'react';
 import type {ReactNode, CSSProperties} from 'react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
+import {SearchSVG, ChannelSearchSVG, MentionsSVG, SavedMessagesSVG, PinSVG, ChannelFilesSVG, UserGroupsSVG, UserGroupMembersSVG, InfomaniakChannelSearchSvg} from 'components/common/svg_images_components';
 import ChannelFilesIcon from 'components/widgets/icons/channel_files_icon';
 import IKFlagIcon from 'components/widgets/icons/ik_flag_icon';
 import PinIcon from 'components/widgets/icons/pin_icon';
-import {SearchSVG, ChannelSearchSVG, MentionsSVG, SavedMessagesSVG, PinSVG, ChannelFilesSVG, UserGroupsSVG, UserGroupMembersSVG, InfomaniakChannelSearchSvg} from 'components/common/svg_images_components';
 
 import {NoResultsVariant, NoResultsLayout} from './types';
 import './no_results_indicator.scss';

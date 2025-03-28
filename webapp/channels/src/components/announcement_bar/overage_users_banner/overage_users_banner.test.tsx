@@ -10,10 +10,11 @@ import {General} from 'mattermost-redux/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import {fireEvent, renderWithContext, screen} from 'tests/react_testing_utils';
 import {OverActiveUserLimits, Preferences, SelfHostedProducts, StatTypes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 import {generateId} from 'utils/utils';
+
+import {fireEvent, renderWithContext, screen} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 

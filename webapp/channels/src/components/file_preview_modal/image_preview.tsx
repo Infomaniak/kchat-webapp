@@ -11,6 +11,7 @@ import {getFilePreviewUrl, getFileDownloadUrl} from 'mattermost-redux/utils/file
 
 import type {ZoomValue} from 'components/file_preview_modal/file_preview_modal_image_controls/file_preview_modal_image_controls';
 import type {LinkInfo} from 'components/file_preview_modal/types';
+
 import {FileTypes} from 'utils/constants';
 import {getFileType} from 'utils/utils';
 

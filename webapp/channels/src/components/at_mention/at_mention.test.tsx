@@ -8,8 +8,9 @@ import {General} from 'mattermost-redux/constants';
 
 import AtMention from 'components/at_mention/at_mention';
 
-import {render} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {render} from 'tests/react_testing_utils';
 
 /* eslint-disable global-require */
 

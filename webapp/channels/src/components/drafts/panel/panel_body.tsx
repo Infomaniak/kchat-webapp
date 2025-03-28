@@ -9,8 +9,8 @@ import type {UserProfile, UserStatus} from '@mattermost/types/users';
 
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 
-import DraftEditor from 'components/drafts/draft_editor';
 import PriorityLabels from 'components/advanced_text_editor/priority_labels';
+import DraftEditor from 'components/drafts/draft_editor';
 import FilePreview from 'components/file_preview';
 import Markdown from 'components/markdown';
 import ShowMore from 'components/post_view/show_more';

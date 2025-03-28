@@ -5,10 +5,11 @@ import React from 'react';
 import {FormattedMessage, defineMessage} from 'react-intl';
 import type {IntlShape, MessageDescriptor} from 'react-intl';
 
-import {getModule} from 'module_registry';
 import Constants from 'utils/constants';
 import {latinise} from 'utils/latinise';
 import * as TextFormatting from 'utils/text_formatting';
+
+import {getModule} from 'module_registry';
 
 import {unescapeHtmlEntities} from './markdown/renderer';
 

@@ -8,9 +8,10 @@ import {Provider} from 'react-redux';
 import {PostPriority} from '@mattermost/types/posts';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 
+import * as utils from 'utils/utils';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
-import * as utils from 'utils/utils';
 
 import type {PostDraft} from 'types/store/draft';
 

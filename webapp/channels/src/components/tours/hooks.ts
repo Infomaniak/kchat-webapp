@@ -8,10 +8,11 @@ import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
+import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 import {close as closeLhs, open as openLhs} from 'actions/views/lhs';
 import {switchToChannels} from 'actions/views/onboarding_tasks';
+
 // import {setStatusDropdown} from 'actions/views/status_dropdown';
-import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 
 import {openMenu, dismissMenu} from 'components/menu';
 import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from 'components/onboarding_tasks';

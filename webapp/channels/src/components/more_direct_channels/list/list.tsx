@@ -166,6 +166,7 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
             noteText={note}
             disableMultiSelectList={props.values.length > (Constants.MAX_USERS_IN_GM - 1)}
             maxValues={MAX_SELECTABLE_VALUES}
+
             // numRemainingText={remainingText}
             changeMessageColor='red'
             showError={props.values.length === MAX_SELECTABLE_VALUES}

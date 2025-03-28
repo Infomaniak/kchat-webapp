@@ -4,8 +4,9 @@
 import React from 'react';
 import * as reactRedux from 'react-redux';
 
-import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 

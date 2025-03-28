@@ -2,12 +2,11 @@
 // See LICENSE.txt for license information.
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
+import IconButton from '@infomaniak/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
 import React, {useRef} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-
-import IconButton from '@infomaniak/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
 
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 

@@ -8,8 +8,9 @@ import * as channelActions from 'mattermost-redux/actions/channels';
 
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 
-import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 
 import ToggleFavoriteChannel from './toggle_favorite_channel';
 

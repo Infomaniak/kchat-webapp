@@ -132,6 +132,7 @@ export const useTasksList = () => {
     // const showStartTrialTask = selfHostedTrialCondition || cloudTrialCondition;
 
     const list: Record<string, string> = {...OnboardingTasksName};
+
     // if (!showStartTrialTask) {
     //     delete list.START_TRIAL;
     // }

@@ -9,8 +9,9 @@ import type {DeepPartial} from '@mattermost/types/utilities';
 
 import AddIncomingWebhook from 'components/integrations/add_incoming_webhook/add_incoming_webhook';
 
-import {renderWithContext, userEvent} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, userEvent} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 

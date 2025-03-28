@@ -4,9 +4,10 @@
 import React from 'react';
 import {type IntlShape} from 'react-intl';
 
-import {renderWithContext, screen} from 'tests/react_testing_utils';
 import {NotificationLevels} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import UserSettingsNotifications, {areDesktopAndMobileSettingsDifferent} from './user_settings_notifications';
 

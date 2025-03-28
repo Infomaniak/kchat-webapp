@@ -265,7 +265,7 @@ const SwitchChannelSuggestion = React.forwardRef<HTMLLIElement, Props>((props, r
         );
     }
 
-    let teamName = null;
+    const teamName = null;
 
     // Infomaniak obsolete since always same team
     // if (isRealChannel(channel) && channel.team_id && team) {

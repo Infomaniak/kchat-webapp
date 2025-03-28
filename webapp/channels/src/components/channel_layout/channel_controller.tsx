@@ -18,9 +18,10 @@ import Sidebar from 'components/sidebar';
 import CRTPostsChannelResetWatcher from 'components/threading/channel_threads/posts_channel_reset_watcher';
 import UnreadsStatusHandler from 'components/unreads_status_handler';
 
-import Pluggable from 'plugins/pluggable';
 import {Constants} from 'utils/constants';
 import {isInternetExplorer, isEdge} from 'utils/user_agent';
+
+import Pluggable from 'plugins/pluggable';
 
 const ProductNoticesModal = makeAsyncComponent('ProductNoticesModal', lazy(() => import('components/product_notices_modal')));
 const ResetStatusModal = makeAsyncComponent('ResetStatusModal', lazy(() => import('components/reset_status_modal')));

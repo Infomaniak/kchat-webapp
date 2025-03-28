@@ -3,7 +3,6 @@
 
 import classNames from 'classnames';
 import React, {useState} from 'react';
-
 import {useSelector} from 'react-redux';
 
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
@@ -13,7 +12,8 @@ import MainMenu from 'components/main_menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import WithTooltip from 'components/with_tooltip';
 
-import { isDesktopApp } from 'utils/user_agent';
+import {isDesktopApp} from 'utils/user_agent';
+
 import SidebarBrowseOrAddChannelMenu from './sidebar_browse_or_add_channel_menu';
 
 import './sidebar_header.scss';

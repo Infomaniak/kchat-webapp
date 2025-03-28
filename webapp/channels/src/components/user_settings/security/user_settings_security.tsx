@@ -21,9 +21,10 @@ import SettingItem from 'components/setting_item';
 import SettingItemMax from 'components/setting_item_max';
 import ToggleModalButton from 'components/toggle_modal_button';
 
-import icon50 from 'images/icon50x50.png';
 import Constants from 'utils/constants';
 import {isValidPassword} from 'utils/password';
+
+import icon50 from 'images/icon50x50.png';
 
 import MfaSection from './mfa_section';
 import UserAccessTokenSection from './user_access_token_section';

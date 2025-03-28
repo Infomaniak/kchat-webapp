@@ -8,9 +8,10 @@ import * as rhsActions from 'actions/views/rhs';
 
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 
-import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 import {RHSStates} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 
 import ViewPinnedPosts from './view_pinned_posts';
 

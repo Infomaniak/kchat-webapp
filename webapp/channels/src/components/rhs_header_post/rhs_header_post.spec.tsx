@@ -10,9 +10,10 @@ import {Preferences} from 'mattermost-redux/constants';
 
 import FollowButton from 'components/threading/common/follow_button';
 
-import {mockStore} from 'tests/test_store';
 import {WindowSizes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {mockStore} from 'tests/test_store';
 
 import RhsHeaderPost from './index';
 

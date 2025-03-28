@@ -16,6 +16,7 @@ import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
 import AtMention from 'components/at_mention';
 import ChannelNotificationsModal from 'components/channel_notifications_modal';
 import ChannelIntroTownSquareSvg from 'components/common/svg_images_components/channel_intro_town_square_svg';
+import EmptyStateThemeableSvg from 'components/common/svg_images_components/empty_state_themeable_svg';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
 import ChannelPermissionGate from 'components/permissions_gates/channel_permission_gate';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
@@ -29,7 +30,6 @@ import * as Utils from 'utils/utils';
 
 import AddMembersButton from './add_members_button';
 import PluggableIntroButtons from './pluggable_intro_buttons';
-import EmptyStateThemeableSvg from 'components/common/svg_images_components/empty_state_themeable_svg';
 
 type Props = {
     currentUserId: string;
@@ -574,7 +574,7 @@ function createStandardIntroMessage(
     usersLimit: number,
     locale: string,
     creatorName: string,
-    isChannelMember = true
+    isChannelMember = true,
 ) {
     const uiName = channel.display_name;
     let memberMessage;

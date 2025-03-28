@@ -3,8 +3,9 @@
 
 import React from 'react';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import * as Utils from 'utils/utils';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import AtMentionSuggestion from './at_mention_suggestion';
 import type {Item} from './at_mention_suggestion';

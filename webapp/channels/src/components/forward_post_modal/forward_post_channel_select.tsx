@@ -1,19 +1,18 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect, useRef} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
-import {components} from 'react-select';
-import type {OptionProps, SingleValueProps, OnChangeValue, DropdownIndicatorProps, OptionsOrGroups, GroupBase} from 'react-select';
-import AsyncSelect from 'react-select/async';
-
 import {
     ArchiveOutlineIcon, ChevronDownIcon,
     GlobeIcon,
     LockOutlineIcon,
     MessageTextOutlineIcon,
 } from '@infomaniak/compass-icons/components';
+import React, {useEffect, useRef} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
+import {components} from 'react-select';
+import type {OptionProps, SingleValueProps, OnChangeValue, DropdownIndicatorProps, OptionsOrGroups, GroupBase} from 'react-select';
+import AsyncSelect from 'react-select/async';
 
 import type {Channel} from '@mattermost/types/channels';
 

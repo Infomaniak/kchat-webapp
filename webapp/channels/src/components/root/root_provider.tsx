@@ -5,8 +5,9 @@ import React from 'react';
 
 import IntlProvider from 'components/intl_provider';
 
-import WebSocketClient from 'client/web_websocket_client';
 import {WebSocketContext} from 'utils/use_websocket';
+
+import WebSocketClient from 'client/web_websocket_client';
 
 type Props = {
     children: React.ReactNode;

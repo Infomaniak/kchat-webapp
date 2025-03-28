@@ -9,6 +9,7 @@ import type {WrappedComponentProps} from 'react-intl';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import CustomStatusText from 'components/custom_status/custom_status_text';
+import MeetButton from 'components/meet_button/meet_button';
 import Timestamp from 'components/timestamp';
 import WithTooltip from 'components/with_tooltip';
 
@@ -18,8 +19,8 @@ import {
     RHSStates,
 } from 'utils/constants';
 import {isEmptyObject} from 'utils/utils';
-import ChannelHeaderPlug from 'plugins/channel_header_plug';
 
+import ChannelHeaderPlug from 'plugins/channel_header_plug';
 
 import ChannelHeaderText from './channel_header_text';
 import ChannelHeaderTitle from './channel_header_title';
@@ -27,7 +28,6 @@ import ChannelInfoButton from './channel_info_button';
 import HeaderIconWrapper from './components/header_icon_wrapper';
 
 import type {PropsFromRedux} from './index';
-import MeetButton from 'components/meet_button/meet_button';
 
 export type Props = WrappedComponentProps & PropsFromRedux;
 

@@ -2,12 +2,10 @@
 // See LICENSE.txt for license information.
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
-import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
-import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
 
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
@@ -25,6 +23,10 @@ import {
 } from 'components/tours/onboarding_tour';
 import UserAccountMenu from 'components/user_account_menu';
 import WithTooltip from 'components/with_tooltip';
+
+import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
+
+import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 
 import type {GlobalState} from 'types/store';
 

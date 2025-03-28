@@ -6,8 +6,9 @@ import React from 'react';
 
 import TeamUrl from 'components/create_team/components/team_url/team_url';
 
-import {renderWithContext, screen, userEvent, waitFor} from 'tests/react_testing_utils';
 import Constants from 'utils/constants';
+
+import {renderWithContext, screen, userEvent, waitFor} from 'tests/react_testing_utils';
 
 jest.mock('images/logo.png', () => 'logo.png');
 

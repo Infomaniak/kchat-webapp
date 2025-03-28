@@ -13,6 +13,7 @@ import Permissions from 'mattermost-redux/constants/permissions';
 
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
+import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
 import Input from 'components/widgets/inputs/input/input';
 import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
 
@@ -38,7 +39,6 @@ jest.mock('mattermost-redux/actions/cloud', () => ({
 import NewChannelModal from './new_channel_modal';
 
 import {shallow} from 'enzyme';
-import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
 
 describe('components/new_channel_modal', () => {
     const initialState: DeepPartial<GlobalState> = {
@@ -257,10 +257,10 @@ describe('components/new_channel_modal', () => {
     //         },
     //     } as unknown as React.ChangeEvent<HTMLInputElement>;
 
-        // renderWithContext(
-        //     <NewChannelModal/>,
-        //     initialState,
-        // );
+    // renderWithContext(
+    //     <NewChannelModal/>,
+    //     initialState,
+    // );
 
     //     // Change display name
     //     const input = wrapper.find(ChannelNameFormField).first();
@@ -495,10 +495,10 @@ describe('components/new_channel_modal', () => {
     // test('should request team creation on submit', async () => {
     //     const name = 'Channel name';
 
-        // renderWithContext(
-        //     <NewChannelModal/>,
-        //     initialState,
-        // );
+    // renderWithContext(
+    //     <NewChannelModal/>,
+    //     initialState,
+    // );
 
     //     const wrapper = mountWithIntl(
     //         <NewChannelModal/>,

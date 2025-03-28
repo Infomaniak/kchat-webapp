@@ -4777,6 +4777,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mattermost/client@npm:10.6.0":
+  version: 10.6.0
+  resolution: "@mattermost/client@npm:10.6.0"
+  peerDependencies:
+    "@mattermost/types": ^9.3.0 || ^10.0.0
+    typescript: ^4.3.0 || ^5.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/f62ce3e07e93dfc9164ffcfc837a25914a009d95afafcb9df655a5848ab734ec76106ffd7c3e75cc19c95a7dc270c44f6c3eaad4193988a2600f90e2bf7852d1
+  languageName: node
+  linkType: hard
+
 "@mattermost/components@workspace:webapp/platform/components":
   version: 0.0.0-use.local
   resolution: "@mattermost/components@workspace:webapp/platform/components"
@@ -4830,7 +4843,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mattermost/eslint-plugin@workspace:webapp/platform/eslint-plugin":
+"@mattermost/eslint-plugin@npm:*, @mattermost/eslint-plugin@workspace:webapp/platform/eslint-plugin":
   version: 0.0.0-use.local
   resolution: "@mattermost/eslint-plugin@workspace:webapp/platform/eslint-plugin"
   dependencies:
@@ -4863,6 +4876,18 @@ __metadata:
   bin:
     mmjstool: ./bin/mmjstool
   checksum: 10/3f6b17c7980a74481c82489c21128c1ff8e8c21847099bfe1bdbfcb76566a045de9c7c8502b29d3d689334fccb6ab0177cad8239b62bf88d8ab1e9bdbd62abe2
+  languageName: node
+  linkType: hard
+
+"@mattermost/types@npm:10.6.0":
+  version: 10.6.0
+  resolution: "@mattermost/types@npm:10.6.0"
+  peerDependencies:
+    typescript: ^4.3.0 || ^5.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/b16de694539f325437735a58e68ae40cb5d51d010f0a870c83932e5e04bfe27308bff007fc67dbbe190cfcfd429bab7582ce971aa816c69ebe504e458e06c5e4
   languageName: node
   linkType: hard
 
@@ -5517,6 +5542,18 @@ __metadata:
   peerDependencies:
     redux: ^3.1.0 || ^4.0.0
   checksum: 10/907759fc756124d9250dc62b0f1dc4b8b0e5915903d0bd1f9f4c5e34d7811148b04e029771e04b93213e058dd38e47f9caba4dd73d69bd053c2f177544af12ab
+  languageName: node
+  linkType: hard
+
+"@redux-devtools/extension@npm:^3.2.3":
+  version: 3.3.0
+  resolution: "@redux-devtools/extension@npm:3.3.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.2"
+    immutable: "npm:^4.3.4"
+  peerDependencies:
+    redux: ^3.1.0 || ^4.0.0 || ^5.0.0
+  checksum: 10/07c2bb6f786900f29509f1e414ae0af845cb276a471e1e0e961d3a6a7dc16485ffe620bf01a1e0a545181d550058d197525760bbddb2c172acac25ddbe9dbd0d
   languageName: node
   linkType: hard
 
@@ -15852,6 +15889,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"immutable@npm:^4.3.4":
+  version: 4.3.7
+  resolution: "immutable@npm:4.3.7"
+  checksum: 10/37d963c5050f03ae5f3714ba7a43d469aa482051087f4c65d673d1501c309ea231d87480c792e19fa85e2eaf965f76af5d0aa92726505f3cfe4af91619dfb80b
+  languageName: node
+  linkType: hard
+
 "import-fresh@npm:^3.2.1, import-fresh@npm:^3.3.0":
   version: 3.3.0
   resolution: "import-fresh@npm:3.3.0"
@@ -18777,6 +18821,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mattermost-redux@workspace:webapp/platform/mattermost-redux":
+  version: 0.0.0-use.local
+  resolution: "mattermost-redux@workspace:webapp/platform/mattermost-redux"
+  dependencies:
+    "@mattermost/client": "npm:10.6.0"
+    "@mattermost/types": "npm:10.6.0"
+    "@redux-devtools/extension": "npm:^3.2.3"
+    lodash: "npm:^4.17.21"
+    moment-timezone: "npm:^0.5.38"
+    redux: "npm:^4.2.0"
+    redux-batched-actions: "npm:^0.5.0"
+    redux-thunk: "npm:^2.4.2"
+    serialize-error: "npm:^11.0.3"
+    shallow-equals: "npm:^1.0.0"
+    timezones.json: "npm:^1.7.1"
+  peerDependencies:
+    typescript: ^4.3.0 || ^5.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "mattermost-webapp@workspace:webapp/channels":
   version: 0.0.0-use.local
   resolution: "mattermost-webapp@workspace:webapp/channels"
@@ -18801,7 +18868,7 @@ __metadata:
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types"
     "@mattermost/components": "workspace:webapp/platform/components"
     "@mattermost/desktop-api": "npm:5.10.0-2"
-    "@mattermost/eslint-plugin": "workspace:webapp/platform/eslint-plugin"
+    "@mattermost/eslint-plugin": "npm:*"
     "@mattermost/mmjstool": "github:mattermost/mattermost-utilities#7b63833d208d482ba4a1c12230bb3e68dd9c5e5e"
     "@mui/base": "npm:5.0.0-alpha.127"
     "@mui/material": "npm:5.11.16"
@@ -18850,6 +18917,8 @@ __metadata:
     "@types/turndown": "npm:5.0.5"
     "@types/webpack-env": "npm:1.18.1"
     "@types/zen-observable": "npm:0.8.7"
+    "@typescript-eslint/eslint-plugin": "npm:^7.1.0"
+    "@typescript-eslint/parser": "npm:^7.1.0"
     axios: "npm:1.7.9"
     babel-loader: "npm:9.1.2"
     babel-plugin-formatjs: "npm:10.5.1"
@@ -18884,6 +18953,9 @@ __metadata:
     eslint: "npm:8.57.0"
     eslint-import-resolver-webpack: "npm:0.13.8"
     eslint-plugin-formatjs: "npm:4.12.2"
+    eslint-plugin-header: "npm:^3.1.1"
+    eslint-plugin-import: "npm:^2.29.1"
+    eslint-plugin-jsx-a11y: "npm:^6.7.1"
     eslint-plugin-react: "npm:7.34.0"
     eslint-plugin-react-hooks: "npm:4.6.0"
     exif2css: "npm:1.3.0"
@@ -18910,6 +18982,7 @@ __metadata:
     jest-environment-jsdom: "npm:29.7.0"
     jest-junit: "npm:16.0.0"
     jest-watch-typeahead: "npm:2.2.2"
+    jsx-ast-utils: "npm:^3.3.3"
     katex: "npm:0.16.21"
     localforage: "npm:1.10.0"
     localforage-observable: "npm:2.1.1"
@@ -19561,6 +19634,15 @@ __metadata:
   dependencies:
     moment: "npm:^2.29.4"
   checksum: 10/45e3793d44bea8e826c934a335ebf0b92c6d6dae562fdb59d8c45a16d5c11de4d6692b5fa7eebca969881f06b81b55f8535883bfbc727b597d601709fa5a2bb2
+  languageName: node
+  linkType: hard
+
+"moment-timezone@npm:^0.5.38":
+  version: 0.5.48
+  resolution: "moment-timezone@npm:0.5.48"
+  dependencies:
+    moment: "npm:^2.29.4"
+  checksum: 10/8e0b7a05577623552293b28eeee4e60634b8be87fdb74084fa6d5ccc516771eb42d88f29c5a5e50a94c494048d14cdef94f94526a9dfd5e1b0050ff29d0a6c0a
   languageName: node
   linkType: hard
 
@@ -22312,7 +22394,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux-batched-actions@npm:0.5.0":
+"redux-batched-actions@npm:0.5.0, redux-batched-actions@npm:^0.5.0":
   version: 0.5.0
   resolution: "redux-batched-actions@npm:0.5.0"
   peerDependencies:
@@ -22348,7 +22430,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux-thunk@npm:2.4.2":
+"redux-thunk@npm:2.4.2, redux-thunk@npm:^2.4.2":
   version: 2.4.2
   resolution: "redux-thunk@npm:2.4.2"
   peerDependencies:
@@ -22366,7 +22448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.0.0, redux@npm:^4.0.4, redux@npm:^4.0.5":
+"redux@npm:^4.0.0, redux@npm:^4.0.4, redux@npm:^4.0.5, redux@npm:^4.2.0":
   version: 4.2.1
   resolution: "redux@npm:4.2.1"
   dependencies:
@@ -23188,7 +23270,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serialize-error@npm:11.0.3":
+"serialize-error@npm:11.0.3, serialize-error@npm:^11.0.3":
   version: 11.0.3
   resolution: "serialize-error@npm:11.0.3"
   dependencies:
@@ -23351,7 +23433,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shallow-equals@npm:1.0.0":
+"shallow-equals@npm:1.0.0, shallow-equals@npm:^1.0.0":
   version: 1.0.0
   resolution: "shallow-equals@npm:1.0.0"
   checksum: 10/eb1e8ef2c922cef77335584a00b40d1850c046244849cd3dac351257c8bbabc422ccd9465703e6dced45773080ad5856b2e7b6f06ac1f7d1f80c97c0538d79bf
@@ -24786,7 +24868,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"timezones.json@npm:1.7.1":
+"timezones.json@npm:1.7.1, timezones.json@npm:^1.7.1":
   version: 1.7.1
   resolution: "timezones.json@npm:1.7.1"
   checksum: 10/d0bcfbbae6d090a9bb8c9a7bf3abbc17189f8d17f00365716240e09db4d3d7783d63b0112ac7c88951937ef21940cc8434680cb9fde883a3f8f1b348ca620b52

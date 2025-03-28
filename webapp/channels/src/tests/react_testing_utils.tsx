@@ -17,10 +17,11 @@ import type {DeepPartial} from '@mattermost/types/utilities';
 import configureStore from 'store';
 import globalStore from 'stores/redux_store';
 
+import {WebSocketContext} from 'utils/use_websocket';
+
 import WebSocketClient from 'client/web_websocket_client';
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 import mockStore from 'tests/test_store';
-import {WebSocketContext} from 'utils/use_websocket';
 
 import type {GlobalState} from 'types/store';
 export * from '@testing-library/react';

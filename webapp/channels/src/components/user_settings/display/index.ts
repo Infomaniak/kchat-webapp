@@ -26,8 +26,9 @@ import {
 import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
 
-import {getLanguages, isLanguageAvailable} from 'i18n/i18n';
 import {Preferences} from 'utils/constants';
+
+import {getLanguages, isLanguageAvailable} from 'i18n/i18n';
 
 import type {GlobalState} from 'types/store';
 

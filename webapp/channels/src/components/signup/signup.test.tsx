@@ -17,9 +17,10 @@ import Signup from 'components/signup/signup';
 import Input from 'components/widgets/inputs/input/input';
 import PasswordInput from 'components/widgets/inputs/password_input/password_input';
 
+import {WindowSizes} from 'utils/constants';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {act, renderWithContext, screen} from 'tests/react_testing_utils';
-import {WindowSizes} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

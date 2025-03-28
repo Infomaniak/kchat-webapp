@@ -3,8 +3,9 @@
 
 import React from 'react';
 
-import {renderWithContext, userEvent, screen, waitFor} from 'tests/react_testing_utils';
 import * as utilsNotifications from 'utils/notifications';
+
+import {renderWithContext, userEvent, screen, waitFor} from 'tests/react_testing_utils';
 
 import NotificationPermissionBar from './index';
 

@@ -129,14 +129,14 @@ import {withSuspense} from 'components/common/hocs/with_suspense';
 import InteractiveDialog from 'components/interactive_dialog';
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
+import {getHistory} from 'utils/browser_history';
+import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, PageLoadContext} from 'utils/constants';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
 
 import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
-import {getHistory} from 'utils/browser_history';
-import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, PageLoadContext} from 'utils/constants';
-import {getSiteURL} from 'utils/url';
 
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
 import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';

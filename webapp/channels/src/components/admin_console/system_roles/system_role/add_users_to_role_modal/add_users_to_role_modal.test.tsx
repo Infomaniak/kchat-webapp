@@ -3,8 +3,9 @@
 
 import React from 'react';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import {TestHelper} from 'utils/test_helper';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import AddUsersToRoleModal from './add_users_to_role_modal';
 

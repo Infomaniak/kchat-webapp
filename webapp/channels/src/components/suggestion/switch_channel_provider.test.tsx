@@ -6,8 +6,9 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {Preferences} from 'mattermost-redux/constants';
 
-import mockStore from 'tests/test_store';
 import {TestHelper} from 'utils/test_helper';
+
+import mockStore from 'tests/test_store';
 
 import SwitchChannelProvider from './switch_channel_provider';
 
@@ -970,7 +971,7 @@ describe('components/SwitchChannelProvider', () => {
                             last_viewed_at: 3,
                             type: 'G',
                             name: 'insight_gm_channel',
-display_name: 'insight_gm_channel',
+                            display_name: 'insight_gm_channel',
                         },
                     },
                     channelsInTeam: {

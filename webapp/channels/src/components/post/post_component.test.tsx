@@ -5,11 +5,12 @@ import React from 'react';
 
 import type {DeepPartial} from '@mattermost/types/utilities';
 
-import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 import {getHistory} from 'utils/browser_history';
 import {Locations} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
+import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 

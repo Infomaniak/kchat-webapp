@@ -13,9 +13,10 @@ import type {BaseProps} from 'components/admin_console/old_admin_settings';
 import ExternalLink from 'components/external_link';
 import FormError from 'components/form_error';
 
-import imagePath from 'images/openid-convert/emoticon-outline.svg';
 import {getHistory} from 'utils/browser_history';
 import {Constants} from 'utils/constants';
+
+import imagePath from 'images/openid-convert/emoticon-outline.svg';
 
 import './openid_convert.scss';
 

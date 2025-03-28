@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {ComponentProps, useState} from 'react';
+import type {ComponentProps} from 'react';
+import React, {useState} from 'react';
+import {useUpdateEffect} from 'react-use';
 import styled, {css} from 'styled-components';
 
-import {useUpdateEffect} from 'react-use';
-
+import type {PrimaryButton} from './assets/buttons';
 import Dropdown from './dropdown';
-import {PrimaryButton} from './assets/buttons';
 
 export const DotMenuButton = styled.div<{isActive: boolean}>`
     display: inline-flex;

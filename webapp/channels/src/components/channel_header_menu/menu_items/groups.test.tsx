@@ -10,9 +10,10 @@ import AddGroupsToChannelModal from 'components/add_groups_to_channel_modal';
 import ChannelGroupsManageModal from 'components/channel_groups_manage_modal';
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 
-import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 import {ModalIdentifiers} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
 
 import Groups from './groups';
 

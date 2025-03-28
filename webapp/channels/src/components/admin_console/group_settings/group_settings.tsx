@@ -9,9 +9,10 @@ import ExternalLink from 'components/external_link';
 import AdminHeader from 'components/widgets/admin_console/admin_header';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 
-import Pluggable from 'plugins/pluggable';
 import {DocLinks} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
+
+import Pluggable from 'plugins/pluggable';
 
 type Props = {
     isDisabled?: boolean;

@@ -22,12 +22,13 @@ import RhsSettings from 'components/rhs_settings';
 import RhsThread from 'components/rhs_thread';
 import Search from 'components/search/index';
 
-import RhsPlugin from 'plugins/rhs_plugin';
 import a11yController from 'utils/a11y_controller_instance';
 import {focusElement, getFirstFocusableChild} from 'utils/a11y_utils';
 import Constants from 'utils/constants';
 import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import {isMac} from 'utils/user_agent';
+
+import RhsPlugin from 'plugins/rhs_plugin';
 
 import type {RhsState} from 'types/store/rhs';
 

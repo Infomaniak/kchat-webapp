@@ -287,13 +287,13 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                     ) : (
                         <>
                             <h1>
-                                                                       <FormattedMessage
+                                <FormattedMessage
                                     id='next_steps_view.welcomeToMattermost'
                                     defaultMessage='Welcome to KChat'
                                 />
-                                                                   </h1>
+                            </h1>
                             <p>
-                                                                       <FormattedMessage
+                                <FormattedMessage
                                     id='onboardingTour.taskList.subtitle'
                                     defaultMessage="Let's get up and running."
                                 />
@@ -309,14 +309,14 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                                 />
                             ))}
                             <span
-                                                                       className='link'
-                                                                       onClick={dismissChecklist}
-                                                                   >
-                                                                       <FormattedMessage
+                                className='link'
+                                onClick={dismissChecklist}
+                            >
+                                <FormattedMessage
                                     id='onboardingTask.taskList.dismiss_link'
                                     defaultMessage='No thanks, I’ll figure it out myself'
                                 />
-                                                                   </span>
+                            </span>
                         </>
                     )}
                 </TaskItems>

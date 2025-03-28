@@ -5,8 +5,9 @@ import React from 'react';
 
 import type {SystemEmoji} from '@mattermost/types/emojis';
 
-import {renderWithContext, screen} from 'tests/react_testing_utils';
 import EmojiMap from 'utils/emoji_map';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import EmojiPicker from './emoji_picker';
 

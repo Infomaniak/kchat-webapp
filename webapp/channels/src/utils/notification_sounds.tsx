@@ -8,6 +8,9 @@ import {FormattedMessage} from 'react-intl';
 import type {ChannelNotifyProps} from '@mattermost/types/channels';
 import type {UserNotifyProps} from '@mattermost/types/users';
 
+import {DesktopSound} from 'utils/constants';
+import * as UserAgent from 'utils/user_agent';
+
 import bing from 'sounds/bing.mp3';
 import calls_calm from 'sounds/calls_calm.mp3';
 import calls_cheerful from 'sounds/calls_cheerful.mp3';
@@ -18,8 +21,6 @@ import down from 'sounds/down.mp3';
 import hello from 'sounds/hello.mp3';
 import ripple from 'sounds/ripple.mp3';
 import upstairs from 'sounds/upstairs.mp3';
-import {DesktopSound} from 'utils/constants';
-import * as UserAgent from 'utils/user_agent';
 
 export const DesktopNotificationSounds = {
     DEFAULT: 'default',

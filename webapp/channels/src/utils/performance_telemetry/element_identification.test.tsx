@@ -9,8 +9,9 @@ import {Permissions} from 'mattermost-redux/constants';
 
 import ChannelController from 'components/channel_layout/channel_controller';
 
-import {renderWithContext, screen, waitFor} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, waitFor} from 'tests/react_testing_utils';
 
 import {identifyElementRegion} from './element_identification';
 

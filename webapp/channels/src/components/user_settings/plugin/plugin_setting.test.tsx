@@ -10,8 +10,9 @@ import type {DeepPartial} from '@mattermost/types/utilities';
 import * as preferencesActions from 'mattermost-redux/actions/preferences';
 import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
-import {renderWithContext} from 'tests/react_testing_utils';
 import {getPluginPreferenceKey} from 'utils/plugins/preferences';
+
+import {renderWithContext} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 

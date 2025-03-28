@@ -10,10 +10,11 @@ import {Posts} from 'mattermost-redux/constants';
 
 import * as Actions from 'actions/post_actions';
 
-import test_helper from 'packages/mattermost-redux/test/test_helper';
-import mockStore from 'tests/test_store';
 import {Constants, ActionTypes, RHSStates} from 'utils/constants';
 import * as PostUtils from 'utils/post_utils';
+
+import test_helper from 'packages/mattermost-redux/test/test_helper';
+import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
 

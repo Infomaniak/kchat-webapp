@@ -24,6 +24,7 @@
       "webapp/platform/client",
       "webapp/platform/components",
       "webapp/platform/eslint-plugin",
+      "webapp/platform/mattermost-redux",
       "webapp/platform/types"
     ]
   },

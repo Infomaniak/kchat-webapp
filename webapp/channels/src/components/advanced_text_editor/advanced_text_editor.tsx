@@ -28,19 +28,19 @@ import {getSelectedPostFocussedAt} from 'selectors/rhs';
 import {connectionErrorCount} from 'selectors/views/system';
 import LocalStorageStore from 'stores/local_storage_store';
 
-import {BannerJoinChannel} from 'components/banner_join_channel';
 import PostBoxIndicator from 'components/advanced_text_editor/post_box_indicator/post_box_indicator';
 import {makeAsyncComponent} from 'components/async_load';
+import {BannerJoinChannel} from 'components/banner_join_channel';
 import AutoHeightSwitcher from 'components/common/auto_height_switcher';
-import DndBanner from 'components/dnd_banner';
-import GuestBanner from 'components/guest_banner';
 import useDidUpdate from 'components/common/hooks/useDidUpdate';
 import DeletePostModal from 'components/delete_post_modal';
+import DndBanner from 'components/dnd_banner';
 import {
     DropOverlayIdCreateComment,
     DropOverlayIdCreatePost,
     DropOverlayIdEditPost, FileUploadOverlay,
 } from 'components/file_upload_overlay/file_upload_overlay';
+import GuestBanner from 'components/guest_banner';
 import RhsSuggestionList from 'components/suggestion/rhs_suggestion_list';
 import SuggestionList from 'components/suggestion/suggestion_list';
 import Textbox from 'components/textbox';
@@ -238,8 +238,8 @@ const AdvancedTextEditor = ({
         setShowPreview((prev) => !prev);
     }, []);
 
-    const emitTypingEvent = useCallback((eventType = "typing") => {
-        GlobalActions.emitLocalUserTypingEvent(eventType,channelId, postId);
+    const emitTypingEvent = useCallback((eventType = 'typing') => {
+        GlobalActions.emitLocalUserTypingEvent(eventType, channelId, postId);
     }, [channelId, postId]);
 
     const handleDraftChange = useCallback((draftToChange: PostDraft, options: {instant?: boolean; show?: boolean} = {instant: false, show: false}) => {
@@ -442,13 +442,14 @@ const AdvancedTextEditor = ({
         location,
         handleDraftChange,
         serverError,
+
         // uploadsProgressPercent,
         // handleUploadProgress,
         // handleFileUploadComplete,
         // handleUploadError,
         // removePreview,
         // emitTypingEvent,
-    )
+    );
     if (draft.postType === Constants.PostTypes.VOICE) {
         attachmentPreview = voiceAttachmentPreview;
     }
@@ -707,7 +708,7 @@ const AdvancedTextEditor = ({
             <Poll
                 key='poll'
                 disabled={showPreview}
-            />
+            />,
         ] : []),
         ...(pluginItems || []),
     ].filter(Boolean), [pluginItems, priorityAdditionalControl, isInEditMode, location, showPreview]);

@@ -13,8 +13,9 @@ import * as modalActions from 'actions/views/modals';
 
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 
-import {renderWithContext, screen, fireEvent, waitFor} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, fireEvent, waitFor} from 'tests/react_testing_utils';
 
 import MobileChannelHeaderPlugins from './mobile_channel_header_plugins';
 

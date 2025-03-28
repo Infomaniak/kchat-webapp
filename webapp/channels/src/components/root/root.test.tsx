@@ -15,10 +15,11 @@ import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
 import * as GlobalActions from 'actions/global_actions';
 
-import testConfigureStore from 'packages/mattermost-redux/test/test_store';
-import {renderWithContext, waitFor} from 'tests/react_testing_utils';
 import {StoragePrefixes} from 'utils/constants';
 import * as Utils from 'utils/utils';
+
+import testConfigureStore from 'packages/mattermost-redux/test/test_store';
+import {renderWithContext, waitFor} from 'tests/react_testing_utils';
 
 import {handleLoginLogoutSignal, redirectToOnboardingOrDefaultTeam} from './actions';
 import type {Props} from './root';

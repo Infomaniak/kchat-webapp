@@ -4,8 +4,9 @@
 import React from 'react';
 import {IntlProvider} from 'react-intl';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {TestHelper} from 'utils/test_helper';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import UsersToRemoveRole from './users_to_remove_role';
 

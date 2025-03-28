@@ -5,10 +5,11 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import * as reactRedux from 'react-redux';
 
-import mockStore from 'tests/test_store';
 import {TopLevelProducts} from 'utils/constants';
 import * as productUtils from 'utils/products';
 import {TestHelper} from 'utils/test_helper';
+
+import mockStore from 'tests/test_store';
 
 import ProductMenu, {ProductMenuButton, ProductMenuContainer} from './product_menu';
 import ProductMenuItem from './product_menu_item';

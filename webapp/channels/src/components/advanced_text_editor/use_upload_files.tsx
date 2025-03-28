@@ -173,8 +173,10 @@ const useUploadFiles = (
             rootId={postId}
             channelId={channelId}
             postType={postType}
+
             // For drive sharelinks
             message={draft.message}
+
             // caretPosition={caretPosition}
             handleDriveSharelink={handleFileUploadChange}
             storedDrafts={storedDrafts}
@@ -185,12 +187,13 @@ const useUploadFiles = (
     return [
         attachmentPreview,
         fileUploadJSX,
+
         // Infomaniak: export this for our voice recorder hook
         handleUploadProgress,
         handleFileUploadComplete,
         handleUploadError,
         removePreview,
-        uploadsProgressPercent
+        uploadsProgressPercent,
     ];
 };
 

@@ -6,13 +6,14 @@ import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-import {RHSStates} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
 import WithTooltip from 'components/with_tooltip';
+
+import {RHSStates} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {GlobalState} from 'types/store';
 

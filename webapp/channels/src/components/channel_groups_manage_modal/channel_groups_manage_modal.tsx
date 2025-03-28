@@ -17,9 +17,10 @@ import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
-import groupsAvatar from 'images/groups-avatar.png';
 import {ModalIdentifiers} from 'utils/constants';
 import * as Utils from 'utils/utils';
+
+import groupsAvatar from 'images/groups-avatar.png';
 
 import type {ModalData} from 'types/actions';
 
