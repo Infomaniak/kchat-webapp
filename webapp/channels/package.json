@@ -101,7 +101,7 @@
     "timezones.json": "1.7.1",
     "tinycolor2": "1.6.0",
     "turndown": "7.2.0",
-    "typescript": "5.5.4",
+    "typescript": "5.6.3",
     "wasm-media-encoders": "0.6.4",
     "web-vitals": "4.2.4",
     "zen-observable": "0.10.0"
@@ -155,8 +155,6 @@
     "@types/tinycolor2": "1.4.6",
     "@types/webpack-env": "1.18.1",
     "@types/zen-observable": "0.8.7",
-    "@typescript-eslint/eslint-plugin": "5.57.1",
-    "@typescript-eslint/parser": "5.57.1",
     "babel-loader": "9.1.2",
     "babel-plugin-formatjs": "10.5.1",
     "babel-plugin-lodash": "3.3.4",
