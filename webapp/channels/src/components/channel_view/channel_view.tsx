@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import WebSocketClient from 'client/web_websocket_client';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
@@ -17,6 +16,8 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import PostView from 'components/post_view';
 
 import {getHistory} from 'utils/browser_history';
+
+import WebSocketClient from 'client/web_websocket_client';
 
 import type {PropsFromRedux} from './index';
 
@@ -93,7 +94,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
     };
 
     startAutomaticCallIfNeeded = () => {
-        const params = new URLSearchParams(window.location.search);
+        const params = new URLSearchParams(this.props.location.search);
         const shouldStartCall = params.has('call');
 
         if (shouldStartCall) {
@@ -102,7 +103,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             params.delete('call');
 
             // Keep existing params if there is
-            const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+            const newUrl = this.props.location.pathname + (params.toString() ? `?${params.toString()}` : '');
             getHistory().replace(newUrl);
         }
     };
