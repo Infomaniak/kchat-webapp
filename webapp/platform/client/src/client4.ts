@@ -6,10 +6,6 @@
 import crypto from 'crypto';
 
 import FormData from 'form-data';
-import {
-    TrackPropertyUser,
-    TrackPropertyUserAgent, TrackScheduledPostsFeature,
-} from 'mattermost-webapp/src/packages/mattermost-redux/src/constants/telemetry';
 
 import type {ClusterInfo, AnalyticsRow, SchemaMigration, LogFilterQuery} from '@mattermost/types/admin';
 import type {AppBinding, AppCallRequest, AppCallResponse} from '@mattermost/types/apps';
@@ -159,17 +155,12 @@ import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 import type {TelemetryHandler} from './telemetry';
 
-// @ts-ignore
-
 const IKConstants = {
 
-    // @ts-ignore
     LOGIN_URL: process.env.LOGIN_ENDPOINT, // eslint-disable-line no-process-env
-    // @ts-ignore
     LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
     CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
 
-    // @ts-ignore
     MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
 };
 
@@ -893,9 +884,9 @@ export default class Client4 {
         );
     };
 
-    registerDevice = (device_id: string) => {
-        const body: any = {
-            device_id,
+    registerDevice = (deviceId: string) => {
+        const body = {
+            device_id: deviceId,
         };
 
         return this.doFetch<UserProfile>(
@@ -4410,7 +4401,7 @@ export default class Client4 {
             channel_id: string;
             created_at: string;
             id: string;
-            team_user: Object;
+            team_user: unknown;
             team_user_id: string;
             updated_at: string;
             url: string;
@@ -4433,7 +4424,7 @@ export default class Client4 {
             channel_id: string;
             created_at: string;
             id: string;
-            team_user: Object;
+            team_user: unknown;
             team_user_id: string;
             updated_at: string;
             url: string;
