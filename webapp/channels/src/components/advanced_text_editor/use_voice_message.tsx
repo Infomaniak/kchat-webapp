@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
+import type {FileInfo} from '@mattermost/types/files';
 
 import FilePreview from 'components/file_preview';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
@@ -21,18 +22,18 @@ const useVoiceMessage = (
     readOnlyChannel: boolean,
     location: string,
     handleDraftChange: (draft: PostDraft, options?: {instant?: boolean; show?: boolean}) => void,
-    serverError: ServerError,
-    uploadsProgressPercent: {[clientID: string]: FilePreviewInfo},
-    handleUploadProgress: () => void,
-    handleFileUploadComplete: () => void,
-    handleUploadError: () => void,
-    removePreview: () => void,
+    serverError: (ServerError & { submittedMessage?: string | undefined }) | null,
+    uploadsProgressPercent: { [clientID: string]: FilePreviewInfo },
+    handleUploadProgress: (filePreviewInfo: FilePreviewInfo) => void,
+    handleFileUploadComplete: (fileInfos: FileInfo[], clientIds: string[], channelId: string, rootId?: string) => void,
+    handleUploadError: (uploadError: string | ServerError | null, clientId?: string, channelId?: string, rootId?: string) => void,
+    removePreview: (clientId: string) => void,
     emitTypingEvent: (eventType?: string) => void,
 ) => {
     const [voiceMessageClientId, setVoiceMessageClientId] = useState('');
     const voiceMessageState = getVoiceMessageStateFromDraft(draft);
 
-    const handleVoiceMessageUploadStart = (clientId: string, channelId: Channel['id']) => {
+    const handleVoiceMessageUploadStart = (clientId: string) => {
         const uploadsInProgress = [...draft.uploadsInProgress, clientId];
         const newDraft = {
             ...draft,
@@ -87,7 +88,7 @@ const useVoiceMessage = (
                     onUploadComplete={handleFileUploadComplete}
                     onUploadError={handleUploadError}
                     onRemoveDraft={removePreview}
-                    onSubmit={handleFileUploadComplete}
+                    onSubmit={handleFileUploadComplete as () => void}
                     onStarted={emitTypingEvent}
                     onCancel={emitTypingEvent}
                     onComplete={emitTypingEvent}
@@ -105,7 +106,7 @@ const useVoiceMessage = (
         );
     }
 
-    return [voiceMessageClientId, handleVoiceMessageUploadStart, voiceMessageJSX, voiceAttachmentPreview];
+    return [voiceMessageJSX, voiceAttachmentPreview];
 };
 
 export default useVoiceMessage;

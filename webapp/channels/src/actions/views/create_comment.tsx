@@ -59,6 +59,7 @@ export function submitPost(
             user_id: userId,
             create_at: time,
             metadata: {...draft.metadata},
+            type: draft?.postType ?? '',
             props: {...draft.props},
         } as unknown as Post;
 

@@ -49,13 +49,7 @@ export default function FileAttachmentList(props: Props) {
                 inPost={true}
             />
         );
-    }
-
-    if (fileInfos.length === 0) {
-        return null;
-    }
-
-    if (fileInfos && fileInfos.length === 1 && !fileInfos[0].archived) {
+    } else if (fileInfos && fileInfos.length === 1 && !fileInfos[0].archived) {
         const fileType = getFileType(fileInfos[0].extension);
 
         if (fileType === FileTypes.IMAGE || (fileType === FileTypes.SVG && enableSVGs)) {
@@ -74,6 +68,10 @@ export default function FileAttachmentList(props: Props) {
         return (
             <div style={style.minHeightPlaceholder}/>
         );
+    }
+
+    if (fileInfos.length === 0) {
+        return null;
     }
 
     const postFiles = [];

@@ -41,6 +41,7 @@ import {
     DropOverlayIdEditPost, FileUploadOverlay,
 } from 'components/file_upload_overlay/file_upload_overlay';
 import GuestBanner from 'components/guest_banner';
+import Poll from 'components/post_poll';
 import RhsSuggestionList from 'components/suggestion/rhs_suggestion_list';
 import SuggestionList from 'components/suggestion/suggestion_list';
 import Textbox from 'components/textbox';
@@ -90,7 +91,6 @@ import useUploadFiles from './use_upload_files';
 import useVoiceMessage from './use_voice_message';
 
 import './advanced_text_editor.scss';
-import Poll from 'components/post_poll';
 
 const FileLimitStickyBanner = makeAsyncComponent('FileLimitStickyBanner', lazy(() => import('components/file_limit_sticky_banner')));
 
@@ -239,8 +239,8 @@ const AdvancedTextEditor = ({
     }, []);
 
     const emitTypingEvent = useCallback((eventType = 'typing') => {
-        GlobalActions.emitLocalUserTypingEvent(eventType, channelId, postId);
-    }, [channelId, postId]);
+        GlobalActions.emitLocalUserTypingEvent(eventType, channelId, rootId);
+    }, [channelId, rootId]);
 
     const handleDraftChange = useCallback((draftToChange: PostDraft, options: {instant?: boolean; show?: boolean} = {instant: false, show: false}) => {
         if (saveDraftFrame.current) {
@@ -314,7 +314,7 @@ const AdvancedTextEditor = ({
     useOrientationHandler(textboxRef, rootId);
     const pluginItems = usePluginItems(draft, textboxRef, handleDraftChange);
     const focusTextbox = useTextboxFocus(textboxRef, channelId, isRHS, canPost);
-    const [attachmentPreview, fileUploadJSX] = useUploadFiles(
+    const [initialAttachmentPreview, fileUploadJSX, handleUploadProgress, handleFileUploadComplete, handleUploadError, removePreview, uploadsProgressPercent] = useUploadFiles(
         draft,
         rootId,
         channelId,
@@ -327,6 +327,8 @@ const AdvancedTextEditor = ({
         setServerError,
         isInEditMode,
     );
+
+    let attachmentPreview = initialAttachmentPreview;
 
     const {
         emojiPicker,
@@ -434,27 +436,26 @@ const AdvancedTextEditor = ({
         handleCancel,
     );
 
-    const [voiceMessageClientId, handleVoiceMessageUploadStart, voiceMessageJSX, voiceAttachmentPreview] = useVoiceMessage(
+    const [voiceMessageJSX, voiceAttachmentPreview] = useVoiceMessage(
         draft,
         channelId,
-        postId,
+        rootId,
         readOnlyChannel,
         location,
         handleDraftChange,
         serverError,
-
-        // uploadsProgressPercent,
-        // handleUploadProgress,
-        // handleFileUploadComplete,
-        // handleUploadError,
-        // removePreview,
-        // emitTypingEvent,
+        uploadsProgressPercent,
+        handleUploadProgress,
+        handleFileUploadComplete,
+        handleUploadError,
+        removePreview,
+        emitTypingEvent,
     );
+
     if (draft.postType === Constants.PostTypes.VOICE) {
         attachmentPreview = voiceAttachmentPreview;
     }
 
-    const noArgumentHandleSubmit = useCallback(() => handleSubmit(), [handleSubmit]);
     const handleSubmitWithEvent = useCallback((e: React.FormEvent) => {
         e.preventDefault();
         handleSubmitWithErrorHandling();
@@ -703,13 +704,13 @@ const AdvancedTextEditor = ({
     const ariaLabel = loginSuccessfulLabel ? `${loginSuccessfulLabel} ${ariaLabelMessageInput}` : ariaLabelMessageInput;
 
     const additionalControls = useMemo(() => [
-        !isInEditMode && priorityAdditionalControl,
-        ...(location !== Locations.RHS_COMMENT ? [
+        isInEditMode ? null : priorityAdditionalControl,
+        ...(location === Locations.RHS_COMMENT ? [] : [
             <Poll
                 key='poll'
                 disabled={showPreview}
             />,
-        ] : []),
+        ]),
         ...(pluginItems || []),
     ].filter(Boolean), [pluginItems, priorityAdditionalControl, isInEditMode, location, showPreview]);
 

@@ -23,6 +23,16 @@ const getFileCount = (draft: PostDraft) => {
     return draft.fileInfos.length + draft.uploadsInProgress.length;
 };
 
+type UseUploadFilesReturnType = [
+    JSX.Element | null,
+    JSX.Element | null,
+    (filePreviewInfo: FilePreviewInfo) => void,
+    (fileInfos: FileInfo[], clientIds: string[], channelId: string, rootId?: string) => void,
+    (uploadError: string | ServerError | null, clientId?: string, channelId?: string, rootId?: string) => void,
+    (clientId: string) => void,
+    { [clientID: string]: FilePreviewInfo },
+];
+
 const useUploadFiles = (
     draft: PostDraft,
     postId: string,
@@ -35,7 +45,7 @@ const useUploadFiles = (
     focusTextbox: (forceFocust?: boolean) => void,
     setServerError: (err: (ServerError & { submittedMessage?: string }) | null) => void,
     isPostBeingEdited?: boolean,
-): [React.ReactNode, React.ReactNode] => {
+): UseUploadFilesReturnType => {
     const locale = useSelector(getCurrentLocale);
 
     const [uploadsProgressPercent, setUploadsProgressPercent] = useState<{ [clientID: string]: FilePreviewInfo }>({});
@@ -159,7 +169,6 @@ const useUploadFiles = (
     } else if (postId) {
         postType = isThreadView ? 'thread' : 'comment';
     }
-
     const fileUploadJSX = isDisabled ? null : (
         <FileUpload
             ref={fileUploadRef}
