@@ -125,17 +125,10 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             }
         }
 
-        if (prevProps.channelId !== this.props.channelId) {
-            // handle initial load
+        // IK: start call if needed should be triggered both on initial load and SPA navigation
+        if (prevProps.channelId !== this.props.channelId || this.props.location.search !== prevProps.location.search) {
             if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
                 this.startAutomaticCallIfNeeded();
-            }
-        } else {
-            if (this.props.location.search !== prevProps.location.search) {
-                // handle search param change if on the same channel
-                if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
-                    this.startAutomaticCallIfNeeded();
-                }
             }
         }
     }
