@@ -94,16 +94,16 @@ export default class ChannelView extends React.PureComponent<Props, State> {
     };
 
     startAutomaticCallIfNeeded = () => {
-        const params = new URLSearchParams(window.location.search);
+        const params = new URLSearchParams(this.props.location.search);
         const shouldStartCall = params.has('call');
-
+        
         if (shouldStartCall) {
             this.props.startCall(this.props.channelId);
 
             params.delete('call');
 
             // Keep existing params if there is
-            const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+            const newUrl = this.props.location.pathname + (params.toString() ? `?${params.toString()}` : '');
             getHistory().replace(newUrl);
         }
     };
@@ -122,6 +122,12 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             }
             if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
                 WebSocketClient.bindPresenceChannel(this.props.channelId);
+            }
+        }
+
+        // IK: start call if needed should be triggered both on initial load and SPA navigation
+        if (prevProps.channelId !== this.props.channelId || this.props.location.search !== prevProps.location.search) {
+            if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
                 this.startAutomaticCallIfNeeded();
             }
         }
