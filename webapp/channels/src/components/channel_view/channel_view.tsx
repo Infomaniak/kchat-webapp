@@ -96,7 +96,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
     startAutomaticCallIfNeeded = () => {
         const params = new URLSearchParams(this.props.location.search);
         const shouldStartCall = params.has('call');
-
+        
         if (shouldStartCall) {
             this.props.startCall(this.props.channelId);
 
@@ -125,8 +125,18 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             }
         }
 
-        if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived && this.props.location.search !== prevProps.location.search) {
-            this.startAutomaticCallIfNeeded();
+        if (prevProps.channelId !== this.props.channelId) {
+            // handle initial load
+            if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
+                this.startAutomaticCallIfNeeded();
+            }
+        } else {
+            if (this.props.location.search !== prevProps.location.search) {
+                // handle search param change if on the same channel
+                if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
+                    this.startAutomaticCallIfNeeded();
+                }
+            }
         }
     }
 
