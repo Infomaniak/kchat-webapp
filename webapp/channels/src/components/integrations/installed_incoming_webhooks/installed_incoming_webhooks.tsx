@@ -15,10 +15,8 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 
 import BackstageList from 'components/backstage/components/backstage_list';
-import ExternalLink from 'components/external_link';
 import InstalledIncomingWebhook, {matchesFilter} from 'components/integrations/installed_incoming_webhook';
 
-import {DeveloperLinks} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
 const PAGE_SIZE = 200;

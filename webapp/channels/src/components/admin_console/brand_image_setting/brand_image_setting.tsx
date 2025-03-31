@@ -182,11 +182,6 @@ export default class BrandImageSetting extends React.PureComponent<Props, State>
     };
 
     render() {
-        let letbtnDefaultClass = 'btn';
-        if (!this.props.disabled) {
-            letbtnDefaultClass += ' btn-default';
-        }
-
         let img = null;
         if (this.state.brandImage) {
             img = (

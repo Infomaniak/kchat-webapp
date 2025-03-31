@@ -3,10 +3,10 @@
 
 import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
-import React, {memo, useCallback, useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';
-import {Link, useRouteMatch} from 'react-router-dom';
+import {useRouteMatch} from 'react-router-dom';
 
 import {getThreadCounts, getThreadsForCurrentTeam} from 'mattermost-redux/actions/threads';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
@@ -27,7 +27,6 @@ import {getSelectedThreadIdInCurrentTeam} from 'selectors/views/threads';
 import {useGlobalState} from 'stores/hooks';
 import LocalStorageStore from 'stores/local_storage_store';
 
-import ChatIllustration from 'components/common/svg_images_components/chat_illustration';
 import LoadingScreen from 'components/loading_screen';
 import NoResultsIndicator from 'components/no_results_indicator';
 
@@ -52,7 +51,7 @@ const GlobalThreads = () => {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
 
-    const {url, params: {threadIdentifier}} = useRouteMatch<{threadIdentifier?: string}>();
+    const {params: {threadIdentifier}} = useRouteMatch<{threadIdentifier?: string}>();
     const [filter, setFilter] = useGlobalState(ThreadFilter.none, FILTER_STORAGE_KEY);
     const {currentTeamId, currentUserId, clear} = useThreadRouting();
 
@@ -140,10 +139,6 @@ const GlobalThreads = () => {
         return () => {
             dispatch(setSelectedThreadId(currentTeamId, ''));
         };
-    }, []);
-
-    const handleSelectUnread = useCallback(() => {
-        setFilter(ThreadFilter.unread);
     }, []);
 
     return (

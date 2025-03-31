@@ -5,8 +5,6 @@ import {createBrowserHistory} from 'history';
 import type {History} from 'history';
 
 import DesktopApp from 'utils/desktop_api';
-
-// import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {
     isDesktopApp,
 

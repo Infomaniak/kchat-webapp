@@ -59,7 +59,6 @@ interface WindowWithLibraries {
         openUserSettings: (dialogProps: any) => void;
         browserHistory: ReturnType<typeof getHistory>;
     };
-    openPricingModal: () => typeof openPricingModal;
     Components: {
         Textbox: typeof Textbox;
         Timestamp: typeof Timestamp;
@@ -68,7 +67,6 @@ interface WindowWithLibraries {
         Avatar: typeof Avatar;
         imageURLForUser: typeof imageURLForUser;
         BotBadge: typeof BotTag;
-        StartTrialFormModal: typeof StartTrialFormModal;
         ThreadViewer: typeof ThreadViewer;
         PostMessagePreview: typeof PostMessagePreview;
         AdvancedTextEditor: typeof AdvancedTextEditor;
@@ -122,7 +120,7 @@ window.WebappUtils = {
         return getHistory();
     },
     modals: {openModal, ModalIdentifiers},
-    notificationSounds: {ring: NotificationSounds.callsNotificationSounds.ring, stopRing: NotificationSounds.stopRing},
+    notificationSounds: {ring: NotificationSounds.ring, stopRing: NotificationSounds.stopRing},
     sendDesktopNotificationToMe: notifyMe,
     openUserSettings: (dialogProps) => openModal({
         modalId: ModalIdentifiers.USER_SETTINGS,

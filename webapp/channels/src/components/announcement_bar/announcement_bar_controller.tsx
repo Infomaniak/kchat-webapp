@@ -8,8 +8,6 @@ import type {ClientLicense, ClientConfig, WarnMetricStatus} from '@mattermost/ty
 import withGetCloudSubscription from 'components/common/hocs/cloud/with_get_cloud_subscription';
 
 import AppStoreBar from './appstore_announcement_bar';
-import CloudTrialAnnouncementBar from './cloud_trial_announcement_bar';
-import ConfigurationAnnouncementBar from './configuration_bar';
 import AnnouncementBar from './default_announcement_bar';
 import MASMigrationBar from './mas_migration_bar';
 import NotificationPermissionBar from './notification_permission_bar';
@@ -68,39 +66,10 @@ class AnnouncementBarController extends React.PureComponent<Props> {
         const cloudTrialEndAnnouncementBar = null;
         const notifyAdminDowngradeDelinquencyBar = null;
         const toYearlyNudgeBannerDismissable = null;
-        let toPaidPlanNudgeBannerDismissable = null;
-        if (this.props.license?.Cloud === 'true') {
-            // paymentAnnouncementBar = (
-            //     <PaymentAnnouncementBar/>
-            // );
-            // cloudTrialAnnouncementBar = (
-            //     <CloudTrialAnnouncementBar/>
-            // );
-            // cloudTrialEndAnnouncementBar = (
-            //     <CloudTrialEndAnnouncementBar/>
-            // );
-
-            toPaidPlanNudgeBannerDismissable = (<ToPaidPlanBannerDismissable/>);
-        }
+        const toPaidPlanNudgeBannerDismissable = null;
 
         const autoStartTrialModal = null;
 
-        // if (this.props.userIsAdmin) {
-        //     autoStartTrialModal = (
-        //         <AutoStartTrialModal/>
-        //     );
-        // }
-
-        // The component specified further down takes priority over the component above it.
-        // For example, consider this-
-        // {
-        //    Foo
-        //    Bar
-        //    Baz
-        // }
-        // Even if all Foo, Bar and Baz render, only Baz is visible as it's further down.
-        // One exception to this rule is for admin configured announcement banners
-        // If set with class 'admin-announcement', they will always be visible, stacked vertically.
         return (
             <>
                 <NotificationPermissionBar/>

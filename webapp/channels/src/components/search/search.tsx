@@ -26,8 +26,7 @@ import {ShortcutKeys} from 'components/with_tooltip/tooltip_shortcut';
 
 import Constants, {searchHintOptions, RHSStates, searchFilesHintOptions} from 'utils/constants';
 import * as Keyboard from 'utils/keyboard';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-import {isDesktopApp, getDesktopVersion, isMacApp} from 'utils/user_agent';
+import {isDesktopApp, isMacApp} from 'utils/user_agent';
 
 import type {SearchType} from 'types/store/rhs';
 

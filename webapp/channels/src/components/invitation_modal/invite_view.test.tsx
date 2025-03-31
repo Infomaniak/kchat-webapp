@@ -8,8 +8,6 @@ import type {Team} from '@mattermost/types/teams';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import {SelfHostedProducts} from 'utils/constants';
-import {TestHelper as TH} from 'utils/test_helper';
 import {generateId} from 'utils/utils';
 
 import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';

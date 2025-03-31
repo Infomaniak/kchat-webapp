@@ -3,6 +3,7 @@
 
 import classNames from 'classnames';
 import type {MouseEvent} from 'react';
+import React from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
 

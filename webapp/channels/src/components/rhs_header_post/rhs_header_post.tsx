@@ -9,9 +9,6 @@ import type {Channel} from '@mattermost/types/channels';
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import FollowButton from 'components/threading/common/follow_button';
-import CRTThreadsPaneTutorialTip
-    from 'components/tours/crt_tour/crt_threads_pane_tutorial_tip';
 import WithTooltip from 'components/with_tooltip';
 
 import {getHistory} from 'utils/browser_history';
@@ -78,7 +75,6 @@ class RhsHeaderPost extends React.PureComponent<Props> {
 
     render() {
         let back;
-        const {isFollowingThread} = this.props;
         const {formatMessage} = this.props.intl;
         const closeSidebarTooltip = (
             <FormattedMessage

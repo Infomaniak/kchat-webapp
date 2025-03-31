@@ -10,15 +10,13 @@ import type {Team} from '@mattermost/types/teams';
 import {General} from 'mattermost-redux/constants';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import {SelfHostedProducts} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
 import {generateId} from 'utils/utils';
 
 import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';
 import mockStore from 'tests/test_store';
 
 import type {Props} from './invitation_modal';
-import InvitationModal, {View, InvitationModal as BaseInvitationModal} from './invitation_modal';
+import InvitationModal, {View} from './invitation_modal';
 import InviteView from './invite_view';
 import NoPermissionsView from './no_permissions_view';
 import ResultView from './result_view';

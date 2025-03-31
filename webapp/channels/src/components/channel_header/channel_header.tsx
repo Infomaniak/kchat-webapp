@@ -9,7 +9,7 @@ import type {WrappedComponentProps} from 'react-intl';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import CustomStatusText from 'components/custom_status/custom_status_text';
-import MeetButton from 'components/meet_button/meet_button';
+import MeetButton from 'components/meet_button';
 import Timestamp from 'components/timestamp';
 import WithTooltip from 'components/with_tooltip';
 
@@ -124,7 +124,6 @@ class ChannelHeader extends React.PureComponent<Props> {
             dmUser,
             rhsState,
             hasGuests,
-            showChannelHeaderTutorialStep,
             hideGuestTags,
         } = this.props;
         if (!channel) {
@@ -383,7 +382,7 @@ class ChannelHeader extends React.PureComponent<Props> {
                         channel={channel}
                         channelMember={channelMember}
                     />
-                    {/* {showMeetBtn && <MeetButton/>} */}
+                    {showMeetBtn && <MeetButton/>}
                     <ChannelInfoButton channel={channel}/>
                 </div>
             </div>

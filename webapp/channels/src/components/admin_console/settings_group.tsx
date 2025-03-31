@@ -3,17 +3,15 @@
 
 import React, {memo} from 'react';
 
-export default class SettingsGroup extends React.PureComponent {
-    static get propTypes() {
-        return {
-            show: PropTypes.bool.isRequired,
-            header: PropTypes.node,
-            title: PropTypes.node,
-            subtitle: PropTypes.node,
-            children: PropTypes.node,
-            container: PropTypes.bool,
-        };
-    }
+type Props = {
+    id?: string;
+    show?: boolean;
+    header?: React.ReactNode;
+    title?: React.ReactNode;
+    subtitle?: React.ReactNode;
+    children?: React.ReactNode;
+    container?: boolean;
+};
 
 const SettingsGroup = ({
     show = true,

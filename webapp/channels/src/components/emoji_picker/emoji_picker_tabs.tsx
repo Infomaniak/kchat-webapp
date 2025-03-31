@@ -11,7 +11,6 @@ import {makeAsyncComponent} from 'components/async_load';
 import EmojiPicker from 'components/emoji_picker';
 import EmojiPickerHeader from 'components/emoji_picker/components/emoji_picker_header';
 import EmojiIcon from 'components/widgets/icons/emoji_icon';
-import GfycatIcon from 'components/widgets/icons/gfycat_icon';
 import GifIcon from 'components/widgets/icons/giphy_icon';
 
 const GifPicker = makeAsyncComponent('GifPicker', React.lazy(() => import('components/gif_picker/gif_picker')));

@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import {clamp} from 'lodash';
+import clamp from 'lodash/clamp';
 import React, {useEffect, useRef, useState} from 'react';
 
 import type {FileInfo} from '@mattermost/types/files';

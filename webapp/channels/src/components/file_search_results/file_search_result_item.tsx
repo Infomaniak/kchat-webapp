@@ -11,9 +11,6 @@ import FilePreviewModal from 'components/file_preview_modal';
 import Timestamp, {RelativeRanges} from 'components/timestamp';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-
-import './file_search_result_item.scss';
-
 import Tag from 'components/widgets/tag/tag';
 import WithTooltip from 'components/with_tooltip';
 
@@ -24,6 +21,8 @@ import {isDesktopApp} from 'utils/user_agent';
 import {fileSizeToString, copyToClipboard, localizeMessage} from 'utils/utils';
 
 import type {PropsFromRedux, OwnProps} from './index';
+
+import './file_search_result_item.scss';
 
 type Props = OwnProps & PropsFromRedux;
 

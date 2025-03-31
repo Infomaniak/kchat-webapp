@@ -388,24 +388,9 @@ export const getMostRecentPostIdInChannel: (state: GlobalState, channelId: Chann
     getAllPosts,
     (state: GlobalState, channelId: string) => getPostIdsInChannel(state, channelId),
     shouldShowJoinLeaveMessages,
-    (posts, postIdsInChannel, allowSystemMessages) => {
+    (_, postIdsInChannel) => {
         if (!postIdsInChannel) {
             return '';
-        }
-
-        allowSystemMessages = true;
-
-        if (!allowSystemMessages) {
-            // return the most recent non-system message in the channel
-            let postId;
-            for (let i = 0; i < postIdsInChannel.length; i++) {
-                const p = posts[postIdsInChannel[i]];
-                if (!p.type || !p.type.startsWith(Posts.SYSTEM_MESSAGE_PREFIX)) {
-                    postId = p.id;
-                    break;
-                }
-            }
-            return postId;
         }
 
         // return the most recent message in the channel

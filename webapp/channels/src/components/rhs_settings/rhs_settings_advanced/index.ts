@@ -10,6 +10,7 @@ import {updateUserActive, revokeAllSessionsForUser} from 'mattermost-redux/actio
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {get, getUnreadScrollPositionPreference, makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import {Preferences} from 'utils/constants';

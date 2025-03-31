@@ -11,7 +11,6 @@ import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import {measureRhsOpened} from 'actions/views/rhs';
-import {getIsMobileView} from 'selectors/views/browser';
 import {makePrepareReplyIdsForThreadViewer, makeGetThreadLastViewedAt} from 'selectors/views/threads';
 
 import type {GlobalState} from 'types/store';

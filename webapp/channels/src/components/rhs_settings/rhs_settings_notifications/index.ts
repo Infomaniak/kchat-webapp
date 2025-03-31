@@ -10,6 +10,7 @@ import {updateMe} from 'mattermost-redux/actions/users';
 import {Preferences} from 'mattermost-redux/constants';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {get as getPreference} from 'mattermost-redux/selectors/entities/preferences';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import type {GlobalState} from 'types/store';

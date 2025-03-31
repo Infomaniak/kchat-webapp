@@ -4,7 +4,6 @@
 import React from 'react';
 import type {MouseEvent, ReactNode} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Link} from 'react-router-dom';
 
 type Props = {
     showPreview?: boolean;
@@ -20,7 +19,6 @@ function TextboxLinks({
     previewMessageLink,
     hasText = false,
     hasExceededCharacterLimit = false,
-    currentLocale,
     updatePreview,
 }: Props) {
     const togglePreview = (e: MouseEvent) => {

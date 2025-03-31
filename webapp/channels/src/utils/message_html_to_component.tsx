@@ -164,24 +164,6 @@ export default function messageHtmlToComponent(html: string, options: Options = 
         });
     }
 
-    if (options.atPlanMentions) {
-        const mentionAttrib = 'data-plan-mention';
-        processingInstructions.push({
-            replaceChildren: true,
-            shouldProcessNode: (node: any) => node.attribs && node.attribs[mentionAttrib],
-            processNode: (node: any) => {
-                const mentionName = node.attribs[mentionAttrib];
-                const sumOfMembersMention = null;
-
-                // const sumOfMembersMention = (
-                //     <AtPlanMention
-                //         plan={mentionName}
-                //     />);
-                return sumOfMembersMention;
-            },
-        });
-    }
-
     if (!('emoji' in options) || options.emoji) {
         const emojiAttrib = 'data-emoticon';
         processingInstructions.push({

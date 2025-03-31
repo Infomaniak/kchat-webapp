@@ -10,6 +10,7 @@ import {UserTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
 import type {DispatchFunc, GetStateFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 
+// eslint-disable-next-line no-restricted-imports
 import {getHistory} from 'utils/browser_history';
 
 import {logError} from './errors';

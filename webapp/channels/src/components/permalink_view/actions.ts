@@ -7,8 +7,7 @@ import type {Post} from '@mattermost/types/posts';
 import {getChannel, getChannelMember, selectChannel, joinChannel, getChannelStats} from 'mattermost-redux/actions/channels';
 import {getPostThread} from 'mattermost-redux/actions/posts';
 import {getMissingProfilesByIds} from 'mattermost-redux/actions/users';
-import {Client4} from 'mattermost-redux/client';
-import {getCurrentChannel, getChannel as getChannelFromRedux} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam, getTeam, getMyTeamMember} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
@@ -88,14 +87,6 @@ export function focusPost(postId: string, returnTo = '', currentUserId: string, 
         if (privateChannelJoinPromptVisible) {
             return;
         }
-
-        // let postInfo;
-        // try {
-        //     postInfo = await Client4.getPostThread(postId);
-        // } catch (e) {
-        //     getHistory().replace(`/error?type=${ErrorPageTypes.PERMALINK_NOT_FOUND}&returnTo=${returnTo}`);
-        //     return;
-        // }
 
         const state = getState();
         const currentTeam = getCurrentTeam(state);
@@ -182,9 +173,6 @@ export function focusPost(postId: string, returnTo = '', currentUserId: string, 
                         return;
                     }
                 }
-
-                // [Preview feature] disabling join channel when focusing a post.
-                //await dispatch(joinChannel(currentUserId, '', channelId, channel.name));
             }
         }
 

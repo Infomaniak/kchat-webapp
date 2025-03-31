@@ -8,7 +8,6 @@ import type {Team} from '@mattermost/types/teams.js';
 
 import {Permissions} from 'mattermost-redux/constants';
 
-import ExternalLink from 'components/external_link';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 

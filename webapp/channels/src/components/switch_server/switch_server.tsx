@@ -16,6 +16,7 @@ type Props = {
     unreadStatus: BasicUnreadStatus;
     servers: Server[];
     isMultiServer: boolean;
+    spaceId: string;
 }
 
 const SwitchServer: FC<Props> = ({currentServer, unreadStatus, servers, isMultiServer, spaceId}) => {

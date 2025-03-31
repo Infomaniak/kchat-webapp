@@ -3,7 +3,6 @@
 
 /* eslint-disable max-lines */
 
-import * as Sentry from '@sentry/react';
 import {getName} from 'country-list';
 import crypto from 'crypto';
 import cssVars from 'css-vars-ponyfill';
@@ -61,7 +60,7 @@ import {getHistory} from 'utils/browser_history';
 import type {A11yFocusEventDetail} from 'utils/constants';
 import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes, AdvancedTextEditorTextboxIds} from 'utils/constants';
 import * as Keyboard from 'utils/keyboard';
-import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
+import {isDesktopApp} from 'utils/user_agent';
 import * as UserAgent from 'utils/user_agent';
 
 import bing from 'sounds/bing.mp3';
@@ -73,7 +72,6 @@ import ripple from 'sounds/ripple.mp3';
 import upstairs from 'sounds/upstairs.mp3';
 
 import {joinPrivateChannelPrompt} from './channel_utils';
-import {isServerVersionGreaterThanOrEqualTo} from './server_version';
 
 const CLICKABLE_ELEMENTS = [
     'a',

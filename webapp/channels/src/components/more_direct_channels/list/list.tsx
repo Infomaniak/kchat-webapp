@@ -1,20 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
 import type {ReactNode} from 'react';
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {openModal} from 'actions/views/modals';
-
 import MultiSelect from 'components/multiselect';
-import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
+import Constants from 'utils/constants';
 
 import {usePrevious} from './hooks';
 
@@ -53,6 +49,7 @@ export type Props = {
     };
 }
 
+//@ts-expect-error Multiselect got a generic
 const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionValue>>) => {
     const renderOptionValue = useCallback((
         option: OptionValue,
@@ -72,17 +69,9 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
         );
     }, [props.selectedItemRef]);
 
-    const dispatch = useDispatch();
-
     const handleSubmitImmediatelyOn = useCallback((value: OptionValue) => {
         return value.id === props.currentUserId || Boolean(value.delete_at);
     }, [props.currentUserId]);
-
-    const handleCreateChannel = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault();
-        props.handleHide();
-        dispatch(openModal({modalId: ModalIdentifiers.NEW_CHANNEL_MODAL, dialogType: NewChannelModal}));
-    };
 
     const intl = useIntl();
     const previousEmptyGroupIds = usePrevious(props.emptyGroupChannelsIds);
@@ -106,48 +95,19 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
         }
     }
 
-    let remainingText;
-    if (MAX_SELECTABLE_VALUES > props.values.length) {
-        remainingText = (
-            <FormattedMessage
-                id={'multiselect.numPeopleRemaining'}
-                defaultMessage={'Use ↑↓ to browse, ↵ to select. You can add {num, number} more {num, plural, one {person} other {people}}. '}
-                values={{
-                    num: MAX_SELECTABLE_VALUES - props.values.length,
-                }}
-            />
-        );
-    } else {
-        remainingText = (
-            <FormattedMessage
-                id={'multiselect.maxPeople'}
-                defaultMessage={'Use ↑↓ to browse, ↵ to select. You can\'t add more than {num} people. Please <a>create a channel</a> to include more people.'}
-                values={{
-                    num: MAX_SELECTABLE_VALUES,
-                    a: (chunks: React.ReactNode) => {
-                        return (
-                            <a
-                                href='#'
-                                onClick={(e) => handleCreateChannel(e)}
-                            >{chunks}</a>
-                        );
-                    },
-                }}
-            />
-        );
-    }
-
     const options = useMemo(() => {
         return props.options.map(optionValue);
     }, [props.options]);
 
     useEffect(() => {
-        if (props.emptyGroupChannelsIds.length > 0 && !_.isEqual(previousEmptyGroupIds, props.emptyGroupChannelsIds)) {
+        if (props.emptyGroupChannelsIds.length > 0 && !isEqual(previousEmptyGroupIds, props.emptyGroupChannelsIds)) {
             props.actions.getProfilesInGroupChannels?.(props.emptyGroupChannelsIds);
         }
     }, [props.emptyGroupChannelsIds, props.actions, previousEmptyGroupIds]);
 
     return (
+
+        // @ts-expect-error Multiselect has a generic
         <MultiSelect<OptionValue>
             ref={ref}
             options={options}
@@ -167,7 +127,6 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
             disableMultiSelectList={props.values.length > (Constants.MAX_USERS_IN_GM - 1)}
             maxValues={MAX_SELECTABLE_VALUES}
 
-            // numRemainingText={remainingText}
             changeMessageColor='red'
             showError={props.values.length === MAX_SELECTABLE_VALUES}
             numRemainingText={

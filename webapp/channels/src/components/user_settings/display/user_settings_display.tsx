@@ -25,8 +25,8 @@ import Constants from 'utils/constants';
 import {getBrowserTimezone} from 'utils/timezone';
 import {a11yFocus} from 'utils/utils';
 
-import type {Language} from 'i18n/i18n';
 import {getLanguageInfo} from 'i18n/i18n';
+import type {Language} from 'i18n/i18n';
 
 import ManageLanguages from './manage_languages';
 import ManageTimezones from './manage_timezones';
@@ -179,6 +179,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
     }
 
     componentDidMount() {
+        // eslint-disable-next-line react/prop-types
         const {actions, enableTimezone, shouldAutoUpdateTimezone} = this.props;
 
         if (enableTimezone && shouldAutoUpdateTimezone) {
@@ -869,7 +870,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
         });
 
         let timezoneSelection;
-        if (this.props.enableTimezone && !this.props.shouldAutoUpdateTimezone) {
+        if (!this.props.shouldAutoUpdateTimezone) {
             const userTimezone = this.props.userTimezone;
             const active = this.props.activeSection === 'timezone';
             let max = null;

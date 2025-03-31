@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -134,7 +135,7 @@ type Props = SuggestionProps<WrappedChannel> & WrappedComponentProps & {
 }
 
 const SwitchChannelSuggestion = React.forwardRef<HTMLLIElement, Props>((props, ref) => {
-    const {item, status, collapsedThreads, team, isPartOfOnlyOneTeam} = props;
+    const {item, status, collapsedThreads, isPartOfOnlyOneTeam} = props;
     const channel = item.channel;
     const channelIsArchived = channel.delete_at && channel.delete_at !== 0;
 

@@ -11,7 +11,6 @@ import SharedUserIndicator from 'components/shared_user_indicator';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
 
-import Constants from 'utils/constants';
 import {imageURLForUser} from 'utils/utils';
 
 import {generateColor} from './utils';

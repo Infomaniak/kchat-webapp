@@ -6,6 +6,7 @@
  */
 
 /* eslint-disable import/order */
+/* eslint-disable no-console, @typescript-eslint/no-unused-vars */
 import bg from './bg.json';
 import de from './de.json';
 import enAU from './en-AU.json';
@@ -26,7 +27,7 @@ import tr from './tr.json';
 import uk from './uk.json';
 import zhTW from './zh-TW.json';
 import zhCN from './zh-CN.json';
-
+/* eslint-enable @typescript-eslint/no-unused-vars */
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
 import {langFiles, langIDs, langLabels} from './imports';

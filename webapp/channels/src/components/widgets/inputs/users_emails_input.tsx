@@ -3,6 +3,7 @@
 
 import classNames from 'classnames';
 import type {RefObject} from 'react';
+import React from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import {components} from 'react-select';

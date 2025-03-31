@@ -3,8 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import ReactSelect from 'react-select';
-import type {OnChangeValue, StylesConfig} from 'react-select';
+import type {OnChangeValue} from 'react-select';
 import type {Timezone} from 'timezones.json';
 
 import type {UserProfile} from '@mattermost/types/users';
@@ -190,73 +189,12 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const {timezones, compact} = this.props;
+        const {compact} = this.props;
         const {useAutomaticTimezone} = this.state;
-
-        let index = 0;
-        let previousTimezone: Timezone;
-
-        const timeOptions = this.props.timezones.map((timeObject) => {
-            if (timeObject.utc[index] === previousTimezone?.utc[index]) {
-                index++;
-            } else {
-                // It's safe to use the first item since consecutive timezones
-                // don't have the same 'utc' array.
-                index = index === 0 ? index : 0;
-            }
-
-            previousTimezone = timeObject;
-
-            // Some more context on why different 'utc' items are used can be found here.
-            // https://github.com/mattermost/mattermost/pull/29290#issuecomment-2478492626
-            return {
-                value: timeObject.utc[index],
-                label: timeObject.text,
-            };
-        });
-
-        let serverError;
-        if (this.state.serverError) {
-            serverError = <label className='has-error'>{this.state.serverError}</label>;
-        }
 
         const inputs = [];
 
-        // These are passed to the 'key' prop and should all be unique.
-        const inputId = {
-            automaticTimezoneInput: 1,
-            manualTimezoneInput: 2,
-            message: 3,
-        };
-
-        const reactStyles = {
-
-            menuPortal: (provided) => ({
-                ...provided,
-                zIndex: 9999,
-            }),
-
-        } satisfies StylesConfig<SelectedOption, boolean>;
-
-        const noTimezonesFromServer = timezones.length === 0;
         const automaticTimezoneInput = (
-
-            // <div className='checkbox'>
-            //     <label>
-            //         <input
-            //             id='automaticTimezoneInput'
-            //             type='checkbox'
-            //             checked={useAutomaticTimezone}
-            //             onChange={this.handleAutomaticTimezone}
-            //             disabled={noTimezonesFromServer}
-            //         />
-            //         <FormattedMessage
-            //             id='user.settings.timezones.automatic'
-            //             defaultMessage='Automatic'
-            //         />
-
-            //     </label>
-            // </div>
             <Toggle
                 id={'automaticTimezoneInput childOption'}
                 onToggle={this.handleAutomaticTimezone}
@@ -285,15 +223,6 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
 
         inputs.push(manualTimezoneInput);
 
-        // inputs.push(
-        //     <div>
-        //         <br/>
-        //         <FormattedMessage
-        //             id='user.settings.timezones.promote'
-        //             defaultMessage='Select the time zone used for timestamps in the user interface and email notifications.'
-        //         />
-        //     </div>,
-        // );
         if (compact) {
             return inputs;
         }

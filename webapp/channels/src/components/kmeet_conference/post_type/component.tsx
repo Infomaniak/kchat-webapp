@@ -41,7 +41,7 @@ const text = {
     S: {id: 'kmeet.calls.declined', defaultMessage: 'Appel décliné', values: {}},
 };
 
-const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV2, joinCall, hasConferenceStarted}) => {
+const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV2, joinCall}) => {
     const intl = useIntl();
     const dispatch = useDispatch();
 

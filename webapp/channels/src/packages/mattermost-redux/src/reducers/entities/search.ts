@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {AnyAction} from 'redux';
 import {combineReducers} from 'redux';
 
 import type {Post} from '@mattermost/types/posts';
@@ -248,16 +249,6 @@ function isSearchGettingMore(state = false, action: MMReduxAction) {
     }
 }
 
-// mattermost version
-// function isLimitedResults(state = -1, action: AnyAction): number {
-//     switch (action.type) {
-//     case SearchTypes.SEARCH_POSTS_REQUEST: {
-//         if (!action.isGettingMore) {
-//             return -1;
-//         }
-//         return state;
-//     }
-// }
 function hasLimitation(state: string | null = null, action: AnyAction) {
     const {data, type} = action;
 
@@ -266,17 +257,6 @@ function hasLimitation(state: string | null = null, action: AnyAction) {
         return data?.has_limitation || null;
     default:
         return state;
-    }
-}
-
-function isLimitedResults(state = -1, action: MMReduxAction): number {
-    switch (action.type) {
-    case SearchTypes.SEARCH_POSTS_REQUEST: {
-        if (!action.isGettingMore) {
-            return -1;
-        }
-        return state;
-    }
     }
 }
 
@@ -309,7 +289,4 @@ export default combineReducers({
     // Date of limitation start, present if a limit is present
     hasLimitation,
 
-    // Boolean true if the search returns results inaccessible because
-    // they are beyond a cloud workspace's message limits.
-    // isLimitedResults,
 });

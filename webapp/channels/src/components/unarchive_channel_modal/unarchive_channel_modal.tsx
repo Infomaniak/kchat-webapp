@@ -8,6 +8,7 @@ import {FormattedMessage} from 'react-intl';
 import type {Channel, ChannelType} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
 
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';

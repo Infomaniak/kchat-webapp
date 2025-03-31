@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import noop from 'lodash/noop';
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage, defineMessage, useIntl} from 'react-intl';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import type {Team} from '@mattermost/types/teams';
 
@@ -34,7 +34,6 @@ type Props = {
 export function TeamProfile({team, isArchived, onToggleArchive, isDisabled, saveNeeded}: Props) {
     const teamIconUrl = imageURLForTeam(team);
     const usageDeltas = useGetUsageDeltas();
-    const dispatch = useDispatch();
     const usage = useGetUsage();
     const license = useSelector(getLicense);
     const intl = useIntl();
@@ -51,9 +50,7 @@ export function TeamProfile({team, isArchived, onToggleArchive, isDisabled, save
         return null;//
     }
 
-    const archiveBtn = isArchived ?
-        defineMessage({id: 'admin.team_settings.team_details.unarchiveTeam', defaultMessage: 'Unarchive Team'}) :
-        defineMessage({id: 'admin.team_settings.team_details.archiveTeam', defaultMessage: 'Archive Team'});
+    const archiveBtn = isArchived ? defineMessage({id: 'admin.team_settings.team_details.unarchiveTeam', defaultMessage: 'Unarchive Team'}) : defineMessage({id: 'admin.team_settings.team_details.archiveTeam', defaultMessage: 'Archive Team'});
 
     const toggleArchive = () => {
         setOverrideRestoreDisabled(true);

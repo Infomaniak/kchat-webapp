@@ -163,7 +163,7 @@ export default function TeamButton({
         </WithTeamTooltip>
     );
 
-    const teamButton = (
+    let teamButton = (
         <Link
             id={`${url.slice(1)}TeamButton`}
             aria-label={isNotCreateTeamButton ? ariaLabel : displayName}

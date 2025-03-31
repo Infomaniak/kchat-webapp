@@ -65,11 +65,6 @@ function CustomStatusEmoji({
         return statusEmoji;
     }
 
-    const expires = Boolean(
-        customStatus.expires_at &&
-        customStatus.duration !== CustomStatusDuration.DONT_CLEAR,
-    );
-
     return (
         <WithTooltip
             title={

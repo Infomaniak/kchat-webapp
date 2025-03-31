@@ -85,6 +85,7 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
+import {getGroup} from 'mattermost-redux/selectors/entities/groups';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -130,7 +131,7 @@ import InteractiveDialog from 'components/interactive_dialog';
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
 import {getHistory} from 'utils/browser_history';
-import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, PageLoadContext} from 'utils/constants';
+import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
@@ -748,6 +749,7 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.KSUITE_DELETED:
         dispatch(handleKSuiteDeleted(msg));
+        break;
     case SocketEvents.CPA_VALUES_UPDATED:
         dispatch(handleCustomAttributeValuesUpdated(msg));
         break;
@@ -2091,7 +2093,7 @@ function handleConferenceDeleted(msg) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function handlePusherMemberRemoved(msg) {
+function handlePusherMemberRemoved() {
     // console.log('pusher member removed', msg);
 }
 

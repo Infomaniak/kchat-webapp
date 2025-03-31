@@ -1,20 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {KSuiteBridge} from '@infomaniak/ksuite-bridge';
-
-import {storeBridge} from 'actions/ksuite_bridge_actions';
 import * as Actions from 'actions/views/root';
 import * as i18nSelectors from 'selectors/i18n';
 
-import {ActionTypes, BridgeActionTypes} from 'utils/constants';
+import {ActionTypes} from 'utils/constants';
 
 import mockStore from 'tests/test_store';
 
 describe('root view actions', () => {
     const origCookies = document.cookie;
     const origWasLoggedIn = localStorage.getItem('was_logged_in');
-    const ksuiteBridge = new KSuiteBridge();
 
     beforeAll(() => {
         document.cookie = '';

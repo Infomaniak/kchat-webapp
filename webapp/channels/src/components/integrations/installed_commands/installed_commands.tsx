@@ -14,7 +14,6 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 
 import BackstageList from 'components/backstage/components/backstage_list';
-import ExternalLink from 'components/external_link';
 
 import * as Utils from 'utils/utils';
 

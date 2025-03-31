@@ -13,10 +13,9 @@ import type {Team} from '@mattermost/types/teams';
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
-import UserSettingsModal from 'components/user_settings/modal';
 import WithTooltip from 'components/with_tooltip';
 
-import {ModalIdentifiers, RHSStates} from 'utils/constants';
+import {RHSStates} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
@@ -30,7 +29,7 @@ type Props = {
     currentTeam: Team;
 }
 
-const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, tooltipContent, currentTeam}: Props): JSX.Element | null => {
+const SettingsButton = ({tab = 'display', className, icon, currentTeam}: Props): JSX.Element | null => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));

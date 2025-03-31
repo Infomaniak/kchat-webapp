@@ -10,7 +10,6 @@ import type {UserProfile} from '@mattermost/types/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
-import SharedUserIndicator from 'components/shared_user_indicator';
 import StatusIcon from 'components/status_icon';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';

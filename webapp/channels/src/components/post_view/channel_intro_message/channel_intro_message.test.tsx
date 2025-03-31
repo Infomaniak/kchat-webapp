@@ -60,7 +60,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
     describe('test Open Channel', () => {
         test('should match component state, without boards', () => {
             const initialState = {};
-            const {container} = renderWithContext(
+            renderWithContext(
                 <ChannelIntroMessage{...baseProps}/>, initialState,
             );
 
@@ -84,7 +84,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
         };
 
         test('should match component state, no profiles', () => {
-            const {container} = renderWithContext(
+            renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                 />,
@@ -100,7 +100,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
         });
 
         test('should match component state, with profiles', () => {
-            const {container} = renderWithContext(
+            renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     channelProfiles={users}
@@ -140,7 +140,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
         };
 
         test('should match component state, without teammate', () => {
-            const {container} = renderWithContext(
+            renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                 />,
@@ -152,7 +152,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
         });
 
         test('should match component state, with teammate', () => {
-            const {container} = renderWithContext(
+            renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     teammate={user1 as UserProfile}
@@ -193,7 +193,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
         };
 
         test('should match component state, readonly', () => {
-            const {container} = renderWithContext(
+            renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     isReadOnly={true}
@@ -209,7 +209,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
         });
 
         test('should match component state without any permission', () => {
-            const {container} = renderWithContext(
+            renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                     teamIsGroupConstrained={true}
@@ -228,12 +228,11 @@ describe('components/post_view/ChannelIntroMessages', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-            const beginningHeading = screen.getByText('test channel');
+        const beginningHeading = screen.getByText('test channel');
 
-            expect(beginningHeading).toBeInTheDocument();
-            expect(beginningHeading).toHaveClass('channel-intro__title');
-            expect(screen.getByText('Post messages here that you want everyone to see. Everyone automatically becomes a member of this channel when they join the team.', {exact: false})).toBeInTheDocument();
-        });
+        expect(beginningHeading).toBeInTheDocument();
+        expect(beginningHeading).toHaveClass('channel-intro__title');
+        expect(screen.getByText('Post messages here that you want everyone to see. Everyone automatically becomes a member of this channel when they join the team.', {exact: false})).toBeInTheDocument();
     });
 
     describe('test OFFTOPIC Channel', () => {
@@ -248,7 +247,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
         };
 
         test('should match component state', () => {
-            const {container} = renderWithContext(
+            renderWithContext(
                 <ChannelIntroMessage
                     {...props}
                 />,

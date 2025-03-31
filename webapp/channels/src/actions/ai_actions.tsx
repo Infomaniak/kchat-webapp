@@ -1,3 +1,5 @@
+
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {ActionTypes} from 'utils/constants';

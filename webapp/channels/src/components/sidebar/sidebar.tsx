@@ -33,7 +33,6 @@ const CreateUserGroupsModal = makeAsyncComponent('CreateUserGroupsModal', lazy((
 const InvitationModal = makeAsyncComponent('InvitationModal', lazy(() => import('components/invitation_modal')));
 const KeyboardShortcutsModal = makeAsyncComponent('KeyboardShortcutsModal', lazy(() => import('components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal')));
 const NewChannelModal = makeAsyncComponent('NewChannelModal', lazy(() => import('components/new_channel_modal/new_channel_modal')));
-const UserSettingsModal = makeAsyncComponent('UserSettingsModal', lazy(() => import('components/user_settings/modal')));
 
 type Props = {
     teamId: string;

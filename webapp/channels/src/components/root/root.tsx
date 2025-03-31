@@ -11,13 +11,9 @@ import type {RouteComponentProps} from 'react-router-dom';
 
 import {ServiceEnvironment} from '@mattermost/types/config';
 
-// import type {PreferenceType} from '@mattermost/types/preferences';
-// import type {Team} from '@mattermost/types/teams';
-
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
 import {Client4} from 'mattermost-redux/client';
-import {Preferences} from 'mattermost-redux/constants';
 
 import {storeBridge, storeBridgeParam} from 'actions/ksuite_bridge_actions';
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
@@ -31,7 +27,6 @@ import store from 'stores/redux_store';
 import {makeAsyncComponent, makeAsyncPluggableComponent} from 'components/async_load';
 import GlobalHeader from 'components/global_header/global_header';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
-import {HFTRoute, LoggedInHFTRoute} from 'components/header_footer_template_route';
 import InitialLoadingScreen from 'components/initial_loading_screen';
 import LoggedIn from 'components/logged_in';
 import LoggedInRoute from 'components/logged_in_route';
@@ -39,10 +34,6 @@ import {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_works
 import {Animations} from 'components/preparing_workspace/steps';
 import SidebarMobileRightMenu from 'components/sidebar_mobile_right_menu';
 
-import webSocketClient from 'client/web_websocket_client';
-import {initializePlugins} from 'plugins';
-
-import 'utils/a11y_controller_instance';
 import Constants, {DesktopThemePreferences, PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import DesktopApp from 'utils/desktop_api';
@@ -54,6 +45,10 @@ import {getSiteURL} from 'utils/url';
 import {getDesktopVersion, isAndroidWeb, isChromebook, isDesktopApp, isIosWeb} from 'utils/user_agent';
 import {applyTheme, injectWebcomponentInit, isTextDroppableEvent} from 'utils/utils';
 
+import webSocketClient from 'client/web_websocket_client';
+import {initializePlugins} from 'plugins';
+import {LLMBotPost} from 'plugins/ai/components/llmbot_post';
+
 import LuxonController from './luxon_controller';
 import PerformanceReporterController from './performance_reporter_controller';
 import RootProvider from './root_provider';
@@ -64,7 +59,7 @@ import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, 
 import type {PropsFromRedux} from './index';
 
 import 'plugins/export';
-import {LLMBotPost} from 'plugins/ai/components/llmbot_post';
+import 'utils/a11y_controller_instance';
 
 const MobileViewWatcher = makeAsyncComponent('MobileViewWatcher', lazy(() => import('components/mobile_view_watcher')));
 const WindowSizeObserver = makeAsyncComponent('WindowSizeObserver', lazy(() => import('components/window_size_observer/WindowSizeObserver')));
@@ -72,19 +67,6 @@ const ErrorPage = makeAsyncComponent('ErrorPage', lazy(() => import('components/
 const Login = makeAsyncComponent('LoginController', lazy(() => import('components/login/login')));
 const AccessProblem = makeAsyncComponent('AccessProblem', lazy(() => import('components/access_problem')));
 
-// const PasswordResetSendLink = makeAsyncComponent('PasswordResedSendLink', lazy(() => import('components/password_reset_send_link')));
-// const PasswordResetForm = makeAsyncComponent('PasswordResetForm', lazy(() => import('components/password_reset_form')));
-// const Signup = makeAsyncComponent('SignupController', lazy(() => import('components/signup/signup')));
-// const ShouldVerifyEmail = makeAsyncComponent('ShouldVerifyEmail', lazy(() => import('components/should_verify_email/should_verify_email')));
-// const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', lazy(() => import('components/do_verify_email/do_verify_email')));
-// const ClaimController = makeAsyncComponent('ClaimController', lazy(() => import('components/claim')));
-// const TermsOfService = makeAsyncComponent('TermsOfService', lazy(() => import('components/terms_of_service')));
-// const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', lazy(() => import('components/linking_landing_page')));
-// const AdminConsole = makeAsyncComponent('AdminConsole', lazy(() => import('components/admin_console')));
-// const SelectTeam = makeAsyncComponent('SelectTeam', lazy(() => import('components/select_team')));
-// const Authorize = makeAsyncComponent('Authorize', lazy(() => import('components/authorize')));
-// const CreateTeam = makeAsyncComponent('CreateTeam', lazy(() => import('components/create_team')));
-// const Mfa = makeAsyncComponent('Mfa', lazy(() => import('components/mfa/mfa_controller')));
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', lazy(() => import('components/preparing_workspace')));
 const LaunchingWorkspace = makeAsyncComponent('LaunchingWorkspace', lazy(() => import('components/preparing_workspace/launching_workspace')));
 const CompassThemeProvider = makeAsyncComponent('CompassThemeProvider', lazy(() => import('components/compass_theme_provider/compass_theme_provider')));
@@ -97,7 +79,6 @@ const TeamSidebar = makeAsyncComponent('TeamSidebar', lazy(() => import('compone
 const SidebarRight = makeAsyncComponent('SidebarRight', lazy(() => import('components/sidebar_right')));
 const ModalController = makeAsyncComponent('ModalController', lazy(() => import('components/modal_controller')));
 const AppBar = makeAsyncComponent('AppBar', lazy(() => import('components/app_bar/app_bar')));
-const ComponentLibrary = makeAsyncComponent('ComponentLibrary', lazy(() => import('components/component_library')));
 
 const Pluggable = makeAsyncPluggableComponent();
 
@@ -150,8 +131,6 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     setRudderConfig = () => {
-        const telemetryId = this.props.telemetryId;
-
         const rudderUrl = 'https://pdat.matterlytics.com';
         let rudderKey = '';
         switch (this.props.serviceEnvironment) {
@@ -416,7 +395,9 @@ export default class Root extends React.PureComponent<Props, State> {
 
     initiateMeRequests = async () => {
         const {isLoaded, isMeRequested} = await this.props.actions.loadConfigAndMe();
+        // eslint-disable-next-line no-console
         console.log('isLoaded', isLoaded);
+        // eslint-disable-next-line no-console
         console.log('isMeRequested', isMeRequested);
 
         if (isLoaded) {

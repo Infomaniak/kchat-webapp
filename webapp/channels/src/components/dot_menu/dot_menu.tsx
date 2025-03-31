@@ -270,6 +270,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
             const dlUrl = getZipforPost(this.props.post.id);
             window.location.href = dlUrl;
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('Failed to download attachments:', error);
         }
     };

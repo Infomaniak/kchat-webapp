@@ -2,25 +2,19 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
 import {GenericModal} from '@mattermost/components';
 import type {ChannelType} from '@mattermost/types/channels';
 import type {DeepPartial} from '@mattermost/types/utilities';
 
-import {createChannel} from 'mattermost-redux/actions/channels';
 import Permissions from 'mattermost-redux/constants/permissions';
 
-import {openChannelLimitModalIfNeeded} from 'actions/cloud';
-
 import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
-import Input from 'components/widgets/inputs/input/input';
 import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
 
 import Constants, {suitePluginIds} from 'utils/constants';
 import {cleanUpUrlable} from 'utils/url';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {
     renderWithContext,
     screen,
@@ -37,8 +31,6 @@ jest.mock('mattermost-redux/actions/cloud', () => ({
 }));
 
 import NewChannelModal from './new_channel_modal';
-
-import {shallow} from 'enzyme';
 
 describe('components/new_channel_modal', () => {
     const initialState: DeepPartial<GlobalState> = {

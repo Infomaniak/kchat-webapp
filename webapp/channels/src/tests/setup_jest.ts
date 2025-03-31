@@ -52,7 +52,9 @@ jest.mock('@mui/styled-engine', () => {
 });
 
 jest.mock('utils/url_import', () => ({
+    // eslint-disable-next-line no-process-env
     getWasmFileURL: jest.fn(() => `${process.env.BASE_URL}/wasm-media-encoders/wasm/mp3`),
+    // eslint-disable-next-line no-process-env
     getPdfJSWorkerURL: jest.fn(() => `${process.env.BASE_URL}/pdfjs-dist/build/pdf.worker.min.mjs`),
 }));
 

@@ -9,7 +9,7 @@ import {getChannelAndMyMember, getChannelMembersByIds} from 'mattermost-redux/ac
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getTeamMembersByIds} from 'mattermost-redux/actions/teams';
 import * as UserActions from 'mattermost-redux/actions/users';
-import {Preferences as PreferencesRedux, General} from 'mattermost-redux/constants';
+import {Preferences as PreferencesRedux} from 'mattermost-redux/constants';
 import {
     getChannel,
     getChannelMembersInChannels,
@@ -27,7 +27,7 @@ import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
 import {loadCustomEmojisForCustomStatusesByUserIds} from 'actions/emoji_actions';
 import {loadStatusesForProfilesList, loadStatusesForProfilesMap} from 'actions/status_actions';
-import {getDisplayedChannels, getSidebarGroupChannels} from 'selectors/views/channel_sidebar';
+import {getSidebarGroupChannels} from 'selectors/views/channel_sidebar';
 import store from 'stores/redux_store';
 
 import {Constants, Preferences, UserStatuses} from 'utils/constants';

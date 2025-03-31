@@ -12,9 +12,6 @@ import type {MMReduxAction} from 'mattermost-redux/action_types';
 import {AdminTypes, ChannelTypes, TeamTypes, UserTypes, SchemeTypes, GroupTypes} from 'mattermost-redux/action_types';
 import {teamListToMap} from 'mattermost-redux/utils/team_utils';
 
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
-
 function currentTeamId(state = '', action: MMReduxAction) {
     switch (action.type) {
     case TeamTypes.SELECT_TEAM:

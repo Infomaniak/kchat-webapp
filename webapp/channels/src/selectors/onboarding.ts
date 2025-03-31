@@ -14,7 +14,6 @@ import {GenericTaskSteps, OnboardingTaskCategory, OnboardingTaskList} from 'comp
 import {FINISHED} from 'components/tours';
 
 import {RecommendedNextStepsLegacy, Preferences} from 'utils/constants';
-import {isMobile} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
 

@@ -15,8 +15,6 @@ import {getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 import FileInfoPreview from 'components/file_info_preview';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
-import {getPdfJSWorkerURL} from 'utils/url_import';
-
 const INITIAL_RENDERED_PAGES = 3;
 
 export type Props = {

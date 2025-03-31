@@ -4,7 +4,6 @@
 import MuiMenuItem from '@mui/material/MenuItem';
 import type {MenuItemProps as MuiMenuItemProps} from '@mui/material/MenuItem';
 import {styled} from '@mui/material/styles';
-import cloneDeep from 'lodash/cloneDeep';
 import React, {
     Children,
     useContext,
@@ -138,7 +137,6 @@ export function MenuItem(props: Props) {
         children,
         onClick,
         role = 'menuitem',
-        forceCloseOnSelect = false,
         ...otherProps
     } = props;
 
@@ -174,13 +172,6 @@ export function MenuItem(props: Props) {
                 if (isMobileView || isRoleCheckboxOrRadio(role)) {
                     onClick(event);
                 } else {
-                    // Clone the event since we delay the click handler until after the menu has closed.
-                    // const clonedEvent = cloneDeep(event);
-
-                    // menuContext.addOnClosedListener(() => {
-                    //     onClick(clonedEvent);
-                    // });
-
                     onClick(event);
                 }
             }

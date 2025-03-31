@@ -4,7 +4,6 @@
 import React, {useEffect, useMemo} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage, defineMessages, useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Team} from '@mattermost/types/teams';
@@ -12,14 +11,9 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import {trackEvent} from 'actions/telemetry_actions';
-
-import useCopyText from 'components/common/hooks/useCopyText';
 import UsersEmailsInput from 'components/widgets/inputs/users_emails_input';
 
 import {Constants} from 'utils/constants';
-import {getSiteURL} from 'utils/url';
-import {getTrackFlowRole, getRoleForTrackFlow, getSourceForTrackFlow} from 'utils/utils';
 
 import type {CustomMessageProps, InviteChannels} from './add_to_channels';
 import AddToChannels, {defaultCustomMessage, defaultInviteChannels} from './add_to_channels';
@@ -27,8 +21,6 @@ import InviteAs, {InviteType} from './invite_as';
 import OverageUsersBannerNotice from './overage_users_banner_notice';
 
 import './invite_view.scss';
-
-import {getAnalyticsCategory} from 'components/onboarding_tasks';
 
 export const initializeInviteState = (initialSearchValue = '', inviteAsGuest = false): InviteState => {
     return deepFreeze({
@@ -77,9 +69,6 @@ export type Props = InviteState & {
 }
 
 export default function InviteView(props: Props) {
-    const trackFlowRole = useSelector(getTrackFlowRole);
-    const roleForTrackFlow = useSelector(getRoleForTrackFlow);
-
     useEffect(() => {
         if (!props.currentTeam.invite_id) {
             props.regenerateTeamInviteId(props.currentTeam.id);
@@ -87,49 +76,6 @@ export default function InviteView(props: Props) {
     }, [props.currentTeam.id, props.currentTeam.invite_id, props.regenerateTeamInviteId]);
 
     const {formatMessage} = useIntl();
-
-    const inviteURL = useMemo(() => {
-        return `${getSiteURL()}/signup_user_complete/?id=${props.currentTeam.invite_id}&md=link&sbr=${trackFlowRole}`;
-    }, [props.currentTeam.invite_id, trackFlowRole]);
-
-    const copyText = useCopyText({
-        trackCallback: () => trackEvent(getAnalyticsCategory(props.isAdmin), 'click_copy_invite_link', {...roleForTrackFlow, ...getSourceForTrackFlow()}),
-        text: inviteURL,
-    });
-
-    const copyButton = (
-        <button
-            onClick={copyText.onClick}
-            data-testid='InviteView__copyInviteLink'
-            aria-label={
-                formatMessage({
-                    id: 'invite_modal.copy_link.url_aria',
-                    defaultMessage: 'team invite link {inviteURL}',
-                }, {inviteURL})
-            }
-            className='btn btn-secondary'
-            aria-live='polite'
-        >
-            {!copyText.copiedRecently && (
-                <>
-                    <i className='icon icon-link-variant'/>
-                    <FormattedMessage
-                        id='invite_modal.copy_link'
-                        defaultMessage='Copy invite link'
-                    />
-                </>
-            )}
-            {copyText.copiedRecently && (
-                <>
-                    <i className='icon icon-check'/>
-                    <FormattedMessage
-                        id='invite_modal.copied'
-                        defaultMessage='Copied'
-                    />
-                </>
-            )}
-        </button>
-    );
 
     const errorProperties = {
         showError: false,

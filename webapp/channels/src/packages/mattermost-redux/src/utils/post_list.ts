@@ -11,8 +11,6 @@ import {Posts} from 'mattermost-redux/constants';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {makeGetPostsForIds} from 'mattermost-redux/selectors/entities/posts';
 import type {UserActivityPost} from 'mattermost-redux/selectors/entities/posts';
-
-// import {shouldShowJoinLeaveMessages} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import {createIdsSelector, memoizeResult} from 'mattermost-redux/utils/helpers';
 import {isUserActivityPost, shouldFilterJoinLeavePost, isFromWebhook, ensureString} from 'mattermost-redux/utils/post_utils';
@@ -24,14 +22,8 @@ export const DATE_LINE = 'date-';
 export const START_OF_NEW_MESSAGES = 'start-of-new-messages-';
 export const MAX_COMBINED_SYSTEM_POSTS = 100;
 
-export function shouldShowJoinLeaveMessages(/*state: GlobalState*/) {
+export function shouldShowJoinLeaveMessages() {
     return true;
-
-    // const config = getConfig(state);
-    // const enableJoinLeaveMessage = config.EnableJoinLeaveMessageByDefault === 'true';
-
-    // // This setting is true or not set if join/leave messages are to be displayed
-    // return getBool(state, Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_FILTER_JOIN_LEAVE, enableJoinLeaveMessage);
 }
 
 interface PostFilterOptions {

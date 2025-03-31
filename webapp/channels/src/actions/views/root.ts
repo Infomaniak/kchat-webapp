@@ -9,7 +9,7 @@ import {ActionTypes} from 'utils/constants';
 
 import en from 'i18n/en.json';
 
-import type {ActionFuncAsync, ThunkActionFunc, GlobalState} from 'types/store';
+import type {ActionFuncAsync, ThunkActionFunc} from 'types/store';
 import type {Translations} from 'types/store/i18n';
 
 const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};

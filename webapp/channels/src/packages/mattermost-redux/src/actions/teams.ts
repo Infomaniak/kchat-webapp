@@ -8,7 +8,7 @@ import type {ServerError} from '@mattermost/types/errors';
 import type {Team, TeamMembership, TeamMemberWithError, GetTeamMembersOpts, TeamsWithCount, TeamSearchOpts, NotPagedTeamSearchOpts, PagedTeamSearchOpts} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
-import {ChannelTypes, ServerTypes, TeamTypes, UserTypes} from 'mattermost-redux/action_types';
+import {ChannelTypes, TeamTypes, UserTypes} from 'mattermost-redux/action_types';
 import {selectChannel} from 'mattermost-redux/actions/channels';
 import {logError} from 'mattermost-redux/actions/errors';
 import {bindClientFunc, forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
@@ -22,7 +22,9 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult, DispatchFunc, GetStateFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 import EventEmitter from 'mattermost-redux/utils/event_emitter';
 
+// eslint-disable-next-line no-restricted-imports
 import {Servers} from 'utils/constants';
+// eslint-disable-next-line no-restricted-imports
 import {isDesktopApp} from 'utils/user_agent';
 
 async function getProfilesAndStatusesForMembers(userIds: string[], dispatch: DispatchFunc, getState: GetStateFunc) {

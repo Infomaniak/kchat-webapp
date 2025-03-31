@@ -93,7 +93,6 @@ export class UnreadsStatusHandlerClass extends React.PureComponent<Props> {
             unreadStatus,
             inGlobalThreads,
             inDrafts,
-            inActivityAndInsights,
             inScheduledPosts,
         } = this.props;
         const {formatMessage} = this.props.intl;

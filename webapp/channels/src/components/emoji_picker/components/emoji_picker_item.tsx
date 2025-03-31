@@ -55,7 +55,6 @@ function EmojiPickerItem({emoji, rowIndex, isSelected, onClick, onMouseOver}: Pr
     let content;
 
     if (!isInfomaniakEmoji(emoji) && isSystemEmoji(emoji)) {
-        const emojiName = emoji.short_name ? emoji.short_name : emoji.name;
         const emojiUnified = emoji.unified ? emoji.unified.toLowerCase() : emoji.name.toLowerCase();
 
         content = (

@@ -22,7 +22,6 @@ import * as PostActions from 'actions/post_actions';
 import {openModal} from 'actions/views/modals';
 
 import KeyboardShortcutsModal from 'components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal';
-import LeaveChannelModal from 'components/leave_channel_modal';
 import MarketplaceModal from 'components/plugin_marketplace/marketplace_modal';
 import {AppCommandParser} from 'components/suggestion/command_provider/app_command_parser/app_command_parser';
 import {intlShim} from 'components/suggestion/command_provider/app_command_parser/app_command_parser_dependencies';

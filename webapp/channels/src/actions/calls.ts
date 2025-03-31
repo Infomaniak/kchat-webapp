@@ -9,6 +9,7 @@ import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentChannelId, getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {ActionFunc, ActionFuncAsync, DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {
@@ -104,6 +105,7 @@ export function joinCallInChannel(): ActionFuncAsync {
         setTimeout(() => {
             if (msg) {
                 const kmeetUrl = new URL(msg.url);
+                // eslint-disable-next-line no-console
                 console.log('[calls: joinCallInChannel]', msg.url);
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
@@ -199,6 +201,7 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 dispatch(openCallDialingModal(channelID));
             }
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('call could not be started', error);
         }
     };
@@ -267,6 +270,7 @@ export function receivedCall(call: Call, currentUserId: string) {
 
             dispatch(openCallDialingModal(call.channel_id));
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('[calls] receivedCall error:', error);
         }
     };
@@ -303,6 +307,7 @@ export function hangUpCall() {
         const state = getState();
         const conferenceId = callConferenceId(state);
         await Client4.declineIncomingMeetCall(conferenceId);
+        // eslint-disable-next-line no-console
         console.log('[calls: hangUpCall]', conferenceId);
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         stopRing();

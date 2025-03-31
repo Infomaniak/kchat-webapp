@@ -10,7 +10,6 @@ import type {UserProfile, UserStatus} from '@mattermost/types/users';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 
 import PriorityLabels from 'components/advanced_text_editor/priority_labels';
-import DraftEditor from 'components/drafts/draft_editor';
 import FilePreview from 'components/file_preview';
 import Markdown from 'components/markdown';
 import ShowMore from 'components/post_view/show_more';
@@ -52,17 +51,12 @@ function PanelBody({
     uploadsInProgress,
     userId,
     username,
-    draft,
-    isEditing,
-    setIsEditing,
 }: Props) {
     const currentRelativeTeamUrl = useSelector(getCurrentRelativeTeamUrl);
 
     const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         handleFormattedTextClick(e, currentRelativeTeamUrl);
     }, [currentRelativeTeamUrl]);
-
-    const hideEditor = () => setIsEditing(false);
 
     return (
         <div className='DraftPanelBody post'>

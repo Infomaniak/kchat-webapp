@@ -93,7 +93,7 @@ const DotMenu = ({
 
     const button = (
 
-        // @ts-ignore
+        // @ts-expect-error old error
         <MenuButton
             title={title}
             isActive={(isActive ?? false) || isOpen}

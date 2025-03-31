@@ -6,7 +6,6 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import type {Post} from '@mattermost/types/posts';
-import {isStringArray} from '@mattermost/types/utilities';
 
 import {getMissingProfilesByIds} from 'mattermost-redux/actions/users';
 import {makeGetProfilesByIdsAndUsernames} from 'mattermost-redux/selectors/entities/users';
@@ -23,6 +22,8 @@ function GMConversionMessage(props: Props): JSX.Element {
 
     // Infomaniak change due to an api constraint for this prop
     const gmMembersDuringConversionIDsString = props.post.props.gmMembersDuringConversionIDs as string;
+
+    // @ts-expect-error i dont know if it's normal or not
     const gmMembersDuringConversionIDs = props.post.props.gmMembersDuringConversionIDs.includes(',') ? gmMembersDuringConversionIDsString.split(',') : [gmMembersDuringConversionIDsString];
 
     const dispatch = useDispatch();

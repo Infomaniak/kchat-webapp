@@ -1,17 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
-
-import {openModal} from 'actions/views/modals';
-
-import UserSettingsModal from 'components/user_settings/modal';
-import WithTooltip from 'components/with_tooltip';
-
-import {ModalIdentifiers} from 'utils/constants';
-
+import React from 'react';
 type Props = {
     userId: string;
     currentUserId: string;
@@ -26,24 +16,8 @@ const ProfilePopoverSelfUserRow = ({
     userId,
     currentUserId,
     haveOverrideProp,
-    hide,
-    returnFocus,
-    handleCloseModals,
-    handleShowDirectChannel,
+
 }: Props) => {
-    const {formatMessage} = useIntl();
-    const dispatch = useDispatch();
-
-    const handleEditAccountSettings = useCallback(() => {
-        hide?.();
-        dispatch(openModal({
-            modalId: ModalIdentifiers.USER_SETTINGS,
-            dialogType: UserSettingsModal,
-            dialogProps: {isContentProductSettings: false, onExited: returnFocus},
-        }));
-        handleCloseModals();
-    }, [hide, returnFocus, handleCloseModals]);
-
     if (userId !== currentUserId || haveOverrideProp) {
         return null;
     }
@@ -51,37 +25,7 @@ const ProfilePopoverSelfUserRow = ({
     return (
         <div
             className='user-popover__bottom-row-container'
-        >
-            {/* <button
-                type='button'
-                className='btn btn-primary btn-sm'
-                onClick={handleEditAccountSettings}
-            >
-                <i
-                    className='icon icon-account-outline'
-                    aria-hidden='true'
-                />
-                <FormattedMessage
-                    id='user_profile.account.editProfile'
-                    defaultMessage='Edit Profile'
-                />
-            </button>
-            <WithTooltip
-                title={formatMessage({id: 'user_profile.send.dm.yourself', defaultMessage: 'Send yourself a message'})}
-            >
-                <button
-                    type='button'
-                    className='btn btn-icon btn-sm'
-                    onClick={handleShowDirectChannel}
-                    aria-label={formatMessage({id: 'user_profile.send.dm.yourself', defaultMessage: 'Send yourself a message'})}
-                >
-                    <i
-                        className='icon icon-send'
-                        aria-hidden='true'
-                    />
-                </button>
-            </WithTooltip> */}
-        </div>
+        />
     );
 };
 

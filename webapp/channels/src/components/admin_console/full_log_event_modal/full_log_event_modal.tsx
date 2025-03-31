@@ -60,6 +60,21 @@ export default class FullLogEventModal extends React.PureComponent<Props, State>
     };
 
     render() {
+        let copy = (<Button onClick={this.copyLog}>
+            <FormattedMessage
+                id='admin.server_logs.CopyLog'
+                defaultMessage='Copy log'
+            />
+        </Button>);
+
+        if (this.state.copySuccess) {
+            copy = (
+                <FormattedMessage
+                    id='admin.server_logs.DataCopied'
+                    defaultMessage='Data copied'
+                />);
+        }
+
         return (
             <Modal
                 show={this.props.show}
@@ -78,16 +93,7 @@ export default class FullLogEventModal extends React.PureComponent<Props, State>
                             defaultMessage='Log Event'
                         />
                     </Modal.Title>
-                    {this.state.copySuccess ? <FormattedMessage
-                        id='admin.server_logs.DataCopied'
-                        defaultMessage='Data copied'
-                    /> : <Button onClick={this.copyLog}>
-                                                  <FormattedMessage
-                            id='admin.server_logs.CopyLog'
-                            defaultMessage='Copy log'
-                        />
-                                              </Button>
-                    }
+                    {copy}
                 </Modal.Header>
                 <Modal.Body>
                     {this.renderContents()}

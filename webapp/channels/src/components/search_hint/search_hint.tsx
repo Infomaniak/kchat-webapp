@@ -9,8 +9,6 @@ import {useSelector} from 'react-redux';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
-import ExternalLink from 'components/external_link';
-
 import {isFileAttachmentsEnabled} from 'utils/file_utils';
 
 interface SearchTerm {

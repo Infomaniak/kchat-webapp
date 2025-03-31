@@ -44,7 +44,6 @@ import type {GlobalState} from 'types/store';
 import DotMenu from './dot_menu';
 
 import {setGlobalItem} from '../../actions/storage';
-import {getGlobalItem} from '../../selectors/storage';
 
 type Props = {
     post: Post;

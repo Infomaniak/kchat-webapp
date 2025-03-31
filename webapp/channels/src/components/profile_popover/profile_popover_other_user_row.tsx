@@ -1,15 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {SendIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import ProfilePopoverAddToChannel from 'components/profile_popover/profile_popover_add_to_channel';
-
-// import ProfilePopoverCallButtonWrapper from 'components/profile_popover/profile_popover_call_button_wrapper';
 
 type Props = {
     user: UserProfile;
@@ -30,7 +27,6 @@ const ProfilePopoverOtherUserRow = ({
     handleCloseModals,
     returnFocus,
     hide,
-    fullname,
 }: Props) => {
     if (user.id === currentUserId || haveOverrideProp) {
         return null;

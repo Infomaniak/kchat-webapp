@@ -15,7 +15,6 @@ import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general
 import {get, isCollapsedThreadsAllowed, getCollapsedThreadsPreference} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTimezone, getCurrentTimezoneFull, getCurrentTimezoneLabel} from 'mattermost-redux/selectors/entities/timezone';
 import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
-import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
 
 import {Preferences} from 'utils/constants';
 

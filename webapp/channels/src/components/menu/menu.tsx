@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {Fade} from '@mui/material';
 import MuiMenuList from '@mui/material/MenuList';
 import MuiPopover from '@mui/material/Popover';
 import type {PopoverOrigin} from '@mui/material/Popover';
@@ -33,7 +32,6 @@ import {isKeyPressed} from 'utils/keyboard';
 
 import {MenuContext, useMenuContextValue} from './menu_context';
 import {hasElementPopup} from './menu_item';
-import {MuiMenuStyled} from './menu_styled';
 
 import './menu.scss';
 
@@ -290,14 +288,6 @@ export function Menu(props: Props) {
             <MenuContext.Provider value={providerValue}>
                 <MuiPopover
                     anchorEl={anchorElement}
-                    anchorOrigin={props?.menu?.anchorOrigin ?? {
-                        vertical: 'top',
-                        horizontal: 'left',
-                    }}
-                    transformOrigin={props?.menu?.transformOrigin ?? {
-                        vertical: 'top',
-                        horizontal: 'left',
-                    }}
                     open={isMenuOpen}
                     onClose={handleMenuClose}
                     onClick={handleMenuClick}

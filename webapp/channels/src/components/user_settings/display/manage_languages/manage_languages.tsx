@@ -5,7 +5,7 @@ import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import ReactSelect from 'react-select';
-import type {StylesConfig, ValueType, OnChangeValue, AriaOnFocus, AriaOnChange} from 'react-select';
+import type {StylesConfig, OnChangeValue, AriaOnFocus, AriaOnChange} from 'react-select';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -18,7 +18,6 @@ import Constants from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
 
 import type {Language} from 'i18n/i18n';
-import * as I18n from 'i18n/i18n.jsx';
 
 type Actions = {
     updateMe: (user: UserProfile) => Promise<ActionResult>;

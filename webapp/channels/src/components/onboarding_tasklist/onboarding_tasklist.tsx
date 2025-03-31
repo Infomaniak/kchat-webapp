@@ -38,7 +38,6 @@ import {CompletedAnimation} from './onboarding_tasklist_animations';
 import Completed from './onboarding_tasklist_completed';
 import {TaskListPopover} from './onboarding_tasklist_popover';
 import {Task} from './onboarding_tasklist_task';
-import TasklistIcon from './tasklist_icon';
 
 const TaskItems = styled.div`
     border-radius: var(--radius-m);

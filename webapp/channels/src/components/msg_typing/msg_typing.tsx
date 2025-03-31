@@ -51,8 +51,7 @@ export default function MsgTyping(props: Props) {
                     userStoppedRecording(userId, channelId, rootId, Date.now());
                 }
             }
-        }, [props.channelId, props.postId, userStartedTyping, userStartedRecording, userStoppedTyping,
-            userStoppedRecording]),
+        }, [userStartedTyping, userStartedRecording, props.channelId, props.rootId, userStoppedTyping, userStoppedRecording]),
     });
 
     const getInputText = (users: string[], eventType = 'typing') => {

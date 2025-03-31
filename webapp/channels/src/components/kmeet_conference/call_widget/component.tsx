@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -24,12 +25,9 @@ import ChannelConvIcon from 'components/widgets/icons/channel_conv_icon';
 import CompassIcon from 'components/widgets/icons/compassIcon';
 import ExpandConvIcon from 'components/widgets/icons/expand_conv_icon';
 import LeaveConvIcon from 'components/widgets/icons/leave_conf_icon';
-import MutedIcon from 'components/widgets/icons/muted_icon';
 import PopOutIcon from 'components/widgets/icons/popout';
-import RaisedHandIcon from 'components/widgets/icons/raised_hand';
 import ScreenSharingIcon from 'components/widgets/icons/screen_sharing_icon';
 import ShrinkConvIcon from 'components/widgets/icons/shrink_conv_icon';
-import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
 import Avatar from 'components/widgets/users/avatar';
 import Avatars from 'components/widgets/users/avatars/avatars';
 import WithTooltip from 'components/with_tooltip';
@@ -273,6 +271,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             cameraOn: false,
             screenSharing: false,
         };
+        // eslint-disable-next-line no-underscore-dangle
         this._ref = React.createRef();
         this.node = React.createRef();
     }
@@ -361,11 +360,8 @@ export default class CallWidget extends React.PureComponent<Props, State> {
     }
 
     onAudioStatusChange(muted: boolean) {
+        // eslint-disable-next-line no-console
         console.log(muted);
-
-        // this.setState({
-        //     audioMuted:
-        // })
     }
 
     getCallDuration = () => {
@@ -381,13 +377,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         if (this.props.screenSharingID === this.props.currentUserID) {
             window.callsClient.unshareScreen();
             state.screenStream = null;
-        } else if (!this.props.screenSharingID) {
-            // if (window.desktop && compareSemVer(window.desktop.version, '5.1.0') >= 0) {
-            //     this.props.showScreenSourceModal();
-            // } else {
-            //     const stream = await window.callsClient.shareScreen('', hasExperimentalFlag());
-            //     state.screenStream = stream;
-            // }
         }
 
         this.setState({
@@ -487,14 +476,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         });
     };
 
-    // onMenuClick = () => {
-    //     this.setState({
-    //         showMenu: !this.state.showMenu,
-    //         devices: window.callsClient?.getAudioDevices(),
-    //         showParticipantsList: false,
-    //     });
-    // }
-
     onParticipantsButtonClick = () => {
         this.setState({
             showParticipantsList: !this.state.showParticipantsList,
@@ -519,8 +500,10 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                 ps.push(audioEl.setSinkId(device.deviceId));
             }
             Promise.all(ps).then(() => {
+                // eslint-disable-next-line no-console
                 console.log('audio output has changed');
             }).catch((err) => {
+                // eslint-disable-next-line no-console
                 console.log(err);
             });
         }
@@ -531,16 +514,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         if (!this.props.screenSharingID) {
             return null;
         }
-
-        // const isSharing = this.props.screenSharingID === this.props.currentUserID;
-
-        // let profile;
-        // if (!isSharing) {
-        //     profile = this.props.profilesMap[this.props.screenSharingID];
-        //     if (!profile) {
-        //         return null;
-        //     }
-        // }
 
         return (
             <div
@@ -619,18 +592,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
         const renderParticipants = () => {
             return Object.values(this.props.profiles).map((profile) => {
-                const status = this.props.statuses[profile.id];
-                let isMuted = true;
-                let isSpeaking = false;
-                let isHandRaised = false;
-                if (status) {
-                    isMuted = status.muted;
-                    isSpeaking = Boolean(status.voice);
-                    isHandRaised = Boolean(status.raised_hand > 0);
-                }
-
-                const MuteIcon = isMuted ? CallMutedIcon : CallUnmutedIcon;
-
                 return (
                     <li
                         className='MenuItem'
@@ -650,28 +611,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             }
                         </span>
 
-                        {/* <span
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginLeft: 'auto',
-                                gap: '4px',
-                            }}
-                        >
-                            { isHandRaised &&
-                            <RaisedHandIcon
-                                fill={'rgba(255, 188, 66, 1)'}
-                                style={{width: '14px', height: '14px'}}
-                            />
-                            }
-
-                            <MuteIcon
-                                fill={isMuted ? '#9F9F9F' : '#0098FF'}
-                                style={{width: '14px', height: '14px'}}
-                            />
-
-                        </span> */}
                     </li>
                 );
             });
@@ -802,7 +741,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
         const notificationContent = onJoinSelf;
 
-        const joinedUsers = this.state.showUsersJoined.map((userID, idx) => {
+        const joinedUsers = this.state.showUsersJoined.map((userID) => {
             if (userID === this.props.currentUserID) {
                 return null;
             }
@@ -845,7 +784,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
     onMouseDown = (ev: React.MouseEvent<HTMLDivElement>) => {
         document.addEventListener('mousemove', this.onMouseMove, false);
-        const target = ev.target as HTMLElement;
         this.setState({
             dragging: {
                 ...this.state.dragging,
@@ -856,9 +794,8 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         });
     };
 
-    onMouseUp = (ev: MouseEvent) => {
+    onMouseUp = () => {
         document.removeEventListener('mousemove', this.onMouseMove, false);
-        const target = ev.target as HTMLElement;
         this.setState({
             dragging: {
                 ...this.state.dragging,
@@ -922,54 +859,10 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             },
             window.origin,
         );
-
-        // if (this.state.expandedViewWindow && !this.state.expandedViewWindow.closed) {
-        //     this.state.expandedViewWindow.focus();
-        //     return;
-        // }
-
-        // // TODO: remove this as soon as we support opening a window from desktop app.
-        // if (this.props.show) {
-        //     this.props.hideExpandedView();
-        //     this.setState({
-        //         expanded: false,
-        //     });
-
-        //     return;
-        // }
-
-        // this.props.showExpandedView();
-
-        // } else {
-        //     const expandedViewWindow = window.open(
-        //         `/${this.props.team.name}/${isDMChannel(this.props.channel) ? 'messages' : 'channels'}/${this.props.channel.name}/call`,
-        //         'ExpandedView',
-        //         'resizable=yes',
-        //     );
-
-        // this.setState({
-        //     expanded: true,
-        // });
-
-        // }
-        // browserHistory.push(`/${this.props.team.name}/${isDMChannel(this.props.channel) ? 'messages' : 'channels'}/${this.props.channel.name}/call`);
     };
-
-    // onRaiseHandToggle = () => {
-    //     if (!window.callsClient) {
-    //         return;
-    //     }
-    //     if (window.callsClient.isHandRaised) {
-    //         window.callsClient.unraiseHand();
-    //     } else {
-    //         window.callsClient.raiseHand();
-    //     }
-    // }
 
     onChannelLinkClick = (ev: React.MouseEvent<HTMLElement>) => {
         ev.preventDefault();
-
-        // window.postMessage({type: 'browser-history-push-return', message: {pathName: this.props.channelURL}}, window.origin);
     };
 
     renderChannelName = (hasTeamSidebar: boolean) => {
@@ -1047,8 +940,8 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             channelDisplayName = this.props.channel.display_name;
             break;
         }
-        if (channelDisplayName.length < 0 || channelDisplayName === localizeMessage('channel_loader.someone', 'Someone')) {
-            channelDisplayName = localizeMessage('callingWidget.waitingForUsers', 'Waiting for users');
+        if (channelDisplayName.length < 0 || channelDisplayName === localizeMessage({id: 'channel_loader.someone', defaultMessage: 'Someone'})) {
+            channelDisplayName = localizeMessage({id: 'callingWidget.waitingForUsers', defaultMessage: 'Waiting for users'});
         }
         return (
             <>

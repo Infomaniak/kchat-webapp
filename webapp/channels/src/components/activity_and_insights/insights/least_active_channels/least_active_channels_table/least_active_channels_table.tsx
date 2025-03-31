@@ -25,6 +25,7 @@ import ChannelActionsMenu from '../channel_actions_menu/channel_actions_menu';
 
 import './../../../activity_and_insights.scss';
 import './least_active_channels_table.scss';
+import {last} from 'lodash';
 
 type Props = {
     filterType: string;
@@ -132,6 +133,30 @@ const LeastActiveChannelsTable = (props: Props) => {
                 iconToDisplay = <i className='icon icon-lock-outline'/>;
             }
 
+            let lastActivity;
+            if (channel.last_activity_at === 0) {
+                lastActivity = (
+                    <FormattedMessage
+                        id='insights.leastActiveChannels.lastActivityNone'
+                        defaultMessage='No activity'
+                    />
+                );
+            } else {
+                lastActivity = (
+                    <Timestamp
+                        value={channel.last_activity_at}
+                        useTime={false}
+                        units={[
+                            'now',
+                            'minute',
+                            'hour',
+                            'day',
+                            'week',
+                            'month']}
+                    />
+                );
+            }
+
             return (
                 {
                     cells: {
@@ -152,23 +177,7 @@ const LeastActiveChannelsTable = (props: Props) => {
                         ),
                         lastActivity: (
                             <span className='timestamp'>
-                                {
-                                    channel.last_activity_at === 0 ? <FormattedMessage
-                                        id='insights.leastActiveChannels.lastActivityNone'
-                                        defaultMessage='No activity'
-                                    /> : <Timestamp
-                                                                         value={channel.last_activity_at}
-                                                                         units={[
-                                            'now',
-                                            'minute',
-                                            'hour',
-                                            'day',
-                                            'week',
-                                            'month',
-                                        ]}
-                                                                         useTime={false}
-                                                                          />
-                                }
+                                {lastActivity}
                             </span>
                         ),
                         participants: (

@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {FormattedMessage} from 'react-intl';
 import type {ConnectedComponent} from 'react-redux';
 import {Link} from 'react-router-dom';
 

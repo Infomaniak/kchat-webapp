@@ -8,6 +8,7 @@ import {useDispatch} from 'react-redux';
 
 import type {CardSize, InsightsWidgetTypes, TimeFrame} from '@mattermost/types/insights';
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions';

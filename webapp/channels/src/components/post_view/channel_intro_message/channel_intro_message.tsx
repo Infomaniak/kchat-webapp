@@ -2,15 +2,13 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedDate, FormattedMessage, defineMessages} from 'react-intl';
+import {FormattedDate, FormattedMessage} from 'react-intl';
 
 import {BellRingOutlineIcon, GlobeIcon, PencilOutlineIcon, StarOutlineIcon, LockOutlineIcon, StarIcon} from '@mattermost/compass-icons/components';
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile as UserProfileType} from '@mattermost/types/users';
 
 import {Permissions} from 'mattermost-redux/constants';
-import {NotificationLevel} from 'mattermost-redux/constants/channels';
-import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 
 import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
 import AtMention from 'components/at_mention';
@@ -94,7 +92,6 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
             stats,
             usersLimit,
             isChannelMember,
-            channelMember,
             isMobileView,
         } = this.props;
 
@@ -110,7 +107,7 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
         if (channel.type === Constants.DM_CHANNEL) {
             return createDMIntroMessage(channel, centeredIntro, currentUser, isFavorite, isMobileView, this.toggleFavorite, teammate, teammateName);
         } else if (channel.type === Constants.GM_CHANNEL) {
-            return createGMIntroMessage(channel, centeredIntro, isFavorite, isMobileView, this.toggleFavorite, channelProfiles, currentUserId, currentUser, channelMember);
+            return createGMIntroMessage(channel, centeredIntro, isFavorite, isMobileView, this.toggleFavorite, channelProfiles, currentUserId, currentUser);
         } else if (channel.name === Constants.DEFAULT_CHANNEL) {
             return createDefaultIntroMessage(channel, centeredIntro, currentUser, isFavorite, isMobileView, this.toggleFavorite, stats, usersLimit, enableUserCreation, isReadOnly, teamIsGroupConstrained);
         } else if (channel.name === Constants.OFFTOPIC_CHANNEL) {
@@ -122,46 +119,6 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
     }
 }
 
-const gmIntroMessages = defineMessages({
-    muted: {id: 'intro_messages.GM.muted', defaultMessage: 'This group message is currently <b>muted</b>, so you will not be notified.'},
-    [NotificationLevel.ALL]: {id: 'intro_messages.GM.all', defaultMessage: 'You\'ll be notified <b>for all activity</b> in this group message.'},
-    [NotificationLevel.DEFAULT]: {id: 'intro_messages.GM.all', defaultMessage: 'You\'ll be notified <b>for all activity</b> in this group message.'},
-    [NotificationLevel.MENTION]: {id: 'intro_messages.GM.mention', defaultMessage: 'You have selected to be notified <b>only when mentioned</b> in this group message.'},
-    [NotificationLevel.NONE]: {id: 'intro_messages.GM.none', defaultMessage: 'You have selected to <b>never</b> be notified in this group message.'},
-});
-
-const getGMIntroMessageSpecificPart = (userProfile: UserProfileType | undefined, membership: ChannelMembership | undefined) => {
-    const isMuted = isChannelMuted(membership);
-    if (isMuted) {
-        return (
-            <FormattedMessage
-                {...gmIntroMessages.muted}
-                values={{
-                    b: (chunks) => <b>{chunks}</b>,
-                }}
-            />
-        );
-    }
-    const channelNotifyProp = membership?.notify_props?.desktop || NotificationLevel.DEFAULT;
-    const userNotifyProp = userProfile?.notify_props?.desktop || NotificationLevel.MENTION;
-    let notifyLevelToUse = channelNotifyProp;
-    if (notifyLevelToUse === NotificationLevel.DEFAULT) {
-        notifyLevelToUse = userNotifyProp;
-    }
-    if (channelNotifyProp === NotificationLevel.DEFAULT && userNotifyProp === NotificationLevel.MENTION) {
-        notifyLevelToUse = NotificationLevel.ALL;
-    }
-
-    return (
-        <FormattedMessage
-            {...gmIntroMessages[notifyLevelToUse]}
-            values={{
-                b: (chunks) => <b>{chunks}</b>,
-            }}
-        />
-    );
-};
-
 function createGMIntroMessage(
     channel: Channel,
     centeredIntro: string,
@@ -171,13 +128,10 @@ function createGMIntroMessage(
     profiles: UserProfileType[],
     currentUserId: string,
     currentUser: UserProfileType,
-    channelMembership?: ChannelMembership,
 ) {
     const channelIntroId = 'channelIntro';
 
     if (profiles.length > 0) {
-        const currentUserProfile = profiles.find((v) => v.id === currentUserId);
-
         const pictures = profiles.
             filter((profile) => profile.id !== currentUserId).
             map((profile) => (

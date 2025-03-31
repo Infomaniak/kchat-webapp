@@ -25,7 +25,7 @@ import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedi
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
 import {getBool, getTeamsOrderPreference, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getTeam, getMyTeamMember, getTeamMemberships, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUser, getCurrentUserId, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
 import {handleNewPost} from 'actions/post_actions';

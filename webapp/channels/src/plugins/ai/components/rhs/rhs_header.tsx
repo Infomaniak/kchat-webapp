@@ -2,7 +2,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {Link, useLocation, useRouteMatch} from 'react-router-dom';
 import styled from 'styled-components';
 
 import {ChevronDownIcon} from '@mattermost/compass-icons/components';

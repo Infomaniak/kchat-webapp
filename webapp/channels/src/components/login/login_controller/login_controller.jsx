@@ -138,6 +138,7 @@ class LoginController extends React.PureComponent {
                     // TODO: add env for login url and/or current server
                     window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=token&redirect_uri=ktalk://auth-desktop`);
                 }).catch(() => {
+                    // eslint-disable-next-line no-console
                     console.log('Error redirect');
 
                     // Ignore the failure
@@ -517,8 +518,6 @@ class LoginController extends React.PureComponent {
 
     render() {
         const {
-            customDescriptionText,
-            siteName,
             initializing,
         } = this.props;
 

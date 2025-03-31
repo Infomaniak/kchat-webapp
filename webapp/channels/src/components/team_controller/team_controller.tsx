@@ -10,7 +10,6 @@ import type {Team} from '@mattermost/types/teams';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import {reconnect} from 'actions/websocket_actions.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import {makeAsyncComponent, makeAsyncPluggableComponent} from 'components/async_load';
@@ -29,8 +28,6 @@ import type {OwnProps, PropsFromRedux} from './index';
 const BackstageController = makeAsyncComponent('BackstageController', lazy(() => import('components/backstage')));
 const Pluggable = makeAsyncPluggableComponent();
 
-const WAKEUP_CHECK_INTERVAL = 30000; // 30 seconds
-const WAKEUP_THRESHOLD = 60000; // 60 seconds
 const UNREAD_CHECK_TIME_MILLISECONDS = 120 * 1000;
 
 declare global {
@@ -50,7 +47,6 @@ function TeamController(props: Props) {
     const [team, setTeam] = useState<Team | null>(getTeamFromTeamList(props.teamsList, teamNameParam));
 
     const blurTime = useRef(Date.now());
-    const lastTime = useRef(Date.now());
 
     useTelemetryIdentitySync();
 

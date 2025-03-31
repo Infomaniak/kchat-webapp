@@ -12,13 +12,10 @@ import {DesktopSound} from 'utils/constants';
 import * as UserAgent from 'utils/user_agent';
 
 import bing from 'sounds/bing.mp3';
-import calls_calm from 'sounds/calls_calm.mp3';
-import calls_cheerful from 'sounds/calls_cheerful.mp3';
-import calls_dynamic from 'sounds/calls_dynamic.mp3';
-import calls_urgent from 'sounds/calls_urgent.mp3';
 import crackle from 'sounds/crackle.mp3';
 import down from 'sounds/down.mp3';
 import hello from 'sounds/hello.mp3';
+import outgoingRing from 'sounds/outgoing_ring.mp3';
 import ripple from 'sounds/ripple.mp3';
 import upstairs from 'sounds/upstairs.mp3';
 
@@ -122,10 +119,8 @@ export function getValueOfNotificationSoundsSelect(soundName?: string) {
 }
 
 export const callsNotificationSounds = new Map([
-    ['Dynamic', calls_dynamic],
-    ['Calm', calls_calm],
-    ['Urgent', calls_urgent],
-    ['Cheerful', calls_cheerful],
+    ['Ring', ring],
+    ['OutgoingRing', outgoingRing],
 ]);
 
 export const callNotificationSoundKeys = Array.from(callsNotificationSounds.keys());

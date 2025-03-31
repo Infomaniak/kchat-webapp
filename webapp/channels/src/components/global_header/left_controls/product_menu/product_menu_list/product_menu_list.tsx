@@ -4,12 +4,10 @@
 import Icon from '@infomaniak/compass-components/foundations/icon';
 import React, {useEffect} from 'react';
 import {useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Permissions} from 'mattermost-redux/constants';
-import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import AboutBuildModal from 'components/about_build_modal';
 import {VisitSystemConsoleTour} from 'components/onboarding_tasks';
@@ -19,8 +17,7 @@ import MarketplaceModal from 'components/plugin_marketplace';
 import UserGroupsModal from 'components/user_groups_modal';
 import Menu from 'components/widgets/menu/menu';
 
-import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
-import {LicenseSkus, ModalIdentifiers, MattermostFeatures} from 'utils/constants';
+import {ModalIdentifiers} from 'utils/constants';
 import {makeUrlSafe} from 'utils/url';
 import * as UserAgent from 'utils/user_agent';
 
@@ -79,7 +76,6 @@ const ProductMenuList = (props: Props): JSX.Element | null => {
         enableCustomUserGroups,
     } = props;
     const {formatMessage} = useIntl();
-    const isAdmin = useSelector(isCurrentUserSystemAdmin);
 
     useEffect(() => {
         props.actions.getPrevTrialLicense();

@@ -15,11 +15,11 @@ interface Props {
 }
 
 const ConnectedProfiles = ({pictures, profiles, maxShowedProfiles}: Props) => {
-    maxShowedProfiles = maxShowedProfiles || 2;
-    const diff = profiles.length - maxShowedProfiles;
-    profiles = diff > 0 ? profiles.slice(0, maxShowedProfiles) : profiles;
+    const maxShowedProfilesOrDefault = maxShowedProfiles || 2;
+    const diff = profiles.length - maxShowedProfilesOrDefault;
+    const profilesSlice = diff > 0 ? profiles.slice(0, maxShowedProfilesOrDefault) : profiles;
 
-    const els = profiles.map((profile, idx) => {
+    const els = profilesSlice.map((profile, idx) => {
         return (
             <WithTooltip
                 key={'call_thread_profile_' + profile.id}

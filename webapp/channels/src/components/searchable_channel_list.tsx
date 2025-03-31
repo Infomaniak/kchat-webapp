@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {ArchiveOutlineIcon, CheckIcon, ChevronDownIcon, GlobeIcon, LockOutlineIcon, AccountOutlineIcon} from '@infomaniak/compass-icons/components';
+import {ArchiveOutlineIcon, CheckIcon, ChevronDownIcon, GlobeIcon, LockOutlineIcon, AccountOutlineIcon, GlobeCheckedIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage, defineMessages, injectIntl, type WrappedComponentProps} from 'react-intl';
@@ -23,6 +23,7 @@ import {isArchivedChannel} from 'utils/channel_utils';
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
 import * as UserAgent from 'utils/user_agent';
+import {localizeMessage} from 'utils/utils';
 
 import type {FilterType} from './browse_channels/browse_channels';
 import {Filter} from './browse_channels/browse_channels';
@@ -214,9 +215,9 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
                 id='joinViewChannelButton'
                 onClick={(e) => this.handleView(channel, e)}
                 className={joinViewChannelButtonClass}
-                disabled={this.state.joiningChannel}
+                disabled={Boolean(this.state.joiningChannel)}
                 tabIndex={-1}
-                aria-label={localizeMessage('more_channels.view', 'View')}
+                aria-label={localizeMessage({id: 'more_channels.view', defaultMessage: 'View'})}
             >
                 <FormattedMessage
                     id={'more_channels.view'}

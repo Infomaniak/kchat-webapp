@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import IconButton from '@infomaniak/compass-components/components/icon-button';
 import {CheckIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {memo, useCallback, useState} from 'react';

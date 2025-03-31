@@ -12,18 +12,17 @@ import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users'
 import ConfirmModal from 'components/confirm_modal';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {KmeetTour, useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
-
-import './meet_button.scss';
 import WithTooltip from 'components/with_tooltip';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import type {ModalData} from 'types/actions';
 
+import './meet_button.scss';
 import meetSvg from './static/kmeet.svg';
 
 export type Props = {
-    channel: Channel;
+    channel?: Channel;
     hasCall?: boolean;
     membersCount: number;
 
@@ -44,7 +43,7 @@ function MeetButton(props: Props) {
     const kmeetTourStep = isGuest ? OnboardingTourStepsForGuestUsers.KMEET : OnboardingTourSteps.KMEET;
     const showKmeetTutorialStep = useShowOnboardingTutorialStep(kmeetTourStep);
 
-    const {startOrJoinCallInChannelV2, joinCall} = actions;
+    // const {startOrJoinCallInChannelV2, joinCall} = actions;
     const ref = useRef<HTMLButtonElement>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -115,9 +114,9 @@ function MeetButton(props: Props) {
 
     const startCall = () => {
         if (props.hasCall) {
-            joinCall(channel.id);
+            props.actions?.joinCall(channel.id);
         } else {
-            startOrJoinCallInChannelV2(channel.id);
+            props.actions?.startOrJoinCallInChannelV2(channel.id);
         }
     };
 

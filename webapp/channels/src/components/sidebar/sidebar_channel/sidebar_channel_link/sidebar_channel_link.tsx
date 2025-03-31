@@ -11,11 +11,9 @@ import type {Channel} from '@mattermost/types/channels';
 import {mark, trackEvent} from 'actions/telemetry_actions';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
-import SharedChannelIndicator from 'components/shared_channel_indicator';
-import {ChannelsAndDirectMessagesTour} from 'components/tours/onboarding_tour';
 import WithTooltip from 'components/with_tooltip';
 
-import Constants, {RHSStates} from 'utils/constants';
+import {RHSStates} from 'utils/constants';
 import {wrapEmojis} from 'utils/emoji_utils';
 import {cmdOrCtrlPressed} from 'utils/keyboard';
 import {Mark} from 'utils/performance_telemetry';
@@ -28,9 +26,6 @@ import ChannelMentionBadge from '../channel_mention_badge';
 import ChannelPencilIcon from '../channel_pencil_icon';
 import SidebarChannelIcon from '../sidebar_channel_icon';
 import SidebarChannelMenu from '../sidebar_channel_menu';
-
-// import {ChannelsAndDirectMessagesTour} from 'components/tours/onboarding_tour';
-// import {isDesktopApp} from 'utils/user_agent';
 
 type Props = WrappedComponentProps & {
     channel: Channel;
@@ -227,13 +222,6 @@ export class SidebarChannelLink extends React.PureComponent<Props, State> {
                     marginBottom: 0,
                     opacity: 0.8,
                 }}
-            />
-        ) : null;
-
-        const sharedChannelIcon = this.props.isSharedChannel ? (
-            <SharedChannelIndicator
-                className='icon'
-                withTooltip={true}
             />
         ) : null;
 

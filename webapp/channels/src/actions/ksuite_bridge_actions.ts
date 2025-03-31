@@ -4,6 +4,7 @@
 import type {DoNotDisturbMessage, KSuiteBridge} from '@infomaniak/ksuite-bridge';
 import {AppReadyMessageKey, DoNotDisturbMessageKey, RecreateMessageKey} from '@infomaniak/ksuite-bridge';
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {BridgeActionTypes, BridgeParamWhitelist} from 'utils/constants';

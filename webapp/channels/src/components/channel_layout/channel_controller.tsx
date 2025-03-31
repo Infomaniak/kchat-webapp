@@ -23,7 +23,6 @@ import {isInternetExplorer, isEdge} from 'utils/user_agent';
 
 import Pluggable from 'plugins/pluggable';
 
-const ProductNoticesModal = makeAsyncComponent('ProductNoticesModal', lazy(() => import('components/product_notices_modal')));
 const ResetStatusModal = makeAsyncComponent('ResetStatusModal', lazy(() => import('components/reset_status_modal')));
 
 const BODY_CLASS_FOR_CHANNEL = ['app__body', 'channel-view'];

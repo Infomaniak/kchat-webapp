@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -21,18 +22,12 @@ import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, getUser as selectUser, getUsers, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
-import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
-// TODO fix import restriction
-import {getMyMeets} from 'actions/calls';
-import {bridgeRecreate} from 'actions/ksuite_bridge_actions';
-
+// eslint-disable-next-line no-restricted-imports
 import {getHistory} from 'utils/browser_history';
-import {isDesktopApp} from 'utils/user_agent';
 
 // import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 
@@ -103,82 +98,6 @@ export function loadMe(): ActionFuncAsync<boolean> {
     };
 }
 
-// export function loadMe(): ActionFuncAsync<boolean> {
-//     return async (dispatch, getState) => {
-//         console.log('aloche')
-//         // Sometimes the server version is set in one or the other
-//         // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
-//         const serverVersion = Client4.getServerVersion();
-//         dispatch(setServerVersion(serverVersion));
-
-//         try {
-//             const kSuiteCall = await dispatch(getMyKSuites());
-//             const kSuites = getTeams(getState());
-
-//             const suiteArr = Object.values(kSuites);
-
-//             // allow through in tests to launch promise.all but not trigger redirect
-//             if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
-//                 const lastKSuiteSeenId = getLastKSuiteSeenId();
-//                 const sortedSuites = suiteArr.sort((a, b) => {
-//                     if (a.id === lastKSuiteSeenId) {
-//                         return -1;
-//                     }
-//                     if (b.id === lastKSuiteSeenId) {
-//                         return 1;
-//                     }
-//                     return b.update_at - a.update_at;
-//                 });
-//                 const lastKSuiteSeen = sortedSuites[0];
-
-//                 if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-//                     window.postMessage({
-//                         type: 'switch-server',
-//                         data: lastKSuiteSeen.display_name,
-//                     }, window.origin);
-//                 }
-
-//                 // don't redirect to the error page if it is a testing environment
-//                 if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-//                     dispatch(bridgeRecreate(lastKSuiteSeen.url));
-
-//                     window.open(lastKSuiteSeen.url, '_self');
-//                 }
-
-//                 try {
-//                     console.log('aloche')
-//                     await Promise.all([
-//                         dispatch(getClientConfig()),
-//                         dispatch(getLicenseConfig()),
-//                         dispatch(getMe()),
-//                         dispatch(getMyPreferences()),
-//                         dispatch(getMyTeamMembers()),
-//                         dispatch(getMyMeets()),
-//                     ]);
-
-//                     const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
-//                     await dispatch(getMyTeamUnreads(isCollapsedThreads));
-
-//                     await dispatch(getServerLimits());
-//                 } catch (error) {
-//                     dispatch(logError(error as ServerError));
-//                     return {error: error as ServerError};
-//                 }
-//             } else if (!isDesktopApp()) {
-//                 // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
-//                 if (kSuiteCall && kSuiteCall.data) {
-//                     getHistory().push('/error?type=no_ksuite');
-//                 }
-//             }
-//         } catch (error) {
-//             dispatch(logError(error as ServerError));
-//             return {error: error as ServerError};
-//         }
-
-//         return {data: true};
-//     };
-// }
-
 export function logout(): ActionFuncAsync {
     return async (dispatch) => {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
@@ -188,13 +107,6 @@ export function logout(): ActionFuncAsync {
         } catch (error) {
             // nothing to do here
         }
-
-        // TODO: remove
-        // Causes a redirect in web which stops logout.
-        // Since app state rebuilds after redirecting to our external login as opposed
-        // to mattermost where login is in the app this is not needed.
-        //
-        // dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null});
 
         return {data: true};
     };
@@ -561,6 +473,7 @@ export function getProfilesNotInChannel(teamId: string, channelId: string, group
 
 export function getMe(): ActionFuncAsync<UserProfile> {
     return async (dispatch) => {
+        // eslint-disable-next-line no-console
         console.log('getMe');
         const getMeFunc = bindClientFunc({
             clientFunc: Client4.getMe,
@@ -1508,7 +1421,9 @@ export function checkForModifiedUsers(): ActionFuncAsync {
         const users = getUsers(state);
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
         const userIds = Object.keys(users);
+        // eslint-disable-next-line no-console
         console.log('checking for modified users with lastDisconnect:', lastDisconnectAt);
+        // eslint-disable-next-line no-console
         console.log('fetch profile count:', userIds.length);
 
         await dispatch(getProfilesByIds(userIds, {since: lastDisconnectAt}));

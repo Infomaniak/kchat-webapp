@@ -1,14 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {KSuiteBridge} from '@infomaniak/ksuite-bridge';
 import React from 'react';
 import type {RouteComponentProps} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 
 import {ServiceEnvironment} from '@mattermost/types/config';
-import type {PreferenceType} from '@mattermost/types/preferences';
-import type {Team} from '@mattermost/types/teams';
 
 import {Client4} from 'mattermost-redux/client';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';

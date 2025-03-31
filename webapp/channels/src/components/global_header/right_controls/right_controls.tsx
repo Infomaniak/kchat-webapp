@@ -12,8 +12,6 @@ import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users'
 import {getCurrentLocale} from 'selectors/i18n';
 
 import FlagNext from 'components/flag_next';
-
-// import StatusDropdown from 'components/status_dropdown';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {
     AtMentionsTour,
@@ -21,7 +19,6 @@ import {
     SettingsTour,
     useShowOnboardingTutorialStep,
 } from 'components/tours/onboarding_tour';
-import UserAccountMenu from 'components/user_account_menu';
 import WithTooltip from 'components/with_tooltip';
 
 import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
@@ -151,6 +148,7 @@ const RightControls = (): JSX.Element => {
                 <module-reporting-tools-component size='26'/>
             </ReportingToolsWrapper>
             <WithTooltip title={tooltipUserReport}>
+                {/* eslint-disable-next-line @mattermost/use-external-link */}
                 <a
                     className='header-icon grey'
                     style={{height: 45, width: 42, display: 'flex', justifyContent: 'center', alignItems: 'center', textDecoration: 'none'}}
@@ -186,15 +184,13 @@ const RightControls = (): JSX.Element => {
             </ButtonWrapper>
             {!isDesktopApp && (
                 <div style={{position: 'relative'}}>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
+                    {/* @ts-expect-error old ignore */}
                     <module-products-component
                         position='right'
                         style={{height: '100%'}}
                     >
                         {trigger}
-                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                        {/* @ts-ignore */}
+                        {/* @ts-expect-error old ignore */}
                     </module-products-component>
                 </div>
             )}

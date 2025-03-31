@@ -13,7 +13,6 @@ import {ErrorPageTypes} from 'utils/constants';
 import kSuite from 'images/ik/kSuite.svg';
 import MattermostLogoSvg from 'images/logo.svg';
 import loaderkChat from 'images/logo_compact.png';
-import NoTeamIcon from 'images/no_team_icon.png';
 
 import SvgIlluErrorBlocked from './assets/SvgIlluErrorBlocked';
 import SvgIlluErrorMaintenance from './assets/SvgIlluErrorMaintenance';

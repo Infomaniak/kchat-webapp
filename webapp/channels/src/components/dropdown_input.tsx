@@ -2,15 +2,9 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useCallback, useRef, useState} from 'react';
-import {useIntl} from 'react-intl';
+import React, {useState} from 'react';
 import ReactSelect, {components} from 'react-select';
 import type {Props as SelectProps, ActionMeta, StylesConfig} from 'react-select';
-
-import InputError from 'components/input_error';
-import type {CustomMessageInputType} from 'components/widgets/inputs/input/input';
-
-import {ItemStatus} from 'utils/constants';
 
 import './dropdown_input.scss';
 
@@ -103,7 +97,7 @@ const renderError = (error?: string) => {
 };
 
 const DropdownInput = <T extends ValueType>(props: Props<T>) => {
-    const {value, placeholder, className, addon, name, textPrefix, legend, onChange, styles, options, error, testId, required, ...otherProps} = props; // types are not inferred correctly for `props` in react-select version v5.
+    const {value, placeholder, className, addon, name, textPrefix, legend, onChange, styles, options, error, testId, ...otherProps} = props; // types are not inferred correctly for `props` in react-select version v5.
 
     const [focused, setFocused] = useState(false);
 

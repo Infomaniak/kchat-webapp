@@ -8,7 +8,6 @@ import {bindActionCreators} from 'redux';
 import type {GlobalState} from '@mattermost/types/store';
 
 import {getMissingProfilesByIds, getMissingProfilesByUsernames} from 'mattermost-redux/actions/users';
-import {shouldShowJoinLeaveMessages} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, makeGetProfilesByIdsAndUsernames} from 'mattermost-redux/selectors/entities/users';
 
 import CombinedSystemMessage from './combined_system_message';

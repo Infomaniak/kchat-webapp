@@ -3719,6 +3719,7 @@ __metadata:
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types"
     "@types/jest": "npm:28.1.8"
     "@types/react": "npm:17.0.2"
+    eslint: "npm:8.57.0"
     form-data: "npm:4.0.0"
     jest: "npm:27.1.0"
     typescript: "npm:^5.0.0"
@@ -3736,6 +3737,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@infomaniak/mattermost-types@workspace:webapp/platform/types"
   dependencies:
+    eslint: "npm:8.57.0"
+    eslint-import-resolver-webpack: "npm:0.13.8"
+    eslint-plugin-formatjs: "npm:4.12.2"
+    eslint-plugin-react: "npm:7.34.0"
+    eslint-plugin-react-hooks: "npm:4.6.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@types/react": 17.0.2
@@ -4795,6 +4801,7 @@ __metadata:
   resolution: "@mattermost/components@workspace:webapp/platform/components"
   dependencies:
     "@babel/plugin-transform-runtime": "npm:^7.17.0"
+    "@mattermost/eslint-plugin": "npm:*"
     "@rollup/plugin-babel": "npm:^5.3.1"
     "@rollup/plugin-commonjs": "npm:^21.0.2"
     "@rollup/plugin-node-resolve": "npm:^13.1.3"
@@ -4807,6 +4814,11 @@ __metadata:
     "@types/react-redux": "npm:^7.1.21"
     "@types/shallow-equals": "npm:^1.0.0"
     "@types/styled-components": "npm:^5.1.19"
+    eslint: "npm:8.57.0"
+    eslint-import-resolver-webpack: "npm:0.13.8"
+    eslint-plugin-formatjs: "npm:4.12.2"
+    eslint-plugin-react: "npm:7.34.0"
+    eslint-plugin-react-hooks: "npm:4.6.0"
     react-intl: "npm:*"
     rollup: "npm:^2.75.7"
     rollup-plugin-scss: "npm:4.0.0"
@@ -18955,7 +18967,6 @@ __metadata:
     eslint-plugin-formatjs: "npm:4.12.2"
     eslint-plugin-header: "npm:^3.1.1"
     eslint-plugin-import: "npm:^2.29.1"
-    eslint-plugin-jsx-a11y: "npm:^6.7.1"
     eslint-plugin-react: "npm:7.34.0"
     eslint-plugin-react-hooks: "npm:4.6.0"
     exif2css: "npm:1.3.0"
