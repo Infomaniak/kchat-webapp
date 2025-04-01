@@ -27,7 +27,6 @@ import store from 'stores/redux_store';
 import {makeAsyncComponent, makeAsyncPluggableComponent} from 'components/async_load';
 import GlobalHeader from 'components/global_header/global_header';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
-import InitialLoadingScreen from 'components/initial_loading_screen';
 import LoggedIn from 'components/logged_in';
 import LoggedInRoute from 'components/logged_in_route';
 import {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_workspace/launching_workspace';
@@ -354,7 +353,6 @@ export default class Root extends React.PureComponent<Props, State> {
         if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
             if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
                 DesktopApp.reactAppInitialized();
-                InitialLoadingScreen.stop('root');
             }
         }
     }
