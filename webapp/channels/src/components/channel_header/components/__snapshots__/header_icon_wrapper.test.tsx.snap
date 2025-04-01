@@ -26,7 +26,6 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
   >
     <button
       className="channel_files_class"
-      disabled={false}
       id="button_id"
       onClick={[Function]}
     >
@@ -73,7 +72,6 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
   >
     <button
       className="button_class"
-      disabled={false}
       id="button_id"
       onClick={[Function]}
     >
@@ -137,7 +135,6 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
   >
     <button
       className="button_class"
-      disabled={false}
       id="button_id"
       onClick={[Function]}
     >
@@ -185,7 +182,6 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
   >
     <button
       className="pinned_posts_class"
-      disabled={false}
       id="button_id"
       onClick={[Function]}
     >
@@ -232,7 +228,6 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
   >
     <button
       className="button_class"
-      disabled={false}
       id="button_id"
       onClick={[Function]}
     >
@@ -306,7 +301,6 @@ exports[`components/channel_header/components/HeaderIconWrapper should match sna
   >
     <button
       className="search_class"
-      disabled={false}
       id="button_id"
       onClick={[Function]}
     >
