@@ -13,7 +13,6 @@ import type {UserCustomStatus, UserProfile} from '@mattermost/types/users';
 
 import {Permissions} from 'mattermost-redux/constants';
 import {memoizeResult} from 'mattermost-redux/utils/helpers';
-import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
@@ -432,12 +431,11 @@ class ChannelHeader extends React.PureComponent<Props, State> {
 
             memberListButton = (
                 <HeaderIconWrapper
-                    disabled={isEmptyObject(channelMember)}
                     iconComponent={membersIcon}
                     ariaLabel={true}
                     buttonClass={membersIconClass}
                     buttonId={'member_rhs'}
-                    onClick={isEmptyObject(channelMember) ? () => {} : this.toggleChannelMembersRHS}
+                    onClick={channelIsArchived ? () => {} : this.toggleChannelMembersRHS}
                     tooltipKey={'channelMembers'}
                 />
             );
@@ -679,7 +677,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         channelMember={channelMember}
                     />
                     {showMeetBtn && <MeetButton/>}
-                    {!isEmptyObject(channelMember) && <ChannelInfoButton channel={channel}/>}
+                    <ChannelInfoButton channel={channel}/>
                 </div>
             </div>
         );

@@ -138,6 +138,7 @@ describe('components/BrowseChannels', () => {
             closeRightHandSide: jest.fn(),
             setGlobalItem: jest.fn(),
             getChannelsMemberCount: jest.fn(),
+            previewChannel: jest.fn(),
         },
     };
 

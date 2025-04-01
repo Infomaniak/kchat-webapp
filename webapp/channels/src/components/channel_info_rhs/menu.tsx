@@ -95,6 +95,7 @@ interface MenuProps {
     channel: Channel;
     channelStats: ChannelStats;
     isArchived: boolean;
+    isPreview: boolean;
 
     className?: string;
 
@@ -107,11 +108,11 @@ interface MenuProps {
     };
 }
 
-const Menu = ({channel, channelStats, isArchived, className, actions}: MenuProps) => {
+const Menu = ({channel, channelStats, isArchived, className, actions, isPreview}: MenuProps) => {
     const {formatMessage} = useIntl();
     const [loadingStats, setLoadingStats] = useState(true);
 
-    const showNotificationPreferences = channel.type !== Constants.DM_CHANNEL && !isArchived;
+    const showNotificationPreferences = channel.type !== Constants.DM_CHANNEL && !isArchived && !isPreview;
     const showMembers = channel.type !== Constants.DM_CHANNEL;
     const fileCount = channelStats?.files_count >= 0 ? channelStats?.files_count : 0;
 

@@ -46,7 +46,6 @@ import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
 
 import {General, Preferences} from '../constants';
-import display from 'components/user_settings/display';
 
 export function selectChannel(channelId: string) {
     return {
@@ -679,6 +678,37 @@ export function joinChannel(userId: string, teamId: string, channelId: string, c
         }
 
         return {data: {channel, member}};
+    };
+}
+
+// ik: Feature Preview channel almost as `joinChannel` but doesn't add to membership
+export function previewChannel(teamId: string, channelId: string, channelName?: string): ActionFuncAsync<Channel | null> {
+    return async (dispatch, getState) => {
+        if (!channelId && !channelName) {
+            return {data: null};
+        }
+
+        let channel: Channel;
+        try {
+            if (channelId) {
+                channel = await Client4.getChannel(channelId);
+            } else {
+                channel = await Client4.getChannelByName(teamId, channelName!, true);
+            }
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error};
+        }
+
+        Client4.trackEvent('action', 'action_channels_read', {channel_id: channelId});
+
+        dispatch({
+            type: ChannelTypes.RECEIVED_CHANNEL,
+            data: channel,
+        });
+
+        return {data: channel};
     };
 }
 
