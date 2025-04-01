@@ -457,8 +457,8 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         }
 
         // TODO MM-10.0: need any of this, majority was commented apart apart from consts
-        // const buttonSubmitText = localizeMessage('multiselect.add', 'Add');
-        // const buttonSubmitLoadingText = localizeMessage('multiselect.adding', 'Adding...');
+        // const buttonSubmitText = localizeMessage({id: 'multiselect.add', defaultMessage: 'Add'});
+        // const buttonSubmitLoadingText = localizeMessage({id: 'multiselect.adding', defaultMessage: 'Adding...'});
         // const idsInGroup = this.props.profilesInCurrentChannel.map((user) => user.id);
         // let excludedAndNotInTeamUserIds: Set<string>;
         // if (this.props.excludeUsers) {

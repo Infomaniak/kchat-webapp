@@ -47,7 +47,6 @@ type Props = {
     currentTeammate: Channel | null;
     inGlobalThreads: boolean;
     inDrafts: boolean;
-    inActivityAndInsights: boolean;
     inScheduledPosts: boolean;
 };
 

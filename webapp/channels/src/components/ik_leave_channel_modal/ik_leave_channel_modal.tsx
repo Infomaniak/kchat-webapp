@@ -403,8 +403,8 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
         }
     }
 
-    const buttonSubmitText = localizeMessage('multiselect.quit', 'Quitter');
-    const buttonSubmitLoadingText = localizeMessage('multiselect.adding', 'Adding...');
+    const buttonSubmitText = localizeMessage({id: 'multiselect.quit', defaultMessage: 'Quitter'});
+    const buttonSubmitLoadingText = localizeMessage({id: 'multiselect.adding', defaultMessage: 'Adding...'});
 
     let content;
     if (channel.type === Constants.PRIVATE_CHANNEL) {
@@ -464,9 +464,9 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
                         saving={saving}
                         showInputByDefault={true}
                         loading={loadingUsers}
-                        placeholderText={localizeMessage('multiselect.placeholder.peopOrGroups', 'Séléctionner un ou des utilisateurs')}
+                        placeholderText={localizeMessage({id: 'multiselect.placeholder.peopOrGroups', defaultMessage: 'Séléctionner un ou des utilisateurs'})}
                         valueWithImage={true}
-                        backButtonText={localizeMessage('multiselect.cancel', 'Cancel')}
+                        backButtonText={localizeMessage({id: 'multiselect.cancel', defaultMessage: 'Cancel'})}
                         backButtonClick={closeLeaveModal}
                         backButtonClass={'btn-tertiary tertiary-button'}
                         customNoOptionsMessage={null}
@@ -561,7 +561,7 @@ const IkLeaveChannelModal: FC<Props> = ({actions, channel, currentMemberIsChanne
                     onClick={onExited}
                     id='cancelModalButton'
                 >
-                    {localizeMessage('multiselect.cancel', 'Cancel')}
+                    {localizeMessage({id: 'multiselect.cancel', defaultMessage: 'Cancel'})}
                 </button>
                 {hasChannelMembersAdmin ? (<div className='btn-leave'>
                     <button

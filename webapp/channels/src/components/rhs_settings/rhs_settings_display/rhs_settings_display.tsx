@@ -855,7 +855,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             options: [
                 {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME, label: localizeMessage({id: 'user.settings.display.teammateNameDisplayUsername', defaultMessage: 'Show username'})},
 
-                // {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayNicknameFullname', 'Show nickname if one exists, otherwise show first and last name')},
+                // {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage({id: 'user.settings.display.teammateNameDisplayNicknameFullname', defaultMessage: 'Show nickname if one exists, otherwise show first and last name'})},
                 {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME, label: localizeMessage({id: 'user.settings.display.teammateNameDisplayFullname', defaultMessage: 'Show first and last name'})},
             ],
             description: {

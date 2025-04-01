@@ -322,7 +322,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
         const kdriveSave = fileInfo ? (
             <WithTooltip
                 placement='top'
-                title={localizeMessage('kdrive.save', 'Save file to kDrive')}
+                title={localizeMessage({id: 'kdrive.save', defaultMessage: 'Save file to kDrive'})}
             >
                 <a className='style--none size-aware-image__download--kdrive'>
                     <KDriveIcon

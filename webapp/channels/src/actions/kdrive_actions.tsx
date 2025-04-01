@@ -78,7 +78,7 @@ export function saveFileToKDrive(fileId: string, fileName: string) {
 
                     // TODO use env for preprod
                     const link = `https://kdrive.infomaniak.com/app/drive/${resDriveId}/redirect/${resElemId}`;
-                    dispatch(setKDriveToast(localizeMessage('kdrive.uploadSuccess', 'Your file has been saved to kDrive'), link));
+                    dispatch(setKDriveToast(localizeMessage({id: 'kdrive.uploadSuccess', defaultMessage: 'Your file has been saved to kDrive'}), link));
                 }
             }).
             // eslint-disable-next-line no-console
@@ -181,7 +181,7 @@ export function registerInternalKdrivePlugin() {
             data: {
                 id: 'kdrive',
                 pluginId: 'kdrive',
-                text: localizeMessage('kdrive.upload', 'Upload from kDrive'),
+                text: localizeMessage({id: 'kdrive.upload', defaultMessage: 'Upload from kDrive'}),
                 customArgs: [
                     'onFileUpload',
                     'onUploadStart',
