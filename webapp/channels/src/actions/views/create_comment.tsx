@@ -218,3 +218,38 @@ export function editLatestPost(channelId: string, rootId = ''): ActionFunc<boole
         ));
     };
 }
+
+export function submitImmediateCommand(channelId: string, command: string, rootId: string): ActionFuncAsync<unknown, GlobalState> {
+    return async (dispatch, getState) => {
+        const state = getState();
+
+        const teamId = getCurrentTeamId(state);
+
+        let args = {
+            channel_id: channelId,
+            team_id: teamId,
+            root_id: rootId,
+        };
+
+        let message = command;
+
+        const hookResult = await dispatch(runSlashCommandWillBePostedHooks(message, args));
+        if (hookResult.error) {
+            return {error: hookResult.error};
+        } else if (!hookResult.data!.message && !hookResult.data!.args) {
+            // do nothing with an empty return from a hook
+            return {};
+        }
+
+        message = hookResult.data!.message;
+        args = hookResult.data!.args;
+
+        const {error} = await dispatch(executeCommand(message, args));
+
+        if (error) {
+            throw (error);
+        }
+
+        return {};
+    };
+}
