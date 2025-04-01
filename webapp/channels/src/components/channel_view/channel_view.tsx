@@ -128,6 +128,9 @@ export default class ChannelView extends React.PureComponent<Props, State> {
         // IK: start call if needed should be triggered both on initial load and SPA navigation
         if (prevProps.channelId !== this.props.channelId || this.props.location.search !== prevProps.location.search) {
             if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
+
+                console.log("previous channel was",prevProps.channelId)
+                console.log("starting call to channel",this.props.channelId)
                 this.startAutomaticCallIfNeeded();
             }
         }
