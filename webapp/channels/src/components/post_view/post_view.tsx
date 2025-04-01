@@ -8,9 +8,12 @@ import LoadingScreen from 'components/loading_screen';
 import {Preferences} from 'utils/constants';
 
 import PostList from './post_list';
+import { PropsFromRedux } from './index';
+import { RouteComponentProps } from 'react-router-dom';
 
-interface Props {
-    lastViewedAt?: number;
+
+interface Props extends PropsFromRedux, RouteComponentProps {
+    lastViewedAt: number;
     channelLoading: boolean;
     channelId: string;
     focusedPostId?: string;
@@ -78,6 +81,29 @@ export default class PostView extends React.PureComponent<Props, State> {
             });
         });
     };
+
+    startAutomaticCallIfNeeded = () => {
+        const params = new URLSearchParams(this.props.location.search);
+        const hasCallParam = params.has('call');
+        
+        if (hasCallParam) {
+            this.props.actions.startCall(this.props.channelId);
+
+            params.delete('call');
+
+            // Keep existing params if there is
+            const newUrl = this.props.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+
+            this.props.history.replace(newUrl)
+        }
+    };
+
+
+    componentDidUpdate(): void {
+        if(this.props.channelId) {
+            this.startAutomaticCallIfNeeded();
+        }
+    }
 
     render() {
         if (this.props.channelLoading || this.state.loaderForChangeOfPostsChunk) {
