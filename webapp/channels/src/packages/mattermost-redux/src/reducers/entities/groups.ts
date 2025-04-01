@@ -247,12 +247,8 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
         const dataInfo: GroupMember = action.data;
 
         const group = state[dataInfo.group_id];
-        if (!group) {
-            // Do not have group in cache - Skipping update
-            return state;
-        }
 
-        if (Array.isArray(group.member_ids)) {
+        if (Array.isArray(group?.member_ids)) {
             const newMemberIds = new Set(group.member_ids);
             newMemberIds.delete(dataInfo.user_id);
             const newGroup = {...group,
@@ -264,26 +260,15 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
                 [group.id]: newGroup,
             };
         }
-        const count = group.member_count;
 
-        return {
-            ...state,
-            [group.id]: {
-                ...group,
-                member_count: count > 1 ? count - 1 : 0,
-            },
-        };
+        return state;
     }
     case GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP: {
         const {group_id: groupId, user_id: userId}: GroupMember = action.data;
 
         const group = state[groupId];
-        if (!group) {
-            // Do not have group in cache - Skipping update
-            return state;
-        }
 
-        if (Array.isArray(group.member_ids)) {
+        if (Array.isArray(group?.member_ids)) {
             const newMemberIds = new Set(group.member_ids);
             newMemberIds.add(userId);
             const newGroup = {...group,
@@ -296,15 +281,7 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
             };
         }
 
-        const count = group.member_count;
-
-        return {
-            ...state,
-            [group.id]: {
-                ...group,
-                member_count: count + 1,
-            },
-        };
+        return state;
     }
     default:
         return state;
