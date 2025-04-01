@@ -4692,12 +4692,15 @@ export default class Client4 {
         return this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
     }
 
-    upsertDraft = async (draft: Draft) => {
+    upsertDraft = async (draft: Draft, connectionId: string) => {
         const result = await this.doFetch<Draft>(
             `${this.getDraftsRoute()}`,
             {
                 method: 'post',
                 body: JSON.stringify(draft),
+                headers: {
+                    'Connection-Id': `${connectionId}`,
+                },
             },
         );
 
@@ -4730,7 +4733,7 @@ export default class Client4 {
         );
     };
 
-    deleteDraft = (channelId: Channel['id'], rootId = '') => {
+    deleteDraft = (channelId: Channel['id'], rootId = '', connectionId: string) => {
         let endpoint = `${this.getUserRoute('me')}/channels/${channelId}/drafts`;
         if (rootId !== '') {
             endpoint += `/${rootId}`;
@@ -4738,7 +4741,12 @@ export default class Client4 {
 
         return this.doFetch<null>(
             endpoint,
-            {method: 'delete'},
+            {
+                method: 'delete',
+                headers: {
+                    'Connection-Id': `${connectionId}`,
+                },
+            },
         );
     };
 

@@ -2151,7 +2151,7 @@ function handleUpsertDraftEvent(msg) {
 
 function handleCreateScheduledPostEvent(msg) {
     return async (doDispatch) => {
-        const scheduledPost = JSON.parse(msg.data.scheduledPost);
+        const scheduledPost = msg.data.scheduledPost;
         const state = getState();
         const teamId = getTeamIdByChannelId(state, scheduledPost.channel_id);
 
@@ -2167,7 +2167,7 @@ function handleCreateScheduledPostEvent(msg) {
 
 function handleUpdateScheduledPostEvent(msg) {
     return async (doDispatch) => {
-        const scheduledPost = JSON.parse(msg.data.scheduledPost);
+        const scheduledPost = msg.data.scheduledPost;
 
         doDispatch({
             type: ScheduledPostTypes.SCHEDULED_POST_UPDATED,
@@ -2180,7 +2180,7 @@ function handleUpdateScheduledPostEvent(msg) {
 
 function handleDeleteScheduledPostEvent(msg) {
     return async (doDispatch) => {
-        const scheduledPost = JSON.parse(msg.data.scheduledPost);
+        const scheduledPost = msg.data.scheduledPost;
 
         doDispatch({
             type: ScheduledPostTypes.SCHEDULED_POST_DELETED,
