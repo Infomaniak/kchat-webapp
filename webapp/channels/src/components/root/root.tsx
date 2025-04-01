@@ -613,7 +613,7 @@ export default class Root extends React.PureComponent<Props, State> {
         // this message listener is outside the store because of how is handled navigation
         ksuiteBridge.on(NavigateMessageKey, (navigateMessage: NavigateMessage) => {
             confirm("test?")
-            console.log("j'ai testé")
+            console.log("navigate to", navigateMessage)
             getHistory().push(navigateMessage.path);
         });
 
