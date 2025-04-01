@@ -15,6 +15,9 @@
     }
 
     .badge {
+        position: absolute;
+        top: 8px;
+        right: 10px;
         background: rgba(var(--center-channel-color-rgb), 0.48);
         color: var(--center-channel-bg);
         font-size: 10px;
@@ -212,32 +215,19 @@
         white-space: nowrap;
 
         .suggestion-list__main {
-            width: 100%;
+            display: flex;
             color: rgba(var(--center-channel-color-rgb), 1);
-            text-overflow: ellipsis;
+            white-space: nowrap;
 
             .suggestion-list__desc {
-                overflow: hidden;
-                white-space: nowrap;
                 margin-left: 8px;
                 color: rgba(var(--center-channel-color-rgb), 0.75);
             }
         }
-    }
 
         > span:nth-child(2) {
             overflow: hidden;
             text-overflow: ellipsis;
-            display: inline-block;
-            white-space: nowrap;
-            overflow: hidden;
-
-            .suggestion-list__desc {
-                overflow: hidden;
-                white-space: nowrap;
-                margin-left: 8px;
-                color: rgba(var(--center-channel-color-rgb), 0.56);
-            }
         }
     }
 
@@ -249,8 +239,11 @@
 
         .suggestion-list__main {
             width: unset;
-            max-width: 100%;
-            overflow: hidden;
+
+            > span:first-child {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
 
         .badge {
@@ -364,7 +357,7 @@
     .Tag {
         flex-shrink: 0;
     }
-
+}
 
 .suggestion-list__group-count {
     display: flex;
