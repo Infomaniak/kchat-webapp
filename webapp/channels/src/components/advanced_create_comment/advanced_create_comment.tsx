@@ -338,7 +338,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         if (prevProps.rootId !== this.props.rootId || prevProps.selectedPostFocussedAt !== this.props.selectedPostFocussedAt) {
             this.getChannelMemberCountsByGroup();
-            this.focusTextbox();
+            // this.focusTextbox();
         }
 
         if (this.doInitialScrollToBottom) {
