@@ -32,12 +32,13 @@ declare global {
 // This is for anything that needs to be done for ALL react components.
 // This runs before we start to render anything.
 function preRenderSetup(callwhendone: () => void) {
+    const oldOnError = window.onerror;
     window.onerror = (msg, url, line, column, error) => {
         // Ignore exceptions raised by ResizeObserver like:
         // - ResizeObserver loop limit exceeded.
         // - ResizeObserver loop completed with undelivered notifications.
         if (msg.toString()?.startsWith('ResizeObserver loop')) {
-            return;
+            return false;
         }
 
         store.dispatch(
@@ -53,6 +54,10 @@ function preRenderSetup(callwhendone: () => void) {
                 true,
             ),
         );
+
+        if (oldOnError) {
+            return oldOnError(msg, url, line, column, error);
+        }
     };
     setCSRFFromCookie();
     callwhendone();
