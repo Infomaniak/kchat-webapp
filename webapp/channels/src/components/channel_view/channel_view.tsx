@@ -15,8 +15,6 @@ import FileUploadOverlay from 'components/file_upload_overlay';
 import {DropOverlayIdCenterChannel} from 'components/file_upload_overlay/file_upload_overlay';
 import PostView from 'components/post_view';
 
-import {getHistory} from 'utils/browser_history';
-
 import WebSocketClient from 'client/web_websocket_client';
 
 import type {PropsFromRedux} from './index';
@@ -99,21 +97,6 @@ export default class ChannelView extends React.PureComponent<Props, State> {
         this.props.goToLastViewedChannel();
     };
 
-    startAutomaticCallIfNeeded = () => {
-        const params = new URLSearchParams(this.props.location.search);
-        const shouldStartCall = params.has('call');
-
-        if (shouldStartCall) {
-            this.props.startCall(this.props.channelId);
-
-            params.delete('call');
-
-            // Keep existing params if there is
-            const newUrl = this.props.location.pathname + (params.toString() ? `?${params.toString()}` : '');
-            getHistory().replace(newUrl);
-        }
-    };
-
     componentDidUpdate(prevProps: Props) {
         // TODO: debounce
         if (prevProps.channelId !== this.props.channelId && this.props.enableWebSocketEventScope) {
@@ -128,16 +111,6 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             }
             if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
                 WebSocketClient.bindPresenceChannel(this.props.channelId);
-            }
-        }
-
-        // IK: start call if needed should be triggered both on initial load and SPA navigation
-        if (prevProps.channelId !== this.props.channelId || this.props.location.search !== prevProps.location.search) {
-            if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
-
-                console.log("previous channel was",prevProps.channelId)
-                console.log("starting call to channel",this.props.channelId)
-                this.startAutomaticCallIfNeeded();
             }
         }
     }
