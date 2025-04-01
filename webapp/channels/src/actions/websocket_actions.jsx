@@ -36,6 +36,7 @@ import {
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
 import {setServerVersion, getClientConfig} from 'mattermost-redux/actions/general';
+import {getGroup as fetchGroup} from 'mattermost-redux/actions/groups';
 import {
     getCustomEmojiForReaction,
     getPosts,
@@ -79,6 +80,7 @@ import {
     getRedirectChannelNameForTeam,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
+import {getGroup} from 'mattermost-redux/selectors/entities/groups';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -119,7 +121,6 @@ import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatu
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
-import {logTimestamp} from 'utils/utils';
 
 import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
@@ -1562,34 +1563,42 @@ function handleGroupUpdatedEvent(msg) {
     );
 }
 
-function handleGroupAddedMemberEvent(msg) {
-    return (doDispatch, doGetState) => {
+function handleMyGroupUpdate(groupMember) {
+    dispatch(batchActions([
+        {
+            type: GroupTypes.ADD_MY_GROUP,
+            id: groupMember.group_id,
+        },
+        {
+            type: GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP,
+            data: groupMember,
+            id: groupMember.group_id,
+        },
+        {
+            type: UserTypes.RECEIVED_PROFILES_FOR_GROUP,
+            data: [groupMember],
+            id: groupMember.group_id,
+        },
+    ]));
+}
+
+export function handleGroupAddedMemberEvent(msg) {
+    return async (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const data = msg.data.group_member;
+        const groupMember = msg.data.group_member;
 
-        if (currentUserId === data.user_id) {
-            dispatch(
-                {
-                    type: GroupTypes.ADD_MY_GROUP,
-                    data,
-                    id: data.group_id,
-                },
-            );
+        if (currentUserId === groupMember.user_id) {
+            const group = getGroup(state, groupMember.group_id);
+            if (group) {
+                handleMyGroupUpdate(groupMember);
+            } else {
+                const {error} = await doDispatch(fetchGroup(groupMember.group_id, true));
+                if (!error) {
+                    handleMyGroupUpdate(groupMember);
+                }
+            }
         }
-        dispatch(batchActions([
-            {
-                type: GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP,
-                data,
-                id: data.group_id,
-            },
-            {
-                type: UserTypes.RECEIVED_PROFILES_FOR_GROUP,
-                data: [data].filter(Boolean),
-                id: data.group_id,
-            },
-        ]),
-        );
     };
 }
 
@@ -1600,27 +1609,24 @@ function handleGroupDeletedMemberEvent(msg) {
         const data = msg.data.group_member;
 
         if (currentUserId === data.user_id) {
-            dispatch(
+            dispatch(batchActions([
                 {
                     type: GroupTypes.REMOVE_MY_GROUP,
                     data,
                     id: data.group_id,
                 },
-            );
+                {
+                    type: UserTypes.RECEIVED_PROFILES_LIST_TO_REMOVE_FROM_GROUP,
+                    data: [data],
+                    id: data.group_id,
+                },
+                {
+                    type: GroupTypes.RECEIVED_MEMBER_TO_REMOVE_FROM_GROUP,
+                    data,
+                    id: data.group_id,
+                },
+            ]));
         }
-        dispatch(batchActions([
-            {
-                type: UserTypes.RECEIVED_PROFILES_LIST_TO_REMOVE_FROM_GROUP,
-                data: [data].filter(Boolean),
-                id: data.group_id,
-            },
-            {
-                type: GroupTypes.RECEIVED_MEMBER_TO_REMOVE_FROM_GROUP,
-                data,
-                id: data.group_id,
-            },
-        ]),
-        );
     };
 }
 

@@ -78,7 +78,9 @@ export type Props = {
     searchTerm: string;
 
     actions: {
+        getGroup: (groupId: string, includeMemberCount: boolean) => Promise<ActionResult<Group>>;
         getUsersInGroup: (groupId: string, page: number, perPage: number, sort: string) => Promise<ActionResult<UserProfile[]>>;
+        resetUsersInGroup: (groupId: string, members: GroupMember[]) => void;
         openDirectChannelToUserId: (userId: string) => Promise<ActionResult>;
         closeRightHandSide: () => void;
     };
@@ -119,6 +121,17 @@ const GroupMemberList = (props: Props) => {
         }
         setHasMounted(true);
     }, [members.length, hasMounted]);
+
+    // IK: this is necessary to make sure the items in the list
+    // correspond to the displayed member count, and the height
+    // is calculated correctly
+    useEffect(() => {
+        if (!hasMounted) {
+            actions.getGroup(group.id, true);
+            actions.resetUsersInGroup(group.id, members);
+            actions.getUsersInGroup(group.id, 0, USERS_PER_PAGE, 'display_name');
+        }
+    }, [actions, group.id, hasMounted, members]);
 
     const loadNextPage = async () => {
         setNextPageLoadState(Load.LOADING);
