@@ -33,6 +33,7 @@ import type {GlobalState} from 'types/store';
 
 import {openCallDialingModal} from './kmeet_calls';
 import {closeModal} from './views/modals';
+import { getHistory } from 'utils/browser_history';
 
 export function showExpandedView(): ActionFunc {
     return (dispatch) => {
@@ -213,6 +214,12 @@ export function initiateCallIfParam(channelID: string) {
         
         if (hasCallParam) {
             dispatch(startOrJoinCallInChannelV2(channelID))
+
+            params.delete('call');
+
+            // Keep existing params if there is
+            const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+            getHistory().replace(newUrl);
         }
     }
 }
