@@ -207,6 +207,18 @@ export function startOrJoinCallInChannelV2(channelID: string) {
     };
 }
 
+// Initiate a call if the URL contains the query parameter `call`
+export function initiateCallIfParam(channelID: string) {
+        return async (dispatch: DispatchFunc) => {
+        const params = new URLSearchParams(window.location.search);
+        const hasCallParam = params.has('call');
+        
+        if (hasCallParam) {
+            dispatch(startOrJoinCallInChannelV2(channelID))
+        }
+    }
+}
+
 export function updateAudioStatus(dialingID: string, muted = false) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         dispatch({
