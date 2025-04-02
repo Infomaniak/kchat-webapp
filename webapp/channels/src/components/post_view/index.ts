@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {connect, ConnectedProps} from 'react-redux';
+import {connect} from 'react-redux';
 import type {RouteComponentProps} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 
@@ -19,8 +19,6 @@ import {Constants} from 'utils/constants';
 import type {GlobalState} from 'types/store';
 
 import PostView from './post_view';
-import { startOrJoinCallInChannelV2 } from 'actions/calls';
-import { bindActionCreators, Dispatch } from 'redux';
 
 export const isChannelLoading = (params: RouteViewParams, channel?: Channel, team?: Team, teammate?: UserProfile, teamMemberships?: Record<string, TeamMembership>) => {
     if (params.postid) {
@@ -55,42 +53,30 @@ type RouteViewParams = {
 
 type Props = {channelId: string} & RouteComponentProps<RouteViewParams>
 
-function mapStateToProps(state: GlobalState, ownProps: Props) {
-    const params = ownProps.match?.params;
-    const team = getTeamByName(state, params?.team || '');
-    let teammate;
+function makeMapStateToProps() {
+    return function mapStateToProps(state: GlobalState, ownProps: Props) {
+        const params = ownProps.match?.params;
+        const team = getTeamByName(state, params?.team || '');
+        let teammate;
 
-    const channel = getChannel(state, ownProps.channelId);
-    let lastViewedAt = state.views.channel.lastChannelViewTime[ownProps.channelId];
-    if (channel) {
-        if (channel.type === Constants.DM_CHANNEL && channel.teammate_id) {
-            teammate = getUser(state, channel.teammate_id);
+        const channel = getChannel(state, ownProps.channelId);
+        let lastViewedAt = state.views.channel.lastChannelViewTime[ownProps.channelId];
+        if (channel) {
+            if (channel.type === Constants.DM_CHANNEL && channel.teammate_id) {
+                teammate = getUser(state, channel.teammate_id);
+            }
+            lastViewedAt = channel.last_post_at ? lastViewedAt : channel.last_post_at;
         }
-        lastViewedAt = channel.last_post_at ? lastViewedAt : channel.last_post_at;
-    }
 
-    const teamMemberships = getTeamMemberships(state);
-    const channelLoading = isChannelLoading(params!, channel, team, teammate, teamMemberships);
-    const unreadScrollPosition = getUnreadScrollPositionPreference(state);
-    return {
-        unreadScrollPosition,
-        lastViewedAt,
-        channelLoading,
+        const teamMemberships = getTeamMemberships(state);
+        const channelLoading = isChannelLoading(params!, channel, team, teammate, teamMemberships);
+        const unreadScrollPosition = getUnreadScrollPositionPreference(state);
+        return {
+            unreadScrollPosition,
+            lastViewedAt,
+            channelLoading,
+        };
     };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        actions: bindActionCreators({
-            startCall: startOrJoinCallInChannelV2,
-        }, dispatch),
-    };
-};
-
-
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export type PropsFromRedux = ConnectedProps<typeof connector>;
-
-export default withRouter(connector(PostView));
+export default withRouter(connect(makeMapStateToProps)(PostView));
