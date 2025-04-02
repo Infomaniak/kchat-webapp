@@ -9,6 +9,7 @@ import type {Dispatch} from 'redux';
 import {Client4} from 'mattermost-redux/client';
 import {Preferences} from 'mattermost-redux/constants';
 import {get} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 import {getCurrentUser, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
 
@@ -18,6 +19,10 @@ import {makeGetCustomStatus, isCustomStatusExpired, isCustomStatusEnabled} from 
 import type {GlobalState} from 'types/store';
 
 import UserAccountMenu from './user_account_menu';
+
+const STAFF_ONLY_TEAM_NAME_WHITELIST = [
+    'infomaniak',
+];
 
 function makeMapStateToProps() {
     const getCustomStatus = makeGetCustomStatus();
@@ -29,6 +34,8 @@ function makeMapStateToProps() {
         const userFirstName = currentUser?.first_name;
         const userLastName = currentUser?.last_name;
         const customStatus = getCustomStatus(state, userId);
+        const currentTeam = getCurrentTeam(state);
+        const showNextSwitch = currentTeam ? STAFF_ONLY_TEAM_NAME_WHITELIST.includes(currentTeam.name) : false;
 
         return {
             userId,
@@ -42,6 +49,7 @@ function makeMapStateToProps() {
             isCustomStatusExpired: isCustomStatusExpired(state, customStatus),
             isCustomStatusEnabled: isCustomStatusEnabled(state),
             timezone: getCurrentTimezone(state),
+            showNextSwitch,
         };
     };
 }

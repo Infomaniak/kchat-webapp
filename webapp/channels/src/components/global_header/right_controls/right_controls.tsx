@@ -19,6 +19,7 @@ import {
     SettingsTour,
     useShowOnboardingTutorialStep,
 } from 'components/tours/onboarding_tour';
+import UserAccountMenu from 'components/user_account_menu';
 import WithTooltip from 'components/with_tooltip';
 
 import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
@@ -194,7 +195,7 @@ const RightControls = (): JSX.Element => {
                     </module-products-component>
                 </div>
             )}
-            {/* <StatusDropdown/> */}
+            <UserAccountMenu/>
             <FlagNext/>
         </RightControlsContainer>
     );

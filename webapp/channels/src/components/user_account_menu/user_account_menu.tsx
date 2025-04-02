@@ -14,6 +14,7 @@ import {ModalIdentifiers, UserStatuses} from 'utils/constants';
 import UserAccountAwayMenuItem from './user_account_away_menuitem';
 import UserAccountCustomStatusMenuItem from './user_account_custom_status_menuitem';
 import UserAccountDndMenuItem from './user_account_dnd_menuitem';
+import UserAccountIkNextMenuItem from './user_account_ik_next_menuitem';
 import UserAccountLogoutMenuItem from './user_account_logout_menuitem';
 import UserAccountMenuButton from './user_account_menuButton';
 import UserAccountNameMenuItem from './user_account_name_menuitem';
@@ -26,6 +27,7 @@ import UserAccountSetCustomStatusMenuItem from './user_account_set_custom_status
 import type {PropsFromRedux} from './index';
 
 import './user_account_menu.scss';
+import './user_account_menu_ik.scss';
 
 type Props = PropsFromRedux;
 
@@ -128,6 +130,7 @@ export default function UserAccountMenu(props: Props) {
             <UserAccountProfileMenuItem
                 userId={props.userId}
             />
+            <UserAccountIkNextMenuItem/>
             <Menu.Separator/>
             <UserAccountLogoutMenuItem/>
         </Menu.Container>
