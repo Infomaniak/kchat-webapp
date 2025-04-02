@@ -187,8 +187,6 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                     <AdvancedCreatePost/>
                 </div>
             );
-        } else if (this.props.missingChannelRole || this.state.waitForLoader) {
-            createPost = <InputLoading updateWaitForLoader={this.onUpdateInputShowLoader}/>;
         } else {
             createPost = (
                 <BannerJoinChannel
