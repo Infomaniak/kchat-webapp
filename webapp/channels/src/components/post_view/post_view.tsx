@@ -99,11 +99,6 @@ export default class PostView extends React.PureComponent<Props, State> {
     };
 
 
-    componentDidUpdate(): void {
-        if(this.props.channelId) {
-            this.startAutomaticCallIfNeeded();
-        }
-    }
 
     render() {
         if (this.props.channelLoading || this.state.loaderForChangeOfPostsChunk) {

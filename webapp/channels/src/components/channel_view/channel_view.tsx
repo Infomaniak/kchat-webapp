@@ -110,7 +110,6 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             }
         }
 
-        
     }
 
     render() {
