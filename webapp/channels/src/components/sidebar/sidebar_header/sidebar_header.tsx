@@ -54,26 +54,27 @@ const SidebarHeader = (props: Props) => {
                 onToggle={handleMenuToggle}
                 className={classNames({isWebApp: !isDesktopApp()})}
             >
-                <WithTooltip
-                    title={currentTeam.description ? currentTeam.description : currentTeam.display_name}
-                >
-                    <h1 className='sidebarHeader'>
-                        <button
-                            className='style--none sidebar-header'
-                            type='button'
-                            aria-haspopup='menu'
-                            aria-expanded={menuToggled}
-                            aria-controls='sidebarDropdownMenu'
-                            id='sidebarDropdownMenuButton'
-                        >
-                            <span className='title'>{currentTeam.display_name}</span>
-                            <i
-                                className='icon icon-chevron-down'
-                                aria-hidden={true}
-                            />
-                        </button>
-                    </h1>
-                </WithTooltip>
+                {isDesktopApp() && (
+                    <WithTooltip
+                        title={currentTeam.description ? currentTeam.description : currentTeam.display_name}
+                    >
+
+                        <h1 className='sidebarHeader'>
+                            <button
+                                className='style--none sidebar-header'
+                                type='button'
+                                aria-haspopup='menu'
+                                aria-expanded={menuToggled}
+                                aria-controls='sidebarDropdownMenu'
+                                id='sidebarDropdownMenuButton'
+                                disabled={true}
+                            >
+                                <span className='title'>{currentTeam.display_name}</span>
+                            </button>
+                        </h1>
+
+                    </WithTooltip>)
+                }
                 <MainMenu
                     id='sidebarDropdownMenu'
                     usageDeltaTeams={usageDeltas.teams.active}

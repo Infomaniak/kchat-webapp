@@ -16,6 +16,9 @@ import {
 import * as Menu from 'components/menu';
 import {OnboardingTourSteps} from 'components/tours';
 import {useShowOnboardingTutorialStep, CreateAndJoinChannelsTour, InvitePeopleTour} from 'components/tours/onboarding_tour';
+import PlusFilledIcon from 'components/widgets/icons/plus_filled_icon';
+
+import {isDesktopApp} from 'utils/user_agent';
 
 export const ELEMENT_ID_FOR_BROWSE_OR_ADD_CHANNEL_MENU = 'browseOrAddChannelMenuButton';
 
@@ -150,8 +153,18 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
                     id: 'sidebarLeft.browserOrCreateChannelMenuButton.label',
                     defaultMessage: 'Browse or create channels',
                 }),
-                class: 'btn btn-icon btn-sm btn-tertiary btn-inverted btn-round',
-                children: <PlusIcon size={18}/>,
+                class: isDesktopApp() ? 'btn btn-icon btn-sm btn-tertiary btn-inverted btn-round' : 'sidebarHeaderContainer__dropdownButton',
+                children: isDesktopApp() ? (
+                    <PlusIcon size={18}/>
+                ) : (
+                    <>
+                        <PlusFilledIcon/>
+                        <FormattedMessage
+                            id={'admin.user_grid.new'}
+                            defaultMessage='New'
+                        />
+                    </>
+                ),
             }}
             menuButtonTooltip={{
                 text: formatMessage({id: 'sidebarLeft.browserOrCreateChannelMenuButton.label', defaultMessage: 'Browse or create channels'}),
