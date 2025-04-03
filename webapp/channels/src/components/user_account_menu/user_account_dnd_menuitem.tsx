@@ -144,9 +144,12 @@ export default function UserAccountDndMenuItem(props: Props) {
             });
         }
 
+        // IK changes : convert dndEndTime to seconds if it is in milliseconds, MM return dndEndTime in seconds
+        const normalizedDndEndTime = dndEndTime && dndEndTime > 9999999999 ? dndEndTime / 1000 : dndEndTime;
+
         const tz = timezone || getBrowserTimezone();
         const currentTime = moment().tz(tz);
-        const endTime = moment.unix(dndEndTime).tz(tz);
+        const endTime = moment.unix(normalizedDndEndTime).tz(tz);
 
         const diffDays = endTime.clone().startOf('day').diff(currentTime.clone().startOf('day'), 'days');
 
