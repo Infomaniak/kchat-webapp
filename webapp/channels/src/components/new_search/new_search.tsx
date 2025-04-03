@@ -260,7 +260,7 @@ const NewSearch = (): JSX.Element => {
             className='a11y__region'
             ref={searchButtonRef}
         >
-            <i className='icon icon-magnify'/>
+            <i className='icon icon-magnify ik-icon'/>
             {(searchType === 'messages' || searchType === 'files') && (
                 <SearchTypeBadge>
                     {searchType === 'messages' && (
