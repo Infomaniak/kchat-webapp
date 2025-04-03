@@ -106,6 +106,7 @@ interface Props {
     children: ReactNode[];
     menuButtonRef?: React.RefObject<HTMLButtonElement>;
     closeMenuOnTab?: boolean;
+    parentWidth?: boolean;
 
     // Use MUI Anchor Playgroup to try various anchorOrigin
     // and transformOrigin values - https://mui.com/material-ui/react-popover/#anchor-playground
@@ -132,6 +133,7 @@ export function Menu(props: Props) {
     const dispatch = useDispatch();
 
     const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
+    const [menuWidth, setMenuWidth] = useState<string | undefined>(undefined);
     const [disableAutoFocusItem, setDisableAutoFocusItem] = useState(false);
     const isMenuOpen = Boolean(anchorElement);
 
@@ -158,6 +160,13 @@ export function Menu(props: Props) {
     function handleMenuClick(e: MouseEvent<HTMLDivElement> | KeyboardEvent<HTMLDivElement>) {
         e.stopPropagation();
     }
+
+    useEffect(() => {
+        if (anchorElement) {
+            const parentWidth = anchorElement.getBoundingClientRect().width;
+            setMenuWidth(`${parentWidth}px`);
+        }
+    }, [anchorElement]);
 
     useEffect(() => {
         if (props.menu.closeMenuManually) {
@@ -321,7 +330,7 @@ export function Menu(props: Props) {
                         autoFocusItem={!disableAutoFocusItem}
                         className={props.menu.className}
                         style={{
-                            width: props.menu.width,
+                            width: props.parentWidth ? menuWidth : props.menu.width,
                         }}
                     >
                         {props.children}
