@@ -13,6 +13,8 @@ export type PostAction = {
     options?: PostActionOption[];
     default_option?: string;
     cookie?: string;
+
+    isVoted?: boolean; // IK: quick way of knowing which Action is voted for polls
 };
 
 export function isPostAction(v: unknown): v is PostAction {

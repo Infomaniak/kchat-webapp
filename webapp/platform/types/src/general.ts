@@ -6,7 +6,7 @@ import type {UserPropertyField} from './properties';
 import type {IDMappedObjects} from './utilities';
 
 export type GeneralState = {
-    config: Partial<ClientConfig>;
+    config: Partial<ClientConfig> & {IsNewVersionCanaryOnly?: boolean};
     firstAdminVisitMarketplaceStatus: boolean;
     firstAdminCompleteSetup: boolean;
     license: ClientLicense;

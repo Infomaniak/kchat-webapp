@@ -44,13 +44,13 @@ yarn workspace @mattermost/components build
 ### Running with webpack dev server
 
 ```shell
-export $(xargs < ./.env) && yarn dev-server:webapp
+yarn dev-server:webapp
 ```
 
 ### Running prod build
 
 ```shell
-export $(xargs < ./.env) && yarn build:webapp
+yarn build:webapp
 ```
 ### Common errors
 ##### This error can occur when running a single test or a suite of tests
@@ -60,4 +60,8 @@ Cannot find module '../build/Release/canvas.node'
 fix : 
 ```shell
 brew install pkg-config cairo pango libpng jpeg giflib librsvg
+```
+If problem persists (Require C++ compiler) :
+```shell
+yarn --cwd node_modules/canvas run install --build-from-source
 ```

@@ -73,9 +73,8 @@ function CustomStatusEmoji({
                         {customStatus.text && (
                             <span
                                 className='custom-status-text'
-                                style={{marginLeft: 5}}
                             >
-                                {customStatus.text}
+                                {customStatus?.text === '' ? `:${customStatus?.emoji}:` : customStatus?.text}
                             </span>
                         )}
                     </div>

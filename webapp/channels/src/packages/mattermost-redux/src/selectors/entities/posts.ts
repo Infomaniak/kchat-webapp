@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {Channel} from '@mattermost/types/channels';
+import type {MessageAttachment} from '@mattermost/types/message_attachments';
 import type {
     MessageHistory,
     OpenGraphMetadata,
@@ -52,6 +53,14 @@ export function getPost(state: GlobalState, postId: Post['id']): Post {
 
 export function isPostFlagged(state: GlobalState, postId: Post['id']): boolean {
     return getBool(state, Preferences.CATEGORY_FLAGGED_POST, postId);
+}
+
+export function getPostAttachments(state: GlobalState, postId: Post['id']): MessageAttachment[] | undefined {
+    return getPost(state, postId)?.props?.attachments as MessageAttachment[];
+}
+
+export function getPostAttachmentsPollId(state: GlobalState, postId: Post['id']): string | undefined {
+    return getPostAttachments(state, postId)?.[0]?.actions?.[0]?.integration?.context?.['poll-id'];
 }
 
 export function getPostRepliesCount(state: GlobalState, postId: Post['id']): number {
@@ -202,8 +211,6 @@ export function getLatestPostToEdit(state: GlobalState, channelId: string, rootI
 
     return '';
 }
-
-export const getLatestReplyablePostId: (state: GlobalState) => Post['id'] = (state) => getLatestInteractablePostId(state, getCurrentChannelId(state));
 
 // getPostsInCurrentChannel returns an array of all recent posts loaded at the bottom of the given channel.
 // It does not include older posts such as those loaded by viewing a thread or a permalink.
@@ -406,6 +413,16 @@ export function getRecentPostsChunkInChannel(state: GlobalState, channelId: Chan
     }
 
     return postsForChannel.find((block) => block.recent);
+}
+
+export function getNotRecentPostsChunkInChannel(state: GlobalState, channelId: Channel['id']): PostOrderBlock | null | undefined {
+    const postsForChannel = state.entities.posts.postsInChannel[channelId];
+
+    if (!postsForChannel) {
+        return null;
+    }
+
+    return postsForChannel.find((block) => !block.recent);
 }
 
 export function getOldestPostsChunkInChannel(state: GlobalState, channelId: Channel['id']): PostOrderBlock | null | undefined {

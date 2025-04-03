@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import { TranscriptData } from "./transcript";
+
 export type FileInfo = {
     id: string;
     user_id: string;
@@ -18,6 +20,7 @@ export type FileInfo = {
     clientId: string;
     post_id?: string;
     mini_preview?: string;
+    transcript?: TranscriptData;
     archived: boolean;
     link?: string;
     onlyoffice?: OnlyofficeMeta;

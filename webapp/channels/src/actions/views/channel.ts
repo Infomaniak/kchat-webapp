@@ -59,6 +59,7 @@ import LocalStorageStore from 'stores/local_storage_store';
 import {getHistory} from 'utils/browser_history';
 import {isArchivedChannel} from 'utils/channel_utils';
 import {Constants, ActionTypes, EventTypes, PostRequestTypes} from 'utils/constants';
+import {logTimestamp} from 'utils/utils';
 
 import type {ActionFuncAsync, ThunkActionFunc} from 'types/store';
 
@@ -248,6 +249,9 @@ export function autocompleteUsersInChannel(prefix: string, channelId: string): A
 export function loadUnreads(channelId: string, prefetch = false): ActionFuncAsync<{atLatestMessage: boolean; atOldestMessage: boolean}> {
     return async (dispatch) => {
         const time = Date.now();
+
+        logTimestamp(`loadUnreads channel ${channelId} prefetch ${prefetch}`, time);
+
         if (prefetch) {
             dispatch({
                 type: ActionTypes.PREFETCH_POSTS_FOR_CHANNEL,
@@ -421,6 +425,8 @@ export function loadPosts({
 
 export function syncPostsInChannel(channelId: string, since: number, prefetch = false): ActionFuncAsync {
     return async (dispatch, getState) => {
+        // eslint-disable-next-line no-console
+        console.log('sinceTimeToGetPosts', ` channelId: ${channelId}`, `prefetch: ${prefetch}`);
         const time = Date.now();
         const state = getState();
         const socketStatus = getSocketStatus(state);
@@ -430,6 +436,9 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
 
         if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < socketStatus.lastDisconnectAt) {
             sinceTimeToGetPosts = lastPostsApiCallForChannel;
+            logTimestamp('sinceTimeToGetPosts last api call', lastPostsApiCallForChannel);
+        } else {
+            logTimestamp('sinceTimeToGetPosts since', since);
         }
 
         if (prefetch) {
@@ -457,6 +466,8 @@ export function syncPostsInChannel(channelId: string, since: number, prefetch = 
                     status: RequestStatus.FAILURE,
                 });
             } else {
+                // eslint-disable-next-line no-console
+                console.log('PREFETCH_POSTS_FOR_CHANNEL', channelId, 'RequestStatus.SUCCESS', Date.now());
                 actions.push({
                     type: ActionTypes.PREFETCH_POSTS_FOR_CHANNEL,
                     channelId,

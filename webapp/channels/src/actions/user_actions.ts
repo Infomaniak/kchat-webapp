@@ -9,7 +9,7 @@ import {getChannelAndMyMember, getChannelMembersByIds} from 'mattermost-redux/ac
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getTeamMembersByIds} from 'mattermost-redux/actions/teams';
 import * as UserActions from 'mattermost-redux/actions/users';
-import {Preferences as PreferencesRedux} from 'mattermost-redux/constants';
+import {General, Preferences as PreferencesRedux} from 'mattermost-redux/constants';
 import {
     getChannel,
     getChannelMembersInChannels,
@@ -27,7 +27,7 @@ import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
 import {loadCustomEmojisForCustomStatusesByUserIds} from 'actions/emoji_actions';
 import {loadStatusesForProfilesList, loadStatusesForProfilesMap} from 'actions/status_actions';
-import {getSidebarGroupChannels} from 'selectors/views/channel_sidebar';
+import {getDisplayedChannels} from 'selectors/views/channel_sidebar';
 import store from 'stores/redux_store';
 
 import {Constants, Preferences, UserStatuses} from 'utils/constants';
@@ -292,7 +292,13 @@ export async function loadProfilesForSidebar() {
 }
 
 export const getGMsForLoading = (state: GlobalState) => {
-    return getSidebarGroupChannels(state);
+    // Get all channels visible on the current team which doesn't include hidden GMs/DMs
+    let channels = getDisplayedChannels(state);
+
+    // Make sure we only have GMs
+    channels = channels.filter((channel) => channel.type === General.GM_CHANNEL);
+
+    return channels;
 };
 
 export async function loadProfilesForGM() {

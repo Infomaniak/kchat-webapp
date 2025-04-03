@@ -131,6 +131,7 @@ export const getNewestThreadInTeam: (state: GlobalState, teamID: string,) => (Us
         if (!threadsInGivenTeam) {
             return null;
         }
+
         const ids = [...threadsInGivenTeam.filter((id) => threads[id].is_following)];
         return threads[sortByLastReply(ids, threads)[0]];
     },

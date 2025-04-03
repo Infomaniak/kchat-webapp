@@ -1,3 +1,348 @@
+## 2.10.0-rc.70 (2025-02-20)
+
+No changes.
+
+## 2.10.0-rc.69 (2025-02-19)
+
+### Fixed (1 change)
+
+- [fix: set max height with vh instead of element.clientHeight](kchat/webapp@2edb2d39a1bfe46a47f906d12fbcb479c8c43523) by @boris.trombert ([merge request](kchat/webapp!1017))
+
+### Removed (1 change)
+
+- [removed unnecessary websocket logs](kchat/webapp@727d9ae10091dc15b22675c5763d2b52ecd2bdd8) by @dimitar.slaev ([merge request](kchat/webapp!1016))
+
+## 2.10.0-rc.68 (2025-02-18)
+
+### Fixed (1 change)
+
+- [Fixed: Emojis zoom out on hover.](kchat/webapp@b2b08d853ee0120bde1db3812a16efc0647035cf) by @andy.lerandy ([merge request](kchat/webapp!1014))
+
+## 2.10.0-rc.67 (2025-02-18)
+
+No changes.
+
+## 2.10.0-rc.66 (2025-02-17)
+
+### Fixed (1 change)
+
+- [Updated: Reduced number of calls on startup.](kchat/webapp@d7f2221482224033196afa8693710dfb8f1abe83) by @andy.lerandy ([merge request](kchat/webapp!1010))
+
+## 2.10.0-rc.65 (2025-02-13)
+
+### Changed (1 change)
+
+- [Fix missing messages on reconnect](kchat/webapp@2a0764380fb0216318e26f2556bc99eb727ae649) by @dimitar.slaev ([merge request](kchat/webapp!1009))
+
+## 2.10.0-rc.64 (2025-02-05)
+
+### Fixed (1 change)
+
+- [revert all changes except binding channels synchronously](kchat/webapp@0859c4eee982d9c65dc91c3347404fc63907a8c6) by @dimitar.slaev ([merge request](kchat/webapp!1006))
+
+## 2.10.0-rc.63 (2025-02-03)
+
+### Changed (1 change)
+
+- [improve logs to debug syncro bugs](kchat/webapp@cdee4f5636ac84e19327cbe50bb3907b7e3a8611) by @dimitar.slaev ([merge request](kchat/webapp!1005))
+
+## 2.10.0-rc.62 (2025-02-03)
+
+### change (1 change)
+
+- [revert: redirect team when 404](kchat/webapp@45c9412876667a9e0a4ead963af392787f317baf) by @dimitar.slaev ([merge request](kchat/webapp!1004))
+
+## 2.10.0-rc.61 (2025-01-30)
+
+### Fixed (2 changes)
+
+- [delete team from desktop list when 404](kchat/webapp@0479cbdb42585e30b3b68dd725dc0a3689afb957) by @boris.trombert ([merge request](kchat/webapp!999))
+- [update desktop cache when reconnecting ws](kchat/webapp@ea324e3751f664e69f85ac98ad7a9b1e09012fb5) by @boris.trombert ([merge request](kchat/webapp!999))
+
+## 2.10.0-rc.60 (2025-01-29)
+
+### Fixed (7 changes)
+
+- [Fix receiving double notifications](kchat/webapp@e07cc70c8b9679d81674fccfcd6f1ce5081137a6) by @dimitar.slaev ([merge request](kchat/webapp!994))
+- [Fixed: Inline Text set as table.](kchat/webapp@6df2a19067e3ad5d2c77107d82884c67e5d76659) by @andy.lerandy ([merge request](kchat/webapp!998))
+- [Fixed: Viewport of kdrive svg for file preview.](kchat/webapp@f76294b09a318b185f9af12ffc31c448950a1887) by @andy.lerandy ([merge request](kchat/webapp!997))
+- [Fixed: Missing translation.](kchat/webapp@e018ca5b90f4a3f905f6aaa096a16f7356388424) by @andy.lerandy ([merge request](kchat/webapp!995))
+- [redirect to default team when 404 on reconnect and loadMe](kchat/webapp@d1bca23b33e79d6df79d18514b1456c99260fd06) by @dev_bot ([merge request](kchat/webapp!990))
+- [redirect to default team when 404 on reconnect and loadMe](kchat/webapp@92c518094689cc4a908ba36bcb0bdf696101c502) by @dev_bot ([merge request](kchat/webapp!990))
+- [remove old calendar emoji to avoid duplication](kchat/webapp@25e0771950978aabdf6c5f76e9fd288627ccbd00) by @cyril.gromoff ([merge request](kchat/webapp!939))
+
+## 2.10.0-rc.59 (2025-01-23)
+
+### Fixed (3 changes)
+
+- [Fixed: Missing translation.](kchat/webapp@e018ca5b90f4a3f905f6aaa096a16f7356388424) by @andy.lerandy ([merge request](kchat/webapp!995))
+- [Removed: Duplicated important button.](kchat/webapp@a1cb1a202ec81e5232bbe9042d4915137f1ac8a1) by @andy.lerandy ([merge request](kchat/webapp!993))
+- [Fixed: Untranslated button & broken ellipsis.](kchat/webapp@0d06efe8ff2f999589fc0aaaaab19390bc13f671) by @andy.lerandy ([merge request](kchat/webapp!992))
+
+## 2.10.0-rc.58 (2025-01-23)
+
+### Fixed (1 change)
+
+- [Fixed: Untranslated button & broken ellipsis.](kchat/webapp@0d06efe8ff2f999589fc0aaaaab19390bc13f671) by @andy.lerandy ([merge request](kchat/webapp!992))
+
+## 2.10.0-rc.57 (2025-01-23)
+
+No changes.
+
+## 2.10.0-rc.56 (2025-01-22)
+
+No changes.
+
+## 2.10.0-rc.55 (2025-01-22)
+
+### Fixed (2 changes)
+
+- [sound notifications works properly when there are attachement with texts messages](kchat/webapp@1a1fac4599ee74b8c27f81b85141384a1cdb8294) by @cyril.gromoff ([merge request](kchat/webapp!949))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
+## 2.10.0-rc.54 (2025-01-22)
+
+### Fixed (4 changes)
+
+- [fix kdrive import button click handler](kchat/webapp@33b03b07172ecd8913ee431ac37da5149e34c1c9) by @antonbuksa ([merge request](kchat/webapp!991))
+- [Fixed: Duplicated keys in component array.](kchat/webapp@da2f277eaddc551b71192739de62c44c2c839167) by @andy.lerandy ([merge request](kchat/webapp!937))
+- [remove multiple instances of the same date separator in saved messages](kchat/webapp@5976ae806db349fb0032d6989bb910660cb85d8f) by @cyril.gromoff ([merge request](kchat/webapp!937))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
+## 2.10.0-rc.53 (2025-01-21)
+
+### Fixed (1 change)
+
+- [Fixed: Duplicated keys in component array.](kchat/webapp@54a23db0b2fc84756f7c0268db5e4d3aeb22af16) by @andy.lerandy ([merge request](kchat/webapp!989))
+
+## 2.10.0-rc.52 (2025-01-21)
+
+### Fixed (2 changes)
+
+- [Fixed: Incorrect z-index for `new_replies_banner`.](kchat/webapp@0738d1ba82b4b696725821165a6e062ce32ece96) by @andy.lerandy ([merge request](kchat/webapp!988))
+- [Fixed: Missing translation keys.](kchat/webapp@0dba7b72c821304aecae3d8c80446c61d2f42925) by @andy.lerandy ([merge request](kchat/webapp!987))
+
+## 2.10.0-rc.51 (2025-01-14)
+
+### Chore (1 change)
+
+- [clean eslint errors in announcement bar](kchat/webapp@8d984ab4cd40243f94347258d1634dad747220f0) by @antonbuksa
+
+## 2.10.0-rc.50 (2025-01-14)
+
+### Chore (1 change)
+
+- [build(deps): bump ksuite bridge version to 0.3.6](kchat/webapp@39d70ac02fe0724db2ff625e90115f5e1c25ed54) by @charbel.naoum ([merge request](kchat/webapp!986))
+
+### change (1 change)
+
+- [FIx post input width in center mode](kchat/webapp@46bf456fa0f37d23b97e4629bae60fecae750459) by @dimitar.slaev ([merge request](kchat/webapp!985))
+
+## 2.10.0-rc.49 (2025-01-13)
+
+### Fixed (1 change)
+
+- [Hide text input if sending a voice message](kchat/webapp@6645f9e676037ef963c2d2b0ccc620579bf1c69d) by @dimitar.slaev ([merge request](kchat/webapp!983))
+
+### Changed (1 change)
+
+- [upload menu refactor](kchat/webapp@e43981a7c2435d10a38e402d8676bb498a1b5942) by @antonbuksa ([merge request](kchat/webapp!984))
+
+## 2.10.0-rc.48 (2025-01-08)
+
+### Fixed (4 changes)
+
+- [disable schedule message for audio type messages](kchat/webapp@342eba6b9bbcade0c2f426bbbe4dc5fc24b8164d) by @boris.trombert ([merge request](kchat/webapp!978))
+- [change reminder to 8am instead of 9am](kchat/webapp@dad23dd8edcbf51e0de859411fc36c56ddada46c) by @boris.trombert ([merge request](kchat/webapp!976))
+- [handling fail requests during data prefetch](kchat/webapp@344a64fbabbec25f9bdb1763e5e032bb12f5b94e) by @boris.trombert ([merge request](kchat/webapp!975))
+- [change socket error traduction](kchat/webapp@439535234ee8531d1c3a1c7a2fe4e85f2f9290f2) by @boris.trombert ([merge request](kchat/webapp!974))
+
+### Changed (3 changes)
+
+- [Add tooltip to AI actions button](kchat/webapp@ea2e0317664c7af0b9c919f1d7ef357c88e2915c) by @dimitar.slaev ([merge request](kchat/webapp!981))
+- [improve javascript error alert](kchat/webapp@6eb75fdcd1581e192e3308275be9a28aac1d6f6b) by @dimitar.slaev ([merge request](kchat/webapp!980))
+- [comment gh ci until we improve it to not fail](kchat/webapp@ed36f3b24c2391e4bc7fc63a23d225424fcee628) by @antonbuksa
+
+### Removed (1 change)
+
+- [remove gh ci file](kchat/webapp@3a58562a2c474721b1da77952fab809f55f1b661) by @antonbuksa
+
+## 2.10.0-rc.47 (2024-11-29)
+
+### Fixed (1 change)
+
+- [missing traductions when starting a call on a channel](kchat/webapp@27c438d314b28049000df4cf1c73877c92dcecc3) by @boris.trombert ([merge request](kchat/webapp!972))
+
+## 2.10.0-rc.46 (2024-11-29)
+
+### Fixed (2 changes)
+
+- [set schedule message to 8 am](kchat/webapp@98e261a3d0b32a230d753b2a0034bebcb40713e7) by @boris.trombert ([merge request](kchat/webapp!971))
+- [edit post emoji according to cursor position](kchat/webapp@ca75615cdf59c3e4b4495ce5d808ac0a0dcd7ab6) by @boris.trombert ([merge request](kchat/webapp!962))
+
+## 2.10.0-rc.45 (2024-11-29)
+
+### Fixed (1 change)
+
+- [remove glitching border in timepicker for reminder](kchat/webapp@582d0266fb7d5acb9b08979abaed64ed1ef3c144) by @boris.trombert ([merge request](kchat/webapp!969))
+
+## 2.10.0-rc.44 (2024-11-29)
+
+### Fixed (2 changes)
+
+- [fetch missing posts in channel if we found chunk with next_post_id](kchat/webapp@fce43a0d7288e72e7f8eafc8392109c6c5676710) by @boris.trombert ([merge request](kchat/webapp!970))
+- [remove glitching border in timepicker for reminder](kchat/webapp@582d0266fb7d5acb9b08979abaed64ed1ef3c144) by @boris.trombert ([merge request](kchat/webapp!969))
+
+## 2.10.0-rc.43 (2024-11-25)
+
+### Fixed (2 changes)
+
+- [fix: handle case where channel is undefined for channel header dropdown](kchat/webapp@6bd80ba42c323d68702ad7248848baf62738d2db) by @boris.trombert ([merge request](kchat/webapp!968))
+- [refactor createOption function to preserve original label value for keywords settings](kchat/webapp@6c5838606046c6c94d32005e1050797e30e4d448) by @boris.trombert ([merge request](kchat/webapp!967))
+
+### Changed (1 change)
+
+- [ci: invalidate nginx cache on deploy](kchat/webapp@8d7a9977977236512f8e620be3e003ffc6c1b855) by @leopold.jacquot ([merge request](kchat/webapp!966))
+
+## 2.10.0-rc.42 (2024-11-18)
+
+No changes.
+
+## 2.10.0-rc.41 (2024-11-18)
+
+### Removed (1 change)
+
+- [hide broken help link](kchat/webapp@b5b69c065f5cf71b9b842bb88ea2413e6111262e) by @antonbuksa ([merge request](kchat/webapp!963))
+
+## 2.10.0-rc.40 (2024-11-13)
+
+### Changed (1 change)
+
+- [delay ws channel resubs on reconnect until post prefetch finished](kchat/webapp@4eabf5ba31a899be32ebd65bd4c8467d1d0ef979) by @antonbuksa ([merge request](kchat/webapp!965))
+
+## 2.10.0-rc.39 (2024-11-07)
+
+### Fixed (1 change)
+
+- [add header to channel preview](kchat/webapp@b8713762920add4501d4a55465bdb79aab71d734) by  ([merge request](kchat/webapp!844))
+
+### Changed (1 change)
+
+- [implementation sync between chan preview header & regular chan header](kchat/webapp@ca8c19d35f731f5365a94544461c0a1867155a71) by @antonbuksa ([merge request](kchat/webapp!844))
+
+## 2.10.0-rc.38 (2024-11-05)
+
+No changes.
+
+## 2.10.0-rc.37 (2024-11-01)
+
+### Fixed (1 change)
+
+- [fix: use transform: scale property instead of zoom for browsers compatibility](kchat/webapp@d22fdce308fb36d81ac88e488d5bbe53ef8a6563) by @boris.trombert ([merge request](kchat/webapp!961))
+
+## 2.10.0-rc.36 (2024-10-29)
+
+### Fixed (1 change)
+
+- [fix: hide menu for transcript when empty and add close button](kchat/webapp@2248b60f8d57e8617161e851515813110e84e8d7) by @boris.trombert ([merge request](kchat/webapp!959))
+
+## 2.10.0-rc.35 (2024-10-28)
+
+### Added (1 change)
+
+- [render voice messages as a postType using new transcription field in post meta](kchat/webapp@1a2d1a73cef8e057a4442ddf1648f45d9e984118) by @antonbuksa ([merge request](kchat/webapp!956))
+
+### Fixed (2 changes)
+
+- [redirect to kchat tab directly in ksuite redirect](kchat/webapp@78d809a35671b3f43905bb8529f400cdb8bf76ed) by @antonbuksa ([merge request](kchat/webapp!958))
+- [fix double redirect in ksuite iframe](kchat/webapp@b0bd3c99d10b19b9f967d9d0f3b1921be0005206) by @antonbuksa
+
+## 2.10.0-rc.34 (2024-10-24)
+
+### Changed (1 change)
+
+- [do not specify sample rate to audio context if firefox on linux](kchat/webapp@738c5a457b4d6d430ffef50cbca4e1d98ae00e10) by @antonbuksa ([merge request](kchat/webapp!957))
+
+## 2.10.0-rc.33 (2024-10-24)
+
+### Fixed (2 changes)
+
+- [fix: wrap emoji name in status tooltip](kchat/webapp@e21d44925a6b140e89278f94bb3b5823b6258265) by @boris.trombert ([merge request](kchat/webapp!955))
+- [prevent resetting lastDisconnectAt if it already exists to avoid user fetch bug on WS reconnect](kchat/webapp@d5a721af7eed29d56f5e473dd49b742464cc1a5c) by @boris.trombert ([merge request](kchat/webapp!890))
+
+## 2.10.0-rc.32 (2024-10-23)
+
+### Changed (1 change)
+
+- [add early return in ksuite redirect](kchat/webapp@27d93a330898e05a9245694a2287a240a80c5a13) by @antonbuksa
+
+## 2.10.0-rc.31 (2024-10-23)
+
+### Fixed (1 change)
+
+- [fix base url split for ksuite redirect](kchat/webapp@7cbc515583dc126d7aec79fd75e6526d1205dd0b) by @antonbuksa
+
+## 2.10.0-rc.30 (2024-10-23)
+
+### Added (1 change)
+
+- [web only redirect to ksuite from base url](kchat/webapp@144f635a2121be1ea701bab0eea86f0b6df490a7) by @antonbuksa ([merge request](kchat/webapp!954))
+
+### Fixed (1 change)
+
+- [fix french traduction for tooltip emoji reaction](kchat/webapp@a33ebf89764bdeb71b7b3a9e577cf85d6fee5c65) by @boris.trombert ([merge request](kchat/webapp!953))
+
+## 2.10.0-rc.29 (2024-10-22)
+
+### Fixed (2 changes)
+
+- [change status emoji size when hover on status](kchat/webapp@d104f450bbd6e245da8e931eba8125d05849b838) by @boris.trombert ([merge request](kchat/webapp!952))
+- [show transcript by default for vocal messages](kchat/webapp@68c0a7a3c9b75d15f25aecfcc10c97412aeca42c) by @boris.trombert ([merge request](kchat/webapp!950))
+
+## 2.10.0-rc.28 (2024-10-03)
+
+### Changed (1 change)
+
+- [restore custom pagination in get all groups call](kchat/webapp@6d3a87e27221587656aa264dc5f530905d8b1894) by @antonbuksa ([merge request](kchat/webapp!938))
+
+## 2.10.0-rc.27 (2024-10-03)
+
+### Fixed (2 changes)
+
+- [pass id of draft from props instead of draftFromChannel const](kchat/webapp@f1690a1f05445e039913d455a1e2f82099c86e8a) by @boris.trombert ([merge request](kchat/webapp!936))
+- [redirect in general only if unauthorized actions in ws reconnect](kchat/webapp@17c6026729301336771d5aed1ac3d813d1e97157) by @boris.trombert ([merge request](kchat/webapp!935))
+
+## 2.10.0-rc.26 (2024-10-01)
+
+### Fixed (1 change)
+
+- [fix: enable preview for all image types without initial or mini preview](kchat/webapp@5df701df3fc1fd02898a375e5f1cbe3af7c52a2c) by @cyril.gromoff ([merge request](kchat/webapp!911))
+
+## 2.10.0-rc.25 (2024-10-01)
+
+### Fixed (3 changes)
+
+- [correct spelling mistakes](kchat/webapp@956f47b262a9537e3df85636f507bce07aa44293) by @cyril.gromoff ([merge request](kchat/webapp!934))
+- [Fix: change dropdown status text when there is not expire date](kchat/webapp@0d7934cb3c158e077f1b229e0fbb6af786835647) by @cyril.gromoff ([merge request](kchat/webapp!928))
+- [add function to get the last numbered line from text for numbered list](kchat/webapp@7f1b909cfd975a6db078a10a2a5bc8efea5f13e2) by @boris.trombert ([merge request](kchat/webapp!896))
+
+## 2.10.0-rc.24 (2024-09-30)
+
+### Added (1 change)
+
+- [custom keywords notifications in params for dekstop](kchat/webapp@7d66b45e74264275f797a21d8d02c1de49fcfceb) by @boris.trombert ([merge request](kchat/webapp!930))
+
+## 2.10.0-rc.23 (2024-09-27)
+
+No changes.
+
+## 2.10.0-rc.22 (2024-09-26)
+
+### Fixed (2 changes)
+
+- [last admin and user of a private channel can only archive it](kchat/webapp@597cece29bd5f190d96cd8539b1028afe373f9d7) by @boris.trombert ([merge request](kchat/webapp!933))
+- [Make channel optional for toast in post view](kchat/webapp@aa16c6e61c97c5760709f4b4aa0ea80700a33169) by @boris.trombert ([merge request](kchat/webapp!929))
+
 ## 2.10.0-rc.21 (2024-09-25)
 
 No changes.
@@ -118,6 +463,341 @@ No changes.
 ## 2.10.0-rc.2 (2024-09-04)
 
 No changes.
+
+## 2.9.24 (2025-02-26)
+
+### Added (1 change)
+
+- [feat: welcome kchat bot](kchat/webapp@f0fc2da40e13cea68f34a811fe8c2730620ee103) by @dimitar.slaev ([merge request](kchat/webapp!1012))
+
+### Fixed (8 changes)
+
+- [fix: set thread traduction if find in switch channel provider](kchat/webapp@6f50f0555d30fef07a5aee2c2ad048670ba6b9cd) by @boris.trombert ([merge request](kchat/webapp!1026))
+- [fix: add missing draft id if empty](kchat/webapp@cd4db7f1412ba99c68ae92b4862d2328ad7105ef) by @boris.trombert ([merge request](kchat/webapp!1023))
+- [fix: add closing backtick for all message chuck to avoid display flash](kchat/webapp@5e5bbeed9e25e62e186cfaa10625d6018de0f28c) by @boris.trombert ([merge request](kchat/webapp!1021))
+- [Fixed: Number list being truncated](kchat/webapp@cfec461a85b47f5611d648818e7c302f76c499f9) by @andy.lerandy ([merge request](kchat/webapp!1018))
+- [fix: set max height with vh instead of element.clientHeight](kchat/webapp@2edb2d39a1bfe46a47f906d12fbcb479c8c43523) by @boris.trombert ([merge request](kchat/webapp!1017))
+- [Fixed sentry errors for notification actions](kchat/webapp@b570b91835843982337b2dacfe26442cfff32832) by @dimitar.slaev ([merge request](kchat/webapp!1015))
+- [Fixed: No update on member list for mentions.](kchat/webapp@231793cd3398c40d08d023f3e8e34ceb564cf92b) by @andy.lerandy ([merge request](kchat/webapp!1000))
+- [ransform option values into strings, disallowing numeric entries in polls](kchat/webapp@c4c03a0caa16fe529f1f296919d552a4a13f0fc6) by @cyril.gromoff ([merge request](kchat/webapp!946))
+
+### Changed (2 changes)
+
+- [adapt changelog script to not use commits](kchat/webapp@1febe9fc58c1df8a8b39bcabd741df65209fb89b) by @antonbuksa ([merge request](kchat/webapp!1022))
+- [Updated: Date formating for web/desk - Harmonised behavior.](kchat/webapp@e7fd92f6b2fb3f941f01582cbc0d1d89e2deebfe) by @andy.lerandy ([merge request](kchat/webapp!1007))
+
+### Removed (1 change)
+
+- [removed unnecessary websocket logs](kchat/webapp@727d9ae10091dc15b22675c5763d2b52ecd2bdd8) by @dimitar.slaev ([merge request](kchat/webapp!1016))
+
+## 2.9.23 (2025-02-18)
+
+### Fixed (16 changes)
+
+- [Fixed: Emojis zoom out on hover.](kchat/webapp@b2b08d853ee0120bde1db3812a16efc0647035cf) by @andy.lerandy ([merge request](kchat/webapp!1014))
+- [Updated: Reduced number of calls on startup.](kchat/webapp@d7f2221482224033196afa8693710dfb8f1abe83) by @andy.lerandy ([merge request](kchat/webapp!1010))
+- [revert all changes except binding channels synchronously](kchat/webapp@0859c4eee982d9c65dc91c3347404fc63907a8c6) by @dimitar.slaev ([merge request](kchat/webapp!1006))
+- [delete team from desktop list when 404](kchat/webapp@0479cbdb42585e30b3b68dd725dc0a3689afb957) by @boris.trombert ([merge request](kchat/webapp!999))
+- [update desktop cache when reconnecting ws](kchat/webapp@ea324e3751f664e69f85ac98ad7a9b1e09012fb5) by @boris.trombert ([merge request](kchat/webapp!999))
+- [Fix receiving double notifications](kchat/webapp@e07cc70c8b9679d81674fccfcd6f1ce5081137a6) by @dimitar.slaev ([merge request](kchat/webapp!994))
+- [Fixed: Inline Text set as table.](kchat/webapp@6df2a19067e3ad5d2c77107d82884c67e5d76659) by @andy.lerandy ([merge request](kchat/webapp!998))
+- [Fixed: Viewport of kdrive svg for file preview.](kchat/webapp@f76294b09a318b185f9af12ffc31c448950a1887) by @andy.lerandy ([merge request](kchat/webapp!997))
+- [Fixed: Missing translation.](kchat/webapp@e018ca5b90f4a3f905f6aaa096a16f7356388424) by @andy.lerandy ([merge request](kchat/webapp!995))
+- [redirect to default team when 404 on reconnect and loadMe](kchat/webapp@d1bca23b33e79d6df79d18514b1456c99260fd06) by @dev_bot ([merge request](kchat/webapp!990))
+- [Removed: Duplicated important button.](kchat/webapp@a1cb1a202ec81e5232bbe9042d4915137f1ac8a1) by @andy.lerandy ([merge request](kchat/webapp!993))
+- [redirect to default team when 404 on reconnect and loadMe](kchat/webapp@92c518094689cc4a908ba36bcb0bdf696101c502) by @dev_bot ([merge request](kchat/webapp!990))
+- [Fixed: Untranslated button & broken ellipsis.](kchat/webapp@0d06efe8ff2f999589fc0aaaaab19390bc13f671) by @andy.lerandy ([merge request](kchat/webapp!992))
+- [remove old calendar emoji to avoid duplication](kchat/webapp@25e0771950978aabdf6c5f76e9fd288627ccbd00) by @cyril.gromoff ([merge request](kchat/webapp!939))
+- [sound notifications works properly when there are attachement with texts messages](kchat/webapp@1a1fac4599ee74b8c27f81b85141384a1cdb8294) by @cyril.gromoff ([merge request](kchat/webapp!949))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
+### Changed (2 changes)
+
+- [Fix missing messages on reconnect](kchat/webapp@2a0764380fb0216318e26f2556bc99eb727ae649) by @dimitar.slaev ([merge request](kchat/webapp!1009))
+- [improve logs to debug syncro bugs](kchat/webapp@cdee4f5636ac84e19327cbe50bb3907b7e3a8611) by @dimitar.slaev ([merge request](kchat/webapp!1005))
+
+### change (1 change)
+
+- [revert: redirect team when 404](kchat/webapp@45c9412876667a9e0a4ead963af392787f317baf) by @dimitar.slaev ([merge request](kchat/webapp!1004))
+
+## 2.9.23-next.4 (2025-02-18)
+
+### Fixed (1 change)
+
+- [Fixed: Emojis zoom out on hover.](kchat/webapp@b2b08d853ee0120bde1db3812a16efc0647035cf) by @andy.lerandy ([merge request](kchat/webapp!1014))
+
+## 2.9.23-next.3 (2025-02-18)
+
+No changes.
+
+## 2.9.23-next.2 (2025-02-17)
+
+### Fixed (10 changes)
+
+- [Updated: Reduced number of calls on startup.](kchat/webapp@d7f2221482224033196afa8693710dfb8f1abe83) by @andy.lerandy ([merge request](kchat/webapp!1010))
+- [revert all changes except binding channels synchronously](kchat/webapp@0859c4eee982d9c65dc91c3347404fc63907a8c6) by @dimitar.slaev ([merge request](kchat/webapp!1006))
+- [delete team from desktop list when 404](kchat/webapp@0479cbdb42585e30b3b68dd725dc0a3689afb957) by @boris.trombert ([merge request](kchat/webapp!999))
+- [update desktop cache when reconnecting ws](kchat/webapp@ea324e3751f664e69f85ac98ad7a9b1e09012fb5) by @boris.trombert ([merge request](kchat/webapp!999))
+- [Fix receiving double notifications](kchat/webapp@e07cc70c8b9679d81674fccfcd6f1ce5081137a6) by @dimitar.slaev ([merge request](kchat/webapp!994))
+- [Fixed: Inline Text set as table.](kchat/webapp@6df2a19067e3ad5d2c77107d82884c67e5d76659) by @andy.lerandy ([merge request](kchat/webapp!998))
+- [Fixed: Viewport of kdrive svg for file preview.](kchat/webapp@f76294b09a318b185f9af12ffc31c448950a1887) by @andy.lerandy ([merge request](kchat/webapp!997))
+- [redirect to default team when 404 on reconnect and loadMe](kchat/webapp@d1bca23b33e79d6df79d18514b1456c99260fd06) by @dev_bot ([merge request](kchat/webapp!990))
+- [redirect to default team when 404 on reconnect and loadMe](kchat/webapp@92c518094689cc4a908ba36bcb0bdf696101c502) by @dev_bot ([merge request](kchat/webapp!990))
+- [remove old calendar emoji to avoid duplication](kchat/webapp@25e0771950978aabdf6c5f76e9fd288627ccbd00) by @cyril.gromoff ([merge request](kchat/webapp!939))
+
+### Changed (2 changes)
+
+- [Fix missing messages on reconnect](kchat/webapp@2a0764380fb0216318e26f2556bc99eb727ae649) by @dimitar.slaev ([merge request](kchat/webapp!1009))
+- [improve logs to debug syncro bugs](kchat/webapp@cdee4f5636ac84e19327cbe50bb3907b7e3a8611) by @dimitar.slaev ([merge request](kchat/webapp!1005))
+
+### change (1 change)
+
+- [revert: redirect team when 404](kchat/webapp@45c9412876667a9e0a4ead963af392787f317baf) by @dimitar.slaev ([merge request](kchat/webapp!1004))
+
+## 2.9.23-next.1 (2025-01-23)
+
+### Fixed (5 changes)
+
+- [Fixed: Missing translation.](kchat/webapp@e018ca5b90f4a3f905f6aaa096a16f7356388424) by @andy.lerandy ([merge request](kchat/webapp!995))
+- [Removed: Duplicated important button.](kchat/webapp@a1cb1a202ec81e5232bbe9042d4915137f1ac8a1) by @andy.lerandy ([merge request](kchat/webapp!993))
+- [Fixed: Untranslated button & broken ellipsis.](kchat/webapp@0d06efe8ff2f999589fc0aaaaab19390bc13f671) by @andy.lerandy ([merge request](kchat/webapp!992))
+- [sound notifications works properly when there are attachement with texts messages](kchat/webapp@1a1fac4599ee74b8c27f81b85141384a1cdb8294) by @cyril.gromoff ([merge request](kchat/webapp!949))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
+## 2.9.22 (2025-01-22)
+
+### Fixed (20 changes)
+
+- [fix kdrive import button click handler](kchat/webapp@33b03b07172ecd8913ee431ac37da5149e34c1c9) by @antonbuksa ([merge request](kchat/webapp!991))
+- [Fixed: Duplicated keys in component array.](kchat/webapp@da2f277eaddc551b71192739de62c44c2c839167) by @andy.lerandy ([merge request](kchat/webapp!937))
+- [remove multiple instances of the same date separator in saved messages](kchat/webapp@5976ae806db349fb0032d6989bb910660cb85d8f) by @cyril.gromoff ([merge request](kchat/webapp!937))
+- [Fixed: Duplicated keys in component array.](kchat/webapp@54a23db0b2fc84756f7c0268db5e4d3aeb22af16) by @andy.lerandy ([merge request](kchat/webapp!989))
+- [sound notifications works properly when there are attachement with texts messages](kchat/webapp@1a1fac4599ee74b8c27f81b85141384a1cdb8294) by @cyril.gromoff ([merge request](kchat/webapp!949))
+- [Fixed: Incorrect z-index for `new_replies_banner`.](kchat/webapp@0738d1ba82b4b696725821165a6e062ce32ece96) by @andy.lerandy ([merge request](kchat/webapp!988))
+- [Fixed: Missing translation keys.](kchat/webapp@0dba7b72c821304aecae3d8c80446c61d2f42925) by @andy.lerandy ([merge request](kchat/webapp!987))
+- [Hide text input if sending a voice message](kchat/webapp@6645f9e676037ef963c2d2b0ccc620579bf1c69d) by @dimitar.slaev ([merge request](kchat/webapp!983))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+- [disable schedule message for audio type messages](kchat/webapp@342eba6b9bbcade0c2f426bbbe4dc5fc24b8164d) by @boris.trombert ([merge request](kchat/webapp!978))
+- [change reminder to 8am instead of 9am](kchat/webapp@dad23dd8edcbf51e0de859411fc36c56ddada46c) by @boris.trombert ([merge request](kchat/webapp!976))
+- [handling fail requests during data prefetch](kchat/webapp@344a64fbabbec25f9bdb1763e5e032bb12f5b94e) by @boris.trombert ([merge request](kchat/webapp!975))
+- [change socket error traduction](kchat/webapp@439535234ee8531d1c3a1c7a2fe4e85f2f9290f2) by @boris.trombert ([merge request](kchat/webapp!974))
+- [missing traductions when starting a call on a channel](kchat/webapp@27c438d314b28049000df4cf1c73877c92dcecc3) by @boris.trombert ([merge request](kchat/webapp!972))
+- [set schedule message to 8 am](kchat/webapp@98e261a3d0b32a230d753b2a0034bebcb40713e7) by @boris.trombert ([merge request](kchat/webapp!971))
+- [fetch missing posts in channel if we found chunk with next_post_id](kchat/webapp@fce43a0d7288e72e7f8eafc8392109c6c5676710) by @boris.trombert ([merge request](kchat/webapp!970))
+- [remove glitching border in timepicker for reminder](kchat/webapp@582d0266fb7d5acb9b08979abaed64ed1ef3c144) by @boris.trombert ([merge request](kchat/webapp!969))
+- [fix: handle case where channel is undefined for channel header dropdown](kchat/webapp@6bd80ba42c323d68702ad7248848baf62738d2db) by @boris.trombert ([merge request](kchat/webapp!968))
+- [refactor createOption function to preserve original label value for keywords settings](kchat/webapp@6c5838606046c6c94d32005e1050797e30e4d448) by @boris.trombert ([merge request](kchat/webapp!967))
+- [edit post emoji according to cursor position](kchat/webapp@ca75615cdf59c3e4b4495ce5d808ac0a0dcd7ab6) by @boris.trombert ([merge request](kchat/webapp!962))
+
+### Changed (4 changes)
+
+- [Add tooltip to AI actions button](kchat/webapp@ea2e0317664c7af0b9c919f1d7ef357c88e2915c) by @dimitar.slaev ([merge request](kchat/webapp!981))
+- [improve javascript error alert](kchat/webapp@6eb75fdcd1581e192e3308275be9a28aac1d6f6b) by @dimitar.slaev ([merge request](kchat/webapp!980))
+- [comment gh ci until we improve it to not fail](kchat/webapp@ed36f3b24c2391e4bc7fc63a23d225424fcee628) by @antonbuksa
+- [upload menu refactor](kchat/webapp@e43981a7c2435d10a38e402d8676bb498a1b5942) by @antonbuksa ([merge request](kchat/webapp!984))
+
+### Removed (1 change)
+
+- [remove gh ci file](kchat/webapp@3a58562a2c474721b1da77952fab809f55f1b661) by @antonbuksa
+
+### Chore (2 changes)
+
+- [clean eslint errors in announcement bar](kchat/webapp@8d984ab4cd40243f94347258d1634dad747220f0) by @antonbuksa
+- [build(deps): bump ksuite bridge version to 0.3.6](kchat/webapp@39d70ac02fe0724db2ff625e90115f5e1c25ed54) by @charbel.naoum ([merge request](kchat/webapp!986))
+
+### change (1 change)
+
+- [FIx post input width in center mode](kchat/webapp@46bf456fa0f37d23b97e4629bae60fecae750459) by @dimitar.slaev ([merge request](kchat/webapp!985))
+
+## 2.9.22-next.6 (2025-01-22)
+
+### Fixed (5 changes)
+
+- [fix kdrive import button click handler](kchat/webapp@33b03b07172ecd8913ee431ac37da5149e34c1c9) by @antonbuksa ([merge request](kchat/webapp!991))
+- [Fixed: Duplicated keys in component array.](kchat/webapp@da2f277eaddc551b71192739de62c44c2c839167) by @andy.lerandy ([merge request](kchat/webapp!937))
+- [remove multiple instances of the same date separator in saved messages](kchat/webapp@5976ae806db349fb0032d6989bb910660cb85d8f) by @cyril.gromoff ([merge request](kchat/webapp!937))
+- [sound notifications works properly when there are attachement with texts messages](kchat/webapp@1a1fac4599ee74b8c27f81b85141384a1cdb8294) by @cyril.gromoff ([merge request](kchat/webapp!949))
+- [Ensure post actions close when focus is lost](kchat/webapp@2d03851c5b25679e553f79298da1687e4fb3380e) by @dimitar.slaev ([merge request](kchat/webapp!982))
+
+## 2.9.22-next.5 (2025-01-21)
+
+### Fixed (3 changes)
+
+- [Fixed: Duplicated keys in component array.](kchat/webapp@54a23db0b2fc84756f7c0268db5e4d3aeb22af16) by @andy.lerandy ([merge request](kchat/webapp!989))
+- [Fixed: Incorrect z-index for `new_replies_banner`.](kchat/webapp@0738d1ba82b4b696725821165a6e062ce32ece96) by @andy.lerandy ([merge request](kchat/webapp!988))
+- [Fixed: Missing translation keys.](kchat/webapp@0dba7b72c821304aecae3d8c80446c61d2f42925) by @andy.lerandy ([merge request](kchat/webapp!987))
+
+## 2.9.22-next.4 (2025-01-14)
+
+### Fixed (1 change)
+
+- [Hide text input if sending a voice message](kchat/webapp@6645f9e676037ef963c2d2b0ccc620579bf1c69d) by @dimitar.slaev ([merge request](kchat/webapp!983))
+
+### Changed (1 change)
+
+- [upload menu refactor](kchat/webapp@e43981a7c2435d10a38e402d8676bb498a1b5942) by @antonbuksa ([merge request](kchat/webapp!984))
+
+### Chore (2 changes)
+
+- [clean eslint errors in announcement bar](kchat/webapp@8d984ab4cd40243f94347258d1634dad747220f0) by @antonbuksa
+- [build(deps): bump ksuite bridge version to 0.3.6](kchat/webapp@39d70ac02fe0724db2ff625e90115f5e1c25ed54) by @charbel.naoum ([merge request](kchat/webapp!986))
+
+### change (1 change)
+
+- [FIx post input width in center mode](kchat/webapp@46bf456fa0f37d23b97e4629bae60fecae750459) by @dimitar.slaev ([merge request](kchat/webapp!985))
+
+## 2.9.22-next.3 (2025-01-08)
+
+### Fixed (4 changes)
+
+- [disable schedule message for audio type messages](kchat/webapp@342eba6b9bbcade0c2f426bbbe4dc5fc24b8164d) by @boris.trombert ([merge request](kchat/webapp!978))
+- [change reminder to 8am instead of 9am](kchat/webapp@dad23dd8edcbf51e0de859411fc36c56ddada46c) by @boris.trombert ([merge request](kchat/webapp!976))
+- [handling fail requests during data prefetch](kchat/webapp@344a64fbabbec25f9bdb1763e5e032bb12f5b94e) by @boris.trombert ([merge request](kchat/webapp!975))
+- [change socket error traduction](kchat/webapp@439535234ee8531d1c3a1c7a2fe4e85f2f9290f2) by @boris.trombert ([merge request](kchat/webapp!974))
+
+### Changed (3 changes)
+
+- [Add tooltip to AI actions button](kchat/webapp@ea2e0317664c7af0b9c919f1d7ef357c88e2915c) by @dimitar.slaev ([merge request](kchat/webapp!981))
+- [improve javascript error alert](kchat/webapp@6eb75fdcd1581e192e3308275be9a28aac1d6f6b) by @dimitar.slaev ([merge request](kchat/webapp!980))
+- [comment gh ci until we improve it to not fail](kchat/webapp@ed36f3b24c2391e4bc7fc63a23d225424fcee628) by @antonbuksa
+
+### Removed (1 change)
+
+- [remove gh ci file](kchat/webapp@3a58562a2c474721b1da77952fab809f55f1b661) by @antonbuksa
+
+## 2.9.22-next.2 (2024-11-29)
+
+### Fixed (5 changes)
+
+- [missing traductions when starting a call on a channel](kchat/webapp@27c438d314b28049000df4cf1c73877c92dcecc3) by @boris.trombert ([merge request](kchat/webapp!972))
+- [set schedule message to 8 am](kchat/webapp@98e261a3d0b32a230d753b2a0034bebcb40713e7) by @boris.trombert ([merge request](kchat/webapp!971))
+- [fetch missing posts in channel if we found chunk with next_post_id](kchat/webapp@fce43a0d7288e72e7f8eafc8392109c6c5676710) by @boris.trombert ([merge request](kchat/webapp!970))
+- [remove glitching border in timepicker for reminder](kchat/webapp@582d0266fb7d5acb9b08979abaed64ed1ef3c144) by @boris.trombert ([merge request](kchat/webapp!969))
+- [edit post emoji according to cursor position](kchat/webapp@ca75615cdf59c3e4b4495ce5d808ac0a0dcd7ab6) by @boris.trombert ([merge request](kchat/webapp!962))
+
+## 2.9.22-next.1 (2024-11-25)
+
+### Fixed (2 changes)
+
+- [fix: handle case where channel is undefined for channel header dropdown](kchat/webapp@6bd80ba42c323d68702ad7248848baf62738d2db) by @boris.trombert ([merge request](kchat/webapp!968))
+- [refactor createOption function to preserve original label value for keywords settings](kchat/webapp@6c5838606046c6c94d32005e1050797e30e4d448) by @boris.trombert ([merge request](kchat/webapp!967))
+
+## 2.9.21-next.2 (2024-11-19)
+
+### Changed (2 changes)
+
+- [ci: invalidate nginx cache on deploy](kchat/webapp@8d7a9977977236512f8e620be3e003ffc6c1b855) by @leopold.jacquot ([merge request](kchat/webapp!966))
+- [delay ws channel resubs on reconnect until post prefetch finished](kchat/webapp@4eabf5ba31a899be32ebd65bd4c8467d1d0ef979) by @antonbuksa ([merge request](kchat/webapp!965))
+
+### Removed (1 change)
+
+- [hide broken help link](kchat/webapp@b5b69c065f5cf71b9b842bb88ea2413e6111262e) by @antonbuksa ([merge request](kchat/webapp!963))
+
+## 2.9.21-next.1 (2024-11-07)
+
+### Fixed (1 change)
+
+- [add header to channel preview](kchat/webapp@b8713762920add4501d4a55465bdb79aab71d734) by  ([merge request](kchat/webapp!844))
+
+### Changed (1 change)
+
+- [implementation sync between chan preview header & regular chan header](kchat/webapp@ca8c19d35f731f5365a94544461c0a1867155a71) by @antonbuksa ([merge request](kchat/webapp!844))
+
+### Chore (1 change)
+
+- [move ksuite bridge to redux package for tests](kchat/webapp@f1898f084886a50c299b99ad30fc66343f90ab82) by @antonbuksa ([merge request](kchat/webapp!960))
+
+## 2.9.20-next.5 (2024-11-01)
+
+### Fixed (1 change)
+
+- [fix: use transform: scale property instead of zoom for browsers compatibility](kchat/webapp@d22fdce308fb36d81ac88e488d5bbe53ef8a6563) by @boris.trombert ([merge request](kchat/webapp!961))
+
+## 2.9.20-next.4 (2024-10-29)
+
+### Added (1 change)
+
+- [render voice messages as a postType using new transcription field in post meta](kchat/webapp@1a2d1a73cef8e057a4442ddf1648f45d9e984118) by @antonbuksa ([merge request](kchat/webapp!956))
+
+### Fixed (2 changes)
+
+- [fix: hide menu for transcript when empty and add close button](kchat/webapp@2248b60f8d57e8617161e851515813110e84e8d7) by @boris.trombert ([merge request](kchat/webapp!959))
+- [redirect to kchat tab directly in ksuite redirect](kchat/webapp@78d809a35671b3f43905bb8529f400cdb8bf76ed) by @antonbuksa ([merge request](kchat/webapp!958))
+
+## 2.9.20-next.3 (2024-10-24)
+
+### Fixed (1 change)
+
+- [fix double redirect in ksuite iframe](kchat/webapp@b0bd3c99d10b19b9f967d9d0f3b1921be0005206) by @antonbuksa
+
+### Changed (1 change)
+
+- [do not specify sample rate to audio context if firefox on linux](kchat/webapp@738c5a457b4d6d430ffef50cbca4e1d98ae00e10) by @antonbuksa ([merge request](kchat/webapp!957))
+
+## 2.9.20-next.2 (2024-10-24)
+
+### Added (1 change)
+
+- [web only redirect to ksuite from base url](kchat/webapp@144f635a2121be1ea701bab0eea86f0b6df490a7) by @antonbuksa ([merge request](kchat/webapp!954))
+
+### Fixed (4 changes)
+
+- [fix: wrap emoji name in status tooltip](kchat/webapp@e21d44925a6b140e89278f94bb3b5823b6258265) by @boris.trombert ([merge request](kchat/webapp!955))
+- [fix base url split for ksuite redirect](kchat/webapp@7cbc515583dc126d7aec79fd75e6526d1205dd0b) by @antonbuksa
+- [fix french traduction for tooltip emoji reaction](kchat/webapp@a33ebf89764bdeb71b7b3a9e577cf85d6fee5c65) by @boris.trombert ([merge request](kchat/webapp!953))
+- [prevent resetting lastDisconnectAt if it already exists to avoid user fetch bug on WS reconnect](kchat/webapp@d5a721af7eed29d56f5e473dd49b742464cc1a5c) by @boris.trombert ([merge request](kchat/webapp!890))
+
+### Changed (2 changes)
+
+- [do not specify sample rate to audio context if firefox on linux](kchat/webapp@738c5a457b4d6d430ffef50cbca4e1d98ae00e10) by @antonbuksa ([merge request](kchat/webapp!957))
+- [add early return in ksuite redirect](kchat/webapp@27d93a330898e05a9245694a2287a240a80c5a13) by @antonbuksa
+
+## 2.9.20-next.1 (2024-10-22)
+
+### Fixed (2 changes)
+
+- [change status emoji size when hover on status](kchat/webapp@d104f450bbd6e245da8e931eba8125d05849b838) by @boris.trombert ([merge request](kchat/webapp!952))
+- [show transcript by default for vocal messages](kchat/webapp@68c0a7a3c9b75d15f25aecfcc10c97412aeca42c) by @boris.trombert ([merge request](kchat/webapp!950))
+
+## 2.9.19 (2024-10-07)
+
+### Added (1 change)
+
+- [custom keywords notifications in params for dekstop](kchat/webapp@7d66b45e74264275f797a21d8d02c1de49fcfceb) by @boris.trombert ([merge request](kchat/webapp!930))
+
+### Fixed (7 changes)
+
+- [pass id of draft from props instead of draftFromChannel const](kchat/webapp@f1690a1f05445e039913d455a1e2f82099c86e8a) by @boris.trombert ([merge request](kchat/webapp!936))
+- [redirect in general only if unauthorized actions in ws reconnect](kchat/webapp@17c6026729301336771d5aed1ac3d813d1e97157) by @boris.trombert ([merge request](kchat/webapp!935))
+- [fix: enable preview for all image types without initial or mini preview](kchat/webapp@5df701df3fc1fd02898a375e5f1cbe3af7c52a2c) by @cyril.gromoff ([merge request](kchat/webapp!911))
+- [correct spelling mistakes](kchat/webapp@956f47b262a9537e3df85636f507bce07aa44293) by @cyril.gromoff ([merge request](kchat/webapp!934))
+- [last admin and user of a private channel can only archive it](kchat/webapp@597cece29bd5f190d96cd8539b1028afe373f9d7) by @boris.trombert ([merge request](kchat/webapp!933))
+- [Fix: change dropdown status text when there is not expire date](kchat/webapp@0d7934cb3c158e077f1b229e0fbb6af786835647) by @cyril.gromoff ([merge request](kchat/webapp!928))
+- [add function to get the last numbered line from text for numbered list](kchat/webapp@7f1b909cfd975a6db078a10a2a5bc8efea5f13e2) by @boris.trombert ([merge request](kchat/webapp!896))
+
+### Changed (1 change)
+
+- [restore custom pagination in get all groups call](kchat/webapp@6d3a87e27221587656aa264dc5f530905d8b1894) by @antonbuksa ([merge request](kchat/webapp!938))
+
+## 2.9.18-next.3 (2024-10-03)
+
+### Added (1 change)
+
+- [custom keywords notifications in params for dekstop](kchat/webapp@7d66b45e74264275f797a21d8d02c1de49fcfceb) by @boris.trombert ([merge request](kchat/webapp!930))
+
+### Fixed (7 changes)
+
+- [pass id of draft from props instead of draftFromChannel const](kchat/webapp@f1690a1f05445e039913d455a1e2f82099c86e8a) by @boris.trombert ([merge request](kchat/webapp!936))
+- [redirect in general only if unauthorized actions in ws reconnect](kchat/webapp@17c6026729301336771d5aed1ac3d813d1e97157) by @boris.trombert ([merge request](kchat/webapp!935))
+- [fix: enable preview for all image types without initial or mini preview](kchat/webapp@5df701df3fc1fd02898a375e5f1cbe3af7c52a2c) by @cyril.gromoff ([merge request](kchat/webapp!911))
+- [correct spelling mistakes](kchat/webapp@956f47b262a9537e3df85636f507bce07aa44293) by @cyril.gromoff ([merge request](kchat/webapp!934))
+- [last admin and user of a private channel can only archive it](kchat/webapp@597cece29bd5f190d96cd8539b1028afe373f9d7) by @boris.trombert ([merge request](kchat/webapp!933))
+- [Fix: change dropdown status text when there is not expire date](kchat/webapp@0d7934cb3c158e077f1b229e0fbb6af786835647) by @cyril.gromoff ([merge request](kchat/webapp!928))
+- [add function to get the last numbered line from text for numbered list](kchat/webapp@7f1b909cfd975a6db078a10a2a5bc8efea5f13e2) by @boris.trombert ([merge request](kchat/webapp!896))
+
+### Changed (1 change)
+
+- [restore custom pagination in get all groups call](kchat/webapp@6d3a87e27221587656aa264dc5f530905d8b1894) by @antonbuksa ([merge request](kchat/webapp!938))
 
 ## 2.9.18-next.2 (2024-09-23)
 

@@ -43,6 +43,7 @@ type Actions = {
     getChannels: (teamId: string, page: number, perPage: number) => Promise<ActionResult<Channel[]>>;
     getArchivedChannels: (teamId: string, page: number, channelsPerPage: number) => Promise<ActionResult<Channel[]>>;
     joinChannel: (currentUserId: string, teamId: string, channelId: string) => Promise<ActionResult>;
+    previewChannel: (teamId: string, channelId: string) => Promise<ActionResult>;
     searchAllChannels: (term: string, opts?: ChannelSearchOpts) => Promise<ActionResult<Channel[] | ChannelsWithTotalCount>>;
     openModal: <P>(modalData: ModalData<P>) => void;
     closeModal: (modalId: string) => void;
@@ -177,6 +178,8 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
 
         if (!this.isMemberOfChannel(channel.id) && !preview) {
             result = await actions.joinChannel(currentUserId, teamId, channel.id);
+        } else { // ik: preview channel feature case
+            result = await actions.previewChannel(teamId, channel.id);
         }
 
         if (result?.error) {

@@ -183,9 +183,9 @@ export type GroupSearchParams = GetGroupsParams & {
 }
 
 export type GroupMember = {
-    group_id: string;
     user_id: string;
-    create_at: number;
+    group_id: string;
+    created_at: number;
     deleted_at: number;
 }
 

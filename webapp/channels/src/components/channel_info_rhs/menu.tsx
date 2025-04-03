@@ -102,6 +102,7 @@ interface MenuProps {
     channel: Channel;
     channelStats: ChannelStats;
     isArchived: boolean;
+    isPreview: boolean;
 
     className?: string;
 
@@ -122,11 +123,12 @@ export default function Menu(props: MenuProps) {
         isArchived,
         className,
         actions,
+        isPreview,
     } = props;
 
     const [loadingStats, setLoadingStats] = useState(true);
 
-    const showNotificationPreferences = channel.type !== Constants.DM_CHANNEL && !isArchived;
+    const showNotificationPreferences = channel.type !== Constants.DM_CHANNEL && !isArchived && !isPreview;
     const showMembers = channel.type !== Constants.DM_CHANNEL;
     const fileCount = channelStats?.files_count >= 0 ? channelStats?.files_count : 0;
 

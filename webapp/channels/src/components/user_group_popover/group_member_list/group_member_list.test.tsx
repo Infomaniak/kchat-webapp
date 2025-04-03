@@ -109,7 +109,9 @@ describe('component/user_group_popover/group_member_list', () => {
         members,
         teamUrl: 'team',
         actions: {
+            getGroup: jest.fn().mockImplementation(() => Promise.resolve()),
             getUsersInGroup: jest.fn().mockImplementation(() => Promise.resolve()),
+            resetUsersInGroup: jest.fn().mockImplementation(() => Promise.resolve()),
             openDirectChannelToUserId: jest.fn().mockImplementation(() => Promise.resolve()),
             closeRightHandSide: jest.fn(),
         },

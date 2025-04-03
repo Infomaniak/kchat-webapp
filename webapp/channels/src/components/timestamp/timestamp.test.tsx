@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import defaultMessages from 'i18n/en.json';
 import moment from 'moment';
 import React from 'react';
 import {createIntl} from 'react-intl';
-
-import defaultMessages from 'i18n/en.json';
 import {fakeDate} from 'tests/helpers/date';
 import {shallowWithIntl, mountWithIntl} from 'tests/helpers/intl-test-helper';
 
@@ -158,7 +157,7 @@ describe('components/timestamp/Timestamp', () => {
                 useTime={false}
             />,
         );
-        expect(wrapper.text()).toEqual(moment.utc(date).format('dddd'));
+        expect(wrapper.text()).toEqual(moment.utc(date).format('dddd, MMMM DD'));
     });
 
     test('should render 6 days ago as weekday', () => {
@@ -170,7 +169,7 @@ describe('components/timestamp/Timestamp', () => {
             />,
         );
 
-        expect(wrapper.text()).toEqual(moment(date).format('dddd'));
+        expect(wrapper.text()).toEqual(moment(date).format('dddd, MMMM DD'));
     });
 
     test('should render 2 days ago as weekday in supported timezone', () => {
@@ -183,7 +182,7 @@ describe('components/timestamp/Timestamp', () => {
             />,
         );
 
-        expect(wrapper.text()).toEqual(moment.utc(date).tz('Asia/Manila').format('dddd'));
+        expect(wrapper.text()).toEqual(moment.utc(date).tz('Asia/Manila').format('dddd, MMMM DD'));
     });
 
     test('should render date in current year', () => {
@@ -195,7 +194,7 @@ describe('components/timestamp/Timestamp', () => {
             />,
         );
 
-        expect(wrapper.text()).toEqual(moment.utc(date).format('MMMM DD'));
+        expect(wrapper.text()).toEqual(moment.utc(date).format('dddd, MMMM DD'));
     });
 
     test('should render date from previous year', () => {

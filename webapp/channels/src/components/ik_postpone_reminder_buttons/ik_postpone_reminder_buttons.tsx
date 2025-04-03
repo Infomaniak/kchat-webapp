@@ -202,12 +202,12 @@ const IkPostponeReminderButtons = (props: Props) => {
     });
 
     return (
-        <div className='PostponeButtonsWrapper'>
+        <div className='system-bot-message__buttons'>
             <Menu.Container
                 menuButton={{
                     id: `_button_${props.post.id}`,
                     dateTestId: `PostDotMenu-Button-${props.post.id}`,
-                    class: 'PostponeButtons__apply',
+                    class: 'btn btn-sm btn-primary',
                     children:
     <FormattedMessage
         id='postpone.post_reminder.menu'
@@ -228,7 +228,7 @@ const IkPostponeReminderButtons = (props: Props) => {
                 {postReminderSubMenuItems}
             </Menu.Container>
             <button
-                className='PostponeButtons__cancel'
+                className='btn btn-sm btn-tertiary'
                 onClick={handleDeleteMenuItemActivated}
             >
                 <FormattedMessage

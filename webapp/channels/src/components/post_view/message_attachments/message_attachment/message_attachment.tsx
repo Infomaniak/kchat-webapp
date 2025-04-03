@@ -59,6 +59,7 @@ type Props = {
     actions: {
         doPostActionWithCookie: (postId: string, actionId: string, actionCookie: string, selectedOption?: string) => Promise<ActionResult>;
         openModal: <P>(modalData: ModalData<P>) => void;
+        fetchMetadataIfPostIsPoll: (postId: string) => void;
     };
 
     currentRelativeTeamUrl: string;
@@ -91,10 +92,15 @@ export default class MessageAttachment extends React.PureComponent<Props, State>
 
     componentDidMount() {
         this.mounted = true;
+        this.fetchPollMetadata();
     }
 
     componentWillUnmount() {
         this.mounted = false;
+    }
+
+    fetchPollMetadata() {
+        this.props.actions.fetchMetadataIfPostIsPoll(this.props.postId);
     }
 
     handleHeightReceivedForThumbUrl = ({height}: {height: number}) => {

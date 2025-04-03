@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classnames from 'classnames';
 import React, {memo, useCallback} from 'react';
 import styled, {css} from 'styled-components';
 
@@ -64,7 +65,7 @@ const ActionButton = ({
             disabled={disabled}
             key={action.id}
             onClick={handleActionClick}
-            className='btn btn-sm'
+            className={classnames('btn', 'btn-sm', 'btn-outline', action.isVoted && 'voted')}
             hexColor={hexColor}
         >
             <LoadingWrapper
@@ -81,6 +82,8 @@ const ActionButton = ({
 };
 
 type ActionBtnProps = {hexColor: string | null | undefined};
+
+//IK: The 'poll' scenario is handled uniquely, thus it doesn't require a hexColor. I've differentiated between the two styling cases below.
 const ActionBtn = styled.button<ActionBtnProps>`
     ${({hexColor}) => hexColor && css`
         background-color: ${changeOpacity(hexColor, 0.08)} !important;
@@ -90,6 +93,16 @@ const ActionBtn = styled.button<ActionBtnProps>`
         }
         &:active {
             background-color: ${changeOpacity(hexColor, 0.16)} !important;
+        }
+    `}
+    ${({hexColor}) => !hexColor && css`
+        &.voted {
+            border-color: var(--button-bg) !important;
+            color: var(--button-bg) !important;
+        }
+        &:hover {
+            color: var(--button-bg) !important;
+            border-color: var(--button-bg) !important;
         }
     `}
 `;

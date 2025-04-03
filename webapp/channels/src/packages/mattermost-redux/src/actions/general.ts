@@ -32,6 +32,9 @@ export function getClientConfig(): ActionFuncAsync<ClientConfig> {
         const actions = [{type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data}, {type}];
         dispatch(batchActions(actions));
 
+        // IK: We need to reset IsNewVersionCanaryOnly when it's an API call
+        dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data: {...data, IsNewVersionCanaryOnly: undefined}});
+
         return {data};
     };
 }

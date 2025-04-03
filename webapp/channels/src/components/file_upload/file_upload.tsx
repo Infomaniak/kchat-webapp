@@ -712,32 +712,13 @@ export class FileUpload extends PureComponent<Props, State> {
                         key={item.pluginId + '_fileuploadpluginmenuitem'}
                         onClick={() => {
                             if (item.action) {
-                                if (item.customArgs) {
-                                    const args: Array<keyof FileUpload | keyof Props> = [];
-
-                                    item.customArgs.forEach((arg) => {
-                                        if (arg in this || arg in this.props) {
-                                            // @ts-expect-error ts can't infer this properly
-                                            args.push(this[arg] || this.props[arg]);
-                                        }
-                                    });
-
-                                    item.action(...args);
-                                } else {
-                                    item.action(this.checkPluginHooksAndUploadFiles);
-                                }
+                                item.action(this.checkPluginHooksAndUploadFiles);
                             }
                             this.setState({menuOpen: false});
                         }}
                     >
-                        <a
-                            href='#'
-                            style={{display: 'flex', alignItems: 'center'}}
-                        >
-                            <span
-                                className='mr-2'
-                                style={{marginLeft: -3, height: 20}}
-                            >
+                        <a href='#'>
+                            <span className='mr-2'>
                                 {item.icon}
                             </span>
                             {item.text}
@@ -757,7 +738,6 @@ export class FileUpload extends PureComponent<Props, State> {
                         onClick={this.handleLocalFileUploaded}
                         multiple={multiple}
                         accept={accept}
-                        disabled={this.props.disabled}
                     />
                     <MenuWrapper>
                         <WithTooltip
@@ -773,7 +753,6 @@ export class FileUpload extends PureComponent<Props, State> {
                                 type='button'
                                 id='fileUploadButton'
                                 aria-label={buttonAriaLabel}
-                                disabled={this.props.disabled}
                                 className='style--none AdvancedTextEditor__action-button'
                             >
                                 <PaperclipIcon
@@ -795,7 +774,6 @@ export class FileUpload extends PureComponent<Props, State> {
                                     href='#'
                                     onClick={this.simulateInputClick}
                                     onTouchEnd={this.simulateInputClick}
-                                    disabled={this.props.disabled}
                                 >
                                     <span className='mr-2'>
                                         <i className='fa fa-laptop'/>

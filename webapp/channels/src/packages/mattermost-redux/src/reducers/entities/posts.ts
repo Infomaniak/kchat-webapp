@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {TopThread} from '@mattermost/types/insights';
+import type {MessageAttachment} from '@mattermost/types/message_attachments';
 import type {
     OpenGraphMetadata,
     Post,
@@ -241,6 +242,59 @@ export function handlePosts(state: IDMappedObjects<Post> = {}, action: MMReduxAc
                 ...state[postId],
                 is_pinned: isPinned,
                 last_update_at: updateAt,
+            },
+        };
+    }
+
+    case PostTypes.IK_RECEIVED_POLL_METADATA: {
+        const {postId, metadata} = action.data;
+        if (!postId || !metadata || !state[postId]) {
+            return state;
+        }
+
+        let attachments: MessageAttachment[] = state[postId].props.attachments;
+        if (attachments.length === 0) {
+            return state;
+        }
+
+        // Find the correct attachment by poll_id. Although the poll typically has only one attachment,
+        // this code ensures that the correct one is identified even if multiple attachments exist (technically possible).
+        const correspondingAttachmentIndex = attachments.findIndex((att) =>
+            att?.actions?.[0]?.integration?.context?.['poll-id'] === metadata.poll_id,
+        );
+
+        if (correspondingAttachmentIndex === -1) {
+            return state;
+        }
+
+        const correspondingAttachment = attachments[correspondingAttachmentIndex];
+
+        // Function to detect if an action has been voted on.
+        // It checks if the action name is included in the voted answers.
+        // If `setting_progress` is true, it removes the trailing text (votes count) which is embedded in the action name.
+        const detectVote = (actionName?: string) => metadata.voted_answers?.includes(
+            metadata.setting_progress ? actionName?.replace(/\s\(\d+\)/g, '') : actionName);
+
+        // This adds an `isVoted` property to each action, indicating whether it has been voted on.
+        const actionsWithVotes = correspondingAttachment.actions?.map((action) => ({
+            ...action,
+            isVoted: detectVote(action.name),
+        }));
+
+        attachments = [
+            ...attachments.slice(0, correspondingAttachmentIndex),
+            {...correspondingAttachment, actions: actionsWithVotes},
+            ...attachments.slice(correspondingAttachmentIndex + 1),
+        ];
+
+        return {
+            ...state,
+            [postId]: {
+                ...state[postId],
+                props: {
+                    ...state[postId].props,
+                    attachments,
+                },
             },
         };
     }

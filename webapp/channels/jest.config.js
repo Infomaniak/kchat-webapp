@@ -9,6 +9,7 @@ const config = {
     clearMocks: true,
     globals: {
         GIT_RELEASE: '1.0.0',
+        COMMIT_HASH: '0123456789abcdefghij1234567890abcdefghij',
     },
     collectCoverageFrom: [
         'src/actions/**/*.{js,jsx,ts,tsx}',

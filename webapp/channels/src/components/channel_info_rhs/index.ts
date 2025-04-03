@@ -8,7 +8,7 @@ import type {AnyAction, Dispatch} from 'redux';
 import {unfavoriteChannel, favoriteChannel, getChannelStats} from 'mattermost-redux/actions/channels';
 import {Permissions} from 'mattermost-redux/constants';
 import {getCurrentChannel, isCurrentChannelFavorite, isCurrentChannelMuted, isCurrentChannelArchived, getCurrentChannelStats} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentUser, isCurrentChannelInPreview} from 'mattermost-redux/selectors/entities/common';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getProfilesInCurrentChannel, getStatusForUserId, getUser} from 'mattermost-redux/selectors/entities/users';
@@ -41,6 +41,7 @@ function mapStateToProps(state: GlobalState) {
     const currentTeam = getCurrentTeam(state);
     const channelStats = getCurrentChannelStats(state) || EMPTY_CHANNEL_STATS;
     const isArchived = isCurrentChannelArchived(state);
+    const isPreview = isCurrentChannelInPreview(state);
     const isFavorite = isCurrentChannelFavorite(state);
     const isMuted = isCurrentChannelMuted(state);
     const isInvitingPeople = isModalOpen(state, ModalIdentifiers.CHANNEL_INVITE) || isModalOpen(state, ModalIdentifiers.CREATE_DM_CHANNEL);
@@ -57,6 +58,7 @@ function mapStateToProps(state: GlobalState) {
         currentUser,
         currentTeam,
         isArchived,
+        isPreview,
         isFavorite,
         isMuted,
         isInvitingPeople,

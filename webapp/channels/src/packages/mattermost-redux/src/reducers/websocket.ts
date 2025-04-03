@@ -8,6 +8,7 @@ function getInitialState() {
     return {
         connected: false,
         lastConnectAt: 0,
+        firstDisconnect: 0,
         lastDisconnectAt: 0,
         connectionId: '',
         serverHostname: '',
@@ -27,10 +28,13 @@ export default function reducer(state = getInitialState(), action: MMReduxAction
             connected: false,
             lastDisconnectAt: action.timestamp,
             serverHostname: '',
+            firstDisconnect: state.lastDisconnectAt || action.timestamp,
         };
     }
 
     if (action.type === UserTypes.LOGOUT_SUCCESS) {
+        // eslint-disable-next-line no-console
+        console.log('RESET WS STATE');
         return getInitialState();
     }
 

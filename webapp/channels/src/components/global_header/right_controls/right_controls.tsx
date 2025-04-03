@@ -184,16 +184,29 @@ const RightControls = (): JSX.Element => {
                 <SettingsButton/>
             </ButtonWrapper>
             {!isDesktopApp && (
-                <div style={{position: 'relative'}}>
-                    {/* @ts-expect-error old ignore */}
-                    <module-products-component
-                        position='right'
-                        style={{height: '100%'}}
-                    >
-                        {trigger}
-                        {/* @ts-expect-error old ignore */}
-                    </module-products-component>
-                </div>
+                <WithTooltip
+                    id='rightControl__tooltip'
+                    title={
+                        <FormattedMessage
+                            id='global_header.ikProduct'
+                            defaultMessage='Your products'
+                        />
+                    }
+                    placement='bottom'
+                >
+                    <div style={{position: 'relative'}}>
+                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                        {/* @ts-ignore */}
+                        <module-products-component
+                            position='right'
+                            style={{height: '100%'}}
+                        >
+                            {trigger}
+                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                            {/* @ts-ignore */}
+                        </module-products-component>
+                    </div>
+                </WithTooltip>
             )}
             <UserAccountMenu/>
             <FlagNext/>

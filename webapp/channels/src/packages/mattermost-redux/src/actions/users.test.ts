@@ -13,6 +13,8 @@ import {Client4} from 'mattermost-redux/client';
 import {General, RequestStatus} from 'mattermost-redux/constants';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
+import mockStore from 'tests/test_store';
+
 import TestHelper from '../../test/test_helper';
 import configureStore from '../../test/test_store';
 
@@ -33,7 +35,15 @@ describe('Actions.Users', () => {
                         CollapsedThreads: 'always_on',
                     },
                 },
+
+                // Infomaniak specific mock
+                ksuiteBridge: {
+                    bridge: {
+                        isConnected: false,
+                    },
+                },
             },
+
         });
 
         Client4.setUserId('');
@@ -1720,6 +1730,7 @@ describe('Actions.Users', () => {
     describe('checkForModifiedUsers', () => {
         test('should request users by IDs that have changed since the last websocket disconnect', async () => {
             const lastDisconnectAt = 1500;
+            const currentChannelId = '1';
 
             const user1 = {id: 'user1', update_at: 1000};
             const user2 = {id: 'user2', update_at: 1000};
@@ -1729,7 +1740,7 @@ describe('Actions.Users', () => {
                 query({since: lastDisconnectAt}).
                 reply(200, [{...user2, update_at: 2000}]);
 
-            store = configureStore({
+            store = mockStore({
                 entities: {
                     general: {
                         serverVersion: '5.14.0',
@@ -1740,13 +1751,35 @@ describe('Actions.Users', () => {
                             user2,
                         },
                     },
+                    channels: {
+                        currentChannelId,
+                    },
                 },
                 websocket: {
                     lastDisconnectAt,
                 },
+                views: {
+                    channel: {
+                        lastGetPosts: {
+                            [currentChannelId]: 1740473453438,
+                        },
+                    },
+                },
             });
 
-            await store.dispatch(Actions.checkForModifiedUsers());
+            await store.dispatch(Actions.checkForModifiedUsers(currentChannelId));
+            store = mockStore({
+                ...store.getState(),
+                entities: {
+                    ...store.getState().entities,
+                    users: {
+                        profiles: {
+                            ...store.getState().entities.users.profiles,
+                            user2: {id: 'user2', update_at: 2000},
+                        },
+                    },
+                },
+            });
 
             const profiles = store.getState().entities.users.profiles;
             expect(profiles.user1).toBe(user1);
@@ -1756,6 +1789,8 @@ describe('Actions.Users', () => {
 
         test('should do nothing on older servers', async () => {
             const lastDisconnectAt = 1500;
+            const currentChannelId = '1';
+
             const originalState = deepFreeze({
                 entities: {
                     general: {
@@ -1764,15 +1799,24 @@ describe('Actions.Users', () => {
                     users: {
                         profiles: {},
                     },
+                    channels: {
+                        currentChannelId,
+                    },
+                },
+                views: {
+                    channel: {
+                        lastGetPosts: {
+                            [currentChannelId]: 1740473453438,
+                        },
+                    },
                 },
                 websocket: {
                     lastDisconnectAt,
                 },
             });
 
-            store = configureStore(originalState);
-
-            await store.dispatch(Actions.checkForModifiedUsers());
+            store = mockStore(originalState);
+            await store.dispatch(Actions.checkForModifiedUsers(currentChannelId));
 
             const profiles = store.getState().entities.users.profiles;
             expect(profiles).toBe(originalState.entities.users.profiles);

@@ -18,6 +18,7 @@ import {getRoles} from 'mattermost-redux/selectors/entities/roles_helpers';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 
+import {startOrJoinCallInChannelV2} from 'actions/calls';
 import {goToLastViewedChannel} from 'actions/views/channel';
 
 import {getIsChannelBookmarksEnabled} from 'components/channel_bookmarks/utils';
@@ -62,6 +63,7 @@ function mapStateToProps(state: GlobalState) {
 
 const mapDispatchToProps = ({
     goToLastViewedChannel,
+    startCall: startOrJoinCallInChannelV2,
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

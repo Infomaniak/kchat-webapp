@@ -28,6 +28,14 @@ export const getMyCurrentChannelMembership: (a: GlobalState) => ChannelMembershi
     },
 );
 
+export const isCurrentChannelInPreview: (a: GlobalState) => boolean = createSelector(
+    'isCurrentChannelPreview',
+    getMyCurrentChannelMembership,
+    (channelMembership) => {
+        return !channelMembership;
+    },
+);
+
 export function getMembersInChannel(state: GlobalState, channelId: string): Record<string, ChannelMembership> {
     return state.entities.channels?.membersInChannel?.[channelId] || {};
 }

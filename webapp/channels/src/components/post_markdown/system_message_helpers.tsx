@@ -19,6 +19,7 @@ import CombinedSystemMessage from 'components/post_view/combined_system_message'
 import GMConversionMessage from 'components/post_view/gm_conversion_message/gm_conversion_message';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member';
 import PostNotifyChannelMember from 'components/post_view/post_notify_channel_member/post_notify_channel_member';
+import VoiceMessageAttachmentPlayer from 'components/voice/post_type';
 
 import {isChannelNamesMap, type TextFormattingOptions} from 'utils/text_formatting';
 
@@ -372,6 +373,12 @@ function renderCallNotificationMessage(post: Post): ReactNode {
     );
 }
 
+function renderVoiceMessage(post: Post): ReactNode {
+    return (
+        <VoiceMessageAttachmentPlayer post={post}/>
+    );
+}
+
 function renderMeMessage(post: Post): ReactNode {
     // Trim off the leading and trailing asterisk added to /me messages
     const message = post.message.replace(/^\*|\*$/g, '');
@@ -412,7 +419,9 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CHANNEL_UNARCHIVED]: renderChannelUnarchivedMessage,
     [Posts.POST_TYPES.ME]: renderMeMessage,
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
+    [Posts.POST_TYPES.VOICE]: renderVoiceMessage,
     [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
+    [Posts.POST_TYPES.SYSTEM_WELCOME_MESSAGE]: () => <></>, // Infomaniak: return fragment to avoid displaying message from backend
     [Posts.POST_TYPES.CHANGE_CHANNEL_PRIVACY]: renderChangeChannelPrivacyMessage,
 };
 
@@ -524,7 +533,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
         case 0:
             endReminderTime = (
                 <FormattedMessage
-                    id='post.reminder.systemBot.time'
+                    id='post.systemBot.reminder.time'
                     defaultMessage='at {time}'
                     values={{time: <FormattedTime value={targetTime}/>}}
                 />
@@ -533,7 +542,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
         case 1:
             endReminderTime = (
                 <FormattedMessage
-                    id='post.reminder.systemBot.tomorrow'
+                    id='post.systemBot.reminder.tomorrow'
                     defaultMessage='tomorrow at {time}'
                     values={{time: <FormattedTime value={targetTime}/>}}
                 />
@@ -554,7 +563,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
     if (post.props.reschedule) {
         return (
             <FormattedMessage
-                id={'post.reminder.systemBot.reschedule'}
+                id={'post.systemBot.reminder.reschedule'}
                 defaultMessage='Alright, I will remind you of <a>this message</a> {endReminderTime}'
                 values={{
                     permaLink,
@@ -568,7 +577,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
     if (post.props.completed) {
         return (
             <FormattedMessage
-                id={'post.reminder.systemBot.completed'}
+                id={'post.systemBot.reminder.completed'}
                 defaultMessage='Alright, I have marked the reminder for <a>this message</a> as completed!'
                 values={{
                     permaLink,

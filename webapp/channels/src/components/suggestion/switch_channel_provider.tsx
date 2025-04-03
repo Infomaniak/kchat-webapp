@@ -4,8 +4,8 @@
 
 import classNames from 'classnames';
 import React from 'react';
-import {defineMessages, injectIntl} from 'react-intl';
 import type {WrappedComponentProps} from 'react-intl';
+import {defineMessages, injectIntl, useIntl} from 'react-intl';
 import {connect, useSelector} from 'react-redux';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
@@ -140,6 +140,7 @@ const SwitchChannelSuggestion = React.forwardRef<HTMLLIElement, Props>((props, r
     const channelIsArchived = channel.delete_at && channel.delete_at !== 0;
 
     const currentUserId = useSelector(getCurrentUserId);
+    const {formatMessage} = useIntl();
 
     const member = props.channelMember;
     const teammate = props.dmChannelTeammate;
@@ -299,7 +300,9 @@ const SwitchChannelSuggestion = React.forwardRef<HTMLLIElement, Props>((props, r
                     <span
                         className={classNames({'suggestion-list__unread': item.unread && !channelIsArchived})}
                         id={`${name.toLowerCase().replaceAll(' ', '-')}-item-name`}
-                    >{name}</span>
+                    >
+                        {name === ThreadsChannel.display_name ? formatMessage({id: 'globalThreads.sidebarLink', defaultMessage: 'Threads'}) : name}
+                    </span>
                     {showSlug && description && <span className='ml-2 suggestion-list__desc'>{description}</span>}
                 </span>
                 {customStatus}

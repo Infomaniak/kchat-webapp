@@ -30,15 +30,6 @@ type State = {
 }
 
 const limits: Limit[] = [
-    {
-        value: 10000,
-        label: (
-            <FormattedMessage
-                id='user.settings.sidebar.limitVisibleGMsDMs.allDirectMessages'
-                defaultMessage='All Direct Messages'
-            />
-        ),
-    },
     {value: 10, label: '10'},
     {value: 15, label: '15'},
     {value: 20, label: '20'},

@@ -46,6 +46,13 @@ describe('Actions.Posts', () => {
                         EnableJoinLeaveMessageByDefault: 'true',
                     },
                 },
+
+                // Infomaniak specific mock
+                ksuiteBridge: {
+                    bridge: {
+                        isConnected: false,
+                    },
+                },
             },
         });
     });

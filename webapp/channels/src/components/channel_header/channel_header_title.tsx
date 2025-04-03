@@ -8,7 +8,7 @@ import {useSelector} from 'react-redux';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
-import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentChannel, getMyCurrentChannelMembership} from 'mattermost-redux/selectors/entities/channels';
 
 import ProfilePicture from 'components/profile_picture';
 import SharedChannelIndicator from 'components/shared_channel_indicator';
@@ -16,6 +16,7 @@ import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import BotTag from 'components/widgets/tag/bot_tag';
 
 import {Constants} from 'utils/constants';
+import {isEmptyObject} from 'utils/utils';
 
 import ChannelHeaderTitleDirect from './channel_header_title_direct';
 import ChannelHeaderTitleFavorite from './channel_header_title_favorite';
@@ -33,6 +34,7 @@ const ChannelHeaderTitle = ({
     gmMembers,
 }: Props) => {
     const channel = useSelector(getCurrentChannel);
+    const channelMember = useSelector(getMyCurrentChannelMembership);
 
     if (!channel) {
         return null;
@@ -62,6 +64,29 @@ const ChannelHeaderTitle = ({
         channelTitle = <ChannelHeaderTitleDirect dmUser={dmUser}/>;
     } else if (isGroup) {
         channelTitle = <ChannelHeaderTitleGroup gmMembers={gmMembers}/>;
+    }
+
+    // title without menu for channel preview
+    if (isEmptyObject(channelMember)) {
+        return (
+            <div
+                id='channelHeaderDropdownButton'
+                className='channel-header__top channel-header__bot'
+            >
+                <strong
+                    role='heading'
+                    aria-level={2}
+                    id='channelHeaderTitle'
+                    className='heading'
+                >
+                    <span>
+                        {archivedIcon}
+                        {channelTitle}
+                    </span>
+                </strong>
+                <ChannelHeaderTitleFavorite/>
+            </div>
+        );
     }
 
     if (isDirect && dmUser?.is_bot) {

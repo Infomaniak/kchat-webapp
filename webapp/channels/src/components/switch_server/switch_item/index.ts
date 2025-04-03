@@ -10,9 +10,10 @@ import {bindActionCreators} from 'redux';
 import type {Team} from '@mattermost/types/teams';
 
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import {bridgeRecreate} from 'mattermost-redux/actions/ksuiteBridge';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {GetStateFunc} from 'mattermost-redux/types/actions';
 
-import {bridgeRecreate} from 'actions/ksuite_bridge_actions';
 import {switchTeam} from 'actions/team_actions';
 import {makeGetBadgeCountForServerId} from 'selectors/views/servers';
 

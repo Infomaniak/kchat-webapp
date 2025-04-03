@@ -50,7 +50,7 @@ const TaskItems = styled.div`
     box-shadow: var(--elevation-6);
     transition: opacity 250ms ease-in-out 0ms, transform 250ms ease-in-out 0ms;
     transform-origin: left bottom;
-    max-height: ${document.documentElement.clientHeight}px;
+    max-height: 90vh;
     overflow-y: auto;
     display: none;
 

@@ -5,9 +5,10 @@ import type {DoNotDisturbMessage, KSuiteBridge} from '@infomaniak/ksuite-bridge'
 import {AppReadyMessageKey, DoNotDisturbMessageKey, RecreateMessageKey} from '@infomaniak/ksuite-bridge';
 
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import {BridgeActionTypes} from 'mattermost-redux/action_types';
 import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
-import {BridgeActionTypes, BridgeParamWhitelist} from 'utils/constants';
+const BridgeParamWhitelist = ['spaceId', 'ksuiteMode'];
 
 export function storeBridge(bridge: KSuiteBridge) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
@@ -21,7 +22,7 @@ export function storeBridge(bridge: KSuiteBridge) {
         });
 
         bridge.on(DoNotDisturbMessageKey, (doNotDisturbMessage: DoNotDisturbMessage) => {
-            if (doNotDisturbMessage.enabled !== getState().ksuite_bridge.dnd) {
+            if (doNotDisturbMessage.enabled !== getState().entities.ksuiteBridge.dnd) {
                 dispatch({
                     type: BridgeActionTypes.DND_CHANGE,
                     dnd: doNotDisturbMessage.enabled,
@@ -37,7 +38,7 @@ export function bridgeRecreate(url: string) {
     return (_: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
         const urlObj = new URL(url);
-        const {bridge, ksuiteMode, spaceId} = state.ksuite_bridge;
+        const {bridge, ksuiteMode, spaceId} = state.entities.ksuiteBridge;
 
         if (ksuiteMode) {
             urlObj.searchParams.append('ksuite-mode', ksuiteMode);

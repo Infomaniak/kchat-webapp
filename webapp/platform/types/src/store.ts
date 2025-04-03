@@ -83,6 +83,12 @@ export type GlobalState = {
         usage: CloudUsage;
         insights: InsightsState;
         scheduledPosts: ScheduledPostsState;
+        ksuiteBridge: {
+            bridge: any;
+            dnd: boolean;
+            spaceId: string;
+            ksuiteMode: string;
+        };
     };
     errors: any[];
     requests: {
@@ -99,6 +105,7 @@ export type GlobalState = {
         connected: boolean;
         lastConnectAt: number;
         lastDisconnectAt: number;
+        firstDisconnect: number;
         connectionId: string;
         serverHostname: string;
     };

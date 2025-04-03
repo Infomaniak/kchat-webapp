@@ -18,7 +18,7 @@
     fill: rgba(var(--center-channel-color-rgb), 0.64);
     text-align: center;
 
-    &:hover {
+    &:not(.disabled):hover {
         background: rgba(var(--center-channel-color-rgb), 0.08);
         color: rgba(var(--center-channel-color-rgb), 0.8);
         fill: rgba(var(--center-channel-color-rgb), 0.8);
@@ -44,6 +44,7 @@
     &--active,
     &--active.btn.btn-icon,
     &--active:hover {
+    &--active:not(.disabled):hover {
         background: rgba(var(--button-bg-rgb), 0.08);
         color: functions.v(button-bg);
         fill: functions.v(button-bg);

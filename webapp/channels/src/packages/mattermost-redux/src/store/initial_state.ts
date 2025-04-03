@@ -66,6 +66,7 @@ const state: GlobalState = {
             messageCounts: {},
             channelsMemberCount: {},
             pendingGuests: {},
+            guestMembersInChannel: {},
         },
         channelBookmarks: {
             byChannelId: {},
@@ -158,7 +159,7 @@ const state: GlobalState = {
             hasLimitation: -1,
 
             // mattermost limitations
-            // isLimitedResults: -1,
+            isLimitedResults: -1,
         },
         typing: {},
         recording: {},
@@ -274,6 +275,12 @@ const state: GlobalState = {
             errorsByTeamId: {},
             byChannelOrThreadId: {},
         },
+        ksuiteBridge: {
+            bridge: undefined,
+            dnd: false,
+            spaceId: '',
+            ksuiteMode: '',
+        },
     },
     errors: [],
     requests: {
@@ -321,6 +328,10 @@ const state: GlobalState = {
                 error: null,
             },
             getTeams: {
+                status: 'not_started',
+                error: null,
+            },
+            getMyTeams: {
                 status: 'not_started',
                 error: null,
             },
@@ -380,6 +391,7 @@ const state: GlobalState = {
         lastDisconnectAt: 0,
         connectionId: '',
         serverHostname: '',
+        firstDisconnect: 0,
     },
 };
 export default state;

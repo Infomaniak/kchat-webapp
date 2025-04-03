@@ -60,7 +60,7 @@ import {getHistory} from 'utils/browser_history';
 import type {A11yFocusEventDetail} from 'utils/constants';
 import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes, AdvancedTextEditorTextboxIds} from 'utils/constants';
 import * as Keyboard from 'utils/keyboard';
-import {isDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import * as UserAgent from 'utils/user_agent';
 
 import bing from 'sounds/bing.mp3';
@@ -72,6 +72,7 @@ import ripple from 'sounds/ripple.mp3';
 import upstairs from 'sounds/upstairs.mp3';
 
 import {joinPrivateChannelPrompt} from './channel_utils';
+import {isServerVersionGreaterThanOrEqualTo} from './server_version';
 
 const CLICKABLE_ELEMENTS = [
     'a',
@@ -1774,4 +1775,47 @@ export function sortUsersAndGroups(a: UserProfile | Group, b: UserProfile | Grou
 
 export function doesCookieContainsMMUserId() {
     return document.cookie.includes('MMUSERID=');
+}
+
+/**
+ * Merge electron-log logger + Sentry capture message in a single object.
+ * @returns logger object.
+ */
+const mergedLoggers = () => {
+    const logLevels: Sentry.SeverityLevel[] = ['error', 'warning', 'log', 'info', 'debug'];
+
+    const logger: { [key: string]: (...args: any) => void } = {};
+
+    logLevels.forEach((level) => {
+        logger[level] = (...args: any) => {
+            Sentry.addBreadcrumb({
+                category: 'console',
+                level,
+                data: args,
+            });
+            (window as any)?.logManager[level](...args);
+        };
+    });
+
+    return logger;
+};
+
+export const initLoggers = (): void => {
+    // Override console object to merge electron-log logger & add Breadcrumbs entries from Sentry.
+    if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
+        Object.assign(console, mergedLoggers());
+    }
+};
+
+export function logTimestamp(label: string, timestamp: number | undefined) {
+    let time = '';
+    if (timestamp === 0) {
+        time = '0';
+    } else if (typeof timestamp !== 'undefined') {
+        const date = new Date(timestamp);
+        time += `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        time += ` ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+    }
+    // eslint-disable-next-line no-console
+    console.log(label, timestamp, time);
 }

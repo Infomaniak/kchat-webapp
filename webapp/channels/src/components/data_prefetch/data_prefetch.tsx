@@ -9,6 +9,7 @@ import type {Channel} from '@mattermost/types/channels';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {loadProfilesForSidebar} from 'actions/user_actions';
+import {reconnectWsChannels} from 'actions/websocket_actions';
 
 import {Constants} from 'utils/constants';
 
@@ -51,21 +52,28 @@ type Props = {
         Add a jitter(0-1sec) for delaying post requests in case of a new message in open/private channels. This is to prevent a case when all clients request messages when new post is made in a channel with thousands of users.
 */
 export default class DataPrefetch extends React.PureComponent<Props> {
-    private prefetchTimeout?: number;
-
     async componentDidUpdate(prevProps: Props) {
-        const {currentChannelId, prefetchQueueObj, sidebarLoaded} = this.props;
+        const {currentChannelId, prefetchQueueObj, sidebarLoaded, prefetchRequestStatus} = this.props;
         if (sidebarLoaded && !prevProps.sidebarLoaded) {
             loadProfilesForSidebar();
         }
-
         if (currentChannelId && sidebarLoaded && (!prevProps.currentChannelId || !prevProps.sidebarLoaded)) {
             queue.add(async () => this.prefetchPosts(currentChannelId));
             this.prefetchData();
         } else if (prevProps.prefetchQueueObj !== prefetchQueueObj) {
-            clearTimeout(this.prefetchTimeout);
             await queue.clear();
             this.prefetchData();
+        }
+
+        // Infomaniak: if websocket is connecting at the same time this will delay channel subscriptions until all channels have finished prefetch
+        if (prevProps.prefetchQueueObj !== prefetchQueueObj || prevProps.prefetchRequestStatus !== prefetchRequestStatus) {
+            const queueCount = Object.values(prefetchQueueObj).map((x) => x.length).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+            const statusCount = Object.keys(prefetchRequestStatus).length;
+            const allStatusSuccessful = !(Object.values(prefetchRequestStatus).some((x) => x !== 'success'));
+
+            if (queueCount === statusCount && allStatusSuccessful) {
+                reconnectWsChannels();
+            }
         }
 
         if (currentChannelId && sidebarLoaded && (!prevProps.currentChannelId || !prevProps.sidebarLoaded)) {

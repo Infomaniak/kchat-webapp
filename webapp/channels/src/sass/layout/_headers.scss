@@ -505,6 +505,40 @@
             margin: 1px 0 0;
         }
 
+        &.light {
+            overflow: visible;
+            color: inherit;
+            opacity: 1;
+
+            button {
+                color: rgba(var(--center-channel-color-rgb), 0.75);
+
+                i {
+                    color: rgba(var(--center-channel-color-rgb), var(--icon-opacity));
+                }
+
+                .edit-icon {
+                    display: none;
+                }
+
+                &:not(.disabled):focus,
+                &:not(.disabled):hover {
+                    color: rgba(var(--center-channel-color-rgb), 0.88);
+                    text-decoration: none;
+
+                    i {
+                        color: rgba(var(--center-channel-color-rgb), var(--icon-opacity-hover));
+                    }
+                }
+
+                &:hover {
+                    .edit-icon {
+                        display: block;
+                    }
+                }
+            }
+        }
+
         .markdown-inline-img {
             display: inline-block;
             max-height: 18px;

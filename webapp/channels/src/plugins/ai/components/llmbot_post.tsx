@@ -76,7 +76,13 @@ export const LLMBotPost = (props: Props) => {
                         return;
                     }
                     setGenerating(true);
-                    setMessage(data.next);
+                    let message = data.next;
+                    const codeBlockRegex = /^```/gm;
+                    const matches = message.match(codeBlockRegex);
+                    if (matches && matches.length % 2 !== 0) {
+                        message += '\n```';
+                    }
+                    setMessage(message);
                 } else if (data.control === 'end') {
                     setGenerating(false);
                     setStopped(false);

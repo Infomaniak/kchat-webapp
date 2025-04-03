@@ -7,7 +7,7 @@ import type {Dispatch} from 'redux';
 
 import {markChannelAsRead} from 'mattermost-redux/actions/channels';
 import {RequestStatus} from 'mattermost-redux/constants';
-import {getRecentPostsChunkInChannel, makeGetPostsChunkAroundPost, getUnreadPostsChunk, getPost, isPostsChunkIncludingUnreadsPosts, getLimitedViews} from 'mattermost-redux/selectors/entities/posts';
+import {getRecentPostsChunkInChannel, makeGetPostsChunkAroundPost, getUnreadPostsChunk, getPost, isPostsChunkIncludingUnreadsPosts, getLimitedViews, getNotRecentPostsChunkInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {memoizeResult} from 'mattermost-redux/utils/helpers';
 import {makePreparePostIdsForPostList} from 'mattermost-redux/utils/post_list';
 
@@ -50,6 +50,7 @@ function makeMapStateToProps() {
         let latestPostTimeStamp = 0;
         let postIds: string[] | undefined;
         let chunk;
+        let notRecentPostsChunk;
         let atLatestPost = false;
         let atOldestPost = false;
         let formattedPostIds: string[] | undefined;
@@ -68,12 +69,20 @@ function makeMapStateToProps() {
             chunk = getUnreadPostsChunk(state, channelId, unreadChunkTimeStamp);
         } else {
             chunk = getRecentPostsChunkInChannel(state, channelId);
+            notRecentPostsChunk = getNotRecentPostsChunkInChannel(state, channelId);
         }
 
         if (chunk) {
             postIds = chunk.order;
             atLatestPost = Boolean(chunk.recent);
             atOldestPost = Boolean(chunk.oldest);
+        }
+
+        let latestPostNoChunkId;
+
+        if (notRecentPostsChunk) {
+            const postIdsNoChunk = notRecentPostsChunk?.order;
+            latestPostNoChunkId = memoizedGetLatestPostId(postIdsNoChunk);
         }
 
         let shouldHideNewMessageIndicator = false;
@@ -93,6 +102,7 @@ function makeMapStateToProps() {
         }
 
         return {
+            latestPostNoChunkId,
             lastViewedAt,
             isFirstLoad: isFirstLoad(state, channelId),
             formattedPostIds,
@@ -124,3 +134,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
 }
 
 export default connect(makeMapStateToProps, mapDispatchToProps)(PostList);
+

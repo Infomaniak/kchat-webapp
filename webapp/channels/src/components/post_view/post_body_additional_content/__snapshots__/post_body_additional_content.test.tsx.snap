@@ -97,6 +97,12 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
     }
     webSocketClient={
       WebSocketClient {
+        "_currentUserId": undefined,
+        "_currentUserTeamId": undefined,
+        "_presenceChannelId": undefined,
+        "_teamId": undefined,
+        "_userId": undefined,
+        "_userTeamId": undefined,
         "closeCallback": null,
         "closeListeners": Set {},
         "config": Object {
@@ -123,7 +129,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "postedAck": false,
         "reconnectCallback": null,
         "reconnectListeners": Set {},
-        "reconnectTimeout": null,
+        "reconnecting": false,
         "responseCallbacks": Object {},
         "responseSequence": 1,
         "serverHostname": "",
@@ -155,6 +161,12 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
     }
     webSocketClient={
       WebSocketClient {
+        "_currentUserId": undefined,
+        "_currentUserTeamId": undefined,
+        "_presenceChannelId": undefined,
+        "_teamId": undefined,
+        "_userId": undefined,
+        "_userTeamId": undefined,
         "closeCallback": null,
         "closeListeners": Set {},
         "config": Object {
@@ -181,7 +193,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "postedAck": false,
         "reconnectCallback": null,
         "reconnectListeners": Set {},
-        "reconnectTimeout": null,
+        "reconnecting": false,
         "responseCallbacks": Object {},
         "responseSequence": 1,
         "serverHostname": "",

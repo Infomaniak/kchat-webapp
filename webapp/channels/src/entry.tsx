@@ -32,6 +32,7 @@ declare global {
 // This is for anything that needs to be done for ALL react components.
 // This runs before we start to render anything.
 function preRenderSetup(onPreRenderSetupReady: () => void) {
+    const oldOnError = window.onerror;
     window.onerror = (msg, url, line, column, error) => {
         // Ignore exceptions raised by ResizeObserver like:
         // - ResizeObserver loop limit exceeded.
@@ -45,12 +46,17 @@ function preRenderSetup(onPreRenderSetupReady: () => void) {
                 {
                     type: AnnouncementBarTypes.DEVELOPER,
                     message: 'A JavaScript error in the webapp client has occurred. (msg: ' + msg + ', row: ' + line + ', col: ' + column + ').',
+                    intlId: 'apps.error.javascript',
                     stack: error?.stack,
                     url,
                 },
                 {errorBarMode: LogErrorBarMode.InDevMode},
             ),
         );
+
+        if (oldOnError) {
+            oldOnError(msg, url, line, column, error);
+        }
     };
 
     setCSRFFromCookie();

@@ -80,6 +80,7 @@ jest.mock('mattermost-redux/actions/users', () => ({
     getMissingProfilesByIds: jest.fn(() => ({type: 'GET_MISSING_PROFILES_BY_IDS'})),
     getStatusesByIds: jest.fn(() => ({type: 'GET_STATUSES_BY_IDS'})),
     getUser: jest.fn(() => ({type: 'GET_STATUSES_BY_IDS'})),
+    checkForModifiedUsers: jest.fn(() => ({type: 'CHECK_FOR_MODIFIED_USERS'})),
 }));
 
 jest.mock('mattermost-redux/actions/channels', () => ({
@@ -218,7 +219,7 @@ let mockState = {
 
 jest.mock('stores/redux_store', () => {
     return {
-        dispatch: jest.fn(),
+        dispatch: jest.fn(() => Promise.resolve()),
         getState: () => mockState,
     };
 });

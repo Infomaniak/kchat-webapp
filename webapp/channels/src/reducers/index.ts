@@ -3,7 +3,6 @@
 
 import plugins from './plugins';
 import kdrive from './plugins/kdrive';
-import ksuite_bridge from './plugins/ksuite_bridge';
 import storage from './storage';
 import views from './views';
 
@@ -12,5 +11,4 @@ export default {
     plugins,
     storage,
     kdrive,
-    ksuite_bridge,
 };

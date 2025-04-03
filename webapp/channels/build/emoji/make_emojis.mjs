@@ -124,10 +124,6 @@ readMissingDirPromise.then(() => {
     }
 });
 
-// Copy mattermost emoji image
-const webappImagesDir = path.resolve(webappRootDir, 'channels', 'src', 'images');
-endResults.push(copyFileAndPrint(path.resolve(webappImagesDir, 'icon64x64.png'), path.resolve(webappImagesDir, 'emoji/mattermost.png'), 'mattermost-emoji'));
-
 const sheetSource = path.resolve(rootDir, `node_modules/emoji-datasource-apple/img/apple/sheets/${EMOJI_SIZE}.png`);
 const sheetAbsoluteFile = path.resolve(webappRootDir, 'channels', 'src', 'images/emoji-sheets/apple-sheet.png');
 const sheetFile = 'images/emoji-sheets/apple-sheet.png';
@@ -523,7 +519,9 @@ for (const key of emojiFilePositions.keys()) {
     cssEmojis.push(`.emoji-${key} { background-position: ${emojiFilePositions.get(key)} }`);
 }
 
-const cssRules = `.emojisprite-preview {
+const cssRules = `@charset "UTF-8";
+
+.emojisprite-preview {
     width: ${EMOJI_SIZE_PADDED}px;
     max-width: none;
     height: ${EMOJI_SIZE_PADDED}px;

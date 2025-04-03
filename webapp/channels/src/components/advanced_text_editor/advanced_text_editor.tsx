@@ -817,34 +817,37 @@ const AdvancedTextEditor = ({
                         className='AdvancedTextEditor__cell a11y__region'
                     >
                         {!isInEditMode && priorityLabels}
-                        <Textbox
-                            hasLabels={isInEditMode ? false : Boolean(priorityLabels)}
-                            suggestionList={location === Locations.RHS_COMMENT ? RhsSuggestionList : SuggestionList}
-                            onChange={handleChange}
-                            onKeyPress={postMsgKeyPress}
-                            onKeyDown={handleKeyDown}
-                            onMouseUp={handleMouseUpKeyUp}
-                            onKeyUp={handleMouseUpKeyUp}
-                            onComposition={emitTypingEvent}
-                            onHeightChange={handleHeightChange}
-                            handlePostError={handlePostError}
-                            value={messageValue}
-                            onBlur={handleBlur}
-                            onFocus={handleFocus}
-                            emojiEnabled={enableEmojiPicker}
-                            createMessage={createMessage}
-                            channelId={channelId}
-                            id={textboxId}
-                            ref={textboxRef!}
-                            disabled={isDisabled}
-                            characterLimit={maxPostSize}
-                            preview={showPreview}
-                            badConnection={badConnection}
-                            useChannelMentions={useChannelMentions}
-                            rootId={rootId}
-                            onWidthChange={handleWidthChange}
-                            isInEditMode={isInEditMode}
-                        />
+                        {/* IK: Prevent writing any text if we are doing a voice message */}
+                        {draft.postType !== Constants.PostTypes.VOICE && (
+                            <Textbox
+                                hasLabels={isInEditMode ? false : Boolean(priorityLabels)}
+                                suggestionList={location === Locations.RHS_COMMENT ? RhsSuggestionList : SuggestionList}
+                                onChange={handleChange}
+                                onKeyPress={postMsgKeyPress}
+                                onKeyDown={handleKeyDown}
+                                onMouseUp={handleMouseUpKeyUp}
+                                onKeyUp={handleMouseUpKeyUp}
+                                onComposition={emitTypingEvent}
+                                onHeightChange={handleHeightChange}
+                                handlePostError={handlePostError}
+                                value={messageValue}
+                                onBlur={handleBlur}
+                                onFocus={handleFocus}
+                                emojiEnabled={enableEmojiPicker}
+                                createMessage={createMessage}
+                                channelId={channelId}
+                                id={textboxId}
+                                ref={textboxRef!}
+                                disabled={isDisabled}
+                                characterLimit={maxPostSize}
+                                preview={showPreview}
+                                badConnection={badConnection}
+                                useChannelMentions={useChannelMentions}
+                                rootId={rootId}
+                                onWidthChange={handleWidthChange}
+                                isInEditMode={isInEditMode}
+                            />
+                        )}
                         {attachmentPreview}
                         {!isDisabled && (showFormattingBar || showPreview) && (
                             <TexteditorActions

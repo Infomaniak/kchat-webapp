@@ -7,7 +7,7 @@ import {withRouter} from 'react-router-dom';
 
 import {getTeamsOrderCookie} from 'mattermost-redux/utils/team_utils';
 
-import {getKSuiteSpaceId} from 'selectors/ksuite_bridge';
+import {getKSuiteSpaceId} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {getCurrentServer, getOtherServers, getServersUnreadStatus, isMultiServer} from 'selectors/views/servers';
 
 import type {GlobalState} from 'types/store';

@@ -21,7 +21,15 @@ const VersionBar = ({
     buildHash,
     isNewVersionCanaryOnly,
 }: Props) => {
-    const [buildHashOnAppLoad, setBuildHashOnAppLoad] = useState<string|undefined>(buildHash);
+    const [buildHashOnAppLoad, setBuildHashOnAppLoad] = useState<string|undefined>(buildHash === 'none' ? GIT_RELEASE : buildHash);
+    const isCanary = document.cookie.indexOf('KCHAT_NEXT=always') !== -1;
+
+    // IK: isNewVersionCanaryOnly is populated only on WS
+    // For example, this variable is needed if WS trigger update for Canary, but not stable
+    // If Client receive this message, but it is on stable, the update will be ignored
+    // Otherwise, API call to check for update based on which one requested it - isNewVersionCanaryOnly will be undefined
+    const isStableUpdate = !isCanary && isNewVersionCanaryOnly !== true;
+    const isNextUpdate = isCanary && isNewVersionCanaryOnly !== false;
 
     useEffect(() => {
         if (!buildHashOnAppLoad && buildHash) {
@@ -29,17 +37,11 @@ const VersionBar = ({
         }
     }, [buildHash, buildHashOnAppLoad]);
 
-    if (!buildHashOnAppLoad || buildHashOnAppLoad === buildHash) {
+    if (!buildHashOnAppLoad || buildHash === 'none') {
         return null;
     }
 
-    const isCanary = document.cookie.indexOf('KCHAT_NEXT=always') !== -1;
-
-    if (!buildHashOnAppLoad) {
-        return null;
-    }
-
-    if (buildHashOnAppLoad !== buildHash && ((isNewVersionCanaryOnly && isCanary) || (!isNewVersionCanaryOnly && !isCanary))) {
+    if (buildHashOnAppLoad !== buildHash && (isNextUpdate || isStableUpdate)) {
         return (
             <AnnouncementBar
                 type={AnnouncementBarTypes.ANNOUNCEMENT}
@@ -58,7 +60,6 @@ const VersionBar = ({
                                 defaultMessage='Refresh the app now'
                             />
                         </a>
-                        {'.'}
                     </>
                 }
             />

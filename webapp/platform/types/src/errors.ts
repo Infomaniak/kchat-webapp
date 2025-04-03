@@ -6,6 +6,7 @@ export type ServerError = {
     server_error_id?: string;
     stack?: string;
     message: string;
+    intlId?: string; // IK: to translate the red announcement bar javascript error  
     status_code?: number;
     error?: { code: string };
     url?: string;

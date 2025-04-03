@@ -25,6 +25,7 @@ const DateSeparator: FC<Props> = ({date}) => {
                 useTime={false}
                 useSemanticOutput={false}
                 ranges={DATE_RANGES}
+                capitalize={true}
             />
         </BasicSeparator>
     );

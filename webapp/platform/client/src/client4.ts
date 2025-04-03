@@ -111,6 +111,7 @@ import type {
     PluginsResponse,
     PluginStatus,
 } from '@mattermost/types/plugins';
+import type {PollMetadata} from '@mattermost/types/pollMetadata';
 import type {Post, PostList, PostSearchResults, PostsUsageResponse, TeamsUsageResponse, PaginatedPostList, FilesUsageResponse, PostAcknowledgement, PostAnalytics, PostInfo} from '@mattermost/types/posts';
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {ProductNotices} from '@mattermost/types/product_notices';
@@ -152,7 +153,7 @@ import type {
 import type {DeepPartial, PartialExcept, RelationOneToOne} from '@mattermost/types/utilities';
 
 import {cleanUrlForLogging} from './errors';
-import {buildQueryString} from './helpers';
+import {buildQueryString, setUserAgent} from './helpers';
 import type {TelemetryHandler} from './telemetry';
 
 const IKConstants = {
@@ -243,6 +244,9 @@ export default class Client4 {
 
     setUserAgent(userAgent: string) {
         this.userAgent = userAgent;
+
+        // IK: Overlap new user agent which can be consumed by bridge or bug tracker
+        setUserAgent(window, userAgent);
     }
 
     getToken() {
@@ -918,7 +922,7 @@ export default class Client4 {
     };
 
     getProfilesByIds = (userIds: string[], options = {}) => {
-        return this.doFetch<UserProfile[]>(
+        return this.doFetchWithRetry<UserProfile[]>(
             `${this.getUsersRoute()}/ids${buildQueryString(options)}`,
             {method: 'post', body: JSON.stringify(userIds)},
         );
@@ -960,7 +964,7 @@ export default class Client4 {
     getProfilesInChannel = (channelId: string, page = 0, perPage = PER_PAGE_DEFAULT, sort = '', options: {active?: boolean} = {}) => {
         const queryStringObj = {in_channel: channelId, page, per_page: perPage, sort};
 
-        return this.doFetch<UserProfile[]>(
+        return this.doFetchWithRetry<UserProfile[]>(
             `${this.getUsersRoute()}${buildQueryString({...queryStringObj, ...options})}`,
             {method: 'get'},
         );
@@ -2341,14 +2345,14 @@ export default class Client4 {
     };
 
     getPostsUnread = (channelId: string, userId: string, limitAfter = DEFAULT_LIMIT_AFTER, limitBefore = DEFAULT_LIMIT_BEFORE, fetchThreads = true, collapsedThreads = false, collapsedThreadsExtended = false) => {
-        return this.doFetch<PostList>(
+        return this.doFetchWithRetry<PostList>(
             `${this.getUserRoute(userId)}/channels/${channelId}/posts/unread${buildQueryString({limit_after: limitAfter, limit_before: limitBefore, skipFetchThreads: !fetchThreads, collapsedThreads, collapsedThreadsExtended})}`,
             {method: 'get'},
         );
     };
 
     getPostsSince = (channelId: string, since: number, fetchThreads = true, collapsedThreads = false, collapsedThreadsExtended = false) => {
-        return this.doFetch<PostList>(
+        return this.doFetchWithRetry<PostList>(
             `${this.getChannelRoute(channelId)}/posts${buildQueryString({since, skipFetchThreads: !fetchThreads, collapsedThreads, collapsedThreadsExtended})}`,
             {method: 'get'},
         );
@@ -2658,6 +2662,17 @@ export default class Client4 {
             `${this.getPostRoute(postId)}/actions/${encodeURIComponent(actionId)}`,
             {method: 'post', body: JSON.stringify(msg)},
         );
+    };
+
+    // Poll Routes
+
+    getPollsRoute() {
+        return `${this.getBaseRoute()}/polls`;
+    }
+
+    getPollMetadata = (pollId: string) => {
+        const url = `${this.getPollsRoute()}/${pollId}`;
+        return this.doFetch<PollMetadata>(url, {method: 'get'});
     };
 
     // Files Routes
@@ -4474,6 +4489,12 @@ export default class Client4 {
         return data;
     };
 
+    private doFetchWithRetry = async <ClientDataResponse>(url: string, options: Options): Promise<ClientDataResponse> => {
+        const {data} = await this.doFetchWithResponseAndRetry<ClientDataResponse>(url, options);
+
+        return data;
+    };
+
     private doFetchWithResponse = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse>> => {
         const response = await fetch(url, this.getOptions(options));
         const headers = parseAndMergeNestedHeaders(response.headers);
@@ -4534,6 +4555,30 @@ export default class Client4 {
             error: data.error ? data.error : null,
             url,
         });
+    };
+
+    // Ik changes : error handling when request fails, retrying request 3 times with 0,5s delay, only apply this to data_prefetch API calls.
+    doFetchWithResponseAndRetry = async <ClientDataResponse>(url: string, options: Options, retries = 3): Promise<ClientResponse<ClientDataResponse>> => {
+        const RETRY_TIME = 1000; // 1 sec
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            if (attempt > 0) {
+                console.log('retry #', attempt, options.method, url, 'at', Date.now());
+            }
+            try {
+                const response = await this.doFetchWithResponse<ClientDataResponse>(url, options);
+                return response;
+            } catch (err) {
+                console.log(options.method, url, 'retry #', attempt, 'fail at', Date.now());
+
+                if (attempt < retries) {
+                    await new Promise((resolve) => setTimeout(resolve, RETRY_TIME));
+                } else {
+                    console.log('all retry attempts for', options.method, url, 'failed');
+                    throw err;
+                }
+            }
+        }
+        throw new Error('request retry failed.');
     };
 
     trackEvent(category: string, event: string, props?: any) {

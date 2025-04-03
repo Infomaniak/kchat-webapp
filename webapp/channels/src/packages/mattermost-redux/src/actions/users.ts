@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 /* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
@@ -14,21 +15,26 @@ import {UserTypes, AdminTypes} from 'mattermost-redux/action_types';
 import {logError} from 'mattermost-redux/actions/errors';
 import {setServerVersion, getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
 import {bindClientFunc, forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
-import {getServerLimits} from 'mattermost-redux/actions/limits';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 import {getMyTeamMembers, getMyTeamUnreads, getMyKSuites} from 'mattermost-redux/actions/teams';
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
+import {getServerLimits} from 'mattermost-redux/selectors/entities/limits';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId, getUser as selectUser, getUsers, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
 
-// eslint-disable-next-line no-restricted-imports
-import {getHistory} from 'utils/browser_history';
+import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
 
+import {getHistory} from 'utils/browser_history';
+import {isDesktopApp} from 'utils/user_agent';
+
+import type {GlobalState} from 'types/store';
+
+// import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
 // import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 
 // Delay requests for missing profiles for up to 100ms to allow for simulataneous requests to be batched
@@ -74,6 +80,15 @@ export function loadMe(): ActionFuncAsync<boolean> {
         // Sometimes the server version is set in one or the other
         const serverVersion = getState().entities.general.serverVersion || Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
+
+        const bridge = getState().entities.ksuiteBridge.bridge;
+
+        if (!bridge.isConnected && !isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+            // eslint-disable-next-line no-process-env
+            window.location.assign(`https://ksuite.${process.env.BASE_URL?.split('kchat.')[1]}/kchat`);
+
+            return;
+        }
 
         try {
             await Promise.all([
@@ -1415,18 +1430,26 @@ export function clearUserAccessTokens(): ActionFuncAsync {
     };
 }
 
-export function checkForModifiedUsers(): ActionFuncAsync {
+export function checkForModifiedUsers(channelId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const users = getUsers(state);
+        const firstDisconnectAt = state.websocket.firstDisconnect;
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
+        const lastPostsApiCallForChannel = getLastPostsApiTimeForChannel(state as GlobalState, channelId);
+        let since = firstDisconnectAt;
+        if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < lastDisconnectAt) {
+            since = lastPostsApiCallForChannel;
+        }
         const userIds = Object.keys(users);
         // eslint-disable-next-line no-console
         console.log('checking for modified users with lastDisconnect:', lastDisconnectAt);
         // eslint-disable-next-line no-console
+        console.log('checking for modified users since', since);
+        // eslint-disable-next-line no-console
         console.log('fetch profile count:', userIds.length);
 
-        await dispatch(getProfilesByIds(userIds, {since: lastDisconnectAt}));
+        await dispatch(getProfilesByIds(userIds, {since}));
         return {data: true};
     };
 }

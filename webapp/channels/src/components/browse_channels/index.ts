@@ -7,7 +7,14 @@ import type {Dispatch} from 'redux';
 
 import type {Channel} from '@mattermost/types/channels';
 
-import {getChannels, getArchivedChannels, joinChannel, getChannelsMemberCount, searchAllChannels} from 'mattermost-redux/actions/channels';
+import {
+    getChannels,
+    getArchivedChannels,
+    joinChannel,
+    getChannelsMemberCount,
+    searchAllChannels,
+    previewChannel,
+} from 'mattermost-redux/actions/channels';
 import {RequestStatus} from 'mattermost-redux/constants';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getChannelsInCurrentTeam, getMyChannelMemberships, getChannelsMemberCount as getChannelsMemberCountSelector} from 'mattermost-redux/selectors/entities/channels';
@@ -72,6 +79,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             getChannels,
             getArchivedChannels,
             joinChannel,
+            previewChannel,
             searchAllChannels,
             openModal,
             closeModal,

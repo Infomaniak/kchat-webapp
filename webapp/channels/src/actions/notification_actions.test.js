@@ -175,6 +175,13 @@ describe('notification_actions', () => {
                         groups: {},
                         myGroups: [],
                     },
+
+                    // Infomaniak specific mock
+                    ksuiteBridge: {
+                        bridge: {
+                            isConnected: false,
+                        },
+                    },
                 },
                 views: {
                     browser: {

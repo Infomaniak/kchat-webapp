@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {NavigateMessage} from '@infomaniak/ksuite-bridge';
 import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
@@ -13,9 +14,9 @@ import {ServiceEnvironment} from '@mattermost/types/config';
 
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
+import {storeBridge, storeBridgeParam} from 'mattermost-redux/actions/ksuiteBridge';
 import {Client4} from 'mattermost-redux/client';
 
-import {storeBridge, storeBridgeParam} from 'actions/ksuite_bridge_actions';
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
 import {setThemePreference} from 'actions/views/theme';
@@ -33,6 +34,7 @@ import {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_works
 import {Animations} from 'components/preparing_workspace/steps';
 import SidebarMobileRightMenu from 'components/sidebar_mobile_right_menu';
 
+import {getHistory} from 'utils/browser_history';
 import Constants, {DesktopThemePreferences, PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import DesktopApp from 'utils/desktop_api';
@@ -613,6 +615,11 @@ export default class Root extends React.PureComponent<Props, State> {
 
         const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch, store.getState);
+
+        // this message listener is outside the store because of how is handled navigation
+        ksuiteBridge.on(NavigateMessageKey, (navigateMessage: NavigateMessage) => {
+            getHistory().push(navigateMessage.path);
+        });
 
         const ksuiteMode = (new URLSearchParams(window.location.search)).get('ksuite-mode');
         const spaceId = (new URLSearchParams(window.location.search)).get('space-id');

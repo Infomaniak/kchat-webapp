@@ -43,6 +43,7 @@ export interface Props {
     currentUser: UserProfile;
     currentTeam: Team;
     isArchived: boolean;
+    isPreview: boolean;
     isFavorite: boolean;
     isMuted: boolean;
     isInvitingPeople: boolean;
@@ -69,6 +70,7 @@ const ChannelInfoRhs = ({
     channel,
     channelStats,
     isArchived,
+    isPreview,
     isFavorite,
     isMuted,
     isInvitingPeople,
@@ -151,15 +153,21 @@ const ChannelInfoRhs = ({
                 isMobile={isMobile}
                 onClose={actions.closeRightHandSide}
             />
-            <TopButtons
-                channelType={channel.type}
-                channelURL={channelURL}
-                isFavorite={isFavorite}
-                isMuted={isMuted}
-                isInvitingPeople={isInvitingPeople}
-                canAddPeople={canManageMembers}
-                actions={{toggleFavorite, toggleMute, addPeople}}
-            />
+
+            { !isPreview &&
+               (
+                   <TopButtons
+                       channelType={channel.type}
+                       channelURL={channelURL}
+                       isFavorite={isFavorite}
+                       isMuted={isMuted}
+                       isInvitingPeople={isInvitingPeople}
+                       canAddPeople={canManageMembers}
+                       actions={{toggleFavorite, toggleMute, addPeople}}
+                   />
+               )
+            }
+
             <AboutArea
                 channel={channel}
                 dmUser={dmUser}
@@ -175,6 +183,7 @@ const ChannelInfoRhs = ({
                 channel={channel}
                 channelStats={channelStats}
                 isArchived={isArchived}
+                isPreview={isPreview}
                 actions={{
                     openNotificationSettings,
                     showChannelFiles: actions.showChannelFiles,

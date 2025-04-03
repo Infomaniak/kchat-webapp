@@ -39,7 +39,7 @@ import {
 } from 'mattermost-redux/actions/channels';
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
-import {setServerVersion, getClientConfig, getCustomProfileAttributeFields} from 'mattermost-redux/actions/general';
+import {setServerVersion, getClientConfig} from 'mattermost-redux/actions/general';
 import {getGroup as fetchGroup} from 'mattermost-redux/actions/groups';
 import {
     getCustomEmojiForReaction,
@@ -50,7 +50,9 @@ import {
     postDeleted,
     receivedNewPost,
     receivedPost,
+    fetchMetadataIfPostIsPoll,
 } from 'mattermost-redux/actions/posts';
+import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 import {fetchTeamScheduledPosts} from 'mattermost-redux/actions/scheduled_posts';
 import {batchFetchStatusesProfilesGroupsFromPosts} from 'mattermost-redux/actions/status_profile_polling';
@@ -261,9 +263,15 @@ function restart() {
     dispatch(getClientConfig());
 }
 
+export function reconnectWsChannels() {
+    if (WebSocketClient.reconnecting) {
+        WebSocketClient.reconnectAllChannels();
+    }
+}
+
 export async function reconnect(socketId) {
-    // eslint-disable-next-line
-    console.log('Reconnecting WebSocket');
+    // eslint-disable-next-line no-console
+    console.log('[websocket actions] reconnect');
     if (isDesktopApp()) {
         const token = localStorage.getItem('IKToken');
         if (!token) {
@@ -313,15 +321,19 @@ export async function reconnect(socketId) {
         dispatch(fetchTeamScheduledPosts(currentTeamId, true, true));
         dispatch(fetchAllMyChannelMembers());
         dispatch(fetchMyCategories(currentTeamId));
+        dispatch(getMyPreferences());
         loadProfilesForSidebar();
 
+        // eslint-disable-next-line no-console
+        console.log(`[websocket actions] currentTeamId: ${currentTeamId} currentChannelId: ${currentChannelId} mostRecentPostId: ${mostRecentPost?.id}`);
+
+        // IK: Verify version on reconnect
+        dispatch(getClientConfig());
+
         if (mostRecentPost) {
-            // eslint-disable-next-line no-console
-            console.log('[websocket_actions] dispatch syncPostsInChannel');
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
             dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
-            // if network timed-out the first time when loading a channel
             // we can request for getPosts again when socket is connected
             dispatch(getPosts(currentChannelId));
         }
@@ -334,21 +346,19 @@ export async function reconnect(socketId) {
         const crtEnabled = isCollapsedThreadsEnabled(state);
         dispatch(TeamActions.getMyTeamUnreads(crtEnabled));
         if (crtEnabled) {
-            const teams = getMyKSuites(state);
             syncThreads(currentTeamId, currentUserId);
-
-            for (const team of teams) {
-                if (team.id === currentTeamId) {
-                    continue;
-                }
-                syncThreads(team.id, currentUserId);
-            }
         }
 
         // Re-syncing the current channel and team ids.
         WebSocketClient.updateActiveChannel(currentChannelId);
         WebSocketClient.updateActiveTeam(currentTeamId);
     }
+
+    const currentChannelId = getCurrentChannelId(state);
+
+    // IK: call these methods before loading any plugins to fix unhandled errors
+    dispatch(checkForModifiedUsers(currentChannelId));
+    dispatch(TeamActions.getMyKSuites());
 
     loadPluginsIfNecessary();
 
@@ -357,16 +367,6 @@ export async function reconnect(socketId) {
             handler();
         }
     });
-
-    // Refresh custom profile attributes on reconnect
-    dispatch(getCustomProfileAttributeFields());
-
-    if (state.websocket.lastDisconnectAt) {
-        // eslint-disable-next-line no-console
-        console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
-        dispatch(checkForModifiedUsers(true));
-        dispatch(TeamActions.getMyKSuites());
-    }
 
     dispatch(resetWsErrorCount());
     dispatch(clearErrors());
@@ -430,14 +430,10 @@ function handleClose(failCount) {
         dispatch(logError({type: 'critical', message: AnnouncementBarMessages.WEBSOCKET_PORT_ERROR}, true));
     }
 
-    // Subtract 30 sec to account for ws disconnection timeout
-    const nowTimestamp = Date.now();
-    const thirtySecondsAgoTimestamp = nowTimestamp - (30 * 1000);
-
     dispatch(batchActions([
         {
             type: GeneralTypes.WEBSOCKET_FAILURE,
-            timestamp: thirtySecondsAgoTimestamp,
+            timestamp: Date.now(),
         },
         incrementWsErrorCount(),
     ]));
@@ -939,6 +935,7 @@ export function handlePostEditEvent(msg) {
     dispatch(receivedPost(post, crtEnabled));
 
     dispatch(batchFetchStatusesProfilesGroupsFromPosts([post]));
+    dispatch(fetchMetadataIfPostIsPoll(post.id));
 }
 
 async function handlePostDeleteEvent(msg) {
@@ -1605,7 +1602,7 @@ function handleUserRoleUpdated(msg) {
 }
 
 function handleConfigChanged(msg) {
-    store.dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data: {...msg.data.config, IsNewVersionCanaryOnly: msg.data.canary}});
+    store.dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data: {...msg.data.config, IsNewVersionCanaryOnly: Boolean(msg.data.canary)}});
 }
 
 function handleLicenseChanged(msg) {
@@ -1664,7 +1661,7 @@ export function handleGroupAddedMemberEvent(msg) {
     return async (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const groupMember = JSON.parse(msg.data.group_member);
+        const groupMember = msg.data.group_member; //IK: we do not need a JSON.parse
 
         if (currentUserId === groupMember.user_id) {
             const group = getGroup(state, groupMember.group_id);

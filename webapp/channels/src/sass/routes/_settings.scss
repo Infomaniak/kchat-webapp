@@ -84,7 +84,12 @@
 
     .settings-desc {
         font-size: 12px;
-        color: rgba(var(--center-channel-color-rgb),0.785)
+        color: rgba(var(--center-channel-color-rgb),0.785);
+
+        &.help-keyword {
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
     }
     .title-select {
         display: flex;

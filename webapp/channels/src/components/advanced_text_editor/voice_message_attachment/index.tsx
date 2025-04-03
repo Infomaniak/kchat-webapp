@@ -18,7 +18,7 @@ import VoiceMessageRecordingStarted from 'components/advanced_text_editor/voice_
 import VoiceMessageUploadingFailed from 'components/advanced_text_editor/voice_message_attachment/components/upload_failed';
 import VoiceMessageUploadingStarted from 'components/advanced_text_editor/voice_message_attachment/components/upload_started';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
-import VoiceMessageAttachmentPlayer from 'components/voice_message_attachment_player';
+import VoiceMessageAttachmentPlayer from 'components/voice/post_type';
 
 import {AudioFileExtensions, Locations} from 'utils/constants';
 import {VoiceMessageStates} from 'utils/post_utils';
@@ -185,8 +185,8 @@ const VoiceMessageAttachment = (props: Props) => {
             <div className='file-preview__container'>
                 <VoiceMessageAttachmentPlayer
                     fileId={src}
-                    onCancel={handleRemoveAfterUpload}
                     isPreview={true}
+                    onCancel={handleRemoveAfterUpload}
                 />
             </div>
         );

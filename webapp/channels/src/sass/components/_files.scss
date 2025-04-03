@@ -159,6 +159,12 @@
         .image-header {
             display: flex;
             align-items: center;
+
+            &.transcript {
+                cursor: pointer;
+                display: flex;
+                align-items: flex-end;
+            }
         }
 
         .image-name {

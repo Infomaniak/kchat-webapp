@@ -1,11 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {KSuiteBridge} from '@infomaniak/ksuite-bridge';
 import React from 'react';
 import type {RouteComponentProps} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 
 import {ServiceEnvironment} from '@mattermost/types/config';
+import type {PreferenceType} from '@mattermost/types/preferences';
 
 import {Client4} from 'mattermost-redux/client';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
@@ -13,6 +15,7 @@ import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import * as GlobalActions from 'actions/global_actions';
 
 import {StoragePrefixes} from 'utils/constants';
+import type {Team} from 'utils/text_formatting';
 import * as Utils from 'utils/utils';
 
 import testConfigureStore from 'packages/mattermost-redux/test/test_store';
@@ -31,7 +34,7 @@ jest.mock('@infomaniak/ksuite-bridge', () => ({
     })),
 }));
 
-jest.mock('actions/ksuite_bridge_actions', () => ({
+jest.mock('mattermost-redux/actions/ksuiteBridge', () => ({
     storeBridge: (...args: any[]) => jest.fn().mockReturnValue({type: 'STORE_BRIDGE', args}),
 }));
 
@@ -134,6 +137,12 @@ describe('components/Root', () => {
             } as unknown as RouteComponentProps['history'],
         } as RouteComponentProps,
         isDevModeEnabled: false,
+        currentTeam: {} as Team,
+        teamsOrderPreference: {} as PreferenceType,
+        userLocale: 'fr',
+
+        // Infomaniak specific mock
+        ksuiteBridge: {sendMessage: jest.fn()} as unknown as KSuiteBridge,
     };
 
     let originalMatchMedia: (query: string) => MediaQueryList;

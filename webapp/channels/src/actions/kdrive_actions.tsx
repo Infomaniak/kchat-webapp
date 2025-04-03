@@ -168,13 +168,7 @@ export function selectFileFromKdrive(
  * This action is called to register the kdrive upload plugin.
  */
 export function registerInternalKdrivePlugin() {
-    let registered = false;
     return async (dispatch: DispatchFunc) => {
-        if (registered) {
-            return;
-        }
-        registered = true;
-
         dispatch({
             type: ActionTypes.RECEIVED_PLUGIN_COMPONENT,
             name: 'FileUploadMethod',

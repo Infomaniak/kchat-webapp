@@ -131,7 +131,7 @@ class ChannelHeader extends React.PureComponent<Props> {
         }
 
         const ariaLabelChannelHeader = this.props.intl.formatMessage({id: 'accessibility.sections.channelHeader', defaultMessage: 'channel header region'});
-        let showMeetBtn = true;
+        let showMeetBtn = !isEmptyObject(channelMember);
 
         let hasGuestsText: ReactNode = '';
         if (hasGuests) {
@@ -147,9 +147,13 @@ class ChannelHeader extends React.PureComponent<Props> {
             );
         }
 
-        if (isEmptyObject(channel) ||
-            isEmptyObject(channelMember) ||
-            isEmptyObject(currentUser) ||
+        const channelIsArchived = channel.delete_at !== 0;
+
+        // Infomaniak: skip for channel previews
+        // isEmptyObject(channel) ||
+        // isEmptyObject(channelMember) ||
+        // isEmptyObject(currentUser) ||
+        if (
             (!dmUser && channel.type === Constants.DM_CHANNEL)
         ) {
             // Use an empty div to make sure the header's height stays constant
@@ -256,6 +260,7 @@ class ChannelHeader extends React.PureComponent<Props> {
         if (!isDirect) {
             const membersIconClass = classNames('member-rhs__trigger channel-header__icon channel-header__icon--wide channel-header__icon--left btn btn-icon btn-xs', {
                 'channel-header__icon--active': rhsState === RHSStates.CHANNEL_MEMBERS,
+                disabled: isEmptyObject(channelMember),
             });
             const membersIcon = this.props.memberCount ? (
                 <>
@@ -290,7 +295,7 @@ class ChannelHeader extends React.PureComponent<Props> {
                     tooltip={this.props.intl.formatMessage({id: 'channel_header.channelMembers', defaultMessage: 'Members'})}
                     buttonClass={membersIconClass}
                     buttonId={'member_rhs'}
-                    onClick={this.toggleChannelMembersRHS}
+                    onClick={channelIsArchived ? () => {} : this.toggleChannelMembersRHS}
                 >
                     {membersIcon}
                 </HeaderIconWrapper>
