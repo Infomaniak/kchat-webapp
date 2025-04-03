@@ -23,6 +23,7 @@ import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
 import type {Match, MatchAndHistory} from './channel_identifier_router';
+import { initiateCallIfParam } from 'actions/calls';
 
 const LENGTH_OF_ID = 36;
 const LENGTH_OF_GROUP_ID = 40;
@@ -255,6 +256,10 @@ function goToDirectChannelByUsername(match: Match, history: History): ActionFunc
         }
 
         doChannelChange(directChannelDispatchRes.data!);
+
+        //IK: automatic start kMeet if needed
+        dispatch(initiateCallIfParam(directChannelDispatchRes.data!.id))
+
         return {data: undefined};
     };
 }

@@ -46,6 +46,11 @@ export default class ChannelIdentifierRouter extends React.PureComponent<Props> 
             this.props.actions.onChannelByIdentifierEnter(this.props);
             this.replaceUrlIfPermalink();
         }
+
+        // IK: enable search only changes to be consider as entering channel again (usefull for kMeet automatic call)
+        if(this.props.location.search !== prevProps.location.search) {
+            this.props.actions.onChannelByIdentifierEnter(this.props);
+        }
     }
     componentDidMount() {
         this.props.actions.onChannelByIdentifierEnter(this.props);

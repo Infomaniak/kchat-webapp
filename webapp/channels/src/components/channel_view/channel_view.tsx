@@ -15,7 +15,6 @@ import FileUploadOverlay from 'components/file_upload_overlay';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import PostView from 'components/post_view';
 
-import {getHistory} from 'utils/browser_history';
 
 import WebSocketClient from 'client/web_websocket_client';
 
@@ -93,20 +92,6 @@ export default class ChannelView extends React.PureComponent<Props, State> {
         this.props.goToLastViewedChannel();
     };
 
-    startAutomaticCallIfNeeded = () => {
-        const params = new URLSearchParams(this.props.location.search);
-        const shouldStartCall = params.has('call');
-        
-        if (shouldStartCall) {
-            this.props.startCall(this.props.channelId);
-
-            params.delete('call');
-
-            // Keep existing params if there is
-            const newUrl = this.props.location.pathname + (params.toString() ? `?${params.toString()}` : '');
-            getHistory().replace(newUrl);
-        }
-    };
 
     componentDidUpdate(prevProps: Props) {
         // TODO: debounce
@@ -125,12 +110,6 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             }
         }
 
-        // IK: start call if needed should be triggered both on initial load and SPA navigation
-        if (prevProps.channelId !== this.props.channelId || this.props.location.search !== prevProps.location.search) {
-            if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
-                this.startAutomaticCallIfNeeded();
-            }
-        }
     }
 
     render() {

@@ -33,6 +33,7 @@ import type {GlobalState} from 'types/store';
 
 import {openCallDialingModal} from './kmeet_calls';
 import {closeModal} from './views/modals';
+import { getHistory } from 'utils/browser_history';
 
 export function showExpandedView(): ActionFunc {
     return (dispatch) => {
@@ -203,6 +204,24 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             console.error('call could not be started', error);
         }
     };
+}
+
+// Initiate a call if the URL contains the query parameter `call`
+export function initiateCallIfParam(channelID: string) {
+        return async (dispatch: DispatchFunc) => {
+        const params = new URLSearchParams(window.location.search);
+        const hasCallParam = params.has('call');
+        
+        if (hasCallParam) {
+            dispatch(startOrJoinCallInChannelV2(channelID))
+
+            params.delete('call');
+
+            // Keep existing params if there is
+            const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+            getHistory().replace(newUrl);
+        }
+    }
 }
 
 export function updateAudioStatus(dialingID: string, muted = false) {
