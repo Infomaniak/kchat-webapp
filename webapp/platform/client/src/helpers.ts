@@ -16,11 +16,13 @@ export function buildQueryString(parameters: Record<string, any>): string {
     return queryParams.length > 0 ? `?${queryParams}` : '';
 }
 
-export function setUserAgent(window, userAgent) {
+export function setUserAgent(window: Window, userAgent: string) {
     try {
         // Works on Firefox, Chrome, Opera and IE9+
-        if (navigator.__defineGetter__) {
-            navigator.__defineGetter__('userAgent', () => {
+        // @ts-expect-error depends on the browser
+        if ((navigator as Window['navigator']).__defineGetter__) {
+            // @ts-expect-error depends on the browser
+            (navigator as Window['navigator']).__defineGetter__('userAgent', () => {
                 return userAgent;
             });
         } else if (Object.defineProperty) {
@@ -41,7 +43,7 @@ export function setUserAgent(window, userAgent) {
             try {
                 Object.defineProperty(window.navigator, 'userAgent', userAgentProp);
             } catch (e) {
-                window.navigator = Object.create(navigator, {
+                (window.navigator as Window['navigator']) = Object.create(navigator, {
                     userAgent: userAgentProp,
                 });
             }
