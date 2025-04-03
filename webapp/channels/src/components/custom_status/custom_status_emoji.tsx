@@ -70,20 +70,19 @@ function CustomStatusEmoji({
             title={
                 <>
                     <div className='custom-status'>
-                        {customStatus.text && (
-                            <span
-                                className='custom-status-text'
-                            >
-                                {customStatus?.text === '' ? `:${customStatus?.emoji}:` : customStatus?.text}
-                            </span>
-                        )}
+                        <span
+                            className='custom-status-text'
+                        >
+                            {customStatus?.text === '' ? `:${customStatus?.emoji}:` : customStatus?.text}
+                        </span>
+
                     </div>
                     {customStatus.expires_at && customStatus.duration !== CustomStatusDuration.DONT_CLEAR && (
                         <div>
                             <ExpiryTime
                                 time={customStatus.expires_at}
                                 timezone={timezone}
-                                className='custom-status-expiry'
+                                className='ikTooltipContentTitleText'
                             />
                         </div>
                     )}

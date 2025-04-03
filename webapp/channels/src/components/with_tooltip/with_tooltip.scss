@@ -2,22 +2,24 @@
 
 .tooltipContainer {
     z-index: variables.$z-index-tooltip;
-    max-width: 220px;
-    padding: 4px 8px;
+    max-width: 256px;
+    padding: 6px 8px 6px 8px;
+    background: #333333;
     border-radius: 4px;
-    background: rgba(0, 0, 0, 1);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
     line-height: 18px;
     pointer-events: none;
     text-align: center;
     word-break: break-word;
+    border-radius: 8px;
+    font-family: 'SuisseIntl';
 
     > .tooltipContent {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        font-family: "Open Sans", sans-serif;
+        font-family: 'SuisseIntl';
 
         > .tooltipContentTitleContainer {
             display: flex;
@@ -46,6 +48,11 @@
                 font-size: 12px;
                 font-weight: 600;
                 line-height: 15px;
+
+                .ikTooltipContentTitleText {
+                    opacity: .7;
+                    font-weight: 400;
+                }
             }
         }
 
