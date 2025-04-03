@@ -23,7 +23,7 @@ const LeftControlsContainer = styled.div`
     max-width: 200px;
     @media screen and (min-width: 769px) {
         min-width: 200px;
-        max-width: 300px;
+        max-width: 264px;
     }
 
     @media screen and (min-width: 1201px) {

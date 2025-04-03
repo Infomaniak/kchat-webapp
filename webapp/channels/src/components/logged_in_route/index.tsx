@@ -17,10 +17,11 @@ type Props = {
     component: React.ComponentType<RouteComponentProps<any>>;
     path: string | string[];
     theme?: Theme; // the routes that send the theme are the ones that will actually need to show the onboarding tasklist
+    headerRef: React.RefObject<HTMLDivElement>; // IK: ref used for resisizng global header left controls when lhs is resized by user.
 };
 
 export default function LoggedInRoute(props: Props) {
-    const {component: Component, theme, ...rest} = props;
+    const {component: Component, theme, headerRef, ...rest} = props;
 
     return (
         <Route
@@ -32,7 +33,10 @@ export default function LoggedInRoute(props: Props) {
                             <OnBoardingTaskList/>
                         </CompassThemeProvider>
                     )}
-                    <Component {...(routeProps)}/>
+                    <Component
+                        {...(routeProps)}
+                        headerRef={headerRef}
+                    />
                 </LoggedIn>
             )}
         />
