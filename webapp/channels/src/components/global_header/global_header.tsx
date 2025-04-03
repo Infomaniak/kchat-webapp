@@ -21,6 +21,7 @@ const GlobalHeaderContainer = styled.header`
 
     > * + * {
         padding-left: 12px;
+        padding-right: 4px;
     }
 
     & .grey {
