@@ -42,7 +42,6 @@ const RightControlsContainer = styled.div`
     position: relative;
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
     justify-content: flex-end;
-    background-color: #fff;
 
     .header-icon {
         transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
