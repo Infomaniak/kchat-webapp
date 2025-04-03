@@ -61,7 +61,7 @@ const useVoiceMessage = (
             rootId={postId}
             location={location}
             draft={draft}
-            disabled={readOnlyChannel ||
+            disabled={readOnlyChannel || Boolean(draft.message.trim().length || draft.fileInfos.length) ||
                 voiceMessageState === VoiceMessageStates.RECORDING ||
                 voiceMessageState === VoiceMessageStates.UPLOADING || voiceMessageState === VoiceMessageStates.ATTACHED ||
                 hasDraftMessagesOrFileAttachments}
