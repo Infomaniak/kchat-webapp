@@ -3,6 +3,11 @@
     align-items: center;
     justify-content: center;
     font-size: 18px;
+
+    // IK changes : icon search bar
+    &.icon-magnify {
+            color: #23A1FE;
+    }
 }
 
 .icon--no-spacing::before {

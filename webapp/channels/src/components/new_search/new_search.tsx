@@ -31,8 +31,8 @@ import SearchBox from './search_box';
 
 const PopoverStyled = styled(Popover)`
     min-width: 600px;
-    left: -90px;
-    top: -12px;
+    left: -5px;
+    top: -15px;
     border-radius: 12px;
     max-height: 90vh;
     overflow-y: auto;
@@ -50,7 +50,6 @@ const SearchTypeBadge = styled.div`
     border-radius: 4px;
     margin: 0 6px;
     background: rgba(var(--sidebar-text-rgb), 0.08);
-    color: var(--sidebar-text);
     font-size: 10px;
     font-weight: 700;
 
@@ -86,18 +85,14 @@ const NewSearchContainer = styled.div`
     align-items: center;
     height: 28px;
     width: 100%;
-    background-color: rgba(var(--sidebar-text-rgb), 0.08);
-    color: rgba(var(--sidebar-text-rgb), 0.64);
+    background: rgba(var(--sidebar-text-rgb), 0.15);
+    color: rgba(var(--global-header-text-rgb), 0.64);
     font-size: 12px;
     font-weight: 500;
     border-radius: var(--radius-s);
     border: none;
     padding: 4px;
     cursor: pointer;
-    &:hover {
-        background-color: rgba(var(--sidebar-text-rgb), 0.16);
-        color: rgba(var(--sidebar-text-rgb), 0.88);
-    }
 `;
 
 const NewSearchTerms = styled.span`
