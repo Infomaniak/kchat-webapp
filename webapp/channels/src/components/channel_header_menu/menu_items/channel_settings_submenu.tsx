@@ -77,6 +77,20 @@ const ChannelSettingsSubmenu = ({channel, isReadonly, isDefault}: Props): JSX.El
         );
     };
 
+    const handleConvertToPublic = () => {
+        dispatch(
+            openModal({
+                modalId: ModalIdentifiers.CONVERT_CHANNEL,
+                dialogType: ConvertChannelModal,
+                dialogProps: {
+                    channelId: channel.id,
+                    channelDisplayName: channel.display_name,
+                    channelType: Constants.PRIVATE_CHANNEL,
+                },
+            }),
+        );
+    };
+
     return (
         <Menu.SubMenu
             id={'channelSettings'}
@@ -141,8 +155,7 @@ const ChannelSettingsSubmenu = ({channel, isReadonly, isDefault}: Props): JSX.El
                     />
                 </ChannelPermissionGate>
             )}
-
-            {!isDefault && channel.type === Constants.OPEN_CHANNEL && (
+            {!isReadonly && !isDefault && channel.type === Constants.OPEN_CHANNEL && (
                 <ChannelPermissionGate
                     channelId={channel.id}
                     teamId={channel.team_id}
@@ -155,6 +168,25 @@ const ChannelSettingsSubmenu = ({channel, isReadonly, isDefault}: Props): JSX.El
                             <FormattedMessage
                                 id='channel_header.convert'
                                 defaultMessage='Convert to Private Channel'
+                            />
+                        }
+                    />
+                </ChannelPermissionGate>
+            )}
+
+            {!isReadonly && !isDefault && channel.type === Constants.PRIVATE_CHANNEL && (
+                <ChannelPermissionGate
+                    channelId={channel.id}
+                    teamId={channel.team_id}
+                    permissions={[Permissions.CONVERT_PUBLIC_CHANNEL_TO_PRIVATE]}
+                >
+                    <Menu.Item
+                        id='channelConvertToPublic'
+                        onClick={handleConvertToPublic}
+                        labels={
+                            <FormattedMessage
+                                id='channel_header.convert.public'
+                                defaultMessage='Convert to Public Channel'
                             />
                         }
                     />
