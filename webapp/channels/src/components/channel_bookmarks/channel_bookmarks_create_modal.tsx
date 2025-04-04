@@ -502,7 +502,7 @@ const checkedIcon = (
 const FieldLabel = styled.span`
     display: inline-block;
     margin-bottom: 8px;
-    font-family: Open Sans;
+    font-family: SuisseIntl, Open Sans;
     font-size: 14px;
     line-height: 16px;
     font-style: normal;
@@ -520,7 +520,7 @@ const VisualButton = styled.div`
     color: rgba(var(--center-channel-color-rgb), 0.56);
     font-size: 11px;
     font-weight: 600;
-    font-family: Open Sans;
+    font-family: SuisseIntl, Open Sans;
 `;
 
 const FileInputContainer = styled.div`

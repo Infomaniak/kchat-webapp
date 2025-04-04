@@ -251,7 +251,7 @@ const linkStyles = css`
     gap: 5px;
 
     color: rgba(var(--center-channel-color-rgb), 1);
-    font-family: Open Sans;
+    font-family: SuisseIntl, Open Sans;
     font-size: 12px;
     font-style: normal;
     font-weight: 600;

@@ -29,7 +29,7 @@ const Badge = styled.span`
     margin-left: 12px;
     background: rgba(var(--sidebar-text-rgb), 0.08);
     color: rgba(var(--sidebar-text-rgb), 0.75);
-    font-family: 'Open Sans', sans-serif;
+    font-family: SuisseIntl, 'Open Sans', sans-serif;
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.025em;

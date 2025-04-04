@@ -40,7 +40,7 @@ const TagWrapper = styled.div<TagWrapperProps>`
     border: none;
     border-radius: 4px;
 
-    font-family: 'Open Sans', sans-serif;
+    font-family: SuisseIntl, 'Open Sans', sans-serif;
     font-weight: 600;
     line-height: 16px;
     ${({uppercase}) => (
