@@ -95,10 +95,10 @@ function getNotificationsStateFromProps(props: Props, state?: State): State {
     let pushActivity: UserNotifyProps['push'] = NotificationLevels.MENTION;
     let pushStatus: UserNotifyProps['push_status'] = Constants.UserStatuses.AWAY;
     let autoResponderActive = false;
-    let autoResponderMessage: UserNotifyProps['auto_responder_message'] = localizeMessage(
-        'user.settings.notifications.autoResponderDefault',
-        'Hello, I am out of office and unable to respond to messages.',
-    );
+    let autoResponderMessage: UserNotifyProps['auto_responder_message'] = localizeMessage({
+        id: 'user.settings.notifications.autoResponderDefault',
+        defaultMessage: 'Hello, I am out of office and unable to respond to messages.',
+    });
 
     if (user.notify_props) {
         if (user.notify_props.desktop) {
@@ -258,10 +258,10 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         data.auto_responder_message = this.state.autoResponderMessage;
 
         if (!data.auto_responder_message || data.auto_responder_message === '') {
-            data.auto_responder_message = localizeMessage(
-                'user.settings.notifications.autoResponderDefault',
-                'Hello, I am out of office and unable to respond to messages.',
-            );
+            data.auto_responder_message = localizeMessage({
+                id: 'user.settings.notifications.autoResponderDefault',
+                defaultMessage: 'Hello, I am out of office and unable to respond to messages.',
+            });
         }
 
         data.first_name = this.state.firstNameKey.toString() as UserNotifyProps['first_name'];

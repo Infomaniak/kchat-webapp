@@ -237,10 +237,10 @@ class LoginController extends React.PureComponent {
         if (this.state.sessionExpired && !this.closeSessionExpiredNotification) {
             showNotification({
                 title: this.props.siteName,
-                body: Utils.localizeMessage(
-                    'login.session_expired.notification',
-                    'Session Expired: Please sign in to continue receiving notifications.',
-                ),
+                body: Utils.localizeMessage({
+                    id: 'login.session_expired.notification',
+                    defaultMessage: 'Session Expired: Please sign in to continue receiving notifications.',
+                }),
                 requireInteraction: true,
                 silent: false,
                 onClick: () => {
