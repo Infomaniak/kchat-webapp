@@ -33,7 +33,7 @@ export const ChannelsTour = () => {
                 link: (
                     <div>
                         <ExternalLink
-                            href={localizeMessage('onboardingTour.ChannelsTourTip.linkUrl')}
+                            href={localizeMessage({id: 'onboardingTour.ChannelsTourTip.linkUrl'})}
                         >
                             {localizeMessage({id: 'onboardingTour.ChannelsTourTip.learnMore', defaultMessage: 'Learn more'})}
                         </ExternalLink>
