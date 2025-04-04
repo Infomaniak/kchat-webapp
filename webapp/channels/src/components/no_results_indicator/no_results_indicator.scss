@@ -61,7 +61,9 @@
     display: flex;
 
     svg {
-        fill: none;
+        width: 140px;
+        height: 140px;
+        fill: var(--button-bg);
     }
 
     &.icon {
