@@ -18,6 +18,7 @@ import {OnboardingTaskCategory, OnboardingTasksName, TaskNameMapToSteps, Complet
 import UserSettingsModal from 'components/user_settings/modal';
 
 import {ModalIdentifiers} from 'utils/constants';
+import {IKConstants} from 'utils/constants-ik';
 
 import type {GlobalState} from 'types/store';
 
@@ -31,12 +32,9 @@ export default function UserAccountProfileMenuItem(props: Props) {
     const onboardingTaskStep = useSelector((state: GlobalState) => getInt(state, OnboardingTaskCategory, OnboardingTasksName.COMPLETE_YOUR_PROFILE, 0));
     const isCompleteYourProfileTaskPending = onboardingTaskStep === TaskNameMapToSteps[OnboardingTasksName.COMPLETE_YOUR_PROFILE].STARTED;
 
+    //IK: Redirect to manager profile
     function handleClick() {
-        dispatch(openModal({
-            modalId: ModalIdentifiers.USER_SETTINGS,
-            dialogType: UserSettingsModal,
-            dialogProps: {isContentProductSettings: false, focusOriginElement: 'userAccountMenuButton'},
-        }));
+        window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
     }
 
     function handleTourClick() {
