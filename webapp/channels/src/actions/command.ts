@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {lazy} from 'react';
+
 import type {AppCallResponse} from '@mattermost/types/apps';
 import type {CommandArgs, CommandResponse} from '@mattermost/types/integrations';
 
@@ -22,11 +24,9 @@ import * as PostActions from 'actions/post_actions';
 import {leaveChannel} from 'actions/views/channel';
 import {openModal} from 'actions/views/modals';
 
-import KeyboardShortcutsModal from 'components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal';
-import MarketplaceModal from 'components/plugin_marketplace/marketplace_modal';
+import {withSuspense} from 'components/common/hocs/with_suspense';
 import {AppCommandParser} from 'components/suggestion/command_provider/app_command_parser/app_command_parser';
 import {intlShim} from 'components/suggestion/command_provider/app_command_parser/app_command_parser_dependencies';
-import UserSettingsModal from 'components/user_settings/modal';
 
 import {getHistory} from 'utils/browser_history';
 import {Constants, ModalIdentifiers} from 'utils/constants';
@@ -38,7 +38,11 @@ import type {ActionFuncAsync} from 'types/store';
 
 import {doAppSubmit, openAppsModal, postEphemeralCallResponseForCommandArgs} from './apps';
 import {trackEvent} from './telemetry_actions';
-import IkLeaveChannelModal from 'components/ik_leave_channel_modal/ik_leave_channel_modal';
+
+const KeyboardShortcutsModal = withSuspense(lazy(() => import('components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal')));
+const IkLeaveChannelModal = withSuspense(lazy(() => import('components/ik_leave_channel_modal')));
+const MarketplaceModal = withSuspense(lazy(() => import('components/plugin_marketplace/marketplace_modal')));
+export const UserSettingsModal = withSuspense(lazy(() => import('components/user_settings/modal')));
 
 export type ExecuteCommandReturnType = {
     frontendHandled?: boolean;
@@ -98,7 +102,7 @@ export function executeCommand(message: string, args: CommandArgs): ActionFuncAs
             // IK: use the same action as when leaving channel from the sidebar dropdown
             if (channel.type === Constants.OPEN_CHANNEL) {
                 if (channel.name === General.DEFAULT_CHANNEL) {
-                    const message = localizeMessage({id:'leave_public_channel_error.default_channel', defaultMessage:'Unable to leave the default channel.'});
+                    const message = localizeMessage({id: 'leave_public_channel_error.default_channel', defaultMessage: 'Unable to leave the default channel.'});
                     dispatch(GlobalActions.sendEphemeralPost(message));
                 } else {
                     dispatch(leaveChannel(channel.id));
