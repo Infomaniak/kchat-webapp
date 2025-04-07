@@ -3,20 +3,26 @@
 
 import React, {useMemo} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {CheckCircleIcon, CheckIcon} from '@mattermost/compass-icons/components';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {setStatus} from 'mattermost-redux/actions/users';
+import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {openModal} from 'actions/views/modals';
+import {getShowTutorialStep} from 'selectors/onboarding';
 
 import * as Menu from 'components/menu';
+import {OnboardingTasksName} from 'components/onboarding_tasks';
 import ResetStatusModal from 'components/reset_status_modal';
+import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours';
+import {StatusTour} from 'components/tours/onboarding_tour';
 
 import {UserStatuses, ModalIdentifiers} from 'utils/constants';
 
+import type {GlobalState} from 'types/store';
 interface Props {
     userId: UserProfile['id'];
     shouldConfirmBeforeStatusChange: boolean;
@@ -25,6 +31,12 @@ interface Props {
 
 export default function UserAccountOnlineMenuItem(props: Props) {
     const dispatch = useDispatch();
+    const isGuest = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
+    const showStatusTutorialStep = useSelector((state: GlobalState) => getShowTutorialStep(state, {
+        tourName: isGuest ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP,
+        taskName: OnboardingTasksName.CHANNELS_TOUR,
+        tourStep: isGuest ? OnboardingTourStepsForGuestUsers.STATUS : OnboardingTourSteps.STATUS,
+    }));
 
     function handleClick() {
         if (props.shouldConfirmBeforeStatusChange) {
@@ -46,11 +58,19 @@ export default function UserAccountOnlineMenuItem(props: Props) {
     const trailingElement = useMemo(() => {
         if (props.isStatusOnline) {
             return (
-                <CheckIcon
-                    size={16}
-                    className='userAccountMenu_menuItemTrailingCheckIcon'
-                    aria-hidden='true'
-                />
+                <>
+                    <div
+                        className='userAccountMenu_profileMenuItem_tourWrapper'
+                    >
+                        {showStatusTutorialStep && <StatusTour/>}
+                    </div>
+
+                    <CheckIcon
+                        size={16}
+                        className='userAccountMenu_menuItemTrailingCheckIcon'
+                        aria-hidden='true'
+                    />
+                </>
             );
         }
 

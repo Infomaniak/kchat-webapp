@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
 
 import {
     PlusIcon,
@@ -13,11 +14,14 @@ import {
     AccountOutlineIcon,
 } from '@mattermost/compass-icons/components';
 
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+
 import * as Menu from 'components/menu';
 import {OnboardingTourSteps} from 'components/tours';
-import {useShowOnboardingTutorialStep, CreateAndJoinChannelsTour, InvitePeopleTour} from 'components/tours/onboarding_tour';
+import {useShowOnboardingTutorialStep, CreateAndJoinChannelsTour} from 'components/tours/onboarding_tour';
 import PlusFilledIcon from 'components/widgets/icons/plus_filled_icon';
 
+import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 
 export const ELEMENT_ID_FOR_BROWSE_OR_ADD_CHANNEL_MENU = 'browseOrAddChannelMenuButton';
@@ -39,7 +43,11 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
     const {formatMessage} = useIntl();
 
     const showCreateAndJoinChannelsTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS);
-    const showInvitePeopleTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.INVITE_PEOPLE);
+    const currentTeam = useSelector(getCurrentTeam);
+
+    const goToIntegration = () => {
+        getHistory().push(`/${currentTeam?.name}/integrations`);
+    };
 
     let createNewChannelMenuItem: JSX.Element | null = null;
     if (props.canCreateChannel) {
@@ -141,7 +149,6 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
                     />
                 </>
             )}
-            trailingElements={showInvitePeopleTutorialTip && <InvitePeopleTour/>}
         />
     );
 
@@ -185,6 +192,18 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
             {createNewCategoryMenuItem}
             <Menu.Separator/>
             {invitePeopleMenuItem}
+
+            <Menu.Item
+                id='integrations'
+                labels={
+                    <FormattedMessage
+                        id='navbar_dropdownIntegrations'
+                        defaultMessage='Integrations'
+                    />
+                }
+                leadingElement={<GlobeIcon size={18}/>}
+                onClick={goToIntegration}
+            />
         </Menu.Container>
     );
 }

@@ -7,16 +7,16 @@ $z-index-tour-tips-backdrop: 1250;
         &.tippy-box {
             padding: 18px 24px 24px;
             border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-            background: var(--button-bg);
+            background: var(--center-channel-bg);
             border-radius: var(--radius-s);
-            color: var(--button-color);
+            color: var(--center-channel-color-rgb);
             filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.12));
 
             a {
-                color: rgba(var(--button-color-rgb), 0.8);
+                color: rgb(0, 152, 255);
 
                 &:hover {
-                    color: var(--button-color);
+                    color: rgb(0, 152, 255);
                     text-decoration: underline;
                 }
             }
@@ -37,14 +37,14 @@ $z-index-tour-tips-backdrop: 1250;
                 width: 12px;
                 height: 12px;
                 border-color: rgba(var(--center-channel-color-rgb), 0.16);
-                background: var(--button-bg);
+                background: var(--center-channel-bg);
                 color: var(--button-color);
                 transform-origin: center;
             }
 
             button[class^='StyledChip-'],
             button[class*='StyledChip-'] {
-                color: var(--button-color);
+                color: var(--center-channel-color-rgb);
                 background-color: rgba(var(--button-color-rgb), 0.08);
                 box-shadow: none;
                 margin: 0 8px 8px 0;
@@ -56,30 +56,24 @@ $z-index-tour-tips-backdrop: 1250;
 
             .btn {
                 &.btn-primary {
-                    background: var(--button-color);
-                    color: var(--button-bg) !important;
+                        background: var(--button-bg);
+                        color: var(--button-color) !important;
 
                     &:hover:not(.disabled) {
-                        background:
-                            linear-gradient(
-                                0deg,
-                                rgba(var(--button-bg-rgb), 0.08) 0%,
-                                rgba(var(--button-bg-rgb), 0.08) 100%),
-                                var(--button-color);
-                    }
-
-                    &:active {
-                        background:
-                            linear-gradient(
-                                0deg,
-                                rgba(var(--button-bg-rgb), 0.16) 0%,
-                                rgba(var(--button-bg-rgb), 0.16) 100%),
-                                var(--button-color);
-                    }
-
-                    &:focus {
-                        box-shadow: inset 0 0 0 2px var(--sidebar-text-active-border);
-                    }
+                            background:
+                                linear-gradient(0deg,
+                                    rgba(var(--center-channel-color-rgb), 0.16),
+                                    rgba(var(--center-channel-color-rgb), 0.16)),
+                                var(--button-bg);
+                        }
+                    
+                        &:active {
+                            background:
+                                linear-gradient(0deg,
+                                    rgba(var(--center-channel-color-rgb), 0.32),
+                                    rgba(var(--center-channel-color-rgb), 0.32)),
+                                var(--button-bg);
+                        }
 
                     .icon-chevron-right::before {
                         margin-right: -7px;
@@ -87,15 +81,15 @@ $z-index-tour-tips-backdrop: 1250;
                 }
 
                 &.btn-tertiary {
-                    background: rgba(var(--button-color-rgb), 0.08);
-                    color: var(--button-color);
+                    background: rgba(var(--button-bg-rgb), 0.08);
+                    color: var(--button-bg);
 
                     &:hover {
-                        background: rgba(var(--button-color-rgb), 0.12);
+                            background: rgba(var(--button-bg-rgb), 0.04);
                     }
-
+                    
                     &:active {
-                        background: rgba(var(--button-color-rgb), 0.16);
+                        background: rgba(var(--button-bg-rgb), 0.08);
                     }
 
                     &:focus {
@@ -110,11 +104,11 @@ $z-index-tour-tips-backdrop: 1250;
                 &.btn-icon {
                     margin-right: -8px;
                     margin-left: 1.2rem;
-                    color: rgba(var(--button-color-rgb), 0.64);
+                    color: rgba(var(--center-channel-color-rgb), 0.64);
 
                     &:hover {
-                        background: rgba(var(--button-color-rgb), 0.08);
-                        color: rgba(var(--button-color-rgb), 0.8);
+                        background: rgba(var(--center-channel-color-rgb), 0.08);
+                        color: rgba(var(--center-channel-color-rgb), 0.8);
                     }
 
                     &.active {
@@ -171,7 +165,6 @@ $z-index-tour-tips-backdrop: 1250;
     &__pulsating-dot-ctr[data-pulsating-dot-placement=bottom] {
         bottom: 0;
         left: calc(50% - 6px);
-        transform: translate(0, -6px);
     }
 
     &__pulsating-dot-ctr[data-pulsating-dot-placement=bottom-start] {
@@ -317,7 +310,7 @@ $z-index-tour-tips-backdrop: 1250;
     }
 
     &__dot-ring-active {
-        background: rgba(var(--button-color-rgb), 0.16);
+        background: rgba(var(--button-bg-rgb), 0.16);
     }
 
     &__dot {
@@ -326,11 +319,11 @@ $z-index-tour-tips-backdrop: 1250;
         left: 3px;
         width: 6px;
         height: 6px;
-        background: rgba(var(--button-color-rgb), 0.32);
+        background: rgba(var(--button-bg-rgb), 0.32);
         border-radius: var(--radius-full);
 
         &.active {
-            background: rgba(var(--button-color-rgb), 1);
+            background: rgba(var(--button-bg-rgb), 1);
         }
     }
 

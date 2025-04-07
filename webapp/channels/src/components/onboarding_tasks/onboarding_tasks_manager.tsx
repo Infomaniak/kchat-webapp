@@ -34,6 +34,7 @@ import {
     AutoTourStatus,
     FINISHED,
     OnboardingTourSteps,
+    OnboardingTourStepsForGuestUsers,
     TTNameMapToATStatusKey,
     TutorialTourName,
 } from 'components/tours';
@@ -194,8 +195,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
                     name: currentUserId,
 
                     // use SEND_MESSAGE when user is guest (channel creation and invitation are restricted), so only message box and the configure tips are shown
-                    // value: isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE.toString() : OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES.toString(),
-                    value: OnboardingTourSteps.CHANNELS.toString(),
+                    value: isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE.toString() : OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES.toString(),
                 },
                 {
                     user_id: currentUserId,

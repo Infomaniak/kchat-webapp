@@ -35,7 +35,7 @@ export const CreateAndJoinChannelsTour = () => {
             placement='right-start'
             pulsatingDotPlacement='right-start'
             pulsatingDotTranslate={translate}
-            width={352}
+            width={400}
             overlayPunchOut={overlayPunchOut}
         />
     );

@@ -62,7 +62,6 @@ function mapStateToProps(state: GlobalState) {
         reportAProblemLink,
         pluginMenuItems: state.plugins.components.MainMenu,
         moreTeamsToJoin,
-        siteName,
         teamId: currentTeam?.id,
         teamName: currentTeam?.name,
         currentUser,

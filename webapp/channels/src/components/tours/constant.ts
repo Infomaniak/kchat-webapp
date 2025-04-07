@@ -20,6 +20,7 @@ export const OtherToolsTour = 'other_tools_tour';
 export const WorkTemplatesTour = 'work_templates_tour';
 
 export const TutorialTourName = {
+    EXPLORE_OTHER_TOOLS: 'explore_other_tools',
     ONBOARDING_TUTORIAL_STEP: 'tutorial_step',
     ONBOARDING_TUTORIAL_STEP_FOR_GUESTS: 'tutorial_step_for_guest',
     CRT_TUTORIAL_STEP: 'crt_tutorial_step',
@@ -28,25 +29,12 @@ export const TutorialTourName = {
 };
 
 export const OnboardingTourSteps = {
-
-    // CHANNELS_AND_DIRECT_MESSAGES: 0,
-    // CREATE_AND_JOIN_CHANNELS: 1,
-    // INVITE_PEOPLE: 2,
-    SEND_MESSAGE: 3,
-
-    // CUSTOMIZE_EXPERIENCE: 4,
-
-    CHANNELS: 0,
-    JOIN_CHANNELS: 1,
-    CREATE_CHANNELS: 2,
-    CHANNEL_HEADER: 3,
-    DIRECT_MESSAGES: 4,
-    AT_MENTIONS: 5,
-    KMEET: 6,
-    SETTINGS: 7,
-    STATUS: 8,
-    PROFILE: 9,
-
+    CHANNELS_AND_DIRECT_MESSAGES: 0,
+    CREATE_AND_JOIN_CHANNELS: 1,
+    SEND_MESSAGE: 2,
+    KMEET: 3,
+    STATUS: 4,
+    SETTINGS: 5,
     FINISHED,
 };
 
