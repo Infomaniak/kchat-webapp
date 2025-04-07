@@ -18,7 +18,7 @@
     fill: rgba(var(--center-channel-color-rgb), 0.64);
     text-align: center;
 
-    &:not(.disabled):hover {
+    &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.08);
         color: rgba(var(--center-channel-color-rgb), 0.8);
         fill: rgba(var(--center-channel-color-rgb), 0.8);
@@ -44,7 +44,6 @@
     &--active,
     &--active.btn.btn-icon,
     &--active:hover {
-    &--active:not(.disabled):hover {
         background: rgba(var(--button-bg-rgb), 0.08);
         color: functions.v(button-bg);
         fill: functions.v(button-bg);
@@ -96,23 +95,6 @@
     }
 }
 
-.channel-header__icon--call {
-    svg {
-        width: 20px;
-        height: 20px;
-        color: rgba(var(--center-channel-color-rgb), 0.56);
-        fill: rgba(var(--center-channel-color-rgb), 0.78);
-    }
-}
-
-.channel-header__icon--calling {
-    svg {
-        color: var(--online-indicator);
-        fill: var(--online-indicator);
-    }
-}
-
 .userGuideHelp {
     display: inline-table;
-}
 }
