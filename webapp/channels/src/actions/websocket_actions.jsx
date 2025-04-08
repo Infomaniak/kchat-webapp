@@ -1235,7 +1235,8 @@ function handleUserAddedEvent(msg) {
         // Load the channel so that it appears in the sidebar
         const currentUserId = getCurrentUserId(doGetState());
         if (currentUserId === msg.data.user_id) {
-            doDispatch(fetchChannelAndAddToSidebar(msg.broadcast.channel_id));
+            //IK: we use the data field not the broadcast one
+            doDispatch(fetchChannelAndAddToSidebar(msg.data.channel_id));
         }
 
         // This event is fired when a user first joins the server, so refresh analytics to see if we're now over the user limit
