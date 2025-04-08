@@ -30,7 +30,7 @@ import type {GlobalState} from 'types/store';
 import SearchBox from './search_box';
 
 const PopoverStyled = styled(Popover)`
-    min-width: 600px;
+    min-width: 500px;
     left: -5px;
     top: -15px;
     border-radius: 12px;
