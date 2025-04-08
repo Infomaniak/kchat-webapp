@@ -98,7 +98,7 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                 <div className='row main'>
                     <Switch>
                         <Route
-                            path={`${url}/pl/:postid(${ID_PATH_PATTERN})`}
+                            path={`${url}/pl/:postid`} //IK: path pattern is not working in our case (search ids)
                             render={(props) => (
                                 <PermalinkView
                                     {...props}
