@@ -4501,7 +4501,7 @@ export default class Client4 {
 
         let data;
         try {
-            if (headers.get('Content-Type') === 'application/json') {
+            if (headers.get('Content-Type').indexOf('application/json') >= 0) { // Ik changes : our API always return json and don't return same content type as MM
                 data = await response.json();
             } else {
                 data = await response.text();
