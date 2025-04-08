@@ -222,13 +222,18 @@ export function autocompleteChannelsForSearchInTeam(term: string, teamId: string
     };
 }
 
+//IK: We dont have a endpoint to add multiple users in one request yet so we do it the old way
 export function addUsersToChannel(channelId: Channel['id'], userIds: Array<UserProfile['id']>): ActionFuncAsync {
     return async (dispatch) => {
-        const error = await dispatch(ChannelActions.addChannelMembers(channelId, userIds));
-        if (error) {
-            return error;
+        try {
+            const requests = userIds.map((uId) => dispatch(ChannelActions.addChannelMember(channelId, uId)));
+
+            await Promise.all(requests);
+
+            return {data: true};
+        } catch (error) {
+            return {error};
         }
-        return {data: true};
     };
 }
 
