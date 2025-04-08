@@ -61,7 +61,8 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
     handleNotifyChannelMember = () => {
         const {post, userIds} = this.props;
         if (post && post.channel_id) {
-            this.props.actions.notifyChannelMember(post.channel_id, userIds, this.props.post.props.add_channel_member.original_post_id);
+            const postProps = this.props.post.props as { add_channel_member: { original_post_id: string } };
+            this.props.actions.notifyChannelMember(post.channel_id, userIds, postProps.add_channel_member.original_post_id);
             this.props.actions.removePost(post);
         }
     };
@@ -177,22 +178,31 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
             );
         }
 
-        let outOfChannelMessageID;
-        let outOfChannelMessageText;
         let notificationMessageTextId;
         let notificationOrMessageTextId;
+        let outOfChannelMessage = null;
+        let outOfGroupsMessage = null;
 
+        let outOfChannelMessagePart;
         const outOfChannelAtMentions = this.generateAtMentions(usernames);
         if (usernames.length === 1) {
-            outOfChannelMessageID = t('post_body.check_for_out_of_channel_mentions.message.one');
-            outOfChannelMessageText = 'did not get notified by this mention because they are not in the channel. Would you like to ';
             notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message';
             notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message';
+            outOfChannelMessagePart = (
+                <FormattedMessage
+                    id='post_body.check_for_out_of_channel_mentions.message.one'
+                    defaultMessage='did not get notified by this mention because they are not in the channel. Would you like to '
+                />
+            );
         } else if (usernames.length > 1) {
-            outOfChannelMessageID = t('post_body.check_for_out_of_channel_mentions.message.multiple');
-            outOfChannelMessageText = 'did not get notified by this mention because they are not in the channel. Would you like to ';
             notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple';
             notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message.multiple';
+            outOfChannelMessagePart = (
+                <FormattedMessage
+                    id='post_body.check_for_out_of_channel_mentions.message.multiple'
+                    defaultMessage='did not get notified by this mention because they are not in the channel. Would you like to '
+                />
+            );
         }
 
         let outOfGroupsMessagePart;
@@ -206,27 +216,18 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
             );
         }
 
-        let outOfChannelMessage = null;
-        let outOfGroupsMessage = null;
-
         if (usernames.length) {
             if (channelType === Constants.OPEN_CHANNEL) {
                 outOfChannelMessage = (
                     <p>
                         {outOfChannelAtMentions}
                         {' '}
-                        <FormattedMessage
-                            id={outOfChannelMessageID}
-                            defaultMessage={outOfChannelMessageText}
-                        />
+                        {outOfChannelMessagePart}
                         <a
                             className='PostBody_addChannelMemberLink'
                             onClick={this.handleAddChannelMember}
                         >
-                            <FormattedMessage
-                                id={linkId}
-                                defaultMessage={linkText}
-                            />
+                            {link}
                         </a>
                         <FormattedMessage
                             id={notificationOrMessageTextId}
