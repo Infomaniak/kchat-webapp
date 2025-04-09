@@ -94,24 +94,10 @@ exports[`components/multiselect/multiselect MultiSelectList should match snapsho
           }
         />
         <SaveButton
-          btnClass="btn-primary"
-          defaultMessage={
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Save"
-              id="save_button.save"
-            />
-          }
           disabled={false}
-          extraClasses=""
           id="saveItems"
           onClick={[Function]}
           saving={false}
-          savingMessage={
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Saving"
-              id="save_button.saving"
-            />
-          }
         />
       </div>
       <div
@@ -295,24 +281,10 @@ exports[`components/multiselect/multiselect should match snapshot 1`] = `
           }
         />
         <SaveButton
-          btnClass="btn-primary"
-          defaultMessage={
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Save"
-              id="save_button.save"
-            />
-          }
           disabled={false}
-          extraClasses=""
           id="saveItems"
           onClick={[Function]}
           saving={false}
-          savingMessage={
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Saving"
-              id="save_button.saving"
-            />
-          }
         />
       </div>
       <div
@@ -487,24 +459,10 @@ exports[`components/multiselect/multiselect should match snapshot for page 2 1`]
           }
         />
         <SaveButton
-          btnClass="btn-primary"
-          defaultMessage={
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Save"
-              id="save_button.save"
-            />
-          }
           disabled={false}
-          extraClasses=""
           id="saveItems"
           onClick={[Function]}
           saving={false}
-          savingMessage={
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Saving"
-              id="save_button.saving"
-            />
-          }
         />
       </div>
       <div

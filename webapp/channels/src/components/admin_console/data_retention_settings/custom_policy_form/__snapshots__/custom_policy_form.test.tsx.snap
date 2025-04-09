@@ -244,7 +244,6 @@ exports[`components/admin_console/data_retention_settings/custom_policy_form sho
     className="admin-console-save"
   >
     <SaveButton
-      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"
@@ -252,15 +251,8 @@ exports[`components/admin_console/data_retention_settings/custom_policy_form sho
         />
       }
       disabled={true}
-      extraClasses=""
       onClick={[Function]}
       saving={false}
-      savingMessage={
-        <Memo(MemoizedFormattedMessage)
-          defaultMessage="Saving"
-          id="save_button.saving"
-        />
-      }
     />
     <Connect(Component)
       className="cancel-button"
@@ -516,7 +508,6 @@ exports[`components/admin_console/data_retention_settings/custom_policy_form sho
     className="admin-console-save"
   >
     <SaveButton
-      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"
@@ -524,15 +515,8 @@ exports[`components/admin_console/data_retention_settings/custom_policy_form sho
         />
       }
       disabled={true}
-      extraClasses=""
       onClick={[Function]}
       saving={false}
-      savingMessage={
-        <Memo(MemoizedFormattedMessage)
-          defaultMessage="Saving"
-          id="save_button.saving"
-        />
-      }
     />
     <Connect(Component)
       className="cancel-button"

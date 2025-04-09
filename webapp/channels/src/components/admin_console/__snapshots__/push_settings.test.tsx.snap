@@ -16,9 +16,10 @@ exports[`components/PushSettings should match snapshot, licensed 1`] = `
       />
     </AdminHeader>
     <Memo(SettingsGroup)>
-      <Memo(DropdownSetting)
+      <DropdownSetting
         helpText={null}
         id="pushNotificationServerType"
+        isDisabled={false}
         label={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Enable Push Notifications: "
@@ -49,8 +50,9 @@ exports[`components/PushSettings should match snapshot, licensed 1`] = `
           ]
         }
       />
-      <Memo(DropdownSetting)
+      <DropdownSetting
         id="pushNotificationServerLocation"
+        isDisabled={false}
         label={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Push Notification Server location:"
@@ -203,9 +205,10 @@ exports[`components/PushSettings should match snapshot, unlicensed 1`] = `
       />
     </AdminHeader>
     <Memo(SettingsGroup)>
-      <Memo(DropdownSetting)
+      <DropdownSetting
         helpText={null}
         id="pushNotificationServerType"
+        isDisabled={false}
         label={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Enable Push Notifications: "

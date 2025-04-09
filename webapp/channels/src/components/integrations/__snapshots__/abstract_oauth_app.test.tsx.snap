@@ -282,7 +282,7 @@ https://test.com/callback2"
             id="installed_oauth_apps.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveOauthApp"
           onClick={[Function]}
@@ -299,7 +299,7 @@ https://test.com/callback2"
             defaultMessage="Footer"
             id="Footer"
           />
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
         <div>
           renderExtra
         </div>
@@ -593,7 +593,7 @@ exports[`components/integrations/AbstractOAuthApp should match snapshot, display
             id="installed_oauth_apps.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveOauthApp"
           onClick={[Function]}
@@ -610,7 +610,7 @@ exports[`components/integrations/AbstractOAuthApp should match snapshot, display
             defaultMessage="Footer"
             id="Footer"
           />
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
         <div>
           renderExtra
         </div>

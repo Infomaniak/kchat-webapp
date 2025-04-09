@@ -457,7 +457,7 @@ exports[`components/integrations/AbstractCommand should match snapshot 1`] = `
             id="add_command.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveCommand"
           onClick={[Function]}
@@ -474,7 +474,7 @@ exports[`components/integrations/AbstractCommand should match snapshot 1`] = `
             defaultMessage="Footer"
             id="Footer"
           />
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
         <div>
           renderExtra
         </div>
@@ -940,7 +940,7 @@ exports[`components/integrations/AbstractCommand should match snapshot when head
             id="add_command.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveCommand"
           onClick={[Function]}
@@ -951,7 +951,7 @@ exports[`components/integrations/AbstractCommand should match snapshot when head
           <span>
             Footer as string
           </span>
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
         <div>
           renderExtra
         </div>
@@ -1421,7 +1421,7 @@ exports[`components/integrations/AbstractCommand should match snapshot, displays
             id="add_command.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveCommand"
           onClick={[Function]}
@@ -1438,7 +1438,7 @@ exports[`components/integrations/AbstractCommand should match snapshot, displays
             defaultMessage="Footer"
             id="Footer"
           />
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
         <div>
           renderExtra
         </div>

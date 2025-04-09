@@ -140,7 +140,7 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
             setByEnv={false}
             value={false}
           />
-          <Memo(DropdownSetting)
+          <DropdownSetting
             disabled={false}
             helpText={
               <SchemaText
@@ -148,6 +148,7 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
               />
             }
             id="FirstSettings.settingc"
+            isDisabled={false}
             key="Config_dropdown_FirstSettings.settingc"
             label="label-c"
             onChange={[Function]}
@@ -284,7 +285,7 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
               </span>
             </div>
           </div>
-          <Memo(DropdownSetting)
+          <DropdownSetting
             disabled={false}
             helpText={
               <SchemaText
@@ -292,6 +293,7 @@ exports[`components/admin_console/SchemaAdminSettings should match snapshot with
               />
             }
             id="SecondSettings.settingi"
+            isDisabled={false}
             key="Config_language_SecondSettings.settingi"
             label="label-i"
             onChange={[Function]}

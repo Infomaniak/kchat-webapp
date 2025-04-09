@@ -10,6 +10,53 @@ exports[`components/threading/channel_threads/thread_footer should match snapsho
     <div
       className="indicator"
     />
+    <Button
+      className="ReplyButton separated"
+      onClick={[Function]}
+      prepend={
+        <span
+          className="icon"
+        >
+          <i
+            className="icon-reply-outline"
+          />
+        </span>
+      }
+    >
+      <button
+        className="Button Button___transparent ReplyButton separated"
+        onClick={[Function]}
+      >
+        <span
+          className="Button_prepended"
+        >
+          <span
+            className="icon"
+          >
+            <i
+              className="icon-reply-outline"
+            />
+          </span>
+        </span>
+        <span
+          className="Button_label"
+        >
+          <FormattedMessage
+            defaultMessage="{totalReplies, plural, =0 {Reply} =1 {# reply} other {# replies}}"
+            id="threading.numReplies"
+            values={
+              Object {
+                "totalReplies": 0,
+              }
+            }
+          >
+            <span>
+              Reply
+            </span>
+          </FormattedMessage>
+        </span>
+      </button>
+    </Button>
     <Memo(FollowButton)
       className="separated"
       isFollowing={true}
@@ -504,7 +551,6 @@ exports[`components/threading/channel_threads/thread_footer should report total 
               <span>
                 Last reply 
                 <Memo(SemanticTime)
-                  key=".$.1"
                   value={2019-04-01T23:31:44.000Z}
                 >
                   <time
@@ -1015,7 +1061,6 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
               <span>
                 Last reply 
                 <Memo(SemanticTime)
-                  key=".$.1"
                   value={2019-04-01T23:31:44.000Z}
                 >
                   <time

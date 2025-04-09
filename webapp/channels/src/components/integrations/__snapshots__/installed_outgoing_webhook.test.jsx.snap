@@ -4,7 +4,12 @@ exports[`components/integrations/InstalledOutgoingWebhook Should match snapshot 
 
 exports[`components/integrations/InstalledOutgoingWebhook Should match snapshot of makeDisplayName 2`] = `"channel display name"`;
 
-exports[`components/integrations/InstalledOutgoingWebhook Should match snapshot of makeDisplayName 3`] = `"name"`;
+exports[`components/integrations/InstalledOutgoingWebhook Should match snapshot of makeDisplayName 3`] = `
+<Memo(MemoizedFormattedMessage)
+  defaultMessage="A Private Webhook"
+  id="installed_outgoing_webhooks.unknown_channel"
+/>
+`;
 
 exports[`components/integrations/InstalledOutgoingWebhook should match snapshot 1`] = `
 <div
@@ -29,7 +34,7 @@ exports[`components/integrations/InstalledOutgoingWebhook should match snapshot 
           onClick={[Function]}
         >
           <MemoizedFormattedMessage
-            defaultMessage="Regenerate Token"
+            defaultMessage="Regen Token"
             id="installed_integrations.regenToken"
           />
         </button>
@@ -155,7 +160,7 @@ exports[`components/integrations/InstalledOutgoingWebhook should match snapshot 
           values={
             Object {
               "createAt": 1508327769020,
-              "creator": "some-user",
+              "creator": "username",
             }
           }
         />

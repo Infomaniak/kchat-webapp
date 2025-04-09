@@ -236,8 +236,10 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                 actions={
                   Object {
                     "closeRightHandSide": [Function],
+                    "getGroup": [Function],
                     "getUsersInGroup": [Function],
                     "openDirectChannelToUserId": [Function],
+                    "resetUsersInGroup": [Function],
                   }
                 }
                 group={

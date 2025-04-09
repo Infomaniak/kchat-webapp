@@ -12,7 +12,7 @@ exports[`components/admin_console/permission_schemes_settings/permissions_scheme
     <ConfirmModal
       confirmButtonClass="btn btn-primary"
       confirmButtonText={
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -25,7 +25,7 @@ exports[`components/admin_console/permission_schemes_settings/permissions_scheme
             defaultMessage="Yes, Delete"
             id="admin.permissions.permissionsSchemeSummary.deleteConfirmButton"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       }
       message={
         <div>
@@ -135,7 +135,7 @@ exports[`components/admin_console/permission_schemes_settings/permissions_scheme
     <ConfirmModal
       confirmButtonClass="btn btn-primary"
       confirmButtonText={
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -148,7 +148,7 @@ exports[`components/admin_console/permission_schemes_settings/permissions_scheme
             defaultMessage="Yes, Delete"
             id="admin.permissions.permissionsSchemeSummary.deleteConfirmButton"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       }
       message={
         <div>
@@ -306,7 +306,7 @@ exports[`components/admin_console/permission_schemes_settings/permissions_scheme
     <ConfirmModal
       confirmButtonClass="btn btn-primary"
       confirmButtonText={
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -319,7 +319,7 @@ exports[`components/admin_console/permission_schemes_settings/permissions_scheme
             defaultMessage="Yes, Delete"
             id="admin.permissions.permissionsSchemeSummary.deleteConfirmButton"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       }
       message={
         <div>

@@ -1602,7 +1602,7 @@ exports[`components/admin_console/group_settings/group_details/GroupUsers should
       />
     </div>
     <button
-      className="btn btn-tertiary prev disabled"
+      className="btn btn-link prev disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
@@ -1610,7 +1610,7 @@ exports[`components/admin_console/group_settings/group_details/GroupUsers should
       <Memo(PreviousIcon) />
     </button>
     <button
-      className="btn btn-tertiary next disabled"
+      className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
       type="button"

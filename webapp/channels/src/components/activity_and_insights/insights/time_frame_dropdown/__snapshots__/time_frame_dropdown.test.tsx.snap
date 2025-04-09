@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/activity_and_insights/insights/insights_title should match snapshot with data 1`] = `
-<StateManager
+<ForwardRef
   aria-labelledby="changeInsightsTemporal"
   className="react-select react-select-top"
   classNamePrefix="react-select"
@@ -11,9 +11,6 @@ exports[`components/activity_and_insights/insights/insights_title should match s
       "DropdownIndicator": [Function],
     }
   }
-  defaultInputValue=""
-  defaultMenuIsOpen={false}
-  defaultValue={null}
   id="insightsTemporal"
   isSearchable={false}
   menuPortalTarget={<body />}

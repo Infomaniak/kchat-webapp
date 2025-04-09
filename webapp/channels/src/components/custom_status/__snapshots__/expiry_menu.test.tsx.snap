@@ -34,7 +34,7 @@ exports[`components/custom_status/expiry_menu should match snapshot 1`] = `
             <span
               className="expiry-value"
             >
-              Don't clear
+              Don' clear
             </span>
             <span>
               <i

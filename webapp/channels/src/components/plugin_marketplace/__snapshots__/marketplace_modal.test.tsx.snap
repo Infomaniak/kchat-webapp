@@ -72,7 +72,6 @@ exports[`components/marketplace/ doesn't show web marketplace banner in FeatureF
         <span>
           Error connecting to the marketplace server. Please check your settings in the 
           <Link
-            key=".1"
             to="/admin_console/plugins/plugin_management"
           >
             System Console
@@ -164,7 +163,6 @@ exports[`components/marketplace/ hides search, shows web marketplace banner in F
         <span>
           Error connecting to the marketplace server. Please check your settings in the 
           <Link
-            key=".1"
             to="/admin_console/plugins/plugin_management"
           >
             System Console
@@ -421,7 +419,6 @@ exports[`components/marketplace/ should render with error banner 1`] = `
         <span>
           Error connecting to the marketplace server. Please check your settings in the 
           <Link
-            key=".1"
             to="/admin_console/plugins/plugin_management"
           >
             System Console

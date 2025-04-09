@@ -72,7 +72,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, more t
     </a>
     <MemoizedFormattedMessage
       defaultMessage=" ? They will have access to all message history."
-      id="post_body.check_for_out_of_channel_mentions.message_last.multiple"
+      id="post_body.check_for_out_of_channel_mentions.message_last"
     />
   </p>
 </Fragment>
@@ -147,7 +147,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, more t
     </a>
     <MemoizedFormattedMessage
       defaultMessage=" ? They will have access to all message history."
-      id="post_body.check_for_out_of_channel_mentions.message_last.multiple"
+      id="post_body.check_for_out_of_channel_mentions.message_last"
     />
   </p>
 </Fragment>
@@ -175,7 +175,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, privat
       />
     </a>
     <MemoizedFormattedMessage
-      defaultMessage=" ? They will have access to all message history."
+      defaultMessage="? They will have access to all message history."
       id="post_body.check_for_out_of_channel_mentions.message_last"
     />
   </p>

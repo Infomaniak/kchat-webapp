@@ -36,6 +36,7 @@ exports[`components/channel_view Should match snapshot if channel is archived 1`
   />
   <div
     className="post-create__container"
+    data-testid="post-create"
     id="post-create"
   >
     <div
@@ -101,6 +102,7 @@ exports[`components/channel_view Should match snapshot if channel is deactivated
   />
   <div
     className="post-create__container AdvancedTextEditor__ctr"
+    data-testid="post-create"
     id="post-create"
   >
     <div
@@ -163,12 +165,8 @@ exports[`components/channel_view Should match snapshot with base props 1`] = `
   <DeferredRenderWrapper
     channelId="channelId"
   />
-  <div
-    className="post-create__container AdvancedTextEditor__ctr"
-    data-testid="post-create"
-    id="post-create"
-  >
-    <AdvancedCreatePost />
-  </div>
+  <BannerJoinChannel
+    onButtonClick={[Function]}
+  />
 </div>
 `;

@@ -68,9 +68,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_descrip
           >
             <span>
               Inherited from 
-              <a
-                key=".$.1"
-              >
+              <a>
                 All Members
               </a>
               .

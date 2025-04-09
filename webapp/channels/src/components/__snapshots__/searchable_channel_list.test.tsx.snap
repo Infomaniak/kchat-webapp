@@ -71,7 +71,7 @@ exports[`components/SearchableChannelList should match init snapshot 1`] = `
             />
           }
           leadingElement={
-            <GlobeIcon
+            <GlobeCheckedIcon
               size={16}
             />
           }

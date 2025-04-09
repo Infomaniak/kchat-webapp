@@ -64,7 +64,7 @@ exports[`components/MessageExportSettings should match snapshot, disabled, actia
         setByEnv={false}
         value="01:00"
       />
-      <Memo(DropdownSetting)
+      <DropdownSetting
         disabled={true}
         helpText={
           <React.Fragment>
@@ -88,6 +88,7 @@ exports[`components/MessageExportSettings should match snapshot, disabled, actia
           </React.Fragment>
         }
         id="exportFormat"
+        isDisabled={false}
         label={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Export Format:"
@@ -226,7 +227,7 @@ exports[`components/MessageExportSettings should match snapshot, disabled, globa
         setByEnv={false}
         value="01:00"
       />
-      <Memo(DropdownSetting)
+      <DropdownSetting
         disabled={true}
         helpText={
           <React.Fragment>
@@ -250,6 +251,7 @@ exports[`components/MessageExportSettings should match snapshot, disabled, globa
           </React.Fragment>
         }
         id="exportFormat"
+        isDisabled={false}
         label={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Export Format:"
@@ -502,7 +504,7 @@ exports[`components/MessageExportSettings should match snapshot, enabled, actian
         setByEnv={false}
         value="01:00"
       />
-      <Memo(DropdownSetting)
+      <DropdownSetting
         disabled={false}
         helpText={
           <React.Fragment>
@@ -526,6 +528,7 @@ exports[`components/MessageExportSettings should match snapshot, enabled, actian
           </React.Fragment>
         }
         id="exportFormat"
+        isDisabled={false}
         label={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Export Format:"
@@ -664,7 +667,7 @@ exports[`components/MessageExportSettings should match snapshot, enabled, global
         setByEnv={false}
         value="01:00"
       />
-      <Memo(DropdownSetting)
+      <DropdownSetting
         disabled={false}
         helpText={
           <React.Fragment>
@@ -688,6 +691,7 @@ exports[`components/MessageExportSettings should match snapshot, enabled, global
           </React.Fragment>
         }
         id="exportFormat"
+        isDisabled={false}
         label={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Export Format:"

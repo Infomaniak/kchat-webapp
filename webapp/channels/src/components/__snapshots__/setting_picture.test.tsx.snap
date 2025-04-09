@@ -68,7 +68,7 @@ exports[`components/SettingItemMin should match snapshot with active Save button
           />
           <button
             aria-label="Select"
-            className="btn btn-sm btn-primary btn-file sel-btn"
+            className="btn btn-primary btn-file"
             data-testid="inputSettingPictureButton"
             disabled={false}
             onClick={[Function]}
@@ -80,13 +80,13 @@ exports[`components/SettingItemMin should match snapshot with active Save button
           </button>
           <button
             aria-label="Save"
-            className="btn btn-sm btn-primary"
+            className="btn btn-primary"
             data-testid="saveSettingPicture"
             disabled={false}
             onClick={[Function]}
             tabIndex={0}
           >
-            <LoadingWrapper
+            <Memo(LoadingWrapper)
               loading={false}
               text={
                 Object {
@@ -99,12 +99,12 @@ exports[`components/SettingItemMin should match snapshot with active Save button
                 defaultMessage="Save"
                 id="setting_picture.save"
               />
-            </LoadingWrapper>
+            </Memo(LoadingWrapper)>
           </button>
         </span>
         <button
           aria-label="Cancel"
-          className="btn btn-link btn-sm theme"
+          className="btn btn-tertiary theme ml-2"
           data-testid="cancelSettingPicture"
           onClick={[Function]}
         >
@@ -177,7 +177,7 @@ exports[`components/SettingItemMin should match snapshot with active Save button
           />
           <button
             aria-label="Select"
-            className="btn btn-sm btn-primary btn-file sel-btn"
+            className="btn btn-primary btn-file"
             data-testid="inputSettingPictureButton"
             disabled={false}
             onClick={[Function]}
@@ -189,13 +189,13 @@ exports[`components/SettingItemMin should match snapshot with active Save button
           </button>
           <button
             aria-label="Save"
-            className="btn btn-sm btn-primary"
+            className="btn btn-primary"
             data-testid="saveSettingPicture"
             disabled={false}
             onClick={[Function]}
             tabIndex={0}
           >
-            <LoadingWrapper
+            <Memo(LoadingWrapper)
               loading={false}
               text={
                 Object {
@@ -208,12 +208,12 @@ exports[`components/SettingItemMin should match snapshot with active Save button
                 defaultMessage="Save"
                 id="setting_picture.save"
               />
-            </LoadingWrapper>
+            </Memo(LoadingWrapper)>
           </button>
         </span>
         <button
           aria-label="Cancel"
-          className="btn btn-link btn-sm theme"
+          className="btn btn-tertiary theme ml-2"
           data-testid="cancelSettingPicture"
           onClick={[Function]}
         >
@@ -296,7 +296,7 @@ exports[`components/SettingItemMin should match snapshot, on loading picture 1`]
           />
           <button
             aria-label="Select"
-            className="btn btn-sm btn-primary btn-file sel-btn"
+            className="btn btn-primary btn-file"
             data-testid="inputSettingPictureButton"
             disabled={true}
             onClick={[Function]}
@@ -308,13 +308,13 @@ exports[`components/SettingItemMin should match snapshot, on loading picture 1`]
           </button>
           <button
             aria-label="Uploading..."
-            className="btn btn-sm btn-inactive disabled"
+            className="btn btn-inactive disabled"
             data-testid="saveSettingPicture"
             disabled={true}
             onClick={[Function]}
             tabIndex={-1}
           >
-            <LoadingWrapper
+            <Memo(LoadingWrapper)
               loading={true}
               text={
                 Object {
@@ -327,12 +327,12 @@ exports[`components/SettingItemMin should match snapshot, on loading picture 1`]
                 defaultMessage="Save"
                 id="setting_picture.save"
               />
-            </LoadingWrapper>
+            </Memo(LoadingWrapper)>
           </button>
         </span>
         <button
           aria-label="Cancel"
-          className="btn btn-link btn-sm theme"
+          className="btn btn-tertiary theme ml-2"
           data-testid="cancelSettingPicture"
           onClick={[Function]}
         >
@@ -426,7 +426,7 @@ exports[`components/SettingItemMin should match snapshot, profile picture on fil
           />
           <button
             aria-label="Select"
-            className="btn btn-sm btn-primary btn-file sel-btn"
+            className="btn btn-primary btn-file"
             data-testid="inputSettingPictureButton"
             disabled={false}
             onClick={[Function]}
@@ -438,13 +438,13 @@ exports[`components/SettingItemMin should match snapshot, profile picture on fil
           </button>
           <button
             aria-label="Save"
-            className="btn btn-sm btn-inactive disabled"
+            className="btn btn-inactive disabled"
             data-testid="saveSettingPicture"
             disabled={true}
             onClick={[Function]}
             tabIndex={-1}
           >
-            <LoadingWrapper
+            <Memo(LoadingWrapper)
               loading={false}
               text={
                 Object {
@@ -457,12 +457,12 @@ exports[`components/SettingItemMin should match snapshot, profile picture on fil
                 defaultMessage="Save"
                 id="setting_picture.save"
               />
-            </LoadingWrapper>
+            </Memo(LoadingWrapper)>
           </button>
         </span>
         <button
           aria-label="Cancel"
-          className="btn btn-link btn-sm theme"
+          className="btn btn-tertiary theme ml-2"
           data-testid="cancelSettingPicture"
           onClick={[Function]}
         >
@@ -545,7 +545,7 @@ exports[`components/SettingItemMin should match snapshot, profile picture on sou
           />
           <button
             aria-label="Select"
-            className="btn btn-sm btn-primary btn-file sel-btn"
+            className="btn btn-primary btn-file"
             data-testid="inputSettingPictureButton"
             disabled={false}
             onClick={[Function]}
@@ -557,13 +557,13 @@ exports[`components/SettingItemMin should match snapshot, profile picture on sou
           </button>
           <button
             aria-label="Save"
-            className="btn btn-sm btn-inactive disabled"
+            className="btn btn-inactive disabled"
             data-testid="saveSettingPicture"
             disabled={true}
             onClick={[Function]}
             tabIndex={-1}
           >
-            <LoadingWrapper
+            <Memo(LoadingWrapper)
               loading={false}
               text={
                 Object {
@@ -576,12 +576,12 @@ exports[`components/SettingItemMin should match snapshot, profile picture on sou
                 defaultMessage="Save"
                 id="setting_picture.save"
               />
-            </LoadingWrapper>
+            </Memo(LoadingWrapper)>
           </button>
         </span>
         <button
           aria-label="Cancel"
-          className="btn btn-link btn-sm theme"
+          className="btn btn-tertiary theme ml-2"
           data-testid="cancelSettingPicture"
           onClick={[Function]}
         >
@@ -675,7 +675,7 @@ exports[`components/SettingItemMin should match snapshot, team icon on file 1`] 
           />
           <button
             aria-label="Select"
-            className="btn btn-sm btn-primary btn-file sel-btn"
+            className="btn btn-primary btn-file"
             data-testid="inputSettingPictureButton"
             disabled={false}
             onClick={[Function]}
@@ -687,13 +687,13 @@ exports[`components/SettingItemMin should match snapshot, team icon on file 1`] 
           </button>
           <button
             aria-label="Save"
-            className="btn btn-sm btn-inactive disabled"
+            className="btn btn-inactive disabled"
             data-testid="saveSettingPicture"
             disabled={true}
             onClick={[Function]}
             tabIndex={-1}
           >
-            <LoadingWrapper
+            <Memo(LoadingWrapper)
               loading={false}
               text={
                 Object {
@@ -706,12 +706,12 @@ exports[`components/SettingItemMin should match snapshot, team icon on file 1`] 
                 defaultMessage="Save"
                 id="setting_picture.save"
               />
-            </LoadingWrapper>
+            </Memo(LoadingWrapper)>
           </button>
         </span>
         <button
           aria-label="Cancel"
-          className="btn btn-link btn-sm theme"
+          className="btn btn-tertiary theme ml-2"
           data-testid="cancelSettingPicture"
           onClick={[Function]}
         >
@@ -832,7 +832,7 @@ exports[`components/SettingItemMin should match snapshot, team icon on source 1`
           />
           <button
             aria-label="Select"
-            className="btn btn-sm btn-primary btn-file sel-btn"
+            className="btn btn-primary btn-file"
             data-testid="inputSettingPictureButton"
             disabled={false}
             onClick={[Function]}
@@ -844,13 +844,13 @@ exports[`components/SettingItemMin should match snapshot, team icon on source 1`
           </button>
           <button
             aria-label="Save"
-            className="btn btn-sm btn-inactive disabled"
+            className="btn btn-inactive disabled"
             data-testid="saveSettingPicture"
             disabled={true}
             onClick={[Function]}
             tabIndex={-1}
           >
-            <LoadingWrapper
+            <Memo(LoadingWrapper)
               loading={false}
               text={
                 Object {
@@ -863,12 +863,12 @@ exports[`components/SettingItemMin should match snapshot, team icon on source 1`
                 defaultMessage="Save"
                 id="setting_picture.save"
               />
-            </LoadingWrapper>
+            </Memo(LoadingWrapper)>
           </button>
         </span>
         <button
           aria-label="Cancel"
-          className="btn btn-link btn-sm theme"
+          className="btn btn-tertiary theme ml-2"
           data-testid="cancelSettingPicture"
           onClick={[Function]}
         >
@@ -989,7 +989,7 @@ exports[`components/SettingItemMin should match snapshot, user icon on source 1`
           />
           <button
             aria-label="Select"
-            className="btn btn-sm btn-primary btn-file sel-btn"
+            className="btn btn-primary btn-file"
             data-testid="inputSettingPictureButton"
             disabled={false}
             onClick={[Function]}
@@ -1001,13 +1001,13 @@ exports[`components/SettingItemMin should match snapshot, user icon on source 1`
           </button>
           <button
             aria-label="Save"
-            className="btn btn-sm btn-inactive disabled"
+            className="btn btn-inactive disabled"
             data-testid="saveSettingPicture"
             disabled={true}
             onClick={[Function]}
             tabIndex={-1}
           >
-            <LoadingWrapper
+            <Memo(LoadingWrapper)
               loading={false}
               text={
                 Object {
@@ -1020,12 +1020,12 @@ exports[`components/SettingItemMin should match snapshot, user icon on source 1`
                 defaultMessage="Save"
                 id="setting_picture.save"
               />
-            </LoadingWrapper>
+            </Memo(LoadingWrapper)>
           </button>
         </span>
         <button
           aria-label="Cancel"
-          className="btn btn-link btn-sm theme"
+          className="btn btn-tertiary theme ml-2"
           data-testid="cancelSettingPicture"
           onClick={[Function]}
         >

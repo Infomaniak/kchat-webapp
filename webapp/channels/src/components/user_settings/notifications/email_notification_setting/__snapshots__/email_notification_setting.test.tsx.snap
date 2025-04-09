@@ -208,33 +208,19 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
           >
             <hr />
             <SaveButton
-              btnClass="btn-primary"
-              defaultMessage={
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Save"
-                  id="save_button.save"
-                />
-              }
               disabled={false}
-              extraClasses=""
               onClick={[Function]}
               saving={false}
-              savingMessage={
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Saving"
-                  id="save_button.saving"
-                />
-              }
             >
               <button
-                className="save-button btn btn-primary"
+                className="btn btn-primary "
                 data-testid="saveSetting"
                 disabled={false}
                 id="saveSetting"
                 onClick={[Function]}
                 type="submit"
               >
-                <LoadingWrapper
+                <Memo(LoadingWrapper)
                   loading={false}
                   text={
                     <Memo(MemoizedFormattedMessage)
@@ -253,7 +239,7 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
                       </span>
                     </FormattedMessage>
                   </span>
-                </LoadingWrapper>
+                </Memo(LoadingWrapper)>
               </button>
             </SaveButton>
             <button
@@ -653,33 +639,19 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
           >
             <hr />
             <SaveButton
-              btnClass="btn-primary"
-              defaultMessage={
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Save"
-                  id="save_button.save"
-                />
-              }
               disabled={false}
-              extraClasses=""
               onClick={[Function]}
               saving={false}
-              savingMessage={
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Saving"
-                  id="save_button.saving"
-                />
-              }
             >
               <button
-                className="save-button btn btn-primary"
+                className="btn btn-primary "
                 data-testid="saveSetting"
                 disabled={false}
                 id="saveSetting"
                 onClick={[Function]}
                 type="submit"
               >
-                <LoadingWrapper
+                <Memo(LoadingWrapper)
                   loading={false}
                   text={
                     <Memo(MemoizedFormattedMessage)
@@ -698,7 +670,7 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
                       </span>
                     </FormattedMessage>
                   </span>
-                </LoadingWrapper>
+                </Memo(LoadingWrapper)>
               </button>
             </SaveButton>
             <button

@@ -38,18 +38,20 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
     <AlertBanner
       footerMessage={
         Array [
-          <FormattedList
-            value={
-              Array [
-                <Memo(Connect(Component))
-                  mentionName="user-0"
-                />,
-                <Memo(Connect(Component))
-                  mentionName="user-1"
-                />,
-              ]
-            }
-          />,
+          <React.Fragment>
+            <FormattedList
+              value={
+                Array [
+                  <Memo(Connect(Component))
+                    mentionName="user-0"
+                  />,
+                  <Memo(Connect(Component))
+                    mentionName="user-1"
+                  />,
+                ]
+              }
+            />
+          </React.Fragment>,
           " are guest users and need to first be invited to the team before you can add them to the channel. Once they've joined the team, you can add them to this channel.",
         ]
       }
@@ -120,7 +122,6 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
             className="AlertBanner__footerMessage"
           >
             <FormattedList
-              key=".0"
               value={
                 Array [
                   <Memo(Connect(Component))
@@ -212,22 +213,26 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
       message={
         Array [
           "You can add ",
-          <FormattedList
-            value={
-              Array [
-                <Memo(Connect(Component))
-                  mentionName="user-0"
-                />,
-                <Memo(Connect(Component))
-                  mentionName="user-1"
-                />,
-              ]
-            }
-          />,
+          <React.Fragment>
+            <FormattedList
+              value={
+                Array [
+                  <Memo(Connect(Component))
+                    mentionName="user-0"
+                  />,
+                  <Memo(Connect(Component))
+                    mentionName="user-1"
+                  />,
+                ]
+              }
+            />
+          </React.Fragment>,
           " to this channel once they are members of the ",
-          <strong>
-            Team Name Display
-          </strong>,
+          <React.Fragment>
+            <strong>
+              Team Name Display
+            </strong>
+          </React.Fragment>,
           " team.",
         ]
       }
@@ -297,7 +302,6 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
           >
             You can add 
             <FormattedList
-              key=".1"
               value={
                 Array [
                   <Memo(Connect(Component))
@@ -340,9 +344,7 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
               </span>
             </FormattedList>
              to this channel once they are members of the 
-            <strong
-              key=".3"
-            >
+            <strong>
               Team Name Display
             </strong>
              team.
@@ -455,27 +457,31 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
     <AlertBanner
       footerMessage={
         Array [
-          <Memo(Connect(Component))
-            mentionName="user-0"
-          />,
+          <React.Fragment>
+            <Memo(Connect(Component))
+              mentionName="user-0"
+            />
+          </React.Fragment>,
           " and ",
-          <WithTooltip
-            title="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
-          >
-            <span
-              className="add-others-link"
+          <React.Fragment>
+            <WithTooltip
+              title="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
             >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="{count} others"
-                id="channel_invite.invite_team_members.messageOthers"
-                values={
-                  Object {
-                    "count": 10,
+              <span
+                className="add-others-link"
+              >
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="{count} others"
+                  id="channel_invite.invite_team_members.messageOthers"
+                  values={
+                    Object {
+                      "count": 10,
+                    }
                   }
-                }
-              />
-            </span>
-          </WithTooltip>,
+                />
+              </span>
+            </WithTooltip>
+          </React.Fragment>,
           " are guest users and need to first be invited to the team before you can add them to the channel. Once they've joined the team, you can add them to this channel.",
         ]
       }
@@ -546,7 +552,7 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
             className="AlertBanner__footerMessage"
           >
             <Connect(Component)
-              key=".$user-0"
+              key="user-0"
               mentionName="user-0"
             >
               <Memo(AtMention)
@@ -560,7 +566,6 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
             </Connect(Component)>
              and 
             <WithTooltip
-              key=".2"
               title="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
             >
               <span
@@ -701,31 +706,37 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
       message={
         Array [
           "You can add ",
-          <Memo(Connect(Component))
-            mentionName="user-0"
-          />,
+          <React.Fragment>
+            <Memo(Connect(Component))
+              mentionName="user-0"
+            />
+          </React.Fragment>,
           " and ",
-          <WithTooltip
-            title="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
-          >
-            <span
-              className="add-others-link"
+          <React.Fragment>
+            <WithTooltip
+              title="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
             >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="{count} others"
-                id="channel_invite.invite_team_members.messageOthers"
-                values={
-                  Object {
-                    "count": 10,
+              <span
+                className="add-others-link"
+              >
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="{count} others"
+                  id="channel_invite.invite_team_members.messageOthers"
+                  values={
+                    Object {
+                      "count": 10,
+                    }
                   }
-                }
-              />
-            </span>
-          </WithTooltip>,
+                />
+              </span>
+            </WithTooltip>
+          </React.Fragment>,
           " to this channel once they are members of the ",
-          <strong>
-            Team Name Display
-          </strong>,
+          <React.Fragment>
+            <strong>
+              Team Name Display
+            </strong>
+          </React.Fragment>,
           " team.",
         ]
       }
@@ -795,7 +806,7 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
           >
             You can add 
             <Connect(Component)
-              key=".$user-0"
+              key="user-0"
               mentionName="user-0"
             >
               <Memo(AtMention)
@@ -809,7 +820,6 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
             </Connect(Component)>
              and 
             <WithTooltip
-              key=".3"
               title="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
             >
               <span
@@ -838,9 +848,7 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
               </span>
             </WithTooltip>
              to this channel once they are members of the 
-            <strong
-              key=".5"
-            >
+            <strong>
               Team Name Display
             </strong>
              team.

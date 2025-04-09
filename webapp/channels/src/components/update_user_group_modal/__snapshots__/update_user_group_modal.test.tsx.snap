@@ -113,10 +113,8 @@ exports[`component/update_user_group_modal should match snapshot 1`] = `
           />
         </button>
         <SaveButton
-          btnClass="btn-primary"
           defaultMessage="Save Details"
           disabled={true}
-          extraClasses=""
           id="saveItems"
           onClick={[Function]}
           saving={false}

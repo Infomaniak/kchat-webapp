@@ -15,7 +15,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render 1`] = `
         disabled={false}
         onClick={[Function]}
       >
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -28,7 +28,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render 1`] = `
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       </button>
     }
     description="test plugin"
@@ -92,7 +92,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with empty 
         disabled={false}
         onClick={[Function]}
       >
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -105,7 +105,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with empty 
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       </button>
     }
     description="test plugin"
@@ -137,7 +137,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with icon 1
         disabled={false}
         onClick={[Function]}
       >
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -150,7 +150,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with icon 1
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       </button>
     }
     description="test plugin"
@@ -183,7 +183,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with no hom
         disabled={false}
         onClick={[Function]}
       >
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -196,7 +196,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with no hom
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       </button>
     }
     description="test plugin"
@@ -226,7 +226,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with no plu
         disabled={false}
         onClick={[Function]}
       >
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -239,7 +239,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with no plu
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       </button>
     }
     homepageUrl="http://example.com"
@@ -269,7 +269,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with one la
         disabled={false}
         onClick={[Function]}
       >
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -282,7 +282,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with one la
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       </button>
     }
     description="test plugin"
@@ -322,7 +322,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with server
         disabled={false}
         onClick={[Function]}
       >
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -335,7 +335,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with server
             defaultMessage="Try Again"
             id="marketplace_modal.list.try_again"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       </button>
     }
     description="test plugin"
@@ -367,7 +367,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with two la
         disabled={false}
         onClick={[Function]}
       >
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -380,7 +380,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with two la
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       </button>
     }
     description="test plugin"
@@ -425,7 +425,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem when installing 1`] = `
         disabled={false}
         onClick={[Function]}
       >
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             Object {
@@ -438,7 +438,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem when installing 1`] = `
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       </button>
     }
     description="test plugin"
