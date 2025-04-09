@@ -97,7 +97,7 @@ describe('components/external_link', () => {
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
             'href',
-            'https://mattermost.com/?utm_source=kchat&utm_content=test&uid=currentUserId&sid=&test=true',
+            'https://infomaniak.com?test=true',
         );
     });
 
@@ -190,7 +190,7 @@ describe('components/external_link', () => {
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
             'href',
-            'https://mattermost.com/?utm_source=kchat&utm_content=test&uid=currentUserId&sid=#desktop',
+            'https://infomaniak.com#desktop',
         );
     });
 });
