@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {BellRingOutlineIcon, GlobeIcon, PencilOutlineIcon, StarOutlineIcon, LockOutlineIcon, StarIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedDate, FormattedMessage} from 'react-intl';
 
-import {BellRingOutlineIcon, GlobeIcon, PencilOutlineIcon, StarOutlineIcon, LockOutlineIcon, StarIcon} from '@mattermost/compass-icons/components';
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile as UserProfileType} from '@mattermost/types/users';
 
@@ -34,13 +34,13 @@ type Props = {
     channel?: Channel;
     fullWidth: boolean;
     locale: string;
-    channelProfiles: UserProfileRedux[];
+    channelProfiles: UserProfileType[];
     enableUserCreation?: boolean;
     isReadOnly?: boolean;
     isFavorite: boolean;
     teamIsGroupConstrained?: boolean;
     creatorName: string;
-    teammate?: UserProfileRedux;
+    teammate?: UserProfileType;
     teammateName?: string;
     currentUser: UserProfileType;
     stats: any;

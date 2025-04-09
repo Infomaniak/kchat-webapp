@@ -159,7 +159,7 @@ const state: GlobalState = {
             hasLimitation: -1,
 
             // mattermost limitations
-            isLimitedResults: -1,
+            // isLimitedResults: -1,
         },
         typing: {},
         recording: {},
@@ -328,10 +328,6 @@ const state: GlobalState = {
                 error: null,
             },
             getTeams: {
-                status: 'not_started',
-                error: null,
-            },
-            getMyTeams: {
                 status: 'not_started',
                 error: null,
             },
