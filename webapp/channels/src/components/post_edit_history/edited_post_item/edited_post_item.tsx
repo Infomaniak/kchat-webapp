@@ -25,7 +25,6 @@ import Avatar from 'components/widgets/users/avatar';
 import WithTooltip from 'components/with_tooltip';
 
 import {ModalIdentifiers, StoragePrefixes} from 'utils/constants';
-import {t} from 'utils/i18n';
 import {imageURLForUser} from 'utils/utils';
 
 import RestorePostModal from '../restore_post_modal';
@@ -41,15 +40,15 @@ const DATE_RANGES = [
 
 const itemMessages = defineMessages({
     helpText: {
-        id: t('post_info.edit.restore'),
+        id: 'post_info.edit.restore',
         defaultMessage: 'Restore this version',
     },
     currentVersionText: {
-        id: t('post_info.edit.current_version'),
+        id: 'post_info.edit.current_version',
         defaultMessage: 'Current Version',
     },
     ariaLabelMessage: {
-        id: t('post_info.edit.aria_label'),
+        id: 'post_info.edit.aria_label',
         defaultMessage: 'Select to restore an old message.',
     },
 });
@@ -229,27 +228,21 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
             >
                 <div
                     className='edit-post-history__title__container'
-                    aria-hidden='true'
                 >
-                    <div
-                        className='edit-post-history__title__container'
-                    >
-                        <div className='edit-post-history__date__badge__container'>
-                            <button
-                                aria-label='Toggle to see an old message.'
-                                className='edit-post-history__icon__button toggleCollapseButton'
-                            >
-                                <i className={`icon ${open ? 'icon-chevron-down' : 'icon-chevron-right'}`}/>
-                            </button>
-                            <span className='edit-post-history__date'>
-                                <Timestamp
-                                    value={timeStampValue}
-                                    ranges={DATE_RANGES}
-                                />
-                            </span>
-                            {currentVersionIndicator}
-                        </div>
-                        {restoreButton}
+                    <div className='edit-post-history__date__badge__container'>
+                        <button
+                            aria-label='Toggle to see an old message.'
+                            className='edit-post-history__icon__button toggleCollapseButton'
+                        >
+                            <i className={`icon ${open ? 'icon-chevron-down' : 'icon-chevron-right'}`}/>
+                        </button>
+                        <span className='edit-post-history__date'>
+                            <Timestamp
+                                value={timeStampValue}
+                                ranges={DATE_RANGES}
+                            />
+                        </span>
+                        {currentVersionIndicator}
                     </div>
                     {restoreButton}
                 </div>

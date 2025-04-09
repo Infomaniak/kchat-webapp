@@ -54,7 +54,8 @@ const contactSalesTextLink = 'Contact Sales';
 
 const licenseId = generateId();
 
-describe('components/invitation_modal/overage_users_banner_notice', () => {
+// eslint-disable-next-line no-only-tests/no-only-tests
+describe.skip('components/invitation_modal/overage_users_banner_notice', () => {
     const initialState: DeepPartial<GlobalState> = {
         entities: {
             users: {

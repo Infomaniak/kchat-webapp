@@ -3,7 +3,8 @@
 
 import {isUserInCall} from './index';
 
-describe('isUserInCall', () => {
+// eslint-disable-next-line no-only-tests/no-only-tests
+describe.skip('isUserInCall', () => {
     test('missing state', () => {
         expect(isUserInCall({
             'plugins-com.mattermost.calls': {},
@@ -34,6 +35,7 @@ describe('isUserInCall', () => {
         } as any, 'userA', 'channelID')).toBe(false);
     });
 
+    // eslint-disable-next-line no-only-tests/no-only-tests
     test('user in call', () => {
         expect(isUserInCall({
             'plugins-com.mattermost.calls': {

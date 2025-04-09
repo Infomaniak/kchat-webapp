@@ -36,6 +36,7 @@ describe('components/sidebar/sidebar_channel/sidebar_channel_link', () => {
         isUnread: false,
         isMuted: false,
         isChannelSelected: false,
+        showChannelsTutorialStep: false,
         hasUrgent: false,
         actions: {
             markMostRecentPostInChannelAsUnread: jest.fn(),

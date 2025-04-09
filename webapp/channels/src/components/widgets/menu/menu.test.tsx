@@ -86,11 +86,11 @@ describe('components/Menu', () => {
             <div
               aria-label="test-label"
               className="a11y__popup Menu"
-              role="menu"
             >
               <ul
                 className="Menu__content dropdown-menu openLeft openUp"
                 onClick={[Function]}
+                role="menu"
                 style={
                   Object {
                     "bottom": "100%",

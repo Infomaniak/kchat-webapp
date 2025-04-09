@@ -25,6 +25,7 @@ describe('components/drafts/draft_actions', () => {
         teammate: {} as UserProfile,
         teammateId: '',
         type: 'channel' as 'channel' | 'thread',
+        goToChannel: jest.fn(),
     };
 
     it('should match snapshot', () => {

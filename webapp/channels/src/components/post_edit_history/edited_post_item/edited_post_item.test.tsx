@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {screen, fireEvent} from '@testing-library/react';
-import type {ComponentProps} from 'react';
 import React from 'react';
+import type {ComponentProps} from 'react';
 
 import {ModalIdentifiers} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
