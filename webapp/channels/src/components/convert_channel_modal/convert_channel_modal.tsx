@@ -42,9 +42,12 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
     constructor(props: Props) {
         super(props);
 
+        const publicChannel = localizeMessage({id: 'admin.channel_list.public', defaultMessage: 'Public'});
+        const privateChannel = localizeMessage({id: 'admin.channel_list.private', defaultMessage: 'Private'});
+
         this.state = {
             show: true,
-            type: localizeMessage({id: this.props.channelType === Constants.PRIVATE_CHANNEL ? 'admin.channel_list.public' : 'admin.channel_list.private'})?.toLocaleLowerCase(),
+            type: (this.props.channelType === Constants.PRIVATE_CHANNEL ? publicChannel : privateChannel).toLocaleLowerCase(),
         };
     }
 
