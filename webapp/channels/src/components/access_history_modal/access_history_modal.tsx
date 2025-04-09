@@ -59,9 +59,9 @@ export default class AccessHistoryModal extends React.PureComponent<Props, State
         return (
             <Modal
                 dialogClassName='a11y__modal modal--scroll access-history-modal'
-                show={show}
-                onHide={onCloseClick}
-                onExited={onHide}
+                show={this.state.show}
+                onHide={this.onHide}
+                onExited={this.props.onHide}
                 bsSize='large'
                 role='none'
                 aria-labelledby='accessHistoryModalLabel'
