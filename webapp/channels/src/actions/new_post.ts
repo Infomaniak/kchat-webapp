@@ -40,13 +40,13 @@ export type NewPostMessageProps = {
     channel_name: string;
     sender_name: string;
     set_online: boolean;
-    mentions?: string;
-    followers?: string;
+    mentions?: string[];
+    followers?: string[];
     team_id: string;
     should_ack: boolean;
     otherFile?: 'true';
     image?: 'true';
-    post: string;
+    post: Post;
 }
 
 export function completePostReceive(post: Post, websocketMessageProps: NewPostMessageProps, fetchedChannelMember?: boolean): ActionFuncAsync<boolean> {
