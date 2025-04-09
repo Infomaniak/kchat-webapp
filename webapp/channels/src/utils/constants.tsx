@@ -16,8 +16,6 @@ import Permissions from 'mattermost-redux/constants/permissions';
 import keyMirror from 'mattermost-redux/utils/key_mirror';
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
 
-import {t} from 'utils/i18n';
-
 import audioIcon from 'images/icons/audio.svg';
 import codeIcon from 'images/icons/code.svg';
 import excelIcon from 'images/icons/excel.svg';
@@ -2375,116 +2373,116 @@ export const InsightsScopes = {
 export const InsightsCardTitles = {
     TOP_CHANNELS: {
         teamTitle: {
-            id: t('insights.topChannels.title'),
+            id: 'insights.topChannels.title',
             defaultMessage: 'Top channels',
         },
         myTitle: {
-            id: t('insights.topChannels.myTitle'),
+            id: 'insights.topChannels.myTitle',
             defaultMessage: 'My top channels',
         },
         teamSubTitle: {
-            id: t('insights.topChannels.subTitle'),
+            id: 'insights.topChannels.subTitle',
             defaultMessage: 'Most active channels for the team',
         },
         mySubTitle: {
-            id: t('insights.topChannels.mySubTitle'),
+            id: 'insights.topChannels.mySubTitle',
             defaultMessage: 'Most active channels that I\'m a member of',
         },
     },
     TOP_REACTIONS: {
         teamTitle: {
-            id: t('insights.topReactions.title'),
+            id: 'insights.topReactions.title',
             defaultMessage: 'Top reactions',
         },
         myTitle: {
-            id: t('insights.topReactions.myTitle'),
+            id: 'insights.topReactions.myTitle',
             defaultMessage: 'My top reactions',
         },
         teamSubTitle: {
-            id: t('insights.topReactions.subTitle'),
+            id: 'insights.topReactions.subTitle',
             defaultMessage: 'The team\'s most-used reactions',
         },
         mySubTitle: {
-            id: t('insights.topReactions.mySubTitle'),
+            id: 'insights.topReactions.mySubTitle',
             defaultMessage: 'Reactions I\'ve used the most',
         },
     },
     TOP_THREADS: {
         teamTitle: {
-            id: t('insights.topThreads.title'),
+            id: 'insights.topThreads.title',
             defaultMessage: 'Top threads',
         },
         myTitle: {
-            id: t('insights.topThreads.myTitle'),
+            id: 'insights.topThreads.myTitle',
             defaultMessage: 'My top threads',
         },
         teamSubTitle: {
-            id: t('insights.topThreads.subTitle'),
+            id: 'insights.topThreads.subTitle',
             defaultMessage: 'Most active threads for the team',
         },
         mySubTitle: {
-            id: t('insights.topThreads.mySubTitle'),
+            id: 'insights.topThreads.mySubTitle',
             defaultMessage: 'Most active threads I\'ve followed',
         },
     },
     TOP_BOARDS: {
         teamTitle: {
-            id: t('insights.topBoards.title'),
+            id: 'insights.topBoards.title',
             defaultMessage: 'Top boards',
         },
         myTitle: {
-            id: t('insights.topBoards.myTitle'),
+            id: 'insights.topBoards.myTitle',
             defaultMessage: 'My top boards',
         },
         teamSubTitle: {
-            id: t('insights.topBoards.subTitle'),
+            id: 'insights.topBoards.subTitle',
             defaultMessage: 'Most active boards for the team',
         },
         mySubTitle: {
-            id: t('insights.topBoards.mySubTitle'),
+            id: 'insights.topBoards.mySubTitle',
             defaultMessage: 'Most active boards I\'ve participated in',
         },
     },
     LEAST_ACTIVE_CHANNELS: {
         teamTitle: {
-            id: t('insights.leastActiveChannels.title'),
+            id: 'insights.leastActiveChannels.title',
             defaultMessage: 'Least active channels',
         },
         myTitle: {
-            id: t('insights.leastActiveChannels.myTitle'),
+            id: 'insights.leastActiveChannels.myTitle',
             defaultMessage: 'My least active channels',
         },
         teamSubTitle: {
-            id: t('insights.leastActiveChannels.subTitle'),
+            id: 'insights.leastActiveChannels.subTitle',
             defaultMessage: 'Channels with the least posts',
         },
         mySubTitle: {
-            id: t('insights.leastActiveChannels.mySubTitle'),
+            id: 'insights.leastActiveChannels.mySubTitle',
             defaultMessage: 'My channels with the least posts',
         },
     },
     TOP_PLAYBOOKS: {
         teamTitle: {
-            id: t('insights.topPlaybooks.title'),
+            id: 'insights.topPlaybooks.title',
             defaultMessage: 'Top playbooks',
         },
         myTitle: {
-            id: t('insights.topPlaybooks.myTitle'),
+            id: 'insights.topPlaybooks.myTitle',
             defaultMessage: 'My top playbooks',
         },
         teamSubTitle: {
-            id: t('insights.topPlaybooks.subTitle'),
+            id: 'insights.topPlaybooks.subTitle',
             defaultMessage: 'Playbooks with the most runs',
         },
         mySubTitle: {
-            id: t('insights.topPlaybooks.mySubTitle'),
+            id: 'insights.topPlaybooks.mySubTitle',
             defaultMessage: 'Playbooks I\'ve used with the most runs',
         },
     },
     TOP_DMS: {
         teamTitle: {},
         myTitle: {
-            id: t('insights.topDMs.myTitle'),
+            id: 'insights.topDMs.myTitle',
             defaultMessage: 'My most active direct messages',
         },
         teamSubTitle: {},
@@ -2492,7 +2490,7 @@ export const InsightsCardTitles = {
     },
     NEW_TEAM_MEMBERS: {
         teamTitle: {
-            id: t('insights.newTeamMembers.title'),
+            id: 'insights.newTeamMembers.title',
             defaultMessage: 'New team members',
         },
         myTitle: {},
