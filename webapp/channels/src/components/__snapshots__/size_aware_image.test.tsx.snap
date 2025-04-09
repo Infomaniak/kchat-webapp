@@ -52,7 +52,6 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
         }
       >
         <WithTooltip
-          placement="top"
           title="Save file to kDrive"
         >
           <a
@@ -174,7 +173,6 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
         }
       >
         <WithTooltip
-          placement="top"
           title="Save file to kDrive"
         >
           <a
@@ -309,7 +307,6 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
         }
       >
         <WithTooltip
-          placement="top"
           title="Save file to kDrive"
         >
           <a

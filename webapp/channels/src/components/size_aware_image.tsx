@@ -23,7 +23,7 @@ import WithTooltip from 'components/with_tooltip';
 import {FileTypes} from 'utils/constants';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
-import {copyToClipboard, getFileType} from 'utils/utils';
+import {copyToClipboard, getFileType, localizeMessage} from 'utils/utils';
 
 const MIN_IMAGE_SIZE = 48;
 const MIN_IMAGE_SIZE_FOR_INTERNAL_BUTTONS = 100;
@@ -321,7 +321,6 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
 
         const kdriveSave = fileInfo ? (
             <WithTooltip
-                placement='top'
                 title={localizeMessage({id: 'kdrive.save', defaultMessage: 'Save file to kDrive'})}
             >
                 <a className='style--none size-aware-image__download--kdrive'>
