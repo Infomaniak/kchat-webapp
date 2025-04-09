@@ -78,12 +78,6 @@ export type Props = {
 const VISIBLE = {visibility: 'visible'};
 const HIDDEN = {visibility: 'hidden'};
 
-declare global {
-    interface Window {
-        isFocusedTextBox?: boolean;
-    }
-}
-
 export default class Textbox extends React.PureComponent<Props> {
     private readonly suggestionProviders: Provider[];
     private readonly wrapper: React.RefObject<HTMLDivElement>;
@@ -252,8 +246,7 @@ export default class Textbox extends React.PureComponent<Props> {
 
     focus = () => {
         const textbox = this.getInputBox();
-        if (textbox && !window.isFocusedTextBox) {
-            window.isFocusedTextBox = true;
+        if (textbox) {
             textbox.focus();
             Utils.placeCaretAtEnd(textbox);
             setTimeout(() => {
@@ -263,10 +256,6 @@ export default class Textbox extends React.PureComponent<Props> {
             // reset character count warning
             this.checkMessageLength(textbox.value);
         }
-
-        setTimeout(() => {
-            window.isFocusedTextBox = false;
-        }, 500);
     };
 
     blur = () => {
