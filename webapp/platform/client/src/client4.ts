@@ -2217,13 +2217,6 @@ export default class Client4 {
 
     // System Properties Routes
 
-    getCustomProfileAttributeFields = async () => {
-        return this.doFetch<UserPropertyField[]>(
-            `${this.getCustomProfileAttributeFieldsRoute()}`,
-            {method: 'GET'},
-        );
-    };
-
     createCustomProfileAttributeField = async (patch: UserPropertyFieldPatch) => {
         return this.doFetch<UserPropertyField>(
             `${this.getCustomProfileAttributeFieldsRoute()}`,

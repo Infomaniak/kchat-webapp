@@ -46,13 +46,6 @@ export function getLicenseConfig() {
     });
 }
 
-export function getCustomProfileAttributeFields() {
-    return bindClientFunc({
-        clientFunc: Client4.getCustomProfileAttributeFields,
-        onSuccess: [GeneralTypes.CUSTOM_PROFILE_ATTRIBUTE_FIELDS_RECEIVED],
-    });
-}
-
 export function logClientError(message: string, level = LogLevel.Error) {
     return bindClientFunc({
         clientFunc: Client4.logClientError,
@@ -113,7 +106,6 @@ export function getFirstAdminSetupComplete(): ActionFuncAsync<SystemSetting> {
 export default {
     getClientConfig,
     getLicenseConfig,
-    getCustomProfileAttributeFields,
     logClientError,
     setServerVersion,
     setUrl,
