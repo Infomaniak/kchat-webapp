@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {
+    DotsVerticalIcon,
+} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {memo, useState} from 'react';
 import {useIntl} from 'react-intl';
-
-import {
-    DotsVerticalIcon,
-} from '@mattermost/compass-icons/components';
 
 import * as Menu from 'components/menu';
 

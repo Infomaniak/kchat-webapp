@@ -96,6 +96,9 @@ export type Props = WrappedComponentProps & {
     * Prevents display of utility buttons when image in a location that makes them inappropriate
     */
     hideUtilities?: boolean;
+
+    //IK
+    handleKDriveSave: (fileId: string, fileName: string) => Promise<{data: boolean}>;
 }
 
 type State = {
@@ -204,6 +207,8 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             fileURL,
             enablePublicLink,
             intl,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            handleKDriveSave, //we remove it from props so we avoid passing it to the dom <img> as it cause error
             ...props
         } = this.props;
         Reflect.deleteProperty(props, 'showLoader');
