@@ -132,7 +132,10 @@ export default function UserAccountMenu(props: Props) {
             />
             <UserAccountIkNextMenuItem/>
             <Menu.Separator/>
-            <UserAccountLogoutMenuItem/>
+            <UserAccountLogoutMenuItem
+                ksuiteBridge={props.ksuiteBridge}
+                isBridgeConnected={props.isBridgeConnected}
+            />
         </Menu.Container>
     );
 }

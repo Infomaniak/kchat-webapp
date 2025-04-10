@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {LogoutMessageKey, type KSuiteBridge} from '@infomaniak/ksuite-bridge';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
@@ -10,9 +11,19 @@ import {emitUserLoggedOutEvent} from 'actions/global_actions';
 
 import * as Menu from 'components/menu';
 
-export default function UserAccountLogoutMenuItem() {
+export interface Props {
+    ksuiteBridge: KSuiteBridge;
+    isBridgeConnected: boolean;
+}
+
+export default function UserAccountLogoutMenuItem(props: Props) {
     function handleClick() {
-        emitUserLoggedOutEvent();
+        if (props.isBridgeConnected) {
+            props.ksuiteBridge.sendMessage({
+                type: LogoutMessageKey,
+            });
+        }
+        emitUserLoggedOutEvent('ikLogout');
     }
 
     return (

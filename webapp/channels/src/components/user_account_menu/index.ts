@@ -8,6 +8,7 @@ import type {Dispatch} from 'redux';
 
 import {Client4} from 'mattermost-redux/client';
 import {Preferences} from 'mattermost-redux/constants';
+import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
@@ -36,6 +37,7 @@ function makeMapStateToProps() {
         const customStatus = getCustomStatus(state, userId);
         const currentTeam = getCurrentTeam(state);
         const showNextSwitch = currentTeam ? STAFF_ONLY_TEAM_NAME_WHITELIST.includes(currentTeam.name) : false;
+        const ksuiteBridge = getKSuiteBridge(state);
 
         return {
             userId,
@@ -50,6 +52,8 @@ function makeMapStateToProps() {
             isCustomStatusEnabled: isCustomStatusEnabled(state),
             timezone: getCurrentTimezone(state),
             showNextSwitch,
+            ksuiteBridge,
+            isBridgeConnected: ksuiteBridge?.isConnected,
         };
     };
 }
