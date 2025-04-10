@@ -350,8 +350,8 @@ export async function reconnect(socketId) {
         }
 
         // Re-syncing the current channel and team ids.
-        WebSocketClient.updateActiveChannel(currentChannelId);
-        WebSocketClient.updateActiveTeam(currentTeamId);
+        // WebSocketClient.updateActiveChannel(currentChannelId);
+        // WebSocketClient.updateActiveTeam(currentTeamId);
     }
 
     const currentChannelId = getCurrentChannelId(state);
