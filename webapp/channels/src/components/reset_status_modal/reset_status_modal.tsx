@@ -251,6 +251,7 @@ export default class ResetStatusModal extends React.PureComponent<Props, State> 
                 onExited={this.props.onExited}
                 showCheckbox={showCheckbox}
                 checkboxText={manualStatusCheckbox}
+                modalClass='reset-status-modal'
             />
         );
     }

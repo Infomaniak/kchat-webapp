@@ -9,12 +9,7 @@
         }
     }
 }
-.modal-confirm .modal-body {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
 
-.modal-confirm .modal-footer {
-    justify-content: center !important;
+.modal-confirm.reset-status-modal {
+    width: fit-content;
 }
