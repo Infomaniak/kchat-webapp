@@ -10,6 +10,7 @@ import WithTooltip from './index';
 
 jest.mock('utils/user_agent', () => ({
     isMac: jest.fn().mockReturnValue(false),
+    isDesktopApp: jest.fn().mockReturnValue(false),
 }));
 
 describe('WithTooltip', () => {
