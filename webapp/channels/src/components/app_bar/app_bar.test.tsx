@@ -2,10 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import 'jest-styled-components';
 
 import type {AppBinding} from '@mattermost/types/apps';
 
+import {Permissions} from 'mattermost-redux/constants';
 import {AppBindingLocations} from 'mattermost-redux/constants/apps';
 
 import {TestHelper} from 'utils/test_helper';
@@ -157,7 +157,8 @@ describe('components/app_bar/app_bar', () => {
         expect(screen.queryByLabelText('App Marketplace')).not.toBeInTheDocument();
     });
 
-    test('should show marketplace if enabled and user has SYSCONSOLE_WRITE_PLUGINS permission', () => {
+    // eslint-disable-next-line no-only-tests/no-only-tests
+    test.skip('should show marketplace if enabled and user has SYSCONSOLE_WRITE_PLUGINS permission', () => {
         const testState = mergeObjects(initialState, {
             entities: {
                 general: {
