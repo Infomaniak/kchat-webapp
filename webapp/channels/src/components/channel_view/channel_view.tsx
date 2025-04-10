@@ -7,6 +7,7 @@ import type {RouteComponentProps} from 'react-router-dom';
 
 import * as GlobalActions from 'actions/global_actions';
 
+import AdvancedCreatePost from 'components/advanced_create_post';
 import {makeAsyncComponent} from 'components/async_load';
 import {BannerJoinChannel} from 'components/banner_join_channel';
 import deferComponentRender from 'components/deferComponentRender';
@@ -17,12 +18,16 @@ import {getHistory} from 'utils/browser_history';
 
 import WebSocketClient from 'client/web_websocket_client';
 
+// import InputLoading from './input_loading';
+
 import type {PropsFromRedux} from './index';
 
 const ChannelHeader = makeAsyncComponent('ChannelHeader', lazy(() => import('components/channel_header')));
 const FileUploadOverlay = makeAsyncComponent('FileUploadOverlay', lazy(() => import('components/file_upload_overlay')));
 const ChannelBookmarks = makeAsyncComponent('ChannelBookmarks', lazy(() => import('components/channel_bookmarks')));
-const AdvancedCreatePost = makeAsyncComponent('AdvancedCreatePost', lazy(() => import('components/advanced_create_post')));
+
+// IK changes : we choose to not lazy load the advanced create post component due to missingChannelRole being always false
+// const AdvancedCreatePost = makeAsyncComponent('AdvancedCreatePost', lazy(() => import('components/advanced_create_post')), <InputLoading/>);
 
 export type Props = PropsFromRedux & RouteComponentProps<{
     postid?: string;
