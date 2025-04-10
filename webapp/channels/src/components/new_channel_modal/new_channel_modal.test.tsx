@@ -3,19 +3,15 @@
 
 import React from 'react';
 
-import {GenericModal} from '@mattermost/components';
-import type {ChannelType} from '@mattermost/types/channels';
 import type {DeepPartial} from '@mattermost/types/utilities';
 
 import Permissions from 'mattermost-redux/constants/permissions';
 
-import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
-import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
-
-import Constants, {suitePluginIds} from 'utils/constants';
+import {suitePluginIds} from 'utils/constants';
 import {cleanUpUrlable} from 'utils/url';
 
 import {
+    act,
     renderWithContext,
     screen,
     userEvent,
@@ -66,39 +62,6 @@ describe('components/new_channel_modal', () => {
                         id: 'current_team_id',
                         description: 'Curent team description',
                         name: 'current-team',
-                    },
-                },
-                usage: {
-                    storage: 0,
-                    public_channels: 0,
-                    private_channels: 0,
-                    guests: 0,
-                    members: 0,
-                    files: {
-                        totalStorage: 0,
-                    },
-                    messages: {
-                        history: 0,
-                    },
-                    teams: {
-                        active: 0,
-                        cloudArchived: 0,
-                    },
-                    boards: {
-                        cards: 0,
-                    },
-                    usageLoaded: true,
-                },
-                cloud: {
-                    limits: {
-                        limits: {
-                            storage: 10,
-                            public_channels: 10,
-                            private_channels: 10,
-                            guests: 10,
-                            members: 10,
-                        },
-                        limitsLoaded: true,
                     },
                 },
             },
@@ -417,72 +380,38 @@ describe('components/new_channel_modal', () => {
         expect(createChannelButton).toBeDisabled();
     });
 
-    // eslint-disable-next-line no-only-tests/no-only-tests
-    test.skip('should disable confirm button when server error', async () => {
-        // render(
-        //     <NewChannelModal/>,
-        // );
-
-        // // Confirm button should be disabled
-        // const createChannelButton = screen.getByText('Create channel');
-        // expect(createChannelButton).toBeDisabled();
-
-        // // Change display name
-        // const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
-        // expect(channelNameInput).toBeInTheDocument();
-        // expect(channelNameInput).toHaveAttribute('value', '');
-
-        // userEvent.type(channelNameInput, 'Channel name');
-
-        // // Change type to private
-        // const privateChannel = screen.getByText('Private Channel');
-        // expect(privateChannel).toBeInTheDocument();
-
-        // userEvent.click(privateChannel);
-
-        // // Confirm button should be enabled
-        // expect(createChannelButton).toBeEnabled();
-
-        // // Submit
-        // await act(async () => userEvent.click(createChannelButton));
-
-        // const serverError = screen.getByText('Something went wrong. Please try again.');
-        // expect(serverError).toBeInTheDocument();
-        // expect(createChannelButton).toBeDisabled();
-        const mockChangeEvent = {
-            preventDefault: jest.fn(),
-            target: {
-                value: 'Channel name',
-            },
-        } as unknown as React.ChangeEvent<HTMLInputElement>;
-
+    test('should disable confirm button when server error', async () => {
         renderWithContext(
             <NewChannelModal/>,
             initialState,
         );
 
         // Confirm button should be disabled
-        let genericModal = wrapper.find(GenericModal);
-        expect(genericModal.props().isConfirmDisabled).toEqual(true);
+        const createChannelButton = screen.getByText('Create channel');
+        expect(createChannelButton).toBeDisabled();
 
         // Change display name
-        const input = wrapper.find(ChannelNameFormField).first();
-        input.props().onDisplayNameChange!(mockChangeEvent.target.value);
+        const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
+        expect(channelNameInput).toBeInTheDocument();
+        expect(channelNameInput).toHaveAttribute('value', '');
+
+        userEvent.type(channelNameInput, 'Channel name');
 
         // Change type to private
-        const selector = wrapper.find(PublicPrivateSelector);
-        selector.props().onChange!(Constants.PRIVATE_CHANNEL as ChannelType);
+        const privateChannel = screen.getByText('Private Channel');
+        expect(privateChannel).toBeInTheDocument();
+
+        userEvent.click(privateChannel);
 
         // Confirm button should be enabled
-        genericModal = wrapper.find(GenericModal);
-        expect(genericModal.props().isConfirmDisabled).toEqual(false);
+        expect(createChannelButton).toBeEnabled();
 
         // Submit
-        await genericModal.props().handleConfirm!();
+        await act(async () => userEvent.click(createChannelButton));
 
-        genericModal = wrapper.find(GenericModal);
-        expect(genericModal.props().errorText).toEqual('Something went wrong. Please try again.');
-        expect(genericModal.props().isConfirmDisabled).toEqual(true);
+        const serverError = screen.getByText('Something went wrong. Please try again.');
+        expect(serverError).toBeInTheDocument();
+        expect(createChannelButton).toBeDisabled();
     });
 
     // test('should request team creation on submit', async () => {
