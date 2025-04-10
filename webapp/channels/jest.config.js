@@ -16,6 +16,8 @@ const config = {
         'src/client/**/*.{js,jsx,ts,tsx}',
         'src/components/**/*.{jsx,tsx}',
         'src/plugins/**/*.{js,jsx,ts,tsx}',
+        'src/reducers/**/*.{js,jsx,ts,tsx}',
+        'src/routes/**/*.{js,jsx,ts,tsx}',
         'src/selectors/**/*.{js,jsx,ts,tsx}',
         'src/stores/**/*.{js,jsx,ts,tsx}',
         'src/utils/**/*.{js,jsx,ts,tsx}',
@@ -46,7 +48,7 @@ const config = {
         ['jest-junit', {outputDirectory: 'coverage', outputName: 'junit.xml'}],
     ],
     transformIgnorePatterns: [
-        'node_modules/(?!react-native|react-router|p-queue|p-timeout|@infomaniak/compass-components|@infomaniak/compass-icons|cidr-regex|ip-regex|wasm-media-encoders|serialize-error)',
+        'node_modules/(?!react-native|react-router|pdfjs-dist|p-queue|p-timeout|@infomaniak/compass-components|@infomaniak/compass-icons|cidr-regex|ip-regex|wasm-media-encoders|serialize-error)',
     ],
     transform: {
         '^.+\\.(js|jsx|ts|tsx|mjs)$': 'babel-jest',
