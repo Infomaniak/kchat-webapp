@@ -239,6 +239,7 @@ const SidebarCategoryMenu = ({
     return (
         <SidebarCategoryGenericMenu
             id={category.id}
+            name={category.display_name}
             menuTriggerRef={menuTriggerRef}
         >
             {markAsReadMenuItem}
