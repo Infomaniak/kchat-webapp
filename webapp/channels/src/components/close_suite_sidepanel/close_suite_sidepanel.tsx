@@ -12,7 +12,7 @@ type Props = {
 }
 
 const CollapseKsuiteSidepanel: React.FunctionComponent<Props> = (props: Props) => {
-    if (!props.bridge.isConnected) {
+    if (!props.bridge?.isConnected) {
         return null;
     }
 

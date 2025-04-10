@@ -83,7 +83,7 @@ export function loadMe(): ActionFuncAsync<boolean> {
 
         const bridge = getState().entities.ksuiteBridge.bridge;
 
-        if (!bridge.isConnected && !isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+        if (!bridge?.isConnected && !isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
             // eslint-disable-next-line no-process-env
             window.location.assign(`https://ksuite.${process.env.BASE_URL?.split('kchat.')[1]}/kchat`);
 
