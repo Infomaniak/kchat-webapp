@@ -14,6 +14,15 @@ import {PostListRowListIds, PostRequestTypes} from 'utils/constants';
 
 import PostList from './post_list_virtualized';
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('PostList', () => {
     const baseActions = {
         checkAndSetMobileView: jest.fn(),

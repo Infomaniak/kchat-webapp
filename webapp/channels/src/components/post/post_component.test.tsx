@@ -17,6 +17,15 @@ import type {GlobalState} from 'types/store';
 import PostComponent from './post_component';
 import type {Props} from './post_component';
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('PostComponent', () => {
     const currentTeam = TestHelper.getTeamMock();
     const channel = TestHelper.getChannelMock({team_id: currentTeam.id});

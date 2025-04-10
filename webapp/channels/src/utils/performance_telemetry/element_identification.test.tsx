@@ -17,6 +17,15 @@ import {identifyElementRegion} from './element_identification';
 
 jest.mock('react-virtualized-auto-sizer', () => (props: AutoSizerProps) => props.children({height: 100, width: 100}));
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('identifyElementRegion', () => {
     test('should be able to identify various elements in the app', async () => {
         const team = TestHelper.getTeamMock({

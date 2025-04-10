@@ -9,6 +9,15 @@ import {Preferences} from 'mattermost-redux/constants';
 import PostList from './post_list';
 import PostView from './post_view';
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('components/post_view/post_view', () => {
     const baseProps = {
         lastViewedAt: 12345678,

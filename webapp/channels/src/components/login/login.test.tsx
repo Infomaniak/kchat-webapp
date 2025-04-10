@@ -20,6 +20,15 @@ import type {GlobalState} from 'types/store';
 jest.unmock('react-router-dom');
 jest.mock('@sentry/react', () => ({captureException: () => jest.fn()}));
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('components/login/Login', () => {
     const baseState = {
         entities: {
