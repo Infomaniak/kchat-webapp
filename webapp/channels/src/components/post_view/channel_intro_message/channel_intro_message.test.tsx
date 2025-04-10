@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {shallow} from 'enzyme';
 import React from 'react';
 
 import type {Channel, ChannelType} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Constants} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import {renderWithContext, screen} from 'tests/react_testing_utils';
 
@@ -33,6 +33,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
     const users = [
         {id: 'user1', roles: 'system_user'},
         {id: 'guest1', roles: 'system_guest'},
+        {id: 'test-user-id', roles: 'system_user'},
     ] as UserProfile[];
 
     const baseProps = {
@@ -57,9 +58,40 @@ describe('components/post_view/ChannelIntroMessages', () => {
         },
     };
 
+    const initialState = {
+        entities: {
+            general: {config: {}},
+            users: {
+                profiles: {
+                    user1: TestHelper.getUserMock({
+                        id: 'user1',
+                        username: 'my teammate',
+                    }),
+                },
+            },
+
+            roles: {
+                roles: {},
+            },
+            channels: {roles: {channel_id: ['system_user']},
+                currentChannelId: 'channel_id',
+                myMembers: {},
+            },
+            teams: {
+                teams: {},
+            },
+            preferences: {
+                myPreferences: {},
+            },
+        },
+
+        plugins: {
+            components: {},
+        },
+    } as any;
+
     describe('test Open Channel', () => {
         test('should match component state, without boards', () => {
-            const initialState = {};
             renderWithContext(
                 <ChannelIntroMessage{...baseProps}/>, initialState,
             );
@@ -87,7 +119,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
             renderWithContext(
                 <ChannelIntroMessage
                     {...props}
-                />,
+                />, initialState,
             );
 
             expect(screen.queryByText('test channel')).not.toBeInTheDocument();
@@ -104,10 +136,10 @@ describe('components/post_view/ChannelIntroMessages', () => {
                 <ChannelIntroMessage
                     {...props}
                     channelProfiles={users}
-                />,
+                />, initialState,
             );
 
-            expect(screen.getByText('This is the start of your group message history with these teammates. ', {exact: false})).toBeInTheDocument();
+            expect(screen.getByText('This is the start of your group message history with these teammates.', {exact: false})).toBeInTheDocument();
 
             const headerDialog = screen.getByLabelText('Set header');
             expect(headerDialog).toBeInTheDocument();
@@ -143,7 +175,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
             renderWithContext(
                 <ChannelIntroMessage
                     {...props}
-                />,
+                />, initialState,
             );
 
             const message = screen.getByText('This is the start of your direct message history with this teammate. Messages and files shared here are not shown to anyone else.', {exact: false});
@@ -157,7 +189,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
                     {...props}
                     teammate={user1 as UserProfile}
                     teammateName='my teammate'
-                />,
+                />, initialState,
             );
             expect(screen.getByText('This is the start of your direct message history with my teammate.', {exact: false})).toBeInTheDocument();
 
@@ -197,7 +229,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
                 <ChannelIntroMessage
                     {...props}
                     isReadOnly={true}
-                />,
+                />, initialState,
             );
 
             const beginningHeading = screen.getByText('test channel');
@@ -213,33 +245,26 @@ describe('components/post_view/ChannelIntroMessages', () => {
                 <ChannelIntroMessage
                     {...props}
                     teamIsGroupConstrained={true}
-                />,
+                />, initialState,
             );
-            expect(container).toMatchSnapshot();
+
+            //no permission is given, invite link should not be in the dom
+            expect(screen.queryByText('Add other groups to this team')).not.toBeInTheDocument();
+
+            const beginningHeading = screen.getByText('test channel');
+
+            expect(beginningHeading).toBeInTheDocument();
+            expect(beginningHeading).toHaveClass('channel-intro__title');
+            expect(screen.getByText('Post messages here that you want everyone to see. Everyone automatically becomes a member of this channel when they join the team.', {exact: false})).toBeInTheDocument();
         });
-
-        test('should match snapshot, with enableUserCreation', () => {
-            const wrapper = shallow(
-                <ChannelIntroMessage
-                    {...props}
-                    enableUserCreation={true}
-                />,
-            );
-            expect(wrapper).toMatchSnapshot();
-        });
-
-        const beginningHeading = screen.getByText('test channel');
-
-        expect(beginningHeading).toBeInTheDocument();
-        expect(beginningHeading).toHaveClass('channel-intro__title');
-        expect(screen.getByText('Post messages here that you want everyone to see. Everyone automatically becomes a member of this channel when they join the team.', {exact: false})).toBeInTheDocument();
     });
 
-    describe('test OFFTOPIC Channel', () => {
+    describe('test OFF TOPIC Channel', () => {
         const directChannel = {
             ...channel,
             type: Constants.OPEN_CHANNEL as ChannelType,
             name: Constants.OFFTOPIC_CHANNEL,
+            display_name: Constants.OFFTOPIC_CHANNEL,
         };
         const props = {
             ...baseProps,
@@ -250,7 +275,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
             renderWithContext(
                 <ChannelIntroMessage
                     {...props}
-                />,
+                />, initialState,
             );
             screen.getByText('This is the start of off-topic, a channel for non-work-related conversations.');
             expect(screen.getByText('This is the start of off-topic, a channel for non-work-related conversations.')).toHaveClass('channel-intro__text');
