@@ -12,6 +12,7 @@ import TooltipShortcut from './tooltip_shortcut';
 
 jest.mock('utils/user_agent', () => ({
     isMac: jest.fn(),
+    isDesktopApp: jest.fn().mockReturnValue(false),
 }));
 
 describe('TooltipShortcut', () => {

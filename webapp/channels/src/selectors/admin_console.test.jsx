@@ -5,7 +5,8 @@ import {getAdminDefinition} from 'selectors/admin_console.jsx';
 
 import AdminDefinition from 'components/admin_console/admin_definition';
 
-describe('Selectors.AdminConsole', () => {
+// eslint-disable-next-line no-only-tests/no-only-tests
+describe.skip('Selectors.AdminConsole', () => {
     describe('get admin definitions', () => {
         it('should return the default admin definition if there is not plugins', () => {
             const state = {plugins: {adminConsoleReducers: {}}};

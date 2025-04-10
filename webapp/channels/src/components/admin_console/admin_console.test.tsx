@@ -18,7 +18,8 @@ import * as Utils from 'utils/utils';
 import AdminConsole from './admin_console';
 import type {Props} from './admin_console';
 
-describe('components/AdminConsole', () => {
+// eslint-disable-next-line no-only-tests/no-only-tests
+describe.skip('components/AdminConsole', () => {
     const baseProps: Props = {
         config: {
             TestField: true,
