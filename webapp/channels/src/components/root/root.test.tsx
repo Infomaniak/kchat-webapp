@@ -63,7 +63,6 @@ jest.mock('actions/telemetry_actions');
 jest.mock('components/announcement_bar', () => () => <div/>);
 jest.mock('components/team_sidebar', () => () => <div/>);
 jest.mock('components/mobile_view_watcher', () => () => <div/>);
-jest.mock('./performance_reporter_controller', () => () => <div/>);
 
 jest.mock('utils/utils', () => ({
     applyTheme: jest.fn(),
@@ -126,7 +125,6 @@ describe('components/Root', () => {
                 handleLoginLogoutSignal,
                 redirectToOnboardingOrDefaultTeam,
             }, store.dispatch),
-            getCustomProfileAttributeFields: jest.fn(),
         },
         permalinkRedirectTeamName: 'myTeam',
         ...{
