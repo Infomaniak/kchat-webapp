@@ -931,7 +931,7 @@ describe('Selectors.Posts', () => {
             expect(postId).toBe('1000');
         });
 
-        it.skip('system messages hidden', () => { // eslint-disable-line no-only-tests/no-only-tests
+        it('system messages hidden', () => {
             const testPosts = {
                 1000: {id: '1000', type: 'system_join_channel'},
                 1001: {id: '1001', type: 'system_join_channel'},

@@ -60,6 +60,7 @@ export function getPostAttachments(state: GlobalState, postId: Post['id']): Mess
 }
 
 export function getPostAttachmentsPollId(state: GlobalState, postId: Post['id']): string | undefined {
+    // @ts-expect-error we check integration on purpose
     return getPostAttachments(state, postId)?.[0]?.actions?.[0]?.integration?.context?.['poll-id'];
 }
 
@@ -212,6 +213,8 @@ export function getLatestPostToEdit(state: GlobalState, channelId: string, rootI
     return '';
 }
 
+export const getLatestReplyablePostId: (state: GlobalState) => Post['id'] = (state) => getLatestInteractablePostId(state, getCurrentChannelId(state));
+
 // getPostsInCurrentChannel returns an array of all recent posts loaded at the bottom of the given channel.
 // It does not include older posts such as those loaded by viewing a thread or a permalink.
 export const getPostsInCurrentChannel: (state: GlobalState) => Post[] | undefined | null = createSelector(
@@ -253,7 +256,7 @@ export function makeGetPostsForThread(): (state: GlobalState, rootId: string) =>
         (state: GlobalState, rootId: string) => state.entities.posts.postsInThread[rootId],
         (state: GlobalState, rootId: string) => state.entities.posts.posts[rootId],
         shouldShowJoinLeaveMessages,
-        (posts, currentUser, postsForThread, rootPost) => {
+        (posts, currentUser, postsForThread, rootPost, showJoinLeave) => {
             const thread: Post[] = [];
 
             if (rootPost) {
@@ -267,7 +270,7 @@ export function makeGetPostsForThread(): (state: GlobalState, rootId: string) =>
                         continue;
                     }
 
-                    const skip = shouldFilterJoinLeavePost(post, true, currentUser ? currentUser.username : '');
+                    const skip = shouldFilterJoinLeavePost(post, showJoinLeave, currentUser ? currentUser.username : '');
                     if (!skip) {
                         thread.push(post);
                     }
@@ -395,9 +398,22 @@ export const getMostRecentPostIdInChannel: (state: GlobalState, channelId: Chann
     getAllPosts,
     (state: GlobalState, channelId: string) => getPostIdsInChannel(state, channelId),
     shouldShowJoinLeaveMessages,
-    (_, postIdsInChannel) => {
+    (posts, postIdsInChannel, allowSystemMessages) => {
         if (!postIdsInChannel) {
             return '';
+        }
+
+        if (!allowSystemMessages) {
+            // return the most recent non-system message in the channel
+            let postId;
+            for (let i = 0; i < postIdsInChannel.length; i++) {
+                const p = posts[postIdsInChannel[i]];
+                if (!p.type || !p.type.startsWith(Posts.SYSTEM_MESSAGE_PREFIX)) {
+                    postId = p.id;
+                    break;
+                }
+            }
+            return postId;
         }
 
         // return the most recent message in the channel
