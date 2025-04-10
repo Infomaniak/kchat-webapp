@@ -22,7 +22,7 @@ exports[`components/ResetStatusModal should match snapshot 1`] = `
       id="modal.manual_status.message_online"
     />
   }
-  modalClass=""
+  modalClass="reset-status-modal"
   onCancel={[Function]}
   onConfirm={[Function]}
   show={false}
@@ -53,7 +53,7 @@ exports[`components/ResetStatusModal should match snapshot, render modal for OOF
       id="modal.manual_status.auto_responder.message_online"
     />
   }
-  modalClass=""
+  modalClass="reset-status-modal"
   onCancel={[Function]}
   onConfirm={[Function]}
   show={false}

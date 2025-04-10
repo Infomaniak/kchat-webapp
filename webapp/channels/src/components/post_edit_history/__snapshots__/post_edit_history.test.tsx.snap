@@ -230,37 +230,32 @@ exports[`components/post_edit_history should match snapshot 1`] = `
             id="searchResult_post_id"
           >
             <div
-              aria-hidden="true"
               class="edit-post-history__title__container"
             >
               <div
-                class="edit-post-history__title__container"
+                class="edit-post-history__date__badge__container"
               >
-                <div
-                  class="edit-post-history__date__badge__container"
+                <button
+                  aria-label="Toggle to see an old message."
+                  class="edit-post-history__icon__button toggleCollapseButton"
                 >
-                  <button
-                    aria-label="Toggle to see an old message."
-                    class="edit-post-history__icon__button toggleCollapseButton"
+                  <i
+                    class="icon icon-chevron-down"
+                  />
+                </button>
+                <span
+                  class="edit-post-history__date"
+                >
+                  <time
+                    datetime="1970-01-01T00:00:00.000"
                   >
-                    <i
-                      class="icon icon-chevron-down"
-                    />
-                  </button>
-                  <span
-                    class="edit-post-history__date"
-                  >
-                    <time
-                      datetime="1970-01-01T00:00:00.000"
-                    >
-                      January 01, 1970 at 12:00 AM
-                    </time>
-                  </span>
-                  <div
-                    class="edit-post-history__current__indicator"
-                  >
-                    Current Version
-                  </div>
+                    January 01, 1970 at 12:00 AM
+                  </time>
+                </span>
+                <div
+                  class="edit-post-history__current__indicator"
+                >
+                  Current Version
                 </div>
               </div>
             </div>
@@ -328,41 +323,28 @@ exports[`components/post_edit_history should match snapshot 1`] = `
             id="searchResult_post_id_1"
           >
             <div
-              aria-hidden="true"
               class="edit-post-history__title__container"
             >
               <div
-                class="edit-post-history__title__container"
+                class="edit-post-history__date__badge__container"
               >
-                <div
-                  class="edit-post-history__date__badge__container"
-                >
-                  <button
-                    aria-label="Toggle to see an old message."
-                    class="edit-post-history__icon__button toggleCollapseButton"
-                  >
-                    <i
-                      class="icon icon-chevron-right"
-                    />
-                  </button>
-                  <span
-                    class="edit-post-history__date"
-                  >
-                    <time
-                      datetime="1970-01-01T00:00:00.000"
-                    >
-                      January 01, 1970 at 12:00 AM
-                    </time>
-                  </span>
-                </div>
                 <button
-                  aria-label="Select to restore an old message."
-                  class="edit-post-history__icon__button restore-icon"
+                  aria-label="Toggle to see an old message."
+                  class="edit-post-history__icon__button toggleCollapseButton"
                 >
                   <i
-                    class="icon icon-restore"
+                    class="icon icon-chevron-right"
                   />
                 </button>
+                <span
+                  class="edit-post-history__date"
+                >
+                  <time
+                    datetime="1970-01-01T00:00:00.000"
+                  >
+                    January 01, 1970 at 12:00 AM
+                  </time>
+                </span>
               </div>
               <button
                 aria-label="Select to restore an old message."
@@ -384,41 +366,28 @@ exports[`components/post_edit_history should match snapshot 1`] = `
             id="searchResult_post_id_2"
           >
             <div
-              aria-hidden="true"
               class="edit-post-history__title__container"
             >
               <div
-                class="edit-post-history__title__container"
+                class="edit-post-history__date__badge__container"
               >
-                <div
-                  class="edit-post-history__date__badge__container"
-                >
-                  <button
-                    aria-label="Toggle to see an old message."
-                    class="edit-post-history__icon__button toggleCollapseButton"
-                  >
-                    <i
-                      class="icon icon-chevron-right"
-                    />
-                  </button>
-                  <span
-                    class="edit-post-history__date"
-                  >
-                    <time
-                      datetime="1970-01-01T00:00:00.000"
-                    >
-                      January 01, 1970 at 12:00 AM
-                    </time>
-                  </span>
-                </div>
                 <button
-                  aria-label="Select to restore an old message."
-                  class="edit-post-history__icon__button restore-icon"
+                  aria-label="Toggle to see an old message."
+                  class="edit-post-history__icon__button toggleCollapseButton"
                 >
                   <i
-                    class="icon icon-restore"
+                    class="icon icon-chevron-right"
                   />
                 </button>
+                <span
+                  class="edit-post-history__date"
+                >
+                  <time
+                    datetime="1970-01-01T00:00:00.000"
+                  >
+                    January 01, 1970 at 12:00 AM
+                  </time>
+                </span>
               </div>
               <button
                 aria-label="Select to restore an old message."

@@ -552,7 +552,7 @@ https://myothersite.com/api/v2"
                       autoCloseOnCancelButton={true}
                       autoCloseOnConfirmButton={true}
                       bodyPadding={true}
-                      className="modal-confirmintegrations-backstage-modal"
+                      className="modal-confirm integrations-backstage-modal"
                       compassDesign={true}
                       enforceFocus={true}
                       id="confirmModal"
@@ -576,7 +576,7 @@ https://myothersite.com/api/v2"
                         autoFocus={true}
                         backdrop={true}
                         bsClass="modal"
-                        dialogClassName="GenericModal__location--center a11y__modal GenericModal GenericModal__compassDesign modal-confirmintegrations-backstage-modal"
+                        dialogClassName="GenericModal__location--center a11y__modal GenericModal GenericModal__compassDesign modal-confirm integrations-backstage-modal"
                         dialogComponentClass={[Function]}
                         enforceFocus={true}
                         id="confirmModal"
@@ -1307,7 +1307,7 @@ https://myothersite.com/api/v2"
                       autoCloseOnCancelButton={true}
                       autoCloseOnConfirmButton={true}
                       bodyPadding={true}
-                      className="modal-confirmintegrations-backstage-modal"
+                      className="modal-confirm integrations-backstage-modal"
                       compassDesign={true}
                       enforceFocus={true}
                       id="confirmModal"
@@ -1331,7 +1331,7 @@ https://myothersite.com/api/v2"
                         autoFocus={true}
                         backdrop={true}
                         bsClass="modal"
-                        dialogClassName="GenericModal__location--center a11y__modal GenericModal GenericModal__compassDesign modal-confirmintegrations-backstage-modal"
+                        dialogClassName="GenericModal__location--center a11y__modal GenericModal GenericModal__compassDesign modal-confirm integrations-backstage-modal"
                         dialogComponentClass={[Function]}
                         enforceFocus={true}
                         id="confirmModal"
@@ -2061,7 +2061,7 @@ https://myothersite.com/api/v2"
                       autoCloseOnCancelButton={true}
                       autoCloseOnConfirmButton={true}
                       bodyPadding={true}
-                      className="modal-confirmintegrations-backstage-modal"
+                      className="modal-confirm integrations-backstage-modal"
                       compassDesign={true}
                       enforceFocus={true}
                       id="confirmModal"
@@ -2085,7 +2085,7 @@ https://myothersite.com/api/v2"
                         autoFocus={true}
                         backdrop={true}
                         bsClass="modal"
-                        dialogClassName="GenericModal__location--center a11y__modal GenericModal GenericModal__compassDesign modal-confirmintegrations-backstage-modal"
+                        dialogClassName="GenericModal__location--center a11y__modal GenericModal GenericModal__compassDesign modal-confirm integrations-backstage-modal"
                         dialogComponentClass={[Function]}
                         enforceFocus={true}
                         id="confirmModal"
