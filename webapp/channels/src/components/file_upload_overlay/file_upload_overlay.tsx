@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import fileOverlayImage from 'images/fileOverlay.svg';
+import fileOverlayImage from 'images/filesOverlay.png';
 
 import './file_upload_overlay.scss';
 
