@@ -64,7 +64,7 @@ const ChannelSettingsSubmenu = ({channel, isReadonly, isDefault}: Props): JSX.El
         );
     };
 
-    const handleConvertToPrivate = () => {
+    const handleConvertToPublicOrPrivate = () => {
         dispatch(
             openModal({
                 modalId: ModalIdentifiers.CONVERT_CHANNEL,
@@ -72,24 +72,23 @@ const ChannelSettingsSubmenu = ({channel, isReadonly, isDefault}: Props): JSX.El
                 dialogProps: {
                     channelId: channel.id,
                     channelDisplayName: channel.display_name,
+                    channelType: channel.type,
                 },
             }),
         );
     };
 
-    const handleConvertToPublic = () => {
-        dispatch(
-            openModal({
-                modalId: ModalIdentifiers.CONVERT_CHANNEL,
-                dialogType: ConvertChannelModal,
-                dialogProps: {
-                    channelId: channel.id,
-                    channelDisplayName: channel.display_name,
-                    channelType: Constants.PRIVATE_CHANNEL,
-                },
-            }),
-        );
-    };
+    const convertText = channel.type === Constants.OPEN_CHANNEL ? (
+        <FormattedMessage
+            id='channel_header.convert'
+            defaultMessage='Convert to Private Channel'
+        />
+    ) : (
+        <FormattedMessage
+            id='channel_header.convert.public'
+            defaultMessage='Convert to Public Channel'
+        />
+    );
 
     return (
         <Menu.SubMenu
@@ -155,43 +154,20 @@ const ChannelSettingsSubmenu = ({channel, isReadonly, isDefault}: Props): JSX.El
                     />
                 </ChannelPermissionGate>
             )}
-            {!isReadonly && !isDefault && channel.type === Constants.OPEN_CHANNEL && (
+            {!isReadonly && !isDefault && (
                 <ChannelPermissionGate
                     channelId={channel.id}
                     teamId={channel.team_id}
                     permissions={[Permissions.CONVERT_PUBLIC_CHANNEL_TO_PRIVATE]}
                 >
                     <Menu.Item
-                        id='channelConvertToPrivate'
-                        onClick={handleConvertToPrivate}
-                        labels={
-                            <FormattedMessage
-                                id='channel_header.convert'
-                                defaultMessage='Convert to Private Channel'
-                            />
-                        }
+                        id='convertToPublicOrPrivate'
+                        onClick={handleConvertToPublicOrPrivate}
+                        labels={convertText}
                     />
                 </ChannelPermissionGate>
             )}
 
-            {!isReadonly && !isDefault && channel.type === Constants.PRIVATE_CHANNEL && (
-                <ChannelPermissionGate
-                    channelId={channel.id}
-                    teamId={channel.team_id}
-                    permissions={[Permissions.CONVERT_PUBLIC_CHANNEL_TO_PRIVATE]}
-                >
-                    <Menu.Item
-                        id='channelConvertToPublic'
-                        onClick={handleConvertToPublic}
-                        labels={
-                            <FormattedMessage
-                                id='channel_header.convert.public'
-                                defaultMessage='Convert to Public Channel'
-                            />
-                        }
-                    />
-                </ChannelPermissionGate>
-            )}
         </Menu.SubMenu>
     );
 };
