@@ -78,18 +78,16 @@ const ChannelSettingsSubmenu = ({channel, isReadonly, isDefault}: Props): JSX.El
         );
     };
 
-    const convertText = channel.type === Constants.OPEN_CHANNEL ? (
+    const isPublic = channel.type === Constants.OPEN_CHANNEL;
+
+    const convertText = (
         <FormattedMessage
-            id='channel_header.convert'
-            defaultMessage='Convert to Private Channel'
-        />
-    ) : (
-        <FormattedMessage
-            id='channel_header.convert.public'
-            defaultMessage='Convert to Public Channel'
+            id={isPublic ? 'channel_header.convert' : 'channel_header.convert.public'}
+            defaultMessage={isPublic ? 'Convert to Private Channel' : 'Convert to Public Channel'}
         />
     );
 
+    const convertPermission = [isPublic ? Permissions.CONVERT_PUBLIC_CHANNEL_TO_PRIVATE : Permissions.CONVERT_PRIVATE_CHANNEL_TO_PUBLIC];
     return (
         <Menu.SubMenu
             id={'channelSettings'}
@@ -158,7 +156,7 @@ const ChannelSettingsSubmenu = ({channel, isReadonly, isDefault}: Props): JSX.El
                 <ChannelPermissionGate
                     channelId={channel.id}
                     teamId={channel.team_id}
-                    permissions={[Permissions.CONVERT_PUBLIC_CHANNEL_TO_PRIVATE]}
+                    permissions={convertPermission}
                 >
                     <Menu.Item
                         id='convertToPublicOrPrivate'
