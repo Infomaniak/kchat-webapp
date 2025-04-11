@@ -104,10 +104,6 @@ type Props = WrappedComponentProps & {
         setDraggingState: (data: DraggingState) => void;
         stopDragging: () => void;
         clearChannelSelection: () => void;
-        multiSelectChannelAdd: (channelId: string) => void;
-        markAllChannelsAsRead: () => void;
-        openModal: <P>(modalData: ModalData<P>) => void;
-        closeModal: (ModalIdentifier: string) => void;
     };
 };
 
@@ -154,13 +150,11 @@ export class SidebarList extends React.PureComponent<Props, State> {
     componentDidMount() {
         document.addEventListener('keydown', this.navigateChannelShortcut);
         document.addEventListener('keydown', this.navigateUnreadChannelShortcut);
-        document.addEventListener('keydown', this.markAllAsRead);
     }
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.navigateChannelShortcut);
         document.removeEventListener('keydown', this.navigateUnreadChannelShortcut);
-        document.removeEventListener('keydown', this.markAllAsRead);
     }
 
     componentDidUpdate(prevProps: Props) {
@@ -354,6 +348,8 @@ export class SidebarList extends React.PureComponent<Props, State> {
 
     navigateUnreadChannelShortcut = (e: KeyboardEvent) => {
         if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && (isKeyPressed(e, Constants.KeyCodes.UP) || isKeyPressed(e, Constants.KeyCodes.DOWN))) {
+            console.log('🚀 tcl ~ SidebarList ~ navigateUnreadChannelShortcut:');
+
             e.preventDefault();
 
             const allChannelIds = this.getDisplayedChannelIds();
@@ -389,55 +385,7 @@ export class SidebarList extends React.PureComponent<Props, State> {
         }
     };
 
-    markAllAsRead = (e: KeyboardEvent) => {
-        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && Keyboard.isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
-            e.preventDefault();
-            if (this.props.unreadChannelIds.length <= 0) {
-                return;
-            }
-            const title = (
-                <FormattedMessage
-                    id='mark_all_as_read_modal.title'
-                    defaultMessage='Mark all messages as read'
-                />
-            );
-            const message = (
-                <FormattedMessage
-                    id='mark_all_as_read_modal.message'
-                    defaultMessage='Are you sure want to mark all your messages as read ?'
-                />
-            );
-            const confirmButtonText = (
-                <FormattedMessage
-                    id='mark_all_as_read_modal.confirm'
-                    defaultMessage='Yes'
-                />
-            );
-            const onConfirm = () => {
-                this.props.actions.markAllChannelsAsRead();
-                this.props.actions.closeModal(ModalIdentifiers.MARK_ALL_AS_READ_MODAL);
-            };
-            const onCancel = () => {
-                this.props.actions.closeModal(ModalIdentifiers.MARK_ALL_AS_READ_MODAL);
-            };
-            this.props.actions.openModal({
-                modalId: ModalIdentifiers.MARK_ALL_AS_READ_MODAL,
-                dialogType: ConfirmModalRedux,
-                dialogProps: {
-                    show: true,
-                    title,
-                    message,
-                    confirmButtonText,
-                    onConfirm,
-                    onCancel,
-                },
-            });
-        }
-    };
-
     renderCategory = (category: ChannelCategory, index: number) => {
-        const {categories} = this.props;
-        const isLastCategory = index === categories.length - 1;
         return (
             <SidebarCategory
                 key={category.id}
@@ -446,7 +394,6 @@ export class SidebarList extends React.PureComponent<Props, State> {
                 setChannelRef={this.setChannelRef}
                 handleOpenMoreDirectChannelsModal={this.props.handleOpenMoreDirectChannelsModal}
                 isNewCategory={this.props.newCategoryIds.includes(category.id)}
-                isLastCategory={isLastCategory}
             />
         );
     };
@@ -609,7 +556,7 @@ export class SidebarList extends React.PureComponent<Props, State> {
 
             // NOTE: id attribute added to temporarily support the desktop app's at-mention DOM scraping of the old sidebar
             <>
-                <ActivityAndInsightsLink/>
+                <ActivityAndInsightsLink/> {/* Ik: we want to keep using Insights */}
                 <GlobalThreadsLink/>
                 <DraftsLink/>
                 <div
