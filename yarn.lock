@@ -4204,7 +4204,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mattermost/client@npm:10.6.0":
+"@mattermost/client@npm:*, @mattermost/client@npm:10.6.0":
   version: 10.6.0
   resolution: "@mattermost/client@npm:10.6.0"
   peerDependencies:
@@ -17933,6 +17933,7 @@ __metadata:
     "@infomaniak/marked": "npm:^0.2.0"
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client"
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types"
+    "@mattermost/client": "npm:*"
     "@mattermost/components": "workspace:webapp/platform/components"
     "@mattermost/desktop-api": "npm:5.10.0-2"
     "@mattermost/eslint-plugin": "npm:*"
