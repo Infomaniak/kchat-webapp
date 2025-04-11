@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-@import 'utils/mixins';
-@import 'utils/variables';
+@use 'utils/mixins';
+@use 'utils/variables';
 
 .accountSettingRhs {
     position: relative;
@@ -32,7 +32,7 @@
                     > a {
                         background: none;
                         border: none;
-                        border-bottom: 4px solid $primary-color !important;
+                        border-bottom: 4px solid variables.$primary-color !important;
                         color: rgba(var(--center-channel-color-rgb), 1);
                         font-weight: 600;
 

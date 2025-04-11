@@ -18,6 +18,7 @@
     "@infomaniak/marked": "^0.2.0",
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client",
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types",
+    "@mattermost/client": "*",
     "@mattermost/components": "workspace:webapp/platform/components",
     "@mattermost/desktop-api": "5.10.0-2",
     "@mui/base": "5.0.0-alpha.127",
