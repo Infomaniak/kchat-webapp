@@ -3,6 +3,7 @@
 exports[`SidebarList should match snapshot 1`] = `
 <Fragment>
   <ActivityAndInsightsLink />
+   
   <GlobalThreadsLink />
   <DraftsLink />
   <div
@@ -114,7 +115,6 @@ exports[`SidebarList should match snapshot 2`] = `
     }
     categoryIndex={0}
     handleOpenMoreDirectChannelsModal={[MockFunction]}
-    isLastCategory={true}
     isNewCategory={false}
     key="category1"
     setChannelRef={[Function]}

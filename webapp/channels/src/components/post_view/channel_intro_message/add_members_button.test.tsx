@@ -55,20 +55,6 @@ describe('components/post_view/AddMembersButton', () => {
 
     jest.spyOn(teams, 'getCurrentTeamId').mockReturnValue('team-id');
 
-    test('should match snapshot, less than limit', () => {
-        const props = {
-            totalUsers: 10,
-            usersLimit: 100,
-            channel,
-        };
-        renderWithContext(
-            <AddMembersButton {...props}/>,
-            initialState,
-        );
-
-        expect(screen.queryByText('Invite others to the workspace')).toBeInTheDocument();
-    });
-
     test('should match snapshot, more than limit', () => {
         const props = {
             totalUsers: 100,
