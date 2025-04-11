@@ -11,6 +11,7 @@ import AdvancedCreatePost from 'components/advanced_create_post';
 import {makeAsyncComponent} from 'components/async_load';
 import {BannerJoinChannel} from 'components/banner_join_channel';
 import deferComponentRender from 'components/deferComponentRender';
+import FileUploadOverlay from 'components/file_upload_overlay';
 import {DropOverlayIdCenterChannel} from 'components/file_upload_overlay/file_upload_overlay';
 import PostView from 'components/post_view';
 
@@ -18,16 +19,16 @@ import {getHistory} from 'utils/browser_history';
 
 import WebSocketClient from 'client/web_websocket_client';
 
-// import InputLoading from './input_loading';
-
 import type {PropsFromRedux} from './index';
 
 const ChannelHeader = makeAsyncComponent('ChannelHeader', lazy(() => import('components/channel_header')));
-const FileUploadOverlay = makeAsyncComponent('FileUploadOverlay', lazy(() => import('components/file_upload_overlay')));
+
+// IK changes : we also need to not lazy load the file upload overlay component otherwise drag and drop will not work
+// const FileUploadOverlay = makeAsyncComponent('FileUploadOverlay', lazy(() => import('components/file_upload_overlay')));
 const ChannelBookmarks = makeAsyncComponent('ChannelBookmarks', lazy(() => import('components/channel_bookmarks')));
 
 // IK changes : we choose to not lazy load the advanced create post component due to missingChannelRole being always false
-// const AdvancedCreatePost = makeAsyncComponent('AdvancedCreatePost', lazy(() => import('components/advanced_create_post')), <InputLoading/>);
+// const AdvancedCreatePost = makeAsyncComponent('AdvancedCreatePost', lazy(() => import('components/advanced_create_post')));
 
 export type Props = PropsFromRedux & RouteComponentProps<{
     postid?: string;
