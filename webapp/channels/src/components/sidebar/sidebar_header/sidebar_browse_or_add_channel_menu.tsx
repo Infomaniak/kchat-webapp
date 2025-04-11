@@ -7,7 +7,6 @@ import {useSelector} from 'react-redux';
 
 import {
     PlusIcon,
-    AccountPlusOutlineIcon,
     FolderPlusOutlineIcon,
     AccountMultiplePlusOutlineIcon,
     GlobeIcon,
@@ -132,26 +131,6 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         );
     }
 
-    const invitePeopleMenuItem = (
-        <Menu.Item
-            id='invitePeopleMenuItem'
-            onClick={props.onInvitePeopleClick}
-            leadingElement={<AccountPlusOutlineIcon size={18}/>}
-            labels={(
-                <>
-                    <FormattedMessage
-                        id='sidebarLeft.browserOrCreateChannelMenu.invitePeopleMenuItem.primaryLabel'
-                        defaultMessage='Invite people'
-                    />
-                    <FormattedMessage
-                        id='sidebarLeft.browserOrCreateChannelMenu.invitePeopleMenuItem.secondaryLabel'
-                        defaultMessage='Add people to the team'
-                    />
-                </>
-            )}
-        />
-    );
-
     return (
         <Menu.Container
             menuButton={{
@@ -190,9 +169,6 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
                 <Menu.Separator/>
             }
             {createNewCategoryMenuItem}
-            <Menu.Separator/>
-            {invitePeopleMenuItem}
-
             <Menu.Item
                 id='integrations'
                 labels={
