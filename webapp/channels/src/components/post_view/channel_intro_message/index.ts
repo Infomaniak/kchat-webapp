@@ -34,10 +34,6 @@ function mapStateToProps(state: GlobalState) {
     const currentUser = getCurrentUser(state);
     const creator = channel ? getUser(state, channel.creator_id) : undefined;
 
-    const usersLimit = 10;
-
-    const stats = getTotalUsersStatsSelector(state) || {total_users_count: 0};
-
     return {
         currentUserId: getCurrentUserId(state),
         channel,
@@ -52,8 +48,6 @@ function mapStateToProps(state: GlobalState) {
         teammate,
         teammateName: getDisplayNameByUser(state, teammate),
         currentUser,
-        stats,
-        usersLimit,
         isChannelMember: Boolean(channelMember),
         channelMember,
         isMobileView: getIsMobileView(state),

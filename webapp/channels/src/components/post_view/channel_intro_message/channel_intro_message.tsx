@@ -44,7 +44,6 @@ type Props = {
     teammateName?: string;
     currentUser: UserProfileType;
     stats: any;
-    usersLimit: number;
     isChannelMember?: boolean;
     channelMember?: ChannelMembership;
     isMobileView: boolean;
@@ -89,8 +88,6 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
             teammate,
             teammateName,
             currentUser,
-            stats,
-            usersLimit,
             isChannelMember,
             isMobileView,
         } = this.props;
@@ -109,11 +106,11 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
         } else if (channel.type === Constants.GM_CHANNEL) {
             return createGMIntroMessage(channel, centeredIntro, isFavorite, isMobileView, this.toggleFavorite, channelProfiles, currentUserId, currentUser);
         } else if (channel.name === Constants.DEFAULT_CHANNEL) {
-            return createDefaultIntroMessage(channel, centeredIntro, currentUser, isFavorite, isMobileView, this.toggleFavorite, stats, usersLimit, enableUserCreation, isReadOnly, teamIsGroupConstrained);
+            return createDefaultIntroMessage(channel, centeredIntro, currentUser, isFavorite, isMobileView, this.toggleFavorite, enableUserCreation, isReadOnly, teamIsGroupConstrained);
         } else if (channel.name === Constants.OFFTOPIC_CHANNEL) {
-            return createOffTopicIntroMessage(channel, centeredIntro, isFavorite, isMobileView, currentUser, this.toggleFavorite, stats, usersLimit);
+            return createOffTopicIntroMessage(channel, centeredIntro, isFavorite, isMobileView, currentUser, this.toggleFavorite);
         } else if (channel.type === Constants.OPEN_CHANNEL || channel.type === Constants.PRIVATE_CHANNEL) {
-            return createStandardIntroMessage(channel, centeredIntro, currentUser, isFavorite, isMobileView, this.toggleFavorite, stats, usersLimit, locale, creatorName, isChannelMember);
+            return createStandardIntroMessage(channel, centeredIntro, currentUser, isFavorite, isMobileView, this.toggleFavorite, locale, creatorName, isChannelMember);
         }
         return null;
     }
@@ -318,13 +315,9 @@ function createOffTopicIntroMessage(
     isMobileView: boolean,
     currentUser: UserProfileType,
     toggleFavorite: () => void,
-    stats: any,
-    usersLimit: number,
 ) {
     const isPrivate = channel.type === Constants.PRIVATE_CHANNEL;
     const children = createSetHeaderButton(channel);
-    const totalUsers = stats.total_users_count;
-    const inviteUsers = totalUsers < usersLimit;
 
     let setHeaderButton = null;
     let actionButtons = null;
@@ -341,30 +334,13 @@ function createOffTopicIntroMessage(
         );
     }
 
-    const channelInviteButton = (
-        <AddMembersButton
-            totalUsers={totalUsers}
-            usersLimit={usersLimit}
-            channel={channel}
-            pluginButtons={<PluggableIntroButtons channel={channel}/>}
-        />
+    actionButtons = (
+        <div className='channel-intro__actions'>
+            {createFavoriteButton(isFavorite, toggleFavorite)}
+            {setHeaderButton}
+            {createNotificationPreferencesButton(channel, currentUser)}
+        </div>
     );
-
-    if (inviteUsers) {
-        actionButtons = (
-            <div className='channel-intro__actions'>
-                {actionButtons = channelInviteButton}
-            </div>
-        );
-    } else {
-        actionButtons = (
-            <div className='channel-intro__actions'>
-                {createFavoriteButton(isFavorite, toggleFavorite)}
-                {setHeaderButton}
-                {createNotificationPreferencesButton(channel, currentUser)}
-            </div>
-        );
-    }
 
     return (
         <div
@@ -396,16 +372,11 @@ function createDefaultIntroMessage(
     isFavorite: boolean,
     isMobileView: boolean,
     toggleFavorite: () => void,
-    stats: any,
-    usersLimit: number,
     enableUserCreation?: boolean,
     isReadOnly?: boolean,
     teamIsGroupConstrained?: boolean,
 ) {
-    let teamInviteLink = null;
-    const totalUsers = stats.total_users_count;
     const isPrivate = channel.type === Constants.PRIVATE_CHANNEL;
-    const inviteUsers = totalUsers < usersLimit;
 
     let setHeaderButton = null;
     let pluginButtons = null;
@@ -427,61 +398,14 @@ function createDefaultIntroMessage(
         }
     }
 
-    if (!isReadOnly && enableUserCreation) {
-        teamInviteLink = (
-            <TeamPermissionGate
-                teamId={channel.team_id}
-                permissions={[Permissions.INVITE_USER]}
-            >
-                <TeamPermissionGate
-                    teamId={channel.team_id}
-                    permissions={[Permissions.ADD_USER_TO_TEAM]}
-                >
-                    {!teamIsGroupConstrained &&
-                        <AddMembersButton
-                            totalUsers={totalUsers}
-                            usersLimit={usersLimit}
-                            channel={channel}
-                            pluginButtons={pluginButtons}
-                        />
-                    }
-                    {teamIsGroupConstrained &&
-                    <ToggleModalButton
-                        className='intro-links color--link'
-                        modalId={ModalIdentifiers.ADD_GROUPS_TO_TEAM}
-                        dialogType={AddGroupsToTeamModal}
-                        dialogProps={{channel}}
-                    >
-                        <i
-                            className='fa fa-user-plus'
-                        />
-                        <FormattedMessage
-                            id='intro_messages.addGroupsToTeam'
-                            defaultMessage='Add other groups to this team'
-                        />
-                    </ToggleModalButton>
-                    }
-                </TeamPermissionGate>
-            </TeamPermissionGate>
-        );
-    }
-
-    if (inviteUsers) {
-        actionButtons = (
-            <div className='channel-intro__actions'>
-                {actionButtons = teamInviteLink}
-            </div>
-        );
-    } else {
-        actionButtons = (
-            <div className='channel-intro__actions'>
-                {createFavoriteButton(isFavorite, toggleFavorite)}
-                {setHeaderButton}
-                {createNotificationPreferencesButton(channel, currentUser)}
-                {teamIsGroupConstrained && pluginButtons}
-            </div>
-        );
-    }
+    actionButtons = (
+        <div className='channel-intro__actions'>
+            {createFavoriteButton(isFavorite, toggleFavorite)}
+            {setHeaderButton}
+            {createNotificationPreferencesButton(channel, currentUser)}
+            {teamIsGroupConstrained && pluginButtons}
+        </div>
+    );
 
     return (
         <div
@@ -524,8 +448,6 @@ function createStandardIntroMessage(
     isFavorite: boolean,
     isMobileView: boolean,
     toggleFavorite: () => void,
-    stats: any,
-    usersLimit: number,
     locale: string,
     creatorName: string,
     isChannelMember = true,
@@ -534,29 +456,8 @@ function createStandardIntroMessage(
     let memberMessage;
     let teamInviteLink = null;
     const channelIsArchived = channel.delete_at !== 0;
-    const totalUsers = stats.total_users_count;
-    const inviteUsers = totalUsers < usersLimit;
 
-    if (!isChannelMember) { // [Preview mode] if the user is not a member, we change the standard message and remove the add users action.
-        return (
-            <div
-                id='channelIntro'
-                className={'channel-intro ' + centeredIntro}
-            >
-                <h2 className='channel-intro__title'>
-                    <FormattedMessage
-                        id='intro_messages.preview'
-                        defaultMessage='Preview of {name}'
-                        values={{
-                            name: (uiName),
-                        }}
-                    />
-                </h2>
-            </div>
-        );
-    }
-
-    if (channelIsArchived) {
+    if (channelIsArchived || !isChannelMember) { // [Preview mode] if the user is not a member, we change the standard message
         memberMessage = '';
     } else if (channel.type === Constants.PRIVATE_CHANNEL) {
         memberMessage = (
@@ -653,7 +554,7 @@ function createStandardIntroMessage(
 
     const isPrivate = channel.type === Constants.PRIVATE_CHANNEL;
     let setHeaderButton = null;
-    let actionButtons = null;
+
     const children = createSetHeaderButton(channel);
     if (children) {
         setHeaderButton = (
@@ -669,20 +570,14 @@ function createStandardIntroMessage(
 
     teamInviteLink = (
         <AddMembersButton
-            totalUsers={totalUsers}
-            usersLimit={usersLimit}
             channel={channel}
             pluginButtons={<PluggableIntroButtons channel={channel}/>}
         />
     );
 
-    if (inviteUsers) {
-        actionButtons = (
-            <div className='channel-intro__actions'>
-                {actionButtons = teamInviteLink}
-            </div>
-        );
-    } else {
+    let channelName;
+    let actionButtons;
+    if (isChannelMember) {
         actionButtons = (
             <div className='channel-intro__actions'>
                 {createFavoriteButton(isFavorite, toggleFavorite)}
@@ -691,6 +586,19 @@ function createStandardIntroMessage(
                 {!isMobileView && createNotificationPreferencesButton(channel, currentUser)}
                 <PluggableIntroButtons channel={channel}/>
             </div>
+        );
+
+        channelName = channel.display_name;
+    } else { // [Preview mode] no action and more explicit channel name
+        actionButtons = null;
+        channelName = (
+            <FormattedMessage
+                id='intro_messages.preview'
+                defaultMessage='Preview of {name}'
+                values={{
+                    name: (uiName),
+                }}
+            />
         );
     }
 
@@ -701,7 +609,7 @@ function createStandardIntroMessage(
         >
             <EmptyStateThemeableSvg/>
             <h2 className='channel-intro__title'>
-                {channel.display_name}
+                {channelName}
             </h2>
             <div className='channel-intro__created'>
                 {isPrivate ? <LockOutlineIcon size={14}/> : <GlobeIcon size={14}/>}
