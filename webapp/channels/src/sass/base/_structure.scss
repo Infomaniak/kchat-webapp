@@ -84,6 +84,8 @@ body {
 
     position: relative;
     height: 100%;
+
+    padding-left: 14px; //IK: off by 1px from MM (visible on fileoverlay when dragndrop)
 }
 
 .channel-view {
