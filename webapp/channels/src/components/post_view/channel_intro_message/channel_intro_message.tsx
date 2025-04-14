@@ -41,12 +41,10 @@ type Props = {
     teammate?: UserProfileType;
     teammateName?: string;
     currentUser: UserProfileType;
-    stats: any;
     isChannelMember?: boolean;
     channelMember?: ChannelMembership;
     isMobileView: boolean;
     actions: {
-        getTotalUsersStats: () => any;
         favoriteChannel: (channelId: string) => any;
         unfavoriteChannel: (channelId: string) => any;
     };
@@ -64,12 +62,6 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
             this.props.actions.favoriteChannel(this.props.channel.id);
         }
     };
-
-    componentDidMount() {
-        if (!this.props.stats?.total_users_count) {
-            this.props.actions.getTotalUsersStats();
-        }
-    }
 
     render() {
         const {

@@ -6,12 +6,11 @@ import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import {favoriteChannel, unfavoriteChannel} from 'mattermost-redux/actions/channels';
-import {getTotalUsersStats} from 'mattermost-redux/actions/users';
 import {getCurrentChannel, getDirectTeammate, getMyCurrentChannelMembership, isCurrentChannelFavorite} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUser, getProfilesInCurrentChannel, getCurrentUserId, getUser, getTotalUsersStats as getTotalUsersStatsSelector} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getProfilesInCurrentChannel, getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 
 import {getCurrentLocale} from 'selectors/i18n';
 import {getIsMobileView} from 'selectors/views/browser';
@@ -57,7 +56,6 @@ function mapStateToProps(state: GlobalState) {
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
-            getTotalUsersStats,
             favoriteChannel,
             unfavoriteChannel,
         }, dispatch),
