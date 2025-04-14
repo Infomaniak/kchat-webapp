@@ -111,7 +111,7 @@ export const TourTip = ({
                 circularRing += ' tour-tip__dot-ring-active';
             }
             dots.push(
-                <div className={circularRing}>
+                <div className={circularRing} key={dot}>
                     <a
                         href='#'
                         key={'dotactive' + dot}
