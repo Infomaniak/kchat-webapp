@@ -10,6 +10,8 @@
         padding: 4px 0;
         background-color: var(--center-channel-bg);
         box-shadow: var(--elevation-4), 0 0 0 1px rgba(var(--center-channel-color-rgb), 0.12) inset;
+
+      
     }
     &.AsSubMenu {
         pointer-events: none;
@@ -17,7 +19,16 @@
             box-shadow: var(--elevation-5), 0 0 0 1px rgba(var(--center-channel-color-rgb), 0.12) inset;
         }
     }
+
+    // IK: we seems to like it tightier
+    .menu_menuList {
+        padding: 0;
+        & li {
+            min-height: 32px;
+        }
+    }
 }
+
 
 .menuModal {
     & .modal-header {
