@@ -26,18 +26,11 @@ export interface AddMembersButtonProps {
 }
 
 const AddMembersButton: React.FC<AddMembersButtonProps> = ({channel, pluginButtons}: AddMembersButtonProps) => {
-    const currentTeamId = useSelector(getCurrentTeamId);
-
     return (
-        <TeamPermissionGate
-            teamId={currentTeamId}
-            permissions={[Permissions.ADD_USER_TO_TEAM, Permissions.INVITE_GUEST]}
-        >
-            <MoreThanMaxFreeUsers
-                channel={channel}
-                pluginButtons={pluginButtons}
-            />
-        </TeamPermissionGate>
+        <MoreThanMaxFreeUsers
+            channel={channel}
+            pluginButtons={pluginButtons}
+        />
     );
 };
 
