@@ -1,10 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {PaperclipIcon} from '@infomaniak/compass-icons/components';
+import {LaptopIcon, PaperclipIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {PureComponent} from 'react';
-import type {ChangeEvent, DragEvent, MouseEvent, TouchEvent, RefObject} from 'react';
+import type {ChangeEvent, DragEvent, MouseEvent, RefObject,
+    KeyboardEvent as ReactKeyboardEvent,
+    MouseEvent as ReactMouseEvent,
+    TouchEvent as ReactTouchEvent,
+} from 'react';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
 
@@ -20,8 +24,7 @@ import {
     DropOverlayIdRHS,
 } from 'components/file_upload_overlay/file_upload_overlay';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import Menu from 'components/widgets/menu/menu';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+import * as Menu from 'components/menu';
 import WithTooltip from 'components/with_tooltip';
 
 import Constants from 'utils/constants';
@@ -604,7 +607,7 @@ export class FileUpload extends PureComponent<Props, State> {
         this.setState({menuOpen: false});
     };
 
-    simulateInputClick = (e: MouseEvent<HTMLButtonElement | HTMLAnchorElement> | TouchEvent) => {
+    simulateInputClick = (e: ReactMouseEvent<HTMLLIElement> | ReactKeyboardEvent<HTMLLIElement> | MouseEvent | ReactTouchEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
         this.fileInput.current?.click();
@@ -708,22 +711,31 @@ export class FileUpload extends PureComponent<Props, State> {
         } else {
             const pluginFileUploadMethods = this.props.pluginFileUploadMethods.map((item) => {
                 return (
-                    <li
+                    <Menu.Item
                         key={item.pluginId + '_fileuploadpluginmenuitem'}
                         onClick={() => {
                             if (item.action) {
-                                item.action(this.checkPluginHooksAndUploadFiles);
+                                //IK: for kDrive internal plugin
+                                if (item.customArgs) {
+                                    const args: Array<keyof FileUpload | keyof Props> = [];
+                                    item.customArgs.forEach((arg) => {
+                                        if (arg in this || arg in this.props) {
+                                            // @ts-expect-error ts can't infer this properly
+                                            args.push(this[arg] || this.props[arg]);
+                                        }
+                                    });
+
+                                    // @ts-expect-error not typed correctly
+                                    item.action(...args);
+                                } else {
+                                    item.action(this.checkPluginHooksAndUploadFiles);
+                                }
                             }
                             this.setState({menuOpen: false});
                         }}
-                    >
-                        <a href='#'>
-                            <span className='mr-2'>
-                                {item.icon}
-                            </span>
-                            {item.text}
-                        </a>
-                    </li>
+                        labels={<span>{item.text}</span>}
+                        leadingElement={item.icon}
+                    />
                 );
             });
             bodyAction = (
@@ -739,54 +751,51 @@ export class FileUpload extends PureComponent<Props, State> {
                         multiple={multiple}
                         accept={accept}
                     />
-                    <MenuWrapper>
-                        <WithTooltip
-                            title={
-                                <KeyboardShortcutSequence
-                                    shortcut={KEYBOARD_SHORTCUTS.filesUpload}
-                                    hoistDescription={true}
-                                    isInsideTooltip={true}
-                                />
-                            }
-                        >
-                            <button
-                                type='button'
-                                id='fileUploadButton'
-                                aria-label={buttonAriaLabel}
-                                className='style--none AdvancedTextEditor__action-button'
-                            >
+
+                    <Menu.Container
+                        menuButtonTooltip={{
+                            text: formatMessage(holders.uploadFile),
+                        }}
+                        menuButton={{
+                            id: 'fileUploadButton',
+                            class: 'style--none AdvancedTextEditor__action-button',
+                            'aria-label': iconAriaLabel,
+                            children: (
+
                                 <PaperclipIcon
                                     size={18}
                                     color={'currentColor'}
                                     aria-label={iconAriaLabel}
                                 />
-                            </button>
-                        </WithTooltip>
-                        <Menu
-                            id='fileUploadOptions'
-                            openLeft={true}
-                            openUp={true}
-                            ariaLabel={formatMessage({id: 'file_upload.menuAriaLabel', defaultMessage: 'Upload type selector'})}
-                            customStyles={customStyles}
-                        >
-                            <li>
-                                <a
-                                    href='#'
-                                    onClick={this.simulateInputClick}
-                                    onTouchEnd={this.simulateInputClick}
-                                >
-                                    <span className='mr-2'>
-                                        <i className='fa fa-laptop'/>
-                                    </span>
-                                    <FormattedMessage
-                                        id='yourcomputer'
-                                        defaultMessage='Your computer'
-                                    />
-                                </a>
-                            </li>
-                            {pluginFileUploadMethods}
-                        </Menu>
-                    </MenuWrapper>
+                            ),
+                        }}
+                        menu={{
+                            id: 'fileUploadOptions',
+                        }}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left',
+                        }}
+                        transformOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+
+                    >
+                        <Menu.Item
+                            labels={
+                                <FormattedMessage
+                                    id='yourcomputer'
+                                    defaultMessage='Your computer'
+                                />
+                            }
+                            leadingElement={
+                                <LaptopIcon size={16}/>
+                            }
+                            onClick={this.simulateInputClick}
+                        />
+                        {pluginFileUploadMethods}
+                    </Menu.Container>
                 </div>
             );
         }
@@ -804,5 +813,4 @@ export class FileUpload extends PureComponent<Props, State> {
 }
 
 const wrappedComponent = injectIntl(FileUpload, {forwardRef: true});
-wrappedComponent.displayName = 'injectIntl(FileUpload)';
 export default wrappedComponent;

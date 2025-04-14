@@ -176,6 +176,12 @@ export type FileUploadMethodAction = PluginComponent & {
     text: PluggableText;
     action: (checkPluginHooksAndUploadFiles: ((files: FileList | File[]) => void)) => void;
     icon: React.ReactNode;
+
+    // ik custom
+    // an array that allows specifying which args the action function wants from the parent component
+    // example in file_upload for kdrive upload
+    customArgs?: Array<string | number | symbol>;
+    hook?: (post: Post, message?: string) => string;
 };
 
 export type MainMenuAction = PluginComponent & {
