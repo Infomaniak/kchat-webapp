@@ -19,7 +19,6 @@ import {trackEvent} from 'actions/telemetry_actions';
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import {ChannelsTour, DirectMessagesTour} from 'components/tours/onboarding_tour';
 import WithTooltip from 'components/with_tooltip';
 
 import Constants, {A11yCustomEventTypes, DraggingStateTypes, DraggingStates} from 'utils/constants';
@@ -244,8 +243,6 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
             categoryIndex,
             channelIds,
             isNewCategory,
-            showDirectMessagesTutorialStep,
-            showChannelsTutorialStep,
         } = this.props;
 
         if (!category) {
@@ -276,7 +273,6 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                     <SidebarCategorySortingMenu
                         category={category}
                         handleOpenDirectMessagesModal={this.handleOpenDirectMessagesModal}
-                        menuTriggerRef={this.menuTriggerRef}
                     />
                     <WithTooltip
                         title={
@@ -355,8 +351,6 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                         >
-                            {category.type === CategoryTypes.CHANNELS && showChannelsTutorialStep && <ChannelsTour/>}
-                            {category.type === CategoryTypes.DIRECT_MESSAGES && showDirectMessagesTutorialStep && <DirectMessagesTour/>}
                             <Droppable
                                 droppableId={category.id}
                                 type='SIDEBAR_CHANNEL'

@@ -102,7 +102,6 @@ export default class Root extends React.PureComponent<Props, State> {
     // so we do need this.
     constructor(props: Props) {
         super(props);
-        this.mounted = false;
         this.IKLoginCode = undefined;
         this.tokenCheckInterval = undefined;
 
@@ -410,9 +409,8 @@ export default class Root extends React.PureComponent<Props, State> {
             //         this.props.history.push('/signup_user_complete');
             //     }
             // }
-
-            this.onConfigLoaded();
         }
+        this.onConfigLoaded();
     };
 
     handleDropEvent = (e: DragEvent) => {
@@ -431,8 +429,6 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         temporarilySetPageLoadContext(PageLoadContext.PAGE_LOAD);
-
-        this.mounted = true;
 
         if (isDesktopApp()) {
             // Rely on initial client calls to 401 for the first redirect to login,
