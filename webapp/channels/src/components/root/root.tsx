@@ -10,14 +10,12 @@ import React, {lazy} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
-import {ServiceEnvironment} from '@mattermost/types/config';
-
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
 import {storeBridge, storeBridgeParam} from 'mattermost-redux/actions/ksuiteBridge';
 import {Client4} from 'mattermost-redux/client';
 
-import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
+import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
 import {setThemePreference} from 'actions/views/theme';
 import {close, initialize} from 'actions/websocket_actions';
@@ -40,7 +38,6 @@ import {IKConstants} from 'utils/constants-ik';
 import DesktopApp from 'utils/desktop_api';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
-import {rudderAnalytics, RudderTelemetryHandler} from 'utils/rudder';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {getDesktopVersion, isAndroidWeb, isChromebook, isDesktopApp, isIosWeb} from 'utils/user_agent';
@@ -128,71 +125,6 @@ export default class Root extends React.PureComponent<Props, State> {
         this.updateThemePreference(this.themeMediaQuery.matches);
         this.updateWindowSize();
     }
-
-    setRudderConfig = () => {
-        const rudderUrl = 'https://pdat.matterlytics.com';
-        let rudderKey = '';
-        switch (this.props.serviceEnvironment) {
-        case ServiceEnvironment.PRODUCTION:
-            rudderKey = '1aoejPqhgONMI720CsBSRWzzRQ9';
-            break;
-        case ServiceEnvironment.TEST:
-            rudderKey = '1aoeoCDeh7OCHcbW2kseWlwUFyq';
-            break;
-        case ServiceEnvironment.DEV:
-            break;
-        }
-
-        if (rudderKey !== '' && this.props.telemetryEnabled) {
-            const rudderCfg: {setCookieDomain?: string} = {};
-            if (this.props.siteURL !== '') {
-                try {
-                    rudderCfg.setCookieDomain = new URL(this.props.siteURL || '').hostname;
-                } catch (_) {
-                    // eslint-disable-next-line no-console
-                    console.error('Failed to set cookie domain for RudderStack');
-                }
-            }
-
-            rudderAnalytics.load(rudderKey, rudderUrl || '', rudderCfg);
-
-            //     rudderAnalytics.identify(telemetryId, {}, {
-            //         context: {
-            //             ip: '0.0.0.0',
-            //         },
-            //         page: {
-            //             path: '',
-            //             referrer: '',
-            //             search: '',
-            //             title: '',
-            //             url: '',
-            //         },
-            //         anonymousId: '00000000000000000000000000',
-            //     });
-
-            //     rudderAnalytics.page('ApplicationLoaded', {
-            //         path: '',
-            //         referrer: '',
-            //         search: ('' as any),
-            //         title: '',
-            //         url: '',
-            //     } as any,
-            //     {
-            //         context: {
-            //             ip: '0.0.0.0',
-            //         },
-            //         anonymousId: '00000000000000000000000000',
-            //     });
-
-            const utmParams = this.captureUTMParams();
-            rudderAnalytics.ready(() => {
-                Client4.setTelemetryHandler(new RudderTelemetryHandler());
-                if (utmParams) {
-                    trackEvent('utm_params', 'utm_params', utmParams);
-                }
-            });
-        }
-    };
 
     onConfigLoaded = () => {
         Promise.all([
@@ -343,10 +275,6 @@ export default class Root extends React.PureComponent<Props, State> {
             this.props.rhsIsExpanded !== prevProps.rhsIsExpanded
         ) {
             this.setRootMeta();
-        }
-
-        if (!prevProps.isConfigLoaded && this.props.isConfigLoaded) {
-            this.setRudderConfig();
         }
 
         if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
