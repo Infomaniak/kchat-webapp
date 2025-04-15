@@ -15,8 +15,6 @@ import WithTooltip from 'components/with_tooltip';
 import {getHistory} from 'utils/browser_history';
 import {RHSStates} from 'utils/constants';
 
-import RHSHeader from 'plugins/ai/components/rhs/rhs_header';
-
 import type {RhsState} from 'types/store/rhs';
 
 type Props = WrappedComponentProps & {
@@ -40,7 +38,6 @@ type Props = WrappedComponentProps & {
     closeRightHandSide: (e?: React.MouseEvent) => void;
     toggleRhsExpanded: (e: React.MouseEvent) => void;
     setThreadFollow: (userId: string, teamId: string, threadId: string, newState: boolean) => void;
-    onChatHistoryClick?: () => void;
 }
 
 class RhsHeaderPost extends React.PureComponent<Props> {
@@ -167,76 +164,67 @@ class RhsHeaderPost extends React.PureComponent<Props> {
         const expandIconLabel = formatMessage({id: 'rhs_header.expandSidebarTooltip.icon', defaultMessage: 'Expand Sidebar Icon'});
 
         return (
-            <>
-                <div className='sidebar--right__header'>
-                    <span className='sidebar--right__title'>
-                        {back}
-                        <FormattedMessage
-                            id='rhs_header.details'
-                            defaultMessage='Thread'
-                        />
-                        {channelName &&
+            <div className='sidebar--right__header'>
+                <span className='sidebar--right__title'>
+                    {back}
+                    <FormattedMessage
+                        id='rhs_header.details'
+                        defaultMessage='Thread'
+                    />
+                    {channelName &&
                         <button
                             onClick={this.handleJumpClick}
                             className='style--none sidebar--right__title__channel'
                         >
                             {channelName}
                         </button>
-                        }
-                    </span>
-                    <div className='controls'>
-                        {this.props.isCollapsedThreadsEnabled ? (
-                            <FollowButton
-                                className='sidebar--right__follow__thread'
-                                isFollowing={isFollowingThread}
-                                onClick={this.handleFollowChange}
+                    }
+                </span>
+                <div className='controls'>
+                    {this.props.isCollapsedThreadsEnabled ? (
+                        <FollowButton
+                            className='sidebar--right__follow__thread'
+                            isFollowing={isFollowingThread}
+                            onClick={this.handleFollowChange}
+                        />
+                    ) : null}
+
+                    <WithTooltip
+                        title={rhsHeaderTooltipContent}
+                    >
+                        <button
+                            type='button'
+                            className='sidebar--right__expand btn btn-icon btn-sm'
+                            aria-label={this.props.isExpanded ? collapseIconLabel : expandIconLabel}
+                            onClick={this.props.toggleRhsExpanded}
+                        >
+                            <i
+                                className='icon icon-arrow-expand'
                             />
-                        ) : null}
+                            <i
+                                className='icon icon-arrow-collapse'
+                            />
+                        </button>
+                    </WithTooltip>
 
-                        <WithTooltip
-                            title={rhsHeaderTooltipContent}
+                    <WithTooltip
+                        title={closeSidebarTooltip}
+                    >
+                        <button
+                            id='rhsCloseButton'
+                            type='button'
+                            className='sidebar--right__close btn btn-icon btn-sm'
+                            aria-label='Close'
+                            onClick={this.props.closeRightHandSide}
                         >
-                            <button
-                                type='button'
-                                className='sidebar--right__expand btn btn-icon btn-sm'
-                                aria-label={this.props.isExpanded ? collapseIconLabel : expandIconLabel}
-                                onClick={this.props.toggleRhsExpanded}
-                            >
-                                <i
-                                    className='icon icon-arrow-expand'
-                                />
-                                <i
-                                    className='icon icon-arrow-collapse'
-                                />
-                            </button>
-                        </WithTooltip>
-
-                        <WithTooltip
-                            title={closeSidebarTooltip}
-                        >
-                            <button
-                                id='rhsCloseButton'
-                                type='button'
-                                className='sidebar--right__close btn btn-icon btn-sm'
-                                aria-label='Close'
-                                onClick={this.props.closeRightHandSide}
-                            >
-                                <i
-                                    className='icon icon-close'
-                                    aria-label={formatMessage({id: 'rhs_header.closeTooltip.icon', defaultMessage: 'Close Sidebar Icon'})}
-                                />
-                            </button>
-                        </WithTooltip>
-                    </div>
+                            <i
+                                className='icon icon-close'
+                                aria-label={formatMessage({id: 'rhs_header.closeTooltip.icon', defaultMessage: 'Close Sidebar Icon'})}
+                            />
+                        </button>
+                    </WithTooltip>
                 </div>
-
-                {this.props.channel.display_name === 'kChat Bot' && (
-                    <RHSHeader
-                        onChatHistoryClick={this.props.onChatHistoryClick}
-                        channelName={this.props.channel.name}
-                    />
-                )}
-            </>
+            </div>
         );
     }
 }
