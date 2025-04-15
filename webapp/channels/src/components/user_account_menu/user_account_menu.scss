@@ -3,7 +3,7 @@
 #userAccountMenu {
     .userAccountMenu_nameMenuItem {
         align-items: center;
-
+        pointer-events: none;
         .leading-element {
             width: unset;
             height: unset;
