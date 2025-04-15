@@ -27,10 +27,11 @@ import {t} from 'utils/i18n';
 import {isDesktopApp} from 'utils/user_agent';
 import {localizeMessage, moveCursorToEnd} from 'utils/utils';
 
+import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
+
 import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
 
 import './rhs_settings_notifications.scss';
-import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
 type InputProps ={
     display: string;
     description: {

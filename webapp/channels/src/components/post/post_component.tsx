@@ -322,7 +322,7 @@ function PostComponent(props: Props) {
         // IK: Handle case where clicking an item in dropdown outside post doesn't trigger mouse leave,
         // e.g., when threads are open.
         if (!opened && hover) {
-            setHover(false)
+            setHover(false);
         }
     }, [togglePostMenu, hover]);
 

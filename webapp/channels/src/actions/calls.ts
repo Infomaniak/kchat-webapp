@@ -23,6 +23,7 @@ import {
 } from 'selectors/calls';
 import {getCurrentLocale} from 'selectors/i18n';
 
+import {getHistory} from 'utils/browser_history';
 import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_utils';
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {stopRing} from 'utils/notification_sounds';
@@ -34,7 +35,6 @@ import type {GlobalState} from 'types/store';
 
 import {openCallDialingModal} from './kmeet_calls';
 import {closeModal} from './views/modals';
-import { getHistory } from 'utils/browser_history';
 
 export function showExpandedView(): ActionFunc {
     return (dispatch) => {
@@ -210,12 +210,12 @@ export function startOrJoinCallInChannelV2(channelID: string) {
 
 // Initiate a call if the URL contains the query parameter `call`
 export function initiateCallIfParam(channelID: string) {
-        return async (dispatch: DispatchFunc) => {
+    return async (dispatch: DispatchFunc) => {
         const params = new URLSearchParams(window.location.search);
         const hasCallParam = params.has('call');
-        
+
         if (hasCallParam) {
-            dispatch(startOrJoinCallInChannelV2(channelID))
+            dispatch(startOrJoinCallInChannelV2(channelID));
 
             params.delete('call');
 
@@ -223,7 +223,7 @@ export function initiateCallIfParam(channelID: string) {
             const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
             getHistory().replace(newUrl);
         }
-    }
+    };
 }
 
 export function updateAudioStatus(dialingID: string, muted = false) {

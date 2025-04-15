@@ -14,6 +14,7 @@ import {getTeamByName, getMyTeamMember} from 'mattermost-redux/selectors/entitie
 import {getCurrentUser, getCurrentUserId, getUserByUsername as selectUserByUsername, getUser as selectUser, getUserByEmail as selectUserByEmail} from 'mattermost-redux/selectors/entities/users';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
+import {initiateCallIfParam} from 'actions/calls';
 import {openDirectChannelToUserId} from 'actions/channel_actions';
 import * as GlobalActions from 'actions/global_actions';
 
@@ -24,7 +25,6 @@ import * as Utils from 'utils/utils';
 import type {ActionFuncAsync} from 'types/store';
 
 import type {Match, MatchAndHistory} from './channel_identifier_router';
-import { initiateCallIfParam } from 'actions/calls';
 
 const LENGTH_OF_ID = 36;
 const LENGTH_OF_GROUP_ID = 40;
@@ -266,7 +266,7 @@ function goToDirectChannelByUsername(match: Match, history: History): ActionFunc
         doChannelChange(directChannelDispatchRes.data!);
 
         //IK: automatic start kMeet if needed
-        dispatch(initiateCallIfParam(directChannelDispatchRes.data!.id))
+        dispatch(initiateCallIfParam(directChannelDispatchRes.data!.id));
 
         return {data: undefined};
     };

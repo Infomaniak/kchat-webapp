@@ -25,7 +25,6 @@ import ChannelActionsMenu from '../channel_actions_menu/channel_actions_menu';
 
 import './../../../activity_and_insights.scss';
 import './least_active_channels_table.scss';
-import {last} from 'lodash';
 
 type Props = {
     filterType: string;

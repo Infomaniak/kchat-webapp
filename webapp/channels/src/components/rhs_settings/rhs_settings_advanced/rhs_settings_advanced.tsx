@@ -18,7 +18,6 @@ import Constants, {Preferences} from 'utils/constants';
 import {t} from 'utils/i18n';
 import {isLinux, isMac} from 'utils/user_agent';
 
-import * as Utils from '../../../utils/utils';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from '../../keyboard_shortcuts/keyboard_shortcuts_sequence';
 import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
 

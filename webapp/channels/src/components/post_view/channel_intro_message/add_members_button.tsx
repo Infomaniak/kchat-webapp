@@ -3,17 +3,14 @@
 
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import {Permissions} from 'mattermost-redux/constants';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import AddGroupsToChannelModal from 'components/add_groups_to_channel_modal';
 import ChannelInviteModal from 'components/channel_invite_modal';
 import ChannelPermissionGate from 'components/permissions_gates/channel_permission_gate';
-import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import ToggleModalButton from 'components/toggle_modal_button';
 
 import {Constants, ModalIdentifiers} from 'utils/constants';

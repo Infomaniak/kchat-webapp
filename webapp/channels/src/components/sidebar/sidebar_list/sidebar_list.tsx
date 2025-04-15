@@ -348,8 +348,6 @@ export class SidebarList extends React.PureComponent<Props, State> {
 
     navigateUnreadChannelShortcut = (e: KeyboardEvent) => {
         if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && (isKeyPressed(e, Constants.KeyCodes.UP) || isKeyPressed(e, Constants.KeyCodes.DOWN))) {
-            console.log('🚀 tcl ~ SidebarList ~ navigateUnreadChannelShortcut:');
-
             e.preventDefault();
 
             const allChannelIds = this.getDisplayedChannelIds();

@@ -15,7 +15,6 @@ import {UserTypes, AdminTypes} from 'mattermost-redux/action_types';
 import {logError} from 'mattermost-redux/actions/errors';
 import {setServerVersion, getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
 import {bindClientFunc, forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
-import {getServerLimits} from 'mattermost-redux/actions/limits';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 import {getMyTeamMembers, getMyTeamUnreads, getMyKSuites} from 'mattermost-redux/actions/teams';
@@ -87,7 +86,7 @@ export function loadMe(): ActionFuncAsync<boolean> {
             // eslint-disable-next-line no-process-env
             window.location.assign(`https://ksuite.${process.env.BASE_URL?.split('kchat.')[1]}/kchat`);
 
-            return;
+            return {data: false};
         }
 
         try {

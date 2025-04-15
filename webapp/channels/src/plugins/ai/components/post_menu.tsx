@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
@@ -23,7 +23,6 @@ type Props = {
 
 const PostMenu = (props: Props) => {
     const dispatch = useDispatch();
-    const intl = useIntl();
 
     const post = props.post;
 

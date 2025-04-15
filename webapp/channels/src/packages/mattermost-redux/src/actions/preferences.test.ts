@@ -3,10 +3,8 @@
 
 import nock from 'nock';
 
-import {UserTypes} from 'mattermost-redux/action_types';
 // import ksuiteBridge from 'mattermost-redux/action_types/ksuiteBridge';
 import * as Actions from 'mattermost-redux/actions/preferences';
-import {loadMe} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 

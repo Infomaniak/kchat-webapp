@@ -1,23 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {AccountOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {AccountOutlineIcon} from '@mattermost/compass-icons/components';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';
 
-import {openModal} from 'actions/views/modals';
-
 import * as Menu from 'components/menu';
 import {OnboardingTaskCategory, OnboardingTasksName, TaskNameMapToSteps, CompleteYourProfileTour} from 'components/onboarding_tasks';
-import UserSettingsModal from 'components/user_settings/modal';
 
-import {ModalIdentifiers} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 
 import type {GlobalState} from 'types/store';

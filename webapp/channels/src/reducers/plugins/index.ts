@@ -242,6 +242,7 @@ function components(state: PluginsState['components'] = initialComponents, actio
             );
 
             if (componentExists && actionData.pluginId === 'kdrive') {
+                // eslint-disable-next-line no-console
                 console.log(`Component already exists: ${actionData.pluginId} - ${actionData.id}`);
                 return state;
             }

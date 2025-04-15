@@ -29,8 +29,8 @@ describe('components/channel_layout/CenterChannel', () => {
         },
         history: [],
         location: {
-            search : ""
-        }
+            search: '',
+        },
     };
 
     test('should call onChannelByIdentifierEnter on props change', () => {

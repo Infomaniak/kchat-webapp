@@ -21,7 +21,6 @@ import {isKeyPressed} from 'utils/keyboard';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import * as Utils from 'utils/utils';
 
-import WebSocketClient from 'client/web_websocket_client';
 import Pluggable from 'plugins/pluggable';
 
 import type {PropsFromRedux} from './index';

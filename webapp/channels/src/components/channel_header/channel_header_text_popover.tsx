@@ -121,7 +121,6 @@ export function ChannelHeaderTextPopover(props: Props) {
 
     return (
         <>
-            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
             <div
                 ref={rootRef}
                 className='header-description__text'
@@ -141,7 +140,6 @@ export function ChannelHeaderTextPopover(props: Props) {
                         className='channel-header-text-popover-floating-overlay'
                         lockScroll={true}
                     >
-                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
                         <div
                             ref={setFloating}
                             className='channel-header-text-popover'
