@@ -15,6 +15,7 @@ import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 import {getCurrentUser, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {openModal} from 'actions/views/modals';
+import {getCurrentLocale} from 'selectors/i18n';
 import {makeGetCustomStatus, isCustomStatusExpired, isCustomStatusEnabled} from 'selectors/views/custom_status';
 
 import type {GlobalState} from 'types/store';
@@ -38,8 +39,10 @@ function makeMapStateToProps() {
         const currentTeam = getCurrentTeam(state);
         const showNextSwitch = currentTeam ? STAFF_ONLY_TEAM_NAME_WHITELIST.includes(currentTeam.name) : false;
         const ksuiteBridge = getKSuiteBridge(state);
+        const locale = getCurrentLocale(state);
 
         return {
+            locale,
             userId,
             username,
             userFirstName,

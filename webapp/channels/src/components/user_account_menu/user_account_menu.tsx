@@ -116,6 +116,7 @@ export default function UserAccountMenu(props: Props) {
                 isStatusAway={props.status === UserStatuses.AWAY}
             />
             <UserAccountDndMenuItem
+                locale={props.locale}
                 userId={props.userId}
                 shouldConfirmBeforeStatusChange={shouldConfirmBeforeStatusChange}
                 timezone={props.timezone}

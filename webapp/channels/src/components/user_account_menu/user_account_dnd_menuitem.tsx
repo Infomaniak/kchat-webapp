@@ -30,6 +30,7 @@ interface Props {
     timezone?: string;
     shouldConfirmBeforeStatusChange: boolean;
     isStatusDnd: boolean;
+    locale: string;
 }
 
 export default function UserAccountDndMenuItem(props: Props) {
@@ -158,14 +159,22 @@ export default function UserAccountDndMenuItem(props: Props) {
                 id: 'userAccountMenu.dndMenuItem.secondaryLabel.untilTodaySomeTime',
                 defaultMessage: 'Until {time}',
             }, {
-                time: endTime.format('h:mm A'),
+                time: new Intl.DateTimeFormat(props.locale, {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: !isMilitaryTime,
+                }).format(endTime.toDate()),
             });
         } else if (diffDays === 1) {
             return formatMessage({
                 id: 'userAccountMenu.dndMenuItem.secondaryLabel.untilTomorrowSomeTime',
                 defaultMessage: 'Until tomorrow {time}',
             }, {
-                time: endTime.format('h:mm A'),
+                time: new Intl.DateTimeFormat(props.locale, {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: !isMilitaryTime,
+                }).format(endTime.toDate()),
             });
         }
 
