@@ -9,12 +9,13 @@ import WithTooltip from 'components/with_tooltip';
 
 import {copyToClipboard} from 'utils/utils';
 
+type AllMessageKeys = Exclude<keyof typeof messages, 'copied'>;
+type CopyType = AllMessageKeys extends `copy${infer Suffix}` ? Lowercase<Suffix> : never;
+
 type Props = {
     content: string;
-    isForText?: boolean;
+    isFor?: CopyType;
     className?: string;
-    tooltipText?: string;
-    icon?: string;
 };
 
 const CopyButton: React.FC<Props> = (props: Props) => {
@@ -41,10 +42,18 @@ const CopyButton: React.FC<Props> = (props: Props) => {
     let tooltipMessage;
     if (isCopied) {
         tooltipMessage = messages.copied;
-    } else if (props.isForText) {
-        tooltipMessage = messages.copyText;
     } else {
-        tooltipMessage = messages.copyCode;
+        switch (props.isFor) {
+        case 'text':
+            tooltipMessage = messages.copyText;
+            break;
+        case 'id' :
+            tooltipMessage = messages.copyId;
+            break;
+        case 'code':
+        default:
+            tooltipMessage = messages.copyCode;
+        }
     }
 
     const tooltipText = (
@@ -90,6 +99,10 @@ const messages = defineMessages({
     copyText: {
         id: 'copy.text.message',
         defaultMessage: 'Copy text',
+    },
+    copyId: { //IK: custom
+        id: 'copy.text.userid',
+        defaultMessage: 'Copy user ID',
     },
 });
 

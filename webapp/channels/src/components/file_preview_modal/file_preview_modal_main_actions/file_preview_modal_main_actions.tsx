@@ -137,7 +137,7 @@ const FilePreviewModalMainActions: React.FC<Props> = (props: Props) => {
     const copy = (
         <CopyButton
             className='file-preview-modal-main-actions__action-item'
-            isForText={getFileType(props.fileInfo.extension) === FileTypes.TEXT}
+            isFor={getFileType(props.fileInfo.extension) === FileTypes.TEXT ? 'text' : undefined}
             content={props.content}
         />
     );

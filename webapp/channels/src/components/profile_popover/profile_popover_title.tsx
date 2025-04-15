@@ -138,8 +138,7 @@ const ProfilePopoverTitle = ({
             <div className='user-popover__copyID'>
                 <CopyButton
                     content={userId}
-                    tooltipText='copy.text.userid'
-                    icon='icon-link-variant'
+                    isFor='id'
                 />
             </div>
             {roleTitle}
