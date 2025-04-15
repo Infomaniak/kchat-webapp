@@ -2730,6 +2730,7 @@
   "channelHeader.unmute": "Desilenciar",
   "channelHeader.viewInfo": "Ver Info",
   "channelView.login.successfull": "Inicio de sesión exitoso",
+  "channel_header.headerText.addNewButton": "Agregar un encabezado al canal",
   "channel_header.channelFiles": "Archivos del canal",
   "channel_header.channelHasGuests": "Canal con huéspedes",
   "channel_header.channelMembers": "Miembros",

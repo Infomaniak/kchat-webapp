@@ -3292,6 +3292,7 @@
   "channel_bookmarks.editBookmarkLabel": "Lesezeichen-Menü",
   "channel_bookmarks.open": "Öffnen",
   "channel_groups": "{channel} Gruppen",
+  "channel_header.headerText.addNewButton": "Kanalüberschrift hinzufügen",
   "channel_header.channelFiles": "Dateien des Kanals",
   "channel_header.channelHasGuests": "Kanal hat Gäste",
   "channel_header.channelMembers": "Mitglieder",

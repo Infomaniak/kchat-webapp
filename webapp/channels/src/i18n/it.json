@@ -2120,6 +2120,7 @@
   "channelHeader.addToFavorites": "Aggiungi ai preferiti",
   "channelHeader.removeFromFavorites": "Rimuovi dai preferiti",
   "channelHeader.unmute": "Attiva notifiche",
+  "channel_header.headerText.addNewButton": "Aggiungi un'intestazione al canale",
   "channel_bookmarks.addBookmark": "Aggiungi un segnalibro",
   "channel_bookmarks.addBookmarkLimitReached": "Non è possibile aggiungere più di {limit} segnalibri",
   "channel_header.channelHasGuests": "Questo canale ha degli ospiti",

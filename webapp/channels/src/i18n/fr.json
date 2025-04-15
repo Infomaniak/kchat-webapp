@@ -2793,6 +2793,7 @@
   "channel_bookmarks.create.file_input.label": "Pièce jointe",
   "channel_groups": "{channel} groupes",
   "channel_header.addChannelHeader": "Ajouter une entête de canal",
+  "channel_header.headerText.addNewButton": "Ajouter une entête de canal",
   "channel_header.channelFiles": "Fichiers du canal",
   "channel_header.channelHasGuests": "Le canal dispose d’utilisateurs invités",
   "channel_header.channelMembers": "Membres",
