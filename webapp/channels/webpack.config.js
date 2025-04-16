@@ -510,7 +510,7 @@ if (targetIsDevServer) {
                 return '/static/root.html';
             },
             logLevel: 'silent',
-            target: process.env.BASE_URL || 'https://infomaniak.kchat.staging-88850.dev.infomaniak.ch/', //eslint-disable-line no-process-env
+            target: process.env.BASE_URL || 'https://infomaniak.kchat.preprod.dev.infomaniak.ch/', //eslint-disable-line no-process-env
             changeOrigin: true,
             xfwd: true,
             ws: false,
