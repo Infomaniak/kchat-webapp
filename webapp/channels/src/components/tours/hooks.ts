@@ -101,6 +101,30 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
             }
             default:
             }
+        } else if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS) {
+            switch (step) {
+            case OnboardingTourSteps.FINISHED: {
+                let preferences = [
+                    {
+                        user_id: currentUserId,
+                        category: OnboardingTaskCategory,
+                        name: OnboardingTasksName.CHANNELS_TOUR,
+                        value: FINISHED.toString(),
+                    },
+                ];
+                preferences = [...preferences,
+                    {
+                        user_id: currentUserId,
+                        category: OnboardingTaskCategory,
+                        name: OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN,
+                        value: 'true',
+                    },
+                ];
+                dispatch(savePreferences(currentUserId, preferences));
+                break;
+            }
+            default:
+            }
         }
     }, [currentUserId, teamUrl, tourCategory]);
 
