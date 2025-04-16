@@ -3,11 +3,12 @@
 
 import React from 'react';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import * as Utils from 'utils/utils';
 
-import AtMentionSuggestion from './at_mention_suggestion';
-import type {Item} from './at_mention_suggestion';
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+
+import {AtMentionSuggestion} from './at_mention_suggestion/at_mention_suggestion';
+import type {Item} from './at_mention_suggestion/at_mention_suggestion';
 
 jest.mock('components/custom_status/custom_status_emoji', () => () => <div/>);
 jest.spyOn(Utils, 'getFullName').mockReturnValue('a b');

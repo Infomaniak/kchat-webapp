@@ -10,6 +10,7 @@ import {makeAddLastViewAtToProfiles} from 'mattermost-redux/selectors/entities/u
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {getSuggestionsSplitBy, getSuggestionsSplitByMultiple} from 'mattermost-redux/utils/user_utils';
 
+import {loadProfilesMissingStatus} from 'actions/status_actions';
 import store from 'stores/redux_store';
 
 import {Constants} from 'utils/constants';
@@ -354,6 +355,8 @@ export default class AtMentionProvider extends Provider {
         const remoteNonMembers = this.remoteNonMembers().
             filter((member) => !localUserIds[member.id]).
             sort(orderUsers);
+
+        store.dispatch(loadProfilesMissingStatus([...localAndRemoteMembers, ...remoteNonMembers]));
 
         return [...priorityProfiles, ...localAndRemoteMembers, ...localAndRemoteGroups, ...specialMentions, ...remoteNonMembers];
     }

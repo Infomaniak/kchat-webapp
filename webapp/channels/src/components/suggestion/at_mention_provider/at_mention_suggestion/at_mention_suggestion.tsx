@@ -10,7 +10,6 @@ import type {UserProfile} from '@mattermost/types/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
-import SharedUserIndicator from 'components/shared_user_indicator';
 import StatusIcon from 'components/status_icon';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
@@ -20,23 +19,23 @@ import Avatar from 'components/widgets/users/avatar';
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
-import {SuggestionContainer} from '../suggestion';
-import type {SuggestionProps} from '../suggestion';
+import {SuggestionContainer} from '../../suggestion';
+import type {SuggestionProps} from '../../suggestion';
 
 export interface Item extends UserProfile {
     display_name: string;
     name: string;
     isCurrentUser: boolean;
     type: string;
+    status?: string;
 }
 
-interface Group extends Item {
-    member_count: number;
+export interface AtMentionSuggestionProps extends SuggestionProps<Item> {
+    status?: string;
 }
 
-const AtMentionSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<Item>>((props, ref) => {
+export const AtMentionSuggestion = React.forwardRef<HTMLDivElement, AtMentionSuggestionProps>((props, ref) => {
     const {item} = props;
-
     const intl = useIntl();
 
     let itemname: string;
@@ -124,7 +123,7 @@ const AtMentionSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<Ite
                         url={Utils.imageURLForUser(item.id, item.last_picture_update)}
                     />
                 </span>
-                <StatusIcon status={item && item.status}/>
+                <StatusIcon status={props.status || (item && item.status)}/>
             </span>
         );
 
@@ -187,6 +186,3 @@ const AtMentionSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<Ite
         </SuggestionContainer>
     );
 });
-
-AtMentionSuggestion.displayName = 'AtMentionSuggestion';
-export default AtMentionSuggestion;
