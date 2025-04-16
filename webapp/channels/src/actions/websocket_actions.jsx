@@ -2211,9 +2211,11 @@ function handleDeleteDraftEvent(msg) {
 
 function handlePersistentNotification(msg) {
     return async (doDispatch) => {
-        const post = JSON.parse(msg.data.post);
+        //IK: our msg.data.post is already an JS object
+        const post = msg.data.post;
 
-        doDispatch(sendDesktopNotification(post, msg.data));
+        const msgDataLikeMM = {...msg.data, post: JSON.stringify(msg.data.post)}; //IK: so we avoid modifying it later on
+        doDispatch(sendDesktopNotification(post, msgDataLikeMM));
     };
 }
 

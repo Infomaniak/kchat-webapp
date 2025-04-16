@@ -218,7 +218,7 @@ const getNotificationBody = (state: GlobalState, post: Post, msgProps: NewPostMe
 
     let notifyText = post.message;
 
-    const msgPropsPost: Post = msgProps.post;
+    const msgPropsPost: Post = JSON.parse(msgProps.post);
     const attachments = isMessageAttachmentArray(msgPropsPost?.props?.attachments) ? msgPropsPost.props.attachments : [];
     let image = false;
     attachments.forEach((attachment) => {
@@ -286,14 +286,14 @@ function shouldSkipNotification(
         return {status: 'not_sent', reason: 'user_status', data: userStatus};
     }
 
-    let mentions = [''];
+    let mentions = [];
     if (msgProps.mentions) {
-        mentions = msgProps.mentions;
+        mentions = JSON.parse(msgProps.mentions);
     }
 
     let followers = [''];
     if (msgProps.followers) {
-        followers = msgProps.followers;
+        followers = JSON.parse(msgProps.followers);
         mentions = [...new Set([...followers, ...mentions])];
     }
 
