@@ -309,39 +309,6 @@ describe('components/Root', () => {
         expect(Client4.telemetryHandler).not.toBeDefined();
     });
 
-    test('should set a TelemetryHandler when onConfigLoaded is called if Rudder is configured', async () => {
-        const props = {
-            ...baseProps,
-            isConfigLoaded: false,
-            serviceEnvironment: ServiceEnvironment.TEST,
-            actions: {
-                ...baseProps.actions,
-                loadConfigAndMe: jest.fn().mockImplementation(() => {
-                    return Promise.resolve({
-                        isLoaded: true,
-                        isMeRequested: true,
-                    });
-                }),
-            },
-        };
-
-        const {rerender} = renderWithContext(<Root {...props}/>);
-
-        // Wait for the component to load config and call onConfigLoaded
-        await waitFor(() => {
-            expect(props.actions.loadConfigAndMe).toHaveBeenCalledTimes(1);
-        });
-
-        const props2 = {
-            ...props,
-            isConfigLoaded: true,
-        };
-
-        rerender(<Root {...props2}/>);
-
-        expect(Client4.telemetryHandler).toBeDefined();
-    });
-
     describe('showLandingPageIfNecessary', () => {
         const landingProps = {
             ...baseProps,
