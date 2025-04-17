@@ -69,9 +69,7 @@ export default class PostMarkdown extends React.PureComponent<Props> {
                 this.props.currentTeam?.name ?? '',
                 this.props.channel,
                 this.props.hideGuestTags,
-                this.props.isUserCanManageMembers,
-                this.props.isMilitaryTime,
-                this.props.timezone) : null;
+                this.props.isUserCanManageMembers) : null;
             if (renderedSystemMessage) {
                 return <div>{renderedSystemMessage}</div>;
             }
