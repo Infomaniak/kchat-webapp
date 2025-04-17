@@ -263,7 +263,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                         canCreateCustomGroups={this.props.canCreateCustomGroups}
                     />
                 )}
-                {/* {!isDesktopApp() && <SwitchServer/>} */}
+                {!isDesktopApp() && <SwitchServer/>}
                 <div
                     id='lhsNavigator'
                     role='application'
