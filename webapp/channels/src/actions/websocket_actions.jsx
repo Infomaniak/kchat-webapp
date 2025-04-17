@@ -735,7 +735,7 @@ export function handleEvent(msg) {
         dispatch(handleDeleteScheduledPostEvent(msg));
         break;
     case SocketEvents.PERSISTENT_NOTIFICATION_TRIGGERED:
-        dispatch(handlePersistentNotification(msg));
+        dispatch(handlePersistentNotification(ikStringifyDataValues(msg)));
         break;
     case SocketEvents.HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED:
         dispatch(handleHostedCustomerSignupProgressUpdated(msg));
@@ -851,7 +851,7 @@ function debouncePostEvent(wait) {
         } else {
             // Apply immediately for events up until count reaches limit
             count += 1;
-            dispatch(handleNewPostEvent(msg));
+            dispatch(handleNewPostEvent(ikStringifyDataValues(msg)));
             clearTimeout(timeout);
             timeout = setTimeout(triggered, wait);
         }
@@ -2211,11 +2211,9 @@ function handleDeleteDraftEvent(msg) {
 
 function handlePersistentNotification(msg) {
     return async (doDispatch) => {
-        //IK: our msg.data.post is already an JS object
-        const post = msg.data.post;
+        const post = JSON.parse(msg.data.post);
 
-        const msgDataLikeMM = {...msg.data, post: JSON.stringify(msg.data.post)}; //IK: so we avoid modifying it later on
-        doDispatch(sendDesktopNotification(post, msgDataLikeMM));
+        doDispatch(sendDesktopNotification(post, msg.data));
     };
 }
 
@@ -2299,4 +2297,21 @@ export function handleCustomAttributesDeleted(msg) {
         type: GeneralTypes.CUSTOM_PROFILE_ATTRIBUTE_FIELD_DELETED,
         data: msg.data.field_id,
     };
+}
+
+// IK: Our msg.data is an object, but MM expects it to be stringified.
+// To avoid updating every caller, we stringify it here instead.
+function ikStringifyDataValues(msg) {
+    let stringifiedProps;
+
+    if (msg.data) {
+        stringifiedProps = {};
+        for (const key in msg.data) {
+            if (msg.data.hasOwnProperty(key)) {
+                stringifiedProps[key] = JSON.stringify(msg.data[key]);
+            }
+        }
+    }
+    const msgMM = {...msg, data: stringifiedProps};
+    return msgMM;
 }
