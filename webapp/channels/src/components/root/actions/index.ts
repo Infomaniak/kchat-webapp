@@ -62,14 +62,6 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
             };
         }
 
-        // Return early if user is not logged in
-        if (!doesCookieContainsMMUserId()) {
-            return {
-                isLoaded: true,
-                isMeRequested: false,
-            };
-        }
-
         // Load user and its related data now that we know that user is logged in
         const serverVersion = getState().entities.general.serverVersion || Client4.getServerVersion();
         dispatch({type: GeneralTypes.RECEIVED_SERVER_VERSION, data: serverVersion});
