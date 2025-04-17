@@ -21,7 +21,7 @@ import type {Props} from './rhs_settings_advanced';
 import AdvancedRhsSettingsDisplay from './rhs_settings_advanced';
 
 function makeMapStateToProps() {
-    const getAdvancedSettingsCategory = makeGetCategory();
+    const getAdvancedSettingsCategory = makeGetCategory('getAdvancedSettingsCategory', Preferences.CATEGORY_ADVANCED_SETTINGS);
 
     return (state: GlobalState) => {
         const config = getConfig(state);
@@ -30,7 +30,7 @@ function makeMapStateToProps() {
         const enableUserDeactivation = config.EnableUserDeactivation === 'true';
 
         return {
-            advancedSettingsCategory: getAdvancedSettingsCategory(state, Preferences.CATEGORY_ADVANCED_SETTINGS),
+            advancedSettingsCategory: getAdvancedSettingsCategory(state),
             sendOnCtrlEnter: get(state, Preferences.CATEGORY_ADVANCED_SETTINGS, 'send_on_ctrl_enter', 'false'),
             codeBlockOnCtrlEnter: get(state, Preferences.CATEGORY_ADVANCED_SETTINGS, 'code_block_ctrl_enter', 'true'),
             formatting: get(state, Preferences.CATEGORY_ADVANCED_SETTINGS, 'formatting', 'true'),

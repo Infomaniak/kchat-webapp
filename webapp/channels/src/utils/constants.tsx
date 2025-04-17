@@ -1783,6 +1783,12 @@ export const Constants = {
     AVATAR_WIDTH: 24,
     AUTO_RESPONDER: 'system_auto_responder',
     SYSTEM_MESSAGE_PROFILE_IMAGE: logoImage,
+    PRE_RELEASE_FEATURES: {
+        MARKDOWN_PREVIEW: {
+            label: 'markdown_preview', // github issue: https://github.com/mattermost/platform/pull/1389
+            description: 'Show markdown preview option in message input box',
+        },
+    },
     RESERVED_TEAM_NAMES: [
         'signup',
         'login',

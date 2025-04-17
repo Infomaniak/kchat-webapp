@@ -143,6 +143,16 @@ export const KEYBOARD_SHORTCUTS = {
             defaultMessage: 'Previous team:\t⌘|⌥|Up',
         },
     }),
+    msgMarkAllAsRead: {
+        default: {
+            id: 'shortcuts.msgs.mark_all_as_read',
+            defaultMessage: 'Mark all messages as read:\tAlt|Esc',
+        },
+        mac: {
+            id: 'shortcuts.msgs.mark_all_as_read.mac',
+            defaultMessage: 'Mark all messages as read:\t⌥|Esc',
+        },
+    },
     teamNavNext: defineMessages({
         default: {
             id: 'shortcuts.team_nav.next',
