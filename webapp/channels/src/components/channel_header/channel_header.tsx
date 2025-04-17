@@ -260,7 +260,6 @@ class ChannelHeader extends React.PureComponent<Props> {
         if (!isDirect) {
             const membersIconClass = classNames('member-rhs__trigger channel-header__icon channel-header__icon--wide channel-header__icon--left btn btn-icon btn-xs', {
                 'channel-header__icon--active': rhsState === RHSStates.CHANNEL_MEMBERS,
-                disabled: isEmptyObject(channelMember),
             });
             const membersIcon = this.props.memberCount ? (
                 <>
