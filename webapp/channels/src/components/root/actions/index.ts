@@ -12,7 +12,7 @@ import {getClientConfig, getLicenseConfig, getFirstAdminSetupComplete} from 'mat
 import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
 import {getServerLimits} from 'mattermost-redux/actions/limits';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
-import {getMyTeamMembers, getMyTeams, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
+import {getMyKSuites, getMyTeamMembers, getMyTeams, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
 import {getMe, getProfiles} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
@@ -72,7 +72,7 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
                 dispatch(getMyTeams()),
                 dispatch(getMyTeamMembers()),
             ]);
-
+            dispatch(getMyKSuites());
             dispatch(getMyTeamUnreads(isCollapsedThreadsEnabled(getState())));
             dispatch(getServerLimits());
         } catch (error) {
