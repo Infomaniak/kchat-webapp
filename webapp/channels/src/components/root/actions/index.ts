@@ -24,7 +24,6 @@ import {redirectUserToDefaultTeam, emitUserLoggedOutEvent} from 'actions/global_
 
 import {ActionTypes, StoragePrefixes} from 'utils/constants';
 import {isMacApp, isNotMacMas} from 'utils/user_agent';
-import {doesCookieContainsMMUserId} from 'utils/utils';
 
 import type {ActionFuncAsync, ThunkActionFunc} from 'types/store';
 import type {Translations} from 'types/store/i18n';
