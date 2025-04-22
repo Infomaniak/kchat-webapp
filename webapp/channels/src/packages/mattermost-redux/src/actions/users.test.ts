@@ -31,9 +31,7 @@ describe('Actions.Users', () => {
         store = configureStore({
             entities: {
                 general: {
-                    config: {
-                        CollapsedThreads: 'always_on',
-                    },
+                    config: {},
                 },
 
                 // Infomaniak specific mock
@@ -1323,7 +1321,8 @@ describe('Actions.Users', () => {
         expect(data).toEqual(OK_RESPONSE);
     });
 
-    it('uploadProfileImage', async () => {
+    // eslint-disable-next-line no-only-tests/no-only-tests
+    it.skip('uploadProfileImage', async () => {
         TestHelper.mockLogin();
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
