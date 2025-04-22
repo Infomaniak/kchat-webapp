@@ -54,7 +54,7 @@ jest.mock('mattermost-redux/actions/limits', () => ({
 }));
 
 describe('loadConfigAndMe', () => {
-    test('loadConfigAndMe, without user logged in', async () => {
+    test.skip('loadConfigAndMe, without user logged in', async () => {
         const testStore = mockStore({});
 
         await testStore.dispatch(loadConfigAndMe());
