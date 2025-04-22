@@ -2309,6 +2309,7 @@ function fromIKtoMMformat(msg) {
             ...msg.data,
             image: JSON.stringify(msg.data.image ?? undefined),
             mentions: JSON.stringify(msg.data.mentions ?? undefined),
+            followers: JSON.stringify(msg.data.followers ?? undefined),
             otherFile: JSON.stringify(msg.data.otherFile ?? undefined),
             post: JSON.stringify(msg.data.post),
         }};
