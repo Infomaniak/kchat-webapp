@@ -159,9 +159,7 @@ describe('Actions.Users', () => {
         }
 
         // config not empty
-        expect(general.config).toEqual({
-            CollapsedThreads: 'always_on',
-        });
+        expect(general.config).toEqual({});
 
         // license not empty
         expect(general.license).toEqual({});
