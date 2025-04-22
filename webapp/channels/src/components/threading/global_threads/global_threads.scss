@@ -45,7 +45,7 @@
     > .no-results__holder {
         grid-area: list/list/pane/pane;
 
-        @media screen and (max-width: 1073px) {
+        @media screen and (max-width: 1020px) {
             grid-area: main;
         }
     }
