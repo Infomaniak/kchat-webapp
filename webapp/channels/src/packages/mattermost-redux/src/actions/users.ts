@@ -485,8 +485,6 @@ export function getProfilesNotInChannel(teamId: string, channelId: string, group
 
 export function getMe(): ActionFuncAsync<UserProfile> {
     return async (dispatch) => {
-        // eslint-disable-next-line no-console
-        console.log('getMe');
         const getMeFunc = bindClientFunc({
             clientFunc: Client4.getMe,
             onSuccess: UserTypes.RECEIVED_ME,

@@ -319,24 +319,10 @@ export default class Root extends React.PureComponent<Props, State> {
     // };
 
     initiateMeRequests = async () => {
-        const {isLoaded, isMeRequested} = await this.props.actions.loadConfigAndMe();
-        // eslint-disable-next-line no-console
-        console.log('isLoaded', isLoaded);
-        // eslint-disable-next-line no-console
-        console.log('isMeRequested', isMeRequested);
+        const {isLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isLoaded) {
             this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
-
-            // const isUserAtRootRoute = this.props.location.pathname === '/';
-
-            // if (isUserAtRootRoute) {
-            //     if (isMeRequested) {
-            //         this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history, new URLSearchParams(this.props.location.search));
-            //     } else if (this.props.noAccounts) {
-            //         this.props.history.push('/signup_user_complete');
-            //     }
-            // }
         }
         this.onConfigLoaded();
     };
