@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {stat} from 'fs';
+
 import {CollapsedThreads} from '@mattermost/types/config';
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -109,6 +111,9 @@ describe('components/SwitchChannelProvider', () => {
                 currentUserId: 'current_user_id',
                 profilesInChannel: {
                     current_user_id: new Set(['user_1']),
+                },
+                statuses: {
+                    other_user1: 'online',
                 },
             },
             teams: {
@@ -522,6 +527,13 @@ describe('components/SwitchChannelProvider', () => {
             ...defaultState,
             entities: {
                 ...defaultState.entities,
+                users: {
+                    ...defaultState.entities.users,
+                    statuses: {
+                        ...defaultState.entities.users.statuses,
+                        other_user1: 'online',
+                    },
+                },
                 channels: {
                     ...defaultState.entities.channels,
                     myMembers: {
@@ -646,6 +658,9 @@ describe('components/SwitchChannelProvider', () => {
                     currentUserId: 'current_user_id',
                     profilesInChannel: {
                         current_user_id: new Set(['user_1']),
+                    },
+                    statuses: {
+                        other_user1: 'online',
                     },
                 },
             },

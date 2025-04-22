@@ -19,8 +19,8 @@ import Avatar from 'components/widgets/users/avatar';
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
-import {SuggestionContainer} from '../suggestion';
-import type {SuggestionProps} from '../suggestion';
+import {SuggestionContainer} from '../../suggestion';
+import type {SuggestionProps} from '../../suggestion';
 
 export interface Item extends UserProfile {
     display_name: string;
@@ -28,15 +28,15 @@ export interface Item extends UserProfile {
     isCurrentUser: boolean;
     type: string;
     textboxId?: string;
+    status?: string;
 }
 
-interface Group extends Item {
-    member_count: number;
+export interface AtMentionSuggestionProps extends SuggestionProps<Item> {
+    status?: string;
 }
 
-const AtMentionSuggestion = React.forwardRef<HTMLLIElement, SuggestionProps<Item>>((props, ref) => {
+export const AtMentionSuggestion = React.forwardRef<HTMLDivElement, AtMentionSuggestionProps>((props, ref) => {
     const {item} = props;
-
     const intl = useIntl();
 
     let itemname: string;
@@ -136,7 +136,7 @@ const AtMentionSuggestion = React.forwardRef<HTMLLIElement, SuggestionProps<Item
                         url={Utils.imageURLForUser(item.id, item.last_picture_update)}
                     />
                 </span>
-                <StatusIcon status={item && item.status}/>
+                <StatusIcon status={props.status || (item && item.status)}/>
             </span>
         );
 
@@ -201,6 +201,3 @@ const AtMentionSuggestion = React.forwardRef<HTMLLIElement, SuggestionProps<Item
         </SuggestionContainer>
     );
 });
-
-AtMentionSuggestion.displayName = 'AtMentionSuggestion';
-export default AtMentionSuggestion;

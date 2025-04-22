@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`at mention suggestion Should display nick name of non signed in user 1`] = `
-<AtMentionSuggestion
+<ForwardRef
   isSelection={false}
   item={
     Object {
@@ -95,11 +95,11 @@ exports[`at mention suggestion Should display nick name of non signed in user 1`
       </span>
     </li>
   </SuggestionContainer>
-</AtMentionSuggestion>
+</ForwardRef>
 `;
 
 exports[`at mention suggestion Should not display nick name of the signed in user 1`] = `
-<AtMentionSuggestion
+<ForwardRef
   isSelection={false}
   item={
     Object {
@@ -203,5 +203,5 @@ exports[`at mention suggestion Should not display nick name of the signed in use
       </span>
     </li>
   </SuggestionContainer>
-</AtMentionSuggestion>
+</ForwardRef>
 `;

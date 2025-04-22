@@ -63,10 +63,13 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         }
     }, [dispatch, conference]);
 
-    if (
-        caller && conference && caller.id in conference.registrants &&
-        (conference?.registrants[caller.id].status === 'approved' || conference?.registrants[caller.id].status === 'denied')
-    ) {
+    const registrants = conference?.registrants;
+    const callerStatus = caller && registrants?.[caller.id]?.status;
+
+    const isValidCaller = caller && registrants && caller.id in registrants;
+    const isApprovedOrDenied = callerStatus === 'approved' || callerStatus === 'denied';
+
+    if (isValidCaller && isApprovedOrDenied) {
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
     }
 
@@ -151,6 +154,12 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
 
     const Container = isDesktopApp() === false ? GenericModal : 'div';
 
+    // This scenario can occur if the conference ended while the application was offline,
+    // causing this modal to remain visible. Upon websocket reconnection, the conference
+    // state is updated asynchronously, which may lead to a brief instant of undefined conference.
+    if (!conference) {
+        return null;
+    }
     return (
         <Container
             backdrop='static'
