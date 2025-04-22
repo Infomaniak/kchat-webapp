@@ -31,7 +31,6 @@ import Constants, {A11yClassNames} from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
 
 import {MenuContext, useMenuContextValue} from './menu_context';
-import {hasElementPopup} from './menu_item';
 
 import './menu.scss';
 
@@ -72,25 +71,8 @@ type MenuProps = {
      * @warning Make the styling of your components such a way that they don't need this handler
      */
     onToggle?: (isOpen: boolean) => void;
-    closeMenuManually?: boolean;
     onKeyDown?: (event: KeyboardEvent<HTMLDivElement>, forceCloseMenu?: () => void) => void;
     width?: string;
-
-    /**
-     * Infomaniak custom prop (added for audio messages menu)
-     */
-    anchorOrigin?: {
-        vertical: string;
-        horizontal: string;
-    };
-
-    /**
-     * Infomaniak custom prop (added for audio message menu)
-     */
-    transformOrigin?: {
-        vertical: string;
-        horizontal: string;
-    };
     isMenuOpen?: boolean;
 }
 
@@ -104,9 +86,7 @@ interface Props {
     menuFooter?: ReactNode;
     menu: MenuProps;
     children: ReactNode[];
-    menuButtonRef?: React.RefObject<HTMLButtonElement>;
     closeMenuOnTab?: boolean;
-    parentWidth?: boolean;
 
     // Use MUI Anchor Playgroup to try various anchorOrigin
     // and transformOrigin values - https://mui.com/material-ui/react-popover/#anchor-playground
@@ -133,21 +113,17 @@ export function Menu(props: Props) {
     const dispatch = useDispatch();
 
     const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
-    const [menuWidth, setMenuWidth] = useState<string | undefined>(undefined);
-    const [disableAutoFocusItem, setDisableAutoFocusItem] = useState(false);
     const isMenuOpen = Boolean(anchorElement);
 
     // Callback function handler called when menu is closed by escapeKeyDown, backdropClick or tabKeyDown
     function handleMenuClose(event: MouseEvent<HTMLDivElement>) {
         event.preventDefault();
         setAnchorElement(null);
-        setDisableAutoFocusItem(false);
     }
 
     // Handle function injected into menu items to close the menu
     const closeMenu = useCallback(() => {
         setAnchorElement(null);
-        setDisableAutoFocusItem(false);
     }, []);
 
     function handleMenuModalClose(modalId: MenuProps['id']) {
@@ -161,25 +137,13 @@ export function Menu(props: Props) {
         e.stopPropagation();
     }
 
-    useEffect(() => {
-        if (anchorElement) {
-            const parentWidth = anchorElement.getBoundingClientRect().width;
-            setMenuWidth(`${parentWidth}px`);
-        }
-    }, [anchorElement]);
-
-    useEffect(() => {
-        if (props.menu.closeMenuManually) {
-            setAnchorElement(null);
-            if (isMobileView) {
-                handleMenuModalClose(props.menu.id);
-            }
-        }
-    }, [props.menu.closeMenuManually]);
-
     function handleMenuKeyDown(event: KeyboardEvent<HTMLDivElement>) {
         if (isKeyPressed(event, Constants.KeyCodes.ENTER) || isKeyPressed(event, Constants.KeyCodes.SPACE)) {
-            if (hasElementPopup(event.currentTarget)) {
+            const target = event.target as HTMLElement;
+            const ariaHasPopupAttribute = target?.getAttribute('aria-haspopup') === 'true';
+            const ariaHasExpandedAttribute = target?.getAttribute('aria-expanded') === 'true';
+
+            if (ariaHasPopupAttribute && ariaHasExpandedAttribute) {
                 // Avoid closing the sub menu item on enter
             } else {
                 setAnchorElement(null);
@@ -228,11 +192,6 @@ export function Menu(props: Props) {
         }
     }
 
-    // Function to prevent focus-visible from being set on clicking menu items with the mouse
-    function handleMenuButtonMouseDown() {
-        setDisableAutoFocusItem(true);
-    }
-
     // We construct the menu button so we can set onClick correctly here to support both web and mobile view
     function renderMenuButton() {
         const MenuButtonComponent = props.menuButton?.as ?? 'button';
@@ -249,8 +208,6 @@ export function Menu(props: Props) {
                 aria-describedby={props.menuButton?.['aria-describedby']}
                 className={props.menuButton?.class ?? ''}
                 onClick={handleMenuButtonClick}
-                onMouseDown={handleMenuButtonMouseDown}
-                ref={props.menuButtonRef}
             >
                 {props.menuButton.children}
             </MenuButtonComponent>
@@ -327,11 +284,11 @@ export function Menu(props: Props) {
                         id={props.menu.id}
                         aria-label={props.menu?.['aria-label']}
                         aria-labelledby={props.menu['aria-labelledby']}
-                        autoFocusItem={!disableAutoFocusItem}
-                        className={classNames('menu_menuList', props.menu.className)}
+                        className={props.menu.className}
                         style={{
-                            width: props.parentWidth ? menuWidth : props.menu.width,
+                            width: props.menu.width,
                         }}
+                        autoFocusItem={isMenuOpen}
                     >
                         {props.children}
                     </MuiMenuList>
