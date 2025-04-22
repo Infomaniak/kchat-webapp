@@ -248,7 +248,6 @@ function createDMIntroMessage(
                                 botName: 'kchat.bot',
                                 mention: (chunks: React.ReactNode) => (
                                     <AtMention
-                                        key={'kchat.bot'}
                                         mentionName={'kchat.bot'}
                                         channelId={channel.id}
                                     >{'@'}{chunks}</AtMention>
@@ -269,7 +268,6 @@ function createDMIntroMessage(
                                 botName: 'kchat.bot',
                                 mention: (chunks: React.ReactNode) => (
                                     <AtMention
-                                        key={'kchat.bot'}
                                         mentionName={'kchat.bot'}
                                         channelId={channel.id}
                                     >{'@'}{chunks}</AtMention>
