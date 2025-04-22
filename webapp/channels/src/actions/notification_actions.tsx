@@ -218,8 +218,7 @@ const getNotificationBody = (state: GlobalState, post: Post, msgProps: NewPostMe
 
     let notifyText = post.message;
 
-    const msgPropsPost: Post = JSON.parse(msgProps.post);
-    const attachments = isMessageAttachmentArray(msgPropsPost?.props?.attachments) ? msgPropsPost.props.attachments : [];
+    const attachments = isMessageAttachmentArray(post?.props?.attachments) ? post.props.attachments : [];
     let image = false;
     attachments.forEach((attachment) => {
         if (notifyText.length === 0) {
