@@ -2085,6 +2085,7 @@ export const Constants = {
         CLOSE_BRACKET: [']', 221],
         COMPOSING: ['Composing', 229],
     } as Record<string, [string, number]>),
+    FeatureTogglePrefix: 'feature_enabled_',
     CODE_PREVIEW_MAX_FILE_SIZE: 500000, // 500 KB
     HighlightedLanguages: {
         '1c': {name: '1C:Enterprise', extensions: ['bsl', 'os'], aliases: ['bsl']},

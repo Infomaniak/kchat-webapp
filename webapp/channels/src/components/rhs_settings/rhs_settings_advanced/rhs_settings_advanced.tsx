@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import type {ValueType} from 'react-select';
+import type {SingleValue} from 'react-select';
 import ReactSelect from 'react-select';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
@@ -198,7 +198,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
             {value: 2, label: localizeMessage({id: 'user.settings.advance.off', defaultMessage: 'Off'})},
         ];
 
-        const handleSelectChange = (selected: ValueType<any>) => {
+        const handleSelectChange = (selected: SingleValue<any>) => {
             const settings = this.state.settings;
 
             switch (selected.value) {

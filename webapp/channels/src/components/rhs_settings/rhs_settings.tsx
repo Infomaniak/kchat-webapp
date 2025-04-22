@@ -64,7 +64,7 @@ const holders = defineMessages({
 export interface Props {
     isMobile?: boolean;
     currentUser: UserProfile;
-    settingsTab: string;
+    settingsTab?: string;
 }
 
 export default function RhsSettings({
