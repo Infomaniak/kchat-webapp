@@ -5184,5 +5184,7 @@
   "guest_banner.text": "Hay {slot} en esta conversación.",
   "guest_banner.inner": "{count} {count, plural, one {usuario externo} other {usuarios externos}}",
   "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {Usuario externo} other {Usuarios externos}}",
-  "dnd_banner.text": "{name} está en modo “No molestar”, sus notificaciones de mensajes y llamadas están desactivadas"
+  "dnd_banner.text": "{name} está en modo “No molestar”, sus notificaciones de mensajes y llamadas están desactivadas",
+  "voiceMessage.preview.title": "Mensaje de voz",
+  "voiceMessage.uploading": "Subiendo..."
 }

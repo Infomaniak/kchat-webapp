@@ -6483,5 +6483,7 @@
   "guest_banner.text": "There {slot} in this conversation.",
   "guest_banner.inner": "{count, plural, one {is} other {are}} {count} external {count, plural, one {user} other {users}}",
   "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {external user} other {external users}}",
-  "dnd_banner.text": "{name} is in “Do Not Disturb” mode, their message and call notifications are turned off"
+  "dnd_banner.text": "{name} is in “Do Not Disturb” mode, their message and call notifications are turned off",
+  "voiceMessage.preview.title": "Voice message",
+  "voiceMessage.uploading": "Uploading..."
 }

@@ -5398,5 +5398,7 @@
   "workspace_limits.message_history.locked.description.end_user": "Certains anciens messages peuvent ne pas s'afficher car votre espace de travail à plus de {limit} messages. Sélectionnez « Avertir admin » pour envoyer une requête automatique à vos administrateurs système pour mettre à niveau.",
   "workspace_limits.message_history.short": "Messages",
   "workspace_limits.modals.close": "Fermer",
-  "yourcomputer": "Votre ordinateur"
+  "yourcomputer": "Votre ordinateur",
+  "voiceMessage.preview.title": "Message vocal",
+  "voiceMessage.uploading": "Téléchargement..."
 }

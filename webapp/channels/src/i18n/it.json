@@ -4017,5 +4017,7 @@
   "calling_modal.button.accept": "Accetta",
   "calling_modal.button.decline": "Rifiuta",
   "calling_modal.button.cancel": "Riattaccare",
-  "dnd_banner.text": "{name} è in modalità “Non disturbare”, le notifiche di messaggi e chiamate sono disattivate"
+  "dnd_banner.text": "{name} è in modalità “Non disturbare”, le notifiche di messaggi e chiamate sono disattivate",
+  "voiceMessage.preview.title": "Messaggio vocale",
+  "voiceMessage.uploading": "Caricamento in corso..."
 }

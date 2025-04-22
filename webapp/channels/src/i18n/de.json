@@ -6679,5 +6679,7 @@
   "guest_banner.text": "Es gibt {slot} in diesem Gespräch.",
   "guest_banner.inner": "{count} externe Benutzer",
   "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {externer Benutzer} other {externe Benutzer}}",
-  "dnd_banner.text": "{name} ist im “Nicht stören”-Modus, ihre Nachrichten- und Anrufbenachrichtigungen sind deaktiviert"
+  "dnd_banner.text": "{name} ist im “Nicht stören”-Modus, ihre Nachrichten- und Anrufbenachrichtigungen sind deaktiviert",
+  "voiceMessage.preview.title": "Sprachnachricht",
+  "voiceMessage.uploading": "Wird hochgeladen..."
 }
