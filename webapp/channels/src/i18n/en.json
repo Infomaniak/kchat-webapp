@@ -6485,5 +6485,6 @@
   "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {external user} other {external users}}",
   "dnd_banner.text": "{name} is in “Do Not Disturb” mode, their message and call notifications are turned off",
   "voiceMessage.preview.title": "Voice message",
-  "voiceMessage.uploading": "Uploading..."
+  "voiceMessage.uploading": "Uploading...",
+  "voiceMessage.canvasFallback.recording": "Recording started"
 }

@@ -5400,5 +5400,6 @@
   "workspace_limits.modals.close": "Fermer",
   "yourcomputer": "Votre ordinateur",
   "voiceMessage.preview.title": "Message vocal",
-  "voiceMessage.uploading": "Téléchargement..."
+  "voiceMessage.uploading": "Téléchargement...",
+  "voiceMessage.canvasFallback.recording": "Enregistrement démarré"
 }

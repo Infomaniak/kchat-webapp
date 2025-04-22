@@ -6681,5 +6681,6 @@
   "guest_list_popover.guestCount": "{guest_count} {guest_count, plural, one {externer Benutzer} other {externe Benutzer}}",
   "dnd_banner.text": "{name} ist im “Nicht stören”-Modus, ihre Nachrichten- und Anrufbenachrichtigungen sind deaktiviert",
   "voiceMessage.preview.title": "Sprachnachricht",
-  "voiceMessage.uploading": "Wird hochgeladen..."
+  "voiceMessage.uploading": "Wird hochgeladen...",
+  "voiceMessage.canvasFallback.recording": "Aufnahme gestartet"
 }
