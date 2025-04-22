@@ -874,7 +874,8 @@ export function handleNewPostEvent(msg) {
             // eslint-disable-next-line no-console
             console.log('handleNewPostEvent - new post received', post);
         }
-        myDispatch(handleNewPost(post, msg));
+
+        myDispatch(handleNewPost(post, fromIKtoMMformat(msg)));
         myDispatch(batchFetchStatusesProfilesGroupsFromPosts([post]));
 
         // Since status updates aren't real time, assume another user is online if they have posted and:
@@ -2214,8 +2215,7 @@ function handlePersistentNotification(msg) {
         //IK: our msg.data.post is already an JS object
         const post = msg.data.post;
 
-        const msgDataLikeMM = {...msg.data, post: JSON.stringify(msg.data.post)}; //IK: so we avoid modifying it later on
-        doDispatch(sendDesktopNotification(post, msgDataLikeMM));
+        doDispatch(sendDesktopNotification(post, fromIKtoMMformat(msg)));
     };
 }
 
@@ -2299,4 +2299,17 @@ export function handleCustomAttributesDeleted(msg) {
         type: GeneralTypes.CUSTOM_PROFILE_ATTRIBUTE_FIELD_DELETED,
         data: msg.data.field_id,
     };
+}
+
+// IK: Our msg.data is an object, but MM expects it to be stringified (for some, but not all props).
+// To avoid updating every caller, we stringify it here instead.
+function fromIKtoMMformat(msg) {
+    return {...msg,
+        data: {
+            ...msg.data,
+            image: JSON.stringify(msg.data.image ?? undefined),
+            mentions: JSON.stringify(msg.data.mentions ?? undefined),
+            otherFile: JSON.stringify(msg.data.otherFile ?? undefined),
+            post: JSON.stringify(msg.data.post),
+        }};
 }
