@@ -192,7 +192,9 @@ function PostReminderSubmenu(props: Props) {
             trailingElements={<span className={'dot-menu__item-trailing-icon'}><ChevronRightIcon size={16}/></span>}
             menuId={`remind_post_${props.post.id}-menu`}
             subMenuHeader={
-                <h5 className={'dot-menu__post-reminder-menu-header'}>
+                <h5
+                    className={'dot-menu__post-reminder-menu-header'}
+                >
                     {formatMessage(
                         {
                             id: 'post_info.post_reminder.sub_menu.header',
@@ -201,17 +203,6 @@ function PostReminderSubmenu(props: Props) {
                     )}
                 </h5>}
         >
-            <h5
-                className='dot-menu__post-reminder-menu-header'
-
-                // Prevent title from being focusable
-                disabled={true}
-            >
-                {formatMessage(
-                    {id: 'post_info.post_reminder.sub_menu.header',
-                        defaultMessage: 'Set a reminder for:'},
-                )}
-            </h5>
             {postReminderSubMenuItems}
         </Menu.SubMenu>
     );
