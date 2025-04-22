@@ -2304,13 +2304,20 @@ export function handleCustomAttributesDeleted(msg) {
 // IK: Our msg.data is an object, but MM expects it to be stringified (for some, but not all props).
 // To avoid updating every caller, we stringify it here instead.
 function fromIKtoMMformat(msg) {
-    return {...msg,
-        data: {
-            ...msg.data,
-            image: JSON.stringify(msg.data.image ?? undefined),
-            mentions: JSON.stringify(msg.data.mentions ?? undefined),
-            followers: JSON.stringify(msg.data.followers ?? undefined),
-            otherFile: JSON.stringify(msg.data.otherFile ?? undefined),
-            post: JSON.stringify(msg.data.post),
-        }};
+    const data = {...msg.data};
+
+    const keysToStringify = ['image', 'mentions', 'followers', 'otherFile'];
+
+    for (const key of keysToStringify) {
+        if (key in data && data[key] !== undefined) {
+            data[key] = JSON.stringify(data[key]);
+        } else {
+            delete data[key];
+        }
+    }
+
+    return {
+        ...msg,
+        data,
+    };
 }
