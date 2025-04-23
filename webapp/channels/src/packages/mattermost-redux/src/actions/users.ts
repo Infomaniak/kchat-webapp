@@ -155,21 +155,10 @@ export function getFilteredUsersStats(options: GetFilteredUsersStatsOpts = {}, u
 
 export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SIZE, options: any = {}): ActionFuncAsync<UserProfile[]> {
     return async (dispatch, getState) => {
-        let profiles: UserProfile[] = [];
-        let currentFetch: UserProfile[];
-        let currentPage = page;
+        let profiles: UserProfile[];
 
         try {
-            // eslint-disable-next-line no-constant-condition
-            while (true) {
-                // eslint-disable-next-line no-await-in-loop
-                currentFetch = await Client4.getProfiles(currentPage, perPage, options);
-                profiles = profiles.concat(currentFetch);
-                if (currentFetch.length < perPage) {
-                    break;
-                }
-                currentPage += 1;
-            }
+            profiles = await Client4.getProfiles(page, perPage, options);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
