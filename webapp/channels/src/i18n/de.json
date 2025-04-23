@@ -4928,7 +4928,7 @@
   "onboardingTour.ChannelsAndDirectMessagesTour.directMessages": "<b>Direktnachrichten</b> sind für private Diskussionen zwischen einzelnen Benutzern oder kleinen Gruppen.",
   "onboardingTour.ChannelsAndDirectMessagesTour.firstChannel": "Schau mal, hier ist Dein **{firstChannelName}** Kanal! ",
   "onboardingTour.ChannelsAndDirectMessagesTour.title": "Kanäle und Direktnachrichten",
-  "onboardingTour.ChannelsAndDirectMessagesTour.townSquare": "Wir haben auch die <b>{townSquare}</b> und <b>{offTopic}</b> Kanäle für jeden in Deinem Team hinzugefügt.",
+  "onboardingTour.ChannelsAndDirectMessagesTour.townSquare": "Wir haben außerdem den Kanal <b>{townSquare}</b> für alle Teammitglieder hinzugefügt.",
   "onboardingTour.CreateAndJoinChannels.Description": "Erstelle neue Kanäle oder durchsuche die vorhandenen Kanäle um zu sehen was Dein Team diskutiert. Während Du Kanäle hinzufügst, organisiere diese in  Kategorien basierend darauf, wie Du arbeitest.",
   "onboardingTour.CreateAndJoinChannels.title": "Kanäle erstellen und beitreten",
   "onboardingTour.customizeYourExperience.Description": "Lege deine Verfügbarkeit fest, füge einen benutzerdefinierten Status hinzu, und greife auf die Einstellungen und dein Profil zu, um individuelle Anpassungen zu konfigurieren, einschließlich der Benachrichtigungseinstellungen und Themenfarben.",

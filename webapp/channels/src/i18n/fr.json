@@ -4015,7 +4015,7 @@
   "onboardingTour.ChannelsAndDirectMessagesTour.directMessages": "<b>Les messages personnels</b> sont pour des conversations privées entre des individus ou des petits groupes.",
   "onboardingTour.ChannelsAndDirectMessagesTour.firstChannel": "Regardez, voici votre canal **{firstChannelName}** ! ",
   "onboardingTour.ChannelsAndDirectMessagesTour.title": "Canaux et messages personnels",
-  "onboardingTour.ChannelsAndDirectMessagesTour.townSquare": "Nous avons également ajouté les canaux <b>{townSquare}</b> et <b>{offTopic}</b> pour tous les membres de votre équipe.",
+  "onboardingTour.ChannelsAndDirectMessagesTour.townSquare": "Nous avons également ajouté le canal <b>{townSquare}</b> pour tous les membres de votre équipe.",
   "onboardingTour.CreateAndJoinChannels.Description": "Créez de nouveaux canaux ou parcourez les canaux disponibles pour voir ce dont votre équipe discute. Lorsque vous rejoignez des canaux, organisez-les en catégories en fonction de votre méthode de travail.",
   "onboardingTour.CreateAndJoinChannels.title": "Créez et rejoignez des canaux",
   "onboardingTour.customizeYourExperience.Description": "Indiquez votre disponibilité, ajoutez un statut personnalisé et accédez aux paramètres ainsi qu'à votre profil pour configurer votre expérience, notamment les préférences de notification et les couleurs de thème personnalisées.",

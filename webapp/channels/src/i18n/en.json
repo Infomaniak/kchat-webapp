@@ -4792,7 +4792,7 @@
   "onboardingTour.ChannelsAndDirectMessagesTour.directMessages": "<b>Direct messages</b> are for private conversations between individuals or small groups.",
   "onboardingTour.ChannelsAndDirectMessagesTour.firstChannel": "Hey look, there’s your **{firstChannelName}** channel! ",
   "onboardingTour.ChannelsAndDirectMessagesTour.title": "Channels and direct messages",
-  "onboardingTour.ChannelsAndDirectMessagesTour.townSquare": "We’ve also added the <b>{townSquare}</b> and <b>{offTopic}</b> channels for everyone on your team.",
+  "onboardingTour.ChannelsAndDirectMessagesTour.townSquare": "We have also added the <b>{townSquare}</b> channel for all team members.",
   "onboardingTour.CreateAndJoinChannels.Description": "Create new channels or browse available channels to see what your team is discussing. As you join channels, organize them into  categories based on how you work.",
   "onboardingTour.CreateAndJoinChannels.title": "Create and join channels",
   "onboardingTour.customizeYourExperience.Description": "Set your availability, add a custom status, and access Settings and your Profile to configure your experience, including notification preferences and custom theme colors.",

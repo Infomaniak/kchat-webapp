@@ -3853,6 +3853,7 @@
   "onboardingTour.ChannelsTourTip.content": "Trova i canali di discussione della vostra organizzazione a cui avete accesso. Il contenuto di questi canali è visibile a tutti i membri presenti in questi canali. I canali sono quindi ideali per aumentare la trasparenza e coordinare i progetti della vostra organizzazione. {link}",
   "onboardingTour.ChannelsTourTip.learnMore": "Per saperne di più",
   "onboardingTour.ChannelsTourTip.linkUrl": "https://www.infomaniak.com/it/assistenza/faq/2732/gestire-un-canale-kchat?noCache=1",
+  "onboardingTour.ChannelsAndDirectMessagesTour.townSquare": "Abbiamo anche aggiunto il canale <b>{townSquare}</b> per tutti i membri del team.",
   "onboardingTour.CreateChannelsTourTip.title": "Canale privato/pubblico",
   "onboardingTour.CreateChannelsTourTip.content": "Da qui è possibile creare un nuovo canale pubblico o privato per coordinare, ad esempio, un progetto, un team o un reparto.",
   "onboardingTour.JoinChannelsTourTip.title": "Partecipare a un canale pubblico",
