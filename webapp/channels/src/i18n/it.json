@@ -2145,6 +2145,8 @@
   "channel_header.viewMembers": "Mostra membri",
   "channel_info_rhs.top_buttons.favorite": "Preferito",
   "channel_info_rhs.top_buttons.favorited": "Preferito",
+  "channel_info_rhs.about_area.channel_purpose.heading": "Scopo del canale",
+  "channel_info_rhs.about_area.channel_header.heading": "Intestazione del canale",
   "channel_invite.addNewMembers": "Aggiungi nuovi membri a {channel}",
   "channel_invite.invite_guest": "Invitare un nuovo ospite",
   "channel_invite.already_in_channel": "Già nel canale",

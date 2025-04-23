@@ -2823,6 +2823,8 @@
   "channel_header.viewMembers": "Voir les membres",
   "channel_info_rhs.about_area.add_channel_header": "Ajouter un en-tête de canal",
   "channel_info_rhs.about_area.add_channel_purpose": "Ajouter une description de canal",
+  "channel_info_rhs.about_area.channel_purpose.heading": "Objectif du canal",
+  "channel_info_rhs.about_area.channel_header.heading": "En-tête du canal",
   "channel_info_rhs.about_area.channel_header.line_limiter.less": "moins",
   "channel_info_rhs.about_area.channel_header.line_limiter.more": "plus",
   "channel_info_rhs.about_area.channel_purpose.line_limiter.less": "moins",

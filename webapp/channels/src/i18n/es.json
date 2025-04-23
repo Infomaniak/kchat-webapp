@@ -2763,6 +2763,8 @@
   "channel_info_rhs.about_area.channel_header.line_limiter.more": "más",
   "channel_info_rhs.about_area.channel_purpose.line_limiter.less": "menos",
   "channel_info_rhs.about_area.channel_purpose.line_limiter.more": "más",
+  "channel_info_rhs.about_area.channel_purpose.heading": "Propósito del canal",
+  "channel_info_rhs.about_area.channel_header.heading": "Encabezado del canal",
   "channel_info_rhs.about_area_id": "ID:",
   "channel_info_rhs.edit_link": "Editar",
   "channel_info_rhs.header.title": "Info",
