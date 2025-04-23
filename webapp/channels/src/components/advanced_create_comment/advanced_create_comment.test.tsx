@@ -485,25 +485,27 @@ describe('components/AdvancedCreateComment', () => {
             expect(focusTextbox).toHaveBeenCalled();
         });
 
-        it('is called when selectPostFocussedAt changes', () => {
-            const props: any = {...baseProps, draft, selectedPostFocussedAt: 1000};
-            const wrapper = shallow<AdvancedCreateComment>(
-                <AdvancedCreateComment {...props}/>,
-            );
+        // IK: commented test below in scope of rm/394535,
+        // but the change would not be relevant in next upstream
+        // it('is called when selectPostFocussedAt changes', () => {
+        //     const props: any = {...baseProps, draft, selectedPostFocussedAt: 1000};
+        //     const wrapper = shallow<AdvancedCreateComment>(
+        //         <AdvancedCreateComment {...props}/>,
+        //     );
 
-            const focusTextbox = jest.fn();
-            wrapper.instance().focusTextbox = focusTextbox;
+        //     const focusTextbox = jest.fn();
+        //     wrapper.instance().focusTextbox = focusTextbox;
 
-            const newProps = {
-                ...props,
-                selectedPostFocussedAt: 2000,
-            };
+        //     const newProps = {
+        //         ...props,
+        //         selectedPostFocussedAt: 2000,
+        //     };
 
-            // Note that setProps doesn't actually trigger componentDidUpdate
-            wrapper.setProps(newProps);
-            wrapper.instance().componentDidUpdate(props, props);
-            expect(focusTextbox).toHaveBeenCalled();
-        });
+        //     // Note that setProps doesn't actually trigger componentDidUpdate
+        //     wrapper.setProps(newProps);
+        //     wrapper.instance().componentDidUpdate(props, props);
+        //     expect(focusTextbox).toHaveBeenCalled();
+        // });
 
         it('is not called when rootId and selectPostFocussedAt have not changed', () => {
             const props: any = {...baseProps, draft, selectedPostFocussedAt: 1000};

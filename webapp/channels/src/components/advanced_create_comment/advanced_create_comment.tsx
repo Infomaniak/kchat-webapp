@@ -338,7 +338,16 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         if (prevProps.rootId !== this.props.rootId || prevProps.selectedPostFocussedAt !== this.props.selectedPostFocussedAt) {
             this.getChannelMemberCountsByGroup();
-            this.focusTextbox();
+
+            // IK: the below change fixes rm/394535, but the change would
+            // not be relevant / does not need to be preserved in next upstream
+            // merge where the functionality is refactored and consolidated with
+            // with advanced_create_post
+
+            // this.focusTextbox();
+            if (prevProps.rootId !== this.props.rootId) {
+                this.focusTextbox();
+            }
         }
 
         if (this.doInitialScrollToBottom) {
