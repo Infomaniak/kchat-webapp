@@ -4483,7 +4483,7 @@ export default class Client4 {
     };
 
     private doFetchWithRetry = async <ClientDataResponse>(url: string, options: Options): Promise<ClientDataResponse> => {
-        const {data} = await this.doFetchWithResponseAndRetry<ClientDataResponse>(url, options);
+        const {data} = await this.doFetchWithResponse<ClientDataResponse>(url, options);
 
         return data;
     };

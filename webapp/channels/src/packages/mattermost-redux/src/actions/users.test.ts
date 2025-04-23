@@ -443,7 +443,7 @@ describe('Actions.Users', () => {
 
             const promise = store.dispatch(Actions.getMissingProfilesByIds([testUserId1]));
 
-            jest.runAllTimers();
+            jest.advanceTimersToNextTimer();
 
             await promise;
 
