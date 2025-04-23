@@ -5148,7 +5148,6 @@
   "drafts.filter.menu.not_scheduled": "No previsto",
   "drafts.heading": "Borradores",
   "drafts.subtitle": "Los mensajes que hayas iniciado se mostrarán aquí",
-  "drafts.empty.title": "No hay borradores por el momento",
   "drafts.empty.subtitle": "Los mensajes que hayas iniciado se mostrarán aquí",
   "drafts.info.sync": "Actualizado desde otro dispositivo",
   "drafts.actions.delete": "Borrar borrador",
