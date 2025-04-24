@@ -19,13 +19,13 @@
         outline: none;
         margin-left: 10px;
         padding: 0 20px;
+        padding-left: 18px;
 
         &.btn-light {
             max-height: 32px;
         }
 
         &__icon {
-            margin-right: 5px;
             @media screen and (max-width: 999px) {
                 margin: 0;
             }
@@ -34,8 +34,8 @@
                 width: 24px;
             }
 
-            &--16 {
-                width: 16px;
+            &--18 {
+                width: 18px;
             }
         }
 

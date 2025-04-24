@@ -12,7 +12,6 @@ import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users'
 import ConfirmModal from 'components/confirm_modal';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {KmeetTour, useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
-import WithTooltip from 'components/with_tooltip';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 
@@ -129,43 +128,32 @@ function MeetButton(props: Props) {
         actions.closeModal(ModalIdentifiers.KMEET_CALL_MODAL);
     };
 
-    const tooltip = (
-        <FormattedMessage
-            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
-            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
-        />
-    );
-
     const btnClasses = 'btn meet-btn';
     return (
-        <WithTooltip
-            title={tooltip}
+        <div
+            className='meet-btn__wrapper'
+            id='channel-header-kmeet-btn'
         >
-            <div
-                className='meet-btn__wrapper'
-                id='channel-header-kmeet-btn'
+            {showKmeetTutorialStep && <KmeetTour/>}
+            <button
+                type='button'
+                className={btnClasses}
+                onClick={onClick}
+                ref={ref}
             >
-                {showKmeetTutorialStep && <KmeetTour/>}
-                <button
-                    type='button'
-                    className={btnClasses}
-                    onClick={onClick}
-                    ref={ref}
-                >
-                    <img
-                        alt={props.hasCall ? 'join call' : 'start call'}
-                        src={meetSvg}
-                        className='meet-btn__icon meet-btn__icon--16'
+                <img
+                    alt={props.hasCall ? 'join call' : 'start call'}
+                    src={meetSvg}
+                    className='meet-btn__icon meet-btn__icon--18'
+                />
+                <span className='meet-btn__text'>
+                    <FormattedMessage
+                        id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
+                        defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
                     />
-                    <span className='meet-btn__text'>
-                        <FormattedMessage
-                            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
-                            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
-                        />
-                    </span>
-                </button>
-            </div>
-        </WithTooltip>
+                </span>
+            </button>
+        </div>
     );
 }
 
