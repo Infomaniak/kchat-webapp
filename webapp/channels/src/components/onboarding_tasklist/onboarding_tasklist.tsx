@@ -238,18 +238,29 @@ const OnBoardingTaskList = (): JSX.Element | null => {
             value: String(!open),
         }];
 
-        // disable onboarding if the user completed every steps
-        if (open && completedCount === tasksList.length) {
-            preferences.push({
+        dispatch(savePreferences(currentUserId, preferences));
+        trackEvent(OnboardingTaskCategory, open ? OnboardingTaskList.ONBOARDING_TASK_LIST_CLOSE : OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN);
+    }, [open, currentUserId]);
+
+    // IK: Our onboarding process does not include a dedicated "Complete" button.
+    // Instead, it relies on the user completing all steps and then closing the popover to finalize the onboarding, so we hook on the open property
+    useEffect(() => {
+        if (!open && completedCount === tasksList.length) {
+            const preferences = [{
                 user_id: currentUserId,
                 category: OnboardingTaskCategory,
                 name: OnboardingTaskList.ONBOARDING_TASK_LIST_SHOW,
                 value: 'false',
-            });
+            },
+            {
+                user_id: currentUserId,
+                category: OnboardingTaskCategory,
+                name: OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN,
+                value: 'false',
+            }];
+            dispatch(savePreferences(currentUserId, preferences));
         }
-        dispatch(savePreferences(currentUserId, preferences));
-        trackEvent(OnboardingTaskCategory, open ? OnboardingTaskList.ONBOARDING_TASK_LIST_CLOSE : OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN);
-    }, [open, currentUserId]);
+    }, [open]);
 
     if (!hasPreferences || !showTaskList || !isEnableOnboardingFlow) {
         return null;
