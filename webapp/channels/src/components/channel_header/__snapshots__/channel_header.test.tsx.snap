@@ -1960,11 +1960,6 @@ exports[`components/ChannelHeader should render properly when custom status is s
                   }
                 }
                 showTooltip={true}
-                spanStyle={
-                  Object {
-                    "paddingLeft": "8px",
-                  }
-                }
                 userID="user_id"
               />
               <CustomStatusText
