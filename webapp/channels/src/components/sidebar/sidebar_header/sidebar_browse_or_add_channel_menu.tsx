@@ -173,7 +173,7 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
                 id='integrations'
                 labels={
                     <FormattedMessage
-                        id='navbar_dropdownIntegrations'
+                        id='integrations.header'
                         defaultMessage='Integrations'
                     />
                 }
