@@ -11,6 +11,9 @@ import {getConfig, getFeatureFlagValue, getLicense} from 'mattermost-redux/selec
 import {createIdsSelector, createShallowSelector} from 'mattermost-redux/utils/helpers';
 import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 import {setThemeDefaults} from 'mattermost-redux/utils/theme_utils';
+import {isAdmin} from 'mattermost-redux/utils/user_utils';
+
+import {getCurrentUser} from './common';
 
 export function getMyPreferences(state: GlobalState): { [x: string]: PreferenceType } {
     return state.entities.preferences.myPreferences;
@@ -350,9 +353,10 @@ export function isCustomGroupsEnabled(state: GlobalState): boolean {
 }
 
 export function insightsAreEnabled(state: GlobalState): boolean {
+    const isConfiguredForFeature = getConfig(state).InsightsEnabled === 'true';
     const featureIsEnabled = getFeatureFlagValue(state, 'InsightsEnabled') === 'true';
-
-    return featureIsEnabled;
+    const currentUserIsAdmin = isAdmin(getCurrentUser(state).roles);
+    return featureIsEnabled && isConfiguredForFeature && currentUserIsAdmin;
 }
 
 export function getIsOnboardingFlowEnabled(state: GlobalState): boolean {
