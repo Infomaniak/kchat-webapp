@@ -103,7 +103,6 @@ class ChannelHeader extends React.PureComponent<Props> {
                         verticalAlign: 'top',
                         margin: '0 4px 1px',
                     }}
-                    spanStyle={{paddingLeft: '8px'}}
                 />
                 <CustomStatusText
                     text={customStatus?.text}

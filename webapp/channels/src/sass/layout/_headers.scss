@@ -102,11 +102,6 @@
         }
     }
 
-    .channel-header__icon {
-        &#channelHeaderPinButton {
-            margin-left: 4px;
-        }
-    }
 
     .flex-parent {
         display: flex;
@@ -366,7 +361,6 @@
 
     .channel-header__icons {
         display: flex;
-        margin-right: 8px;
         gap: 4px;
 
         .btn-icon {
@@ -385,6 +379,7 @@
         font-size: 12px;
         line-height: 24px;
         text-overflow: ellipsis;
+        margin-left: 12px;
 
         span[data-emoticon] {
             .emoticon {
