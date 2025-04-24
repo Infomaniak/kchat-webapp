@@ -240,6 +240,15 @@ export default styled(Member)`
         margin-right: auto;
         overflow: hidden;
         padding: 4px 0px;
+
+        .profileSpan_userInfo {
+            display: flex;
+            flex-grow: 1;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     }
 
     .MenuWrapper {
