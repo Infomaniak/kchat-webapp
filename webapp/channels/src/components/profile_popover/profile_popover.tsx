@@ -213,38 +213,31 @@ const ProfilePopover = ({
                     hide={hide}
                 />
             </div>
-            <div className='user-profile-popover-bottom-row'>
-                <hr className='user-popover__bottom-row-hr'/>
-                <ProfilePopoverOverrideDisclaimer
-                    haveOverrideProp={haveOverrideProp}
-                    username={user.username}
-                />
-                <ProfilePopoverSelfUserRow
-                    currentUserId={currentUserId}
-                    handleCloseModals={handleCloseModals}
-                    handleShowDirectChannel={handleShowDirectChannel}
-                    haveOverrideProp={haveOverrideProp}
-                    returnFocus={handleReturnFocus}
-                    userId={user.id}
-                    hide={hide}
-                />
-                <ProfilePopoverOtherUserRow
-                    currentUserId={currentUserId}
-                    fullname={fullname}
-                    handleCloseModals={handleCloseModals}
-                    handleShowDirectChannel={handleShowDirectChannel}
-                    haveOverrideProp={haveOverrideProp}
-                    returnFocus={handleReturnFocus}
-                    user={user}
-                    hide={hide}
-                />
-                <Pluggable
-                    pluggableName='PopoverUserActions'
-                    user={user}
-                    hide={hide}
-                    status={hideStatus ? null : status}
-                />
-            </div>
+            {currentUserId !== user.id && (
+                <div className='user-profile-popover-bottom-row'>
+                    <hr className='user-popover__bottom-row-hr'/>
+                    <ProfilePopoverOverrideDisclaimer
+                        haveOverrideProp={haveOverrideProp}
+                        username={user.username}
+                    />
+                    <ProfilePopoverOtherUserRow
+                        currentUserId={currentUserId}
+                        fullname={fullname}
+                        handleCloseModals={handleCloseModals}
+                        handleShowDirectChannel={handleShowDirectChannel}
+                        haveOverrideProp={haveOverrideProp}
+                        returnFocus={handleReturnFocus}
+                        user={user}
+                        hide={hide}
+                    />
+                    <Pluggable
+                        pluggableName='PopoverUserActions'
+                        user={user}
+                        hide={hide}
+                        status={hideStatus ? null : status}
+                    />
+                </div>
+            )}
         </div>
     );
 };
