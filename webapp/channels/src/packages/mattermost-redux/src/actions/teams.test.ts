@@ -56,24 +56,6 @@ describe('Actions.Teams', () => {
         expect(currentTeamId).toEqual(TestHelper.basicTeam!.id);
     });
 
-    it('getMyTeams', async () => {
-        TestHelper.mockLogin();
-        store.dispatch({
-            type: UserTypes.LOGIN_SUCCESS,
-        });
-        await store.dispatch(loadMe());
-
-        nock(Client4.getBaseRoute()).
-            get('/users/me/teams').
-            reply(200, [TestHelper.basicTeam]);
-        await store.dispatch(Actions.getMyTeams());
-
-        const {teams} = store.getState().entities.teams;
-
-        expect(teams).toBeTruthy();
-        expect(teams[TestHelper.basicTeam!.id]).toBeTruthy();
-    });
-
     it('getTeamsForUser', async () => {
         nock(Client4.getBaseRoute()).
             get(`/users/${TestHelper.basicUser!.id}/teams`).

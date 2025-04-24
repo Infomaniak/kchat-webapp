@@ -11,7 +11,7 @@ import {logError} from 'mattermost-redux/actions/errors';
 import {getClientConfig, getLicenseConfig, getFirstAdminSetupComplete} from 'mattermost-redux/actions/general';
 import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
-import {getMyKSuites, getMyTeamMembers, getMyTeams, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
+import {getMyKSuites, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
 import {getMe, getProfiles} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
@@ -68,7 +68,6 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
             await Promise.all([
                 dispatch(getMe()),
                 dispatch(getMyPreferences()),
-                dispatch(getMyTeams()),
                 dispatch(getMyTeamMembers()),
                 dispatch(getMyKSuites()),
             ]);
