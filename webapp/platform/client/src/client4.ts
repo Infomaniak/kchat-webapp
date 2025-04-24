@@ -1306,17 +1306,6 @@ export default class Client4 {
         );
     };
 
-    // Limits Routes
-
-    getServerLimits = () => {
-        return this.doFetchWithResponse<ServerLimits>(
-            `${this.getServerLimitsRoute()}`,
-            {
-                method: 'get',
-            },
-        );
-    };
-
     // Team Routes
 
     createTeam = (team: Team) => {

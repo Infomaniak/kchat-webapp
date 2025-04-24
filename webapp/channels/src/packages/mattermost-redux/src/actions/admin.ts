@@ -26,7 +26,6 @@ import type {
 import type {DeepPartial} from '@mattermost/types/utilities';
 
 import {AdminTypes} from 'mattermost-redux/action_types';
-import {getServerLimits} from 'mattermost-redux/actions/limits';
 import {Client4} from 'mattermost-redux/client';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
@@ -374,22 +373,6 @@ export function uploadLicense(fileData: File) {
             fileData,
         ],
     });
-}
-
-export function removeLicense(): ActionFuncAsync<boolean> {
-    return async (dispatch, getState) => {
-        try {
-            await Client4.removeLicense();
-        } catch (error) {
-            forceLogoutIfNecessary(error as ServerError, dispatch, getState);
-            dispatch(logError(error as ServerError));
-            return {error: error as ServerError};
-        }
-
-        await dispatch(getServerLimits());
-
-        return {data: true};
-    };
 }
 
 export function getPrevTrialLicense(): ActionFuncAsync {
