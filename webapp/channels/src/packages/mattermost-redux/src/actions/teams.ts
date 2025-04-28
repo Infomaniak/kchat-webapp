@@ -69,10 +69,11 @@ export function selectTeam(team: Team | Team['id']) {
 }
 
 export function getMyKSuites() {
-    console.log('je send les ksouht');
     return bindClientFunc({
         clientFunc: Client4.getMyKSuites,
-        onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, Servers.RECEIVED_SERVERS],
+        onRequest: TeamTypes.MY_TEAMS_REQUEST,
+        onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, TeamTypes.MY_TEAMS_SUCCESS, Servers.RECEIVED_SERVERS],
+        onFailure: TeamTypes.MY_TEAMS_FAILURE,
         params: [!isDesktopApp()],
     });
 }

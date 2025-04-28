@@ -12,9 +12,9 @@ import {handleRequest, initialRequestState} from './helpers';
 
 function getMyKSuites(state: RequestStatusType = initialRequestState(), action: AnyAction): RequestStatusType {
     return handleRequest(
-        TeamTypes.GET_TEAMS_REQUEST,
-        TeamTypes.GET_TEAMS_SUCCESS,
-        TeamTypes.GET_TEAMS_FAILURE,
+        TeamTypes.MY_TEAMS_REQUEST,
+        TeamTypes.MY_TEAMS_SUCCESS,
+        TeamTypes.MY_TEAMS_FAILURE,
         state,
         action,
     );
@@ -22,9 +22,9 @@ function getMyKSuites(state: RequestStatusType = initialRequestState(), action: 
 
 function getTeams(state: RequestStatusType = initialRequestState(), action: AnyAction): RequestStatusType {
     return handleRequest(
-        TeamTypes.GET_TEAMS_REQUEST,
-        TeamTypes.GET_TEAMS_SUCCESS,
-        TeamTypes.GET_TEAMS_FAILURE,
+        TeamTypes.MY_TEAMS_REQUEST,
+        TeamTypes.MY_TEAMS_SUCCESS,
+        TeamTypes.MY_TEAMS_FAILURE,
         state,
         action,
     );
