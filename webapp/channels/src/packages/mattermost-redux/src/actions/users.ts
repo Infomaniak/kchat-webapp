@@ -25,6 +25,7 @@ import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/pre
 import {getCurrentUserId, getUser as selectUser, getUsers, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
+import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 
 import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
 
@@ -90,17 +91,33 @@ export function loadMe(): ActionFuncAsync<boolean> {
         }
 
         try {
-            await Promise.all([
-                dispatch(getClientConfig()),
-                dispatch(getLicenseConfig()),
-                dispatch(getMe()),
-                dispatch(getMyPreferences()),
-                dispatch(getMyKSuites()),
-                dispatch(getMyTeamMembers()),
-            ]);
+            const kSuiteCall = await dispatch(getMyKSuites());
+            const kSuites = getTeams(getState());
 
-            const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
-            await dispatch(getMyTeamUnreads(isCollapsedThreads));
+            const suiteArr = Object.values(kSuites);
+
+            if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
+                try {
+                    await Promise.all([
+                        dispatch(getClientConfig()),
+                        dispatch(getLicenseConfig()),
+                        dispatch(getMe()),
+                        dispatch(getMyPreferences()),
+                        dispatch(getMyTeamMembers()),
+                    ]);
+
+                    const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
+                    await dispatch(getMyTeamUnreads(isCollapsedThreads));
+                } catch (error) {
+                    dispatch(logError(error as ServerError));
+                    return {error: error as ServerError};
+                }
+            } else if (!isDesktopApp()) {
+                // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
+                if (kSuiteCall && kSuiteCall.data) {
+                    getHistory().push('/error?type=no_ksuite');
+                }
+            }
         } catch (error) {
             dispatch(logError(error as ServerError));
             return {error: error as ServerError};
