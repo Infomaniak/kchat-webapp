@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 
 import type {NotificationPermissionNeverGranted} from 'utils/notifications';
 import {isNotificationAPISupported} from 'utils/notifications';
@@ -21,7 +21,15 @@ export function useDesktopAppNotificationPermission(): [DesktopNotificationPermi
     const isDesktop = isDesktopApp();
     const isSupported = isNotificationAPISupported();
 
+    // IK: make sure we only call requestDesktopNotificationPermission only once
+    const hasRequestedRef = useRef(false);
+    const isMountedRef = useRef(true);
+
     const requestDesktopNotificationPermission = useCallback(async () => {
+        if (hasRequestedRef.current) {
+            return desktopNotificationPermissionGlobalState as DesktopNotificationPermission;
+        }
+
         // Based on Electron's notification permission it will have following states
         // - allowed - No further action needed
         // - denied permanently - No further action needed
@@ -32,7 +40,10 @@ export function useDesktopAppNotificationPermission(): [DesktopNotificationPermi
         desktopNotificationPermissionGlobalState = permission as DesktopNotificationPermission;
 
         // Update the local state
-        setDesktopNotificationPermission(permission as DesktopNotificationPermission);
+        if (isMountedRef.current) {
+            setDesktopNotificationPermission(permission as DesktopNotificationPermission);
+        }
+        hasRequestedRef.current = true;
 
         return permission;
     }, []);
