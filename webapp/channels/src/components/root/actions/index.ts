@@ -8,25 +8,21 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {GeneralTypes} from 'mattermost-redux/action_types';
 import {logError} from 'mattermost-redux/actions/errors';
-import {getClientConfig, getLicenseConfig, getFirstAdminSetupComplete, setServerVersion} from 'mattermost-redux/actions/general';
+import {getClientConfig, getLicenseConfig, getFirstAdminSetupComplete} from 'mattermost-redux/actions/general';
 import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
-import {bridgeRecreate} from 'mattermost-redux/actions/ksuiteBridge';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {getMyKSuites, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
 import {getMe, getProfiles} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {isCollapsedThreadsEnabled, getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getActiveTeamsList, getTeams} from 'mattermost-redux/selectors/entities/teams';
+import {getActiveTeamsList} from 'mattermost-redux/selectors/entities/teams';
 import {checkIsFirstAdmin, getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
-import {getMyMeets} from 'actions/calls';
 import {redirectUserToDefaultTeam, emitUserLoggedOutEvent} from 'actions/global_actions';
 
-import {getHistory} from 'utils/browser_history';
 import {ActionTypes, StoragePrefixes} from 'utils/constants';
-import {isDesktopApp, isMacApp, isNotMacMas} from 'utils/user_agent';
+import {isMacApp, isNotMacMas} from 'utils/user_agent';
 
 import type {ActionFuncAsync, ThunkActionFunc} from 'types/store';
 import type {Translations} from 'types/store/i18n';
@@ -37,7 +33,7 @@ export type TranslationPluginFunction = (locale: string) => Translations
  * This function meant to be used in root.tsx component loads config, license and if user is logged in, it loads user and its related data.
  */
 export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; isMeRequested?: boolean}>> {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         // attempt to load config and license regardless if user is logged in or not
         try {
             await Promise.all([
@@ -64,96 +60,29 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
             };
         }
 
-        let isMeLoaded = false;
-
-        const dataFromLoadMe = await dispatch(loadMe());
-        isMeLoaded = dataFromLoadMe?.data ?? false;
-
-        return {
-            isLoaded: isMeLoaded,
-            isMeRequested: true,
-        };
-    };
-}
-
-export function loadMe(): ActionFuncAsync<boolean> {
-    return async (dispatch, getState) => {
-        // Sometimes the server version is set in one or the other
-        // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
-        const serverVersion = Client4.getServerVersion();
-        dispatch(setServerVersion(serverVersion));
-
-        const bridge = getState().entities.ksuiteBridge.bridge;
-
-        if (!bridge.isConnected && !isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-            // eslint-disable-next-line no-process-env
-            window.location.assign(`https://ksuite.${process.env.BASE_URL?.split('kchat.')[1]}/kchat`);
-
-            return {data: false};
-        }
+        // Load user and its related data now that we know that user is logged in
+        const serverVersion = getState().entities.general.serverVersion || Client4.getServerVersion();
+        dispatch({type: GeneralTypes.RECEIVED_SERVER_VERSION, data: serverVersion});
 
         try {
-            const kSuiteCall = await dispatch(getMyKSuites());
-            const kSuites = getTeams(getState());
-
-            const suiteArr = Object.values(kSuites);
-
-            // allow through in tests to launch promise.all but not trigger redirect
-            if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
-                const lastKSuiteSeenId = getLastKSuiteSeenId();
-                const sortedSuites = suiteArr.sort((a, b) => {
-                    if (a.id === lastKSuiteSeenId) {
-                        return -1;
-                    }
-                    if (b.id === lastKSuiteSeenId) {
-                        return 1;
-                    }
-                    return b.update_at - a.update_at;
-                });
-                const lastKSuiteSeen = sortedSuites[0];
-
-                if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    window.postMessage({
-                        type: 'switch-server',
-                        data: lastKSuiteSeen.display_name,
-                    }, window.origin);
-                }
-
-                // don't redirect to the error page if it is a testing environment
-                if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    dispatch(bridgeRecreate(lastKSuiteSeen.url));
-
-                    window.open(lastKSuiteSeen.url, '_self');
-                }
-
-                try {
-                    await Promise.all([
-                        dispatch(getClientConfig()),
-                        dispatch(getLicenseConfig()),
-                        dispatch(getMe()),
-                        dispatch(getMyPreferences()),
-                        dispatch(getMyTeamMembers()),
-                        dispatch(getMyMeets()),
-                    ]);
-
-                    const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
-                    await dispatch(getMyTeamUnreads(isCollapsedThreads));
-                } catch (error) {
-                    dispatch(logError(error as ServerError));
-                    return {error: error as ServerError};
-                }
-            } else if (!isDesktopApp()) {
-                // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
-                if (kSuiteCall && kSuiteCall.data) {
-                    getHistory().push('/error?type=no_ksuite');
-                }
-            }
+            await Promise.all([
+                dispatch(getMe()),
+                dispatch(getMyPreferences()),
+                dispatch(getMyTeamMembers()),
+                dispatch(getMyKSuites()),
+            ]);
+            dispatch(getMyTeamUnreads(isCollapsedThreadsEnabled(getState())));
         } catch (error) {
             dispatch(logError(error as ServerError));
-            return {error};
+            return {
+                isLoaded: false,
+            };
         }
 
-        return {data: true};
+        return {
+            isLoaded: true,
+            isMeRequested: true,
+        };
     };
 }
 
