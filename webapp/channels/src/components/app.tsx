@@ -4,7 +4,7 @@
 import React, {lazy} from 'react';
 import {hot} from 'react-hot-loader/root';
 import {Provider} from 'react-redux';
-import {Router} from 'react-router-dom';
+import {Router, Route} from 'react-router-dom';
 
 import store from 'stores/redux_store';
 
@@ -19,7 +19,10 @@ const App = () => {
     return (
         <Provider store={store}>
             <Router history={getHistory()}>
-                <Root/>
+                <Route
+                    path='/'
+                    component={Root}
+                />
             </Router>
         </Provider>
     );
