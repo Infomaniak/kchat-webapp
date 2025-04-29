@@ -139,7 +139,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         if (this.isValidState()) {
             BrowserStore.signalLogin();
-            DesktopApp.signalLogin();
+            // DesktopApp.signalLogin();
         }
     }
 
