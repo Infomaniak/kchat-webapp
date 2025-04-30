@@ -22,35 +22,32 @@ export type Props = {
 export default function RootRedirect(props: Props) {
     const history = useHistory();
     const location = useLocation();
-    console.log('[components/root] redirecting user to default team / login page');
-    useEffect(() => {
-        if (props.currentUserId) {
-            if (props.isElegibleForFirstAdmingOnboarding) {
-                props.actions.getFirstAdminSetupComplete().then((firstAdminCompletedSignup) => {
-                    // root.tsx ensures admin profiles are eventually loaded
-                    if (firstAdminCompletedSignup.data === false && props.isFirstAdmin && !props.areThereTeams) {
-                        history.push('/preparing-workspace');
-                    } else {
-                        GlobalActions.redirectUserToDefaultTeam(new URLSearchParams(location.search));
-                    }
-                });
-            } else {
-                GlobalActions.redirectUserToDefaultTeam(new URLSearchParams(location.search));
-            }
-        }
-    }, [props.currentUserId, props.isElegibleForFirstAdmingOnboarding]);
 
-    if (props.currentUserId) {
-        // Ideally, this would be a Redirect like below, but since we need to call an action, this redirect is done above
-        return null;
-    }
+    // console.log('[components/root] redirecting user to default team / login page');
+
+    // useEffect(() => {
+    //     if (props.currentUserId) {
+    //         if (props.isElegibleForFirstAdmingOnboarding) {
+    //             props.actions.getFirstAdminSetupComplete().then((firstAdminCompletedSignup) => {
+    //                 // root.tsx ensures admin profiles are eventually loaded
+    //                 if (firstAdminCompletedSignup.data === false && props.isFirstAdmin && !props.areThereTeams) {
+    //                     history.push('/preparing-workspace');
+    //                 } else {
+    //                     GlobalActions.redirectUserToDefaultTeam(new URLSearchParams(location.search));
+    //                 }
+    //             });
+    //         } else {
+    //             GlobalActions.redirectUserToDefaultTeam(new URLSearchParams(location.search));
+    //         }
+    //     }
+    // }, [props.currentUserId, props.isElegibleForFirstAdmingOnboarding]);
+
+    // if (props.currentUserId) {
+    //     // Ideally, this would be a Redirect like below, but since we need to call an action, this redirect is done above
+    //     return null;
+    // }
 
     return (
-        <Redirect
-            to={{
-                ...props.location,
-                pathname: '/login',
-            }}
-        />
+        <></>
     );
 }
