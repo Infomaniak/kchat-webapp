@@ -525,22 +525,22 @@ export default class Root extends React.PureComponent<Props, State> {
             }
         }
 
-        // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
-        Client4.bindEmitUserLoggedOutEvent(async (data) => {
-            // eslint-disable-next-line no-negated-condition
-            if (!isDesktopApp()) {
-                window.location.href = data.uri;
-            } else {
-                const lsToken = localStorage.getItem('IKToken');
+        // // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
+        // Client4.bindEmitUserLoggedOutEvent(async (data) => {
+        //     // eslint-disable-next-line no-negated-condition
+        //     if (!isDesktopApp()) {
+        //         window.location.href = data.uri;
+        //     } else {
+        //         const lsToken = localStorage.getItem('IKToken');
 
-                if (lsToken) {
-                    // Delete the token if it still exists.
-                    clearLocalStorageToken();
-                    clearUserCookie();
-                    await window.authManager.logout();
-                }
-            }
-        });
+        //         if (lsToken) {
+        //             // Delete the token if it still exists.
+        //             clearLocalStorageToken();
+        //             clearUserCookie();
+        //             await window.authManager.logout();
+        //         }
+        //     }
+        // });
 
         const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch, store.getState);
