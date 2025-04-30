@@ -14,6 +14,7 @@ import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
 import {storeBridge, storeBridgeParam} from 'mattermost-redux/actions/ksuiteBridge';
 import {Client4} from 'mattermost-redux/client';
+import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
 
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
@@ -28,6 +29,7 @@ import GlobalHeader from 'components/global_header/global_header';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
 import LoggedIn from 'components/logged_in';
 import LoggedInRoute from 'components/logged_in_route';
+import Login from 'components/login/login';
 import {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_workspace/launching_workspace';
 import {Animations} from 'components/preparing_workspace/steps';
 import SidebarMobileRightMenu from 'components/sidebar_mobile_right_menu';
@@ -61,7 +63,8 @@ import 'utils/a11y_controller_instance';
 const MobileViewWatcher = makeAsyncComponent('MobileViewWatcher', lazy(() => import('components/mobile_view_watcher')));
 const WindowSizeObserver = makeAsyncComponent('WindowSizeObserver', lazy(() => import('components/window_size_observer/WindowSizeObserver')));
 const ErrorPage = makeAsyncComponent('ErrorPage', lazy(() => import('components/error_page')));
-const Login = makeAsyncComponent('LoginController', lazy(() => import('components/login/login')));
+
+// const Login = makeAsyncComponent('LoginController', lazy(() => import('components/login/login')));
 const AccessProblem = makeAsyncComponent('AccessProblem', lazy(() => import('components/access_problem')));
 
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', lazy(() => import('components/preparing_workspace')));
@@ -132,6 +135,7 @@ export default class Root extends React.PureComponent<Props, State> {
             initializePlugins(),
         ]).then(() => {
             this.setState({shouldMountAppRoutes: true});
+            console.log('this.shouldMountAppRoutes', this.state.shouldMountAppRoutes);
         });
 
         this.props.actions.migrateRecentEmojis();
@@ -322,7 +326,24 @@ export default class Root extends React.PureComponent<Props, State> {
         const {isLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isLoaded) {
-            this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
+            const currentUser = getCurrentUser(store.getState());
+            if (currentUser) {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                const {email, id, user_id, username, first_name, last_name} = currentUser;
+                console.log('[components/root] set user for sentry', {email, id, username}); // eslint-disable-line no-console
+                Sentry.setUser({ip_address: '{{auto}}', email, id, username});
+
+                // @ts-ignore
+                window.CONST_USER = {
+                    iGlobalUserCode: user_id,
+                    sFirstname: first_name,
+                    sLastname: last_name,
+                    sEmail: email,
+                };
+            }
+            if (this.props.location.pathname === '/') {
+                this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
+            }
         }
         this.onConfigLoaded();
     };
@@ -483,6 +504,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
                     // Need to reset teams before redirecting to login after token is cleared
                     if (isDefaultAuthServer()) {
+                        console.log('[components/root] redirect to login'); // eslint-disable-line no-console
                         getChallengeAndRedirectToLogin(true);
                     } else {
                         window.postMessage(

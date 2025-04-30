@@ -22,7 +22,7 @@ export type Props = {
 export default function RootRedirect(props: Props) {
     const history = useHistory();
     const location = useLocation();
-
+    console.log('[components/root] redirecting user to default team / login page');
     useEffect(() => {
         if (props.currentUserId) {
             if (props.isElegibleForFirstAdmingOnboarding) {
