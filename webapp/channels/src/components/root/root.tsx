@@ -490,6 +490,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 // TODO: find a way to clean this if into an else below, since its counterintuitive
                 // The reset teams will retrigger this func
                 if (isDefaultAuthServer() && !token) {
+                    console.log('[components/root] redirect to login'); // eslint-disable-line no-console
                     getChallengeAndRedirectToLogin(true);
                 }
 

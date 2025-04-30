@@ -38,10 +38,13 @@ const Login = () => {
                 refreshToken?: string;
                 expiresAt?: number;
             }) => {
+                console.log('[components/login] tokenRequest resolved with data:', data);
                 if (!Object.keys(data).length) { // eslint-disable-line no-negated-condition
                     if (isDefaultAuthServer()) {
+                        console.log('[components/login] calling getChallengeAndRedirectToLogin');
                         getChallengeAndRedirectToLogin(isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0'));
                     } else {
+                        console.log('[components/login] reseting teams');
                         window.postMessage(
                             {
                                 type: 'reset-teams',
@@ -53,12 +56,14 @@ const Login = () => {
                 } else {
                     localStorage.setItem('IKToken', data.token);
                     if (data.refreshToken) {
+                        console.log('[components/login] setting IKRefreshToken');
                         localStorage.setItem('IKRefreshToken', data.refreshToken);
                     }
                     if (data.expiresAt) {
+                        console.log('[components/login] setting IKTokenExpire');
                         localStorage.setItem('IKTokenExpire', (data.expiresAt).toString());
                     }
-
+                    console.log('[components/login] setting Client4 token and CSRF');
                     Client4.setToken(data.token);
                     Client4.setCSRF(data.token);
                     Client4.setAuthHeader = true;
