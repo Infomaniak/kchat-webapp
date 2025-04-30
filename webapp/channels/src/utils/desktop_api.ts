@@ -271,8 +271,8 @@ export class DesktopAppAPI {
     updateUnreadsAndMentions = (isUnread: boolean, mentionCount: number) =>
         window.desktopAPI?.setUnreadsAndMentions && window.desktopAPI.setUnreadsAndMentions(isUnread, mentionCount);
     setSessionExpired = (expired: boolean) => window.desktopAPI?.setSessionExpired && window.desktopAPI.setSessionExpired(expired);
-    signalLogin = () => window.desktopAPI?.onLogin?.();
-    signalLogout = () => window.desktopAPI?.onLogout?.();
+    signalLogin = () => {};
+    signalLogout = () => {};
     reactAppInitialized = () => window.desktopAPI?.reactAppInitialized?.();
 
     /*********************************************************************
