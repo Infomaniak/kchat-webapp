@@ -29,7 +29,6 @@ import GlobalHeader from 'components/global_header/global_header';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
 import LoggedIn from 'components/logged_in';
 import LoggedInRoute from 'components/logged_in_route';
-import Login from 'components/login/login';
 import {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_workspace/launching_workspace';
 import {Animations} from 'components/preparing_workspace/steps';
 import SidebarMobileRightMenu from 'components/sidebar_mobile_right_menu';
@@ -64,7 +63,7 @@ const MobileViewWatcher = makeAsyncComponent('MobileViewWatcher', lazy(() => imp
 const WindowSizeObserver = makeAsyncComponent('WindowSizeObserver', lazy(() => import('components/window_size_observer/WindowSizeObserver')));
 const ErrorPage = makeAsyncComponent('ErrorPage', lazy(() => import('components/error_page')));
 
-// const Login = makeAsyncComponent('LoginController', lazy(() => import('components/login/login')));
+const Login = makeAsyncComponent('LoginController', lazy(() => import('components/login/login')));
 const AccessProblem = makeAsyncComponent('AccessProblem', lazy(() => import('components/access_problem')));
 
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', lazy(() => import('components/preparing_workspace')));
@@ -135,7 +134,6 @@ export default class Root extends React.PureComponent<Props, State> {
             initializePlugins(),
         ]).then(() => {
             this.setState({shouldMountAppRoutes: true});
-            console.log('this.shouldMountAppRoutes', this.state.shouldMountAppRoutes);
         });
 
         this.props.actions.migrateRecentEmojis();
@@ -489,11 +487,6 @@ export default class Root extends React.PureComponent<Props, State> {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
                 // TODO: find a way to clean this if into an else below, since its counterintuitive
                 // The reset teams will retrigger this func
-                // if (isDefaultAuthServer() && !token) {
-                //     console.log('[components/root] redirect to login'); // eslint-disable-line no-console
-                //     getChallengeAndRedirectToLogin(true);
-                // }
-
                 // Webcomponents oauth v2
                 window.WC_TOKEN = token;
 
@@ -505,7 +498,6 @@ export default class Root extends React.PureComponent<Props, State> {
 
                     // Need to reset teams before redirecting to login after token is cleared
                     if (isDefaultAuthServer()) {
-                        console.log('[components/root] redirect to login'); // eslint-disable-line no-console
                         getChallengeAndRedirectToLogin(true);
                     } else {
                         window.postMessage(
@@ -526,21 +518,21 @@ export default class Root extends React.PureComponent<Props, State> {
         }
 
         // // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
-        // Client4.bindEmitUserLoggedOutEvent(async (data) => {
-        //     // eslint-disable-next-line no-negated-condition
-        //     if (!isDesktopApp()) {
-        //         window.location.href = data.uri;
-        //     } else {
-        //         const lsToken = localStorage.getItem('IKToken');
+        Client4.bindEmitUserLoggedOutEvent(async (data) => {
+            // eslint-disable-next-line no-negated-condition
+            if (!isDesktopApp()) {
+                window.location.href = data.uri;
+            } else {
+                const lsToken = localStorage.getItem('IKToken');
 
-        //         if (lsToken) {
-        //             // Delete the token if it still exists.
-        //             clearLocalStorageToken();
-        //             clearUserCookie();
-        //             await window.authManager.logout();
-        //         }
-        //     }
-        // });
+                if (lsToken) {
+                    // Delete the token if it still exists.
+                    clearLocalStorageToken();
+                    clearUserCookie();
+                    await window.authManager.logout();
+                }
+            }
+        });
 
         const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch, store.getState);
