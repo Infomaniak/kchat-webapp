@@ -69,7 +69,6 @@ export function selectTeam(team: Team | Team['id']) {
 }
 
 export function getMyKSuites() {
-    console.log('je send les ksouht');
     return bindClientFunc({
         clientFunc: Client4.getMyKSuites,
         onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, Servers.RECEIVED_SERVERS],

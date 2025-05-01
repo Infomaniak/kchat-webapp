@@ -363,8 +363,6 @@ export default class Root extends React.PureComponent<Props, State> {
             this.runMounted();
         }
 
-        this.initiateMeRequests();
-
         // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
 
         // this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
@@ -537,6 +535,7 @@ export default class Root extends React.PureComponent<Props, State> {
         }
 
         injectWebcomponentInit();
+        this.initiateMeRequests();
 
         // Force logout of all tabs if one tab is logged out
         window.addEventListener('storage', this.handleLogoutLoginSignal);

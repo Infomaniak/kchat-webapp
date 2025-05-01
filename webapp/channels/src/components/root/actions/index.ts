@@ -19,6 +19,7 @@ import {isCollapsedThreadsEnabled, getIsOnboardingFlowEnabled} from 'mattermost-
 import {getActiveTeamsList} from 'mattermost-redux/selectors/entities/teams';
 import {checkIsFirstAdmin, getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
+import {getMyMeets} from 'actions/calls';
 import {redirectUserToDefaultTeam, emitUserLoggedOutEvent} from 'actions/global_actions';
 
 import {ActionTypes, StoragePrefixes} from 'utils/constants';
@@ -70,6 +71,7 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
                 dispatch(getMyPreferences()),
                 dispatch(getMyTeamMembers()),
                 dispatch(getMyKSuites()),
+                dispatch(getMyMeets()),
             ]);
             dispatch(getMyTeamUnreads(isCollapsedThreadsEnabled(getState())));
         } catch (error) {
