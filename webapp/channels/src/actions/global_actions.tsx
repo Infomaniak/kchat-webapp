@@ -272,7 +272,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
     dispatch(logout()).then(() => {
         if (shouldSignalLogout) {
             BrowserStore.signalLogout();
-            // DesktopApp.signalLogout();
+            DesktopApp.signalLogout();
         }
 
         // Waiting for deleteToken login ik

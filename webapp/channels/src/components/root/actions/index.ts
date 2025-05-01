@@ -6,21 +6,23 @@ import type {History} from 'history';
 import type {ServerError} from '@mattermost/types/errors';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {GeneralTypes} from 'mattermost-redux/action_types';
 import {logError} from 'mattermost-redux/actions/errors';
-import {getClientConfig, getFirstAdminSetupComplete, getLicenseConfig} from 'mattermost-redux/actions/general';
+import {getClientConfig, getLicenseConfig, getFirstAdminSetupComplete} from 'mattermost-redux/actions/general';
 import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
-import {getProfiles, loadMe} from 'mattermost-redux/actions/users';
+import {getMyPreferences} from 'mattermost-redux/actions/preferences';
+import {getMyKSuites, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
+import {getMe, getProfiles} from 'mattermost-redux/actions/users';
+import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
-import {getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {isCollapsedThreadsEnabled, getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getActiveTeamsList} from 'mattermost-redux/selectors/entities/teams';
 import {checkIsFirstAdmin, getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
-import {emitUserLoggedOutEvent, redirectUserToDefaultTeam} from 'actions/global_actions';
-
-import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
+import {redirectUserToDefaultTeam, emitUserLoggedOutEvent} from 'actions/global_actions';
 
 import {ActionTypes, StoragePrefixes} from 'utils/constants';
-import {isDesktopApp, isMacApp, isNotMacMas} from 'utils/user_agent';
+import {isMacApp, isNotMacMas} from 'utils/user_agent';
 
 import type {ActionFuncAsync, ThunkActionFunc} from 'types/store';
 import type {Translations} from 'types/store/i18n';
@@ -31,15 +33,7 @@ export type TranslationPluginFunction = (locale: string) => Translations
  * This function meant to be used in root.tsx component loads config, license and if user is logged in, it loads user and its related data.
  */
 export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; isMeRequested?: boolean}>> {
-    return async (dispatch) => {
-        // If expired, refresh token
-        if (isDesktopApp() && checkIKTokenIsExpired()) {
-            console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
-            await refreshIKToken(/*redirectToReam*/false)?.catch((e: unknown) => {
-                console.warn('[actions/view/root] desktop token refresh error: ', e); // eslint-disable-line no-console
-            });
-        }
-
+    return async (dispatch, getState) => {
         // attempt to load config and license regardless if user is logged in or not
         try {
             await Promise.all([
@@ -60,18 +54,33 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
                 redirectToErrorPageIfNecessary(forceMigrationError);
             }
         } catch (error) {
-            console.debug('Error loading config and license', error); //eslint-disable-line no-console
             dispatch(logError(error as ServerError));
             return {
-                isMeRequested: false,
                 isLoaded: false,
             };
         }
 
-        const dataFromLoadMe = await dispatch(loadMe());
+        // Load user and its related data now that we know that user is logged in
+        const serverVersion = getState().entities.general.serverVersion || Client4.getServerVersion();
+        dispatch({type: GeneralTypes.RECEIVED_SERVER_VERSION, data: serverVersion});
+
+        try {
+            await Promise.all([
+                dispatch(getMe()),
+                dispatch(getMyPreferences()),
+                dispatch(getMyTeamMembers()),
+                dispatch(getMyKSuites()),
+            ]);
+            dispatch(getMyTeamUnreads(isCollapsedThreadsEnabled(getState())));
+        } catch (error) {
+            dispatch(logError(error as ServerError));
+            return {
+                isLoaded: false,
+            };
+        }
 
         return {
-            isLoaded: dataFromLoadMe.data || false,
+            isLoaded: true,
             isMeRequested: true,
         };
     };

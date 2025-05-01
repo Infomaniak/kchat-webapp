@@ -58,6 +58,7 @@ const Login = () => {
                     if (data.expiresAt) {
                         localStorage.setItem('IKTokenExpire', (data.expiresAt).toString());
                     }
+
                     Client4.setToken(data.token);
                     Client4.setCSRF(data.token);
                     Client4.setAuthHeader = true;

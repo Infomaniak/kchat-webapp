@@ -92,7 +92,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
         window.addEventListener('beforeunload', this.handleBeforeUnload);
 
         // listen for the app visibility state
-        // window.addEventListener('visibilitychange', this.handleVisibilityChange, false);
+        window.addEventListener('visibilitychange', this.handleVisibilityChange, false);
 
         // Listen for focused tab/window state
         window.addEventListener('focus', this.onFocusListener);
@@ -139,7 +139,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         if (this.isValidState()) {
             BrowserStore.signalLogin();
-            // DesktopApp.signalLogin();
+            DesktopApp.signalLogin();
         }
     }
 

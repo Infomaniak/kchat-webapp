@@ -14,7 +14,6 @@ import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
 import {storeBridge, storeBridgeParam} from 'mattermost-redux/actions/ksuiteBridge';
 import {Client4} from 'mattermost-redux/client';
-import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
 
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
@@ -62,7 +61,6 @@ import 'utils/a11y_controller_instance';
 const MobileViewWatcher = makeAsyncComponent('MobileViewWatcher', lazy(() => import('components/mobile_view_watcher')));
 const WindowSizeObserver = makeAsyncComponent('WindowSizeObserver', lazy(() => import('components/window_size_observer/WindowSizeObserver')));
 const ErrorPage = makeAsyncComponent('ErrorPage', lazy(() => import('components/error_page')));
-
 const Login = makeAsyncComponent('LoginController', lazy(() => import('components/login/login')));
 const AccessProblem = makeAsyncComponent('AccessProblem', lazy(() => import('components/access_problem')));
 
@@ -324,24 +322,7 @@ export default class Root extends React.PureComponent<Props, State> {
         const {isLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isLoaded) {
-            const currentUser = getCurrentUser(store.getState());
-            if (currentUser) {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                const {email, id, user_id, username, first_name, last_name} = currentUser;
-                console.log('[components/root] set user for sentry', {email, id, username}); // eslint-disable-line no-console
-                Sentry.setUser({ip_address: '{{auto}}', email, id, username});
-
-                // @ts-ignore
-                window.CONST_USER = {
-                    iGlobalUserCode: user_id,
-                    sFirstname: first_name,
-                    sLastname: last_name,
-                    sEmail: email,
-                };
-            }
-            if (this.props.location.pathname === '/') {
-                this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
-            }
+            this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
         }
         this.onConfigLoaded();
     };
@@ -381,6 +362,8 @@ export default class Root extends React.PureComponent<Props, State> {
             // Allow through initial requests for web.
             this.runMounted();
         }
+
+        this.initiateMeRequests();
 
         // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
 
@@ -517,7 +500,7 @@ export default class Root extends React.PureComponent<Props, State> {
             }
         }
 
-        // // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
+        // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
@@ -554,7 +537,6 @@ export default class Root extends React.PureComponent<Props, State> {
         }
 
         injectWebcomponentInit();
-        this.initiateMeRequests();
 
         // Force logout of all tabs if one tab is logged out
         window.addEventListener('storage', this.handleLogoutLoginSignal);
@@ -564,8 +546,8 @@ export default class Root extends React.PureComponent<Props, State> {
 
         document.addEventListener('dragover', this.handleDragOverEvent);
     };
-
     componentWillUnmount() {
+        this.mounted = false;
         this.IKLoginCode = undefined;
         if (this.tokenCheckInterval) {
             clearInterval(this.tokenCheckInterval);
