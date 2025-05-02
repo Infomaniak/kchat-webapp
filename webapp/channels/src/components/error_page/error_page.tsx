@@ -82,12 +82,6 @@ export default class ErrorPage extends React.PureComponent<Props> {
             window.open('https://apps.apple.com/app/infomaniak-kchat/id6443845553', '_blank');
         };
 
-        const goToKsuite = () => {
-            if (window) {
-                window.open('https://infomaniak.com/ksuite', '_blank');
-            }
-        };
-
         let trustParams = false;
         if (signature) {
             params.delete('s');
@@ -136,7 +130,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
             backButton = (
                 <a
                     className='btn btn-primary'
-                    onClick={() => goToKsuite()}
+                    onClick={GlobalActions.redirectToKSuite}
                 >
                     <FormattedMessage
                         id='error.generic.link_ksuite'
