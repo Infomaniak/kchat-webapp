@@ -17,6 +17,7 @@ type Props = {
     status?: string;
     className?: string;
     type?: string;
+    slot?: string;
 }
 
 const StatusIcon = ({
@@ -24,6 +25,7 @@ const StatusIcon = ({
     button = false,
     status,
     type,
+    slot
 }: Props) => {
     if (!status) {
         return null;
@@ -37,21 +39,21 @@ const StatusIcon = ({
 
     if (type === 'avatar') {
         if (status === 'online') {
-            return <StatusOnlineAvatarIcon className={iconClassName}/>;
+            return <StatusOnlineAvatarIcon slot={slot} className={iconClassName}/>;
         } else if (status === 'away') {
-            return <StatusAwayAvatarIcon className={iconClassName}/>;
+            return <StatusAwayAvatarIcon slot={slot} className={iconClassName}/>;
         } else if (status === 'dnd') {
-            return <StatusDndAvatarIcon className={iconClassName}/>;
+            return <StatusDndAvatarIcon slot={slot} className={iconClassName}/>;
         }
-        return <StatusOfflineAvatarIcon className={iconClassName}/>;
+        return <StatusOfflineAvatarIcon slot={slot} className={iconClassName}/>;
     } else if (status === 'online') {
-        return <StatusOnlineIcon className={iconClassName}/>;
+        return <StatusOnlineIcon slot={slot} className={iconClassName}/>;
     } else if (status === 'away') {
-        return <StatusAwayIcon className={iconClassName}/>;
+        return <StatusAwayIcon slot={slot} className={iconClassName}/>;
     } else if (status === 'dnd') {
-        return <StatusDndIcon className={iconClassName}/>;
+        return <StatusDndIcon slot={slot} className={iconClassName}/>;
     }
-    return <StatusOfflineIcon className={iconClassName}/>;
+    return <StatusOfflineIcon slot={slot} className={iconClassName}/>;
 };
 
 export default memo(StatusIcon);

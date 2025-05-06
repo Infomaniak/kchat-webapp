@@ -58,7 +58,7 @@ interface Props {
     isEmojiLarge?: boolean;
     hint?: string | ReactNode | MessageDescriptor;
     shortcut?: ShortcutDefinition;
-
+    slot?: string;
     /**
      * Whether the tooltip should be vertical or horizontal, by default it is vertical
      * This doesn't always guarantee the tooltip will be vertical, it just determines the initial placement and fallback placements
