@@ -10,13 +10,13 @@ import {Client4} from 'mattermost-redux/client';
 import GuestListPopover from 'components/guest_list_popover';
 import {getListHeight} from 'components/guest_list_popover/user_list/styled';
 import {MAX_LIST_HEIGHT, VIEWPORT_SCALE_FACTOR} from 'components/guest_list_popover/user_list/user_list';
-import ProfilePopover from 'components/profile_popover';
 
 import type {A11yFocusEventDetail} from 'utils/constants';
 import Constants, {A11yCustomEventTypes} from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
 import {popOverOverlayPosition} from 'utils/position_utils';
 import {getViewportSize} from 'utils/utils';
+import {WcContactSheetElement} from "../../profile_popover/profile_popover_controller";
 
 export type Props = {
     count: number;
@@ -28,6 +28,7 @@ const HEADER_HEIGHT_ESTIMATE = 130;
 
 const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
     const ref = useRef<HTMLAnchorElement>(null);
+    const userPanelRef = useRef<WcContactSheetElement>(null);
 
     const [show, setShow] = useState(false);
     const [placement, setPlacement] = useState(('top'));
@@ -71,8 +72,8 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
     };
 
     const showUserOverlay = (user: UserProfile) => {
-        hideOverlay();
         setShowUser(user);
+        userPanelRef.current?.open();
     };
 
     const hideUserOverlay = () => {
@@ -89,7 +90,6 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
             },
         ));
     };
-
     return (
         <>
             <span
@@ -98,6 +98,7 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
                 ref={ref}
                 aria-haspopup='dialog'
                 role='button'
+                slot="trigger"
                 tabIndex={0}
             >
                 <FormattedMessage
@@ -122,26 +123,6 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
                     returnFocus={returnFocus}
                     membersCount={count}
                 />
-            </Overlay>
-            <Overlay
-                placement={placement}
-                show={showUser !== undefined}
-                target={target}
-                onHide={hideUserOverlay}
-                rootClose={true}
-            >
-                {showUser ? (
-                    <ProfilePopover
-                        className='user-profile-popover'
-                        userId={showUser.id}
-                        src={Client4.getProfilePictureUrl(showUser.id, showUser.last_picture_update)}
-                        channelId={channelId}
-                        hasMention={false}
-                        hide={hideUserOverlay}
-                        returnFocus={returnFocus}
-                    />
-                ) : <div/>
-                }
             </Overlay>
         </>
     );
