@@ -4,7 +4,6 @@
 import classNames from 'classnames';
 import React, {useRef, useMemo, memo, useEffect} from 'react';
 
-import {Client4} from 'mattermost-redux/client';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import ProfilePopover from 'components/profile_popover';
@@ -60,15 +59,13 @@ const AtMention = (props: Props) => {
         return (
             <>
                 <ProfilePopover
+                    user={user}
                     triggerComponentClass={classNames('style--none', {'mention--highlight': highlightMention})}
-                    userId={user.id}
-                    src={Client4.getProfilePictureUrl(user.id, user.last_picture_update)}
-                    channelId={props.channelId}
                     returnFocus={returnFocus}
-                    triggerComponentAs='button'
                 >
                     <span
                         ref={ref}
+                        slot="trigger"
                         className='mention-link'
                     >
                         {'@' + userDisplayName}

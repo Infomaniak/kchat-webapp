@@ -57,20 +57,19 @@ function UserAvatar({
 } & ComponentProps<typeof Avatar>) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
-
     const profilePictureURL = userId ? imageURLForUser(userId) : '';
 
     return (
-        <ProfilePopover<HTMLButtonElement>
-            triggerComponentAs='button'
-            triggerComponentClass='style--none btn-round'
-            userId={userId}
-            src={profilePictureURL}
+        <ProfilePopover
+            user={user}
+            overwriteIcon={ profilePictureURL}
+             triggerComponentClass='style--none btn-round'
         >
             <WithTooltip
                 title={name}
             >
                 <Avatar
+                    slot="trigger"
                     url={imageURLForUser(userId, user?.last_picture_update)}
                     tabIndex={-1}
                     {...props}
