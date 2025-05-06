@@ -13,6 +13,7 @@ import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
 
 import * as Utils from 'utils/utils';
+import ProfilePopover from 'components/profile_popover';
 
 import {DMButton, DMContainer, Gap, UserButton, UserList, UserListItem, Username, getListHeight, ProfileTag} from './styled';
 
@@ -75,6 +76,7 @@ const UserListProfiles: FC<Props> = ({
 
         return (
             <UserListItem
+                slot="trigger"
                 className='group-member-list_item'
                 first={index === 0}
                 key={user.id}
@@ -123,10 +125,12 @@ const UserListProfiles: FC<Props> = ({
 
     const renderContent = () => {
         return members.map((member, idx) => (
-            <Item
-                key={member.user.id}
-                index={idx}
-            />
+            <ProfilePopover user={member.user} triggerComponentStyle={{minWidth: '100%'}}>
+                <Item
+                    key={member.user.id}
+                    index={idx}
+                />
+            </ProfilePopover>
         ));
     };
 
