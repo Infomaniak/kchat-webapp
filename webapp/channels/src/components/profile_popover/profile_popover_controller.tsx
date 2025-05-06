@@ -1,59 +1,47 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-
+import './profile_popover.scss';
 import {
-    useFloating,
-    autoUpdate,
-    autoPlacement,
-    useTransitionStyles,
-    useClick,
-    useDismiss,
-    useInteractions,
-    useRole,
-    shift,
-    FloatingFocusManager,
-    FloatingOverlay,
-    FloatingPortal,
-} from '@floating-ui/react';
-import classNames from 'classnames';
-import type {HtmlHTMLAttributes, ReactNode} from 'react';
-import React, {useCallback, useState} from 'react';
-import {useIntl} from 'react-intl';
-
-import type {Channel} from '@mattermost/types/channels';
+    Children,
+    cloneElement, ForwardedRef,
+    ReactElement,
+    ReactNode,
+    useEffect, useImperativeHandle,
+    useRef
+} from 'react';
+import React from 'react';
 import type {UserProfile} from '@mattermost/types/users';
+import {Client4} from "mattermost-redux/client";
+import {useDispatch} from "react-redux";
+import type {ModalData} from "../../types/actions";
+import {getHistory} from "../../utils/browser_history";
+import {createDirectChannel} from "mattermost-redux/actions/channels";
 
-import {A11yClassNames, OverlaysTimings, OverlayTransitionStyles, RootHtmlPortalId} from 'utils/constants';
+export interface ProfilePopoverProps {
+    currentUser: UserProfile;
+    user?: UserProfile;
+    children?: ReactNode;
+    accountId?: number;
+    backgroundColor?: string;
+    isExternal?: boolean;
+    presence?: string;
+    size?: 'sm' | 'md' | 'lg' | 'xl';
+    triggerComponentClass?: string;
+    triggerComponentStyle?: Partial<CSSStyleDeclaration>;
 
-import ProfilePopover from './profile_popover';
-
-interface Props<TriggerComponentType> {
-
-    /**
-     * The Props for the trigger component
-     */
-    triggerComponentAs?: React.ElementType;
-    triggerComponentId?: HtmlHTMLAttributes<TriggerComponentType>['id'];
-    triggerComponentClass?: HtmlHTMLAttributes<TriggerComponentType>['className'];
-    triggerComponentStyle?: HtmlHTMLAttributes<TriggerComponentType>['style'];
-
-    /**
-     * Source URL from the image to display in the popover
-     */
-    src: string;
-
-    /**
-     * Username of the profile.
-     */
-    username?: string;
+    currentTeamAccountId?: number,
+    currentTeamName?: string,
 
     /**
-     * This should be the trigger button for the popover, Do note that the root element of the trigger component should be passed in triggerComponentRoot
+     * Function to call to return focus to the previously focused element when the popover closes.
+     * If not provided, the popover will automatically determine the previously focused element
+     * and focus that on close. However, if the previously focused element is not correctly detected
+     * by the popover, or the previously focused element will disappear after the popover opens,
+     * it is necessary to provide this function to focus the correct element.
+     *
+     * To match wc-contact-sheet behavior this function is passed to the onClose callBack of the panel
      */
-    children: ReactNode;
-    userId: UserProfile['id'];
-    channelId?: Channel['id'];
-
+    returnFocus?: () => void;
     /**
      * The overwritten username that should be shown at the top of the popover
      */
@@ -64,113 +52,105 @@ interface Props<TriggerComponentType> {
      */
     overwriteIcon?: string;
 
-    /**
-     * Set to true of the popover was opened from a webhook post
-     */
-    fromWebhook?: boolean;
-    hideStatus?: boolean;
-
-    /**
-     * Function to call to return focus to the previously focused element when the popover closes.
-     * If not provided, the popover will automatically determine the previously focused element
-     * and focus that on close. However, if the previously focused element is not correctly detected
-     * by the popover, or the previously focused element will disappear after the popover opens,
-     * it is necessary to provide this function to focus the correct element.
-     */
-    returnFocus?: () => void;
-
-    onToggle?: (isMounted: boolean) => void;
+    actions: {
+        startOrJoinCallInChannelV2: (channelID: unknown) => void;
+        joinCall: (channelID: unknown) => void;
+        openModal: <P>(modalData: ModalData<P>) => void;
+        closeModal: (ModalIdentifier: string) => void;
+    };
 }
 
-export function ProfilePopoverController<TriggerComponentType = HTMLSpanElement>(props: Props<TriggerComponentType>) {
-    const intl = useIntl();
+export type WcContactSheetElement = HTMLElement & {open: () => void, close:() => void};
 
-    const profileAriaLabel = intl.formatMessage({id: 'profile_popover.aria_label.without_username', defaultMessage: 'profile popover'});
-    const userProfileAriaLabel = intl.formatMessage({
-        id: 'profile_popover.aria_label.with_username',
-        defaultMessage: '{userName}\'s profile popover',
-    },
-    {
-        userName: props.username,
-    });
+export const ProfilePopoverController = React.forwardRef<WcContactSheetElement | undefined, ProfilePopoverProps>((props:ProfilePopoverProps, ref: ForwardedRef<WcContactSheetElement | undefined>) =>{
+    const {
+        actions,
+        currentUser,
+        user,
+        children,
+        currentTeamAccountId,
+        currentTeamName,
+        backgroundColor = 'transparent',
+        isExternal = false,
+        presence= 'offline',
+        size = 'md',
+        triggerComponentClass = '',
+        returnFocus = () => null,
+        overwriteName,
+        overwriteIcon = Boolean(user) ? Client4.getProfilePictureUrl(user!.id, user!.last_picture_update) : undefined,
+        triggerComponentStyle
+    } = props
 
-    const [isOpen, setOpen] = useState(false);
+    const dispatch = useDispatch();
 
-    const {refs, floatingStyles, context: floatingContext} = useFloating({
-        open: isOpen,
-        onOpenChange: setOpen,
-        whileElementsMounted: autoUpdate,
-        middleware: [autoPlacement(), shift()],
-    });
+    const localRef = useRef<WcContactSheetElement | undefined>(undefined);
 
-    const {isMounted, styles: transitionStyles} = useTransitionStyles(floatingContext, TRANSITION_STYLE_PROPS);
+    useImperativeHandle(ref, () => localRef.current);
 
-    const clickInteractions = useClick(floatingContext);
-    const dismissInteraction = useDismiss(floatingContext);
-    const role = useRole(floatingContext);
+    useEffect(() => {
 
-    const {getReferenceProps, getFloatingProps} = useInteractions([
-        clickInteractions,
-        dismissInteraction,
-        role,
-    ]);
+        if (!localRef?.current) return ;
 
-    const handleHide = useCallback(() => {
-        setOpen(false);
-    }, []);
+        const handleQuickActionClick= (e: CustomEvent) => {
+            const {option, user: u, project} = e.detail;
 
-    const TriggerComponent = props.triggerComponentAs ?? 'span';
+            if (option.id === 'send-direct-message'){
+
+                getHistory().push(`/${currentTeamName}/messages/@${u.kChatUserName}`);
+                e.preventDefault();
+            }
+            if (option.id === 'start-call'){
+
+
+                const getDmChannel= async () => {
+                    const {data} = await dispatch(createDirectChannel(user!.id, currentUser.id))
+                    return data.id
+                }
+
+                getDmChannel().then(actions.startOrJoinCallInChannelV2)
+                e.preventDefault();
+            }
+        }
+
+        localRef.current.addEventListener('close', returnFocus );
+        localRef.current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
+
+        return () => {
+            localRef.current?.removeEventListener('close', returnFocus);
+            localRef.current?.removeEventListener('quickActionClick', handleQuickActionClick  as EventListenerOrEventListenerObject);
+
+        }
+
+    }, [ref]);
 
     return (
         <>
-            <TriggerComponent
-                id={props.triggerComponentId}
-                ref={refs.setReference}
-                className={props.triggerComponentClass}
-                style={props.triggerComponentStyle}
-                {...getReferenceProps()}
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            <wc-contact-sheet
+                prevent-stop-propagation={true}
+                ref={localRef}
+                class={triggerComponentClass}
+                prevent-open-on-hover={true}
+                account-id={currentTeamAccountId}
+                background-color={backgroundColor} // TODO
+                is-external={isExternal} // TODO
+                k-chat-team-name={currentTeamName}
+                k-chat-user-name={user?.username}
+                presence={presence}
+                size={size}
+                src={overwriteIcon}
+                timezone={user?.timezone?.useAutomaticTimezone ? user?.timezone.automaticTimezone : user?.timezone?.manualTimezone}
+                user-id={user?.user_id}
+                user-mail={user?.email}
+                user-name={overwriteName || user?.first_name + ' ' + user?.last_name}
+                style={triggerComponentStyle}
             >
-                {props.children}
-            </TriggerComponent>
+                {Children.map(children, (child) => cloneElement(child as ReactElement , {slot: 'trigger'}))}
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+            </wc-contact-sheet>
 
-            {isMounted && (
-                <FloatingPortal id={RootHtmlPortalId}>
-                    <FloatingOverlay
-                        className='user-profile-popover-floating-overlay'
-                        lockScroll={true}
-                    >
-                        <FloatingFocusManager context={floatingContext}>
-                            <div
-                                ref={refs.setFloating}
-                                style={{...floatingStyles, ...transitionStyles}}
-                                className={classNames('user-profile-popover', A11yClassNames.POPUP)}
-                                aria-label={props.username ? userProfileAriaLabel : profileAriaLabel}
-                                {...getFloatingProps()}
-                            >
-                                <ProfilePopover
-                                    userId={props.userId}
-                                    src={props.src}
-                                    channelId={props.channelId}
-                                    hideStatus={props.hideStatus}
-                                    fromWebhook={props.fromWebhook}
-                                    hide={handleHide}
-                                    returnFocus={props.returnFocus}
-                                    overwriteIcon={props.overwriteIcon}
-                                    overwriteName={props.overwriteName}
-                                />
-                            </div>
-                        </FloatingFocusManager>
-                    </FloatingOverlay>
-                </FloatingPortal>
-            )}
         </>
     );
-}
-
-const TRANSITION_STYLE_PROPS = {
-    duration: {
-        open: OverlaysTimings.FADE_IN_DURATION,
-        close: OverlaysTimings.FADE_OUT_DURATION,
-    },
-    initial: OverlayTransitionStyles.START,
-};
+} )
