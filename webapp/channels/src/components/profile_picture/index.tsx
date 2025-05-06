@@ -9,6 +9,10 @@ import StatusIcon from 'components/status_icon';
 import StatusIconNew from 'components/status_icon_new';
 import Avatar, {getAvatarWidth} from 'components/widgets/users/avatar';
 import type {TAvatarSizeToken} from 'components/widgets/users/avatar';
+import {useSelector} from "react-redux";
+import type {GlobalState} from "../../types/store";
+import {getUser as selectUser} from "mattermost-redux/selectors/entities/users";
+import type {UserProfile} from "@mattermost/types/users";
 
 type Props = {
     size?: TAvatarSizeToken;
@@ -37,35 +41,30 @@ function ProfilePicture(props: Props) {
     const profileIconClass = `profile-icon ${props.isEmoji ? 'emoji' : ''}`;
 
     const hideStatus = props.isBot || props.fromAutoResponder || props.fromWebhook;
-
     if (props.userId) {
+        const user = useSelector((state: GlobalState) => selectUser(state, props.userId)) as UserProfile | undefined;
+
         return (
             <ProfilePopover
+                user={user}
                 triggerComponentClass={classNames('status-wrapper style--none', props.wrapperClass)}
-                userId={props.userId}
-                src={profileSrc}
-                username={props.username}
-                channelId={props.channelId}
-                hideStatus={hideStatus}
-                overwriteIcon={props.overwriteIcon}
+                overwriteIcon={props.overwriteIcon || profileSrc}
                 overwriteName={props.overwriteName}
-                fromWebhook={props.fromWebhook}
-                triggerComponentAs='button'
                 triggerComponentStyle={{
                     borderRadius: '50%',
                     width: `${getAvatarWidth(props?.size ?? 'md')}px`,
                     height: `${getAvatarWidth(props?.size ?? 'md')}px`,
-                }}
+                } as CSSStyleDeclaration}
             >
                 <>
-                    <span className={profileIconClass}>
+                    <span className={profileIconClass} slot="trigger">
                         <Avatar
                             username={props.username}
                             size={props.size}
                             url={props.src}
                         />
                     </span>
-                    <StatusIcon status={props.status}/>
+                    <StatusIcon status={props.status} slot="trigger"/>
                 </>
             </ProfilePopover>
         );
