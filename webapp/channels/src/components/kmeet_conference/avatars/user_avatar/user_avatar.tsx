@@ -10,7 +10,6 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {getUser as selectUser, makeDisplayNameGetter} from 'mattermost-redux/selectors/entities/users';
 
-import OverlayTrigger from 'components/overlay_trigger';
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
 import ProfilePopover from 'components/profile_popover';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
@@ -38,13 +37,13 @@ interface MMOverlayTrigger extends BaseOverlayTrigger {
 const displayNameGetter = makeDisplayNameGetter();
 
 function UserAvatar({
-    userId,
-    overlayProps,
-    displayProfileOverlay,
-    displayProfileStatus,
-    status,
-    ...props
-}: Props) {
+                        userId,
+                        overlayProps,
+                        displayProfileOverlay,
+                        displayProfileStatus,
+                        status,
+                        ...props
+                    }: Props) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
 
@@ -57,31 +56,19 @@ function UserAvatar({
     };
 
     return (
-        <OverlayTrigger
-            trigger='click'
-            disabled={!displayProfileOverlay}
-            placement='right'
-            rootClose={true}
-            ref={overlay}
-            overlay={
-                <ProfilePopover
-                    className='user-profile-popover'
-                    userId={userId}
-                    src={profilePictureURL}
-                    hide={hideProfilePopover}
-                />
-            }
+        <RoundButton
+            className={'style--none'}
+            onClick={(e) => e.stopPropagation()}
         >
-            <SimpleTooltip
-                id={`name-${userId}`}
-                content={name}
-                {...overlayProps}
-            >
-                <RoundButton
-                    className={'style--none'}
-                    onClick={(e) => e.stopPropagation()}
+            <ProfilePopover
+                user={user} >
+                <SimpleTooltip
+                    id={`name-${userId}`}
+                    content={name}
+                    {...overlayProps}
                 >
                     <Status
+                        slot="trigger"
                         showStatus={displayProfileStatus}
                         registrant={status}
                     >
@@ -91,9 +78,9 @@ function UserAvatar({
                             {...props}
                         />
                     </Status>
-                </RoundButton>
-            </SimpleTooltip>
-        </OverlayTrigger>
+                </SimpleTooltip>
+            </ProfilePopover>
+        </RoundButton>
     );
 }
 

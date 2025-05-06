@@ -71,18 +71,14 @@ export default function UserProfile({
 
     return (
         <>
-            <ProfilePopover<HTMLButtonElement>
-                triggerComponentAs='button'
+            <ProfilePopover
+             user={user}
                 triggerComponentClass='user-popover style--none'
-                triggerComponentStyle={userStyle}
-                userId={userId}
-                src={profileImg}
-                channelId={channelId}
-                hideStatus={hideStatus}
+                triggerComponentStyle={userStyle as CSSStyleDeclaration}
                 overwriteIcon={overwriteIcon}
                 overwriteName={overwriteName}
             >
-                {name}
+                <div slot="trigger">{name}</div>
             </ProfilePopover>
             {userIsRemote &&
             <SharedUserIndicator
