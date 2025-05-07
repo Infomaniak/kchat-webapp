@@ -287,6 +287,7 @@ export function Menu(props: Props) {
                         className={props.menu.className}
                         style={{
                             width: props.menu.width,
+                            padding: '8px',
                         }}
                         autoFocusItem={isMenuOpen}
                     >

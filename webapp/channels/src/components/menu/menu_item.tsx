@@ -224,6 +224,7 @@ export const MenuItemStyled = styled(MuiMenuItem, {
                 fontFamily: '"SuisseIntl", sans-serif',
                 color: isRegular ? 'var(--center-channel-color)' : 'var(--error-text)',
                 padding: '5px 10px',
+                borderRadius: '4px',
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'nowrap',
