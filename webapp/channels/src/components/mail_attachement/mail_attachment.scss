@@ -1,0 +1,38 @@
+$mail-preview-background: var(--mail-preview-background, var(--ik-background-hover, #f5f5f5));
+
+$mail-preview-thin-color: var(--mail-preview-thin-color, var(--ik-font-secondary, #666));
+
+
+.mail_attachment {
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    padding: 12px 16px;
+    margin-top: 12px;
+    border-radius: 4px;
+    background-color: $mail-preview-background;
+
+    &__row{
+        display: flex;
+        gap: 8px;
+        //@include font($size: 14px); // TODO
+
+        .bold {
+            font-weight: 500;
+        }
+
+        .thin {
+            color: $mail-preview-thin-color;
+        }
+
+        .right {
+            margin-left: auto;
+        }
+
+        .border-right {
+            border-right: 1px solid $mail-preview-thin-color;
+            padding-right: 8px;
+        }
+    }
+}
+
