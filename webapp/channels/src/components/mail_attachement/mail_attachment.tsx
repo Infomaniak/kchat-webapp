@@ -4,27 +4,19 @@ import React from "react"
 
 
 import "./mail_attachment.scss"
-import {MailInfo, Post, PostType} from "@mattermost/types/posts";
-import MessageWithAdditionalContent from "../message_with_additional_content";
-import PostMessageView from "../post_view/post_message_view";
-import PostMarkdown from "../post_markdown";
+import { Post} from "@mattermost/types/posts";
+
 import Markdown from "../markdown";
 
 export const MailAttachmentMessage = (props: {post: Post}) => {
-    // const {
-    //     mailSubject,
-    //     mailDate,
-    //     senderName,
-    //     targetName,
-    // } = props;
 
     const post = props.post;
     const {
-        senderName = 'Charbel',
-        targetName = 'Shai',
-        subject = 'Promotion de Shai',
-        dateLabel = 'Demain',
-    } = post.props as MailInfo;
+        senderName,
+        targetName,
+        subject,
+        dateLabel,
+    } = post.props;
     return(
         <>
             <div className="mail_attachment">
