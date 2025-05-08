@@ -12,24 +12,26 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
 
     const post = props.post;
     const {
-        senderName,
-        targetName,
+        from,
+        to,
         subject,
-        dateLabel,
+        created_at,
     } = post.props;
+    console.log({props: post.props});
+
     return(
         <>
             <div className="mail_attachment">
                 <div className="mail_attachment__row">
                     {/* TODO ICON */}
                     <div className="bold">{('À propos de l’e-mail')}</div>
-                    <div className="thin right">{dateLabel}</div>
+                    <div className="thin right">{created_at}</div>
                 </div>
                 <div className="mail_attachment__row">
                     <div className="thin">{('Expéditeur')}:</div>
-                    <div className="border-right">{senderName}</div>
+                    <div className="border-right">{from}</div>
                     <div className="thin">{('Destinataire')}:</div>
-                    <div>{targetName}</div>
+                    <div>{to}</div>
                 </div>
                 <div className="mail_attachment__row">
                     <div className="thin">{('Objet')}:</div>
