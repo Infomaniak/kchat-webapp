@@ -37,6 +37,14 @@ jest.mock('mattermost-redux/actions/teams', () => {
         getMyTeamMembers: () => ({type: 'MOCK_GET_MY_TEAM_MEMBERS'}),
         getMyTeams: () => ({type: 'MOCK_GET_MY_TEAMS'}),
         getMyTeamUnreads: () => ({type: 'MOCK_GET_MY_TEAM_UNREADS'}),
+        getMyKSuites: () => ({type: 'MOCK_GET_MY_KSUITES'}),
+
+    };
+});
+jest.mock('actions/calls', () => {
+    return {
+        getMyMeets: () => ({type: 'MOCK_GET_MY_MEETS'}),
+
     };
 });
 
@@ -78,10 +86,10 @@ describe('loadConfigAndMe', () => {
             {type: 'RECEIVED_SERVER_VERSION', data: '1.0.0'},
             {type: 'MOCK_LOAD_ME'},
             {type: 'MOCK_LOAD_PREFERENCES'},
-            {type: 'MOCK_GET_MY_TEAMS'},
             {type: 'MOCK_GET_MY_TEAM_MEMBERS'},
+            {type: 'MOCK_GET_MY_KSUITES'},
+            {type: 'MOCK_GET_MY_MEETS'},
             {type: 'MOCK_GET_MY_TEAM_UNREADS'},
-            {type: 'MOCK_GET_SERVER_LIMITS'},
         ]);
     });
 });
