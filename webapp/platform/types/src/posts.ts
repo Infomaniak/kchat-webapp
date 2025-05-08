@@ -35,6 +35,7 @@ export type PostType = 'system_add_remove' |
 'system_change_chan_privacy' |
 'reminder' |
 'system_wrangler' |
+'mail_attachment' |
 '';
 
 export type PostEmbedType = 'image' | 'link' | 'message_attachment' | 'opengraph' | 'permalink';
