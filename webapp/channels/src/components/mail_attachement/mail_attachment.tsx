@@ -7,6 +7,7 @@ import "./mail_attachment.scss"
 import { Post} from "@mattermost/types/posts";
 
 import Markdown from "../markdown";
+import Timestamp from "../timestamp";
 
 export const MailAttachmentMessage = (props: {post: Post}) => {
 
@@ -16,16 +17,18 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
         to,
         subject,
         created_at,
-    } = post.props;
-    console.log({props: post.props});
+    } = post.props['mail_attachment'] as {from: string, to: string, subject: string,created_at: number};
 
     return(
         <>
+            salut
             <div className="mail_attachment">
                 <div className="mail_attachment__row">
                     {/* TODO ICON */}
                     <div className="bold">{('À propos de l’e-mail')}</div>
-                    <div className="thin right">{created_at}</div>
+                    <div className="thin right">
+                    <Timestamp value={created_at}/>
+                    </div>
                 </div>
                 <div className="mail_attachment__row">
                     <div className="thin">{('Expéditeur')}:</div>
