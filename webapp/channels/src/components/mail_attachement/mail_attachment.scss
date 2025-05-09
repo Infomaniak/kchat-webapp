@@ -1,6 +1,6 @@
-$mail-preview-background: var(--mail-preview-background, var(--ik-background-hover, #f5f5f5));
+$mail-preview-background: rgba(var(--center-channel-color-rgb), 0.04);
 
-$mail-preview-thin-color: var(--mail-preview-thin-color, var(--ik-font-secondary, #666));
+$mail-preview-thin-color: var(--ik-btn-secondary-color, #666);
 
 
 .mail_attachment {
@@ -19,7 +19,7 @@ $mail-preview-thin-color: var(--mail-preview-thin-color, var(--ik-font-secondary
         align-items: center;
         max-width: 100%;
         white-space: nowrap;
-        //@include font($size: 14px); // TODO
+        font-size: 14px;
 
         * {
             flex-shrink: 1;

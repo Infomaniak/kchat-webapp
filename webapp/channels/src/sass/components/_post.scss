@@ -553,7 +553,7 @@
         background-color: rgba(functions.v(center-channel-color-rgb), 0.04);
 
         .mail_attachment {
-            background-color: #999; //TODO color var
+            background-color: rgba(var(--center-channel-color-rgb), 0.08);
         }
 
         .PostAttachmentOpenGraph .remove-button {
