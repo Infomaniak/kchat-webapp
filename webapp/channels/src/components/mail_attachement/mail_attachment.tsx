@@ -8,6 +8,7 @@ import { Post} from "@mattermost/types/posts";
 
 import Markdown from "../markdown";
 import Timestamp from "../timestamp";
+import MailIcon from "./icon/MailIcon";
 
 export const MailAttachmentMessage = (props: {post: Post}) => {
 
@@ -21,10 +22,9 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
 
     return(
         <>
-            salut
             <div className="mail_attachment">
                 <div className="mail_attachment__row">
-                    {/* TODO ICON */}
+                    <MailIcon />
                     <div className="bold">{('À propos de l’e-mail')}</div>
                     <div className="thin right">
                     <Timestamp value={created_at}/>

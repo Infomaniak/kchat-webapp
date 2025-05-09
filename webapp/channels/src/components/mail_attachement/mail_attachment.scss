@@ -11,11 +11,23 @@ $mail-preview-thin-color: var(--mail-preview-thin-color, var(--ik-font-secondary
     margin-top: 12px;
     border-radius: 4px;
     background-color: $mail-preview-background;
+    margin-bottom: 8px ;
 
     &__row{
         display: flex;
         gap: 8px;
+        align-items: center;
+        max-width: 100%;
+        white-space: nowrap;
         //@include font($size: 14px); // TODO
+
+        * {
+            flex-shrink: 1;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: max-content;
+        }
 
         .bold {
             font-weight: 500;
@@ -23,10 +35,12 @@ $mail-preview-thin-color: var(--mail-preview-thin-color, var(--ik-font-secondary
 
         .thin {
             color: $mail-preview-thin-color;
+            flex-shrink: 0;
         }
 
         .right {
             margin-left: auto;
+            flex-basis: unset;
         }
 
         .border-right {
