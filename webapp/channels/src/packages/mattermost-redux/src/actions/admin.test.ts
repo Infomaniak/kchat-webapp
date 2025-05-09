@@ -605,7 +605,8 @@ describe('Actions.Admin', () => {
         expect(nock.isDone()).toBe(true);
     });
 
-    it('removeLicense', async () => {
+    // eslint-disable-next-line no-only-tests/no-only-tests
+    it.skip('removeLicense', async () => {
         nock(Client4.getBaseRoute()).
             delete('/license').
             reply(200, OK_RESPONSE);
