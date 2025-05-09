@@ -36,7 +36,7 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
                     <div className="thin">{('Destinataire')}:</div>
                     <div>{to}</div>
                 </div>
-                <div className="mail_attachment__row">
+                <div className="mail_attachment__row subject">
                     <div className="thin">{('Objet')}:</div>
                     <div>{subject}</div>
                 </div>
