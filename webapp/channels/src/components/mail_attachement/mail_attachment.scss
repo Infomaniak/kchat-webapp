@@ -21,6 +21,11 @@ $mail-preview-thin-color: var(--ik-btn-secondary-color, #666);
         white-space: nowrap;
         font-size: 14px;
 
+        &.subject * {
+            align-self: flex-start;
+            white-space: normal;
+        }
+
         * {
             flex-shrink: 1;
             text-overflow: ellipsis;
