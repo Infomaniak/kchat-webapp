@@ -25,7 +25,7 @@ const StatusIcon = ({
     button = false,
     status,
     type,
-    slot
+    slot,
 }: Props) => {
     if (!status) {
         return null;
@@ -39,21 +39,45 @@ const StatusIcon = ({
 
     if (type === 'avatar') {
         if (status === 'online') {
-            return <StatusOnlineAvatarIcon slot={slot} className={iconClassName}/>;
+            return (<StatusOnlineAvatarIcon
+                slot={slot}
+                className={iconClassName}
+            />);
         } else if (status === 'away') {
-            return <StatusAwayAvatarIcon slot={slot} className={iconClassName}/>;
+            return (<StatusAwayAvatarIcon
+                slot={slot}
+                className={iconClassName}
+            />);
         } else if (status === 'dnd') {
-            return <StatusDndAvatarIcon slot={slot} className={iconClassName}/>;
+            return (<StatusDndAvatarIcon
+                slot={slot}
+                className={iconClassName}
+            />);
         }
-        return <StatusOfflineAvatarIcon slot={slot} className={iconClassName}/>;
+        return (<StatusOfflineAvatarIcon
+            slot={slot}
+            className={iconClassName}
+        />);
     } else if (status === 'online') {
-        return <StatusOnlineIcon slot={slot} className={iconClassName}/>;
+        return (<StatusOnlineIcon
+            slot={slot}
+            className={iconClassName}
+        />);
     } else if (status === 'away') {
-        return <StatusAwayIcon slot={slot} className={iconClassName}/>;
+        return (<StatusAwayIcon
+            slot={slot}
+            className={iconClassName}
+        />);
     } else if (status === 'dnd') {
-        return <StatusDndIcon slot={slot} className={iconClassName}/>;
+        return (<StatusDndIcon
+            slot={slot}
+            className={iconClassName}
+        />);
     }
-    return <StatusOfflineIcon slot={slot} className={iconClassName}/>;
+    return (<StatusOfflineIcon
+        slot={slot}
+        className={iconClassName}
+    />);
 };
 
 export default memo(StatusIcon);

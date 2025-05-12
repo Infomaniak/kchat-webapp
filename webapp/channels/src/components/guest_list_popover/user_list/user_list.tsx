@@ -9,11 +9,11 @@ import {useHistory} from 'react-router-dom';
 import type {ServerError} from '@mattermost/types/errors';
 import type {UserProfile} from '@mattermost/types/users';
 
+import ProfilePopover from 'components/profile_popover';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
 
 import * as Utils from 'utils/utils';
-import ProfilePopover from 'components/profile_popover';
 
 import {DMButton, DMContainer, Gap, UserButton, UserList, UserListItem, Username, getListHeight, ProfileTag} from './styled';
 
@@ -32,7 +32,6 @@ export type Props = {
     membersCount: number;
 
     hide: () => void;
-    showUserOverlay: (user: UserProfile) => void;
 
     actions: {
         openDirectChannelToUserId: (userId?: string) => Promise<{ error: ServerError }>;
@@ -46,7 +45,6 @@ const UserListProfiles: FC<Props> = ({
     teamUrl,
     membersCount,
     hide,
-    showUserOverlay,
 }) => {
     const history = useHistory();
 
@@ -76,7 +74,7 @@ const UserListProfiles: FC<Props> = ({
 
         return (
             <UserListItem
-                slot="trigger"
+                slot='trigger'
                 className='group-member-list_item'
                 first={index === 0}
                 key={user.id}
@@ -84,7 +82,6 @@ const UserListProfiles: FC<Props> = ({
                 last={index === membersCount - 1}
             >
                 <UserButton
-                    onClick={() => showUserOverlay(user)}
                     aria-haspopup='dialog'
                 >
                     <Avatar
@@ -125,7 +122,11 @@ const UserListProfiles: FC<Props> = ({
 
     const renderContent = () => {
         return members.map((member, idx) => (
-            <ProfilePopover user={member.user} triggerComponentStyle={{minWidth: '100%'}}>
+            <ProfilePopover
+                user={member.user}
+                triggerComponentStyle={{minWidth: '100%'}}
+                hideStatus={true}
+            >
                 <Item
                     key={member.user.id}
                     index={idx}

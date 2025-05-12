@@ -62,14 +62,14 @@ function UserAvatar({
     return (
         <ProfilePopover
             user={user}
-            overwriteIcon={ profilePictureURL}
-             triggerComponentClass='style--none btn-round'
+            overwriteIcon={profilePictureURL}
+            triggerComponentClass='style--none btn-round'
         >
             <WithTooltip
                 title={name}
             >
                 <Avatar
-                    slot="trigger"
+                    slot='trigger'
                     url={imageURLForUser(userId, user?.last_picture_update)}
                     tabIndex={-1}
                     {...props}
