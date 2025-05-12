@@ -3,16 +3,19 @@
 
 import classNames from 'classnames';
 import React from 'react';
+import {useSelector} from 'react-redux';
+
+import type {UserProfile} from '@mattermost/types/users';
+
+import {getUser as selectUser} from 'mattermost-redux/selectors/entities/users';
 
 import ProfilePopover from 'components/profile_popover';
 import StatusIcon from 'components/status_icon';
 import StatusIconNew from 'components/status_icon_new';
 import Avatar, {getAvatarWidth} from 'components/widgets/users/avatar';
 import type {TAvatarSizeToken} from 'components/widgets/users/avatar';
-import {useSelector} from "react-redux";
-import type {GlobalState} from "../../types/store";
-import {getUser as selectUser} from "mattermost-redux/selectors/entities/users";
-import type {UserProfile} from "@mattermost/types/users";
+
+import type {GlobalState} from '../../types/store';
 
 type Props = {
     size?: TAvatarSizeToken;
@@ -42,11 +45,13 @@ function ProfilePicture(props: Props) {
 
     const hideStatus = props.isBot || props.fromAutoResponder || props.fromWebhook;
     if (props.userId) {
-        const user = useSelector((state: GlobalState) => selectUser(state, props.userId)) as UserProfile | undefined;
+        const user = useSelector((state: GlobalState) => selectUser(state, props.userId!)) as UserProfile | undefined;
 
         return (
             <ProfilePopover
                 user={user}
+                username={props.username}
+                hideStatus={hideStatus}
                 triggerComponentClass={classNames('status-wrapper style--none', props.wrapperClass)}
                 overwriteIcon={props.overwriteIcon || profileSrc}
                 overwriteName={props.overwriteName}
@@ -57,7 +62,10 @@ function ProfilePicture(props: Props) {
                 } as CSSStyleDeclaration}
             >
                 <>
-                    <span className={profileIconClass} slot="trigger">
+                    <span
+                        className={profileIconClass}
+                        slot='trigger'
+                    >
                         <Avatar
                             username={props.username}
                             size={props.size}

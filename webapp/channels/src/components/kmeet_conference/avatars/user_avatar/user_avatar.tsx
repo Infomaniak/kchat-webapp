@@ -37,23 +37,17 @@ interface MMOverlayTrigger extends BaseOverlayTrigger {
 const displayNameGetter = makeDisplayNameGetter();
 
 function UserAvatar({
-                        userId,
-                        overlayProps,
-                        displayProfileOverlay,
-                        displayProfileStatus,
-                        status,
-                        ...props
-                    }: Props) {
+    userId,
+    overlayProps,
+    displayProfileOverlay,
+    displayProfileStatus,
+    status,
+    ...props
+}: Props) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
 
     const profilePictureURL = userId ? imageURLForUser(userId) : '';
-
-    const overlay = useRef<MMOverlayTrigger>(null);
-
-    const hideProfilePopover = () => {
-        overlay.current?.hide();
-    };
 
     return (
         <RoundButton
@@ -61,14 +55,17 @@ function UserAvatar({
             onClick={(e) => e.stopPropagation()}
         >
             <ProfilePopover
-                user={user} >
+                disabled={!displayProfileOverlay}
+                user={user}
+                overwriteIcon={profilePictureURL}
+            >
                 <SimpleTooltip
                     id={`name-${userId}`}
                     content={name}
                     {...overlayProps}
                 >
                     <Status
-                        slot="trigger"
+                        slot='trigger'
                         showStatus={displayProfileStatus}
                         registrant={status}
                     >
