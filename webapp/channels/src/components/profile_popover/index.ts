@@ -8,14 +8,13 @@ import {bindActionCreators} from 'redux';
 import {getCurrentTeamAccountId, getCurrentTeamName} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
 
-import type {ProfilePopoverProps} from './profile_popover_controller';
-import {ProfilePopoverController} from './profile_popover_controller';
 
 import {startOrJoinCallInChannelV2} from '../../actions/calls';
 import {joinCall} from '../../actions/kmeet_calls';
 import {closeModal, openModal} from '../../actions/views/modals';
 import type {GlobalState} from '../../types/store';
 import {UserStatuses} from '../../utils/constants';
+import {ProfilePopoverProps, ProfilePopoverWcController} from "./profile_popover_wc_controller";
 
 function mapStateToProps(state: GlobalState, ownProps: ProfilePopoverProps) {
     const currentUser = getCurrentUser(state);
@@ -41,4 +40,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfilePopoverController);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilePopoverWcController);
