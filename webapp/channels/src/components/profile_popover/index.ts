@@ -1,26 +1,32 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {connect} from 'react-redux';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
+
+import {getCurrentTeamAccountId, getCurrentTeamName} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUser, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
+
+import type {ProfilePopoverProps} from './profile_popover_controller';
 import {ProfilePopoverController} from './profile_popover_controller';
-import type {GlobalState} from "../../types/store";
-import {getCurrentUser} from "mattermost-redux/selectors/entities/users";
-import {bindActionCreators, Dispatch} from "redux";
-import {startOrJoinCallInChannelV2} from "../../actions/calls";
-import {joinCall} from "../../actions/kmeet_calls";
-import {closeModal, openModal} from "../../actions/views/modals";
-import {connect} from "react-redux";
-import {getCurrentTeamAccountId, getCurrentTeamName} from "mattermost-redux/selectors/entities/teams";
 
+import {startOrJoinCallInChannelV2} from '../../actions/calls';
+import {joinCall} from '../../actions/kmeet_calls';
+import {closeModal, openModal} from '../../actions/views/modals';
+import type {GlobalState} from '../../types/store';
+import {UserStatuses} from '../../utils/constants';
 
-function mapStateToProps(state: GlobalState) {
+function mapStateToProps(state: GlobalState, ownProps: ProfilePopoverProps) {
     const currentUser = getCurrentUser(state);
     const currentTeamAccountId = getCurrentTeamAccountId(state);
     const currentTeamName = getCurrentTeamName(state);
-
+    const userStatus = (ownProps.user?.id && getStatusForUserId(state, ownProps.user?.id)) || UserStatuses.OFFLINE;
     return {
         currentUser,
         currentTeamAccountId,
         currentTeamName,
+        userStatus,
     };
 }
 

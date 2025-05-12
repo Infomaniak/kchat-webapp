@@ -65,7 +65,7 @@ const AtMention = (props: Props) => {
                 >
                     <span
                         ref={ref}
-                        slot="trigger"
+                        slot='trigger'
                         className='mention-link'
                     >
                         {'@' + userDisplayName}

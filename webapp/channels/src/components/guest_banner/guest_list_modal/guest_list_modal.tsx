@@ -16,7 +16,6 @@ import Constants, {A11yCustomEventTypes} from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
 import {popOverOverlayPosition} from 'utils/position_utils';
 import {getViewportSize} from 'utils/utils';
-import {WcContactSheetElement} from "../../profile_popover/profile_popover_controller";
 
 export type Props = {
     count: number;
@@ -28,11 +27,9 @@ const HEADER_HEIGHT_ESTIMATE = 130;
 
 const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
     const ref = useRef<HTMLAnchorElement>(null);
-    const userPanelRef = useRef<WcContactSheetElement>(null);
 
     const [show, setShow] = useState(false);
-    const [placement, setPlacement] = useState(('top'));
-    const [showUser, setShowUser] = useState<UserProfile | undefined>();
+    const [placement, setPlacement] = useState<"bottom" | "top" | "right" | "left" | undefined>(('top'));
     const [target, setTarget] = useState<HTMLAnchorElement | undefined>();
 
     const showOverlay = (target?: HTMLAnchorElement) => {
@@ -47,7 +44,6 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
             const placement = popOverOverlayPosition(targetBounds, window.innerHeight, approximatePopoverHeight);
             setTarget(target);
             setShow(!show);
-            setShowUser(undefined);
             setPlacement(placement);
         }
     };
@@ -71,15 +67,6 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
         setShow(false);
     };
 
-    const showUserOverlay = (user: UserProfile) => {
-        setShowUser(user);
-        userPanelRef.current?.open();
-    };
-
-    const hideUserOverlay = () => {
-        setShowUser(undefined);
-    };
-
     const returnFocus = () => {
         document.dispatchEvent(new CustomEvent<A11yFocusEventDetail>(
             A11yCustomEventTypes.FOCUS, {
@@ -98,7 +85,7 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
                 ref={ref}
                 aria-haspopup='dialog'
                 role='button'
-                slot="trigger"
+                slot='trigger'
                 tabIndex={0}
             >
                 <FormattedMessage
@@ -119,7 +106,6 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
                     channelId={channelId}
                     profiles={guestProfiles}
                     hide={hideOverlay}
-                    showUserOverlay={showUserOverlay}
                     returnFocus={returnFocus}
                     membersCount={count}
                 />
