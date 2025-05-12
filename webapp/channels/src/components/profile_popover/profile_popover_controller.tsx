@@ -1,24 +1,31 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 import './profile_popover.scss';
-import {
-    Children,
-    cloneElement, ForwardedRef,
+import type {ForwardedRef,
     ReactElement,
-    ReactNode,
+    ReactNode} from 'react';
+import React, {
+    Children,
+    cloneElement,
     useEffect, useImperativeHandle,
-    useRef
+    useRef,
 } from 'react';
-import React from 'react';
+import {useDispatch} from 'react-redux';
+
 import type {UserProfile} from '@mattermost/types/users';
-import {Client4} from "mattermost-redux/client";
-import {useDispatch} from "react-redux";
-import type {ModalData} from "../../types/actions";
-import {getHistory} from "../../utils/browser_history";
-import {createDirectChannel} from "mattermost-redux/actions/channels";
+
+import {createDirectChannel} from 'mattermost-redux/actions/channels';
+import {Client4} from 'mattermost-redux/client';
+
+import type {ModalData} from '../../types/actions';
+import {getHistory} from '../../utils/browser_history';
 
 export interface ProfilePopoverProps {
-    currentUser: UserProfile;
+    disabled?: boolean;
+    username?: string;
+    hideStatus?: boolean;
+    currentUser?: UserProfile;
+    userStatus?: string;
     user?: UserProfile;
     children?: ReactNode;
     accountId?: number;
@@ -28,9 +35,8 @@ export interface ProfilePopoverProps {
     size?: 'sm' | 'md' | 'lg' | 'xl';
     triggerComponentClass?: string;
     triggerComponentStyle?: Partial<CSSStyleDeclaration>;
-
-    currentTeamAccountId?: number,
-    currentTeamName?: string,
+    currentTeamAccountId?: number;
+    currentTeamName?: string;
 
     /**
      * Function to call to return focus to the previously focused element when the popover closes.
@@ -52,34 +58,37 @@ export interface ProfilePopoverProps {
      */
     overwriteIcon?: string;
 
-    actions: {
-        startOrJoinCallInChannelV2: (channelID: unknown) => void;
-        joinCall: (channelID: unknown) => void;
-        openModal: <P>(modalData: ModalData<P>) => void;
-        closeModal: (ModalIdentifier: string) => void;
+    actions?: {
+        startOrJoinCallInChannelV2?: (channelID: string) => void;
+        joinCall?: (channelID: string) => void;
+        openModal?: <P>(modalData: ModalData<P>) => void;
+        closeModal?: (ModalIdentifier: string) => void;
     };
 }
 
-export type WcContactSheetElement = HTMLElement & {open: () => void, close:() => void};
+export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void};
 
-export const ProfilePopoverController = React.forwardRef<WcContactSheetElement | undefined, ProfilePopoverProps>((props:ProfilePopoverProps, ref: ForwardedRef<WcContactSheetElement | undefined>) =>{
+export const ProfilePopoverController = React.forwardRef<WcContactSheetElement | undefined, ProfilePopoverProps>((props: ProfilePopoverProps, ref: ForwardedRef<WcContactSheetElement | undefined>) => {
     const {
+        disabled,
+        username,
+        hideStatus,
         actions,
         currentUser,
+        userStatus,
         user,
         children,
         currentTeamAccountId,
         currentTeamName,
         backgroundColor = 'transparent',
         isExternal = false,
-        presence= 'offline',
         size = 'md',
         triggerComponentClass = '',
         returnFocus = () => null,
         overwriteName,
-        overwriteIcon = Boolean(user) ? Client4.getProfilePictureUrl(user!.id, user!.last_picture_update) : undefined,
-        triggerComponentStyle
-    } = props
+        overwriteIcon = user ? Client4.getProfilePictureUrl(user!.id, user!.last_picture_update) : undefined,
+        triggerComponentStyle,
+    } = props;
 
     const dispatch = useDispatch();
 
@@ -88,39 +97,36 @@ export const ProfilePopoverController = React.forwardRef<WcContactSheetElement |
     useImperativeHandle(ref, () => localRef.current);
 
     useEffect(() => {
+        if (!localRef?.current) {
+            return;
+        }
 
-        if (!localRef?.current) return ;
+        const handleQuickActionClick = (e: CustomEvent) => {
+            const {option, user: u} = e.detail;
 
-        const handleQuickActionClick= (e: CustomEvent) => {
-            const {option, user: u, project} = e.detail;
-
-            if (option.id === 'send-direct-message'){
-
+            if (option.id === 'send-direct-message') {
                 getHistory().push(`/${currentTeamName}/messages/@${u.kChatUserName}`);
                 e.preventDefault();
             }
-            if (option.id === 'start-call'){
+            if (option.id === 'start-call') {
+                const getDmChannel = async () => {
+                    // @ts-ignore
+                    const {data} = await dispatch(createDirectChannel(user!.id, currentUser.id));
+                    return data.id;
+                };
 
-
-                const getDmChannel= async () => {
-                    const {data} = await dispatch(createDirectChannel(user!.id, currentUser.id))
-                    return data.id
-                }
-
-                getDmChannel().then(actions.startOrJoinCallInChannelV2)
+                getDmChannel().then(actions?.startOrJoinCallInChannelV2);
                 e.preventDefault();
             }
-        }
+        };
 
-        localRef.current.addEventListener('close', returnFocus );
+        localRef.current.addEventListener('close', returnFocus);
         localRef.current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
 
         return () => {
             localRef.current?.removeEventListener('close', returnFocus);
-            localRef.current?.removeEventListener('quickActionClick', handleQuickActionClick  as EventListenerOrEventListenerObject);
-
-        }
-
+            localRef.current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
+        };
     }, [ref]);
 
     return (
@@ -128,6 +134,7 @@ export const ProfilePopoverController = React.forwardRef<WcContactSheetElement |
             {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
             {/* @ts-ignore */}
             <wc-contact-sheet
+                disabled={disabled}
                 prevent-stop-propagation={true}
                 ref={localRef}
                 class={triggerComponentClass}
@@ -136,8 +143,8 @@ export const ProfilePopoverController = React.forwardRef<WcContactSheetElement |
                 background-color={backgroundColor} // TODO
                 is-external={isExternal} // TODO
                 k-chat-team-name={currentTeamName}
-                k-chat-user-name={user?.username}
-                presence={presence}
+                k-chat-user-name={user?.username || username}
+                presence={hideStatus ? undefined : userStatus}
                 size={size}
                 src={overwriteIcon}
                 timezone={user?.timezone?.useAutomaticTimezone ? user?.timezone.automaticTimezone : user?.timezone?.manualTimezone}
@@ -146,11 +153,11 @@ export const ProfilePopoverController = React.forwardRef<WcContactSheetElement |
                 user-name={overwriteName || user?.first_name + ' ' + user?.last_name}
                 style={triggerComponentStyle}
             >
-                {Children.map(children, (child) => cloneElement(child as ReactElement , {slot: 'trigger'}))}
+                {Children.map(children, (child) => cloneElement(child as ReactElement, {slot: 'trigger'}))}
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
             </wc-contact-sheet>
 
         </>
     );
-} )
+});
