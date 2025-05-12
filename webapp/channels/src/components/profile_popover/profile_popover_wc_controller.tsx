@@ -19,6 +19,7 @@ import {Client4} from 'mattermost-redux/client';
 
 import type {ModalData} from '../../types/actions';
 import {getHistory} from '../../utils/browser_history';
+import {isGuest} from "mattermost-redux/utils/user_utils";
 
 export interface ProfilePopoverProps {
     disabled?: boolean;
@@ -140,8 +141,8 @@ export const ProfilePopoverWcController = React.forwardRef<WcContactSheetElement
                 class={triggerComponentClass}
                 prevent-open-on-hover={true}
                 account-id={currentTeamAccountId}
-                background-color={backgroundColor} // TODO
-                is-external={isExternal} // TODO
+                background-color={backgroundColor}
+                is-external={user?.roles ? isGuest(user.roles) : isExternal}
                 k-chat-team-name={currentTeamName}
                 k-chat-user-name={user?.username || username}
                 presence={hideStatus ? undefined : userStatus}
