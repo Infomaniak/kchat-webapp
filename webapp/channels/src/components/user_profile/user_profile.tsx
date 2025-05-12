@@ -28,8 +28,6 @@ export default function UserProfile({
     user,
     displayName,
     theme,
-    userId,
-    channelId,
     overwriteIcon,
 }: Props) {
     let name: ReactNode;
@@ -72,13 +70,14 @@ export default function UserProfile({
     return (
         <>
             <ProfilePopover
-             user={user}
+                hideStatus={hideStatus}
+                user={user}
                 triggerComponentClass='user-popover style--none'
                 triggerComponentStyle={userStyle as CSSStyleDeclaration}
-                overwriteIcon={overwriteIcon}
+                overwriteIcon={overwriteIcon || profileImg}
                 overwriteName={overwriteName}
             >
-                <div slot="trigger">{name}</div>
+                <div slot='trigger'>{name}</div>
             </ProfilePopover>
             {userIsRemote &&
             <SharedUserIndicator

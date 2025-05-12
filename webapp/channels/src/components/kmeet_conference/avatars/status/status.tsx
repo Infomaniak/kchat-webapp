@@ -13,7 +13,10 @@ type Props = {
 
 const Status: FC<Props> = ({registrant, showStatus, children, slot}) => {
     return (
-        <Sc.Container slot={slot} grayscale={!registrant.present && registrant.status === 'approved'}>
+        <Sc.Container
+            slot={slot}
+            grayscale={!registrant.present && registrant.status === 'approved'}
+        >
             {showStatus && (
                 <Sc.IconWrapper status={registrant.status}>
                     {registrant.status === 'denied' && <Sc.DeniedIcon/>}
