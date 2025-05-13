@@ -11,6 +11,11 @@ import {mockStore} from 'tests/test_store';
 import Avatars from './avatars';
 
 import Avatar from '../avatar';
+import {
+    StateEntitiesChannelsMock,
+    StateEntitiesPostsMock,
+    StateViewRhsMock, StateEntitiesTeamsMock, StateEntitiesUsersMock
+} from "mattermost-redux/selectors/entities/state.mock";
 
 jest.mock('mattermost-redux/actions/users', () => {
     return {
@@ -27,10 +32,13 @@ jest.mock('mattermost-redux/actions/users', () => {
 describe('components/widgets/users/Avatars', () => {
     const state = {
         entities: {
+            channels: StateEntitiesChannelsMock,
+            posts: StateEntitiesPostsMock,
             general: {
                 config: {},
             },
             users: {
+                ...StateEntitiesUsersMock,
                 currentUserId: 'uid',
                 profiles: {
                     1: {
@@ -77,12 +85,16 @@ describe('components/widgets/users/Avatars', () => {
                 },
             },
             teams: {
+                ...StateEntitiesTeamsMock,
                 currentTeamId: 'tid',
             },
             preferences: {
                 myPreferences: {},
             },
         },
+        views: {
+            rhs: StateViewRhsMock
+        }
     };
 
     test('should support userIds', () => {
