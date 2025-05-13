@@ -38,7 +38,6 @@ export function getIsTeamAdmin(state: GlobalState, userId: string) {
 }
 
 export function getIsChannelAdmin(state: GlobalState, userId: string, channelId?: string) {
-    if (userId === '9860ee45-70aa-4a06-ba9c-8b68d0bce4fc') debugger;
     if (!channelId) {
         return false;
     }
