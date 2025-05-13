@@ -105,7 +105,15 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
         user,
     } = props;
 
+    const badges = [];
     const localRef = useRef<WcContactSheetElement | undefined>(undefined);
+    const {formatMessage} = useIntl();
+
+    if (user?.is_bot)
+        badges.push(formatMessage({
+            id: 'tag.default.bot',
+            defaultMessage: 'BOT',
+        }))
 
     useEffect(() => {
         if (!localRef?.current) {
@@ -127,7 +135,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
 
         localRef.current.addEventListener('close', returnFocus);
         localRef.current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
-
+        localRef.current.badges = badges;
         return () => {
             localRef.current?.removeEventListener('close', returnFocus);
             localRef.current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
@@ -158,7 +166,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                 user-name={overwriteName || user?.first_name + ' ' + user?.last_name}
                 style={triggerComponentStyle}
             >
-                {cloneThroughFragments(children)}
+                <span slot="trigger">{children}</span>
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
             </wc-contact-sheet>
