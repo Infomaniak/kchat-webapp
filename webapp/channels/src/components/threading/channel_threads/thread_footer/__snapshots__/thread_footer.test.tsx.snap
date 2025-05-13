@@ -73,66 +73,94 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           }
           userId="5"
         >
-          <ProfilePopoverController
+          <Connect(ProfilePopoverWcController)
             src="/api/v4/users/5/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="5"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
-              className="style--none btn-round"
-              onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
+            <ProfilePopoverWcController
+              channelId="current_channel_id"
+              currentTeamName="team1"
+              dispatch={[Function]}
+              isChannelAdmin={false}
+              isTeamAdmin={false}
+              src="/api/v4/users/5/image?_=0"
+              triggerComponentClass="style--none btn-round"
+              user={
+                Object {
+                  "first_name": "First5",
+                  "id": "5",
+                  "last_name": "Last5",
+                  "nickname": "nickname5",
+                  "username": "first.last5",
+                }
+              }
+              userId="5"
+              userStatus="offline"
             >
-              <WithTooltip
-                title="first.last5"
+              <wc-contact-sheet
+                background-color="transparent"
+                class="style--none btn-round"
+                is-external={false}
+                k-chat-team-name="team1"
+                k-chat-user-name="first.last5"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/5/image?_=0"
+                user-name="First5 Last5"
               >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="sm"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/5/image?_=0"
+                <span
+                  className="style--none btn-round"
+                  slot="trigger"
                 >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-sm"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/5/image?_=0"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
+                  <WithTooltip
+                    title="first.last5"
+                  >
+                    <Avatar
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      onMouseLeave={[Function]}
+                      onMouseMove={[Function]}
+                      onPointerDown={[Function]}
+                      onPointerEnter={[Function]}
+                      size="sm"
+                      style={
+                        Object {
+                          "background": "rgb(240, 240, 241)",
+                        }
                       }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </button>
-          </ProfilePopoverController>
+                      tabIndex={-1}
+                      url="/api/v4/users/5/image?_=0"
+                    >
+                      <img
+                        alt="user profile image"
+                        className="Avatar Avatar-sm"
+                        loading="lazy"
+                        onBlur={[Function]}
+                        onError={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onMouseLeave={[Function]}
+                        onMouseMove={[Function]}
+                        onPointerDown={[Function]}
+                        onPointerEnter={[Function]}
+                        src="/api/v4/users/5/image?_=0"
+                        style={
+                          Object {
+                            "background": "rgb(240, 240, 241)",
+                          }
+                        }
+                        tabIndex={-1}
+                      />
+                    </Avatar>
+                  </WithTooltip>
+                </span>
+              </wc-contact-sheet>
+            </ProfilePopoverWcController>
+          </Connect(ProfilePopoverWcController)>
         </UserAvatar>
         <UserAvatar
           key="4"
@@ -144,66 +172,94 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           }
           userId="4"
         >
-          <ProfilePopoverController
+          <Connect(ProfilePopoverWcController)
             src="/api/v4/users/4/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="4"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
-              className="style--none btn-round"
-              onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
+            <ProfilePopoverWcController
+              channelId="current_channel_id"
+              currentTeamName="team1"
+              dispatch={[Function]}
+              isChannelAdmin={false}
+              isTeamAdmin={false}
+              src="/api/v4/users/4/image?_=0"
+              triggerComponentClass="style--none btn-round"
+              user={
+                Object {
+                  "first_name": "First4",
+                  "id": "4",
+                  "last_name": "Last4",
+                  "nickname": "nickname4",
+                  "username": "first.last4",
+                }
+              }
+              userId="4"
+              userStatus="offline"
             >
-              <WithTooltip
-                title="first.last4"
+              <wc-contact-sheet
+                background-color="transparent"
+                class="style--none btn-round"
+                is-external={false}
+                k-chat-team-name="team1"
+                k-chat-user-name="first.last4"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/4/image?_=0"
+                user-name="First4 Last4"
               >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="sm"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/4/image?_=0"
+                <span
+                  className="style--none btn-round"
+                  slot="trigger"
                 >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-sm"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/4/image?_=0"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
+                  <WithTooltip
+                    title="first.last4"
+                  >
+                    <Avatar
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      onMouseLeave={[Function]}
+                      onMouseMove={[Function]}
+                      onPointerDown={[Function]}
+                      onPointerEnter={[Function]}
+                      size="sm"
+                      style={
+                        Object {
+                          "background": "rgb(240, 240, 241)",
+                        }
                       }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </button>
-          </ProfilePopoverController>
+                      tabIndex={-1}
+                      url="/api/v4/users/4/image?_=0"
+                    >
+                      <img
+                        alt="user profile image"
+                        className="Avatar Avatar-sm"
+                        loading="lazy"
+                        onBlur={[Function]}
+                        onError={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onMouseLeave={[Function]}
+                        onMouseMove={[Function]}
+                        onPointerDown={[Function]}
+                        onPointerEnter={[Function]}
+                        src="/api/v4/users/4/image?_=0"
+                        style={
+                          Object {
+                            "background": "rgb(240, 240, 241)",
+                          }
+                        }
+                        tabIndex={-1}
+                      />
+                    </Avatar>
+                  </WithTooltip>
+                </span>
+              </wc-contact-sheet>
+            </ProfilePopoverWcController>
+          </Connect(ProfilePopoverWcController)>
         </UserAvatar>
         <UserAvatar
           key="3"
@@ -215,66 +271,94 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           }
           userId="3"
         >
-          <ProfilePopoverController
+          <Connect(ProfilePopoverWcController)
             src="/api/v4/users/3/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="3"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
-              className="style--none btn-round"
-              onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
+            <ProfilePopoverWcController
+              channelId="current_channel_id"
+              currentTeamName="team1"
+              dispatch={[Function]}
+              isChannelAdmin={false}
+              isTeamAdmin={false}
+              src="/api/v4/users/3/image?_=0"
+              triggerComponentClass="style--none btn-round"
+              user={
+                Object {
+                  "first_name": "First3",
+                  "id": "3",
+                  "last_name": "Last3",
+                  "nickname": "nickname3",
+                  "username": "first.last3",
+                }
+              }
+              userId="3"
+              userStatus="offline"
             >
-              <WithTooltip
-                title="first.last3"
+              <wc-contact-sheet
+                background-color="transparent"
+                class="style--none btn-round"
+                is-external={false}
+                k-chat-team-name="team1"
+                k-chat-user-name="first.last3"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/3/image?_=0"
+                user-name="First3 Last3"
               >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="sm"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/3/image?_=0"
+                <span
+                  className="style--none btn-round"
+                  slot="trigger"
                 >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-sm"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/3/image?_=0"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
+                  <WithTooltip
+                    title="first.last3"
+                  >
+                    <Avatar
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      onMouseLeave={[Function]}
+                      onMouseMove={[Function]}
+                      onPointerDown={[Function]}
+                      onPointerEnter={[Function]}
+                      size="sm"
+                      style={
+                        Object {
+                          "background": "rgb(240, 240, 241)",
+                        }
                       }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </button>
-          </ProfilePopoverController>
+                      tabIndex={-1}
+                      url="/api/v4/users/3/image?_=0"
+                    >
+                      <img
+                        alt="user profile image"
+                        className="Avatar Avatar-sm"
+                        loading="lazy"
+                        onBlur={[Function]}
+                        onError={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onMouseLeave={[Function]}
+                        onMouseMove={[Function]}
+                        onPointerDown={[Function]}
+                        onPointerEnter={[Function]}
+                        src="/api/v4/users/3/image?_=0"
+                        style={
+                          Object {
+                            "background": "rgb(240, 240, 241)",
+                          }
+                        }
+                        tabIndex={-1}
+                      />
+                    </Avatar>
+                  </WithTooltip>
+                </span>
+              </wc-contact-sheet>
+            </ProfilePopoverWcController>
+          </Connect(ProfilePopoverWcController)>
         </UserAvatar>
         <WithTooltip
           title="first.last2, first.last1"
@@ -583,66 +667,94 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           }
           userId="5"
         >
-          <ProfilePopoverController
+          <Connect(ProfilePopoverWcController)
             src="/api/v4/users/5/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="5"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
-              className="style--none btn-round"
-              onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
+            <ProfilePopoverWcController
+              channelId="current_channel_id"
+              currentTeamName="team1"
+              dispatch={[Function]}
+              isChannelAdmin={false}
+              isTeamAdmin={false}
+              src="/api/v4/users/5/image?_=0"
+              triggerComponentClass="style--none btn-round"
+              user={
+                Object {
+                  "first_name": "First5",
+                  "id": "5",
+                  "last_name": "Last5",
+                  "nickname": "nickname5",
+                  "username": "first.last5",
+                }
+              }
+              userId="5"
+              userStatus="offline"
             >
-              <WithTooltip
-                title="first.last5"
+              <wc-contact-sheet
+                background-color="transparent"
+                class="style--none btn-round"
+                is-external={false}
+                k-chat-team-name="team1"
+                k-chat-user-name="first.last5"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/5/image?_=0"
+                user-name="First5 Last5"
               >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="sm"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/5/image?_=0"
+                <span
+                  className="style--none btn-round"
+                  slot="trigger"
                 >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-sm"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/5/image?_=0"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
+                  <WithTooltip
+                    title="first.last5"
+                  >
+                    <Avatar
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      onMouseLeave={[Function]}
+                      onMouseMove={[Function]}
+                      onPointerDown={[Function]}
+                      onPointerEnter={[Function]}
+                      size="sm"
+                      style={
+                        Object {
+                          "background": "rgb(240, 240, 241)",
+                        }
                       }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </button>
-          </ProfilePopoverController>
+                      tabIndex={-1}
+                      url="/api/v4/users/5/image?_=0"
+                    >
+                      <img
+                        alt="user profile image"
+                        className="Avatar Avatar-sm"
+                        loading="lazy"
+                        onBlur={[Function]}
+                        onError={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onMouseLeave={[Function]}
+                        onMouseMove={[Function]}
+                        onPointerDown={[Function]}
+                        onPointerEnter={[Function]}
+                        src="/api/v4/users/5/image?_=0"
+                        style={
+                          Object {
+                            "background": "rgb(240, 240, 241)",
+                          }
+                        }
+                        tabIndex={-1}
+                      />
+                    </Avatar>
+                  </WithTooltip>
+                </span>
+              </wc-contact-sheet>
+            </ProfilePopoverWcController>
+          </Connect(ProfilePopoverWcController)>
         </UserAvatar>
         <UserAvatar
           key="4"
@@ -654,66 +766,94 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           }
           userId="4"
         >
-          <ProfilePopoverController
+          <Connect(ProfilePopoverWcController)
             src="/api/v4/users/4/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="4"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
-              className="style--none btn-round"
-              onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
+            <ProfilePopoverWcController
+              channelId="current_channel_id"
+              currentTeamName="team1"
+              dispatch={[Function]}
+              isChannelAdmin={false}
+              isTeamAdmin={false}
+              src="/api/v4/users/4/image?_=0"
+              triggerComponentClass="style--none btn-round"
+              user={
+                Object {
+                  "first_name": "First4",
+                  "id": "4",
+                  "last_name": "Last4",
+                  "nickname": "nickname4",
+                  "username": "first.last4",
+                }
+              }
+              userId="4"
+              userStatus="offline"
             >
-              <WithTooltip
-                title="first.last4"
+              <wc-contact-sheet
+                background-color="transparent"
+                class="style--none btn-round"
+                is-external={false}
+                k-chat-team-name="team1"
+                k-chat-user-name="first.last4"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/4/image?_=0"
+                user-name="First4 Last4"
               >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="sm"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/4/image?_=0"
+                <span
+                  className="style--none btn-round"
+                  slot="trigger"
                 >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-sm"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/4/image?_=0"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
+                  <WithTooltip
+                    title="first.last4"
+                  >
+                    <Avatar
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      onMouseLeave={[Function]}
+                      onMouseMove={[Function]}
+                      onPointerDown={[Function]}
+                      onPointerEnter={[Function]}
+                      size="sm"
+                      style={
+                        Object {
+                          "background": "rgb(240, 240, 241)",
+                        }
                       }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </button>
-          </ProfilePopoverController>
+                      tabIndex={-1}
+                      url="/api/v4/users/4/image?_=0"
+                    >
+                      <img
+                        alt="user profile image"
+                        className="Avatar Avatar-sm"
+                        loading="lazy"
+                        onBlur={[Function]}
+                        onError={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onMouseLeave={[Function]}
+                        onMouseMove={[Function]}
+                        onPointerDown={[Function]}
+                        onPointerEnter={[Function]}
+                        src="/api/v4/users/4/image?_=0"
+                        style={
+                          Object {
+                            "background": "rgb(240, 240, 241)",
+                          }
+                        }
+                        tabIndex={-1}
+                      />
+                    </Avatar>
+                  </WithTooltip>
+                </span>
+              </wc-contact-sheet>
+            </ProfilePopoverWcController>
+          </Connect(ProfilePopoverWcController)>
         </UserAvatar>
         <UserAvatar
           key="3"
@@ -725,66 +865,94 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           }
           userId="3"
         >
-          <ProfilePopoverController
+          <Connect(ProfilePopoverWcController)
             src="/api/v4/users/3/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="3"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
-              className="style--none btn-round"
-              onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
+            <ProfilePopoverWcController
+              channelId="current_channel_id"
+              currentTeamName="team1"
+              dispatch={[Function]}
+              isChannelAdmin={false}
+              isTeamAdmin={false}
+              src="/api/v4/users/3/image?_=0"
+              triggerComponentClass="style--none btn-round"
+              user={
+                Object {
+                  "first_name": "First3",
+                  "id": "3",
+                  "last_name": "Last3",
+                  "nickname": "nickname3",
+                  "username": "first.last3",
+                }
+              }
+              userId="3"
+              userStatus="offline"
             >
-              <WithTooltip
-                title="first.last3"
+              <wc-contact-sheet
+                background-color="transparent"
+                class="style--none btn-round"
+                is-external={false}
+                k-chat-team-name="team1"
+                k-chat-user-name="first.last3"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/3/image?_=0"
+                user-name="First3 Last3"
               >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="sm"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/3/image?_=0"
+                <span
+                  className="style--none btn-round"
+                  slot="trigger"
                 >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-sm"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/3/image?_=0"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
+                  <WithTooltip
+                    title="first.last3"
+                  >
+                    <Avatar
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      onMouseLeave={[Function]}
+                      onMouseMove={[Function]}
+                      onPointerDown={[Function]}
+                      onPointerEnter={[Function]}
+                      size="sm"
+                      style={
+                        Object {
+                          "background": "rgb(240, 240, 241)",
+                        }
                       }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </button>
-          </ProfilePopoverController>
+                      tabIndex={-1}
+                      url="/api/v4/users/3/image?_=0"
+                    >
+                      <img
+                        alt="user profile image"
+                        className="Avatar Avatar-sm"
+                        loading="lazy"
+                        onBlur={[Function]}
+                        onError={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onMouseLeave={[Function]}
+                        onMouseMove={[Function]}
+                        onPointerDown={[Function]}
+                        onPointerEnter={[Function]}
+                        src="/api/v4/users/3/image?_=0"
+                        style={
+                          Object {
+                            "background": "rgb(240, 240, 241)",
+                          }
+                        }
+                        tabIndex={-1}
+                      />
+                    </Avatar>
+                  </WithTooltip>
+                </span>
+              </wc-contact-sheet>
+            </ProfilePopoverWcController>
+          </Connect(ProfilePopoverWcController)>
         </UserAvatar>
         <WithTooltip
           title="first.last2, first.last1"
