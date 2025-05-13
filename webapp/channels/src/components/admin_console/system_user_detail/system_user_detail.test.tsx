@@ -17,6 +17,7 @@ import {TestHelper} from 'utils/test_helper';
 
 import type {MockIntl} from 'tests/helpers/intl-test-helper';
 import {renderWithContext, waitFor, within} from 'tests/react_testing_utils';
+import {StateEntitiesTeamsMock} from "mattermost-redux/selectors/entities/state.mock";
 
 // Mock user profile data
 const user = Object.assign(TestHelper.getUserMock(), {auth_service: Constants.EMAIL_SERVICE}) as UserProfile;
@@ -27,6 +28,12 @@ const getUserMock = jest.fn().mockResolvedValue({data: user, error: null});
 const getLdapUserMock = jest.fn().mockResolvedValue({data: ldapUser, error: null});
 
 describe('SystemUserDetail', () => {
+    const baseState = {
+        entities: {
+            teams: StateEntitiesTeamsMock
+        }
+    }
+
     const defaultProps: Props = {
         showManageUserSettings: false,
         showLockedManageUserSettings: false,
@@ -63,7 +70,7 @@ describe('SystemUserDetail', () => {
 
     test('should match default snapshot', async () => {
         const props = defaultProps;
-        const {container} = renderWithContext(<SystemUserDetail {...props}/>);
+        const {container} = renderWithContext(<SystemUserDetail {...props}/>, baseState);
 
         await waitForLoadingToFinish(container);
 
@@ -75,7 +82,7 @@ describe('SystemUserDetail', () => {
             ...defaultProps,
             mfaEnabled: true,
         };
-        const {container} = renderWithContext(<SystemUserDetail {...props}/>);
+        const {container} = renderWithContext(<SystemUserDetail {...props}/>,baseState);
 
         await waitForLoadingToFinish(container);
 
@@ -87,7 +94,7 @@ describe('SystemUserDetail', () => {
             ...defaultProps,
             showManageUserSettings: true,
         };
-        const {container} = renderWithContext(<SystemUserDetail {...props}/>);
+        const {container} = renderWithContext(<SystemUserDetail {...props}/>, baseState);
 
         await waitForLoadingToFinish(container);
 
@@ -99,7 +106,7 @@ describe('SystemUserDetail', () => {
             ...defaultProps,
             showLockedManageUserSettings: false,
         };
-        const {container} = renderWithContext(<SystemUserDetail {...props}/>);
+        const {container} = renderWithContext(<SystemUserDetail {...props}/>, baseState);
 
         await waitForLoadingToFinish(container);
 
@@ -113,7 +120,7 @@ describe('SystemUserDetail', () => {
             isLoading: false,
         };
 
-        const {container} = renderWithContext(<SystemUserDetail {...props}/>);
+        const {container} = renderWithContext(<SystemUserDetail {...props}/>,baseState);
 
         await waitForLoadingToFinish(container);
 
@@ -128,7 +135,7 @@ describe('SystemUserDetail', () => {
             ...defaultProps,
             showManageUserSettings: false,
         };
-        const {container} = renderWithContext(<SystemUserDetail {...props}/>);
+        const {container} = renderWithContext(<SystemUserDetail {...props}/>, baseState);
 
         await waitForLoadingToFinish(container);
 
