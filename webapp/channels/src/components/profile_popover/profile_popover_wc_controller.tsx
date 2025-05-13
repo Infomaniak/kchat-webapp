@@ -12,7 +12,7 @@ import React, {
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
-import {isGuest} from 'mattermost-redux/utils/user_utils';
+import {isGuest, isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {getHistory} from '../../utils/browser_history';
 import {useIntl} from "react-intl";
@@ -27,6 +27,8 @@ export interface ProfilePopoverAdditionalProps {
     currentUser?: UserProfile;
     user?: UserProfile;
     userStatus?: string;
+    isTeamAdmin?: boolean;
+    isChannelAdmin?: boolean;
 }
 
 export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
@@ -104,17 +106,38 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
         triggerComponentStyle,
         src,
         user,
+        isTeamAdmin,
+        isChannelAdmin
     } = props;
 
     const badges = [];
     const localRef = useRef<WcContactSheetElement | undefined>(undefined);
     const {formatMessage} = useIntl();
 
-    if (user?.is_bot)
+    if (user?.is_bot) {
         badges.push(formatMessage({
             id: 'tag.default.bot',
             defaultMessage: 'BOT',
         }))
+    }
+    if (isSystemAdmin(user?.roles)) {
+        badges.push(formatMessage({
+            id: 'user_profile.roleTitle.system_admin',
+            defaultMessage: 'System Admin',
+        }))
+    }
+    if (isTeamAdmin) {
+        badges.push(formatMessage({
+            id: 'user_profile.roleTitle.team_admin',
+            defaultMessage: 'Team Admin',
+        }))
+    }
+    if (isChannelAdmin) {
+        badges.push(formatMessage({
+            id: 'user_profile.roleTitle.channel_admin',
+            defaultMessage: 'Channel Admin',
+        }))
+    }
 
     useEffect(() => {
         if (!localRef?.current) {
