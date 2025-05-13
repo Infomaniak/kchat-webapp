@@ -8,6 +8,7 @@ import React, {
     useEffect,
     useRef,
 } from 'react';
+import {useIntl} from 'react-intl';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -15,7 +16,6 @@ import type {UserProfile} from '@mattermost/types/users';
 import {isGuest, isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {getHistory} from '../../utils/browser_history';
-import {useIntl} from "react-intl";
 
 export interface ProfilePopoverAdditionalProps {
     disabled?: boolean;
@@ -107,7 +107,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
         src,
         user,
         isTeamAdmin,
-        isChannelAdmin
+        isChannelAdmin,
     } = props;
 
     const badges = [];
@@ -118,30 +118,31 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
         badges.push(formatMessage({
             id: 'tag.default.bot',
             defaultMessage: 'BOT',
-        }))
+        }));
     }
     if (isSystemAdmin(user?.roles)) {
         badges.push(formatMessage({
             id: 'user_profile.roleTitle.system_admin',
             defaultMessage: 'System Admin',
-        }))
+        }));
     }
     if (isTeamAdmin) {
         badges.push(formatMessage({
             id: 'user_profile.roleTitle.team_admin',
             defaultMessage: 'Team Admin',
-        }))
+        }));
     }
     if (isChannelAdmin) {
         badges.push(formatMessage({
             id: 'user_profile.roleTitle.channel_admin',
             defaultMessage: 'Channel Admin',
-        }))
+        }));
     }
 
     useEffect(() => {
-        if (!localRef?.current) {
-            return;
+        const current = localRef?.current;
+        if (!current) {
+            return () => {};
         }
 
         const handleQuickActionClick = (e: CustomEvent) => {
@@ -157,12 +158,12 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             }
         };
 
-        localRef.current.addEventListener('close', returnFocus);
-        localRef.current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
-        localRef.current.badges = badges;
+        current.addEventListener('close', returnFocus);
+        current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
+        current.badges = badges;
         return () => {
-            localRef.current?.removeEventListener('close', returnFocus);
-            localRef.current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
+            current?.removeEventListener('close', returnFocus);
+            current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         };
     }, []);
 
@@ -190,7 +191,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                 user-name={overwriteName || user?.first_name + ' ' + user?.last_name}
                 style={triggerComponentStyle}
             >
-                <span slot="trigger">{children}</span>
+                <span slot='trigger'>{children}</span>
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
             </wc-contact-sheet>
