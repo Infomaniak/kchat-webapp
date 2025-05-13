@@ -29,7 +29,7 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
     const ref = useRef<HTMLAnchorElement>(null);
 
     const [show, setShow] = useState(false);
-    const [placement, setPlacement] = useState<"bottom" | "top" | "right" | "left" | undefined>(('top'));
+    const [placement, setPlacement] = useState<'bottom' | 'top' | 'right' | 'left' | undefined>(('top'));
     const [target, setTarget] = useState<HTMLAnchorElement | undefined>();
 
     const showOverlay = (target?: HTMLAnchorElement) => {
@@ -77,6 +77,7 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
             },
         ));
     };
+
     return (
         <>
             <span

@@ -17,7 +17,6 @@ type Props = {
     status?: string;
     className?: string;
     type?: string;
-    slot?: string;
 }
 
 const StatusIcon = ({
@@ -25,7 +24,6 @@ const StatusIcon = ({
     button = false,
     status,
     type,
-    slot,
 }: Props) => {
     if (!status) {
         return null;
@@ -39,45 +37,21 @@ const StatusIcon = ({
 
     if (type === 'avatar') {
         if (status === 'online') {
-            return (<StatusOnlineAvatarIcon
-                slot={slot}
-                className={iconClassName}
-            />);
+            return <StatusOnlineAvatarIcon className={iconClassName}/>;
         } else if (status === 'away') {
-            return (<StatusAwayAvatarIcon
-                slot={slot}
-                className={iconClassName}
-            />);
+            return <StatusAwayAvatarIcon className={iconClassName}/>;
         } else if (status === 'dnd') {
-            return (<StatusDndAvatarIcon
-                slot={slot}
-                className={iconClassName}
-            />);
+            return <StatusDndAvatarIcon className={iconClassName}/>;
         }
-        return (<StatusOfflineAvatarIcon
-            slot={slot}
-            className={iconClassName}
-        />);
+        return <StatusOfflineAvatarIcon className={iconClassName}/>;
     } else if (status === 'online') {
-        return (<StatusOnlineIcon
-            slot={slot}
-            className={iconClassName}
-        />);
+        return <StatusOnlineIcon className={iconClassName}/>;
     } else if (status === 'away') {
-        return (<StatusAwayIcon
-            slot={slot}
-            className={iconClassName}
-        />);
+        return <StatusAwayIcon className={iconClassName}/>;
     } else if (status === 'dnd') {
-        return (<StatusDndIcon
-            slot={slot}
-            className={iconClassName}
-        />);
+        return <StatusDndIcon className={iconClassName}/>;
     }
-    return (<StatusOfflineIcon
-        slot={slot}
-        className={iconClassName}
-    />);
+    return <StatusOfflineIcon className={iconClassName}/>;
 };
 
 export default memo(StatusIcon);

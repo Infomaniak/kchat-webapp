@@ -81,7 +81,8 @@ export default function UserProfile({
                 overwriteIcon={overwriteIcon}
                 overwriteName={overwriteName}
             >
-                <div >{name}</div>
+                {/*TODO FIND  USAGE AND TEST*/}
+                {name}
             </ProfilePopover>
             {userIsRemote &&
             <SharedUserIndicator
