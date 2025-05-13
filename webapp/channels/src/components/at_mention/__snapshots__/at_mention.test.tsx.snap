@@ -93,10 +93,9 @@ exports[`components/AtMention should match snapshot when mentioning all with mix
 
 exports[`components/AtMention should match snapshot when mentioning current user 1`] = `
 <Fragment>
-  <ProfilePopoverController
+  <Connect(ProfilePopoverWcController)
     returnFocus={[Function]}
     src="/api/v4/users/abc1/image"
-    triggerComponentAs="button"
     triggerComponentClass="style--none mention--highlight"
     userId="abc1"
   >
@@ -105,16 +104,15 @@ exports[`components/AtMention should match snapshot when mentioning current user
     >
       @First Last
     </span>
-  </ProfilePopoverController>
+  </Connect(ProfilePopoverWcController)>
 </Fragment>
 `;
 
 exports[`components/AtMention should match snapshot when mentioning user 1`] = `
 <Fragment>
-  <ProfilePopoverController
+  <Connect(ProfilePopoverWcController)
     returnFocus={[Function]}
     src="/api/v4/users/abc2/image"
-    triggerComponentAs="button"
     triggerComponentClass="style--none"
     userId="abc2"
   >
@@ -123,16 +121,15 @@ exports[`components/AtMention should match snapshot when mentioning user 1`] = `
     >
       @Nick
     </span>
-  </ProfilePopoverController>
+  </Connect(ProfilePopoverWcController)>
 </Fragment>
 `;
 
 exports[`components/AtMention should match snapshot when mentioning user containing and followed by punctuation 1`] = `
 <Fragment>
-  <ProfilePopoverController
+  <Connect(ProfilePopoverWcController)
     returnFocus={[Function]}
     src="/api/v4/users/abc3/image"
-    triggerComponentAs="button"
     triggerComponentClass="style--none"
     userId="abc3"
   >
@@ -141,17 +138,16 @@ exports[`components/AtMention should match snapshot when mentioning user contain
     >
       @Dot Matrix
     </span>
-  </ProfilePopoverController>
+  </Connect(ProfilePopoverWcController)>
   .
 </Fragment>
 `;
 
 exports[`components/AtMention should match snapshot when mentioning user containing punctuation 1`] = `
 <Fragment>
-  <ProfilePopoverController
+  <Connect(ProfilePopoverWcController)
     returnFocus={[Function]}
     src="/api/v4/users/abc3/image"
-    triggerComponentAs="button"
     triggerComponentClass="style--none"
     userId="abc3"
   >
@@ -160,16 +156,15 @@ exports[`components/AtMention should match snapshot when mentioning user contain
     >
       @Dot Matrix
     </span>
-  </ProfilePopoverController>
+  </Connect(ProfilePopoverWcController)>
 </Fragment>
 `;
 
 exports[`components/AtMention should match snapshot when mentioning user followed by punctuation 1`] = `
 <Fragment>
-  <ProfilePopoverController
+  <Connect(ProfilePopoverWcController)
     returnFocus={[Function]}
     src="/api/v4/users/abc2/image"
-    triggerComponentAs="button"
     triggerComponentClass="style--none"
     userId="abc2"
   >
@@ -178,17 +173,16 @@ exports[`components/AtMention should match snapshot when mentioning user followe
     >
       @Nick
     </span>
-  </ProfilePopoverController>
+  </Connect(ProfilePopoverWcController)>
   ...
 </Fragment>
 `;
 
 exports[`components/AtMention should match snapshot when mentioning user with different teammate name display setting 1`] = `
 <Fragment>
-  <ProfilePopoverController
+  <Connect(ProfilePopoverWcController)
     returnFocus={[Function]}
     src="/api/v4/users/abc2/image"
-    triggerComponentAs="button"
     triggerComponentClass="style--none"
     userId="abc2"
   >
@@ -197,16 +191,15 @@ exports[`components/AtMention should match snapshot when mentioning user with di
     >
       @user1
     </span>
-  </ProfilePopoverController>
+  </Connect(ProfilePopoverWcController)>
 </Fragment>
 `;
 
 exports[`components/AtMention should match snapshot when mentioning user with mixed case 1`] = `
 <Fragment>
-  <ProfilePopoverController
+  <Connect(ProfilePopoverWcController)
     returnFocus={[Function]}
     src="/api/v4/users/abc2/image"
-    triggerComponentAs="button"
     triggerComponentClass="style--none"
     userId="abc2"
   >
@@ -215,7 +208,7 @@ exports[`components/AtMention should match snapshot when mentioning user with mi
     >
       @Nick
     </span>
-  </ProfilePopoverController>
+  </Connect(ProfilePopoverWcController)>
 </Fragment>
 `;
 
