@@ -30,6 +30,7 @@ export interface ProfilePopoverAdditionalProps {
     userStatus?: string;
     isTeamAdmin?: boolean;
     isChannelAdmin?: boolean;
+    channelId?: string
 }
 
 export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
@@ -111,7 +112,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
         isChannelAdmin,
     } = props;
 
-    const badges = [];
+    const badges: string[] = [];
     const localRef = useRef<WcContactSheetElement | undefined>(undefined);
     const {formatMessage} = useIntl();
 
@@ -121,7 +122,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             defaultMessage: 'BOT',
         }));
     }
-    if (isSystemAdmin(user?.roles)) {
+    if (user?.roles && isSystemAdmin(user?.roles)) {
         badges.push(formatMessage({
             id: 'user_profile.roleTitle.system_admin',
             defaultMessage: 'System Admin',
@@ -197,7 +198,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                 user-name={overwriteName || user?.first_name + ' ' + user?.last_name}
                 style={triggerComponentStyle}
             >
-                <span slot='trigger'>{children}</span>
+                <span slot='trigger' className={triggerComponentClass}>{children}</span>
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
             </wc-contact-sheet>
