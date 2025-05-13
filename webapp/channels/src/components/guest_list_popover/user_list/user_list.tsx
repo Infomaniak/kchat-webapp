@@ -74,7 +74,6 @@ const UserListProfiles: FC<Props> = ({
 
         return (
             <UserListItem
-
                 className='group-member-list_item'
                 first={index === 0}
                 key={user.id}

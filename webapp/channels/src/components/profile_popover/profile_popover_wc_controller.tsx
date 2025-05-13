@@ -2,29 +2,30 @@
 // See LICENSE.txt for license information.
 import './profile_popover.scss';
 import type {
-    ReactNode
+    ReactNode,
 } from 'react';
 import React, {
     useEffect,
     useRef,
 } from 'react';
 
+import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {isGuest} from 'mattermost-redux/utils/user_utils';
+
 import {getHistory} from '../../utils/browser_history';
-import {isGuest} from "mattermost-redux/utils/user_utils";
-import type {Channel} from "@mattermost/types/channels";
 
 export interface ProfilePopoverAdditionalProps {
     disabled?: boolean;
-    currentTeamAccountId?: number,
-    currentTeamName?: string
+    currentTeamAccountId?: number;
+    currentTeamName?: string;
     size?: 'md' | 'lg' | 'xl';
-    isExternal?: boolean
-    actions? :any,
-    currentUser?: UserProfile,
-    user?: UserProfile,
-    userStatus?: string,
+    isExternal?: boolean;
+    actions?: any;
+    currentUser?: UserProfile;
+    user?: UserProfile;
+    userStatus?: string;
 }
 
 export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
@@ -82,7 +83,6 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     onToggle?: (isMounted: boolean) => void;
 }
 
-
 export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void};
 
 export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
@@ -105,7 +105,6 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
         user,
     } = props;
 
-
     const localRef = useRef<WcContactSheetElement | undefined>(undefined);
 
     useEffect(() => {
@@ -121,7 +120,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                 e.preventDefault();
             }
             if (option.id === 'start-call') {
-                getHistory().push(`/${currentTeamName}/messages/@${user?.username}?call=true`)
+                getHistory().push(`/${currentTeamName}/messages/@${user?.username}?call=true`);
                 e.preventDefault();
             }
         };
@@ -134,7 +133,6 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             localRef.current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         };
     }, []);
-
 
     return (
         <>
@@ -169,8 +167,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     );
 };
 
-
-function cloneThroughFragments(children: React.ReactNode) : React.ReactNode {
+function cloneThroughFragments(children: React.ReactNode): React.ReactNode {
     return React.Children.map(children, (c) => {
         if (React.isValidElement(c)) {
             if (c.type === React.Fragment) {
