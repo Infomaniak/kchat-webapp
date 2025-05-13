@@ -2,10 +2,7 @@ wc-contact-sheet {
     cursor: pointer;
     padding: 0;
     display: inline-block;
-
-    span {
-        display: block;
-    }
+    max-width: 100%;
 
     &.full-width {
         min-width: 100%;
