@@ -133,13 +133,12 @@ const Member = ({className, channel, member, index, totalUsers, editing, actions
                     />
                 </Avatar>
                 <ProfilePopover
-                    user={member.user}
-                    overwriteIcon={userProfileSrc}
+                    userId={member.user.id}
+                    src={userProfileSrc}
                     hideStatus={member.user.is_bot}
-
                     triggerComponentClass='profileSpan_userInfo'
                 >
-                    <DisplayName slot='trigger'>
+                    <DisplayName >
                         {member.displayName}
                         {isGuest(member.user.roles) && <GuestTag/>}
                         {member.user.remote_id &&

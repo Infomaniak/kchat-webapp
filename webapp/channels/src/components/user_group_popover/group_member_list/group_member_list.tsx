@@ -186,11 +186,11 @@ const GroupMemberList = (props: Props) => {
                     role='listitem'
                 >
                     <ProfilePopover
-                        user={user}
-                        overwriteIcon={Utils.imageURLForUser(user?.id ?? '')}
+                        userId={user.id}
+                        src={Utils.imageURLForUser(user?.id ?? '')}
                         hideStatus={user.is_bot}
                     >
-                        <UserButton slot='trigger'>
+                        <UserButton>
                             <span className='status-wrapper'>
                                 <Avatar
                                     username={user.username}

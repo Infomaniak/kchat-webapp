@@ -85,7 +85,6 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
                 ref={ref}
                 aria-haspopup='dialog'
                 role='button'
-                slot='trigger'
                 tabIndex={0}
             >
                 <FormattedMessage

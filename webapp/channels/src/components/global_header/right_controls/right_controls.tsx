@@ -124,7 +124,6 @@ const RightControls = (): JSX.Element => {
     const trigger = (
         <span
             className='header-icon'
-            slot='trigger'
             style={{height: 45, display: 'flex'}}
         >
             <IconButton
