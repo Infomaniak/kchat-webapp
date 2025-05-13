@@ -45,26 +45,28 @@ function ProfilePicture(props: Props) {
 
     const hideStatus = props.isBot || props.fromAutoResponder || props.fromWebhook;
     if (props.userId) {
-        const user = useSelector((state: GlobalState) => selectUser(state, props.userId!)) as UserProfile | undefined;
 
         return (
             <ProfilePopover
-                user={user}
-                username={props.username}
-                hideStatus={hideStatus}
-                triggerComponentClass={classNames('status-wrapper style--none', props.wrapperClass)}
-                overwriteIcon={props.overwriteIcon || profileSrc}
-                overwriteName={props.overwriteName}
                 triggerComponentStyle={{
                     borderRadius: '50%',
                     width: `${getAvatarWidth(props?.size ?? 'md')}px`,
                     height: `${getAvatarWidth(props?.size ?? 'md')}px`,
                 } as CSSStyleDeclaration}
+                triggerComponentClass={classNames('status-wrapper style--none', props.wrapperClass)}
+                userId={props.userId}
+                src={profileSrc}
+                username={props.username}
+                channelId={props.channelId}
+                hideStatus={hideStatus}
+                overwriteIcon={props.overwriteIcon}
+                overwriteName={props.overwriteName}
+                fromWebhook={props.fromWebhook} // TODO find usage
+
             >
                 <>
                     <span
                         className={profileIconClass}
-                        slot='trigger'
                     >
                         <Avatar
                             username={props.username}

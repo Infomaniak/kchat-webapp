@@ -56,16 +56,16 @@ function UserAvatar({
         >
             <ProfilePopover
                 disabled={!displayProfileOverlay}
-                user={user}
-                overwriteIcon={profilePictureURL}
-            >
+                userId={userId}
+                src={profilePictureURL}
+             >
                 <SimpleTooltip
                     id={`name-${userId}`}
                     content={name}
                     {...overlayProps}
                 >
                     <Status
-                        slot='trigger'
+
                         showStatus={displayProfileStatus}
                         registrant={status}
                     >
