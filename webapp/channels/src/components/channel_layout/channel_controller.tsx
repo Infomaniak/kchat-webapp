@@ -10,7 +10,6 @@ import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entitie
 
 import {addVisibleUsersInCurrentChannelAndSelfToStatusPoll} from 'actions/status_actions';
 import {loadStatusesForChannelAndSidebar} from 'actions/status_actions';
-import store from 'stores/redux_store';
 
 import {makeAsyncComponent} from 'components/async_load';
 import CenterChannel from 'components/channel_layout/center_channel';
@@ -21,7 +20,6 @@ import CRTPostsChannelResetWatcher from 'components/threading/channel_threads/po
 import UnreadsStatusHandler from 'components/unreads_status_handler';
 
 import {Constants} from 'utils/constants';
-import {dumpReduxState} from 'utils/state_anonymizer';
 import {isInternetExplorer, isEdge} from 'utils/user_agent';
 
 import Pluggable from 'plugins/pluggable';
@@ -37,20 +35,9 @@ type Props = {
     headerRef: React.RefObject<HTMLDivElement>;
 }
 
-declare global {
-    interface Window {
-        dumpReduxState: () => void;
-    }
-}
-
 export default function ChannelController(props: Props) {
     const enabledUserStatuses = useSelector(getIsUserStatusesConfigEnabled);
     const dispatch = useDispatch();
-
-    window.dumpReduxState = () => {
-        const state = store.getState();
-        dumpReduxState(state);
-    };
 
     useEffect(() => {
         const isMsBrowser = isInternetExplorer() || isEdge();
