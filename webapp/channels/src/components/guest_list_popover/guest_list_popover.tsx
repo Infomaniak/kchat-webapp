@@ -125,6 +125,7 @@ const GuestListPopover: FC<Props> = ({
                     </Subtitle>
                 </Header>
                 <UserListProfiles
+                    channelId={props.channelId}
                     hide={hide}
                     profiles={profiles}
                     membersCount={membersCount}
