@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useRef} from 'react';
+import React, {memo} from 'react';
 import type {ComponentProps} from 'react';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
@@ -37,13 +37,13 @@ interface MMOverlayTrigger extends BaseOverlayTrigger {
 const displayNameGetter = makeDisplayNameGetter();
 
 function UserAvatar({
-                        userId,
-                        overlayProps,
-                        displayProfileOverlay,
-                        displayProfileStatus,
-                        status,
-                        ...props
-                    }: Props) {
+    userId,
+    overlayProps,
+    displayProfileOverlay,
+    displayProfileStatus,
+    status,
+    ...props
+}: Props) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
 
