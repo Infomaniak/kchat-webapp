@@ -5,8 +5,6 @@ import {FormattedMessage} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {Client4} from 'mattermost-redux/client';
-
 import GuestListPopover from 'components/guest_list_popover';
 import {getListHeight} from 'components/guest_list_popover/user_list/styled';
 import {MAX_LIST_HEIGHT, VIEWPORT_SCALE_FACTOR} from 'components/guest_list_popover/user_list/user_list';
