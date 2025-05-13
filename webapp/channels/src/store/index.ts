@@ -3,7 +3,7 @@
 
 import baseLocalForage from 'localforage';
 import {extendPrototype} from 'localforage-observable';
-import type {Store} from 'redux';
+import type {Store, StoreEnhancer} from 'redux';
 import type {Persistor} from 'redux-persist';
 import {persistStore, REHYDRATE} from 'redux-persist';
 import Observable from 'zen-observable';
@@ -34,12 +34,13 @@ window.Observable = Observable;
 
 const localForage = extendPrototype(baseLocalForage);
 
-export default function configureStore(preloadedState?: DeepPartial<GlobalState>, additionalReducers?: Record<string, any>): Store<GlobalState> {
+export default function configureStore(preloadedState?: DeepPartial<GlobalState>, additionalReducers?: Record<string, any>, sentryReduxEnhancer?: StoreEnhancer[]): Store<GlobalState> {
     const reducers = additionalReducers ? {...appReducers, ...additionalReducers} : appReducers;
     const store = configureServiceStore({
         appReducers: reducers,
         getAppReducers,
         preloadedState,
+        sentryReduxEnhancer,
     });
 
     localForage.ready().then(() => {

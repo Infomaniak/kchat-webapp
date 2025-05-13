@@ -9,15 +9,17 @@ import type {StoreEnhancer} from 'redux';
 
 import configureStore from 'store';
 
-const sentryReduxEnhancer = Sentry.createReduxEnhancer({
+import {transformStateForSentry} from 'utils/sentry';
 
+const sentryReduxEnhancer: StoreEnhancer = Sentry.createReduxEnhancer({
+    stateTransformer: transformStateForSentry,
 });
 
-const store = configureStore({
-    enhancers: (getDefaultEnhancers: () => StoreEnhancer[]) => {
-        return getDefaultEnhancers().concat(sentryReduxEnhancer);
-    },
-});
+const store = configureStore(
+    undefined,
+    undefined,
+    [sentryReduxEnhancer],
+);
 
 // Export the store to simplify debugging in production environments. This is not a supported API,
 // and should not be relied upon by plugins.

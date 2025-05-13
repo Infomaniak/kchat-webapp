@@ -9,7 +9,6 @@ import {cleanUpStatusAndProfileFetchingPoll} from 'mattermost-redux/actions/stat
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 
 import {addVisibleUsersInCurrentChannelAndSelfToStatusPoll} from 'actions/status_actions';
-import {loadStatusesForChannelAndSidebar} from 'actions/status_actions';
 
 import {makeAsyncComponent} from 'components/async_load';
 import CenterChannel from 'components/channel_layout/center_channel';

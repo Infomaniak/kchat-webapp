@@ -544,6 +544,10 @@ export default class Root extends React.PureComponent<Props, State> {
         injectWebcomponentInit();
         this.initiateMeRequests();
 
+        window.addEventListener('emitReportSubmitted', (event) => {
+            this.handleWebComponentReportSubmitted(event as CustomEvent<{ ticketUrl: string }>);
+        });
+
         // Force logout of all tabs if one tab is logged out
         window.addEventListener('storage', this.handleLogoutLoginSignal);
 
@@ -574,6 +578,23 @@ export default class Root extends React.PureComponent<Props, State> {
 
     handleLogoutLoginSignal = (e: StorageEvent) => {
         this.props.actions.handleLoginLogoutSignal(e);
+    };
+
+    handleWebComponentReportSubmitted = (redmineEvent: CustomEvent<{ ticketUrl: string }>) => {
+        const message = `Redmine created: ${redmineEvent.detail.ticketUrl}`;
+
+        if (redmineEvent) {
+            Sentry.captureMessage(message, {
+                level: 'info',
+                extra: {
+                    webComponentDetails: redmineEvent,
+                },
+                tags: {
+                    source: 'webcomponent',
+                    eventType: 'reportSubmitted',
+                },
+            });
+        }
     };
 
     // handleWindowResizeEvent = throttle(() => {
