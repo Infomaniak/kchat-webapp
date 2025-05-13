@@ -58,14 +58,13 @@ function UserAvatar({
                 disabled={!displayProfileOverlay}
                 userId={userId}
                 src={profilePictureURL}
-             >
+            >
                 <SimpleTooltip
                     id={`name-${userId}`}
                     content={name}
                     {...overlayProps}
                 >
                     <Status
-
                         showStatus={displayProfileStatus}
                         registrant={status}
                     >
