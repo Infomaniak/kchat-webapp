@@ -30,14 +30,15 @@ type Props = {
     channelId?: string;
 }
 
-function getIsTeamAdmin(state: GlobalState, userId: string) {
+export function getIsTeamAdmin(state: GlobalState, userId: string) {
     const team = getCurrentTeam(state);
     const teamMember = team ? getTeamMember(state, team.id, userId) : undefined;
 
     return Boolean(teamMember && teamMember.scheme_admin);
 }
 
-function getIsChannelAdmin(state: GlobalState, userId: string, channelId?: string) {
+export function getIsChannelAdmin(state: GlobalState, userId: string, channelId?: string) {
+    if (userId === '9860ee45-70aa-4a06-ba9c-8b68d0bce4fc') debugger;
     if (!channelId) {
         return false;
     }
