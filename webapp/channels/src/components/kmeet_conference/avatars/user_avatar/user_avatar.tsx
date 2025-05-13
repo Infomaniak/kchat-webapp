@@ -37,32 +37,33 @@ interface MMOverlayTrigger extends BaseOverlayTrigger {
 const displayNameGetter = makeDisplayNameGetter();
 
 function UserAvatar({
-    userId,
-    overlayProps,
-    displayProfileOverlay,
-    displayProfileStatus,
-    status,
-    ...props
-}: Props) {
+                        userId,
+                        overlayProps,
+                        displayProfileOverlay,
+                        displayProfileStatus,
+                        status,
+                        ...props
+                    }: Props) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
 
     const profilePictureURL = userId ? imageURLForUser(userId) : '';
 
     return (
-        <RoundButton
-            className={'style--none'}
-            onClick={(e) => e.stopPropagation()}
+
+        <ProfilePopover
+            disabled={!displayProfileOverlay}
+            userId={userId}
+            src={profilePictureURL}
         >
-            <ProfilePopover
-                disabled={!displayProfileOverlay}
-                userId={userId}
-                src={profilePictureURL}
+            <SimpleTooltip
+                id={`name-${userId}`}
+                content={name}
+                {...overlayProps}
             >
-                <SimpleTooltip
-                    id={`name-${userId}`}
-                    content={name}
-                    {...overlayProps}
+                <RoundButton
+                    className={'style--none'}
+                    onClick={(e) => e.stopPropagation()}
                 >
                     <Status
                         showStatus={displayProfileStatus}
@@ -74,9 +75,10 @@ function UserAvatar({
                             {...props}
                         />
                     </Status>
-                </SimpleTooltip>
-            </ProfilePopover>
-        </RoundButton>
+                </RoundButton>
+
+            </SimpleTooltip>
+        </ProfilePopover>
     );
 }
 
