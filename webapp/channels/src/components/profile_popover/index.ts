@@ -8,6 +8,8 @@ import type {UserProfile} from '@mattermost/types/users';
 import {getCurrentTeamAccountId, getCurrentTeamName} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, getStatusForUserId, getUser as selectUser} from 'mattermost-redux/selectors/entities/users';
 
+import {getDefaultChannelId} from './profile_popover';
+import {getIsChannelAdmin, getIsTeamAdmin} from './profile_popover_title';
 import type {
     ProfilePopoverAdditionalProps,
     ProfilePopoverProps} from './profile_popover_wc_controller';
@@ -17,8 +19,6 @@ import {
 
 import type {GlobalState} from '../../types/store';
 import {UserStatuses} from '../../utils/constants';
-import {getIsChannelAdmin,getIsTeamAdmin} from "./profile_popover_title";
-import {getDefaultChannelId} from "./profile_popover";
 
 function mapStateToProps(state: GlobalState, ownProps: ProfilePopoverProps): ProfilePopoverAdditionalProps {
     ownProps.channelId = ownProps.channelId || getDefaultChannelId(state);
@@ -28,7 +28,7 @@ function mapStateToProps(state: GlobalState, ownProps: ProfilePopoverProps): Pro
     const user = selectUser(state, ownProps.userId) as UserProfile | undefined;
     const userStatus = (ownProps.userId && getStatusForUserId(state, ownProps.userId)) || UserStatuses.OFFLINE;
 
-    const isTeamAdmin = getIsTeamAdmin(state, ownProps.userId)
+    const isTeamAdmin = getIsTeamAdmin(state, ownProps.userId);
     const isChannelAdmin = getIsChannelAdmin(state, ownProps.userId, ownProps.channelId);
 
     return {
@@ -39,7 +39,7 @@ function mapStateToProps(state: GlobalState, ownProps: ProfilePopoverProps): Pro
         user,
         userStatus,
         isTeamAdmin,
-        isChannelAdmin
+        isChannelAdmin,
     };
 }
 
