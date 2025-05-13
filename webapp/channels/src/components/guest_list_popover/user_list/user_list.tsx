@@ -74,7 +74,7 @@ const UserListProfiles: FC<Props> = ({
 
         return (
             <UserListItem
-                slot='trigger'
+
                 className='group-member-list_item'
                 first={index === 0}
                 key={user.id}
@@ -123,8 +123,8 @@ const UserListProfiles: FC<Props> = ({
     const renderContent = () => {
         return members.map((member, idx) => (
             <ProfilePopover
-                user={member.user}
-                triggerComponentStyle={{minWidth: '100%'}}
+                userId={member.user?.id}
+                triggerComponentStyle={{minWidth: '100%'} as CSSStyleDeclaration}
                 hideStatus={true}
             >
                 <Item
