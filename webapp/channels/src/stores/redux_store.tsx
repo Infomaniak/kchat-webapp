@@ -4,11 +4,14 @@
 // This is a temporary store while we are transitioning from Flux to Redux. This file exports
 // the configured Redux store for use by actions and selectors.
 
+import * as Sentry from '@sentry/react';
 import type {StoreEnhancer} from 'redux';
 
 import configureStore from 'store';
 
-import {sentryReduxEnhancer} from 'utils/sentry';
+const sentryReduxEnhancer = Sentry.createReduxEnhancer({
+
+});
 
 const store = configureStore({
     enhancers: (getDefaultEnhancers: () => StoreEnhancer[]) => {
