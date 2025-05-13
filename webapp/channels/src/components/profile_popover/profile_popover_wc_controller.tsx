@@ -16,6 +16,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import {isGuest, isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {getHistory} from '../../utils/browser_history';
+import {copyToClipboard} from "../../utils/utils";
 
 export interface ProfilePopoverAdditionalProps {
     disabled?: boolean;
@@ -154,6 +155,11 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             }
             if (option.id === 'start-call') {
                 getHistory().push(`/${currentTeamName}/messages/@${user?.username}?call=true`);
+                e.preventDefault();
+            }
+
+            if (option.id === 'copy-kchat-user-id') {
+                copyToClipboard(user.id)
                 e.preventDefault();
             }
         };
