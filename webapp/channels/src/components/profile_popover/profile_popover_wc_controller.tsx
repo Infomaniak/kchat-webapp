@@ -15,6 +15,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {getHistory} from '../../utils/browser_history';
+import {useIntl} from "react-intl";
 
 export interface ProfilePopoverAdditionalProps {
     disabled?: boolean;
@@ -174,15 +175,3 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
         </>
     );
 };
-
-function cloneThroughFragments(children: React.ReactNode): React.ReactNode {
-    return React.Children.map(children, (c) => {
-        if (React.isValidElement(c)) {
-            if (c.type === React.Fragment) {
-                return cloneThroughFragments(c.props.children);
-            }
-            return React.cloneElement(c, {...c.props, slot: 'trigger'});
-        }
-        return c;
-    });
-}
