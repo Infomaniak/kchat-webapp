@@ -46,7 +46,7 @@ const UserListProfiles: FC<Props> = ({
     teamUrl,
     membersCount,
     hide,
-    channelId
+    channelId,
 }) => {
     const history = useHistory();
 
@@ -124,6 +124,7 @@ const UserListProfiles: FC<Props> = ({
     const renderContent = () => {
         return members.map((member, idx) => (
             <ProfilePopover
+                key={member.user.id}
                 userId={member.user?.id}
                 channelId={channelId}
                 triggerComponentStyle={{minWidth: '100%'} as CSSStyleDeclaration}
