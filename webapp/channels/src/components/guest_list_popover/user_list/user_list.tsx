@@ -27,6 +27,7 @@ export type GroupMember = {
 }
 
 export type Props = {
+    channelId: string;
     members: GroupMember[];
     teamUrl?: string;
     membersCount: number;
@@ -45,6 +46,7 @@ const UserListProfiles: FC<Props> = ({
     teamUrl,
     membersCount,
     hide,
+    channelId
 }) => {
     const history = useHistory();
 
@@ -123,6 +125,7 @@ const UserListProfiles: FC<Props> = ({
         return members.map((member, idx) => (
             <ProfilePopover
                 userId={member.user?.id}
+                channelId={channelId}
                 triggerComponentStyle={{minWidth: '100%'} as CSSStyleDeclaration}
                 hideStatus={true}
             >
