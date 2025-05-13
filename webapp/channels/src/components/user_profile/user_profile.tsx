@@ -81,7 +81,6 @@ export default function UserProfile({
                 overwriteIcon={overwriteIcon}
                 overwriteName={overwriteName}
             >
-                {/*TODO FIND  USAGE AND TEST*/}
                 {name}
             </ProfilePopover>
             {userIsRemote &&
