@@ -17,20 +17,29 @@ import {
 
 import type {GlobalState} from '../../types/store';
 import {UserStatuses} from '../../utils/constants';
+import {getIsChannelAdmin,getIsTeamAdmin} from "./profile_popover_title";
+import {getDefaultChannelId} from "./profile_popover";
 
 function mapStateToProps(state: GlobalState, ownProps: ProfilePopoverProps): ProfilePopoverAdditionalProps {
+    ownProps.channelId = ownProps.channelId || getDefaultChannelId(state);
     const currentUser = getCurrentUser(state);
     const currentTeamAccountId = getCurrentTeamAccountId(state);
     const currentTeamName = getCurrentTeamName(state);
     const user = selectUser(state, ownProps.userId) as UserProfile | undefined;
     const userStatus = (ownProps.userId && getStatusForUserId(state, ownProps.userId)) || UserStatuses.OFFLINE;
 
+    const isTeamAdmin = getIsTeamAdmin(state, ownProps.userId)
+    const isChannelAdmin = getIsChannelAdmin(state, ownProps.userId, ownProps.channelId);
+
     return {
+        channelId: ownProps.channelId,
         currentTeamAccountId,
         currentTeamName,
         currentUser,
         user,
         userStatus,
+        isTeamAdmin,
+        isChannelAdmin
     };
 }
 
