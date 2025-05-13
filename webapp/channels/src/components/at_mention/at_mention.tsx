@@ -14,6 +14,7 @@ import {A11yCustomEventTypes} from 'utils/constants';
 import {getUserOrGroupFromMentionName} from 'utils/post_utils';
 
 import type {PropsFromRedux} from './index';
+import {Client4} from "mattermost-redux/client";
 
 type OwnProps = {
     mentionName: string;
@@ -59,13 +60,13 @@ const AtMention = (props: Props) => {
         return (
             <>
                 <ProfilePopover
-                    user={user}
-                    triggerComponentClass={classNames('style--none', {'mention--highlight': highlightMention})}
+                    userId={user.id}
+                    src={Client4.getProfilePictureUrl(user.id, user.last_picture_update)}
+                    channelId={props.channelId}
                     returnFocus={returnFocus}
                 >
                     <span
                         ref={ref}
-                        slot='trigger'
                         className='mention-link'
                     >
                         {'@' + userDisplayName}
