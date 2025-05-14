@@ -5,7 +5,8 @@ import {useCallback, useEffect, useState} from 'react';
 
 import type {NotificationPermissionNeverGranted} from 'utils/notifications';
 import {isNotificationAPISupported} from 'utils/notifications';
-import {isDesktopApp} from 'utils/user_agent';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 
 export type DesktopNotificationPermission = Exclude<NotificationPermission, typeof NotificationPermissionNeverGranted> | undefined;
 
@@ -38,6 +39,10 @@ export function useDesktopAppNotificationPermission(): [DesktopNotificationPermi
     }, []);
 
     useEffect(() => {
+        // Ik: Avoid requestion permission too early in old apps (as we ask perms for each server)
+        if (isDesktop && !isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.4.0')) {
+            return;
+        }
         if (!isDesktop || !isSupported) {
             setDesktopNotificationPermission(undefined);
         } else if (desktopNotificationPermissionGlobalState === undefined) {
