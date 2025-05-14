@@ -31,7 +31,7 @@ const PostMenu = (props: Props) => {
 
     const summarizePost = async (postId: string) => {
         try {
-            const result = await Client4.doSummarize(postId, 'kchat.bot');
+            const result = await Client4.doSummarize(postId, 'euria');
             dispatch(selectPostById(result.postid));
             Client4.viewMyChannel(result.channelid);
         } catch (error) {
