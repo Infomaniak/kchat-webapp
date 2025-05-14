@@ -65,7 +65,7 @@ const PostAttachmentContainer = (props: Props) => {
                 dispatch(focusPost(params.postId, link, currentUserId, {skipRedirectReplyPermalink: true}));
                 return;
             }
-            if (!classNames.some((className) => e.target.className.includes(className)) && e.target.id !== 'image-name-text') {
+            if (typeof e.target.className === 'string' && !classNames.some((className) => e.target.className.includes(className)) && e.target.id !== 'image-name-text') {
                 history.push(link);
             }
         }
