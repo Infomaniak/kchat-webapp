@@ -27,7 +27,7 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
                     <MailIcon />
                     <div className="bold">{('À propos de l’e-mail')}</div>
                     <div className="thin right">
-                    <Timestamp value={created_at}/>
+                    <Timestamp value={created_at * 1000}/>
                     </div>
                 </div>
                 <div className="mail_attachment__row">
