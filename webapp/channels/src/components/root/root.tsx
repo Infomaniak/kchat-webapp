@@ -527,6 +527,11 @@ export default class Root extends React.PureComponent<Props, State> {
 
         const ksuiteMode = (new URLSearchParams(window.location.search)).get('ksuite-mode');
         const spaceId = (new URLSearchParams(window.location.search)).get('space-id');
+        const sidePanelkSuite = (new URLSearchParams(window.location.search)).get('ksuite-mode=side&ws-embedded-mode=true');
+
+        if (sidePanelkSuite) {
+            storeBridgeParam('side-panel', sidePanelkSuite);
+        }
 
         if (ksuiteMode) {
             storeBridgeParam('ksuiteMode', ksuiteMode)(store.dispatch);
