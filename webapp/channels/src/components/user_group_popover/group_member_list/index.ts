@@ -15,6 +15,7 @@ import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getProfilesInGroupWithoutSorting, searchProfilesInGroupWithoutSorting} from 'mattermost-redux/selectors/entities/users';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 

@@ -18,7 +18,7 @@ import CallAccept from 'components/widgets/icons/call_accept';
 import CallHangUp from 'components/widgets/icons/call_hang_up';
 
 import {ModalIdentifiers} from 'utils/constants';
-import {ringing, stopRing} from 'utils/notification_sounds';
+import {ring, stopRing} from 'utils/notification_sounds';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {Conference} from 'types/conference';
@@ -73,36 +73,18 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
     }
 
-    // const handleClickOutsideModal = useCallback((event: any) => {
-    //     if (modalRef.current && !modalRef.current.contains(event.target)) {
-    //         onHandleDecline();
-    //     }
-    // }, [onHandleDecline]);
-
     useEffect(() => {
-        window.addEventListener('offline', () => {
-            onHandleDecline();
-        });
-
-        // document.addEventListener('click', handleClickOutsideModal);
-
-        // const timeout = setTimeout(() => {
-        //     onHandleDecline();
-        // }, 30000);
-
-        // return () => {
-        //     // document.removeEventListener('click', handleClickOutsideModal);
-        //     clearTimeout(timeout);
-        // };
+        window.addEventListener('offline', onHandleDecline);
+        return () => window.removeEventListener('offline', onHandleDecline);
     }, [onHandleDecline]);
 
     useEffect(() => {
-        ringing(isCallerCurrentUser ? 'OutgoingRing' : 'Ring');
+        ring(isCallerCurrentUser ? 'OutgoingRing' : 'Ring');
 
         return () => {
             stopRing();
         };
-    }, []);
+    }, [isCallerCurrentUser]);
 
     useEffect(() => {
         if (!caller && conference) {

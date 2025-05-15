@@ -162,7 +162,7 @@ func (f *Flow) handle(
 
 		dialogRequest := model.OpenDialogRequest{
 			TriggerId: triggerID,
-			URL:       f.pluginURL + namePath(f.name) + "/dialog",
+			URL:       "/plugins/" + f.pluginID + namePath(f.name) + "/dialog",
 			Dialog:    processDialog(b.Dialog, state.AppState),
 		}
 		dialogRequest.Dialog.State = fmt.Sprintf("%v,%v", fromName, selectedButton)
@@ -196,7 +196,7 @@ func (f *Flow) handle(
 }
 
 func (f *Flow) processButtonPostActions(post *model.Post) {
-	attachments, ok := post.GetProp("attachments").([]*model.SlackAttachment)
+	attachments, ok := post.GetProp(model.PostPropsAttachments).([]*model.SlackAttachment)
 	if !ok || len(attachments) == 0 {
 		return
 	}
@@ -205,6 +205,6 @@ func (f *Flow) processButtonPostActions(post *model.Post) {
 		if a.Integration == nil {
 			a.Integration = &model.PostActionIntegration{}
 		}
-		a.Integration.URL = f.pluginURL + namePath(f.name) + "/button"
+		a.Integration.URL = "/plugins/" + f.pluginID + namePath(f.name) + "/button"
 	}
 }

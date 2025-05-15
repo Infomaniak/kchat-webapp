@@ -9,20 +9,15 @@ import type {Channel} from '@mattermost/types/channels';
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import OverlayTrigger from 'components/overlay_trigger';
 import FollowButton from 'components/threading/common/follow_button';
-import Tooltip from 'components/tooltip';
-import CRTThreadsPaneTutorialTip
-    from 'components/tours/crt_tour/crt_threads_pane_tutorial_tip';
+import WithTooltip from 'components/with_tooltip';
 
 import {getHistory} from 'utils/browser_history';
-import Constants, {RHSStates} from 'utils/constants';
-
-import RHSHeader from 'plugins/ai/components/rhs/rhs_header';
+import {RHSStates} from 'utils/constants';
 
 import type {RhsState} from 'types/store/rhs';
 
-interface Props extends WrappedComponentProps {
+type Props = WrappedComponentProps & {
     isExpanded: boolean;
     isMobileView: boolean;
     rootPostId: string;
@@ -43,7 +38,6 @@ interface Props extends WrappedComponentProps {
     closeRightHandSide: (e?: React.MouseEvent) => void;
     toggleRhsExpanded: (e: React.MouseEvent) => void;
     setThreadFollow: (userId: string, teamId: string, threadId: string, newState: boolean) => void;
-    onChatHistoryClick?: () => void;
 }
 
 class RhsHeaderPost extends React.PureComponent<Props> {
@@ -82,12 +76,10 @@ class RhsHeaderPost extends React.PureComponent<Props> {
         const {isFollowingThread} = this.props;
         const {formatMessage} = this.props.intl;
         const closeSidebarTooltip = (
-            <Tooltip id='closeSidebarTooltip'>
-                <FormattedMessage
-                    id='rhs_header.closeSidebarTooltip'
-                    defaultMessage='Close'
-                />
-            </Tooltip>
+            <FormattedMessage
+                id='rhs_header.closeSidebarTooltip'
+                defaultMessage='Close'
+            />
         );
 
         let backToResultsTooltip;
@@ -96,52 +88,34 @@ class RhsHeaderPost extends React.PureComponent<Props> {
         case RHSStates.SEARCH:
         case RHSStates.MENTION:
             backToResultsTooltip = (
-                <Tooltip id='backToResultsTooltip'>
-                    <FormattedMessage
-                        id='rhs_header.backToResultsTooltip'
-                        defaultMessage='Back to search results'
-                    />
-                </Tooltip>
+                <FormattedMessage
+                    id='rhs_header.backToResultsTooltip'
+                    defaultMessage='Back to search results'
+                />
             );
             break;
         case RHSStates.FLAG:
             backToResultsTooltip = (
-                <Tooltip id='backToResultsTooltip'>
-                    <FormattedMessage
-                        id='rhs_header.backToFlaggedTooltip'
-                        defaultMessage='Back to saved messages'
-                    />
-                </Tooltip>
+                <FormattedMessage
+                    id='rhs_header.backToFlaggedTooltip'
+                    defaultMessage='Back to saved messages'
+                />
             );
             break;
         case RHSStates.PIN:
             backToResultsTooltip = (
-                <Tooltip id='backToResultsTooltip'>
-                    <FormattedMessage
-                        id='rhs_header.backToPinnedTooltip'
-                        defaultMessage='Back to pinned messages'
-                    />
-                </Tooltip>
+                <FormattedMessage
+                    id='rhs_header.backToPinnedTooltip'
+                    defaultMessage='Back to pinned messages'
+                />
             );
             break;
         }
 
-        const expandSidebarTooltip = (
-            <Tooltip id='expandSidebarTooltip'>
-                <FormattedMessage
-                    id='rhs_header.expandSidebarTooltip'
-                    defaultMessage='Expand the right sidebar'
-                />
-                <KeyboardShortcutSequence
-                    shortcut={KEYBOARD_SHORTCUTS.navExpandSidebar}
-                    hideDescription={true}
-                    isInsideTooltip={true}
-                />
-            </Tooltip>
-        );
-
-        const shrinkSidebarTooltip = (
-            <Tooltip id='shrinkSidebarTooltip'>
+        //rhsHeaderTooltipContent contains tooltips content for expand or shrink sidebarTooltip.
+        // if props.isExpanded is true, defaultMessage would feed from 'shrinkTooltip', else 'expandTooltip'
+        const rhsHeaderTooltipContent = this.props.isExpanded ? (
+            <>
                 <FormattedMessage
                     id='rhs_header.collapseSidebarTooltip'
                     defaultMessage='Collapse the right sidebar'
@@ -151,17 +125,27 @@ class RhsHeaderPost extends React.PureComponent<Props> {
                     hideDescription={true}
                     isInsideTooltip={true}
                 />
-            </Tooltip>
+            </>
+        ) : (
+            <>
+                <FormattedMessage
+                    id='rhs_header.expandSidebarTooltip'
+                    defaultMessage='Expand the right sidebar'
+                />
+                <KeyboardShortcutSequence
+                    shortcut={KEYBOARD_SHORTCUTS.navExpandSidebar}
+                    hideDescription={true}
+                    isInsideTooltip={true}
+                />
+            </>
         );
 
         const channelName = this.props.channel.display_name;
 
         if (backToResultsTooltip) {
             back = (
-                <OverlayTrigger
-                    delayShow={Constants.OVERLAY_TIME_DELAY}
-                    placement='top'
-                    overlay={backToResultsTooltip}
+                <WithTooltip
+                    title={backToResultsTooltip}
                 >
                     <button
                         className='sidebar--right__back btn btn-icon btn-sm'
@@ -172,88 +156,75 @@ class RhsHeaderPost extends React.PureComponent<Props> {
                             className='icon icon-arrow-back-ios'
                         />
                     </button>
-                </OverlayTrigger>
+                </WithTooltip>
             );
         }
 
+        const collapseIconLabel = formatMessage({id: 'rhs_header.collapseSidebarTooltip.icon', defaultMessage: 'Collapse Sidebar Icon'});
+        const expandIconLabel = formatMessage({id: 'rhs_header.expandSidebarTooltip.icon', defaultMessage: 'Expand Sidebar Icon'});
+
         return (
-            <>
-                <div className='sidebar--right__header'>
-                    <span className='sidebar--right__title'>
-                        {back}
-                        <FormattedMessage
-                            id='rhs_header.details'
-                            defaultMessage='Thread'
-                        />
-                        {channelName &&
+            <div className='sidebar--right__header'>
+                <span className='sidebar--right__title'>
+                    {back}
+                    <FormattedMessage
+                        id='rhs_header.details'
+                        defaultMessage='Thread'
+                    />
+                    {channelName &&
                         <button
                             onClick={this.handleJumpClick}
                             className='style--none sidebar--right__title__channel'
                         >
                             {channelName}
                         </button>
-                        }
-                    </span>
+                    }
+                </span>
+                <div className='controls'>
+                    {this.props.isCollapsedThreadsEnabled ? (
+                        <FollowButton
+                            className='sidebar--right__follow__thread'
+                            isFollowing={isFollowingThread}
+                            onClick={this.handleFollowChange}
+                        />
+                    ) : null}
 
-                    <div className='controls'>
-                        {this.props.isCollapsedThreadsEnabled ? (
-                            <FollowButton
-                                className='sidebar--right__follow__thread'
-                                isFollowing={isFollowingThread}
-                                onClick={this.handleFollowChange}
+                    <WithTooltip
+                        title={rhsHeaderTooltipContent}
+                    >
+                        <button
+                            type='button'
+                            className='sidebar--right__expand btn btn-icon btn-sm'
+                            aria-label={this.props.isExpanded ? collapseIconLabel : expandIconLabel}
+                            onClick={this.props.toggleRhsExpanded}
+                        >
+                            <i
+                                className='icon icon-arrow-expand'
                             />
-                        ) : null}
+                            <i
+                                className='icon icon-arrow-collapse'
+                            />
+                        </button>
+                    </WithTooltip>
 
-                        <OverlayTrigger
-                            delayShow={Constants.OVERLAY_TIME_DELAY}
-                            placement='bottom'
-                            overlay={this.props.isExpanded ? shrinkSidebarTooltip : expandSidebarTooltip}
+                    <WithTooltip
+                        title={closeSidebarTooltip}
+                    >
+                        <button
+                            id='rhsCloseButton'
+                            type='button'
+                            className='sidebar--right__close btn btn-icon btn-sm'
+                            aria-label='Close'
+                            onClick={this.props.closeRightHandSide}
                         >
-                            <button
-                                type='button'
-                                className='sidebar--right__expand btn btn-icon btn-sm'
-                                aria-label='Expand'
-                                onClick={this.props.toggleRhsExpanded}
-                            >
-                                <i
-                                    className='icon icon-arrow-expand'
-                                    aria-label={formatMessage({id: 'rhs_header.expandSidebarTooltip.icon', defaultMessage: 'Expand Sidebar Icon'})}
-                                />
-                                <i
-                                    className='icon icon-arrow-collapse'
-                                    aria-label={formatMessage({id: 'rhs_header.collapseSidebarTooltip.icon', defaultMessage: 'Collapse Sidebar Icon'})}
-                                />
-                            </button>
-                        </OverlayTrigger>
-
-                        <OverlayTrigger
-                            delayShow={Constants.OVERLAY_TIME_DELAY}
-                            placement='top'
-                            overlay={closeSidebarTooltip}
-                        >
-                            <button
-                                id='rhsCloseButton'
-                                type='button'
-                                className='sidebar--right__close btn btn-icon btn-sm'
-                                aria-label='Close'
-                                onClick={this.props.closeRightHandSide}
-                            >
-                                <i
-                                    className='icon icon-close'
-                                    aria-label={formatMessage({id: 'rhs_header.closeTooltip.icon', defaultMessage: 'Close Sidebar Icon'})}
-                                />
-                            </button>
-                        </OverlayTrigger>
-                    </div>
-                    {this.props.showThreadsTutorialTip && <CRTThreadsPaneTutorialTip/>}
+                            <i
+                                className='icon icon-close'
+                                aria-label={formatMessage({id: 'rhs_header.closeTooltip.icon', defaultMessage: 'Close Sidebar Icon'})}
+                            />
+                        </button>
+                    </WithTooltip>
                 </div>
-                {this.props.channel.display_name === 'kChat Bot' && (
-                    <RHSHeader
-                        onChatHistoryClick={this.props.onChatHistoryClick}
-                        channelName={this.props.channel.name}
-                    />
-                )}
-            </>
+            </div>
         );
     }
 }

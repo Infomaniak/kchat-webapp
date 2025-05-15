@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect, useState, useRef} from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import AutoSizer from 'react-virtualized-auto-sizer';
@@ -12,7 +12,6 @@ import InfiniteLoader from 'react-window-infinite-loader';
 import styled, {css} from 'styled-components';
 
 import type {Group} from '@mattermost/types/groups';
-import type {GlobalState} from '@mattermost/types/store';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
@@ -20,13 +19,16 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import NoResultsIndicator from 'components/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
+import ProfilePopover from 'components/profile_popover';
 import StatusIcon from 'components/status_icon';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
-import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
+import WithTooltip from 'components/with_tooltip';
 
 import {UserStatuses} from 'utils/constants';
 import * as Utils from 'utils/utils';
+
+import type {GlobalState} from 'types/store';
 
 import {Load} from '../constants';
 
@@ -61,11 +63,6 @@ export type Props = {
     hide: () => void;
 
     /**
-     * Function to call to show a profile popover and hide parent popover
-     */
-    showUserOverlay: (user: UserProfile) => void;
-
-    /**
      * State of current search
      */
     searchState: Load;
@@ -95,7 +92,6 @@ const GroupMemberList = (props: Props) => {
         teamUrl,
         searchTerm,
         searchState,
-        showUserOverlay,
     } = props;
 
     const history = useHistory();
@@ -172,10 +168,11 @@ const GroupMemberList = (props: Props) => {
     };
 
     const Item = ({index, style}: ListChildComponentProps) => {
+        const status = useSelector((state: GlobalState) => getStatusForUserId(state, members[index]?.user?.id) || UserStatuses.OFFLINE);
+
         // Remove explicit height provided by VariableSizeList
         style.height = undefined;
 
-        const status = useSelector((state: GlobalState) => getStatusForUserId(state, members[index]?.user?.id) || UserStatuses.OFFLINE);
         if (isUserLoaded(index)) {
             const user = members[index].user;
             const name = members[index].displayName;
@@ -188,31 +185,31 @@ const GroupMemberList = (props: Props) => {
                     key={user.id}
                     role='listitem'
                 >
-                    <UserButton
-                        onClick={() => showUserOverlay(user)}
-                        aria-haspopup='dialog'
+                    <ProfilePopover
+                        userId={user.id}
+                        src={Utils.imageURLForUser(user?.id ?? '')}
+                        hideStatus={user.is_bot}
                     >
-                        <span className='status-wrapper'>
-                            <Avatar
-                                username={user.username}
-                                size={'sm'}
-                                url={Utils.imageURLForUser(user?.id ?? '')}
-                                className={'avatar-post-preview'}
-                                tabIndex={-1}
-                            />
-                            <StatusIcon
-                                className='status user-popover-status'
-                                status={status}
-                                button={true}
-                            />
-                        </span>
-                        <Username className='overflow--ellipsis text-nowrap'>{name}</Username>
-                        <Gap className='group-member-list_gap'/>
-                    </UserButton>
+                        <UserButton>
+                            <span className='status-wrapper'>
+                                <Avatar
+                                    username={user.username}
+                                    size={'sm'}
+                                    url={Utils.imageURLForUser(user?.id ?? '')}
+                                    className={'avatar-post-preview'}
+                                    tabIndex={-1}
+                                />
+                                <StatusIcon
+                                    status={status}
+                                />
+                            </span>
+                            <Username className='overflow--ellipsis text-nowrap'>{name}</Username>
+                            <Gap className='group-member-list_gap'/>
+                        </UserButton>
+                    </ProfilePopover>
                     <DMContainer className='group-member-list_dm-button'>
-                        <SimpleTooltip
-                            id={`name-${user.id}`}
-                            content={formatMessage({id: 'group_member_list.sendMessageTooltip', defaultMessage: 'Send message'})}
+                        <WithTooltip
+                            title={formatMessage({id: 'group_member_list.sendMessageTooltip', defaultMessage: 'Send message'})}
                         >
                             <DMButton
                                 className='btn btn-icon btn-xs'
@@ -225,7 +222,7 @@ const GroupMemberList = (props: Props) => {
                                     className='icon icon-send'
                                 />
                             </DMButton>
-                        </SimpleTooltip>
+                        </WithTooltip>
                     </DMContainer>
                 </UserListItem>
             );
@@ -252,7 +249,12 @@ const GroupMemberList = (props: Props) => {
         } else if (searchState === Load.FAILED) {
             return (
                 <LoadFailedItem>
-                    <span>{Utils.localizeMessage('group_member_list.searchError', 'There was a problem getting results. Clear your search term and try again.')}</span>
+                    <span>
+                        <FormattedMessage
+                            id='group_member_list.searchError'
+                            defaultMessage='There was a problem getting results. Clear your search term and try again.'
+                        />
+                    </span>
                 </LoadFailedItem>
             );
         } else if (isSearching && members.length === 0) {
@@ -268,12 +270,18 @@ const GroupMemberList = (props: Props) => {
             return (
                 <LoadFailedItem>
                     <span>
-                        {Utils.localizeMessage('group_member_list.loadError', 'Oops! Something went wrong while loading this group.')}
+                        <FormattedMessage
+                            id='group_member_list.loadError'
+                            defaultMessage='Oops! Something went wrong while loading this group.'
+                        />
                         {' '}
                         <RetryButton
                             onClick={loadMoreItems}
                         >
-                            {Utils.localizeMessage('group_member_list.retryLoadButton', 'Retry')}
+                            <FormattedMessage
+                                id='group_member_list.retryLoadButton'
+                                defaultMessage='Retry'
+                            />
                         </RetryButton>
                     </span>
                 </LoadFailedItem>
@@ -358,7 +366,7 @@ const UserListItem = styled.div<{first?: boolean; last?: boolean}>`
 const UserButton = styled.button`
     display: flex;
     width: 100%;
-    padding: 0px 20px;
+    padding: 5px 20px;
     border: none;
     background: unset;
     text-align: unset;

@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import {clamp} from 'lodash';
+import clamp from 'lodash/clamp';
 import React, {useEffect, useRef, useState} from 'react';
 
 import type {FileInfo} from '@mattermost/types/files';
@@ -11,6 +11,9 @@ import {getFilePreviewUrl, getFileDownloadUrl} from 'mattermost-redux/utils/file
 
 import type {ZoomValue} from 'components/file_preview_modal/file_preview_modal_image_controls/file_preview_modal_image_controls';
 import type {LinkInfo} from 'components/file_preview_modal/types';
+
+import {FileTypes} from 'utils/constants';
+import {getFileType} from 'utils/utils';
 
 import './image_preview.scss';
 
@@ -186,6 +189,14 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     zoomExport = scale.current;
     minZoomExport = minScale.current;
 
+    let conditionalSVGStyleAttribute;
+    if (getFileType(fileInfo.extension) === FileTypes.SVG) {
+        conditionalSVGStyleAttribute = {
+            width: fileInfo.width,
+            height: 'auto',
+        };
+    }
+
     return (
         <div style={containerStyle}>
             <img
@@ -200,6 +211,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
                 onMouseLeave={handleMouseLeave}
                 onMouseEnter={handleMouseEnter}
                 onWheel={handleWheel}
+                style={conditionalSVGStyleAttribute}
             />
         </div>
     );

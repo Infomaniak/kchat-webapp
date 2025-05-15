@@ -71,7 +71,7 @@ type Props = {
     isFlagged?: boolean;
     handleCommentClick?: React.EventHandler<any>;
     handleDropdownOpened: (open: boolean) => void;
-    handleAddReactionClick?: () => void;
+    handleAddReactionClick?: (showEmojiPicker: boolean) => void;
     isMenuOpen?: boolean;
     isReadOnly?: boolean;
     postTranslationEnabled: boolean;
@@ -100,7 +100,7 @@ type Props = {
         /**
          * Function to set the editing post
          */
-        setEditingPost: (postId?: string, refocusId?: string, title?: string, isRHS?: boolean) => void;
+        setEditingPost: (postId?: string, refocusId?: string, isRHS?: boolean) => void;
 
         /**
          * Function to pin the post
@@ -215,9 +215,8 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     };
 
     handleAddReactionMenuItemActivated = () => {
-        // to be safe, make sure the handler function has been defined
         if (this.props.handleAddReactionClick) {
-            this.props.handleAddReactionClick();
+            this.props.handleAddReactionClick(true);
         }
     };
 
@@ -227,7 +226,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     };
 
     copyText = (e: ChangeEvent) => {
-        Utils.copyToClipboard(this.props.post.message);
+        Utils.copyToClipboard(this.props.post.message_source || this.props.post.message);
         trackDotMenuEvent(e, TELEMETRY_LABELS.COPY_TEXT);
     };
 
@@ -271,6 +270,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
             const dlUrl = getZipforPost(this.props.post.id);
             window.location.href = dlUrl;
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('Failed to download attachments:', error);
         }
     };
@@ -317,7 +317,6 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
         this.props.actions.setEditingPost(
             this.props.post.id,
             this.props.location === Locations.CENTER ? 'post_textbox' : 'reply_textbox',
-            this.props.post.root_id ? Utils.localizeMessage('rhs_comment.comment', 'Comment') : Utils.localizeMessage('create_post.post', 'Post'),
             this.props.location === Locations.RHS_ROOT || this.props.location === Locations.RHS_COMMENT || this.props.location === Locations.SEARCH,
         );
         trackDotMenuEvent(e, TELEMETRY_LABELS.EDIT);
@@ -519,7 +518,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
             <Menu.Container
                 menuButton={{
                     id: `${this.props.location}_button_${this.props.post.id}`,
-                    dateTestId: `PostDotMenu-Button-${this.props.post.id}`,
+                    dataTestId: `PostDotMenu-Button-${this.props.post.id}`,
                     class: classNames('post-menu__item', {
                         'post-menu__item--active': this.props.isMenuOpen,
                     }),
@@ -534,7 +533,6 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                     onToggle: this.handleMenuToggle,
                 }}
                 menuButtonTooltip={{
-                    id: `PostDotMenu-ButtonTooltip-${this.props.post.id}`,
                     text: formatMessage({id: 'post_info.dot_menu.tooltip.more', defaultMessage: 'More'}),
                     class: 'hidden-xs',
                 }}

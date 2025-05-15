@@ -7,8 +7,9 @@ import {FormattedMessage} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {TestHelper} from 'utils/test_helper';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import ResetEmailModal from './reset_email_modal';
 

@@ -202,7 +202,8 @@ export default class InteractiveDialog extends React.PureComponent<Props, State>
                 show={this.state.show}
                 onHide={this.onHide}
                 onExited={this.props.onExited}
-                role='dialog'
+                backdrop='static'
+                role='none'
                 aria-labelledby='interactiveDialogModalLabel'
             >
                 <form

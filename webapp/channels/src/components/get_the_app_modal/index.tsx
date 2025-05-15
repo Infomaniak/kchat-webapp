@@ -14,9 +14,10 @@ import useGetOperatingSystem from 'components/common/hooks/useGetOperatingSystem
 import Header from 'components/widgets/header';
 import GetTheAppModalIcon from 'components/widgets/icons/get_the_app_modal_icon';
 
+import {ModalIdentifiers} from 'utils/constants';
+
 import MattermostLogoSvg from 'images/logo.svg';
 import loaderkChat from 'images/logo_compact.png';
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

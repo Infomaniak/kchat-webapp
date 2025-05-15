@@ -6,8 +6,9 @@ import type {MockStoreEnhanced} from 'redux-mock-store';
 import {close, open, toggle} from 'actions/views/lhs';
 import configureStore from 'store';
 
-import mockStore from 'tests/test_store';
 import {ActionTypes} from 'utils/constants';
+
+import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
 

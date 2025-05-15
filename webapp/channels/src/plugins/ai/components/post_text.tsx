@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 import styled, {keyframes, css} from 'styled-components';
 
@@ -61,7 +61,7 @@ const PostText = (props: Props) => {
     const team = useSelector<GlobalState, Team>((state) => state.entities.teams.teams[channel?.team_id]);
     const siteURL = useSelector<GlobalState, string | undefined>((state) => state.entities.general.config.SiteURL);
 
-    // @ts-ignore
+    // @ts-expect-error old error ignore
     const {formatText, messageHtmlToComponent} = window.PostUtils;
 
     const markdownOptions = {

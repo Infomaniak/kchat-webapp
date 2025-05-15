@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
 import type {ReactNode} from 'react';
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
@@ -28,6 +28,7 @@ export type Props = {
     handleDelete: (values: OptionValue[]) => void;
     handlePageChange: (page: number, prevPage: number) => void;
     handleSubmit: (values?: OptionValue[]) => void;
+    handleHide: () => void;
     isExistingChannel: boolean;
     loading: boolean;
     options: Option[];
@@ -48,6 +49,7 @@ export type Props = {
     };
 }
 
+//@ts-expect-error Multiselect got a generic
 const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionValue>>) => {
     const renderOptionValue = useCallback((
         option: OptionValue,
@@ -98,12 +100,14 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
     }, [props.options]);
 
     useEffect(() => {
-        if (props.emptyGroupChannelsIds.length > 0 && !_.isEqual(previousEmptyGroupIds, props.emptyGroupChannelsIds)) {
+        if (props.emptyGroupChannelsIds.length > 0 && !isEqual(previousEmptyGroupIds, props.emptyGroupChannelsIds)) {
             props.actions.getProfilesInGroupChannels?.(props.emptyGroupChannelsIds);
         }
     }, [props.emptyGroupChannelsIds, props.actions, previousEmptyGroupIds]);
 
     return (
+
+        // @ts-expect-error Multiselect has a generic
         <MultiSelect<OptionValue>
             ref={ref}
             options={options}
@@ -122,6 +126,7 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
             noteText={note}
             disableMultiSelectList={props.values.length > (Constants.MAX_USERS_IN_GM - 1)}
             maxValues={MAX_SELECTABLE_VALUES}
+
             changeMessageColor='red'
             showError={props.values.length === MAX_SELECTABLE_VALUES}
             numRemainingText={

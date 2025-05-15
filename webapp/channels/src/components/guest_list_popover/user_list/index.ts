@@ -10,6 +10,7 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 

@@ -1,21 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import Icon from '@infomaniak/compass-components/foundations/icon';
 import React from 'react';
+import type {MouseEvent, KeyboardEvent} from 'react';
 import {useIntl} from 'react-intl';
+
+import {PencilOutlineIcon} from '@mattermost/compass-icons/components';
 
 import {getDateForTimezone} from 'mattermost-redux/utils/timezone_utils';
 
-import {isSameDay, isWithinLastWeek, isYesterday} from 'utils/datetime';
+import WithTooltip from 'components/with_tooltip';
 
-import OverlayTrigger from '../../overlay_trigger';
-import Tooltip from '../../tooltip';
+import Constants from 'utils/constants';
+import {isSameDay, isWithinLastWeek, isYesterday} from 'utils/datetime';
 
 import type {Props} from './index';
 
-// TODO: post edit histoiry {postOwner, post, canEdit, actions}
-const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0}: Props): JSX.Element | null => {
+const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0, postOwner, post, canEdit, actions}: Props): JSX.Element | null => {
     const {formatMessage, formatDate, formatTime} = useIntl();
 
     if (!postId || editedAt === 0) {
@@ -55,39 +56,27 @@ const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0}: P
         relativeOrDate: date,
         time,
     });
+    const viewHistoryText = formatMessage({
+        id: 'post_message_view.view_post_edit_history',
+        defaultMessage: 'Click to view history',
+    });
 
-    // TODO: post edit history
-    // const viewHistoryText = formatMessage({
-    //     id: 'post_message_view.view_post_edit_history',
-    //     defaultMessage: 'Click to view history',
-    // });
+    const postOwnerTooltipInfo = (postOwner && canEdit) ? (
+        <span className='view-history__text'>{viewHistoryText}</span>
+    ) : null;
 
-    const postOwnerTooltipInfo = null;
+    const showPostEditHistory = (e: MouseEvent<HTMLButtonElement> | KeyboardEvent<unknown>) => {
+        e.preventDefault();
+        if (post?.id) {
+            actions.openShowEditHistory(post);
+        }
+    };
 
-    // TODO: post edit history
-    // const postOwnerTooltipInfo = (postOwner && canEdit) ? (
-    //     <span className='view-history__text'>{viewHistoryText}</span>
-    // ) : null;
-
-    const tooltip = (
-        <Tooltip
-            id={`edited-post-tooltip_${postId}`}
-            className='hidden-xs'
-        >
-            {`${editedText} ${formattedTime}`}
-            {postOwnerTooltipInfo}
-        </Tooltip>
-    );
-
-    // TODO: post edit history
-    // const showPostEditHistory = (e: MouseEvent<HTMLButtonElement>) => {
-    //     e.preventDefault();
-
-    //     if (post?.id) {
-    //         actions.getPostEditHistory(post.id);
-    //         actions.openShowEditHistory(post);
-    //     }
-    // };
+    const handleKeyPress = (e: KeyboardEvent<unknown>) => {
+        if (e.key === Constants.KeyCodes.ENTER[0] || e.key === Constants.KeyCodes.SPACE[0]) {
+            showPostEditHistory(e);
+        }
+    };
 
     const editedIndicatorContent = (
         <span
@@ -96,35 +85,35 @@ const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0}: P
             data-post-id={postId}
             data-edited-at={editedAt}
         >
-            <Icon
-                glyph={'pencil-outline'}
-                size={10}
-            />
+            <PencilOutlineIcon size={12}/>
             {editedText}
         </span>
     );
 
-    const editedIndicator = editedIndicatorContent;
+    const editedIndicator = (postOwner && canEdit) ? (
+        <button
+            className={'style--none'}
 
-    // TODO: post edit history
-    // const editedIndicator = (postOwner && canEdit) ? (
-    //     <button
-    //         className={'style--none'}
-    //         tabIndex={-1}
-    //         onClick={showPostEditHistory}
-    //     >
-    //         {editedIndicatorContent}
-    //     </button>
-    // ) : editedIndicatorContent;
+            // onClick={showPostEditHistory}
+            tabIndex={0}
+            onKeyUp={handleKeyPress}
+            aria-label={editedText}
+        >
+            {editedIndicatorContent}
+        </button>
+    ) : editedIndicatorContent;
 
     return !postId || editedAt === 0 ? null : (
-        <OverlayTrigger
-            delayShow={250}
-            placement='top'
-            overlay={tooltip}
+        <WithTooltip
+            title={
+                <>
+                    {`${editedText} ${formattedTime}`}
+                    {postOwnerTooltipInfo}
+                </>
+            }
         >
             {editedIndicator}
-        </OverlayTrigger>
+        </WithTooltip>
     );
 };
 

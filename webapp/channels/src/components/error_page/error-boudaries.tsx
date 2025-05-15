@@ -1,3 +1,4 @@
+/* eslint-disable react/require-optimization */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -26,12 +27,14 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
     static getDerivedStateFromError(error) {
         // Update state so the next render will show the fallback UI.
+        // eslint-disable-next-line no-console
         console.log(error);
         return {hasError: true};
     }
 
     componentDidCatch(error, errorInfo) {
         // You can also log the error to an error reporting service
+        // eslint-disable-next-line no-console
         console.log(error, errorInfo);
 
         /*

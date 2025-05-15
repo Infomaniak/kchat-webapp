@@ -4,10 +4,11 @@
 import React from 'react';
 import {createIntl, useIntl} from 'react-intl';
 
+import {TestHelper} from 'utils/test_helper';
+
 import enMessages from 'i18n/en.json';
 import esMessages from 'i18n/es.json';
 import {renderWithContext, screen} from 'tests/react_testing_utils';
-import {TestHelper} from 'utils/test_helper';
 
 import LatestPostReader from './latest_post_reader';
 

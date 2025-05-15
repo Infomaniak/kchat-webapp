@@ -56,7 +56,6 @@ export function MentionsSVG(props: React.HTMLAttributes<HTMLSpanElement>) {
                     fill='var(--center-channel-bg)'
                 />
             </svg>
-
         </span>
     );
 }

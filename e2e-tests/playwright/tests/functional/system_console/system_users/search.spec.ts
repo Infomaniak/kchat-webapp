@@ -111,17 +111,16 @@
 //         throw new Error('Failed to create admin user');
 //     }
 
-//     // # Log in as admin
-//     const {page} = await pw.testBrowser.login(adminUser);
+// # Log in as admin
+// const {systemConsolePage} = await pw.testBrowser.login(adminUser);
 
 //     // # Create 2 users
 //     const user1 = await adminClient.createUser(createRandomUser(), '', '');
 //     const user2 = await adminClient.createUser(createRandomUser(), '', '');
 
-//     // # Visit system console
-//     const systemConsolePage = new pages.SystemConsolePage(page);
-//     await systemConsolePage.goto();
-//     await systemConsolePage.toBeVisible();
+// // # Visit system console
+// await systemConsolePage.goto();
+// await systemConsolePage.toBeVisible();
 
 //     // # Go to Users section
 //     await systemConsolePage.sidebar.goToItem('Users');
@@ -137,15 +136,15 @@
 //     await systemConsolePage.systemUsers.verifyRowWithTextIsNotFound(user2.email);
 // });
 
-// test('MM-T5521-5 Should be able to search users with their nick names', async ({pw, pages}) => {
+// test('MM-T5521-5 Should be able to search users with their nick names', async ({pw}) => {
 //     const {adminUser, adminClient} = await pw.initSetup();
 
 //     if (!adminUser) {
 //         throw new Error('Failed to create admin user');
 //     }
 
-//     // # Log in as admin
-//     const {page} = await pw.testBrowser.login(adminUser);
+// # Log in as admin
+// const {systemConsolePage} = await pw.testBrowser.login(adminUser);
 
 //     // # Create 2 users
 //     const user1 = await adminClient.createUser(createRandomUser(), '', '');

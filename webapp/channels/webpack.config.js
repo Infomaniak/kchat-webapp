@@ -1,18 +1,15 @@
 /* eslint-disable no-console, no-process-env */
 const childProcess = require('child_process');
-const path = require('path');
 const url = require('url');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExternalTemplateRemotesPlugin = require('external-remotes-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 const webpack = require('webpack');
 const {ModuleFederationPlugin} = require('webpack').container;
 const LiveReloadPlugin = require('webpack-livereload-plugin');
-
-// const WebpackPwaManifest = require('webpack-pwa-manifest');
-// const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 
 const packageJson = require('./package.json');
 
@@ -21,10 +18,14 @@ const GIT_RELEASE = JSON.stringify(childProcess.execSync('git describe --tags --
 const IS_CANARY = GIT_RELEASE.includes('-next');
 const IS_PREPROD = GIT_RELEASE.includes('-rc');
 
+// list of known code editors that set an environment variable.
+const knownCodeEditors = ['VSCODE_CWD', 'INSIDE_EMACS'];
+const isInsideCodeEditor = knownCodeEditors.some((editor) => process.env[editor]);
+
 const targetIsRun = NPM_TARGET?.startsWith('run');
 const targetIsStats = NPM_TARGET === 'stats';
 const targetIsDevServer = NPM_TARGET?.startsWith('dev-server');
-const targetIsEslint = NPM_TARGET === 'check' || NPM_TARGET === 'fix' || process.env.VSCODE_CWD;
+const targetIsEslint = NPM_TARGET?.startsWith('check') || NPM_TARGET === 'fix' || isInsideCodeEditor;
 
 const DEV = targetIsRun || targetIsStats || targetIsDevServer;
 
@@ -139,7 +140,7 @@ var config = {
                         loader: 'sass-loader',
                         options: {
                             sassOptions: {
-                                includePaths: ['src', 'src/sass'],
+                                loadPaths: ['src/sass'],
                             },
                         },
                     },
@@ -194,7 +195,7 @@ var config = {
     target: 'web',
     plugins: [
         new webpack.ProvidePlugin({
-            process: 'process/browser',
+            process: 'process/browser.js',
         }),
         new webpack.DefinePlugin({
             COMMIT_HASH: JSON.stringify(childProcess.execSync('git rev-parse HEAD || echo dev').toString()),
@@ -209,6 +210,7 @@ var config = {
             filename: 'root.html',
             inject: 'head',
             template: 'src/root.html',
+            scriptLoading: 'blocking',
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
@@ -252,6 +254,7 @@ var config = {
                 {from: 'src/images/only_office_slide_logo.png', to: 'images'},
                 {from: 'src/images/only_office_word_logo.png', to: 'images'},
                 {from: 'src/images/bot_default_icon.png', to: 'images'},
+                {from: 'src/images/euria_logo.png', to: 'images'},
                 {from: 'src/images/poll_bot_default_icon.png', to: 'images'},
                 {from: 'src/images/chat_gpt.png', to: 'images'},
                 {from: 'src/images/payment_processing.png', to: 'images'},

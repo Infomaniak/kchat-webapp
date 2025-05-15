@@ -4,8 +4,8 @@
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import type {ValueType} from 'react-select';
 import ReactSelect from 'react-select';
+import type {StylesConfig, OnChangeValue, AriaOnFocus, AriaOnChange} from 'react-select';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -17,18 +17,21 @@ import SettingItemMax from 'components/setting_item_max';
 import Constants from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
 
-import * as I18n from 'i18n/i18n.jsx';
+import type {Language} from 'i18n/i18n';
 
 type Actions = {
     updateMe: (user: UserProfile) => Promise<ActionResult>;
+    patchUser: (user: UserProfile) => Promise<ActionResult>;
 };
 
 type Props = {
     intl: IntlShape;
     user: UserProfile;
     locale: string;
+    locales: Record<string, Language>;
     updateSection: (section: string) => void;
     actions: Actions;
+    adminMode?: boolean;
 };
 
 type SelectedOption = {
@@ -48,11 +51,10 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
     reactSelectContainer: React.RefObject<HTMLDivElement>;
     constructor(props: Props) {
         super(props);
-        const locales: any = I18n.getLanguages();
         const userLocale = props.locale;
         const selectedOption = {
-            value: locales[userLocale].value,
-            label: locales[userLocale].name,
+            value: props.locales[userLocale].value,
+            label: props.locales[userLocale].name,
         };
         this.reactSelectContainer = React.createRef();
 
@@ -100,7 +102,7 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
         }
     };
 
-    setLanguage = (selectedOption: ValueType<SelectedOption>) => {
+    setLanguage = (selectedOption: OnChangeValue<SelectedOption, boolean>) => {
         if (selectedOption && 'value' in selectedOption) {
             this.setState({
                 locale: selectedOption.value,
@@ -123,9 +125,10 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
     submitUser = (user: UserProfile) => {
         this.setState({isSaving: true});
 
-        this.props.actions.updateMe(user).then((res) => {
+        const action = this.props.adminMode ? this.props.actions.patchUser : this.props.actions.updateMe;
+        action(user).then((res) => {
             if ('data' in res) {
-                // Do nothing since changing the locale essentially refreshes the page
+                this.setState({isSaving: false});
             } else if ('error' in res) {
                 let serverError;
                 const {error} = res;
@@ -156,7 +159,8 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const {intl} = this.props;
+        const {intl, locales} = this.props;
+
         let serverError;
         if (this.state.serverError) {
             serverError = (
@@ -165,7 +169,6 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
         }
 
         const options: SelectedOption[] = [];
-        const locales: any = I18n.getLanguages();
 
         const languages = Object.keys(locales).
             map((l) => {
@@ -182,11 +185,20 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
         });
 
         const reactStyles = {
-            menuPortal: (provided: React.CSSProperties) => ({
+            menuPortal: (provided) => ({
                 ...provided,
                 zIndex: 9999,
             }),
+        } satisfies StylesConfig<SelectedOption, boolean>;
+
+        const onFocusMessage: AriaOnFocus<SelectedOption> = ({focused}) => {
+            return `option ${focused.label} focused`;
         };
+
+        const onChangeMessage: AriaOnChange<SelectedOption, boolean> = (option) => {
+            return `option ${option.label} selected`;
+        };
+
         const interfaceLanguageLabelAria = intl.formatMessage({id: 'user.settings.languages.dropdown.arialabel', defaultMessage: 'Dropdown selector to change the interface language'});
 
         const input = (
@@ -196,6 +208,7 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
                     aria-label={interfaceLanguageLabelAria}
                     className='control-label'
                     id='changeInterfaceLanguageLabel'
+                    htmlFor='displayLanguage'
                 >
                     <FormattedMessage
                         id='user.settings.languages.change'
@@ -209,18 +222,23 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
                     <ReactSelect
                         className='react-select react-select-top'
                         classNamePrefix='react-select'
+                        ariaLiveMessages={{
+                            onFocus: onFocusMessage,
+                            onChange: onChangeMessage,
+                        }}
                         id='displayLanguage'
                         menuIsOpen={this.state.openMenu}
                         menuPortalTarget={document.body}
                         styles={reactStyles}
                         options={options}
-                        clearable={false}
+                        isClearable={false}
                         onChange={this.setLanguage}
                         onKeyDown={this.handleKeyDown}
                         value={this.state.selectedOption}
                         onMenuClose={this.handleMenuClose}
                         onMenuOpen={this.handleMenuOpen}
                         aria-labelledby='changeInterfaceLanguageLabel'
+                        aria-live='assertive'
                     />
                     {serverError}
                 </div>
@@ -257,11 +275,11 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
                         defaultMessage='Language'
                     />
                 }
-                width='medium'
                 submit={this.changeLanguage}
                 saving={this.state.isSaving}
                 inputs={[input]}
                 updateSection={this.props.updateSection}
+                disableEnterSubmit={true}
             />
         );
     }

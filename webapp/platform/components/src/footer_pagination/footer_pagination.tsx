@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ChevronLeftIcon, ChevronRightIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React from 'react';
 import {useIntl} from 'react-intl';
-
-import {ChevronLeftIcon, ChevronRightIcon} from '@infomaniak/compass-icons/components';
 
 import './footer_pagination.scss';
 

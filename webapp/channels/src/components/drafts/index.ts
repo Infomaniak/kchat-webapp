@@ -3,10 +3,7 @@
 
 import {connect} from 'react-redux';
 
-import {Permissions} from 'mattermost-redux/constants';
-import {localDraftsAreEnabled, getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
@@ -21,25 +18,13 @@ function makeMapStateToProps() {
     return (state: GlobalState) => {
         const user = getCurrentUser(state);
         const status = getStatusForUserId(state, user.id);
-        const drafts = getDrafts(state);
-        const currentTeamId = getCurrentTeamId(state);
-        const invalidScheduledAmount = drafts.reduce((acc, draft) => {
-            const {channelId, timestamp} = draft.value;
-            const isInvalid = !haveIChannelPermission(state, currentTeamId, channelId, Permissions.CREATE_POST);
-            if (isInvalid && timestamp) {
-                return acc + 1;
-            }
-            return acc;
-        }, 0);
 
         return {
             displayName: displayUsername(user, getTeammateNameDisplaySetting(state)),
-            drafts,
+            drafts: getDrafts(state),
             draftRemotes: state.views.drafts.remotes,
             status,
             user,
-            localDraftsAreEnabled: localDraftsAreEnabled(state),
-            invalidScheduledAmount,
         };
     };
 }

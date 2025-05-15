@@ -9,12 +9,11 @@ import type {ChannelType} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
 
 import {General} from 'mattermost-redux/constants';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
-
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 import Constants from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
@@ -43,9 +42,12 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
     constructor(props: Props) {
         super(props);
 
+        const publicChannel = localizeMessage({id: 'admin.channel_list.public', defaultMessage: 'Public'});
+        const privateChannel = localizeMessage({id: 'admin.channel_list.private', defaultMessage: 'Private'});
+
         this.state = {
             show: true,
-            type: localizeMessage(this.props.channelType === Constants.PRIVATE_CHANNEL ? 'admin.channel_list.public' : 'admin.channel_list.private')?.toLocaleLowerCase(),
+            type: (this.props.channelType === Constants.PRIVATE_CHANNEL ? publicChannel : privateChannel).toLocaleLowerCase(),
         };
     }
 
@@ -76,7 +78,7 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                 show={this.state.show}
                 onHide={this.onHide}
                 onExited={onExited}
-                role='dialog'
+                role='none'
                 aria-labelledby='convertChannelModalLabel'
             >
                 <Modal.Header closeButton={true}>
@@ -96,22 +98,24 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                 </Modal.Header>
                 <Modal.Body>
                     <p>
-                        <FormattedMarkdownMessage
+                        <FormattedMessage
                             id={this.props.channelType === Constants.PRIVATE_CHANNEL ? 'convert_channel.question1.public' : 'convert_channel.question1'}
-                            defaultMessage='When you convert **{display_name}** to a {type} channel, history and membership are preserved.'
+                            defaultMessage='When you convert <b>{display_name}</b> to a {type} channel, history and membership are preserved.'
                             values={{
                                 display_name: channelDisplayName,
                                 type: this.state.type,
+                                b: (chunks: string) => <b>{chunks}</b>,
                             }}
                         />
                     </p>
                     <p>
-                        <FormattedMarkdownMessage
+                        <FormattedMessage
                             id='convert_channel.question3'
-                            defaultMessage='Are you sure you want to convert **{display_name}** to a {type} channel?'
+                            defaultMessage='Are you sure you want to convert <b>{display_name}</b> to a {type} channel?'
                             values={{
                                 display_name: channelDisplayName,
                                 type: this.state.type,
+                                b: (chunks: string) => <b>{chunks}</b>,
                             }}
                         />
                     </p>
@@ -121,6 +125,7 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                         type='button'
                         className='btn btn-link secondary'
                         onClick={this.onHide}
+                        data-testid='convertChannelCancel'
                     >
                         <FormattedMessage
                             id='convert_channel.cancel'

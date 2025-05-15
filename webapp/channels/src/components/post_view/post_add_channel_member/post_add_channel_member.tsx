@@ -12,7 +12,6 @@ import {sendAddToChannelEphemeralPost} from 'actions/global_actions';
 import AtMention from 'components/at_mention';
 
 import {Constants} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 interface Actions {
     notifyChannelMember: (channelId: string, userIds: string[], postId: string) => void;
@@ -62,7 +61,8 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
     handleNotifyChannelMember = () => {
         const {post, userIds} = this.props;
         if (post && post.channel_id) {
-            this.props.actions.notifyChannelMember(post.channel_id, userIds, this.props.post.props.add_channel_member.original_post_id);
+            const postProps = this.props.post.props as { add_channel_member: { original_post_id: string } };
+            this.props.actions.notifyChannelMember(post.channel_id, userIds, postProps.add_channel_member.original_post_id);
             this.props.actions.removePost(post);
         }
     };
@@ -161,47 +161,60 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
             return null;
         }
 
-        let linkId;
-        let linkText;
+        let link;
         if (channelType === Constants.PRIVATE_CHANNEL) {
-            linkId = t('post_body.check_for_out_of_channel_mentions.link.private');
-            linkText = 'add them to this private channel';
+            link = (
+                <FormattedMessage
+                    id='post_body.check_for_out_of_channel_mentions.link.private'
+                    defaultMessage='add them to this private channel'
+                />
+            );
         } else if (channelType === Constants.OPEN_CHANNEL) {
-            linkId = t('post_body.check_for_out_of_channel_mentions.link.public');
-            linkText = 'add them to the channel';
+            link = (
+                <FormattedMessage
+                    id='post_body.check_for_out_of_channel_mentions.link.public'
+                    defaultMessage='add them to the channel'
+                />
+            );
         }
 
-        let outOfChannelMessageID;
-        let outOfChannelMessageText;
         let notificationMessageTextId;
         let notificationOrMessageTextId;
-        let historyMessageId;
-
-        const outOfChannelAtMentions = this.generateAtMentions(usernames);
-        if (usernames.length === 1) {
-            outOfChannelMessageID = t('post_body.check_for_out_of_channel_mentions.message.one');
-            outOfChannelMessageText = 'did not get notified by this mention because they are not in the channel. Would you like to ';
-            notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message';
-            notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message';
-            historyMessageId = 'post_body.check_for_out_of_channel_mentions.message_last';
-        } else if (usernames.length > 1) {
-            outOfChannelMessageID = t('post_body.check_for_out_of_channel_mentions.message.multiple');
-            outOfChannelMessageText = 'did not get notified by this mention because they are not in the channel. Would you like to ';
-            notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple';
-            notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message.multiple';
-            historyMessageId = 'post_body.check_for_out_of_channel_mentions.message_last.multiple';
-        }
-
-        let outOfGroupsMessageID;
-        let outOfGroupsMessageText;
-        const outOfGroupsAtMentions = this.generateAtMentions(noGroupsUsernames);
-        if (noGroupsUsernames.length) {
-            outOfGroupsMessageID = t('post_body.check_for_out_of_channel_groups_mentions.message');
-            outOfGroupsMessageText = 'did not get notified by this mention because they are not in the channel. They cannot be added to the channel because they are not a member of the linked groups. To add them to this channel, they must be added to the linked groups.';
-        }
-
         let outOfChannelMessage = null;
         let outOfGroupsMessage = null;
+
+        let outOfChannelMessagePart;
+        const outOfChannelAtMentions = this.generateAtMentions(usernames);
+        if (usernames.length === 1) {
+            notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message';
+            notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message';
+            outOfChannelMessagePart = (
+                <FormattedMessage
+                    id='post_body.check_for_out_of_channel_mentions.message.one'
+                    defaultMessage='did not get notified by this mention because they are not in the channel. Would you like to '
+                />
+            );
+        } else if (usernames.length > 1) {
+            notificationOrMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple';
+            notificationMessageTextId = 'post_body.check_for_out_of_channel_groups_mentions_notify.message.multiple';
+            outOfChannelMessagePart = (
+                <FormattedMessage
+                    id='post_body.check_for_out_of_channel_mentions.message.multiple'
+                    defaultMessage='did not get notified by this mention because they are not in the channel. Would you like to '
+                />
+            );
+        }
+
+        let outOfGroupsMessagePart;
+        const outOfGroupsAtMentions = this.generateAtMentions(noGroupsUsernames);
+        if (noGroupsUsernames.length) {
+            outOfGroupsMessagePart = (
+                <FormattedMessage
+                    id='post_body.check_for_out_of_channel_groups_mentions.message'
+                    defaultMessage='did not get notified by this mention because they are not in the channel. They cannot be added to the channel because they are not a member of the linked groups. To add them to this channel, they must be added to the linked groups.'
+                />
+            );
+        }
 
         if (usernames.length) {
             if (channelType === Constants.OPEN_CHANNEL) {
@@ -209,18 +222,12 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                     <p>
                         {outOfChannelAtMentions}
                         {' '}
-                        <FormattedMessage
-                            id={outOfChannelMessageID}
-                            defaultMessage={outOfChannelMessageText}
-                        />
+                        {outOfChannelMessagePart}
                         <a
                             className='PostBody_addChannelMemberLink'
                             onClick={this.handleAddChannelMember}
                         >
-                            <FormattedMessage
-                                id={linkId}
-                                defaultMessage={linkText}
-                            />
+                            {link}
                         </a>
                         <FormattedMessage
                             id={notificationOrMessageTextId}
@@ -236,7 +243,7 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                             />
                         </a>
                         <FormattedMessage
-                            id={historyMessageId}
+                            id={'post_body.check_for_out_of_channel_mentions.message_last'}
                             defaultMessage={' ? They will have access to all message history.'}
                         />
                     </p>
@@ -246,22 +253,16 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                     <p>
                         {outOfChannelAtMentions}
                         {' '}
-                        <FormattedMessage
-                            id={outOfChannelMessageID}
-                            defaultMessage={outOfChannelMessageText}
-                        />
+                        {outOfChannelMessagePart}
                         <a
                             className='PostBody_addChannelMemberLink'
                             onClick={this.handleAddChannelMember}
                         >
-                            <FormattedMessage
-                                id={linkId}
-                                defaultMessage={linkText}
-                            />
+                            {link}
                         </a>
                         <FormattedMessage
-                            id={historyMessageId}
-                            defaultMessage={' ? They will have access to all message history.'}
+                            id={'post_body.check_for_out_of_channel_mentions.message_last'}
+                            defaultMessage={'? They will have access to all message history.'}
                         />
                     </p>
                 );
@@ -273,10 +274,7 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
                 <p>
                     {outOfGroupsAtMentions}
                     {' '}
-                    <FormattedMessage
-                        id={outOfGroupsMessageID}
-                        defaultMessage={outOfGroupsMessageText}
-                    />
+                    {outOfGroupsMessagePart}
                 </p>
             );
         }

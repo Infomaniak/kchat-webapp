@@ -1,4 +1,4 @@
-@charset "utf-8";
+@use "utils/functions";
 
 .app__body {
     .suggestion--selected {
@@ -15,6 +15,9 @@
     }
 
     .badge {
+        position: absolute;
+        top: 8px;
+        right: 10px;
         background: rgba(var(--center-channel-color-rgb), 0.48);
         color: var(--center-channel-bg);
         font-size: 10px;
@@ -59,9 +62,10 @@
     max-width: 100%;
     max-height: 292px;
     padding-bottom: 12px;
+    padding-left: 0;
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    background-color: v(center-channel-bg);
     border-radius: 4px;
+    background-color: functions.v(center-channel-bg);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     -webkit-overflow-scrolling: touch;
     overflow-x: auto;
@@ -73,9 +77,9 @@
     }
 
     &::-webkit-scrollbar-thumb {
-        border: 1px solid v(center-channel-bg);
-        background-color: rgba(var(--center-channel-color-rgb), 0.24) !important;
+        border: 1px solid functions.v(center-channel-bg);
         border-radius: 4px;
+        background-color: rgba(var(--center-channel-color-rgb), 0.24) !important;
     }
 
     .modal & {
@@ -101,8 +105,8 @@
     flex: 0 0 3.7rem;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--center-channel-color-rgb), 0.08);
     border-radius: 4px;
+    background: rgba(var(--center-channel-color-rgb), 0.08);
     font-size: 20px;
     font-weight: 600;
 
@@ -211,39 +215,19 @@
         white-space: nowrap;
 
         .suggestion-list__main {
-            width: 100%;
+            display: flex;
             color: rgba(var(--center-channel-color-rgb), 1);
-            text-overflow: ellipsis;
+            white-space: nowrap;
 
             .suggestion-list__desc {
-                overflow: hidden;
-                white-space: nowrap;
                 margin-left: 8px;
                 color: rgba(var(--center-channel-color-rgb), 0.75);
             }
         }
-    }
 
-    .suggestion-list__custom {
-        display: flex;
-        overflow: hidden;
-        width: 100%;
-        color: rgba(var(--center-channel-color-rgb), 0.56);
-        gap: 8px;
-
-        .suggestion-list__main {
-            color: rgba(var(--center-channel-color-rgb), 1);
-            text-overflow: ellipsis;
-            display: inline-block;
-            white-space: nowrap;
+        > span:nth-child(2) {
             overflow: hidden;
-
-            .suggestion-list__desc {
-                overflow: hidden;
-                white-space: nowrap;
-                margin-left: 8px;
-                color: rgba(var(--center-channel-color-rgb), 0.56);
-            }
+            text-overflow: ellipsis;
         }
     }
 
@@ -255,8 +239,11 @@
 
         .suggestion-list__main {
             width: unset;
-            max-width: 100%;
-            overflow: hidden;
+
+            > span:first-child {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
 
         .badge {
@@ -288,7 +275,7 @@
         flex: 0 0 1.6rem;
         align-items: center;
         justify-content: center;
-        fill: v(center-channel-color);
+        fill: functions.v(center-channel-color);
         opacity: 0.73;
 
         &--standard {

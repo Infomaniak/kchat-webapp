@@ -1,17 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import IconButton from '@infomaniak/compass-components/components/icon-button';
 import {shallow} from 'enzyme';
 import React from 'react';
 
 import {CloudProducts} from 'utils/constants';
 import {FileSizes} from 'utils/file_utils';
 
+import BrowserOrAddChannelMenu from './sidebar_browse_or_add_channel_menu';
 import type {Props} from './sidebar_header';
 import SidebarHeader from './sidebar_header';
-
-import AddChannelDropdown from '../add_channel_dropdown';
 
 let props: Props;
 
@@ -36,7 +34,6 @@ describe('Components/SidebarHeader', () => {
             handleOpenDirectMessagesModal: jest.fn(),
             unreadFilterEnabled: true,
             showCreateUserGroupModal: jest.fn(),
-            userGroupsEnabled: false,
             canCreateCustomGroups: true,
             showWorkTemplateButton: true,
         };
@@ -139,9 +136,9 @@ describe('Components/SidebarHeader', () => {
         };
     });
 
-    it('should show AddChannelDropdown', () => {
+    it('should show BrowserOrAddChannelMenu', () => {
         const wrapper = shallow(<SidebarHeader {...props}/>);
-        expect(wrapper.find(AddChannelDropdown).length).toBe(1);
+        expect(wrapper.find(BrowserOrAddChannelMenu).length).toBe(1);
     });
 
     // it('should embed teams menu dropdown into heading', () => {

@@ -9,11 +9,10 @@ import {FormattedMessage, injectIntl} from 'react-intl';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import KeyboardShortcutsModal from 'components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
 import UserGuideIcon from 'components/widgets/icons/user_guide_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+import WithTooltip from 'components/with_tooltip';
 
 import {ModalIdentifiers} from 'utils/constants';
 
@@ -77,16 +76,11 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
 
     render() {
         const {intl} = this.props;
-        const tooltip = (
-            <Tooltip
-                id='userGuideHelpTooltip'
-                className='hidden-xs'
-            >
-                <FormattedMessage
-                    id={'channel_header.userHelpGuide'}
-                    defaultMessage='Help'
-                />
-            </Tooltip>
+        const tooltipText = (
+            <FormattedMessage
+                id={'channel_header.userHelpGuide'}
+                defaultMessage='Help'
+            />
         );
 
         return (
@@ -94,10 +88,8 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                 className='userGuideHelp'
                 onToggle={this.buttonToggleState}
             >
-                <OverlayTrigger
-                    delayShow={500}
-                    placement='bottom'
-                    overlay={this.state.buttonActive ? <></> : tooltip}
+                <WithTooltip
+                    title={this.state.buttonActive ? '' : tooltipText}
                 >
                     <button
                         id='channelHeaderUserGuideButton'
@@ -107,7 +99,7 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                     >
                         <UserGuideIcon className='icon'/>
                     </button>
-                </OverlayTrigger>
+                </WithTooltip>
                 <Menu
                     openLeft={true}
                     openUp={false}

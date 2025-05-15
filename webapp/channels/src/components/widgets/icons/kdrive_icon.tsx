@@ -3,6 +3,7 @@
 
 import React from 'react';
 
+// eslint-disable-next-line react/prop-types
 const KDriveIcon = ({style, ...rest}: React.HTMLAttributes<HTMLSpanElement>) => (
     <span {...rest}>
         <svg

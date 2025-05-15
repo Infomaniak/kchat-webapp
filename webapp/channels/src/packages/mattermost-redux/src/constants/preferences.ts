@@ -37,10 +37,6 @@ const Preferences = {
     MENTION_KEYS: 'mention_keys',
     USE_MILITARY_TIME: 'use_military_time',
 
-    CATEGORY_ACTIONS_MENU: 'actions_menu',
-    NAME_ACTIONS_MENU_TUTORIAL_STATE: 'actions_menu_tutorial_state',
-    ACTIONS_MENU_VIEWED: 'actions_menu_modal_viewed',
-
     CATEGORY_CUSTOM_STATUS: 'custom_status',
     NAME_CUSTOM_STATUS_TUTORIAL_STATE: 'custom_status_tutorial_state',
     NAME_RECENT_CUSTOM_STATUSES: 'recent_custom_statuses',
@@ -80,7 +76,6 @@ const Preferences = {
     CATEGORY_ONBOARDING: 'category_onboarding',
 
     CATEGORY_DRAFTS: 'drafts',
-    DRAFTS_TOUR_TIP_SHOWED: 'drafts_tour_tip_showed',
 
     CATEGORY_REPORTING: 'reporting',
 
@@ -88,6 +83,7 @@ const Preferences = {
     HIDE_MYSQL_STATS_NOTIFICATION: 'hide_mysql_stats_notifcation',
 
     CATEGORY_TEAMS_ORDER: 'teams_order',
+    CATEGORY_OVERAGE_USERS_BANNER: 'overage_users_banner',
 
     CATEGORY_THEME: 'theme',
     THEMES: {
@@ -156,18 +152,18 @@ const Preferences = {
             sidebarText: '#ffffff',
             sidebarUnreadText: '#ffffff',
             sidebarTextHoverBg: '#222c3f',
-            sidebarTextActiveBorder: '#1279ba',
+            sidebarTextActiveBorder: '#4a7ce8',
             sidebarTextActiveColor: '#ffffff',
-            sidebarHeaderBg: '#152231',
-            sidebarHeaderTextColor: '#dddfe4',
-            sidebarTeamBarBg: '#05080f',
+            sidebarHeaderBg: '#182339',
+            sidebarHeaderTextColor: '#ffffff',
+            sidebarTeamBarBg: '#1c2740',
             onlineIndicator: '#3db887',
             awayIndicator: '#f5ab00',
             dndIndicator: '#d24b4e',
-            mentionBg: '#1c58d9',
-            mentionBj: '#1c58d9',
+            mentionBg: '#4a7ce8',
+            mentionBj: '#4a7ce8',
             mentionColor: '#ffffff',
-            centerChannelBg: '#0a111f',
+            centerChannelBg: '#111827',
             centerChannelColor: '#dddfe4',
             newMessageSeparator: '#81a3ef',
             linkColor: '#5d89ea',
@@ -213,7 +209,7 @@ const Preferences = {
             sidebarText: '#ffffff',
             sidebarUnreadText: '#ffffff',
             sidebarTextHoverBg: '#25262a',
-            sidebarTextActiveBorder: '#1592e0',
+            sidebarTextActiveBorder: '#4a7ce8',
             sidebarTextActiveColor: '#ffffff',
             sidebarHeaderBg: '#1b1d22',
             sidebarHeaderTextColor: '#dddfe4',
@@ -221,8 +217,8 @@ const Preferences = {
             onlineIndicator: '#3db887',
             awayIndicator: '#f5ab00',
             dndIndicator: '#d24b4e',
-            mentionBg: '#1c58d9',
-            mentionBj: '#1c58d9',
+            mentionBg: '#4b7ce7',
+            mentionBj: '#4b7ce7',
             mentionColor: '#ffffff',
             centerChannelBg: '#1A1D21',
             centerChannelColor: '#dddfe4',

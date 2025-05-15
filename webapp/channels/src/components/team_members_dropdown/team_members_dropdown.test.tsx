@@ -1,12 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {shallow} from 'enzyme';
 import React from 'react';
 
 import TeamMembersDropdown from 'components/team_members_dropdown/team_members_dropdown';
 
-import {TestHelper} from '../../utils/test_helper';
+import {TestHelper} from 'utils/test_helper';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 describe('components/team_members_dropdown', () => {
     const user = TestHelper.getUserMock({id: 'user-1', username: 'username1', roles: 'team_admin', is_bot: false});
@@ -40,14 +41,14 @@ describe('components/team_members_dropdown', () => {
     };
 
     test('should match snapshot for team_members_dropdown', () => {
-        const wrapper = shallow(
+        const wrapper = shallowWithIntl(
             <TeamMembersDropdown {...baseProps}/>,
         );
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should match snapshot opening dropdown upwards', () => {
-        const wrapper = shallow(
+        const wrapper = shallowWithIntl(
             <TeamMembersDropdown
                 {...baseProps}
                 index={4}
@@ -59,7 +60,7 @@ describe('components/team_members_dropdown', () => {
 
     test('should match snapshot with group-constrained team', () => {
         baseProps.currentTeam.group_constrained = true;
-        const wrapper = shallow(
+        const wrapper = shallowWithIntl(
             <TeamMembersDropdown {...baseProps}/>,
         );
         expect(wrapper).toMatchSnapshot();
@@ -68,7 +69,7 @@ describe('components/team_members_dropdown', () => {
     test('should match snapshot for a bot with group-constrained team', () => {
         baseProps.currentTeam.group_constrained = true;
         baseProps.user = bot;
-        const wrapper = shallow(
+        const wrapper = shallowWithIntl(
             <TeamMembersDropdown {...baseProps}/>,
         );
         expect(wrapper).toMatchSnapshot();

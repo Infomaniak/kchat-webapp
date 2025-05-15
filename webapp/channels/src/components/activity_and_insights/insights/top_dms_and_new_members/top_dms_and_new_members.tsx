@@ -115,7 +115,7 @@ const TopDMsAndNewMembers = (props: WidgetHocProps) => {
             dialogType: InsightsModal,
             dialogProps: {
                 widgetType: props.widgetType,
-                title: localizeMessage('insights.newTeamMembers.title', 'New team members'),
+                title: localizeMessage({id: 'insights.newTeamMembers.title', defaultMessage: 'New team members'}),
                 subtitle: '',
                 filterType: props.filterType,
                 timeFrame: props.timeFrame,

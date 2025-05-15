@@ -10,10 +10,11 @@ import {EditChannelHeaderModal} from 'components/edit_channel_header_modal/edit_
 import type {EditChannelHeaderModal as EditChannelHeaderModalClass} from 'components/edit_channel_header_modal/edit_channel_header_modal';
 import Textbox from 'components/textbox';
 
-import {type MockIntl} from 'tests/helpers/intl-test-helper';
-import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
 import Constants from 'utils/constants';
 import * as Utils from 'utils/utils';
+
+import {type MockIntl} from 'tests/helpers/intl-test-helper';
+import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
 
 const KeyCodes = Constants.KeyCodes;
 

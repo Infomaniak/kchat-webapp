@@ -9,8 +9,9 @@ import {
 } from 'actions/channel_actions';
 import {loadProfilesForSidebar} from 'actions/user_actions';
 
-import mockStore from 'tests/test_store';
 import {TestHelper} from 'utils/test_helper';
+
+import mockStore from 'tests/test_store';
 
 const initialState = {
     entities: {
@@ -117,7 +118,7 @@ jest.mock('mattermost-redux/actions/channels', () => ({
             }],
         };
     },
-    addChannelMember: (...args: any) => ({type: 'MOCK_ADD_CHANNEL_MEMBER', args}),
+    addChannelMembers: (...args: any) => ({type: 'MOCK_ADD_CHANNEL_MEMBERS', args}),
     createDirectChannel: (...args: any) => ({type: 'MOCK_CREATE_DIRECT_CHANNEL', args}),
     createGroupChannel: (...args: any) => ({type: 'MOCK_CREATE_GROUP_CHANNEL', args}),
 }));
@@ -146,13 +147,13 @@ describe('Actions.Channel', () => {
         const testStore = await mockStore(initialState);
 
         const expectedActions = [{
-            type: 'MOCK_ADD_CHANNEL_MEMBER',
-            args: ['testid', 'testuserid'],
+            type: 'MOCK_ADD_CHANNEL_MEMBERS',
+            args: ['testid', ['testuserid', 'testuserid2']],
         }];
 
         const fakeData = {
             channel: 'testid',
-            userIds: ['testuserid'],
+            userIds: ['testuserid', 'testuserid2'],
         };
 
         await testStore.dispatch(addUsersToChannel(fakeData.channel, fakeData.userIds));

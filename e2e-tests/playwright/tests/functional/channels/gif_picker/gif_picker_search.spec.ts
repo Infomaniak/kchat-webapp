@@ -42,6 +42,8 @@ test('MM-T5445 Should search, select and post correct Gif when Gif picker is ope
     await expect(lastPost.body.getByLabel('file thumbnail')).toHaveAttribute('alt', altOfFirstSearchGifResult);
 });
 
+
+
 test('MM-T5446 Should search, select and post correct Gif when Gif picker is opened from RHS textbox', async ({
     page,
     pages,

@@ -3,7 +3,6 @@
 
 import classNames from 'classnames';
 import React, {useCallback, useState} from 'react';
-import {Tooltip} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -29,8 +28,8 @@ import {closeModal, openModal} from 'actions/views/modals';
 import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
 import ChannelLimitIndicator from 'components/limits/channel_limit_indicator';
 import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
-import OverlayTrigger from 'components/overlay_trigger';
 import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
+import WithTooltip from 'components/with_tooltip';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 
@@ -58,11 +57,11 @@ export function validateDisplayName(displayName: string) {
     const errors: string[] = [];
 
     if (displayName.length < Constants.MIN_CHANNELNAME_LENGTH) {
-        errors.push(localizeMessage('channel_modal.name.longer', 'Channel names must have at least 2 characters.'));
+        errors.push(localizeMessage({id: 'channel_modal.name.longer', defaultMessage: 'Channel names must have at least 2 characters.'}));
     }
 
     if (displayName.length > Constants.MAX_CHANNELNAME_LENGTH) {
-        errors.push(localizeMessage('channel_modal.name.shorter', 'Channel names must have maximum 64 characters.'));
+        errors.push(localizeMessage({id: 'channel_modal.name.shorter', defaultMessage: 'Channel names must have maximum 64 characters.'}));
     }
 
     return errors;
@@ -79,7 +78,7 @@ const NewChannelModal = () => {
     const intl = useIntl();
     const {formatMessage} = intl;
 
-    const {id: currentTeamId} = useSelector(getCurrentTeam);
+    const currentTeamId = useSelector(getCurrentTeam)?.id;
 
     const canCreatePublicChannel = useSelector((state: GlobalState) => (currentTeamId ? haveICurrentChannelPermission(state, Permissions.CREATE_PUBLIC_CHANNEL) : false));
     const canCreatePrivateChannel = useSelector((state: GlobalState) => (currentTeamId ? haveICurrentChannelPermission(state, Permissions.CREATE_PRIVATE_CHANNEL) : false));
@@ -96,8 +95,7 @@ const NewChannelModal = () => {
     const [channelInputError, setChannelInputError] = useState(false);
 
     // create a board along with the channel
-    const pluginsComponentsList = useSelector((state: GlobalState) => state.plugins.components);
-    const createBoardFromChannelPlugin = pluginsComponentsList?.CreateBoardFromTemplate;
+    const createBoardFromChannelPlugin = useSelector((state: GlobalState) => state.plugins.components.CreateBoardFromTemplate);
     const newChannelWithBoardPulsatingDotState = useSelector((state: GlobalState) => getPreference(state, Preferences.APP_BAR, Preferences.NEW_CHANNEL_WITH_BOARD_TOUR_SHOWED, ''));
 
     const [canCreateFromPluggable, setCanCreateFromPluggable] = useState(true);
@@ -109,7 +107,7 @@ const NewChannelModal = () => {
     }, []);
 
     const handleOnModalConfirm = async () => {
-        if (!canCreate) {
+        if (!canCreate || !currentTeamId) {
             return;
         }
 
@@ -156,7 +154,7 @@ const NewChannelModal = () => {
     };
 
     const addBoardToChannel = async (channelId: string) => {
-        if (!createBoardFromChannelPlugin) {
+        if (!createBoardFromChannelPlugin || !currentTeamId) {
             return false;
         }
         if (!actionFromPluggable) {
@@ -242,13 +240,9 @@ const NewChannelModal = () => {
     const canCreate = displayName && !urlError && type && !purposeError && !serverError && canCreateFromPluggable && !channelInputError && !(limitations[type] ?? false);
 
     const newBoardInfoIcon = (
-        <OverlayTrigger
-            delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement='right'
-            overlay={(
-                <Tooltip
-                    id='new-channel-with-board-tooltip'
-                >
+        <WithTooltip
+            title={
+                <>
                     <div className='title'>
                         <FormattedMessage
                             id={'channel_modal.create_board.tooltip_title'}
@@ -261,11 +255,11 @@ const NewChannelModal = () => {
                             defaultMessage={'Use any of our templates to manage your tasks or start from scratch with your own!'}
                         />
                     </div>
-                </Tooltip>
-            )}
+                </>
+            }
         >
             <i className='icon-information-outline'/>
-        </OverlayTrigger>
+        </WithTooltip>
     );
 
     const handleSetLimitations = (newLimitations: Record<typeof General.OPEN_CHANNEL | typeof General.PRIVATE_CHANNEL, boolean>) => {

@@ -7,8 +7,9 @@ import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
 import {setGlobalItem} from 'actions/storage';
 
-import mockStore from 'tests/test_store';
 import {StoragePrefixes} from 'utils/constants';
+
+import mockStore from 'tests/test_store';
 
 import type {PostDraft} from 'types/store/draft';
 
@@ -175,6 +176,7 @@ describe('draft actions', () => {
                 message: '',
                 fileInfos: [],
                 uploadsInProgress: [],
+                metadata: {},
             }));
 
             expect(store.getActions()).toEqual(testStore.getActions());

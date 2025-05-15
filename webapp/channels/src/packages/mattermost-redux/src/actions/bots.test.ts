@@ -4,7 +4,6 @@
 import nock from 'nock';
 
 import * as BotActions from 'mattermost-redux/actions/bots';
-import * as UserActions from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 
 import TestHelper from '../../test/test_helper';

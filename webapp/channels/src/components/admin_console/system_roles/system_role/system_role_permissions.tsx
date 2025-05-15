@@ -2,20 +2,19 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {defineMessage} from 'react-intl';
+import {defineMessage, FormattedMessage} from 'react-intl';
 
 import type {Role} from '@mattermost/types/roles';
 
 import {memoizeResult} from 'mattermost-redux/utils/helpers';
 
+import ExternalLink from 'components/external_link';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 
 import Constants from 'utils/constants';
 
 import SystemRolePermission from './system_role_permission';
 import type {PermissionsToUpdate, PermissionToUpdate, SystemSection} from './types';
-
-import FormattedMarkdownMessage from '../../../formatted_markdown_message';
 
 import './system_role_permissions.scss';
 
@@ -63,7 +62,7 @@ const sectionsList: SystemSection[] = [
             {name: 'user_management_teams'},
             {name: 'user_management_channels'},
             {name: 'user_management_permissions'},
-            {name: 'user_management_system_roles', disabled: true},
+            {name: 'user_management_system_roles', hasDescription: true, disabled: true},
         ],
     },
     {
@@ -207,10 +206,40 @@ export default class SystemRolePermissions extends React.PureComponent<Props, St
 
         if (this.props.role.name === Constants.PERMISSIONS_SYSTEM_CUSTOM_GROUP_ADMIN) {
             return (
-                <FormattedMarkdownMessage
-                    id='admin.permissions.roles.system_custom_group_admin.detail_text'
-                    defaultMessage="The built-in Custom Group Manager role can be used to delegate the administration of [Custom Groups](https://docs.mattermost.com/welcome/manage-custom-groups.html) to users other than the System Admin.\n \nDon't forget to deauthorize all other system users from administering Custom Groups by unchecking the associated permissions checkbox in System console > User Management > Permissions.\n \nThis role has permission to create, edit, and delete custom user groups by selecting **User groups** from the Products menu."
-                />
+                <>
+                    <p>
+                        <FormattedMessage
+                            id='admin.permissions.roles.system_custom_group_admin.introduction'
+                            defaultMessage='The built-in Custom Group Manager role can be used to delegate the administration of <a>Custom Groups</a> to users other than the System Admin.'
+                            values={{
+                                a: (chunks: string) => (
+                                    <ExternalLink
+                                        href='https://docs.mattermost.com/welcome/manage-custom-groups.html'
+                                        location='adminConsoleSystemRoles'
+                                    >
+                                        {chunks}
+                                    </ExternalLink>
+                                ),
+                            }}
+                        />
+                    </p>
+                    <p>
+                        <FormattedMessage
+                            id='admin.permissions.roles.system_custom_group_admin.deauthorize_reminder'
+                            defaultMessage="Don't forget to deauthorize all other system users from administering Custom Groups by unchecking the associated permissions checkbox in System console > User Management > Permissions."
+                        />
+                    </p>
+                    <p>
+                        <FormattedMessage
+                            id='admin.permissions.roles.system_custom_group_admin.permissions_info'
+                            defaultMessage='This role has permission to create, edit, and delete custom user groups by selecting <b>User groups</b> from the Products menu.'
+                            values={{
+                                b: (chunks: string) => <b>{chunks}</b>,
+                            }}
+                        />
+                    </p>
+                </>
+
             );
         }
 

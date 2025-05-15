@@ -5,7 +5,6 @@ import {lazy} from 'react';
 
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
-import type {ActionFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 
 import {getTeamRedirectChannelIfIsAccesible} from 'actions/global_actions';
 import LocalStorageStore from 'stores/local_storage_store';
@@ -14,6 +13,8 @@ import {withSuspense} from 'components/common/hocs/with_suspense';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, Constants, ModalIdentifiers} from 'utils/constants';
+
+import type {ActionFunc, ActionFuncAsync} from 'types/store';
 
 import {openModal} from './modals';
 
@@ -26,6 +27,10 @@ export function switchToChannels(): ActionFuncAsync<boolean> {
         const user = getCurrentUser(state);
         const teamId = getCurrentTeamId(state) || LocalStorageStore.getPreviousTeamId(currentUserId);
         const team = getTeam(state, teamId || '');
+
+        if (!team) {
+            return {data: false};
+        }
 
         const channel = await getTeamRedirectChannelIfIsAccesible(user, team);
         const channelName = channel?.name || Constants.DEFAULT_CHANNEL;
@@ -42,8 +47,6 @@ export function openInvitationsModal(timeout = 1): ActionFunc {
             dispatch(openModal({
                 modalId: ModalIdentifiers.INVITATION,
                 dialogType: InvitationModal,
-                dialogProps: {
-                },
             }));
         }, timeout);
         return {data: true};

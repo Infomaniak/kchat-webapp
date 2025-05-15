@@ -8,11 +8,10 @@ import type {Team} from '@mattermost/types/teams';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import store from 'stores/redux_store';
+import {generateId} from 'utils/utils';
 
 import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';
 import mockStore from 'tests/test_store';
-import {generateId} from 'utils/utils';
 
 import InviteAs, {InviteType} from './invite_as';
 import type {Props} from './invite_view';
@@ -106,7 +105,7 @@ describe('InviteView', () => {
         },
     };
 
-    store.getState = () => (state);
+    const store = mockStore(state);
 
     beforeEach(() => {
         props = defaultProps;

@@ -1,9 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {useCallback} from 'react';
-import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
 import type {PostPriorityMetadata} from '@mattermost/types/posts';
@@ -11,10 +9,10 @@ import type {UserProfile, UserStatus} from '@mattermost/types/users';
 
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 
-import DraftEditor from 'components/drafts/draft_editor';
+import PriorityLabels from 'components/advanced_text_editor/priority_labels';
 import FilePreview from 'components/file_preview';
 import Markdown from 'components/markdown';
-import PriorityLabel from 'components/post_priority/post_priority_label';
+import ShowMore from 'components/post_view/show_more';
 import ProfilePicture from 'components/profile_picture';
 
 import {imageURLForUser, handleFormattedTextClick} from 'utils/utils';
@@ -24,7 +22,7 @@ import type {PostDraft} from 'types/store/draft';
 import './panel_body.scss';
 
 type Props = {
-    channelId: string;
+    channelId?: string;
     displayName: string;
     fileInfos: PostDraft['fileInfos'];
     message: string;
@@ -53,9 +51,6 @@ function PanelBody({
     uploadsInProgress,
     userId,
     username,
-    draft,
-    isEditing,
-    setIsEditing,
 }: Props) {
     const currentRelativeTeamUrl = useSelector(getCurrentRelativeTeamUrl);
 
@@ -63,10 +58,7 @@ function PanelBody({
         handleFormattedTextClick(e, currentRelativeTeamUrl);
     }, [currentRelativeTeamUrl]);
 
-    const hideEditor = () => setIsEditing(false);
-
     return (
-
         <div className='DraftPanelBody post'>
             <div className='DraftPanelBody__left post__img'>
                 <ProfilePicture
@@ -78,56 +70,42 @@ function PanelBody({
                     src={imageURLForUser(userId)}
                 />
             </div>
-            <div
-                onClick={handleClick}
-                className='post__content'
-            >
-                <div className='DraftPanelBody__right'>
-                    <div className='post__header'>
-                        <strong className='display_name'>{displayName}</strong>
-                        {priority && (
-                            <div className='DraftPanelBody__priority'>
-                                {priority.priority && (
-                                    <PriorityLabel
-                                        size='xs'
+            <div className='DraftPanelBody__post_body'>
+                <ShowMore
+                    text={message}
+                >
+                    <div
+                        onClick={handleClick}
+                        className='post__content'
+                    >
+                        <div className='DraftPanelBody__right'>
+                            <div className='post__header'>
+                                <strong>{displayName}</strong>
+                                {priority && (
+                                    <PriorityLabels
+                                        canRemove={false}
+                                        hasError={false}
+                                        persistentNotifications={priority.persistent_notifications}
                                         priority={priority.priority}
+                                        requestedAck={priority.requested_ack}
                                     />
                                 )}
-                                {priority.requested_ack && (
-                                    <div className='DraftPanelBody__priority-ack'>
-                                        <CheckCircleOutlineIcon size={14}/>
-                                        {!priority.priority && (
-                                            <FormattedMessage
-                                                id={'post_priority.request_acknowledgement'}
-                                                defaultMessage={'Request acknowledgement'}
-                                            />
-                                        )}
-                                    </div>
-                                )}
                             </div>
-                        )}
+                            <div className='post__body'>
+                                <Markdown
+                                    options={OPTIONS}
+                                    message={message}
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <div className='post__body'>
-                        {isEditing ? (
-                            <DraftEditor
-                                draft={draft}
-                                onCancel={hideEditor}
-                                onEdit={hideEditor}
-                            />
-                        ) : (
-                            <Markdown
-                                options={OPTIONS}
-                                message={message}
-                            />
-                        )}
-                    </div>
-                    {((fileInfos.length > 0 || uploadsInProgress?.length > 0) && !isEditing) && (
-                        <FilePreview
-                            fileInfos={fileInfos}
-                            uploadsInProgress={uploadsInProgress}
-                        />
-                    )}
-                </div>
+                </ShowMore>
+                {(fileInfos.length > 0 || uploadsInProgress?.length > 0) && (
+                    <FilePreview
+                        fileInfos={fileInfos}
+                        uploadsInProgress={uploadsInProgress}
+                    />
+                )}
             </div>
         </div>
     );

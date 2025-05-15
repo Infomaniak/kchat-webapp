@@ -4,15 +4,14 @@
 import React, {useCallback, useMemo} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {matchPath, useHistory, useLocation} from 'react-router-dom';
+import {matchPath, useLocation} from 'react-router-dom';
 
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCurrentTeamDefaultChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
-import {isCurrentUserGuestUser, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {trackEvent as trackEventAction} from 'actions/telemetry_actions';
 import {collapseAllCategoriesExcept} from 'actions/views/channel_sidebar';
@@ -24,32 +23,27 @@ import {
     switchToChannels,
 } from 'actions/views/onboarding_tasks';
 import {setProductMenuSwitcherOpen} from 'actions/views/product_menu';
-import {setStatusDropdown} from 'actions/views/status_dropdown';
+import {getOnboardingTaskPreferences} from 'selectors/onboarding';
 
-import BullsEye from 'components/common/svg_images_components/bulls_eye_svg';
-import Clipboard from 'components/common/svg_images_components/clipboard_svg';
 import Gears from 'components/common/svg_images_components/gears_svg';
 import Handshake from 'components/common/svg_images_components/handshake_svg';
-import Newspaper from 'components/common/svg_images_components/newspaper_svg';
 import Security from 'components/common/svg_images_components/security_svg';
 import Sunglasses from 'components/common/svg_images_components/sunglasses_svg';
-import Wrench from 'components/common/svg_images_components/wrench_svg';
+import {openMenu} from 'components/menu';
 import {
     AutoTourStatus,
     FINISHED,
     OnboardingTourSteps,
+    OnboardingTourStepsForGuestUsers,
     TTNameMapToATStatusKey,
     TutorialTourName,
 } from 'components/tours';
-
-import {ExploreOtherToolsTourSteps} from 'utils/constants';
+import {ELEMENT_ID_FOR_USER_ACCOUNT_MENU_BUTTON} from 'components/user_account_menu/user_account_menu';
 
 import type {GlobalState} from 'types/store';
 
 import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName, TaskNameMapToSteps} from './constants';
 import {generateTelemetryTag} from './utils';
-
-const getCategory = makeGetCategory();
 
 const useGetTaskDetails = () => {
     const {formatMessage} = useIntl();
@@ -59,14 +53,6 @@ const useGetTaskDetails = () => {
             message: formatMessage({
                 id: 'onboardingTask.taskList.introduction',
                 defaultMessage: 'Take a tour of Channels.',
-            }),
-        },
-        [OnboardingTasksName.PLAYBOOKS_TOUR]: {
-            id: 'task_resolve_incidents_faster_with_playbooks',
-            svg: Clipboard,
-            message: formatMessage({
-                id: 'onboardingTask.checklist.task_resolve_incidents_faster_with_playbooks',
-                defaultMessage: 'Explore workflows with your first playbook.',
             }),
         },
         [OnboardingTasksName.INVITE_PEOPLE]: {
@@ -83,15 +69,6 @@ const useGetTaskDetails = () => {
             message: formatMessage({
                 id: 'onboardingTask.checklist.task_complete_your_profile',
                 defaultMessage: 'Complete your profile.',
-            }),
-        },
-
-        [OnboardingTasksName.EXPLORE_OTHER_TOOLS]: {
-            id: 'task_explore_other_tools_in_platform',
-            svg: Wrench,
-            message: formatMessage({
-                id: 'onboardingTask.checklist.task_explore_other_tools_in_platform',
-                defaultMessage: 'Explore other tools in the platform.',
             }),
         },
 
@@ -123,58 +100,12 @@ const useGetTaskDetails = () => {
 };
 
 export const useTasksList = () => {
-    const pluginsList = useSelector((state: GlobalState) => state.plugins.plugins);
-
-    // const prevTrialLicense = useSelector((state: GlobalState) => state.entities.admin.prevTrialLicense);
-    // const license = useSelector(getLicense);
-    // const isPrevLicensed = prevTrialLicense?.IsLicensed;
-    // const isCurrentLicensed = license?.IsLicensed;
-    // const isUserAdmin = useSelector((state: GlobalState) => isCurrentUserSystemAdmin(state));
-    // const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
-    const isUserFirstAdmin = useSelector(isFirstAdmin);
-
-    // const isThinOnBoardingTaskList = useSelector((state: GlobalState) => {
-    //     return isReduceOnBoardingTaskList(state);
-    // });
-    // const workTemplateEnabled = useSelector(areWorkTemplatesEnabled);
-
-    // Cloud conditions
-    // const subscription = useSelector((state: GlobalState) => state.entities.cloud.subscription);
-    // const isCloud = license?.Cloud === 'true';
-    // const isFreeTrial = subscription?.is_free_trial === 'true';
-    // const hadPrevCloudTrial = subscription?.is_free_trial === 'false' && subscription?.trial_end_at > 0;
-
-    // Show this CTA if the instance is currently not licensed and has never had a trial license loaded before
-    // if Cloud, show if not in trial and had never been on trial
-    // const selfHostedTrialCondition = isCurrentLicensed === 'false' && isPrevLicensed === 'false';
-    // const cloudTrialCondition = isCloud && !isFreeTrial && !hadPrevCloudTrial;
-
-    // const showStartTrialTask = selfHostedTrialCondition || cloudTrialCondition;
-
     const list: Record<string, string> = {...OnboardingTasksName};
 
     delete list.PLAYBOOKS_TOUR;
     delete list.START_TRIAL;
 
-    // if (!isUserFirstAdmin && !isUserAdmin) {
-    //     delete list.VISIT_SYSTEM_CONSOLE;
-    //     delete list.START_TRIAL;
-    // }
-
-    // explore other tools tour is only shown to subsequent admins and end users
-    if (isUserFirstAdmin || (!pluginsList.playbooks && !pluginsList.focalboard)) {
-        delete list.EXPLORE_OTHER_TOOLS;
-    }
-
-    // invite other users is hidden for guest users
-    // if (isGuestUser) {
-    // }
-
     delete list.INVITE_PEOPLE;
-
-    // if (isThinOnBoardingTaskList) {
-    //     delete list.DOWNLOAD_APP;
-    // }
 
     delete list.COMPLETE_YOUR_PROFILE;
     delete list.VISIT_SYSTEM_CONSOLE;
@@ -183,7 +114,7 @@ export const useTasksList = () => {
 };
 
 export const useTasksListWithStatus = () => {
-    const dataInDb = useSelector((state: GlobalState) => getCategory(state, OnboardingTaskCategory));
+    const dataInDb = useSelector(getOnboardingTaskPreferences);
     const tasksList = useTasksList();
     const getTaskDetails = useGetTaskDetails();
     return useMemo(() =>
@@ -243,7 +174,6 @@ export const useHandleOnBoardingTaskData = () => {
 
 export const useHandleOnBoardingTaskTrigger = () => {
     const dispatch = useDispatch();
-    const history = useHistory();
     const {pathname} = useLocation();
 
     const handleSaveData = useHandleOnBoardingTaskData();
@@ -252,8 +182,6 @@ export const useHandleOnBoardingTaskTrigger = () => {
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const inAdminConsole = matchPath(pathname, {path: '/admin_console'}) != null;
     const inChannels = matchPath(pathname, {path: '/:team/channels/:chanelId'}) != null;
-    const pluginsList = useSelector((state: GlobalState) => state.plugins.plugins);
-    const boards = pluginsList.focalboard;
 
     return (taskName: string) => {
         switch (taskName) {
@@ -267,8 +195,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
                     name: currentUserId,
 
                     // use SEND_MESSAGE when user is guest (channel creation and invitation are restricted), so only message box and the configure tips are shown
-                    // value: isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE.toString() : OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES.toString(),
-                    value: OnboardingTourSteps.CHANNELS.toString(),
+                    value: isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE.toString() : OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES.toString(),
                 },
                 {
                     user_id: currentUserId,
@@ -285,41 +212,11 @@ export const useHandleOnBoardingTaskTrigger = () => {
             dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => !category.channel_ids.includes(currentTeamDefaultChannelId)));
             break;
         }
-        case OnboardingTasksName.PLAYBOOKS_TOUR: {
-            history.push('/playbooks/start');
-            localStorage.setItem(OnboardingTaskCategory, 'true');
-            handleSaveData(taskName, TaskNameMapToSteps[taskName].FINISHED, true);
-            break;
-        }
         case OnboardingTasksName.COMPLETE_YOUR_PROFILE: {
-            dispatch(setStatusDropdown(true));
+            openMenu(ELEMENT_ID_FOR_USER_ACCOUNT_MENU_BUTTON);
             dispatch(setShowOnboardingCompleteProfileTour(true));
             handleSaveData(taskName, TaskNameMapToSteps[taskName].STARTED, true);
             if (inAdminConsole) {
-                dispatch(switchToChannels());
-            }
-            break;
-        }
-        case OnboardingTasksName.EXPLORE_OTHER_TOOLS: {
-            dispatch(setProductMenuSwitcherOpen(true));
-            handleSaveData(taskName, TaskNameMapToSteps[taskName].STARTED, true);
-            const tourCategory = TutorialTourName.EXPLORE_OTHER_TOOLS;
-            const preferences = [
-                {
-                    user_id: currentUserId,
-                    category: tourCategory,
-                    name: currentUserId,
-                    value: ExploreOtherToolsTourSteps.PLAYBOOKS_TOUR.toString(),
-                },
-                {
-                    user_id: currentUserId,
-                    category: tourCategory,
-                    name: TTNameMapToATStatusKey[tourCategory],
-                    value: AutoTourStatus.ENABLED.toString(),
-                },
-            ];
-            dispatch(savePreferences(currentUserId, preferences));
-            if (!inChannels) {
                 dispatch(switchToChannels());
             }
             break;

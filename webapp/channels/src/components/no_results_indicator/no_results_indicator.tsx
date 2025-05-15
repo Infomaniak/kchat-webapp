@@ -2,17 +2,14 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import type {ReactNode, CSSProperties} from 'react';
 import React from 'react';
-import type {MessageDescriptor} from 'react-intl';
-import {FormattedMessage} from 'react-intl';
+import type {ReactNode, CSSProperties} from 'react';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
-import {SearchSVG, MentionsSVG, ChannelFilesSVG, UserGroupsSVG, UserGroupMembersSVG, InfomaniakChannelSearchSvg} from 'components/common/svg_images_components';
+import {SearchSVG, MentionsSVG, ChannelFilesSVG, UserGroupsSVG, InfomaniakChannelSearchSvg} from 'components/common/svg_images_components';
 import ChannelFilesIcon from 'components/widgets/icons/channel_files_icon';
 import IKFlagIcon from 'components/widgets/icons/ik_flag_icon';
 import PinIcon from 'components/widgets/icons/pin_icon';
-
-import {t} from 'utils/i18n';
 
 import {NoResultsVariant, NoResultsLayout} from './types';
 import './no_results_indicator.scss';
@@ -42,7 +39,7 @@ const iconMap: {[key in NoResultsVariant]: React.ReactNode } = {
     // [NoResultsVariant.ChannelFiles]: <ChannelFilesSVG className='no-results__icon'/>,
     // [NoResultsVariant.ChannelFilesFiltered]: <ChannelFilesSVG className='no-results__icon'/>,
     [NoResultsVariant.UserGroups]: <UserGroupsSVG className='no-results__icon'/>,
-    [NoResultsVariant.UserGroupMembers]: <UserGroupMembersSVG className='no-results__icon'/>,
+    [NoResultsVariant.UserGroupMembers]: <UserGroupsSVG className='no-results__icon'/>,
     [NoResultsVariant.UserGroupsArchived]: <UserGroupsSVG className='no-results__icon'/>,
     [NoResultsVariant.FlaggedPosts]: <IKFlagIcon/>,
     [NoResultsVariant.PinnedPosts]: <PinIcon/>,
@@ -50,77 +47,99 @@ const iconMap: {[key in NoResultsVariant]: React.ReactNode } = {
     [NoResultsVariant.ChannelFilesFiltered]: <ChannelFilesIcon/>,
 };
 
-const titleMap: {[key in NoResultsVariant]: MessageDescriptor} = {
+const titleMap = defineMessages({
     [NoResultsVariant.Search]: {
-        id: t('no_results.search.title'),
+        id: 'no_results.search.title',
+        defaultMessage: 'No results for “{channelName}”',
     },
     [NoResultsVariant.Files]: {
-        id: t('no_results.Files.title'),
+        id: 'no_results.Files.title',
+        defaultMessage: 'No file results for “{searchTerm}”',
     },
     [NoResultsVariant.ChannelSearch]: {
-        id: t('no_results.channel_search.title'),
+        id: 'no_results.channel_search.title',
+        defaultMessage: 'No results for “{channelName}”',
     },
     [NoResultsVariant.Mentions]: {
-        id: t('no_results.mentions.title'),
+        id: 'no_results.mentions.title',
+        defaultMessage: 'No mentions yet',
     },
     [NoResultsVariant.FlaggedPosts]: {
-        id: t('no_results.flagged_posts.title'),
+        id: 'no_results.flagged_posts.title',
+        defaultMessage: 'No saved messages yet',
     },
     [NoResultsVariant.PinnedPosts]: {
-        id: t('no_results.pinned_messages.title'),
+        id: 'no_results.pinned_messages.title',
+        defaultMessage: 'No pinned messages yet',
     },
     [NoResultsVariant.ChannelFiles]: {
-        id: t('no_results.channel_files.title'),
+        id: 'no_results.channel_files.title',
+        defaultMessage: 'No files yet',
     },
     [NoResultsVariant.ChannelFilesFiltered]: {
-        id: t('no_results.channel_files_filtered.title'),
+        id: 'no_results.channel_files_filtered.title',
+        defaultMessage: 'No files found',
     },
     [NoResultsVariant.UserGroups]: {
-        id: t('no_results.user_groups.title'),
+        id: 'no_results.user_groups.title',
+        defaultMessage: 'No groups yet',
     },
     [NoResultsVariant.UserGroupMembers]: {
-        id: t('no_results.user_group_members.title'),
+        id: 'no_results.user_group_members.title',
+        defaultMessage: 'No members yet',
     },
     [NoResultsVariant.UserGroupsArchived]: {
-        id: t('no_results.user_groups.archived.title'),
+        id: 'no_results.user_groups.archived.title',
+        defaultMessage: 'No archived groups',
     },
-};
+});
 
-const subtitleMap: {[key in NoResultsVariant]: MessageDescriptor} = {
+const subtitleMap = defineMessages({
     [NoResultsVariant.Search]: {
-        id: t('no_results.search.subtitle'),
+        id: 'no_results.search.subtitle',
+        defaultMessage: 'Check the spelling or try another search.',
     },
     [NoResultsVariant.Files]: {
-        id: t('no_results.Files.subtitle'),
+        id: 'no_results.Files.subtitle',
+        defaultMessage: 'Check the spelling or try another search.',
     },
     [NoResultsVariant.ChannelSearch]: {
-        id: t('no_results.channel_search.subtitle'),
+        id: 'no_results.channel_search.subtitle',
+        defaultMessage: 'Check the spelling or try another search.',
     },
     [NoResultsVariant.Mentions]: {
-        id: t('no_results.mentions.subtitle'),
+        id: 'no_results.mentions.subtitle',
+        defaultMessage: 'Messages where someone mentions you or includes your trigger words are saved here.',
     },
     [NoResultsVariant.FlaggedPosts]: {
-        id: t('no_results.flagged_posts.subtitle'),
+        id: 'no_results.flagged_posts.subtitle',
+        defaultMessage: 'To save something for later, open the context menu on a message and choose {buttonText}. Saved messages are only visible to you',
     },
     [NoResultsVariant.PinnedPosts]: {
-        id: t('no_results.pinned_messages.subtitle'),
+        id: 'no_results.pinned_messages.subtitle',
+        defaultMessage: 'To pin important messages, open the context menu on a message and choose {text}. Pinned messages will be visible to everyone in this channel.',
     },
     [NoResultsVariant.ChannelFiles]: {
-        id: t('no_results.channel_files.subtitle'),
+        id: 'no_results.channel_files.subtitle',
+        defaultMessage: 'Files posted in this channel will show here.',
     },
     [NoResultsVariant.ChannelFilesFiltered]: {
-        id: t('no_results.channel_files_filtered.subtitle'),
+        id: 'no_results.channel_files_filtered.subtitle',
+        defaultMessage: "This channel doesn't contains any file with the selected file format.",
     },
     [NoResultsVariant.UserGroups]: {
-        id: t('no_results.user_groups.subtitle'),
+        id: 'no_results.user_groups.subtitle',
+        defaultMessage: 'Groups are a custom collection of users that can be used for mentions and invites.',
     },
     [NoResultsVariant.UserGroupMembers]: {
-        id: t('no_results.user_group_members.subtitle'),
+        id: 'no_results.user_group_members.subtitle',
+        defaultMessage: 'There are currently no members in this group, please add one.',
     },
     [NoResultsVariant.UserGroupsArchived]: {
-        id: t('no_results.user_groups.archived.subtitle'),
+        id: 'no_results.user_groups.archived.subtitle',
+        defaultMessage: 'Groups that are no longer relevant or are not being used can be archived',
     },
-};
+});
 
 const NoResultsIndicator = ({
     expanded,

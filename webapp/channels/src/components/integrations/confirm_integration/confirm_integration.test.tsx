@@ -10,8 +10,9 @@ import type {IDMappedObjects} from '@mattermost/types/utilities';
 
 import ConfirmIntegration from 'components/integrations/confirm_integration/confirm_integration';
 
-import {renderWithContext} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext} from 'tests/react_testing_utils';
 
 describe('components/integrations/ConfirmIntegration', () => {
     const id = 'r5tpgt4iepf45jt768jz84djic';

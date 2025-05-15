@@ -8,13 +8,11 @@ import type {Team, TeamMembership, TeamUnread} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne, IDMappedObjects} from '@mattermost/types/utilities';
 
+import type {MMReduxAction} from 'mattermost-redux/action_types';
 import {AdminTypes, ChannelTypes, TeamTypes, UserTypes, SchemeTypes, GroupTypes} from 'mattermost-redux/action_types';
 import {teamListToMap} from 'mattermost-redux/utils/team_utils';
 
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
-
-function currentTeamId(state = '', action: AnyAction) {
+function currentTeamId(state = '', action: MMReduxAction) {
     switch (action.type) {
     case TeamTypes.SELECT_TEAM:
         return action.data;
@@ -26,7 +24,7 @@ function currentTeamId(state = '', action: AnyAction) {
     }
 }
 
-function teams(state: IDMappedObjects<Team> = {}, action: AnyAction) {
+function teams(state: IDMappedObjects<Team> = {}, action: MMReduxAction) {
     switch (action.type) {
     case TeamTypes.RECEIVED_TEAMS_LIST: {
         const teams: Team[] = action.data;
@@ -78,7 +76,7 @@ function teams(state: IDMappedObjects<Team> = {}, action: AnyAction) {
     case TeamTypes.RECEIVED_TEAM_DELETED: {
         const nextState = {...state};
         const teamId = action.data.id;
-        if (nextState.hasOwnProperty(teamId)) {
+        if (Object.hasOwn(nextState, teamId)) {
             Reflect.deleteProperty(nextState, teamId);
             return nextState;
         }
@@ -125,7 +123,7 @@ function teams(state: IDMappedObjects<Team> = {}, action: AnyAction) {
     }
 }
 
-function myMembers(state: RelationOneToOne<Team, TeamMembership> = {}, action: AnyAction) {
+function myMembers(state: RelationOneToOne<Team, TeamMembership> = {}, action: MMReduxAction) {
     function updateState(receivedTeams: IDMappedObjects<Team> = {}, currentState: RelationOneToOne<Team, TeamMembership> = {}) {
         return Object.keys(receivedTeams).forEach((teamId) => {
             if (receivedTeams[teamId].delete_at > 0 && currentState[teamId]) {
@@ -320,7 +318,7 @@ function myMembers(state: RelationOneToOne<Team, TeamMembership> = {}, action: A
     }
 }
 
-function membersInTeam(state: RelationOneToOne<Team, RelationOneToOne<UserProfile, TeamMembership>> = {}, action: AnyAction) {
+function membersInTeam(state: RelationOneToOne<Team, RelationOneToOne<UserProfile, TeamMembership>> = {}, action: MMReduxAction) {
     switch (action.type) {
     case TeamTypes.RECEIVED_MEMBER_IN_TEAM: {
         const data = action.data;
@@ -383,7 +381,7 @@ function membersInTeam(state: RelationOneToOne<Team, RelationOneToOne<UserProfil
     case TeamTypes.RECEIVED_TEAM_DELETED: {
         const nextState = {...state};
         const teamId = action.data.id;
-        if (nextState.hasOwnProperty(teamId)) {
+        if (Object.hasOwn(nextState, teamId)) {
             Reflect.deleteProperty(nextState, teamId);
             return nextState;
         }
@@ -400,7 +398,7 @@ function membersInTeam(state: RelationOneToOne<Team, RelationOneToOne<UserProfil
     }
 }
 
-function stats(state: any = {}, action: AnyAction) {
+function stats(state: any = {}, action: MMReduxAction) {
     switch (action.type) {
     case TeamTypes.RECEIVED_TEAM_STATS: {
         const stat = action.data;
@@ -412,7 +410,7 @@ function stats(state: any = {}, action: AnyAction) {
     case TeamTypes.RECEIVED_TEAM_DELETED: {
         const nextState = {...state};
         const teamId = action.data.id;
-        if (nextState.hasOwnProperty(teamId)) {
+        if (Object.hasOwn(nextState, teamId)) {
             Reflect.deleteProperty(nextState, teamId);
             return nextState;
         }
@@ -426,7 +424,7 @@ function stats(state: any = {}, action: AnyAction) {
     }
 }
 
-function groupsAssociatedToTeam(state: RelationOneToOne<Team, {ids: string[]; totalCount: number}> = {}, action: AnyAction) {
+function groupsAssociatedToTeam(state: RelationOneToOne<Team, {ids: string[]; totalCount: number}> = {}, action: MMReduxAction) {
     switch (action.type) {
     case GroupTypes.RECEIVED_GROUP_ASSOCIATED_TO_TEAM: {
         const {teamID, groups} = action.data;
@@ -514,7 +512,7 @@ function updateMyTeamMemberSchemeRoles(state: RelationOneToOne<Team, TeamMembers
     return state;
 }
 
-function totalCount(state = 0, action: AnyAction) {
+function totalCount(state = 0, action: MMReduxAction) {
     switch (action.type) {
     case TeamTypes.RECEIVED_TOTAL_TEAM_COUNT: {
         return action.data;

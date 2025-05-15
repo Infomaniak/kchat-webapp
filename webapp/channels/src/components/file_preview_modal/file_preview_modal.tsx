@@ -4,6 +4,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
+import {FormattedMessage} from 'react-intl';
 
 import type {FileInfo} from '@mattermost/types/files';
 import type {Post} from '@mattermost/types/posts';
@@ -23,9 +24,9 @@ import * as Utils from 'utils/utils';
 
 import type {FilePreviewComponent} from 'types/store/plugins';
 
-import type {ZoomValue} from './file_preview_modal_image_controls/file_preview_modal_image_controls';
 import FilePreviewModalFooter from './file_preview_modal_footer/file_preview_modal_footer';
 import FilePreviewModalHeader from './file_preview_modal_header/file_preview_modal_header';
+import type {ZoomValue} from './file_preview_modal_image_controls/file_preview_modal_image_controls';
 import ImagePreview from './image_preview';
 import PopoverBar from './popover_bar';
 import {isFileInfo} from './types';
@@ -385,12 +386,16 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                 }
             } else {
                 // display a progress indicator when the preview for an image is still loading
-                const loading = Utils.localizeMessage('view_image.loading', 'Loading');
                 const progress = Math.floor(this.state.progress[this.state.imageIndex]);
 
                 content = (
                     <LoadingImagePreview
-                        loading={loading}
+                        loading={
+                            <FormattedMessage
+                                id='view_image.loading'
+                                defaultMessage='Loading'
+                            />
+                        }
                         progress={progress}
                     />
                 );
@@ -421,7 +426,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                 dialogClassName={dialogClassName}
                 animation={true}
                 backdrop={false}
-                role='dialog'
+                role='none'
                 style={{paddingLeft: 0}}
                 aria-labelledby='viewImageModalLabel'
             >

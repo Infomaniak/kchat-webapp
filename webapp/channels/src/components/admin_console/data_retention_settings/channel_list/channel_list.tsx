@@ -14,7 +14,6 @@ import type {Column, Row} from 'components/admin_console/data_grid/data_grid';
 import DataGrid from 'components/admin_console/data_grid/data_grid';
 import type {FilterOptions} from 'components/admin_console/filter/filter';
 import TeamFilterDropdown from 'components/admin_console/filter/team_filter_dropdown';
-
 import './channel_list.scss';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import GlobeIcon from 'components/widgets/icons/globe_icon';

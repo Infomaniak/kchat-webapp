@@ -1,16 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {Audit} from './audits';
-import {Compliance} from './compliance';
-import {AdminConfig, AllowedIPRange, ClientLicense, EnvironmentConfig} from './config';
-import {DataRetentionCustomPolicies} from './data_retention';
-import {MixedUnlinkedGroupRedux} from './groups';
-import {PluginRedux, PluginStatusRedux} from './plugins';
-import {SamlCertificateStatus, SamlMetadataResponse} from './saml';
-import {Team} from './teams';
-import {UserAccessToken, UserProfile} from './users';
-import {RelationOneToOne} from './utilities';
+import type {Audit} from './audits';
+import type {Compliance} from './compliance';
+import type {AdminConfig, ClientLicense, EnvironmentConfig} from './config';
+import type {DataRetentionCustomPolicies} from './data_retention';
+import type {MixedUnlinkedGroupRedux} from './groups';
+import type {PluginRedux, PluginStatusRedux} from './plugins';
+import type {SamlCertificateStatus, SamlMetadataResponse} from './saml';
+import type {Team} from './teams';
+import type {UserAccessToken, UserProfile} from './users';
+import type {RelationOneToOne} from './utilities';
 
 export enum LogLevelEnum {
     SILLY = 'silly',
@@ -86,13 +86,13 @@ export type AnalyticsState = {
     TOTAL_READ_DB_CONNECTIONS?: number;
     DAILY_ACTIVE_USERS?: number;
     MONTHLY_ACTIVE_USERS?: number;
-    TOTAL_FILE_POSTS?: number;
-    TOTAL_HASHTAG_POSTS?: number;
     TOTAL_IHOOKS?: number;
     TOTAL_OHOOKS?: number;
     TOTAL_COMMANDS?: number;
     TOTAL_SESSIONS?: number;
     REGISTERED_USERS?: number;
+    TOTAL_FILE_COUNT?: number;
+    TOTAL_FILE_SIZE?: number;
 }
 
 export type ClusterInfo = {
@@ -112,14 +112,29 @@ export type IndexedPluginAnalyticsRow = {
     [key: string]: PluginAnalyticsRow;
 }
 
+export enum AnalyticsVisualizationType {
+    Count = 'count',
+    LineChart = 'line_chart',
+    DoughnutChart = 'doughnut_chart',
+}
+
 export type PluginAnalyticsRow = {
     id: string;
     name: React.ReactNode;
-    icon: string;
-    value: number;
+    icon?: string;
+    value: any;
+    visualizationType?: AnalyticsVisualizationType;
 };
 
 export type SchemaMigration = {
     version: number;
     name: string;
 };
+
+export type SupportPacketContent = {
+    id: string;
+    translation_id?: string;
+    label: string;
+    selected: boolean;
+    mandatory: boolean;
+}

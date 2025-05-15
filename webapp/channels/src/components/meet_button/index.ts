@@ -20,7 +20,7 @@ import {getConferenceByChannelId} from '../../selectors/kmeet_calls';
 function mapStateToProps(state: GlobalState) {
     const channel = getCurrentChannel(state);
     const membersCount = getCurrentChannelMembersCount(state);
-    const conference = getConferenceByChannelId(state, channel.id);
+    const conference = getConferenceByChannelId(state, channel?.id);
 
     return {
         channel,
@@ -29,13 +29,15 @@ function mapStateToProps(state: GlobalState) {
     };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    actions: bindActionCreators({
-        startOrJoinCallInChannelV2,
-        joinCall,
-        openModal,
-        closeModal,
-    }, dispatch),
-});
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        actions: bindActionCreators({
+            startOrJoinCallInChannelV2,
+            joinCall,
+            openModal,
+            closeModal,
+        }, dispatch),
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MeetButton);

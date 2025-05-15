@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import type {IntlShape} from 'react-intl';
-import {injectIntl, FormattedMessage} from 'react-intl';
+import {injectIntl, FormattedMessage, defineMessage} from 'react-intl';
 import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -28,7 +28,7 @@ import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
-import {localizeMessage, sortUsersAndGroups} from 'utils/utils';
+import {sortUsersAndGroups} from 'utils/utils';
 
 import GroupOption from './group_option';
 import TeamWarningBanner from './team_warning_banner';
@@ -47,7 +47,7 @@ export type Props = {
     profilesNotInCurrentTeam: UserProfile[];
     profilesFromRecentDMs: UserProfile[];
     intl: IntlShape;
-    membersInTeam: RelationOneToOne<UserProfile, TeamMembership>;
+    membersInTeam?: RelationOneToOne<UserProfile, TeamMembership>;
     userStatuses: RelationOneToOne<UserProfile, string>;
     onExited: () => void;
     channel: Channel;
@@ -411,13 +411,9 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                                 {displayName}
                                 {option.is_bot && <BotTag/>}
                                 {isGuest(option.roles) && <GuestTag className='popoverlist'/>}
-                                {displayName === option.username ?
-                                    null :
-                                    <UsernameSpan
-                                        className='ml-2 light'
-                                    >
-                                        {'@'}{option.username}
-                                    </UsernameSpan>
+                                {displayName === option.username ? null : <UsernameSpan className='ml-2 light'>
+                                    {'@'}{option.username}
+                                </UsernameSpan>
                                 }
                                 <UserMappingSpan
                                     className='light'
@@ -428,11 +424,14 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                     <div className='more-modal__actions'>
-                        <div className='more-modal__actions--round'>
+                        <button
+                            className='more-modal__actions--round'
+                            aria-label='Add channel to invite'
+                        >
                             <i
                                 className='icon icon-plus'
                             />
-                        </div>
+                        </button>
                     </div>
                 </div>
             );
@@ -457,15 +456,16 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             inviteError = (<label className='has-error control-label'>{this.state.inviteError}</label>);
         }
 
-        const buttonSubmitText = localizeMessage('multiselect.add', 'Add');
-        const buttonSubmitLoadingText = localizeMessage('multiselect.adding', 'Adding...');
-        const idsInGroup = this.props.profilesInCurrentChannel.map((user) => user.id);
-        let excludedAndNotInTeamUserIds: Set<string>;
-        if (this.props.excludeUsers) {
-            excludedAndNotInTeamUserIds = new Set(...this.props.profilesNotInCurrentTeam.map((user) => user.id), Object.values(this.props.excludeUsers).map((user) => user.id));
-        } else {
-            excludedAndNotInTeamUserIds = new Set(this.props.profilesNotInCurrentTeam.map((user) => user.id));
-        }
+        // TODO MM-10.0: need any of this, majority was commented apart apart from consts
+        // const buttonSubmitText = localizeMessage({id: 'multiselect.add', defaultMessage: 'Add'});
+        // const buttonSubmitLoadingText = localizeMessage({id: 'multiselect.adding', defaultMessage: 'Adding...'});
+        // const idsInGroup = this.props.profilesInCurrentChannel.map((user) => user.id);
+        // let excludedAndNotInTeamUserIds: Set<string>;
+        // if (this.props.excludeUsers) {
+        //     excludedAndNotInTeamUserIds = new Set(...this.props.profilesNotInCurrentTeam.map((user) => user.id), Object.values(this.props.excludeUsers).map((user) => user.id));
+        // } else {
+        //     excludedAndNotInTeamUserIds = new Set(this.props.profilesNotInCurrentTeam.map((user) => user.id));
+        // }
         // let users = this.filterOutDeletedAndExcludedAndNotInTeamUsers(
         //     filterProfilesStartingWithTerm(
         //         this.props.profilesNotInCurrentChannel.concat(this.props.profilesInCurrentChannel),
@@ -494,15 +494,16 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         //     }));
 
         // users = Array.from(new Set(users));
+        const buttonSubmitText = defineMessage({id: 'multiselect.add', defaultMessage: 'Add'});
+        const buttonSubmitLoadingText = defineMessage({id: 'multiselect.adding', defaultMessage: 'Adding...'});
 
         const closeMembersInviteModal = () => {
             this.props.actions.closeModal(ModalIdentifiers.CHANNEL_INVITE);
         };
 
-        const InviteModalLink = (props: {inviteAsGuest?: boolean; children: React.ReactNode}) => {
+        const InviteModalLink = (props: {inviteAsGuest?: boolean; children: React.ReactNode; id?: string}) => {
             return (
                 <ToggleModalButton
-                    id='inviteGuest'
                     className={`${props.inviteAsGuest ? 'invite-as-guest' : ''} btn btn-link`}
                     modalId={ModalIdentifiers.INVITATION}
                     dialogType={InvitationModal}
@@ -510,8 +511,10 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                         channelToInvite: this.props.channel,
                         initialValue: this.state.term,
                         inviteAsGuest: props.inviteAsGuest,
+                        focusOriginElement: 'customNoOptionsMessageLink',
                     }}
                     onClick={closeMembersInviteModal}
+                    id={props.id}
                 >
                     {props.children}
                 </ToggleModalButton>
@@ -519,7 +522,9 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         };
 
         const customNoOptionsMessage = (
-            <div className='custom-no-options-message'>
+            <div
+                className='custom-no-options-message'
+            >
                 <FormattedMessage
                     id='channel_invite.no_options_message'
                     defaultMessage='No matches found'
@@ -548,9 +553,9 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                 buttonSubmitLoadingText={buttonSubmitLoadingText}
                 saving={this.state.saving}
                 loading={this.state.loadingUsers}
-                placeholderText={this.props.isGroupsEnabled ? localizeMessage('multiselect.placeholder.peopleOrGroups', 'Search for people or groups') : localizeMessage('multiselect.placeholder', 'Search for people')}
+                placeholderText={this.props.isGroupsEnabled ? defineMessage({id: 'multiselect.placeholder.peopleOrGroups', defaultMessage: 'Search for people or groups'}) : defineMessage({id: 'multiselect.placeholder', defaultMessage: 'Search for people'})}
                 valueWithImage={true}
-                backButtonText={localizeMessage('multiselect.cancel', 'Cancel')}
+                backButtonText={defineMessage({id: 'multiselect.cancel', defaultMessage: 'Cancel'})}
                 backButtonClick={closeMembersInviteModal}
                 backButtonClass={'btn-tertiary tertiary-button'}
                 customNoOptionsMessage={this.props.emailInvitationsEnabled ? customNoOptionsMessage : null}
@@ -573,7 +578,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                 show={this.state.show}
                 onHide={this.onHide}
                 onExited={this.props.onExited}
-                role='dialog'
+                role='none'
                 aria-labelledby='channelInviteModalLabel'
             >
                 <Modal.Header

@@ -8,6 +8,7 @@ import type {LimitSummary} from './useGetMultiplesExceededCloudLimit';
 import useGetMultiplesExceededCloudLimit from './useGetMultiplesExceededCloudLimit';
 
 jest.mock('react', () => ({
+    ...jest.requireActual('react'),
     useMemo: (fn: () => LimitSummary) => fn(),
 }));
 

@@ -70,20 +70,20 @@ const TimeFrameDropdown = (props: Props) => {
         if (timeFrame === TimeFrames.INSIGHTS_1_DAY) {
             return {
                 value: TimeFrames.INSIGHTS_1_DAY,
-                label: localizeMessage('insights.timeFrame.today', 'Today'),
+                label: localizeMessage({id: 'insights.timeFrame.today', defaultMessage: 'Today'}),
             };
         }
 
         if (timeFrame === TimeFrames.INSIGHTS_28_DAYS) {
             return {
                 value: TimeFrames.INSIGHTS_28_DAYS,
-                label: localizeMessage('insights.timeFrame.longRange', 'Last 28 days'),
+                label: localizeMessage({id: 'insights.timeFrame.longRange', defaultMessage: 'Last 28 days'}),
             };
         }
 
         return {
             value: TimeFrames.INSIGHTS_7_DAYS,
-            label: localizeMessage('insights.timeFrame.mediumRange', 'Last 7 days'),
+            label: localizeMessage({id: 'insights.timeFrame.mediumRange', defaultMessage: 'Last 7 days'}),
         };
     }, [props.timeFrame]);
 
@@ -97,15 +97,15 @@ const TimeFrameDropdown = (props: Props) => {
             options={[
                 {
                     value: TimeFrames.INSIGHTS_1_DAY,
-                    label: localizeMessage('insights.timeFrame.today', 'Today'),
+                    label: localizeMessage({id: 'insights.timeFrame.today', defaultMessage: 'Today'}),
                 },
                 {
                     value: TimeFrames.INSIGHTS_7_DAYS,
-                    label: localizeMessage('insights.timeFrame.mediumRange', 'Last 7 days'),
+                    label: localizeMessage({id: 'insights.timeFrame.mediumRange', defaultMessage: 'Last 7 days'}),
                 },
                 {
                     value: TimeFrames.INSIGHTS_28_DAYS,
-                    label: localizeMessage('insights.timeFrame.longRange', 'Last 28 days'),
+                    label: localizeMessage({id: 'insights.timeFrame.longRange', defaultMessage: 'Last 28 days'}),
                 },
             ]}
             clearable={false}

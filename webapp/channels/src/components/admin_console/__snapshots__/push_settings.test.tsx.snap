@@ -15,10 +15,7 @@ exports[`components/PushSettings should match snapshot, licensed 1`] = `
         id="admin.environment.pushNotificationServer"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <DropdownSetting
         helpText={null}
         id="pushNotificationServerType"
@@ -161,45 +158,32 @@ exports[`components/PushSettings should match snapshot, licensed 1`] = `
         type="number"
         value={1000}
       />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -220,10 +204,7 @@ exports[`components/PushSettings should match snapshot, unlicensed 1`] = `
         id="admin.environment.pushNotificationServer"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <DropdownSetting
         helpText={null}
         id="pushNotificationServerType"
@@ -309,45 +290,32 @@ exports[`components/PushSettings should match snapshot, unlicensed 1`] = `
         type="number"
         value={1000}
       />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>

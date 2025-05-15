@@ -41,8 +41,11 @@ const (
 
 var ErrMaxPropSizeExceeded = fmt.Errorf("max prop size of %d exceeded", maxPropSizeBytes)
 
+//msgp:ignore StringInterface StringSet
 type StringInterface map[string]any
 type StringSet map[string]struct{}
+
+//msgp:tuple StringArray
 type StringArray []string
 
 func (ss StringSet) Has(val string) bool {
@@ -228,6 +231,7 @@ func AppErrorInit(t i18n.TranslateFunc) {
 	})
 }
 
+//msgp:ignore AppError
 type AppError struct {
 	Id              string `json:"id"`
 	Message         string `json:"message"`               // Message to be display to the end user without debugging information
@@ -235,7 +239,6 @@ type AppError struct {
 	RequestId       string `json:"request_id,omitempty"`  // The RequestId that's also set in the header
 	StatusCode      int    `json:"status_code,omitempty"` // The http status code
 	Where           string `json:"-"`                     // The function where it happened in the form of Struct.Func
-	IsOAuth         bool   `json:"is_oauth,omitempty"`    // Whether the error is OAuth specific
 	SkipTranslation bool   `json:"-"`                     // Whether translation for the error should be skipped.
 	params          map[string]any
 	wrapped         error
@@ -336,6 +339,11 @@ func (er *AppError) Wrap(err error) *AppError {
 	return er
 }
 
+func (er *AppError) WipeDetailed() {
+	er.wrapped = nil
+	er.DetailedError = ""
+}
+
 // AppErrorFromJSON will try to decode the input into an AppError.
 func AppErrorFromJSON(r io.Reader) error {
 	data, err := io.ReadAll(r)
@@ -365,7 +373,6 @@ func NewAppError(where string, id string, params map[string]any, details string,
 		Where:         where,
 		DetailedError: details,
 		StatusCode:    status,
-		IsOAuth:       false,
 	}
 	ap.Translate(translateFunc)
 	return ap
@@ -378,6 +385,11 @@ var encoding = base32.NewEncoding("ybndrfg8ejkmcpqxot1uwisza345h769").WithPaddin
 // without the padding.
 func NewId() string {
 	return encoding.EncodeToString(uuid.NewRandom())
+}
+
+// NewUsername is a NewId prefixed with a letter to make valid username
+func NewUsername() string {
+	return "a" + NewId()
 }
 
 // NewRandomTeamName is a NewId that will be a valid team name.
@@ -619,6 +631,12 @@ func IsValidEmail(email string) bool {
 		return false
 	}
 
+	// mail.ParseAddress accepts quoted strings for the address
+	// which can lead to sending to the wrong email address
+	// check for multiple '@' symbols and invalidate
+	if strings.Count(email, "@") > 1 {
+		return false
+	}
 	return true
 }
 
@@ -840,4 +858,17 @@ func filterBlocklist(r rune) rune {
 
 func IsCloud() bool {
 	return os.Getenv("MM_CLOUD_INSTALLATION_ID") != ""
+}
+
+func SliceToMapKey(s ...string) map[string]any {
+	m := make(map[string]any)
+	for i := range s {
+		m[s[i]] = struct{}{}
+	}
+
+	if len(s) != len(m) {
+		panic("duplicate keys")
+	}
+
+	return m
 }

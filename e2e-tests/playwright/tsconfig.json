@@ -15,5 +15,5 @@
         },
     },
     "include": ["./**/*"],
-    "exclude": ["playwright-report"],
+    "exclude": ["playwright-report"]
 }

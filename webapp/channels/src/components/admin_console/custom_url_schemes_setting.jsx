@@ -49,11 +49,11 @@ export default class CustomURLSchemesSetting extends React.PureComponent {
     };
 
     render() {
-        const label = Utils.localizeMessage('admin.customization.customUrlSchemes', 'Custom URL Schemes:');
-        const helpText = Utils.localizeMessage(
-            'admin.customization.customUrlSchemesDesc',
-            'Allows message text to link if it begins with any of the comma-separated URL schemes listed. By default, the following schemes will create links: "http", "https", "ftp", "tel", and "mailto".',
-        );
+        const label = Utils.localizeMessage({id: 'admin.customization.customUrlSchemes', defaultMessage: 'Custom URL Schemes:'});
+        const helpText = Utils.localizeMessage({
+            id: 'admin.customization.customUrlSchemesDesc',
+            defaultMessage: 'Allows message text to link if it begins with any of the comma-separated URL schemes listed. By default, the following schemes will create links: "http", "https", "ftp", "tel", and "mailto".',
+        });
 
         return (
             <Setting

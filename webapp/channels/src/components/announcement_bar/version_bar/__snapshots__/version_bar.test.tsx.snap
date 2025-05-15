@@ -29,7 +29,6 @@ exports[`components/VersionBar should match snapshot - On mount \`none\` become 
           id="version_bar.refresh"
         />
       </a>
-      .
     </React.Fragment>
   }
   type="announcement"
@@ -59,7 +58,6 @@ exports[`components/VersionBar should match snapshot - bar rendered after build 
           id="version_bar.refresh"
         />
       </a>
-      .
     </React.Fragment>
   }
   type="announcement"
@@ -89,7 +87,6 @@ exports[`components/VersionBar should match snapshot - bar rendered after build 
           id="version_bar.refresh"
         />
       </a>
-      .
     </React.Fragment>
   }
   type="announcement"
@@ -119,7 +116,6 @@ exports[`components/VersionBar should match snapshot - bar rendered but disappea
           id="version_bar.refresh"
         />
       </a>
-      .
     </React.Fragment>
   }
   type="announcement"

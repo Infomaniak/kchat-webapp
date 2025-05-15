@@ -17,7 +17,8 @@ import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/commo
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentTeamUrl, getCurrentTeamId, getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFuncAsync, ActionResult} from 'mattermost-redux/types/actions';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import type {ActionFuncAsync, ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {loadNewDMIfNeeded, loadNewGMIfNeeded, loadProfilesForSidebar} from 'actions/user_actions';
@@ -166,6 +167,26 @@ export function autocompleteChannels(term: string, success: (channels: Channel[]
     };
 }
 
+export function autocompleteActiveChannels(term: string, success: (channels: Channel[]) => void, error?: (err: ServerError) => void): ActionFuncAsync {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const teamId = getCurrentTeamId(state);
+        if (!teamId) {
+            return {data: false};
+        }
+
+        const {data, error: err} = await dispatch(ChannelActions.autocompleteChannels(teamId, term));
+        if (data && success) {
+            const activeChannels = data.filter((channel: Channel) => channel.delete_at === 0);
+            success(activeChannels);
+        } else if (err && error) {
+            error({id: err.server_error_id, ...err});
+        }
+
+        return {data: true};
+    };
+}
+
 export function autocompleteChannelsForSearch(term: string, success?: (channels: Channel[]) => void, error?: (err: ServerError) => void): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
@@ -185,17 +206,29 @@ export function autocompleteChannelsForSearch(term: string, success?: (channels:
     };
 }
 
+export function autocompleteChannelsForSearchInTeam(term: string, teamId: string, success?: (channels: Channel[]) => void, error?: (err: ServerError) => void): ActionFuncAsync {
+    return async (dispatch) => {
+        if (!teamId) {
+            return {data: false};
+        }
+
+        const {data, error: err} = await dispatch(ChannelActions.autocompleteChannelsForSearch(teamId, term));
+        if (data && success) {
+            success(data);
+        } else if (err && error) {
+            error({id: err.server_error_id, ...err});
+        }
+        return {data: true};
+    };
+}
+
 export function addUsersToChannel(channelId: Channel['id'], userIds: Array<UserProfile['id']>): ActionFuncAsync {
     return async (dispatch) => {
-        try {
-            const requests = userIds.map((uId) => dispatch(ChannelActions.addChannelMember(channelId, uId)));
-
-            await Promise.all(requests);
-
-            return {data: true};
-        } catch (error) {
-            return {error};
+        const error = await dispatch(ChannelActions.addChannelMembers(channelId, userIds));
+        if (error) {
+            return error;
         }
+        return {data: true};
     };
 }
 

@@ -1,107 +1,40 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {mount} from 'enzyme';
 import React from 'react';
-import 'jest-styled-components';
 
 import type {AppBinding} from '@mattermost/types/apps';
 
+import {Permissions} from 'mattermost-redux/constants';
 import {AppBindingLocations} from 'mattermost-redux/constants/apps';
 
-import type {GlobalState} from 'types/store';
-import type {PluginComponent} from 'types/store/plugins';
+import {TestHelper} from 'utils/test_helper';
+
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
+import {renderWithContext, screen} from 'tests/react_testing_utils';
+
+import type {ChannelHeaderButtonAction, RightHandSidebarComponent} from 'types/store/plugins';
 
 import AppBar from './app_bar';
 
-const mockDispatch = jest.fn();
-let mockState: GlobalState;
-
-jest.mock('react-redux', () => ({
-    ...jest.requireActual('react-redux') as typeof import('react-redux'),
-    useSelector: (selector: (state: typeof mockState) => unknown) => selector(mockState),
-    useDispatch: () => mockDispatch,
-}));
-
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom') as typeof import('react-router-dom'),
-    useLocation: () => {
-        return {
-            pathname: '',
-        };
-    },
-}));
-
 describe('components/app_bar/app_bar', () => {
-    beforeEach(() => {
-        mockState = {
-            views: {
-                rhs: {
-                    isSidebarOpen: true,
-                    rhsState: 'plugin',
-                    pluggableId: 'the_rhs_plugin_component',
-                },
-            },
-            plugins: {
-                components: {
-                    AppBar: channelHeaderComponents,
-                    RightHandSidebarComponent: rhsComponents,
-                    Product: [],
-                } as {[componentName: string]: PluginComponent[]},
-            },
-            entities: {
-                apps: {
-                    main: {
-                        bindings: channelHeaderAppBindings,
-                    } as {bindings: AppBinding[]},
-                    pluginEnabled: true,
-                },
-                general: {
-                    config: {
-                        EnableAppBar: 'true',
-                        FeatureFlagAppsEnabled: 'true',
-                    } as any,
-                },
-                channels: {
-                    currentChannelId: 'currentchannel',
-                    channels: {
-                        currentchannel: {
-                            id: 'currentchannel',
-                        },
-                    } as any,
-                    myMembers: {
-                        currentchannel: {
-                            id: 'memberid',
-                        },
-                    } as any,
-                },
-                teams: {
-                    currentTeamId: 'currentteam',
-                },
-                preferences: {
-                    myPreferences: {
-                    },
-                } as any,
-            },
-        } as GlobalState;
-    });
-
-    const channelHeaderComponents: PluginComponent[] = [
+    const channelHeaderComponents: ChannelHeaderButtonAction[] = [
         {
             id: 'the_component_id',
             pluginId: 'playbooks',
             icon: 'fallback_component' as any,
             tooltipText: 'Playbooks Tooltip',
             action: jest.fn(),
+            dropdownText: 'Playbooks dropdown',
         },
     ];
 
-    const rhsComponents: PluginComponent[] = [
+    const rhsComponents: RightHandSidebarComponent[] = [
         {
             id: 'the_rhs_plugin_component_id',
             pluginId: 'playbooks',
-            icon: <div/>,
-            action: jest.fn(),
+            component: () => null,
+            title: 'some title',
         },
     ];
 
@@ -117,21 +50,142 @@ describe('components/app_bar/app_bar', () => {
         },
     ] as AppBinding[];
 
-    test('should match snapshot on mount', async () => {
-        const wrapper = mount(
+    const initialState = {
+        views: {
+            rhs: {
+                isSidebarOpen: true,
+                rhsState: 'plugin',
+                pluggableId: 'the_rhs_plugin_component',
+            },
+        },
+        plugins: {
+            components: {
+                AppBar: channelHeaderComponents,
+                RightHandSidebarComponent: rhsComponents,
+                Product: [],
+            },
+        },
+        entities: {
+            apps: {
+                main: {
+                    bindings: channelHeaderAppBindings,
+                } as {bindings: AppBinding[]},
+                pluginEnabled: true,
+            },
+            general: {
+                config: {
+                    DisableAppBar: 'false',
+                    FeatureFlagAppsEnabled: 'true',
+                },
+            },
+            channels: {
+                currentChannelId: 'currentchannel',
+                channels: {
+                    currentchannel: TestHelper.getChannelMock({
+                        id: 'currentchannel',
+                    }),
+                },
+                myMembers: {
+                    currentchannel: TestHelper.getChannelMembershipMock({
+                        channel_id: 'currentchannel',
+                        user_id: 'user1',
+                    }),
+                },
+            },
+            teams: {
+                currentTeamId: 'currentteam',
+            },
+            users: {
+                currentUserId: 'user1',
+                profiles: {
+                    user1: TestHelper.getUserMock({
+                        roles: 'system_user',
+                    }),
+                },
+            },
+        },
+    };
+
+    test('should match snapshot on mount', () => {
+        const testState = initialState;
+        const {asFragment} = renderWithContext(
             <AppBar/>,
+            testState,
         );
 
-        expect(wrapper).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
-    test('should match snapshot on mount when App Bar is disabled', async () => {
-        mockState.entities.general.config.EnableAppBar = 'false';
+    test('should match snapshot on mount when App Bar is disabled', () => {
+        const testState = mergeObjects(initialState, {
+            entities: {
+                general: {
+                    config: {
+                        DisableAppbar: 'false',
+                    },
+                },
+            },
+        });
 
-        const wrapper = mount(
+        const {asFragment} = renderWithContext(
             <AppBar/>,
+            testState,
         );
 
-        expect(wrapper).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    test('should not show marketplace if disabled or user does not have SYSCONSOLE_WRITE_PLUGINS permission', () => {
+        const testState = mergeObjects(initialState, {
+            entities: {
+                general: {
+                    config: {
+                        DisableAppBar: 'true',
+                        FeatureFlagAppsEnabled: 'true',
+                        EnableMarketplace: 'true',
+                        PluginsEnabled: 'true',
+                    },
+                },
+            },
+        });
+
+        renderWithContext(
+            <AppBar/>,
+            testState,
+        );
+
+        expect(screen.queryByLabelText('App Marketplace')).not.toBeInTheDocument();
+    });
+
+    // eslint-disable-next-line no-only-tests/no-only-tests
+    test.skip('should show marketplace if enabled and user has SYSCONSOLE_WRITE_PLUGINS permission', () => {
+        const testState = mergeObjects(initialState, {
+            entities: {
+                general: {
+                    config: {
+                        DisableAppBar: 'false',
+                        FeatureFlagAppsEnabled: 'true',
+                        EnableMarketplace: 'true',
+                        PluginsEnabled: 'true',
+                    },
+                },
+                roles: {
+                    roles: {
+                        system_user: {
+                            permissions: [
+                                Permissions.SYSCONSOLE_WRITE_PLUGINS,
+                            ],
+                        },
+                    },
+                },
+            },
+        });
+
+        renderWithContext(
+            <AppBar/>,
+            testState,
+        );
+
+        expect(screen.queryByLabelText('App Marketplace')).toBeInTheDocument();
     });
 });

@@ -20,6 +20,15 @@ import {TestHelper} from 'utils/test_helper';
 
 import PostListRow from './post_list_row';
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('components/post_view/post_list_row', () => {
     const defaultProps = {
         listId: '1234',
@@ -45,7 +54,6 @@ describe('components/post_view/post_list_row', () => {
         post: TestHelper.getPostMock({id: 'post_id_1'}),
         currentUserId: 'user_id_1',
         newMessagesSeparatorActions: [],
-        lastViewedAt: 0,
         channelId: 'channel_id_1',
     };
 
@@ -111,7 +119,7 @@ describe('components/post_view/post_list_row', () => {
     });
 
     test('should render new messages line', () => {
-        const listId = PostListRowListIds.START_OF_NEW_MESSAGES;
+        const listId = PostListRowListIds.START_OF_NEW_MESSAGES + '1553106600000';
         const props = {
             ...defaultProps,
             listId,

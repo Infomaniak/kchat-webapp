@@ -14,7 +14,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
         onClick={[Function]}
         type="button"
       >
-        <LoadingWrapper
+        <Memo(LoadingWrapper)
           loading={false}
           text={
             <Memo(MemoizedFormattedMessage)
@@ -27,7 +27,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
             defaultMessage="Button Text"
             id="test"
           />
-        </LoadingWrapper>
+        </Memo(LoadingWrapper)>
       </button>
     </div>
     <div
@@ -102,7 +102,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
           onClick={[Function]}
           type="button"
         >
-          <LoadingWrapper
+          <Memo(LoadingWrapper)
             loading={false}
             text={
               <Memo(MemoizedFormattedMessage)
@@ -119,7 +119,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
                 Button Text
               </span>
             </FormattedMessage>
-          </LoadingWrapper>
+          </Memo(LoadingWrapper)>
         </button>
         <div>
           <div
@@ -232,7 +232,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
           onClick={[Function]}
           type="button"
         >
-          <LoadingWrapper
+          <Memo(LoadingWrapper)
             loading={false}
             text={
               <Memo(MemoizedFormattedMessage)
@@ -249,7 +249,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
                 Button Text
               </span>
             </FormattedMessage>
-          </LoadingWrapper>
+          </Memo(LoadingWrapper)>
         </button>
         <div>
           <div
@@ -354,7 +354,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
           onClick={[Function]}
           type="button"
         >
-          <LoadingWrapper
+          <Memo(LoadingWrapper)
             loading={false}
             text={
               <Memo(MemoizedFormattedMessage)
@@ -371,7 +371,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
                 Button Text
               </span>
             </FormattedMessage>
-          </LoadingWrapper>
+          </Memo(LoadingWrapper)>
         </button>
         <div>
           <div
@@ -479,7 +479,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
           onClick={[Function]}
           type="button"
         >
-          <LoadingWrapper
+          <Memo(LoadingWrapper)
             loading={false}
             text={
               <Memo(MemoizedFormattedMessage)
@@ -496,7 +496,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
                 Button Text
               </span>
             </FormattedMessage>
-          </LoadingWrapper>
+          </Memo(LoadingWrapper)>
         </button>
       </div>
       <div

@@ -14,7 +14,9 @@ import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
 import {DraggingStates, DraggingStateTypes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 
-import SidebarList from './sidebar_list';
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+
+import SidebarList, {type SidebarList as SidebarListComponent} from './sidebar_list';
 
 describe('SidebarList', () => {
     const currentChannel = TestHelper.getChannelMock({
@@ -118,7 +120,7 @@ describe('SidebarList', () => {
     };
 
     test('should match snapshot', () => {
-        const wrapper = shallow(
+        const wrapper = shallowWithIntl(
             <SidebarList {...baseProps}/>,
         );
 
@@ -133,7 +135,7 @@ describe('SidebarList', () => {
     });
 
     test('should close sidebar on mobile when channel is selected (ie. changed)', () => {
-        const wrapper = shallow(
+        const wrapper = shallowWithIntl(
             <SidebarList {...baseProps}/>,
         );
 
@@ -142,11 +144,12 @@ describe('SidebarList', () => {
     });
 
     test('should scroll to top when team changes', () => {
-        const wrapper = shallow<SidebarList>(
+        const wrapper = shallowWithIntl(
             <SidebarList {...baseProps}/>,
         );
+        const instance = wrapper.instance() as SidebarListComponent;
 
-        wrapper.instance().scrollbar = {
+        instance.scrollbar = {
             current: {
                 scrollToTop: jest.fn(),
             } as any,
@@ -158,14 +161,14 @@ describe('SidebarList', () => {
         };
 
         wrapper.setProps({currentTeam: newCurrentTeam});
-        expect(wrapper.instance().scrollbar.current!.scrollToTop).toHaveBeenCalled();
+        expect(instance.scrollbar.current!.scrollToTop).toHaveBeenCalled();
     });
 
     test('should display unread scroll indicator when channels appear outside visible area', () => {
-        const wrapper = shallow<SidebarList>(
+        const wrapper = shallowWithIntl(
             <SidebarList {...baseProps}/>,
         );
-        const instance = wrapper.instance();
+        const instance = wrapper.instance() as SidebarListComponent;
 
         instance.scrollbar = {
             current: {
@@ -192,10 +195,10 @@ describe('SidebarList', () => {
     });
 
     test('should scroll to correct position when scrolling to channel', () => {
-        const wrapper = shallow<SidebarList>(
+        const wrapper = shallowWithIntl(
             <SidebarList {...baseProps}/>,
         );
-        const instance = wrapper.instance();
+        const instance = wrapper.instance() as SidebarListComponent;
 
         instance.scrollToPosition = jest.fn();
 
@@ -221,7 +224,7 @@ describe('SidebarList', () => {
             style: {},
         }]);
 
-        const wrapper = shallow<SidebarList>(
+        const wrapper = shallowWithIntl(
             <SidebarList {...baseProps}/>,
         );
 
@@ -235,7 +238,9 @@ describe('SidebarList', () => {
             type: DraggingStateTypes.CATEGORY,
         };
 
-        wrapper.instance().onBeforeCapture(categoryBefore);
+        const instance = wrapper.instance() as SidebarListComponent;
+
+        instance.onBeforeCapture(categoryBefore);
         expect(baseProps.actions.setDraggingState).toHaveBeenCalledWith(expectedCategoryBefore);
 
         const channelBefore = {
@@ -248,14 +253,15 @@ describe('SidebarList', () => {
             type: DraggingStateTypes.CHANNEL,
         };
 
-        wrapper.instance().onBeforeCapture(channelBefore);
+        instance.onBeforeCapture(channelBefore);
         expect(baseProps.actions.setDraggingState).toHaveBeenCalledWith(expectedChannelBefore);
     });
 
     test('should call correct action on dropping item', () => {
-        const wrapper = shallow<SidebarList>(
+        const wrapper = shallowWithIntl(
             <SidebarList {...baseProps}/>,
         );
+        const instance = wrapper.instance() as SidebarListComponent;
 
         const categoryResult: DropResult = {
             reason: 'DROP',
@@ -272,7 +278,7 @@ describe('SidebarList', () => {
             mode: 'SNAP' as MovementMode,
         };
 
-        wrapper.instance().onDragEnd(categoryResult);
+        instance.onDragEnd(categoryResult);
         expect(baseProps.actions.moveCategory).toHaveBeenCalledWith(baseProps.currentTeam.id, categoryResult.draggableId, categoryResult.destination!.index);
 
         const channelResult: DropResult = {
@@ -290,7 +296,7 @@ describe('SidebarList', () => {
             mode: 'SNAP' as MovementMode,
         };
 
-        wrapper.instance().onDragEnd(channelResult);
+        instance.onDragEnd(channelResult);
         expect(baseProps.actions.moveChannelsInSidebar).toHaveBeenCalledWith(channelResult.destination!.droppableId, channelResult.destination!.index, channelResult.draggableId);
     });
 });

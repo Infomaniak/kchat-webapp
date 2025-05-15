@@ -4,10 +4,10 @@
 import {lazy} from 'react';
 
 import {Client4} from 'mattermost-redux/client';
-import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getUserById} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
 import {getConferenceByChannelId, getIsCurrentUserInCall} from 'selectors/kmeet_calls';
@@ -102,6 +102,7 @@ export function joinCall(channelId: string) {
             const answer = await Client4.acceptIncomingMeetCall(conference.id);
             dispatch(startCall(channelId, answer.jwt, conference.url, answer.name));
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.warn('cant join, call no longer exists', error);
             dispatch(deleteConference(conference.id, channelId));
         }

@@ -5,8 +5,9 @@ import React from 'react';
 
 import {Posts} from 'mattermost-redux/constants';
 
-import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 
 import LastUsers from './last_users';
 

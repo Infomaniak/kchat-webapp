@@ -20,13 +20,13 @@ const NewMembersTotal = ({total, timeFrame, openInsightsModal}: Props) => {
     const timeFrameInfo = useCallback(() => {
         switch (timeFrame) {
         case TimeFrames.INSIGHTS_1_DAY:
-            return localizeMessage('insights.newMembers.today', 'Joined the team today');
+            return localizeMessage({id: 'insights.newMembers.today', defaultMessage: 'Joined the team today'});
         case TimeFrames.INSIGHTS_7_DAYS:
-            return localizeMessage('insights.newMembers.lastSevenDays', 'Joined the team in the last 7 days');
+            return localizeMessage({id: 'insights.newMembers.lastSevenDays', defaultMessage: 'Joined the team in the last 7 days'});
         case TimeFrames.INSIGHTS_28_DAYS:
-            return localizeMessage('insights.newMembers.lastTwentyEightDays', 'Joined the team in the last 28 days');
+            return localizeMessage({id: 'insights.newMembers.lastTwentyEightDays', defaultMessage: 'Joined the team in the last 28 days'});
         default:
-            return localizeMessage('insights.newMembers.lastSevenDays', 'Joined the team in the last 7 days');
+            return localizeMessage({id: 'insights.newMembers.lastSevenDays', defaultMessage: 'Joined the team in the last 7 days'});
         }
     }, [timeFrame]);
 
@@ -44,7 +44,7 @@ const NewMembersTotal = ({total, timeFrame, openInsightsModal}: Props) => {
                         openInsightsModal();
                     }}
                 >
-                    {localizeMessage('insights.newMembers.seeAll', 'See all')}
+                    {localizeMessage({id: 'insights.newMembers.seeAll', defaultMessage: 'See all'})}
                     <i className='icon icon-chevron-right'/>
                 </button>
             </div>

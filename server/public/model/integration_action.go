@@ -17,22 +17,39 @@ import (
 	"math/big"
 	"net/http"
 	"reflect"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/hashicorp/go-multierror"
+	"github.com/pkg/errors"
 )
 
 const (
-	PostActionTypeButton = "button"
-	PostActionTypeSelect = "select"
+	PostActionTypeButton              = "button"
+	PostActionTypeSelect              = "select"
+	DialogTitleMaxLength              = 24
+	DialogElementDisplayNameMaxLength = 24
+	DialogElementNameMaxLength        = 300
+	DialogElementHelpTextMaxLength    = 150
+	DialogElementTextMaxLength        = 150
+	DialogElementTextareaMaxLength    = 3000
+	DialogElementSelectMaxLength      = 3000
+	DialogElementBoolMaxLength        = 150
 )
 
-var PostActionRetainPropKeys = []string{"from_webhook", "override_username", "override_icon_url"}
+var PostActionRetainPropKeys = []string{PostPropsFromWebhook, PostPropsOverrideUsername, PostPropsOverrideIconURL}
 
 type DoPostActionRequest struct {
 	SelectedOption string `json:"selected_option,omitempty"`
 	Cookie         string `json:"cookie,omitempty"`
 }
+
+const (
+	PostActionDataSourceUsers    = "users"
+	PostActionDataSourceChannels = "channels"
+)
 
 type PostAction struct {
 	// A unique Action ID. If not set, generated automatically.
@@ -72,6 +89,73 @@ type PostAction struct {
 	// client, or are encrypted in a Cookie.
 	Integration *PostActionIntegration `json:"integration,omitempty"`
 	Cookie      string                 `json:"cookie,omitempty" db:"-"`
+}
+
+// IsValid validates the action and returns an error if it is invalid.
+func (p *PostAction) IsValid() error {
+	var multiErr *multierror.Error
+
+	if p.Name == "" {
+		multiErr = multierror.Append(multiErr, fmt.Errorf("action must have a name"))
+	}
+
+	if p.Style != "" {
+		validStyles := []string{"default", "primary", "success", "good", "warning", "danger"}
+		// If not a predefined style, check if it's a hex color
+		if !slices.Contains(validStyles, p.Style) && !hexColorRegex.MatchString(p.Style) {
+			multiErr = multierror.Append(multiErr, fmt.Errorf("invalid style '%s' - must be one of [default, primary, success, good, warning, danger] or a hex color", p.Style))
+		}
+	}
+
+	switch p.Type {
+	case PostActionTypeButton:
+		if len(p.Options) > 0 {
+			multiErr = multierror.Append(multiErr, fmt.Errorf("button action must not have options"))
+		}
+		if p.DataSource != "" {
+			multiErr = multierror.Append(multiErr, fmt.Errorf("button action must not have a data source"))
+		}
+	case PostActionTypeSelect:
+		if p.DataSource != "" {
+			validSources := []string{PostActionDataSourceUsers, PostActionDataSourceChannels}
+			if !slices.Contains(validSources, p.DataSource) {
+				multiErr = multierror.Append(multiErr, fmt.Errorf("invalid data_source '%s' for select action", p.DataSource))
+			}
+
+			if len(p.Options) > 0 {
+				multiErr = multierror.Append(multiErr, fmt.Errorf("select action cannot have both DataSource and Options set"))
+			}
+		} else {
+			if len(p.Options) == 0 {
+				multiErr = multierror.Append(multiErr, fmt.Errorf("select action must have either DataSource or Options set"))
+			} else {
+				for i, opt := range p.Options {
+					if opt == nil {
+						multiErr = multierror.Append(multiErr, fmt.Errorf("select action contains nil option"))
+						continue
+					}
+					if err := opt.IsValid(); err != nil {
+						multiErr = multierror.Append(multiErr, multierror.Prefix(err, fmt.Sprintf("option at index %d is invalid:", i)))
+					}
+				}
+			}
+		}
+	default:
+		multiErr = multierror.Append(multiErr, fmt.Errorf("invalid action type: must be '%s' or '%s'", PostActionTypeButton, PostActionTypeSelect))
+	}
+
+	if p.Integration == nil {
+		multiErr = multierror.Append(multiErr, fmt.Errorf("action must have integration settings"))
+	} else {
+		if p.Integration.URL == "" {
+			multiErr = multierror.Append(multiErr, fmt.Errorf("action must have an integration URL"))
+		}
+		if !(strings.HasPrefix(p.Integration.URL, "/plugins/") || strings.HasPrefix(p.Integration.URL, "plugins/") || IsValidHTTPURL(p.Integration.URL)) {
+			multiErr = multierror.Append(multiErr, fmt.Errorf("action must have an valid integration URL"))
+		}
+	}
+
+	return multiErr.ErrorOrNil()
 }
 
 func (p *PostAction) Equals(input *PostAction) bool {
@@ -178,7 +262,22 @@ type PostActionOptions struct {
 	Value string `json:"value"`
 }
 
+func (o *PostActionOptions) IsValid() error {
+	var multiErr *multierror.Error
+
+	if o.Text == "" {
+		multiErr = multierror.Append(multiErr, fmt.Errorf("text is required"))
+	}
+	if o.Value == "" {
+		multiErr = multierror.Append(multiErr, fmt.Errorf("value is required"))
+	}
+
+	return multiErr.ErrorOrNil()
+}
+
 type PostActionIntegration struct {
+	// URL is the endpoint that the action will be sent to.
+	// It can be a relative path to a plugin.
 	URL     string         `json:"url,omitempty"`
 	Context map[string]any `json:"context,omitempty"`
 }
@@ -335,10 +434,153 @@ func (r *OpenDialogRequest) DecodeAndVerifyTriggerId(s *ecdsa.PrivateKey, timeou
 	return DecodeAndVerifyTriggerId(r.TriggerId, s, timeout)
 }
 
+func (r *OpenDialogRequest) IsValid() error {
+	var multiErr *multierror.Error
+	if r.URL == "" {
+		multiErr = multierror.Append(multiErr, errors.New("empty URL"))
+	}
+
+	if r.TriggerId == "" {
+		multiErr = multierror.Append(multiErr, errors.New("empty trigger id"))
+	}
+
+	err := r.Dialog.IsValid()
+	if err != nil {
+		multiErr = multierror.Append(multiErr, err)
+	}
+
+	return multiErr.ErrorOrNil()
+}
+
+func (d *Dialog) IsValid() error {
+	var multiErr *multierror.Error
+
+	if d.Title == "" || len(d.Title) > DialogTitleMaxLength {
+		multiErr = multierror.Append(multiErr, errors.Errorf("invalid dialog title %q", d.Title))
+	}
+
+	if d.IconURL != "" && !IsValidHTTPURL(d.IconURL) {
+		multiErr = multierror.Append(multiErr, errors.New("invalid icon url"))
+	}
+
+	if len(d.Elements) != 0 {
+		elementMap := make(map[string]bool)
+
+		for _, element := range d.Elements {
+			if elementMap[element.Name] {
+				multiErr = multierror.Append(multiErr, errors.Errorf("duplicate dialog element %q", element.Name))
+			}
+			elementMap[element.Name] = true
+
+			err := element.IsValid()
+			if err != nil {
+				multiErr = multierror.Append(multiErr, errors.Wrapf(err, "%q field is not valid", element.Name))
+			}
+		}
+	}
+	return multiErr.ErrorOrNil()
+}
+
+func (e *DialogElement) IsValid() error {
+	var multiErr *multierror.Error
+	textSubTypes := map[string]bool{
+		"":         true,
+		"text":     true,
+		"email":    true,
+		"number":   true,
+		"tel":      true,
+		"url":      true,
+		"password": true,
+	}
+
+	if e.MinLength < 0 {
+		multiErr = multierror.Append(multiErr, errors.Errorf("min length cannot be a negative number, got %d", e.MinLength))
+	}
+	if e.MinLength > e.MaxLength {
+		multiErr = multierror.Append(multiErr, errors.Errorf("min length should be less then max length, got %d > %d", e.MinLength, e.MaxLength))
+	}
+
+	multiErr = multierror.Append(multiErr, checkMaxLength("DisplayName", e.DisplayName, DialogElementDisplayNameMaxLength))
+	multiErr = multierror.Append(multiErr, checkMaxLength("Name", e.Name, DialogElementNameMaxLength))
+	multiErr = multierror.Append(multiErr, checkMaxLength("HelpText", e.HelpText, DialogElementHelpTextMaxLength))
+
+	switch e.Type {
+	case "text":
+		multiErr = multierror.Append(multiErr, checkMaxLength("Default", e.Default, DialogElementTextMaxLength))
+		multiErr = multierror.Append(multiErr, checkMaxLength("Placeholder", e.Placeholder, DialogElementTextMaxLength))
+		if _, ok := textSubTypes[e.SubType]; !ok {
+			multiErr = multierror.Append(multiErr, errors.Errorf("invalid subtype %q", e.Type))
+		}
+
+	case "textarea":
+		multiErr = multierror.Append(multiErr, checkMaxLength("Default", e.Default, DialogElementTextareaMaxLength))
+		multiErr = multierror.Append(multiErr, checkMaxLength("Placeholder", e.Placeholder, DialogElementTextareaMaxLength))
+
+		if _, ok := textSubTypes[e.SubType]; !ok {
+			multiErr = multierror.Append(multiErr, errors.Errorf("invalid subtype %q", e.Type))
+		}
+
+	case "select":
+		multiErr = multierror.Append(multiErr, checkMaxLength("Default", e.Default, DialogElementSelectMaxLength))
+		multiErr = multierror.Append(multiErr, checkMaxLength("Placeholder", e.Placeholder, DialogElementSelectMaxLength))
+		if e.DataSource != "" && e.DataSource != "users" && e.DataSource != "channels" {
+			multiErr = multierror.Append(multiErr, errors.Errorf("invalid data source %q, allowed are 'users' or 'channels'", e.DataSource))
+		}
+		if e.DataSource == "" && !isDefaultInOptions(e.Default, e.Options) {
+			multiErr = multierror.Append(multiErr, errors.Errorf("default value %q doesn't exist in options ", e.Default))
+		}
+
+	case "bool":
+		if e.Default != "" && e.Default != "true" && e.Default != "false" {
+			multiErr = multierror.Append(multiErr, errors.New("invalid default of bool"))
+		}
+		multiErr = multierror.Append(multiErr, checkMaxLength("Placeholder", e.Placeholder, DialogElementBoolMaxLength))
+
+	case "radio":
+		if !isDefaultInOptions(e.Default, e.Options) {
+			multiErr = multierror.Append(multiErr, errors.Errorf("default value %q doesn't exist in options ", e.Default))
+		}
+
+	default:
+		multiErr = multierror.Append(multiErr, errors.Errorf("invalid element type: %q", e.Type))
+	}
+
+	return multiErr.ErrorOrNil()
+}
+
+func isDefaultInOptions(defaultValue string, options []*PostActionOptions) bool {
+	if defaultValue == "" {
+		return true
+	}
+
+	for _, option := range options {
+		if option != nil && defaultValue == option.Value {
+			return true
+		}
+	}
+
+	return false
+}
+
+func checkMaxLength(fieldName string, field string, maxLength int) error {
+	// DisplayName and Name are required fields
+	if fieldName == "DisplayName" || fieldName == "Name" {
+		if len(field) == 0 {
+			return errors.Errorf("%v cannot be empty", fieldName)
+		}
+	}
+
+	if len(field) > maxLength {
+		return errors.Errorf("%v cannot be longer than %d characters, got %d", fieldName, maxLength, len(field))
+	}
+
+	return nil
+}
+
 func (o *Post) StripActionIntegrations() {
 	attachments := o.Attachments()
-	if o.GetProp("attachments") != nil {
-		o.AddProp("attachments", attachments)
+	if o.GetProp(PostPropsAttachments) != nil {
+		o.AddProp(PostPropsAttachments, attachments)
 	}
 	for _, attachment := range attachments {
 		for _, action := range attachment.Actions {
@@ -359,10 +601,10 @@ func (o *Post) GetAction(id string) *PostAction {
 }
 
 func (o *Post) GenerateActionIds() {
-	if o.GetProp("attachments") != nil {
-		o.AddProp("attachments", o.Attachments())
+	if o.GetProp(PostPropsAttachments) != nil {
+		o.AddProp(PostPropsAttachments, o.Attachments())
 	}
-	if attachments, ok := o.GetProp("attachments").([]*SlackAttachment); ok {
+	if attachments, ok := o.GetProp(PostPropsAttachments).([]*SlackAttachment); ok {
 		for _, attachment := range attachments {
 			for _, action := range attachment.Actions {
 				if action != nil && action.Id == "" {

@@ -5,10 +5,11 @@ import {mount} from 'enzyme';
 import React from 'react';
 import * as reactIntl from 'react-intl';
 
+import {TestHelper} from 'utils/test_helper';
+
 import enMessages from 'i18n/en.json';
 import esMessages from 'i18n/es.json';
 import {mockStore} from 'tests/test_store';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Props} from './post_aria_label_div';
 import PostAriaLabelDiv from './post_aria_label_div';

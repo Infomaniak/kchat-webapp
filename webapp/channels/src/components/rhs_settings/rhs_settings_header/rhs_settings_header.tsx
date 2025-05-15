@@ -10,10 +10,9 @@ import styled from 'styled-components';
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+import WithTooltip from 'components/with_tooltip';
 
-import Constants, {RHSStates} from 'utils/constants';
+import {RHSStates} from 'utils/constants';
 import {t} from 'utils/i18n';
 
 import type {GlobalState} from 'types/store';
@@ -48,12 +47,10 @@ export default function RhsSettingsHeader({
     };
 
     const closeSidebarTooltip = (
-        <Tooltip id='closeSidebarTooltip'>
-            <FormattedMessage
-                id='rhs_header.closeSidebarTooltip'
-                defaultMessage='Close'
-            />
-        </Tooltip>
+        <FormattedMessage
+            id='rhs_header.closeSidebarTooltip'
+            defaultMessage='Close'
+        />
     );
 
     return (
@@ -81,10 +78,8 @@ export default function RhsSettingsHeader({
 
             </span>
 
-            <OverlayTrigger
-                delayShow={Constants.OVERLAY_TIME_DELAY}
-                placement='top'
-                overlay={closeSidebarTooltip}
+            <WithTooltip
+                title={closeSidebarTooltip}
             >
                 <button
                     id='rhsCloseButton'
@@ -98,7 +93,7 @@ export default function RhsSettingsHeader({
                         aria-label={formatMessage({id: t('rhs_header.closeTooltip.icon'), defaultMessage: 'Close Sidebar Icon'})}
                     />
                 </button>
-            </OverlayTrigger>
+            </WithTooltip>
         </div>
     );
 }

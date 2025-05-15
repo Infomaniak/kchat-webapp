@@ -9,6 +9,7 @@ import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentChannelId, getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {ActionFunc, ActionFuncAsync, DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {
@@ -22,6 +23,7 @@ import {
 } from 'selectors/calls';
 import {getCurrentLocale} from 'selectors/i18n';
 
+import {getHistory} from 'utils/browser_history';
 import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_utils';
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {stopRing} from 'utils/notification_sounds';
@@ -33,7 +35,6 @@ import type {GlobalState} from 'types/store';
 
 import {openCallDialingModal} from './kmeet_calls';
 import {closeModal} from './views/modals';
-import { getHistory } from 'utils/browser_history';
 
 export function showExpandedView(): ActionFunc {
     return (dispatch) => {
@@ -105,6 +106,7 @@ export function joinCallInChannel(): ActionFuncAsync {
         setTimeout(() => {
             if (msg) {
                 const kmeetUrl = new URL(msg.url);
+                // eslint-disable-next-line no-console
                 console.log('[calls: joinCallInChannel]', msg.url);
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
@@ -198,9 +200,9 @@ export function startOrJoinCallInChannelV2(channelID: string) {
 
                 // keep ringing behaviour for DM and GM
                 dispatch(openCallDialingModal(channelID));
-                return;
             }
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('call could not be started', error);
         }
     };
@@ -208,12 +210,12 @@ export function startOrJoinCallInChannelV2(channelID: string) {
 
 // Initiate a call if the URL contains the query parameter `call`
 export function initiateCallIfParam(channelID: string) {
-        return async (dispatch: DispatchFunc) => {
+    return async (dispatch: DispatchFunc) => {
         const params = new URLSearchParams(window.location.search);
         const hasCallParam = params.has('call');
-        
+
         if (hasCallParam) {
-            dispatch(startOrJoinCallInChannelV2(channelID))
+            dispatch(startOrJoinCallInChannelV2(channelID));
 
             params.delete('call');
 
@@ -221,7 +223,7 @@ export function initiateCallIfParam(channelID: string) {
             const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
             getHistory().replace(newUrl);
         }
-    }
+    };
 }
 
 export function updateAudioStatus(dialingID: string, muted = false) {
@@ -287,6 +289,7 @@ export function receivedCall(call: Call, currentUserId: string) {
 
             dispatch(openCallDialingModal(call.channel_id));
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('[calls] receivedCall error:', error);
         }
     };
@@ -323,6 +326,7 @@ export function hangUpCall() {
         const state = getState();
         const conferenceId = callConferenceId(state);
         await Client4.declineIncomingMeetCall(conferenceId);
+        // eslint-disable-next-line no-console
         console.log('[calls: hangUpCall]', conferenceId);
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         stopRing();

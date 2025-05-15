@@ -1,6 +1,4 @@
-@charset "UTF-8";
-
-@import 'sass/utils/variables';
+@use 'utils/variables';
 
 .nav-pills__unread-indicator {
     position: absolute;
@@ -10,6 +8,7 @@
     height: auto;
     align-items: center;
     justify-content: center;
+    // Infomaniak edit
     padding: 5px;
     margin-left: 50%;
     background: var(--mention-bg);
@@ -34,7 +33,7 @@
 
     body.enable-animations & {
         transition-delay: 0s;
-        transition-duration: $transition-quick;
+        transition-duration: variables.$transition-quick;
         transition-property: opacity, visibility;
         transition-timing-function: ease-out, step-start;
     }
@@ -64,7 +63,7 @@
 
         body.enable-animations & {
             transition-delay: 0s;
-            transition-duration: $transition-quick;
+            transition-duration: variables.$transition-quick;
             transition-property: opacity, visibility;
             transition-timing-function: ease-out, step-start;
         }

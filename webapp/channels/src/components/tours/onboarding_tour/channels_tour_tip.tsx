@@ -33,9 +33,9 @@ export const ChannelsTour = () => {
                 link: (
                     <div>
                         <ExternalLink
-                            href={localizeMessage('onboardingTour.ChannelsTourTip.linkUrl')}
+                            href={localizeMessage({id: 'onboardingTour.ChannelsTourTip.linkUrl', defaultMessage: 'https://www.infomaniak.com/en/support/faq/2732/managing-a-kchat-channel'})}
                         >
-                            {localizeMessage('onboardingTour.ChannelsTourTip.learnMore', 'Learn more')}
+                            {localizeMessage({id: 'onboardingTour.ChannelsTourTip.learnMore', defaultMessage: 'Learn more'})}
                         </ExternalLink>
                     </div>
                 ),

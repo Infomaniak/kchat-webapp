@@ -230,7 +230,6 @@ class SearchableUserList extends React.PureComponent<Props, State> {
         let nextButton;
         let previousButton;
         let usersToDisplay;
-        const {formatMessage} = this.props.intl;
 
         if (this.props.term || !this.props.users) {
             usersToDisplay = this.props.users;

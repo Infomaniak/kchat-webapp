@@ -7,14 +7,13 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {TourTip, useMeasurePunchouts} from '@mattermost/components';
 
+import {setShowOnboardingCompleteProfileTour} from 'actions/views/onboarding_tasks';
 import {isShowOnboardingCompleteProfileTour} from 'selectors/views/onboarding_tasks';
 
 import {OnboardingTasksName, TaskNameMapToSteps} from './constants';
 import {useHandleOnBoardingTaskData} from './onboarding_tasks_manager';
 
-import {setShowOnboardingCompleteProfileTour} from '../../actions/views/onboarding_tasks';
-
-const translate = {x: 0, y: -2};
+const translate = {x: 1, y: -9};
 
 export const CompleteYourProfileTour = () => {
     const dispatch = useDispatch();
@@ -44,7 +43,7 @@ export const CompleteYourProfileTour = () => {
         </p>
     );
 
-    const overlayPunchOut = useMeasurePunchouts(['status-drop-down-menu-list'], [], {y: -6, height: 6, x: 0, width: 0});
+    const overlayPunchOut = useMeasurePunchouts(['userAccountMenu'], [], {x: -2.5, y: -2.5, width: 5, height: 5});
     const onDismiss = (e: React.MouseEvent) => {
         e.stopPropagation();
         e.preventDefault();
@@ -59,7 +58,7 @@ export const CompleteYourProfileTour = () => {
             overlayPunchOut={overlayPunchOut}
             step={steps.STARTED}
             placement='left-start'
-            pulsatingDotPlacement='left'
+            pulsatingDotPlacement='left-end'
             pulsatingDotTranslate={translate}
             handleDismiss={onDismiss}
             singleTip={true}

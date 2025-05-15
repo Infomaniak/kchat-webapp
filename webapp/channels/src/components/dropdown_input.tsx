@@ -2,10 +2,9 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import type {CSSProperties} from 'react';
 import React, {useState} from 'react';
-import type {Props as SelectProps, ActionMeta} from 'react-select';
 import ReactSelect, {components} from 'react-select';
+import type {Props as SelectProps, ActionMeta, StylesConfig} from 'react-select';
 
 import './dropdown_input.scss';
 
@@ -22,33 +21,36 @@ type Props<T extends ValueType> = Omit<SelectProps<T>, 'onChange'> & {
     error?: string;
     onChange: (value: T, action: ActionMeta<T>) => void;
     testId?: string;
+    required?: boolean;
+    addon?: React.ReactNode;
+    textPrefix?: React.ReactNode;
 };
 
 const baseStyles = {
-    input: (provided: CSSProperties) => ({
+    input: (provided) => ({
         ...provided,
         color: 'var(--center-channel-color)',
     }),
-    control: (provided: CSSProperties) => ({
+    control: (provided) => ({
         ...provided,
         border: 'none',
         boxShadow: 'none',
         padding: '0 2px',
         cursor: 'pointer',
     }),
-    indicatorSeparator: (provided: CSSProperties) => ({
+    indicatorSeparator: (provided) => ({
         ...provided,
         display: 'none',
     }),
-    menu: (provided: CSSProperties) => ({
+    menu: (provided) => ({
         ...provided,
         zIndex: 100,
     }),
-    menuPortal: (provided: CSSProperties) => ({
+    menuPortal: (provided) => ({
         ...provided,
         zIndex: 100,
     }),
-};
+} satisfies StylesConfig;
 
 const IndicatorsContainer = (props: any) => {
     return (
@@ -95,11 +97,11 @@ const renderError = (error?: string) => {
 };
 
 const DropdownInput = <T extends ValueType>(props: Props<T>) => {
-    const {value, placeholder, className, addon, name, textPrefix, legend, onChange, styles, options, error, testId, ...otherProps} = props;
+    const {value, placeholder, className, addon, name, textPrefix, legend, onChange, styles, options, error, testId, ...otherProps} = props; // types are not inferred correctly for `props` in react-select version v5.
 
     const [focused, setFocused] = useState(false);
 
-    const onInputFocus = (event: React.FocusEvent<HTMLElement>) => {
+    const onInputFocus = (event: React.FocusEvent<HTMLInputElement>) => {
         const {onFocus} = props;
 
         setFocused(true);

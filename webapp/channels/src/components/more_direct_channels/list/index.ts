@@ -11,6 +11,7 @@ import {getProfilesInGroupChannels} from 'mattermost-redux/actions/users';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getAllChannels, getChannelsWithUserProfiles} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 import {filterProfilesStartingWithTerm} from 'mattermost-redux/utils/user_utils';

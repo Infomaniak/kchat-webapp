@@ -1,6 +1,6 @@
-@charset 'UTF-8';
 
 .tooltip {
+    z-index: 2000;
     max-width: 220px;
     font-family: inherit;
     pointer-events: none;
@@ -40,19 +40,22 @@
         }
     }
 
-    &.text-nowrap {
-        .tooltip-inner {
-            white-space: nowrap;
-        }
-    }
 
     .tooltip-help {
         color: rgba(255, 255, 255, 0.75);
     }
 
+    .tooltip-large-emoji {
+        margin-bottom: 2px;
+    }
+
     .tooltip-title {
         font-weight: 600;
         line-height: 15px;
+
+        .emoticon {
+            margin-right: 6px;
+        }
     }
 
     .tooltip-hint {
@@ -69,7 +72,6 @@
     }
 
     .emoticon {
-        margin-right: 6px;
         vertical-align: center;
     }
 }

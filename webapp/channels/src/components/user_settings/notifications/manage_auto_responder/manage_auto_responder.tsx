@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ChangeEvent} from 'react';
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import type {ChangeEvent} from 'react';
+import {defineMessage, FormattedMessage} from 'react-intl';
 
+import LocalizedPlaceholderTextarea from 'components/localized_placeholder_textarea';
 import SettingItemMax from 'components/setting_item_max';
-
-import {localizeMessage} from 'utils/utils';
 
 const MESSAGE_MAX_LENGTH = 200;
 
@@ -70,12 +69,12 @@ export default class ManageAutoResponder extends React.PureComponent<Props> {
                 key='autoResponderMessage'
             >
                 <div className='pt-2'>
-                    <textarea
+                    <LocalizedPlaceholderTextarea
                         style={{resize: 'none'}}
                         id='autoResponderMessageInput'
                         className='form-control'
                         rows={5}
-                        placeholder={localizeMessage('user.settings.notifications.autoResponderPlaceholder', 'Message')}
+                        placeholder={defineMessage({id: 'user.settings.notifications.autoResponderPlaceholder', defaultMessage: 'Message'})}
                         value={autoResponderMessage}
                         maxLength={MESSAGE_MAX_LENGTH}
                         onChange={this.onMessageChanged}
@@ -106,10 +105,9 @@ export default class ManageAutoResponder extends React.PureComponent<Props> {
                 title={
                     <FormattedMessage
                         id='user.settings.notifications.autoResponder'
-                        defaultMessage='Automatic Direct Message Replies'
+                        defaultMessage='Automatic direct message replies'
                     />
                 }
-                width='medium'
                 shiftEnter={true}
                 submit={this.props.submit}
                 saving={this.props.saving}

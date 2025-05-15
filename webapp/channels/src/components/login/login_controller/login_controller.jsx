@@ -138,6 +138,7 @@ class LoginController extends React.PureComponent {
                     // TODO: add env for login url and/or current server
                     window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=token&redirect_uri=ktalk://auth-desktop`);
                 }).catch(() => {
+                    // eslint-disable-next-line no-console
                     console.log('Error redirect');
 
                     // Ignore the failure
@@ -236,10 +237,10 @@ class LoginController extends React.PureComponent {
         if (this.state.sessionExpired && !this.closeSessionExpiredNotification) {
             showNotification({
                 title: this.props.siteName,
-                body: Utils.localizeMessage(
-                    'login.session_expired.notification',
-                    'Session Expired: Please sign in to continue receiving notifications.',
-                ),
+                body: Utils.localizeMessage({
+                    id: 'login.session_expired.notification',
+                    defaultMessage: 'Session Expired: Please sign in to continue receiving notifications.',
+                }),
                 requireInteraction: true,
                 silent: false,
                 onClick: () => {
@@ -319,7 +320,7 @@ class LoginController extends React.PureComponent {
                     <FormattedMessage
                         id={msgId}
                         values={{
-                            ldapUsername: this.props.ldapLoginFieldName || Utils.localizeMessage('login.ldapUsernameLower', 'AD/LDAP username'),
+                            ldapUsername: this.props.ldapLoginFieldName || Utils.localizeMessage({id: 'login.ldapUsernameLower', defaultMessage: 'AD/LDAP username'}),
                         }}
                     />
                 ),
@@ -474,24 +475,24 @@ class LoginController extends React.PureComponent {
 
         const loginPlaceholders = [];
         if (emailSigninEnabled) {
-            loginPlaceholders.push(Utils.localizeMessage('login.email', 'Email'));
+            loginPlaceholders.push(Utils.localizeMessage({id: 'login.email', defaultMessage: 'Email'}));
         }
 
         if (usernameSigninEnabled) {
-            loginPlaceholders.push(Utils.localizeMessage('login.username', 'Username'));
+            loginPlaceholders.push(Utils.localizeMessage({id: 'login.username', defaultMessage: 'Username'}));
         }
 
         if (ldapEnabled) {
             if (this.props.ldapLoginFieldName) {
                 loginPlaceholders.push(this.props.ldapLoginFieldName);
             } else {
-                loginPlaceholders.push(Utils.localizeMessage('login.ldapUsername', 'AD/LDAP Username'));
+                loginPlaceholders.push(Utils.localizeMessage({id: 'login.ldapUsername', defaultMessage: 'AD/LDAP Username'}));
             }
         }
 
         if (loginPlaceholders.length >= 2) {
             return loginPlaceholders.slice(0, loginPlaceholders.length - 1).join(', ') +
-                Utils.localizeMessage('login.placeholderOr', ' or ') +
+                Utils.localizeMessage({id: 'login.placeholderOr', defaultMessage: ' or '}) +
                 loginPlaceholders[loginPlaceholders.length - 1];
         } else if (loginPlaceholders.length === 1) {
             return loginPlaceholders[0];
@@ -517,8 +518,6 @@ class LoginController extends React.PureComponent {
 
     render() {
         const {
-            customDescriptionText,
-            siteName,
             initializing,
         } = this.props;
 

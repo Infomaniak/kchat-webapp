@@ -10,9 +10,8 @@ import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
 import type SettingItemMinComponent from 'components/setting_item_min';
-import ImportThemeModal from 'components/user_settings/display/user_settings_theme/import_theme_modal';
 
-import {Constants, ModalIdentifiers} from 'utils/constants';
+import {Constants} from 'utils/constants';
 import {applyTheme} from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
@@ -27,7 +26,6 @@ type Props = {
     areAllSectionsInactive: boolean;
     updateSection: (section: string) => void;
     setRequireConfirm?: (requireConfirm: boolean) => void;
-    setEnforceFocus?: (enforceFocus: boolean) => void;
     allowCustomThemes: boolean;
     showAllTeamsCheckbox: boolean;
     applyToAllTeams: boolean;
@@ -119,7 +117,7 @@ export default class ThemeSetting extends React.PureComponent<Props, State> {
         let themeChanged = this.state.theme.length === theme.length;
         if (!themeChanged) {
             for (const field in theme) {
-                if (theme.hasOwnProperty(field)) {
+                if (Object.hasOwn(theme, field)) {
                     if (this.state.theme[field] !== theme[field]) {
                         themeChanged = true;
                         break;
@@ -144,18 +142,6 @@ export default class ThemeSetting extends React.PureComponent<Props, State> {
         applyTheme(state.theme);
 
         this.props.setRequireConfirm?.(false);
-    };
-
-    handleImportModal = (): void => {
-        this.props.actions.openModal({
-            modalId: ModalIdentifiers.IMPORT_THEME_MODAL,
-            dialogType: ImportThemeModal,
-            dialogProps: {
-                callback: this.updateTheme,
-            },
-        });
-
-        this.props.setEnforceFocus?.(false);
     };
 
     handleUpdateSection = (section: string): void => this.props.updateSection(section);
@@ -195,6 +181,7 @@ export default class ThemeSetting extends React.PureComponent<Props, State> {
                                 name='theme'
                                 checked={!displayCustom}
                                 onChange={this.updateType.bind(this, 'premade')}
+                                aria-controls='premadeThemesSection'
                             />
                             <FormattedMessage
                                 id='user.settings.display.theme.themeColors'
@@ -230,13 +217,25 @@ export default class ThemeSetting extends React.PureComponent<Props, State> {
 
             themeUI = (
                 <SettingItemMax
-                    inputs={inputs}
+                    inputs={
+                        <fieldset>
+                            <legend className='hidden-label'>
+                                <FormattedMessage
+                                    id='user.settings.display.theme.title'
+                                    defaultMessage='Theme'
+                                />
+                            </legend>
+                            <div>
+                                {inputs}
+                            </div>
+                        </fieldset>
+                    }
                     submitExtra={allTeamsCheckbox}
                     submit={this.submitTheme}
                     disableEnterSubmit={true}
                     saving={this.state.isSaving}
                     serverError={serverError}
-                    width='full'
+                    isFullWidth={true}
                     updateSection={this.handleUpdateSection}
                 />
             );

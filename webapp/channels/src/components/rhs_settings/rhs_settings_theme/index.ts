@@ -3,7 +3,7 @@
 
 import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
-import {ActionCreatorsMapObject, bindActionCreators} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import {saveTheme, deleteTeamSpecificThemes} from 'mattermost-redux/actions/preferences';
 import {getTheme, makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';

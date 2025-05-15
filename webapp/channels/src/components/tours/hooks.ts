@@ -8,23 +8,20 @@ import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
-import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 import {close as closeLhs, open as openLhs} from 'actions/views/lhs';
 import {switchToChannels} from 'actions/views/onboarding_tasks';
-import {setProductMenuSwitcherOpen} from 'actions/views/product_menu';
-import {setStatusDropdown} from 'actions/views/status_dropdown';
 
+import {dismissMenu, openMenu} from 'components/menu';
 import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from 'components/onboarding_tasks';
+import {ELEMENT_ID_FOR_BROWSE_OR_ADD_CHANNEL_MENU} from 'components/sidebar/sidebar_header/sidebar_browse_or_add_channel_menu';
+import {ELEMENT_ID_FOR_USER_ACCOUNT_MENU_BUTTON} from 'components/user_account_menu/user_account_menu';
 
 import {getHistory} from 'utils/browser_history';
-
-import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
 
 import type {GlobalState} from 'types/store';
 
 import {
     CrtTutorialSteps,
-    ExploreOtherToolsTourSteps,
     FINISHED,
     OnboardingTourSteps,
     TTNameMapToTourSteps,
@@ -36,16 +33,7 @@ export const useGetTourSteps = (tourCategory: string) => {
 
     let tourSteps: Record<string, number> = TTNameMapToTourSteps[tourCategory];
 
-    const {playbooksPlugin, playbooksProductEnabled} = useGetPluginsActivationState();
-
-    if (tourCategory === TutorialTourName.EXPLORE_OTHER_TOOLS) {
-        const steps: Record<string, number> = tourSteps as typeof ExploreOtherToolsTourSteps;
-        if (!playbooksPlugin && !playbooksProductEnabled) {
-            delete steps.PLAYBOOKS_TOUR;
-        }
-
-        tourSteps = steps;
-    } else if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP && isGuestUser) {
+    if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP && isGuestUser) {
         // restrict the 'learn more about messaging' tour when user is guest (townSquare, channel creation and user invite are restricted to guests)
         tourSteps = TTNameMapToTourSteps[TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS];
     }
@@ -56,32 +44,23 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
     const dispatch = useDispatch();
     const currentUserId = useSelector(getCurrentUserId);
     const teamUrl = useSelector((state: GlobalState) => getCurrentRelativeTeamUrl(state));
-
     const nextStepActions = useCallback((step: number) => {
         if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP) {
             switch (step) {
-            // case OnboardingTourSteps.CHANNELS : {
-            //     dispatch(openLhs());
-            //     break;
-            // }
-            case OnboardingTourSteps.JOIN_CHANNELS : {
-                dispatch(setAddChannelDropdown(true));
+            case OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES : {
+                dispatch(openLhs());
                 break;
             }
-            case OnboardingTourSteps.CREATE_CHANNELS : {
-                dispatch(setAddChannelDropdown(true));
+            case OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS : {
+                openMenu(ELEMENT_ID_FOR_BROWSE_OR_ADD_CHANNEL_MENU);
                 break;
             }
-            case OnboardingTourSteps.CHANNEL_HEADER : {
+            case OnboardingTourSteps.SEND_MESSAGE: {
                 dispatch(switchToChannels());
                 break;
             }
             case OnboardingTourSteps.STATUS : {
-                dispatch(setStatusDropdown(true));
-                break;
-            }
-            case OnboardingTourSteps.PROFILE : {
-                dispatch(setStatusDropdown(true));
+                openMenu(ELEMENT_ID_FOR_USER_ACCOUNT_MENU_BUTTON);
                 break;
             }
             case OnboardingTourSteps.FINISHED: {
@@ -122,15 +101,14 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
             }
             default:
             }
-        } else if (tourCategory === TutorialTourName.EXPLORE_OTHER_TOOLS) {
+        } else if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS) {
             switch (step) {
-            case ExploreOtherToolsTourSteps.FINISHED : {
-                dispatch(setProductMenuSwitcherOpen(false));
+            case OnboardingTourSteps.FINISHED: {
                 let preferences = [
                     {
                         user_id: currentUserId,
                         category: OnboardingTaskCategory,
-                        name: OnboardingTasksName.EXPLORE_OTHER_TOOLS,
+                        name: OnboardingTasksName.CHANNELS_TOUR,
                         value: FINISHED.toString(),
                     },
                 ];
@@ -153,20 +131,19 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
     const lastStepActions = useCallback((lastStep: number) => {
         if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP) {
             switch (lastStep) {
-            case OnboardingTourSteps.CHANNELS : {
-                dispatch(setAddChannelDropdown(false));
+            case OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS: {
+                dismissMenu();
                 break;
             }
-
-            // case OnboardingTourSteps.INVITE_PEOPLE : {
-            //     dispatch(setAddChannelDropdown(false));
-            //     break;
-            // }
+            case OnboardingTourSteps.STATUS: {
+                dismissMenu();
+                break;
+            }
             default:
             }
         } else if (tourCategory === TutorialTourName.CRT_TUTORIAL_STEP) {
             switch (lastStep) {
-            case CrtTutorialSteps.WELCOME_POPOVER : {
+            case CrtTutorialSteps.WELCOME_POPOVER: {
                 dispatch(closeLhs());
                 break;
             }

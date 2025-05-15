@@ -11,10 +11,11 @@ import type {TeamType} from '@mattermost/types/teams';
 import UnreadsStatusHandler from 'components/unreads_status_handler/unreads_status_handler';
 import type {UnreadsStatusHandlerClass} from 'components/unreads_status_handler/unreads_status_handler';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import {Constants} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 import {isChrome, isFirefox} from 'utils/user_agent';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 type Props = ComponentProps<typeof UnreadsStatusHandlerClass>;
 
@@ -48,6 +49,7 @@ describe('components/UnreadsStatusHandler', () => {
         inGlobalThreads: false,
         inDrafts: false,
         inActivityAndInsights: false,
+        inScheduledPosts: false,
     };
 
     test('set correctly the title when needed', () => {
@@ -84,6 +86,38 @@ describe('components/UnreadsStatusHandler', () => {
             currentTeammate: {} as Props['currentTeammate']});
         instance.updateTitle();
         expect(document.title).toBe('Mattermost - Join a team');
+
+        wrapper.setProps({
+            inDrafts: false,
+            inScheduledPosts: true,
+            unreadStatus: 0,
+        });
+        instance.updateTitle();
+        expect(document.title).toBe('Scheduled - Test team display name');
+
+        wrapper.setProps({
+            inDrafts: false,
+            inScheduledPosts: true,
+            unreadStatus: 10,
+        });
+        instance.updateTitle();
+        expect(document.title).toBe('(10) Scheduled - Test team display name');
+
+        wrapper.setProps({
+            inDrafts: true,
+            inScheduledPosts: false,
+            unreadStatus: 0,
+        });
+        instance.updateTitle();
+        expect(document.title).toBe('Drafts - Test team display name');
+
+        wrapper.setProps({
+            inDrafts: true,
+            inScheduledPosts: false,
+            unreadStatus: 10,
+        });
+        instance.updateTitle();
+        expect(document.title).toBe('(10) Drafts - Test team display name');
     });
 
     test('should set correct title on mentions on safari', () => {
@@ -149,5 +183,19 @@ describe('components/UnreadsStatusHandler', () => {
         wrapper.instance().updateTitle();
 
         expect(document.title).toBe('Drafts - Test team display name');
+    });
+
+    test('should display correct title when in scheduled posts tab', () => {
+        const wrapper = shallowWithIntl(
+            <UnreadsStatusHandler
+                {...defaultProps}
+                inScheduledPosts={true}
+                currentChannel={undefined}
+                siteName={undefined}
+            />,
+        ) as unknown as ShallowWrapper<Props, any, UnreadsStatusHandlerClass>;
+        wrapper.instance().updateTitle();
+
+        expect(document.title).toBe('Scheduled - Test team display name');
     });
 });

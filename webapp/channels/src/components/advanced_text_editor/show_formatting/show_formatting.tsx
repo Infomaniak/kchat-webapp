@@ -7,10 +7,7 @@ import React, {memo} from 'react';
 import {useIntl} from 'react-intl';
 
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
-
-import Constants from 'utils/constants';
+import WithTooltip from 'components/with_tooltip';
 
 import {IconContainer} from '../formatting_bar/formatting_icon';
 
@@ -25,22 +22,15 @@ const ShowFormatting = (props: ShowFormatProps): JSX.Element => {
     const buttonAriaLabel = formatMessage({id: 'accessibility.button.preview', defaultMessage: 'preview'});
     const iconAriaLabel = formatMessage({id: 'generic_icons.preview', defaultMessage: 'Eye Icon'});
 
-    const tooltip = (
-        <Tooltip id='PreviewInputTextButtonTooltip'>
-            <KeyboardShortcutSequence
-                shortcut={KEYBOARD_SHORTCUTS.msgMarkdownPreview}
-                hoistDescription={true}
-                isInsideTooltip={true}
-            />
-        </Tooltip>
-    );
-
     return (
-        <OverlayTrigger
-            placement='left'
-            delayShow={Constants.OVERLAY_TIME_DELAY}
-            trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
-            overlay={tooltip}
+        <WithTooltip
+            title={
+                <KeyboardShortcutSequence
+                    shortcut={KEYBOARD_SHORTCUTS.msgMarkdownPreview}
+                    hoistDescription={true}
+                    isInsideTooltip={true}
+                />
+            }
         >
             <IconContainer
                 type='button'
@@ -55,7 +45,7 @@ const ShowFormatting = (props: ShowFormatProps): JSX.Element => {
                     aria-label={iconAriaLabel}
                 />
             </IconContainer>
-        </OverlayTrigger>
+        </WithTooltip>
     );
 };
 

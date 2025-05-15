@@ -21,6 +21,7 @@ import ChipsList from './chips_list';
 import CtaButtons from './cta_buttons';
 import type {DataModel, UpdatesParam} from './dashboard.data';
 import useMetricsData, {ItemStatus} from './dashboard.data';
+import OverallScore from './overall-score';
 
 import {elasticsearchTest, ldapTest, testSiteURL} from '../../../actions/admin_actions';
 import LoadingScreen from '../../loading_screen';
@@ -28,7 +29,6 @@ import FormattedAdminHeader from '../../widgets/admin_console/formatted_admin_he
 import type {Props} from '../admin_console';
 
 import './dashboard.scss';
-import OverallScore from './overall-score';
 
 const AccordionItem = styled.div`
     padding: 12px;

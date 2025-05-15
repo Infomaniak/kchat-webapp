@@ -3,7 +3,6 @@
 
 /* eslint-disable max-lines */
 
-import * as Sentry from '@sentry/react';
 import {getName} from 'country-list';
 import crypto from 'crypto';
 import cssVars from 'css-vars-ponyfill';
@@ -12,12 +11,9 @@ import isNil from 'lodash/isNil';
 import moment from 'moment';
 import React from 'react';
 import type {LinkHTMLAttributes} from 'react';
-import {FormattedMessage} from 'react-intl';
-import type {IntlShape} from 'react-intl';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Address} from '@mattermost/types/cloud';
-import type {ClientConfig} from '@mattermost/types/config';
 import type {FileInfo} from '@mattermost/types/files';
 import type {Group} from '@mattermost/types/groups';
 import type {GlobalState} from '@mattermost/types/store';
@@ -34,13 +30,14 @@ import {getPost as getPostAction} from 'mattermost-redux/actions/posts';
 import {getTeamByName as getTeamByNameAction} from 'mattermost-redux/actions/teams';
 import {Client4} from 'mattermost-redux/client';
 import {Preferences, General} from 'mattermost-redux/constants';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {
     getChannel,
     getChannelsNameMapInTeam,
     getMyChannelMemberships,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
-import {getBool, getTeammateNameDisplaySetting, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getTeammateNameDisplaySetting, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {
     getTeamByName,
@@ -60,12 +57,11 @@ import {focusPost} from 'components/permalink_view/actions';
 import type {TextboxElement} from 'components/textbox';
 
 import {getHistory} from 'utils/browser_history';
-import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes} from 'utils/constants';
 import type {A11yFocusEventDetail} from 'utils/constants';
-import {t} from 'utils/i18n';
+import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes, AdvancedTextEditorTextboxIds} from 'utils/constants';
 import * as Keyboard from 'utils/keyboard';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import * as UserAgent from 'utils/user_agent';
-import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 
 import bing from 'sounds/bing.mp3';
 import crackle from 'sounds/crackle.mp3';
@@ -77,7 +73,6 @@ import upstairs from 'sounds/upstairs.mp3';
 
 import {joinPrivateChannelPrompt} from './channel_utils';
 import {isServerVersionGreaterThanOrEqualTo} from './server_version';
-
 
 const CLICKABLE_ELEMENTS = [
     'a',
@@ -146,7 +141,6 @@ export function insertLineBreakFromKeyEvent(e: KeyboardEvent): string {
     // return the updated string so that component state can be updated
     return newValue;
 }
-
 
 export const notificationSounds = new Map([
     ['Bing', bing],
@@ -391,7 +385,7 @@ export function applyTheme(theme: Theme) {
         changeCss('.app__body .attachment .attachment__content, .app__body .attachment-actions button', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.16));
         changeCss('.app__body .attachment-actions button:focus, .app__body .attachment-actions button:hover', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.5));
         changeCss('.app__body .attachment-actions button:focus, .app__body .attachment-actions button:hover', 'background:' + changeOpacity(theme.centerChannelColor, 0.03));
-        changeCss('.app__body .input-group-addon, .app__body .channel-intro .channel-intro__content, .app__body .webhooks__container', 'background:' + changeOpacity(theme.centerChannelColor, 0.05));
+        changeCss('.app__body .input-group-addon, .app__body .webhooks__container', 'background:' + changeOpacity(theme.centerChannelColor, 0.05));
         changeCss('.app__body .date-separator .separator__text', 'color:' + theme.centerChannelColor);
         changeCss('.app__body .date-separator .separator__hr, .app__body .modal-footer, .app__body .modal .custom-textarea', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('.app__body .search-item-container', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.1));
@@ -468,6 +462,9 @@ export function applyTheme(theme: Theme) {
         changeCss('.app__body .emoji-picker .nav-tabs > li.active > a', 'border-bottom-color:' + theme.buttonBg + '!important;');
         changeCss('.app__body .btn-primary:hover', 'background:' + blendColors(theme.buttonBg, '#000000', 0.1));
         changeCss('.app__body .btn-primary:active', 'background:' + blendColors(theme.buttonBg, '#000000', 0.2));
+
+        changeCss('.app__body .SendMessageButton:not(.disabled):hover', 'background:' + blendColors(theme.buttonBg, '#000000', 0.1));
+        changeCss('.app__body #button_send_post_options:not(.disabled):hover', 'background:' + blendColors(theme.buttonBg, '#000000', 0.1));
     }
 
     if (theme.buttonColor) {
@@ -913,7 +910,7 @@ export function setSelectionRange(input: HTMLInputElement | HTMLTextAreaElement,
     input.setSelectionRange(selectionStart, selectionEnd);
 }
 
-export function setCaretPosition(input: HTMLInputElement, pos: number) {
+export function setCaretPosition(input: HTMLInputElement | HTMLTextAreaElement, pos: number) {
     if (!input) {
         return;
     }
@@ -1236,11 +1233,6 @@ export function getUserIdFromChannelId(channelId: Channel['id'], currentUserId =
     return otherUserId;
 }
 
-// Should be refactored, seems to make most sense to wrap TextboxLinks in a connect(). To discuss
-export function isFeatureEnabled(feature: {label: string}, state: GlobalState) {
-    return getBool(state, Constants.Preferences.CATEGORY_ADVANCED_SETTINGS, Constants.FeatureTogglePrefix + feature.label);
-}
-
 export function fillRecord<T>(value: T, length: number): Record<number, T> {
     const arr: Record<number, T> = {};
 
@@ -1299,7 +1291,7 @@ export function clearFileInput(elm: HTMLInputElement) {
 /**
  * @deprecated Use react-intl instead, only place its usage can be justified is in the redux actions
  */
-export function localizeMessage(id: string, defaultMessage?: string) {
+export function localizeMessage({id, defaultMessage}: {id: string; defaultMessage?: string}) {
     const state = store.getState();
 
     const locale = getCurrentLocale(state);
@@ -1315,8 +1307,8 @@ export function localizeMessage(id: string, defaultMessage?: string) {
 /**
  * @deprecated If possible, use intl.formatMessage instead. If you have to use this, remember to mark the id using `t`
  */
-export function localizeAndFormatMessage(id: string, defaultMessage: string, template: { [name: string]: any } | undefined) {
-    const base = localizeMessage(id, defaultMessage);
+export function localizeAndFormatMessage(descriptor: {id: string; defaultMessage?: string}, template: { [name: string]: any } | undefined) {
+    const base = localizeMessage(descriptor);
 
     if (!template) {
         return base;
@@ -1333,91 +1325,6 @@ export function mod(a: number, b: number): number {
 }
 
 export const REACTION_PATTERN = /^(\+|-):([^:\s]+):\s*$/;
-
-export function getPasswordConfig(config: Partial<ClientConfig>) {
-    return {
-        minimumLength: parseInt(config.PasswordMinimumLength!, 10),
-        requireLowercase: config.PasswordRequireLowercase === 'true',
-        requireUppercase: config.PasswordRequireUppercase === 'true',
-        requireNumber: config.PasswordRequireNumber === 'true',
-        requireSymbol: config.PasswordRequireSymbol === 'true',
-    };
-}
-
-export function isValidPassword(password: string, passwordConfig: ReturnType<typeof getPasswordConfig>, intl?: IntlShape) {
-    let errorId = t('user.settings.security.passwordError');
-    const telemetryErrorIds = [];
-    let valid = true;
-    const minimumLength = passwordConfig.minimumLength || Constants.MIN_PASSWORD_LENGTH;
-
-    if (password.length < minimumLength || password.length > Constants.MAX_PASSWORD_LENGTH) {
-        valid = false;
-        telemetryErrorIds.push({field: 'password', rule: 'error_length'});
-    }
-
-    if (passwordConfig.requireLowercase) {
-        if (!password.match(/[a-z]/)) {
-            valid = false;
-        }
-
-        errorId += 'Lowercase';
-        telemetryErrorIds.push({field: 'password', rule: 'lowercase'});
-    }
-
-    if (passwordConfig.requireUppercase) {
-        if (!password.match(/[A-Z]/)) {
-            valid = false;
-        }
-
-        errorId += 'Uppercase';
-        telemetryErrorIds.push({field: 'password', rule: 'uppercase'});
-    }
-
-    if (passwordConfig.requireNumber) {
-        if (!password.match(/[0-9]/)) {
-            valid = false;
-        }
-
-        errorId += 'Number';
-        telemetryErrorIds.push({field: 'password', rule: 'number'});
-    }
-
-    if (passwordConfig.requireSymbol) {
-        if (!password.match(/[ !"\\#$%&'()*+,-./:;<=>?@[\]^_`|~]/)) {
-            valid = false;
-        }
-
-        errorId += 'Symbol';
-        telemetryErrorIds.push({field: 'password', rule: 'symbol'});
-    }
-
-    let error;
-    if (!valid) {
-        error = intl ? (
-            intl.formatMessage(
-                {
-                    id: errorId,
-                    defaultMessage: 'Must be {min}-{max} characters long.',
-                },
-                {
-                    min: minimumLength,
-                    max: Constants.MAX_PASSWORD_LENGTH,
-                },
-            )
-        ) : (
-            <FormattedMessage
-                id={errorId}
-                defaultMessage='Must be {min}-{max} characters long.'
-                values={{
-                    min: minimumLength,
-                    max: Constants.MAX_PASSWORD_LENGTH,
-                }}
-            />
-        );
-    }
-
-    return {valid, error, telemetryErrorIds};
-}
 
 function isChannelOrPermalink(link: string) {
     let match = (/\/([a-z0-9\-_]+)\/channels\/([a-z0-9\-__][a-z0-9\-__.]+)/).exec(link);
@@ -1486,7 +1393,7 @@ export async function handleFormattedTextClick(e: React.MouseEvent, currentRelat
                             let post = getPost(state, postId!);
                             if (!post) {
                                 const {data: postData} = await store.dispatch(getPostAction(match.postId!));
-                                post = postData;
+                                post = postData!;
                             }
                             if (post) {
                                 isReply = Boolean(post.root_id);
@@ -1503,12 +1410,12 @@ export async function handleFormattedTextClick(e: React.MouseEvent, currentRelat
                             if (!member) {
                                 const membership = await store.dispatch(getChannelMember(channel.id, getCurrentUserId(state)));
                                 if ('data' in membership) {
-                                    member = membership.data;
+                                    member = membership.data!;
                                 }
                             }
                             if (!member) {
                                 const {data} = await store.dispatch(joinPrivateChannelPrompt(team, channel.display_name, false));
-                                if (data.join) {
+                                if (data!.join) {
                                     let error = false;
                                     if (!getTeamMemberships(state)[team.id]) {
                                         const joinTeamResult = await store.dispatch(addUserToTeam(team.id, user.id));
@@ -1639,13 +1546,18 @@ function isSelection() {
     return selection!.type === 'Range';
 }
 
+/**
+ * Checks if text is selected in the a textbox in center or in RHS or in edit mode of post
+ */
 export function isTextSelectedInPostOrReply(e: React.KeyboardEvent | KeyboardEvent) {
     const {id} = e.target as HTMLElement;
 
-    const isTypingInPost = id === 'post_textbox';
-    const isTypingInReply = id === 'reply_textbox';
+    const isTypingInValidTextbox =
+    id === AdvancedTextEditorTextboxIds.InCenter ||
+    id === AdvancedTextEditorTextboxIds.InRHSComment ||
+    id === AdvancedTextEditorTextboxIds.InEditMode;
 
-    if (!isTypingInPost && !isTypingInReply) {
+    if (isTypingInValidTextbox === false) {
         return false;
     }
 
@@ -1740,8 +1652,7 @@ const TrackFlowRoles: Record<string, string> = {
     su: General.SYSTEM_USER_ROLE,
 };
 
-export function getTrackFlowRole() {
-    const state = store.getState();
+export function getTrackFlowRole(state: GlobalState) {
     let trackFlowRole = 'su';
 
     if (isFirstAdmin(state)) {
@@ -1753,11 +1664,15 @@ export function getTrackFlowRole() {
     return trackFlowRole;
 }
 
-export function getRoleForTrackFlow() {
-    const startedByRole = TrackFlowRoles[getTrackFlowRole()];
+export const getRoleForTrackFlow = createSelector(
+    'getRoleForTrackFlow',
+    getTrackFlowRole,
+    (trackFlowRole) => {
+        const startedByRole = TrackFlowRoles[trackFlowRole];
 
-    return {started_by_role: startedByRole};
-}
+        return {started_by_role: startedByRole};
+    },
+);
 
 export function getSbr() {
     const params = new URLSearchParams(window.location.search);
@@ -1858,27 +1773,9 @@ export function sortUsersAndGroups(a: UserProfile | Group, b: UserProfile | Grou
     return aSortString.localeCompare(bSortString);
 }
 
-export const lazyWithRetries: typeof React.lazy = (importer) => {
-    const retryImport = async () => {
-        try {
-            return await importer();
-        } catch (error) {
-            for (let i = 0; i < 5; i++) {
-                // eslint-disable-next-line no-await-in-loop
-                await new Promise((resolve) => setTimeout(resolve, 2000));
-                try {
-                    // eslint-disable-next-line no-await-in-loop
-                    return await importer();
-                } catch (e) {
-                    // eslint-disable-next-line no-console
-                    console.log('retrying import');
-                }
-            }
-            throw error;
-        }
-    };
-    return React.lazy(retryImport);
-};
+export function doesCookieContainsMMUserId() {
+    return document.cookie.includes('MMUSERID=');
+}
 
 /**
  * Merge electron-log logger + Sentry capture message in a single object.
@@ -1919,5 +1816,6 @@ export function logTimestamp(label: string, timestamp: number | undefined) {
         time += `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
         time += ` ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
     }
+    // eslint-disable-next-line no-console
     console.log(label, timestamp, time);
 }

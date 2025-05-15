@@ -12,7 +12,7 @@ import Constants, {ModalIdentifiers} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import {renderWithContext, screen} from 'tests/react_testing_utils';
+import {renderWithContext, screen, waitFor} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -167,8 +167,7 @@ describe('components/sidebar', () => {
             },
         };
 
-        test('should not render unreads category when disabled by user preference', () => {
-            const currentUserId = 'current_user_id';
+        test('should not render unreads category when disabled by user preference', async () => {
             const testState = {
                 entities: {
                     channels: {
@@ -210,11 +209,12 @@ describe('components/sidebar', () => {
                 mergeObjects(baseState, testState),
             );
 
-            expect(screen.queryByText('UNREADS')).not.toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.queryByText('UNREADS')).not.toBeInTheDocument();
+            });
         });
 
-        test('should render unreads category when there are unread channels', () => {
-            const currentUserId = 'current_user_id';
+        test('should render unreads category when there are unread channels', async () => {
             const testState: DeepPartial<GlobalState> = {
                 entities: {
                     channels: {
@@ -256,11 +256,12 @@ describe('components/sidebar', () => {
                 mergeObjects(baseState, testState),
             );
 
-            expect(screen.queryByText('UNREADS')).toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.queryByText('UNREADS')).toBeInTheDocument();
+            });
         });
 
-        test('should not render unreads category when there are no unread channels', () => {
-            const currentUserId = 'current_user_id';
+        test('should not render unreads category when there are no unread channels', async () => {
             const testState: DeepPartial<GlobalState> = {
                 entities: {
                     preferences: {
@@ -297,11 +298,12 @@ describe('components/sidebar', () => {
                 mergeObjects(baseState, testState),
             );
 
-            expect(screen.queryByText('UNREADS')).not.toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.queryByText('UNREADS')).not.toBeInTheDocument();
+            });
         });
 
-        test('should render unreads category when there are no unread channels but the current channel was previously unread', () => {
-            const currentUserId = 'current_user_id';
+        test('should render unreads category when there are no unread channels but the current channel was previously unread', async () => {
             const testState: DeepPartial<GlobalState> = {
                 entities: {
                     preferences: {
@@ -344,7 +346,9 @@ describe('components/sidebar', () => {
                 mergeObjects(baseState, testState),
             );
 
-            expect(screen.queryByText('UNREADS')).toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.queryByText('UNREADS')).toBeInTheDocument();
+            });
         });
     });
 });

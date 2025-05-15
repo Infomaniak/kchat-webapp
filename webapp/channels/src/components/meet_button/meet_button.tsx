@@ -10,20 +10,18 @@ import type {Channel} from '@mattermost/types/channels';
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import ConfirmModal from 'components/confirm_modal';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {KmeetTour, useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 
-import './meet_button.scss';
 import type {ModalData} from 'types/actions';
 
+import './meet_button.scss';
 import meetSvg from './static/kmeet.svg';
 
 export type Props = {
-    channel: Channel;
+    channel?: Channel;
     hasCall?: boolean;
     membersCount: number;
 
@@ -44,9 +42,9 @@ function MeetButton(props: Props) {
     const kmeetTourStep = isGuest ? OnboardingTourStepsForGuestUsers.KMEET : OnboardingTourSteps.KMEET;
     const showKmeetTutorialStep = useShowOnboardingTutorialStep(kmeetTourStep);
 
-    const {startOrJoinCallInChannelV2, joinCall} = actions;
+    // const {startOrJoinCallInChannelV2, joinCall} = actions;
     const ref = useRef<HTMLButtonElement>(null);
-    const timeoutRef = useRef<NodeJS.Timeout|null>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const onClick = () => {
         if (timeoutRef.current) {
@@ -115,9 +113,9 @@ function MeetButton(props: Props) {
 
     const startCall = () => {
         if (props.hasCall) {
-            joinCall(channel.id);
+            props.actions?.joinCall(channel.id);
         } else {
-            startOrJoinCallInChannelV2(channel.id);
+            props.actions?.startOrJoinCallInChannelV2(channel.id);
         }
     };
 
@@ -130,50 +128,32 @@ function MeetButton(props: Props) {
         actions.closeModal(ModalIdentifiers.KMEET_CALL_MODAL);
     };
 
-    const tooltip = (
-        <Tooltip
-            id='call'
-            className='meet-btn__overlay'
-        >
-            <FormattedMessage
-                id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
-                defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
-            />
-        </Tooltip>
-    );
-
     const btnClasses = 'btn meet-btn';
     return (
-        <OverlayTrigger
-            delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement='bottom'
-            overlay={tooltip}
+        <div
+            className='meet-btn__wrapper'
+            id='channel-header-kmeet-btn'
         >
-            <div
-                className='meet-btn__wrapper'
-                id='channel-header-kmeet-btn'
+            {showKmeetTutorialStep && <KmeetTour/>}
+            <button
+                type='button'
+                className={btnClasses}
+                onClick={onClick}
+                ref={ref}
             >
-                {showKmeetTutorialStep && <KmeetTour/>}
-                <button
-                    type='button'
-                    className={btnClasses}
-                    onClick={onClick}
-                    ref={ref}
-                >
-                    <img
-                        alt={props.hasCall ? 'join call' : 'start call'}
-                        src={meetSvg}
-                        className='meet-btn__icon meet-btn__icon--16'
+                <img
+                    alt={props.hasCall ? 'join call' : 'start call'}
+                    src={meetSvg}
+                    className='meet-btn__icon meet-btn__icon--18'
+                />
+                <span className='meet-btn__text'>
+                    <FormattedMessage
+                        id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
+                        defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
                     />
-                    <span className='meet-btn__text'>
-                        <FormattedMessage
-                            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
-                            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
-                        />
-                    </span>
-                </button>
-            </div>
-        </OverlayTrigger>
+                </span>
+            </button>
+        </div>
     );
 }
 

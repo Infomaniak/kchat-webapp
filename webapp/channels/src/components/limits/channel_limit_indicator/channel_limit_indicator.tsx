@@ -10,6 +10,7 @@ import type {ChannelType} from '@mattermost/types/channels';
 import {General} from 'mattermost-redux/constants';
 import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {getUsage} from 'actions/cloud';

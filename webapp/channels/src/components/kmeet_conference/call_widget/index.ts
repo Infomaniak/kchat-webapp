@@ -12,6 +12,7 @@ import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import type {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
@@ -49,6 +50,7 @@ const mapStateToProps = (state: GlobalState) => {
                 } else if (profiles && profiles[i]) {
                     try {
                         profiles.splice(i, 1);
+                    // eslint-disable-next-line no-empty
                     } catch {}
                 }
             }

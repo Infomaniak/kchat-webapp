@@ -12,9 +12,10 @@ import {Permissions} from 'mattermost-redux/constants';
 
 import InstalledOutgoingOAuthConnections from 'components/integrations/outgoing_oauth_connections/installed_outgoing_oauth_connections';
 
+import {TestHelper} from 'utils/test_helper';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
-import {TestHelper} from 'utils/test_helper';
 
 describe('components/integrations/InstalledOutgoingOAuthConnections', () => {
     const outgoingOAuthConnections: Record<string, OutgoingOAuthConnection> = {

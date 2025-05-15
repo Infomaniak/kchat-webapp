@@ -15,10 +15,7 @@ exports[`components/ClusterSettings should match snapshot, compression disabled 
         id="admin.advance.cluster"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <Memo(ClusterTableContainer) />
       <div
         className="banner"
@@ -28,14 +25,7 @@ exports[`components/ClusterSettings should match snapshot, compression disabled 
           id="admin.cluster.noteDescription"
         />
       </div>
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, Mattermost will run in High Availability mode. Please see <link>documentation</link> to learn more about configuring High Availability for Mattermost."
@@ -56,12 +46,6 @@ exports[`components/ClusterSettings should match snapshot, compression disabled 
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={true}
       />
       <AdminTextSetting
@@ -112,14 +96,7 @@ exports[`components/ClusterSettings should match snapshot, compression disabled 
         setByEnv={false}
         value=""
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, the cluster will attempt to communicate via IP Address vs using the hostname."
@@ -135,22 +112,9 @@ exports[`components/ClusterSettings should match snapshot, compression disabled 
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={false}
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, all communication through the gossip protocol will be encrypted."
@@ -166,22 +130,9 @@ exports[`components/ClusterSettings should match snapshot, compression disabled 
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={false}
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, all communication through the gossip protocol will be compressed. It is recommended to keep this flag disabled."
@@ -197,12 +148,6 @@ exports[`components/ClusterSettings should match snapshot, compression disabled 
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={false}
       />
       <AdminTextSetting
@@ -229,68 +174,32 @@ exports[`components/ClusterSettings should match snapshot, compression disabled 
         setByEnv={false}
         value={8074}
       />
-      <AdminTextSetting
-        helpText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="The port used for streaming data between servers."
-            id="admin.cluster.StreamingPortDesc"
-          />
-        }
-        id="StreamingPort"
-        label={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Streaming Port:"
-            id="admin.cluster.StreamingPort"
-          />
-        }
-        onChange={[Function]}
-        placeholder={
-          Object {
-            "defaultMessage": "E.g.: \\"8075\\"",
-            "id": "admin.cluster.StreamingPortEx",
-          }
-        }
-        setByEnv={false}
-      />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -311,10 +220,7 @@ exports[`components/ClusterSettings should match snapshot, compression enabled 1
         id="admin.advance.cluster"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <Memo(ClusterTableContainer) />
       <div
         className="banner"
@@ -324,14 +230,7 @@ exports[`components/ClusterSettings should match snapshot, compression enabled 1
           id="admin.cluster.noteDescription"
         />
       </div>
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, Mattermost will run in High Availability mode. Please see <link>documentation</link> to learn more about configuring High Availability for Mattermost."
@@ -352,12 +251,6 @@ exports[`components/ClusterSettings should match snapshot, compression enabled 1
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={true}
       />
       <AdminTextSetting
@@ -408,14 +301,7 @@ exports[`components/ClusterSettings should match snapshot, compression enabled 1
         setByEnv={false}
         value=""
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, the cluster will attempt to communicate via IP Address vs using the hostname."
@@ -431,22 +317,9 @@ exports[`components/ClusterSettings should match snapshot, compression enabled 1
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={false}
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, all communication through the gossip protocol will be encrypted."
@@ -462,22 +335,9 @@ exports[`components/ClusterSettings should match snapshot, compression enabled 1
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={false}
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, all communication through the gossip protocol will be compressed. It is recommended to keep this flag disabled."
@@ -493,12 +353,6 @@ exports[`components/ClusterSettings should match snapshot, compression enabled 1
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={true}
       />
       <AdminTextSetting
@@ -525,68 +379,32 @@ exports[`components/ClusterSettings should match snapshot, compression enabled 1
         setByEnv={false}
         value={8074}
       />
-      <AdminTextSetting
-        helpText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="The port used for streaming data between servers."
-            id="admin.cluster.StreamingPortDesc"
-          />
-        }
-        id="StreamingPort"
-        label={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Streaming Port:"
-            id="admin.cluster.StreamingPort"
-          />
-        }
-        onChange={[Function]}
-        placeholder={
-          Object {
-            "defaultMessage": "E.g.: \\"8075\\"",
-            "id": "admin.cluster.StreamingPortEx",
-          }
-        }
-        setByEnv={false}
-      />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -607,10 +425,7 @@ exports[`components/ClusterSettings should match snapshot, encryption disabled 1
         id="admin.advance.cluster"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <Memo(ClusterTableContainer) />
       <div
         className="banner"
@@ -620,14 +435,7 @@ exports[`components/ClusterSettings should match snapshot, encryption disabled 1
           id="admin.cluster.noteDescription"
         />
       </div>
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, Mattermost will run in High Availability mode. Please see <link>documentation</link> to learn more about configuring High Availability for Mattermost."
@@ -648,12 +456,6 @@ exports[`components/ClusterSettings should match snapshot, encryption disabled 1
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={true}
       />
       <AdminTextSetting
@@ -704,14 +506,7 @@ exports[`components/ClusterSettings should match snapshot, encryption disabled 1
         setByEnv={false}
         value=""
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, the cluster will attempt to communicate via IP Address vs using the hostname."
@@ -727,22 +522,9 @@ exports[`components/ClusterSettings should match snapshot, encryption disabled 1
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={false}
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, all communication through the gossip protocol will be encrypted."
@@ -758,22 +540,9 @@ exports[`components/ClusterSettings should match snapshot, encryption disabled 1
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={false}
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, all communication through the gossip protocol will be compressed. It is recommended to keep this flag disabled."
@@ -789,12 +558,6 @@ exports[`components/ClusterSettings should match snapshot, encryption disabled 1
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={false}
       />
       <AdminTextSetting
@@ -821,68 +584,32 @@ exports[`components/ClusterSettings should match snapshot, encryption disabled 1
         setByEnv={false}
         value={8074}
       />
-      <AdminTextSetting
-        helpText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="The port used for streaming data between servers."
-            id="admin.cluster.StreamingPortDesc"
-          />
-        }
-        id="StreamingPort"
-        label={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Streaming Port:"
-            id="admin.cluster.StreamingPort"
-          />
-        }
-        onChange={[Function]}
-        placeholder={
-          Object {
-            "defaultMessage": "E.g.: \\"8075\\"",
-            "id": "admin.cluster.StreamingPortEx",
-          }
-        }
-        setByEnv={false}
-      />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>
@@ -903,10 +630,7 @@ exports[`components/ClusterSettings should match snapshot, encryption enabled 1`
         id="admin.advance.cluster"
       />
     </AdminHeader>
-    <SettingsGroup
-      container={true}
-      show={true}
-    >
+    <Memo(SettingsGroup)>
       <Memo(ClusterTableContainer) />
       <div
         className="banner"
@@ -916,14 +640,7 @@ exports[`components/ClusterSettings should match snapshot, encryption enabled 1`
           id="admin.cluster.noteDescription"
         />
       </div>
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, Mattermost will run in High Availability mode. Please see <link>documentation</link> to learn more about configuring High Availability for Mattermost."
@@ -944,12 +661,6 @@ exports[`components/ClusterSettings should match snapshot, encryption enabled 1`
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={true}
       />
       <AdminTextSetting
@@ -1000,14 +711,7 @@ exports[`components/ClusterSettings should match snapshot, encryption enabled 1`
         setByEnv={false}
         value=""
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, the cluster will attempt to communicate via IP Address vs using the hostname."
@@ -1023,22 +727,9 @@ exports[`components/ClusterSettings should match snapshot, encryption enabled 1`
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={false}
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, all communication through the gossip protocol will be encrypted."
@@ -1054,22 +745,9 @@ exports[`components/ClusterSettings should match snapshot, encryption enabled 1`
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={true}
       />
-      <BooleanSetting
-        disabled={false}
-        falseText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="false"
-            id="admin.false"
-          />
-        }
+      <Memo(BooleanSetting)
         helpText={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="When true, all communication through the gossip protocol will be compressed. It is recommended to keep this flag disabled."
@@ -1085,12 +763,6 @@ exports[`components/ClusterSettings should match snapshot, encryption enabled 1`
         }
         onChange={[Function]}
         setByEnv={false}
-        trueText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="true"
-            id="admin.true"
-          />
-        }
         value={false}
       />
       <AdminTextSetting
@@ -1117,68 +789,32 @@ exports[`components/ClusterSettings should match snapshot, encryption enabled 1`
         setByEnv={false}
         value={8074}
       />
-      <AdminTextSetting
-        helpText={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="The port used for streaming data between servers."
-            id="admin.cluster.StreamingPortDesc"
-          />
-        }
-        id="StreamingPort"
-        label={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Streaming Port:"
-            id="admin.cluster.StreamingPort"
-          />
-        }
-        onChange={[Function]}
-        placeholder={
-          Object {
-            "defaultMessage": "E.g.: \\"8075\\"",
-            "id": "admin.cluster.StreamingPortEx",
-          }
-        }
-        setByEnv={false}
-      />
-    </SettingsGroup>
+    </Memo(SettingsGroup)>
     <div
       className="admin-console-save"
     >
       <SaveButton
-        btnClass="btn-primary"
-        defaultMessage={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Save"
-            id="save_button.save"
-          />
-        }
         disabled={true}
-        extraClasses=""
         onClick={[Function]}
         saving={false}
-        savingMessage="Saving Config..."
+        savingMessage={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Saving Config..."
+            id="admin.saving"
+          />
+        }
       />
-      <div
-        className="error-message"
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
+      <WithTooltip
+        title=""
       >
-        <FormError
-          error={null}
-          errors={Array []}
-        />
-      </div>
-      <Overlay
-        animation={[Function]}
-        placement="top"
-        rootClose={false}
-        show={false}
-        target={null}
-      >
-        <Tooltip
-          id="error-tooltip"
-        />
-      </Overlay>
+        <div
+          className="error-message"
+        >
+          <Memo(FormError)
+            error={null}
+          />
+        </div>
+      </WithTooltip>
     </div>
   </div>
 </form>

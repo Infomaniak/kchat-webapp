@@ -112,7 +112,7 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
         let themeChanged = this.state.theme.length === theme.length;
         if (!themeChanged) {
             for (const field in theme) {
-                if (theme.hasOwnProperty(field)) {
+                if (Object.prototype.hasOwnProperty.call(theme, field)) {
                     if (this.state.theme[field] !== theme[field]) {
                         themeChanged = true;
                         break;

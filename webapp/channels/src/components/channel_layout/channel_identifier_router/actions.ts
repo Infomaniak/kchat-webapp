@@ -10,11 +10,11 @@ import {joinChannel, getChannelByNameAndTeamName, getChannelMember, markGroupCha
 import {getUser, getUserByUsername, getUserByEmail} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {getChannelByName, getOtherChannels, getChannel, getChannelsNameMapInTeam, getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
-import {getTeamByName} from 'mattermost-redux/selectors/entities/teams';
+import {getTeamByName, getMyTeamMember} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, getCurrentUserId, getUserByUsername as selectUserByUsername, getUser as selectUser, getUserByEmail as selectUserByEmail} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
+import {initiateCallIfParam} from 'actions/calls';
 import {openDirectChannelToUserId} from 'actions/channel_actions';
 import * as GlobalActions from 'actions/global_actions';
 
@@ -22,8 +22,9 @@ import {joinPrivateChannelPrompt} from 'utils/channel_utils';
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
+import type {ActionFuncAsync} from 'types/store';
+
 import type {Match, MatchAndHistory} from './channel_identifier_router';
-import { initiateCallIfParam } from 'actions/calls';
 
 const LENGTH_OF_ID = 36;
 const LENGTH_OF_GROUP_ID = 40;
@@ -189,11 +190,18 @@ export function goToChannelByChannelName(match: Match, history: History): Action
         }
 
         if (!channel || !member) {
-            // Prompt system admin before joining the private channel
-            const user = getCurrentUser(getState());
-            const isSystemAdmin = UserUtils.isSystemAdmin(user?.roles);
-            if (isSystemAdmin) {
-                if (channel?.type === Constants.PRIVATE_CHANNEL) {
+            if (channel?.type === Constants.PRIVATE_CHANNEL) {
+                // Prompt system admins and team admins before joining the private channel
+                const user = getCurrentUser(getState());
+                const isSystemAdmin = UserUtils.isSystemAdmin(user?.roles);
+                let prompt = false;
+                if (isSystemAdmin) {
+                    prompt = true;
+                } else {
+                    const teamMember = getMyTeamMember(state, teamObj.id);
+                    prompt = Boolean(teamMember && teamMember.scheme_admin);
+                }
+                if (prompt) {
                     const joinPromptResult = await dispatch(joinPrivateChannelPrompt(teamObj, channel.display_name));
                     if ('data' in joinPromptResult && !joinPromptResult.data!.join) {
                         return {data: undefined};
@@ -258,7 +266,7 @@ function goToDirectChannelByUsername(match: Match, history: History): ActionFunc
         doChannelChange(directChannelDispatchRes.data!);
 
         //IK: automatic start kMeet if needed
-        dispatch(initiateCallIfParam(directChannelDispatchRes.data!.id))
+        dispatch(initiateCallIfParam(directChannelDispatchRes.data!.id));
 
         return {data: undefined};
     };

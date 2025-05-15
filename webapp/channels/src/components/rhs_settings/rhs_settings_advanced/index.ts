@@ -10,6 +10,7 @@ import {updateUserActive, revokeAllSessionsForUser} from 'mattermost-redux/actio
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {get, getUnreadScrollPositionPreference, makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import {Preferences} from 'utils/constants';
@@ -20,7 +21,7 @@ import type {Props} from './rhs_settings_advanced';
 import AdvancedRhsSettingsDisplay from './rhs_settings_advanced';
 
 function makeMapStateToProps() {
-    const getAdvancedSettingsCategory = makeGetCategory();
+    const getAdvancedSettingsCategory = makeGetCategory('getAdvancedSettingsCategory', Preferences.CATEGORY_ADVANCED_SETTINGS);
 
     return (state: GlobalState) => {
         const config = getConfig(state);
@@ -29,7 +30,7 @@ function makeMapStateToProps() {
         const enableUserDeactivation = config.EnableUserDeactivation === 'true';
 
         return {
-            advancedSettingsCategory: getAdvancedSettingsCategory(state, Preferences.CATEGORY_ADVANCED_SETTINGS),
+            advancedSettingsCategory: getAdvancedSettingsCategory(state),
             sendOnCtrlEnter: get(state, Preferences.CATEGORY_ADVANCED_SETTINGS, 'send_on_ctrl_enter', 'false'),
             codeBlockOnCtrlEnter: get(state, Preferences.CATEGORY_ADVANCED_SETTINGS, 'code_block_ctrl_enter', 'true'),
             formatting: get(state, Preferences.CATEGORY_ADVANCED_SETTINGS, 'formatting', 'true'),

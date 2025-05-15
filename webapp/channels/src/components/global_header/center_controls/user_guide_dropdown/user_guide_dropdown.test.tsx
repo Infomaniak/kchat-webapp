@@ -3,8 +3,6 @@
 
 import React from 'react';
 
-import {trackEvent} from 'actions/telemetry_actions.jsx';
-
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 

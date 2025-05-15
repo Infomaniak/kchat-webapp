@@ -10,6 +10,8 @@ import AtMention from 'components/at_mention/at_mention';
 
 import {TestHelper} from 'utils/test_helper';
 
+import {render} from 'tests/react_testing_utils';
+
 /* eslint-disable global-require */
 
 describe('components/AtMention', () => {
@@ -28,6 +30,7 @@ describe('components/AtMention', () => {
             marketing: TestHelper.getGroupMock({id: 'qwerty2', name: 'marketing', allow_reference: false}),
             accounting: TestHelper.getGroupMock({id: 'qwerty3', name: 'accounting', allow_reference: true}),
         },
+        getMissingMentionedUsers: jest.fn(),
     };
 
     test('should match snapshot when mentioning user', () => {
@@ -225,5 +228,35 @@ describe('components/AtMention', () => {
         );
 
         expect(wrapper).toMatchSnapshot();
+    });
+
+    describe('fetchMissingUsers', () => {
+        test('when fetchMissingUsers is true, should fetch an unloaded user on mount', () => {
+            render(
+                <AtMention
+                    {...baseProps}
+                    mentionName='someuser'
+                    fetchMissingUsers={true}
+                >
+                    {'@someuser'}
+                </AtMention>,
+            );
+
+            expect(baseProps.getMissingMentionedUsers).toHaveBeenCalledWith('someuser');
+        });
+
+        test('when fetchMissingUsers is false, should not fetch an unloaded user on mount', () => {
+            shallow(
+                <AtMention
+                    {...baseProps}
+                    mentionName='someuser'
+                    fetchMissingUsers={false}
+                >
+                    {'@someuser'}
+                </AtMention>,
+            );
+
+            expect(baseProps.getMissingMentionedUsers).not.toHaveBeenCalledWith('someuser');
+        });
     });
 });

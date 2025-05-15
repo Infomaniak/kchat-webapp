@@ -124,7 +124,7 @@ function mapStateToProps(state: GlobalState) {
     const isPreview = isCurrentChannelInPreview(state);
     const canManageMembers = haveIChannelPermission(
         state,
-        currentTeam.id,
+        currentTeam?.id,
         channel.id,
         isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS : Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS,
     ) && !isArchived && !isPreview;

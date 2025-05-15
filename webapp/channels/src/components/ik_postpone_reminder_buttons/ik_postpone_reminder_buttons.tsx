@@ -13,7 +13,7 @@ import * as Menu from 'components/menu';
 import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal';
 
 import {ModalIdentifiers} from 'utils/constants';
-import {toUTCUnix} from 'utils/datetime';
+import {toUTCUnixInSeconds} from 'utils/datetime';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import type {ModalData} from 'types/actions';
@@ -82,7 +82,7 @@ const IkPostponeReminderButtons = (props: Props) => {
             }
 
             const postId = props.post.props.post_id;
-            const timestamp = toUTCUnix(endTime.toDate());
+            const timestamp = toUTCUnixInSeconds(endTime.toDate());
             const reschedule = true;
             const reminderPostId = props.post.id;
 

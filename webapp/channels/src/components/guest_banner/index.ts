@@ -7,6 +7,7 @@ import {bindActionCreators, type ActionCreatorsMapObject, type Dispatch} from 'r
 import {getChannelGuestMembers} from 'mattermost-redux/actions/channels';
 import {getChannelGuestMembersCount} from 'mattermost-redux/selectors/entities/channels';
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 
 import type {GlobalState} from 'types/store/index';

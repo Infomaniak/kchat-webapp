@@ -9,6 +9,7 @@ import {bindActionCreators} from 'redux';
 import {getPluginStatuses} from 'mattermost-redux/actions/admin';
 import {setFirstAdminVisitMarketplaceStatus} from 'mattermost-redux/actions/general';
 import {getFirstAdminVisitMarketplaceStatus} from 'mattermost-redux/selectors/entities/general';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {GenericAction, ActionFunc} from 'mattermost-redux/types/actions';
 
 import {fetchListing, filterListing} from 'actions/marketplace';

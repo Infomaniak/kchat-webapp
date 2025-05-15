@@ -3,12 +3,12 @@
 
 import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
-import React, {memo, useCallback, useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';
-import {Link, useRouteMatch} from 'react-router-dom';
+import {useRouteMatch} from 'react-router-dom';
 
-import {getThreadCounts, getThreads} from 'mattermost-redux/actions/threads';
+import {getThreadCounts, getThreadsForCurrentTeam} from 'mattermost-redux/actions/threads';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {
     getThreadOrderInCurrentTeam,
@@ -29,9 +29,9 @@ import LocalStorageStore from 'stores/local_storage_store';
 
 import LoadingScreen from 'components/loading_screen';
 import NoResultsIndicator from 'components/no_results_indicator';
-import Header from 'components/widgets/header';
 
-import {Constants, PreviousViewedTypes} from 'utils/constants';
+import {PreviousViewedTypes} from 'utils/constants';
+import {Mark, Measure, measureAndReport} from 'utils/performance_telemetry';
 
 import type {GlobalState} from 'types/store/index';
 import {LhsItemType, LhsPage} from 'types/store/lhs';
@@ -51,7 +51,7 @@ const GlobalThreads = () => {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
 
-    const {url, params: {threadIdentifier}} = useRouteMatch<{threadIdentifier?: string}>();
+    const {params: {threadIdentifier}} = useRouteMatch<{threadIdentifier?: string}>();
     const [filter, setFilter] = useGlobalState(ThreadFilter.none, FILTER_STORAGE_KEY);
     const {currentTeamId, currentUserId, clear} = useThreadRouting();
 
@@ -59,8 +59,8 @@ const GlobalThreads = () => {
     const selectedThread = useSelector((state: GlobalState) => getThread(state, threadIdentifier));
     const selectedThreadId = useSelector(getSelectedThreadIdInCurrentTeam);
     const selectedPost = useSelector((state: GlobalState) => getPost(state, threadIdentifier!));
-    const threadIds = useSelector((state: GlobalState) => getThreadOrderInCurrentTeam(state, selectedThread?.id), shallowEqual);
-    const unreadThreadIds = useSelector((state: GlobalState) => getUnreadThreadOrderInCurrentTeam(state, selectedThread?.id), shallowEqual);
+    const threadIds = useSelector((state: GlobalState) => getThreadOrderInCurrentTeam(state), shallowEqual);
+    const unreadThreadIds = useSelector((state: GlobalState) => getUnreadThreadOrderInCurrentTeam(state), shallowEqual);
     const numUnread = counts?.total_unread_threads || 0;
     const isRHSOpened = useSelector(getIsRhsOpen);
 
@@ -97,42 +97,36 @@ const GlobalThreads = () => {
 
     const [isLoading, setLoading] = useState(isEmptyList);
 
-    const fetchThreads = useCallback(async (unread): Promise<{data: any}> => {
-        await dispatch(getThreads(
-            currentUserId,
-            currentTeamId,
-            {
-                unread,
-                perPage: Constants.THREADS_PAGE_SIZE,
-            },
-        ));
-
-        return {data: true};
-    }, [currentUserId, currentTeamId]);
-
-    const isOnlySelectedThreadInList = (list: string[]) => {
-        return selectedThreadId && list.length === 1 && list[0] === selectedThreadId;
-    };
-
-    const shouldLoadThreads = isEmpty(threadIds) || isOnlySelectedThreadInList(threadIds);
-    const shouldLoadUnreadThreads = isEmpty(unreadThreadIds) || isOnlySelectedThreadInList(unreadThreadIds);
+    const shouldLoadThreads = isEmpty(threadIds);
+    const shouldLoadUnreadThreads = isEmpty(unreadThreadIds);
 
     useEffect(() => {
         const promises = [];
 
         // this is needed to jump start threads fetching
         if (shouldLoadThreads) {
-            promises.push(fetchThreads(false));
+            promises.push(dispatch(getThreadsForCurrentTeam({unread: false})));
         }
 
         if (filter === ThreadFilter.unread && shouldLoadUnreadThreads) {
-            promises.push(fetchThreads(true));
+            promises.push(dispatch(getThreadsForCurrentTeam({unread: true})));
         }
 
         Promise.all(promises).then(() => {
             setLoading(false);
         });
-    }, [fetchThreads, filter, threadIds, unreadThreadIds]);
+    }, [filter, threadIds, unreadThreadIds]);
+
+    useEffect(() => {
+        if (!isLoading) {
+            measureAndReport({
+                name: Measure.GlobalThreadsLoad,
+                startMark: Mark.GlobalThreadsLinkClicked,
+                canFail: true,
+            });
+            performance.clearMarks(Mark.GlobalThreadsLinkClicked);
+        }
+    }, [isLoading]);
 
     useEffect(() => {
         if (!selectedThread && !selectedPost && !isLoading) {
@@ -147,10 +141,6 @@ const GlobalThreads = () => {
         };
     }, []);
 
-    const handleSelectUnread = useCallback(() => {
-        setFilter(ThreadFilter.unread);
-    }, []);
-
     return (
         <div
             id='app-content'
@@ -159,19 +149,6 @@ const GlobalThreads = () => {
                 'rhs-opened': isRHSOpened,
             })}
         >
-            <Header
-                level={2}
-                className={'GlobalThreads___header'}
-                heading={formatMessage({
-                    id: 'globalThreads.heading',
-                    defaultMessage: 'Followed threads',
-                })}
-                subtitle={formatMessage({
-                    id: 'globalThreads.subtitle',
-                    defaultMessage: 'Threads you’re participating in will automatically show here',
-                })}
-            />
-
             {isLoading || isEmptyList ? (
                 <div className='no-results__holder'>
                     {isLoading ? (

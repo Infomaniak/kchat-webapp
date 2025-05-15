@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+// IK changes : We remove the check to commons_team as it's not possible in our case
+
 import classNames from 'classnames';
 import type {ComponentProps} from 'react';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
@@ -18,9 +20,6 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
-
-// import NoCommonTeamsError from './no_common_teams/no_common_teams';
-// import TeamSelector from './team_selector/team_selector';
 
 import WarningTextSection from './warning_text_section/warning_text_section';
 
@@ -100,7 +99,7 @@ const ConvertGmToChannelModal = ({onExited, channel, actions, profilesInChannel,
     modalProps.isConfirmDisabled = !canCreate;
 
     const subBody = (
-        <React.Fragment>
+        <>
             <WarningTextSection channelMemberNames={channelMemberNames}/>
 
             <ChannelNameFormField
@@ -123,7 +122,7 @@ const ConvertGmToChannelModal = ({onExited, channel, actions, profilesInChannel,
                 </div>
             }
 
-        </React.Fragment>
+        </>
     );
 
     const modalBody = (

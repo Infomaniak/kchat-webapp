@@ -62,7 +62,6 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
   >
     <ul
       className="NavGroupContent"
-      role="list"
     >
       <Connect(SidebarChannel)
         channelId="channel_id"
@@ -141,7 +140,6 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
   >
     <ul
       className="NavGroupContent"
-      role="list"
     >
       <Connect(SidebarChannel)
         channelId="channel_id"
@@ -218,7 +216,6 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
   >
     <ul
       className="NavGroupContent"
-      role="list"
     >
       <PublicDraggable
         draggableId="NEW_CHANNEL_SPACER__category1"
@@ -281,7 +278,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
   className=""
 >
   <SidebarCategoryHeader
-    displayName="custom_category_1"
+    displayName="DIRECT MESSAGES"
     isCollapsed={false}
     isCollapsible={true}
     isDragging={false}
@@ -290,7 +287,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
     onClick={[Function]}
     onContextMenu={[Function]}
   >
-    <Connect(Component)
+    <Memo(SidebarCategorySortingMenu)
       category={
         Object {
           "channel_ids": Array [
@@ -307,20 +304,10 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
         }
       }
       handleOpenDirectMessagesModal={[Function]}
-      menuTriggerRef={
-        Object {
-          "current": null,
-        }
-      }
     />
-    <OverlayTrigger
-      defaultOverlayShown={false}
-      delayShow={500}
-      overlay={
-        <Tooltip
-          className="hidden-xs"
-          id="new-group-tooltip"
-        >
+    <WithTooltip
+      title={
+        <React.Fragment>
           Create new direct message
           <Memo(KeyboardShortcutSequence)
             hideDescription={true}
@@ -338,33 +325,26 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
               }
             }
           />
-        </Tooltip>
-      }
-      placement="top"
-      trigger={
-        Array [
-          "hover",
-          "focus",
-        ]
+        </React.Fragment>
       }
     >
       <button
         aria-label="Create new direct message"
         className="SidebarChannelGroupHeader_addButton"
+        id="newDirectMessageButton"
         onClick={[Function]}
       >
         <i
           className="icon-plus"
         />
       </button>
-    </OverlayTrigger>
+    </WithTooltip>
   </SidebarCategoryHeader>
   <div
     className="SidebarChannelGroup_content"
   >
     <ul
       className="NavGroupContent"
-      role="list"
     >
       <Connect(SidebarChannel)
         channelId="channel_id"
@@ -410,7 +390,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
   className=""
 >
   <SidebarCategoryHeader
-    displayName="custom_category_1"
+    displayName="DIRECT MESSAGES"
     isCollapsed={false}
     isCollapsible={false}
     isDragging={false}
@@ -419,7 +399,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
     onClick={[Function]}
     onContextMenu={[Function]}
   >
-    <Connect(Component)
+    <Memo(SidebarCategorySortingMenu)
       category={
         Object {
           "channel_ids": Array [
@@ -436,20 +416,10 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
         }
       }
       handleOpenDirectMessagesModal={[Function]}
-      menuTriggerRef={
-        Object {
-          "current": null,
-        }
-      }
     />
-    <OverlayTrigger
-      defaultOverlayShown={false}
-      delayShow={500}
-      overlay={
-        <Tooltip
-          className="hidden-xs"
-          id="new-group-tooltip"
-        >
+    <WithTooltip
+      title={
+        <React.Fragment>
           Create new direct message
           <Memo(KeyboardShortcutSequence)
             hideDescription={true}
@@ -467,33 +437,26 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
               }
             }
           />
-        </Tooltip>
-      }
-      placement="top"
-      trigger={
-        Array [
-          "hover",
-          "focus",
-        ]
+        </React.Fragment>
       }
     >
       <button
         aria-label="Create new direct message"
         className="SidebarChannelGroupHeader_addButton"
+        id="newDirectMessageButton"
         onClick={[Function]}
       >
         <i
           className="icon-plus"
         />
       </button>
-    </OverlayTrigger>
+    </WithTooltip>
   </SidebarCategoryHeader>
   <div
     className="SidebarChannelGroup_content"
   >
     <ul
       className="NavGroupContent"
-      role="list"
     />
   </div>
 </div>
