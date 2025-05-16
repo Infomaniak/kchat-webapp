@@ -2371,6 +2371,7 @@
   "edit_post.action_buttons.save": "Risparmiare",
   "edit_post.action_buttons.cancel": "Annullare",
   "edit_post.editPost": "Modifica post...",
+  "edit_post.no_notification_trigger_on_mention": "Modificare questo messaggio con una '@menzione' non notificherà il destinatario.",
   "edit_post.time_limit_button.for_n_seconds": "Per {n} secondi",
   "edit_post.time_limit_button.no_limit": "Sempre",
   "edit_post.time_limit_modal.invalid_time_limit": "Limite di tempo non valido",

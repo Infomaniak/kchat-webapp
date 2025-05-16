@@ -3114,6 +3114,7 @@
   "edit_post.action_buttons.cancel": "Cancelar",
   "edit_post.action_buttons.save": "Guardar",
   "edit_post.editPost": "Editar el mensaje...",
+  "edit_post.no_notification_trigger_on_mention": "Editar este mensaje con una '@mención' no notificará al destinatario.",
   "edit_post.helper_text": "<strong>{key}ENTER</strong> para Guardar, <strong>ESC</strong> para Cancelar",
   "edit_post.time_limit_button.for_n_seconds": "Durante {n} segundos",
   "edit_post.time_limit_button.no_limit": "Cualquier momento",
