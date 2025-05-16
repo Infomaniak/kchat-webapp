@@ -16,7 +16,7 @@
 
     .tooltip-inner {
         max-width: 256px;
-        padding: 6px 8px 6px 8px;
+        padding: 8px;
         background: #333333;
         box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
         font-size: 12px;
@@ -30,12 +30,14 @@
 
     &.top {
         .tooltip-arrow {
+            border-top-color: #333333;
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
         }
     }
 
     &.bottom {
         .tooltip-arrow {
+            border-top-color: #333333;
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
         }
     }
