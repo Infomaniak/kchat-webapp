@@ -15,7 +15,7 @@ stages:
 variables:
   KANIKO_VERSION: "debug" # https://github.com/GoogleContainerTools/kaniko/releases
   MINIO_CLIENT_VERSION: "RELEASE.2022-11-07T23-47-39Z" # https://hub.docker.com/r/minio/mc/tags
-  NODE_VERSION: 18.17.1 # Sould respect /.nvmrc
+  NODE_VERSION: 20.11.1 # Sould respect /.nvmrc
   SENTRY_VERSION: 2.17.1 # https://hub.docker.com/r/getsentry/sentry-cli/tags
   RUBY_VERSION: 3.3.1 # https://hub.docker.com/_/ruby/tags
   PLAYWRIGHT_VERSION: "v1.43.1-jammy" # https://mcr.microsoft.com/en-us/product/playwright/tags
