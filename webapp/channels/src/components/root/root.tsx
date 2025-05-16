@@ -322,7 +322,9 @@ export default class Root extends React.PureComponent<Props, State> {
         const {isLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isLoaded) {
-            this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
+            if (this.props.location.pathname === '/') {
+                this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
+            }
         }
         this.onConfigLoaded();
     };
