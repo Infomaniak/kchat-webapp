@@ -48,6 +48,7 @@ type MenuButtonProps = {
     class?: string;
     as?: keyof JSX.IntrinsicElements;
     children: ReactNode;
+    ref?: React.RefObject<HTMLButtonElement>;
 }
 
 type MenuButtonTooltipProps = {
@@ -208,6 +209,8 @@ export function Menu(props: Props) {
                 aria-describedby={props.menuButton?.['aria-describedby']}
                 className={props.menuButton?.class ?? ''}
                 onClick={handleMenuButtonClick}
+
+                ref={props.menuButton.ref}
             >
                 {props.menuButton.children}
             </MenuButtonComponent>
