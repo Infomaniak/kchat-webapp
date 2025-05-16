@@ -297,6 +297,7 @@ const SidebarChannelMenu = ({
                     defaultMessage: 'Channel options for {channelName}',
                 }, {channelName: channel.name}),
                 children: <DotsVerticalIcon size={16}/>,
+                ref: menuTriggerRef,
             }}
             menuButtonTooltip={{
                 class: 'hidden-xs',
@@ -307,7 +308,6 @@ const SidebarChannelMenu = ({
                 'aria-label': formatMessage({id: 'sidebar_left.sidebar_channel_menu.dropdownAriaLabel', defaultMessage: 'Edit channel menu'}),
                 onToggle: onMenuToggle,
             }}
-            menuButtonRef={menuTriggerRef}
         >
             {markAsReadUnreadMenuItem}
             {favoriteUnfavoriteMenuItem}
