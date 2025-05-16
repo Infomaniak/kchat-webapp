@@ -3202,6 +3202,7 @@
   "edit_post.action_buttons.cancel": "Annuler",
   "edit_post.action_buttons.save": "Enregistrer",
   "edit_post.editPost": "Modifier le message...",
+  "edit_post.no_notification_trigger_on_mention": "Modifier ce message avec une '@mention' ne notifiera pas le destinataire.",
   "edit_post.helper_text": "<strong>{key}Entrée</strong> pour enregistrer, <strong>Échap</strong> pour annuler",
   "edit_post.time_limit_button.for_n_seconds": "Pour {n} secondes",
   "edit_post.time_limit_button.no_limit": "N’importe quand",
