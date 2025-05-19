@@ -3008,6 +3008,14 @@
   "notify_all.confirm": "Conferma",
   "notify_all.title.confirm": "Conferma l'invio delle notifiche a tutto il canale",
   "notify_all.title.confirm_groups": "Conferma invio notifica di gruppo",
+  "notify_here.question": "Utilizzando <b>@here</b> stai per inviare notifiche ad almeno <b>{totalMembers} altre persone</b>. Sei sicuro di volerlo fare?",
+  "notifyAll.question": "Utilizzando <b>@all</b> o <b>@channel</b> stai per inviare notifiche a <b>{totalMembers} persone</b>. Sei sicuro di volerlo fare?",
+  "notifyAll.question_groups": "Utilizzando <b>{mentions}</b> e <b>{finalMention}</b> stai per inviare notifiche ad almeno <b>{totalMembers} persone</b>. Sei sicuro di volerlo fare?",
+  "notifyAll.question_oneGroup": "Utilizzando <b>{mention}</b> stai per inviare notifiche ad almeno <b>{totalMembers} persone</b>. Sei sicuro di volerlo fare?",
+  "notifyAll.question_timezone_oneGroup": "Utilizzando <b>{mention}</b> stai per inviare notifiche ad almeno <b>{totalMembers} persone</b> in <b>{timezones, number} {timezones, plural, one {fuso orario} other {fusi orari}}</b>. Sei sicuro di volerlo fare?",
+  "notifyAll.question_timezoneGroups": "Utilizzando <b>{mentions}</b> e <b>{finalMention}</b> stai per inviare notifiche ad almeno <b>{totalMembers} persone</b> in <b>{timezones, number} {timezones, plural, one {fuso orario} other {fusi orari}}</b>. Sei sicuro di volerlo fare?",
+  "notifyAll.questionTimezone": "Utilizzando <b>@all</b> o <b>@channel</b> stai per inviare notifiche a <b>{totalMembers} persone</b> in <b>{timezones, number} {timezones, plural, one {fuso orario} other {fusi orari}}</b>. Sei sicuro di volerlo fare?",
+  "notifyHere.question_timezone": "Utilizzando <b>@here</b> stai per inviare notifiche ad almeno <b>{totalMembers} altre persone</b> in <b>{timezones, number} {timezones, plural, one {fuso orario} other {fusi orari}}</b>. Sei sicuro di volerlo fare?",
   "numMembers": "{num, number} {num, plural, one {member} other {members}}",
   "offers_modal.accept": "Modificare la mia offerta",
   "offers_modal.cancel": "Non al momento",
@@ -4024,5 +4032,5 @@
   "dnd_banner.text": "{name} è in modalità “Non disturbare”, le notifiche di messaggi e chiamate sono disattivate",
   "voiceMessage.preview.title": "Messaggio vocale",
   "voiceMessage.uploading": "Caricamento in corso...",
-  "voiceMessage.canvasFallback.recording": "Registrazione avviata"
+  "voiceMessage.canvasFallback.recording": "Registrazione avviata",
 }
