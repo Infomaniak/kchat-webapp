@@ -73,7 +73,7 @@ function ThreadFooter({
         trackEvent('crt', 'replied_using_footer');
         e.stopPropagation();
         dispatch(selectPost({id: threadId, channel_id: channelId} as Post));
-    }, [dispatch, replyClick, threadId, channelId]);
+    }, [replyClick, threadId, channelId]);
 
     const handleFollowing = useCallback((e) => {
         e.stopPropagation();
@@ -114,21 +114,23 @@ function ThreadFooter({
                 />
             ) : null}
 
-            <Button
-                onClick={handleReply}
-                className='ReplyButton separated'
-                prepend={
-                    <span className='icon'>
-                        <i className='icon-reply-outline'/>
-                    </span>
-                }
-            >
-                <FormattedMessage
-                    id='threading.numReplies'
-                    defaultMessage='{totalReplies, plural, =0 {Reply} =1 {# reply} other {# replies}}'
-                    values={{totalReplies}}
-                />
-            </Button>
+            {thread.reply_count > 0 && (
+                <Button
+                    onClick={handleReply}
+                    className='ReplyButton separated'
+                    prepend={
+                        <span className='icon'>
+                            <i className='icon-reply-outline'/>
+                        </span>
+                    }
+                >
+                    <FormattedMessage
+                        id='threading.numReplies'
+                        defaultMessage='{totalReplies, plural, =0 {Reply} =1 {# reply} other {# replies}}'
+                        values={{totalReplies}}
+                    />
+                </Button>
+            )}
 
             <FollowButton
                 isFollowing={isFollowing}
