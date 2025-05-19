@@ -87,8 +87,7 @@ export default class PostBodyAdditionalContent extends React.PureComponent<Props
             );
 
         case 'message_attachment': {
-            // Ik: we use a simplier validation for message attachments 
-            const attachments = Array.isArray(this.props.post.props?.attachments) ? this.props.post.props?.attachments : [];
+            const attachments = isMessageAttachmentArray(this.props.post.props?.attachments) ? this.props.post.props?.attachments : [];
 
             return (
                 <MessageAttachmentList
