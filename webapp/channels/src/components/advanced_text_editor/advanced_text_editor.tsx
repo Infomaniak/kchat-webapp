@@ -632,7 +632,7 @@ const AdvancedTextEditor = ({
         };
     }, [channelId, rootId]);
 
-    const disableSendButton = Boolean(isDisabled || (!draft.message.trim().length && !draft.fileInfos.length)) || !isValidPersistentNotifications;
+    const disableSendButton = Boolean(isDisabled || (!draft.message.trim().length && !draft.fileInfos.length)) || !isValidPersistentNotifications || Boolean(postError);
     const sendButton = readOnlyChannel || isInEditMode ? null : (
         <SendButton
             disabled={disableSendButton}
