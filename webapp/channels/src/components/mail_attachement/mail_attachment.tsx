@@ -42,15 +42,7 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
                 </div>
             </div>
             <Markdown
-                // imageProps={post.imageProps}
                 message={post.message}
-                // proxyImages={post.ima}
-                // mentionKeys={}
-                // highlightKeys={highlightKeys}
-                // options={options}
-                // channelNamesMap={channelNamesMap}
-                // hasPluginTooltips={this.props.hasPluginTooltips}
-                // imagesMetadata={this.props.post?.metadata?.images}
                 postId={post.id}
                 editedAt={post.edit_at ? post.edit_at : undefined}
             />
