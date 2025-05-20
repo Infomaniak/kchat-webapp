@@ -255,6 +255,7 @@ test:unit:
     paths:
       - webapp/channels/coverage/
     when: on_success
+    expire_in: 1 days
     reports:
       junit: webapp/channels/coverage/junit.xml
       coverage_report:
@@ -282,6 +283,7 @@ test:e2e:
   # Pass env variables to Playwright/Cypress
   # https://docs.gitlab.com/ee/ci/variables/index.html#pass-an-environment-variable-to-another-job
   artifacts:
+    expire_in: 1 days
     reports:
       dotenv: test.env
 
