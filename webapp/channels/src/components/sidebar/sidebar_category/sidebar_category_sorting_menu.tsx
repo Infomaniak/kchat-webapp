@@ -34,11 +34,13 @@ import Constants from 'utils/constants';
 type Props = {
     category: ChannelCategory;
     handleOpenDirectMessagesModal: (e: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) => void;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
 };
 
 const SidebarCategorySortingMenu = ({
     category,
     handleOpenDirectMessagesModal,
+    menuTriggerRef,
 }: Props) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const {formatMessage} = useIntl();
@@ -196,6 +198,7 @@ const SidebarCategorySortingMenu = ({
                     'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}, {name: category.display_name}),
                     class: 'SidebarMenu_menuButton sortingMenu',
                     children: <DotsVerticalIcon size={16}/>,
+                    ref: menuTriggerRef,
                 }}
                 menuButtonTooltip={{
                     text: formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}, {name: category.display_name}),
