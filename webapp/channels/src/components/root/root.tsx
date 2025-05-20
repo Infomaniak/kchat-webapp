@@ -738,7 +738,7 @@ export default class Root extends React.PureComponent<Props, State> {
             }
         });
 
-        const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
+        const ksuiteBridge = new KSuiteBridge({debugPrefix: 'kchat'}); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch, store.getState);
 
         // this message listener is outside the store because of how is handled navigation
