@@ -4293,6 +4293,8 @@
   "sidebar.types.channels": "CANALES",
   "sidebar.types.direct_messages": "MENSAJES DIRECTOS",
   "sidebar.types.favorites": "FAVORITOS",
+  "sidebar.types.unreadChannels.ariaLabel": "No leídos",
+  "sidebar.types.unreadChannels.displayName": "NO LEÍDOS",
   "sidebar.unreads": "Más sin leer",
   "sidebarLeft.browserOrCreateChannelMenu.browseChannelsMenuItem.primaryLabel": "Explorar canales",
   "sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel": "Crear una nueva categoría",

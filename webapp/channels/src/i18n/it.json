@@ -3309,6 +3309,8 @@
   "sidebar.types.channels": "CANALI",
   "sidebar.types.direct_messages": "MESSAGGI DIRETTI",
   "sidebar.types.favorites": "PREFERITI",
+  "sidebar.types.unreadChannels.ariaLabel": "Non letti",
+  "sidebar.types.unreadChannels.displayName": "NON LETTI",
   "sidebar.unreads": "Più non letti",
     "sidebarLeft.browserOrCreateChannelMenu.browseChannelsMenuItem.primaryLabel": "Esplora canali",
   "sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel": "Crea una nuova categoria",
