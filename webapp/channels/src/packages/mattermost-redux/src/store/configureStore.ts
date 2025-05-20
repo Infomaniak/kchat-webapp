@@ -30,12 +30,12 @@ export default function configureStore<S extends GlobalState>({
     appReducers,
     getAppReducers,
     preloadedState,
-    sentryReduxEnhancers = [],
+    sentryReduxEnhancer = [],
 }: {
     appReducers: Record<string, Reducer>;
     getAppReducers: () => Record<string, Reducer>;
     preloadedState: Partial<S>;
-    sentryReduxEnhancers?: StoreEnhancer[];
+    sentryReduxEnhancer?: StoreEnhancer[];
 }): Store {
     const baseState = {
         ...initialState,
@@ -57,7 +57,7 @@ export default function configureStore<S extends GlobalState>({
         thunk.withExtraArgument({loaders: {}}),
     );
 
-    const storeEnhancers = [middleware, ...sentryReduxEnhancers];
+    const storeEnhancers = [middleware, ...sentryReduxEnhancer];
 
     const enhancers = composeEnhancers(...storeEnhancers);
 
