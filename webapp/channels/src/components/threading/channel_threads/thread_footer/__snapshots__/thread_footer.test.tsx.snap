@@ -10,53 +10,6 @@ exports[`components/threading/channel_threads/thread_footer should match snapsho
     <div
       className="indicator"
     />
-    <Button
-      className="ReplyButton separated"
-      onClick={[Function]}
-      prepend={
-        <span
-          className="icon"
-        >
-          <i
-            className="icon-reply-outline"
-          />
-        </span>
-      }
-    >
-      <button
-        className="Button Button___transparent ReplyButton separated"
-        onClick={[Function]}
-      >
-        <span
-          className="Button_prepended"
-        >
-          <span
-            className="icon"
-          >
-            <i
-              className="icon-reply-outline"
-            />
-          </span>
-        </span>
-        <span
-          className="Button_label"
-        >
-          <FormattedMessage
-            defaultMessage="{totalReplies, plural, =0 {Reply} =1 {# reply} other {# replies}}"
-            id="threading.numReplies"
-            values={
-              Object {
-                "totalReplies": 0,
-              }
-            }
-          >
-            <span>
-              Reply
-            </span>
-          </FormattedMessage>
-        </span>
-      </button>
-    </Button>
     <Memo(FollowButton)
       className="separated"
       isFollowing={true}
