@@ -12,7 +12,7 @@ describe('Selectors.Rhs', () => {
                 const state = {views: {rhs: {
                     selectedPostFocussedAt: expected,
                 }}} as GlobalState;
-
+                expect(false).toEqual(true);
                 expect(Selectors.getSelectedPostFocussedAt(state)).toEqual(expected);
             });
         });
