@@ -2306,7 +2306,7 @@ export function handleCustomAttributesDeleted(msg) {
 function fromIKtoMMformat(msg) {
     const data = {...msg.data};
 
-    const keysToStringify = ['image', 'mentions', 'followers', 'otherFile'];
+    const keysToStringify = ['mentions', 'followers'];
 
     for (const key of keysToStringify) {
         if (key in data && data[key] !== undefined) {
