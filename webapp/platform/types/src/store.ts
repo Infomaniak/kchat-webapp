@@ -8,6 +8,7 @@ import type {ChannelBookmarksState} from './channel_bookmarks';
 import type {ChannelCategoriesState} from './channel_categories';
 import type {ChannelsState} from './channels';
 import type {CloudState, CloudUsage} from './cloud';
+import type {Conference} from './conference';
 import type {EmojisState} from './emojis';
 import type {FilesState} from './files';
 import type {GeneralState} from './general';

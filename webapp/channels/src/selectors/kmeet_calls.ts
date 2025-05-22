@@ -6,13 +6,11 @@ import type {GlobalState} from '@mattermost/types/store';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 
-import type {GlobalState} from 'types/store';
-
 export const getConferenceByChannelId = (state: GlobalState, channelId?: string) => {
     if (!channelId) {
         return null;
     }
-    return state.views.kmeetCalls.conferences[channelId];
+    return state.entities.kmeetCalls.conferences[channelId];
 };
 
 export const getIsAnyUserInConference = (state: GlobalState, channelId: string) => {

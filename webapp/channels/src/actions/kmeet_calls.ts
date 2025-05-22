@@ -17,7 +17,7 @@ import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_u
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 
-import type {DispatchFunc, GlobalState} from 'types/store';
+import type {ActionFuncAsync, DispatchFunc, GlobalState} from 'types/store';
 
 import {closeModal, openModal} from './views/modals';
 

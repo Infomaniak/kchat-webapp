@@ -255,9 +255,10 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOthe
     // This scenario can occur if the conference ended while the application was offline,
     // causing this modal to remain visible. Upon websocket reconnection, the conference
     // state is updated asynchronously, which may lead to a brief instant of undefined conference.
-    if (!conference) {
+    if (!conference && !isOtherServer) {
         return null;
     }
+
     return (
         <Container
             backdrop='static'
