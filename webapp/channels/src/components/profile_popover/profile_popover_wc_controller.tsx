@@ -88,7 +88,7 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     onToggle?: (isMounted: boolean) => void;
 }
 
-export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; badges: string[], hiddenOptions: string[],hiddenInformations: string[]};
+export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; badges: string[]; hiddenOptions: string[];hiddenInformations: string[]};
 
 export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     const {
@@ -171,12 +171,11 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
         };
 
         current.addEventListener('close', returnFocus);
-        current.addEventListener('open', () => console.log(hasOverriddenProps, user?.is_bot));
         current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         current.badges = badges;
         if (user?.is_bot) {
-            current.hiddenInformations= ['timezone' , 'userMail' ];
-            current.hiddenOptions = ['send-mail', 'search-incoming-mail', 'block-user', 'schedule-event', 'create-contact', 'show-contact', 'start-call', 'manage-profile']
+            current.hiddenInformations = ['timezone', 'userMail'];
+            current.hiddenOptions = ['send-mail', 'search-incoming-mail', 'block-user', 'schedule-event', 'create-contact', 'show-contact', 'start-call', 'manage-profile'];
         }
         current.badges = badges;
 
@@ -214,9 +213,9 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                     slot='trigger'
                     className={triggerComponentClass}
                 >{children}</span>
-                {(shouldDisplayMinimalPanel && user?.is_bot) && <div
+                {(shouldDisplayMinimalPanel) && <div
                     slot='custom-content'
-                                                        >
+                >
                     {formatMessage({
                         id: 'user_profile.account.post_was_created',
                         defaultMessage: 'This post was created by an integration from @{username}',
