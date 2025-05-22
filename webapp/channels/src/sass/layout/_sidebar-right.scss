@@ -288,7 +288,6 @@
     overflow: hidden;
     height: 100%;
     border-left: var(--border-default);
-    box-shadow: var(--elevation-2);
 
     &.expanded {
         position: absolute;
@@ -314,7 +313,6 @@
         // If this is changed, the interaction with the App Bar icons must be tested
         //(see .app-bar__icon in components/app_bar/app_bar.scss)
         z-index: 20;
-        box-shadow: var(--elevation-2);
 
         .sidebar-right-container {
             height: 100%;
