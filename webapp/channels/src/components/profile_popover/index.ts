@@ -21,7 +21,7 @@ import type {GlobalState} from '../../types/store';
 import {UserStatuses} from '../../utils/constants';
 
 function mapStateToProps(state: GlobalState, ownProps: ProfilePopoverProps): ProfilePopoverAdditionalProps {
-    ownProps.channelId = ownProps.channelId || getDefaultChannelId(state);
+    const channelId = ownProps.channelId || getDefaultChannelId(state);
     const currentUser = getCurrentUser(state);
     const currentTeamAccountId = getCurrentTeamAccountId(state);
     const currentTeamName = getCurrentTeamName(state);
@@ -29,10 +29,10 @@ function mapStateToProps(state: GlobalState, ownProps: ProfilePopoverProps): Pro
     const userStatus = (ownProps.userId && getStatusForUserId(state, ownProps.userId)) || UserStatuses.OFFLINE;
 
     const isTeamAdmin = getIsTeamAdmin(state, ownProps.userId);
-    const isChannelAdmin = getIsChannelAdmin(state, ownProps.userId, ownProps.channelId);
+    const isChannelAdmin = getIsChannelAdmin(state, ownProps.userId, channelId);
 
     return {
-        channelId: ownProps.channelId,
+        channelId,
         currentTeamAccountId,
         currentTeamName,
         currentUser,
