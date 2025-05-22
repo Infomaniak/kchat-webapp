@@ -12,7 +12,7 @@ import * as Menu from 'components/menu';
 
 type Props = {
     id: string;
-    menuTriggerRef: React.RefObject<HTMLButtonElement>;
+    menuTriggerRef?: React.RefObject<HTMLButtonElement>;
     children: React.ReactNode[];
     name: string;
 };
@@ -48,6 +48,7 @@ const SidebarCategoryGenericMenu = ({
                     'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}, {name}),
                     class: 'SidebarMenu_menuButton',
                     children: <DotsVerticalIcon size={16}/>,
+                    ref: menuTriggerRef,
                 }}
                 menuButtonTooltip={{
                     text: formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}, {name}),
@@ -58,7 +59,6 @@ const SidebarCategoryGenericMenu = ({
                     'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.dropdownAriaLabel', defaultMessage: 'Edit category menu'}),
                     onToggle: handleMenuToggle,
                 }}
-                menuButtonRef={menuTriggerRef}
             >
                 {children}
             </Menu.Container>

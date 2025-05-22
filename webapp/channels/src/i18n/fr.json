@@ -4472,6 +4472,8 @@
   "sidebar.types.channels": "CANAUX",
   "sidebar.types.direct_messages": "MESSAGES PERSONNELS",
   "sidebar.types.favorites": "FAVORIS",
+  "sidebar.types.unreadChannels.ariaLabel": "Non lus",
+  "sidebar.types.unreadChannels.displayName": "NON LUS",
   "sidebar.unreads": "Messages non lus",
   "sidebarLeft.browserOrCreateChannelMenu.browseChannelsMenuItem.primaryLabel": "Parcourir les canaux",
   "sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel": "Créer une nouvelle catégorie",
