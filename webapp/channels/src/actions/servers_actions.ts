@@ -7,7 +7,7 @@ import store from 'stores/redux_store';
 
 import {ModalIdentifiers, SocketEvents} from 'utils/constants';
 
-import {openCallDialingModalFromOtherServer} from './kmeet_calls';
+import {openCallDialingModal} from './kmeet_calls';
 import {closeModal} from './views/modals';
 import {changeStatus, setBadges} from './views/servers';
 
@@ -22,7 +22,7 @@ type ServerMessage<T> = {
 export function handleServerEvent(msg: ServerMessage<any>) {
     switch (msg.event) {
     case SocketEvents.CONFERENCE_ADDED:
-        dispatch(openCallDialingModalFromOtherServer(msg, true));
+        dispatch(openCallDialingModal(msg.data.channel_id, msg));
         break;
     case SocketEvents.CONFERENCE_DELETED:
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));

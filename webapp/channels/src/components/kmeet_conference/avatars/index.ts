@@ -14,7 +14,6 @@ import Avatars from './avatars';
 
 type OwnProps = {
     channelId?: string;
-    otherServerParticipants: any;
 }
 
 const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {

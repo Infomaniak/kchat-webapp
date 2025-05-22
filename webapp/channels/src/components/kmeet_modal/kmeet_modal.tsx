@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, {useEffect, useMemo, useState, useRef} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import type {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
@@ -12,7 +12,7 @@ import {bridgeRecreate} from 'mattermost-redux/actions/ksuiteBridge';
 import {getUser} from 'mattermost-redux/actions/users';
 import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
-import {joinCall, declineCall, cancelCall, getUserCustom} from 'actions/kmeet_calls';
+import {joinCall, declineCall, cancelCall, getRemoteUsers} from 'actions/kmeet_calls';
 import {switchTeam} from 'actions/team_actions';
 import {closeModal} from 'actions/views/modals';
 
@@ -35,17 +35,15 @@ type Props = {
     conference?: Conference;
     caller?: UserProfile;
     users?: UserProfile[];
-    isOtherServer?: boolean;
-    eventOtherServer: any;
+    crossServerEvent: any;
     otherServer: Server | null | undefined;
     otherServerName: string | undefined;
 }
 
-const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOtherServer = false, eventOtherServer, otherServer, otherServerName}) => {
+const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, crossServerEvent, otherServer, otherServerName}) => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const modalRef = React.useRef<HTMLDivElement>(null);
-    const mountedRef = useRef(false);
     const isCallerCurrentUser = useMemo(() => caller?.id === user.id, [caller, user]);
     const participants = useMemo(() => {
         if (!users || !user) {
@@ -59,27 +57,27 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOthe
     const [otherServerParticipants, setOtherServerParticipants] = useState<UserProfile[]>([]);
 
     const onHandleAccept = React.useCallback(() => {
-        if (conference && !isOtherServer) {
+        if (conference && !crossServerEvent) {
             dispatch(joinCall(conference.channel_id));
-        } else {
+        } else if (crossServerEvent) {
             if (!otherServer) {
                 return;
             }
             bridgeRecreate(otherServer.url);
             switchTeam(otherServer.url, otherServer);
             setLastKSuiteSeenCookie(otherServer.id);
-            const urlWithConferenceId = `${otherServer.url}/${otherServer.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${eventOtherServer.data.channel_id}`;
+            const urlWithConferenceId = `${otherServer.url}/${otherServer.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${crossServerEvent.data.channel_id}`;
             window.location.href = urlWithConferenceId;
         }
-    }, [conference, isOtherServer, otherServer, eventOtherServer, dispatch]);
+    }, [conference, otherServer, crossServerEvent, dispatch]);
 
     const onHandleDecline = React.useCallback(() => {
-        if (conference && !isOtherServer) {
+        if (conference && !crossServerEvent) {
             dispatch(declineCall(conference.channel_id));
         } else {
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         }
-    }, [conference, isOtherServer, dispatch]);
+    }, [conference, crossServerEvent, dispatch]);
 
     const onHandleCancel = React.useCallback(() => {
         if (conference) {
@@ -103,29 +101,30 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOthe
     }, []);
 
     useEffect(() => {
-        mountedRef.current = true;
+        const abortController = new AbortController();
+        const signal = abortController.signal;
 
-        return () => {
-            mountedRef.current = false;
-        };
-    }, []);
-
-    useEffect(() => {
         const fetchParticipants = async () => {
-            if (isOtherServer) {
-                const userIds = eventOtherServer.data.participants;
+            if (crossServerEvent) {
+                const userIds = crossServerEvent.data.participants;
                 try {
-                    const data = await getUserCustom(otherServerName, userIds);
+                    const data = await getRemoteUsers(otherServerName, userIds);
                     const filteredData = data.filter((participant) => participant.nickname !== user.nickname);
-                    if (mountedRef.current) {
+                    if (!signal.aborted) {
                         setOtherServerParticipants(filteredData);
                     }
                 } catch (error) {
+                    // eslint-disable-next-line no-console
                     console.error('Error fetching participants:', error);
                 }
             }
         };
+
         fetchParticipants();
+
+        return () => {
+            abortController.abort();
+        };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -133,17 +132,6 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOthe
         window.addEventListener('offline', () => {
             onHandleDecline();
         });
-
-        // document.addEventListener('click', handleClickOutsideModal);
-
-        // const timeout = setTimeout(() => {
-        //     onHandleDecline();
-        // }, 30000);
-
-        // return () => {
-        //     // document.removeEventListener('click', handleClickOutsideModal);
-        //     clearTimeout(timeout);
-        // };
     }, [onHandleDecline]);
 
     useEffect(() => {
@@ -166,7 +154,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOthe
     };
 
     const text = () => {
-        if (isOtherServer) {
+        if (crossServerEvent) {
             return (
                 <>
                     <div className='call-modal__calling-user'>
@@ -255,7 +243,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, isOthe
     // This scenario can occur if the conference ended while the application was offline,
     // causing this modal to remain visible. Upon websocket reconnection, the conference
     // state is updated asynchronously, which may lead to a brief instant of undefined conference.
-    if (!conference && !isOtherServer) {
+    if (!conference && !crossServerEvent) {
         return null;
     }
 

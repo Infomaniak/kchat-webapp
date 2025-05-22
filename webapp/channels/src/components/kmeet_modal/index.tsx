@@ -6,7 +6,7 @@ import {getConferenceByChannelId} from 'mattermost-redux/selectors/entities/kmee
 import {getUserById} from 'mattermost-redux/selectors/entities/users';
 
 import {getCurrentLocale} from 'selectors/i18n';
-import {getServerUrlByTeamId} from 'selectors/views/servers';
+import {getServerById} from 'selectors/views/servers';
 
 import type {GlobalState} from 'types/store';
 
@@ -14,8 +14,7 @@ import KmeetModal from './kmeet_modal';
 
 type OwnProps = {
     channelId: string;
-    eventOtherServer: any;
-    isOtherServer: boolean;
+    crossServerEvent: any;
 }
 
 function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
@@ -28,9 +27,9 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     let otherServerName;
     let otherServer;
 
-    if (ownProps.isOtherServer) {
-        otherServer = getServerUrlByTeamId(state, ownProps.eventOtherServer.data.team_id);
-        otherServerName = getServerUrlByTeamId(state, ownProps.eventOtherServer.data.team_id)?.name;
+    if (ownProps.crossServerEvent) {
+        otherServer = getServerById(state, ownProps.crossServerEvent.data.team_id);
+        otherServerName = otherServer?.name;
     }
 
     return {

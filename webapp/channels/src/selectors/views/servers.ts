@@ -38,19 +38,6 @@ export const getOtherServers: (state: GlobalState) => Server[] = createSelector(
     },
 );
 
-export const getServerUrlByTeamId: (state: GlobalState, teamId: string) => Server | null = createSelector(
-    'makeGetServerUrlByTeamId',
-    getArrayServers,
-    (state: GlobalState, teamId: string) => teamId,
-    (servers, teamId) => {
-        const server = servers.find((server) => server.id === teamId);
-        if (!server) {
-            return null;
-        }
-        return server;
-    },
-);
-
 export const makeGetBadgeCountForServerId: (state: GlobalState, id: string) => number = createSelector(
     'makeGetBadgeCountForServerId',
     getServers,

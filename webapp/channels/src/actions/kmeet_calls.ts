@@ -23,7 +23,7 @@ import {closeModal, openModal} from './views/modals';
 
 const KmeetModal = withSuspense(lazy(() => import('components/kmeet_modal')));
 
-export function openCallDialingModal(channelId: string) {
+export function openCallDialingModal(channelId: string, crossServerEvent?: any) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const isCurrentUserAlreadyInCall = getIsCurrentUserInCall(state);
@@ -64,34 +64,10 @@ export function openCallDialingModal(channelId: string) {
                 dialogType: KmeetModal,
                 dialogProps: {
                     channelId,
+                    ...(crossServerEvent && {crossServerEvent}),
                 },
             },
         ));
-        return {data: true};
-    };
-}
-
-export function openCallDialingModalFromOtherServer(eventOtherServer: any, isOtherServer: boolean): ActionFuncAsync {
-    return async (dispatch: DispatchFunc, getState) => {
-        const state = getState();
-        const isCurrentUserAlreadyInCall = getIsCurrentUserInCall(state);
-        if (isCurrentUserAlreadyInCall) {
-            return {data: false};
-        }
-        const channelId = eventOtherServer.channelId;
-
-        dispatch(openModal(
-            {
-                modalId: ModalIdentifiers.INCOMING_CALL,
-                dialogType: KmeetModal,
-                dialogProps: {
-                    channelId,
-                    isOtherServer,
-                    eventOtherServer,
-                },
-            },
-        ));
-
         return {data: true};
     };
 }
@@ -172,8 +148,8 @@ export function joinCallIfModalOpen(channelId: string) {
     };
 }
 
-export async function getUserCustom(serverUrl: string | undefined, userIds: []) {
-    const data = await Client4.getCustomUser(serverUrl, userIds);
+export async function getRemoteUsers(serverUrl: string | undefined, userIds: []) {
+    const data = await Client4.getRemoteUsers(serverUrl, userIds);
     return data;
 }
 
