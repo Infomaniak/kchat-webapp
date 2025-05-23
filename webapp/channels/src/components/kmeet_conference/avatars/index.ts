@@ -5,9 +5,8 @@ import {connect} from 'react-redux';
 
 import type {Conference} from '@mattermost/types/conference';
 
+import {getConferenceByChannelId, getConferenceParticipantsIds} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {getCurrentUser, makeGetProfilesByIdsAndUsernames} from 'mattermost-redux/selectors/entities/users';
-
-import {getConferenceByChannelId, getConferenceParticipantsIds} from 'selectors/kmeet_calls';
 
 import type {GlobalState} from 'types/store';
 
