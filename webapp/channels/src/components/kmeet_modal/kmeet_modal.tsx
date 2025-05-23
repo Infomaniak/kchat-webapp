@@ -16,7 +16,7 @@ import {joinCall, declineCall, cancelCall, getRemoteUsers} from 'actions/kmeet_c
 import {switchTeam} from 'actions/team_actions';
 import {closeModal} from 'actions/views/modals';
 
-import Avatars from 'components/kmeet_conference/avatars';
+import KMeetAvatars from 'components/kmeet_conference/avatars';
 import CallAccept from 'components/widgets/icons/call_accept';
 import CallHangUp from 'components/widgets/icons/call_hang_up';
 
@@ -262,7 +262,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, crossS
                 <div
                     className='call-modal__header'
                 >
-                    <Avatars
+                    <KMeetAvatars
                         otherServerParticipants={otherServerParticipants}
                         channelId={channel?.id}
                         showCurrentUser={false}

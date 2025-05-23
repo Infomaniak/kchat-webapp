@@ -20,15 +20,13 @@ import type {Registrant} from 'types/conference';
 import Status from '../status';
 
 type Props = {
-    userId: UserProfile['id'];
+    user: UserProfile;
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
     displayProfileOverlay: boolean;
     displayProfileStatus: boolean;
     disableFetch?: boolean;
     rootClose?: boolean;
     status?: Registrant;
-    user: UserProfile;
-    name: string | undefined;
 } & ComponentProps<typeof Avatar>
 
 interface MMOverlayTrigger extends BaseOverlayTrigger {
@@ -36,18 +34,16 @@ interface MMOverlayTrigger extends BaseOverlayTrigger {
 }
 
 function UserAvatar({
-    userId,
+    user,
     overlayProps,
     displayProfileOverlay,
     displayProfileStatus,
     disableFetch,
     status,
-    user,
-    name,
     rootClose = true,
     ...props
 }: Props) {
-    const profilePictureURL = userId ? imageURLForUser(userId) : '';
+    const profilePictureURL = user.id ? imageURLForUser(user.id) : '';
 
     const overlay = useRef<MMOverlayTrigger>(null);
 
@@ -65,7 +61,7 @@ function UserAvatar({
             overlay={
                 <ProfilePopover
                     className='user-profile-popover'
-                    userId={userId}
+                    userId={user.id}
                     src={profilePictureURL}
                     hide={hideProfilePopover}
                     disableFetch={disableFetch}
@@ -73,8 +69,8 @@ function UserAvatar({
             }
         >
             <SimpleTooltip
-                id={`name-${userId}`}
-                content={name}
+                id={`name-${user.id}`}
+                content={user.username}
                 {...overlayProps}
             >
                 <RoundButton
@@ -86,7 +82,7 @@ function UserAvatar({
                         registrant={status}
                     >
                         <Avatar
-                            url={(user && user.public_picture_url) || imageURLForUser(userId, user?.last_picture_update)}
+                            url={(user && user.public_picture_url) || imageURLForUser(user.id, user?.last_picture_update)}
                             tabIndex={-1}
                             {...props}
                         />

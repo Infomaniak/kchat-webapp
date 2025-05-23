@@ -1,15 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useMemo, useEffect} from 'react';
+import React, {memo, useMemo} from 'react';
 import type {ComponentProps, CSSProperties} from 'react';
 import {useIntl} from 'react-intl';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import tinycolor from 'tinycolor2';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {getMissingProfilesByIds} from 'mattermost-redux/actions/users';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getUser as selectUser, makeDisplayNameGetter} from 'mattermost-redux/selectors/entities/users';
 
@@ -36,42 +35,45 @@ type Props = {
     fetchMissingUsers?: boolean;
     disableProfileOverlay?: boolean;
     displayProfileStatus?: boolean;
-    otherServerParticipants: UserProfile[];
+    otherServerParticipants?: UserProfile[];
+    conferenceParticipants?: UserProfile[];
 };
 
 const OTHERS_DISPLAY_LIMIT = 99;
 
 const displayNameGetter = makeDisplayNameGetter();
 
-function Avatars({
+function KMeetAvatars({
     conference,
-    currentUser,
     size,
     disableProfileOverlay,
     displayProfileStatus,
-    fetchMissingUsers,
-    showCurrentUser = true,
     breakAt,
     otherServerParticipants,
+    conferenceParticipants,
 }: Props) {
     const {formatMessage} = useIntl();
-    const dispatch = useDispatch();
-    const usersIds = useMemo(() => {
-        if (otherServerParticipants && !conference) {
-            return otherServerParticipants.map((user) => user.id);
-        }
-        if (conference && conference.registrants) {
-            const ids = Object.keys(conference.registrants);
-            if (currentUser && !showCurrentUser) {
-                return ids.filter((id) => id !== currentUser.id);
-            }
 
-            return ids;
+    const usersIds = useMemo(() => {
+        if (conference && conference.registrants) {
+            return Object.keys(conference.registrants);
         }
         return [];
-    }, [otherServerParticipants, conference, currentUser, showCurrentUser]);
+    }, [conference]);
+
+    const usersToDisplay = useMemo(() => {
+        if (conference && conference.registrants) {
+            return conferenceParticipants;
+        }
+
+        if (otherServerParticipants) {
+            return otherServerParticipants;
+        }
+        return [];
+    }, [conference, otherServerParticipants, conferenceParticipants]);
+
     const [overlayProps, setImmediate] = useSynchronizedImmediate();
-    const [displayUserIds, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(usersIds, breakAt);
+    const [, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(usersIds, breakAt);
     const overflowNames = useSelector((state: GlobalState) => {
         return overflowUserIds.map((userId) => displayNameGetter(state, true)(selectUser(state, userId))).join(', ');
     });
@@ -81,49 +83,23 @@ function Avatars({
         background: tinycolor.mix(centerChannelBg, centerChannelColor, 8).toRgbString(),
     }), [centerChannelBg, centerChannelColor]);
 
-    useEffect(() => {
-        if (fetchMissingUsers) {
-            dispatch(getMissingProfilesByIds(usersIds));
-        }
-    }, [fetchMissingUsers, usersIds, dispatch]);
-
-    if (!conference) {
-        return <></>;
-    }
-
-    const renderUserAvatar = (userOrId: UserProfile | string) => {
-        const isUserProfile = (userOrId: UserProfile | string): userOrId is UserProfile => typeof userOrId !== 'string';
-        const user = isUserProfile(userOrId) ? userOrId : undefined;
-        const id = isUserProfile(userOrId) ? userOrId.id : userOrId;
-        const status = isUserProfile(userOrId) ? undefined : conference.registrants[id];
-        const name = user ? user.nickname : undefined;
-        const rootClose = !user;
-        const disableFetch = Boolean(user);
-
-        return (
-            <UserAvatar
-                key={id}
-                user={user}
-                name={name}
-                style={avatarStyle}
-                userId={id}
-                size={size}
-                overlayProps={overlayProps}
-                rootClose={rootClose}
-                disableFetch={disableFetch}
-                status={status}
-                displayProfileOverlay={Boolean(disableProfileOverlay)}
-                displayProfileStatus={Boolean(displayProfileStatus)}
-            />
-        );
-    };
-
     return (
         <div
             className={`Avatars Avatars___${size}`}
             onMouseLeave={() => setImmediate(false)}
         >
-            {(otherServerParticipants?.length > 0 ? otherServerParticipants : displayUserIds).map(renderUserAvatar)}
+            {usersToDisplay?.map((user) => (
+                <UserAvatar
+                    style={avatarStyle}
+                    key={user.id}
+                    user={user}
+                    size={size}
+                    overlayProps={overlayProps}
+                    status={conference && conference.registrants ? conference.registrants[user.id] : undefined}
+                    displayProfileOverlay={Boolean(disableProfileOverlay)}
+                    displayProfileStatus={Boolean(displayProfileStatus)}
+                />
+            ))}
             {Boolean(nonDisplayCount) && (
                 <SimpleTooltip
                     id={'names-overflow'}
@@ -157,4 +133,4 @@ function Avatars({
     );
 }
 
-export default memo(Avatars);
+export default memo(KMeetAvatars);
