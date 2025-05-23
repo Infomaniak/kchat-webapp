@@ -95,7 +95,7 @@ function KMeetAvatars({
                     user={user}
                     size={size}
                     overlayProps={overlayProps}
-                    status={conference && conference.registrants ? conference.registrants[user.id] : undefined}
+                    status={conference?.registrants?.[user.id]}
                     displayProfileOverlay={Boolean(disableProfileOverlay)}
                     displayProfileStatus={Boolean(displayProfileStatus)}
                 />

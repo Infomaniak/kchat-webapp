@@ -129,9 +129,8 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, crossS
     }, []);
 
     useEffect(() => {
-        window.addEventListener('offline', () => {
-            onHandleDecline();
-        });
+        window.addEventListener('offline', onHandleDecline);
+        return () => window.removeEventListener('offline', onHandleDecline);
     }, [onHandleDecline]);
 
     useEffect(() => {

@@ -26,10 +26,7 @@ function makeMapStateToProps() {
         const conference = channelId ? getConferenceByChannelId(state, channelId) : {} as Conference;
 
         const conferenceParticipantsIds = channelId ? getConferenceParticipantsIds(state, channelId) : [];
-        const conferenceParticipants = conferenceParticipantsIds.length > 0 ? getProfilesByIdsAndUsernames(state, {
-            allUserIds: conferenceParticipantsIds,
-            allUsernames: [],
-        }) : [];
+        const conferenceParticipants = getProfilesByIdsAndUsernames(state, {allUserIds: conferenceParticipantsIds, allUsernames: []});
 
         return {
             conferenceParticipants,
