@@ -12,6 +12,8 @@ $mail-preview-thin-color: var(--ik-btn-secondary-color, #666);
     border-radius: 4px;
     background-color: $mail-preview-background;
     margin-bottom: 8px ;
+    width: 100%;
+    max-width: 600px;
 
     &__row{
         display: flex;
