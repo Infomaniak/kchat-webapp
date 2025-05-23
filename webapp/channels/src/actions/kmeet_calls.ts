@@ -7,6 +7,8 @@ import {Client4} from 'mattermost-redux/client';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getConferenceByChannelId, getIsCurrentUserInCall} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {getUserById} from 'mattermost-redux/selectors/entities/users';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
 import {isModalOpen} from 'selectors/views/modals';
@@ -17,7 +19,7 @@ import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_u
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 
-import type {ActionFuncAsync, DispatchFunc, GlobalState} from 'types/store';
+import type {DispatchFunc, GlobalState} from 'types/store';
 
 import {closeModal, openModal} from './views/modals';
 
@@ -123,6 +125,7 @@ export function handleCallFromUrl(): ActionFuncAsync {
             if (!conference) {
                 // eslint-disable-next-line no-console
                 console.log('Conference not found');
+                return {data: false};
             }
             await dispatch(joinCall(conference.channel_id));
         }

@@ -26,6 +26,7 @@ import {getCurrentUserId, getUser as selectUser, getUsers, getUsersByUsername} f
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
 
+import {handleCallFromUrl} from 'actions/kmeet_calls';
 import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
 
 import {getHistory} from 'utils/browser_history';
@@ -98,6 +99,8 @@ export function loadMe(): ActionFuncAsync<boolean> {
                 dispatch(getMyKSuites()),
                 dispatch(getMyTeamMembers()),
             ]);
+
+            dispatch(handleCallFromUrl());
 
             const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
             await dispatch(getMyTeamUnreads(isCollapsedThreads));
