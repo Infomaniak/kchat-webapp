@@ -26,7 +26,7 @@ import {countMeta} from './utils';
 import './avatars.scss';
 
 type Props = {
-    conference: Conference;
+    conference: Conference | null;
     currentUser: UserProfile;
     showCurrentUser?: boolean;
     totalUsers?: number;

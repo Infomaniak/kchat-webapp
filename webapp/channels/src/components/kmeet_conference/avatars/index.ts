@@ -5,32 +5,31 @@ import {connect} from 'react-redux';
 
 import type {Conference} from '@mattermost/types/conference';
 
-import {getConferenceByChannelId} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {getCurrentUser, makeGetProfilesByIdsAndUsernames} from 'mattermost-redux/selectors/entities/users';
+
+import {getConferenceByChannelId, getConferenceParticipantsIds} from 'selectors/kmeet_calls';
 
 import type {GlobalState} from 'types/store';
 
-import KMeetAvatars from './avatars';
+import KMeetAvatars from './kmeet_avatars';
 
 type OwnProps = {
     channelId?: string;
     showCurrentUser?: boolean;
 }
+
 function makeMapStateToProps() {
     const getProfilesByIdsAndUsernames = makeGetProfilesByIdsAndUsernames();
 
-    return (state: GlobalState, ownProps: OwnProps) => {
+    return (state: GlobalState, {channelId}: OwnProps) => {
         const currentUser = getCurrentUser(state);
-        const conference = ownProps.channelId ? getConferenceByChannelId(state, ownProps.channelId) : {} as Conference;
-        let conferenceParticipants;
-        if (conference && conference.registrants) {
-            const ids = Object.keys(conference.registrants);
-            let finalIds: string[] = ids;
-            if (currentUser && !ownProps.showCurrentUser) {
-                finalIds = ids.filter((id) => id !== currentUser.id);
-            }
-            conferenceParticipants = getProfilesByIdsAndUsernames(state, {allUserIds: finalIds, allUsernames: []});
-        }
+        const conference = channelId ? getConferenceByChannelId(state, channelId) : {} as Conference;
+
+        const conferenceParticipantsIds = channelId ? getConferenceParticipantsIds(state, channelId) : [];
+        const conferenceParticipants = conferenceParticipantsIds.length > 0 ? getProfilesByIdsAndUsernames(state, {
+            allUserIds: conferenceParticipantsIds,
+            allUsernames: [],
+        }) : [];
 
         return {
             conferenceParticipants,

@@ -4,7 +4,7 @@
 import type {GlobalState} from '@mattermost/types/store';
 
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 
 export const getConferenceByChannelId = (state: GlobalState, channelId?: string) => {
     if (!channelId) {
@@ -40,6 +40,20 @@ export const getIsCurrentUserInCall = createSelector(
         }
 
         return inCall;
+    },
+);
+
+export const getConferenceParticipantsIds = createSelector(
+    'getConferenceParticipants',
+    (state: GlobalState, channelId: string) => getConferenceByChannelId(state, channelId),
+    getCurrentUser,
+    (conference, currentUser): string[] => {
+        if (!conference?.registrants) {
+            return [];
+        }
+
+        const ids = Object.keys(conference.registrants);
+        return currentUser ? ids.filter((id) => id !== currentUser.id) : ids;
     },
 );
 
