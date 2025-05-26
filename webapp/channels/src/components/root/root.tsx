@@ -539,6 +539,16 @@ export default class Root extends React.PureComponent<Props, State> {
         injectWebcomponentInit();
         this.initiateMeRequests();
 
+        if (!isDesktopApp() && (window.location.hash || '').endsWith('/notifications-settings')) {
+            customElements.whenDefined('module-settings-component').then(() => {
+                document.dispatchEvent(new CustomEvent('openSettings', {
+                    detail: ['ksuite-kchat', 'ksuite-kchat-personalization'],
+                }));
+            }).catch((error) => {
+                console.error('[channel_controller] Error waiting for wc-settings:', error);
+            });
+        }
+
         // Force logout of all tabs if one tab is logged out
         window.addEventListener('storage', this.handleLogoutLoginSignal);
 
