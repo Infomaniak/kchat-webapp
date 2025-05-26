@@ -35,7 +35,7 @@ export default function init({SENTRY_DSN}: Args) {
         dsn: SENTRY_DSN,
         release: GIT_RELEASE, //eslint-disable-line no-process-env
         environment: host.split('.').splice(1).join('.'),
-        normalizeDepth: 10,
+        normalizeDepth: 5,
         integrations: [
             isCanaryOrPreprod && new Sentry.BrowserTracing(),
             isCanaryOrPreprod && new Sentry.Replay(),
