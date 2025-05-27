@@ -38,9 +38,6 @@ export default class WebSocketClient {
     private userChannel: Channel | null;
     private userTeamChannel: Channel | null;
     private presenceChannel: Channel | null;
-
-    // private config: WebSocketClientConfig;
-
     private connectionUrl: string | null;
     private socketId: string | null;
     private currentPresence: string;
@@ -159,12 +156,6 @@ export default class WebSocketClient {
         this.userTeamChannel = null;
         this.presenceChannel = null;
         this.otherTeamsChannel = {};
-
-        // this.serverHostname = '';
-        // this.postedAck = false;
-        // this.reconnectTimeout = null;
-        // this.config = {...defaultWebSocketClientConfig, ...config};
-        // this.pingInterval = null;
     }
 
     // on connect, only send auth cookie and blank state.
@@ -197,13 +188,6 @@ export default class WebSocketClient {
         if (this.conn) {
             return;
         }
-
-        // We have a timeout waiting to re-initialize the websocket.
-        // We should wait until that fires before initializing,
-        // otherwise we may not respect the configured backoff.
-        // if (this.reconnectTimeout) {
-        //     return;
-        // }
 
         if (connectionUrl == null) {
             console.log('websocket must have connection url'); //eslint-disable-line no-console
@@ -645,28 +629,6 @@ export default class WebSocketClient {
             // this.conn = null;
             console.log('websocket closed'); //eslint-disable-line no-console
         }
-    }
-
-    // stopPingInterval() {
-    //     if (this.pingInterval) {
-    //         clearInterval(this.pingInterval);
-    //         this.pingInterval = null;
-    //     }
-    // }
-
-    ping(responseCallback?: (msg: any) => void) {
-        const msg = {
-            action: 'ping',
-            seq: this.responseSequence++,
-        };
-
-        if (responseCallback) {
-            this.responseCallbacks[msg.seq] = responseCallback;
-        }
-
-        // if (this.conn && this.conn.readyState === WebSocket.OPEN) {
-        //     this.conn.send(JSON.stringify(msg));
-        // }
     }
 
     sendMessage(action: string, data: any, responseCallback?: (msg: any) => void) {

@@ -312,9 +312,9 @@ export async function reconnect(socketId) {
         const mostRecentId = getMostRecentPostIdInChannel(state, currentChannelId);
         const mostRecentPost = getPost(state, mostRecentId);
 
-        if (appsEnabled(state)) {
-            dispatch(handleRefreshAppsBindings());
-        }
+        // if (appsEnabled(state)) {
+        //     dispatch(handleRefreshAppsBindings());
+        // }
 
         dispatch(fetchMyCategories(currentTeamId));
         dispatch(fetchAllMyTeamsChannels());
@@ -350,8 +350,8 @@ export async function reconnect(socketId) {
         }
 
         // Re-syncing the current channel and team ids.
-        // WebSocketClient.updateActiveChannel(currentChannelId);
-        // WebSocketClient.updateActiveTeam(currentTeamId);
+        WebSocketClient.updateActiveChannel(currentChannelId);
+        WebSocketClient.updateActiveTeam(currentTeamId);
     }
 
     const currentChannelId = getCurrentChannelId(state);
@@ -1235,8 +1235,9 @@ function handleUserAddedEvent(msg) {
 
         // Load the channel so that it appears in the sidebar
         const currentUserId = getCurrentUserId(doGetState());
+
+        //IK: we use the data field not the broadcast one
         if (currentUserId === msg.data.user_id) {
-            //IK: we use the data field not the broadcast one
             doDispatch(fetchChannelAndAddToSidebar(msg.data.channel_id));
         }
 
