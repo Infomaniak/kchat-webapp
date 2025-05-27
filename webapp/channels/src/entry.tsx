@@ -12,6 +12,8 @@ import App from 'components/app';
 
 import {AnnouncementBarTypes} from 'utils/constants';
 import sentry from 'utils/sentry';
+import {getKSuiteRedirect} from 'utils/url-ksuite-redirect';
+import {isDesktopApp} from 'utils/user_agent';
 import {setCSRFFromCookie} from 'utils/utils';
 
 // Import our styles
@@ -84,7 +86,21 @@ function appendOnDOMContentLoadedEvent(onDomContentReady: () => void) {
     }
 }
 
-appendOnDOMContentLoadedEvent(() => {
-    // Do the pre-render setup and call renderReactRootComponent when done
-    preRenderSetup(renderReactRootComponent);
-});
+/**
+ * Redirects to kSuite if conditions are met (runs before loading DOM)
+ */
+(() => {
+    // eslint-disable-next-line no-process-env
+    const isDev = process.env.NODE_ENV === 'development';
+    const redirect = getKSuiteRedirect(window.location, isDesktopApp(), isDev);
+
+    if (redirect) {
+        window.location.href = redirect;
+    } else {
+        appendOnDOMContentLoadedEvent(() => {
+            // Do the pre-render setup and call renderReactRootComponent when done
+            preRenderSetup(renderReactRootComponent);
+        });
+    }
+})();
+
