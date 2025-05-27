@@ -155,48 +155,32 @@ const MAX_WEBSOCKET_FAILS = 7;
 const pluginEventHandlers = {};
 
 export function initialize() {
+    const debugId = `[WS init-${Date.now()}]`;
+
     if (!window.WebSocket) {
-        // eslint-disable-next-line no-console
-        console.log('Browser does not support WebSocket');
+        console.warn(`${debugId} WebSocket not supported in this browser`);
         return;
     }
 
-    // eslint-disable-next-line no-console
-    console.log('Initializing or re-initializing WebSocket');
+    console.log(`${debugId} Initializing WebSocket`);
 
     const config = getConfig(getState());
     const user = getCurrentUser(getState());
     const currentChannelId = getCurrentChannelId(getState());
+
     if (!user) {
+        console.warn(`${debugId} No current user found. Skipping initialization.`);
         return;
     }
 
     let connUrl = '';
+
     if (config.WebsocketURL) {
         connUrl = config.WebsocketURL;
     } else {
         connUrl = new URL(getSiteURL());
-
-        // replace the protocol with a websocket one
         connUrl.protocol = 'wss:';
-
-        // if (connUrl.protocol === 'https:') {
-        //     connUrl.protocol = 'wss:';
-        // } else {
-        //     connUrl.protocol = 'ws:';
-        // }
-
-        // append a port number if one isn't already specified
         connUrl.host += ':' + config.WebsocketSecurePort;
-
-        // if (!(/:\d+$/).test(connUrl.host)) {
-        //     if (connUrl.protocol === 'wss:') {
-        //         connUrl.host += ':' + config.WebsocketSecurePort;
-        //     } else {
-        //         connUrl.host += ':' + config.WebsocketPort;
-        //     }
-        // }
-
         connUrl = connUrl.toString();
     }
 
@@ -205,19 +189,14 @@ export function initialize() {
         connUrl = connUrl.substring(0, connUrl.length - 1);
     }
 
-    // connUrl += Client4.getUrlVersion() + '/websocket';
-
     const token = localStorage.getItem('IKToken');
-
     if (isDesktopApp() && !token) {
-        // eslint-disable-next-line no-console
-        console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
+        console.error(`${debugId} Token missing in desktop app, redirecting to login`);
         getHistory().push('/login');
         return;
     }
 
-    // eslint-disable-next-line no-console
-    console.log('[websocket_actions > initialize] init called, ws will reauth');
+    console.info(`${debugId} Connecting to WebSocket at ${connUrl}`);
 
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
@@ -234,6 +213,8 @@ export function initialize() {
         token,
         currentChannelId,
     );
+
+    console.log(`${debugId} WebSocket initialization complete`);
 }
 
 export function close() {
@@ -257,6 +238,8 @@ export function unregisterPluginReconnectHandler(pluginId) {
 }
 
 function restart() {
+    const debugId = `[WS restart-${Date.now()}]`;
+    console.log(`${debugId} Restart started`);
     reconnect();
 
     // We fetch the client config again on the server restart.
@@ -270,31 +253,41 @@ export function reconnectWsChannels() {
 }
 
 export async function reconnect(socketId) {
-    // eslint-disable-next-line no-console
-    console.log('[websocket actions] reconnect');
+    const debugId = `[WS reconnect-${Date.now()}]`;
+    console.log(`${debugId} Reconnect started`);
+
+    // 🔍 Log current WebSocket listeners
+    console.log(`${debugId} Listener counts`, {
+        messageListeners: WebSocketClient.messageListeners?.size || 0,
+        firstConnectListeners: WebSocketClient.firstConnectListeners?.size || 0,
+        reconnectListeners: WebSocketClient.reconnectListeners?.size || 0,
+        missedMessageListeners: WebSocketClient.missedMessageListeners?.size || 0,
+        closeListeners: WebSocketClient.closeListeners?.size || 0,
+        otherServerMessageListeners: WebSocketClient.otherServerMessageListeners?.size || 0,
+    });
+
     if (isDesktopApp()) {
         const token = localStorage.getItem('IKToken');
         if (!token) {
-            // eslint-disable-next-line no-console
-            console.log('[websocket_actions > reconnect] token storage corrupt, redirecting to login');
+            console.log(`${debugId} Token missing, redirecting to login`);
             getHistory().push('/login');
             return;
         }
 
         if (checkIKTokenIsExpired()) {
-            // eslint-disable-next-line no-console
-            console.log('[websocket_actions > reconnect] token expired, calling refresh');
+            console.log(`${debugId} Token expired, attempting refresh`);
             try {
-                const newToken = await refreshIKToken(/*redirectToTeam**/false);
+                const newToken = await refreshIKToken(false);
                 if (newToken) {
                     WebSocketClient.updateToken(newToken);
+                    console.log(`${debugId} Token refreshed and updated`);
                 }
             } catch (e) {
-                // eslint-disable-next-line no-console
-                console.warn(e);
+                console.warn(`${debugId} Token refresh failed`, e);
             }
         }
     }
+
     dispatch({
         type: GeneralTypes.WEBSOCKET_SUCCESS,
         timestamp: Date.now(),
@@ -302,6 +295,7 @@ export async function reconnect(socketId) {
 
     if (socketId) {
         Client4.setSocketId(socketId);
+        console.log(`${debugId} Socket ID set: ${socketId}`);
     }
 
     const state = getState();
@@ -312,10 +306,6 @@ export async function reconnect(socketId) {
         const mostRecentId = getMostRecentPostIdInChannel(state, currentChannelId);
         const mostRecentPost = getPost(state, mostRecentId);
 
-        // if (appsEnabled(state)) {
-        //     dispatch(handleRefreshAppsBindings());
-        // }
-
         dispatch(fetchMyCategories(currentTeamId));
         dispatch(fetchAllMyTeamsChannels());
         dispatch(fetchTeamScheduledPosts(currentTeamId, true, true));
@@ -324,8 +314,7 @@ export async function reconnect(socketId) {
         dispatch(getMyPreferences());
         loadProfilesForSidebar();
 
-        // eslint-disable-next-line no-console
-        console.log(`[websocket actions] currentTeamId: ${currentTeamId} currentChannelId: ${currentChannelId} mostRecentPostId: ${mostRecentPost?.id}`);
+        console.log(`${debugId} currentTeamId=${currentTeamId}, currentChannelId=${currentChannelId}, mostRecentPostId=${mostRecentPost?.id}`);
 
         // IK: Verify version on reconnect
         dispatch(getClientConfig());
@@ -334,7 +323,6 @@ export async function reconnect(socketId) {
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
             dispatch(loadDeletedPosts(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
-            // we can request for getPosts again when socket is connected
             dispatch(getPosts(currentChannelId));
         }
 
@@ -352,6 +340,7 @@ export async function reconnect(socketId) {
         // Re-syncing the current channel and team ids.
         WebSocketClient.updateActiveChannel(currentChannelId);
         WebSocketClient.updateActiveTeam(currentTeamId);
+        console.log(`${debugId} Active channel/team updated`);
     }
 
     const currentChannelId = getCurrentChannelId(state);
@@ -362,8 +351,9 @@ export async function reconnect(socketId) {
 
     loadPluginsIfNecessary();
 
-    Object.values(pluginReconnectHandlers).forEach((handler) => {
+    Object.values(pluginReconnectHandlers).forEach((handler, i) => {
         if (handler && typeof handler === 'function') {
+            console.log(`${debugId} Calling pluginReconnectHandler [${i}]`);
             handler();
         }
     });
@@ -373,6 +363,8 @@ export async function reconnect(socketId) {
 
     dispatch(getDrafts(currentTeamId));
     dispatch(getMyMeets());
+
+    console.log(`${debugId} Reconnect completed`);
 }
 
 function syncThreads(teamId, userId) {
