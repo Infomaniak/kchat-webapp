@@ -12,6 +12,8 @@ import App from 'components/app';
 
 import {AnnouncementBarTypes} from 'utils/constants';
 import sentry from 'utils/sentry';
+import {getKSuiteRedirect} from 'utils/url-ksuite-redirect';
+import {isDesktopApp} from 'utils/user_agent';
 import {setCSRFFromCookie} from 'utils/utils';
 
 // Import our styles
@@ -86,7 +88,17 @@ function appendOnLoadEvent(fn: (evt: Event) => void) {
     }
 }
 
-appendOnLoadEvent(() => {
-    // Do the pre-render setup and call renderRootComponent when done
-    preRenderSetup(renderRootComponent);
-});
+(() => {
+    // eslint-disable-next-line no-process-env
+    const isDev = process.env.NODE_ENV === 'development';
+    const redirect = getKSuiteRedirect(window.location, isDesktopApp(), isDev);
+
+    if (redirect) {
+        window.location.href = redirect;
+    } else {
+        appendOnLoadEvent(() => {
+            // Do the pre-render setup and call renderRootComponent when done
+            preRenderSetup(renderRootComponent);
+        });
+    }
+})();
