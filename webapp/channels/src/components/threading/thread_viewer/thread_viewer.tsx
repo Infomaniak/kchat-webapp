@@ -81,12 +81,6 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
         }
     }
 
-    public componentWillUnmount() {
-        if (this.props.enableWebSocketEventScope) {
-            WebSocketClient.updateActiveThread(this.props.isThreadView, '');
-        }
-    }
-
     public componentDidUpdate(prevProps: Props) {
         const reconnected = this.props.socketConnectionStatus && !prevProps.socketConnectionStatus;
 
@@ -182,9 +176,6 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
             await this.fetchThread();
         }
 
-        if (this.props.channel && this.props.enableWebSocketEventScope) {
-            WebSocketClient.updateActiveThread(this.props.isThreadView, this.props.channel?.id);
-        }
         this.setState({isLoading: false});
     };
 
