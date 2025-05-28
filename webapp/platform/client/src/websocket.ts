@@ -236,8 +236,9 @@ export default class WebSocketClient {
                 console.log(`${debugId} connectFailCount incremented: ${this.connectFailCount}`);
 
                 this.closeCallback?.(this.connectFailCount);
-                this.closeListeners.forEach((listener, i) => {
-                    console.debug(`${debugId} Calling closeListener [${i}]`);
+                this.closeListeners.forEach((listener) => {
+                    const funcName = listener.name || '<anonymous>';
+                    console.debug(`${debugId} Calling closeListener (${funcName})`);
                     listener(this.connectFailCount);
                 });
             }
@@ -256,8 +257,9 @@ export default class WebSocketClient {
 
             console.log(`${debugId} Triggering close callbacks after error`);
             this.closeCallback?.(this.connectFailCount);
-            this.closeListeners.forEach((listener, i) => {
-                console.debug(`${debugId} Calling closeListener [${i}]`);
+            this.closeListeners.forEach((listener) => {
+                const funcName = listener.name || '<anonymous>';
+                console.debug(`${debugId} Calling closeListener (${funcName})`);
                 listener(this.connectFailCount);
             });
         });
@@ -283,8 +285,9 @@ export default class WebSocketClient {
                 }
 
                 this.reconnectCallback?.(this.conn?.connection.socket_id);
-                this.reconnectListeners.forEach((listener, i) => {
-                    console.debug(`${debugId} Calling reconnectListener [${i}]`);
+                this.reconnectListeners.forEach((listener) => {
+                    const funcName = listener.name || '<anonymous>';
+                    console.debug(`${debugId} Calling reconnectListener (${funcName})`);
                     listener(this.conn?.connection.socket_id);
                 });
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
