@@ -217,6 +217,9 @@ export function initialize() {
 }
 
 export function close() {
+    const debugId = `[WS close-${Date.now()}]`;
+    console.warn(`${debugId} closing`);
+
     // WebSocketClient.close();
     WebSocketClient.removeMessageListener(handleEvent);
     WebSocketClient.removeFirstConnectListener(handleFirstConnect);
