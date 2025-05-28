@@ -256,7 +256,6 @@ export async function reconnect(socketId) {
     const debugId = `[WS reconnect-${Date.now()}]`;
     console.log(`${debugId} Reconnect started`);
 
-    // 🔍 Log current WebSocket listeners
     console.debug(`${debugId} Listener counts`, {
         messageListeners: WebSocketClient.messageListeners?.size || 0,
         firstConnectListeners: WebSocketClient.firstConnectListeners?.size || 0,
