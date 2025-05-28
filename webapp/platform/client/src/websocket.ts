@@ -770,18 +770,6 @@ export default class WebSocketClient {
         this.sendPresenceMessage('client-user_recording', data, callback);
     }
 
-    updateActiveChannel() {
-        throw new Error('IK: not implemented');
-    }
-
-    updateActiveTeam() {
-        throw new Error('IK: not implemented');
-    }
-
-    updateActiveThread() {
-        throw new Error('IK: not implemented');
-    }
-
     userUpdateActiveStatus(userIsActive: boolean, manual: boolean, callback?: () => void) {
         const data = {
             user_is_active: userIsActive,

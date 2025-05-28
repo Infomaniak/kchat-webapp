@@ -338,9 +338,6 @@ export async function reconnect(socketId) {
         }
 
         // Re-syncing the current channel and team ids.
-        WebSocketClient.updateActiveChannel(currentChannelId);
-        WebSocketClient.updateActiveTeam(currentTeamId);
-        console.debug(`${debugId} Active channel/team updated`);
     }
 
     const currentChannelId = getCurrentChannelId(state);
