@@ -239,7 +239,7 @@ export function unregisterPluginReconnectHandler(pluginId) {
 
 function restart() {
     const debugId = `[WS restart-${Date.now()}]`;
-    console.log(`${debugId} Restart started`);
+    console.debug(`${debugId} Restart started`);
     reconnect();
 
     // We fetch the client config again on the server restart.
@@ -257,7 +257,7 @@ export async function reconnect(socketId) {
     console.log(`${debugId} Reconnect started`);
 
     // 🔍 Log current WebSocket listeners
-    console.log(`${debugId} Listener counts`, {
+    console.debug(`${debugId} Listener counts`, {
         messageListeners: WebSocketClient.messageListeners?.size || 0,
         firstConnectListeners: WebSocketClient.firstConnectListeners?.size || 0,
         reconnectListeners: WebSocketClient.reconnectListeners?.size || 0,
@@ -280,7 +280,7 @@ export async function reconnect(socketId) {
                 const newToken = await refreshIKToken(false);
                 if (newToken) {
                     WebSocketClient.updateToken(newToken);
-                    console.log(`${debugId} Token refreshed and updated`);
+                    console.debug(`${debugId} Token refreshed and updated`);
                 }
             } catch (e) {
                 console.warn(`${debugId} Token refresh failed`, e);
@@ -295,7 +295,7 @@ export async function reconnect(socketId) {
 
     if (socketId) {
         Client4.setSocketId(socketId);
-        console.log(`${debugId} Socket ID set: ${socketId}`);
+        console.debug(`${debugId} Socket ID set: ${socketId}`);
     }
 
     const state = getState();
@@ -340,7 +340,7 @@ export async function reconnect(socketId) {
         // Re-syncing the current channel and team ids.
         WebSocketClient.updateActiveChannel(currentChannelId);
         WebSocketClient.updateActiveTeam(currentTeamId);
-        console.log(`${debugId} Active channel/team updated`);
+        console.debug(`${debugId} Active channel/team updated`);
     }
 
     const currentChannelId = getCurrentChannelId(state);
@@ -353,7 +353,7 @@ export async function reconnect(socketId) {
 
     Object.values(pluginReconnectHandlers).forEach((handler, i) => {
         if (handler && typeof handler === 'function') {
-            console.log(`${debugId} Calling pluginReconnectHandler [${i}]`);
+            console.debug(`${debugId} Calling pluginReconnectHandler [${i}]`);
             handler();
         }
     });
