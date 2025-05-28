@@ -276,7 +276,7 @@ export default class WebSocketClient {
                 this.reconnecting = true;
                 console.log(`${debugId} Detected reconnecting state`);
 
-                if (this.reconnectListeners.size === 0 && !this.reconnectCallback) {
+                if (this.reconnectListeners.size <= 0 && !this.reconnectCallback) {
                     console.warn(`${debugId} No reconnect handlers found, reloading app`);
                     window.location.reload();
                     return;
@@ -291,8 +291,9 @@ export default class WebSocketClient {
                 this.reconnectAllChannels();
                 console.log(`${debugId} First connection, triggering initial handlers`);
                 this.firstConnectCallback?.(this.conn?.connection.socket_id);
-                this.firstConnectListeners.forEach((listener, i) => {
-                    console.debug(`${debugId} Calling firstConnectListener [${i}]`);
+                this.firstConnectListeners.forEach((listener) => {
+                    const funcName = listener.name || '<anonymous>';
+                    console.debug(`${debugId} Calling firstConnectListener (${funcName})`);
                     listener(this.conn?.connection.socket_id);
                 });
             }
