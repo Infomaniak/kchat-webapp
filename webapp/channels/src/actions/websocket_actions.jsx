@@ -75,7 +75,6 @@ import {
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
 import {Client4} from 'mattermost-redux/client';
 import {General, Permissions} from 'mattermost-redux/constants';
-import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {
     getChannel,
     getChannelMembersInChannels,
@@ -158,11 +157,11 @@ export function initialize() {
     const debugId = `[WS init-${Date.now()}]`;
 
     if (!window.WebSocket) {
-        console.warn(`${debugId} WebSocket not supported in this browser`);
+        console.warn(`${debugId} Browser does not support WebSocket`);
         return;
     }
 
-    console.log(`${debugId} Initializing WebSocket`);
+    console.log(`${debugId} Initializing or re-initializing WebSocket`);
 
     const config = getConfig(getState());
     const user = getCurrentUser(getState());
@@ -191,12 +190,12 @@ export function initialize() {
 
     const token = localStorage.getItem('IKToken');
     if (isDesktopApp() && !token) {
-        console.error(`${debugId} Token missing in desktop app, redirecting to login`);
+        console.error(`${debugId} token storage corrupt, redirecting to login`);
         getHistory().push('/login');
         return;
     }
 
-    console.info(`${debugId} Connecting to WebSocket at ${connUrl}`);
+    console.info(`${debugId} init called, ws will reauth`);
 
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
@@ -254,7 +253,7 @@ export function reconnectWsChannels() {
 
 export async function reconnect(socketId) {
     const debugId = `[WS reconnect-${Date.now()}]`;
-    console.log(`${debugId} Reconnect started`);
+    console.log(`${debugId} reconnect`);
 
     console.debug(`${debugId} Listener counts`, {
         messageListeners: WebSocketClient.messageListeners?.size || 0,
@@ -268,13 +267,13 @@ export async function reconnect(socketId) {
     if (isDesktopApp()) {
         const token = localStorage.getItem('IKToken');
         if (!token) {
-            console.log(`${debugId} Token missing, redirecting to login`);
+            console.log(`${debugId} token storage corrupt, redirecting to login`);
             getHistory().push('/login');
             return;
         }
 
         if (checkIKTokenIsExpired()) {
-            console.log(`${debugId} Token expired, attempting refresh`);
+            console.log(`${debugId} token expired, calling refresh`);
             try {
                 const newToken = await refreshIKToken(false);
                 if (newToken) {
@@ -313,7 +312,7 @@ export async function reconnect(socketId) {
         dispatch(getMyPreferences());
         loadProfilesForSidebar();
 
-        console.log(`${debugId} currentTeamId=${currentTeamId}, currentChannelId=${currentChannelId}, mostRecentPostId=${mostRecentPost?.id}`);
+        console.log(`${debugId} currentTeamId: ${currentTeamId} currentChannelId: ${currentChannelId} mostRecentPostId: ${mostRecentPost?.id}`);
 
         // IK: Verify version on reconnect
         dispatch(getClientConfig());

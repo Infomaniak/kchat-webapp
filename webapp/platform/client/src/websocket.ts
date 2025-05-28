@@ -193,12 +193,12 @@ export default class WebSocketClient {
         }
 
         if (!connectionUrl) {
-            console.log(`${debugId} Missing connection URL`);
+            console.log(`${debugId} websocket must have connection url`);
             return;
         }
 
         if (this.connectFailCount === 0) {
-            console.log(`${debugId} Connecting to ${connectionUrl}`);
+            console.log(`${debugId} websocket connecting to ${connectionUrl}`);
         }
 
         console.debug(`${debugId} Current listener counts`, {
@@ -225,7 +225,7 @@ export default class WebSocketClient {
         this.connectionUrl = connectionUrl;
 
         this.conn.connection.bind('state_change', (states: { current: string; previous: string }) => {
-            console.log(`${debugId} Connection state change: ${states.previous} → ${states.current}`);
+            console.log(`${debugId} current state is: ${states.previous} → ${states.current}`);
 
             if (
                 states.current === 'unavailable' ||
@@ -233,7 +233,7 @@ export default class WebSocketClient {
                 (states.previous === 'connected' && states.current === 'connecting')
             ) {
                 this.connectFailCount++;
-                console.log(`${debugId} connectFailCount incremented: ${this.connectFailCount}`);
+                console.log(`${debugId} connectFailCount updated: ${this.connectFailCount}`);
 
                 this.closeCallback?.(this.connectFailCount);
                 this.closeListeners.forEach((listener) => {
@@ -245,7 +245,7 @@ export default class WebSocketClient {
         });
 
         this.conn.connection.bind('error', (evt: any) => {
-            console.log(`${debugId} Unexpected WebSocket error:`, evt);
+            console.log(`${debugId} unexpected error:`, evt);
             this.errorCount++;
             this.connectFailCount++;
 
@@ -255,7 +255,7 @@ export default class WebSocketClient {
                 this.presenceChannel = null;
             }
 
-            console.log(`${debugId} Triggering close callbacks after error`);
+            console.log(`${debugId} calling close callbacks`);
             this.closeCallback?.(this.connectFailCount);
             this.closeListeners.forEach((listener) => {
                 const funcName = listener.name || '<anonymous>';
@@ -265,7 +265,7 @@ export default class WebSocketClient {
         });
 
         this.conn.connection.bind('connected', () => {
-            console.log(`${debugId} Connected with socketId: ${this.conn?.connection.socket_id}`);
+            console.log(`${debugId} socketId: ${this.conn?.connection.socket_id}`);
 
             this._teamId = teamId;
             this._userId = userId;
@@ -276,7 +276,7 @@ export default class WebSocketClient {
 
             if (this.connectFailCount > 0) {
                 this.reconnecting = true;
-                console.log(`${debugId} Detected reconnecting state`);
+                console.log(`${debugId} reconnecting`);
 
                 if (this.reconnectListeners.size <= 0 && !this.reconnectCallback) {
                     console.warn(`${debugId} No reconnect handlers found, reloading app`);
@@ -292,7 +292,7 @@ export default class WebSocketClient {
                 });
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
                 this.reconnectAllChannels();
-                console.log(`${debugId} First connection, triggering initial handlers`);
+                console.log(`${debugId} calling first connect callbacks`);
                 this.firstConnectCallback?.(this.conn?.connection.socket_id);
                 this.firstConnectListeners.forEach((listener) => {
                     const funcName = listener.name || '<anonymous>';
@@ -311,9 +311,9 @@ export default class WebSocketClient {
 
     reconnectAllChannels() {
         const debugId = `[WS reconnectAllChannels-${Date.now()}]`;
-        console.log(`${debugId} state`, this.conn?.connection.state);
+        console.log(`${debugId} reconnectAllChannels state`, this.conn?.connection.state);
         if (this.conn?.connection.state !== 'connected') {
-            console.log(`${debugId} retrying`);
+            console.log(`${debugId} reconnectAllChannels retrying`);
             setTimeout(() => {
                 this.reconnectAllChannels();
             }, 2000);
@@ -361,13 +361,13 @@ export default class WebSocketClient {
             this.teamChannel = null;
         }
 
-        console.log(`${debugId} private-team.${teamId}`);
+        console.log(`${debugId} subscribeToTeamChannel ~ private-team.${teamId}`);
         this.currentTeam = teamId;
         this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
         this.bindChannelGlobally(this.teamChannel);
 
         this.teamChannel?.bind('pusher:subscription_error', () => {
-            console.log(`${debugId} failed to subscribe to private-team.${teamId} queuing retry`);
+            console.log(`${debugId} failed to subscribe to private-team.${teamId} queing retry`);
 
             setTimeout(() => {
                 this.subscribeToTeamChannel(teamId);
@@ -383,7 +383,7 @@ export default class WebSocketClient {
             this.userChannel = null;
         }
 
-        console.log(`${debugId} presence-user.${userId}`);
+        console.log(`${debugId} subscribeToUserChannel ~ presence-user.${userId}`);
         this.currentUser = userId;
         this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
         this.bindChannelGlobally(this.userChannel);
@@ -405,7 +405,7 @@ export default class WebSocketClient {
             this.userTeamChannel = null;
         }
 
-        console.log(`${debugId} presence-teamUser.${teamUserId}`);
+        console.log(`${debugId} subscribeToUserTeamScopedChannel ~ presence-teamUser.${teamUserId}`);
         this.currentTeamUser = teamUserId;
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
         this.bindChannelGlobally(this.userTeamChannel);
@@ -421,7 +421,7 @@ export default class WebSocketClient {
 
     bindPresenceChannel(channelID: string) {
         const debugId = `[WS bindPresence-${Date.now()}]`;
-        console.log(`${debugId} presence-channel.${channelID}`);
+        console.log(`${debugId} bindPresenceChannel ~ presence-channel.${channelID}`);
         this.currentPresence = channelID;
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
         if (this.presenceChannel) {
@@ -431,7 +431,7 @@ export default class WebSocketClient {
 
     unbindPresenceChannel(channelID: string) {
         const debugId = `[WS unbindPresence-${Date.now()}]`;
-        console.log(`${debugId} presence-channel.${channelID}`);
+        console.log(`${debugId} unbindPresenceChannel ~ presence-channel.${channelID}`);
         this.conn?.unsubscribe(`presence-channel.${channelID}`);
 
         if (this.presenceChannel) {
