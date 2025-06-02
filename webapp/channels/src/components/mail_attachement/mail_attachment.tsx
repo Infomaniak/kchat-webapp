@@ -1,46 +1,35 @@
-import React from "react"
+import React from 'react';
 
+import './mail_attachment.scss';
+import type {Post} from '@mattermost/types/posts';
 
-
-
-import "./mail_attachment.scss"
-import { Post} from "@mattermost/types/posts";
-
-import Markdown from "../markdown";
-import Timestamp from "../timestamp";
-import MailIcon from "./icon/MailIcon";
+import Markdown from '../markdown';
+import Timestamp from '../timestamp';
 
 export const MailAttachmentMessage = (props: {post: Post}) => {
-
     const post = props.post;
     const {
         from,
         to,
         subject,
         created_at,
-    } = post.props['mail_attachment'] as {from: string, to: string, subject: string,created_at: number};
+    } = post.props.mail_attachment as {from: string; to: string; subject: string;created_at: number};
 
-    return(
+    return (
         <>
-            <div className="mail_attachment">
-                <div className="mail_attachment__row">
-                    <MailIcon />
-                    <div className="bold">{('À propos de l’e-mail')}</div>
-                    <div className="thin right">
-                    <Timestamp value={created_at * 1000}/>
-                    </div>
-                </div>
-                <div className="mail_attachment__row">
-                    <div className="thin">{('Expéditeur')}:</div>
-                    <div className="border-right">{from}</div>
-                    <div className="thin">{('Destinataire')}:</div>
-                    <div>{to}</div>
-                </div>
-                <div className="mail_attachment__row subject">
-                    <div className="thin">{('Objet')}:</div>
-                    <div>{subject}</div>
-                </div>
-            </div>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            <wc-mail-attachment
+                class='mail_attachment'
+                mail-subject={subject}
+                mail-date={created_at}
+                sender-name={from}
+                target-name={to}
+            >
+                <Timestamp value={created_at * 1000}/>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+            </wc-mail-attachment>
             <Markdown
                 message={post.message}
                 postId={post.id}
@@ -48,4 +37,4 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
             />
         </>
     );
-}
+};
