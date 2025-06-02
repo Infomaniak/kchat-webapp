@@ -17,8 +17,7 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
 
     return (
         <>
-            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-            {/* @ts-ignore */}
+            {/*@ts-expect-error webcomponent*/}
             <wc-mail-attachment
                 class='mail_attachment'
                 mail-subject={subject}
@@ -27,8 +26,7 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
                 target-name={to}
             >
                 <Timestamp value={created_at * 1000}/>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
+                {/*@ts-expect-error webcomponent*/}
             </wc-mail-attachment>
             <Markdown
                 message={post.message}
