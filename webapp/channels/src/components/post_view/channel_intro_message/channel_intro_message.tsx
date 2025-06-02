@@ -245,10 +245,10 @@ function createDMIntroMessage(
                             values={{
                                 limit: 100,
                                 day: 23,
-                                botName: 'kchat.bot',
+                                botName: 'euria',
                                 mention: (chunks: React.ReactNode) => (
                                     <AtMention
-                                        mentionName={'kchat.bot'}
+                                        mentionName={'euria'}
                                         channelId={channel.id}
                                     >{'@'}{chunks}</AtMention>
                                 ),
@@ -257,7 +257,7 @@ function createDMIntroMessage(
                         />
                     </p>
                 ) : null}
-                {teammate?.username === 'kchat.bot' ? (
+                {teammate?.username === 'euria' ? (
                     <p className='channel-limitation-banner'>
                         <span style={{alignSelf: 'baseline'}}>
                             <i className='icon-information-outline'/>
@@ -265,10 +265,10 @@ function createDMIntroMessage(
                         <FormattedMessage
                             id='intro_messages.botFalcon'
                             values={{
-                                botName: 'kchat.bot',
+                                botName: 'euria',
                                 mention: (chunks: React.ReactNode) => (
                                     <AtMention
-                                        mentionName={'kchat.bot'}
+                                        mentionName={'euria'}
                                         channelId={channel.id}
                                     >{'@'}{chunks}</AtMention>
                                 ),

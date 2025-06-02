@@ -3114,6 +3114,7 @@
   "edit_post.action_buttons.cancel": "Cancelar",
   "edit_post.action_buttons.save": "Guardar",
   "edit_post.editPost": "Editar el mensaje...",
+  "edit_post.no_notification_trigger_on_mention": "Editar este mensaje con una '@mención' no notificará al destinatario.",
   "edit_post.helper_text": "<strong>{key}ENTER</strong> para Guardar, <strong>ESC</strong> para Cancelar",
   "edit_post.time_limit_button.for_n_seconds": "Durante {n} segundos",
   "edit_post.time_limit_button.no_limit": "Cualquier momento",
@@ -4292,6 +4293,8 @@
   "sidebar.types.channels": "CANALES",
   "sidebar.types.direct_messages": "MENSAJES DIRECTOS",
   "sidebar.types.favorites": "FAVORITOS",
+  "sidebar.types.unreadChannels.ariaLabel": "No leídos",
+  "sidebar.types.unreadChannels.displayName": "NO LEÍDOS",
   "sidebar.unreads": "Más sin leer",
   "sidebarLeft.browserOrCreateChannelMenu.browseChannelsMenuItem.primaryLabel": "Explorar canales",
   "sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel": "Crear una nueva categoría",
@@ -5188,5 +5191,13 @@
   "dnd_banner.text": "{name} está en modo “No molestar”, sus notificaciones de mensajes y llamadas están desactivadas",
   "voiceMessage.preview.title": "Mensaje de voz",
   "voiceMessage.uploading": "Subiendo...",
-  "voiceMessage.canvasFallback.recording": "Grabación iniciada"
+  "voiceMessage.canvasFallback.recording": "Grabación iniciada",
+  "notify_here.question": "Al usar <b>@here</b> estás a punto de enviar notificaciones a al menos <b>{totalMembers} otras personas</b>. ¿Estás seguro de que quieres hacer esto?",
+  "notifyAll.question": "Al usar <b>@all</b> o <b>@channel</b> estás a punto de enviar notificaciones a <b>{totalMembers} personas</b>. ¿Estás seguro de que quieres hacer esto?",
+  "notifyAll.question_groups": "Al usar <b>{mentions}</b> y <b>{finalMention}</b> estás a punto de enviar notificaciones a al menos <b>{totalMembers} personas</b>. ¿Estás seguro de que quieres hacer esto?",
+  "notifyAll.question_oneGroup": "Al usar <b>{mention}</b> estás a punto de enviar notificaciones a al menos <b>{totalMembers} personas</b>. ¿Estás seguro de que quieres hacer esto?",
+  "notifyAll.question_timezone_oneGroup": "Al usar <b>{mention}</b> estás a punto de enviar notificaciones a al menos <b>{totalMembers} personas</b> en <b>{timezones, number} {timezones, plural, one {zona horaria} other {zonas horarias}}</b>. ¿Estás seguro de que quieres hacer esto?",
+  "notifyAll.question_timezoneGroups": "Al usar <b>{mentions}</b> y <b>{finalMention}</b> estás a punto de enviar notificaciones a al menos <b>{totalMembers} personas</b> en <b>{timezones, number} {timezones, plural, one {zona horaria} other {zonas horarias}}</b>. ¿Estás seguro de que quieres hacer esto?",
+  "notifyAll.questionTimezone": "Al usar <b>@all</b> o <b>@channel</b> estás a punto de enviar notificaciones a <b>{totalMembers} personas</b> en <b>{timezones, number} {timezones, plural, one {zona horaria} other {zonas horarias}}</b>. ¿Estás seguro de que quieres hacer esto?",
+  "notifyHere.question_timezone": "Al usar <b>@here</b> estás a punto de enviar notificaciones a al menos <b>{totalMembers} otras personas</b> en <b>{timezones, number} {timezones, plural, one {zona horaria} other {zonas horarias}}</b>. ¿Estás seguro de que quieres hacer esto?"
 }

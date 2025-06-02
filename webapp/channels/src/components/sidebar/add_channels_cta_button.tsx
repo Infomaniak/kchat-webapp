@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -26,6 +26,8 @@ import {ModalIdentifiers, Preferences, Touched} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
+const MENU_HEIGHT = 74;
+
 const AddChannelsCtaButton = (): JSX.Element | null => {
     const dispatch = useDispatch();
     const currentTeamId = useSelector(getCurrentTeamId);
@@ -38,9 +40,19 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
     const canJoinPublicChannel = useSelector((state: GlobalState) => haveICurrentChannelPermission(state, Permissions.JOIN_PUBLIC_CHANNELS));
     const isAddChannelCtaOpen = useSelector(isAddChannelCtaDropdownOpen);
     const currentUserId = useSelector(getCurrentUserId);
+    const elementRef = useRef<HTMLButtonElement>(null);
+    const [openUp, setOpenUp] = useState(false);
     const openAddChannelsCtaOpen = useCallback((open: boolean) => {
         dispatch(setAddChannelCtaDropdown(open));
     }, []);
+
+    const updatePosition = () => {
+        if (elementRef.current) {
+            const {bottom} = elementRef.current.getBoundingClientRect();
+            const hasSpaceBelow = bottom + MENU_HEIGHT < window.innerHeight;
+            setOpenUp(!hasSpaceBelow);
+        }
+    };
 
     let buttonClass = 'SidebarChannelNavigator__addChannelsCtaLhsButton';
 
@@ -107,6 +119,7 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
         const handleClick = () => btnCallback?.();
         return (
             <button
+                ref={elementRef}
                 className={buttonClass}
                 id={'addChannelsCta'}
                 aria-label={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channel Dropdown'})}
@@ -140,6 +153,9 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
     };
 
     const trackOpen = (opened: boolean) => {
+        if (opened) {
+            updatePosition();
+        }
         openAddChannelsCtaOpen(opened);
         storePreferencesAndTrackEvent();
     };
@@ -153,19 +169,22 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
     }
 
     return (
-        <MenuWrapper
-            className='AddChannelsCtaDropdown'
-            onToggle={trackOpen}
-            open={isAddChannelCtaOpen}
-        >
-            {addChannelsButton()}
-            <Menu
-                id='AddChannelCtaDropdown'
-                ariaLabel={intl.formatMessage({id: 'sidebar_left.add_channel_cta_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channels Dropdown'})}
+        <>
+            <MenuWrapper
+                className='AddChannelsCtaDropdown'
+                onToggle={trackOpen}
+                open={isAddChannelCtaOpen}
             >
-                {renderDropdownItems()}
-            </Menu>
-        </MenuWrapper>
+                {addChannelsButton()}
+                <Menu
+                    id='AddChannelCtaDropdown'
+                    ariaLabel={intl.formatMessage({id: 'sidebar_left.add_channel_cta_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channels Dropdown'})}
+                    openUp={openUp}
+                >
+                    {renderDropdownItems()}
+                </Menu>
+            </MenuWrapper>
+        </>
     );
 };
 

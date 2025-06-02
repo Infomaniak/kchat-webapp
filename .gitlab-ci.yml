@@ -1,6 +1,7 @@
 stages:
   - build
-  - test
+  - test_unit
+  - test_e2e
   - release
   - deploy
 
@@ -15,7 +16,7 @@ stages:
 variables:
   KANIKO_VERSION: "debug" # https://github.com/GoogleContainerTools/kaniko/releases
   MINIO_CLIENT_VERSION: "RELEASE.2022-11-07T23-47-39Z" # https://hub.docker.com/r/minio/mc/tags
-  NODE_VERSION: 18.17.1 # Sould respect /.nvmrc
+  NODE_VERSION: 20.11.1 # Sould respect /.nvmrc
   SENTRY_VERSION: 2.17.1 # https://hub.docker.com/r/getsentry/sentry-cli/tags
   RUBY_VERSION: 3.3.1 # https://hub.docker.com/_/ruby/tags
   PLAYWRIGHT_VERSION: "v1.43.1-jammy" # https://mcr.microsoft.com/en-us/product/playwright/tags
@@ -241,7 +242,7 @@ deploy:image:
 
 # Execute unit tests
 test:unit:
-  stage: test
+  stage: test_unit
   extends:
     - .tests-node
   rules:
@@ -255,6 +256,7 @@ test:unit:
     paths:
       - webapp/channels/coverage/
     when: on_success
+    expire_in: 1 days
     reports:
       junit: webapp/channels/coverage/junit.xml
       coverage_report:
@@ -269,7 +271,7 @@ test:unit:
 # Triggers e2e tests
 # Parse staging base URL and store in dotenv artifact
 test:e2e:
-  stage: test
+  stage: test_e2e
   extends:
     - .tests
   image: ruby:${RUBY_VERSION}
@@ -282,12 +284,13 @@ test:e2e:
   # Pass env variables to Playwright/Cypress
   # https://docs.gitlab.com/ee/ci/variables/index.html#pass-an-environment-variable-to-another-job
   artifacts:
+    expire_in: 1 days
     reports:
       dotenv: test.env
 
 # Execute playwright tests
 test:e2e:pw:
-  stage: test
+  stage: test_e2e
   extends:
     - .tests-node
   image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}

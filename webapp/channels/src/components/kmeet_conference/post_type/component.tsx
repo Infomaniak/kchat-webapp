@@ -3,7 +3,7 @@
 
 import moment from 'moment-timezone';
 import type {FC} from 'react';
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
@@ -46,6 +46,7 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
     const dispatch = useDispatch();
 
     const meetingUrl = useMemo(() => conference?.url ?? post.props.url, [conference, post]);
+    const [now, setNow] = useState(Date.now());
 
     const onJoinCallClick = () => {
         joinCall(post.channel_id);
@@ -56,6 +57,41 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
     };
 
     moment.locale(String(intl.locale));
+
+    useEffect(() => {
+        if (!post.props.start_at) {
+            return undefined;
+        }
+
+        // This useEffect handles the automatic refresh of the elapsed time display since the call started (start_at).
+        // It forces a re-render every minute if the call started less than an hour ago, then every hour after that,
+        // in order to optimize performance while keeping the display up to date.
+        const ONE_MINUTE = 60_000;
+        const ONE_HOUR = 60 * ONE_MINUTE;
+
+        const getInterval = () => {
+            if (post.props.start_at && (Date.now() - post.props.start_at > ONE_HOUR)) {
+                return ONE_HOUR;
+            }
+            return ONE_MINUTE;
+        };
+        let intervalId: NodeJS.Timeout;
+        let currentInterval = getInterval();
+
+        const tick = () => {
+            setNow(Date.now());
+
+            const newInterval = getInterval();
+            if (newInterval !== currentInterval) {
+                clearInterval(intervalId);
+                currentInterval = newInterval;
+                intervalId = setInterval(tick, currentInterval);
+            }
+        };
+
+        intervalId = setInterval(tick, currentInterval);
+        return () => clearInterval(intervalId);
+    }, [post.props.start_at]);
 
     useEffect(() => {
         if (post.props.conference_id && meetingUrl && post.channel_id) {
@@ -176,7 +212,7 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
         </Sc.Duration>
     ) : (
         <Sc.Duration>
-            {moment(post.props.start_at).fromNow()}
+            {moment(post.props.start_at).from(now)}
         </Sc.Duration>
     );
 

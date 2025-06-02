@@ -304,6 +304,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
         }
       }
       handleOpenDirectMessagesModal={[Function]}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
     />
     <WithTooltip
       title={
@@ -416,6 +421,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
         }
       }
       handleOpenDirectMessagesModal={[Function]}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
     />
     <WithTooltip
       title={

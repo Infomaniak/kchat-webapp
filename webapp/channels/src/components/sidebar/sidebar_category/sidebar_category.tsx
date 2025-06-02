@@ -273,6 +273,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                     <SidebarCategorySortingMenu
                         category={category}
                         handleOpenDirectMessagesModal={this.handleOpenDirectMessagesModal}
+                        menuTriggerRef={this.menuTriggerRef}
                     />
                     <WithTooltip
                         title={

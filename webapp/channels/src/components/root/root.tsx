@@ -322,7 +322,9 @@ export default class Root extends React.PureComponent<Props, State> {
         const {isLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isLoaded) {
-            this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
+            if (this.props.location.pathname === '/') {
+                this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
+            }
         }
         this.onConfigLoaded();
     };
@@ -515,7 +517,7 @@ export default class Root extends React.PureComponent<Props, State> {
             }
         });
 
-        const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
+        const ksuiteBridge = new KSuiteBridge({debugPrefix: 'kchat'}); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch, store.getState);
 
         // this message listener is outside the store because of how is handled navigation
@@ -536,6 +538,16 @@ export default class Root extends React.PureComponent<Props, State> {
 
         injectWebcomponentInit();
         this.initiateMeRequests();
+
+        if (!isDesktopApp() && (window.location.hash || '').endsWith('/notifications-settings')) {
+            customElements.whenDefined('module-settings-component').then(() => {
+                document.dispatchEvent(new CustomEvent('openSettings', {
+                    detail: ['ksuite-kchat', 'ksuite-kchat-personalization'],
+                }));
+            }).catch((error) => {
+                console.error('[channel_controller] Error waiting for wc-settings:', error);
+            });
+        }
 
         // Force logout of all tabs if one tab is logged out
         window.addEventListener('storage', this.handleLogoutLoginSignal);

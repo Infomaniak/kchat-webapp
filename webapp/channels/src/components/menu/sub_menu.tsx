@@ -188,7 +188,7 @@ export function SubMenu(props: Props) {
                         onKeyDown={handleSubMenuKeyDown}
                         autoFocusItem={isSubMenuOpen}
                         sx={{
-                            py: 0,
+                            p: '8px',
                             pointerEvents: 'auto',
                         }}
                     >
