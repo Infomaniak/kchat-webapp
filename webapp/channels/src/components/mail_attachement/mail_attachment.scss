@@ -4,56 +4,7 @@ $mail-preview-thin-color: var(--ik-btn-secondary-color, #666);
 
 
 .mail_attachment {
-    display: flex;
-    gap: 4px;
-    flex-direction: column;
-    padding: 12px 16px;
-    margin-top: 12px;
-    border-radius: 4px;
-    background-color: $mail-preview-background;
-    margin-bottom: 8px ;
-    width: 100%;
     max-width: 600px;
-
-    &__row{
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        max-width: 100%;
-        white-space: nowrap;
-        font-size: 14px;
-
-        &.subject * {
-            align-self: flex-start;
-            white-space: normal;
-        }
-
-        * {
-            flex-shrink: 1;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            max-width: max-content;
-        }
-
-        .bold {
-            font-weight: 600;
-        }
-
-        .thin {
-            color: $mail-preview-thin-color;
-            flex-shrink: 0;
-        }
-
-        .right {
-            margin-left: auto;
-            flex-basis: unset;
-        }
-
-        .border-right {
-            border-right: 1px solid $mail-preview-thin-color;
-            padding-right: 8px;
-        }
-    }
+    --mail-preview-bold-font-weight: 600;
 }
 
