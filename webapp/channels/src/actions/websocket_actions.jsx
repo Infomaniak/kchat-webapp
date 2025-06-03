@@ -374,7 +374,8 @@ export async function reconnect(socketId) {
     dispatch(clearErrors());
 
     dispatch(getDrafts(currentTeamId));
-    dispatch(getMyMeets());
+    await dispatch(getMyMeets());
+    dispatch(handleCallFromUrl());
 
     // eslint-disable-next-line no-console
     console.log(`${debugId} Reconnect completed`);
