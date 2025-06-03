@@ -120,7 +120,7 @@ import {closeRightHandSide} from 'actions/views/rhs';
 import {incrementWsErrorCount, resetWsErrorCount} from 'actions/views/system';
 import {updateThreadLastOpened} from 'actions/views/threads';
 import {voiceConnectedChannels} from 'selectors/calls';
-import {getConferenceByChannelId} from 'selectors/kmeet_calls';
+import {getConferenceByChannelId} from 'mattermost-redux/selectors/entities/kmeet_calls';;
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
