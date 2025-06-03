@@ -56,14 +56,6 @@ const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0, po
         relativeOrDate: date,
         time,
     });
-    const viewHistoryText = formatMessage({
-        id: 'post_message_view.view_post_edit_history',
-        defaultMessage: 'Click to view history',
-    });
-
-    const postOwnerTooltipInfo = (postOwner && canEdit) ? (
-        <span className='view-history__text'>{viewHistoryText}</span>
-    ) : null;
 
     const showPostEditHistory = (e: MouseEvent<HTMLButtonElement> | KeyboardEvent<unknown>) => {
         e.preventDefault();
@@ -93,8 +85,6 @@ const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0, po
     const editedIndicator = (postOwner && canEdit) ? (
         <button
             className={'style--none'}
-
-            // onClick={showPostEditHistory}
             tabIndex={0}
             onKeyUp={handleKeyPress}
             aria-label={editedText}
@@ -108,7 +98,6 @@ const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0, po
             title={
                 <>
                     {`${editedText} ${formattedTime}`}
-                    {postOwnerTooltipInfo}
                 </>
             }
         >
