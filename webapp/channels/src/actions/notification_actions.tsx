@@ -207,8 +207,9 @@ const getNotificationUsername = (state: GlobalState, post: Post, msgProps: NewPo
     if (userFromPost) {
         return displayUsername(userFromPost, getTeammateNameDisplaySetting(state), false);
     }
+
     if (msgProps.sender_name) {
-        return msgProps.sender_name;
+        return msgProps.sender_name?.replace(/^@/, '');
     }
     return Utils.localizeMessage({id: 'channel_loader.someone', defaultMessage: 'Someone'});
 };
