@@ -1,5 +1,6 @@
 stages:
   - build
+  - lint
   - test_unit
   - test_e2e
   - release
@@ -239,6 +240,25 @@ deploy:image:
 #   allow_failure: true
 #   script:
 #     - yarn test:types
+
+lint:eslint:
+  stage: lint
+  image: node:${NODE_VERSION}
+  tags:
+    - kubernetes
+  rules:
+    - *rule-merge-request
+    - *rule-commit
+  before_script:
+    - *script-yarn-install
+    - *script-build-packages
+  script:
+    - yarn workspace mattermost-webapp check:eslint
+  artifacts:
+    reports:
+      codequality: eslint-report.json
+    expire_in: 1 week
+    when: on_failure
 
 # Execute unit tests
 test:unit:

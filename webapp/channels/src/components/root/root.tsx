@@ -559,6 +559,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     detail: ['ksuite-kchat', 'ksuite-kchat-personalization'],
                 }));
             }).catch((error) => {
+                // eslint-disable-next-line no-console
                 console.error('[channel_controller] Error waiting for wc-settings:', error);
             });
         }
