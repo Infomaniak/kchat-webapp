@@ -12,7 +12,7 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
         from,
         to,
         subject,
-        created_at,
+        created_at: createdAt,
     } = post.props.mail_attachment as {from: string; to: string; subject: string;created_at: number};
 
     return (
@@ -21,11 +21,11 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
             <wc-mail-attachment
                 class='mail_attachment'
                 mail-subject={subject}
-                mail-date={created_at}
+                mail-date={createdAt}
                 sender-name={from}
                 target-name={to}
             >
-                <Timestamp value={created_at * 1000}/>
+                <Timestamp value={createdAt * 1000}/>
                 {/*@ts-expect-error webcomponent*/}
             </wc-mail-attachment>
             <Markdown
