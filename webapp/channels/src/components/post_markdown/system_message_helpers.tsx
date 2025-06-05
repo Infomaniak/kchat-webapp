@@ -22,7 +22,8 @@ import PostNotifyChannelMember from 'components/post_view/post_notify_channel_me
 import VoiceMessageAttachmentPlayer from 'components/voice/post_type';
 
 import {isChannelNamesMap, type TextFormattingOptions} from 'utils/text_formatting';
-import {MailAttachmentMessage} from "../mail_attachement/mail_attachment";
+
+import {MailAttachmentMessage} from '../mail_attachement/mail_attachment';
 
 export function renderUsername(value: unknown): ReactNode {
     const verifiedValue = ensureString(value);
