@@ -212,6 +212,9 @@ const SearchBox = forwardRef(
                 if (Keyboard.isKeyPressed(e as any, KeyCodes.ENTER)) {
                     e.stopPropagation();
                     e.preventDefault();
+                    if (!searchTerms.trim()) {
+                        return;
+                    }
                     if (!providerResults || providerResults?.items.length === 0 || selectedOption === -1) {
                         onSearch(searchType, searchTeam, searchTerms);
                     } else {
