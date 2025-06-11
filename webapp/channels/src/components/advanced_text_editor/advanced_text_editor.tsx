@@ -199,10 +199,11 @@ const AdvancedTextEditor = ({
         const config = getConfig(state);
         const enableTutorial = config.EnableTutorial === 'true';
 
-        const tutorialStep = getInt(state, TutorialTourName.ONBOARDING_TUTORIAL_STEP, currentUserId, 0);
+        const isGuestUser = isCurrentUserGuestUser(state);
+        const tutorialStepKey = isGuestUser ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP;
+        const tutorialStep = getInt(state, tutorialStepKey, currentUserId, 0);
 
         // guest validation to see which point the messaging tour tip starts
-        const isGuestUser = isCurrentUserGuestUser(state);
         const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE : OnboardingTourSteps.SEND_MESSAGE;
 
         return enableTutorial && (tutorialStep === tourStep);
