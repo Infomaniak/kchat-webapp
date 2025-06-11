@@ -1,22 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {LogoutVariantIcon} from '@infomaniak/compass-icons/components';
 import React, {memo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
-import {LogoutVariantIcon} from '@mattermost/compass-icons/components';
 import type {Channel} from '@mattermost/types/channels';
 
 import {leaveChannel} from 'actions/views/channel';
 import {openModal} from 'actions/views/modals';
 
-import LeaveChannelModal from 'components/leave_channel_modal';
+import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
 import * as Menu from 'components/menu';
 
 import {Constants, ModalIdentifiers} from 'utils/constants';
-
-// import type {PropsFromRedux} from './index';
 
 type Props = {
     channel: Channel;
@@ -33,7 +31,7 @@ const LeaveChannel = ({
             dispatch(
                 openModal({
                     modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
-                    dialogType: LeaveChannelModal,
+                    dialogType: IkLeaveChannelModal,
                     dialogProps: {
                         channel,
                     },

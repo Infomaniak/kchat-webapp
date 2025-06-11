@@ -17,7 +17,6 @@ import ChannelPermissionGate from 'components/permissions_gates/channel_permissi
 
 import {Constants} from 'utils/constants';
 
-import MenuItemArchiveChannel from '../menu_items/archive_channel';
 import MenuItemChannelBookmarks from '../menu_items/channel_bookmarks_submenu';
 import MenuItemChannelSettings from '../menu_items/channel_settings_submenu';
 import MenuItemCloseChannel from '../menu_items/close_channel';
@@ -50,7 +49,6 @@ const ChannelHeaderPublicMenu = ({channel, user, isMuted, isReadonly, isDefault,
     const isPrivate = channel?.type === Constants.PRIVATE_CHANNEL;
 
     const channelMembersPermission = isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS : Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS;
-    const channelDeletePermission = isPrivate ? Permissions.DELETE_PRIVATE_CHANNEL : Permissions.DELETE_PUBLIC_CHANNEL;
     const channelUnarchivePermission = Permissions.MANAGE_TEAM;
 
     return (
@@ -168,18 +166,6 @@ const ChannelHeaderPublicMenu = ({channel, user, isMuted, isReadonly, isDefault,
 
             {isArchived && (
                 <MenuItemCloseChannel/>
-            )}
-
-            {!isArchived && !isDefault && (
-                <ChannelPermissionGate
-                    channelId={channel.id}
-                    teamId={channel.team_id}
-                    permissions={[channelDeletePermission]}
-                >
-                    <MenuItemArchiveChannel
-                        channel={channel}
-                    />
-                </ChannelPermissionGate>
             )}
 
             {isArchived && !isDefault && (
