@@ -6,6 +6,7 @@ import React from 'react';
 import type {Channel} from '@mattermost/types/channels';
 
 import Permissions from 'mattermost-redux/constants/permissions';
+import * as channelSelectors from 'mattermost-redux/selectors/entities/channels';
 
 import {removeDraft, updateDraft} from 'actions/views/drafts';
 
@@ -28,6 +29,14 @@ jest.mock('actions/views/drafts', () => ({
     updateDraft: jest.fn((...args) => ({type: 'MOCK_UPDATE_DRAFT', args})),
     removeDraft: jest.fn((...args) => ({type: 'MOCK_REMOVE_DRAFT', args})),
 }));
+
+jest.mock('mattermost-redux/selectors/entities/channels', () => {
+    const actual = jest.requireActual('mattermost-redux/selectors/entities/channels');
+    return {
+        ...actual,
+        getMyChannelMembership: jest.fn(),
+    };
+});
 
 const mockedRemoveDraft = jest.mocked(removeDraft);
 const mockedUpdateDraft = jest.mocked(updateDraft);
@@ -192,6 +201,9 @@ const baseProps = {
 };
 
 describe('components/avanced_text_editor/advanced_text_editor', () => {
+    beforeEach(() => {
+        channelSelectors.getMyChannelMembership.mockReturnValue(true);
+    });
     describe('keyDown behavior', () => {
         it('ESC should blur the input', () => {
             renderWithContext(
