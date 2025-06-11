@@ -1424,7 +1424,7 @@ export async function handleFormattedTextClick(e: React.MouseEvent, currentRelat
                                 }
                             }
                             if (!member) {
-                                const {data} = await store.dispatch(joinPrivateChannelPrompt(team, channel.display_name, false));
+                                const {data} = await store.dispatch(joinPrivateChannelPrompt(team, channel.display_name, channel.id, false));
                                 if (data!.join) {
                                     let error = false;
                                     if (!getTeamMemberships(state)[team.id]) {

@@ -30,6 +30,7 @@ const ChannelBookmarks = makeAsyncComponent('ChannelBookmarks', lazy(() => impor
 
 export type Props = PropsFromRedux & RouteComponentProps<{
     postid?: string;
+    channel?: string | undefined;
 }>;
 
 type State = {
@@ -186,7 +187,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                     <AdvancedCreatePost/>
                 </div>
             );
-        } else {
+        } else if (this.props.channel?.type !== 'P' && this.props.channel) {
             createPost = (
                 <BannerJoinChannel
                     onButtonClick={() => GlobalActions.joinChannel(this.props.channelId)}

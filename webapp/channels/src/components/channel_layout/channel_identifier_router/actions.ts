@@ -202,7 +202,7 @@ export function goToChannelByChannelName(match: Match, history: History): Action
                     prompt = Boolean(teamMember && teamMember.scheme_admin);
                 }
                 if (prompt) {
-                    const joinPromptResult = await dispatch(joinPrivateChannelPrompt(teamObj, channel.display_name));
+                    const joinPromptResult = await dispatch(joinPrivateChannelPrompt(teamObj, channel.display_name, channel.id));
                     if ('data' in joinPromptResult && !joinPromptResult.data!.join) {
                         return {data: undefined};
                     }
