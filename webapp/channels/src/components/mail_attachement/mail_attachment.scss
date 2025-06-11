@@ -1,0 +1,10 @@
+$mail-preview-background: rgba(var(--center-channel-color-rgb), 0.04);
+
+$mail-preview-thin-color: var(--ik-btn-secondary-color, #666);
+
+
+.mail_attachment {
+    max-width: 600px;
+    --mail-preview-bold-font-weight: 600;
+}
+

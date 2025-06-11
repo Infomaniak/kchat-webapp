@@ -24,6 +24,8 @@ import {t} from 'utils/i18n';
 import type {TextFormattingOptions} from 'utils/text_formatting';
 import {getSiteURL} from 'utils/url';
 
+import {MailAttachmentMessage} from '../mail_attachement/mail_attachment';
+
 export function renderUsername(value: string): ReactNode {
     const username = (value[0] === '@') ? value : `@${value}`;
 
@@ -372,6 +374,12 @@ function renderCallNotificationMessage(post: Post): ReactNode {
     );
 }
 
+function renderMailAttachmentMessage(post: Post): ReactNode {
+    return (
+        <MailAttachmentMessage post={post}/>
+    );
+}
+
 function renderVoiceMessage(post: Post): ReactNode {
     return (
         <VoiceMessageAttachmentPlayer post={post}/>
@@ -418,6 +426,7 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CHANNEL_UNARCHIVED]: renderChannelUnarchivedMessage,
     [Posts.POST_TYPES.ME]: renderMeMessage,
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
+    [Posts.POST_TYPES.MAIL_ATTACHMENT]: renderMailAttachmentMessage,
     [Posts.POST_TYPES.VOICE]: renderVoiceMessage,
     [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
     [Posts.POST_TYPES.SYSTEM_WELCOME_MESSAGE]: () => <></>, // Infomaniak: return fragment to avoid displaying message from backend
