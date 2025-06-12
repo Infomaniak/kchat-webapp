@@ -614,12 +614,18 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (redmineEvent) {
             const currentState = store.getState();
+            const extra = {
+                webComponentDetails: redmineEvent,
+                state: JSON.stringify(transformStateForSentry(currentState), (key, value) => {
+                    if (typeof value === 'string' && value.includes('@')) {
+                        return '[REDACTED_EMAIL]';
+                    }
+                    return value;
+                }, 2),
+            };
             Sentry.captureMessage(message, {
                 level: 'info',
-                extra: {
-                    webComponentDetails: redmineEvent,
-                    state: transformStateForSentry(currentState),
-                },
+                extra,
                 tags: {
                     source: 'webcomponent',
                     eventType: 'reportSubmitted',
