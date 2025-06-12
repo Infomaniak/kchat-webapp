@@ -69,12 +69,18 @@ describe('components/new_search/NewSearch', () => {
             screen.getByText('Search').click();
         });
         expect(screen.getByText('Messages')).toBeInTheDocument();
+
+        // Ik change: we disable enter for empty search so add a message in input
+        const input = screen.getByPlaceholderText('Search messages');
+        fireEvent.change(input, {target: {value: 'test'}});
+
         act(() => {
-            fireEvent.keyDown(screen.getByPlaceholderText('Search messages'), {key: 'Enter', code: 'Enter', keyCode: 13, charCode: 13});
+            fireEvent.keyDown(input, {key: 'Enter', code: 'Enter', keyCode: 13, charCode: 13});
         });
+
         expect(screen.queryByText('Messages')).not.toBeInTheDocument();
         expect(mockDispatch).toHaveBeenCalledWith({searchType: 'messages', type: 'UPDATE_RHS_SEARCH_TYPE'});
-        expect(mockDispatch).toHaveBeenCalledWith({terms: '', type: 'UPDATE_RHS_SEARCH_TERMS'});
+        expect(mockDispatch).toHaveBeenCalledWith({terms: 'test', type: 'UPDATE_RHS_SEARCH_TERMS'});
         expect(mockDispatch).toHaveBeenCalledWith({teamId: '', type: 'UPDATE_RHS_SEARCH_TEAM'});
         expect(mockDispatch).toHaveBeenCalledTimes(4);
     });
