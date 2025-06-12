@@ -71,6 +71,12 @@ type JoinPrivateChannelPromptResult = {
     };
 };
 
+const joinChannel = (channelId: string) => {
+    // eslint-disable-next-line global-require
+    const GlobalActions = require('actions/global_actions');
+    GlobalActions.joinChannel(channelId);
+};
+
 export function joinPrivateChannelPrompt(team: Team, channelDisplayName: string, channelId: string, handleOnCancel = true): ActionFuncAsync<JoinPrivateChannelPromptResult['data']> {
     return async (dispatch, getState) => {
         const result: JoinPrivateChannelPromptResult = await new Promise((resolve) => {
@@ -80,7 +86,7 @@ export function joinPrivateChannelPrompt(team: Team, channelDisplayName: string,
                 dialogProps: {
                     channelName: channelDisplayName,
                     onJoin: () => {
-                        GlobalActions.joinChannel(channelId);
+                        joinChannel(channelId);
                         LocalStorageStore.setTeamIdJoinedOnLoad(null);
                         resolve({
                             data: {join: true},
