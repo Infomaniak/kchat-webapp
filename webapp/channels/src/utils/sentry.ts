@@ -41,8 +41,8 @@ export default function init({SENTRY_DSN}: Args) {
         environment: host.split('.').splice(1).join('.'),
         normalizeDepth: 5,
         integrations: [
-            isCanaryOrPreprod && new Sentry.BrowserTracing(),
-            isCanaryOrPreprod && new Sentry.Replay(),
+            isCanaryOrPreprod && Sentry.browserTracingIntegration(),
+            isCanaryOrPreprod && Sentry.replayIntegration(),
         ].filter(bool),
         // eslint-disable-next-line no-process-env
         tracesSampleRate: parseFloat(process.env.SENTRY_PERFORMANCE_SAMPLE_RATE!),
