@@ -193,6 +193,8 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                     onButtonClick={() => GlobalActions.joinChannel(this.props.channelId)}
                 />
             );
+        } else {
+            createPost = null;
         }
 
         const DeferredPostView = this.state.deferredPostView;
