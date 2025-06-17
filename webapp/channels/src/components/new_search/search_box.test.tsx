@@ -55,7 +55,12 @@ describe('components/new_search/SearchBox', () => {
 
     test('should call search on enter keydown', () => {
         renderWithContext(<SearchBox {...baseProps}/>);
-        fireEvent.keyDown(screen.getByPlaceholderText('Search messages'), {key: 'Enter', code: 'Enter'});
+        const input = screen.getByPlaceholderText('Search messages');
+
+        // Ik change: we disable enter for empty search so add a message in input
+
+        fireEvent.change(input, {target: {value: 'test'}});
+        fireEvent.keyDown(input, {key: 'Enter', code: 'Enter'});
         expect(baseProps.onSearch).toBeCalledTimes(1);
     });
 
