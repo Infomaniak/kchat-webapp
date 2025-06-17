@@ -2794,7 +2794,7 @@
   "channel_groups": "{channel} groupes",
   "channel_header.addChannelHeader": "Ajouter une entête de canal",
   "channel_header.headerText.addNewButton": "Ajouter une entête de canal",
-  "channel_header.lastActive": "En ligne pour la dernière fois {timestamp}",
+  "channel_header.lastActive": "En ligne pour la dernière fois le {timestamp}",
   "channel_header.lastOnline": "En ligne {timestamp}",
   "channel_header.channelFiles": "Fichiers du canal",
   "channel_header.channelHasGuests": "Le canal dispose d’utilisateurs invités",
