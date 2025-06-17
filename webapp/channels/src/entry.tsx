@@ -12,7 +12,7 @@ import App from 'components/app';
 
 import {AnnouncementBarTypes} from 'utils/constants';
 import sentry from 'utils/sentry';
-import {getKSuiteRedirect} from 'utils/url-ksuite-redirect';
+import {getKSuiteRedirect, isInIframe} from 'utils/url-ksuite-redirect';
 import {isDesktopApp} from 'utils/user_agent';
 import {setCSRFFromCookie} from 'utils/utils';
 
@@ -92,8 +92,7 @@ function appendOnDOMContentLoadedEvent(onDomContentReady: () => void) {
 (() => {
     // eslint-disable-next-line no-process-env
     const isDev = process.env.NODE_ENV === 'development';
-    const redirect = getKSuiteRedirect(window.location, isDesktopApp(), isDev);
-
+    const redirect = getKSuiteRedirect(window.location, isInIframe(), isDesktopApp(), isDev);
     if (redirect) {
         window.location.href = redirect;
     } else {
