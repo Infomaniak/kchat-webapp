@@ -124,7 +124,6 @@ export function loadMe(): ActionFuncAsync<boolean> {
                     dispatch(getLicenseConfig()),
                     dispatch(getMe()),
                     dispatch(getMyPreferences()),
-                    dispatch(getMyKSuites()),
                     dispatch(getMyTeamMembers()),
                 ]);
 
