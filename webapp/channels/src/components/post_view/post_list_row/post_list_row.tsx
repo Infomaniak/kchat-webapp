@@ -14,6 +14,7 @@ import * as PostListUtils from 'mattermost-redux/utils/post_list';
 
 import type {emitShortcutReactToLastPostFrom} from 'actions/post_actions';
 
+import UpgradeBanner from 'components/ik_upgrade_banner/ik_upgrade_banner';
 import PostComponent from 'components/post';
 import ChannelIntroMessage from 'components/post_view/channel_intro_message/';
 import CombinedUserActivityPost from 'components/post_view/combined_user_activity_post';
@@ -24,8 +25,6 @@ import {PostListRowListIds, Locations} from 'utils/constants';
 import {isIdNotPost} from 'utils/post_utils';
 
 import type {NewMessagesSeparatorActionComponent} from 'types/store/plugins';
-
-import ChannelMessageLimitationBanner from '../channel_message_limitation_banner/channel_message_limitation_banner';
 
 export type PostListRowProps = {
     listId: string;
@@ -125,24 +124,12 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
             );
         }
 
-        // todo: mattermost version
-        // if (this.props.exceededLimitChannelId) {
-        //     return (
-        //         <CenterMessageLock
-        //             channelId={this.props.exceededLimitChannelId}
-        //             firstInaccessiblePostTime={this.props.firstInaccessiblePostTime}
-
-        if (hasLimitDate && listId === CHANNEL_INTRO_MESSAGE && !isLastPost) {
-            return (
-                <ChannelMessageLimitationBanner
-                    olderMessagesDate={hasLimitDate}
-                />
-            );
-        }
-
         if (listId === CHANNEL_INTRO_MESSAGE) {
             return (
-                <ChannelIntroMessage/>
+                <>
+                    <ChannelIntroMessage/>
+                    {hasLimitDate !== null && <UpgradeBanner/>}
+                </>
             );
         }
 
