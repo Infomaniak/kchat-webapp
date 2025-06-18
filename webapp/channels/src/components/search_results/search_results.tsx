@@ -33,6 +33,7 @@ import SearchLimitsBanner from './search_limits_banner';
 import type {Props} from './types';
 
 import './search_results.scss';
+import UpgradeBanner from 'components/ik_upgrade_banner/ik_upgrade_banner';
 
 const GET_MORE_BUFFER = 30;
 
@@ -297,7 +298,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                     {'sidebar-expanded': isSideBarExpanded},
                 ])}
             >
-                <ChannelMessageLimitationBanner olderMessagesDate={hasLimitDate}/>
+                <UpgradeBanner/>
                 <NoResultsIndicator {...noResultsProps}/>
             </div>
         );
