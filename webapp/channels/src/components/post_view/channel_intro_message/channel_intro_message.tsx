@@ -15,6 +15,7 @@ import ChannelNotificationsModal from 'components/channel_notifications_modal';
 import ChannelIntroTownSquareSvg from 'components/common/svg_images_components/channel_intro_town_square_svg';
 import EmptyStateThemeableSvg from 'components/common/svg_images_components/empty_state_themeable_svg';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
+import UpgradeBanner from 'components/ik_upgrade_banner/ik_upgrade_banner';
 import ChannelPermissionGate from 'components/permissions_gates/channel_permission_gate';
 import ProfilePicture from 'components/profile_picture';
 import ToggleModalButton from 'components/toggle_modal_button';
@@ -158,6 +159,7 @@ function createGMIntroMessage(
                     />
                 </p>
                 {actionButtons}
+                <UpgradeBanner/>
             </div>
         );
     }
@@ -277,6 +279,7 @@ function createDMIntroMessage(
                         />
                     </p>
                 ) : null}
+                <UpgradeBanner/>
             </div>
         );
     }
@@ -349,6 +352,7 @@ function createOffTopicIntroMessage(
                 />
             </p>
             {actionButtons}
+            <UpgradeBanner/>
         </div>
     );
 }
@@ -425,6 +429,7 @@ function createDefaultIntroMessage(
                 }
             </p>
             {actionButtons}
+            <UpgradeBanner/>
         </div>
     );
 }
@@ -608,6 +613,7 @@ function createStandardIntroMessage(
                 {purposeMessage}
             </p>
             {actionButtons}
+            <UpgradeBanner/>
         </div>
     );
 }
