@@ -65,7 +65,10 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
     }
 
     return (
-        <div className='channel-limit-indicator'>
+        <button
+            className='channel-limit-indicator'
+            onClick={() => alert('Woo, Magnifique modale')}
+        >
             <UpgradeOfferIcon/>
             <FormattedMessage
                 id='channelLimitIndicator.text'
@@ -78,7 +81,8 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
                     modifyOffer: (chunks: string[]) => (<a onClick={() => redirectTokSuiteDashboard(currentTeamAccountId)}>{chunks}</a>),
                 }}
             />
-        </div>
+            <a>Faire évoluer</a>
+        </button>
     );
 };
 
