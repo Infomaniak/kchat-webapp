@@ -104,7 +104,7 @@ import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, i
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_actions';
-import {
+import {getUsage,
     getTeamsUsage,
 } from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
@@ -1742,6 +1742,8 @@ function handleSidebarCategoryCreated(msg) {
         // Fetch all categories, including ones that weren't explicitly updated, in case any other categories had channels
         // moved out of them.
         doDispatch(fetchMyCategories(msg.data.team_id));
+
+        doDispatch(getUsage());
     };
 }
 
@@ -1778,6 +1780,8 @@ function handleSidebarCategoryDeleted(msg) {
 
         // Fetch all categories since any channels that were in the deleted category were moved to other categories.
         doDispatch(fetchMyCategories(msg.data.team_id));
+
+        doDispatch(getUsage());
     };
 }
 

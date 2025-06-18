@@ -171,6 +171,14 @@ export type Limits = {
     teams?: {
         active?: number;
     };
+
+    //Ik plan limitation:
+    custom_emojis: number;
+    incoming_webhooks: number;
+    outgoing_webhooks: number;
+    sidebar_categories: number;
+    reminder_custom_date: boolean;
+    scheduled_draft_custom_date: boolean;
 }
 
 export interface CloudUsage {
@@ -190,6 +198,13 @@ export interface CloudUsage {
         historyLoaded: boolean;
     };
     teams: TeamsUsage;
+
+    //Ik plan limitation:
+    custom_emojis: number;
+    incoming_webhooks: number;
+    outgoing_webhooks: number;
+    sidebar_categories: number;
+
 }
 
 export type TeamsUsage = {

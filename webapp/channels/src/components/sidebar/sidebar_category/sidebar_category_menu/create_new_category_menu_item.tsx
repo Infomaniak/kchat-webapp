@@ -10,6 +10,7 @@ import {FolderPlusOutlineIcon} from '@mattermost/compass-icons/components';
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
+import {useCategoryCreationWithLimitation} from 'components/common/hooks/useNewCategoryQuota';
 import EditCategoryModal from 'components/edit_category_modal';
 import * as Menu from 'components/menu';
 
@@ -32,17 +33,23 @@ const CreateNewCategoryMenuItem = ({
         trackEvent('ui', 'ui_sidebar_category_menu_createCategory');
     }, [dispatch]);
 
+    const {onClick, OptionalUpgradeButton} = useCategoryCreationWithLimitation({onClick: handleCreateCategory});
+
     return (
         <Menu.Item
             id={`create-${id}`}
-            onClick={handleCreateCategory}
+            onClick={onClick}
             aria-haspopup={true}
             leadingElement={<FolderPlusOutlineIcon size={18}/>}
             labels={(
-                <FormattedMessage
-                    id='sidebar_left.sidebar_category_menu.createCategory'
-                    defaultMessage='Create New Category'
-                />
+                <>
+                    <FormattedMessage
+                        id='sidebar_left.sidebar_category_menu.createCategory'
+                        defaultMessage='Create New Category'
+                    />
+                    {OptionalUpgradeButton}
+                </>
+
             )}
             {...otherProps}
         />

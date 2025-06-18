@@ -15,6 +15,9 @@ import {
 
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
+import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
+import {useCategoryCreationWithLimitation} from 'components/common/hooks/useNewCategoryQuota';
+import {UpgradeBtn} from 'components/ik_upgrade_btn/ik_upgrade_btn';
 import * as Menu from 'components/menu';
 import {OnboardingTourSteps} from 'components/tours';
 import {useShowOnboardingTutorialStep, CreateAndJoinChannelsTour} from 'components/tours/onboarding_tour';
@@ -47,6 +50,8 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
     const goToIntegration = () => {
         getHistory().push(`/${currentTeam?.name}/integrations`);
     };
+
+    const {onClick: onNewCategoryClick, OptionalUpgradeButton} = useCategoryCreationWithLimitation({onClick: props.onCreateNewCategoryClick});
 
     let createNewChannelMenuItem: JSX.Element | null = null;
     if (props.canCreateChannel) {
@@ -119,13 +124,16 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         createNewCategoryMenuItem = (
             <Menu.Item
                 id='createCategoryMenuItem'
-                onClick={props.onCreateNewCategoryClick}
+                onClick={onNewCategoryClick}
                 leadingElement={<FolderPlusOutlineIcon size={18}/>}
                 labels={(
-                    <FormattedMessage
-                        id='sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel'
-                        defaultMessage='Create new category'
-                    />
+                    <>
+                        <FormattedMessage
+                            id='sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel'
+                            defaultMessage='Create new category'
+                        />
+                        {OptionalUpgradeButton}
+                    </>
                 )}
             />
         );

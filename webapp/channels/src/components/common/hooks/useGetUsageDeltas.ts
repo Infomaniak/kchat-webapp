@@ -45,6 +45,10 @@ export default function useGetUsageDeltas(): CloudUsage {
                     cloudArchived: usage.teams.cloudArchived,
                     teamsLoaded: usage.teams.teamsLoaded,
                 },
+                custom_emojis: usage.custom_emojis - withBackupValue(limits.custom_emojis, limitsLoaded),
+                incoming_webhooks: usage.incoming_webhooks - withBackupValue(limits.incoming_webhooks, limitsLoaded),
+                outgoing_webhooks: usage.outgoing_webhooks - withBackupValue(limits.outgoing_webhooks, limitsLoaded),
+                sidebar_categories: usage.sidebar_categories - withBackupValue(limits.sidebar_categories, limitsLoaded),
             }
         );
     }, [usage, limits, limitsLoaded]);
