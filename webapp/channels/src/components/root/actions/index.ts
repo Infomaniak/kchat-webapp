@@ -96,7 +96,6 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
                     dispatch(getMe()),
                     dispatch(getMyPreferences()),
                     dispatch(getMyTeamMembers()),
-                    dispatch(getMyKSuites()),
                     dispatch(getMyMeets()),
                 ]);
                 dispatch(getMyTeamUnreads(isCollapsedThreadsEnabled(getState())));
