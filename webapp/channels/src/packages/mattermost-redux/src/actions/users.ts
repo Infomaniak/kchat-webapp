@@ -22,11 +22,9 @@ import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, getUser as selectUser, getUsers, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
-import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
 import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
 
@@ -34,8 +32,6 @@ import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
-
-import {bridgeRecreate} from './ksuiteBridge';
 
 // import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
 // import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
@@ -93,51 +89,21 @@ export function loadMe(): ActionFuncAsync<boolean> {
             return {data: false};
         }
 
-        const kSuiteCall = await dispatch(getMyKSuites());
-        const kSuites = getTeams(getState());
+        try {
+            await Promise.all([
+                dispatch(getClientConfig()),
+                dispatch(getLicenseConfig()),
+                dispatch(getMe()),
+                dispatch(getMyPreferences()),
+                dispatch(getMyKSuites()),
+                dispatch(getMyTeamMembers()),
+            ]);
 
-        const suiteArr = Object.values(kSuites);
-
-        if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
-            const lastKSuiteSeenId = getLastKSuiteSeenId();
-            const sortedSuites = suiteArr.sort((a, b) => {
-                if (a.id === lastKSuiteSeenId) {
-                    return -1;
-                }
-                if (b.id === lastKSuiteSeenId) {
-                    return 1;
-                }
-                return b.update_at - a.update_at;
-            });
-            const lastKSuiteSeen = sortedSuites[0];
-
-            if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                window.postMessage({
-                    type: 'switch-server',
-                    data: lastKSuiteSeen.display_name,
-                }, window.origin);
-            }
-
-            try {
-                await Promise.all([
-                    dispatch(getClientConfig()),
-                    dispatch(getLicenseConfig()),
-                    dispatch(getMe()),
-                    dispatch(getMyPreferences()),
-                    dispatch(getMyTeamMembers()),
-                ]);
-
-                const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
-                await dispatch(getMyTeamUnreads(isCollapsedThreads));
-            } catch (error) {
-                dispatch(logError(error as ServerError));
-                return {error: error as ServerError};
-            }
-        } else if (!isDesktopApp()) {
-            // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
-            if (kSuiteCall && kSuiteCall.data) {
-                getHistory().push('/error?type=no_ksuite');
-            }
+            const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
+            await dispatch(getMyTeamUnreads(isCollapsedThreads));
+        } catch (error) {
+            dispatch(logError(error as ServerError));
+            return {error: error as ServerError};
         }
 
         return {data: true};
