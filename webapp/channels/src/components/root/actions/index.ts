@@ -16,14 +16,16 @@ import {getMe, getProfiles} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {isCollapsedThreadsEnabled, getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getActiveTeamsList} from 'mattermost-redux/selectors/entities/teams';
+import {getActiveTeamsList, getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {checkIsFirstAdmin, getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
 import {getMyMeets} from 'actions/calls';
 import {redirectUserToDefaultTeam, emitUserLoggedOutEvent} from 'actions/global_actions';
 
+import {getHistory} from 'utils/browser_history';
 import {ActionTypes, StoragePrefixes} from 'utils/constants';
-import {isMacApp, isNotMacMas} from 'utils/user_agent';
+import {isDesktopApp, isMacApp, isNotMacMas} from 'utils/user_agent';
 
 import type {ActionFuncAsync, ThunkActionFunc} from 'types/store';
 import type {Translations} from 'types/store/i18n';
@@ -64,21 +66,50 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
         // Load user and its related data now that we know that user is logged in
         const serverVersion = getState().entities.general.serverVersion || Client4.getServerVersion();
         dispatch({type: GeneralTypes.RECEIVED_SERVER_VERSION, data: serverVersion});
+        const kSuiteCall = await dispatch(getMyKSuites());
+        const kSuites = getTeams(getState());
 
-        try {
-            await Promise.all([
-                dispatch(getMe()),
-                dispatch(getMyPreferences()),
-                dispatch(getMyTeamMembers()),
-                dispatch(getMyKSuites()),
-                dispatch(getMyMeets()),
-            ]);
-            dispatch(getMyTeamUnreads(isCollapsedThreadsEnabled(getState())));
-        } catch (error) {
-            dispatch(logError(error as ServerError));
-            return {
-                isLoaded: false,
-            };
+        const suiteArr = Object.values(kSuites);
+
+        if (suiteArr.length > 0) {
+            const lastKSuiteSeenId = getLastKSuiteSeenId();
+            const sortedSuites = suiteArr.sort((a, b) => {
+                if (a.id === lastKSuiteSeenId) {
+                    return -1;
+                }
+                if (b.id === lastKSuiteSeenId) {
+                    return 1;
+                }
+                return b.update_at - a.update_at;
+            });
+            const lastKSuiteSeen = sortedSuites[0];
+
+            if (isDesktopApp()) {
+                window.postMessage({
+                    type: 'switch-server',
+                    data: lastKSuiteSeen.display_name,
+                }, window.origin);
+            }
+
+            try {
+                await Promise.all([
+                    dispatch(getMe()),
+                    dispatch(getMyPreferences()),
+                    dispatch(getMyTeamMembers()),
+                    dispatch(getMyMeets()),
+                ]);
+                dispatch(getMyTeamUnreads(isCollapsedThreadsEnabled(getState())));
+            } catch (error) {
+                dispatch(logError(error as ServerError));
+                return {
+                    isLoaded: false,
+                };
+            }
+        } else if (!isDesktopApp()) {
+            // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
+            if (kSuiteCall && kSuiteCall.data) {
+                getHistory().push('/error?type=no_ksuite');
+            }
         }
 
         return {
