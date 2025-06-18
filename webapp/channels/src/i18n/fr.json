@@ -3684,7 +3684,7 @@
   "invite_modal.copy_link": "Copier le lien d'invitation",
   "invite_modal.copy_link.url_aria": "lien d'invitation d'équipe {inviteURL}",
   "invite_modal.example_channel": "Ex. : {channel_name}",
-  "invite_modal.guests": "des utilisateurs externes",
+  "invite_modal.guests": "utilisateurs externes",
   "invite_modal.invite": "Inviter",
   "invite_modal.invited": "{inviteType} invité dans {team_name}",
   "invite_modal.invited_guests": "Utilisateurs invités",
