@@ -8,6 +8,7 @@ import {bindActionCreators} from 'redux';
 import {getCloudLimits, getCloudLimitsLoaded} from 'mattermost-redux/selectors/entities/cloud';
 import {getCurrentChannelId, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getLimitedViews, getPost} from 'mattermost-redux/selectors/entities/posts';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 
 import {emitShortcutReactToLastPostFrom} from 'actions/post_actions';
@@ -30,10 +31,12 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     const post = getPost(state, ownProps.listId);
     const currentUserId = getCurrentUserId(state);
     const newMessagesSeparatorActions = state.plugins.components.NewMessagesSeparatorAction;
+    const packName = getCurrentPackName(state);
+    const shouldShowUpgradeBanner = packName === 'ksuite_essential';
 
     const props: Pick<
     PostListRowProps,
-    'shortcutReactToLastPostEmittedFrom' | 'usage' | 'limits' | 'limitsLoaded' | 'exceededLimitChannelId' | 'firstInaccessiblePostTime' | 'post' | 'currentUserId' | 'newMessagesSeparatorActions'
+    'shortcutReactToLastPostEmittedFrom' | 'usage' | 'limits' | 'limitsLoaded' | 'exceededLimitChannelId' | 'firstInaccessiblePostTime' | 'post' | 'currentUserId' | 'newMessagesSeparatorActions' | 'shouldShowUpgradeBanner'
     > = {
         shortcutReactToLastPostEmittedFrom,
         usage,
@@ -42,6 +45,8 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         post,
         currentUserId,
         newMessagesSeparatorActions,
+        shouldShowUpgradeBanner,
+
     };
     if ((ownProps.listId === PostListRowListIds.OLDER_MESSAGES_LOADER || ownProps.listId === PostListRowListIds.CHANNEL_INTRO_MESSAGE) && limitsLoaded) {
         const currentChannelId = getCurrentChannelId(state);

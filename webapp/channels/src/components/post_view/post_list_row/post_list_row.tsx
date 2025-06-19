@@ -55,6 +55,7 @@ export type PostListRowProps = {
 
     usage: CloudUsage;
     limits: Limits;
+    shouldShowUpgradeBanner: boolean;
     limitsLoaded: boolean;
     exceededLimitChannelId?: string;
     firstInaccessiblePostTime?: number;
@@ -128,7 +129,7 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
             return (
                 <>
                     <ChannelIntroMessage/>
-                    {hasLimitDate !== null && <UpgradeBanner/>}
+                    {this.props.shouldShowUpgradeBanner && <UpgradeBanner/>}
                 </>
             );
         }

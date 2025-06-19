@@ -1,4 +1,4 @@
 export const UpgradeBtn = ({}) => {
     console.error('DO NOT MERGE THIS');
-    return <button>UPGRADE</button>;
+    return <button>Î UPGRADE</button>;
 };

@@ -1,7 +1,5 @@
-.upgrade-banner-placeholder {
-    margin: 24px 8px;
-    width: 100%;
-    height: 48px;
-    background-color: #e0e0e0;
-    border-radius: 6px;
+.upgrade-banner {
+    width: auto;
+    margin: 24px;
+    display: block; 
 }
