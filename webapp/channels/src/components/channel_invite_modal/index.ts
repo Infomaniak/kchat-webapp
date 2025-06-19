@@ -23,6 +23,8 @@ import {loadStatusesForProfilesList} from 'actions/status_actions';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
 import {closeModal} from 'actions/views/modals';
 
+import withUseGetUsageDelta from 'components/common/hocs/cloud/with_use_get_usage_deltas';
+
 import type {GlobalState} from 'types/store';
 
 import ChannelInviteModal from './channel_invite_modal';
@@ -113,4 +115,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     };
 }
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(ChannelInviteModal);
+export default connect(makeMapStateToProps, mapDispatchToProps)(withUseGetUsageDelta(ChannelInviteModal));
