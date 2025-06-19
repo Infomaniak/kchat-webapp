@@ -8,23 +8,35 @@ exports[`components/admin_console/admin_user_card/admin_user_card should match d
     <div
       class="AdminUserCard__header"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="dialog"
+      <wc-contact-sheet
+        background-color="transparent"
         class="status-wrapper style--none admin-user-card"
+        is-external="false"
+        k-chat-team-name="team1"
+        presence="offline"
+        prevent-open-on-hover="true"
+        prevent-stop-propagation="true"
+        size="md"
+        src="/api/v4/users/1234/image"
         style="border-radius: 50%; width: 128px; height: 128px;"
+        user-name="undefined undefined"
       >
         <span
-          class="profile-icon "
+          class="status-wrapper style--none admin-user-card"
+          slot="trigger"
         >
-          <img
-            alt="user profile image"
-            class="Avatar Avatar-xxl"
-            loading="lazy"
-            src="/api/v4/users/1234/image"
-          />
+          <span
+            class="profile-icon "
+          >
+            <img
+              alt="user profile image"
+              class="Avatar Avatar-xxl"
+              loading="lazy"
+              src="/api/v4/users/1234/image"
+            />
+          </span>
         </span>
-      </button>
+      </wc-contact-sheet>
       <div
         class="AdminUserCard__user-info"
       >
@@ -66,23 +78,35 @@ exports[`components/admin_console/admin_user_card/admin_user_card should match s
     <div
       class="AdminUserCard__header"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="dialog"
+      <wc-contact-sheet
+        background-color="transparent"
         class="status-wrapper style--none admin-user-card"
+        is-external="false"
+        k-chat-team-name="team1"
+        presence="offline"
+        prevent-open-on-hover="true"
+        prevent-stop-propagation="true"
+        size="md"
+        src="/api/v4/users/1234/image"
         style="border-radius: 50%; width: 128px; height: 128px;"
+        user-name="undefined undefined"
       >
         <span
-          class="profile-icon "
+          class="status-wrapper style--none admin-user-card"
+          slot="trigger"
         >
-          <img
-            alt="user profile image"
-            class="Avatar Avatar-xxl"
-            loading="lazy"
-            src="/api/v4/users/1234/image"
-          />
+          <span
+            class="profile-icon "
+          >
+            <img
+              alt="user profile image"
+              class="Avatar Avatar-xxl"
+              loading="lazy"
+              src="/api/v4/users/1234/image"
+            />
+          </span>
         </span>
-      </button>
+      </wc-contact-sheet>
       <div
         class="AdminUserCard__user-info"
       >
@@ -119,23 +143,35 @@ exports[`components/admin_console/admin_user_card/admin_user_card should match s
     <div
       class="AdminUserCard__header"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="dialog"
+      <wc-contact-sheet
+        background-color="transparent"
         class="status-wrapper style--none admin-user-card"
+        is-external="false"
+        k-chat-team-name="team1"
+        presence="offline"
+        prevent-open-on-hover="true"
+        prevent-stop-propagation="true"
+        size="md"
+        src="/api/v4/users/1234/image"
         style="border-radius: 50%; width: 128px; height: 128px;"
+        user-name="undefined undefined"
       >
         <span
-          class="profile-icon "
+          class="status-wrapper style--none admin-user-card"
+          slot="trigger"
         >
-          <img
-            alt="user profile image"
-            class="Avatar Avatar-xxl"
-            loading="lazy"
-            src="/api/v4/users/1234/image"
-          />
+          <span
+            class="profile-icon "
+          >
+            <img
+              alt="user profile image"
+              class="Avatar Avatar-xxl"
+              loading="lazy"
+              src="/api/v4/users/1234/image"
+            />
+          </span>
         </span>
-      </button>
+      </wc-contact-sheet>
       <div
         class="AdminUserCard__user-info"
       >
@@ -170,23 +206,35 @@ exports[`components/admin_console/admin_user_card/admin_user_card should match s
     <div
       class="AdminUserCard__header"
     >
-      <button
-        aria-expanded="false"
-        aria-haspopup="dialog"
+      <wc-contact-sheet
+        background-color="transparent"
         class="status-wrapper style--none admin-user-card"
+        is-external="false"
+        k-chat-team-name="team1"
+        presence="offline"
+        prevent-open-on-hover="true"
+        prevent-stop-propagation="true"
+        size="md"
+        src="/api/v4/users/1234/image"
         style="border-radius: 50%; width: 128px; height: 128px;"
+        user-name="undefined undefined"
       >
         <span
-          class="profile-icon "
+          class="status-wrapper style--none admin-user-card"
+          slot="trigger"
         >
-          <img
-            alt="user profile image"
-            class="Avatar Avatar-xxl"
-            loading="lazy"
-            src="/api/v4/users/1234/image"
-          />
+          <span
+            class="profile-icon "
+          >
+            <img
+              alt="user profile image"
+              class="Avatar Avatar-xxl"
+              loading="lazy"
+              src="/api/v4/users/1234/image"
+            />
+          </span>
         </span>
-      </button>
+      </wc-contact-sheet>
       <div
         class="AdminUserCard__user-info"
       >

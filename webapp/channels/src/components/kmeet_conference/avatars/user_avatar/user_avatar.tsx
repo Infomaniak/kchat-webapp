@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useRef} from 'react';
+import React, {memo} from 'react';
 import type {ComponentProps} from 'react';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
@@ -10,7 +10,6 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {getUser as selectUser, makeDisplayNameGetter} from 'mattermost-redux/selectors/entities/users';
 
-import OverlayTrigger from 'components/overlay_trigger';
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
 import ProfilePopover from 'components/profile_popover';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
@@ -50,27 +49,12 @@ function UserAvatar({
 
     const profilePictureURL = userId ? imageURLForUser(userId) : '';
 
-    const overlay = useRef<MMOverlayTrigger>(null);
-
-    const hideProfilePopover = () => {
-        overlay.current?.hide();
-    };
-
     return (
-        <OverlayTrigger
-            trigger='click'
+
+        <ProfilePopover
             disabled={!displayProfileOverlay}
-            placement='right'
-            rootClose={true}
-            ref={overlay}
-            overlay={
-                <ProfilePopover
-                    className='user-profile-popover'
-                    userId={userId}
-                    src={profilePictureURL}
-                    hide={hideProfilePopover}
-                />
-            }
+            userId={userId}
+            src={profilePictureURL}
         >
             <SimpleTooltip
                 id={`name-${userId}`}
@@ -92,8 +76,9 @@ function UserAvatar({
                         />
                     </Status>
                 </RoundButton>
+
             </SimpleTooltip>
-        </OverlayTrigger>
+        </ProfilePopover>
     );
 }
 
