@@ -78,7 +78,10 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
                     modifyOffer: (chunks: string[]) => (<a onClick={() => redirectTokSuiteDashboard(currentTeamAccountId)}>{chunks}</a>),
                 }}
             />
-            <button onClick={() => alert('Woo, Magnifique modale')}>Faire évoluer</button>
+            <wc-modal-conversion-upgrade-button
+                modal-type='standard'
+                size='compact'
+            />
         </div>
     );
 };

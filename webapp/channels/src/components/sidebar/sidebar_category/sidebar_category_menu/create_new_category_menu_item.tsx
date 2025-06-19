@@ -42,13 +42,13 @@ const CreateNewCategoryMenuItem = ({
             aria-haspopup={true}
             leadingElement={<FolderPlusOutlineIcon size={18}/>}
             labels={(
-                <>
+                <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
                     <FormattedMessage
                         id='sidebar_left.sidebar_category_menu.createCategory'
                         defaultMessage='Create New Category'
                     />
                     {OptionalUpgradeButton}
-                </>
+                </span>
 
             )}
             {...otherProps}

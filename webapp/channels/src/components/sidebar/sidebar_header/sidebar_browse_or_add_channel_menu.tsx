@@ -127,13 +127,13 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
                 onClick={onNewCategoryClick}
                 leadingElement={<FolderPlusOutlineIcon size={18}/>}
                 labels={(
-                    <>
+                    <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
                         <FormattedMessage
                             id='sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel'
                             defaultMessage='Create new category'
                         />
                         {OptionalUpgradeButton}
-                    </>
+                    </span>
                 )}
             />
         );

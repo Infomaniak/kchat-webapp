@@ -9,6 +9,7 @@ import {injectIntl, FormattedMessage, defineMessage} from 'react-intl';
 import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
+import type {CloudUsage} from '@mattermost/types/cloud';
 import type {Group, GroupSearchParams} from '@mattermost/types/groups';
 import type {TeamMembership} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
@@ -19,6 +20,7 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {filterGroupsMatchingTerm} from 'mattermost-redux/utils/group_utils';
 import {displayUsername, filterProfilesStartingWithTerm, isGuest} from 'mattermost-redux/utils/user_utils';
 
+import {UpgradeBtn} from 'components/ik_upgrade_btn/ik_upgrade_btn';
 import InvitationModal from 'components/invitation_modal';
 import MultiSelect from 'components/multiselect/multiselect';
 import type {Value} from 'components/multiselect/multiselect';
@@ -77,6 +79,8 @@ export type Props = {
         searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined, opts: GroupSearchParams) => Promise<ActionResult>;
         getTeamMembersByIds: (teamId: string, userIds: string[]) => Promise<ActionResult>;
     };
+
+    usageDeltas: CloudUsage;
 }
 
 type State = {
@@ -456,6 +460,12 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             inviteError = (<label className='has-error control-label'>{this.state.inviteError}</label>);
         }
 
+        const {modalIdentifier, OptionalUpgradeButton, modalType} = getCategoryCreationWithLimitation(
+            this.props.usageDeltas,
+            ModalIdentifiers.INVITATION,
+            InvitationModal,
+        );
+
         // TODO MM-10.0: need any of this, majority was commented apart apart from consts
         // const buttonSubmitText = localizeMessage({id: 'multiselect.add', defaultMessage: 'Add'});
         // const buttonSubmitLoadingText = localizeMessage({id: 'multiselect.adding', defaultMessage: 'Adding...'});
@@ -501,12 +511,13 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             this.props.actions.closeModal(ModalIdentifiers.CHANNEL_INVITE);
         };
 
+        // eslint-disable-next-line react/require-optimization
         const InviteModalLink = (props: {inviteAsGuest?: boolean; children: React.ReactNode; id?: string}) => {
             return (
                 <ToggleModalButton
                     className={`${props.inviteAsGuest ? 'invite-as-guest' : ''} btn btn-link`}
-                    modalId={ModalIdentifiers.INVITATION}
-                    dialogType={InvitationModal}
+                    modalId={modalIdentifier}
+                    dialogType={modalType}
                     dialogProps={{
                         channelToInvite: this.props.channel,
                         initialValue: this.state.term,
@@ -568,6 +579,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                     id='channel_invite.invite_guest'
                     defaultMessage='Invite as a Guest'
                 />
+                {OptionalUpgradeButton}
             </InviteModalLink>
         );
 
@@ -619,3 +631,15 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
 }
 
 export default injectIntl(ChannelInviteModal);
+
+export function getCategoryCreationWithLimitation(usageDeltas, originalModalIdentifier, originalModalType) {
+    const {guests: guestAvailableNegative} = usageDeltas;
+    const available = guestAvailableNegative < 0;
+
+    const modalIdentifier = available ? originalModalIdentifier : 'MODAL-WC-TRUC';
+    const modalType = available ? originalModalType : 'MODAL-WC-TRUC';
+
+    const OptionalUpgradeButton = available ? null : <UpgradeBtn/>;
+
+    return {modalIdentifier, OptionalUpgradeButton, modalType};
+}

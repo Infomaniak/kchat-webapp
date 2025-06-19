@@ -1,12 +1,12 @@
-import React from 'react';
-
-import {UpgradeBtn} from 'components/ik_upgrade_btn/ik_upgrade_btn';
+import React, {useRef} from 'react';
 
 import useGetUsageDeltas from './useGetUsageDeltas';
 
 export function useCategoryCreationWithLimitation(props: {onClick: () => void}) {
+    const modalRef = useRef<any>(null);
+
     const openUpgradePopupOpen = () => {
-        alert('Woo, tu veux pas un kSuite PRO ?');
+        modalRef.current?.open();
     };
 
     const {sidebar_categories: remainingCategoryNegative} = useGetUsageDeltas();
@@ -15,7 +15,11 @@ export function useCategoryCreationWithLimitation(props: {onClick: () => void}) 
 
     let OptionalUpgradeButton = null;
     if (!available) {
-        OptionalUpgradeButton = <UpgradeBtn/>;
+        OptionalUpgradeButton = (
+            <wc-ksuite-modal-conversion ref={modalRef}>
+                <wc-modal-conversion-tag/>
+            </wc-ksuite-modal-conversion>
+        );
     }
 
     return {onClick, OptionalUpgradeButton};
