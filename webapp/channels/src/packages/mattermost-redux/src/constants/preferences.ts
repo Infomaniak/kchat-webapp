@@ -143,8 +143,6 @@ const Preferences = {
             switchServerIconColor: '#FAFAFA',
             switchServerHoverBackground: '#3E435B',
             guestBannerBackground: '#F4F6FD',
-            contactSheetPillColor: 'white',
-            contactSheetPillBackgroundColor: '#0088B2',
         },
         indigo: {
             type: 'Indigo',
@@ -259,8 +257,6 @@ const Preferences = {
             switchServerIconColor: '#FAFAFA',
             switchServerHoverBackground: '#3E435B',
             guestBannerBackground: '#1f2328',
-            contactSheetPillColor: 'white',
-            contactSheetPillBackgroundColor: '#005E7A',
         },
         quartz: {
             type: 'Quartz',

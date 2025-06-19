@@ -219,8 +219,6 @@ export type Theme = {
     switchServerIconColor: string;
     switchServerHoverBackground: string;
     guestBannerBackground: string;
-    contactSheetPillColor: string;
-    contactSheetPillBackgroundColor: string;
 };
 
 const getDefaultTheme = createSelector('getDefaultTheme', getConfig, (config): Theme => {

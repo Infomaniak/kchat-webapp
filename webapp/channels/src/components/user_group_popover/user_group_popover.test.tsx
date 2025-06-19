@@ -17,11 +17,6 @@ import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
 
 import UserGroupPopover from './user_group_popover';
-import {
-    StateEntitiesChannelsMock,
-    StateEntitiesPostsMock, StateEntitiesTeamsMock,
-    StateViewRhsMock
-} from "mattermost-redux/selectors/entities/state.mock";
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),
@@ -79,7 +74,6 @@ describe('component/user_group_popover', () => {
     const initialState = {
         entities: {
             teams: {
-                ...StateEntitiesTeamsMock,
                 currentTeamId: 'team_id1',
                 teams: {
                     team_id1: {
@@ -99,11 +93,8 @@ describe('component/user_group_popover', () => {
             preferences: {
                 myPreferences: {},
             },
-            channels: StateEntitiesChannelsMock,
-            posts: StateEntitiesPostsMock,
         },
         views: {
-            rhs: StateViewRhsMock,
             modals: {
                 modalState: {},
             },

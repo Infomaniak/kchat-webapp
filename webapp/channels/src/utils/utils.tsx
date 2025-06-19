@@ -639,8 +639,6 @@ export function applyTheme(theme: Theme) {
             'ik-modal-header': theme.ikModalHeader,
             'ik-btn-secondary': theme.ikBtnSecondary,
             'ik-btn-secondary-color': theme.ikBtnSecondaryColor,
-            'wc-contact-sheet-pill-color': theme.contactSheetPillColor,
-            'wc-contact-sheet-pill-background-color': theme.contactSheetPillBackgroundColor
         },
     });
 }

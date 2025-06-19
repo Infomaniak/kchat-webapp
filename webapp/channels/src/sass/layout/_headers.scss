@@ -504,7 +504,6 @@
             color: inherit;
             opacity: 1;
 
-            wc-contact-sheet,
             button {
                 color: rgba(var(--center-channel-color-rgb), 0.75);
 
@@ -647,13 +646,11 @@
     .channel-intro-img {
         position: relative;
 
-        wc-contact-sheet,
         button {
             border: solid 2px var(--center-channel-bg);
         }
 
-        &__group button,
-        &__group wc-contact-sheet{
+        &__group button {
             margin: 0 -8px;
         }
 
@@ -694,8 +691,7 @@
         }
 
         span,
-        button,
-        wc-contact-sheet{
+        button {
             font-size: inherit;
             font-weight: inherit;
             letter-spacing: inherit;

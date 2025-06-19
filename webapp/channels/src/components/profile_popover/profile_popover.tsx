@@ -34,6 +34,7 @@ import ProfilePopoverLastActive from './profile_popover_last_active';
 import ProfilePopoverName from './profile_popover_name';
 import ProfilePopoverOtherUserRow from './profile_popover_other_user_row';
 import ProfilePopoverOverrideDisclaimer from './profile_popover_override_disclaimer';
+import ProfilePopoverSelfUserRow from './profile_popover_self_user_row';
 import ProfilePopoverTimezone from './profile_popover_timezone';
 import ProfilePopoverTitle from './profile_popover_title';
 
@@ -241,7 +242,7 @@ const ProfilePopover = ({
     );
 };
 
-export function getDefaultChannelId(state: GlobalState) {
+function getDefaultChannelId(state: GlobalState) {
     const selectedPost = getSelectedPost(state);
     return selectedPost.exists ? selectedPost.channel_id : getCurrentChannelId(state);
 }
