@@ -1876,6 +1876,7 @@
   "admin_settings.save_unsaved_changes": "Si prega di salvare i cambiamenti prima",
   "analytics.chart.loading": "Caricamento...",
   "analytics.chart.meaningful": "Dati insufficienti per una rappresentazione significativa.",
+  "advanced_text_editor.remote_user_hour": "L'orario per {user} è {time}",
   "ai.summarizeThread" : "Riassumi",
   "ai.actions" : "Azioni IA",
   "analytics.system.activeUsers": "Utenti attivi con post",
