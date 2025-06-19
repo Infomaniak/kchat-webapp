@@ -30,14 +30,14 @@ type Props = {
     channelId?: string;
 }
 
-function getIsTeamAdmin(state: GlobalState, userId: string) {
+export function getIsTeamAdmin(state: GlobalState, userId: string) {
     const team = getCurrentTeam(state);
     const teamMember = team ? getTeamMember(state, team.id, userId) : undefined;
 
     return Boolean(teamMember && teamMember.scheme_admin);
 }
 
-function getIsChannelAdmin(state: GlobalState, userId: string, channelId?: string) {
+export function getIsChannelAdmin(state: GlobalState, userId: string, channelId?: string) {
     if (!channelId) {
         return false;
     }

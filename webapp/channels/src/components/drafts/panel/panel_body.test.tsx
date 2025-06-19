@@ -16,6 +16,11 @@ import mockStore from 'tests/test_store';
 import type {PostDraft} from 'types/store/draft';
 
 import PanelBody from './panel_body';
+import {
+    StateEntitiesChannelsMock,
+    StateEntitiesTeamsMock,
+    StateEntitiesUsersMock
+} from "mattermost-redux/selectors/entities/state.mock";
 
 jest.mock('wasm-media-encoders', () => ({
     createEncoder: jest.fn(),
@@ -47,6 +52,7 @@ describe('components/drafts/panel/panel_body', () => {
                 },
             },
             channels: {
+                ...StateEntitiesChannelsMock,
                 currentChannelId: 'channel_id',
                 channels: {
                     channel_id: {id: 'channel_id', team_id: 'team_id'},
@@ -63,11 +69,13 @@ describe('components/drafts/panel/panel_body', () => {
                 customEmoji: {},
             },
             users: {
+                ... StateEntitiesUsersMock,
                 currentUserId: 'userid1',
                 profiles: {userid1: {id: 'userid1', username: 'username1', roles: 'system_user'}},
                 profilesInChannel: {},
             },
             teams: {
+                ...StateEntitiesTeamsMock,
                 currentTeamId: 'team_id',
                 teams: {
                     team_id: {
