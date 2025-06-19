@@ -8,6 +8,7 @@ import {TestHelper} from 'utils/test_helper';
 import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import AdminUserCard from './admin_user_card';
+import {StateEntitiesTeamsMock} from "mattermost-redux/selectors/entities/state.mock";
 
 describe('components/admin_console/admin_user_card/admin_user_card', () => {
     const user = TestHelper.getUserMock({
@@ -17,13 +18,19 @@ describe('components/admin_console/admin_user_card/admin_user_card', () => {
         id: '1234',
     });
 
+    const baseState = {
+        entities: {
+            teams: StateEntitiesTeamsMock
+        }
+    }
+
     const defaultProps = {
         user,
     } as any;
 
     test('should match default snapshot', () => {
         const props = defaultProps;
-        const {container} = renderWithContext(<AdminUserCard {...props}/>);
+        const {container} = renderWithContext(<AdminUserCard {...props}/>, baseState);
         screen.getByText(props.user.first_name, {exact: false});
         screen.getByText(props.user.last_name, {exact: false});
         screen.getByText(props.user.nickname, {exact: false});
@@ -39,7 +46,7 @@ describe('components/admin_console/admin_user_card/admin_user_card', () => {
                 nickname: null,
             },
         };
-        const {container} = renderWithContext(<AdminUserCard {...props}/>);
+        const {container} = renderWithContext(<AdminUserCard {...props}/>, baseState);
         screen.getByText(props.user.first_name, {exact: false});
         screen.getByText(props.user.last_name, {exact: false});
         expect(screen.queryByText(defaultProps.user.nickname)).not.toBeInTheDocument();
@@ -56,7 +63,7 @@ describe('components/admin_console/admin_user_card/admin_user_card', () => {
                 last_name: null,
             },
         };
-        const {container} = renderWithContext(<AdminUserCard {...props}/>);
+        const {container} = renderWithContext(<AdminUserCard {...props}/>, baseState);
         expect(screen.queryByText(defaultProps.user.first_name)).not.toBeInTheDocument();
         expect(screen.queryByText(defaultProps.user.last_name)).not.toBeInTheDocument();
         screen.getByText(props.user.nickname, {exact: false});
@@ -74,7 +81,7 @@ describe('components/admin_console/admin_user_card/admin_user_card', () => {
                 nickname: null,
             },
         };
-        const {container} = renderWithContext(<AdminUserCard {...props}/>);
+        const {container} = renderWithContext(<AdminUserCard {...props}/>, baseState);
         expect(screen.queryByText(defaultProps.user.first_name)).not.toBeInTheDocument();
         expect(screen.queryByText(defaultProps.user.last_name)).not.toBeInTheDocument();
         expect(screen.queryByText(defaultProps.user.nickname)).not.toBeInTheDocument();
