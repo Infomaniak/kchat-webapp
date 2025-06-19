@@ -93,6 +93,14 @@ export const getCurrentTeam: (state: GlobalState) => Team | undefined = createSe
     },
 );
 
+export const getCurrentTeamName: (state: GlobalState) => string | undefined = createSelector(
+    'getCurrentTeamName',
+    getCurrentTeam,
+    (team) => {
+        return team?.name;
+    },
+);
+
 export function getTeam(state: GlobalState, id: string): Team | undefined {
     const teams = getTeams(state);
     return teams[id];

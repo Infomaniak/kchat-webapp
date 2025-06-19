@@ -13,6 +13,12 @@ import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
 
 import TopBoards from './top_boards';
+import {
+    StateEntitiesPostsMock,
+    StateEntitiesTeamsMock,
+    StateEntitiesUsersMock,
+    StateViewRhsMock
+} from "mattermost-redux/selectors/entities/state.mock";
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),
@@ -41,8 +47,13 @@ describe('components/activity_and_insights/insights/top_boards', () => {
     };
 
     const initialState = {
+        views: {
+            rhs: StateViewRhsMock
+        },
         entities: {
+
             teams: {
+                ...StateEntitiesTeamsMock,
                 currentTeamId: 'team_id1',
                 teams: {
                     team_id1: {
@@ -64,6 +75,7 @@ describe('components/activity_and_insights/insights/top_boards', () => {
                 config: {},
             },
             users: {
+                ...StateEntitiesUsersMock,
                 currentUserId: 'current_user_id',
                 profiles: {
                     current_user_id: {
@@ -84,6 +96,7 @@ describe('components/activity_and_insights/insights/top_boards', () => {
             emojis: {
                 customEmoji: {},
             },
+            posts: StateEntitiesPostsMock,
         },
         plugins: {
             insightsHandlers: {
@@ -124,7 +137,7 @@ describe('components/activity_and_insights/insights/top_boards', () => {
     };
 
     test('check if 3 team top boards render', async () => {
-        const store = await mockStore(initialState);
+        const store = mockStore(initialState);
         const wrapper = mountWithIntl(
             <Provider store={store}>
                 <BrowserRouter>

@@ -17,14 +17,21 @@ import {mockStore} from 'tests/test_store';
 import ThreadFooter from './thread_footer';
 
 import FollowButton from '../../common/follow_button';
+import {
+    StateEntitiesChannelsMock,
+    StateEntitiesTeamsMock,
+    StateEntitiesUsersMock, StateViewRhsMock
+} from "mattermost-redux/selectors/entities/state.mock";
 
 describe('components/threading/channel_threads/thread_footer', () => {
     const baseState = {
         entities: {
+            channels: StateEntitiesChannelsMock,
             general: {
                 config: {},
             },
             users: {
+                ...StateEntitiesUsersMock,
                 currentUserId: 'uid',
                 profiles: {
                     1: {
@@ -66,6 +73,7 @@ describe('components/threading/channel_threads/thread_footer', () => {
             },
 
             teams: {
+                ...StateEntitiesTeamsMock,
                 currentTeamId: 'tid',
             },
             preferences: {
@@ -117,6 +125,10 @@ describe('components/threading/channel_threads/thread_footer', () => {
                 },
             },
         },
+        views: {
+            rhs: StateViewRhsMock,
+        }
+
     };
 
     let resetFakeDate: () => void;
