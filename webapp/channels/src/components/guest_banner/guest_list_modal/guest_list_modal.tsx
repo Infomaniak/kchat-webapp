@@ -5,12 +5,9 @@ import {FormattedMessage} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {Client4} from 'mattermost-redux/client';
-
 import GuestListPopover from 'components/guest_list_popover';
 import {getListHeight} from 'components/guest_list_popover/user_list/styled';
 import {MAX_LIST_HEIGHT, VIEWPORT_SCALE_FACTOR} from 'components/guest_list_popover/user_list/user_list';
-import ProfilePopover from 'components/profile_popover';
 
 import type {A11yFocusEventDetail} from 'utils/constants';
 import Constants, {A11yCustomEventTypes} from 'utils/constants';
@@ -30,8 +27,7 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
     const ref = useRef<HTMLAnchorElement>(null);
 
     const [show, setShow] = useState(false);
-    const [placement, setPlacement] = useState(('top'));
-    const [showUser, setShowUser] = useState<UserProfile | undefined>();
+    const [placement, setPlacement] = useState<'bottom' | 'top' | 'right' | 'left' | undefined>(('top'));
     const [target, setTarget] = useState<HTMLAnchorElement | undefined>();
 
     const showOverlay = (target?: HTMLAnchorElement) => {
@@ -46,7 +42,6 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
             const placement = popOverOverlayPosition(targetBounds, window.innerHeight, approximatePopoverHeight);
             setTarget(target);
             setShow(!show);
-            setShowUser(undefined);
             setPlacement(placement);
         }
     };
@@ -68,15 +63,6 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
 
     const hideOverlay = () => {
         setShow(false);
-    };
-
-    const showUserOverlay = (user: UserProfile) => {
-        hideOverlay();
-        setShowUser(user);
-    };
-
-    const hideUserOverlay = () => {
-        setShowUser(undefined);
     };
 
     const returnFocus = () => {
@@ -118,30 +104,9 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
                     channelId={channelId}
                     profiles={guestProfiles}
                     hide={hideOverlay}
-                    showUserOverlay={showUserOverlay}
                     returnFocus={returnFocus}
                     membersCount={count}
                 />
-            </Overlay>
-            <Overlay
-                placement={placement}
-                show={showUser !== undefined}
-                target={target}
-                onHide={hideUserOverlay}
-                rootClose={true}
-            >
-                {showUser ? (
-                    <ProfilePopover
-                        className='user-profile-popover'
-                        userId={showUser.id}
-                        src={Client4.getProfilePictureUrl(showUser.id, showUser.last_picture_update)}
-                        channelId={channelId}
-                        hasMention={false}
-                        hide={hideUserOverlay}
-                        returnFocus={returnFocus}
-                    />
-                ) : <div/>
-                }
             </Overlay>
         </>
     );

@@ -12,6 +12,7 @@ import {TestHelper} from 'utils/test_helper';
 import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import ChannelIntroMessage from './channel_intro_message';
+import {StateEntitiesTeamsMock, StateEntitiesUsersMock} from "mattermost-redux/selectors/entities/state.mock";
 
 describe('components/post_view/ChannelIntroMessages', () => {
     const channel = {
@@ -62,6 +63,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
         entities: {
             general: {config: {}},
             users: {
+                ...StateEntitiesUsersMock,
                 profiles: {
                     user1: TestHelper.getUserMock({
                         id: 'user1',
@@ -77,9 +79,7 @@ describe('components/post_view/ChannelIntroMessages', () => {
                 currentChannelId: 'channel_id',
                 myMembers: {},
             },
-            teams: {
-                teams: {},
-            },
+            teams: StateEntitiesTeamsMock,
             preferences: {
                 myPreferences: {},
             },
