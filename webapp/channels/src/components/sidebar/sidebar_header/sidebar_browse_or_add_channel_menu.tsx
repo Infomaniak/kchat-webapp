@@ -15,9 +15,7 @@ import {
 
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
-import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import {useCategoryCreationWithLimitation} from 'components/common/hooks/useNewCategoryQuota';
-import {UpgradeBtn} from 'components/ik_upgrade_btn/ik_upgrade_btn';
 import * as Menu from 'components/menu';
 import {OnboardingTourSteps} from 'components/tours';
 import {useShowOnboardingTutorialStep, CreateAndJoinChannelsTour} from 'components/tours/onboarding_tour';
