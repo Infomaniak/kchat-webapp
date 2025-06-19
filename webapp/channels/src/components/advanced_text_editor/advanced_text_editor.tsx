@@ -12,7 +12,7 @@ import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions} from 'mattermost-redux/constants';
-import {getChannel, makeGetChannel, getDirectChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getChannel, makeGetChannel, getDirectChannel, getMyChannelMembership} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getFeatureFlagValue} from 'mattermost-redux/selectors/entities/general';
 import {get, getBool, getInt} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -185,7 +185,12 @@ const AdvancedTextEditor = ({
 
     const canPost = useSelector((state: GlobalState) => {
         const channel = getChannel(state, channelId);
-        return channel ? haveIChannelPermission(state, channel.team_id, channel.id, Permissions.CREATE_POST) : false;
+        if (!channel) {
+            return false;
+        }
+        const isMember = getMyChannelMembership(state, channel.id);
+
+        return isMember && haveIChannelPermission(state, channel.team_id, channel.id, Permissions.CREATE_POST);
     });
     const useChannelMentions = useSelector((state: GlobalState) => {
         const channel = getChannel(state, channelId);
