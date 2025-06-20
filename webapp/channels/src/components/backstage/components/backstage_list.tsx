@@ -18,6 +18,7 @@ type Props = {
     header: ReactNode;
     addLink?: string;
     addText?: ReactNode;
+    isCapped: boolean;
     addButtonId?: string;
     emptyText?: ReactNode;
     emptyTextSearch?: JSX.Element;
@@ -112,22 +113,28 @@ const BackstageList = (remainingProps: Props) => {
     let addLink = null;
 
     if (remainingProps.addLink && remainingProps.addText) {
-        addLink = (
-            <Link
-                className='add-link'
-                to={remainingProps.addLink}
-            >
-                <button
-                    type='button'
-                    className='btn btn-primary'
-                    id={remainingProps.addButtonId}
+        if (!remainingProps.isCapped) {
+            addLink = (
+                <Link
+                    className='add-link'
+                    to={remainingProps.addLink}
                 >
-                    <span>
-                        {remainingProps.addText}
-                    </span>
-                </button>
-            </Link>
-        );
+                    <button
+                        type='button'
+                        className='btn btn-primary'
+                        id={remainingProps.addButtonId}
+                    >
+                        <span>
+                            {remainingProps.addText}
+                        </span>
+                    </button>
+                </Link>
+            );
+        } else {
+            addLink = (
+                <wc-modal-conversion-upgrade-button size='standard'/>
+            );
+        }
     }
 
     const hasFilter = filter.length > 0;

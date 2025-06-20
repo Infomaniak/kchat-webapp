@@ -30,8 +30,10 @@ type Props = {
     users: IDMappedObjects<UserProfile>;
     canManageOthersWebhooks: boolean;
     enableIncomingWebhooks: boolean;
+    isCapped: boolean;
     actions: {
         removeIncomingHook: (hookId: string) => Promise<ActionResult>;
+        refreshUsage: () => Promise<any>;
         loadIncomingHooksAndProfilesForTeam: (teamId: string, startPageNumber: number,
             pageSize: number, includeTotalCount: boolean) => Promise<ActionResult<IncomingWebhook[] | IncomingWebhooksWithCount>>;
     };
@@ -57,7 +59,7 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
     }
 
     deleteIncomingWebhook = (incomingWebhook: IncomingWebhook) => {
-        this.props.actions.removeIncomingHook(incomingWebhook.id);
+        this.props.actions.removeIncomingHook(incomingWebhook.id).then(this.props.actions.refreshUsage);
     };
 
     loadPage = async (pageToLoad: number) => {
@@ -133,6 +135,7 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
                         defaultMessage='Add Incoming Webhook'
                     />
                 }
+                isCapped={this.props.isCapped}
                 addLink={'/' + this.props.team.name + '/integrations/incoming_webhooks/add'}
                 addButtonId='addIncomingWebhook'
                 emptyText={

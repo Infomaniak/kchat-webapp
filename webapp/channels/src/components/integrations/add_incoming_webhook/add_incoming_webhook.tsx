@@ -51,6 +51,11 @@ type Props = {
         * The function to call to add a new incoming webhook
         */
         createIncomingHook: (hook: IncomingWebhook) => Promise<ActionResult<IncomingWebhook>>;
+
+        /**
+        * The function to call to refresh usage
+        */
+        refreshUsage: () => Promise<void>;
     };
 };
 
@@ -65,13 +70,17 @@ const AddIncomingWebhook = ({
     const addIncomingHook = useCallback(async (hook: IncomingWebhook) => {
         setServerError('');
 
-        const {data, error} = await actions.createIncomingHook(hook);
-        if (data) {
-            getHistory().push(`/${team.name}/integrations/confirm?type=incoming_webhooks&id=${data.id}`);
-            return;
-        }
-        if (error) {
-            setServerError(error.message);
+        try {
+            const {data, error} = await actions.createIncomingHook(hook);
+            if (data) {
+                getHistory().push(`/${team.name}/integrations/confirm?type=incoming_webhooks&id=${data.id}`);
+                return;
+            }
+            if (error) {
+                setServerError(error.message);
+            }
+        } finally {
+            actions.refreshUsage();
         }
     }, [actions, team.name]);
 

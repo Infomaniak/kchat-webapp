@@ -14,8 +14,10 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getFilteredIncomingHooks, getIncomingHooksTotalCount} from 'mattermost-redux/selectors/entities/integrations';
 import {haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getUsers} from 'mattermost-redux/selectors/entities/users';
 
+import {getUsage as getUsageAction} from 'actions/cloud';
 import {loadIncomingHooksAndProfilesForTeam} from 'actions/integration_actions';
 
 import InstalledIncomingWebhooks from './installed_incoming_webhooks';
@@ -27,6 +29,8 @@ function mapStateToProps(state: GlobalState) {
     const config = getConfig(state);
     const canManageOthersWebhooks = haveITeamPermission(state, teamId, Permissions.MANAGE_OTHERS_INCOMING_WEBHOOKS);
     const enableIncomingWebhooks = config.EnableIncomingWebhooks === 'true';
+    const usage = getUsage(state);
+    const isCapped = usage.incoming_webhooks > 0;
 
     return {
         incomingHooks,
@@ -35,6 +39,7 @@ function mapStateToProps(state: GlobalState) {
         users: getUsers(state),
         canManageOthersWebhooks,
         enableIncomingWebhooks,
+        isCapped,
     };
 }
 
@@ -43,6 +48,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
         actions: bindActionCreators({
             loadIncomingHooksAndProfilesForTeam,
             removeIncomingHook,
+            refreshUsage: getUsageAction,
         }, dispatch),
     };
 }
