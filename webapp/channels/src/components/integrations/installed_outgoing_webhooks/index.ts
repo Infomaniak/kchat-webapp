@@ -12,8 +12,10 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getOutgoingHooks} from 'mattermost-redux/selectors/entities/integrations';
 import {haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getUsers} from 'mattermost-redux/selectors/entities/users';
 
+import {getUsage as getUsageAction} from 'actions/cloud';
 import {loadOutgoingHooksAndProfilesForTeam} from 'actions/integration_actions';
 
 import type {GlobalState} from 'types/store';
@@ -29,6 +31,8 @@ function mapStateToProps(state: GlobalState) {
         map((key) => outgoingHooks[key]).
         filter((outgoingWebhook) => outgoingWebhook.team_id === teamId);
     const enableOutgoingWebhooks = config.EnableOutgoingWebhooks === 'true';
+    const usage = getUsage(state);
+    const isCapped = usage.outgoing_webhooks > 0;
 
     return {
         outgoingWebhooks,
@@ -37,6 +41,7 @@ function mapStateToProps(state: GlobalState) {
         teamId,
         canManageOthersWebhooks,
         enableOutgoingWebhooks,
+        isCapped,
     };
 }
 
@@ -46,6 +51,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             loadOutgoingHooksAndProfilesForTeam,
             removeOutgoingHook: Actions.removeOutgoingHook,
             regenOutgoingHookToken: Actions.regenOutgoingHookToken,
+            refreshUsage: getUsageAction(),
         }, dispatch),
     };
 }

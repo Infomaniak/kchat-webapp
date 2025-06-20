@@ -40,6 +40,11 @@ export type Props = {
         * The function to call to add a new outgoing webhook
         */
         createOutgoingHook: (hook: OutgoingWebhook) => Promise<ActionResult<OutgoingWebhook>>;
+
+        /**
+        * The function to call to refresh usage
+        */
+        refreshUsage: () => Promise<void>;
     };
 
     /**
@@ -61,14 +66,18 @@ const AddOutgoingWebhook = ({team, actions, enablePostUsernameOverride, enablePo
     const addOutgoingHook = async (hook: OutgoingWebhook) => {
         setServerError('');
 
-        const {data, error} = await actions.createOutgoingHook(hook);
-        if (data) {
-            history.push(`/${team.name}/integrations/confirm?type=outgoing_webhooks&id=${data.id}`);
-            return;
-        }
+        try {
+            const {data, error} = await actions.createOutgoingHook(hook);
+            if (data) {
+                history.push(`/${team.name}/integrations/confirm?type=outgoing_webhooks&id=${data.id}`);
+                return;
+            }
 
-        if (error) {
-            setServerError(error.message);
+            if (error) {
+                setServerError(error.message);
+            }
+        } finally {
+            actions.refreshUsage();
         }
     };
 

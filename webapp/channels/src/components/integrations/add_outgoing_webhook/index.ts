@@ -8,6 +8,8 @@ import type {Dispatch} from 'redux';
 import {createOutgoingHook} from 'mattermost-redux/actions/integrations';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
+import {getUsage} from 'actions/cloud';
+
 import type {GlobalState} from 'types/store';
 
 import AddOutgoingWebhook from './add_outgoing_webhook';
@@ -26,6 +28,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
             createOutgoingHook,
+            refreshUsage: getUsage,
         }, dispatch),
     };
 }

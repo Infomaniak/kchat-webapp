@@ -56,6 +56,11 @@ export type Props = {
     */
     teamId: string;
 
+    /**
+    *  Wether or not user is capped with limitation
+    */
+    isCapped: boolean;
+
     actions: {
 
         /**
@@ -72,6 +77,12 @@ export type Props = {
         * The function to call for regeneration of webhook token
         */
         regenOutgoingHookToken: (hookId: string) => Promise<ActionResult>;
+
+        /**
+        * The function to call for refreshing usage
+        */
+        refreshUsage: () => Promise<void>;
+
     };
 
     /**
@@ -110,7 +121,7 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
     };
 
     removeOutgoingHook = (outgoingWebhook: OutgoingWebhook) => {
-        this.props.actions.removeOutgoingHook(outgoingWebhook.id);
+        this.props.actions.removeOutgoingHook(outgoingWebhook.id).then(this.props.actions.refreshUsage);
     };
 
     outgoingWebhookCompare = (a: OutgoingWebhook, b: OutgoingWebhook) => {
@@ -176,6 +187,7 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
                     this.props.team.name +
                     '/integrations/outgoing_webhooks/add'
                 }
+                isCapped={this.props.isCapped}
                 addButtonId='addOutgoingWebhook'
                 emptyText={
                     <FormattedMessage
