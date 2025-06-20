@@ -1,14 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo} from 'react';
+import React, {memo, useRef} from 'react';
 import {FormattedMessage, FormattedDate, FormattedTime, useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {ChevronRightIcon, ClockOutlineIcon} from '@mattermost/compass-icons/components';
 import type {Post} from '@mattermost/types/posts';
 
 import {addPostReminder} from 'mattermost-redux/actions/posts';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 
 import {openModal} from 'actions/views/modals';
 
@@ -39,17 +40,24 @@ function PostReminderSubmenu(props: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
 
+    const packName = useSelector(getCurrentPackName);
+    const customTimeAvailable = packName !== 'ksuite_essential';
+
     function handlePostReminderMenuClick(id: string) {
         if (id === PostReminders.CUSTOM) {
-            const postReminderCustomTimePicker = {
-                modalId: ModalIdentifiers.POST_REMINDER_CUSTOM_TIME_PICKER,
-                dialogType: PostReminderCustomTimePicker,
-                dialogProps: {
-                    postId: props.post.id,
-                },
-            };
+            if (customTimeAvailable) {
+                const postReminderCustomTimePicker = {
+                    modalId: ModalIdentifiers.POST_REMINDER_CUSTOM_TIME_PICKER,
+                    dialogType: PostReminderCustomTimePicker,
+                    dialogProps: {
+                        postId: props.post.id,
+                    },
+                };
 
-            dispatch(openModal(postReminderCustomTimePicker));
+                dispatch(openModal(postReminderCustomTimePicker));
+            } else {
+                modalRef.current?.open();
+            }
         } else {
             const currentDate = getCurrentMomentForTimezone(props.timezone);
 
@@ -74,6 +82,8 @@ function PostReminderSubmenu(props: Props) {
             dispatch(addPostReminder(props.userId, props.post.id, toUTCUnixInSeconds(endTime.toDate())));
         }
     }
+
+    const modalRef = useRef(null);
 
     const postReminderSubMenuItems = Object.values(PostReminders).map((postReminder) => {
         let labels = null;
@@ -112,12 +122,30 @@ function PostReminderSubmenu(props: Props) {
                     defaultMessage='Monday'
                 />
             );
-        } else {
+        } else if (customTimeAvailable) {
             labels = (
                 <FormattedMessage
                     id='post_info.post_reminder.sub_menu.custom'
                     defaultMessage='Custom'
                 />
+            );
+        } else {
+            labels = (
+                <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
+
+                    <FormattedMessage
+                        id='post_info.post_reminder.sub_menu.custom'
+                        defaultMessage='Custom'
+                    />
+
+                    <wc-ksuite-modal-conversion
+                        ref={modalRef}
+                        modalType='standard'
+                    >
+                        <wc-modal-conversion-tag/>
+                    </wc-ksuite-modal-conversion>
+
+                </span>
             );
         }
 
