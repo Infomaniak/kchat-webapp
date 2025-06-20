@@ -7,7 +7,6 @@ import type {Dispatch} from 'redux';
 
 import {createCustomEmoji} from 'mattermost-redux/actions/emojis';
 
-import {getUsage} from 'actions/cloud';
 import {getEmojiMap} from 'selectors/emojis';
 
 import type {GlobalState} from 'types/store';
@@ -24,7 +23,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
             createCustomEmoji,
-            refreshUsage: getUsage,
         }, dispatch),
     };
 }

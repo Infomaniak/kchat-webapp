@@ -203,9 +203,7 @@ export default class EmojiList extends React.PureComponent<Props, State> {
                         key={'emoji_search_item' + emojiId}
                         emojiId={emojiId}
                         onDelete={this.deleteFromSearch}
-                        actions={{deleteCustomEmoji: (emojiId) => {
-                            deleteCustomEmoji(emojiId);
-                        }}}
+                        actions={{deleteCustomEmoji}}
                     />,
                 );
             });

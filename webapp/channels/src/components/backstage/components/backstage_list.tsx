@@ -115,7 +115,10 @@ const BackstageList = (remainingProps: Props) => {
     if (remainingProps.addLink && remainingProps.addText) {
         if (remainingProps.isCapped) {
             addLink = (
-                <wc-modal-conversion-upgrade-button size='standard'/>
+                <wc-modal-conversion-upgrade-button
+                    size='standard'
+                    buttonText={remainingProps.addText}
+                />
             );
         } else {
             addLink = (

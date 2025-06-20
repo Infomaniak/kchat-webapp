@@ -514,7 +514,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         // eslint-disable-next-line react/require-optimization
         const InviteModalLink = (props: {inviteAsGuest?: boolean; children: React.ReactNode; id?: string}) => {
             return (
-                isCapped ? <wc-qqchose/> : <ToggleModalButton
+                <ToggleModalButton
                     className={`${props.inviteAsGuest ? 'invite-as-guest' : ''} btn btn-link`}
                     modalId={modalIdentifier}
                     dialogType={modalType}
@@ -526,7 +526,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                     }}
                     onClick={closeMembersInviteModal}
                     id={props.id}
-                                           >
+                >
                     {props.children}
                 </ToggleModalButton>
             );
