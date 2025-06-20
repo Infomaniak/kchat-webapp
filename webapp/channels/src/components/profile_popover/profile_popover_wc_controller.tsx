@@ -31,6 +31,7 @@ export interface ProfilePopoverAdditionalProps {
     isTeamAdmin?: boolean;
     isChannelAdmin?: boolean;
     channelId?: string;
+    isAnyModalOpen: boolean;
 }
 
 export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
@@ -115,6 +116,7 @@ const mapCustomBadges = (badge: string) => (
 
 export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     const {
+        isAnyModalOpen,
         disabled,
         username,
         hideStatus,
@@ -205,6 +207,10 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         };
     }, []);
+
+    useEffect(() => {
+        localRef?.current?.close();
+    }, [isAnyModalOpen]);
 
     return (
         <>

@@ -19,6 +19,7 @@ import {
 
 import type {GlobalState} from '../../types/store';
 import {UserStatuses} from '../../utils/constants';
+import {isAnyModalOpen} from "../../selectors/views/modals";
 
 function mapStateToProps(state: GlobalState, ownProps: ProfilePopoverProps): ProfilePopoverAdditionalProps {
     const channelId = ownProps.channelId || getDefaultChannelId(state);
@@ -40,6 +41,7 @@ function mapStateToProps(state: GlobalState, ownProps: ProfilePopoverProps): Pro
         userStatus,
         isTeamAdmin,
         isChannelAdmin,
+        isAnyModalOpen: isAnyModalOpen(state)
     };
 }
 
