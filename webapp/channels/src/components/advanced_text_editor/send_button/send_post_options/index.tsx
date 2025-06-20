@@ -2,12 +2,14 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
 import type {SchedulingInfo} from '@mattermost/types/schedule_post';
+
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 
 import {openModal} from 'actions/views/modals';
 
@@ -61,6 +63,36 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
         }));
     }, [channelId, dispatch, handleSelectCustomTime]);
 
+    const currentPack = useSelector(getCurrentPackName);
+    const isAvailable = currentPack !== 'ksuite_essential';
+
+    const modalRef = useRef(null);
+    let customTimeOnClick = null;
+    let customTimeLabel = null;
+    if (isAvailable) {
+        customTimeOnClick = handleChooseCustomTime;
+        customTimeLabel = (<FormattedMessage
+            id='create_post_button.option.schedule_message.options.choose_custom_time'
+            defaultMessage='Choose a custom time'
+        />);
+    } else {
+        customTimeOnClick = () => modalRef.current?.open();
+        customTimeLabel = (
+            <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <FormattedMessage
+                    id='create_post_button.option.schedule_message.options.choose_custom_time'
+                    defaultMessage='Choose a custom time'
+                />
+                <wc-ksuite-modal-conversion
+                    ref={modalRef}
+                    modalType='standard'
+                >
+                    <wc-modal-conversion-tag/>
+                </wc-ksuite-modal-conversion>
+            </span>
+        );
+    }
+
     return (
         <Menu.Container
             menuButtonTooltip={{
@@ -110,14 +142,9 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
             <Menu.Separator/>
 
             <Menu.Item
-                onClick={handleChooseCustomTime}
+                onClick={customTimeOnClick}
                 key={'choose_custom_time'}
-                labels={
-                    <FormattedMessage
-                        id='create_post_button.option.schedule_message.options.choose_custom_time'
-                        defaultMessage='Choose a custom time'
-                    />
-                }
+                labels={customTimeLabel}
             />
 
         </Menu.Container>
