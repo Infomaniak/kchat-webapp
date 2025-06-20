@@ -23,6 +23,7 @@ import type EmojiMap from 'utils/emoji_map';
 export interface AddEmojiProps {
     actions: {
         createCustomEmoji: (term: CustomEmoji, imageData: File) => Promise<ActionResult>;
+        refreshUsage: () => Promise<void>;
     };
     emojiMap: EmojiMap;
     user: UserProfile;
@@ -182,6 +183,7 @@ export default class AddEmoji extends React.PureComponent<AddEmojiProps, AddEmoj
         }
 
         const response = await actions.createCustomEmoji(emoji as CustomEmoji, image);
+        await actions.refreshUsage();
 
         if ('data' in response) {
             const savedEmoji = response as AddEmojiResponse;

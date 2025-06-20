@@ -13,6 +13,8 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
+import {getUsage} from 'actions/cloud';
+
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 
@@ -92,6 +94,8 @@ export function removeIncomingHook(hookId: string): ActionFuncAsync {
                 data: {id: hookId},
             },
         ]));
+
+        dispatch(getUsage);
 
         return {data: true};
     };
