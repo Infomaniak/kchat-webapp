@@ -20,15 +20,38 @@ jest.mock('selectors/local_storage', () => ({
     getPenultimateViewedChannelName: () => 'town-square',
 }));
 
+// IK: After a regression, we make sure the archive channel option is there
 describe('components/ChannelHeaderMenu/MenuItems/LeaveChannelTest', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    // IK: We removed the Mattermost archive channel button for non-archived and non-default channels
-    // as we handle archiving through IkLeaveChannelModal instead
+    test('should render archive channel menu item from a private channel', () => {
+        const channel = TestHelper.getChannelMock({
+            delete_at: 0,
+            type: 'P',
+        });
+        const user = TestHelper.getUserMock();
 
-    test('should not render archive channel menu item', () => {
+        renderWithContext(
+            <ChannelHeaderPublicMenu
+                channel={channel}
+                user={user}
+                isMuted={false}
+                isReadonly={false}
+                isDefault={false}
+                isMobile={false}
+                isFavorite={false}
+                isLicensedForLDAPGroups={false}
+                pluginItems={[]}
+            />,
+        );
+
+        const archiveMenuItem = screen.queryByText('Archive Channel');
+        expect(archiveMenuItem).toBeInTheDocument();
+    });
+
+    test('should render archive channel menu item from a public channel', () => {
         const channel = TestHelper.getChannelMock({
             delete_at: 0,
             type: 'O',
@@ -50,6 +73,6 @@ describe('components/ChannelHeaderMenu/MenuItems/LeaveChannelTest', () => {
         );
 
         const archiveMenuItem = screen.queryByText('Archive Channel');
-        expect(archiveMenuItem).not.toBeInTheDocument();
+        expect(archiveMenuItem).toBeInTheDocument();
     });
 });
