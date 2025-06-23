@@ -96,7 +96,6 @@ const mapCustomBadges = (badge: string) => (
 
         {/* @ts-expect-error webcomponent */}
         <wc-pill
-            class='test'
             slot='custom-badges'
             style={{
                 color: 'var(--wc-contact-sheet-pill-color)',
