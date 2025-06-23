@@ -45,5 +45,17 @@ export default function PriorityLabel({
         );
     }
 
+    if (priority === PostPriority.TRANSCRIPT) {
+        return (
+            <Tag
+                {...rest}
+                variant='transcript'
+                icon={'microphone'}
+                text={formatMessage({id: 'post_priority.priority.transcript', defaultMessage: 'post_priority.priority.transcript'})}
+                size='sm'
+            />
+        );
+    }
+
     return null;
 }
