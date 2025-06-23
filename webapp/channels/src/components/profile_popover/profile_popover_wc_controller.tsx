@@ -91,20 +91,18 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
 
 export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; hiddenOptions: string[];hiddenInformations: string[]};
 
-
 const mapCustomBadges = (badge: string) => (
     <>
 
         {/* @ts-expect-error webcomponent */}
         <wc-pill
-            class="test"
-            slot="custom-badges"
+            class='test'
+            slot='custom-badges'
             style={{
                 color: 'var(--wc-contact-sheet-pill-color)',
-                ['--wc-pill-background']: 'var(--wc-contact-sheet-pill-background-color)'
+                '--wc-pill-background': 'var(--wc-contact-sheet-pill-background-color)',
             }}
-            // style="--wc-pill-background: #13B4D0;color: #fff"
-            size="small"
+            size='small'
             round={true}
             prevent-removal={true}
         >
@@ -112,7 +110,7 @@ const mapCustomBadges = (badge: string) => (
             {/* @ts-expect-error webcomponent */}
         </wc-pill>
     </>
-)
+);
 
 export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     const {
