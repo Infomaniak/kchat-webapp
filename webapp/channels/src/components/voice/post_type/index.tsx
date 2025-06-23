@@ -21,7 +21,6 @@ import {
     useAudioPlayer,
 } from 'components/common/hooks/useAudioPlayer';
 import * as Menu from 'components/menu';
-import TranscriptSpinner from 'components/widgets/loading/loading_transcript_spinner';
 
 import {convertSecondsToMSS} from 'utils/datetime';
 
@@ -42,8 +41,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
         }
     }, [post?.metadata]);
 
-    const [isTranscript, toggleTranscript] = useReducer((state) => !state, true);
-    const [showFullTranscript, toggleFullTranscript] = useReducer((state) => !state, false);
+    const [isAudio, toggleAudio] = useReducer((state) => !state, true);
     const fileId = props.fileId ? props.fileId : post?.file_ids![0]; // There is always one file id for type voice.
     const transcript = (props.fileId || isLoading) ? null : post?.metadata?.files[0]?.transcript;
     const {formatMessage} = useIntl();
@@ -57,23 +55,14 @@ function VoiceMessageAttachmentPlayer(props: Props) {
         window.location.assign(getFileDownloadUrl(fileId));
     }
 
-    const handleTranscriptClick = () => {
-        if (typeof transcript === 'object') {
-            toggleTranscript();
-        }
+    const handleAudioClick = () => {
+        toggleAudio();
     };
 
-    const transcriptReady = (
+    const audioReady = (
         <FormattedMessage
-            id='vocals.transcript_title'
-            defaultMessage='Audio Transcript (auto-generated)'
-        />
-    );
-
-    const loadingMessage = (
-        <FormattedMessage
-            id='vocals.transcript_loading'
-            defaultMessage='Audio transcription in progress..'
+            id='vocals.title'
+            defaultMessage='Audio'
         />
     );
 
@@ -82,25 +71,20 @@ function VoiceMessageAttachmentPlayer(props: Props) {
             key='toggle'
             className='style--none single-image-view__toggle'
             aria-label='Toggle Embed Visibility'
-            onClick={toggleTranscript}
+            onClick={(e) => {
+                e.stopPropagation();
+                toggleAudio();
+            }}
         >
-            {!props.fileId && (
-                isLoading ? (
-                    <div style={{paddingRight: '3px'}}>
-                        <TranscriptSpinner/>
-                    </div>
-                ) : (
-                    <span className={classNames('icon', isTranscript ? 'icon-menu-down' : 'icon-menu-right')}/>
-                )
-            )}
+            <span className={classNames('icon', isAudio ? 'icon-menu-down' : 'icon-menu-right')}/>
         </button>
     );
 
-    const transcriptHeader = (
-        ((!props.isPreview && transcript?.text?.length !== 0 && transcript?.text?.length !== undefined) || (isLoading && !props.isPreview)) && (
+    const audioHeader = (
+        (!props.isPreview) && (
             <div
-                className='image-header transcript'
-                onClick={handleTranscriptClick}
+                className='image-header vocal'
+                onClick={handleAudioClick}
             >
                 {toggle}
                 <div
@@ -110,11 +94,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                     <div id='image-name-text'>
                         {props.isPreview ? null : (
                             <>
-                                {isLoading && !props.fileId ? (
-                                    loadingMessage
-                                ) : (
-                                    transcriptReady
-                                )}
+                                {audioReady}
                             </>
                         )}
                     </div>
@@ -125,128 +105,106 @@ function VoiceMessageAttachmentPlayer(props: Props) {
 
     return (
         <>
-            <div className='post-image__column post-image__column--audio'>
-                <div className='post-image__thumbnail'>
-                    <div
-                        className='post-image__icon-background'
-                        onClick={togglePlayPause}
-                    >
-                        {playerState === AudioPlayerState.Playing ? (
-                            <PauseIcon
-                                size={24}
-                                color='var(--button-bg)'
-                            />
-                        ) : (
-                            <PlayIcon
-                                size={24}
-                                color='var(--button-bg)'
-                            />
-                        )}
-                    </div>
-                </div>
-                <div className='post-image__details'>
-                    <div className='post-image__detail_wrapper'>
-                        <div className='post-image__detail'>
-                            <div className='temp__audio-seeker'>
-                                <progress
-                                    value={progressValue}
-                                    max='1'
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className='post-image__elapsed-time'>
-                        {playerState === AudioPlayerState.Playing || playerState === AudioPlayerState.Paused ? convertSecondsToMSS(elapsed) : convertSecondsToMSS(duration)}
-                    </div>
-                    {props.post && (
-                        <Menu.Container
-                            menu={{id: 'dropdown-menu-dotmenu',
-                                transformOrigin: {
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                },
-                                anchorOrigin: {
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                },
-                            }}
-                            menuButton={{
-                                id: 'post-image-end-button',
-                                'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}),
-                                class: 'post-image__end-button',
-                                children: (
-                                    <DotsVerticalIcon
-                                        size={18}
-                                        color='currentColor'
-                                    />),
-                            }}
-                        >
-                            <Menu.Item
-                                id={`download_${post?.id}`}
-                                leadingElement={(
-                                    <DownloadOutlineIcon
-                                        size={18}
-                                        color='currentColor'
-                                    />)}
-                                labels={(
-                                    <FormattedMessage
-                                        id='single_image_view.download_tooltip'
-                                        defaultMessage='Download'
-                                    />
-                                )}
-                                onClick={downloadFile}
-                            />
-                        </Menu.Container>
-                    )}
-                    {props.isPreview && (
-                        <button
-                            className='post-image__end-button'
-                            onClick={props.onCancel}
-                        >
-                            <CloseIcon
-                                size={18}
-                                color='currentColor'
-                            />
-                        </button>
-                    )}
-                </div>
-            </div>
             <div>
                 <div>
-                    <div className='file-view--single'>
-                        <div className='file__image'>
-                            {transcriptHeader}
-                        </div>
-                    </div>
                     {!props.isPreview && !isLoading && (
                         <div >
                             <>
-                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && isTranscript && (
+                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && (
                                     <div style={{paddingTop: '5px'}}>
-                                        {showFullTranscript || transcript.text.length <= 300 ? (
-                                            `${transcript.text} `
-                                        ) : (
-                                            <>
-                                                {`${transcript.text.substring(0, 300)}... `}
-                                                <a
-                                                    onClick={() => {
-                                                        toggleFullTranscript();
-                                                    }}
-                                                >
-                                                    <FormattedMessage
-                                                        id={'vocals.loading_transcript'}
-                                                        defaultMessage={'Afficher plus'}
-                                                    />
-                                                </a>
-                                            </>
-                                        )}
+                                        {`${transcript.text} `}
                                     </div>
                                 )}
                             </>
                         </div>
-                    ) }
+                    )}
                 </div>
             </div>
+            <div className='file-view--single'>
+                <div className='file__image'>
+                    {audioHeader}
+                </div>
+            </div>
+            {isAudio && (
+                <div className='post-image__column post-image__column--audio'>
+                    <div className='post-image__thumbnail'>
+                        <div
+                            className='post-image__icon-background'
+                            onClick={togglePlayPause}
+                        >
+                            {playerState === AudioPlayerState.Playing ? (
+                                <PauseIcon
+                                    size={24}
+                                    color='var(--button-bg)'
+                                />
+                            ) : (
+                                <PlayIcon
+                                    size={24}
+                                    color='var(--button-bg)'
+                                />
+                            )}
+                        </div>
+                    </div>
+                    <div className='post-image__details'>
+                        <div className='post-image__detail_wrapper'>
+                            <div className='post-image__detail'>
+                                <div className='temp__audio-seeker'>
+                                    <progress
+                                        value={progressValue}
+                                        max='1'
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className='post-image__elapsed-time'>
+                            {playerState === AudioPlayerState.Playing || playerState === AudioPlayerState.Paused ? convertSecondsToMSS(elapsed) : convertSecondsToMSS(duration)}
+                        </div>
+                        {props.post && (
+                            <Menu.Container
+                                menu={{id: 'dropdown-menu-dotmenu'}}
+                                menuButton={{
+                                    id: 'post-image-end-button',
+                                    'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'}),
+                                    class: 'post-image__end-button',
+                                    children: (
+                                        <DotsVerticalIcon
+                                            size={18}
+                                            color='currentColor'
+                                        />),
+                                }}
+                            >
+                                <></>
+                                <Menu.Item
+                                    id={`download_${post?.id}`}
+                                    leadingElement={(
+                                        <DownloadOutlineIcon
+                                            size={18}
+                                            color='currentColor'
+                                        />)}
+                                    labels={(
+                                        <FormattedMessage
+                                            id='single_image_view.download_tooltip'
+                                            defaultMessage='Download'
+                                        />
+                                    )}
+                                    onClick={downloadFile}
+                                />
+                            </Menu.Container>
+                        )}
+                        {props.isPreview && (
+                            <button
+                                className='post-image__end-button'
+                                onClick={props.onCancel}
+                            >
+                                <CloseIcon
+                                    size={18}
+                                    color='currentColor'
+                                />
+                            </button>
+                        )}
+                    </div>
+                </div>
+            )}
         </>
     );
 }

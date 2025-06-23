@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import { TranscriptData } from "./transcript";
+import type {TranscriptData} from './transcript';
 
 export type FileInfo = {
     id: string;
