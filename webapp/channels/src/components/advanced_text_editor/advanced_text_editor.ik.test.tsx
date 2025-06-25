@@ -8,21 +8,18 @@ import type {Channel} from '@mattermost/types/channels';
 import Permissions from 'mattermost-redux/constants/permissions';
 import * as channelSelectors from 'mattermost-redux/selectors/entities/channels';
 
-import {removeDraft, updateDraft} from 'actions/views/drafts';
-
 import type {FileUpload} from 'components/file_upload/file_upload';
 import type Textbox from 'components/textbox/textbox';
 
-import Constants, {Locations, StoragePrefixes} from 'utils/constants';
+import {StoragePrefixes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import {renderWithContext, userEvent, screen} from 'tests/react_testing_utils';
+import {renderWithContext} from 'tests/react_testing_utils';
 
 import type {PostDraft} from 'types/store/draft';
 
 import AdvancedTextEditor from './advanced_text_editor';
-import type {Props} from './advanced_text_editor';
 
 jest.mock('actions/views/drafts', () => ({
     ...jest.requireActual('actions/views/drafts'),
@@ -37,9 +34,6 @@ jest.mock('mattermost-redux/selectors/entities/channels', () => {
         getMyChannelMembership: jest.fn(),
     };
 });
-
-const mockedRemoveDraft = jest.mocked(removeDraft);
-const mockedUpdateDraft = jest.mocked(updateDraft);
 
 jest.mock('wasm-media-encoders', () => ({
     createEncoder: jest.fn(),
@@ -202,7 +196,7 @@ const baseProps = {
 
 describe('components/avanced_text_editor/advanced_text_editor', () => {
     it('should show join channel banner if not a member', () => {
-        channelSelectors.getMyChannelMembership.mockReturnValue(false);
+        (channelSelectors.getMyChannelMembership as jest.Mock).mockReturnValue(false);
         const {container} = renderWithContext(
             <AdvancedTextEditor
                 {...baseProps}
@@ -228,7 +222,7 @@ describe('components/avanced_text_editor/advanced_text_editor', () => {
     });
 
     it('should NOT show join channel banner if user is member', () => {
-        channelSelectors.getMyChannelMembership.mockReturnValue(true);
+        (channelSelectors.getMyChannelMembership as jest.Mock).mockReturnValue(true);
 
         const {container} = renderWithContext(
             <AdvancedTextEditor

@@ -57,6 +57,7 @@ jest.mock('mattermost-redux/selectors/entities/preferences', () => {
 });
 
 describe('loadConfigAndMe', () => {
+    // eslint-disable-next-line no-only-tests/no-only-tests
     test.skip('loadConfigAndMe, without user logged in', async () => {
         const testStore = mockStore({});
 

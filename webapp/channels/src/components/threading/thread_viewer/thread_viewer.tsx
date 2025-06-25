@@ -16,8 +16,6 @@ import FileUploadOverlay from 'components/file_upload_overlay';
 import {DropOverlayIdThreads} from 'components/file_upload_overlay/file_upload_overlay';
 import LoadingScreen from 'components/loading_screen';
 
-import WebSocketClient from 'client/web_websocket_client';
-
 import type {FakePost} from 'types/store/rhs';
 
 import ThreadViewerVirtualized from '../virtualized_thread_viewer';

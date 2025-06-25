@@ -16,7 +16,7 @@ import {getChannel, makeGetChannel, getDirectChannel, getMyChannelMembership} fr
 import {getConfig, getFeatureFlagValue} from 'mattermost-redux/selectors/entities/general';
 import {get, getBool, getInt} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentUserId, isCurrentUserGuestUser, getStatusForUserId, makeGetDisplayName} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId, isCurrentUserGuestUser, makeGetDisplayName} from 'mattermost-redux/selectors/entities/users';
 
 import * as GlobalActions from 'actions/global_actions';
 import type {CreatePostOptions} from 'actions/post_actions';
@@ -56,7 +56,6 @@ import Constants, {
     StoragePrefixes,
     Preferences,
     AdvancedTextEditor as AdvancedTextEditorConst,
-    UserStatuses,
     ModalIdentifiers,
     AdvancedTextEditorTextboxIds,
 } from 'utils/constants';
@@ -180,7 +179,6 @@ const AdvancedTextEditor = ({
     });
     const teammateId = useSelector((state: GlobalState) => getDirectChannel(state, channelId)?.teammate_id || '');
     const teammateDisplayName = useSelector((state: GlobalState) => (teammateId ? getDisplayName(state, teammateId) : ''));
-    const showDndWarning = useSelector((state: GlobalState) => (teammateId ? getStatusForUserId(state, teammateId) === UserStatuses.DND : false));
     const selectedPostFocussedAt = useSelector((state: GlobalState) => getSelectedPostFocussedAt(state));
 
     const canPost = useSelector((state: GlobalState) => {
