@@ -2494,6 +2494,7 @@
   "adminConsole.list.table.rowsCount.100": "100",
   "adminConsole.list.table.rowsCount.20": "20",
   "adminConsole.list.table.rowsCount.50": "50",
+  "advanced_text_editor.remote_user_hour": "L'heure pour {user} est {time}",
   "admin_settings.save_unsaved_changes": "Veuillez sauvegarder vos changements en cours",
   "air_gapped_modal.close": "Fermer",
   "air_gapped_modal.description": "Pour commencer votre essai, rendez-vous sur {link} et demander une clé d’essai.",
