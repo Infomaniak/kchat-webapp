@@ -13,18 +13,18 @@ export function useCategoryCreationWithLimitation(props: {onClick: () => void}) 
     };
     const packaName = useSelector(getCurrentPackName);
     const {sidebar_categories: remainingCategoryNegative} = useGetUsageDeltas();
-    const available = remainingCategoryNegative < 0 && packaName === 'ksuite_essential';
+    const available = packaName !== 'ksuite_essential' || remainingCategoryNegative < 0;
     const onClick = available ? props.onClick : openUpgradePopupOpen;
 
     let OptionalUpgradeButton = null;
     if (!available) {
         OptionalUpgradeButton = (
-            <wc-ksuite-modal-conversion
+            <wc-ksuite-pro-upgrade-dialog
                 ref={modalRef}
-                modalType='standard'
+                offer='standard'
             >
-                <wc-modal-conversion-tag/>
-            </wc-ksuite-modal-conversion>
+                <wc-ksuite-pro-upgrade-tag slot='trigger-element'/>
+            </wc-ksuite-pro-upgrade-dialog>
         );
     }
 
