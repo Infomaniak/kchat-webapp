@@ -14,7 +14,7 @@ export default function UnsupportedNotificationAnnouncementBar() {
     const [show, setShow] = useState(!BrowserStore.getHideNotificationPermissionRequestBanner());
 
     const handleClick = useCallback(async () => {
-        window.open('https://mattermost.com/pl/pc-web-requirements', '_blank', 'noopener,noreferrer');
+        window.open('https://www.infomaniak.com/fr/support/faq/1025', '_blank', 'noopener,noreferrer');
     }, []);
 
     const handleClose = useCallback(() => {
