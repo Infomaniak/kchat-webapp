@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React, {useCallback, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import BrowserStore from 'stores/browser_store';
 
@@ -12,9 +12,10 @@ import {AnnouncementBarTypes} from 'utils/constants';
 
 export default function UnsupportedNotificationAnnouncementBar() {
     const [show, setShow] = useState(!BrowserStore.getHideNotificationPermissionRequestBanner());
+    const {locale} = useIntl();
 
     const handleClick = useCallback(async () => {
-        window.open('https://www.infomaniak.com/fr/support/faq/1025', '_blank', 'noopener,noreferrer');
+        window.open(`https://www.infomaniak.com/${locale}/support/faq/1025`, '_blank', 'noopener,noreferrer');
     }, []);
 
     const handleClose = useCallback(() => {
