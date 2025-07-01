@@ -51,7 +51,7 @@ export default function PriorityLabel({
                 {...rest}
                 variant='transcript'
                 icon={'microphone'}
-                text={formatMessage({id: 'post_priority.priority.transcript', defaultMessage: 'post_priority.priority.transcript'})}
+                text={formatMessage({id: 'post_priority.priority.transcript', defaultMessage: 'Automatically transcribed'})}
                 size='sm'
             />
         );

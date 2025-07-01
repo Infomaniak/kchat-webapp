@@ -25,6 +25,8 @@ import TranscriptSpinner from 'components/widgets/loading/loading_transcript_spi
 
 import {convertSecondsToMSS} from 'utils/datetime';
 
+import {isValidTranscript} from './utils';
+
 export interface Props {
     post?: Post;
     isPreview?: boolean;
@@ -35,15 +37,6 @@ export interface Props {
 function VoiceMessageAttachmentPlayer(props: Props) {
     const {post} = props;
     const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const transcript = post?.metadata?.files?.[0]?.transcript;
-
-        if (transcript && typeof transcript.text === 'string') {
-            setIsLoading(false);
-        }
-    }, [post?.metadata]);
-
     const [isAudio, toggleAudio] = useReducer((state) => !state, false);
     const [showFullTranscript, toggleFullTranscript] = useReducer((state) => !state, false);
     const fileId = props.fileId ? props.fileId : post?.file_ids![0]; // There is always one file id for type voice.
@@ -52,16 +45,20 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     const {playerState, duration, elapsed, togglePlayPause} = useAudioPlayer(fileId ? `/api/v4/files/${fileId}` : '');
     const progressValue = elapsed === 0 || duration === 0 ? '0' : (elapsed / duration).toFixed(2);
 
+    useEffect(() => {
+        const transcript = post?.metadata?.files?.[0]?.transcript;
+
+        if (isValidTranscript(transcript)) {
+            setIsLoading(false);
+        }
+    }, [post?.metadata]);
+
     function downloadFile() {
         if (!fileId) {
             return;
         }
         window.location.assign(getFileDownloadUrl(fileId));
     }
-
-    const handleAudioClick = () => {
-        toggleAudio();
-    };
 
     const loadingMessage = (
         <FormattedMessage
@@ -73,7 +70,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     const showVocalMessage = (
         <FormattedMessage
             id='vocals.show'
-            defaultMessage='Ecouter le message'
+            defaultMessage='Listen to the message'
         />
     );
 
@@ -136,7 +133,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
         (!props.isPreview) && (
             <div
                 className='image-header transcript'
-                onClick={handleAudioClick}
+                onClick={toggleAudio}
             >
                 {toggleVocal}
                 <div
@@ -167,7 +164,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                     {!props.isPreview && !isLoading && (
                         <div >
                             <>
-                                {typeof transcript === 'object' && transcript && transcript.text && transcript.text.length !== 0 && (
+                                {isValidTranscript(transcript) && (
                                     <div style={{paddingTop: '5px'}}>
                                         {showFullTranscript || transcript.text.length <= 300 ? (
                                             `${transcript.text} `
@@ -246,22 +243,24 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                                         />),
                                 }}
                             >
-                                <></>
-                                <Menu.Item
-                                    id={`download_${post?.id}`}
-                                    leadingElement={(
-                                        <DownloadOutlineIcon
-                                            size={18}
-                                            color='currentColor'
-                                        />)}
-                                    labels={(
-                                        <FormattedMessage
-                                            id='single_image_view.download_tooltip'
-                                            defaultMessage='Download'
-                                        />
-                                    )}
-                                    onClick={downloadFile}
-                                />
+                                {[
+                                    <Menu.Item
+                                        key={`download_${post?.id}`}
+                                        id={`download_${post?.id}`}
+                                        leadingElement={(
+                                            <DownloadOutlineIcon
+                                                size={18}
+                                                color='currentColor'
+                                            />)}
+                                        labels={(
+                                            <FormattedMessage
+                                                id='single_image_view.download_tooltip'
+                                                defaultMessage='Download'
+                                            />
+                                        )}
+                                        onClick={downloadFile}
+                                    />]
+                                }
                             </Menu.Container>
                         )}
                         {props.isPreview && (
