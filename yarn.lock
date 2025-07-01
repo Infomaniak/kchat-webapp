@@ -12178,6 +12178,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-formatter-gitlab@npm:4.0.0":
+  version: 4.0.0
+  resolution: "eslint-formatter-gitlab@npm:4.0.0"
+  dependencies:
+    chalk: "npm:^4.0.0"
+    yaml: "npm:^2.0.0"
+  peerDependencies:
+    eslint: ^5 || ^6 || ^7 || ^8
+  checksum: 10/e8795691c63401ca7bfdd6a0d878d7aa9d4cc9cdd3c23a6717540f37411ce4fda9ef9822f55deead5b45c8083346e62b25819d3f861ace3424fb24d982fb9ddd
+  languageName: node
+  linkType: hard
+
 "eslint-import-resolver-node@npm:^0.3.9":
   version: 0.3.9
   resolution: "eslint-import-resolver-node@npm:0.3.9"
@@ -18019,6 +18031,7 @@ __metadata:
     enzyme-adapter-react-17-updated: "npm:1.0.2"
     enzyme-to-json: "npm:3.6.2"
     eslint: "npm:8.57.0"
+    eslint-formatter-gitlab: "npm:4.0.0"
     eslint-import-resolver-webpack: "npm:0.13.8"
     eslint-plugin-formatjs: "npm:4.12.2"
     eslint-plugin-header: "npm:^3.1.1"
