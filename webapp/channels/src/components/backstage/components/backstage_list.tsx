@@ -18,6 +18,7 @@ type Props = {
     header: ReactNode;
     addLink?: string;
     addText?: ReactNode;
+    addTextKey?: string;
     isCapped: boolean;
     addButtonId?: string;
     emptyText?: ReactNode;
@@ -114,11 +115,15 @@ const BackstageList = (remainingProps: Props) => {
 
     if (remainingProps.addLink && remainingProps.addText) {
         if (remainingProps.isCapped) {
+            const rawText = formatMessage({id: remainingProps.addTextKey});
+
             addLink = (
-                <wc-modal-conversion-upgrade-button
-                    size='standard'
-                    buttonText={remainingProps.addText}
-                />
+                <wc-ksuite-pro-upgrade-dialog offer='business'>
+                    <wc-ksuite-pro-upgrade-button
+                        slot='trigger-element'
+                        button-text={rawText}
+                    />
+                </wc-ksuite-pro-upgrade-dialog>
             );
         } else {
             addLink = (

@@ -21,8 +21,8 @@ describe('Plan Navigation', () => {
     it.each([
         ['ksuite_essential', 'standard'],
         ['ksuite_standard', 'business'],
-        ['ksuite_pro', 'enterprise'],
-        ['ksuite_entreprise', 'enterprise'],
+        ['ksuite_pro', 'entreprise'],
+        ['ksuite_entreprise', 'entreprise'],
     ] as Array<[PackName, ReturnType<typeof getNextWcPackName>]>)(
         'getNextWcPlan(%s) → %s',
         (input, expected) => {

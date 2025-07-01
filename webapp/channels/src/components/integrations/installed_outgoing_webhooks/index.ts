@@ -8,6 +8,7 @@ import type {Dispatch} from 'redux';
 import * as Actions from 'mattermost-redux/actions/integrations';
 import {Permissions} from 'mattermost-redux/constants';
 import {getAllChannels} from 'mattermost-redux/selectors/entities/channels';
+import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getOutgoingHooks} from 'mattermost-redux/selectors/entities/integrations';
 import {haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -32,7 +33,8 @@ function mapStateToProps(state: GlobalState) {
         filter((outgoingWebhook) => outgoingWebhook.team_id === teamId);
     const enableOutgoingWebhooks = config.EnableOutgoingWebhooks === 'true';
     const usage = getUsage(state);
-    const isCapped = usage.outgoing_webhooks > 0;
+    const limits = getCloudLimits(state);
+    const isCapped = (usage.outgoing_webhooks - limits.outgoing_webhooks) >= 0;
 
     return {
         outgoingWebhooks,
@@ -51,7 +53,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             loadOutgoingHooksAndProfilesForTeam,
             removeOutgoingHook: Actions.removeOutgoingHook,
             regenOutgoingHookToken: Actions.regenOutgoingHookToken,
-            refreshUsage: getUsageAction(),
+            refreshUsage: getUsageAction,
         }, dispatch),
     };
 }

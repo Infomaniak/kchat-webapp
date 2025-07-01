@@ -274,6 +274,7 @@ const state: GlobalState = {
             incoming_webhooks: 0,
             outgoing_webhooks: 0,
             sidebar_categories: 0,
+            scheduled_draft_custom_date: 0,
         },
         insights: {
             topReactions: {},

@@ -60,22 +60,30 @@ export default function EmojiPage({
 
     let action = null;
     if (isCapped) {
-        action = <wc-modal-conversion-upgrade-button size='standard'/>;
-    } else {
-        action = (<Link
-            className='add-link'
-            to={'/' + teamName + '/emoji/add'}
-        >
-            <button
-                type='button'
-                className='btn btn-primary'
-            >
-                <FormattedMessage
-                    id='emoji_list.add'
-                    defaultMessage='Add Custom Emoji'
+        const label = intl.formatMessage({id: 'emoji_list.add'});
+        action = (
+            <wc-ksuite-pro-upgrade-dialog offer='business'>
+                <wc-ksuite-pro-upgrade-button
+                    slot='trigger-element'
+                    button-text={label}
                 />
-            </button>
-        </Link>);
+            </wc-ksuite-pro-upgrade-dialog>);
+    } else {
+        action = (
+            <Link
+                className='add-link'
+                to={'/' + teamName + '/emoji/add'}
+            >
+                <button
+                    type='button'
+                    className='btn btn-primary'
+                >
+                    <FormattedMessage
+                        id='emoji_list.add'
+                        defaultMessage='Add Custom Emoji'
+                    />
+                </button>
+            </Link>);
     }
 
     return (

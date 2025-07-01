@@ -1,15 +1,11 @@
-import {useRef} from 'react';
+import {useSelector} from 'react-redux';
 
-import type {PackFeatureConfig} from 'mattermost-redux/utils/getPackLimitedFeature';
-import {getPackLimitedFeature} from 'mattermost-redux/utils/getPackLimitedFeature';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
+import {getNextWcPackName} from 'mattermost-redux/utils/plans_util';
 
-export function usePackLimitedFeature<T>(config: Omit<PackFeatureConfig<T>, 'modalRef'>) {
-    const modalRef = useRef<any>(null);
+export function useNextPlan() {
+    const currentPack = useSelector(getCurrentPackName);
+    const nextPlan = getNextWcPackName(currentPack);
 
-    const {onClick, Label, Modal} = getPackLimitedFeature({
-        ...config,
-        modalRef,
-    });
-
-    return {onClick, Label, OptionalUpgradeModal: Modal, modalRef};
+    return nextPlan;
 }

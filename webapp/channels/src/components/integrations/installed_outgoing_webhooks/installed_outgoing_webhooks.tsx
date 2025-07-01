@@ -121,7 +121,9 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
     };
 
     removeOutgoingHook = (outgoingWebhook: OutgoingWebhook) => {
-        this.props.actions.removeOutgoingHook(outgoingWebhook.id).then(this.props.actions.refreshUsage);
+        this.props.actions.removeOutgoingHook(outgoingWebhook.id).then(() => {
+            this.props.actions.refreshUsage();
+        });
     };
 
     outgoingWebhookCompare = (a: OutgoingWebhook, b: OutgoingWebhook) => {
@@ -182,6 +184,7 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
                         defaultMessage='Add Outgoing Webhook'
                     />
                 }
+                addTextKey='installed_outgoing_webhooks.add'
                 addLink={
                     '/' +
                     this.props.team.name +

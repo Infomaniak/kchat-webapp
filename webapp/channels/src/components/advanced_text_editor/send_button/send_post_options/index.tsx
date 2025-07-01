@@ -2,18 +2,20 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
 import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
-import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
+import {limitHelper} from 'mattermost-redux/utils/plans_util';
 
 import {openModal} from 'actions/views/modals';
 
 import CoreMenuOptions from 'components/advanced_text_editor/send_button/send_post_options/core_menu_options';
+import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
+import {useNextPlan} from 'components/common/hooks/usePackLimitedFeature';
 import * as Menu from 'components/menu';
 
 import {ModalIdentifiers} from 'utils/constants';
@@ -63,35 +65,27 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
         }));
     }, [channelId, dispatch, handleSelectCustomTime]);
 
-    const currentPack = useSelector(getCurrentPackName);
-    const isAvailable = currentPack !== 'ksuite_essential';
-
-    const modalRef = useRef(null);
-    let customTimeOnClick = null;
-    let customTimeLabel = null;
-    if (isAvailable) {
-        customTimeOnClick = handleChooseCustomTime;
-        customTimeLabel = (<FormattedMessage
+    const allowed = (
+        <FormattedMessage
             id='create_post_button.option.schedule_message.options.choose_custom_time'
             defaultMessage='Choose a custom time'
-        />);
-    } else {
-        customTimeOnClick = () => modalRef.current?.open();
-        customTimeLabel = (
-            <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
-                <FormattedMessage
-                    id='create_post_button.option.schedule_message.options.choose_custom_time'
-                    defaultMessage='Choose a custom time'
-                />
-                <wc-ksuite-modal-conversion
-                    ref={modalRef}
-                    modalType='standard'
-                >
-                    <wc-modal-conversion-tag/>
-                </wc-ksuite-modal-conversion>
-            </span>
-        );
-    }
+        />
+    );
+
+    const nextPlan = useNextPlan();
+    const forbidden = (
+        <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
+            <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
+                <p slot='trigger-element'>
+                    {allowed}
+                    <wc-ksuite-pro-upgrade-tag/>
+                </p>
+            </wc-ksuite-pro-upgrade-dialog>
+        </span>
+    );
+
+    const {scheduled_draft_custom_date: scheduledDraftCustomDate} = useGetUsageDeltas();
+    const {component, onClick} = limitHelper(scheduledDraftCustomDate, allowed, forbidden, handleChooseCustomTime);
 
     return (
         <Menu.Container
@@ -142,9 +136,9 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
             <Menu.Separator/>
 
             <Menu.Item
-                onClick={customTimeOnClick}
+                onClick={onClick}
                 key={'choose_custom_time'}
-                labels={customTimeLabel}
+                labels={component}
             />
 
         </Menu.Container>

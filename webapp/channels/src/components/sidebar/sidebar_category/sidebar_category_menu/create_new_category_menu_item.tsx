@@ -7,10 +7,13 @@ import {useDispatch} from 'react-redux';
 
 import {FolderPlusOutlineIcon} from '@mattermost/compass-icons/components';
 
+import {limitHelper} from 'mattermost-redux/utils/plans_util';
+
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
-import {useCategoryCreationWithLimitation} from 'components/common/hooks/useNewCategoryQuota';
+import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
+import {useNextPlan} from 'components/common/hooks/usePackLimitedFeature';
 import EditCategoryModal from 'components/edit_category_modal';
 import * as Menu from 'components/menu';
 
@@ -33,7 +36,27 @@ const CreateNewCategoryMenuItem = ({
         trackEvent('ui', 'ui_sidebar_category_menu_createCategory');
     }, [dispatch]);
 
-    const {onClick, OptionalUpgradeButton} = useCategoryCreationWithLimitation({onClick: handleCreateCategory});
+    const allowed = (
+        <FormattedMessage
+            id='sidebar_left.sidebar_category_menu.createCategory'
+            defaultMessage='Create New Category'
+        />
+    );
+
+    const nextPlan = useNextPlan();
+    const forbidden = (
+        <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
+            <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
+                <p slot='trigger-element'>
+                    {allowed}
+                    <wc-ksuite-pro-upgrade-tag/>
+                </p>
+            </wc-ksuite-pro-upgrade-dialog>
+        </span>
+    );
+    const {sidebar_categories: sidebarCategories} = useGetUsageDeltas();
+
+    const {component, onClick} = limitHelper(sidebarCategories, allowed, forbidden, handleCreateCategory);
 
     return (
         <Menu.Item
@@ -41,16 +64,7 @@ const CreateNewCategoryMenuItem = ({
             onClick={onClick}
             aria-haspopup={true}
             leadingElement={<FolderPlusOutlineIcon size={18}/>}
-            labels={(
-                <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
-                    <FormattedMessage
-                        id='sidebar_left.sidebar_category_menu.createCategory'
-                        defaultMessage='Create New Category'
-                    />
-                    {OptionalUpgradeButton}
-                </span>
-
-            )}
+            labels={component}
             {...otherProps}
         />
     );

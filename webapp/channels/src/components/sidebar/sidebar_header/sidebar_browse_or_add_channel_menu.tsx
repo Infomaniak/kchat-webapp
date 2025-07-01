@@ -14,8 +14,10 @@ import {
 } from '@mattermost/compass-icons/components';
 
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {limitHelper} from 'mattermost-redux/utils/plans_util';
 
-import {useCategoryCreationWithLimitation} from 'components/common/hooks/useNewCategoryQuota';
+import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
+import {useNextPlan} from 'components/common/hooks/usePackLimitedFeature';
 import * as Menu from 'components/menu';
 import {OnboardingTourSteps} from 'components/tours';
 import {useShowOnboardingTutorialStep, CreateAndJoinChannelsTour} from 'components/tours/onboarding_tour';
@@ -49,7 +51,27 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         getHistory().push(`/${currentTeam?.name}/integrations`);
     };
 
-    const {onClick: onNewCategoryClick, OptionalUpgradeButton} = useCategoryCreationWithLimitation({onClick: props.onCreateNewCategoryClick});
+    const {sidebar_categories: sidebarCategories} = useGetUsageDeltas();
+
+    const allowed = (
+        <FormattedMessage
+            id='sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel'
+            defaultMessage='Create new category'
+        />
+    );
+
+    const nextPlan = useNextPlan();
+    const forbidden = (
+        <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
+            <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
+                <p slot='trigger-element'>
+                    {allowed}
+                    <wc-ksuite-pro-upgrade-tag/>
+                </p>
+            </wc-ksuite-pro-upgrade-dialog>
+        </span>
+    );
+    const {component, onClick} = limitHelper(sidebarCategories, allowed, forbidden, props.onCreateNewCategoryClick);
 
     let createNewChannelMenuItem: JSX.Element | null = null;
     if (props.canCreateChannel) {
@@ -122,17 +144,9 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         createNewCategoryMenuItem = (
             <Menu.Item
                 id='createCategoryMenuItem'
-                onClick={onNewCategoryClick}
+                onClick={onClick}
                 leadingElement={<FolderPlusOutlineIcon size={18}/>}
-                labels={(
-                    <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
-                        <FormattedMessage
-                            id='sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel'
-                            defaultMessage='Create new category'
-                        />
-                        {OptionalUpgradeButton}
-                    </span>
-                )}
+                labels={component}
             />
         );
     }

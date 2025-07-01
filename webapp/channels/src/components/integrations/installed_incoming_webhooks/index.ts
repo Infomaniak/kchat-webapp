@@ -10,6 +10,7 @@ import type {GlobalState} from '@mattermost/types/store';
 import {removeIncomingHook} from 'mattermost-redux/actions/integrations';
 import {Permissions} from 'mattermost-redux/constants';
 import {getAllChannels} from 'mattermost-redux/selectors/entities/channels';
+import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getFilteredIncomingHooks, getIncomingHooksTotalCount} from 'mattermost-redux/selectors/entities/integrations';
 import {haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -30,7 +31,8 @@ function mapStateToProps(state: GlobalState) {
     const canManageOthersWebhooks = haveITeamPermission(state, teamId, Permissions.MANAGE_OTHERS_INCOMING_WEBHOOKS);
     const enableIncomingWebhooks = config.EnableIncomingWebhooks === 'true';
     const usage = getUsage(state);
-    const isCapped = usage.incoming_webhooks > 0;
+    const limits = getCloudLimits(state);
+    const isCapped = (usage.incoming_webhooks - limits.incoming_webhooks) >= 0;
 
     return {
         incomingHooks,

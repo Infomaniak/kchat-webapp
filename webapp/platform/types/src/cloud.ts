@@ -204,6 +204,7 @@ export interface CloudUsage {
     incoming_webhooks: number;
     outgoing_webhooks: number;
     sidebar_categories: number;
+    scheduled_draft_custom_date: number;
 
 }
 
