@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux';
 
 import {FolderPlusOutlineIcon} from '@mattermost/compass-icons/components';
 
-import {limitHelper} from 'mattermost-redux/utils/plans_util';
+import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
@@ -36,7 +36,7 @@ const CreateNewCategoryMenuItem = ({
         trackEvent('ui', 'ui_sidebar_category_menu_createCategory');
     }, [dispatch]);
 
-    const allowed = (
+    const enabled = (
         <FormattedMessage
             id='sidebar_left.sidebar_category_menu.createCategory'
             defaultMessage='Create New Category'
@@ -44,25 +44,28 @@ const CreateNewCategoryMenuItem = ({
     );
 
     const nextPlan = useNextPlan();
-    const forbidden = (
-        <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
-            <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-                <p slot='trigger-element'>
-                    {allowed}
-                    <wc-ksuite-pro-upgrade-tag/>
-                </p>
-            </wc-ksuite-pro-upgrade-dialog>
-        </span>
+    const disabled = (
+        <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
+            <div
+                slot='trigger-element'
+                style={{display: 'flex', alignItems: 'center', gap: '8px'}}
+            >
+                {enabled}
+                <wc-ksuite-pro-upgrade-tag/>
+            </div>
+        </wc-ksuite-pro-upgrade-dialog>
+
     );
     const {sidebar_categories: sidebarCategories} = useGetUsageDeltas();
 
-    const {component, onClick} = limitHelper(sidebarCategories, allowed, forbidden, handleCreateCategory);
+    const {component, onClick} = isQuotaExceeded(sidebarCategories, enabled, disabled, handleCreateCategory);
 
     return (
         <Menu.Item
             id={`create-${id}`}
             onClick={onClick}
-            aria-haspopup={true}
+            aria-haspopup={sidebarCategories >= 0}
+            aria-expanded={sidebarCategories >= 0}
             leadingElement={<FolderPlusOutlineIcon size={18}/>}
             labels={component}
             {...otherProps}

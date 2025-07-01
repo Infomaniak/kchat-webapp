@@ -6,6 +6,7 @@ import type {ChangeEvent, ReactNode} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {Link} from 'react-router-dom';
 
+import {useNextPlan} from 'components/common/hooks/usePackLimitedFeature';
 import LoadingScreen from 'components/loading_screen';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
@@ -53,6 +54,8 @@ const getPaging = (remainingProps: Props, childCount: number, hasFilter: boolean
 
 const BackstageList = (remainingProps: Props) => {
     const {formatMessage} = useIntl();
+
+    const nextPlan = useNextPlan();
 
     const [filter, setFilter] = useState('');
     const updateFilter = (e: ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
@@ -118,7 +121,7 @@ const BackstageList = (remainingProps: Props) => {
             const rawText = formatMessage({id: remainingProps.addTextKey});
 
             addLink = (
-                <wc-ksuite-pro-upgrade-dialog offer='business'>
+                <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
                     <wc-ksuite-pro-upgrade-button
                         slot='trigger-element'
                         button-text={rawText}

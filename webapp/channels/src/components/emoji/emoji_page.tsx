@@ -8,6 +8,7 @@ import {Link} from 'react-router-dom';
 import Permissions from 'mattermost-redux/constants/permissions';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
+import {useNextPlan} from 'components/common/hooks/usePackLimitedFeature';
 import AnyTeamPermissionGate from 'components/permissions_gates/any_team_permission_gate';
 
 import * as Utils from 'utils/utils';
@@ -40,6 +41,8 @@ export default function EmojiPage({
 }: Props) {
     const intl = useIntl();
 
+    const nextPlan = useNextPlan();
+
     useEffect(() => {
         updateTitle();
         actions.loadRolesIfNeeded(ROLES);
@@ -62,7 +65,7 @@ export default function EmojiPage({
     if (isCapped) {
         const label = intl.formatMessage({id: 'emoji_list.add'});
         action = (
-            <wc-ksuite-pro-upgrade-dialog offer='business'>
+            <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
                 <wc-ksuite-pro-upgrade-button
                     slot='trigger-element'
                     button-text={label}

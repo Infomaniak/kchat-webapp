@@ -14,7 +14,7 @@ import {
 } from '@mattermost/compass-icons/components';
 
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-import {limitHelper} from 'mattermost-redux/utils/plans_util';
+import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import {useNextPlan} from 'components/common/hooks/usePackLimitedFeature';
@@ -61,16 +61,17 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
 
     const nextPlan = useNextPlan();
     const forbidden = (
-        <span style={{whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '8px'}}>
-            <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-                <p slot='trigger-element'>
-                    {allowed}
-                    <wc-ksuite-pro-upgrade-tag/>
-                </p>
-            </wc-ksuite-pro-upgrade-dialog>
-        </span>
+        <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
+            <div
+                slot='trigger-element'
+                style={{display: 'flex', alignItems: 'center', gap: '8px'}}
+            >
+                {allowed}
+                <wc-ksuite-pro-upgrade-tag/>
+            </div>
+        </wc-ksuite-pro-upgrade-dialog>
     );
-    const {component, onClick} = limitHelper(sidebarCategories, allowed, forbidden, props.onCreateNewCategoryClick);
+    const {component, onClick} = isQuotaExceeded(sidebarCategories, allowed, forbidden, props.onCreateNewCategoryClick);
 
     let createNewChannelMenuItem: JSX.Element | null = null;
     if (props.canCreateChannel) {
@@ -144,6 +145,8 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
             <Menu.Item
                 id='createCategoryMenuItem'
                 onClick={onClick}
+                aria-haspopup={sidebarCategories >= 0}
+                aria-expanded={sidebarCategories >= 0}
                 leadingElement={<FolderPlusOutlineIcon size={18}/>}
                 labels={component}
             />

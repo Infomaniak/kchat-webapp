@@ -5,8 +5,9 @@ import './ik_upgrade_banner.css';
 const UpgradeBanner: FC = () => {
     return (
         <wc-ksuite-pro-upgrade-banner
+            offer='standard'
             class='upgrade-banner'
-            head-band-type='button'
+            variant='chat::history'
         />
     );
 };

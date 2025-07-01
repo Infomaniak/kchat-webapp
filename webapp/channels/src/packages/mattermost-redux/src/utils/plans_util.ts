@@ -40,11 +40,19 @@ export const getNextPackName = (current: PackName | undefined): PackName => {
 export const getNextWcPackName = (current: PackName | undefined): WcPackName =>
     toWcPlan(getNextPackName(current));
 
-export const limitHelper = (remaining: number | boolean, allowed: ReactElement, forbidden: ReactElement, onClick: () => void) => {
-    const isAllow = typeof remaining === 'number' && remaining < 0 || typeof remaining === 'boolean' && remaining === true;
+export const isQuotaExceeded = (
+    remaining: number | boolean,
+    enabledContent: ReactElement,
+    disabledContent: ReactElement,
+    onAllowedClick: () => void,
+) => {
+    const isLimitReached = (
+        (typeof remaining === 'number' && remaining >= 0) ||
+        (typeof remaining === 'boolean' && remaining === false)
+    );
 
-    if (isAllow) {
-        return {component: allowed, onClick};
-    }
-    return {component: forbidden, onClick: () => {}};
+    return {
+        component: isLimitReached ? disabledContent : enabledContent,
+        onClick: isLimitReached ? () => {} : onAllowedClick,
+    };
 };
