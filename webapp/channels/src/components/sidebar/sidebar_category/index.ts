@@ -9,6 +9,8 @@ import type {ChannelCategory} from '@mattermost/types/channel_categories';
 
 import {setCategoryCollapsed, setCategorySorting} from 'mattermost-redux/actions/channel_categories';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
+import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
+import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
@@ -26,11 +28,16 @@ function makeMapStateToProps() {
     const getChannelIdsForCategory = makeGetFilteredChannelIdsForCategory();
 
     return (state: GlobalState, ownProps: OwnProps) => {
+        const usage = getUsage(state);
+        const limits = getCloudLimits(state);
+        const guestCount = usage.guests + usage.pending_guests;
+        const canAddGuest = (guestCount - limits.guests) < 0;
         return {
             channelIds: getChannelIdsForCategory(state, ownProps.category),
             draggingState: getDraggingState(state),
             currentUserId: getCurrentUserId(state),
             isAdmin: isAdmin(getCurrentUser(state).roles),
+            canAddGuest,
         };
     };
 }

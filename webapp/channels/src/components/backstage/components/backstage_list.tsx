@@ -6,7 +6,7 @@ import type {ChangeEvent, ReactNode} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {Link} from 'react-router-dom';
 
-import {useNextPlan} from 'components/common/hooks/usePackLimitedFeature';
+import {useNextPlan} from 'components/common/hooks/useNextPlan';
 import LoadingScreen from 'components/loading_screen';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';

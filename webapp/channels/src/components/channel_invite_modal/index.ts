@@ -11,19 +11,20 @@ import {getTeamStats, getTeamMembersByIds} from 'mattermost-redux/actions/teams'
 import {getProfilesNotInChannel, getProfilesInChannel, searchProfiles} from 'mattermost-redux/actions/users';
 import {Permissions} from 'mattermost-redux/constants';
 import {getRecentProfilesFromDMs} from 'mattermost-redux/selectors/entities/channels';
+import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {makeGetAllAssociatedGroupsForReference} from 'mattermost-redux/selectors/entities/groups';
 import {getTeammateNameDisplaySetting, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentTeam, getMembersInCurrentTeam, getMembersInTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeam, getMembersInCurrentTeam, getMembersInTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getProfilesNotInCurrentChannel, getProfilesInCurrentChannel, getProfilesNotInCurrentTeam, getProfilesNotInTeam, getUserStatuses, makeGetProfilesNotInChannel, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
+import {getNextWcPackName} from 'mattermost-redux/utils/plans_util';
 
 import {addUsersToChannel} from 'actions/channel_actions';
 import {loadStatusesForProfilesList} from 'actions/status_actions';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
 import {closeModal} from 'actions/views/modals';
-
-import withUseGetUsageDelta from 'components/common/hocs/cloud/with_use_get_usage_deltas';
 
 import type {GlobalState} from 'types/store';
 
@@ -83,6 +84,13 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
         const teammateNameDisplaySetting = getTeammateNameDisplaySetting(state);
         const groups = getAllAssociatedGroupsForReference(state, true);
 
+        const usage = getUsage(state);
+        const limits = getCloudLimits(state);
+        const totalGuest = usage.guests + usage.pending_guests;
+        const remainingGuestSlots = totalGuest - limits.guests;
+        const currentPack = getCurrentPackName(state);
+        const nextPlan = getNextWcPackName(currentPack);
+
         return {
             profilesNotInCurrentChannel,
             profilesInCurrentChannel,
@@ -95,6 +103,8 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
             emailInvitationsEnabled,
             groups,
             isGroupsEnabled,
+            nextPlan,
+            remainingGuestSlots,
         };
     };
 }
@@ -115,4 +125,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     };
 }
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(withUseGetUsageDelta(ChannelInviteModal));
+export default connect(makeMapStateToProps, mapDispatchToProps)(ChannelInviteModal);

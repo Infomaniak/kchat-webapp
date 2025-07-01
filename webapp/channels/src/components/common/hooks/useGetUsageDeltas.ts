@@ -50,6 +50,7 @@ export default function useGetUsageDeltas(): CloudUsage {
                 outgoing_webhooks: usage.outgoing_webhooks - withBackupValue(limits.outgoing_webhooks, limitsLoaded),
                 sidebar_categories: usage.sidebar_categories - withBackupValue(limits.sidebar_categories, limitsLoaded),
                 scheduled_draft_custom_date: limits.scheduled_draft_custom_date === true ? -1 : 0,
+                reminder_custom_date: limits.reminder_custom_date === true ? -1 : 0,
             }
         );
     }, [usage, limits, limitsLoaded]);

@@ -9,7 +9,6 @@ import {injectIntl, FormattedMessage, defineMessage} from 'react-intl';
 import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
-import type {CloudUsage} from '@mattermost/types/cloud';
 import type {Group, GroupSearchParams} from '@mattermost/types/groups';
 import type {TeamMembership} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
@@ -18,10 +17,10 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 import {Client4} from 'mattermost-redux/client';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {filterGroupsMatchingTerm} from 'mattermost-redux/utils/group_utils';
+import type {WcPackName} from 'mattermost-redux/utils/plans_util';
 import {displayUsername, filterProfilesStartingWithTerm, isGuest} from 'mattermost-redux/utils/user_utils';
 
-import {UpgradeBtn} from 'components/ik_upgrade_btn/ik_upgrade_btn';
-import InvitationModal from 'components/invitation_modal';
+import InvitationModal from 'components/invitation_modal/invitation_modal';
 import MultiSelect from 'components/multiselect/multiselect';
 import type {Value} from 'components/multiselect/multiselect';
 import ProfilePicture from 'components/profile_picture';
@@ -34,6 +33,8 @@ import {sortUsersAndGroups} from 'utils/utils';
 
 import GroupOption from './group_option';
 import TeamWarningBanner from './team_warning_banner';
+
+import './channel_invite_modal.css';
 
 const USERS_PER_PAGE = 50;
 const USERS_FROM_DMS = 10;
@@ -68,6 +69,8 @@ export type Props = {
     emailInvitationsEnabled?: boolean;
     groups: Group[];
     isGroupsEnabled: boolean;
+    nextPlan: WcPackName;
+    remainingGuestSlots: number;
     actions: {
         addUsersToChannel: (channelId: string, userIds: string[]) => Promise<ActionResult>;
         getProfilesNotInChannel: (teamId: string, channelId: string, groupConstrained: boolean, page: number, perPage?: number) => Promise<ActionResult>;
@@ -79,8 +82,6 @@ export type Props = {
         searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined, opts: GroupSearchParams) => Promise<ActionResult>;
         getTeamMembersByIds: (teamId: string, userIds: string[]) => Promise<ActionResult>;
     };
-
-    usageDeltas: CloudUsage;
 }
 
 type State = {
@@ -460,12 +461,6 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             inviteError = (<label className='has-error control-label'>{this.state.inviteError}</label>);
         }
 
-        const {modalIdentifier, OptionalUpgradeButton, modalType} = getCategoryCreationWithLimitation(
-            this.props.usageDeltas,
-            ModalIdentifiers.INVITATION,
-            InvitationModal,
-        );
-
         // TODO MM-10.0: need any of this, majority was commented apart apart from consts
         // const buttonSubmitText = localizeMessage({id: 'multiselect.add', defaultMessage: 'Add'});
         // const buttonSubmitLoadingText = localizeMessage({id: 'multiselect.adding', defaultMessage: 'Adding...'});
@@ -516,8 +511,8 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             return (
                 <ToggleModalButton
                     className={`${props.inviteAsGuest ? 'invite-as-guest' : ''} btn btn-link`}
-                    modalId={modalIdentifier}
-                    dialogType={modalType}
+                    modalId={ModalIdentifiers.INVITATION}
+                    dialogType={InvitationModal}
                     dialogProps={{
                         channelToInvite: this.props.channel,
                         initialValue: this.state.term,
@@ -579,9 +574,36 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                     id='channel_invite.invite_guest'
                     defaultMessage='Invite as a Guest'
                 />
-                {OptionalUpgradeButton}
             </InviteModalLink>
         );
+
+        const inviteGuestQuotaReached = (
+            <wc-ksuite-pro-upgrade-dialog
+                offer={this.props.nextPlan}
+                class='inviteGuessLimited'
+            >
+                <div
+                    slot='trigger-element'
+                    style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer'}}
+                >
+                    <FormattedMessage
+                        id='channel_invite.invite_guest'
+                        defaultMessage='Invite as a Guest'
+                    />
+
+                    <wc-ksuite-pro-upgrade-tag/>
+                </div>
+            </wc-ksuite-pro-upgrade-dialog>
+        );
+
+        let inviteGuestComp = null;
+        if (this.props.emailInvitationsEnabled && this.props.canInviteGuests) {
+            if (this.props.remainingGuestSlots < 0) {
+                inviteGuestComp = inviteGuestLink;
+            } else {
+                inviteGuestComp = inviteGuestQuotaReached;
+            }
+        }
 
         return (
             <Modal
@@ -622,7 +644,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                             teamId={this.props.channel.team_id}
                             users={this.state.usersNotInTeam}
                         />
-                        {(this.props.emailInvitationsEnabled && this.props.canInviteGuests) && inviteGuestLink}
+                        {inviteGuestComp}
                     </div>
                 </Modal.Body>
             </Modal>
@@ -631,15 +653,3 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
 }
 
 export default injectIntl(ChannelInviteModal);
-
-export function getCategoryCreationWithLimitation(usageDeltas, originalModalIdentifier, originalModalType) {
-    const {guests: guestAvailableNegative} = usageDeltas;
-    const available = guestAvailableNegative < 0;
-
-    const modalIdentifier = available ? originalModalIdentifier : 'MODAL-WC-TRUC';
-    const modalType = available ? originalModalType : 'MODAL-WC-TRUC';
-
-    const OptionalUpgradeButton = available ? null : <UpgradeBtn/>;
-
-    return {modalIdentifier, OptionalUpgradeButton, modalType};
-}

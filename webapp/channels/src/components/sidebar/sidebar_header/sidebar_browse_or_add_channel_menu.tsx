@@ -17,7 +17,7 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import {useNextPlan} from 'components/common/hooks/usePackLimitedFeature';
+import {useNextPlan} from 'components/common/hooks/useNextPlan';
 import * as Menu from 'components/menu';
 import {OnboardingTourSteps} from 'components/tours';
 import {useShowOnboardingTutorialStep, CreateAndJoinChannelsTour} from 'components/tours/onboarding_tour';

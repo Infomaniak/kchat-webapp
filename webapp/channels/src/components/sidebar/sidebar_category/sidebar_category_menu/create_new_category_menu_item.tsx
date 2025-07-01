@@ -13,7 +13,7 @@ import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import {useNextPlan} from 'components/common/hooks/usePackLimitedFeature';
+import {useNextPlan} from 'components/common/hooks/useNextPlan';
 import EditCategoryModal from 'components/edit_category_modal';
 import * as Menu from 'components/menu';
 

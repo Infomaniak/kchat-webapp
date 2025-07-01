@@ -15,7 +15,7 @@ import {openModal} from 'actions/views/modals';
 
 import CoreMenuOptions from 'components/advanced_text_editor/send_button/send_post_options/core_menu_options';
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import {useNextPlan} from 'components/common/hooks/usePackLimitedFeature';
+import {useNextPlan} from 'components/common/hooks/useNextPlan';
 import * as Menu from 'components/menu';
 
 import {ModalIdentifiers} from 'utils/constants';

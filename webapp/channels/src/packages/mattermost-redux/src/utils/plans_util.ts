@@ -2,7 +2,7 @@ import type {ReactElement} from 'react';
 
 import type {PackName} from '@mattermost/types/teams';
 
-type WcPackName = 'essential' | 'standard' | 'business' | 'entreprise';
+export type WcPackName = 'essential' | 'standard' | 'business' | 'entreprise';
 
 const planOrder: PackName[] = [
     'ksuite_essential',

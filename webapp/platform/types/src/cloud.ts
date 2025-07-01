@@ -205,6 +205,7 @@ export interface CloudUsage {
     outgoing_webhooks: number;
     sidebar_categories: number;
     scheduled_draft_custom_date: number;
+    reminder_custom_date: number;
 
 }
 
