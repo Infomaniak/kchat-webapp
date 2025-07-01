@@ -57,6 +57,7 @@ jest.mock('mattermost-redux/selectors/entities/preferences', () => {
 });
 
 describe('loadConfigAndMe', () => {
+    // eslint-disable-next-line no-only-tests/no-only-tests
     test.skip('loadConfigAndMe, without user logged in', async () => {
         const testStore = mockStore({});
 
@@ -73,6 +74,15 @@ describe('loadConfigAndMe', () => {
                 users: {
                     currentUserId: 'userid',
                 },
+                teams: {
+                    teams: {
+                        team1: {
+                            id: 'team1',
+                            display_name: 'Team 1',
+                            update_at: 1234567890,
+                        },
+                    },
+                },
             },
         });
 
@@ -84,10 +94,10 @@ describe('loadConfigAndMe', () => {
             {type: 'MOCK_GET_CLIENT_CONFIG'},
             {type: 'MOCK_GET_LICENSE_CONFIG'},
             {type: 'RECEIVED_SERVER_VERSION', data: '1.0.0'},
+            {type: 'MOCK_GET_MY_KSUITES'},
             {type: 'MOCK_LOAD_ME'},
             {type: 'MOCK_LOAD_PREFERENCES'},
             {type: 'MOCK_GET_MY_TEAM_MEMBERS'},
-            {type: 'MOCK_GET_MY_KSUITES'},
             {type: 'MOCK_GET_MY_MEETS'},
             {type: 'MOCK_GET_MY_TEAM_UNREADS'},
         ]);

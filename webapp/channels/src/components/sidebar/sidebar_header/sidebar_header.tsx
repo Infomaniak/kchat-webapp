@@ -1,16 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
-import React, {useState} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-
-import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import MainMenu from 'components/main_menu';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import WithTooltip from 'components/with_tooltip';
 
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -33,53 +27,23 @@ export type Props = {
 
 const SidebarHeader = (props: Props) => {
     const currentTeam = useSelector(getCurrentTeam);
-    const usageDeltas = useGetUsageDeltas();
-
-    const [menuToggled, setMenuToggled] = useState(false);
-
-    const handleMenuToggle = () => {
-        setMenuToggled(!menuToggled);
-    };
 
     if (!currentTeam) {
         return null;
     }
 
     return (
-        <header
-            id='sidebar-header-container'
-            className='sidebarHeaderContainer'
-        >
-            <MenuWrapper
-                onToggle={handleMenuToggle}
-                className={classNames({isWebApp: !isDesktopApp()})}
-            >
-                {isDesktopApp() && (
-                    <WithTooltip
-                        title={currentTeam.description ? currentTeam.description : currentTeam.display_name}
-                    >
-
-                        <h1 className='sidebarHeader'>
-                            <button
-                                className='style--none sidebar-header'
-                                type='button'
-                                aria-haspopup='menu'
-                                aria-expanded={menuToggled}
-                                aria-controls='sidebarDropdownMenu'
-                                id='sidebarDropdownMenuButton'
-                                disabled={true}
-                            >
-                                <span className='title'>{currentTeam.display_name}</span>
-                            </button>
-                        </h1>
-
-                    </WithTooltip>)
-                }
-                <MainMenu
-                    id='sidebarDropdownMenu'
-                    usageDeltaTeams={usageDeltas.teams.active}
-                />
-            </MenuWrapper>
+        <header className='sidebarHeaderContainer'>
+            {isDesktopApp() && (
+                <button
+                    className='style--none sidebar-header'
+                    type='button'
+                    id='sidebarDropdownMenuButton'
+                    disabled={true}
+                >
+                    <span className='title'>{currentTeam.display_name}</span>
+                </button>
+            )}
             {(props.canCreateChannel || props.canJoinPublicChannel) && (
                 <SidebarBrowseOrAddChannelMenu
                     canCreateChannel={props.canCreateChannel}

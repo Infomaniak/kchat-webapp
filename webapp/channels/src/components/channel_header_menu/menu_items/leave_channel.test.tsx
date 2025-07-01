@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux';
 import * as channelActions from 'actions/views/channel';
 import * as modalActions from 'actions/views/modals';
 
-import LeaveChannelModal from 'components/leave_channel_modal';
+import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 
 import {ModalIdentifiers} from 'utils/constants';
@@ -65,7 +65,7 @@ describe('components/ChannelHeaderMenu/MenuItems/LeaveChannelTest', () => {
         expect(modalActions.openModal).toHaveBeenCalledTimes(1);
         expect(modalActions.openModal).toHaveBeenCalledWith({
             modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
-            dialogType: LeaveChannelModal,
+            dialogType: IkLeaveChannelModal,
             dialogProps: {
                 channel,
             },

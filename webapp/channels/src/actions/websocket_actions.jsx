@@ -157,10 +157,11 @@ export function initialize() {
     const debugId = `[WS init-${Date.now()}]`;
 
     if (!window.WebSocket) {
+        // eslint-disable-next-line no-console
         console.warn(`${debugId} Browser does not support WebSocket`);
         return;
     }
-
+    // eslint-disable-next-line no-console
     console.log(`${debugId} Initializing or re-initializing WebSocket`);
 
     const config = getConfig(getState());
@@ -168,6 +169,7 @@ export function initialize() {
     const currentChannelId = getCurrentChannelId(getState());
 
     if (!user) {
+        // eslint-disable-next-line no-console
         console.warn(`${debugId} No current user found. Skipping initialization.`);
         return;
     }
@@ -190,11 +192,13 @@ export function initialize() {
 
     const token = localStorage.getItem('IKToken');
     if (isDesktopApp() && !token) {
+        // eslint-disable-next-line no-console
         console.error(`${debugId} token storage corrupt, redirecting to login`);
         getHistory().push('/login');
         return;
     }
 
+    // eslint-disable-next-line no-console
     console.info(`${debugId} init called, ws will reauth`);
 
     WebSocketClient.addMessageListener(handleEvent);
@@ -213,11 +217,13 @@ export function initialize() {
         currentChannelId,
     );
 
+    // eslint-disable-next-line no-console
     console.log(`${debugId} WebSocket initialization complete`);
 }
 
 export function close() {
     const debugId = `[WS close-${Date.now()}]`;
+    // eslint-disable-next-line no-console
     console.warn(`${debugId} closing`);
 
     // WebSocketClient.close();
@@ -241,6 +247,7 @@ export function unregisterPluginReconnectHandler(pluginId) {
 
 function restart() {
     const debugId = `[WS restart-${Date.now()}]`;
+    // eslint-disable-next-line no-console
     console.debug(`${debugId} Restart started`);
     reconnect();
 
@@ -256,8 +263,10 @@ export function reconnectWsChannels() {
 
 export async function reconnect(socketId) {
     const debugId = `[WS reconnect-${Date.now()}]`;
+    // eslint-disable-next-line no-console
     console.log(`${debugId} reconnect`);
 
+    // eslint-disable-next-line no-console
     console.debug(`${debugId} Listener counts`, {
         messageListeners: WebSocketClient.messageListeners?.size || 0,
         firstConnectListeners: WebSocketClient.firstConnectListeners?.size || 0,
@@ -270,20 +279,24 @@ export async function reconnect(socketId) {
     if (isDesktopApp()) {
         const token = localStorage.getItem('IKToken');
         if (!token) {
+            // eslint-disable-next-line no-console
             console.log(`${debugId} token storage corrupt, redirecting to login`);
             getHistory().push('/login');
             return;
         }
 
         if (checkIKTokenIsExpired()) {
+            // eslint-disable-next-line no-console
             console.log(`${debugId} token expired, calling refresh`);
             try {
                 const newToken = await refreshIKToken(false);
                 if (newToken) {
                     WebSocketClient.updateToken(newToken);
+                    // eslint-disable-next-line no-console
                     console.debug(`${debugId} Token refreshed and updated`);
                 }
             } catch (e) {
+                // eslint-disable-next-line no-console
                 console.warn(`${debugId} Token refresh failed`, e);
             }
         }
@@ -296,6 +309,7 @@ export async function reconnect(socketId) {
 
     if (socketId) {
         Client4.setSocketId(socketId);
+        // eslint-disable-next-line no-console
         console.debug(`${debugId} Socket ID set: ${socketId}`);
     }
 
@@ -315,6 +329,7 @@ export async function reconnect(socketId) {
         dispatch(getMyPreferences());
         loadProfilesForSidebar();
 
+        // eslint-disable-next-line no-console
         console.log(`${debugId} currentTeamId: ${currentTeamId} currentChannelId: ${currentChannelId} mostRecentPostId: ${mostRecentPost?.id}`);
 
         // IK: Verify version on reconnect
@@ -351,6 +366,7 @@ export async function reconnect(socketId) {
 
     Object.values(pluginReconnectHandlers).forEach((handler, i) => {
         if (handler && typeof handler === 'function') {
+            // eslint-disable-next-line no-console
             console.debug(`${debugId} Calling pluginReconnectHandler [${i}]`);
             handler();
         }
@@ -362,6 +378,7 @@ export async function reconnect(socketId) {
     dispatch(getDrafts(currentTeamId));
     dispatch(getMyMeets());
 
+    // eslint-disable-next-line no-console
     console.log(`${debugId} Reconnect completed`);
 }
 

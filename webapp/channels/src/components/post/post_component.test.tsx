@@ -5,6 +5,8 @@ import React from 'react';
 
 import type {DeepPartial} from '@mattermost/types/utilities';
 
+import * as channelSelectors from 'mattermost-redux/selectors/entities/channels';
+
 import {getHistory} from 'utils/browser_history';
 import {Locations} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
@@ -25,6 +27,14 @@ jest.mock('wasm-media-encoders', () => ({
         close: jest.fn(),
     })),
 }));
+
+jest.mock('mattermost-redux/selectors/entities/channels', () => {
+    const actual = jest.requireActual('mattermost-redux/selectors/entities/channels');
+    return {
+        ...actual,
+        getMyChannelMembership: jest.fn(),
+    };
+});
 
 describe('PostComponent', () => {
     const currentTeam = TestHelper.getTeamMock();
@@ -377,6 +387,8 @@ describe('PostComponent', () => {
         });
 
         test('should show file list in edit container when editing', () => {
+            channelSelectors.getMyChannelMembership.mockReturnValue(true);
+
             const fileInfo1 = TestHelper.getFileInfoMock({id: 'fileId1', name: 'file1.jpg'});
             const fileInfo2 = TestHelper.getFileInfoMock({id: 'fileId2', name: 'file2.jpg'});
             const fileInfo3 = TestHelper.getFileInfoMock({id: 'fileId3', name: 'file3.jpg'});

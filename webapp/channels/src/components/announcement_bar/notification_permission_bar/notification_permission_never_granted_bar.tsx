@@ -10,6 +10,7 @@ import AnnouncementBar from 'components/announcement_bar/default_announcement_ba
 
 import {AnnouncementBarTypes} from 'utils/constants';
 import {requestNotificationPermission} from 'utils/notifications';
+import {isInIframe} from 'utils/url-ksuite-redirect';
 
 export default function NotificationPermissionNeverGrantedBar() {
     const [show, setShow] = useState(!BrowserStore.getHideNotificationPermissionRequestBanner());
@@ -33,7 +34,7 @@ export default function NotificationPermissionNeverGrantedBar() {
         BrowserStore.setHideNotificationPermissionRequestBanner();
     }, []);
 
-    if (!show) {
+    if (!show || isInIframe()) {
         return null;
     }
 

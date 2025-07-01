@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {NavigateMessage} from '@infomaniak/ksuite-bridge';
-import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
+import {KSuiteBridge, LogoutMessageKey, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import deepEqual from 'fast-deep-equal';
@@ -40,6 +40,7 @@ import {EmojiIndicesByAlias} from 'utils/emoji';
 import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
+import {isInIframe} from 'utils/url-ksuite-redirect';
 import {getDesktopVersion, isAndroidWeb, isChromebook, isDesktopApp, isIosWeb} from 'utils/user_agent';
 import {applyTheme, injectWebcomponentInit, isTextDroppableEvent} from 'utils/utils';
 
@@ -101,7 +102,7 @@ export default class Root extends React.PureComponent<Props, State> {
         super(props);
         this.IKLoginCode = undefined;
         this.tokenCheckInterval = undefined;
-
+        this.embeddedInIFrame = isInIframe();
         this.headerResizerRef = React.createRef();
 
         setUrl(getSiteURL());
@@ -282,6 +283,10 @@ export default class Root extends React.PureComponent<Props, State> {
                 DesktopApp.reactAppInitialized();
             }
         }
+
+        if (this.embeddedInIFrame && this.props.location !== prevProps.location) {
+            this.sendBridgeNavigate();
+        }
     }
 
     captureUTMParams() {
@@ -460,6 +465,11 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     };
 
+    sendBridgeNavigate = () => {
+        const {ksuiteBridge, location} = this.props;
+        ksuiteBridge?.sendMessage({type: NavigateMessageKey, path: location.pathname});
+    };
+
     runMounted = () => {
         const token = localStorage.getItem('IKToken');
         const tokenExpire = localStorage.getItem('IKTokenExpire');
@@ -504,7 +514,11 @@ export default class Root extends React.PureComponent<Props, State> {
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
-                window.location.href = data.uri;
+                if (this.embeddedInIFrame) {
+                    this.props.ksuiteBridge?.sendMessage({type: LogoutMessageKey});
+                } else {
+                    window.location.href = data.uri;
+                }
             } else {
                 const lsToken = localStorage.getItem('IKToken');
 
@@ -545,6 +559,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     detail: ['ksuite-kchat', 'ksuite-kchat-personalization'],
                 }));
             }).catch((error) => {
+                // eslint-disable-next-line no-console
                 console.error('[channel_controller] Error waiting for wc-settings:', error);
             });
         }
@@ -637,9 +652,6 @@ export default class Root extends React.PureComponent<Props, State> {
         if (!this.state.shouldMountAppRoutes) {
             return <div/>;
         }
-
-        const {ksuiteBridge, location} = this.props;
-        ksuiteBridge?.sendMessage({type: NavigateMessageKey, path: location.pathname});
 
         return (
             <RootProvider>

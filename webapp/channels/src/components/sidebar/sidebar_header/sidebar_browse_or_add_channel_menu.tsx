@@ -38,7 +38,6 @@ type Props = {
     onCreateNewUserGroupClick: () => void;
     unreadFilterEnabled: boolean;
     onCreateNewCategoryClick: () => void;
-    onInvitePeopleClick: () => void;
 };
 
 export default function SidebarBrowserOrAddChannelMenu(props: Props) {
@@ -179,7 +178,6 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
                 id: 'browserOrAddChannelMenu',
                 'aria-labelledby': ELEMENT_ID_FOR_BROWSE_OR_ADD_CHANNEL_MENU,
             }}
-            parentWidth={!isDesktopApp()}
         >
             {createNewChannelMenuItem}
             {browseChannelsMenuItem}

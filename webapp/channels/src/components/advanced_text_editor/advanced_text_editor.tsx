@@ -12,11 +12,11 @@ import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions} from 'mattermost-redux/constants';
-import {getChannel, makeGetChannel, getDirectChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getChannel, makeGetChannel, getDirectChannel, getMyChannelMembership} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getFeatureFlagValue} from 'mattermost-redux/selectors/entities/general';
 import {get, getBool, getInt} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentUserId, isCurrentUserGuestUser, getStatusForUserId, makeGetDisplayName} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId, isCurrentUserGuestUser, makeGetDisplayName} from 'mattermost-redux/selectors/entities/users';
 
 import * as GlobalActions from 'actions/global_actions';
 import type {CreatePostOptions} from 'actions/post_actions';
@@ -56,7 +56,6 @@ import Constants, {
     StoragePrefixes,
     Preferences,
     AdvancedTextEditor as AdvancedTextEditorConst,
-    UserStatuses,
     ModalIdentifiers,
     AdvancedTextEditorTextboxIds,
 } from 'utils/constants';
@@ -180,12 +179,16 @@ const AdvancedTextEditor = ({
     });
     const teammateId = useSelector((state: GlobalState) => getDirectChannel(state, channelId)?.teammate_id || '');
     const teammateDisplayName = useSelector((state: GlobalState) => (teammateId ? getDisplayName(state, teammateId) : ''));
-    const showDndWarning = useSelector((state: GlobalState) => (teammateId ? getStatusForUserId(state, teammateId) === UserStatuses.DND : false));
     const selectedPostFocussedAt = useSelector((state: GlobalState) => getSelectedPostFocussedAt(state));
 
     const canPost = useSelector((state: GlobalState) => {
         const channel = getChannel(state, channelId);
-        return channel ? haveIChannelPermission(state, channel.team_id, channel.id, Permissions.CREATE_POST) : false;
+        if (!channel) {
+            return false;
+        }
+        const isMember = getMyChannelMembership(state, channel.id);
+
+        return isMember && haveIChannelPermission(state, channel.team_id, channel.id, Permissions.CREATE_POST);
     });
     const useChannelMentions = useSelector((state: GlobalState) => {
         const channel = getChannel(state, channelId);
@@ -199,10 +202,11 @@ const AdvancedTextEditor = ({
         const config = getConfig(state);
         const enableTutorial = config.EnableTutorial === 'true';
 
-        const tutorialStep = getInt(state, TutorialTourName.ONBOARDING_TUTORIAL_STEP, currentUserId, 0);
+        const isGuestUser = isCurrentUserGuestUser(state);
+        const tutorialStepKey = isGuestUser ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP;
+        const tutorialStep = getInt(state, tutorialStepKey, currentUserId, 0);
 
         // guest validation to see which point the messaging tour tip starts
-        const isGuestUser = isCurrentUserGuestUser(state);
         const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE : OnboardingTourSteps.SEND_MESSAGE;
 
         return enableTutorial && (tutorialStep === tourStep);
