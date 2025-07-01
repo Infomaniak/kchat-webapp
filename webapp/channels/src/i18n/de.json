@@ -3264,6 +3264,7 @@
   "channelView.archivedChannel": "Du siehst einen <b>archivierten Channel</b>. Neue Nachrichten können nicht gepostet werden.",
   "channelView.archivedChannelWithDeactivatedUser": "Du siehst einen archivierten Kanal mit einem <b>deaktivierten Benutzer</b>. Neue Nachrichten können nicht gepostet werden.",
   "channelView.login.successfull": "Anmeldung erfolgreich",
+  "channelSettings": "Kanal-Einstellungen",
   "channel_bookmarks.addBookmark": "Lesezeichen hinzufügen",
   "channel_bookmarks.addBookmarkLimitReached": "Kann nicht mehr als {limit} Lesezeichen hinzufügen",
   "channel_bookmarks.addLink": "Link hinzufügen",
