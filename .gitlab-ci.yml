@@ -256,7 +256,7 @@ lint:eslint:
     - yarn workspace mattermost-webapp check:eslint
   artifacts:
     reports:
-      codequality: ./webapp/channels/eslint-report.json
+      codequality: gl-codequality.json
     expire_in: 1 week
     when: on_failure
 
