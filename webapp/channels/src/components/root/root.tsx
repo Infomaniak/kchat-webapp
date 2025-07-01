@@ -17,7 +17,6 @@ import {Client4} from 'mattermost-redux/client';
 
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
-import {setThemePreference} from 'actions/views/theme';
 import {close, initialize} from 'actions/websocket_actions';
 import BrowserStore from 'stores/browser_store';
 import LocalStorageStore from 'stores/local_storage_store';
@@ -33,7 +32,7 @@ import {Animations} from 'components/preparing_workspace/steps';
 import SidebarMobileRightMenu from 'components/sidebar_mobile_right_menu';
 
 import {getHistory} from 'utils/browser_history';
-import Constants, {DesktopThemePreferences, PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
+import {PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import DesktopApp from 'utils/desktop_api';
 import {EmojiIndicesByAlias} from 'utils/emoji';
@@ -52,7 +51,7 @@ import LuxonController from './luxon_controller';
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
 
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import type {PropsFromRedux} from './index';
 
@@ -86,11 +85,11 @@ export type Props = PropsFromRedux & RouteComponentProps;
 
 interface State {
     shouldMountAppRoutes?: boolean;
+    isLoggingOut?: boolean;
 }
 
 export default class Root extends React.PureComponent<Props, State> {
     private IKLoginCode: string | undefined;
-    private tokenCheckInterval: NodeJS.Timer | undefined;
     private headerResizerRef: React.RefObject<HTMLDivElement>;
 
     // Whether the app is running in an iframe.
@@ -101,7 +100,6 @@ export default class Root extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.IKLoginCode = undefined;
-        this.tokenCheckInterval = undefined;
         this.embeddedInIFrame = isInIframe();
         this.headerResizerRef = React.createRef();
 
@@ -115,16 +113,99 @@ export default class Root extends React.PureComponent<Props, State> {
 
         this.state = {
             shouldMountAppRoutes: false,
+            isLoggingOut: false,
         };
+    }
 
-        this.smallDesktopMediaQuery = window.matchMedia(`(min-width: ${Constants.TABLET_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.DESKTOP_SCREEN_WIDTH}px)`);
-        this.tabletMediaQuery = window.matchMedia(`(min-width: ${Constants.MOBILE_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.TABLET_SCREEN_WIDTH}px)`);
-        this.mobileMediaQuery = window.matchMedia(`(max-width: ${Constants.MOBILE_SCREEN_WIDTH}px)`);
+    componentDidMount() {
+        temporarilySetPageLoadContext(PageLoadContext.PAGE_LOAD);
 
-        this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        if (isDesktopApp()) {
+            // Rely on initial client calls to 401 for the first redirect to login,
+            // we dont need to do it manually.
+            // Login will send us back here with a code after we give it the challange.
+            // Use code to refresh token.
+            const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
 
-        this.updateThemePreference(this.themeMediaQuery.matches);
-        this.updateWindowSize();
+            if (loginCode) {
+                console.log('[components/root] login with code'); // eslint-disable-line no-console
+                this.storeLoginCode(loginCode);
+                this.tryGetNewToken();
+            } else {
+                this.runMounted();
+            }
+        } else {
+            // Allow through initial requests for web.
+            this.runMounted();
+        }
+
+        this.props.actions.registerCustomPostRenderer('custom_llmbot', LLMBotPost, 'llmbot_post_message_renderer');
+
+        measurePageLoadTelemetry();
+        trackSelectorMetrics();
+    }
+
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        if (!deepEqual(prevProps.theme, this.props.theme) || !deepEqual(prevProps.currentTeam, this.props.currentTeam)) {
+            // add body class for webcomponents theming
+            if (document.body.className.match(/kchat-.+-theme/)) {
+                document.body.className = document.body.className.replace(/kchat-.+-theme/, `kchat-${this.props.theme.ikType}-theme`);
+            } else {
+                document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
+            }
+
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
+                window.postMessage({
+                    type: 'preferred-theme',
+                    data: {
+                        theme: this.props.theme,
+                        teamName: this.props.currentTeam?.display_name,
+                    },
+                }, window.origin);
+            }
+
+            this.applyTheme();
+        }
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
+            if (!deepEqual(prevProps.teamsOrderPreference, this.props.teamsOrderPreference)) {
+                window.postMessage({
+                    type: 'teams-order-preference',
+                    data: this.props.teamsOrderPreference?.value,
+                }, window.origin);
+            }
+            if (!deepEqual(prevProps.userLocale, this.props.userLocale)) {
+                window.postMessage({
+                    type: 'user-locale',
+                    data: this.props.userLocale,
+                }, window.origin);
+            }
+        }
+
+        if (
+            this.props.shouldShowAppBar !== prevProps.shouldShowAppBar ||
+            this.props.rhsIsOpen !== prevProps.rhsIsOpen ||
+            this.props.rhsIsExpanded !== prevProps.rhsIsExpanded
+        ) {
+            this.setRootMeta();
+        }
+
+        if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
+            if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
+                DesktopApp.reactAppInitialized();
+            }
+        }
+
+        if (this.embeddedInIFrame && this.props.location !== prevProps.location) {
+            this.sendBridgeNavigate();
+        }
+    }
+
+    componentWillUnmount() {
+        this.IKLoginCode = undefined;
+
+        window.removeEventListener('storage', this.handleLogoutLoginSignal);
+        document.removeEventListener('drop', this.handleDropEvent);
+        document.removeEventListener('dragover', this.handleDragOverEvent);
     }
 
     onConfigLoaded = () => {
@@ -234,61 +315,6 @@ export default class Root extends React.PureComponent<Props, State> {
         applyTheme(this.props.theme);
     }
 
-    componentDidUpdate(prevProps: Props, prevState: State) {
-        if (!deepEqual(prevProps.theme, this.props.theme) || !deepEqual(prevProps.currentTeam, this.props.currentTeam)) {
-            // add body class for webcomponents theming
-            if (document.body.className.match(/kchat-.+-theme/)) {
-                document.body.className = document.body.className.replace(/kchat-.+-theme/, `kchat-${this.props.theme.ikType}-theme`);
-            } else {
-                document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
-            }
-
-            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
-                window.postMessage({
-                    type: 'preferred-theme',
-                    data: {
-                        theme: this.props.theme,
-                        teamName: this.props.currentTeam?.display_name,
-                    },
-                }, window.origin);
-            }
-
-            this.applyTheme();
-        }
-        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
-            if (!deepEqual(prevProps.teamsOrderPreference, this.props.teamsOrderPreference)) {
-                window.postMessage({
-                    type: 'teams-order-preference',
-                    data: this.props.teamsOrderPreference?.value,
-                }, window.origin);
-            }
-            if (!deepEqual(prevProps.userLocale, this.props.userLocale)) {
-                window.postMessage({
-                    type: 'user-locale',
-                    data: this.props.userLocale,
-                }, window.origin);
-            }
-        }
-
-        if (
-            this.props.shouldShowAppBar !== prevProps.shouldShowAppBar ||
-            this.props.rhsIsOpen !== prevProps.rhsIsOpen ||
-            this.props.rhsIsExpanded !== prevProps.rhsIsExpanded
-        ) {
-            this.setRootMeta();
-        }
-
-        if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
-            if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
-                DesktopApp.reactAppInitialized();
-            }
-        }
-
-        if (this.embeddedInIFrame && this.props.location !== prevProps.location) {
-            this.sendBridgeNavigate();
-        }
-    }
-
     captureUTMParams() {
         const qs = new URLSearchParams(window.location.search);
 
@@ -312,16 +338,6 @@ export default class Root extends React.PureComponent<Props, State> {
         }
         return null;
     }
-
-    // Sentry.setUser({ip_address: '{{auto}}', email, id, username});
-
-    // // @ts-ignore
-    // window.CONST_USER = {
-    //     iGlobalUserCode: user_id,
-    //     sFirstname: first_name,
-    //     sLastname: last_name,
-    //     sEmail: email,
-    // };
 
     initiateMeRequests = async () => {
         const {isLoaded} = await this.props.actions.loadConfigAndMe();
@@ -347,42 +363,6 @@ export default class Root extends React.PureComponent<Props, State> {
             e.stopPropagation();
         }
     };
-
-    componentDidMount() {
-        temporarilySetPageLoadContext(PageLoadContext.PAGE_LOAD);
-
-        if (isDesktopApp()) {
-            // Rely on initial client calls to 401 for the first redirect to login,
-            // we dont need to do it manually.
-            // Login will send us back here with a code after we give it the challange.
-            // Use code to refresh token.
-            const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
-
-            if (loginCode) {
-                console.log('[components/root] login with code'); // eslint-disable-line no-console
-                this.storeLoginCode(loginCode);
-                this.tryGetNewToken();
-            } else {
-                this.runMounted();
-            }
-        } else {
-            // Allow through initial requests for web.
-            this.runMounted();
-        }
-
-        // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
-
-        // this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
-        // this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
-        this.props.actions.registerCustomPostRenderer('custom_llmbot', LLMBotPost, 'llmbot_post_message_renderer');
-
-        if (this.themeMediaQuery?.addEventListener) {
-            this.themeMediaQuery.addEventListener('change', this.handleThemeMediaQueryChangeEvent);
-        }
-
-        measurePageLoadTelemetry();
-        trackSelectorMetrics();
-    }
 
     storeLoginCode = (code: string) => {
         console.log('[components/root] store login code'); // eslint-disable-line no-console
@@ -421,10 +401,13 @@ export default class Root extends React.PureComponent<Props, State> {
                     token: response.access_token,
                 };
             } else {
+                if (response.expires_in === undefined) {
+                    throw new Error('IKLoginToken response does not contain expires_in');
+                }
                 newToken = {
                     token: response.access_token,
                     refreshToken: response.refresh_token,
-                    expiresAt: (Date.now() / 1000) + response.expires_in, // ignore as its never undefined in 2.0
+                    expiresAt: (Date.now() / 1000) + response.expires_in,
                 };
             }
 
@@ -472,41 +455,12 @@ export default class Root extends React.PureComponent<Props, State> {
 
     runMounted = () => {
         const token = localStorage.getItem('IKToken');
-        const tokenExpire = localStorage.getItem('IKTokenExpire');
-        const refreshToken = localStorage.getItem('IKRefreshToken');
 
-        // Validate infinite token or setup token keepalive for older tokens
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
-                // TODO: find a way to clean this if into an else below, since its counterintuitive
                 // The reset teams will retrigger this func
                 // Webcomponents oauth v2
                 window.WC_TOKEN = token;
-
-                // migration from 2.0
-                if (token && (tokenExpire || refreshToken)) {
-                    // Prepare migrate to infinite token by clearing all instances of old token
-                    clearLocalStorageToken();
-                    window.authManager.resetToken();
-
-                    // Need to reset teams before redirecting to login after token is cleared
-                    if (isDefaultAuthServer()) {
-                        getChallengeAndRedirectToLogin(true);
-                    } else {
-                        window.postMessage(
-                            {
-                                type: 'reset-teams',
-                                message: {},
-                            },
-                            window.origin,
-                        );
-                    }
-                }
-            } else if (token && refreshToken) {
-                // 2.0 and older apps
-                // set an interval to run every minute to check if token needs refresh soon
-                // for older versions of app.
-                this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
             }
         }
 
@@ -517,12 +471,13 @@ export default class Root extends React.PureComponent<Props, State> {
                 window.open(data.uri, this.embeddedInIFrame ? '_top' : '_self');
             } else {
                 const lsToken = localStorage.getItem('IKToken');
-
                 if (lsToken) {
                     // Delete the token if it still exists.
                     clearLocalStorageToken();
                     clearUserCookie();
-                    await window.authManager.logout();
+                    this.setState({isLoggingOut: true});
+                    await window.authManager?.logout();
+                    this.setState({isLoggingOut: false});
                 }
             }
         });
@@ -568,42 +523,9 @@ export default class Root extends React.PureComponent<Props, State> {
 
         document.addEventListener('dragover', this.handleDragOverEvent);
     };
-    componentWillUnmount() {
-        this.mounted = false;
-        this.IKLoginCode = undefined;
-        if (this.tokenCheckInterval) {
-            clearInterval(this.tokenCheckInterval);
-        }
-
-        if (this.loginCodeInterval) {
-            clearInterval(this.loginCodeInterval);
-        }
-
-        if (this.themeMediaQuery.removeEventListener) {
-            this.themeMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
-        }
-
-        window.removeEventListener('storage', this.handleLogoutLoginSignal);
-        document.removeEventListener('drop', this.handleDropEvent);
-        document.removeEventListener('dragover', this.handleDragOverEvent);
-    }
 
     handleLogoutLoginSignal = (e: StorageEvent) => {
         this.props.actions.handleLoginLogoutSignal(e);
-    };
-
-    // handleWindowResizeEvent = throttle(() => {
-    //     this.props.actions.emitBrowserWindowResized();
-    // }, 100);
-
-    handleMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
-        if (e.matches) {
-            this.updateWindowSize();
-        }
-    };
-
-    handleThemeMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
-        this.updateThemePreference(e.matches);
     };
 
     setRootMeta = () => {
@@ -616,32 +538,6 @@ export default class Root extends React.PureComponent<Props, State> {
         })) {
             root.classList.toggle(className, enabled);
         }
-    };
-
-    updateWindowSize = () => {
-        // switch (true) {
-        // case this.desktopMediaQuery.matches:
-        //     this.props.actions.emitBrowserWindowResized(WindowSizes.DESKTOP_VIEW);
-        //     break;
-        // case this.smallDesktopMediaQuery.matches:
-        //     this.props.actions.emitBrowserWindowResized(WindowSizes.SMALL_DESKTOP_VIEW);
-        //     break;
-        // case this.tabletMediaQuery.matches:
-        //     this.props.actions.emitBrowserWindowResized(WindowSizes.TABLET_VIEW);
-        //     break;
-        // case this.mobileMediaQuery.matches:
-        //     this.props.actions.emitBrowserWindowResized(WindowSizes.MOBILE_VIEW);
-        //     break;
-        // }
-    };
-
-    updateThemePreference = (isDark: boolean) => {
-        if (isDark) {
-            store.dispatch(setThemePreference(DesktopThemePreferences.DARK));
-            return;
-        }
-
-        store.dispatch(setThemePreference(DesktopThemePreferences.LIGHT));
     };
 
     render() {
@@ -666,15 +562,6 @@ export default class Root extends React.PureComponent<Props, State> {
                         path={'/access_problem'}
                         component={AccessProblem}
                     />
-                    {/* <HFTRoute
-                        path={'/help'}
-                        component={HelpController}
-                    /> */}
-                    {/* <Route
-                        path={'/landing'}
-                        component={LinkingLandingPage}
-                    /> */}
-
                     <LoggedInRoute
                         headerRef={this.headerResizerRef}
                         path={'/preparing-workspace'}
@@ -703,7 +590,6 @@ export default class Root extends React.PureComponent<Props, State> {
                         <AnnouncementBarController/>
                         <SystemNotice/>
                         <GlobalHeader headerRef={this.headerResizerRef}/>
-                        {/* <CloudEffects/> */}
                         {!this.embeddedInIFrame && isDesktopApp() && !isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0') && <TeamSidebar/>}
                         <div className='main-wrapper'>
                             <Switch>
@@ -772,7 +658,7 @@ export default class Root extends React.PureComponent<Props, State> {
                                     path={`/:team(${TEAM_NAME_PATH_PATTERN})`}
                                     component={TeamController}
                                 />
-                                <RootRedirect/>
+                                <RootRedirect isLoggingOut={this.state.isLoggingOut}/>
                             </Switch>
                             <SidebarRight/>
                         </div>

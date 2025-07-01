@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import {Client4} from 'mattermost-redux/client';
@@ -22,10 +22,6 @@ import './login.scss';
 const Login = () => {
     const currentUser = useSelector(getCurrentUser);
 
-    const tokenInterval = useRef<NodeJS.Timer>();
-
-    const closeSessionExpiredNotification = useRef<() => void>();
-
     useEffect(() => {
         // eslint-disable-next-line no-console
         console.log('[components/login] init login component');
@@ -38,7 +34,8 @@ const Login = () => {
                 refreshToken?: string;
                 expiresAt?: number;
             }) => {
-                if (!Object.keys(data).length) { // eslint-disable-line no-negated-condition
+                // eslint-disable-next-line no-negated-condition
+                if (!Object.keys(data).length) {
                     if (isDefaultAuthServer()) {
                         getChallengeAndRedirectToLogin(isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0'));
                     } else {
@@ -73,17 +70,6 @@ const Login = () => {
             console.log('[components/login] current user is ok -> redirecting to team');
             redirectUserToDefaultTeam();
         }
-
-        // We love hooks
-        return () => {
-            // eslint-disable-next-line no-console
-            console.log('login effect cleanup');
-            clearInterval(tokenInterval.current as NodeJS.Timer);
-            if (closeSessionExpiredNotification!.current) {
-                closeSessionExpiredNotification.current();
-                closeSessionExpiredNotification.current = undefined;
-            }
-        };
     }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
     return (
