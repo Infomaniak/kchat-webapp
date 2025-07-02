@@ -9,7 +9,7 @@ import {useDispatch} from 'react-redux';
 import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
 import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
-import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
+import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
 
 import {openModal} from 'actions/views/modals';
 
@@ -65,7 +65,7 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
         }));
     }, [channelId, dispatch, handleSelectCustomTime]);
 
-    const allowed = (
+    const enabledComponent = (
         <FormattedMessage
             id='create_post_button.option.schedule_message.options.choose_custom_time'
             defaultMessage='Choose a custom time'
@@ -73,20 +73,20 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
     );
 
     const nextPlan = useNextPlan();
-    const forbidden = (
+    const disabledComponent = (
         <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
             <div
                 slot='trigger-element'
                 style={{display: 'flex', alignItems: 'center', gap: '8px'}}
             >
-                {allowed}
+                {enabledComponent}
                 <wc-ksuite-pro-upgrade-tag/>
             </div>
         </wc-ksuite-pro-upgrade-dialog>
     );
 
     const {scheduled_draft_custom_date: scheduledDraftCustomDate} = useGetUsageDeltas();
-    const {component, onClick} = isQuotaExceeded(scheduledDraftCustomDate, allowed, forbidden, handleChooseCustomTime);
+    const {component, onClick} = withQuotaControl(scheduledDraftCustomDate, enabledComponent, disabledComponent, handleChooseCustomTime);
 
     return (
         <Menu.Container

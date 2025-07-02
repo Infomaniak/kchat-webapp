@@ -13,7 +13,7 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import Permissions from 'mattermost-redux/constants/permissions';
 import type {ActionResult} from 'mattermost-redux/types/actions';
-import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
+import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
 
 import withUseGetUsageDelta from 'components/common/hocs/cloud/with_use_get_usage_deltas';
 import LoadingScreen from 'components/loading_screen';
@@ -342,7 +342,7 @@ class BrowseChannels extends React.PureComponent<Props, State> {
             );
 
             const delta = this.props.usageDeltas.public_channels >= 0 && this.props.usageDeltas.private_channels >= 0 ? 0 : -1;
-            const {component} = isQuotaExceeded(delta, enabled, disabled, () => {});
+            const {component} = withQuotaControl(delta, enabled, disabled, () => {});
             return (
                 <TeamPermissionGate
                     teamId={teamId}

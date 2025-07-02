@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux';
 
 import {FolderPlusOutlineIcon} from '@mattermost/compass-icons/components';
 
-import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
+import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
@@ -58,7 +58,7 @@ const CreateNewCategoryMenuItem = ({
     );
     const {sidebar_categories: sidebarCategories} = useGetUsageDeltas();
 
-    const {component, onClick} = isQuotaExceeded(sidebarCategories, enabled, disabled, handleCreateCategory);
+    const {component, onClick} = withQuotaControl(sidebarCategories, enabled, disabled, handleCreateCategory);
 
     return (
         <Menu.Item

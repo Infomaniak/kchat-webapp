@@ -9,7 +9,7 @@ import {ChevronRightIcon, ClockOutlineIcon} from '@mattermost/compass-icons/comp
 import type {Post} from '@mattermost/types/posts';
 
 import {addPostReminder} from 'mattermost-redux/actions/posts';
-import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
+import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
 
 import {openModal} from 'actions/views/modals';
 
@@ -138,7 +138,7 @@ function PostReminderSubmenu(props: Props) {
                     </div>
                 </wc-ksuite-pro-upgrade-dialog>
             );
-            const {component, onClick} = isQuotaExceeded(reminderCustomDate, enabled, disabled, clickHandler);
+            const {component, onClick} = withQuotaControl(reminderCustomDate, enabled, disabled, clickHandler);
             isQuotaReached = reminderCustomDate >= 0;
             labels = component;
             clickHandler = onClick;

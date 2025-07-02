@@ -40,7 +40,7 @@ export const getNextPackName = (current: PackName | undefined): PackName => {
 export const getNextWcPackName = (current: PackName | undefined): WcPackName =>
     toWcPlan(getNextPackName(current));
 
-export const isQuotaExceeded = (
+export const withQuotaControl = (
     remaining: number | boolean,
     enabledContent: ReactElement,
     disabledContent: ReactElement,

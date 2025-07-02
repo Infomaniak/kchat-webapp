@@ -14,7 +14,7 @@ import {
 } from '@mattermost/compass-icons/components';
 
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
+import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
@@ -71,7 +71,7 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
             </div>
         </wc-ksuite-pro-upgrade-dialog>
     );
-    const {component: createCategoryComponent, onClick: createCategoryOnClick} = isQuotaExceeded(sidebarCategories, enabledCategory, disabledCategory, props.onCreateNewCategoryClick);
+    const {component: createCategoryComponent, onClick: createCategoryOnClick} = withQuotaControl(sidebarCategories, enabledCategory, disabledCategory, props.onCreateNewCategoryClick);
 
     let createNewChannelMenuItem: JSX.Element | null = null;
     if (props.canCreateChannel) {
@@ -95,7 +95,7 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         );
 
         const privateAndPublicQuotas = (privateChannels >= 0 && publicChannels >= 0) ? 0 : -1;
-        const {component: createChannelComponent, onClick: createChannelOnClick} = isQuotaExceeded(privateAndPublicQuotas, enabledCreateChannel, disabledCreateChannel, props.onCreateNewChannelClick);
+        const {component: createChannelComponent, onClick: createChannelOnClick} = withQuotaControl(privateAndPublicQuotas, enabledCreateChannel, disabledCreateChannel, props.onCreateNewChannelClick);
 
         createNewChannelMenuItem = (
             <Menu.Item
