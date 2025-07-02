@@ -14,7 +14,6 @@ export type Props = {
     location?: Location;
     isFirstAdmin: boolean;
     areThereTeams: boolean;
-    isLoggingOut?: boolean;
     actions: {
         getFirstAdminSetupComplete: () => Promise<ActionResult>;
     };
@@ -41,7 +40,7 @@ export default function RootRedirect(props: Props) {
         }
     }, [props.currentUserId, props.isElegibleForFirstAdmingOnboarding]);
 
-    if (props.currentUserId || props.isLoggingOut) {
+    if (props.currentUserId) {
         // Ideally, this would be a Redirect like below, but since we need to call an action, this redirect is done above
         return null;
     }
