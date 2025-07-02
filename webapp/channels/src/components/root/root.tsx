@@ -199,6 +199,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentWillUnmount() {
         this.mounted = false;
+
         this.IKLoginCode = undefined;
 
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
@@ -344,6 +345,8 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (isLoaded) {
             if (this.props.location.pathname === '/') {
+                // eslint-disable-next-line no-console
+                console.log('redirect to default team');
                 this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
             }
         }
@@ -477,9 +480,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     // Delete the token if it still exists.
                     clearLocalStorageToken();
                     clearUserCookie();
-                    this.setState({isLoggingOut: true});
                     await window.authManager?.logout();
-                    this.setState({isLoggingOut: false});
                 }
             } else if (this.embeddedInIFrame) {
                 this.props.ksuiteBridge?.sendMessage({type: LogoutMessageKey});
@@ -664,7 +665,7 @@ export default class Root extends React.PureComponent<Props, State> {
                                     path={`/:team(${TEAM_NAME_PATH_PATTERN})`}
                                     component={TeamController}
                                 />
-                                <RootRedirect isLoggingOut={this.state.isLoggingOut}/>
+                                <RootRedirect/>
                             </Switch>
                             <SidebarRight/>
                         </div>
