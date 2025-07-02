@@ -9,7 +9,6 @@ import type {CloudUsage, Limits} from '@mattermost/types/cloud';
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
 
-import {hasLimitDate} from 'mattermost-redux/actions/posts';
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
 
 import type {emitShortcutReactToLastPostFrom} from 'actions/post_actions';

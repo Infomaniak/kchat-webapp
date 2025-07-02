@@ -33,7 +33,7 @@ type Props = {
     isCapped: boolean;
     actions: {
         removeIncomingHook: (hookId: string) => Promise<ActionResult>;
-        refreshUsage: () => Promise<any>;
+        refreshUsage: () => Promise<void>;
         loadIncomingHooksAndProfilesForTeam: (teamId: string, startPageNumber: number,
             pageSize: number, includeTotalCount: boolean) => Promise<ActionResult<IncomingWebhook[] | IncomingWebhooksWithCount>>;
     };

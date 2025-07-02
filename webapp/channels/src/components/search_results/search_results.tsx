@@ -16,9 +16,9 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getFilesDropdownPluginMenuItems} from 'selectors/plugins';
 
 import FileSearchResultItem from 'components/file_search_results';
+import UpgradeBanner from 'components/ik_upgrade_banner/ik_upgrade_banner';
 import NoResultsIndicator from 'components/no_results_indicator/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
-import ChannelMessageLimitationBanner from 'components/post_view/channel_message_limitation_banner/channel_message_limitation_banner';
 import SearchHint from 'components/search_hint/search_hint';
 import SearchResultsHeader from 'components/search_results_header';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
@@ -33,7 +33,6 @@ import SearchLimitsBanner from './search_limits_banner';
 import type {Props} from './types';
 
 import './search_results.scss';
-import UpgradeBanner from 'components/ik_upgrade_banner/ik_upgrade_banner';
 
 const GET_MORE_BUFFER = 30;
 

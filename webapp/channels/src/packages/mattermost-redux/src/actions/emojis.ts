@@ -13,8 +13,6 @@ import {getCustomEmojisByName as selectCustomEmojisByName} from 'mattermost-redu
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {parseEmojiNamesFromText} from 'mattermost-redux/utils/emoji_utils';
 
-import {getUsage} from 'actions/cloud';
-
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {getProfilesByIds} from './users';
