@@ -669,7 +669,7 @@ export default class Root extends React.PureComponent<Props, State> {
                                     path={`/:team(${TEAM_NAME_PATH_PATTERN})`}
                                     component={TeamController}
                                 />
-                                <RootRedirect/>
+                                <RootRedirect isRedirectingToLogin={this.isRedirectingToLogin}/>
                             </Switch>
                             <SidebarRight/>
                         </div>
