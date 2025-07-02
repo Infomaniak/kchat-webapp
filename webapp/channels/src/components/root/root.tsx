@@ -91,6 +91,7 @@ interface State {
 export default class Root extends React.PureComponent<Props, State> {
     private IKLoginCode: string | undefined;
     private headerResizerRef: React.RefObject<HTMLDivElement>;
+    private mounted: boolean;
 
     // Whether the app is running in an iframe.
     private embeddedInIFrame: boolean;
@@ -99,6 +100,7 @@ export default class Root extends React.PureComponent<Props, State> {
     // so we do need this.
     constructor(props: Props) {
         super(props);
+        this.mounted = false;
         this.IKLoginCode = undefined;
         this.embeddedInIFrame = isInIframe();
         this.headerResizerRef = React.createRef();
@@ -119,6 +121,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         temporarilySetPageLoadContext(PageLoadContext.PAGE_LOAD);
+        this.mounted = true;
 
         if (isDesktopApp()) {
             // Rely on initial client calls to 401 for the first redirect to login,
@@ -201,6 +204,7 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     componentWillUnmount() {
+        this.mounted = false;
         this.IKLoginCode = undefined;
 
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
@@ -213,7 +217,9 @@ export default class Root extends React.PureComponent<Props, State> {
             this.props.actions.initializeProducts(),
             initializePlugins(),
         ]).then(() => {
-            this.setState({shouldMountAppRoutes: true});
+            if (this.mounted) {
+                this.setState({shouldMountAppRoutes: true});
+            }
         });
 
         this.props.actions.migrateRecentEmojis();
