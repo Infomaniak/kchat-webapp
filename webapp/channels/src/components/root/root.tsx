@@ -345,7 +345,7 @@ export default class Root extends React.PureComponent<Props, State> {
         const {isLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isLoaded) {
-            if (this.props.location.pathname === '/') {
+            if (this.props.location.pathname === '/' && !this.isRedirectingToLogin) {
                 // eslint-disable-next-line no-console
                 console.log('redirect to default team');
                 this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
