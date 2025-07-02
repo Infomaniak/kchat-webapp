@@ -7,10 +7,8 @@ import type {Dispatch} from 'redux';
 
 import type {GlobalState} from '@mattermost/types/store';
 
-import {createIncomingHook} from 'mattermost-redux/actions/integrations';
+import {createIncomingHookWithRefreshUsage} from 'mattermost-redux/actions/integrations';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-
-import {getUsage} from 'actions/cloud';
 
 import AddIncomingWebhook from './add_incoming_webhook';
 
@@ -28,8 +26,7 @@ function mapStateToProps(state: GlobalState) {
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
-            createIncomingHook,
-            refreshUsage: getUsage,
+            createIncomingHook: createIncomingHookWithRefreshUsage,
         }, dispatch),
     };
 }

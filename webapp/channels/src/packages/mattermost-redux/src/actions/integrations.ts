@@ -16,6 +16,7 @@ import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 
+import {getUsage} from '../../../../actions/cloud';
 import {General} from '../constants';
 
 export function createIncomingHook(hook: IncomingWebhook) {
@@ -28,14 +29,14 @@ export function createIncomingHook(hook: IncomingWebhook) {
     });
 }
 
-export function getIncomingHook(hookId: string) {
-    return bindClientFunc({
-        clientFunc: Client4.getIncomingWebhook,
-        onSuccess: [IntegrationTypes.RECEIVED_INCOMING_HOOK],
-        params: [
-            hookId,
-        ],
-    });
+export function createIncomingHookWithRefreshUsage(hook: IncomingWebhook): ActionFuncAsync<any> {
+    return async (dispatch) => {
+        const result = await dispatch(createIncomingHook(hook));
+
+        await dispatch(getUsage());
+
+        return result;
+    };
 }
 
 export function getIncomingHooks(teamId = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT, includeTotalCount = false): ActionFuncAsync<IncomingWebhook[] | IncomingWebhooksWithCount> {
@@ -92,6 +93,8 @@ export function removeIncomingHook(hookId: string): ActionFuncAsync {
                 data: {id: hookId},
             },
         ]));
+
+        await dispatch(getUsage());
 
         return {data: true};
     };

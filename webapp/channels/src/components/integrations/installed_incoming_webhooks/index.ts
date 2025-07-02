@@ -18,7 +18,6 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getUsers} from 'mattermost-redux/selectors/entities/users';
 
-import {getUsage as getUsageAction} from 'actions/cloud';
 import {loadIncomingHooksAndProfilesForTeam} from 'actions/integration_actions';
 
 import InstalledIncomingWebhooks from './installed_incoming_webhooks';
@@ -50,7 +49,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
         actions: bindActionCreators({
             loadIncomingHooksAndProfilesForTeam,
             removeIncomingHook,
-            refreshUsage: getUsageAction,
         }, dispatch),
     };
 }
