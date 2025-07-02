@@ -51,7 +51,7 @@ import LuxonController from './luxon_controller';
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
 
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, refreshIKToken, storeTokenResponse} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import type {PropsFromRedux} from './index';
 
@@ -458,6 +458,11 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+                if (isDefaultAuthServer() && !token) {
+                    console.log('[components/root] redirect to login'); // eslint-disable-line no-console
+                    getChallengeAndRedirectToLogin(true);
+                }
+
                 // The reset teams will retrigger this func
                 // Webcomponents oauth v2
                 window.WC_TOKEN = token;
