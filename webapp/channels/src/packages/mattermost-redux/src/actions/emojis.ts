@@ -17,6 +17,7 @@ import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {getProfilesByIds} from './users';
 
+import {getUsage} from '../../../../actions/cloud';
 import {General, Emoji} from '../constants';
 
 export let systemEmojis: Set<string> = new Set();
@@ -33,6 +34,18 @@ export function createCustomEmoji(emoji: any, image: any) {
             image,
         ],
     });
+}
+
+export function createCustomEmojiWithRefreshUsage(emoji: any, image: any) {
+    return async (dispatch) => {
+        const result = await dispatch(createCustomEmoji(emoji, image));
+
+        if (result.data) {
+            dispatch(getUsage());
+        }
+
+        return result;
+    };
 }
 
 export function getCustomEmoji(emojiId: string) {
@@ -205,6 +218,7 @@ export function deleteCustomEmoji(emojiId: string): ActionFuncAsync {
             return {error};
         }
 
+        await dispatch(getUsage());
         dispatch({
             type: EmojiTypes.DELETED_CUSTOM_EMOJI,
             data: {id: emojiId},

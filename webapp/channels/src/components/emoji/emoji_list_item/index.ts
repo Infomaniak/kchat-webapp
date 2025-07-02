@@ -9,8 +9,6 @@ import {deleteCustomEmoji} from 'mattermost-redux/actions/emojis';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
-import {getUsage} from 'actions/cloud';
-
 import {getDisplayNameByUser} from 'utils/utils';
 
 import type {Props} from './emoji_list_item';
@@ -35,7 +33,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
             deleteCustomEmoji,
-            refreshUsage: getUsage,
         }, dispatch),
     };
 }

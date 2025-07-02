@@ -21,7 +21,6 @@ export type Props = {
     onDelete?: (emojiId: string) => void;
     actions: {
         deleteCustomEmoji: (emojiId: string) => void;
-        refreshUsage: () => void;
     };
 };
 
@@ -31,7 +30,6 @@ const DELETE_OTHER_PERMISSION = [Permissions.DELETE_OTHERS_EMOJIS];
 const EmojiListItem = ({
     actions: {
         deleteCustomEmoji,
-        refreshUsage,
     },
     onDelete,
     emoji = {} as CustomEmoji,
@@ -51,7 +49,6 @@ const EmojiListItem = ({
             onDelete(emoji.id);
         }
         deleteCustomEmoji(emoji.id);
-        refreshUsage();
     }, [deleteCustomEmoji, emoji, onDelete]);
 
     let displayName = creatorDisplayName;

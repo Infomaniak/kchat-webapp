@@ -11,8 +11,6 @@ import {deleteCustomEmoji} from 'mattermost-redux/actions/emojis';
 import {Emoji} from 'mattermost-redux/constants';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import {getUsage} from 'actions/cloud';
-
 import EmojiListItem from 'components/emoji/emoji_list_item';
 import LoadingScreen from 'components/loading_screen';
 import LocalizedPlaceholderInput from 'components/localized_placeholder_input';
@@ -205,10 +203,7 @@ export default class EmojiList extends React.PureComponent<Props, State> {
                         key={'emoji_search_item' + emojiId}
                         emojiId={emojiId}
                         onDelete={this.deleteFromSearch}
-                        actions={{deleteCustomEmoji: (id) => {
-                            deleteCustomEmoji(id);
-                            getUsage();
-                        }}}
+                        actions={{deleteCustomEmoji}}
                     />,
                 );
             });
