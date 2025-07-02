@@ -86,7 +86,6 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
     );
 
     const {scheduled_draft_custom_date: scheduledDraftCustomDate} = useGetUsageDeltas();
-    console.log('🚀 tcl ~ index.tsx:89 ~ scheduledDraftCustomDate:', scheduledDraftCustomDate);
     const {component, onClick} = isQuotaExceeded(scheduledDraftCustomDate, allowed, forbidden, handleChooseCustomTime);
 
     return (
