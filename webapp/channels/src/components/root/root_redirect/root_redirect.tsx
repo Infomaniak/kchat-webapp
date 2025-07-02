@@ -17,6 +17,7 @@ export type Props = {
     actions: {
         getFirstAdminSetupComplete: () => Promise<ActionResult>;
     };
+    isRedirectingToLogin?: boolean;
 }
 
 export default function RootRedirect(props: Props) {
@@ -40,7 +41,7 @@ export default function RootRedirect(props: Props) {
         }
     }, [props.currentUserId, props.isElegibleForFirstAdmingOnboarding]);
 
-    if (props.currentUserId) {
+    if (props.currentUserId || props.isRedirectingToLogin) {
         // Ideally, this would be a Redirect like below, but since we need to call an action, this redirect is done above
         return null;
     }
