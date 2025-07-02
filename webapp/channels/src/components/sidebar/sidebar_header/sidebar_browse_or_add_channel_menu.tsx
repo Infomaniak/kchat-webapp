@@ -50,42 +50,61 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         getHistory().push(`/${currentTeam?.name}/integrations`);
     };
 
-    const {sidebar_categories: sidebarCategories} = useGetUsageDeltas();
+    const {sidebar_categories: sidebarCategories, private_channels: privateChannels, public_channels: publicChannels} = useGetUsageDeltas();
+    const nextPlan = useNextPlan();
 
-    const allowed = (
+    const enabledCategory = (
         <FormattedMessage
             id='sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel'
             defaultMessage='Create new category'
         />
     );
 
-    const nextPlan = useNextPlan();
-    const forbidden = (
+    const disabledCategory = (
         <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
             <div
                 slot='trigger-element'
                 style={{display: 'flex', alignItems: 'center', gap: '8px'}}
             >
-                {allowed}
+                {enabledCategory}
                 <wc-ksuite-pro-upgrade-tag/>
             </div>
         </wc-ksuite-pro-upgrade-dialog>
     );
-    const {component, onClick} = isQuotaExceeded(sidebarCategories, allowed, forbidden, props.onCreateNewCategoryClick);
+    const {component: createCategoryComponent, onClick: createCategoryOnClick} = isQuotaExceeded(sidebarCategories, enabledCategory, disabledCategory, props.onCreateNewCategoryClick);
 
     let createNewChannelMenuItem: JSX.Element | null = null;
     if (props.canCreateChannel) {
+        const enabledCreateChannel = (
+            <FormattedMessage
+                id='sidebarLeft.browserOrCreateChannelMenu.createNewChannelMenuItem.primaryLabel'
+                defaultMessage='Create new channel'
+            />
+        );
+
+        const disabledCreateChannel = (
+            <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
+                <div
+                    slot='trigger-element'
+                    style={{display: 'flex', alignItems: 'center', gap: '8px'}}
+                >
+                    {enabledCreateChannel}
+                    <wc-ksuite-pro-upgrade-tag/>
+                </div>
+            </wc-ksuite-pro-upgrade-dialog>
+        );
+
+        const privateAndPublicQuotas = (privateChannels >= 0 && publicChannels >= 0) ? 0 : -1;
+        const {component: createChannelComponent, onClick: createChannelOnClick} = isQuotaExceeded(privateAndPublicQuotas, enabledCreateChannel, disabledCreateChannel, props.onCreateNewChannelClick);
+
         createNewChannelMenuItem = (
             <Menu.Item
                 id='createNewChannelMenuItem'
-                onClick={props.onCreateNewChannelClick}
+                aria-haspopup={privateAndPublicQuotas >= 0}
+                aria-expanded={privateAndPublicQuotas >= 0}
+                onClick={createChannelOnClick}
                 leadingElement={<PlusIcon size={18}/>}
-                labels={(
-                    <FormattedMessage
-                        id='sidebarLeft.browserOrCreateChannelMenu.createNewChannelMenuItem.primaryLabel'
-                        defaultMessage='Create new channel'
-                    />
-                )}
+                labels={createChannelComponent}
                 trailingElements={showCreateAndJoinChannelsTutorialTip && <CreateAndJoinChannelsTour/>}
             />
         );
@@ -144,11 +163,11 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         createNewCategoryMenuItem = (
             <Menu.Item
                 id='createCategoryMenuItem'
-                onClick={onClick}
+                onClick={createCategoryOnClick}
                 aria-haspopup={sidebarCategories >= 0}
                 aria-expanded={sidebarCategories >= 0}
                 leadingElement={<FolderPlusOutlineIcon size={18}/>}
-                labels={component}
+                labels={createCategoryComponent}
             />
         );
     }

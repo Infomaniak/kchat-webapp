@@ -5,13 +5,10 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import type {Channel, ChannelType} from '@mattermost/types/channels';
-import type {ServerError} from '@mattermost/types/errors';
+import type {Channel} from '@mattermost/types/channels';
 
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
-
-import {openChannelLimitModalIfNeeded} from 'actions/cloud';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import Constants from 'utils/constants';
 
@@ -26,7 +23,7 @@ type State = {
 }
 
 export type ChannelDetailsActions = {
-    unarchiveChannel: (channelId: string, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc) => Promise<ActionResult>;
+    unarchiveChannel: (channelId: string) => Promise<ActionResult>;
 };
 
 export default class UnarchiveChannelModal extends React.PureComponent<Props, State> {
@@ -40,7 +37,7 @@ export default class UnarchiveChannelModal extends React.PureComponent<Props, St
         if (this.props.channel.id.length !== Constants.CHANNEL_ID_LENGTH) {
             return;
         }
-        this.props.actions.unarchiveChannel(this.props.channel.id, openChannelLimitModalIfNeeded);
+        this.props.actions.unarchiveChannel(this.props.channel.id);
         this.onHide();
     };
 

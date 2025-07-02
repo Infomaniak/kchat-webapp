@@ -8,7 +8,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import type {ChannelType} from '@mattermost/types/channels';
 
 import {General} from 'mattermost-redux/constants';
-import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
@@ -25,10 +24,9 @@ import './channel_limit_indicator.scss';
 
 type Props = {
     type: ChannelType;
-    setLimitations: (limtation: Record<typeof General.OPEN_CHANNEL | typeof General.PRIVATE_CHANNEL, boolean>) => void;
 };
 
-const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
+const ChannelLimitIndicator = ({type}: Props) => {
     const dispatch = useDispatch<DispatchFunc>();
     const isAdmin = useSelector(isCurrentUserSystemAdmin);
     const [loaded, setLoaded] = useState(false);
@@ -51,15 +49,6 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
     useEffect(() => {
         loadUsage();
     }, [loadUsage]);
-
-    useEffect(() => {
-        if (loaded) {
-            setLimitations({
-                [General.OPEN_CHANNEL]: publicChannelLimitReached,
-                [General.PRIVATE_CHANNEL]: privateChannelLimitReached,
-            });
-        }
-    }, [publicChannelLimitReached, privateChannelLimitReached, loaded]);
 
     if ((type === General.OPEN_CHANNEL && !publicChannelLimitReached) || (type === General.PRIVATE_CHANNEL && !privateChannelLimitReached)) {
         return null;

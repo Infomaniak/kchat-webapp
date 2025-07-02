@@ -1,19 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ChannelType} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
 
 import {CloudTypes} from 'mattermost-redux/action_types';
 import {getCloudCustomer, getCloudProducts, getCloudSubscription, getInvoices} from 'mattermost-redux/actions/cloud';
 import {Client4} from 'mattermost-redux/client';
-import {General} from 'mattermost-redux/constants';
 import {getCloudErrors} from 'mattermost-redux/selectors/entities/cloud';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {isModalOpen} from 'selectors/views/modals';
-
-import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
 
 import {ModalIdentifiers} from 'utils/constants';
 import {isLimitExceeded} from 'utils/limits';
@@ -45,27 +41,6 @@ export function getUsage(): ThunkActionFunc<Promise<any>> {
             }
         } catch (e) {
             return e;
-        }
-        return {data: true};
-    };
-}
-
-export function openChannelLimitModalIfNeeded(error: ServerError, type: ChannelType): ThunkActionFunc<{data: boolean}> {
-    return (dispatch, getState) => {
-        if (isLimitExceeded(error)) {
-            if (isModalOpen(getState(), ModalIdentifiers.NEW_CHANNEL_MODAL)) {
-                dispatch(closeModal(ModalIdentifiers.NEW_CHANNEL_MODAL));
-            } else if (isModalOpen(getState(), ModalIdentifiers.UNARCHIVE_CHANNEL)) {
-                dispatch(closeModal(ModalIdentifiers.UNARCHIVE_CHANNEL));
-            }
-            dispatch(openModal({
-                modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
-                dialogType: ChannelLimitReachedModal,
-                dialogProps: {
-                    isPublicLimited: type === General.OPEN_CHANNEL,
-                    isPrivateLimited: type === General.PRIVATE_CHANNEL,
-                },
-            }));
         }
         return {data: true};
     };

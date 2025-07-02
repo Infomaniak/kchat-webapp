@@ -3,15 +3,19 @@
 
 import classNames from 'classnames';
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import type {IntlShape} from 'react-intl';
+import {injectIntl, FormattedMessage} from 'react-intl';
 
 import {GenericModal} from '@mattermost/components';
 import type {Channel, ChannelMembership, ChannelSearchOpts, ChannelsWithTotalCount} from '@mattermost/types/channels';
+import type {CloudUsage} from '@mattermost/types/cloud';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import Permissions from 'mattermost-redux/constants/permissions';
 import type {ActionResult} from 'mattermost-redux/types/actions';
+import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
 
+import withUseGetUsageDelta from 'components/common/hocs/cloud/with_use_get_usage_deltas';
 import LoadingScreen from 'components/loading_screen';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
@@ -71,6 +75,8 @@ export type Props = {
     rhsOpen?: boolean;
     channelsMemberCount?: Record<string, number>;
     actions: Actions;
+    intl: IntlShape;
+    usageDeltas: CloudUsage;
 }
 
 type State = {
@@ -83,7 +89,7 @@ type State = {
     searchTerm: string;
 }
 
-export default class BrowseChannels extends React.PureComponent<Props, State> {
+class BrowseChannels extends React.PureComponent<Props, State> {
     public searchTimeoutId: number;
     activeChannels: Channel[] = [];
 
@@ -307,24 +313,42 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
 
         const createNewChannelButton = (className: string, icon?: JSX.Element) => {
             const buttonClassName = classNames('btn', className);
+
+            const enabled = (
+                <button
+                    type='button'
+                    id='createNewChannelButton'
+                    className={buttonClassName}
+                    onClick={this.handleNewChannel}
+                    aria-label={localizeMessage({id: 'more_channels.create', defaultMessage: 'Create New Channel'})}
+                >
+                    {icon}
+                    <FormattedMessage
+                        id='more_channels.create'
+                        defaultMessage='Create New Channel'
+                    />
+                </button>
+            );
+
+            const rawText = this.props.intl.formatMessage({id: 'more_channels.create'});
+            const disabled = (
+                <wc-ksuite-pro-upgrade-dialog offer='standard'>
+                    <wc-ksuite-pro-upgrade-button
+                        style={{whiteSpace: 'nowrap', overflow: 'hidden'}}
+                        slot='trigger-element'
+                        button-text={rawText}
+                    />
+                </wc-ksuite-pro-upgrade-dialog>
+            );
+
+            const delta = this.props.usageDeltas.public_channels >= 0 && this.props.usageDeltas.private_channels >= 0 ? 0 : -1;
+            const {component} = isQuotaExceeded(delta, enabled, disabled, () => {});
             return (
                 <TeamPermissionGate
                     teamId={teamId}
                     permissions={[Permissions.CREATE_PUBLIC_CHANNEL]}
                 >
-                    <button
-                        type='button'
-                        id='createNewChannelButton'
-                        className={buttonClassName}
-                        onClick={this.handleNewChannel}
-                        aria-label={localizeMessage({id: 'more_channels.create', defaultMessage: 'Create New Channel'})}
-                    >
-                        {icon}
-                        <FormattedMessage
-                            id='more_channels.create'
-                            defaultMessage='Create New Channel'
-                        />
-                    </button>
+                    {component}
                 </TeamPermissionGate>
             );
         };
@@ -389,3 +413,5 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
         );
     }
 }
+
+export default withUseGetUsageDelta(injectIntl(BrowseChannels));
