@@ -44,7 +44,6 @@ import {savePreferences} from './preferences';
 import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
 
-import {getUsage} from '../../../../actions/cloud';
 import {General, Preferences} from '../constants';
 
 export function selectChannel(channelId: string) {
@@ -101,7 +100,68 @@ export function createChannel(channel: Channel, userId: string): ActionFuncAsync
 
         dispatch(addChannelToInitialCategory(created, true));
 
-        await dispatch(getUsage());
+        return {data: created};
+    };
+}
+
+export function createDirectChannel(userId: string, otherUserId: string): ActionFuncAsync<Channel> {
+    return async (dispatch, getState) => {
+        dispatch({type: ChannelTypes.CREATE_CHANNEL_REQUEST, data: null});
+
+        let created;
+        try {
+            created = await Client4.createDirectChannel([userId, otherUserId]);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch({type: ChannelTypes.CREATE_CHANNEL_FAILURE, error});
+            dispatch(logError(error));
+            return {error};
+        }
+
+        const member = {
+            channel_id: created.id,
+            user_id: userId,
+            roles: `${General.CHANNEL_USER_ROLE}`,
+            last_viewed_at: 0,
+            msg_count: 0,
+            mention_count: 0,
+            notify_props: {desktop: 'default', mark_unread: 'all'},
+            last_update_at: created.create_at,
+        };
+
+        const preferences = [
+            {user_id: userId, category: Preferences.CATEGORY_DIRECT_CHANNEL_SHOW, name: otherUserId, value: 'true'},
+            {user_id: userId, category: Preferences.CATEGORY_CHANNEL_OPEN_TIME, name: created.id, value: new Date().getTime().toString()},
+        ];
+
+        dispatch(savePreferences(userId, preferences));
+
+        dispatch(batchActions([
+            {
+                type: ChannelTypes.RECEIVED_CHANNEL,
+                data: created,
+            },
+            {
+                type: ChannelTypes.RECEIVED_MY_CHANNEL_MEMBER,
+                data: member,
+            },
+            {
+                type: PreferenceTypes.RECEIVED_PREFERENCES,
+                data: preferences,
+            },
+            {
+                type: ChannelTypes.CREATE_CHANNEL_SUCCESS,
+            },
+            {
+                type: UserTypes.RECEIVED_PROFILES_LIST_IN_CHANNEL,
+                id: created.id,
+                data: [{id: userId}, {id: otherUserId}],
+            },
+        ]));
+
+        dispatch(addChannelToInitialCategory(created));
+
+        dispatch(loadRolesIfNeeded(member.roles.split(' ')));
 
         return {data: created};
     };
@@ -665,7 +725,26 @@ export function deleteChannel(channelId: string): ActionFuncAsync {
         }
 
         dispatch({type: ChannelTypes.DELETE_CHANNEL_SUCCESS, data: {id: channelId, viewArchivedChannels}});
-        await dispatch(getUsage());
+
+        return {data: true};
+    };
+}
+
+export function unarchiveChannel(channelId: string, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc): ActionFuncAsync {
+    return async (dispatch, getState) => {
+        try {
+            await Client4.unarchiveChannel(channelId);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(openLimitModalIfNeeded(error, getChannelSelector(getState(), channelId).type));
+            dispatch(logError(error));
+            return {error};
+        }
+
+        const state = getState();
+        const config = getConfig(state);
+        const viewArchivedChannels = config.ExperimentalViewArchivedChannels === 'true';
+        dispatch({type: ChannelTypes.UNARCHIVED_CHANNEL_SUCCESS, data: {id: channelId, viewArchivedChannels}});
 
         return {data: true};
     };
