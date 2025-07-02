@@ -584,7 +584,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             >
                 <div
                     slot='trigger-element'
-                    style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer'}}
+                    style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginTop: '8px'}}
                 >
                     <FormattedMessage
                         id='channel_invite.invite_guest'
