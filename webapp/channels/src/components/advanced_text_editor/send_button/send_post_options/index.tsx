@@ -86,6 +86,7 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
     );
 
     const {scheduled_draft_custom_date: scheduledDraftCustomDate} = useGetUsageDeltas();
+    console.log('🚀 tcl ~ index.tsx:89 ~ scheduledDraftCustomDate:', scheduledDraftCustomDate);
     const {component, onClick} = isQuotaExceeded(scheduledDraftCustomDate, allowed, forbidden, handleChooseCustomTime);
 
     return (
@@ -137,7 +138,8 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
             <Menu.Separator/>
 
             <Menu.Item
-                aria-haspopup={scheduledDraftCustomDate}
+                aria-haspopup={scheduledDraftCustomDate >= 0}
+                aria-expanded={scheduledDraftCustomDate >= 0}
                 onClick={onClick}
                 key={'choose_custom_time'}
                 labels={component}
