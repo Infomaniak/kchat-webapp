@@ -16,7 +16,6 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getUsers} from 'mattermost-redux/selectors/entities/users';
 
-import {getUsage as getUsageAction} from 'actions/cloud';
 import {loadOutgoingHooksAndProfilesForTeam} from 'actions/integration_actions';
 
 import type {GlobalState} from 'types/store';
@@ -53,7 +52,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
             loadOutgoingHooksAndProfilesForTeam,
             removeOutgoingHook: Actions.removeOutgoingHook,
             regenOutgoingHookToken: Actions.regenOutgoingHookToken,
-            refreshUsage: getUsageAction,
         }, dispatch),
     };
 }

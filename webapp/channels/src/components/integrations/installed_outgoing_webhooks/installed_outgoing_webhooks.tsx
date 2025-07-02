@@ -77,12 +77,6 @@ export type Props = {
         * The function to call for regeneration of webhook token
         */
         regenOutgoingHookToken: (hookId: string) => Promise<ActionResult>;
-
-        /**
-        * The function to call for refreshing usage
-        */
-        refreshUsage: () => Promise<void>;
-
     };
 
     /**
@@ -121,7 +115,7 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
     };
 
     removeOutgoingHook = (outgoingWebhook: OutgoingWebhook) => {
-        this.props.actions.removeOutgoingHook(outgoingWebhook.id).then(this.props.actions.refreshUsage);
+        this.props.actions.removeOutgoingHook(outgoingWebhook.id);
     };
 
     outgoingWebhookCompare = (a: OutgoingWebhook, b: OutgoingWebhook) => {

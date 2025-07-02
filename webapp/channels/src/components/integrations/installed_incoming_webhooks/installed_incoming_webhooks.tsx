@@ -58,7 +58,7 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
     }
 
     deleteIncomingWebhook = (incomingWebhook: IncomingWebhook) => {
-        this.props.actions.removeIncomingHook(incomingWebhook.id).then(this.props.actions.refreshUsage);
+        this.props.actions.removeIncomingHook(incomingWebhook.id);
     };
 
     loadPage = async (pageToLoad: number) => {

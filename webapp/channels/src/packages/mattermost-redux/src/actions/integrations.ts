@@ -5,6 +5,7 @@ import type {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
 import type {Command, CommandArgs, DialogSubmission, IncomingWebhook, IncomingWebhooksWithCount, OAuthApp, OutgoingOAuthConnection, OutgoingWebhook, SubmitDialogResponse} from '@mattermost/types/integrations';
+import type {GlobalState} from '@mattermost/types/store';
 
 import {IntegrationTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
@@ -32,7 +33,6 @@ export function createIncomingHook(hook: IncomingWebhook) {
 export function createIncomingHookWithRefreshUsage(hook: IncomingWebhook): ActionFuncAsync<any> {
     return async (dispatch) => {
         const result = await dispatch(createIncomingHook(hook));
-
         await dispatch(getUsage());
 
         return result;
@@ -120,14 +120,13 @@ export function createOutgoingHook(hook: OutgoingWebhook) {
     });
 }
 
-export function getOutgoingHook(hookId: string) {
-    return bindClientFunc({
-        clientFunc: Client4.getOutgoingWebhook,
-        onSuccess: [IntegrationTypes.RECEIVED_OUTGOING_HOOK],
-        params: [
-            hookId,
-        ],
-    });
+export function createOutgoingHookWithRefreshUsage(hook: OutgoingWebhook): ActionFuncAsync<OutgoingWebhook, GlobalState, AnyAction> {
+    return async (dispatch) => {
+        const result = await dispatch(createOutgoingHook(hook));
+        await dispatch(getUsage());
+
+        return result;
+    };
 }
 
 export function getOutgoingHooks(channelId = '', teamId = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT) {
@@ -160,6 +159,8 @@ export function removeOutgoingHook(hookId: string): ActionFuncAsync {
                 data: {id: hookId},
             },
         ]));
+
+        await dispatch(getUsage());
 
         return {data: true};
     };
