@@ -1,4 +1,4 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
+// to simplify usage, we threat those are enable or disabled// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
 import {useMemo} from 'react';
@@ -49,8 +49,8 @@ export default function useGetUsageDeltas(): CloudUsage {
                 incoming_webhooks: usage.incoming_webhooks - withBackupValue(limits.incoming_webhooks, limitsLoaded),
                 outgoing_webhooks: usage.outgoing_webhooks - withBackupValue(limits.outgoing_webhooks, limitsLoaded),
                 sidebar_categories: usage.sidebar_categories - withBackupValue(limits.sidebar_categories, limitsLoaded),
-                scheduled_draft_custom_date: limits.scheduled_draft_custom_date === true ? -1 : 0,
-                reminder_custom_date: limits.reminder_custom_date === true ? -1 : 0,
+                scheduled_draft_custom_date: limits.scheduled_draft_custom_date === true ? -1 : 0, // to simplify usage, we threat those are enable or disabled
+                reminder_custom_date: limits.reminder_custom_date === true ? -1 : 0, // to simplify usage, we threat those are enable or disabled
             }
         );
     }, [usage, limits, limitsLoaded]);

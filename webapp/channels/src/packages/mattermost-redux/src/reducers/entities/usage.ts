@@ -32,17 +32,18 @@ const emptyUsage: CloudUsage = {
     outgoing_webhooks: 0,
     sidebar_categories: 0,
     scheduled_draft_custom_date: 0,
+    reminder_custom_date: 0,
 };
 
 // represents the usage associated with this workspace
 export default function usage(state: CloudUsage = emptyUsage, action: MMReduxAction) {
     switch (action.type) {
-    case CloudTypes.RECEIVED_USAGE:{
+    case CloudTypes.RECEIVED_USAGE:
         return {
             ...state,
             ...action.data,
             usageLoaded: true,
-        };}
+        };
     case CloudTypes.RECEIVED_MESSAGES_USAGE: {
         return {
             ...state,

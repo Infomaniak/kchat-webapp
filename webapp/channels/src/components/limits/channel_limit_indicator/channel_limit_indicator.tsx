@@ -29,7 +29,6 @@ type Props = {
 const ChannelLimitIndicator = ({type}: Props) => {
     const dispatch = useDispatch<DispatchFunc>();
     const isAdmin = useSelector(isCurrentUserSystemAdmin);
-    const [loaded, setLoaded] = useState(false);
     const {public_channels: publicChannelsUsage, private_channels: privateChannelsUsage} = useGetUsage();
     const {public_channels: publicChannelsLimit, private_channels: privateChannelsLimit} = useGetLimits()[0];
     const {public_channels: publicChannelsUsageDelta, private_channels: privateChannelsUsageDelta} = useGetUsageDeltas();
@@ -40,10 +39,7 @@ const ChannelLimitIndicator = ({type}: Props) => {
     const privateChannelLimitReached = privateChannelsUsageDelta >= 0;
 
     const loadUsage = useCallback(async () => {
-        const result = await dispatch(getUsage());
-        if (result?.data) {
-            setLoaded(true);
-        }
+        await dispatch(getUsage());
     }, [dispatch]);
 
     useEffect(() => {

@@ -17,7 +17,7 @@ const OptionnalUpgradeBanner: FC = () => {
 
     // @ts-expect-error global state vs RootState
     const locale = useSelector((s) => getCurrentUserLocale(s));
-    const historyDurationLimit = sanitizeHistoryDuration(limits.messages?.history); // it can also be a string
+    const historyDurationLimit = sanitizeHistoryDuration(limits.messages?.history);
 
     if (historyDurationLimit === null) {
         return null;
@@ -38,7 +38,6 @@ const OptionnalUpgradeBanner: FC = () => {
         </div>
     );
 
-    //TODO: DO NOT MERGE ! DO NOT MERGE ! DO NOT MERGE ! need to setup text correctly
     return (
         <wc-ksuite-pro-upgrade-banner
             offer={nextPlan}

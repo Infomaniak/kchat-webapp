@@ -54,7 +54,6 @@ export type PostListRowProps = {
 
     usage: CloudUsage;
     limits: Limits;
-    shouldShowUpgradeBanner: boolean;
     limitsLoaded: boolean;
     exceededLimitChannelId?: string;
     firstInaccessiblePostTime?: number;
