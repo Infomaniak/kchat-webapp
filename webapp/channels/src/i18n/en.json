@@ -6245,6 +6245,7 @@
   "userSettings.adminMode.admin_mode_badge": "Admin Mode",
   "userSettings.adminMode.modal_header": "Manage {userDisplayName}'s Settings",
   "userSettingsModal.pluginPreferences.header": "PLUGIN PREFERENCES",
+  "upgrade_banner.description": "Messages and files older than {duration} are no longer available. Upgrade to the {plan} kSuite Pro plan to enjoy unlimited conversation history.",
   "version_bar.new": "A new version of kChat is available.",
   "version_bar.refresh": "Refresh the app now",
   "view_image_popover.download": "Download",

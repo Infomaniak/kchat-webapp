@@ -5242,6 +5242,7 @@
   "user_profile.send.dm": "Envoyer un message",
   "user_profile.send.dm.yourself": "Envoyez-vous un message",
   "users_limits_announcement_bar.ctaText": "En savoir plus",
+  "upgrade_banner.description":"Les messages et fichiers datant de plus de {duration} ne sont plus disponibles. Passez à l'offre {plan} de kSuite Pro pour profiter d'un historique illimité de vos conversations.",
   "version_bar.new": "Une nouvelle version de kChat est disponible.",
   "version_bar.refresh": "Actualiser l'application maintenant",
   "view_image.loading": "Chargement ",

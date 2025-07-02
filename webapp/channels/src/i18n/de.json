@@ -6377,6 +6377,7 @@
   "userSettings.adminMode.admin_mode_badge": "Admin-Modus",
   "userSettings.adminMode.modal_header": "Verwalte {userDisplayName}'s Einstellungen",
   "userSettingsModal.pluginPreferences.header": "PLUGIN-EINSTELLUNGEN",
+  "upgrade_banner.description":"Nachrichten und Dateien, die älter als {duration} sind, sind nicht mehr verfügbar. Wechsle zum {plan} von kSuite Pro, um unbegrenzten Gesprächsverlauf zu erhalten.",
   "user_group_popover.close": "Popover der Benutzergruppe schließen",
   "user_group_popover.memberCount": "{member_count} {member_count, plural, one {Mitglied} other {Mitglieder}}",
   "user_group_popover.openGroupModal": "Vollständige Gruppeninformationen anzeigen",

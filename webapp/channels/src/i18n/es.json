@@ -4963,6 +4963,7 @@
   "user_profile.custom_status": "Estado",
   "user_profile.custom_status.set_status": "Establece un Estado",
   "user_profile.send.dm": "Enviar Mensaje",
+  "upgrade_banner.description":"Los mensajes y archivos de más de {duration} ya no están disponibles. Pásate al plan {plan} de kSuite Pro para disfrutar de un historial ilimitado de tus conversaciones.",
   "version_bar.new": "Una nueva version de kChat está disponible.",
   "version_bar.refresh": "Refrescar la app ahora",
   "view_image.loading": "Cargando ",
