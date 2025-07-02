@@ -10,15 +10,25 @@ import {formatYMDDurationHuman} from 'mattermost-redux/utils/duration';
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
 
-const UpgradeBanner: FC = () => {
+const OptionnalUpgradeBanner: FC = () => {
     const nextPlan = useNextPlan();
     const [limits] = useGetLimits();
 
     // @ts-expect-error global state vs RootState
     const locale = useSelector((s) => getCurrentUserLocale(s));
-    const historyDurationLimit = (limits.messages?.history as unknown as string) ?? ''; //messages.history is wrongly typed (we received an ISO 8601 duration) but i don't want to changes that many part
+    const historyDurationLimit = sanitizeHistoryDuration(limits.messages?.history); // it can also be a string
 
-    const historyDurationLimitHuman = formatYMDDurationHuman(historyDurationLimit, locale);
+    if (historyDurationLimit === null) {
+        return null;
+    }
+
+    const historyDurationLimitHuman = formatYMDDurationHuman(historyDurationLimit ?? '', locale);
+
+    const descriptionSlot = (
+        <div slot='sub-heading'>
+            {historyDurationLimitHuman}
+        </div>
+    );
 
     //TODO: DO NOT MERGE ! DO NOT MERGE ! DO NOT MERGE ! need to setup text correctly
     return (
@@ -27,11 +37,32 @@ const UpgradeBanner: FC = () => {
             class='upgrade-banner'
             variant='chat::history'
         >
-            <div slot='sub-heading'>
-                {historyDurationLimitHuman}
-            </div>
+            {historyDurationLimit && descriptionSlot}
         </wc-ksuite-pro-upgrade-banner>
     );
 };
 
-export default UpgradeBanner;
+export default OptionnalUpgradeBanner;
+
+// The history duration input can be either:
+// - a number: where 0 or -1 means "no duration" or "unlimited",
+// - or a string: expected to be an ISO 8601 duration format.
+function sanitizeHistoryDuration(history: string | number | undefined): string | null {
+    if (history === undefined || history === null) {
+        return null;
+    }
+
+    if (typeof history === 'number') {
+        return null;
+    }
+
+    if (typeof history === 'string') {
+        const isoDurationRegex = /^P(?=\d|T)(\d+Y)?(\d+M)?(\d+D)?(T(\d+H)?(\d+M)?(\d+S)?)?$/i;
+        if (!isoDurationRegex.test(history)) {
+            return null;
+        }
+        return history;
+    }
+
+    return null;
+}

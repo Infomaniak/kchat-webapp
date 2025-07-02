@@ -16,7 +16,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getFilesDropdownPluginMenuItems} from 'selectors/plugins';
 
 import FileSearchResultItem from 'components/file_search_results';
-import UpgradeBanner from 'components/ik_upgrade_banner/ik_upgrade_banner';
+import OptionnalUpgradeBanner from 'components/ik_upgrade_banner/ik_upgrade_banner';
 import NoResultsIndicator from 'components/no_results_indicator/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
 import SearchHint from 'components/search_hint/search_hint';
@@ -297,7 +297,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                     {'sidebar-expanded': isSideBarExpanded},
                 ])}
             >
-                <UpgradeBanner/>
+                <OptionnalUpgradeBanner/>
                 <NoResultsIndicator {...noResultsProps}/>
             </div>
         );
