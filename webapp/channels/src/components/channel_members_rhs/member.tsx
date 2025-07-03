@@ -238,6 +238,7 @@ export default styled(Member)`
         flex-direction: row;
         align-items: center;
         margin-right: auto;
+        max-width: calc(100% - 24px);
         padding: 4px 0px;
 
         .profileSpan_userInfo {
