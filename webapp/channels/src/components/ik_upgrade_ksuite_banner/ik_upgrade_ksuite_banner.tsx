@@ -1,7 +1,5 @@
-import type {FC} from 'react';
 import React from 'react';
-
-import './ik_upgrade_banner.css';
+import type {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
@@ -10,6 +8,7 @@ import {formatYMDDurationHuman} from 'mattermost-redux/utils/duration';
 
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
+import './ik_upgrade_banner.css';
 
 const OptionnalUpgradeBanner: FC = () => {
     const nextPlan = useNextPlan();
