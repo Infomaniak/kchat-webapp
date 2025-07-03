@@ -44,6 +44,7 @@ import {savePreferences} from './preferences';
 import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
 
+import {getUsage} from '../../../../actions/cloud';
 import {General, Preferences} from '../constants';
 
 export function selectChannel(channelId: string) {
@@ -58,6 +59,7 @@ export function createChannel(channel: Channel, userId: string): ActionFuncAsync
         let created;
         try {
             created = await Client4.createChannel(channel);
+            await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch({
@@ -707,6 +709,7 @@ export function deleteChannel(channelId: string): ActionFuncAsync {
 
         try {
             await Client4.deleteChannel(channelId);
+            await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -734,6 +737,7 @@ export function unarchiveChannel(channelId: string, openLimitModalIfNeeded: (err
     return async (dispatch, getState) => {
         try {
             await Client4.unarchiveChannel(channelId);
+            await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(openLimitModalIfNeeded(error, getChannelSelector(getState(), channelId).type));

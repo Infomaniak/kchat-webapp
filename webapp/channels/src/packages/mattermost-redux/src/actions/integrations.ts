@@ -39,6 +39,16 @@ export function createIncomingHookWithRefreshUsage(hook: IncomingWebhook): Actio
     };
 }
 
+export function getIncomingHook(hookId: string) {
+    return bindClientFunc({
+        clientFunc: Client4.getIncomingWebhook,
+        onSuccess: [IntegrationTypes.RECEIVED_INCOMING_HOOK],
+        params: [
+            hookId,
+        ],
+    });
+}
+
 export function getIncomingHooks(teamId = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT, includeTotalCount = false): ActionFuncAsync<IncomingWebhook[] | IncomingWebhooksWithCount> {
     return async (dispatch, getState) => {
         let data;
@@ -127,6 +137,16 @@ export function createOutgoingHookWithRefreshUsage(hook: OutgoingWebhook): Actio
 
         return result;
     };
+}
+
+export function getOutgoingHook(hookId: string) {
+    return bindClientFunc({
+        clientFunc: Client4.getOutgoingWebhook,
+        onSuccess: [IntegrationTypes.RECEIVED_OUTGOING_HOOK],
+        params: [
+            hookId,
+        ],
+    });
 }
 
 export function getOutgoingHooks(channelId = '', teamId = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT) {
