@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {NavigateMessage} from '@infomaniak/ksuite-bridge';
-import {KSuiteBridge, LogoutMessageKey, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
+import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import deepEqual from 'fast-deep-equal';
@@ -515,11 +515,7 @@ export default class Root extends React.PureComponent<Props, State> {
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
-                if (this.embeddedInIFrame) {
-                    this.props.ksuiteBridge?.sendMessage({type: LogoutMessageKey});
-                } else {
-                    window.location.href = data.uri;
-                }
+                window.open(data.uri, this.embeddedInIFrame ? '_top' : '_self');
             } else {
                 const lsToken = localStorage.getItem('IKToken');
 
