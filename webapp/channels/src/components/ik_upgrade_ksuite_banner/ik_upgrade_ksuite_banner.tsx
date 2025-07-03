@@ -8,7 +8,7 @@ import {formatYMDDurationHuman} from 'mattermost-redux/utils/duration';
 
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
-import './ik_upgrade_banner.css';
+import './ik_upgrade_ksuite_banner.css';
 
 const OptionnalUpgradeBanner: FC = () => {
     const nextPlan = useNextPlan();
