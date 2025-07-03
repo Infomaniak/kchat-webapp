@@ -134,6 +134,9 @@ export default function WithTooltip({
             flip({
                 fallbackPlacements: placements.fallback,
             }),
+
+            // IK change: Add 8px of padding so the tooltip is always at least 8px away from any edge of the screen.
+            // If the tooltip would overflow (e.g., on the right), it will be shifted left to maintain this space.
             shift({padding: 8}),
             arrow({
                 element: arrowRef,
