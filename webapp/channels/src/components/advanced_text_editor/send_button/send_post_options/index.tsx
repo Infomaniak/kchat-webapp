@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
@@ -33,6 +33,8 @@ type Props = {
 export function SendPostOptions({disabled, onSelect, channelId}: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
+
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const handleOnSelect = useCallback((e: React.FormEvent, scheduledAt: number) => {
         e.preventDefault();
@@ -73,7 +75,20 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
     );
 
     const disabledComponent = (
-        <UpgradeKsuiteButton>
+        <UpgradeKsuiteButton
+
+            // This is a bit of a hack to handle layout issues caused by the web component:
+            // We trigger a resize event once the web component signals it's ready,
+            // forcing the menu to recalculate positioning.
+            // The isUpdating state helps prevent UI flicker during this forced update.
+            onReady={() => {
+                setIsUpdating(true);
+                setTimeout(() => {
+                    window.dispatchEvent(new Event('resize'));
+                    setIsUpdating(false);
+                }, 20);
+            }}
+        >
             {enabledComponent}
         </UpgradeKsuiteButton>
     );
@@ -83,6 +98,7 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
 
     return (
         <Menu.Container
+            style={{visibility: isUpdating ? 'hidden' : 'visible', background: 'red'}}
             menuButtonTooltip={{
                 text: formatMessage({
                     id: 'create_post_button.option.schedule_message',

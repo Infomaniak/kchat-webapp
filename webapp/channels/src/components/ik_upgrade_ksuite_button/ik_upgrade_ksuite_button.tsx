@@ -1,5 +1,5 @@
 import type {ReactNode} from 'react';
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
 
@@ -7,6 +7,7 @@ type Props = {
     label?: string;
     children?: ReactNode;
     className?: string;
+    onReady?: () => void;
 }
 
 /**
@@ -14,12 +15,24 @@ type Props = {
  *
  * - If `label` is provided, renders with an <wc-ksuite-pro-upgrade-button>.
  * - If `children` is provided (and no `label`), it renders custom content with added <wc-ksuite-pro-upgrade-tag>.
+ * - If `onReady` is provided, it's called when the WC is mounted and ready.
  */
-export default function UpgradeKsuiteButton({label, children, className}: Props) {
+export default function UpgradeKsuiteButton({label, children, className, onReady}: Props) {
     const nextPlan = useNextPlan();
+    const dialogRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        const el = dialogRef.current;
+        if (el?.componentOnReady) {
+            el.componentOnReady().then(() => {
+                onReady?.();
+            });
+        }
+    }, [onReady]);
 
     return (
         <wc-ksuite-pro-upgrade-dialog
+            ref={dialogRef}
             offer={nextPlan}
             class={className}
         >
