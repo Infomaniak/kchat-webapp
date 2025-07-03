@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {cleanUpStatusAndProfileFetchingPoll} from 'mattermost-redux/actions/status_profile_polling';
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
+import {getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 
 import {addVisibleUsersInCurrentChannelAndSelfToStatusPoll} from 'actions/status_actions';
 
@@ -19,7 +20,7 @@ import CRTPostsChannelResetWatcher from 'components/threading/channel_threads/po
 import UnreadsStatusHandler from 'components/unreads_status_handler';
 
 import {Constants} from 'utils/constants';
-import {isInternetExplorer, isEdge} from 'utils/user_agent';
+import {isInternetExplorer, isEdge, isDesktopApp} from 'utils/user_agent';
 
 import Pluggable from 'plugins/pluggable';
 
@@ -36,6 +37,7 @@ type Props = {
 
 export default function ChannelController(props: Props) {
     const enabledUserStatuses = useSelector(getIsUserStatusesConfigEnabled);
+    const mykSuite = useSelector(getMyKSuites);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -69,6 +71,37 @@ export default function ChannelController(props: Props) {
             clearInterval(loadStatusesIntervalId);
         };
     }, [enabledUserStatuses]);
+
+    useEffect(() => {
+        if (isDesktopApp()) {
+            window.addEventListener('keydown', handleDesktopServerSwitchShortcut);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleDesktopServerSwitchShortcut);
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleDesktopServerSwitchShortcut = (e: KeyboardEvent) => {
+        if ((e.metaKey || e.ctrlKey) && e.altKey) {
+            const digits = Array.from({length: Math.min(mykSuite.length, 10)}, (_, i) => {
+                return i === 9 ? 'Digit0' : `Digit${i + 1}`;
+            });
+
+            const idx = digits.indexOf(e.code);
+            if (idx !== -1) {
+                e.preventDefault();
+
+                if (isDesktopApp()) {
+                    window.postMessage({
+                        type: 'switch-server',
+                        data: mykSuite[idx].display_name,
+                    }, window.origin);
+                }
+            }
+        }
+    };
 
     return (
         <>
