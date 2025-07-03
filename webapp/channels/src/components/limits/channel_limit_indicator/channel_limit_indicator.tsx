@@ -74,7 +74,6 @@ const ChannelLimitIndicator = ({type}: Props) => {
                             defaultMessage='Upgrade'
 
                         />
-
                     </a>
                 </wc-ksuite-pro-upgrade-dialog>
             </div>

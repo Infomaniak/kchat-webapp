@@ -16,7 +16,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getFilesDropdownPluginMenuItems} from 'selectors/plugins';
 
 import FileSearchResultItem from 'components/file_search_results';
-import OptionnalUpgradeBanner from 'components/ik_upgrade_banner/ik_upgrade_banner';
+import OptionnalUpgradeBanner from 'components/ik_upgrade_ksuite_banner/ik_upgrade_ksuite_banner';
 import NoResultsIndicator from 'components/no_results_indicator/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
 import SearchHint from 'components/search_hint/search_hint';

@@ -20,6 +20,7 @@ import {filterGroupsMatchingTerm} from 'mattermost-redux/utils/group_utils';
 import type {WcPackName} from 'mattermost-redux/utils/plans_util';
 import {displayUsername, filterProfilesStartingWithTerm, isGuest} from 'mattermost-redux/utils/user_utils';
 
+import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import InvitationModal from 'components/invitation_modal/invitation_modal';
 import MultiSelect from 'components/multiselect/multiselect';
 import type {Value} from 'components/multiselect/multiselect';
@@ -578,22 +579,13 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         );
 
         const inviteGuestQuotaReached = (
-            <wc-ksuite-pro-upgrade-dialog
-                offer={this.props.nextPlan}
-                class='inviteGuessLimited'
-            >
-                <div
-                    slot='trigger-element'
-                    style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginTop: '8px'}}
-                >
-                    <FormattedMessage
-                        id='channel_invite.invite_guest'
-                        defaultMessage='Invite as a Guest'
-                    />
+            <UpgradeKsuiteButton className='inviteGuessLimited'>
+                <FormattedMessage
+                    id='channel_invite.invite_guest'
+                    defaultMessage='Invite as a Guest'
+                />
+            </UpgradeKsuiteButton>
 
-                    <wc-ksuite-pro-upgrade-tag/>
-                </div>
-            </wc-ksuite-pro-upgrade-dialog>
         );
 
         let inviteGuestComp = null;

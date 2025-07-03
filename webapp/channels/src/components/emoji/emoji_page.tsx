@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom';
 import Permissions from 'mattermost-redux/constants/permissions';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
-import {useNextPlan} from 'components/common/hooks/useNextPlan';
+import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import AnyTeamPermissionGate from 'components/permissions_gates/any_team_permission_gate';
 
 import * as Utils from 'utils/utils';
@@ -41,8 +41,6 @@ export default function EmojiPage({
 }: Props) {
     const intl = useIntl();
 
-    const nextPlan = useNextPlan();
-
     useEffect(() => {
         updateTitle();
         actions.loadRolesIfNeeded(ROLES);
@@ -64,13 +62,7 @@ export default function EmojiPage({
     let action = null;
     if (isCapped) {
         const label = intl.formatMessage({id: 'emoji_list.add'});
-        action = (
-            <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-                <wc-ksuite-pro-upgrade-button
-                    slot='trigger-element'
-                    button-text={label}
-                />
-            </wc-ksuite-pro-upgrade-dialog>);
+        action = <UpgradeKsuiteButton label={label}/>;
     } else {
         action = (
             <Link

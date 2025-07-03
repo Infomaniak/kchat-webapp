@@ -16,6 +16,7 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
 
 import withUseGetUsageDelta from 'components/common/hocs/cloud/with_use_get_usage_deltas';
+import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import LoadingScreen from 'components/loading_screen';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
@@ -332,13 +333,7 @@ class BrowseChannels extends React.PureComponent<Props, State> {
 
             const rawText = this.props.intl.formatMessage({id: 'more_channels.create'});
             const disabled = (
-                <wc-ksuite-pro-upgrade-dialog offer='standard'>
-                    <wc-ksuite-pro-upgrade-button
-                        style={{whiteSpace: 'nowrap', overflow: 'hidden'}}
-                        slot='trigger-element'
-                        button-text={rawText}
-                    />
-                </wc-ksuite-pro-upgrade-dialog>
+                <UpgradeKsuiteButton label={rawText}/>
             );
 
             const delta = this.props.usageDeltas.public_channels >= 0 && this.props.usageDeltas.private_channels >= 0 ? 0 : -1;

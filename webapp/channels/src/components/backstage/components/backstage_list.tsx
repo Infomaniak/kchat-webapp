@@ -6,13 +6,13 @@ import type {ChangeEvent, ReactNode} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {Link} from 'react-router-dom';
 
-import {useNextPlan} from 'components/common/hooks/useNextPlan';
 import LoadingScreen from 'components/loading_screen';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
 import SearchIcon from 'components/widgets/icons/fa_search_icon';
 
 import './backstage_list.scss';
+import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 
 type Props = {
     children?: JSX.Element[] | ((filter: string) => [JSX.Element[], boolean]);
@@ -54,8 +54,6 @@ const getPaging = (remainingProps: Props, childCount: number, hasFilter: boolean
 
 const BackstageList = (remainingProps: Props) => {
     const {formatMessage} = useIntl();
-
-    const nextPlan = useNextPlan();
 
     const [filter, setFilter] = useState('');
     const updateFilter = (e: ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
@@ -121,12 +119,7 @@ const BackstageList = (remainingProps: Props) => {
             const rawText = formatMessage({id: remainingProps.addTextKey});
 
             addLink = (
-                <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-                    <wc-ksuite-pro-upgrade-button
-                        slot='trigger-element'
-                        button-text={rawText}
-                    />
-                </wc-ksuite-pro-upgrade-dialog>
+                <UpgradeKsuiteButton label={rawText}/>
             );
         } else {
             addLink = (

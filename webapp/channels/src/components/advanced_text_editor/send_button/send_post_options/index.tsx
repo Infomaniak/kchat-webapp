@@ -15,7 +15,7 @@ import {openModal} from 'actions/views/modals';
 
 import CoreMenuOptions from 'components/advanced_text_editor/send_button/send_post_options/core_menu_options';
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import {useNextPlan} from 'components/common/hooks/useNextPlan';
+import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import * as Menu from 'components/menu';
 
 import {ModalIdentifiers} from 'utils/constants';
@@ -72,17 +72,10 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
         />
     );
 
-    const nextPlan = useNextPlan();
     const disabledComponent = (
-        <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-            <div
-                slot='trigger-element'
-                style={{display: 'flex', alignItems: 'center', gap: '8px'}}
-            >
-                {enabledComponent}
-                <wc-ksuite-pro-upgrade-tag/>
-            </div>
-        </wc-ksuite-pro-upgrade-dialog>
+        <UpgradeKsuiteButton>
+            {enabledComponent}
+        </UpgradeKsuiteButton>
     );
 
     const {scheduled_draft_custom_date: scheduledDraftCustomDate} = useGetUsageDeltas();

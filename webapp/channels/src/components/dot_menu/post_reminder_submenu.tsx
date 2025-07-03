@@ -15,6 +15,7 @@ import {openModal} from 'actions/views/modals';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
+import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import * as Menu from 'components/menu';
 import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal';
 
@@ -128,15 +129,9 @@ function PostReminderSubmenu(props: Props) {
                 />
             );
             const disabled = (
-                <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-                    <div
-                        slot='trigger-element'
-                        style={{display: 'flex', alignItems: 'center', gap: '8px'}}
-                    >
-                        {enabled}
-                        <wc-ksuite-pro-upgrade-tag/>
-                    </div>
-                </wc-ksuite-pro-upgrade-dialog>
+                <UpgradeKsuiteButton>
+                    {enabled}
+                </UpgradeKsuiteButton>
             );
             const {component, onClick} = withQuotaControl(reminderCustomDate, enabled, disabled, clickHandler);
             isQuotaReached = reminderCustomDate >= 0;

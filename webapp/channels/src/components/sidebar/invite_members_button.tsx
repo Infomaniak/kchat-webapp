@@ -11,6 +11,7 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
+import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import InvitationModal from 'components/invitation_modal';
 import {getAnalyticsCategory} from 'components/onboarding_tasks';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
@@ -64,24 +65,17 @@ const InviteMembersButton = (props: Props): JSX.Element | null => {
     );
 
     const disabled = (
-        <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-            <div
-                slot='trigger-element'
-                aria-label={intl.formatMessage({id: 'sidebar_left.sidebar_channel_navigator.inviteUsers', defaultMessage: 'Invite Members'})}
-                style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer'}}
-            >
-                <i
-                    className='icon-plus-box'
-                    aria-hidden='true'
-                    style={{fontSize: '20px', marginLeft: '15px'}}
-                />
-                <FormattedMessage
-                    id={'sidebar_left.inviteMembers'}
-                    defaultMessage='Invite Members'
-                />
-                <wc-ksuite-pro-upgrade-tag/>
-            </div>
-        </wc-ksuite-pro-upgrade-dialog>
+        <UpgradeKsuiteButton>
+            <i
+                className='icon-plus-box'
+                aria-hidden='true'
+                style={{fontSize: '20px', marginLeft: '15px'}}
+            />
+            <FormattedMessage
+                id={'sidebar_left.inviteMembers'}
+                defaultMessage='Invite Members'
+            />
+        </UpgradeKsuiteButton>
 
     );
 

@@ -18,6 +18,7 @@ import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
+import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import * as Menu from 'components/menu';
 import {OnboardingTourSteps} from 'components/tours';
 import {useShowOnboardingTutorialStep, CreateAndJoinChannelsTour} from 'components/tours/onboarding_tour';
@@ -61,15 +62,9 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
     );
 
     const disabledCategory = (
-        <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-            <div
-                slot='trigger-element'
-                style={{display: 'flex', alignItems: 'center', gap: '8px'}}
-            >
-                {enabledCategory}
-                <wc-ksuite-pro-upgrade-tag/>
-            </div>
-        </wc-ksuite-pro-upgrade-dialog>
+        <UpgradeKsuiteButton>
+            {enabledCategory}
+        </UpgradeKsuiteButton>
     );
     const {component: createCategoryComponent, onClick: createCategoryOnClick} = withQuotaControl(sidebarCategories, enabledCategory, disabledCategory, props.onCreateNewCategoryClick);
 
@@ -83,15 +78,10 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         );
 
         const disabledCreateChannel = (
-            <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-                <div
-                    slot='trigger-element'
-                    style={{display: 'flex', alignItems: 'center', gap: '8px'}}
-                >
-                    {enabledCreateChannel}
-                    <wc-ksuite-pro-upgrade-tag/>
-                </div>
-            </wc-ksuite-pro-upgrade-dialog>
+            <UpgradeKsuiteButton>
+                {enabledCreateChannel}
+            </UpgradeKsuiteButton>
+
         );
 
         const privateAndPublicQuotas = (privateChannels >= 0 && publicChannels >= 0) ? 0 : -1;

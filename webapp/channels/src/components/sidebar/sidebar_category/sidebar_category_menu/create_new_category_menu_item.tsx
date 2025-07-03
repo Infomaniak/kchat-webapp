@@ -13,8 +13,8 @@ import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import {useNextPlan} from 'components/common/hooks/useNextPlan';
 import EditCategoryModal from 'components/edit_category_modal';
+import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import * as Menu from 'components/menu';
 
 import {ModalIdentifiers} from 'utils/constants';
@@ -43,17 +43,10 @@ const CreateNewCategoryMenuItem = ({
         />
     );
 
-    const nextPlan = useNextPlan();
     const disabled = (
-        <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-            <div
-                slot='trigger-element'
-                style={{display: 'flex', alignItems: 'center', gap: '8px'}}
-            >
-                {enabled}
-                <wc-ksuite-pro-upgrade-tag/>
-            </div>
-        </wc-ksuite-pro-upgrade-dialog>
+        <UpgradeKsuiteButton>
+            {enabled}
+        </UpgradeKsuiteButton>
 
     );
     const {sidebar_categories: sidebarCategories} = useGetUsageDeltas();
