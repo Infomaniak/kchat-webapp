@@ -17,6 +17,7 @@ import {
     FloatingArrow,
     flip,
     useMergeRefs,
+    shift,
 } from '@floating-ui/react';
 import classNames from 'classnames';
 import React, {useRef, useState, useMemo, cloneElement, isValidElement} from 'react';
@@ -133,6 +134,7 @@ export default function WithTooltip({
             flip({
                 fallbackPlacements: placements.fallback,
             }),
+            shift({padding: 8}),
             arrow({
                 element: arrowRef,
             }),
