@@ -61,7 +61,7 @@ exports[`TooltipContent have correct structure with title and large emoji 1`] = 
           aria-label=":smile:"
           class="emoticon"
           data-emoticon="smile"
-          style="background-image: url(/static/emoji/1f604.png); background-size: contain; height: 48px; width: 48px; max-height: 48px; max-width: 48px; min-height: 48px; min-width: 48px; overflow: hidden;"
+          style="background-image: url(/static/emoji/1f604.png); background-size: contain; height: 28px; width: 28px; max-height: 28px; max-width: 28px; min-height: 28px; min-width: 28px; overflow: hidden;"
         />
       </span>
       <span
