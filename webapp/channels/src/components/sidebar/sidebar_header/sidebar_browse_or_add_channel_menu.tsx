@@ -61,6 +61,7 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
                 id='createNewChannelMenuItem'
                 onClick={withQuotaCheckChannels(props.onCreateNewChannelClick)}
                 leadingElement={<PlusIcon size={18}/>}
+                isLabelsRowLayout={true}
                 labels={(
                     <div
                         style={{
@@ -138,6 +139,7 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
                 id='createCategoryMenuItem'
                 onClick={withQuotaCheckCategories(props.onCreateNewCategoryClick)}
                 leadingElement={<FolderPlusOutlineIcon size={18}/>}
+                isLabelsRowLayout={true}
                 labels={(
                     <div
                         style={{

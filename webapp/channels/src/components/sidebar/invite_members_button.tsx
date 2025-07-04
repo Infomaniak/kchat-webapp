@@ -38,35 +38,64 @@ const InviteMembersButton = (props: Props): JSX.Element | null => {
 
     const {isQuotaExceeded, withQuotaCheck} = quotaGate(props.canAddGuest, 'ksuite_essential');
 
+    const canAdd = (
+        <ToggleModalButton
+            ariaLabel={intl.formatMessage({id: 'sidebar_left.inviteMembers', defaultMessage: 'Invite Members'})}
+            id='inviteMembersButton'
+            className={`intro-links color--link cursor--pointer${props.className ? ` ${props.className}` : ''}`}
+            modalId={ModalIdentifiers.INVITATION}
+            dialogType={InvitationModal}
+            onClick={handleButtonClick}
+            dialogProps={{focusOriginElement: 'inviteMembersButton'}}
+        >
+            <div
+                className='SidebarChannelNavigator__inviteMembersLhsButton'
+                aria-label={intl.formatMessage({id: 'sidebar_left.sidebar_channel_navigator.inviteUsers', defaultMessage: 'Invite Members'})}
+            >
+                <i
+                    className='icon-plus-box'
+                    aria-hidden='true'
+                />
+                <FormattedMessage
+                    id={'sidebar_left.inviteMembers'}
+                    defaultMessage='Invite Members'
+                />
+            </div>
+        </ToggleModalButton>
+    );
+
+    const cantAdd = (
+        <div
+            className='SidebarChannelNavigator__inviteMembersLhsButton'
+            aria-label={intl.formatMessage({id: 'sidebar_left.sidebar_channel_navigator.inviteUsers', defaultMessage: 'Invite Members'})}
+            onClick={withQuotaCheck(() => {})}
+            role='button'
+
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+            }}
+        >
+            <i
+                className='icon-plus-box'
+                aria-hidden='true'
+            />
+            <FormattedMessage
+                id={'sidebar_left.inviteMembers'}
+                defaultMessage='Invite Members'
+            />
+            {isQuotaExceeded && <wc-ksuite-pro-upgrade-tag style={{marginLeft: '8px'}}/>}
+        </div>
+    );
+
     return (
         <TeamPermissionGate
             teamId={currentTeamId}
             permissions={[Permissions.ADD_USER_TO_TEAM, Permissions.INVITE_GUEST]}
         >
-            <ToggleModalButton
-                ariaLabel={intl.formatMessage({id: 'sidebar_left.inviteMembers', defaultMessage: 'Invite Members'})}
-                id='inviteMembersButton'
-                className={`intro-links color--link cursor--pointer${props.className ? ` ${props.className}` : ''}`}
-                modalId={ModalIdentifiers.INVITATION}
-                dialogType={InvitationModal}
-                onClick={withQuotaCheck(handleButtonClick)}
-                dialogProps={{focusOriginElement: 'inviteMembersButton'}}
-            >
-                <div
-                    className='SidebarChannelNavigator__inviteMembersLhsButton'
-                    aria-label={intl.formatMessage({id: 'sidebar_left.sidebar_channel_navigator.inviteUsers', defaultMessage: 'Invite Members'})}
-                >
-                    <i
-                        className='icon-plus-box'
-                        aria-hidden='true'
-                    />
-                    <FormattedMessage
-                        id={'sidebar_left.inviteMembers'}
-                        defaultMessage='Invite Members'
-                    />
-                    {isQuotaExceeded && <wc-ksuite-pro-upgrade-tag/>}
-                </div>
-            </ToggleModalButton>
+            {props.canAddGuest && canAdd}
+            {!props.canAddGuest && cantAdd}
         </TeamPermissionGate>
     );
 };

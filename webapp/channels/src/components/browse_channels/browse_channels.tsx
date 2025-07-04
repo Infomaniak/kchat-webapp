@@ -328,11 +328,17 @@ class BrowseChannels extends React.PureComponent<Props, State> {
                         aria-label={localizeMessage({id: 'more_channels.create', defaultMessage: 'Create New Channel'})}
                     >
                         {icon}
+                        {isQuotaExceeded && (
+                            <wc-icon
+                                name='rocket'
+                                style={{color: 'rgb(var(--button-bg-rgb))'}}
+                            />)
+                        }
                         <FormattedMessage
                             id='more_channels.create'
                             defaultMessage='Create New Channel'
                         />
-                        {isQuotaExceeded && <wc-ksuite-pro-upgrade-compact-tag/>}
+
                     </button>
                 </TeamPermissionGate>
             );
