@@ -20,14 +20,14 @@ function mapStateToProps(state: GlobalState) {
 
     const usage = getUsage(state);
     const limit = getCloudLimits(state);
-    const isCapped = (usage.custom_emojis - limit.custom_emojis) >= 0;
+    const isQuotaExceeded = (usage.custom_emojis - limit.custom_emojis) >= 0;
 
     return {
         teamName: team?.name,
         teamDisplayName: team?.display_name,
         siteName: state.entities.general.config.SiteName,
         currentTheme: getTheme(state),
-        isCapped,
+        isQuotaExceeded,
     };
 }
 

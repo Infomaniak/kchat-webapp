@@ -22,7 +22,7 @@ type Props = {
     header: ReactNode;
     addLink?: string;
     addText?: ReactNode;
-    isCapped?: boolean;
+    isQuotaExceeded?: boolean;
     addButtonId?: string;
     emptyText?: ReactNode;
     emptyTextSearch?: JSX.Element;
@@ -119,8 +119,8 @@ const BackstageList = (remainingProps: Props) => {
     let addLink = null;
 
     if (remainingProps.addLink && remainingProps.addText) {
-        if (remainingProps.isCapped) {
-            const {withQuotaCheck} = quotaGate(!remainingProps.isCapped, currentPack);
+        if (remainingProps.isQuotaExceeded) {
+            const {withQuotaCheck} = quotaGate(!remainingProps.isQuotaExceeded, currentPack);
 
             addLink = (
                 <button

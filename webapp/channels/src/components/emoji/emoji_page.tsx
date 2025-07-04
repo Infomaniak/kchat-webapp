@@ -23,7 +23,7 @@ type Props = {
     siteName?: string;
     scrollToTop(): void;
     currentTheme: Theme;
-    isCapped: boolean;
+    isQuotaExceeded: boolean;
     actions: {
         loadRolesIfNeeded(roles: Iterable<string>): void;
     };
@@ -39,7 +39,7 @@ export default function EmojiPage({
     scrollToTop,
     currentTheme,
     actions,
-    isCapped,
+    isQuotaExceeded,
 }: Props) {
     const intl = useIntl();
     const currentPack = useSelector(getCurrentPackName);
@@ -63,7 +63,7 @@ export default function EmojiPage({
     };
 
     let action = null;
-    if (isCapped) {
+    if (isQuotaExceeded) {
         const {withQuotaCheck} = quotaGate(false, currentPack);
         action = (
             <button

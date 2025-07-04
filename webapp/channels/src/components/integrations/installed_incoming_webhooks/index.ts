@@ -31,7 +31,7 @@ function mapStateToProps(state: GlobalState) {
     const enableIncomingWebhooks = config.EnableIncomingWebhooks === 'true';
     const usage = getUsage(state);
     const limits = getCloudLimits(state);
-    const isCapped = (usage.incoming_webhooks - limits.incoming_webhooks) >= 0;
+    const isQuotaExceeded = (usage.incoming_webhooks - limits.incoming_webhooks) >= 0;
 
     return {
         incomingHooks,
@@ -40,7 +40,7 @@ function mapStateToProps(state: GlobalState) {
         users: getUsers(state),
         canManageOthersWebhooks,
         enableIncomingWebhooks,
-        isCapped,
+        isQuotaExceeded,
     };
 }
 
