@@ -6,7 +6,7 @@ import type {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
 import type {Channel, ChannelUnread} from '@mattermost/types/channels';
-import type {FetchPaginatedThreadOptions} from '@mattermost/types/client4';
+import type {FetchPaginatedThreadOptions, ReminderTimestamp} from '@mattermost/types/client4';
 import type {Group} from '@mattermost/types/groups';
 import {isMessageAttachmentArray} from '@mattermost/types/message_attachments';
 import type {Post, PostList, PostAcknowledgement} from '@mattermost/types/posts';
@@ -1195,17 +1195,6 @@ export function markPostReminderAsDone(userId: string, postId: string): ActionFu
         return {data: true};
     };
 }
-
-type FixedReminderTimestamp = {
-    type: 'fixed';
-    value: '30 minutes' | '1 hour' | '2 hours' | 'tomorrow' | 'monday';
-}
-export type CustomReminderTimestamp = {
-    type: 'custom';
-    value: number; // in seconds
-}
-
-export type ReminderTimestamp = FixedReminderTimestamp | CustomReminderTimestamp
 
 export function addPostReminder(userId: string, postId: string, timestamp: ReminderTimestamp, reschedule?: boolean, reminderPostId?: string): ActionFuncAsync {
     return async (dispatch, getState) => {

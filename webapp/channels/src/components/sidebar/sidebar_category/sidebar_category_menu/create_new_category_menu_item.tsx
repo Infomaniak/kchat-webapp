@@ -38,7 +38,6 @@ const CreateNewCategoryMenuItem = ({
     }, [dispatch]);
 
     const {sidebar_categories: sidebarCategories} = useGetUsageDeltas();
-
     const {isQuotaExceeded, withQuotaCheck} = quotaGate(sidebarCategories, currentPack);
 
     return (

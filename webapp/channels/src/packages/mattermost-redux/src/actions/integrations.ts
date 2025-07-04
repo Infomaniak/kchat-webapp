@@ -33,6 +33,8 @@ export function createIncomingHook(hook: IncomingWebhook) {
 export function createIncomingHookWithRefreshUsage(hook: IncomingWebhook): ActionFuncAsync<any> {
     return async (dispatch) => {
         const result = await dispatch(createIncomingHook(hook));
+
+        //@ts-expect-error state type mismatch
         await dispatch(getUsage());
 
         return result;
@@ -104,6 +106,7 @@ export function removeIncomingHook(hookId: string): ActionFuncAsync {
             },
         ]));
 
+        //@ts-expect-error state type mismatch
         await dispatch(getUsage());
 
         return {data: true};
@@ -133,6 +136,8 @@ export function createOutgoingHook(hook: OutgoingWebhook) {
 export function createOutgoingHookWithRefreshUsage(hook: OutgoingWebhook): ActionFuncAsync<OutgoingWebhook, GlobalState, AnyAction> {
     return async (dispatch) => {
         const result = await dispatch(createOutgoingHook(hook));
+
+        //@ts-expect-error state type mismatch
         await dispatch(getUsage());
 
         return result;
@@ -180,6 +185,7 @@ export function removeOutgoingHook(hookId: string): ActionFuncAsync {
             },
         ]));
 
+        //@ts-expect-error state type mismatch
         await dispatch(getUsage());
 
         return {data: true};

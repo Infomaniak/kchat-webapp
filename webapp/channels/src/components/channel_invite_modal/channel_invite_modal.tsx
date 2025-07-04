@@ -17,7 +17,7 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 import {Client4} from 'mattermost-redux/client';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {filterGroupsMatchingTerm} from 'mattermost-redux/utils/group_utils';
-import {quotaGate, type WcPackName} from 'mattermost-redux/utils/plans_util';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 import {displayUsername, filterProfilesStartingWithTerm, isGuest} from 'mattermost-redux/utils/user_utils';
 
 import InvitationModal from 'components/invitation_modal/invitation_modal';

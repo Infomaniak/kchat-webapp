@@ -2457,6 +2457,9 @@ export default class Client4 {
         );
     };
 
+    // `target_time` can either be a timestamp in second
+    // or one of the predefined string values for scheduled dates:
+    // '30 minutes', '1 hour', '2 hours', 'tomorrow', 'monday'
     addPostReminder = (userId: string, postId: string, timestamp: number | string, reschedule?: boolean, reminderPostId?: string) => {
         this.trackEvent('api', 'api_post_set_reminder');
 

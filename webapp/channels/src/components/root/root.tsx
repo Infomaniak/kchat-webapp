@@ -51,6 +51,7 @@ import {LLMBotPost} from 'plugins/ai/components/llmbot_post';
 import LuxonController from './luxon_controller';
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
+import {WcModal} from './WcModal';
 
 import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
@@ -657,7 +658,7 @@ export default class Root extends React.PureComponent<Props, State> {
             <RootProvider>
                 <MobileViewWatcher/>
                 <LuxonController/>
-                <WcModals/>
+                <WcModal/>
                 <Switch>
                     <Route
                         path={'/error'}
@@ -798,11 +799,3 @@ export function doesRouteBelongToTeamControllerRoutes(pathname: RouteComponentPr
 
     return TEAM_CONTROLLER_PATH_PATTERN.test(pathname);
 }
-
-const WcModals = () => {
-    return (
-        <wc-ksuite-pro-upgrade-dialog id='wc-modal'>
-            <div slot='trigger-element'/>
-        </wc-ksuite-pro-upgrade-dialog>
-    );
-};

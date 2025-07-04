@@ -33,12 +33,14 @@ export const quotaGate = (
 
     const openUpgradeDialog = (plan: WcPackName) => {
         customElements.whenDefined('wc-ksuite-pro-upgrade-dialog').then(() => {
-            const wcModal = document.getElementById('wc-modal');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const wcModal = document.getElementById('wc-modal') as any; // no type for wc yet
             if (wcModal && typeof wcModal.open === 'function') {
                 requestAnimationFrame(() => { // This is to make sure we don't have weird behavior with MUI menu closing the modal
                     wcModal.open(plan);
                 });
             } else {
+                // eslint-disable-next-line no-console
                 console.warn('open() on <wc-ksuite-pro-upgrade-dialog id="wc-modal"> is not available.');
             }
         });

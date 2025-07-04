@@ -44,6 +44,17 @@ export type FetchPaginatedThreadOptions = {
     fromPost?: string;
 }
 
+export type FixedReminderTimestamp = {
+    type: 'fixed';
+    value: '30 minutes' | '1 hour' | '2 hours' | 'tomorrow' | 'monday';
+}
+export type CustomReminderTimestamp = {
+    type: 'custom';
+    value: number; // in seconds
+}
+
+export type ReminderTimestamp = FixedReminderTimestamp | CustomReminderTimestamp
+
 export type SummarizeResult ={
     postid: string;
     channelid: string;

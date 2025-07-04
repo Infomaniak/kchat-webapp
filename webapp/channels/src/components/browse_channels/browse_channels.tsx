@@ -339,7 +339,6 @@ class BrowseChannels extends React.PureComponent<Props, State> {
                             id='more_channels.create'
                             defaultMessage='Create New Channel'
                         />
-
                     </button>
                 </TeamPermissionGate>
             );

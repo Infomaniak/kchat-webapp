@@ -36,11 +36,12 @@ export function createCustomEmoji(emoji: any, image: any) {
     });
 }
 
-export function createCustomEmojiWithRefreshUsage(emoji: any, image: any) {
+export function createCustomEmojiWithRefreshUsage(emoji: any, image: any): ActionFuncAsync {
     return async (dispatch) => {
         const result = await dispatch(createCustomEmoji(emoji, image));
 
         if (result.data) {
+            // @ts-expect-error mistmatch of state type
             dispatch(getUsage());
         }
 
@@ -218,6 +219,7 @@ export function deleteCustomEmoji(emojiId: string): ActionFuncAsync {
             return {error};
         }
 
+        // @ts-expect-error mistmatch of state type
         await dispatch(getUsage());
         dispatch({
             type: EmojiTypes.DELETED_CUSTOM_EMOJI,

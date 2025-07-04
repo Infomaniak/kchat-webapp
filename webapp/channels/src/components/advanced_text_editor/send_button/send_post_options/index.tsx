@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -75,7 +75,7 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
 
     return (
         <Menu.Container
-            style={{visibility: isUpdating ? 'hidden' : 'visible'}}
+            style={{visibility: isUpdating ? 'hidden' : 'visible'}} // avoid blinking menu
             menuButtonTooltip={{
                 text: formatMessage({
                     id: 'create_post_button.option.schedule_message',
@@ -125,26 +125,17 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
             <Menu.Item
                 onClick={withQuotaCheck(handleChooseCustomTime)}
                 key={'choose_custom_time'}
-                labels={
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        <FormattedMessage
-                            id='create_post_button.option.schedule_message.options.choose_custom_time'
-                            defaultMessage='Choose a custom time'
-                        />
-                        {isQuotaExceeded && (
-                            <wc-ksuite-pro-upgrade-tag
-                                ref={workaroundToComputeSize(hasInitializedRef, setIsUpdating)}
-                            />
-                        )}
-                    </div>
-                }
+                labels={(
+                    <FormattedMessage
+                        id='create_post_button.option.schedule_message.options.choose_custom_time'
+                        defaultMessage='Choose a custom time'
+                    />
+                )}
+                trailingElements={isQuotaExceeded && (
+                    <wc-ksuite-pro-upgrade-tag
+                        ref={workaroundToComputeSize(hasInitializedRef, setIsUpdating)}
+                    />
+                )}
             />
 
         </Menu.Container>

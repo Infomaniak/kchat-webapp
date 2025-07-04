@@ -59,6 +59,8 @@ export function createChannel(channel: Channel, userId: string): ActionFuncAsync
         let created;
         try {
             created = await Client4.createChannel(channel);
+
+            // @ts-expect-error State type mismatch
             await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
@@ -709,6 +711,8 @@ export function deleteChannel(channelId: string): ActionFuncAsync {
 
         try {
             await Client4.deleteChannel(channelId);
+
+            // @ts-expect-error State type mismatch
             await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
@@ -737,6 +741,8 @@ export function unarchiveChannel(channelId: string, openLimitModalIfNeeded: (err
     return async (dispatch, getState) => {
         try {
             await Client4.unarchiveChannel(channelId);
+
+            // @ts-expect-error State type mismatch
             await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
