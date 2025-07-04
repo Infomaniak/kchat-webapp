@@ -38,11 +38,13 @@ const UserInfo = styled.div`
 `;
 
 const DisplayName = styled.span`
-    display: inline-flex;
+    display: block;
     gap: 8px;
     margin-left: 8px;
     font-size: 14px;
     line-height: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
     color: var(--center-channel-color);
 `;
 
