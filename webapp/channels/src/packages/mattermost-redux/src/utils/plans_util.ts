@@ -1,15 +1,6 @@
-import type {ReactElement} from 'react';
-
 import type {PackName} from '@mattermost/types/teams';
 
 export type WcPackName = 'essential' | 'standard' | 'business' | 'entreprise';
-
-const planOrder: PackName[] = [
-    'ksuite_essential',
-    'ksuite_standard',
-    'ksuite_pro',
-    'ksuite_entreprise',
-];
 
 const wcPlanMap: Record<PackName, WcPackName> = {
     ksuite_essential: 'essential',
@@ -18,41 +9,51 @@ const wcPlanMap: Record<PackName, WcPackName> = {
     ksuite_entreprise: 'entreprise',
 };
 
-const toWcPlan = (pack: PackName): WcPackName => {
-    const mapped = wcPlanMap[pack];
-    if (!mapped) {
-        throw new Error(`Unknown PackName: ${pack}`);
-    }
-    return mapped;
+const planOrder: PackName[] = [
+    'ksuite_essential',
+    'ksuite_standard',
+    'ksuite_pro',
+    'ksuite_entreprise',
+];
+
+export const getNextWcPack = (current: PackName | undefined): WcPackName => {
+    const index = current ? planOrder.indexOf(current) : -1;
+    const next =
+        index >= 0 && index < planOrder.length - 1 ? planOrder[index + 1] : planOrder[0];
+    return wcPlanMap[next];
 };
 
-export const getNextPackName = (current: PackName | undefined): PackName => {
-    if (!current) {
-        return planOrder[0];
-    }
-    const index = planOrder.indexOf(current);
-    if (index === -1) {
-        return current;
-    }
-    return index < planOrder.length - 1 ? planOrder[index + 1] : current;
-};
-
-export const getNextWcPackName = (current: PackName | undefined): WcPackName =>
-    toWcPlan(getNextPackName(current));
-
-export const withQuotaControl = (
+export const quotaGate = (
     remaining: number | boolean,
-    enabledContent: ReactElement,
-    disabledContent: ReactElement,
-    onAllowedClick: () => void,
+    currentPlan: PackName | undefined,
 ) => {
-    const isLimitReached = (
+    const isQuotaExceeded =
         (typeof remaining === 'number' && remaining >= 0) ||
-        (typeof remaining === 'boolean' && remaining === false)
-    );
+        (typeof remaining === 'boolean' && remaining === false);
 
-    return {
-        component: isLimitReached ? disabledContent : enabledContent,
-        onClick: isLimitReached ? () => {} : onAllowedClick,
+    const openUpgradeDialog = (plan: WcPackName) => {
+        customElements.whenDefined('wc-ksuite-pro-upgrade-dialog').then(() => {
+            const wcModal = document.getElementById('wc-modal');
+            if (wcModal && typeof wcModal.open === 'function') {
+                requestAnimationFrame(() => { // This is to make sure we don't have weird behavior with MUI menu closing the modal
+                    wcModal.open(plan);
+                });
+            } else {
+                console.warn('open() on <wc-ksuite-pro-upgrade-dialog id="wc-modal"> is not available.');
+            }
+        });
     };
+
+    const withQuotaCheck = (cb: () => void) => {
+        return () => {
+            if (isQuotaExceeded) {
+                const plan = getNextWcPack(currentPlan);
+                openUpgradeDialog(plan);
+            } else {
+                cb();
+            }
+        };
+    };
+
+    return {isQuotaExceeded, withQuotaCheck};
 };

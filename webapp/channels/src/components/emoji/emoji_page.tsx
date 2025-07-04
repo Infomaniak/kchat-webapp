@@ -7,8 +7,8 @@ import {Link} from 'react-router-dom';
 
 import Permissions from 'mattermost-redux/constants/permissions';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
-import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import AnyTeamPermissionGate from 'components/permissions_gates/any_team_permission_gate';
 
 import * as Utils from 'utils/utils';
@@ -61,8 +61,22 @@ export default function EmojiPage({
 
     let action = null;
     if (isCapped) {
-        const label = intl.formatMessage({id: 'emoji_list.add'});
-        action = <UpgradeKsuiteButton label={label}/>;
+        const {withQuotaCheck} = quotaGate(false, 'ksuite_essential');
+        action = (
+            <button
+                type='button'
+                className='btn btn-primary'
+                onClick={withQuotaCheck(() => {})} // dummy callback, we know we are capped
+            >
+                <wc-icon
+                    name='rocket'
+                />
+                <FormattedMessage
+                    id='emoji_list.add'
+                    defaultMessage='Add Custom Emoji'
+                />
+            </button>
+        );
     } else {
         action = (
             <Link

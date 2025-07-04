@@ -2,20 +2,20 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
 import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
-import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import {openModal} from 'actions/views/modals';
 
 import CoreMenuOptions from 'components/advanced_text_editor/send_button/send_post_options/core_menu_options';
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import * as Menu from 'components/menu';
 
 import {ModalIdentifiers} from 'utils/constants';
@@ -67,38 +67,15 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
         }));
     }, [channelId, dispatch, handleSelectCustomTime]);
 
-    const enabledComponent = (
-        <FormattedMessage
-            id='create_post_button.option.schedule_message.options.choose_custom_time'
-            defaultMessage='Choose a custom time'
-        />
-    );
-
-    const disabledComponent = (
-        <UpgradeKsuiteButton
-
-            // This is a bit of a hack to handle layout issues caused by the web component:
-            // We trigger a resize event once the web component signals it's ready,
-            // forcing the menu to recalculate positioning.
-            // The isUpdating state helps prevent UI flicker during this forced update.
-            onReady={() => {
-                setIsUpdating(true);
-                setTimeout(() => {
-                    window.dispatchEvent(new Event('resize'));
-                    setIsUpdating(false);
-                }, 20);
-            }}
-        >
-            {enabledComponent}
-        </UpgradeKsuiteButton>
-    );
-
     const {scheduled_draft_custom_date: scheduledDraftCustomDate} = useGetUsageDeltas();
-    const {component, onClick} = withQuotaControl(scheduledDraftCustomDate, enabledComponent, disabledComponent, handleChooseCustomTime);
+    const currentPack = useSelector(getCurrentPackName);
+    const {isQuotaExceeded, withQuotaCheck} = quotaGate(scheduledDraftCustomDate, currentPack);
+
+    const hasInitializedRef = useRef(false);
 
     return (
         <Menu.Container
-            style={{visibility: isUpdating ? 'hidden' : 'visible', background: 'red'}}
+            style={{visibility: isUpdating ? 'hidden' : 'visible'}}
             menuButtonTooltip={{
                 text: formatMessage({
                     id: 'create_post_button.option.schedule_message',
@@ -146,13 +123,53 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
             <Menu.Separator/>
 
             <Menu.Item
-                aria-haspopup={scheduledDraftCustomDate >= 0}
-                aria-expanded={scheduledDraftCustomDate >= 0}
-                onClick={onClick}
+                onClick={withQuotaCheck(handleChooseCustomTime)}
                 key={'choose_custom_time'}
-                labels={component}
+                labels={
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        <FormattedMessage
+                            id='create_post_button.option.schedule_message.options.choose_custom_time'
+                            defaultMessage='Choose a custom time'
+                        />
+                        {isQuotaExceeded && (
+                            <wc-ksuite-pro-upgrade-tag
+                                ref={workaroundToComputeSize(hasInitializedRef, setIsUpdating)}
+                            />
+                        )}
+                    </div>
+                }
             />
 
         </Menu.Container>
     );
 }
+
+// This is a bit of a hack to handle layout issues caused by the web component:
+// We trigger a resize event once the web component signals it's ready,
+// forcing the menu to recalculate positioning.
+// The isUpdating state helps prevent UI flicker during this forced update.
+function workaroundToComputeSize(hasInitializedRef: React.MutableRefObject<boolean>, setIsUpdating: React.Dispatch<React.SetStateAction<boolean>>) {
+    return (el) => {
+        if (!el || hasInitializedRef.current) {
+            return;
+        }
+
+        hasInitializedRef.current = true;
+
+        el.componentOnReady?.().then(() => {
+            setIsUpdating(true);
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+                setIsUpdating(false);
+            }, 20);
+        });
+    };
+}
+

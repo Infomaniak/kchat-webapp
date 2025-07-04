@@ -6,21 +6,21 @@ import type {ChangeEvent, ReactNode} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {Link} from 'react-router-dom';
 
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
+
 import LoadingScreen from 'components/loading_screen';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
 import SearchIcon from 'components/widgets/icons/fa_search_icon';
 
 import './backstage_list.scss';
-import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 
 type Props = {
     children?: JSX.Element[] | ((filter: string) => [JSX.Element[], boolean]);
     header: ReactNode;
     addLink?: string;
     addText?: ReactNode;
-    addTextKey?: string;
-    isCapped: boolean;
+    isCapped?: boolean;
     addButtonId?: string;
     emptyText?: ReactNode;
     emptyTextSearch?: JSX.Element;
@@ -116,10 +116,21 @@ const BackstageList = (remainingProps: Props) => {
 
     if (remainingProps.addLink && remainingProps.addText) {
         if (remainingProps.isCapped) {
-            const rawText = formatMessage({id: remainingProps.addTextKey});
+            const {withQuotaCheck} = quotaGate(!remainingProps.isCapped, 'ksuite_essential');
 
             addLink = (
-                <UpgradeKsuiteButton label={rawText}/>
+                <button
+                    type='button'
+                    className='btn btn-primary'
+                    id={remainingProps.addButtonId}
+                    onClick={withQuotaCheck(() => {})} //dummy function, as we now we are capped
+                >
+                    <wc-icon name='rocket'/>
+                    <span>
+                        {remainingProps.addText}
+                    </span>
+                </button>
+
             );
         } else {
             addLink = (

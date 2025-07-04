@@ -7,14 +7,13 @@ import {useDispatch} from 'react-redux';
 
 import {FolderPlusOutlineIcon} from '@mattermost/compass-icons/components';
 
-import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import EditCategoryModal from 'components/edit_category_modal';
-import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import * as Menu from 'components/menu';
 
 import {ModalIdentifiers} from 'utils/constants';
@@ -36,31 +35,32 @@ const CreateNewCategoryMenuItem = ({
         trackEvent('ui', 'ui_sidebar_category_menu_createCategory');
     }, [dispatch]);
 
-    const enabled = (
-        <FormattedMessage
-            id='sidebar_left.sidebar_category_menu.createCategory'
-            defaultMessage='Create New Category'
-        />
-    );
-
-    const disabled = (
-        <UpgradeKsuiteButton>
-            {enabled}
-        </UpgradeKsuiteButton>
-
-    );
     const {sidebar_categories: sidebarCategories} = useGetUsageDeltas();
+    console.log('🚀 tcl ~ create_new_category_menu_item.tsx:39 ~ sidebarCategories:', sidebarCategories);
 
-    const {component, onClick} = withQuotaControl(sidebarCategories, enabled, disabled, handleCreateCategory);
+    const {isQuotaExceeded, withQuotaCheck} = quotaGate(sidebarCategories, 'ksuite_essential');
 
     return (
         <Menu.Item
             id={`create-${id}`}
-            onClick={onClick}
-            aria-haspopup={sidebarCategories >= 0}
-            aria-expanded={sidebarCategories >= 0}
+            onClick={withQuotaCheck(handleCreateCategory)}
             leadingElement={<FolderPlusOutlineIcon size={18}/>}
-            labels={component}
+            labels={
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        cursor: 'pointer',
+                    }}
+                >
+                    <FormattedMessage
+                        id='sidebar_left.sidebar_category_menu.createCategory'
+                        defaultMessage='Create New Category'
+                    />
+                    {isQuotaExceeded && <wc-ksuite-pro-upgrade-tag/>}
+                </div>
+            }
             {...otherProps}
         />
     );

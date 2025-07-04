@@ -7,11 +7,10 @@ import {useSelector} from 'react-redux';
 
 import {Permissions} from 'mattermost-redux/constants';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import {useNextPlan} from 'components/common/hooks/useNextPlan';
-import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import InvitationModal from 'components/invitation_modal';
 import {getAnalyticsCategory} from 'components/onboarding_tasks';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
@@ -28,7 +27,6 @@ type Props = {
 const InviteMembersButton = (props: Props): JSX.Element | null => {
     const intl = useIntl();
     const currentTeamId = useSelector(getCurrentTeamId);
-    const nextPlan = useNextPlan();
 
     const handleButtonClick = () => {
         trackEvent(getAnalyticsCategory(props.isAdmin), 'click_sidebar_invite_members_button');
@@ -38,54 +36,37 @@ const InviteMembersButton = (props: Props): JSX.Element | null => {
         return null;
     }
 
-    const enabled = (
-        <ToggleModalButton
-            ariaLabel={intl.formatMessage({id: 'sidebar_left.inviteMembers', defaultMessage: 'Invite Members'})}
-            id='inviteMembersButton'
-            className={`intro-links color--link cursor--pointer${props.className ? ` ${props.className}` : ''}`}
-            modalId={ModalIdentifiers.INVITATION}
-            dialogType={InvitationModal}
-            onClick={handleButtonClick}
-            dialogProps={{focusOriginElement: 'inviteMembersButton'}}
-        >
-            <div
-                className='SidebarChannelNavigator__inviteMembersLhsButton'
-                aria-label={intl.formatMessage({id: 'sidebar_left.sidebar_channel_navigator.inviteUsers', defaultMessage: 'Invite Members'})}
-            >
-                <i
-                    className='icon-plus-box'
-                    aria-hidden='true'
-                />
-                <FormattedMessage
-                    id={'sidebar_left.inviteMembers'}
-                    defaultMessage='Invite Members'
-                />
-            </div>
-        </ToggleModalButton>
-    );
-
-    const disabled = (
-        <UpgradeKsuiteButton>
-            <i
-                className='icon-plus-box'
-                aria-hidden='true'
-                style={{fontSize: '20px', marginLeft: '15px'}}
-            />
-            <FormattedMessage
-                id={'sidebar_left.inviteMembers'}
-                defaultMessage='Invite Members'
-            />
-        </UpgradeKsuiteButton>
-
-    );
+    const {isQuotaExceeded, withQuotaCheck} = quotaGate(props.canAddGuest, 'ksuite_essential');
 
     return (
         <TeamPermissionGate
             teamId={currentTeamId}
             permissions={[Permissions.ADD_USER_TO_TEAM, Permissions.INVITE_GUEST]}
         >
-            {props.canAddGuest && enabled}
-            {!props.canAddGuest && disabled}
+            <ToggleModalButton
+                ariaLabel={intl.formatMessage({id: 'sidebar_left.inviteMembers', defaultMessage: 'Invite Members'})}
+                id='inviteMembersButton'
+                className={`intro-links color--link cursor--pointer${props.className ? ` ${props.className}` : ''}`}
+                modalId={ModalIdentifiers.INVITATION}
+                dialogType={InvitationModal}
+                onClick={withQuotaCheck(handleButtonClick)}
+                dialogProps={{focusOriginElement: 'inviteMembersButton'}}
+            >
+                <div
+                    className='SidebarChannelNavigator__inviteMembersLhsButton'
+                    aria-label={intl.formatMessage({id: 'sidebar_left.sidebar_channel_navigator.inviteUsers', defaultMessage: 'Invite Members'})}
+                >
+                    <i
+                        className='icon-plus-box'
+                        aria-hidden='true'
+                    />
+                    <FormattedMessage
+                        id={'sidebar_left.inviteMembers'}
+                        defaultMessage='Invite Members'
+                    />
+                    {isQuotaExceeded && <wc-ksuite-pro-upgrade-tag/>}
+                </div>
+            </ToggleModalButton>
         </TeamPermissionGate>
     );
 };

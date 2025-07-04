@@ -657,6 +657,7 @@ export default class Root extends React.PureComponent<Props, State> {
             <RootProvider>
                 <MobileViewWatcher/>
                 <LuxonController/>
+                <WcModals/>
                 <Switch>
                     <Route
                         path={'/error'}
@@ -797,3 +798,11 @@ export function doesRouteBelongToTeamControllerRoutes(pathname: RouteComponentPr
 
     return TEAM_CONTROLLER_PATH_PATTERN.test(pathname);
 }
+
+const WcModals = () => {
+    return (
+        <wc-ksuite-pro-upgrade-dialog id='wc-modal'>
+            <div slot='trigger-element'/>
+        </wc-ksuite-pro-upgrade-dialog>
+    );
+};

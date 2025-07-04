@@ -136,7 +136,6 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
                 }
                 isCapped={this.props.isCapped}
                 addLink={'/' + this.props.team.name + '/integrations/incoming_webhooks/add'}
-                addTextKey='installed_incoming_webhooks.add'
                 addButtonId='addIncomingWebhook'
                 emptyText={
                     <FormattedMessage

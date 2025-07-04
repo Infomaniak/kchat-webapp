@@ -13,10 +13,9 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import Permissions from 'mattermost-redux/constants/permissions';
 import type {ActionResult} from 'mattermost-redux/types/actions';
-import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import withUseGetUsageDelta from 'components/common/hocs/cloud/with_use_get_usage_deltas';
-import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import LoadingScreen from 'components/loading_screen';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
@@ -76,7 +75,6 @@ export type Props = {
     rhsOpen?: boolean;
     channelsMemberCount?: Record<string, number>;
     actions: Actions;
-    intl: IntlShape;
     usageDeltas: CloudUsage;
 }
 
@@ -312,38 +310,30 @@ class BrowseChannels extends React.PureComponent<Props, State> {
                 <div className='form-group has-error'><label className='control-label'>{serverErrorState}</label></div>;
         }
 
+        const delta = this.props.usageDeltas.public_channels >= 0 && this.props.usageDeltas.private_channels >= 0 ? 0 : -1;
+        const {isQuotaExceeded, withQuotaCheck} = quotaGate(delta, 'ksuite_essential');
+
         const createNewChannelButton = (className: string, icon?: JSX.Element) => {
             const buttonClassName = classNames('btn', className);
-
-            const enabled = (
-                <button
-                    type='button'
-                    id='createNewChannelButton'
-                    className={buttonClassName}
-                    onClick={this.handleNewChannel}
-                    aria-label={localizeMessage({id: 'more_channels.create', defaultMessage: 'Create New Channel'})}
-                >
-                    {icon}
-                    <FormattedMessage
-                        id='more_channels.create'
-                        defaultMessage='Create New Channel'
-                    />
-                </button>
-            );
-
-            const rawText = this.props.intl.formatMessage({id: 'more_channels.create'});
-            const disabled = (
-                <UpgradeKsuiteButton label={rawText}/>
-            );
-
-            const delta = this.props.usageDeltas.public_channels >= 0 && this.props.usageDeltas.private_channels >= 0 ? 0 : -1;
-            const {component} = withQuotaControl(delta, enabled, disabled, () => {});
             return (
                 <TeamPermissionGate
                     teamId={teamId}
                     permissions={[Permissions.CREATE_PUBLIC_CHANNEL]}
                 >
-                    {component}
+                    <button
+                        type='button'
+                        id='createNewChannelButton'
+                        className={buttonClassName}
+                        onClick={withQuotaCheck(this.handleNewChannel)}
+                        aria-label={localizeMessage({id: 'more_channels.create', defaultMessage: 'Create New Channel'})}
+                    >
+                        {icon}
+                        <FormattedMessage
+                            id='more_channels.create'
+                            defaultMessage='Create New Channel'
+                        />
+                        {isQuotaExceeded && <wc-ksuite-pro-upgrade-compact-tag/>}
+                    </button>
                 </TeamPermissionGate>
             );
         };
@@ -409,4 +399,4 @@ class BrowseChannels extends React.PureComponent<Props, State> {
     }
 }
 
-export default withUseGetUsageDelta(injectIntl(BrowseChannels));
+export default withUseGetUsageDelta(BrowseChannels);

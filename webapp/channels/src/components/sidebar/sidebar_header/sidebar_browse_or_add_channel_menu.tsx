@@ -14,11 +14,9 @@ import {
 } from '@mattermost/compass-icons/components';
 
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import {useNextPlan} from 'components/common/hooks/useNextPlan';
-import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import * as Menu from 'components/menu';
 import {OnboardingTourSteps} from 'components/tours';
 import {useShowOnboardingTutorialStep, CreateAndJoinChannelsTour} from 'components/tours/onboarding_tour';
@@ -52,49 +50,32 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
     };
 
     const {sidebar_categories: sidebarCategories, private_channels: privateChannels, public_channels: publicChannels} = useGetUsageDeltas();
-    const nextPlan = useNextPlan();
 
-    const enabledCategory = (
-        <FormattedMessage
-            id='sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel'
-            defaultMessage='Create new category'
-        />
-    );
-
-    const disabledCategory = (
-        <UpgradeKsuiteButton>
-            {enabledCategory}
-        </UpgradeKsuiteButton>
-    );
-    const {component: createCategoryComponent, onClick: createCategoryOnClick} = withQuotaControl(sidebarCategories, enabledCategory, disabledCategory, props.onCreateNewCategoryClick);
+    const privateAndPublicQuotas = (privateChannels >= 0 && publicChannels >= 0) ? 0 : -1;
+    const {isQuotaExceeded: isQuotaExceededChannels, withQuotaCheck: withQuotaCheckChannels} = quotaGate(privateAndPublicQuotas, 'ksuite_essential');
 
     let createNewChannelMenuItem: JSX.Element | null = null;
     if (props.canCreateChannel) {
-        const enabledCreateChannel = (
-            <FormattedMessage
-                id='sidebarLeft.browserOrCreateChannelMenu.createNewChannelMenuItem.primaryLabel'
-                defaultMessage='Create new channel'
-            />
-        );
-
-        const disabledCreateChannel = (
-            <UpgradeKsuiteButton>
-                {enabledCreateChannel}
-            </UpgradeKsuiteButton>
-
-        );
-
-        const privateAndPublicQuotas = (privateChannels >= 0 && publicChannels >= 0) ? 0 : -1;
-        const {component: createChannelComponent, onClick: createChannelOnClick} = withQuotaControl(privateAndPublicQuotas, enabledCreateChannel, disabledCreateChannel, props.onCreateNewChannelClick);
-
         createNewChannelMenuItem = (
             <Menu.Item
                 id='createNewChannelMenuItem'
-                aria-haspopup={privateAndPublicQuotas >= 0}
-                aria-expanded={privateAndPublicQuotas >= 0}
-                onClick={createChannelOnClick}
+                onClick={withQuotaCheckChannels(props.onCreateNewChannelClick)}
                 leadingElement={<PlusIcon size={18}/>}
-                labels={createChannelComponent}
+                labels={(
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        <FormattedMessage
+                            id='sidebarLeft.browserOrCreateChannelMenu.createNewChannelMenuItem.primaryLabel'
+                            defaultMessage='Create new channel'
+                        />
+                        {isQuotaExceededChannels && <wc-ksuite-pro-upgrade-tag/>}
+                    </div>)}
                 trailingElements={showCreateAndJoinChannelsTutorialTip && <CreateAndJoinChannelsTour/>}
             />
         );
@@ -148,16 +129,32 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         );
     }
 
+    const {isQuotaExceeded: isQuotaExceededCategories, withQuotaCheck: withQuotaCheckCategories} = quotaGate(sidebarCategories, 'ksuite_essential');
+
     let createNewCategoryMenuItem: JSX.Element | null = null;
     if (!props.unreadFilterEnabled) {
         createNewCategoryMenuItem = (
             <Menu.Item
                 id='createCategoryMenuItem'
-                onClick={createCategoryOnClick}
-                aria-haspopup={sidebarCategories >= 0}
-                aria-expanded={sidebarCategories >= 0}
+                onClick={withQuotaCheckCategories(props.onCreateNewCategoryClick)}
                 leadingElement={<FolderPlusOutlineIcon size={18}/>}
-                labels={createCategoryComponent}
+                labels={(
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        <FormattedMessage
+                            id='sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel'
+                            defaultMessage='Create new category'
+                        />
+
+                        {isQuotaExceededCategories && <wc-ksuite-pro-upgrade-tag/>}
+                    </div>
+                )}
             />
         );
     }

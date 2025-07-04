@@ -2457,7 +2457,7 @@ export default class Client4 {
         );
     };
 
-    addPostReminder = (userId: string, postId: string, timestamp: number, reschedule?: boolean, reminderPostId?: string) => {
+    addPostReminder = (userId: string, postId: string, timestamp: number | string, reschedule?: boolean, reminderPostId?: string) => {
         this.trackEvent('api', 'api_post_set_reminder');
 
         return this.doFetch<StatusOK>(

@@ -5,5 +5,7 @@ declare namespace JSX {
         'wc-ksuite-pro-upgrade-button': any;
         'wc-ksuite-pro-upgrade-tag': any;
         'wc-mail-attachment': any;
+        'wc-ksuite-pro-upgrade-compact-tag': any;
+        'wc-icon': any;
     }
 }

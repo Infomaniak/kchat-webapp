@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -1195,10 +1196,21 @@ export function markPostReminderAsDone(userId: string, postId: string): ActionFu
     };
 }
 
-export function addPostReminder(userId: string, postId: string, timestamp: number, reschedule?: boolean, reminderPostId?: string): ActionFuncAsync {
+type FixedReminderTimestamp = {
+    type: 'fixed';
+    value: '30 minutes' | '1 hour' | '2 hours' | 'tomorrow' | 'monday';
+}
+export type CustomReminderTimestamp = {
+    type: 'custom';
+    value: number; // in seconds
+}
+
+export type ReminderTimestamp = FixedReminderTimestamp | CustomReminderTimestamp
+
+export function addPostReminder(userId: string, postId: string, timestamp: ReminderTimestamp, reschedule?: boolean, reminderPostId?: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         try {
-            await Client4.addPostReminder(userId, postId, timestamp, reschedule, reminderPostId);
+            await Client4.addPostReminder(userId, postId, timestamp.value, reschedule, reminderPostId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));

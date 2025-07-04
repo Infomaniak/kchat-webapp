@@ -14,7 +14,17 @@ import useGetUsage from './useGetUsage';
 // 10MB files used, minus 1000MB limit = value < 0, limit not exceeded.
 // etc.
 // withBackupValue will set the limit arbitrarily high in the event that the limit isn't set
-export const withBackupValue = (maybeLimit: number | undefined, limitsLoaded: boolean) => (limitsLoaded ? (maybeLimit ?? Number.MAX_VALUE) : Number.MAX_VALUE);
+export const withBackupValue = (maybeLimit: number | undefined, limitsLoaded: boolean) => {
+    if (!limitsLoaded) {
+        return Number.MAX_VALUE;
+    }
+
+    if (maybeLimit === -1 || maybeLimit === undefined) { // IK: backend can send -1 as unlimited instead of undefined
+        return Number.MAX_VALUE;
+    }
+
+    return maybeLimit;
+};
 
 export default function useGetUsageDeltas(): CloudUsage {
     const usage = useGetUsage();

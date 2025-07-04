@@ -8,14 +8,13 @@ import {useDispatch} from 'react-redux';
 import {ChevronRightIcon, ClockOutlineIcon} from '@mattermost/compass-icons/components';
 import type {Post} from '@mattermost/types/posts';
 
+import type {ReminderTimestamp} from 'mattermost-redux/actions/posts';
 import {addPostReminder} from 'mattermost-redux/actions/posts';
-import {withQuotaControl} from 'mattermost-redux/utils/plans_util';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import {openModal} from 'actions/views/modals';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import {useNextPlan} from 'components/common/hooks/useNextPlan';
-import UpgradeKsuiteButton from 'components/ik_upgrade_ksuite_button/ik_upgrade_ksuite_button';
 import * as Menu from 'components/menu';
 import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal';
 
@@ -44,7 +43,6 @@ function PostReminderSubmenu(props: Props) {
     const dispatch = useDispatch();
 
     const {reminder_custom_date: reminderCustomDate} = useGetUsageDeltas();
-    const nextPlan = useNextPlan();
 
     function handlePostReminderMenuClick(id: string) {
         if (id === PostReminders.CUSTOM) {
@@ -58,34 +56,28 @@ function PostReminderSubmenu(props: Props) {
 
             dispatch(openModal(postReminderCustomTimePicker));
         } else {
-            const currentDate = getCurrentMomentForTimezone(props.timezone);
-
-            let endTime = currentDate;
+            let targetTime: ReminderTimestamp | null = null;
             if (id === PostReminders.THIRTY_MINUTES) {
-                // add 30 minutes in current time
-                endTime = currentDate.add(30, 'minutes');
+                targetTime = {type: 'fixed', value: '30 minutes'};
             } else if (id === PostReminders.ONE_HOUR) {
-                // add 1 hour in current time
-                endTime = currentDate.add(1, 'hour');
+                targetTime = {type: 'fixed', value: '1 hour'};
             } else if (id === PostReminders.TWO_HOURS) {
-                // add 2 hours in current time
-                endTime = currentDate.add(2, 'hours');
+                targetTime = {type: 'fixed', value: '2 hours'};
             } else if (id === PostReminders.TOMORROW) {
-                // set to next day 8 in the morning
-                endTime = currentDate.add(1, 'day').set({hour: 8, minute: 0});
+                targetTime = {type: 'fixed', value: 'tomorrow'};
             } else if (id === PostReminders.MONDAY) {
-                // set to next Monday 8 in the morning
-                endTime = currentDate.add(1, 'week').isoWeekday(1).set({hour: 8, minute: 0});
+                targetTime = {type: 'fixed', value: 'monday'};
+            } else {
+                throw new Error("Reminder timestamp doesn't match");
             }
 
-            dispatch(addPostReminder(props.userId, props.post.id, toUTCUnixInSeconds(endTime.toDate())));
+            dispatch(addPostReminder(props.userId, props.post.id, targetTime));
         }
     }
 
     const postReminderSubMenuItems = Object.values(PostReminders).map((postReminder) => {
         let labels = null;
         let clickHandler = () => handlePostReminderMenuClick(postReminder);
-        let isQuotaReached = false;
         if (postReminder === PostReminders.THIRTY_MINUTES) {
             labels = (
                 <FormattedMessage
@@ -122,21 +114,24 @@ function PostReminderSubmenu(props: Props) {
                 />
             );
         } else {
-            const enabled = (
-                <FormattedMessage
-                    id='post_info.post_reminder.sub_menu.custom'
-                    defaultMessage='Custom'
-                />
+            const {isQuotaExceeded, withQuotaCheck} = quotaGate(reminderCustomDate, 'ksuite_essential');
+            labels = (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        cursor: 'pointer',
+                    }}
+                >
+                    <FormattedMessage
+                        id='post_info.post_reminder.sub_menu.custom'
+                        defaultMessage='Custom'
+                    />
+                    {isQuotaExceeded && <wc-ksuite-pro-upgrade-tag/>}
+                </div>
             );
-            const disabled = (
-                <UpgradeKsuiteButton>
-                    {enabled}
-                </UpgradeKsuiteButton>
-            );
-            const {component, onClick} = withQuotaControl(reminderCustomDate, enabled, disabled, clickHandler);
-            isQuotaReached = reminderCustomDate >= 0;
-            labels = component;
-            clickHandler = onClick;
+            clickHandler = withQuotaCheck(clickHandler);
         }
 
         let trailingElements = null;
@@ -189,8 +184,6 @@ function PostReminderSubmenu(props: Props) {
                 labels={labels}
                 trailingElements={trailingElements}
                 onClick={clickHandler}
-                aria-haspopup={isQuotaReached}
-                aria-expanded={isQuotaReached}
             />
         );
     });

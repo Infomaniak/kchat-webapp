@@ -176,7 +176,6 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
                         defaultMessage='Add Outgoing Webhook'
                     />
                 }
-                addTextKey='installed_outgoing_webhooks.add'
                 addLink={
                     '/' +
                     this.props.team.name +
