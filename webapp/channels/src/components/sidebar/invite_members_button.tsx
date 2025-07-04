@@ -6,7 +6,7 @@ import {useIntl, FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
 import {Permissions} from 'mattermost-redux/constants';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import {trackEvent} from 'actions/telemetry_actions';
@@ -27,6 +27,7 @@ type Props = {
 const InviteMembersButton = (props: Props): JSX.Element | null => {
     const intl = useIntl();
     const currentTeamId = useSelector(getCurrentTeamId);
+    const currentPack = useSelector(getCurrentPackName);
 
     const handleButtonClick = () => {
         trackEvent(getAnalyticsCategory(props.isAdmin), 'click_sidebar_invite_members_button');
@@ -36,7 +37,7 @@ const InviteMembersButton = (props: Props): JSX.Element | null => {
         return null;
     }
 
-    const {isQuotaExceeded, withQuotaCheck} = quotaGate(props.canAddGuest, 'ksuite_essential');
+    const {isQuotaExceeded, withQuotaCheck} = quotaGate(props.canAddGuest, currentPack);
 
     const canAdd = (
         <ToggleModalButton

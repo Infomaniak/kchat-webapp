@@ -3,10 +3,11 @@
 
 import React, {useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {FolderPlusOutlineIcon} from '@mattermost/compass-icons/components';
 
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import {trackEvent} from 'actions/telemetry_actions';
@@ -27,6 +28,7 @@ const CreateNewCategoryMenuItem = ({
     ...otherProps
 }: Props) => {
     const dispatch = useDispatch();
+    const currentPack = useSelector(getCurrentPackName);
     const handleCreateCategory = useCallback(() => {
         dispatch(openModal({
             modalId: ModalIdentifiers.EDIT_CATEGORY,
@@ -36,9 +38,8 @@ const CreateNewCategoryMenuItem = ({
     }, [dispatch]);
 
     const {sidebar_categories: sidebarCategories} = useGetUsageDeltas();
-    console.log('🚀 tcl ~ create_new_category_menu_item.tsx:39 ~ sidebarCategories:', sidebarCategories);
 
-    const {isQuotaExceeded, withQuotaCheck} = quotaGate(sidebarCategories, 'ksuite_essential');
+    const {isQuotaExceeded, withQuotaCheck} = quotaGate(sidebarCategories, currentPack);
 
     return (
         <Menu.Item

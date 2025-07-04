@@ -89,7 +89,6 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
         const totalGuest = usage.guests + usage.pending_guests;
         const remainingGuestSlots = totalGuest - limits.guests;
         const currentPack = getCurrentPackName(state);
-        const nextPlan = getNextWcPack(currentPack);
 
         return {
             profilesNotInCurrentChannel,
@@ -103,7 +102,7 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
             emailInvitationsEnabled,
             groups,
             isGroupsEnabled,
-            nextPlan,
+            currentPack,
             remainingGuestSlots,
         };
     };

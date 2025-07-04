@@ -13,7 +13,7 @@ import {
     AccountOutlineIcon,
 } from '@mattermost/compass-icons/components';
 
-import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
@@ -44,6 +44,7 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
 
     const showCreateAndJoinChannelsTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS);
     const currentTeam = useSelector(getCurrentTeam);
+    const currentPack = useSelector(getCurrentPackName);
 
     const goToIntegration = () => {
         getHistory().push(`/${currentTeam?.name}/integrations`);
@@ -52,7 +53,7 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
     const {sidebar_categories: sidebarCategories, private_channels: privateChannels, public_channels: publicChannels} = useGetUsageDeltas();
 
     const privateAndPublicQuotas = (privateChannels >= 0 && publicChannels >= 0) ? 0 : -1;
-    const {isQuotaExceeded: isQuotaExceededChannels, withQuotaCheck: withQuotaCheckChannels} = quotaGate(privateAndPublicQuotas, 'ksuite_essential');
+    const {isQuotaExceeded: isQuotaExceededChannels, withQuotaCheck: withQuotaCheckChannels} = quotaGate(privateAndPublicQuotas, currentPack);
 
     let createNewChannelMenuItem: JSX.Element | null = null;
     if (props.canCreateChannel) {
@@ -130,7 +131,7 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         );
     }
 
-    const {isQuotaExceeded: isQuotaExceededCategories, withQuotaCheck: withQuotaCheckCategories} = quotaGate(sidebarCategories, 'ksuite_essential');
+    const {isQuotaExceeded: isQuotaExceededCategories, withQuotaCheck: withQuotaCheckCategories} = quotaGate(sidebarCategories, currentPack);
 
     let createNewCategoryMenuItem: JSX.Element | null = null;
     if (!props.unreadFilterEnabled) {

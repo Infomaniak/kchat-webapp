@@ -3,13 +3,14 @@
 
 import React, {memo} from 'react';
 import {FormattedMessage, FormattedDate, FormattedTime, useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {ChevronRightIcon, ClockOutlineIcon} from '@mattermost/compass-icons/components';
 import type {Post} from '@mattermost/types/posts';
 
 import type {ReminderTimestamp} from 'mattermost-redux/actions/posts';
 import {addPostReminder} from 'mattermost-redux/actions/posts';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import {openModal} from 'actions/views/modals';
@@ -41,6 +42,7 @@ const PostReminders = {
 function PostReminderSubmenu(props: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
+    const currentPack = useSelector(getCurrentPackName);
 
     const {reminder_custom_date: reminderCustomDate} = useGetUsageDeltas();
 
@@ -114,7 +116,7 @@ function PostReminderSubmenu(props: Props) {
                 />
             );
         } else {
-            const {isQuotaExceeded, withQuotaCheck} = quotaGate(reminderCustomDate, 'ksuite_essential');
+            const {isQuotaExceeded, withQuotaCheck} = quotaGate(reminderCustomDate, currentPack);
             labels = (
                 <div
                     style={{

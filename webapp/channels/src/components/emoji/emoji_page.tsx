@@ -3,10 +3,12 @@
 
 import React, {useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
 import Permissions from 'mattermost-redux/constants/permissions';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import AnyTeamPermissionGate from 'components/permissions_gates/any_team_permission_gate';
@@ -40,6 +42,7 @@ export default function EmojiPage({
     isCapped,
 }: Props) {
     const intl = useIntl();
+    const currentPack = useSelector(getCurrentPackName);
 
     useEffect(() => {
         updateTitle();
@@ -61,7 +64,7 @@ export default function EmojiPage({
 
     let action = null;
     if (isCapped) {
-        const {withQuotaCheck} = quotaGate(false, 'ksuite_essential');
+        const {withQuotaCheck} = quotaGate(false, currentPack);
         action = (
             <button
                 type='button'

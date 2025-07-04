@@ -3,12 +3,12 @@
 
 import classNames from 'classnames';
 import React from 'react';
-import type {IntlShape} from 'react-intl';
-import {injectIntl, FormattedMessage} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 
 import {GenericModal} from '@mattermost/components';
 import type {Channel, ChannelMembership, ChannelSearchOpts, ChannelsWithTotalCount} from '@mattermost/types/channels';
 import type {CloudUsage} from '@mattermost/types/cloud';
+import type {PackName} from '@mattermost/types/teams';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import Permissions from 'mattermost-redux/constants/permissions';
@@ -76,6 +76,7 @@ export type Props = {
     channelsMemberCount?: Record<string, number>;
     actions: Actions;
     usageDeltas: CloudUsage;
+    currentPack: PackName | undefined;
 }
 
 type State = {
@@ -311,7 +312,7 @@ class BrowseChannels extends React.PureComponent<Props, State> {
         }
 
         const delta = this.props.usageDeltas.public_channels >= 0 && this.props.usageDeltas.private_channels >= 0 ? 0 : -1;
-        const {isQuotaExceeded, withQuotaCheck} = quotaGate(delta, 'ksuite_essential');
+        const {isQuotaExceeded, withQuotaCheck} = quotaGate(delta, this.props.currentPack);
 
         const createNewChannelButton = (className: string, icon?: JSX.Element) => {
             const buttonClassName = classNames('btn', className);

@@ -4,8 +4,10 @@
 import React, {useState} from 'react';
 import type {ChangeEvent, ReactNode} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import LoadingScreen from 'components/loading_screen';
@@ -54,6 +56,8 @@ const getPaging = (remainingProps: Props, childCount: number, hasFilter: boolean
 
 const BackstageList = (remainingProps: Props) => {
     const {formatMessage} = useIntl();
+
+    const currentPack = useSelector(getCurrentPackName);
 
     const [filter, setFilter] = useState('');
     const updateFilter = (e: ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
@@ -116,7 +120,7 @@ const BackstageList = (remainingProps: Props) => {
 
     if (remainingProps.addLink && remainingProps.addText) {
         if (remainingProps.isCapped) {
-            const {withQuotaCheck} = quotaGate(!remainingProps.isCapped, 'ksuite_essential');
+            const {withQuotaCheck} = quotaGate(!remainingProps.isCapped, currentPack);
 
             addLink = (
                 <button

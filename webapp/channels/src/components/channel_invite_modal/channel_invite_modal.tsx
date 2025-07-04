@@ -10,14 +10,14 @@ import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Group, GroupSearchParams} from '@mattermost/types/groups';
-import type {TeamMembership} from '@mattermost/types/teams';
+import type {PackName, TeamMembership} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import {Client4} from 'mattermost-redux/client';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {filterGroupsMatchingTerm} from 'mattermost-redux/utils/group_utils';
-import type {WcPackName} from 'mattermost-redux/utils/plans_util';
+import {quotaGate, type WcPackName} from 'mattermost-redux/utils/plans_util';
 import {displayUsername, filterProfilesStartingWithTerm, isGuest} from 'mattermost-redux/utils/user_utils';
 
 import InvitationModal from 'components/invitation_modal/invitation_modal';
@@ -69,7 +69,7 @@ export type Props = {
     emailInvitationsEnabled?: boolean;
     groups: Group[];
     isGroupsEnabled: boolean;
-    nextPlan: WcPackName;
+    currentPack: PackName | undefined;
     remainingGuestSlots: number;
     actions: {
         addUsersToChannel: (channelId: string, userIds: string[]) => Promise<ActionResult>;
@@ -568,6 +568,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             />
         );
 
+        const {withQuotaCheck} = quotaGate(this.props.remainingGuestSlots, this.props.currentPack);
         const inviteGuestLink = (
             <InviteModalLink inviteAsGuest={true}>
                 <FormattedMessage
@@ -579,13 +580,16 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
 
         const inviteGuestQuotaReached = (
             <div
-                slot='trigger-element'
                 style={{
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    marginRight: '32px',
+                    marginTop: '8px',
                     gap: '8px',
-                    cursor: 'pointer',
                 }}
+                role='button'
+                onClick={withQuotaCheck(() => {})} // dummy callback
             >
                 <FormattedMessage
                     id='channel_invite.invite_guest'
