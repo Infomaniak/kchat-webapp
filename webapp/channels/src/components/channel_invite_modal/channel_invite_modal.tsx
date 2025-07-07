@@ -20,7 +20,7 @@ import {filterGroupsMatchingTerm} from 'mattermost-redux/utils/group_utils';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';
 import {displayUsername, filterProfilesStartingWithTerm, isGuest} from 'mattermost-redux/utils/user_utils';
 
-import InvitationModal from 'components/invitation_modal/invitation_modal';
+import InvitationModal from 'components/invitation_modal';
 import MultiSelect from 'components/multiselect/multiselect';
 import type {Value} from 'components/multiselect/multiselect';
 import ProfilePicture from 'components/profile_picture';
@@ -601,12 +601,10 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         );
 
         let inviteGuestComp = null;
-        if (this.props.emailInvitationsEnabled && this.props.canInviteGuests) {
-            if (this.props.remainingGuestSlots < 0) {
-                inviteGuestComp = inviteGuestLink;
-            } else {
-                inviteGuestComp = inviteGuestQuotaReached;
-            }
+        if (this.props.remainingGuestSlots < 0) {
+            inviteGuestComp = inviteGuestLink;
+        } else {
+            inviteGuestComp = inviteGuestQuotaReached;
         }
 
         return (
@@ -648,7 +646,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                             teamId={this.props.channel.team_id}
                             users={this.state.usersNotInTeam}
                         />
-                        {inviteGuestComp}
+                        {(this.props.emailInvitationsEnabled && this.props.canInviteGuests) && inviteGuestComp}
                     </div>
                 </Modal.Body>
             </Modal>
