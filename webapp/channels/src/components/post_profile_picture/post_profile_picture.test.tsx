@@ -57,8 +57,8 @@ describe('components/PostProfilePicture', () => {
         const props: Props = baseProps;
         renderWithContext(
             <PostProfilePicture {...props}/>,
-            baseState
-            );
+            baseState,
+        );
 
         expect(screen.queryByLabelText('Online Icon')).not.toBeInTheDocument();
 
@@ -73,7 +73,7 @@ describe('components/PostProfilePicture', () => {
         };
         renderWithContext(
             <PostProfilePicture {...props}/>,
-            baseState
+            baseState,
         );
 
         // status is given, 'Away Icon' should be in the dom
