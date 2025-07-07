@@ -88,7 +88,7 @@ const NewChannelModal = () => {
     const [urlError, setURLError] = useState('');
     const [purposeError, setPurposeError] = useState('');
     const [serverError, setServerError] = useState('');
-    const [limitations, setLimitations] = useState<Partial<Record<ChannelType, boolean>>>({});
+    const [limitations] = useState<Partial<Record<ChannelType, boolean>>>({});
     const [channelInputError, setChannelInputError] = useState(false);
 
     // create a board along with the channel

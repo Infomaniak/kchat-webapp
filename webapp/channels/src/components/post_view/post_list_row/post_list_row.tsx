@@ -93,7 +93,7 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
     }
 
     render() {
-        const {listId, previousListId, loadingOlderPosts, loadingNewerPosts, isLastPost} = this.props;
+        const {listId, previousListId, loadingOlderPosts, loadingNewerPosts} = this.props;
         const {
             OLDER_MESSAGES_LOADER,
             NEWER_MESSAGES_LOADER,
