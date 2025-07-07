@@ -18,7 +18,7 @@ import {
     removeChannelMember,
     unarchiveChannel,
     updateChannelMemberSchemeRoles,
-    updateChannelPrivacy,
+    updateChannelPrivacyAndRefreshUsage,
 } from 'mattermost-redux/actions/channels';
 import {
     getGroupsAssociatedToChannel as fetchAssociatedGroups,
@@ -96,7 +96,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             getTeam: fetchTeam,
             getChannelModerations: fetchChannelModerations,
             patchChannel,
-            updateChannelPrivacy,
+            updateChannelPrivacy: updateChannelPrivacyAndRefreshUsage,
             patchGroupSyncable,
             patchChannelModerations,
             loadScheme,

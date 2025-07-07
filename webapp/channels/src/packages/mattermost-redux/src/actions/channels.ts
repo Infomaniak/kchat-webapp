@@ -268,12 +268,28 @@ export function patchChannel(channelId: string, patch: Partial<Channel>): Action
     });
 }
 
+/**
+ * @deprecated Use updateChannelPrivacyAndRefreshUsage() instead.
+ * We should refresh usage after
+ */
 export function updateChannelPrivacy(channelId: string, privacy: string): ActionFuncAsync<Channel> {
     return bindClientFunc({
         clientFunc: Client4.updateChannelPrivacy,
         onSuccess: [ChannelTypes.RECEIVED_CHANNEL],
         params: [channelId, privacy],
     });
+}
+
+export function updateChannelPrivacyAndRefreshUsage(
+    channelId: string,
+    privacy: string,
+): ActionFuncAsync<Channel> {
+    return async (dispatch) => {
+        const result = await dispatch(updateChannelPrivacy(channelId, privacy));
+        await dispatch(getUsage());
+
+        return result;
+    };
 }
 
 export function convertGroupMessageToPrivateChannel(channelID: string, teamID: string, displayName: string, name: string): ActionFuncAsync<Channel> {
