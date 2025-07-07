@@ -206,7 +206,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     }, []);
 
     useEffect(() => {
-        localRef?.current?.close();
+        localRef?.current?.close?.();
     }, [isAnyModalOpen]);
 
     return (
