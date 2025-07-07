@@ -14,10 +14,10 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
+import {getUsage} from './cloud';
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 
-import {getUsage} from '../../../../actions/cloud';
 import {General} from '../constants';
 
 export function createIncomingHook(hook: IncomingWebhook) {
@@ -34,7 +34,6 @@ export function createIncomingHookWithRefreshUsage(hook: IncomingWebhook): Actio
     return async (dispatch) => {
         const result = await dispatch(createIncomingHook(hook));
 
-        //@ts-expect-error state type mismatch
         await dispatch(getUsage());
 
         return result;
@@ -106,7 +105,6 @@ export function removeIncomingHook(hookId: string): ActionFuncAsync {
             },
         ]));
 
-        //@ts-expect-error state type mismatch
         await dispatch(getUsage());
 
         return {data: true};
@@ -137,7 +135,6 @@ export function createOutgoingHookWithRefreshUsage(hook: OutgoingWebhook): Actio
     return async (dispatch) => {
         const result = await dispatch(createOutgoingHook(hook));
 
-        //@ts-expect-error state type mismatch
         await dispatch(getUsage());
 
         return result;
@@ -185,7 +182,6 @@ export function removeOutgoingHook(hookId: string): ActionFuncAsync {
             },
         ]));
 
-        //@ts-expect-error state type mismatch
         await dispatch(getUsage());
 
         return {data: true};

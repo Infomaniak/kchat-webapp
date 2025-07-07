@@ -7,10 +7,10 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {GenericModal} from '@mattermost/components';
 
+import {getUsage} from 'mattermost-redux/actions/cloud';
 import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
-import {getUsage} from 'actions/cloud';
 import {redirectTokSuiteDashboard} from 'actions/global_actions';
 import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';

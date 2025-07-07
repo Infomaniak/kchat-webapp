@@ -38,13 +38,13 @@ import {getChannelByName} from 'mattermost-redux/utils/channel_utils';
 import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
 
 import {addChannelToInitialCategory, addChannelToCategory} from './channel_categories';
+import {getUsage} from './cloud';
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {savePreferences} from './preferences';
 import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
 
-import {getUsage} from '../../../../actions/cloud';
 import {General, Preferences} from '../constants';
 
 export function selectChannel(channelId: string) {
@@ -60,7 +60,6 @@ export function createChannel(channel: Channel, userId: string): ActionFuncAsync
         try {
             created = await Client4.createChannel(channel);
 
-            // @ts-expect-error State type mismatch
             await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
@@ -712,7 +711,6 @@ export function deleteChannel(channelId: string): ActionFuncAsync {
         try {
             await Client4.deleteChannel(channelId);
 
-            // @ts-expect-error State type mismatch
             await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
@@ -742,7 +740,6 @@ export function unarchiveChannel(channelId: string, openLimitModalIfNeeded: (err
         try {
             await Client4.unarchiveChannel(channelId);
 
-            // @ts-expect-error State type mismatch
             await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);

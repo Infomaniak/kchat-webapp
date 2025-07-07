@@ -37,7 +37,7 @@ import {
     fetchAllMyChannelMembers,
     fetchAllMyTeamsChannels,
 } from 'mattermost-redux/actions/channels';
-import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
+import {getCloudSubscription, getUsage} from 'mattermost-redux/actions/cloud';
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
 import {setServerVersion, getClientConfig} from 'mattermost-redux/actions/general';
 import {getGroup as fetchGroup} from 'mattermost-redux/actions/groups';
@@ -104,9 +104,7 @@ import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, i
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_actions';
-import {getUsage,
-    getTeamsUsage,
-} from 'actions/cloud';
+import {getTeamsUsage} from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
 import {sendDesktopNotification} from 'actions/notification_actions';

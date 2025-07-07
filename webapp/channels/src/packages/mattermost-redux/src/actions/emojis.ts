@@ -13,11 +13,11 @@ import {getCustomEmojisByName as selectCustomEmojisByName} from 'mattermost-redu
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {parseEmojiNamesFromText} from 'mattermost-redux/utils/emoji_utils';
 
+import {getUsage} from './cloud';
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {getProfilesByIds} from './users';
 
-import {getUsage} from '../../../../actions/cloud';
 import {General, Emoji} from '../constants';
 
 export let systemEmojis: Set<string> = new Set();
@@ -41,7 +41,6 @@ export function createCustomEmojiWithRefreshUsage(emoji: any, image: any): Actio
         const result = await dispatch(createCustomEmoji(emoji, image));
 
         if (result.data) {
-            // @ts-expect-error mistmatch of state type
             dispatch(getUsage());
         }
 
@@ -219,7 +218,6 @@ export function deleteCustomEmoji(emojiId: string): ActionFuncAsync {
             return {error};
         }
 
-        // @ts-expect-error mistmatch of state type
         await dispatch(getUsage());
         dispatch({
             type: EmojiTypes.DELETED_CUSTOM_EMOJI,

@@ -7,12 +7,9 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import type {ChannelType} from '@mattermost/types/channels';
 
+import {getUsage} from 'mattermost-redux/actions/cloud';
 import {General} from 'mattermost-redux/constants';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
-
-import {getUsage} from 'actions/cloud';
 
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetUsage from 'components/common/hooks/useGetUsage';
@@ -20,6 +17,7 @@ import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
 import UpgradeOfferIcon from 'components/widgets/icons/upgrade_offer_icon';
 
+import type {DispatchFunc} from 'types/store';
 import './channel_limit_indicator.scss';
 
 type Props = {

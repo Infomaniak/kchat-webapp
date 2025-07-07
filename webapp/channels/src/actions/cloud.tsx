@@ -29,23 +29,6 @@ export function getInstallation() {
     };
 }
 
-export function getUsage(): ThunkActionFunc<Promise<any>> {
-    return async (dispatch) => {
-        try {
-            const result = await Client4.getUsage();
-            if (result) {
-                dispatch({
-                    type: CloudTypes.RECEIVED_USAGE,
-                    data: result,
-                });
-            }
-        } catch (e) {
-            return e;
-        }
-        return {data: true};
-    };
-}
-
 export function validateBusinessEmail(email = '') {
     trackEvent('api', 'api_validate_business_email');
     return async () => {
