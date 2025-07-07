@@ -4,6 +4,12 @@
 import {mount} from 'enzyme';
 import React from 'react';
 
+import {
+    StateEntitiesChannelsMock,
+    StateEntitiesPostsMock,
+    StateViewRhsMock, StateEntitiesTeamsMock, StateEntitiesUsersMock, StateViewModalsMock,
+} from 'mattermost-redux/selectors/entities/state.mock';
+
 import WithTooltip from 'components/with_tooltip';
 
 import {mockStore} from 'tests/test_store';
@@ -11,11 +17,6 @@ import {mockStore} from 'tests/test_store';
 import Avatars from './avatars';
 
 import Avatar from '../avatar';
-import {
-    StateEntitiesChannelsMock,
-    StateEntitiesPostsMock,
-    StateViewRhsMock, StateEntitiesTeamsMock, StateEntitiesUsersMock
-} from "mattermost-redux/selectors/entities/state.mock";
 
 jest.mock('mattermost-redux/actions/users', () => {
     return {
@@ -93,8 +94,9 @@ describe('components/widgets/users/Avatars', () => {
             },
         },
         views: {
-            rhs: StateViewRhsMock
-        }
+            rhs: StateViewRhsMock,
+            modals: StateViewModalsMock,
+        },
     };
 
     test('should support userIds', () => {
