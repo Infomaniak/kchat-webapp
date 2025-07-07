@@ -54,7 +54,7 @@ const ChannelLimitIndicator = ({type}: Props) => {
             <div style={{display: 'flex', flexDirection: 'column'}}>
                 <FormattedMessage
                     id='channelLimitIndicator.text'
-                    defaultMessage='You have reached the limit of {type, select, O {public channels} P {private channels} other {}} ({usage, number}/{limit, number}) on your kSuite offer. {isAdmin, select, true {<modifyOffer>Modify your offer</modifyOffer> to create additional channels.} other {Please contact an administrator to modify the offer.}}'
+                    defaultMessage='You have reached the limit of {type, select, O {public channels} P {private channels} other {}} ({usage, number}/{limit, number}) on your kSuite offer. {isAdmin, select, true {Modify your offer to create additional channels.} other {Please contact an administrator to modify the offer.}}'
                     values={{
                         type,
                         isAdmin,

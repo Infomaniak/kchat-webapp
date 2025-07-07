@@ -109,12 +109,10 @@ describe('channel limit indicator', () => {
                     },
                 },
             });
-            const setLimitations = jest.fn();
             let wrapper = mountWithIntl(
                 <Provider store={store}>
                     <ChannelLimitIndicator
                         type={General.OPEN_CHANNEL}
-                        setLimitations={setLimitations}
                     />
                 </Provider>,
             );
@@ -124,17 +122,11 @@ describe('channel limit indicator', () => {
                 <Provider store={store}>
                     <ChannelLimitIndicator
                         type={General.PRIVATE_CHANNEL}
-                        setLimitations={setLimitations}
                     />
                 </Provider>,
             );
             await actImmediate(wrapper);
             expect(wrapper.find('.channel-limit-indicator').exists()).toBe(false);
-            expect(setLimitations).toHaveBeenCalledTimes(2);
-            expect(setLimitations).toHaveBeenCalledWith({
-                [General.OPEN_CHANNEL]: true,
-                [General.PRIVATE_CHANNEL]: false,
-            });
         });
         test('private limited', async () => {
             store = mockStore({
@@ -147,12 +139,10 @@ describe('channel limit indicator', () => {
                     },
                 },
             });
-            const setLimitations = jest.fn();
             let wrapper = mountWithIntl(
                 <Provider store={store}>
                     <ChannelLimitIndicator
                         type={General.PRIVATE_CHANNEL}
-                        setLimitations={setLimitations}
                     />
                 </Provider>,
             );
@@ -162,26 +152,18 @@ describe('channel limit indicator', () => {
                 <Provider store={store}>
                     <ChannelLimitIndicator
                         type={General.OPEN_CHANNEL}
-                        setLimitations={setLimitations}
                     />
                 </Provider>,
             );
             await actImmediate(wrapper);
             expect(wrapper.find('.channel-limit-indicator').exists()).toBe(false);
-            expect(setLimitations).toHaveBeenCalledTimes(2);
-            expect(setLimitations).toHaveBeenCalledWith({
-                [General.OPEN_CHANNEL]: false,
-                [General.PRIVATE_CHANNEL]: true,
-            });
         });
         test('not limited', async () => {
             store = mockStore({...initialState});
-            const setLimitations = jest.fn();
             let wrapper = mountWithIntl(
                 <Provider store={store}>
                     <ChannelLimitIndicator
                         type={General.OPEN_CHANNEL}
-                        setLimitations={setLimitations}
                     />
                 </Provider>,
             );
@@ -191,20 +173,14 @@ describe('channel limit indicator', () => {
                 <Provider store={store}>
                     <ChannelLimitIndicator
                         type={General.PRIVATE_CHANNEL}
-                        setLimitations={setLimitations}
                     />
                 </Provider>,
             );
             await actImmediate(wrapper);
             expect(wrapper.find('.channel-limit-indicator').exists()).toBe(false);
-            expect(setLimitations).toHaveBeenCalledTimes(2);
-            expect(setLimitations).toHaveBeenCalledWith({
-                [General.OPEN_CHANNEL]: false,
-                [General.PRIVATE_CHANNEL]: false,
-            });
         });
     });
-    it('should redirect to ksuite manager', async () => {
+    it('should show the upgrade trigger', async () => {
         store = mockStore({
             ...initialState,
             entities: {
@@ -219,15 +195,13 @@ describe('channel limit indicator', () => {
             <Provider store={store}>
                 <ChannelLimitIndicator
                     type={General.OPEN_CHANNEL}
-                    setLimitations={jest.fn()}
                 />
             </Provider>,
         );
         await actImmediate(wrapper);
-        const modifyOffer = wrapper.find('a');
-        expect(modifyOffer.exists()).toBe(true);
-        modifyOffer.simulate('click');
-        expect(redirectTokSuiteDashboard).toHaveBeenCalledTimes(1);
-        expect(redirectTokSuiteDashboard).toHaveBeenCalledWith('current_team_account_id');
+        const link = wrapper.find('a');
+        expect(link.exists()).toBe(true);
+        expect(link.text()).toBe('Upgrade');
+        expect(link.prop('slot')).toBe('trigger-element');
     });
 });
