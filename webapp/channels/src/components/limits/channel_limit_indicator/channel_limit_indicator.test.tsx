@@ -8,8 +8,6 @@ import {Provider} from 'react-redux';
 
 import {General} from 'mattermost-redux/constants';
 
-import {redirectTokSuiteDashboard} from 'actions/global_actions';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
 
