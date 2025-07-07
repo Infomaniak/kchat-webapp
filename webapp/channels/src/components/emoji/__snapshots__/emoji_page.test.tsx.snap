@@ -1,46 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EmojiPage should render ksuite modal conversion when emoji is out of quota 1`] = `
-<div
-  className="backstage-content emoji-list"
->
-  <div
-    className="backstage-header"
-  >
-    <h1>
-      <MemoizedFormattedMessage
-        defaultMessage="Custom Emoji"
-        id="emoji_list.header"
-      />
-    </h1>
-    <Memo(AnyTeamPermissionGate)
-      permissions={
-        Array [
-          "create_emojis",
-        ]
-      }
-    >
-      <button
-        className="btn btn-primary"
-        onClick={[Function]}
-        type="button"
-      >
-        <wc-icon
-          name="rocket"
-        />
-        <MemoizedFormattedMessage
-          defaultMessage="Add Custom Emoji"
-          id="emoji_list.add"
-        />
-      </button>
-    </Memo(AnyTeamPermissionGate)>
-  </div>
-  <Connect(EmojiList)
-    scrollToTop={[MockFunction]}
-  />
-</div>
-`;
-
 exports[`EmojiPage should render without crashing 1`] = `
 <div
   className="backstage-content emoji-list"

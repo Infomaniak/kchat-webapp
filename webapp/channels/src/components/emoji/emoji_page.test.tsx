@@ -25,6 +25,7 @@ jest.spyOn(reactRedux, 'useSelector').mockImplementation((selector) => {
     if (selector === teamSelectors.getCurrentPackName) {
         return 'ksuite_essential';
     }
+    return '';
 });
 
 describe('EmojiPage', () => {
