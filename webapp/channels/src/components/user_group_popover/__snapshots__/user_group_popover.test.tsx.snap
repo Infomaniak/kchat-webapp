@@ -1011,6 +1011,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                         currentTeamName="team1"
                                         dispatch={[Function]}
                                         hideStatus={false}
+                                        isAnyModalOpen={false}
                                         isChannelAdmin={false}
                                         isTeamAdmin={false}
                                         src="/api/v4/users/id0/image?_=0"
@@ -1253,6 +1254,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                         currentTeamName="team1"
                                         dispatch={[Function]}
                                         hideStatus={false}
+                                        isAnyModalOpen={false}
                                         isChannelAdmin={false}
                                         isTeamAdmin={false}
                                         src="/api/v4/users/id1/image?_=0"
@@ -1495,6 +1497,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                         currentTeamName="team1"
                                         dispatch={[Function]}
                                         hideStatus={false}
+                                        isAnyModalOpen={false}
                                         isChannelAdmin={false}
                                         isTeamAdmin={false}
                                         src="/api/v4/users/id10/image?_=0"
@@ -1737,6 +1740,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                         currentTeamName="team1"
                                         dispatch={[Function]}
                                         hideStatus={false}
+                                        isAnyModalOpen={false}
                                         isChannelAdmin={false}
                                         isTeamAdmin={false}
                                         src="/api/v4/users/id11/image?_=0"
@@ -1979,6 +1983,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                         currentTeamName="team1"
                                         dispatch={[Function]}
                                         hideStatus={false}
+                                        isAnyModalOpen={false}
                                         isChannelAdmin={false}
                                         isTeamAdmin={false}
                                         src="/api/v4/users/id12/image?_=0"

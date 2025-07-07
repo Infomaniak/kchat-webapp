@@ -65,6 +65,7 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                 }
               }
               dispatch={[Function]}
+              isAnyModalOpen={false}
               isChannelAdmin={false}
               isTeamAdmin={false}
               src="/api/v4/users/user_id/image?_=0"
@@ -334,6 +335,7 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                 }
               }
               dispatch={[Function]}
+              isAnyModalOpen={false}
               isChannelAdmin={false}
               isTeamAdmin={false}
               src="/api/v4/users/user_id/image?_=0"
@@ -609,6 +611,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                 }
               }
               dispatch={[Function]}
+              isAnyModalOpen={false}
               isChannelAdmin={false}
               isTeamAdmin={false}
               src="/api/v4/users/user_id/image?_=0"
@@ -941,6 +944,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                 }
               }
               dispatch={[Function]}
+              isAnyModalOpen={false}
               isChannelAdmin={false}
               isTeamAdmin={false}
               src="/api/v4/users/user_id/image?_=0"

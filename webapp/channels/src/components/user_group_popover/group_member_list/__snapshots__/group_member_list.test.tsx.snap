@@ -649,6 +649,7 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                 currentTeamName="team1"
                                 dispatch={[Function]}
                                 hideStatus={false}
+                                isAnyModalOpen={false}
                                 isChannelAdmin={false}
                                 isTeamAdmin={false}
                                 src="/api/v4/users/id0/image?_=0"
@@ -848,6 +849,7 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                 currentTeamName="team1"
                                 dispatch={[Function]}
                                 hideStatus={false}
+                                isAnyModalOpen={false}
                                 isChannelAdmin={false}
                                 isTeamAdmin={false}
                                 src="/api/v4/users/id1/image?_=0"
@@ -1047,6 +1049,7 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                 currentTeamName="team1"
                                 dispatch={[Function]}
                                 hideStatus={false}
+                                isAnyModalOpen={false}
                                 isChannelAdmin={false}
                                 isTeamAdmin={false}
                                 src="/api/v4/users/id2/image?_=0"
@@ -1246,6 +1249,7 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                 currentTeamName="team1"
                                 dispatch={[Function]}
                                 hideStatus={false}
+                                isAnyModalOpen={false}
                                 isChannelAdmin={false}
                                 isTeamAdmin={false}
                                 src="/api/v4/users/id3/image?_=0"
@@ -1445,6 +1449,7 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                 currentTeamName="team1"
                                 dispatch={[Function]}
                                 hideStatus={false}
+                                isAnyModalOpen={false}
                                 isChannelAdmin={false}
                                 isTeamAdmin={false}
                                 src="/api/v4/users/id4/image?_=0"

@@ -36,6 +36,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
           channelId="current_channel_id"
           currentTeamName="team1"
           dispatch={[Function]}
+          isAnyModalOpen={false}
           isChannelAdmin={false}
           isTeamAdmin={false}
           src="/api/v4/users/1/image?_=0"
@@ -136,6 +137,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
           channelId="current_channel_id"
           currentTeamName="team1"
           dispatch={[Function]}
+          isAnyModalOpen={false}
           isChannelAdmin={false}
           isTeamAdmin={false}
           src="/api/v4/users/6/image?_=0"
@@ -225,6 +227,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
           channelId="current_channel_id"
           currentTeamName="team1"
           dispatch={[Function]}
+          isAnyModalOpen={false}
           isChannelAdmin={false}
           isTeamAdmin={false}
           src="/api/v4/users/7/image?_=0"
@@ -373,6 +376,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
           channelId="current_channel_id"
           currentTeamName="team1"
           dispatch={[Function]}
+          isAnyModalOpen={false}
           isChannelAdmin={false}
           isTeamAdmin={false}
           src="/api/v4/users/1/image?_=0"
@@ -473,6 +477,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
           channelId="current_channel_id"
           currentTeamName="team1"
           dispatch={[Function]}
+          isAnyModalOpen={false}
           isChannelAdmin={false}
           isTeamAdmin={false}
           src="/api/v4/users/2/image?_=0"
@@ -573,6 +578,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
           channelId="current_channel_id"
           currentTeamName="team1"
           dispatch={[Function]}
+          isAnyModalOpen={false}
           isChannelAdmin={false}
           isTeamAdmin={false}
           src="/api/v4/users/3/image?_=0"
@@ -730,6 +736,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
           channelId="current_channel_id"
           currentTeamName="team1"
           dispatch={[Function]}
+          isAnyModalOpen={false}
           isChannelAdmin={false}
           isTeamAdmin={false}
           src="/api/v4/users/1/image?_=0"
@@ -830,6 +837,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
           channelId="current_channel_id"
           currentTeamName="team1"
           dispatch={[Function]}
+          isAnyModalOpen={false}
           isChannelAdmin={false}
           isTeamAdmin={false}
           src="/api/v4/users/2/image?_=0"
@@ -930,6 +938,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
           channelId="current_channel_id"
           currentTeamName="team1"
           dispatch={[Function]}
+          isAnyModalOpen={false}
           isChannelAdmin={false}
           isTeamAdmin={false}
           src="/api/v4/users/3/image?_=0"
