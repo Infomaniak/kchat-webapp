@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 import './wc_profile_popover.scss';
 import type {
+    LegacyRef,
     ReactNode,
 } from 'react';
 import React, {
@@ -88,22 +89,19 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     onToggle?: (isMounted: boolean) => void;
 }
 
-export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; hiddenOptions: string[];hiddenInformations: string[]};
-
+export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; hiddenOptions: string[];hiddenInformations: string[], customTrigger: HTMLElement};
 
 const mapCustomBadges = (badge: string) => (
     <>
 
         {/* @ts-expect-error webcomponent */}
         <wc-pill
-            class="test"
-            slot="custom-badges"
+            slot='custom-badges'
             style={{
                 color: 'var(--wc-contact-sheet-pill-color)',
-                ['--wc-pill-background']: 'var(--wc-contact-sheet-pill-background-color)'
+                '--wc-pill-background': 'var(--wc-contact-sheet-pill-background-color)',
             }}
-            // style="--wc-pill-background: #13B4D0;color: #fff"
-            size="small"
+            size='small'
             round={true}
             prevent-removal={true}
         >
@@ -111,7 +109,7 @@ const mapCustomBadges = (badge: string) => (
             {/* @ts-expect-error webcomponent */}
         </wc-pill>
     </>
-)
+);
 
 export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     const {
@@ -140,6 +138,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     const shouldDisplayMinimalPanel = hasOverriddenProps || props.fromWebhook;
     const displayedUsername = username || user?.username;
     const localRef = useRef<WcContactSheetElement | undefined>(undefined);
+    const triggerRef = useRef<HTMLSpanElement | undefined>(undefined);
     const {formatMessage} = useIntl();
 
     if (!shouldDisplayMinimalPanel) {
@@ -171,7 +170,8 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
 
     useEffect(() => {
         const current = localRef?.current;
-        if (!current) {
+        const customTrigger = triggerRef?.current;
+        if (!current || !customTrigger) {
             return () => {};
         }
 
@@ -193,6 +193,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             }
         };
 
+        current.customTrigger = customTrigger
         current.addEventListener('close', returnFocus);
         current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         if (user?.is_bot) {
@@ -204,12 +205,17 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             current?.removeEventListener('close', returnFocus);
             current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         };
-    }, []);
+    }, [triggerRef?.current,localRef?.current]);
 
     return (
         <>
+            <span
+                ref={triggerRef as LegacyRef<HTMLSpanElement>}
+                className={triggerComponentClass}
+            >{children}</span>
             {/*@ts-expect-error webcomponent*/}
             <wc-contact-sheet
+                hide-default-slot={true}
                 disabled={disabled}
                 prevent-stop-propagation={true}
                 ref={localRef}
@@ -229,10 +235,6 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                 user-name={overwriteName || user?.first_name + ' ' + user?.last_name}
                 style={triggerComponentStyle}
             >
-                <span
-                    slot='trigger'
-                    className={triggerComponentClass}
-                >{children}</span>
                 {badges.map(mapCustomBadges)}
                 {(shouldDisplayMinimalPanel) && <div
                     slot='custom-content'
