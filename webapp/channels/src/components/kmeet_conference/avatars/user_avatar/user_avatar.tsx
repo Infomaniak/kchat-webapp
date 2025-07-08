@@ -30,10 +30,6 @@ type Props = {
     status: Registrant;
 } & ComponentProps<typeof Avatar>
 
-interface MMOverlayTrigger extends BaseOverlayTrigger {
-    hide: () => void;
-}
-
 const displayNameGetter = makeDisplayNameGetter();
 
 function UserAvatar({
