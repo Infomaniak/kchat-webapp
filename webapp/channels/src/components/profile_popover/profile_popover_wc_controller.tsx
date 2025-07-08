@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import './wc_profile_popover.scss';
 import type {
+    CSSProperties,
     LegacyRef,
     ReactNode,
 } from 'react';
@@ -42,7 +42,7 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     triggerComponentAs?: React.ElementType;
     triggerComponentId?: HTMLElement['id'];
     triggerComponentClass?: HTMLElement['className'];
-    triggerComponentStyle?: HTMLElement['style'];
+    triggerComponentStyle?: CSSProperties;
 
     /**
      * Source URL from the image to display in the popover
@@ -210,6 +210,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             <span
                 ref={triggerRef as LegacyRef<HTMLSpanElement>}
                 className={triggerComponentClass}
+                style={triggerComponentStyle}
             >{children}</span>
             <wc-contact-sheet
                 hide-default-slot={true}
@@ -230,7 +231,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                 user-id={!shouldDisplayMinimalPanel && user?.user_id} // prevent fetching user data if not needed
                 user-mail={user?.is_bot ? `@${displayedUsername}` : user?.email} // if user is bot display username instead of mail
                 user-name={overwriteName || user?.first_name + ' ' + user?.last_name}
-                style={triggerComponentStyle}
+                style={{display: 'none'}}
             >
                 {badges.map(mapCustomBadges)}
                 {shouldDisplayMinimalPanel &&
