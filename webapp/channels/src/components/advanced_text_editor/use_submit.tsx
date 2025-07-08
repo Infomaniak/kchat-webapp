@@ -329,7 +329,7 @@ const useSubmit = (
             return;
         }
 
-        if (memberNotifyCount > 0 && !isDirectOrGroup) {
+        if (memberNotifyCount > 0) {
             showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, onConfirm);
             isDraftSubmitting.current = false;
             return;
