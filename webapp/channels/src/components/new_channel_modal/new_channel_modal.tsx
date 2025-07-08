@@ -24,6 +24,7 @@ import {switchToChannel} from 'actions/views/channel';
 import {closeModal} from 'actions/views/modals';
 
 import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
+import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import ChannelLimitIndicator from 'components/limits/channel_limit_indicator';
 import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
 import WithTooltip from 'components/with_tooltip';
@@ -75,6 +76,7 @@ const NewChannelModal = () => {
     const intl = useIntl();
     const {formatMessage} = intl;
 
+    const {private_channels: privateChannels, public_channels: publicChannels} = useGetUsageDeltas();
     const currentTeamId = useSelector(getCurrentTeam)?.id;
 
     const canCreatePublicChannel = useSelector((state: GlobalState) => (currentTeamId ? haveICurrentChannelPermission(state, Permissions.CREATE_PUBLIC_CHANNEL) : false));
@@ -88,7 +90,6 @@ const NewChannelModal = () => {
     const [urlError, setURLError] = useState('');
     const [purposeError, setPurposeError] = useState('');
     const [serverError, setServerError] = useState('');
-    const [limitations] = useState<Partial<Record<ChannelType, boolean>>>({});
     const [channelInputError, setChannelInputError] = useState(false);
 
     // create a board along with the channel
@@ -234,7 +235,10 @@ const NewChannelModal = () => {
         e.stopPropagation();
     };
 
-    const canCreate = displayName && !urlError && type && !purposeError && !serverError && canCreateFromPluggable && !channelInputError && !(limitations[type] ?? false);
+    const isChannelLimitOk = (type === 'O' && canCreatePublicChannel && publicChannels < 0) ||
+                             (type === 'P' && canCreatePrivateChannel && privateChannels < 0);
+
+    const canCreate = displayName && !urlError && type && !purposeError && !serverError && canCreateFromPluggable && !channelInputError && isChannelLimitOk;
 
     const newBoardInfoIcon = (
         <WithTooltip
