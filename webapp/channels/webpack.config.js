@@ -341,8 +341,35 @@ var config = {
 };
 
 function generateCSP() {
-    let csp = "script-src 'self' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ web-components-staging.dev.infomaniak.ch/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ kmeet.preprod.dev.infomaniak.ch/ onlyoffice.infomaniak.com" + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV + "; script-src-elem 'self' 'unsafe-inline' blob: kchat.preprod.dev.infomaniak.ch kmeet.preprod.dev.infomaniak.ch web-components.storage.infomaniak.com documentserver.kdrive.infomaniak.com onlyoffice.infomaniak.com web-components-staging.dev.infomaniak.ch;";
+    const scriptSrc = [
+        "'self'",
+        'blob:',
+        'cdn.rudderlabs.com',
+        'js.stripe.com/v3',
+        'web-components.storage.infomaniak.com',
+        'web-components-staging.dev.infomaniak.ch',
+        'welcome.infomaniak.com',
+        'welcome.preprod.dev.infomaniak.ch',
+        'kmeet.infomaniak.com',
+        'kmeet.preprod.dev.infomaniak.ch',
+        'onlyoffice.infomaniak.com',
+        CSP_UNSAFE_INLINE,
+        CSP_UNSAFE_EVAL_IF_DEV,
+    ].join(' ');
 
+    const scriptSrcElem = [
+        "'self'",
+        "'unsafe-inline'",
+        'blob:',
+        'kchat.preprod.dev.infomaniak.ch',
+        'kmeet.preprod.dev.infomaniak.ch',
+        'web-components.storage.infomaniak.com',
+        'web-components-staging.dev.infomaniak.ch',
+        'documentserver.kdrive.infomaniak.com',
+        'onlyoffice.infomaniak.com',
+    ].join(' ');
+
+    let csp = `script-src ${scriptSrc}; script-src-elem ${scriptSrcElem};`;
     if (IS_CANARY || IS_PREPROD) {
         csp += CSP_WORKER_SRC;
     }
