@@ -12,7 +12,11 @@ import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 export function createSchedulePost(schedulePost: ScheduledPost, teamId: string, connectionId: string) {
     return async (dispatch: DispatchFunc) => {
         try {
-            const createdPost = await Client4.createScheduledPost(schedulePost, connectionId);
+            const schedulePostWithTimeStamp = {
+                ...schedulePost,
+                timestamp: schedulePost.scheduled_at, // For now, we will pass both 'timestamp' and 'scheduled_at', the former should be removed soon
+            };
+            const createdPost = await Client4.createScheduledPost(schedulePostWithTimeStamp, connectionId);
 
             dispatch({
                 type: ScheduledPostTypes.SINGLE_SCHEDULED_POST_RECEIVED,

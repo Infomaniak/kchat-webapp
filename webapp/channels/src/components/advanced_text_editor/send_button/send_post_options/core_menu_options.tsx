@@ -110,7 +110,8 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
         extraProps.trailingElements = teammateTimeDisplay;
     }
 
-    const tomorrowClickHandler = useCallback((e) => handleOnSelect(e, tomorrow9amTime), [handleOnSelect, tomorrow9amTime]);
+    // @ts-expect-error tyoe behind the scene 'tomorrow' and 'monday' is allowed
+    const tomorrowClickHandler = useCallback((e) => handleOnSelect(e, 'tomorrow'), [handleOnSelect]);
 
     const optionTomorrow = (
         <Menu.Item
@@ -129,7 +130,8 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
         />
     );
 
-    const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, nextMonday), [handleOnSelect, nextMonday]);
+    // @ts-expect-error tyoe behind the scene 'tomorrow' and 'monday' is allowed
+    const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, 'monday'), [handleOnSelect]);
 
     const optionNextMonday = (
         <Menu.Item
