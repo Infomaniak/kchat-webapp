@@ -89,8 +89,6 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     onToggle?: (isMounted: boolean) => void;
 }
 
-export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; hiddenOptions: string[];hiddenInformations: string[]; customTrigger: HTMLElement};
-
 const mapCustomBadges = (badge: string) => (
     <>
 
@@ -137,7 +135,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     const hasOverriddenProps = Boolean(overwriteName) || Boolean(overwriteIcon);
     const shouldDisplayMinimalPanel = hasOverriddenProps || props.fromWebhook;
     const displayedUsername = username || user?.username;
-    const localRef = useRef<WcContactSheetElement | undefined>(undefined);
+    const localRef = useRef<JSX.IntrinsicElements['wc-contact-sheet'] | undefined>(undefined);
     const triggerRef = useRef<HTMLSpanElement | undefined>(undefined);
     const {formatMessage} = useIntl();
 
@@ -213,7 +211,6 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                 ref={triggerRef as LegacyRef<HTMLSpanElement>}
                 className={triggerComponentClass}
             >{children}</span>
-            {/*@ts-expect-error webcomponent*/}
             <wc-contact-sheet
                 hide-default-slot={true}
                 disabled={disabled}
@@ -248,7 +245,6 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                             username: displayedUsername,
                         })}
                     </div>}
-                {/*@ts-expect-error webcomponent*/}
             </wc-contact-sheet>
         </>
     );
