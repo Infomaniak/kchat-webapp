@@ -60,9 +60,9 @@ $app-bar-width: 44px;
                     width: 3px;
                     height: $app-bar-icon-size;
                     border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
-                    background-color: var(--sidebar-text-active-border);
                     // Infomaniak
                     border-radius: 0 2px 2px 0;
+                    background-color: var(--sidebar-text-active-border);
                     content: '';
                 }
 

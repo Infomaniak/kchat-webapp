@@ -22,10 +22,10 @@
 
     .userDisplayName {
         display: inline-block;
-        vertical-align: bottom;
         overflow: hidden;
         max-width: 350px;
         text-overflow: ellipsis;
         text-wrap: nowrap;
+        vertical-align: bottom;
     }
 }

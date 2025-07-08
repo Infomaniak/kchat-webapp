@@ -1,4 +1,4 @@
-import {TestHelper} from "../../../../../utils/test_helper";
+import {TestHelper} from '../../../../../utils/test_helper';
 
 export const StateEntitiesUsersMock = {
     currentUserId: 'uid',
@@ -40,9 +40,9 @@ export const StateEntitiesUsersMock = {
         },
     },
     statuses: {},
-}
+};
 
-export const StateEntitiesChannelsMock =   {
+export const StateEntitiesChannelsMock = {
     membersInChannel: {},
     currentChannelId: 'current_channel_id',
     myMembers: {
@@ -79,7 +79,7 @@ export const StateEntitiesChannelsMock =   {
         current_channel_id: {total: 10},
         current_user_id__existingId: {total: 0},
     },
-}
+};
 
 export const StateEntitiesPostsMock = {
     posts: {
@@ -100,14 +100,13 @@ export const StateEntitiesPostsMock = {
             user_id: '1',
         },
     },
-}
+};
 
 export const StateViewRhsMock = {
     rhsState: null,
     filesSearchExtFilter: [] as string[],
     searchType: '',
-}
-
+};
 
 export const StateEntitiesTeamsMock = {
     membersInTeam: {},
@@ -118,4 +117,4 @@ export const StateEntitiesTeamsMock = {
             name: 'team1',
         },
     },
-}
+};

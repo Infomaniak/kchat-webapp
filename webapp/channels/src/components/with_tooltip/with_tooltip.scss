@@ -4,15 +4,14 @@
     z-index: variables.$z-index-tooltip;
     max-width: 256px;
     padding: 6px 8px 6px 8px;
+    border-radius: 8px;
     background: #333333;
-    border-radius: 4px;
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    font-family: 'SuisseIntl';
     line-height: 18px;
     pointer-events: none;
     text-align: center;
     word-break: break-word;
-    border-radius: 8px;
-    font-family: 'SuisseIntl';
 
     > .tooltipContent {
         display: flex;
@@ -50,8 +49,8 @@
                 line-height: 15px;
 
                 .ikTooltipContentTitleText {
-                    opacity: .7;
                     font-weight: 400;
+                    opacity: .7;
                 }
             }
         }

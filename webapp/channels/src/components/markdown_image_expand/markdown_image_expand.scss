@@ -9,6 +9,8 @@
 
 .markdown-image-expand__collapse-button {
     position: absolute;
+    // Infomaniak edit
+    z-index: 1;
     top: 0;
     left: 0;
     display: none;
@@ -22,8 +24,6 @@
     color: rgba(var(--center-channel-color-rgb), 0.64);
     font-size: 18px;
     line-height: 21px;
-    // Infomaniak edit
-    z-index: 1;
     .icon {
         width: 18px;
         height: 18px;

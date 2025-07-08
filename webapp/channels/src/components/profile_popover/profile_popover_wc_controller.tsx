@@ -90,20 +90,20 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
 
 export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; hiddenOptions: string[];hiddenInformations: string[]};
 
-
 const mapCustomBadges = (badge: string) => (
     <>
 
         {/* @ts-expect-error webcomponent */}
         <wc-pill
-            class="test"
-            slot="custom-badges"
+            class='test'
+            slot='custom-badges'
             style={{
                 color: 'var(--wc-contact-sheet-pill-color)',
-                ['--wc-pill-background']: 'var(--wc-contact-sheet-pill-background-color)'
+                '--wc-pill-background': 'var(--wc-contact-sheet-pill-background-color)',
             }}
+
             // style="--wc-pill-background: #13B4D0;color: #fff"
-            size="small"
+            size='small'
             round={true}
             prevent-removal={true}
         >
@@ -111,7 +111,7 @@ const mapCustomBadges = (badge: string) => (
             {/* @ts-expect-error webcomponent */}
         </wc-pill>
     </>
-)
+);
 
 export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     const {
@@ -234,17 +234,18 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                     className={triggerComponentClass}
                 >{children}</span>
                 {badges.map(mapCustomBadges)}
-                {(shouldDisplayMinimalPanel) && <div
-                    slot='custom-content'
-                >
-                    {formatMessage({
-                        id: 'user_profile.account.post_was_created',
-                        defaultMessage: 'This post was created by an integration from @{username}',
-                    },
-                    {
-                        username: displayedUsername,
-                    })}
-                </div>}
+                {(shouldDisplayMinimalPanel) &&
+                    <div
+                        slot='custom-content'
+                    >
+                        {formatMessage({
+                            id: 'user_profile.account.post_was_created',
+                            defaultMessage: 'This post was created by an integration from @{username}',
+                        },
+                        {
+                            username: displayedUsername,
+                        })}
+                    </div>}
                 {/*@ts-expect-error webcomponent*/}
             </wc-contact-sheet>
         </>

@@ -2,37 +2,37 @@
 
 .loader-ik {
     position: fixed;
+    z-index: 9999;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 9999;
     background-color: #EDECEC;
 
 
     &__content {
         position: absolute;
-        top: 50%;
-        width: 100%;
         z-index: 2;
+        top: 50%;
+        left: 40%;
+        width: 100%;
+        margin-left: 10%;
         color: #000;
         font-size: 25px;
         text-align: center;
         -webkit-transform: translate3d(-50%, -50%, 0);
-        transform: translate3d(-50%, -50%, 0);
-        left: 40%;
-        margin-left: 10%
+        transform: translate3d(-50%, -50%, 0)
     }
 
     &__circle {
+        position: relative;
         display: block;
-        margin: 0 auto;
-        background: #fff;
-        border-radius: 80px;
         width: 80px;
         height: 80px;
-        line-height: 80px;
-        position: relative
+        border-radius: 80px;
+        margin: 0 auto;
+        background: #fff;
+        line-height: 80px
     }
 
     &__image {

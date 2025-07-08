@@ -33,11 +33,11 @@
 
     // IK: a bit hacky, this menu is not a popover really
     #browserOrAddChannelMenu > li > .label-elements  {
-        white-space: normal;
         display:inline-flex;
-        flex-wrap: wrap;
-        width:80%;
         overflow: hidden;
+        width:80%;
+        flex-wrap: wrap;
+        white-space: normal;
     }
 }
 

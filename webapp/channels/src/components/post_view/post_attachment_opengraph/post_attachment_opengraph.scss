@@ -15,10 +15,10 @@
     width: 100%;
     max-width: 700px;
     padding: 13px;
-    border-left: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
-    margin: 5px 0 0 5px;
     // background-color: var(--center-channel-bg);
     border-radius: 4px;
+    border-left: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
+    margin: 5px 0 0 5px;
     // box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
 
     /**
@@ -151,8 +151,8 @@
 
             img {
                 width: 80%;
-                border-radius: 6px;
                 min-height: 100%;
+                border-radius: 6px;
                 object-fit: cover;
             }
         }

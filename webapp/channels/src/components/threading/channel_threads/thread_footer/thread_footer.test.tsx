@@ -7,6 +7,12 @@ import React from 'react';
 
 import type {UserThread} from '@mattermost/types/threads';
 
+import {
+    StateEntitiesChannelsMock,
+    StateEntitiesTeamsMock,
+    StateEntitiesUsersMock, StateViewRhsMock,
+} from 'mattermost-redux/selectors/entities/state.mock';
+
 import Timestamp from 'components/timestamp';
 import Avatars from 'components/widgets/users/avatars';
 import WithTooltip from 'components/with_tooltip';
@@ -17,11 +23,6 @@ import {mockStore} from 'tests/test_store';
 import ThreadFooter from './thread_footer';
 
 import FollowButton from '../../common/follow_button';
-import {
-    StateEntitiesChannelsMock,
-    StateEntitiesTeamsMock,
-    StateEntitiesUsersMock, StateViewRhsMock
-} from "mattermost-redux/selectors/entities/state.mock";
 
 describe('components/threading/channel_threads/thread_footer', () => {
     const baseState = {
@@ -127,7 +128,7 @@ describe('components/threading/channel_threads/thread_footer', () => {
         },
         views: {
             rhs: StateViewRhsMock,
-        }
+        },
 
     };
 

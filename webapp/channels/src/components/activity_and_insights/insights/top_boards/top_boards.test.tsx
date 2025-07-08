@@ -9,16 +9,17 @@ import {BrowserRouter} from 'react-router-dom';
 
 import {CardSizes, InsightsWidgetTypes, TimeFrames} from '@mattermost/types/insights';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import mockStore from 'tests/test_store';
-
-import TopBoards from './top_boards';
 import {
     StateEntitiesPostsMock,
     StateEntitiesTeamsMock,
     StateEntitiesUsersMock,
-    StateViewRhsMock
-} from "mattermost-redux/selectors/entities/state.mock";
+    StateViewRhsMock,
+} from 'mattermost-redux/selectors/entities/state.mock';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import mockStore from 'tests/test_store';
+
+import TopBoards from './top_boards';
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),
@@ -48,7 +49,7 @@ describe('components/activity_and_insights/insights/top_boards', () => {
 
     const initialState = {
         views: {
-            rhs: StateViewRhsMock
+            rhs: StateViewRhsMock,
         },
         entities: {
 
