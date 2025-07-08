@@ -10,7 +10,8 @@ import Permissions from 'mattermost-redux/constants/permissions';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {haveICurrentChannelPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {setAddChannelCtaDropdown} from 'actions/views/add_channel_dropdown';
@@ -18,6 +19,7 @@ import {openModal} from 'actions/views/modals';
 import {isAddChannelCtaDropdownOpen} from 'selectors/views/add_channel_dropdown';
 
 import BrowseChannels from 'components/browse_channels';
+import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
@@ -33,6 +35,11 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
     const currentTeamId = useSelector(getCurrentTeamId);
     const intl = useIntl();
     const touchedAddChannelsCtaButton = useSelector((state: GlobalState) => getBool(state, Preferences.TOUCHED, Touched.ADD_CHANNELS_CTA));
+
+    const currentPlan = useSelector(getCurrentPackName);
+    const {private_channels: privateChannels, public_channels: publicChannels} = useGetUsageDeltas();
+    const privateAndPublicQuotas = (privateChannels >= 0 && publicChannels >= 0) ? 0 : -1;
+    const {isQuotaExceeded, withQuotaCheck} = quotaGate(privateAndPublicQuotas, currentPlan);
 
     const canCreatePublicChannel = useSelector((state: GlobalState) => haveICurrentChannelPermission(state, Permissions.CREATE_PUBLIC_CHANNEL));
     const canCreatePrivateChannel = useSelector((state: GlobalState) => haveICurrentChannelPermission(state, Permissions.CREATE_PRIVATE_CHANNEL));
@@ -98,9 +105,10 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
             createChannel = (
                 <Menu.ItemAction
                     id='showNewChannel'
-                    onClick={showNewChannelModal}
+                    onClick={withQuotaCheck(showNewChannelModal)}
                     icon={<i className='icon-plus'/>}
                     text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.createNewChannel', defaultMessage: 'Create new channel'})}
+                    rightDecorator={isQuotaExceeded ? <wc-ksuite-pro-upgrade-tag/> : null}
                 />
             );
         }

@@ -772,6 +772,14 @@ $sidebarOpacityAnimationDuration: 0.15s;
                 color: rgba(var(--center-channel-color-rgb), 0.64);
             }
         }
+
+        .MenuItem__primary-text {
+            align-items: center;
+
+            .text {
+                margin-right: 8px;
+            }
+        }
     }
 
     #inviteMembersButton,
