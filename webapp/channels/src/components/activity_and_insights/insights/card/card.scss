@@ -1,7 +1,7 @@
 .Card.insights-card {
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
-    margin: 8px;
     border-radius: 8px;
+    margin: 8px;
     box-shadow: none;
 
     .Card__header {
@@ -44,8 +44,8 @@
             right: 20px;
             padding: 8px;
             border: none;
-            background: none;
             border-radius: 4px;
+            background: none;
             color: rgba(var(--center-channel-color-rgb), 0.56);
 
             &:hover {

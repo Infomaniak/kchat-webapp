@@ -272,8 +272,8 @@
 
         .more-modal {
             .modal-header {
-                flex-direction: column;
                 width: 100%;
+                flex-direction: column;
                 padding-right: 15px;
             }
 
@@ -1378,11 +1378,11 @@
                     height: 40px;
 
                     .SidebarLink {
+                        // Infomaniak
+                        overflow: hidden;
                         width: 290px;
                         height: 40px;
                         align-items: center;
-                        // Infomaniak
-                        overflow: hidden;
 
                         &::before {
                             height: 40px;

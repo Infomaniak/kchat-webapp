@@ -333,10 +333,10 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
         &.isWebApp {
             .dropdown-menu {
+                width: 100%;
                 // Infomaniak
                 min-width: 0;
                 max-width: 100%;
-                width: 100%;
             }
         }
 

@@ -219,8 +219,8 @@
                     }
 
                     &:hover {
-                        background-color: rgba(var(--center-channel-color-rgb), 0.08);
                         border-radius: 4px;
+                        background-color: rgba(var(--center-channel-color-rgb), 0.08);
                         text-decoration: none;
                     }
 
@@ -262,8 +262,8 @@
 
                         span.horizontal-bar {
                             height: 8px;
-                            margin-left: 16px;
                             border-radius: 6px;
+                            margin-left: 16px;
                         }
                     }
                 }
@@ -324,8 +324,8 @@
 
                 .bar-chart-data {
                     width: 8px;
-                    margin-bottom: 6px;
                     border-radius: 6px;
+                    margin-bottom: 6px;
                 }
             }
         }
@@ -360,8 +360,8 @@
                     }
 
                     &:hover {
-                        background: rgba(var(--center-channel-color-rgb), 0.08);
                         border-radius: 4px;
+                        background: rgba(var(--center-channel-color-rgb), 0.08);
                         cursor: pointer;
                     }
                 }
@@ -396,8 +396,8 @@
                     padding: 10px 12px;
 
                     &:hover {
-                        background: rgba(var(--center-channel-color-rgb), 0.08);
                         border-radius: 4px;
+                        background: rgba(var(--center-channel-color-rgb), 0.08);
                         cursor: pointer;
                         text-decoration: none;
                     }
@@ -478,8 +478,8 @@
                     padding: 10px 12px;
 
                     &:hover {
-                        background: rgba(var(--center-channel-color-rgb), 0.08);
                         border-radius: 4px;
+                        background: rgba(var(--center-channel-color-rgb), 0.08);
                         cursor: pointer;
                         text-decoration: none;
                     }
@@ -559,8 +559,8 @@
                     padding: 10px 12px;
 
                     &:hover {
-                        background: rgba(var(--center-channel-color-rgb), 0.08);
                         border-radius: 4px;
+                        background: rgba(var(--center-channel-color-rgb), 0.08);
                         cursor: pointer;
                         text-decoration: none;
                     }
@@ -617,10 +617,10 @@
 
                     .horizontal-bar {
                         height: 8px;
+                        border-radius: 6px;
                         margin-top: 4px;
                         margin-bottom: 4px;
                         background-color: var(--button-bg);
-                        border-radius: 6px;
                     }
                 }
             }
@@ -670,8 +670,8 @@
                 }
 
                 &:hover {
-                    background: rgba(var(--center-channel-color-rgb), 0.08);
                     border-radius: 4px;
+                    background: rgba(var(--center-channel-color-rgb), 0.08);
                     cursor: pointer;
                     text-decoration: none;
                 }
@@ -761,9 +761,9 @@
 
                         .horizontal-bar {
                             min-height: 8px;
+                            border-radius: 6px;
                             margin-left: 8px;
                             background-color: var(--online-indicator);
-                            border-radius: 6px;
                         }
 
                         .say-hello {
@@ -903,9 +903,9 @@
             .empty-state-emoticon {
                 display: flex;
                 padding: 10px;
+                border-radius: 50px;
                 margin-bottom: 8px;
                 background: rgba(var(--center-channel-color-rgb), 0.08);
-                border-radius: 50px;
 
                 i.icon {
                     width: 20px;

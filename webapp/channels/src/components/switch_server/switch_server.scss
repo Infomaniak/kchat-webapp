@@ -1,9 +1,9 @@
 .switch-server-dropdown {
-    width: 100%;
     overflow: hidden;
+    width: 100%;
     align-items: center;
-    margin-top: 16px;
     padding: 0 16px;
+    margin-top: 16px;
 
     & .team-label{
         width: 100%;
@@ -21,13 +21,13 @@
     }
 
     & .bordered {
-        border-radius: 4px;
         overflow: hidden;
+        border-radius: 4px;
     }
 
     @media screen and (max-width: 768px) {
-        margin-top: 16px;
         padding: 0 14px;
+        margin-top: 16px;
     }
 
     @media screen and (min-width: 768px) {
@@ -37,13 +37,13 @@
 
 .switch-item {
     display: flex;
+    width: 100%;
+    height: 40px;
     align-items: center;
     justify-content: space-between;
     padding: 0 12px;
-    height: 40px;
-    width: 100%;
-    color: var(--switch-server-text-color);
     background: var(--switch-server-background);
+    color: var(--switch-server-text-color);
     transition: background-color .3s ease;
 
     &:not(.isCurrent) {
@@ -82,10 +82,10 @@
 
     .team-label {
         display: flex;
-        align-items: center;
-        white-space: nowrap;
-        text-overflow: ellipsis;
         overflow: hidden;
+        align-items: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
 
         & > .icon {
             margin-right: 8px;
@@ -98,15 +98,15 @@
 }
 
 .switch-counter {
-    height: fit-content;
-    padding: 4px 6px;
-    background-color: #E91E63;
-    border-radius: 18px;
-    font-size: 10px;
-    line-height: 10px;
     display: inline-flex;
+    height: fit-content;
     align-items: center;
     justify-content: center;
+    padding: 4px 6px;
+    border-radius: 18px;
     margin-right: 2px;
+    background-color: #E91E63;
     color: #FFFFFF;
+    font-size: 10px;
+    line-height: 10px;
 }

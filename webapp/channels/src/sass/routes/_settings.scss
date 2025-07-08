@@ -51,13 +51,13 @@
 
     .title-toggle {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
     }
 
     &.user-rhs-container {
-        max-width: 100%;
         width: 100%;
+        max-width: 100%;
         margin-top: 40px;
     }
 
@@ -66,15 +66,15 @@
     }
 
     .settings-select {
-        max-width: 50%;
         min-width: 150px;
+        max-width: 50%;
         margin-left: 8px;
         cursor: pointer;
     }
 
     .advanced-select {
-        max-width: 40%;
         min-width: 200px;
+        max-width: 40%;
         cursor: pointer;
     }
 
@@ -83,8 +83,8 @@
     }
 
     .settings-desc {
-        font-size: 12px;
         color: rgba(var(--center-channel-color-rgb),0.785);
+        font-size: 12px;
 
         &.help-keyword {
             padding-top: 15px;
@@ -93,8 +93,8 @@
     }
     .title-select {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
 
         .settings-title {
             max-width: 60%;
