@@ -89,7 +89,7 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     onToggle?: (isMounted: boolean) => void;
 }
 
-export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; hiddenOptions: string[];hiddenInformations: string[], customTrigger: HTMLElement};
+export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; hiddenOptions: string[];hiddenInformations: string[]; customTrigger: HTMLElement};
 
 const mapCustomBadges = (badge: string) => (
     <>
@@ -193,7 +193,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             }
         };
 
-        current.customTrigger = customTrigger
+        current.customTrigger = customTrigger;
         current.addEventListener('close', returnFocus);
         current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         if (user?.is_bot) {
@@ -205,7 +205,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             current?.removeEventListener('close', returnFocus);
             current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         };
-    }, [triggerRef?.current,localRef?.current]);
+    }, [triggerRef?.current, localRef?.current]);
 
     return (
         <>
