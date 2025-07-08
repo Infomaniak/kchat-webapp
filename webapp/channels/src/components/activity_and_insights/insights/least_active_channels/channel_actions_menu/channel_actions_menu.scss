@@ -9,15 +9,15 @@
         align-items: center;
         padding: 6px 8px;
         border: none;
+        border-radius: 4px;
         margin-left: auto;
         background: transparent;
-        border-radius: 4px;
         color: rgba(var(--center-channel-color-rgb), 0.56);
         text-decoration: none;
 
         &:hover {
-            background: rgba(var(--center-channel-color-rgb), 0.08);
             border-radius: 4px;
+            background: rgba(var(--center-channel-color-rgb), 0.08);
             color: rgba(var(--center-channel-color-rgb), 0.72);
             fill: rgba(var(--center-channel-color-rgb), 0.72);
         }

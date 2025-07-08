@@ -3,12 +3,13 @@
 
 import React from 'react';
 
+import {StateEntitiesTeamsMock} from 'mattermost-redux/selectors/entities/state.mock';
+
 import {TestHelper} from 'utils/test_helper';
 
 import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import AdminUserCard from './admin_user_card';
-import {StateEntitiesTeamsMock} from "mattermost-redux/selectors/entities/state.mock";
 
 describe('components/admin_console/admin_user_card/admin_user_card', () => {
     const user = TestHelper.getUserMock({
@@ -20,9 +21,9 @@ describe('components/admin_console/admin_user_card/admin_user_card', () => {
 
     const baseState = {
         entities: {
-            teams: StateEntitiesTeamsMock
-        }
-    }
+            teams: StateEntitiesTeamsMock,
+        },
+    };
 
     const defaultProps = {
         user,

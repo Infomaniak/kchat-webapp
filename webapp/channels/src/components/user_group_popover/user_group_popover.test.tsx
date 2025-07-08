@@ -11,17 +11,18 @@ import {BrowserRouter} from 'react-router-dom';
 import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {
+    StateEntitiesChannelsMock,
+    StateEntitiesPostsMock, StateEntitiesTeamsMock,
+    StateViewRhsMock,
+} from 'mattermost-redux/selectors/entities/state.mock';
+
 import {TestHelper} from 'utils/test_helper';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
 
 import UserGroupPopover from './user_group_popover';
-import {
-    StateEntitiesChannelsMock,
-    StateEntitiesPostsMock, StateEntitiesTeamsMock,
-    StateViewRhsMock
-} from "mattermost-redux/selectors/entities/state.mock";
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),

@@ -12,9 +12,9 @@
     align-items: center;
     padding: 30px;
     margin: auto;
+    gap: 30px;
     text-align: center;
     word-break: break-word;
-    gap: 30px;
 
     &.horizontal-layout {
         flex-direction: row;

@@ -6,13 +6,14 @@ import React from 'react';
 import type {Channel, ChannelType} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {StateEntitiesTeamsMock, StateEntitiesUsersMock} from 'mattermost-redux/selectors/entities/state.mock';
+
 import {Constants} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 
 import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import ChannelIntroMessage from './channel_intro_message';
-import {StateEntitiesTeamsMock, StateEntitiesUsersMock} from "mattermost-redux/selectors/entities/state.mock";
 
 describe('components/post_view/ChannelIntroMessages', () => {
     const channel = {

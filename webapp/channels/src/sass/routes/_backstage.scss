@@ -29,10 +29,10 @@
 }
 
 .backstage-body {
-    overflow-y: scroll;
     width: 100%;
     background-color: variables.$bg--gray;
     grid-area: main;
+    overflow-y: scroll;
 }
 
 .backstage-content {
@@ -51,8 +51,8 @@
     position: absolute;
     width: 270px;
     padding: 46px 20px;
-    vertical-align: top;
     background-color: variables.$bg--gray;
+    vertical-align: top;
 
     ul {
         padding: 0;
@@ -202,9 +202,9 @@
 }
 
 .backstage-list {
+    overflow: auto; // Infomaniak
     min-height: 50px;
     padding: 5px 15px;
-    overflow: auto; // Infomaniak
     border: 1px solid variables.$light-gray;
     background-color: variables.$white;
 }
@@ -339,13 +339,13 @@
 }
 
 .integrations-list {
+    display: flex;
     width: 100%;
     min-height: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    display: flex;
     flex-wrap: wrap;
     gap: 30px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .integration__icon {

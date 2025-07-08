@@ -10,6 +10,12 @@ import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {General} from 'mattermost-redux/constants';
+import {
+    StateEntitiesChannelsMock,
+    StateEntitiesPostsMock,
+    StateViewRhsMock,
+    StateEntitiesTeamsMock,
+} from 'mattermost-redux/selectors/entities/state.mock';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {TestHelper} from 'utils/test_helper';
@@ -22,12 +28,6 @@ import GroupMemberList from './group_member_list';
 import type {GroupMember} from './group_member_list';
 
 import {Load} from '../constants';
-import {
-    StateEntitiesChannelsMock,
-    StateEntitiesPostsMock,
-    StateViewRhsMock,
-    StateEntitiesTeamsMock
-} from "mattermost-redux/selectors/entities/state.mock";
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),
@@ -96,7 +96,7 @@ describe('component/user_group_popover/group_member_list', () => {
             search: {
                 popoverSearch: '',
             },
-            rhs: StateViewRhsMock
+            rhs: StateViewRhsMock,
         },
     };
 

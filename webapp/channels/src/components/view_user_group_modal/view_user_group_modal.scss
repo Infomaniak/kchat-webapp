@@ -26,14 +26,14 @@
                 width: 4rem;
                 height: 4rem;
                 border: none;
-                margin-left: auto;
                 border-radius: 4px;
+                margin-left: auto;
                 color: rgba(var(--center-channel-color-rgb), 0.56);
                 text-decoration: none;
 
                 &:hover {
-                    background: rgba(var(--center-channel-color-rgb), 0.08);
                     border-radius: 4px;
+                    background: rgba(var(--center-channel-color-rgb), 0.08);
                     color: rgba(var(--center-channel-color-rgb), 0.72);
                     fill: rgba(var(--center-channel-color-rgb), 0.72);
                 }
@@ -139,8 +139,8 @@
                         font-size: inherit;
 
                         &:hover {
-                            background: rgba(var(--center-channel-color-rgb), 0.08);
                             border-radius: 4px;
+                            background: rgba(var(--center-channel-color-rgb), 0.08);
                             color: rgba(var(--center-channel-color-rgb), 0.72);
                             fill: rgba(var(--center-channel-color-rgb), 0.72);
                         }
