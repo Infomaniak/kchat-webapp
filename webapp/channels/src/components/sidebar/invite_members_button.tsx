@@ -86,7 +86,7 @@ const InviteMembersButton = (props: Props): JSX.Element | null => {
                 id={'sidebar_left.inviteMembers'}
                 defaultMessage='Invite Members'
             />
-            {isQuotaExceeded && <wc-ksuite-pro-upgrade-tag style={{marginLeft: '8px'}}/>}
+            {isQuotaExceeded && <wc-ksuite-pro-upgrade-tag style={{marginLeft: '8px', marginRight: '8px'}}/>}
         </div>
     );
 
