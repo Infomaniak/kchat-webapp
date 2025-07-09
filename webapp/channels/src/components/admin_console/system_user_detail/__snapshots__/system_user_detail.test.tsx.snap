@@ -28,9 +28,25 @@ exports[`SystemUserDetail should match default snapshot 1`] = `
           <div
             class="AdminUserCard__header"
           >
+            <span
+              class="status-wrapper style--none admin-user-card"
+              style="border-radius: 50%; width: 128px; height: 128px;"
+            >
+              <span
+                class="profile-icon "
+              >
+                <img
+                  alt="user profile image"
+                  class="Avatar Avatar-xxl"
+                  loading="lazy"
+                  src="/api/v4/users/user_id/image"
+                />
+              </span>
+            </span>
             <wc-contact-sheet
               background-color="transparent"
               class="status-wrapper style--none admin-user-card"
+              hide-default-slot="true"
               is-external="false"
               k-chat-team-name="team1"
               presence="offline"
@@ -38,25 +54,9 @@ exports[`SystemUserDetail should match default snapshot 1`] = `
               prevent-stop-propagation="true"
               size="md"
               src="/api/v4/users/user_id/image"
-              style="border-radius: 50%; width: 128px; height: 128px;"
+              style="display: none;"
               user-name="undefined undefined"
-            >
-              <span
-                class="status-wrapper style--none admin-user-card"
-                slot="trigger"
-              >
-                <span
-                  class="profile-icon "
-                >
-                  <img
-                    alt="user profile image"
-                    class="Avatar Avatar-xxl"
-                    loading="lazy"
-                    src="/api/v4/users/user_id/image"
-                  />
-                </span>
-              </span>
-            </wc-contact-sheet>
+            />
             <div
               class="AdminUserCard__user-info"
             >
@@ -249,9 +249,25 @@ exports[`SystemUserDetail should match snapshot if MFA is enabled 1`] = `
           <div
             class="AdminUserCard__header"
           >
+            <span
+              class="status-wrapper style--none admin-user-card"
+              style="border-radius: 50%; width: 128px; height: 128px;"
+            >
+              <span
+                class="profile-icon "
+              >
+                <img
+                  alt="user profile image"
+                  class="Avatar Avatar-xxl"
+                  loading="lazy"
+                  src="/api/v4/users/user_id/image"
+                />
+              </span>
+            </span>
             <wc-contact-sheet
               background-color="transparent"
               class="status-wrapper style--none admin-user-card"
+              hide-default-slot="true"
               is-external="false"
               k-chat-team-name="team1"
               presence="offline"
@@ -259,25 +275,9 @@ exports[`SystemUserDetail should match snapshot if MFA is enabled 1`] = `
               prevent-stop-propagation="true"
               size="md"
               src="/api/v4/users/user_id/image"
-              style="border-radius: 50%; width: 128px; height: 128px;"
+              style="display: none;"
               user-name="undefined undefined"
-            >
-              <span
-                class="status-wrapper style--none admin-user-card"
-                slot="trigger"
-              >
-                <span
-                  class="profile-icon "
-                >
-                  <img
-                    alt="user profile image"
-                    class="Avatar Avatar-xxl"
-                    loading="lazy"
-                    src="/api/v4/users/user_id/image"
-                  />
-                </span>
-              </span>
-            </wc-contact-sheet>
+            />
             <div
               class="AdminUserCard__user-info"
             >
@@ -470,9 +470,25 @@ exports[`SystemUserDetail should not show manage user settings button when user 
           <div
             class="AdminUserCard__header"
           >
+            <span
+              class="status-wrapper style--none admin-user-card"
+              style="border-radius: 50%; width: 128px; height: 128px;"
+            >
+              <span
+                class="profile-icon "
+              >
+                <img
+                  alt="user profile image"
+                  class="Avatar Avatar-xxl"
+                  loading="lazy"
+                  src="/api/v4/users/user_id/image"
+                />
+              </span>
+            </span>
             <wc-contact-sheet
               background-color="transparent"
               class="status-wrapper style--none admin-user-card"
+              hide-default-slot="true"
               is-external="false"
               k-chat-team-name="team1"
               presence="offline"
@@ -480,25 +496,9 @@ exports[`SystemUserDetail should not show manage user settings button when user 
               prevent-stop-propagation="true"
               size="md"
               src="/api/v4/users/user_id/image"
-              style="border-radius: 50%; width: 128px; height: 128px;"
+              style="display: none;"
               user-name="undefined undefined"
-            >
-              <span
-                class="status-wrapper style--none admin-user-card"
-                slot="trigger"
-              >
-                <span
-                  class="profile-icon "
-                >
-                  <img
-                    alt="user profile image"
-                    class="Avatar Avatar-xxl"
-                    loading="lazy"
-                    src="/api/v4/users/user_id/image"
-                  />
-                </span>
-              </span>
-            </wc-contact-sheet>
+            />
             <div
               class="AdminUserCard__user-info"
             >
@@ -691,9 +691,25 @@ exports[`SystemUserDetail should show manage user settings button as activated 1
           <div
             class="AdminUserCard__header"
           >
+            <span
+              class="status-wrapper style--none admin-user-card"
+              style="border-radius: 50%; width: 128px; height: 128px;"
+            >
+              <span
+                class="profile-icon "
+              >
+                <img
+                  alt="user profile image"
+                  class="Avatar Avatar-xxl"
+                  loading="lazy"
+                  src="/api/v4/users/user_id/image"
+                />
+              </span>
+            </span>
             <wc-contact-sheet
               background-color="transparent"
               class="status-wrapper style--none admin-user-card"
+              hide-default-slot="true"
               is-external="false"
               k-chat-team-name="team1"
               presence="offline"
@@ -701,25 +717,9 @@ exports[`SystemUserDetail should show manage user settings button as activated 1
               prevent-stop-propagation="true"
               size="md"
               src="/api/v4/users/user_id/image"
-              style="border-radius: 50%; width: 128px; height: 128px;"
+              style="display: none;"
               user-name="undefined undefined"
-            >
-              <span
-                class="status-wrapper style--none admin-user-card"
-                slot="trigger"
-              >
-                <span
-                  class="profile-icon "
-                >
-                  <img
-                    alt="user profile image"
-                    class="Avatar Avatar-xxl"
-                    loading="lazy"
-                    src="/api/v4/users/user_id/image"
-                  />
-                </span>
-              </span>
-            </wc-contact-sheet>
+            />
             <div
               class="AdminUserCard__user-info"
             >
@@ -918,9 +918,25 @@ exports[`SystemUserDetail should show manage user settings button as disabled wh
           <div
             class="AdminUserCard__header"
           >
+            <span
+              class="status-wrapper style--none admin-user-card"
+              style="border-radius: 50%; width: 128px; height: 128px;"
+            >
+              <span
+                class="profile-icon "
+              >
+                <img
+                  alt="user profile image"
+                  class="Avatar Avatar-xxl"
+                  loading="lazy"
+                  src="/api/v4/users/user_id/image"
+                />
+              </span>
+            </span>
             <wc-contact-sheet
               background-color="transparent"
               class="status-wrapper style--none admin-user-card"
+              hide-default-slot="true"
               is-external="false"
               k-chat-team-name="team1"
               presence="offline"
@@ -928,25 +944,9 @@ exports[`SystemUserDetail should show manage user settings button as disabled wh
               prevent-stop-propagation="true"
               size="md"
               src="/api/v4/users/user_id/image"
-              style="border-radius: 50%; width: 128px; height: 128px;"
+              style="display: none;"
               user-name="undefined undefined"
-            >
-              <span
-                class="status-wrapper style--none admin-user-card"
-                slot="trigger"
-              >
-                <span
-                  class="profile-icon "
-                >
-                  <img
-                    alt="user profile image"
-                    class="Avatar Avatar-xxl"
-                    loading="lazy"
-                    src="/api/v4/users/user_id/image"
-                  />
-                </span>
-              </span>
-            </wc-contact-sheet>
+            />
             <div
               class="AdminUserCard__user-info"
             >
@@ -1139,9 +1139,25 @@ exports[`SystemUserDetail should show the activate user button as disabled when 
           <div
             class="AdminUserCard__header"
           >
+            <span
+              class="status-wrapper style--none admin-user-card"
+              style="border-radius: 50%; width: 128px; height: 128px;"
+            >
+              <span
+                class="profile-icon "
+              >
+                <img
+                  alt="user profile image"
+                  class="Avatar Avatar-xxl"
+                  loading="lazy"
+                  src="/api/v4/users/user_id/image"
+                />
+              </span>
+            </span>
             <wc-contact-sheet
               background-color="transparent"
               class="status-wrapper style--none admin-user-card"
+              hide-default-slot="true"
               is-external="false"
               k-chat-team-name="team1"
               presence="offline"
@@ -1149,25 +1165,9 @@ exports[`SystemUserDetail should show the activate user button as disabled when 
               prevent-stop-propagation="true"
               size="md"
               src="/api/v4/users/user_id/image"
-              style="border-radius: 50%; width: 128px; height: 128px;"
+              style="display: none;"
               user-name="undefined undefined"
-            >
-              <span
-                class="status-wrapper style--none admin-user-card"
-                slot="trigger"
-              >
-                <span
-                  class="profile-icon "
-                >
-                  <img
-                    alt="user profile image"
-                    class="Avatar Avatar-xxl"
-                    loading="lazy"
-                    src="/api/v4/users/user_id/image"
-                  />
-                </span>
-              </span>
-            </wc-contact-sheet>
+            />
             <div
               class="AdminUserCard__user-info"
             >
