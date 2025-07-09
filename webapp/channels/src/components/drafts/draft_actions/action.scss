@@ -14,7 +14,7 @@
         &:hover,
         &:active,
         &--active {
-            background: rgba(var(--center-channel-color-rgb), 0.08);
+            background: rgba(var(--center-channel-color-rgb), 0.08) !important;
         }
 
         span {

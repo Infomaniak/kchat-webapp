@@ -251,11 +251,13 @@ function DraftRow({
         setIsEditing(false);
     }, []);
 
-    const handleSchedulePostOnReschedule = useCallback(async (updatedScheduledAtTime: number) => {
+    const handleSchedulePostOnReschedule = useCallback(async (updatedScheduledAtTime: number | 'monday' | 'tomorrow') => {
         handleCancelEdit();
 
         const updatedScheduledPost: ScheduledPost = {
             ...(item as ScheduledPost),
+
+            // @ts-expect-error type mistmatch to avoid plenty of changes, but scheduled_at accept 'monday' and 'tomorrow'
             scheduled_at: updatedScheduledAtTime,
         };
 

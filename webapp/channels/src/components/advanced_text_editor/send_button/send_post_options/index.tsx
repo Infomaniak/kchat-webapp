@@ -29,9 +29,13 @@ type Props = {
     channelId: string;
     disabled?: boolean;
     onSelect: (schedulingInfo: SchedulingInfo) => void;
+    transformOriginVertical?: 'top' | 'bottom';
+    anchorOrigin?: 'top' | 'bottom';
+    menuIcon?: React.ReactNode;
+    menuButtonClassName?: string;
 }
 
-export function SendPostOptions({disabled, onSelect, channelId}: Props) {
+export function SendPostOptions({disabled, onSelect, channelId, transformOriginVertical, anchorOrigin, menuIcon, menuButtonClassName}: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
 
@@ -87,8 +91,8 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
             }}
             menuButton={{
                 id: 'button_send_post_options',
-                class: classNames('button_send_post_options', {disabled}),
-                children: <ChevronDownIcon size={16}/>,
+                class: menuButtonClassName ?? classNames('button_send_post_options', {disabled}),
+                children: menuIcon ?? <ChevronDownIcon size={16}/>,
                 disabled,
                 'aria-label': formatMessage({
                     id: 'create_post_button.option.schedule_message',
@@ -100,10 +104,10 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
             }}
             transformOrigin={{
                 horizontal: 'right',
-                vertical: 'bottom',
+                vertical: transformOriginVertical ?? 'bottom',
             }}
             anchorOrigin={{
-                vertical: 'top',
+                vertical: anchorOrigin ?? 'top',
                 horizontal: 'right',
             }}
         >
