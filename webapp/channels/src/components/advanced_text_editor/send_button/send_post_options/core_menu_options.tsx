@@ -24,6 +24,7 @@ import RecentUsedCustomDate from './recent_used_custom_date';
 type Props = {
     handleOnSelect: (e: React.FormEvent, scheduledAt: number) => void;
     channelId: string;
+    allowCustom: boolean;
 }
 
 function getScheduledTimeInTeammateTimezone(userCurrentTimestamp: number, teammateTimezoneString: string): string {
@@ -40,7 +41,7 @@ function getNextWeekday(dateTime: DateTime, targetWeekday: number) {
     return dateTime.plus({days: deltaDays});
 }
 
-function CoreMenuOptions({handleOnSelect, channelId}: Props) {
+function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
     const {
         userCurrentTimezone,
         teammateTimezone,
@@ -195,12 +196,14 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
     return (
         <>
             {options}
-            <RecentUsedCustomDate
-                handleOnSelect={handleOnSelect}
-                userCurrentTimezone={userCurrentTimezone}
-                tomorrow9amTime={tomorrow9amTime}
-                nextMonday={nextMonday}
-            />
+            {allowCustom && (
+                <RecentUsedCustomDate
+                    handleOnSelect={handleOnSelect}
+                    userCurrentTimezone={userCurrentTimezone}
+                    tomorrow9amTime={tomorrow9amTime}
+                    nextMonday={nextMonday}
+                />
+            )}
         </>
     );
 }

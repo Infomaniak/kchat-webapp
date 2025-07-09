@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
 import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
+import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
@@ -68,6 +69,7 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
     }, [channelId, dispatch, handleSelectCustomTime]);
 
     const {scheduled_draft_custom_date: scheduledDraftCustomDate} = useGetUsageDeltas();
+    const {scheduled_draft_custom_date: scheduledDraftCustomDateIsLimited} = useSelector(getCloudLimits);
     const currentPack = useSelector(getCurrentPackName);
     const {isQuotaExceeded, withQuotaCheck} = quotaGate(scheduledDraftCustomDate, currentPack);
 
@@ -118,6 +120,7 @@ export function SendPostOptions({disabled, onSelect, channelId}: Props) {
             <CoreMenuOptions
                 handleOnSelect={handleOnSelect}
                 channelId={channelId}
+                allowCustom={scheduledDraftCustomDateIsLimited}
             />
 
             <Menu.Separator/>
