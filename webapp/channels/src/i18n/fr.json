@@ -5436,5 +5436,9 @@
   "yourcomputer": "Votre ordinateur",
   "voiceMessage.preview.title": "Message vocal",
   "voiceMessage.uploading": "Téléchargement...",
-  "voiceMessage.canvasFallback.recording": "Enregistrement démarré"
+  "voiceMessage.canvasFallback.recording": "Enregistrement démarré",
+  "schedule_post.custom_time_modal.cancel_button_text": "Annuler",
+  "schedule_post.custom_time_modal.confirm_button_text": "Planifier",
+  "schedule_post.custom_time_modal.dm_user_time": "{dmUserTime} pour {dmUserName}",
+  "schedule_post.custom_time_modal.title": "Planifier le message"
 }
