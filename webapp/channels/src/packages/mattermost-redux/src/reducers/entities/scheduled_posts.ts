@@ -70,8 +70,9 @@ function byTeamId(state: ScheduledPostsState['byTeamId'] = {}, action: MMReduxAc
         const teamId = action.data.teamId || 'directChannels';
 
         const newState = {...state};
+        const existingList = newState[teamId] || [];
 
-        const existingIndex = newState[teamId].findIndex((existingScheduledPostId) => existingScheduledPostId === scheduledPost.id);
+        const existingIndex = existingList.findIndex((existingScheduledPostId) => existingScheduledPostId === scheduledPost.id);
         if (existingIndex >= 0) {
             newState[teamId].splice(existingIndex, 1);
         }
