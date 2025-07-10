@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -1546,7 +1547,7 @@ export function getChannelPendingGuests(channelId: string) {
     });
 }
 
-export function cancelPendingGuestInvite(channelId: string, invitationKey: string) {
+function cancelPendingGuestInvite(channelId: string, invitationKey: string) {
     return bindClientFunc({
         clientFunc: async () => {
             await Client4.cancelPendingGuestInvite(invitationKey);
@@ -1554,6 +1555,15 @@ export function cancelPendingGuestInvite(channelId: string, invitationKey: strin
         },
         onSuccess: ChannelTypes.CANCELED_PENDING_GUEST_INVITE,
     });
+}
+
+export function cancelPendingGuestInviteWithRefreshUsage(channelId: string, invitationKey: string): ActionFuncAsync {
+    return async (dispatch) => {
+        const result = await dispatch(cancelPendingGuestInvite(channelId, invitationKey));
+        await dispatch(getUsage());
+
+        return result;
+    };
 }
 
 export function fetchMissingChannels(channelIDs: string[]): ActionFuncAsync<Array<Channel['id']>> {
