@@ -345,7 +345,7 @@ export default class Root extends React.PureComponent<Props, State> {
         const {isLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isLoaded) {
-            if (this.props.location.pathname === '/') {
+            if (this.props.location.pathname === '/' && !this.isRedirectingToLogin) {
                 // eslint-disable-next-line no-console
                 console.log('redirect to default team');
                 this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
@@ -463,10 +463,10 @@ export default class Root extends React.PureComponent<Props, State> {
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
                 if (isDefaultAuthServer() && !token) {
-                    // if (this.isRedirectingToLogin) {
-                    //     return;
-                    // }
-                    // this.isRedirectingToLogin = true;
+                    if (this.isRedirectingToLogin) {
+                        return;
+                    }
+                    this.isRedirectingToLogin = true;
                     console.log('[components/root] redirect to login'); // eslint-disable-line no-console
                     getChallengeAndRedirectToLogin(true);
                 }
