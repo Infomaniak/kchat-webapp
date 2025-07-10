@@ -140,7 +140,7 @@ export function SendPostOptions({disabled, onSelect, channelId, transformOriginV
                 )}
                 trailingElements={isQuotaExceeded && (
                     <wc-ksuite-pro-upgrade-tag
-                        ref={workaroundToComputeSize(hasInitializedRef, setIsUpdating)}
+                        ref={forceResizeOnMount(setIsUpdating)}
                     />
                 )}
             />
@@ -150,24 +150,20 @@ export function SendPostOptions({disabled, onSelect, channelId, transformOriginV
 }
 
 // This is a bit of a hack to handle layout issues caused by the web component:
-// We trigger a resize event once the web component signals it's ready,
+// We trigger a resize event,
 // forcing the menu to recalculate positioning.
 // The isUpdating state helps prevent UI flicker during this forced update.
-function workaroundToComputeSize(hasInitializedRef: React.MutableRefObject<boolean>, setIsUpdating: React.Dispatch<React.SetStateAction<boolean>>) {
-    return (el) => {
-        if (!el || hasInitializedRef.current) {
+function forceResizeOnMount(setIsUpdating: React.Dispatch<React.SetStateAction<boolean>>) {
+    return (el: HTMLElement | null) => {
+        if (!el) {
             return;
         }
 
-        hasInitializedRef.current = true;
-
-        el.componentOnReady?.().then(() => {
-            setIsUpdating(true);
-            setTimeout(() => {
-                window.dispatchEvent(new Event('resize'));
-                setIsUpdating(false);
-            }, 20);
-        });
+        setIsUpdating(true);
+        setTimeout(() => {
+            window.dispatchEvent(new Event('resize'));
+            setIsUpdating(false);
+        }, 20);
     };
 }
 
