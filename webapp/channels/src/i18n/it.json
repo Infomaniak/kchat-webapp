@@ -3920,7 +3920,8 @@
   "cancel_multiple_invites_modal.header": "Annullare più inviti",
   "cancel_multiple_invites_modal.content": "Annullando questo invito, annullerete anche gli inviti nei seguenti canali :",
   "channelLimitIndicator.text": "È stato raggiunto il limite di {type, select, O {canali pubblici} P {canali privati} other {}} ({usage, number}/{limit, number}) sulla propria offerta kSuite. {isAdmin, select, true {Modifica la tua offerta per creare altri canali.} other {Contattare un amministratore per modificare l'offerta.}}",
-  "channelLimitIndicator.upsell": "Evolvi",  
+  "channelLimitIndicator.upsell": "Evolvi",
+  "upgrade.offer": "aggiorna il tuo piano",  
   "get_the_app_announcement_bar.message": "<gta>Scaricate l'applicazione kChat</gta> per {os} per un'esperienza migliore ! (<dnd>Non ricordarmelo più</dnd>)",
   "get_app_annoucement_bar_mobile.download": "Scaricare",
   "get_the_app_modal.header": "Scaricare l'applicazione kChat per {platform}",
@@ -4063,5 +4064,6 @@
   "schedule_post.custom_time_modal.cancel_button_text": "Annulla",
   "schedule_post.custom_time_modal.confirm_button_text": "Programma",
   "schedule_post.custom_time_modal.dm_user_time": "{dmUserTime} per {dmUserName}",
-  "schedule_post.custom_time_modal.title": "Programma messaggio"
+  "schedule_post.custom_time_modal.title": "Programma messaggio",
+  "invitation_modal.invite_members.exceeded_max_guest": "{count, plural, one {Rimane # invito esterno} other {Rimangono # inviti esterni}}. Rimuovi utenti oppure {action}."
 }

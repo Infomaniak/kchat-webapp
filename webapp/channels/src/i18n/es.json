@@ -5086,7 +5086,8 @@
   "cancel_multiple_invites_modal.header": "Cancelar varias invitaciones",
   "cancel_multiple_invites_modal.content": "Al cancelar esta invitación, también cancelará las invitaciones en los siguientes canales :",
   "channelLimitIndicator.text": "Has alcanzado el límite de {type, select, O {canales públicos} P {canales privados} other {}} ({usage, number}/{limit, number}) en tu oferta kSuite. {isAdmin, select, true {Modifica tu oferta para crear canales adicionales.} other {Póngase en contacto con un administrador para modificar la oferta.}}",
-  "channelLimitIndicator.upsell": "Evoluciona", 
+  "channelLimitIndicator.upsell": "Evoluciona",
+  "upgrade.offer": "mejorar tu plan",
   "toggle_next_modal.title": "Cambiar a la versión {version}",
   "toggle_next_modal.message_stable": "STABLE es nuestro entorno por defecto. Si no le interesa probar nuevas funciones, le recomendamos que vuelva a la versión STABLE.",
   "toggle_next_modal.message_next": "NEXT es nuestro entorno de pruebas. Puede que encuentres algunos errores, pero también accederás a los últimos contenidos y actualizaciones. Si no te interesa probar nuevas funciones, te recomendamos que te quedes en la versión STABLE.",
@@ -5227,5 +5228,6 @@
   "schedule_post.custom_time_modal.cancel_button_text": "Cancelar",
   "schedule_post.custom_time_modal.confirm_button_text": "Programar",
   "schedule_post.custom_time_modal.dm_user_time": "{dmUserTime} para {dmUserName}",
-  "schedule_post.custom_time_modal.title": "Programar mensaje"
+  "schedule_post.custom_time_modal.title": "Programar mensaje",
+  "invitation_modal.invite_members.exceeded_max_guest": "{count, plural, one {Queda # invitación externa} other {Quedan # invitaciones externas}}. Elimina usuarios o {action}."
 }
