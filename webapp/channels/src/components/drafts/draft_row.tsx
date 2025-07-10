@@ -381,10 +381,13 @@ function DraftRow({
                         kind={isScheduledPost ? 'scheduledPost' : 'draft'}
                         hover={hover}
                         actions={showUpdatedFeedback ? (
-                            <FormattedMessage
-                                id='drafts.schedule.updated'
-                                defaultMessage='The schedule has been successfully updated'
-                            />
+                            <span className='glow-message'>
+                                <span className='icon icon-check-circle-outline'/>
+                                <FormattedMessage
+                                    id='drafts.schedule.updated'
+                                    defaultMessage='The schedule has been successfully updated'
+                                />
+                            </span>
                         ) : actions}
                         title={title}
                         timestamp={timestamp}
