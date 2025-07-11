@@ -125,7 +125,6 @@ class ChannelHeader extends React.PureComponent<Props> {
             hasGuests,
             hideGuestTags,
         } = this.props;
-
         if (!channel) {
             return null;
         }
