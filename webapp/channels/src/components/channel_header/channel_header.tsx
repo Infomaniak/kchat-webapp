@@ -31,8 +31,6 @@ import type {PropsFromRedux} from './index';
 
 export type Props = WrappedComponentProps & PropsFromRedux;
 
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-
 class ChannelHeader extends React.PureComponent<Props> {
     toggleFavoriteRef: RefObject<HTMLButtonElement>;
 
@@ -126,11 +124,7 @@ class ChannelHeader extends React.PureComponent<Props> {
             rhsState,
             hasGuests,
             hideGuestTags,
-            intl,
         } = this.props;
-
-        const isOlderThanDay = Date.now() - (this.props.lastActivityTimestamp ?? 0) > ONE_DAY_MS;
-        const isFrench = intl.locale.startsWith('fr');
 
         if (!channel) {
             return null;
