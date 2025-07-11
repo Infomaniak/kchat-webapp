@@ -96,6 +96,11 @@ export async function generateCodeChallenge(codeVerifier: string) {
  * get code_challenge and redirect to IK Login
  */
 export function getChallengeAndRedirectToLogin(infinite = false) {
+    if (window.__alreadyRedirectedToLogin) {
+        console.log('Already redirecting to login');
+        return;
+    }
+    window.__alreadyRedirectedToLogin = true;
     const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
     const codeVerifier = getCodeVerifier();
     let codeChallenge = '';
