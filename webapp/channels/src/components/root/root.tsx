@@ -193,11 +193,11 @@ export default class Root extends React.PureComponent<Props, State> {
             this.setRootMeta();
         }
 
-        if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
-            if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
-                DesktopApp.reactAppInitialized();
-            }
-        }
+        // if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
+        //     if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
+        //         DesktopApp.reactAppInitialized();
+        //     }
+        // }
 
         if (this.embeddedInIFrame && this.props.location !== prevProps.location) {
             this.sendBridgeNavigate();
@@ -479,6 +479,10 @@ export default class Root extends React.PureComponent<Props, State> {
 
                 // The reset teams will retrigger this func
                 // Webcomponents oauth v2
+                if (isDefaultAuthServer() && !token) {
+                    getChallengeAndRedirectToLogin(true);
+                }
+
                 window.WC_TOKEN = token;
             }
         }
