@@ -9,7 +9,6 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import {getChannelPendingGuests, joinChannel} from 'mattermost-redux/actions/channels';
-import {getUsage} from 'mattermost-redux/actions/cloud';
 import * as TeamActions from 'mattermost-redux/actions/teams';
 import {getChannelMembersInChannels, getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {getTeamMember} from 'mattermost-redux/selectors/entities/teams';
@@ -145,8 +144,6 @@ export function sendMembersInvites(teamId: string, users: UserProfile[], emails:
             }
         }
 
-        dispatch(getUsage());
-
         return {
             data: {
                 sent,
@@ -217,8 +214,6 @@ export async function sendGuestInviteForUser(
             },
         };
     }
-
-    dispatch(getUsage());
 
     if (memberOfAny) {
         return {
@@ -334,8 +329,6 @@ export function sendGuestsInvites(
                 }
             }
         }
-
-        dispatch(getUsage());
 
         return {
             data: {
@@ -481,8 +474,6 @@ export function sendMembersInvitesToChannels(
                 }
             }
         }
-
-        dispatch(getUsage());
 
         return {
             data: {

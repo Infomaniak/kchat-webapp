@@ -7,7 +7,7 @@ import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import {cancelPendingGuestInviteWithRefreshUsage} from 'mattermost-redux/actions/channels';
+import {cancelPendingGuestInvite} from 'mattermost-redux/actions/channels';
 import {makeGetChannelsForIds} from 'mattermost-redux/selectors/entities/channels';
 
 import {closeModal} from 'actions/views/modals';
@@ -43,7 +43,7 @@ const CancelMultipleInvitesModal = ({currentChannelId, channelIds, pendingGuestK
     }, [dispatch]);
 
     const handleCancelPendingGuestInvite = useCallback(() => {
-        dispatch(cancelPendingGuestInviteWithRefreshUsage(currentChannelId, pendingGuestKey));
+        dispatch(cancelPendingGuestInvite(currentChannelId, pendingGuestKey));
         handleClose();
     }, [dispatch, currentChannelId, pendingGuestKey, handleClose]);
 

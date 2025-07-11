@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import type {Channel, PendingGuest} from '@mattermost/types/channels';
 import type {GlobalState} from '@mattermost/types/store';
 
-import {cancelPendingGuestInviteWithRefreshUsage} from 'mattermost-redux/actions/channels';
+import {cancelPendingGuestInvite} from 'mattermost-redux/actions/channels';
 import {Permissions} from 'mattermost-redux/constants';
 import {haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/roles';
 
@@ -49,7 +49,7 @@ const PendingGuestsDropdown = ({channel, pendingGuest, index, totalUsers}: Props
                 }));
                 return;
             }
-            dispatch(cancelPendingGuestInviteWithRefreshUsage(channel.id, pendingGuest.key));
+            dispatch(cancelPendingGuestInvite(channel.id, pendingGuest.key));
         }
     };
 

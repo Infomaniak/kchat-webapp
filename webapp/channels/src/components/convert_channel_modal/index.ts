@@ -5,14 +5,14 @@ import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
-import {updateChannelPrivacyAndRefreshUsage} from 'mattermost-redux/actions/channels';
+import {updateChannelPrivacy} from 'mattermost-redux/actions/channels';
 
 import ConvertChannelModal from './convert_channel_modal';
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
-            updateChannelPrivacy: updateChannelPrivacyAndRefreshUsage,
+            updateChannelPrivacy,
         }, dispatch),
     };
 }

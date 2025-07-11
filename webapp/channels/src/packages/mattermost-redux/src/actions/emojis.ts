@@ -13,7 +13,6 @@ import {getCustomEmojisByName as selectCustomEmojisByName} from 'mattermost-redu
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {parseEmojiNamesFromText} from 'mattermost-redux/utils/emoji_utils';
 
-import {getUsage} from './cloud';
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {getProfilesByIds} from './users';
@@ -39,10 +38,6 @@ export function createCustomEmoji(emoji: any, image: any) {
 export function createCustomEmojiWithRefreshUsage(emoji: any, image: any): ActionFuncAsync {
     return async (dispatch) => {
         const result = await dispatch(createCustomEmoji(emoji, image));
-
-        if (result.data) {
-            dispatch(getUsage());
-        }
 
         return result;
     };
@@ -218,7 +213,6 @@ export function deleteCustomEmoji(emojiId: string): ActionFuncAsync {
             return {error};
         }
 
-        await dispatch(getUsage());
         dispatch({
             type: EmojiTypes.DELETED_CUSTOM_EMOJI,
             data: {id: emojiId},

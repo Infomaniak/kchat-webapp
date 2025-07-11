@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import type {Dispatch} from 'redux';
 
-import {createOutgoingHookWithRefreshUsage} from 'mattermost-redux/actions/integrations';
+import {createOutgoingHook} from 'mattermost-redux/actions/integrations';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
 import type {GlobalState} from 'types/store';
@@ -25,7 +25,7 @@ function mapStateToProps(state: GlobalState) {
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
-            createOutgoingHook: createOutgoingHookWithRefreshUsage,
+            createOutgoingHook,
         }, dispatch),
     };
 }

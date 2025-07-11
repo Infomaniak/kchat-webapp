@@ -39,7 +39,6 @@ import {getChannelByName} from 'mattermost-redux/utils/channel_utils';
 import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
 
 import {addChannelToInitialCategory, addChannelToCategory} from './channel_categories';
-import {getUsage} from './cloud';
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {savePreferences} from './preferences';
@@ -60,8 +59,6 @@ export function createChannel(channel: Channel, userId: string): ActionFuncAsync
         let created;
         try {
             created = await Client4.createChannel(channel);
-
-            await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch({
@@ -269,28 +266,12 @@ export function patchChannel(channelId: string, patch: Partial<Channel>): Action
     });
 }
 
-/**
- * @deprecated Use updateChannelPrivacyAndRefreshUsage() instead.
- * We should refresh usage after
- */
 export function updateChannelPrivacy(channelId: string, privacy: string): ActionFuncAsync<Channel> {
     return bindClientFunc({
         clientFunc: Client4.updateChannelPrivacy,
         onSuccess: [ChannelTypes.RECEIVED_CHANNEL],
         params: [channelId, privacy],
     });
-}
-
-export function updateChannelPrivacyAndRefreshUsage(
-    channelId: string,
-    privacy: string,
-): ActionFuncAsync<Channel> {
-    return async (dispatch) => {
-        const result = await dispatch(updateChannelPrivacy(channelId, privacy));
-        await dispatch(getUsage());
-
-        return result;
-    };
 }
 
 export function convertGroupMessageToPrivateChannel(channelID: string, teamID: string, displayName: string, name: string): ActionFuncAsync<Channel> {
@@ -727,8 +708,6 @@ export function deleteChannel(channelId: string): ActionFuncAsync {
 
         try {
             await Client4.deleteChannel(channelId);
-
-            await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -756,8 +735,6 @@ export function unarchiveChannel(channelId: string, openLimitModalIfNeeded: (err
     return async (dispatch, getState) => {
         try {
             await Client4.unarchiveChannel(channelId);
-
-            await dispatch(getUsage());
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(openLimitModalIfNeeded(error, getChannelSelector(getState(), channelId).type));
@@ -1547,7 +1524,7 @@ export function getChannelPendingGuests(channelId: string) {
     });
 }
 
-function cancelPendingGuestInvite(channelId: string, invitationKey: string) {
+export function cancelPendingGuestInvite(channelId: string, invitationKey: string) {
     return bindClientFunc({
         clientFunc: async () => {
             await Client4.cancelPendingGuestInvite(invitationKey);
@@ -1555,15 +1532,6 @@ function cancelPendingGuestInvite(channelId: string, invitationKey: string) {
         },
         onSuccess: ChannelTypes.CANCELED_PENDING_GUEST_INVITE,
     });
-}
-
-export function cancelPendingGuestInviteWithRefreshUsage(channelId: string, invitationKey: string): ActionFuncAsync {
-    return async (dispatch) => {
-        const result = await dispatch(cancelPendingGuestInvite(channelId, invitationKey));
-        await dispatch(getUsage());
-
-        return result;
-    };
 }
 
 export function fetchMissingChannels(channelIDs: string[]): ActionFuncAsync<Array<Channel['id']>> {

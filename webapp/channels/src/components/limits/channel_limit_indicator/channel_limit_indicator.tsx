@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import type {ChannelType} from '@mattermost/types/channels';
 
-import {getUsage} from 'mattermost-redux/actions/cloud';
 import {General} from 'mattermost-redux/constants';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
@@ -17,7 +16,6 @@ import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
 import UpgradeOfferIcon from 'components/widgets/icons/upgrade_offer_icon';
 
-import type {DispatchFunc} from 'types/store';
 import './channel_limit_indicator.scss';
 
 type Props = {
@@ -25,7 +23,6 @@ type Props = {
 };
 
 const ChannelLimitIndicator = ({type}: Props) => {
-    const dispatch = useDispatch<DispatchFunc>();
     const isAdmin = useSelector(isCurrentUserSystemAdmin);
     const {public_channels: publicChannelsUsage, private_channels: privateChannelsUsage} = useGetUsage();
     const {public_channels: publicChannelsLimit, private_channels: privateChannelsLimit} = useGetLimits()[0];
@@ -35,14 +32,6 @@ const ChannelLimitIndicator = ({type}: Props) => {
 
     const publicChannelLimitReached = publicChannelsUsageDelta >= 0;
     const privateChannelLimitReached = privateChannelsUsageDelta >= 0;
-
-    const loadUsage = useCallback(async () => {
-        await dispatch(getUsage());
-    }, [dispatch]);
-
-    useEffect(() => {
-        loadUsage();
-    }, [loadUsage]);
 
     if ((type === General.OPEN_CHANNEL && !publicChannelLimitReached) || (type === General.PRIVATE_CHANNEL && !privateChannelLimitReached)) {
         return null;

@@ -446,6 +446,10 @@ function handleClose(failCount) {
 
 export function handleEvent(msg) {
     switch (msg.event) {
+    case SocketEvents.QUOTA_CHANGED: {
+        handleLimitationChanged(msg);
+        break;
+    }
     case SocketEvents.POSTED:
     case SocketEvents.EPHEMERAL_MESSAGE:
         handleNewPostEventDebounced(msg);
@@ -2309,6 +2313,24 @@ export function handleCustomAttributesDeleted(msg) {
         type: GeneralTypes.CUSTOM_PROFILE_ATTRIBUTE_FIELD_DELETED,
         data: msg.data.field_id,
     };
+}
+
+export function handleLimitationChanged(msg) {
+    const usage = {
+        public_channels: msg.data.limitations.channels.public.count,
+        private_channels: msg.data.limitations.channels.private.count,
+        guests: msg.data.limitations.guests.count,
+        pending_guests: msg.data.limitations.guests.pending,
+        members: msg.data.limitations.users.count,
+        incoming_webhooks: msg.data.limitations.webhooks.incoming.count,
+        outgoing_webhooks: msg.data.limitations.webhooks.outgoing.count,
+        custom_emojis: msg.data.limitations.emojis.count,
+    };
+
+    dispatch({
+        type: CloudTypes.RECEIVED_USAGE,
+        data: usage,
+    });
 }
 
 // IK: Our msg.data is an object, but MM expects it to be stringified (for some, but not all props).

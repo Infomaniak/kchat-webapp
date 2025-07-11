@@ -5,7 +5,6 @@ import type {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
 import type {Command, CommandArgs, DialogSubmission, IncomingWebhook, IncomingWebhooksWithCount, OAuthApp, OutgoingOAuthConnection, OutgoingWebhook, SubmitDialogResponse} from '@mattermost/types/integrations';
-import type {GlobalState} from '@mattermost/types/store';
 
 import {IntegrationTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
@@ -14,7 +13,6 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
-import {getUsage} from './cloud';
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 
@@ -28,16 +26,6 @@ export function createIncomingHook(hook: IncomingWebhook) {
             hook,
         ],
     });
-}
-
-export function createIncomingHookWithRefreshUsage(hook: IncomingWebhook): ActionFuncAsync<any> {
-    return async (dispatch) => {
-        const result = await dispatch(createIncomingHook(hook));
-
-        await dispatch(getUsage());
-
-        return result;
-    };
 }
 
 export function getIncomingHook(hookId: string) {
@@ -105,8 +93,6 @@ export function removeIncomingHook(hookId: string): ActionFuncAsync {
             },
         ]));
 
-        await dispatch(getUsage());
-
         return {data: true};
     };
 }
@@ -129,16 +115,6 @@ export function createOutgoingHook(hook: OutgoingWebhook) {
             hook,
         ],
     });
-}
-
-export function createOutgoingHookWithRefreshUsage(hook: OutgoingWebhook): ActionFuncAsync<OutgoingWebhook, GlobalState, AnyAction> {
-    return async (dispatch) => {
-        const result = await dispatch(createOutgoingHook(hook));
-
-        await dispatch(getUsage());
-
-        return result;
-    };
 }
 
 export function getOutgoingHook(hookId: string) {
@@ -181,8 +157,6 @@ export function removeOutgoingHook(hookId: string): ActionFuncAsync {
                 data: {id: hookId},
             },
         ]));
-
-        await dispatch(getUsage());
 
         return {data: true};
     };
