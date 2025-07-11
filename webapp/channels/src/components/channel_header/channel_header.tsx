@@ -192,7 +192,7 @@ class ChannelHeader extends React.PureComponent<Props> {
 
             if (this.props.isLastActiveEnabled && this.props.lastActivityTimestamp && this.props.timestampUnits) {
                 dmHeaderTextStatus = (
-                    <>
+                    <span className='header-status__text'>
                         <span className='last-active__text'>
                             <FormattedMessage
                                 id='channel_header.lastActive'
@@ -210,7 +210,7 @@ class ChannelHeader extends React.PureComponent<Props> {
                             />
                         </span>
                         {this.renderCustomStatus()}
-                    </>
+                    </span>
                 );
             }
         }
