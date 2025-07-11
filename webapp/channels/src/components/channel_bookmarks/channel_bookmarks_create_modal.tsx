@@ -37,6 +37,8 @@ import './bookmark_create_modal.scss';
 import CreateModalNameInput from './create_modal_name_input';
 import {useCanUploadFiles} from './utils';
 
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+
 const MAX_LINK_LENGTH = 1024;
 const MAX_TITLE_LENGTH = 64;
 
@@ -74,6 +76,7 @@ function ChannelBookmarkCreateModal({
     const [parsedDisplayName, setParsedDisplayName] = useState<string | undefined>();
     const [saving, setSaving] = useState(false);
     const [saveError, setSaveError] = useState('');
+    const isAdmin = useSelector(isCurrentUserSystemAdmin);
 
     const handleKeyDown = useCallback((event: KeyboardEvent) => {
         if (isKeyPressed(event, Constants.KeyCodes.ESCAPE) && !showEmojiPicker) {
@@ -232,6 +235,7 @@ function ChannelBookmarkCreateModal({
             onProgress,
             onSuccess,
             onError,
+            isAdmin,
         }, true)) as unknown as XMLHttpRequest;
     };
 

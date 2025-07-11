@@ -3253,6 +3253,8 @@
   "file_upload.upload_files": "Subir archivos",
   "file_upload.zeroBytesFile": "Estás subiendo un archivo vacío: {filename}",
   "file_upload.zeroBytesFiles": "Estás subiendo archivos vacíos: {filenames}",
+  "file_upload.quota.exceeded.admin": "El espacio de almacenamiento no es suficiente para realizar esta acción. Cambie su plan para obtener más espacio y nuevas funcionalidades. <upsell>Actualizar</upsell>",
+  "file_upload.quota.exceeded": "El espacio de almacenamiento no es suficiente para realizar esta acción. Contacte con un administrador para actualizar.",
   "filtered_channels_list.search": "Buscar canales",
   "filtered_user_list.countTotal": "{count, number} {count, plural, one {miembro} other {miembros}} de {total, number} total",
   "filtered_user_list.countTotalPage": "{startCount, number} - {endCount, number} {count, plural, one {miembro} other {miembros}} de {total, number} total",

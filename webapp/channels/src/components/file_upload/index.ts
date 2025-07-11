@@ -6,6 +6,7 @@ import {bindActionCreators} from 'redux';
 import type {Dispatch} from 'redux';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import {uploadFile} from 'actions/file_actions';
 import {getCurrentLocale} from 'selectors/i18n';
@@ -25,6 +26,8 @@ function mapStateToProps(state: GlobalState) {
     const centerChannelPostBeingEdited = editingPost.show && !editingPost.isRHS;
     const rhsPostBeingEdited = editingPost.show && editingPost.isRHS;
 
+    const isAdmin = isCurrentUserSystemAdmin(state);
+
     return {
         maxFileSize,
         canUploadFiles: canUploadFiles(config),
@@ -33,6 +36,7 @@ function mapStateToProps(state: GlobalState) {
         pluginFilesWillUploadHooks: state.plugins.components.FilesWillUploadHook,
         centerChannelPostBeingEdited,
         rhsPostBeingEdited,
+        isAdmin,
     };
 }
 

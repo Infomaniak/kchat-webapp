@@ -24,12 +24,13 @@ export interface UploadFile {
     rootId: string;
     channelId: string;
     clientId: string;
+    isAdmin: boolean;
     onProgress: (filePreviewInfo: FilePreviewInfo) => void;
     onSuccess: (data: any, channelId: string, rootId: string) => void;
     onError: (err: string | ServerError, clientId: string, channelId: string, rootId: string) => void;
 }
 
-export function uploadFile({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError}: UploadFile, isBookmark?: boolean): ThunkActionFunc<XMLHttpRequest> {
+export function uploadFile({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError, isAdmin}: UploadFile, isBookmark?: boolean): ThunkActionFunc<XMLHttpRequest> {
     return (dispatch, getState) => {
         dispatch({type: FileTypes.UPLOAD_FILES_REQUEST});
 
@@ -98,8 +99,12 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                     let errorMessage = '';
                     try {
                         const errorResponse = JSON.parse(xhr.response);
-                        errorMessage =
-                        (errorResponse?.id && errorResponse?.message) ? localizeMessage({id: errorResponse.id, defaultMessage: errorResponse.message}) : localizeMessage({id: 'file_upload.generic_error', defaultMessage: 'There was a problem uploading your files.'});
+                        if (xhr.status === 409 && errorResponse.id === 'quota-exceeded') {
+                            errorMessage = isAdmin ? 'file_upload.quota.exceeded.admin' : 'file_upload.quota.exceeded'; // in this case we only provide the react.intl key, because we need to inject translated component (not possible here)
+                        } else {
+                            errorMessage =
+                                (errorResponse?.id && errorResponse?.message) ? localizeMessage({id: errorResponse.id, defaultMessage: errorResponse.message}) : localizeMessage({id: 'file_upload.generic_error', defaultMessage: 'There was a problem uploading your files.'});
+                        }
                     } catch (e) {
                         errorMessage = localizeMessage({id: 'file_upload.generic_error', defaultMessage: 'There was a problem uploading your files.'});
                     }

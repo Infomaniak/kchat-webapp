@@ -160,13 +160,14 @@ export type Props = {
     handleDriveSharelink: (e: React.ChangeEvent<TextboxElement>) => void;
     centerChannelPostBeingEdited: boolean;
     rhsPostBeingEdited: boolean;
+    isAdmin: boolean;
 
     actions: {
 
         /**
          * Function to be called to upload file
          */
-        uploadFile: ({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError}: UploadFile) => XMLHttpRequest;
+        uploadFile: ({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError, isAdmin}: UploadFile) => XMLHttpRequest;
     };
 };
 
@@ -332,6 +333,7 @@ export class FileUpload extends PureComponent<Props, State> {
                 onProgress: this.props.onUploadProgress,
                 onSuccess: this.fileUploadSuccess,
                 onError: this.fileUploadFail,
+                isAdmin: this.props.isAdmin,
             });
 
             this.setState({requests: {...this.state.requests, [clientId]: request}});

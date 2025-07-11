@@ -3882,6 +3882,8 @@
   "yourcomputer": "Il tuo pc",
   "create_channel.limit_error": "Il limite del canale è stato raggiunto.",
   "file_upload.limit_error": "Limite di memoria raggiunto.",
+  "file_upload.quota.exceeded.admin": "Lo spazio di archiviazione non è sufficiente per eseguire questa azione. Modifica il tuo piano per ottenere più spazio e nuove funzionalità. <upsell>Aggiorna</upsell>",
+  "file_upload.quota.exceeded": "Lo spazio di archiviazione non è sufficiente per eseguire questa azione. Contattare un amministratore per l'aggiornamento.",
   "invite.guests.limit_error": "Limite di ospiti raggiunto.",
   "limitModal.plans": "Disponibile per i piani",
   "limitModal.planList": "Basic, Teams & Pro",

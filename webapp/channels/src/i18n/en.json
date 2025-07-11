@@ -6344,6 +6344,8 @@
   "yourcomputer": "Your computer",
   "create_channel.limit_error": "Channel limit reached.",
   "file_upload.limit_error": "Storage limit reached.",
+  "file_upload.quota.exceeded.admin": "Storage space is insufficient to perform this action. Upgrade your plan to get more storage and new features. <upsell>Upgrade</upsell>",
+  "file_upload.quota.exceeded": "Storage space is insufficient to perform this action. Please contact an administrator to upgrade.",
   "invite.guests.limit_error": "Guest limit reached",
   "limitModal.plans": "Available for plans",
   "limitModal.planList": "Basic, Teams & Pro",
