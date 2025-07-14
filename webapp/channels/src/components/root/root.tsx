@@ -468,6 +468,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     DesktopApp.reactAppInitialized();
                     getChallengeAndRedirectToLogin(true);
                     console.log('[components/root] redirect to login'); // eslint-disable-line no-console
+                    return;
                 }
 
                 window.WC_TOKEN = token;
