@@ -151,7 +151,7 @@ export default class Root extends React.PureComponent<Props, State> {
         trackSelectorMetrics();
     }
 
-    componentDidUpdate(prevProps: Props, prevState: State) {
+    componentDidUpdate(prevProps: Props) {
         if (!deepEqual(prevProps.theme, this.props.theme) || !deepEqual(prevProps.currentTeam, this.props.currentTeam)) {
             // add body class for webcomponents theming
             if (document.body.className.match(/kchat-.+-theme/)) {
@@ -193,6 +193,10 @@ export default class Root extends React.PureComponent<Props, State> {
             this.props.rhsIsExpanded !== prevProps.rhsIsExpanded
         ) {
             this.setRootMeta();
+        }
+
+        if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
+            DesktopApp.reactAppInitialized();
         }
 
         if (this.embeddedInIFrame && this.props.location !== prevProps.location) {
@@ -465,10 +469,9 @@ export default class Root extends React.PureComponent<Props, State> {
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
                 if (isDefaultAuthServer() && !token) {
-                    DesktopApp.reactAppInitialized();
                     getChallengeAndRedirectToLogin(true);
                     console.log('[components/root] redirect to login'); // eslint-disable-line no-console
-                    // return;
+                    return;
                 }
 
                 window.WC_TOKEN = token;
