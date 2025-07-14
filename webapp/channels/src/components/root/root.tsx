@@ -92,7 +92,6 @@ export default class Root extends React.PureComponent<Props, State> {
     private IKLoginCode: string | undefined;
     private headerResizerRef: React.RefObject<HTMLDivElement>;
     private mounted: boolean;
-    private isRedirectingToLogin: boolean = false;
 
     // Whether the app is running in an iframe.
     private embeddedInIFrame: boolean;
@@ -195,12 +194,6 @@ export default class Root extends React.PureComponent<Props, State> {
         ) {
             this.setRootMeta();
         }
-
-        // if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
-        //     if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
-        //         DesktopApp.reactAppInitialized();
-        //     }
-        // }
 
         if (this.embeddedInIFrame && this.props.location !== prevProps.location) {
             this.sendBridgeNavigate();
@@ -354,7 +347,7 @@ export default class Root extends React.PureComponent<Props, State> {
         const {isLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isLoaded) {
-            if (this.props.location.pathname === '/' && !this.isRedirectingToLogin) {
+            if (this.props.location.pathname === '/') {
                 // eslint-disable-next-line no-console
                 console.log('redirect to default team');
                 this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
@@ -670,7 +663,7 @@ export default class Root extends React.PureComponent<Props, State> {
                                     path={`/:team(${TEAM_NAME_PATH_PATTERN})`}
                                     component={TeamController}
                                 />
-                                <RootRedirect isRedirectingToLogin={this.isRedirectingToLogin}/>
+                                <RootRedirect/>
                             </Switch>
                             <SidebarRight/>
                         </div>
