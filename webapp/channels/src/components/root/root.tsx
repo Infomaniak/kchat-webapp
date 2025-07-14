@@ -472,12 +472,9 @@ export default class Root extends React.PureComponent<Props, State> {
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
                 if (isDefaultAuthServer() && !token) {
-                    if (this.isRedirectingToLogin) {
-                        return;
-                    }
-                    this.isRedirectingToLogin = true;
-                    console.log('[components/root] redirect to login'); // eslint-disable-line no-console
+                    DesktopApp.reactAppInitialized();
                     getChallengeAndRedirectToLogin(true);
+                    console.log('[components/root] redirect to login'); // eslint-disable-line no-console
                 }
 
                 window.WC_TOKEN = token;
