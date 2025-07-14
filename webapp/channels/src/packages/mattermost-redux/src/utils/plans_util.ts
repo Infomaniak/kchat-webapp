@@ -16,11 +16,20 @@ const planOrder: PackName[] = [
     'ksuite_entreprise',
 ];
 
+const paidPlans: PackName[] = ['ksuite_standard', 'ksuite_entreprise', 'ksuite_pro'];
+
 export const getNextWcPack = (current: PackName | undefined): WcPackName => {
     const index = current ? planOrder.indexOf(current) : -1;
     const next =
         index >= 0 && index < planOrder.length - 1 ? planOrder[index + 1] : planOrder[0];
     return wcPlanMap[next];
+};
+
+export const isPaidPlan = (plan: PackName | undefined): boolean => {
+    if (!plan) {
+        return false;
+    }
+    return paidPlans.includes(plan);
 };
 
 export const quotaGate = (

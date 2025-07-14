@@ -12,6 +12,7 @@ import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 import {getNextWcPack, openUpgradeDialog} from 'mattermost-redux/utils/plans_util';
 
 import {isErrorInvalidSlashCommand} from 'utils/post_utils';
+import {getShopUrl} from 'utils/utils';
 
 interface Props {
     error: ServerError;
@@ -57,7 +58,7 @@ function MessageSubmitError(props: Props) {
 
     let message: string | ReactNode = props.error.message.trim();
 
-    const messageToFormat = ['file_upload.quota.exceeded', 'file_upload.quota.exceeded.admin'];
+    const messageToFormat = ['file_upload.quota.exceeded', 'file_upload.quota.exceeded.admin', 'file_upload.quota.exceeded.paidPlan.admin'];
 
     // IK: this is a special case, we do the translation here as we need to inject a translated component aswell (which is complicated from redux action)
     if (messageToFormat.includes(props.error?.message)) {
@@ -67,7 +68,14 @@ function MessageSubmitError(props: Props) {
                 values={{
                     upsell: (chunks) => (
                         <a
-                            onClick={() => openUpgradeDialog(nextPlan)}
+                            onClick={() => {
+                                if (props.error.message === 'file_upload.quota.exceeded.paidPlan.admin') {
+                                    window.open(getShopUrl(), '_blank');
+                                } else {
+                                    openUpgradeDialog(nextPlan);
+                                }
+                            }
+                            }
                             href='#'
                         >{chunks}</a>
                     ),

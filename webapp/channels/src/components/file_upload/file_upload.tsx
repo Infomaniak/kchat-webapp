@@ -161,13 +161,14 @@ export type Props = {
     centerChannelPostBeingEdited: boolean;
     rhsPostBeingEdited: boolean;
     isAdmin: boolean;
+    isPaidPlan: boolean;
 
     actions: {
 
         /**
          * Function to be called to upload file
          */
-        uploadFile: ({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError, isAdmin}: UploadFile) => XMLHttpRequest;
+        uploadFile: ({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError, isAdmin, isPaidPlan}: UploadFile) => XMLHttpRequest;
     };
 };
 
@@ -334,6 +335,7 @@ export class FileUpload extends PureComponent<Props, State> {
                 onSuccess: this.fileUploadSuccess,
                 onError: this.fileUploadFail,
                 isAdmin: this.props.isAdmin,
+                isPaidPlan: this.props.isPaidPlan,
             });
 
             this.setState({requests: {...this.state.requests, [clientId]: request}});

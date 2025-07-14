@@ -14,7 +14,10 @@ import type {FileInfo} from '@mattermost/types/files';
 
 import {getFile} from 'mattermost-redux/selectors/entities/files';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
+import {isPaidPlan} from 'mattermost-redux/utils/plans_util';
 
 import type {UploadFile} from 'actions/file_actions';
 import {uploadFile} from 'actions/file_actions';
@@ -32,12 +35,10 @@ import {generateId} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
-import './bookmark_create_modal.scss';
-
 import CreateModalNameInput from './create_modal_name_input';
 import {useCanUploadFiles} from './utils';
 
-import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import './bookmark_create_modal.scss';
 
 const MAX_LINK_LENGTH = 1024;
 const MAX_TITLE_LENGTH = 64;
@@ -67,6 +68,7 @@ function ChannelBookmarkCreateModal({
 }: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
+    const currentPack = useSelector(getCurrentPackName);
 
     // common
     const type = bookmark?.type ?? bookmarkType ?? 'link';
@@ -236,6 +238,7 @@ function ChannelBookmarkCreateModal({
             onSuccess,
             onError,
             isAdmin,
+            isPaidPlan: isPaidPlan(currentPack),
         }, true)) as unknown as XMLHttpRequest;
     };
 

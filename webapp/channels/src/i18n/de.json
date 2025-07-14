@@ -6566,6 +6566,7 @@
   "create_channel.limit_error": "Kanal-Limit erreicht.",
   "file_upload.limit_error": "Speichergrenze erreicht.",
   "file_upload.quota.exceeded.admin": "Der Speicherplatz reicht nicht aus, um diese Aktion auszuführen. Ändern Sie Ihren Tarif, um mehr Speicherplatz und neue Funktionen zu erhalten. <upsell>Upgrade</upsell>",
+  "file_upload.quota.exceeded.paidPlan.admin": "Es steht nicht genügend Speicherplatz zur Verfügung, um diese Aktion auszuführen. Wechseln Sie zu einem höheren Tarif, um mehr Speicherplatz und neue Funktionen zu erhalten. <upsell>Mein Tarif upgraden</upsell>",
   "file_upload.quota.exceeded": "Der Speicherplatz reicht nicht aus, um diese Aktion auszuführen. Bitte wenden Sie sich an einen Administrator, um ein Upgrade durchzuführen.",
   "invite.guests.limit_error": "Gast-Limit erreicht.",
   "limitModal.plans": "Verfügbar für Pläne",
