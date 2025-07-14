@@ -23,8 +23,6 @@ import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 import {getMyMeets} from 'actions/calls';
 import {redirectUserToDefaultTeam, emitUserLoggedOutEvent} from 'actions/global_actions';
 
-import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
-
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, StoragePrefixes} from 'utils/constants';
 import {isDesktopApp, isMacApp, isNotMacMas} from 'utils/user_agent';
@@ -41,12 +39,6 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
     return async (dispatch, getState) => {
         // attempt to load config and license regardless if user is logged in or not
         try {
-            if (isDesktopApp() && checkIKTokenIsExpired()) {
-                console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
-                await refreshIKToken(/*redirectToReam*/false)?.catch((e: unknown) => {
-                    console.warn('[actions/view/root] desktop token refresh error: ', e); // eslint-disable-line no-console
-                });
-            }
             await Promise.all([
                 dispatch(getClientConfig()),
                 dispatch(getLicenseConfig()),
