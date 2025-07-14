@@ -55,8 +55,8 @@ function shouldShowRecentlyUsedCustomTime(
     typeof recentlyUsedCustomDateVal.update_at === 'number' &&
     typeof recentlyUsedCustomDateVal.timestamp === 'number' &&
     recentlyUsedCustomDateVal.timestamp > nowMillis && // is in the future
-    recentlyUsedCustomDateVal.timestamp !== tomorrow8amTime && // is not the existing option tomorrow 9a.m
-    recentlyUsedCustomDateVal.timestamp !== nextMonday && // is not the existing option tomorrow 9a.m
+    recentlyUsedCustomDateVal.timestamp !== tomorrow8amTime && // is not the existing option tomorrow 8a.m
+    recentlyUsedCustomDateVal.timestamp !== nextMonday && // is not the existing option tomorrow 8a.m
     isTimestampWithinLast30Days(recentlyUsedCustomDateVal.update_at, userCurrentTimezone);
 }
 
