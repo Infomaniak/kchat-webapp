@@ -86,7 +86,7 @@ const Preferences = {
     CATEGORY_OVERAGE_USERS_BANNER: 'overage_users_banner',
 
     CATEGORY_ANNOUNCEMENT_BAR_VISIBILITY: 'announcement_bar_visiblity',
-    ALMOST_FULL_ANNOUNCEMENT_BAR: 'almost_full_storage',
+    ALMOST_FULL_ANNOUNCEMENT_BAR: 'almost_full_storage', // option should be 'visible' or 'dismissed'
 
     CATEGORY_THEME: 'theme',
     THEMES: {

@@ -17,16 +17,16 @@ import {getShopUrl} from 'utils/utils';
 
 type Props = {
     userIsAdmin: boolean;
-    isDiscarded: boolean;
+    visibility: 'visible' | 'dismissed' ;
 
     actions: {
-        saveDismissedState: (isDismissed: boolean) => void;
+        saveVisibility: (visibility: 'visible' | 'dismissed') => void;
     };
 }
 
 const TRESHOLD_ALMOST_FULL = -1073741824; // 1Gb, 1024b-based
 
-export function AlmostFullStorageAnnouncementBar({userIsAdmin, actions, isDiscarded}: Props) {
+export function AlmostFullStorageAnnouncementBar({userIsAdmin, actions, visibility}: Props) {
     const {storage} = useGetUsageDeltas();
     const currentPack = useSelector(getCurrentPackName);
     const nextPack = getNextWcPack(currentPack);
@@ -43,8 +43,9 @@ export function AlmostFullStorageAnnouncementBar({userIsAdmin, actions, isDiscar
 
     const isFull = storage >= 0;
     const isAlmostFull = !isFull && storage >= TRESHOLD_ALMOST_FULL;
+    const shouldShow = isAlmostFull && visibility === 'visible';
 
-    if (!isAlmostFull && !isDiscarded) {
+    if (!shouldShow) {
         return null;
     }
 
@@ -77,7 +78,7 @@ export function AlmostFullStorageAnnouncementBar({userIsAdmin, actions, isDiscar
         <AnnouncementBar
             type={AnnouncementBarTypes.WARNING}
             showCloseButton={true}
-            handleClose={() => actions.saveDismissedState(true)}
+            handleClose={() => actions.saveVisibility('dismissed')}
             message={message()}
             icon={(
                 <AlertSvg

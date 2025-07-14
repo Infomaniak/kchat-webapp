@@ -405,9 +405,9 @@ export function callDialingEnabled(state: GlobalState): boolean {
     return getFeatureFlagValue(state, 'IkCallDialing') === 'true';
 }
 
-export const getStorageAnnouncementBarDismissState: (state: GlobalState, userPreferences?: PreferencesType) => boolean = createSelector(
+export const getAlmostFullStorageVisibilityBar: (state: GlobalState, userPreferences?: PreferencesType) => 'visible' | 'dismissed' = createSelector(
     'getStorageAnnouncementBarDismissState',
     (state: GlobalState, userPreferences?: PreferencesType) =>
-        get(state, Preferences.CATEGORY_ANNOUNCEMENT_BAR_VISIBILITY, Preferences.ALMOST_FULL_ANNOUNCEMENT_BAR, 'false', userPreferences),
-    (value: string) => value === 'true',
+        get(state, Preferences.CATEGORY_ANNOUNCEMENT_BAR_VISIBILITY, Preferences.ALMOST_FULL_ANNOUNCEMENT_BAR, 'visible', userPreferences),
+    (value: string) => (value === 'dismissed' ? 'dismissed' : 'visible'),
 );

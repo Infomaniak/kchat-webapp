@@ -7,14 +7,14 @@ import type {Dispatch} from 'redux';
 
 import type {GlobalState} from '@mattermost/types/store';
 
-import {saveStorageAnnouncementBarDismissal} from 'mattermost-redux/actions/preferences';
-import {getStorageAnnouncementBarDismissState} from 'mattermost-redux/selectors/entities/preferences';
+import {saveAlmostFullStorageBarVisibility} from 'mattermost-redux/actions/preferences';
+import {getAlmostFullStorageVisibilityBar} from 'mattermost-redux/selectors/entities/preferences';
 
 import {AlmostFullStorageAnnouncementBar} from './almost_full_storage_announcement_bar';
 
 function mapStateToProps(state: GlobalState) {
     return {
-        isDiscarded: getStorageAnnouncementBarDismissState(state),
+        visibility: getAlmostFullStorageVisibilityBar(state),
     };
 }
 
@@ -22,7 +22,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators(
             {
-                saveDismissedState: saveStorageAnnouncementBarDismissal,
+                saveVisibility: saveAlmostFullStorageBarVisibility,
             },
             dispatch,
         ),
