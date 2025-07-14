@@ -85,13 +85,11 @@ export type Props = PropsFromRedux & RouteComponentProps;
 
 interface State {
     shouldMountAppRoutes?: boolean;
-    isLoggingOut?: boolean;
 }
 
 export default class Root extends React.PureComponent<Props, State> {
     private IKLoginCode: string | undefined;
     private headerResizerRef: React.RefObject<HTMLDivElement>;
-    private mounted: boolean;
 
     // Whether the app is running in an iframe.
     private embeddedInIFrame: boolean;
@@ -100,7 +98,6 @@ export default class Root extends React.PureComponent<Props, State> {
     // so we do need this.
     constructor(props: Props) {
         super(props);
-        this.mounted = false;
         this.IKLoginCode = undefined;
         this.embeddedInIFrame = isInIframe();
         this.headerResizerRef = React.createRef();
@@ -113,18 +110,13 @@ export default class Root extends React.PureComponent<Props, State> {
 
         setSystemEmojis(new Set(EmojiIndicesByAlias.keys()));
 
-        // Force logout of all tabs if one tab is logged out
-        window.addEventListener('storage', this.handleLogoutLoginSignal);
-
         this.state = {
             shouldMountAppRoutes: false,
-            isLoggingOut: false,
         };
     }
 
     componentDidMount() {
         temporarilySetPageLoadContext(PageLoadContext.PAGE_LOAD);
-        this.mounted = true;
 
         if (isDesktopApp()) {
             // Rely on initial client calls to 401 for the first redirect to login,
@@ -205,8 +197,6 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     componentWillUnmount() {
-        this.mounted = false;
-
         this.IKLoginCode = undefined;
 
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
@@ -219,9 +209,7 @@ export default class Root extends React.PureComponent<Props, State> {
             this.props.actions.initializeProducts(),
             initializePlugins(),
         ]).then(() => {
-            if (this.mounted) {
-                this.setState({shouldMountAppRoutes: true});
-            }
+            this.setState({shouldMountAppRoutes: true});
         });
 
         this.props.actions.migrateRecentEmojis();
@@ -352,8 +340,6 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (isLoaded) {
             if (this.props.location.pathname === '/') {
-                // eslint-disable-next-line no-console
-                console.log('redirect to default team');
                 this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
             }
         }
@@ -526,6 +512,9 @@ export default class Root extends React.PureComponent<Props, State> {
                 console.error('[channel_controller] Error waiting for wc-settings:', error);
             });
         }
+
+        // Force logout of all tabs if one tab is logged out
+        window.addEventListener('storage', this.handleLogoutLoginSignal);
 
         // Prevent drag and drop files from navigating away from the app
         document.addEventListener('drop', this.handleDropEvent);
