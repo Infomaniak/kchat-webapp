@@ -69,6 +69,11 @@ export default function ScheduledPostIndicator({location, channelId, postId, rem
                             ranges={SCHEDULED_POST_TIME_RANGES}
                             useSemanticOutput={false}
                             useTime={scheduledPostTimeFormat}
+                            userTimezone={{
+                                useAutomaticTimezone: false, // scheduled_at is already on the right timestamp, we dont need to offset it
+                                automaticTimezone: '',
+                                manualTimezone: '',
+                            }}
                         />
                     ),
                 }}
