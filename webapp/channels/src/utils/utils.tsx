@@ -1151,6 +1151,16 @@ export function defaultImageURLForUser(userId: UserProfile['id']) {
     return Client4.getUsersRoute() + '/' + userId + '/image/default';
 }
 
+export function getShopUrl() {
+    // eslint-disable-next-line no-process-env
+    const baseUrl = process.env.SHOP_ENDPOINT;
+    const path = 'order2/select/ksuite_change_offer';
+    if (!baseUrl) {
+        throw new Error('SHOP_ENDPOINT is not defined in environment variables');
+    }
+    return new URL(path, baseUrl).toString();
+}
+
 // in contrast to Client4.getTeamIconUrl, for ui logic this function returns null if last_team_icon_update is unset
 export function imageURLForTeam(team: Team) {
     return team.last_team_icon_update ? Client4.getTeamIconUrl(team.id, team.last_team_icon_update) : null;

@@ -491,6 +491,7 @@ if (DEV) {
     env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.preprod.dev.infomaniak.ch/');
     env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.preprod.dev.infomaniak.ch/');
     env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.preprod.dev.infomaniak.ch');
+    env.SHOP_ENDPOINT = JSON.stringify(process.env.BASE_URL || 'https://shop.preprod.dev.infomaniak.ch/');
     env.SENTRY_PERFORMANCE_SAMPLE_RATE = JSON.stringify(process.env.SENTRY_PERFORMANCE_SAMPLE_RATE || 0);
     if (process.env.MM_LIVE_RELOAD) {
         config.plugins.push(new LiveReloadPlugin());
@@ -505,6 +506,7 @@ if (DEV) {
     env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.infomaniak.com/');
     env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.infomaniak.com/');
     env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.infomaniak.com');
+    env.SHOP_ENDPOINT = JSON.stringify(process.env.BASE_URL || 'https://shop.infomaniak.com/');
     env.SENTRY_PERFORMANCE_SAMPLE_RATE = JSON.stringify(process.env.SENTRY_PERFORMANCE_SAMPLE_RATE || 0);
 }
 

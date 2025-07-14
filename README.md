@@ -22,6 +22,7 @@ WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current
 WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com
 MANAGER_ENDPOINT=https://manager.infomaniak.com
 LOGIN_ENDPOINT=https://login.infomaniak.com
+SHOP_ENDPOINT=https://shop.infomaniak.com/
 ```
 
 ### Hosts
