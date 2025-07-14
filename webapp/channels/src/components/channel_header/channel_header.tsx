@@ -18,6 +18,7 @@ import {
     NotificationLevels,
     RHSStates,
 } from 'utils/constants';
+import {isToday} from 'utils/datetime';
 import {isEmptyObject} from 'utils/utils';
 
 import ChannelHeaderPlug from 'plugins/channel_header_plug';
@@ -191,9 +192,6 @@ class ChannelHeader extends React.PureComponent<Props> {
             );
 
             if (this.props.isLastActiveEnabled && this.props.lastActivityTimestamp && this.props.timestampUnits) {
-                const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-
-                const isOlderThanDay = Date.now() - (this.props.lastActivityTimestamp ?? 0) > ONE_DAY_MS;
                 dmHeaderTextStatus = (
                     <span className='header-status__text'>
                         <span className='last-active__text'>
@@ -209,8 +207,7 @@ class ChannelHeader extends React.PureComponent<Props> {
                                             style={'short'}
                                         />
                                     ),
-                                    type: isOlderThanDay ? 'absolute' : 'relative',
-
+                                    isTodayOrTomorrow: isToday(new Date(this.props.lastActivityTimestamp)),
                                 }}
                             />
                         </span>
