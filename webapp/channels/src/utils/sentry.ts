@@ -19,7 +19,7 @@ const bool = <T>(x: T | false | undefined | null | '' | 0): x is T => Boolean(x)
 export default function init({SENTRY_DSN}: Args) {
     const {host} = window.location;
 
-    if (true) {
+    if (!SENTRY_DSN || isLocalhost(host)) {
         return;
     }
 
