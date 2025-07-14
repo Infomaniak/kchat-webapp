@@ -477,12 +477,6 @@ export default class Root extends React.PureComponent<Props, State> {
                     getChallengeAndRedirectToLogin(true);
                 }
 
-                // The reset teams will retrigger this func
-                // Webcomponents oauth v2
-                if (isDefaultAuthServer() && !token) {
-                    getChallengeAndRedirectToLogin(true);
-                }
-
                 window.WC_TOKEN = token;
             }
         }
