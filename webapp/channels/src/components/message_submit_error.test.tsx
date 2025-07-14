@@ -3,8 +3,15 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import * as reactRedux from 'react-redux';
 
 import MessageSubmitError from 'components/message_submit_error';
+
+// At the top of your test file or inside a `describe` block
+jest.spyOn(reactRedux, 'useSelector').mockImplementation((selector) => {
+    // Return whatever value your selector would normally return
+    return 'MockPlanName'; // or selector(mockedState) if you want dynamic
+});
 
 describe('components/MessageSubmitError', () => {
     const baseProps = {

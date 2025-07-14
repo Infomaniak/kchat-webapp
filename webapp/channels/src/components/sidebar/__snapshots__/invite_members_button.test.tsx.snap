@@ -59,6 +59,7 @@ exports[`components/sidebar/invite_members_button should match snapshot 1`] = `
             style={
               Object {
                 "marginLeft": "8px",
+                "marginRight": "8px",
               }
             }
           />
