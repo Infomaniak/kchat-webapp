@@ -68,14 +68,14 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
     }, [currentUserId]);
 
     const now = DateTime.now().setZone(userCurrentTimezone);
-    const tomorrow9amTime = DateTime.now().
+    const tomorrow8amTime = DateTime.now().
         setZone(userCurrentTimezone).
         plus({days: 1}).
-        set({hour: 9, minute: 0, second: 0, millisecond: 0}).
+        set({hour: 8, minute: 0, second: 0, millisecond: 0}).
         toMillis();
 
     const nextMonday = getNextWeekday(now, 1).set({
-        hour: 9,
+        hour: 8,
         minute: 0,
         second: 0,
         millisecond: 0,
@@ -83,7 +83,7 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
 
     const timeComponent = (
         <Timestamp
-            value={tomorrow9amTime.valueOf()}
+            value={tomorrow8amTime.valueOf()}
             useDate={false}
         />
     );
@@ -92,7 +92,7 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
 
     if (isDM && !isBot && !isSelfDM) {
         const teammateTimezoneString = teammateTimezone.useAutomaticTimezone ? teammateTimezone.automaticTimezone : teammateTimezone.manualTimezone || 'UTC';
-        const scheduledTimeInTeammateTimezone = getScheduledTimeInTeammateTimezone(tomorrow9amTime, teammateTimezoneString);
+        const scheduledTimeInTeammateTimezone = getScheduledTimeInTeammateTimezone(tomorrow8amTime, teammateTimezoneString);
         const teammateTimeDisplay = (
             <FormattedMessage
                 id='create_post_button.option.schedule_message.options.teammate_user_hour'
@@ -200,7 +200,7 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
                 <RecentUsedCustomDate
                     handleOnSelect={handleOnSelect}
                     userCurrentTimezone={userCurrentTimezone}
-                    tomorrow9amTime={tomorrow9amTime}
+                    tomorrow9amTime={tomorrow8amTime}
                     nextMonday={nextMonday}
                 />
             )}
