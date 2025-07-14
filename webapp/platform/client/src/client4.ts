@@ -183,6 +183,7 @@ export const DEFAULT_LIMIT_AFTER = 30;
 const GRAPHQL_ENDPOINT = '/api/v5/graphql';
 
 type LogoutFunc = (data?: any) => void;
+type OutOfQuotaFunc = () => void;
 
 export default class Client4 {
     logToConsole = false;
@@ -208,6 +209,7 @@ export default class Client4 {
 
     useBoardsProduct = false;
     emitUserLoggedOutEvent: LogoutFunc | undefined = undefined;
+    emitOutOfQuotaEvent?: OutOfQuotaFunc = undefined;
 
     isIkBaseUrl() {
         const whitelist = [
@@ -311,6 +313,10 @@ export default class Client4 {
 
     bindEmitUserLoggedOutEvent(func: LogoutFunc) {
         this.emitUserLoggedOutEvent = func;
+    }
+
+    bindOutOfQuotaEvent(func: OutOfQuotaFunc) {
+        this.emitOutOfQuotaEvent = func;
     }
 
     getServerVersion() {
@@ -4501,6 +4507,12 @@ export default class Client4 {
         if (response.status === 401 && data?.result === 'redirect') {
             if (this.emitUserLoggedOutEvent) {
                 this.emitUserLoggedOutEvent(data);
+            }
+        }
+
+        if (response.status === 409 && data?.id === 'quota-exceeded') {
+            if (this.emitOutOfQuotaEvent) {
+                this.emitOutOfQuotaEvent();
             }
         }
 
