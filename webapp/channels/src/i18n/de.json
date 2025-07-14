@@ -6689,5 +6689,9 @@
   "dnd_banner.text": "{name} ist im “Nicht stören”-Modus, ihre Nachrichten- und Anrufbenachrichtigungen sind deaktiviert",
   "voiceMessage.preview.title": "Sprachnachricht",
   "voiceMessage.uploading": "Wird hochgeladen...",
-  "voiceMessage.canvasFallback.recording": "Aufnahme gestartet"
+  "voiceMessage.canvasFallback.recording": "Aufnahme gestartet",
+  "full_storage_announcement_bar.message.admin": "Du hast dein Speicherkontingent erreicht. <modifyOffer>Upgrade deinen Plan</modifyOffer>, um mehr Speicherplatz und neue Funktionen zu erhalten.",
+  "full_storage_announcement_bar.message": "Du hast dein Speicherkontingent erreicht. Kontaktiere einen Administrator für ein Upgrade.",
+  "almost_full_storage_announcement_bar.message.admin": "Du bist dabei, dein Speicherkontingent zu erreichen. Um ohne Unterbrechung weiterzuarbeiten, <modifyOffer>upgrade deinen Plan</modifyOffer>, um mehr Speicherplatz und neue Funktionen zu erhalten.",
+  "almost_full_storage_announcement_bar.message": "Du bist dabei, dein Speicherkontingent zu erreichen. Um ohne Unterbrechung weiterzuarbeiten, kontaktiere einen Administrator für ein Upgrade."
 }

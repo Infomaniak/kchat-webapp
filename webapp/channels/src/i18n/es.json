@@ -5240,5 +5240,9 @@
   "schedule_post.custom_time_modal.confirm_button_text": "Programar",
   "schedule_post.custom_time_modal.dm_user_time": "{dmUserTime} para {dmUserName}",
   "schedule_post.custom_time_modal.title": "Programar mensaje",
-  "invitation_modal.invite_members.exceeded_max_guest": "{count, plural, one {Queda # invitación externa} other {Quedan # invitaciones externas}}. Elimina usuarios o {action}."
+  "invitation_modal.invite_members.exceeded_max_guest": "{count, plural, one {Queda # invitación externa} other {Quedan # invitaciones externas}}. Elimina usuarios o {action}.",
+  "full_storage_announcement_bar.message.admin": "Has alcanzado el límite de tu espacio de almacenamiento. <modifyOffer>Mejora tu plan</modifyOffer> para obtener más almacenamiento y nuevas funciones.",
+  "full_storage_announcement_bar.message": "Has alcanzado el límite de tu espacio de almacenamiento. Contacta con un administrador para actualizar.",
+  "almost_full_storage_announcement_bar.message.admin": "Estás a punto de alcanzar el límite de tu espacio de almacenamiento. Para seguir trabajando sin interrupciones, <modifyOffer>mejora tu plan</modifyOffer> para obtener más almacenamiento y nuevas funciones.",
+  "almost_full_storage_announcement_bar.message": "Estás a punto de alcanzar el límite de tu espacio de almacenamiento. Para seguir trabajando sin interrupciones, contacta con un administrador para actualizar."
 }

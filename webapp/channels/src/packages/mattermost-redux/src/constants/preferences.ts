@@ -85,6 +85,9 @@ const Preferences = {
     CATEGORY_TEAMS_ORDER: 'teams_order',
     CATEGORY_OVERAGE_USERS_BANNER: 'overage_users_banner',
 
+    CATEGORY_ANNOUNCEMENT_BAR_VISIBILITY: 'announcement_bar_visiblity',
+    ALMOST_FULL_ANNOUNCEMENT_BAR: 'almost_full_storage',
+
     CATEGORY_THEME: 'theme',
     THEMES: {
         ik: {

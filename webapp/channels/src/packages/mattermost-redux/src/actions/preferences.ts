@@ -126,6 +126,23 @@ export function saveTheme(teamId: string, theme: Theme): ActionFuncAsync {
     };
 }
 
+export function saveStorageAnnouncementBarDismissal(isDismissed: boolean): ActionFuncAsync {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const currentUserId = getCurrentUserId(state);
+
+        const pref: PreferenceType[] = [{
+            category: Preferences.CATEGORY_ANNOUNCEMENT_BAR_VISIBILITY,
+            name: Preferences.ALMOST_FULL_ANNOUNCEMENT_BAR,
+            user_id: currentUserId,
+            value: JSON.stringify(isDismissed),
+        }];
+
+        await dispatch(savePreferences(currentUserId, pref));
+        return {data: true};
+    };
+}
+
 export function deleteTeamSpecificThemes(): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();

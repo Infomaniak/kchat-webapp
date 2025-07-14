@@ -4076,5 +4076,9 @@
   "schedule_post.custom_time_modal.confirm_button_text": "Programma",
   "schedule_post.custom_time_modal.dm_user_time": "{dmUserTime} per {dmUserName}",
   "schedule_post.custom_time_modal.title": "Programma messaggio",
-  "invitation_modal.invite_members.exceeded_max_guest": "{count, plural, one {Rimane # invito esterno} other {Rimangono # inviti esterni}}. Rimuovi utenti oppure {action}."
+  "invitation_modal.invite_members.exceeded_max_guest": "{count, plural, one {Rimane # invito esterno} other {Rimangono # inviti esterni}}. Rimuovi utenti oppure {action}.",
+  "full_storage_announcement_bar.message.admin": "Hai raggiunto il limite del tuo spazio di archiviazione. <modifyOffer>Modifica il tuo piano</modifyOffer> per ottenere più spazio e nuove funzionalità.",
+  "full_storage_announcement_bar.message": "Hai raggiunto il limite del tuo spazio di archiviazione. Contatta un amministratore per l'aggiornamento.",
+  "almost_full_storage_announcement_bar.message.admin": "Stai per raggiungere il limite del tuo spazio di archiviazione. Per continuare a lavorare senza interruzioni, <modifyOffer>modifica il tuo piano</modifyOffer> per ottenere più spazio e nuove funzionalità.",
+  "almost_full_storage_announcement_bar.message": "Stai per raggiungere il limite del tuo spazio di archiviazione. Per continuare a lavorare senza interruzioni, contatta un amministratore per l'aggiornamento."
 }

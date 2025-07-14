@@ -404,3 +404,10 @@ export const getOverageBannerPreferences = makeGetCategory('getOverageBannerPref
 export function callDialingEnabled(state: GlobalState): boolean {
     return getFeatureFlagValue(state, 'IkCallDialing') === 'true';
 }
+
+export const getStorageAnnouncementBarDismissState: (state: GlobalState, userPreferences?: PreferencesType) => boolean = createSelector(
+    'getStorageAnnouncementBarDismissState',
+    (state: GlobalState, userPreferences?: PreferencesType) =>
+        get(state, Preferences.CATEGORY_ANNOUNCEMENT_BAR_VISIBILITY, Preferences.ALMOST_FULL_ANNOUNCEMENT_BAR, 'false', userPreferences),
+    (value: string) => value === 'true',
+);
