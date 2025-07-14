@@ -96,7 +96,6 @@ export default class UsersEmailsInput extends React.PureComponent<Props, State> 
             options: [],
             prevValue: this.props.inputValue,
         };
-        console.log('🚀 tcl ~ users_emails_input.tsx:93 ~ UsersEmailsInput ~ props:', props);
     }
 
     renderUserName = (user: UserProfile) => {
@@ -192,7 +191,6 @@ export default class UsersEmailsInput extends React.PureComponent<Props, State> 
     };
 
     onChange = (value: MultiValue<EmailInvite | UserProfile> | SingleValue<EmailInvite | UserProfile>) => {
-        console.log('🚀 tcl ~ users_emails_input.tsx:194 ~ UsersEmailsInput ~ value:', value);
         if (this.props.onChange) {
             if (value) {
                 this.props.onChange((value as Array<UserProfile | EmailInvite>).map((v) => {
@@ -300,7 +298,6 @@ export default class UsersEmailsInput extends React.PureComponent<Props, State> 
             // Check if the input is a valid new email, if the email invitations are enabled.
             if (this.props.emailInvitationsEnabled && isEmail(action.prevInputValue)) {
                 const email = action.prevInputValue;
-                console.log('🚀 tcl ~ users_emails_input.tsx:301 ~ UsersEmailsInput ~ email:', email);
                 this.onChange([...values, {value: email, label: email}]);
                 this.props.onInputChange('');
                 this.setState((state) => ({
@@ -477,8 +474,6 @@ export default class UsersEmailsInput extends React.PureComponent<Props, State> 
 
     render() {
         const values = this.formatValuesForCreatable();
-
-        const Msg: any = components.NoOptionsMessage;
 
         const styles = {
             placeholder: (css) => ({

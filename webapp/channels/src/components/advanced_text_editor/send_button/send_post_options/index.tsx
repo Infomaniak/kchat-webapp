@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -76,8 +76,6 @@ export function SendPostOptions({disabled, onSelect, channelId, transformOriginV
     const {scheduled_draft_custom_date: scheduledDraftCustomDateIsLimited} = useSelector(getCloudLimits);
     const currentPack = useSelector(getCurrentPackName);
     const {isQuotaExceeded, withQuotaCheck} = quotaGate(scheduledDraftCustomDate, currentPack);
-
-    const hasInitializedRef = useRef(false);
 
     return (
         <Menu.Container
