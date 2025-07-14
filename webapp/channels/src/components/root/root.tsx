@@ -114,6 +114,9 @@ export default class Root extends React.PureComponent<Props, State> {
 
         setSystemEmojis(new Set(EmojiIndicesByAlias.keys()));
 
+        // Force logout of all tabs if one tab is logged out
+        window.addEventListener('storage', this.handleLogoutLoginSignal);
+
         this.state = {
             shouldMountAppRoutes: false,
             isLoggingOut: false,
@@ -529,9 +532,6 @@ export default class Root extends React.PureComponent<Props, State> {
                 console.error('[channel_controller] Error waiting for wc-settings:', error);
             });
         }
-
-        // Force logout of all tabs if one tab is logged out
-        window.addEventListener('storage', this.handleLogoutLoginSignal);
 
         // Prevent drag and drop files from navigating away from the app
         document.addEventListener('drop', this.handleDropEvent);
