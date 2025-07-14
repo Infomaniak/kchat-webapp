@@ -111,11 +111,8 @@ export function getChallengeAndRedirectToLogin(infinite = false) {
         // TODO: store in redux instead of localstorage
         localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
 
-        // window.location.assign(`https://login.preprod.dev.infomaniak.ch/authorize?code_challenge=${codeChallenge}${infinite ? '' : '&access_type=offline'}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=https://infomaniak.kchat.preprod.dev.infomaniak.ch/`);
-        // console.log('test', `https://login.preprod.dev.infomaniak.ch/authorize?code_challenge=${codeChallenge}${infinite ? '' : '&access_type=offline'}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=https://infomaniak.kchat.preprod.dev.infomaniak.ch/`);
-
         console.log('🚀 ~ generateCodeChallenge URL', `${IKConstants.LOGIN_URL}authorize?code_challenge=${codeChallenge}${infinite ? '' : '&access_type=offline'}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
-        window.location.assign(`${IKConstants.LOGIN_URL}authorize?code_challenge=${codeChallenge}${infinite ? '' : '&access_type=offline'}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
+        window.location.assign(`https://login.preprod.dev.infomaniak.ch/authorize?code_challenge=${codeChallenge}${infinite ? '' : '&access_type=offline'}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=https://infomaniak.kchat.preprod.dev.infomaniak.ch/`);
     }).catch(() => {
         console.log('[login/utils > getChallengeAndRedirectToLogin] error redirect');
     });
