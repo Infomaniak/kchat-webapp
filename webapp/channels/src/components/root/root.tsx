@@ -17,6 +17,7 @@ import {Client4} from 'mattermost-redux/client';
 
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
+import {setThemePreference} from 'actions/views/theme';
 import {close, initialize} from 'actions/websocket_actions';
 import BrowserStore from 'stores/browser_store';
 import LocalStorageStore from 'stores/local_storage_store';
@@ -32,7 +33,7 @@ import {Animations} from 'components/preparing_workspace/steps';
 import SidebarMobileRightMenu from 'components/sidebar_mobile_right_menu';
 
 import {getHistory} from 'utils/browser_history';
-import {PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
+import {DesktopThemePreferences, PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import DesktopApp from 'utils/desktop_api';
 import {EmojiIndicesByAlias} from 'utils/emoji';
@@ -93,6 +94,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     // Whether the app is running in an iframe.
     private embeddedInIFrame: boolean;
+    themeMediaQuery: MediaQueryList;
 
     // The constructor adds a bunch of event listeners,
     // so we do need this.
@@ -113,6 +115,10 @@ export default class Root extends React.PureComponent<Props, State> {
         this.state = {
             shouldMountAppRoutes: false,
         };
+
+        this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        this.updateThemePreference(this.themeMediaQuery.matches);
     }
 
     componentDidMount() {
@@ -135,6 +141,10 @@ export default class Root extends React.PureComponent<Props, State> {
         } else {
             // Allow through initial requests for web.
             this.runMounted();
+        }
+
+        if (this.themeMediaQuery?.addEventListener) {
+            this.themeMediaQuery.addEventListener('change', this.handleThemeMediaQueryChangeEvent);
         }
 
         this.props.actions.registerCustomPostRenderer('custom_llmbot', LLMBotPost, 'llmbot_post_message_renderer');
@@ -528,6 +538,14 @@ export default class Root extends React.PureComponent<Props, State> {
 
     handleLogoutLoginSignal = (e: StorageEvent) => {
         this.props.actions.handleLoginLogoutSignal(e);
+    };
+
+    handleThemeMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
+        this.updateThemePreference(e.matches);
+    };
+
+    updateThemePreference = (isDark: boolean) => {
+        store.dispatch(setThemePreference(isDark ? DesktopThemePreferences.DARK : DesktopThemePreferences.LIGHT));
     };
 
     setRootMeta = () => {
