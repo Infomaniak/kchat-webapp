@@ -7,10 +7,8 @@ import * as reactRedux from 'react-redux';
 
 import MessageSubmitError from 'components/message_submit_error';
 
-// At the top of your test file or inside a `describe` block
-jest.spyOn(reactRedux, 'useSelector').mockImplementation((selector) => {
-    // Return whatever value your selector would normally return
-    return 'MockPlanName'; // or selector(mockedState) if you want dynamic
+jest.spyOn(reactRedux, 'useSelector').mockImplementation(() => {
+    return 'MockPlanName';
 });
 
 describe('components/MessageSubmitError', () => {
