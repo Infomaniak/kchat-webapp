@@ -514,7 +514,11 @@ export default class Root extends React.PureComponent<Props, State> {
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
-                window.open(data.uri, this.embeddedInIFrame ? '_top' : '_self');
+                if (this.embeddedInIFrame) {
+                    window.open(window.location.href, '_top');
+                } else {
+                    window.location.href = data.uri;
+                }
             } else {
                 const lsToken = localStorage.getItem('IKToken');
 
