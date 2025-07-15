@@ -5479,5 +5479,8 @@
   "full_storage_announcement_bar.message.admin": "Vous avez atteint la limite de votre espace de stockage. <modifyOffer>Modifiez votre offre</modifyOffer> afin de bénéficier de plus de stockage et de nouvelles fonctionnalités.",
   "full_storage_announcement_bar.message": "Vous avez atteint la limite de votre espace de stockage. Contactez un administrateur pour mettre à niveau.",
   "almost_full_storage_announcement_bar.message.admin": "Vous avez bientôt atteint la limite de votre espace de stockage. Pour continuer à travailler sans interruption, <modifyOffer>modifiez votre offre</modifyOffer> afin de bénéficier de plus de stockage et de nouvelles fonctionnalités.",
-  "almost_full_storage_announcement_bar.message": "Vous avez bientôt atteint la limite de votre espace de stockage. Pour continuer à travailler sans interruption, contactez un administrateur pour mettre à niveau."
+  "almost_full_storage_announcement_bar.message": "Vous avez bientôt atteint la limite de votre espace de stockage. Pour continuer à travailler sans interruption, contactez un administrateur pour mettre à niveau.",
+  "duration.year": "{count, plural, one {an} other {ans}}",
+  "duration.month": "{count, plural, one {mois} other {mois}}",
+  "duration.day": "{count, plural, one {jour} other {jours}}"
 }

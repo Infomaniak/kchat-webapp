@@ -4104,5 +4104,8 @@
   "full_storage_announcement_bar.message.admin": "Hai raggiunto il limite del tuo spazio di archiviazione. <modifyOffer>Modifica il tuo piano</modifyOffer> per ottenere più spazio e nuove funzionalità.",
   "full_storage_announcement_bar.message": "Hai raggiunto il limite del tuo spazio di archiviazione. Contatta un amministratore per l'aggiornamento.",
   "almost_full_storage_announcement_bar.message.admin": "Stai per raggiungere il limite del tuo spazio di archiviazione. Per continuare a lavorare senza interruzioni, <modifyOffer>modifica il tuo piano</modifyOffer> per ottenere più spazio e nuove funzionalità.",
-  "almost_full_storage_announcement_bar.message": "Stai per raggiungere il limite del tuo spazio di archiviazione. Per continuare a lavorare senza interruzioni, contatta un amministratore per l'aggiornamento."
+  "almost_full_storage_announcement_bar.message": "Stai per raggiungere il limite del tuo spazio di archiviazione. Per continuare a lavorare senza interruzioni, contatta un amministratore per l'aggiornamento.",
+  "duration.year": "{count, plural, one {anno} other {anni}}",
+  "duration.month": "{count, plural, one {mese} other {mesi}}",
+  "duration.day": "{count, plural, one {giorno} other {giorni}}"
 }

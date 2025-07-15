@@ -1,57 +1,35 @@
 import {Duration} from 'luxon';
+import type {IntlShape} from 'react-intl';
 
-const labels: Record<string, Record<string, [string, string]>> = {
-    en: {
-        year: ['year', 'years'],
-        month: ['month', 'months'],
-        day: ['day', 'days'],
-    },
-    fr: {
-        year: ['an', 'ans'],
-        month: ['mois', 'mois'],
-        day: ['jour', 'jours'],
-    },
-    es: {
-        year: ['año', 'años'],
-        month: ['mes', 'meses'],
-        day: ['día', 'días'],
-    },
-    de: {
-        year: ['Jahr', 'Jahre'],
-        month: ['Monat', 'Monate'],
-        day: ['Tag', 'Tage'],
-    },
-    it: {
-        year: ['anno', 'anni'],
-        month: ['mese', 'mesi'],
-        day: ['giorno', 'giorni'],
-    },
-};
+type Unit = 'years' | 'months' | 'days';
 
-export function formatYMDDurationHuman(iso: string, locale: string = 'en'): string {
+const units: Array<[Unit, string]> = [
+    ['years', 'duration.year'],
+    ['months', 'duration.month'],
+    ['days', 'duration.day'],
+];
+
+export function formatYMDDurationHuman(
+    iso: string,
+    intl: IntlShape,
+): string {
     const dur = Duration.fromISO(iso);
-    const nf = new Intl.NumberFormat(locale);
+    const nf = new Intl.NumberFormat(intl.locale);
 
-  type Unit = 'years' | 'months' | 'days';
-  const units: Array<[Unit, keyof typeof labels['en']]> = [
-      ['years', 'year'],
-      ['months', 'month'],
-      ['days', 'day'],
-  ];
+    return units.
+        map(([key, id]) => {
+            const val = dur[key];
+            if (!val) {
+                return null;
+            }
 
-  const loc = labels[locale] || labels.en;
+            const label = intl.formatMessage(
+                {id, defaultMessage: '{count, plural, one {#} other {#s}}'},
+                {count: val},
+            );
 
-  return units.
-      map(([key, labelKey]) => {
-          const val = dur[key];
-          if (!val) {
-              return null;
-          }
-
-          const [singular, plural] = loc[labelKey];
-          const label = val === 1 ? singular : plural;
-          return `${nf.format(val)} ${label}`;
-      }).
-      filter(Boolean).
-      join(' ');
+            return `${nf.format(val)} ${label}`;
+        }).
+        filter(Boolean).
+        join(' ');
 }

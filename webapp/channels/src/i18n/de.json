@@ -6694,5 +6694,8 @@
   "full_storage_announcement_bar.message.admin": "Du hast dein Speicherkontingent erreicht. <modifyOffer>Upgrade deinen Plan</modifyOffer>, um mehr Speicherplatz und neue Funktionen zu erhalten.",
   "full_storage_announcement_bar.message": "Du hast dein Speicherkontingent erreicht. Kontaktiere einen Administrator für ein Upgrade.",
   "almost_full_storage_announcement_bar.message.admin": "Du bist dabei, dein Speicherkontingent zu erreichen. Um ohne Unterbrechung weiterzuarbeiten, <modifyOffer>upgrade deinen Plan</modifyOffer>, um mehr Speicherplatz und neue Funktionen zu erhalten.",
-  "almost_full_storage_announcement_bar.message": "Du bist dabei, dein Speicherkontingent zu erreichen. Um ohne Unterbrechung weiterzuarbeiten, kontaktiere einen Administrator für ein Upgrade."
+  "almost_full_storage_announcement_bar.message": "Du bist dabei, dein Speicherkontingent zu erreichen. Um ohne Unterbrechung weiterzuarbeiten, kontaktiere einen Administrator für ein Upgrade.",
+  "duration.year": "{count, plural, one {Jahr} other {Jahre}}",
+  "duration.month": "{count, plural, one {Monat} other {Monate}}",
+  "duration.day": "{count, plural, one {Tag} other {Tage}}"
 }

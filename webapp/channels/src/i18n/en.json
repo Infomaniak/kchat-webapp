@@ -6471,5 +6471,8 @@
   "full_storage_announcement_bar.message.admin": "You have reached your storage limit. <modifyOffer>Upgrade your plan</modifyOffer> to get more storage and new features.",
   "full_storage_announcement_bar.message": "You have reached your storage limit. Contact an administrator to upgrade.",
   "almost_full_storage_announcement_bar.message.admin": "You're about to reach your storage limit. To keep working without interruption, <modifyOffer>upgrade your plan</modifyOffer> to get more storage and new features.",
-  "almost_full_storage_announcement_bar.message": "You're about to reach your storage limit. To keep working without interruption, contact an administrator to upgrade."
+  "almost_full_storage_announcement_bar.message": "You're about to reach your storage limit. To keep working without interruption, contact an administrator to upgrade.",
+  "duration.year": "{count, plural, one {year} other {years}}",
+  "duration.month": "{count, plural, one {month} other {months}}",
+  "duration.day": "{count, plural, one {day} other {days}}"
 }

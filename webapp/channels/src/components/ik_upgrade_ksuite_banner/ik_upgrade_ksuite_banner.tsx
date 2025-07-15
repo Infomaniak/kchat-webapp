@@ -1,9 +1,7 @@
 import React from 'react';
 import type {FC} from 'react';
-import {FormattedMessage} from 'react-intl';
-import {useSelector} from 'react-redux';
+import {FormattedMessage, useIntl} from 'react-intl';
 
-import {getCurrentUserLocale} from 'mattermost-redux/selectors/entities/i18n';
 import {formatYMDDurationHuman} from 'mattermost-redux/utils/duration';
 
 import useGetLimits from 'components/common/hooks/useGetLimits';
@@ -13,16 +11,15 @@ import './ik_upgrade_ksuite_banner.css';
 const OptionnalUpgradeBanner: FC = () => {
     const nextPlan = useNextPlan();
     const [limits] = useGetLimits();
+    const intl = useIntl();
 
-    // @ts-expect-error global state vs RootState
-    const locale = useSelector((s) => getCurrentUserLocale(s));
     const historyDurationLimit = sanitizeHistoryDuration(limits.messages?.history);
 
     if (historyDurationLimit === null) {
         return null;
     }
 
-    const historyDurationLimitHuman = formatYMDDurationHuman(historyDurationLimit ?? '', locale);
+    const historyDurationLimitHuman = formatYMDDurationHuman(historyDurationLimit ?? '', intl);
 
     const descriptionSlot = (
         <div slot='sub-header'>
