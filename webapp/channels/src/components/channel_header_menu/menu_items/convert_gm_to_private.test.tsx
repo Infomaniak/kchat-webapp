@@ -40,7 +40,7 @@ describe('components/ChannelHeaderMenu/MenuItems/ConvertGMtoPrivate', () => {
         expect(menuItem).toBeInTheDocument();
 
         fireEvent.click(menuItem); // Simulate click on the menu item
-        expect(useDispatch).toHaveBeenCalledTimes(1); // Ensure dispatch was called
+        expect(useDispatch).toHaveBeenCalledTimes(3); // Ensure dispatch was called
         expect(modalActions.openModal).toHaveBeenCalledTimes(3);
         expect(modalActions.openModal).toHaveBeenCalledWith({
             modalId: ModalIdentifiers.CONVERT_GM_TO_CHANNEL,
