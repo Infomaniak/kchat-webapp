@@ -14,7 +14,7 @@ import LoggedIn from 'components/logged_in';
 const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', lazy(() => import('components/onboarding_tasklist')));
 
 type Props = {
-    component: React.ComponentType<RouteComponentProps<any>>;
+    component: React.ComponentType<RouteComponentProps<any> & { headerRef: React.RefObject<HTMLDivElement> }>;
     path: string | string[];
     theme?: Theme; // the routes that send the theme are the ones that will actually need to show the onboarding tasklist
     headerRef: React.RefObject<HTMLDivElement>; // IK: ref used for resisizng global header left controls when lhs is resized by user.
