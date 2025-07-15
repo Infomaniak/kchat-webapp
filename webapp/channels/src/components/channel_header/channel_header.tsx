@@ -18,6 +18,7 @@ import {
     NotificationLevels,
     RHSStates,
 } from 'utils/constants';
+import {isToday} from 'utils/datetime';
 import {isEmptyObject} from 'utils/utils';
 
 import ChannelHeaderPlug from 'plugins/channel_header_plug';
@@ -192,7 +193,7 @@ class ChannelHeader extends React.PureComponent<Props> {
 
             if (this.props.isLastActiveEnabled && this.props.lastActivityTimestamp && this.props.timestampUnits) {
                 dmHeaderTextStatus = (
-                    <>
+                    <span className='header-status__text'>
                         <span className='last-active__text'>
                             <FormattedMessage
                                 id='channel_header.lastActive'
@@ -206,11 +207,12 @@ class ChannelHeader extends React.PureComponent<Props> {
                                             style={'short'}
                                         />
                                     ),
+                                    isTodayOrTomorrow: isToday(new Date(this.props.lastActivityTimestamp)),
                                 }}
                             />
                         </span>
                         {this.renderCustomStatus()}
-                    </>
+                    </span>
                 );
             }
         }

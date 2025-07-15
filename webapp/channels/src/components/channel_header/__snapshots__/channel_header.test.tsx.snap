@@ -87,28 +87,33 @@ exports[`components/ChannelHeader should match snapshot with last active display
             id="channelHeaderDescription"
           >
             <span
-              className="last-active__text"
+              className="header-status__text"
             >
-              <MemoizedFormattedMessage
-                defaultMessage="Active {timestamp}"
-                id="channel_header.lastActive"
-                values={
-                  Object {
-                    "timestamp": <Memo(Connect(injectIntl(Timestamp)))
-                      style="short"
-                      units={
-                        Array [
-                          "now",
-                          "minute",
-                          "hour",
-                        ]
-                      }
-                      useTime={false}
-                      value={1632146562846}
-                    />,
+              <span
+                className="last-active__text"
+              >
+                <MemoizedFormattedMessage
+                  defaultMessage="Active {timestamp}"
+                  id="channel_header.lastActive"
+                  values={
+                    Object {
+                      "isTodayOrTomorrow": false,
+                      "timestamp": <Memo(Connect(injectIntl(Timestamp)))
+                        style="short"
+                        units={
+                          Array [
+                            "now",
+                            "minute",
+                            "hour",
+                          ]
+                        }
+                        useTime={false}
+                        value={1632146562846}
+                      />,
+                    }
                   }
-                }
-              />
+                />
+              </span>
             </span>
             <ChannelHeaderText
               channel={
@@ -1680,28 +1685,33 @@ exports[`components/ChannelHeader should render properly when custom status is e
             id="channelHeaderDescription"
           >
             <span
-              className="last-active__text"
+              className="header-status__text"
             >
-              <MemoizedFormattedMessage
-                defaultMessage="Active {timestamp}"
-                id="channel_header.lastActive"
-                values={
-                  Object {
-                    "timestamp": <Memo(Connect(injectIntl(Timestamp)))
-                      style="short"
-                      units={
-                        Array [
-                          "now",
-                          "minute",
-                          "hour",
-                        ]
-                      }
-                      useTime={false}
-                      value={1632146562846}
-                    />,
+              <span
+                className="last-active__text"
+              >
+                <MemoizedFormattedMessage
+                  defaultMessage="Active {timestamp}"
+                  id="channel_header.lastActive"
+                  values={
+                    Object {
+                      "isTodayOrTomorrow": false,
+                      "timestamp": <Memo(Connect(injectIntl(Timestamp)))
+                        style="short"
+                        units={
+                          Array [
+                            "now",
+                            "minute",
+                            "hour",
+                          ]
+                        }
+                        useTime={false}
+                        value={1632146562846}
+                      />,
+                    }
                   }
-                }
-              />
+                />
+              </span>
             </span>
             <ChannelHeaderText
               channel={
@@ -1928,45 +1938,50 @@ exports[`components/ChannelHeader should render properly when custom status is s
             id="channelHeaderDescription"
           >
             <span
-              className="last-active__text"
+              className="header-status__text"
             >
-              <MemoizedFormattedMessage
-                defaultMessage="Active {timestamp}"
-                id="channel_header.lastActive"
-                values={
-                  Object {
-                    "timestamp": <Memo(Connect(injectIntl(Timestamp)))
-                      style="short"
-                      units={
-                        Array [
-                          "now",
-                          "minute",
-                          "hour",
-                        ]
-                      }
-                      useTime={false}
-                      value={1632146562846}
-                    />,
+              <span
+                className="last-active__text"
+              >
+                <MemoizedFormattedMessage
+                  defaultMessage="Active {timestamp}"
+                  id="channel_header.lastActive"
+                  values={
+                    Object {
+                      "isTodayOrTomorrow": false,
+                      "timestamp": <Memo(Connect(injectIntl(Timestamp)))
+                        style="short"
+                        units={
+                          Array [
+                            "now",
+                            "minute",
+                            "hour",
+                          ]
+                        }
+                        useTime={false}
+                        value={1632146562846}
+                      />,
+                    }
                   }
-                }
-              />
+                />
+              </span>
+              <div>
+                <Memo(CustomStatusEmoji)
+                  emojiStyle={
+                    Object {
+                      "margin": "0 4px 1px",
+                      "verticalAlign": "top",
+                    }
+                  }
+                  showTooltip={true}
+                  userID="user_id"
+                />
+                <CustomStatusText
+                  className="custom-emoji__text"
+                  text="In a meeting"
+                />
+              </div>
             </span>
-            <div>
-              <Memo(CustomStatusEmoji)
-                emojiStyle={
-                  Object {
-                    "margin": "0 4px 1px",
-                    "verticalAlign": "top",
-                  }
-                }
-                showTooltip={true}
-                userID="user_id"
-              />
-              <CustomStatusText
-                className="custom-emoji__text"
-                text="In a meeting"
-              />
-            </div>
             <ChannelHeaderText
               channel={
                 Object {
