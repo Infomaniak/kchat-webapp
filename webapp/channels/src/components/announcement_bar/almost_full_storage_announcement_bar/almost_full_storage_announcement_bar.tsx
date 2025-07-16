@@ -80,12 +80,7 @@ export function AlmostFullStorageAnnouncementBar({userIsAdmin, actions, visibili
             showCloseButton={true}
             handleClose={() => actions.saveVisibility('dismissed')}
             message={message()}
-            icon={(
-                <AlertSvg
-                    width={18}
-                    height={18}
-                />
-            )}
+            icon={<i className='icon-alert-outline'/>}
             showCTA={false}
             showLinkAsButton={false}
 
