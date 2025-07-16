@@ -81,7 +81,6 @@ class AnnouncementBarController extends React.PureComponent<Props> {
                     license={this.props.license}
                     userIsAdmin={this.props.userIsAdmin}
                 />
-
                 {this.props.license?.Cloud !== 'true' && <OverageUsersBanner/>}
                 <VersionBar/>
                 <AppStoreBar/>

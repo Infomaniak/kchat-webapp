@@ -10,7 +10,6 @@ import {getNextWcPack, openUpgradeDialog} from 'mattermost-redux/utils/plans_uti
 
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
-import AlertSvg from 'components/common/svg_images_components/alert_svg';
 
 import {AnnouncementBarTypes} from 'utils/constants';
 import {getShopUrl} from 'utils/utils';
