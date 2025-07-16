@@ -38,11 +38,13 @@ const UserInfo = styled.div`
 `;
 
 const DisplayName = styled.span`
-    display: inline-flex;
+    display: block;
     gap: 8px;
     margin-left: 8px;
     font-size: 14px;
     line-height: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
     color: var(--center-channel-color);
 `;
 
@@ -238,7 +240,7 @@ export default styled(Member)`
         flex-direction: row;
         align-items: center;
         margin-right: auto;
-        overflow: hidden;
+        max-width: calc(100% - 24px);
         padding: 4px 0px;
 
         .profileSpan_userInfo {

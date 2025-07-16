@@ -116,13 +116,13 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
 
     const optionTomorrow = (
         <Menu.Item
-            key={'scheduling_time_tomorrow_9_am'}
+            key={'scheduling_time_tomorrow_8_am'}
             onClick={tomorrowClickHandler}
             labels={
                 <FormattedMessage
                     id='create_post_button.option.schedule_message.options.tomorrow'
-                    defaultMessage='Tomorrow at {9amTime}'
-                    values={{'9amTime': timeComponent}}
+                    defaultMessage='Tomorrow at {8amTime}'
+                    values={{'8amTime': timeComponent}}
                 />
             }
             className='core-menu-options'
@@ -136,13 +136,13 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
 
     const optionNextMonday = (
         <Menu.Item
-            key={'scheduling_time_next_monday_9_am'}
+            key={'scheduling_time_next_monday_8_am'}
             onClick={nextMondayClickHandler}
             labels={
                 <FormattedMessage
                     id='create_post_button.option.schedule_message.options.next_monday'
-                    defaultMessage='Next Monday at {9amTime}'
-                    values={{'9amTime': timeComponent}}
+                    defaultMessage='Next Monday at {8amTime}'
+                    values={{'8amTime': timeComponent}}
                 />
             }
             className='core-menu-options'
@@ -152,14 +152,14 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
 
     const optionMonday = (
         <Menu.Item
-            key={'scheduling_time_monday_9_am'}
+            key={'scheduling_time_monday_8_am'}
             onClick={nextMondayClickHandler}
             labels={
                 <FormattedMessage
                     id='create_post_button.option.schedule_message.options.monday'
-                    defaultMessage='Monday at {9amTime}'
+                    defaultMessage='Monday at {8amTime}'
                     values={{
-                        '9amTime': timeComponent,
+                        '8amTime': timeComponent,
                     }}
                 />
             }
@@ -200,7 +200,7 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
                 <RecentUsedCustomDate
                     handleOnSelect={handleOnSelect}
                     userCurrentTimezone={userCurrentTimezone}
-                    tomorrow9amTime={tomorrow8amTime}
+                    tomorrow8amTime={tomorrow8amTime}
                     nextMonday={nextMonday}
                 />
             )}
