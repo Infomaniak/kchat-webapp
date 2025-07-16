@@ -143,7 +143,6 @@ export function sendMembersInvites(teamId: string, users: UserProfile[], emails:
                 }
             }
         }
-
         return {
             data: {
                 sent,
@@ -329,7 +328,6 @@ export function sendGuestsInvites(
                 }
             }
         }
-
         return {
             data: {
                 sent,
@@ -474,7 +472,6 @@ export function sendMembersInvitesToChannels(
                 }
             }
         }
-
         return {
             data: {
                 sent,

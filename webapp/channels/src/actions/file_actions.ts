@@ -31,6 +31,12 @@ export interface UploadFile {
     onError: (err: string | ServerError, clientId: string, channelId: string, rootId: string) => void;
 }
 
+const quotaMessages = new Map<string, string>([
+    ['admin|paid', 'file_upload.quota.exceeded.paidPlan.admin'],
+    ['admin|free', 'file_upload.quota.exceeded.admin'],
+    ['user|_', 'file_upload.quota.exceeded'],
+]);
+
 export function uploadFile({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError, isAdmin, isPaidPlan}: UploadFile, isBookmark?: boolean): ThunkActionFunc<XMLHttpRequest> {
     return (dispatch, getState) => {
         dispatch({type: FileTypes.UPLOAD_FILES_REQUEST});
@@ -101,15 +107,15 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                     try {
                         const errorResponse = JSON.parse(xhr.response);
                         if (xhr.status === 409 && errorResponse.id === 'quota-exceeded') {
+                            let role = 'user';
+                            let plan = '_';
+
                             if (isAdmin) {
-                                if (isPaidPlan) {
-                                    errorMessage = 'file_upload.quota.exceeded.paidPlan.admin';
-                                } else {
-                                    errorMessage = 'file_upload.quota.exceeded.admin';
-                                }
-                            } else {
-                                errorMessage = 'file_upload.quota.exceeded';
+                                role = 'admin';
+                                plan = isPaidPlan ? 'paid' : 'free';
                             }
+
+                            errorMessage = quotaMessages.get(`${role}|${plan}`) ?? '';
                         } else {
                             errorMessage =
                                 (errorResponse?.id && errorResponse?.message) ? localizeMessage({id: errorResponse.id, defaultMessage: errorResponse.message}) : localizeMessage({id: 'file_upload.generic_error', defaultMessage: 'There was a problem uploading your files.'});

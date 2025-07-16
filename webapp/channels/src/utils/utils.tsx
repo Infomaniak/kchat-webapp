@@ -1154,10 +1154,11 @@ export function defaultImageURLForUser(userId: UserProfile['id']) {
 export function getShopUrl() {
     // eslint-disable-next-line no-process-env
     const baseUrl = process.env.SHOP_ENDPOINT;
-    const path = 'order2/select/ksuite_change_offer';
     if (!baseUrl) {
         throw new Error('SHOP_ENDPOINT is not defined in environment variables');
     }
+
+    const path = 'order2/select/ksuite_change_offer';
     return new URL(path, baseUrl).toString();
 }
 

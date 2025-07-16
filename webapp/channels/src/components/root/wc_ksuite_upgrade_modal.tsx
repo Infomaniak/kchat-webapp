@@ -2,7 +2,7 @@ import React from 'react';
 
 // this component is used to show kSuite conversions modals
 // we have only one markup element and we trigger it programmatically
-export const WcModal = () => {
+export const WcKsuiteUpgradeModal = () => {
     return (
         <wc-ksuite-pro-upgrade-dialog id='wc-modal'>
             <div slot='trigger-element'/>
