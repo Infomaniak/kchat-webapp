@@ -77,7 +77,7 @@ const useUploadFiles = (
         };
 
         handleDraftChange(newDraft);
-    }, [handleDraftChange]);
+    }, [handleDraftChange, draft]);
 
     const handleFileUploadComplete = useCallback((fileInfos: FileInfo[], clientIds: string[], channelId: string, rootId?: string) => {
         const key = rootId || channelId;
