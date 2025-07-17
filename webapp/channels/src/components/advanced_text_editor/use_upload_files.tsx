@@ -15,6 +15,7 @@ import FilePreview from 'components/file_preview';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import FileUpload from 'components/file_upload';
 import type {FileUpload as FileUploadClass, TextEditorLocationType} from 'components/file_upload/file_upload';
+import type {TextboxElement} from 'components/textbox';
 import type TextboxClass from 'components/textbox/textbox';
 
 import type {PostDraft} from 'types/store/draft';
@@ -66,6 +67,17 @@ const useUploadFiles = (
             [filePreviewInfo.clientId]: filePreviewInfo,
         }));
     }, []);
+
+    const handleDriveLink = useCallback((e: React.ChangeEvent<TextboxElement>) => {
+        const message = e.target.value;
+
+        const newDraft = {
+            ...draft,
+            message,
+        };
+
+        handleDraftChange(newDraft);
+    }, [handleDraftChange, draft]);
 
     const handleFileUploadComplete = useCallback((fileInfos: FileInfo[], clientIds: string[], channelId: string, rootId?: string) => {
         const key = rootId || channelId;
@@ -187,7 +199,7 @@ const useUploadFiles = (
             message={draft.message}
 
             // caretPosition={caretPosition}
-            handleDriveSharelink={handleFileUploadChange}
+            handleDriveSharelink={handleDriveLink}
             storedDrafts={storedDrafts}
 
         />
