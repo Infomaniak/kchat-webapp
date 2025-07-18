@@ -329,6 +329,7 @@ const AdvancedTextEditor = ({
         handleDraftChange,
         focusTextbox,
         setServerError,
+        caretPosition,
         isInEditMode,
     );
 
