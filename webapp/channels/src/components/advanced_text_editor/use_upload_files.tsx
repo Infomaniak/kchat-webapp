@@ -45,6 +45,7 @@ const useUploadFiles = (
     handleDraftChange: (draft: PostDraft, options?: {instant?: boolean; show?: boolean}) => void,
     focusTextbox: (forceFocust?: boolean) => void,
     setServerError: (err: (ServerError & { submittedMessage?: string }) | null) => void,
+    caretPosition: number,
     isPostBeingEdited?: boolean,
 ): UseUploadFilesReturnType => {
     const locale = useSelector(getCurrentLocale);
@@ -198,7 +199,7 @@ const useUploadFiles = (
             // For drive sharelinks
             message={draft.message}
 
-            // caretPosition={caretPosition}
+            caretPosition={caretPosition}
             handleDriveSharelink={handleDriveLink}
             storedDrafts={storedDrafts}
 
