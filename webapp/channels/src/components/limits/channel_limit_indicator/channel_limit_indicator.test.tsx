@@ -197,7 +197,7 @@ describe('channel limit indicator', () => {
             </Provider>,
         );
         await actImmediate(wrapper);
-        const link = wrapper.find('a');
+        const link = wrapper.find('.channel-limit-indicator__trigger-upgrade');
         expect(link.exists()).toBe(true);
         expect(link.text()).toBe('Upgrade');
         expect(link.prop('slot')).toBe('trigger-element');
