@@ -341,54 +341,37 @@ var config = {
 };
 
 function generateCSP() {
-    const commonScriptSrc = [
+    const scriptSrc = [
         "'self'",
         'blob:',
         'cdn.rudderlabs.com',
         'js.stripe.com/v3',
         'web-components.storage.infomaniak.com',
+        'web-components-staging.dev.infomaniak.ch',
         'welcome.infomaniak.com',
-        'kmeet.infomaniak.com',
-        'onlyoffice.infomaniak.com',
-    ];
-
-    const preprodScriptSrc = [
-        'web-components-staging.dev.infomaniak.ch',
         'welcome.preprod.dev.infomaniak.ch',
+        'kmeet.infomaniak.com',
         'kmeet.preprod.dev.infomaniak.ch',
-    ];
-
-    const commonScriptSrcElem = [
-        "'self'",
-        "'unsafe-inline'",
-        'blob:',
-        'web-components.storage.infomaniak.com',
-        'documentserver.kdrive.infomaniak.com',
         'onlyoffice.infomaniak.com',
-    ];
-
-    const preprodScriptSrcElem = [
-        'kchat.preprod.dev.infomaniak.ch',
-        'kmeet.preprod.dev.infomaniak.ch',
-        'web-components-staging.dev.infomaniak.ch',
-    ];
-
-    const scriptSrc = [
-        ...commonScriptSrc,
-        ...(IS_CANARY || IS_PREPROD ? preprodScriptSrc : []),
         CSP_UNSAFE_INLINE,
         CSP_UNSAFE_EVAL_IF_DEV,
     ].join(' ');
 
     const scriptSrcElem = [
-        ...commonScriptSrcElem,
-        ...(IS_CANARY || IS_PREPROD ? preprodScriptSrcElem : []),
+        "'self'",
+        "'unsafe-inline'",
+        'blob:',
+        'kchat.preprod.dev.infomaniak.ch',
+        'kmeet.preprod.dev.infomaniak.ch',
+        'web-components.storage.infomaniak.com',
+        'web-components-staging.dev.infomaniak.ch',
+        'documentserver.kdrive.infomaniak.com',
+        'onlyoffice.infomaniak.com',
     ].join(' ');
 
     let csp = `script-src ${scriptSrc}; script-src-elem ${scriptSrcElem};`;
-
     if (IS_CANARY || IS_PREPROD) {
-        csp += ` ${CSP_WORKER_SRC}`;
+        csp += CSP_WORKER_SRC;
     }
 
     console.log('csp for html: ', csp);
