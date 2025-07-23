@@ -45,6 +45,7 @@ const CreateNewCategoryMenuItem = ({
             id={`create-${id}`}
             onClick={withQuotaCheck(handleCreateCategory)}
             leadingElement={<FolderPlusOutlineIcon size={18}/>}
+            isLabelsRowLayout={true}
             labels={
                 <div
                     style={{
