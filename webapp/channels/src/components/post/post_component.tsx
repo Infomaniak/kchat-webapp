@@ -7,7 +7,7 @@ import type {MouseEvent} from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import type {Emoji} from '@mattermost/types/emojis';
-import type {Post} from '@mattermost/types/posts';
+import {PostPriority, type Post} from '@mattermost/types/posts';
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -140,9 +140,18 @@ function PostComponent(props: Props) {
     const [alt, setAlt] = useState(false);
     const [hasReceivedA11yFocus, setHasReceivedA11yFocus] = useState(false);
 
+    const [isTranscriptAvailable, setIsTranscriptAvailable] = useState(false);
+    const isVocalMessage = post.type === 'voice';
     const isSystemMessage = PostUtils.isSystemMessage(post);
     const fromAutoResponder = PostUtils.fromAutoResponder(post);
     const isDesktop = isDesktopApp();
+
+    useEffect(() => {
+        const transcript = post?.metadata?.files?.[0]?.transcript;
+        if (transcript && typeof transcript.text === 'string' && transcript.text.length > 0) {
+            setIsTranscriptAvailable(true);
+        }
+    }, [post?.metadata]);
 
     useEffect(() => {
         if (shouldHighlight) {
@@ -289,7 +298,7 @@ function PostComponent(props: Props) {
             hover || fileDropdownOpened || dropdownOpened || a11yActive || props.isPostBeingEdited;
         return classNames('a11y__section post', {
             'post--highlight': shouldHighlight && !fadeOutHighlight,
-            'same--root': hasSameRoot(props),
+            'same--root': hasSameRoot(props) && !isVocalMessage,
             'other--root': !hasSameRoot(props) && !isSystemMessage,
             'post--bot': PostUtils.isFromBot(post),
             'post--editing': props.isPostBeingEdited,
@@ -301,7 +310,7 @@ function PostComponent(props: Props) {
             'post--hovered': hovered,
 
             // Infomaniak: we disable this in threads
-            'same--user': props.isConsecutivePost && props.location !== Locations.RHS_COMMENT && !props.compactDisplay,
+            'same--user': (props.isConsecutivePost && props.location !== Locations.RHS_COMMENT && !props.compactDisplay) && !isVocalMessage,
             'cursor--pointer': alt && !props.channelIsArchived,
             'post--hide-controls': post.failed || post.state === Posts.POST_DELETED,
             'post--comment same--root': fromAutoResponder,
@@ -439,7 +448,7 @@ function PostComponent(props: Props) {
     let profilePic;
     const hideProfilePicture = hasSameRoot(props) && (!post.root_id && !props.hasReplies) && !PostUtils.isFromBot(post);
     const hideProfileCase = !(props.location === Locations.RHS_COMMENT && props.compactDisplay && props.isConsecutivePost);
-    if (!hideProfilePicture && hideProfileCase) {
+    if ((!hideProfilePicture && hideProfileCase) || isVocalMessage) {
         profilePic = (
             <PostProfilePicture
                 compactDisplay={props.compactDisplay}
@@ -519,6 +528,8 @@ function PostComponent(props: Props) {
     let priority;
     if (post.metadata?.priority && props.isPostPriorityEnabled) {
         priority = <span className='d-flex mr-2 ml-1'><PriorityLabel priority={post.metadata.priority.priority}/></span>;
+    } else if (isTranscriptAvailable) {
+        priority = <span className='d-flex mr-2 ml-1'><PriorityLabel priority={PostPriority.TRANSCRIPT}/></span>;
     }
 
     let postAriaLabelDivTestId = '';
