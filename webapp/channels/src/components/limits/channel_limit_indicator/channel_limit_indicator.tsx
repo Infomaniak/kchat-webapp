@@ -52,16 +52,15 @@ const ChannelLimitIndicator = ({type}: Props) => {
                     }}
                 />
                 <wc-ksuite-pro-upgrade-dialog offer={nextPlan}>
-                    <a
-                        href='#'
+                    <button
                         slot='trigger-element'
+                        className='channel-limit-indicator__trigger-upgrade'
                     >
                         <FormattedMessage
                             id='channelLimitIndicator.upsell'
                             defaultMessage='Upgrade'
-
                         />
-                    </a>
+                    </button>
                 </wc-ksuite-pro-upgrade-dialog>
             </div>
         </div>

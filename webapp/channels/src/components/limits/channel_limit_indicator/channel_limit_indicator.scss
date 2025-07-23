@@ -10,4 +10,15 @@
     border-radius: 4px;
     background: var(--center-channel-bg);
     color: var(--center-channel-color);
+
+    &__trigger-upgrade {
+        background: none;
+        border: none;
+        color: var(--link-color);
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 0;
+        font: inherit;
+    }
 }
+
