@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {lazy, useEffect} from 'react';
+import React, {lazy, useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {cleanUpStatusAndProfileFetchingPoll} from 'mattermost-redux/actions/status_profile_polling';
@@ -72,20 +72,10 @@ export default function ChannelController(props: Props) {
         };
     }, [enabledUserStatuses]);
 
-    useEffect(() => {
-        if (isDesktopApp()) {
-            window.addEventListener('keydown', handleDesktopServerSwitchShortcut);
-        }
-
-        return () => {
-            window.removeEventListener('keydown', handleDesktopServerSwitchShortcut);
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const handleDesktopServerSwitchShortcut = (e: KeyboardEvent) => {
+    const handleDesktopServerSwitchShortcut = useCallback((e: KeyboardEvent) => {
         if ((e.metaKey || e.ctrlKey) && e.altKey) {
-            const digits = Array.from({length: Math.min(mykSuite.length, 10)}, (_, i) => {
+            const reversedSuite = [...mykSuite].reverse();
+            const digits = Array.from({length: Math.min(reversedSuite.length, 10)}, (_, i) => {
                 return i === 9 ? 'Digit0' : `Digit${i + 1}`;
             });
 
@@ -96,12 +86,22 @@ export default function ChannelController(props: Props) {
                 if (isDesktopApp()) {
                     window.postMessage({
                         type: 'switch-server',
-                        data: mykSuite[idx].display_name,
+                        data: reversedSuite[idx].display_name,
                     }, window.origin);
                 }
             }
         }
-    };
+    }, [mykSuite]);
+
+    useEffect(() => {
+        if (isDesktopApp()) {
+            window.addEventListener('keydown', handleDesktopServerSwitchShortcut);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleDesktopServerSwitchShortcut);
+        };
+    }, [handleDesktopServerSwitchShortcut]);
 
     return (
         <>
