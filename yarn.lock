@@ -5172,7 +5172,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:^9.28.1":
+"@sentry/react@npm:9.28.1":
   version: 9.28.1
   resolution: "@sentry/react@npm:9.28.1"
   dependencies:
@@ -5185,7 +5185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:^9.28.1":
+"@sentry/types@npm:9.28.1":
   version: 9.28.1
   resolution: "@sentry/types@npm:9.28.1"
   dependencies:
@@ -17946,8 +17946,8 @@ __metadata:
     "@mui/material": "npm:5.11.16"
     "@mui/styled-engine-sc": "npm:5.11.11"
     "@redux-devtools/extension": "npm:3.2.3"
-    "@sentry/react": "npm:^9.28.1"
-    "@sentry/types": "npm:^9.28.1"
+    "@sentry/react": "npm:9.28.1"
+    "@sentry/types": "npm:9.28.1"
     "@stylistic/stylelint-plugin": "npm:2.1.0"
     "@tanstack/react-table": "npm:8.10.7"
     "@testing-library/jest-dom": "npm:5.16.4"
