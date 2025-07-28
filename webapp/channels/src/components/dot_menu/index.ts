@@ -65,6 +65,7 @@ function makeMapStateToProps() {
         const team = channel ? getTeam(state, channel.team_id) : undefined;
         const teamUrl = `${getSiteURL()}/${team?.name || currentTeam?.name}`;
         const isMilitaryTime = getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false);
+        const isInThread = ownProps.location && (ownProps.location === Locations.RHS_ROOT || ownProps.location === Locations.RHS_COMMENT);
 
         const systemMessage = isSystemMessage(post);
         const collapsedThreads = isCollapsedThreadsEnabled(state);
@@ -118,6 +119,7 @@ function makeMapStateToProps() {
             isMobileView: getIsMobileView(state),
             timezone: getCurrentTimezone(state),
             isMilitaryTime,
+            isInThread,
             postTranslationEnabled: config.FeatureFlagTranslation === 'true',
             canMove: channel ? canWrangler(state, channel.type, threadReplyCount) : false,
         };
