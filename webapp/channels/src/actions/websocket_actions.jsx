@@ -87,6 +87,7 @@ import {
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getGroup} from 'mattermost-redux/selectors/entities/groups';
+import {getConferenceByChannelId} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -120,7 +121,6 @@ import {closeRightHandSide} from 'actions/views/rhs';
 import {incrementWsErrorCount, resetWsErrorCount} from 'actions/views/system';
 import {updateThreadLastOpened} from 'actions/views/threads';
 import {voiceConnectedChannels} from 'selectors/calls';
-import {getConferenceByChannelId} from 'mattermost-redux/selectors/entities/kmeet_calls';;
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
