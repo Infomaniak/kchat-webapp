@@ -11,6 +11,7 @@ import {getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
+import {joinChannel} from 'actions/global_actions';
 import {openModal} from 'actions/views/modals';
 import LocalStorageStore from 'stores/local_storage_store';
 
@@ -68,12 +69,6 @@ type JoinPrivateChannelPromptResult = {
     data: {
         join: boolean;
     };
-};
-
-const joinChannel = (channelId: string) => {
-    // eslint-disable-next-line global-require
-    const GlobalActions = require('actions/global_actions');
-    GlobalActions.joinChannel(channelId);
 };
 
 export function joinPrivateChannelPrompt(team: Team, channelDisplayName: string, channelId: string, handleOnCancel = true): ActionFuncAsync<JoinPrivateChannelPromptResult['data']> {
