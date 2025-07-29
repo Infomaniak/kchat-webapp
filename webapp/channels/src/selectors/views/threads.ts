@@ -13,7 +13,7 @@ import {makeGetPostsForIds} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {createIdsSelector} from 'mattermost-redux/utils/helpers';
-import {DATE_LINE, makeCombineUserActivityPosts, START_OF_NEW_MESSAGES, CREATE_COMMENT} from 'mattermost-redux/utils/post_list';
+import {DATE_LINE, makeCombineUserActivityPosts, START_OF_NEW_MESSAGES} from 'mattermost-redux/utils/post_list';
 import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
 
 import {getIsRhsOpen, getSelectedPostId} from 'selectors/rhs';
