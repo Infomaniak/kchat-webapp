@@ -11,7 +11,6 @@ import {getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
-import * as GlobalActions from 'actions/global_actions';
 import {openModal} from 'actions/views/modals';
 import LocalStorageStore from 'stores/local_storage_store';
 
