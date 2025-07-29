@@ -194,6 +194,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                 />
             );
         } else {
+            // Default case : User is not a member of a private channel and cannot join publicly → no create post UI
             createPost = null;
         }
 
