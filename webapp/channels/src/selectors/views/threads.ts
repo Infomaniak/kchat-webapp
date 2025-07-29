@@ -149,8 +149,6 @@ export function makeFilterRepliesAndAddSeparators() {
                 out.push(post.id);
             }
 
-            out.push(CREATE_COMMENT);
-
             // Flip it back to newest to oldest
             return out.reverse();
         },
