@@ -462,7 +462,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                         disableWidth={true}
                     >
                         {({width, height: _height}) => {
-                            const height = innerRefHeight && postCreateContainerRefHeight ? Math.min(innerRefHeight + CONTENT_PADDING_BOTTOM + 1, _height - postCreateContainerRefHeight) : _height;
+                            const height = innerRefHeight && postCreateContainerRefHeight ? Math.min(innerRefHeight + CONTENT_PADDING_BOTTOM + 1, _height - (postCreateContainerRefHeight - CONTENT_PADDING_BOTTOM)) : _height;
 
                             return (
                                 <>
