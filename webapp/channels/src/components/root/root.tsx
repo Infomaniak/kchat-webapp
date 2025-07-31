@@ -153,7 +153,7 @@ export default class Root extends React.PureComponent<Props, State> {
         trackSelectorMetrics();
     }
 
-    componentDidUpdate(prevProps: Props) {
+    componentDidUpdate(prevProps: Props, prevState: State) {
         if (!deepEqual(prevProps.theme, this.props.theme) || !deepEqual(prevProps.currentTeam, this.props.currentTeam)) {
             // add body class for webcomponents theming
             if (document.body.className.match(/kchat-.+-theme/)) {
@@ -197,8 +197,10 @@ export default class Root extends React.PureComponent<Props, State> {
             this.setRootMeta();
         }
 
-        if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
-            DesktopApp.reactAppInitialized();
+        if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
+            if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
+                DesktopApp.reactAppInitialized();
+            }
         }
 
         if (this.embeddedInIFrame && this.props.location !== prevProps.location) {
