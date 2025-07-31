@@ -29,6 +29,7 @@ import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 import type {GlobalState} from 'types/store';
 
 import AtMentionsButton from './at_mentions_button/at_mentions_button';
+import ReportingToolsButton from './reporting_tools_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';
 import SettingsButton from './settings_button';
 
@@ -143,9 +144,7 @@ const RightControls = (): JSX.Element => {
             id={'RightControlsContainer'}
         >
             <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <module-reporting-tools-component size='26'/>
+                <ReportingToolsButton/>
             </ReportingToolsWrapper>
             <WithTooltip title={tooltipUserReport}>
                 {/* eslint-disable-next-line @mattermost/use-external-link */}

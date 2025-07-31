@@ -19,6 +19,8 @@ import {showMentions, showFlaggedPosts, showSettings, closeRightHandSide, closeM
 import {getRhsState} from 'selectors/rhs';
 
 import {RHSStates} from 'utils/constants';
+import {isStaff} from 'utils/team_utils';
+import {isInIframe} from 'utils/url-ksuite-redirect';
 
 import type {GlobalState} from 'types/store';
 
@@ -34,6 +36,7 @@ function mapStateToProps(state: GlobalState) {
     const enableIncomingWebhooks = config.EnableIncomingWebhooks === 'true';
     const enableOAuthServiceProvider = config.EnableOAuthServiceProvider === 'true';
     const enableOutgoingWebhooks = config.EnableOutgoingWebhooks === 'true';
+    const enableReportingTools = isStaff(currentTeam) && !isInIframe();
     const experimentalPrimaryTeam = config.ExperimentalPrimaryTeam;
     const helpLink = config.HelpLink;
     const reportAProblemLink = config.ReportAProblemLink;
@@ -56,6 +59,7 @@ function mapStateToProps(state: GlobalState) {
         enableIncomingWebhooks,
         enableOAuthServiceProvider,
         enableOutgoingWebhooks,
+        enableReportingTools,
         canManageSystemBots,
         experimentalPrimaryTeam,
         helpLink,
