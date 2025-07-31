@@ -36,6 +36,13 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
         show={true}
         text="Saved messages"
       />
+      <MenuItemAction
+        icon={<ReportingToolsLogo />}
+        id="reportingTools"
+        onClick={[Function]}
+        show={true}
+        text="Reporting tools"
+      />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
       <MenuItemAction
