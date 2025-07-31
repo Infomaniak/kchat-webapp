@@ -113,6 +113,7 @@ export default class PostProfilePicture extends React.PureComponent<Props> {
                 isBot={user?.is_bot}
                 fromAutoResponder={fromAutoResponder}
                 fromWebhook={fromWebhook}
+                compactDisplay={compactDisplay}
             />
         );
     }
