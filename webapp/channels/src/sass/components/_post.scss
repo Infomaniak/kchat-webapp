@@ -756,11 +756,14 @@
             width: 16px;
             padding-top: 1px;
 
-            // img,
-            button {
-                // display: none;
+            // ik: target class instead of button
+            .status-wrapper {
+                // ik: force reset size in compact mode
+                width: 14px !important;
+                height: 14px !important;
 
                 .profile-icon {
+                    // ik: hide profile icon
                     display: none;
                 }
             }

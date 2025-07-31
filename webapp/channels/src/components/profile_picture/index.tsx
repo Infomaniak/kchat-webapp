@@ -27,7 +27,6 @@ type Props = {
     overwriteName?: string;
     newStatusIcon?: boolean;
     statusClass?: string;
-    compactDisplay?: boolean;
 }
 
 function ProfilePicture(props: Props) {
@@ -52,7 +51,7 @@ function ProfilePicture(props: Props) {
                 overwriteName={props.overwriteName}
                 fromWebhook={props.fromWebhook}
                 triggerComponentAs='button'
-                triggerComponentStyle={props.compactDisplay === true ? undefined : {
+                triggerComponentStyle={{
                     borderRadius: '50%',
                     width: `${getAvatarWidth(props?.size ?? 'md')}px`,
                     height: `${getAvatarWidth(props?.size ?? 'md')}px`,
