@@ -4231,6 +4231,7 @@
   "public_private_selector.private.title": "Privé",
   "public_private_selector.public.description": "Tout le monde",
   "public_private_selector.public.title": "Public",
+  "quickSwitchModal.help_no_team": "Tapez pour trouver un canal. Utilisez <b>HAUT/BAS</b> pour parcourir, <b>ENTREE</b> pour sélectionner, <b>ECHAP</b> pour annuler.",
   "quick_switch_modal.help_mobile": "Tapez pour trouver un canal.",
   "quick_switch_modal.input": "entrée de changement rapide",
   "quick_switch_modal.switchChannels": "Trouver des canaux",

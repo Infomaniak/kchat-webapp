@@ -3145,6 +3145,7 @@
   "promote_to_user_modal.desc": "Questa operazione promuove l'ospite {username} a membro effettivo. Consentirà all'utente di unirsi ai canali pubblici e di interagire con gli utenti esterni ai canali di cui sono attualmente membri. Promuovere l'ospite {username} a membro effettivo?",
   "promote_to_user_modal.promote": "Promuovi",
   "promote_to_user_modal.title": "Promuovi ospite {username} a utente",
+  "quickSwitchModal.help_no_team": "Digita per trovare un canale. Usa <b>SU/GIÙ</b> per sfogliare, <b>INVIO</b> per selezionare, <b>ESC</b> per annullare.",
   "quick_switch_modal.help_mobile": "Scrivi per cercare un canale.",
   "quick_switch_modal.switchChannels": "Cambia canali",
   "reaction.add.ariaLabel": "Aggiungi reazione",
