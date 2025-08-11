@@ -12,7 +12,7 @@ import {selectPostById} from 'actions/views/rhs';
 
 import type {GlobalState} from 'types/store';
 
-import IconAI from './assets/icon_ai';
+import IconEuria from './assets/icon_euria';
 import IconThreadSummarization from './assets/icon_thread_summarization';
 import DotMenu, {DropdownMenu, DropdownMenuItem} from './dot_menu';
 
@@ -46,7 +46,7 @@ const PostMenu = (props: Props) => {
 
     return (
         <DotMenu
-            icon={<IconAI/>}
+            icon={<IconEuria/>}
             dropdownMenu={StyledDropdownMenu}
         >
             <DropdownMenuItem onClick={() => summarizePost(post.id)}>
