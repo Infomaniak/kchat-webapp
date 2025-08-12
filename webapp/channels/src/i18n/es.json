@@ -2451,7 +2451,7 @@
   "admin_settings.save_unsaved_changes": "Por favor, guarde los cambios primero",
   "advanced_text_editor.remote_user_hour": "La hora para {user} es {time}",
   "ai.summarizeThread" : "Resumir",
-  "ai.actions" : "Acciones IA",
+  "ai.actions" : "Preguntar a Euria",
   "alert_banner.tooltipCloseBtn": "Cerrar",
   "analytics.chart.loading": "Cargando...",
   "analytics.chart.meaningful": "No hay suficiente data para tener una representación significativa.",

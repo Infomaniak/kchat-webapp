@@ -2940,7 +2940,7 @@
   "air_gapped_modal.description": "Um deinen Test zu starten, besuche bitte {link} und fordere einen Testschlüssel an.",
   "air_gapped_modal.title": "Testschlüssel anfordern",
   "ai.summarizeThread" : "Zusammenfassen",
-  "ai.actions" : "KI-Aktionen",
+  "ai.actions" : "Euria fragen",
   "alert_banner.tooltipCloseBtn": "Schliessen",
   "analytics.chart.loading": "Lade...",
   "analytics.chart.meaningful": "Nicht genügend Daten für eine aussagekräftige Darstellung.",
