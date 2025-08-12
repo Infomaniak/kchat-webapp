@@ -4073,6 +4073,7 @@
   "public_private_selector.private.title": "Privado",
   "public_private_selector.public.description": "Cualquiera",
   "public_private_selector.public.title": "Público",
+  "quickSwitchModal.help_no_team": "Escribe para encontrar un canal. Usa <b>ARRIBA/ABAJO</b> para navegar, <b>ENTER</b> para seleccionar, <b>ESC</b> para cancelar.",
   "quick_switch_modal.help_mobile": "Escribe para encontrar un canal.",
   "quick_switch_modal.input": "entrada de cambio rápido",
   "quick_switch_modal.switchChannels": "Cambiar Canales",

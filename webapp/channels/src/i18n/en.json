@@ -5049,6 +5049,7 @@
   "public_private_selector.private.title": "Private",
   "public_private_selector.public.description": "Anyone",
   "public_private_selector.public.title": "Public",
+  "quickSwitchModal.help_no_team": "Type to find a channel. Use <b>UP/DOWN</b> to browse, <b>ENTER</b> to select, <b>ESC</b> to dismiss.",
   "quick_switch_modal.help_mobile": "Type to find a channel.",
   "quick_switch_modal.input": "quick switch input",
   "quick_switch_modal.switchChannels": "Find Channels",
