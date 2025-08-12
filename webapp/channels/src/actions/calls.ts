@@ -9,8 +9,6 @@ import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentChannelId, getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {ActionFunc, ActionFuncAsync, DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {
     callConferenceId,
@@ -31,7 +29,7 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {imageURLForUser} from 'utils/utils';
 
-import type {GlobalState} from 'types/store';
+import type {ActionFunc, ActionFuncAsync, DispatchFunc, GlobalState} from 'types/store';
 
 import {openCallDialingModal} from './kmeet_calls';
 import {closeModal} from './views/modals';

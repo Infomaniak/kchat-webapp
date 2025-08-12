@@ -9,14 +9,14 @@ import type {ChannelType} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
 
 import {General} from 'mattermost-redux/constants';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import Constants from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
+
+import type {ActionFunc} from 'types/store';
 
 type Props = {
     channelDisplayName: string;

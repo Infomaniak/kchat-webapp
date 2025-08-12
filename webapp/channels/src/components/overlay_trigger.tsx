@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {OverlayTrigger as OriginalOverlayTrigger} from 'react-bootstrap'; // eslint-disable-line no-restricted-imports
+import {OverlayTrigger as OriginalOverlayTrigger} from 'react-bootstrap';
 import type {OverlayTriggerProps} from 'react-bootstrap';
 import {IntlContext} from 'react-intl';
 import type {IntlShape} from 'react-intl';
