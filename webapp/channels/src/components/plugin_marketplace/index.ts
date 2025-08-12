@@ -3,14 +3,12 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
+import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import {getPluginStatuses} from 'mattermost-redux/actions/admin';
 import {setFirstAdminVisitMarketplaceStatus} from 'mattermost-redux/actions/general';
 import {getFirstAdminVisitMarketplaceStatus} from 'mattermost-redux/selectors/entities/general';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {GenericAction, ActionFunc} from 'mattermost-redux/types/actions';
 
 import {fetchListing, filterListing} from 'actions/marketplace';
 import {closeModal} from 'actions/views/modals';
@@ -37,17 +35,9 @@ function mapStateToProps(state: GlobalState) {
     };
 }
 
-type Actions = {
-    closeModal(): void;
-    fetchListing(localOnly?: boolean): Promise<{error?: Error}>;
-    filterListing(filter: string): Promise<{error?: Error}>;
-    setFirstAdminVisitMarketplaceStatus(): Promise<void>;
-    getPluginStatuses(): Promise<void>;
-}
-
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc | GenericAction>, Actions>({
+        actions: bindActionCreators({
             closeModal: () => closeModal(ModalIdentifiers.PLUGIN_MARKETPLACE),
             fetchListing,
             filterListing,

@@ -8,12 +8,11 @@ import {FormattedMessage} from 'react-intl';
 import type {Channel, ChannelType} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
-
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
 import Constants from 'utils/constants';
+
+import type {ActionFunc, ActionResult} from 'types/store';
 
 type Props = {
     onExited: () => void;

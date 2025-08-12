@@ -8,13 +8,13 @@ import React from 'react';
 
 import {Client4} from 'mattermost-redux/client';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
 import {ActionTypes, KDriveActionTypes} from 'utils/constants';
 import {generateId, localizeMessage} from 'utils/utils';
+
+import type {DispatchFunc, GetStateFunc} from 'types/store';
 
 interface IDriveSelectionOutput {
     attachmentsSize: number;
