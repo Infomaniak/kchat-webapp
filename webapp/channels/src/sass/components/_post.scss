@@ -825,8 +825,6 @@
         }
 
         blockquote {
-            display: flex;
-            flex-direction: column;
             padding: 3px 0 3px 20px;
 
             &::before {
@@ -2049,8 +2047,16 @@
     text-align: left;
 }
 
+// ik: added to fix empty blockquote min-height
 .post-message__text > blockquote {
-    display: list-item;
+    display: flex;
+
+    &::after {
+        content: '.';
+        display: inline;
+        visibility: hidden;
+        color: transparent;
+    }
 }
 
 .view-history__text {
