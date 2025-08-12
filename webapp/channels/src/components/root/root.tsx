@@ -54,6 +54,7 @@ import LuxonController from './luxon_controller';
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
 import {WcKsuiteUpgradeModal} from './wc_ksuite_upgrade_modal';
+import WithTitleObserver from './with_title_observer';
 
 import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
@@ -61,7 +62,6 @@ import type {PropsFromRedux} from './index';
 
 import 'plugins/export';
 import 'utils/a11y_controller_instance';
-import WithTitleObserver from './with_title_observer';
 
 const MobileViewWatcher = makeAsyncComponent('MobileViewWatcher', lazy(() => import('components/mobile_view_watcher')));
 const WindowSizeObserver = makeAsyncComponent('WindowSizeObserver', lazy(() => import('components/window_size_observer/WindowSizeObserver')));
