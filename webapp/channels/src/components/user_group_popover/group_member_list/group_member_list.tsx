@@ -208,6 +208,7 @@ const GroupMemberList = (props: Props) => {
                                 },
                             }}
                         >
+                            {/* ik: replaced local Item for GroupMemberListItem component to fix a rendering issue */}
                             {GroupMemberListItem}
                         </VariableSizeList>)}
                 </InfiniteLoader>
