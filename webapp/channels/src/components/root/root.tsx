@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {NavigateMessage} from '@infomaniak/ksuite-bridge';
-import {KSuiteBridge, NavigateMessageKey, TitleChangeMessageKey} from '@infomaniak/ksuite-bridge';
+import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import deepEqual from 'fast-deep-equal';
@@ -61,6 +61,7 @@ import type {PropsFromRedux} from './index';
 
 import 'plugins/export';
 import 'utils/a11y_controller_instance';
+import WithTitleObserver from './with_title_observer';
 
 const MobileViewWatcher = makeAsyncComponent('MobileViewWatcher', lazy(() => import('components/mobile_view_watcher')));
 const WindowSizeObserver = makeAsyncComponent('WindowSizeObserver', lazy(() => import('components/window_size_observer/WindowSizeObserver')));
@@ -99,9 +100,6 @@ export default class Root extends React.PureComponent<Props, State> {
     private embeddedInIFrame: boolean;
     themeMediaQuery: MediaQueryList;
 
-    private titleObserver: MutationObserver;
-    private oldTitle?: string;
-
     // The constructor adds a bunch of event listeners,
     // so we do need this.
     constructor(props: Props) {
@@ -125,8 +123,6 @@ export default class Root extends React.PureComponent<Props, State> {
         this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
         this.updateThemePreference(this.themeMediaQuery.matches);
-
-        this.titleObserver = new MutationObserver(this.handleTitleChanges);
     }
 
     componentDidMount() {
@@ -149,13 +145,6 @@ export default class Root extends React.PureComponent<Props, State> {
         } else {
             // Allow through initial requests for web.
             this.runMounted();
-
-            // Observe title changes
-            const title = document.querySelector('title');
-
-            if (this.embeddedInIFrame && title) {
-                this.titleObserver.observe(title, {childList: true, subtree: true, characterData: true});
-            }
         }
 
         if (this.themeMediaQuery?.addEventListener) {
@@ -229,8 +218,6 @@ export default class Root extends React.PureComponent<Props, State> {
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
         document.removeEventListener('drop', this.handleDropEvent);
         document.removeEventListener('dragover', this.handleDragOverEvent);
-
-        this.titleObserver.disconnect();
     }
 
     onConfigLoaded = () => {
@@ -574,21 +561,6 @@ export default class Root extends React.PureComponent<Props, State> {
         this.updateThemePreference(e.matches);
     };
 
-    handleTitleChanges: MutationCallback = (mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                const {ksuiteBridge} = this.props;
-                const documentTitle = document.title;
-
-                if (ksuiteBridge && documentTitle !== this.oldTitle) {
-                    ksuiteBridge.sendMessage({type: TitleChangeMessageKey, title: documentTitle});
-
-                    this.oldTitle = documentTitle;
-                }
-            }
-        });
-    };
-
     updateThemePreference = (isDark: boolean) => {
         store.dispatch(setThemePreference(isDark ? DesktopThemePreferences.DARK : DesktopThemePreferences.LIGHT));
     };
@@ -612,6 +584,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
         return (
             <RootProvider>
+                <WithTitleObserver/>
                 <MobileViewWatcher/>
                 <LuxonController/>
                 <WcKsuiteUpgradeModal/>
