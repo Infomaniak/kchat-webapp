@@ -5320,6 +5320,7 @@
   "scheduled_post.action.reschedule": "Nachricht neu planen",
   "scheduled_post.action.send_now": "Jetzt senden",
   "scheduled_post.channel_indicator.link_to_scheduled_posts.text": "Alle anzeigen.",
+  "scheduled_post.channel_indicator.multiple": "Sie haben {count} geplante Nachrichten.",
   "scheduled_post.channel_indicator.multiple_in_channel": "{count} geplante Nachrichten im Kanal.",
   "scheduled_post.channel_indicator.multiple_in_thread": "{count} geplante Nachrichten in der Unterhaltung.",
   "scheduled_post.channel_indicator.single": "Die Nachricht ist für {dateTime} vorgesehen.",
