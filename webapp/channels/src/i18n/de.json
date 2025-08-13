@@ -5624,6 +5624,7 @@
   "sidebar_left.sidebar_channel_menu.moveTo": "Bewegen nach...",
   "sidebar_left.sidebar_channel_menu.moveTo.dropdownAriaLabel": "Zum Untermenü verschieben",
   "sidebar_left.sidebar_channel_menu.moveToNewCategory": "Neue Kategorie",
+  "sidebar_left.sidebar_channel_menu.mute": "Stummschalten",
   "sidebar_left.sidebar_channel_menu.muteChannel": "Kanal stummschalten",
   "sidebar_left.sidebar_channel_menu.unfavoriteChannel": "Nicht favorisieren",
   "sidebar_left.sidebar_channel_menu.unmuteChannel": "Stummschaltung aufheben",

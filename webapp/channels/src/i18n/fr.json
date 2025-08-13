@@ -4573,6 +4573,7 @@
   "sidebar_left.sidebar_channel_menu.markAsUnread": "Marquer comme non lu",
   "sidebar_left.sidebar_channel_menu.moveTo": "Déplacer vers...",
   "sidebar_left.sidebar_channel_menu.moveToNewCategory": "Nouvelle catégorie",
+  "sidebar_left.sidebar_channel_menu.mute": "Mettre en sourdine",
   "sidebar_left.sidebar_channel_menu.muteChannel": "Mettre le canal en sourdine",
   "sidebar_left.sidebar_channel_menu.unfavoriteChannel": "Enlever des favoris",
   "sidebar_left.sidebar_channel_menu.unmuteChannel": "Rétablir le son du canal",
