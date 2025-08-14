@@ -3419,6 +3419,7 @@
   "sidebar_left.sidebar_channel_menu.markAsRead": "Segna come già letto",
   "sidebar_left.sidebar_channel_menu.moveTo": "Sposta in",
   "sidebar_left.sidebar_channel_menu.moveToNewCategory": "Sposta in una nuova categoria",
+  "sidebar_left.sidebar_channel_menu.mute": "Silenzia",
   "sidebar_left.sidebar_channel_menu.muteChannel": "Silenzia il canale",
   "sidebar_left.sidebar_channel_menu.unfavoriteChannel": "Rimuovi dai preferiti",
   "sidebar_left.sidebar_channel_menu.unmuteChannel": "De-Silenzia il canale",

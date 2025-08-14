@@ -4398,6 +4398,7 @@
   "sidebar_left.sidebar_channel_menu.markAsRead": "Marcar como Leído",
   "sidebar_left.sidebar_channel_menu.moveTo": "Mover a...",
   "sidebar_left.sidebar_channel_menu.moveToNewCategory": "Nueva Categoría",
+  "sidebar_left.sidebar_channel_menu.mute": "Silenciar",
   "sidebar_left.sidebar_channel_menu.muteChannel": "Silenciar Canal",
   "sidebar_left.sidebar_channel_menu.unfavoriteChannel": "Quitar de Favorito",
   "sidebar_left.sidebar_channel_menu.unmuteChannel": "Dejar de Silenciar Canal",
