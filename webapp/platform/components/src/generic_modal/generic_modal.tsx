@@ -7,6 +7,7 @@ import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
 import './generic_modal.scss';
+import './generic_modal.ik.scss';
 
 export type ModalLocation = 'top' | 'center' | 'bottom';
 
