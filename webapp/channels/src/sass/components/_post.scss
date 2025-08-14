@@ -2049,6 +2049,7 @@
 // ik: added to fix empty blockquote min-height
 .post-message__text > blockquote {
     display: flex;
+    flex-direction: column;
 
     &::after {
         content: '.';
