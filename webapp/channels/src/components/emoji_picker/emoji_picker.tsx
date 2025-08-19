@@ -64,6 +64,7 @@ const EmojiPicker = ({
     const getInitialActiveCategory = () => (recentEmojis.length ? RECENT : SMILEY_EMOTION);
     const [activeCategory, setActiveCategory] = useState<EmojiCategory>(getInitialActiveCategory);
     const [isHovered, setIsHovered] = useState(false);
+    const pickerContainerRef = useRef<HTMLDivElement>(null);
 
     const [cursor, setCursor] = useState<EmojiCursor>({
         rowIndex: -1,
@@ -93,6 +94,27 @@ const EmojiPicker = ({
             searchCustomEmojis(newFilter);
         }
     }, CUSTOM_EMOJI_SEARCH_THROTTLE_TIME_MS));
+
+    // Ik change : handle edge case when onMouseLeave isn't triggered when the mouse is moved quickly
+    useEffect(() => {
+        function handleMouseMove(e: MouseEvent) {
+            const picker = pickerContainerRef.current;
+            if (!picker) {
+                return;
+            }
+            const rect = picker.getBoundingClientRect();
+            if (
+                e.clientX < rect.left ||
+                e.clientX > rect.right ||
+                e.clientY < rect.top ||
+                e.clientY > rect.bottom
+            ) {
+                handleContainerMouseLeave();
+            }
+        }
+        document.addEventListener('mousemove', handleMouseMove);
+        return () => document.removeEventListener('mousemove', handleMouseMove);
+    }, []);
 
     useEffect(() => {
         // Delay taking focus because this briefly renders offscreen when using an Overlay
@@ -428,6 +450,7 @@ const EmojiPicker = ({
             ) : (
 
                 <EmojiPickerCurrentResults
+                    childRef={pickerContainerRef}
                     ref={infiniteLoaderRef}
                     isFiltering={filter.length > 0}
                     activeCategory={activeCategory}
