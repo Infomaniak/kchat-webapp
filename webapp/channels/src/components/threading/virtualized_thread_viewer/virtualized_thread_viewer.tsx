@@ -175,8 +175,6 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         return Promise.resolve();
     }
 
-    // ik: custom feature (flow top-to-bottom)
-    // update DynamicSizeList and CreateComment components sizes
     updateRects() {
         this.setState({
             innerRefHeight: this.innerRef.current?.clientHeight || 0,
@@ -464,8 +462,6 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                         disableWidth={true}
                     >
                         {({width, height: _height}) => {
-                            // ik: custom feature (flow top-to-bottom)
-                            // reserve space for the CreateComment component
                             const height = innerRefHeight && postCreateContainerRefHeight ? Math.min(innerRefHeight + CONTENT_PADDING_BOTTOM + 1, _height - (postCreateContainerRefHeight - CONTENT_PADDING_BOTTOM)) : _height;
 
                             return (
@@ -492,7 +488,6 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                                         {this.renderRow}
                                     </DynamicSizeList>
                                     {this.renderToast(width)}
-                                    {/* ik: custom feature (flow top-to-bottom), moved to stick under the messages in thread */}
                                     <CreateComment
                                         placeholder={this.props.inputPlaceholder}
                                         isThreadView={this.props.isThreadView}
