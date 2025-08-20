@@ -3,7 +3,6 @@
 
 import {mount} from 'enzyme';
 import React from 'react';
-// eslint-disable-next-line no-restricted-imports
 import {OverlayTrigger as BaseOverlayTrigger} from 'react-bootstrap';
 import {FormattedMessage, IntlProvider} from 'react-intl';
 import {Provider as ReduxProvider} from 'react-redux';

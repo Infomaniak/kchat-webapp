@@ -70,9 +70,12 @@ function byTeamId(state: ScheduledPostsState['byTeamId'] = {}, action: MMReduxAc
         const teamId = action.data.teamId || 'directChannels';
 
         const newState = {...state};
+
+        // Ik change : If the teamId does not exist in the state, we should not throw an error and just create a new entry
         const existingList = newState[teamId] || [];
 
         const existingIndex = existingList.findIndex((existingScheduledPostId) => existingScheduledPostId === scheduledPost.id);
+
         if (existingIndex >= 0) {
             newState[teamId].splice(existingIndex, 1);
         }

@@ -712,7 +712,7 @@ export class FileUpload extends PureComponent<Props, State> {
                         key={item.pluginId + '_fileuploadpluginmenuitem'}
                         onClick={() => {
                             if (item.action) {
-                                //IK: for kDrive internal plugin
+                                // IK: for kDrive internal plugin
                                 if (item.customArgs) {
                                     const args: Array<keyof FileUpload | keyof Props> = [];
                                     item.customArgs.forEach((arg) => {

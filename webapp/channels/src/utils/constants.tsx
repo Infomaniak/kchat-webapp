@@ -1623,6 +1623,10 @@ export const ZoomSettings = {
     MAX_SCALE: 3.0,
 };
 
+export const WCEventTypes = {
+    OPEN_REPORTING_TOOL: 'openReportingToolWC',
+} as const;
+
 export const Constants = {
     SettingsTypes,
     JobTypes,
@@ -2270,6 +2274,7 @@ export const Constants = {
     MAX_PURCHASE_SEATS: 1000000,
     MIN_PURCHASE_SEATS: 10,
     MIN_MEMBERS_FOR_CALL_CONFIRM_MODAL: 10,
+    STAFF_ONLY_TEAM_NAME_WHITELIST: ['infomaniak'],
 };
 
 export const ValidationErrors = {

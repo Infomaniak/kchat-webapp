@@ -4449,10 +4449,10 @@ export default class Client4 {
         );
     }
 
-    translatePost = (postId: string) => {
+    translatePost = (postId: string, forceThread?: boolean) => {
         return this.doFetch(
             `${this.getPostRoute(postId)}/translate`,
-            {method: 'POST'},
+            {method: 'POST', body: JSON.stringify({force_thread: forceThread})},
         );
     };
 

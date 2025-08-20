@@ -23,6 +23,11 @@ function isOpen(state = false, action: MMAction) {
         return false;
     case ActionTypes.OPEN_RHS_MENU:
         return false;
+
+    // ik: closeLhs when post is selected
+    case ActionTypes.SELECT_POST:
+        return false;
+
     case TeamTypes.SELECT_TEAM:
         return false;
 

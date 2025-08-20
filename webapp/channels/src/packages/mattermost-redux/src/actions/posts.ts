@@ -1368,11 +1368,12 @@ export function unacknowledgePost(postId: string): ActionFuncAsync {
     };
 }
 
-export function translatePost(postId: string) {
+export function translatePost(postId: string, forceThread?: boolean) {
     return bindClientFunc({
         clientFunc: Client4.translatePost,
         params: [
             postId,
+            forceThread,
         ],
     });
 }

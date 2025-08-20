@@ -61,5 +61,5 @@ NONE
 ```
 
 /assign me  
-/reviewer @antonbuksa @boris.trombert @dimitar.slaev @andy.lerandy @aurelien.sberro  
+/reviewer @antonbuksa @boris.trombert @dimitar.slaev @andy.lerandy @aurelien.sberro @alexandre.pilloud
 /remove_reviewer me  

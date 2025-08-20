@@ -6,8 +6,6 @@ import {lazy} from 'react';
 import {Client4} from 'mattermost-redux/client';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getUserById} from 'mattermost-redux/selectors/entities/users';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
 import {getConferenceByChannelId, getIsCurrentUserInCall} from 'selectors/kmeet_calls';
@@ -19,7 +17,7 @@ import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_u
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 
-import type {GlobalState} from 'types/store';
+import type {DispatchFunc, GlobalState} from 'types/store';
 
 import {closeModal, openModal} from './views/modals';
 
