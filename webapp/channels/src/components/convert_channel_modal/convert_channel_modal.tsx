@@ -14,8 +14,6 @@ import {trackEvent} from 'actions/telemetry_actions.jsx';
 import Constants from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
 
-import type {ActionFunc} from 'types/store';
-
 type Props = {
     channelDisplayName: string;
     channelId: string;
