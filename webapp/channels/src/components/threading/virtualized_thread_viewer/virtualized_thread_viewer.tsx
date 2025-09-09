@@ -43,10 +43,8 @@ type Props = {
     isMobileView: boolean;
     isThreadView: boolean;
     isMember: boolean;
-    newMessagesSeparatorActions: PluginComponent[];
     newMessagesSeparatorActions: NewMessagesSeparatorActionComponent[];
     inputPlaceholder?: string;
-    channelId: string;
     measureRhsOpened: () => void;
 }
 
