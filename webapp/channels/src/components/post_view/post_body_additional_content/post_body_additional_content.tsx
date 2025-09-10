@@ -9,7 +9,7 @@ import type {Post, PostEmbed} from '@mattermost/types/posts';
 import {isArrayOf} from '@mattermost/types/utilities';
 
 import {validateBindings} from 'mattermost-redux/utils/apps';
-import {getEmbedFromMetadata} from 'mattermost-redux/utils/post_utils';
+import {getEmbedFromMetadata, isPostEphemeral, isSystemMessage} from 'mattermost-redux/utils/post_utils';
 
 import MessageAttachmentList from 'components/post_view/message_attachments/message_attachment_list';
 import PostAttachmentOpenGraph from 'components/post_view/post_attachment_opengraph';
@@ -124,6 +124,17 @@ export default class PostBodyAdditionalContent extends React.PureComponent<Props
                 />
             );
         case 'permalink':
+            if (isPostEphemeral(this.props.post) && isSystemMessage(this.props.post)) {
+                const attachments = isMessageAttachmentArray(this.props.post.props?.attachments) ? this.props.post.props?.attachments : [];
+                return (
+                    <MessageAttachmentList
+                        attachments={attachments}
+                        postId={this.props.post.id}
+                        options={this.props.options}
+                        imagesMetadata={this.props.post.metadata.images}
+                    />
+                );
+            }
             if (embed.data && 'post_id' in embed.data && embed.data.post_id && this.props.post.props && !(this.props.post.props.reschedule || this.props.post.props.completed)) {
                 return (
                     <PostMessagePreview
