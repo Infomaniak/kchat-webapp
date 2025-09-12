@@ -9,7 +9,7 @@ import type {Post, PostEmbed} from '@mattermost/types/posts';
 import {isArrayOf} from '@mattermost/types/utilities';
 
 import {validateBindings} from 'mattermost-redux/utils/apps';
-import {getEmbedFromMetadata, isPostEphemeral, isSystemMessage} from 'mattermost-redux/utils/post_utils';
+import {getEmbedFromMetadata, isPostEphemeral} from 'mattermost-redux/utils/post_utils';
 
 import MessageAttachmentList from 'components/post_view/message_attachments/message_attachment_list';
 import PostAttachmentOpenGraph from 'components/post_view/post_attachment_opengraph';
@@ -124,7 +124,13 @@ export default class PostBodyAdditionalContent extends React.PureComponent<Props
                 />
             );
         case 'permalink':
-            if (isPostEphemeral(this.props.post) && isSystemMessage(this.props.post)) {
+            // Ik change: There is a case where a ephemeral message has a permalink in the metadata embed
+            // (e.g., when a reminder is triggered — Mattermost does not send a regular ephemeral message in this case).
+            // In such cases, we want to render the attachment list instead of the post preview.
+            // For now, we assume that all ephemeral messages should display the attachment list.
+            // See post_body_additional_content.ik.test.tsx for test cases.
+
+            if (isPostEphemeral(this.props.post)) {
                 const attachments = isMessageAttachmentArray(this.props.post.props?.attachments) ? this.props.post.props?.attachments : [];
                 return (
                     <MessageAttachmentList
