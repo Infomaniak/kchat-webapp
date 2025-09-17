@@ -6685,5 +6685,7 @@
   "dnd_banner.text": "{name} ist im “Nicht stören”-Modus, ihre Nachrichten- und Anrufbenachrichtigungen sind deaktiviert",
   "voiceMessage.preview.title": "Sprachnachricht",
   "voiceMessage.uploading": "Wird hochgeladen...",
-  "voiceMessage.canvasFallback.recording": "Aufnahme gestartet"
+  "voiceMessage.canvasFallback.recording": "Aufnahme gestartet",
+  "user.settings.notifications.onlyMentions": "Nur für Erwähnungen, Direktnachrichten und Gruppennachrichten",
+  "user.settings.notifications.allActivity": "Für alle Aktivitäten"
 }

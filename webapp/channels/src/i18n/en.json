@@ -6461,5 +6461,6 @@
   "dnd_banner.text": "{name} is in “Do Not Disturb” mode, their message and call notifications are turned off",
   "voiceMessage.preview.title": "Voice message",
   "voiceMessage.uploading": "Uploading...",
-  "voiceMessage.canvasFallback.recording": "Recording started"
+  "voiceMessage.canvasFallback.recording": "Recording started",
+  "user.settings.notifications.allActivity": "For all activity"
 }

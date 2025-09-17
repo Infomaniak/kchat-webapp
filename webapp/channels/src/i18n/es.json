@@ -5260,5 +5260,6 @@
   "notifyAll.question_timezone_oneGroup": "Al usar <b>{mention}</b> estás a punto de enviar notificaciones a al menos <b>{totalMembers} personas</b> en <b>{timezones, number} {timezones, plural, one {zona horaria} other {zonas horarias}}</b>. ¿Estás seguro de que quieres hacer esto?",
   "notifyAll.question_timezoneGroups": "Al usar <b>{mentions}</b> y <b>{finalMention}</b> estás a punto de enviar notificaciones a al menos <b>{totalMembers} personas</b> en <b>{timezones, number} {timezones, plural, one {zona horaria} other {zonas horarias}}</b>. ¿Estás seguro de que quieres hacer esto?",
   "notifyAll.questionTimezone": "Al usar <b>@all</b> o <b>@channel</b> estás a punto de enviar notificaciones a <b>{totalMembers} personas</b> en <b>{timezones, number} {timezones, plural, one {zona horaria} other {zonas horarias}}</b>. ¿Estás seguro de que quieres hacer esto?",
-  "notifyHere.question_timezone": "Al usar <b>@here</b> estás a punto de enviar notificaciones a al menos <b>{totalMembers} otras personas</b> en <b>{timezones, number} {timezones, plural, one {zona horaria} other {zonas horarias}}</b>. ¿Estás seguro de que quieres hacer esto?"
+  "notifyHere.question_timezone": "Al usar <b>@here</b> estás a punto de enviar notificaciones a al menos <b>{totalMembers} otras personas</b> en <b>{timezones, number} {timezones, plural, one {zona horaria} other {zonas horarias}}</b>. ¿Estás seguro de que quieres hacer esto?",
+  "user.settings.notifications.allActivity": "Para toda la actividad"
 }

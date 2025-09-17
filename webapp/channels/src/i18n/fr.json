@@ -5466,5 +5466,6 @@
   "yourcomputer": "Votre ordinateur",
   "voiceMessage.preview.title": "Message vocal",
   "voiceMessage.uploading": "Téléchargement...",
-  "voiceMessage.canvasFallback.recording": "Enregistrement démarré"
+  "voiceMessage.canvasFallback.recording": "Enregistrement démarré",
+  "user.settings.notifications.allActivity": "Pour toutes les activités"
 }
