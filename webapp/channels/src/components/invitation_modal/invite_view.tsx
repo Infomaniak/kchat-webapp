@@ -74,7 +74,13 @@ export type Props = InviteState & {
 
 export default function InviteView(props: Props) {
     const intl = useIntl();
-    const isGuestQuotaExceeded = (props.inviteType === InviteType.GUEST) && (props.remainingGuestSlot! + props.usersEmails.length) > 0;
+
+    const isGuest = props.inviteType === InviteType.GUEST;
+    const guestSlots = props.remainingGuestSlot ?? 0;
+    const requestedGuests = props.usersEmails.length;
+
+    const isGuestQuotaExceeded = isGuest && (guestSlots - requestedGuests) < 0;
+
     const currentPack = useSelector(getCurrentPackName);
     const nextPlan = getNextWcPack(currentPack);
 

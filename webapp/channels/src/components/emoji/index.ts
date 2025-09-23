@@ -10,6 +10,7 @@ import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getUsage} from 'mattermost-redux/selectors/entities/usage';
+import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
 
 import EmojiPage from 'components/emoji/emoji_page';
 
@@ -20,14 +21,14 @@ function mapStateToProps(state: GlobalState) {
 
     const usage = getUsage(state);
     const limit = getCloudLimits(state);
-    const isQuotaExceeded = (usage.custom_emojis - limit.custom_emojis) >= 0;
+    const isEmojisExceeded = isQuotaExceeded(usage.custom_emojis, limit.custom_emojis);
 
     return {
         teamName: team?.name,
         teamDisplayName: team?.display_name,
         siteName: state.entities.general.config.SiteName,
         currentTheme: getTheme(state),
-        isQuotaExceeded,
+        isQuotaExceeded: isEmojisExceeded,
     };
 }
 

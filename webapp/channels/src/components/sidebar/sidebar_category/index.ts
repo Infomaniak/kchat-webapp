@@ -12,6 +12,7 @@ import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
 import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {getDraggingState, makeGetFilteredChannelIdsForCategory} from 'selectors/views/channel_sidebar';
@@ -31,7 +32,7 @@ function makeMapStateToProps() {
         const usage = getUsage(state);
         const limits = getCloudLimits(state);
         const guestCount = usage.guests + usage.pending_guests;
-        const canAddGuest = (guestCount - limits.guests) < 0;
+        const canAddGuest = isQuotaExceeded(guestCount, limits.guests);
         return {
             channelIds: getChannelIdsForCategory(state, ownProps.category),
             draggingState: getDraggingState(state),

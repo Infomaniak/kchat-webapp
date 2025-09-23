@@ -86,7 +86,10 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
         const usage = getUsage(state);
         const limits = getCloudLimits(state);
         const totalGuest = usage.guests + usage.pending_guests;
-        const remainingGuestSlots = totalGuest - limits.guests;
+
+        // IK: special case we need to have the number or remainign guest
+        // so we can't use the helper function plan_utils.isQuotaExceeded
+        const remainingGuestSlots = limits.guests === -1 ? Number.MAX_VALUE : totalGuest - limits.guests;
         const currentPack = getCurrentPackName(state);
 
         return {

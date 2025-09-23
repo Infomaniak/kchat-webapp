@@ -32,6 +32,19 @@ export const isPaidPlan = (plan: PackName | undefined): boolean => {
     return paidPlans.includes(plan);
 };
 
+// Helper when we cannot use the hook useGetUsageDeltas
+// eg: mapStateToProps
+export function isQuotaExceeded(
+    usage: number,
+    maybeLimit?: number,
+): boolean {
+    if (maybeLimit === -1 || maybeLimit === undefined) {
+        return false;
+    }
+
+    return usage >= maybeLimit;
+}
+
 export const quotaGate = (
     remaining: number | boolean,
     currentPlan: PackName | undefined,
