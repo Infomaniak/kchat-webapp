@@ -9,6 +9,7 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import type {OutgoingOAuthConnection} from '@mattermost/types/integrations';
 
 import {Permissions} from 'mattermost-redux/constants';
+import * as teamSelectors from 'mattermost-redux/selectors/entities/teams';
 
 import InstalledOutgoingOAuthConnections from 'components/integrations/outgoing_oauth_connections/installed_outgoing_oauth_connections';
 
@@ -16,6 +17,11 @@ import {TestHelper} from 'utils/test_helper';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
+
+jest.mock('mattermost-redux/selectors/entities/teams', () => ({
+    ...jest.requireActual('mattermost-redux/selectors/entities/teams'),
+    getCurrentPackName: jest.fn(),
+}));
 
 describe('components/integrations/InstalledOutgoingOAuthConnections', () => {
     const outgoingOAuthConnections: Record<string, OutgoingOAuthConnection> = {
@@ -44,6 +50,8 @@ describe('components/integrations/InstalledOutgoingOAuthConnections', () => {
             oauth_token_url: 'https://oauthtoken2.com/oauth/token',
         },
     };
+
+    (teamSelectors.getCurrentPackName as jest.Mock).mockReturnValue('ksuite_essential');
 
     const team = TestHelper.getTeamMock({name: 'test'});
 

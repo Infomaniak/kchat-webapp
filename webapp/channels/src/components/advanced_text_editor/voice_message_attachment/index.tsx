@@ -11,6 +11,9 @@ import type {FileInfo, FileUploadResponse} from '@mattermost/types/files';
 import type {Post} from '@mattermost/types/posts';
 
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {isPaidPlan} from 'mattermost-redux/utils/plans_util';
 
 import {uploadFile} from 'actions/file_actions';
 
@@ -55,6 +58,8 @@ interface Props {
 
 const VoiceMessageAttachment = (props: Props) => {
     const theme = useSelector(getTheme);
+    const isAdmin = useSelector(isCurrentUserSystemAdmin);
+    const currentPack = useSelector(getCurrentPackName);
 
     const dispatch = useDispatch();
 
@@ -100,6 +105,8 @@ const VoiceMessageAttachment = (props: Props) => {
             onProgress: props.onUploadProgress,
             onSuccess: handleOnUploadComplete,
             onError: props.onUploadError,
+            isAdmin,
+            isPaidPlan: isPaidPlan(currentPack),
         })) as unknown as XMLHttpRequest;
 
         if (props.location === Locations.CENTER) {

@@ -66,7 +66,7 @@ describe('Actions.Channels', () => {
             post('/channels').
             reply(201, TestHelper.fakeChannelWithId(TestHelper.basicTeam!.id));
 
-        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), TestHelper.basicUser!.id, openLimitModalIfNeededMock));
+        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), TestHelper.basicUser!.id));
 
         const createRequest = store.getState().requests.channels.createChannel;
 
@@ -1898,7 +1898,7 @@ describe('Actions.Channels', () => {
             post('/channels').
             reply(201, TestHelper.fakeChannelWithId(TestHelper.basicTeam!.id));
 
-        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), TestHelper.basicUser!.id, openLimitModalIfNeededMock));
+        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), TestHelper.basicUser!.id));
 
         const createRequest = store.getState().requests.channels.createChannel;
 
@@ -1933,7 +1933,7 @@ describe('Actions.Channels', () => {
 
         const userId = 'asdf';
 
-        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), userId, openLimitModalIfNeededMock));
+        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam!.id), userId));
 
         const {channels} = store.getState().entities.channels;
         const channelId = channels[Object.keys(channels)[0]].id;

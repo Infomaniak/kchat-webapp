@@ -39,7 +39,7 @@ export default class AppStoreBar extends React.PureComponent<Props> {
         }
         return (
             <AnnouncementBar
-                type={AnnouncementBarTypes.UPDATE_MAC}
+                type={AnnouncementBarTypes.WARNING}
                 icon={
                     <img
                         className='version-alert-icon'

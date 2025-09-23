@@ -10,13 +10,14 @@ import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Group, GroupSearchParams} from '@mattermost/types/groups';
-import type {TeamMembership} from '@mattermost/types/teams';
+import type {PackName, TeamMembership} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import {Client4} from 'mattermost-redux/client';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {filterGroupsMatchingTerm} from 'mattermost-redux/utils/group_utils';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 import {displayUsername, filterProfilesStartingWithTerm, isGuest} from 'mattermost-redux/utils/user_utils';
 
 import InvitationModal from 'components/invitation_modal';
@@ -32,6 +33,8 @@ import {sortUsersAndGroups} from 'utils/utils';
 
 import GroupOption from './group_option';
 import TeamWarningBanner from './team_warning_banner';
+
+import './channel_invite_modal.css';
 
 const USERS_PER_PAGE = 50;
 const USERS_FROM_DMS = 10;
@@ -66,6 +69,8 @@ export type Props = {
     emailInvitationsEnabled?: boolean;
     groups: Group[];
     isGroupsEnabled: boolean;
+    currentPack: PackName | undefined;
+    remainingGuestSlots: number;
     actions: {
         addUsersToChannel: (channelId: string, userIds: string[]) => Promise<ActionResult>;
         getProfilesNotInChannel: (teamId: string, channelId: string, groupConstrained: boolean, page: number, perPage?: number) => Promise<ActionResult>;
@@ -501,6 +506,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             this.props.actions.closeModal(ModalIdentifiers.CHANNEL_INVITE);
         };
 
+        // eslint-disable-next-line react/require-optimization
         const InviteModalLink = (props: {inviteAsGuest?: boolean; children: React.ReactNode; id?: string}) => {
             return (
                 <ToggleModalButton
@@ -511,6 +517,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                         channelToInvite: this.props.channel,
                         initialValue: this.state.term,
                         inviteAsGuest: props.inviteAsGuest,
+                        remainingGuestSlot: props.inviteAsGuest ? this.props.remainingGuestSlots : undefined,
                         focusOriginElement: 'customNoOptionsMessageLink',
                     }}
                     onClick={closeMembersInviteModal}
@@ -562,6 +569,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             />
         );
 
+        const {withQuotaCheck} = quotaGate(this.props.remainingGuestSlots, this.props.currentPack);
         const inviteGuestLink = (
             <InviteModalLink inviteAsGuest={true}>
                 <FormattedMessage
@@ -570,6 +578,35 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                 />
             </InviteModalLink>
         );
+
+        const inviteGuestQuotaReached = (
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    marginRight: '32px',
+                    marginTop: '8px',
+                    gap: '8px',
+                }}
+                role='button'
+                onClick={withQuotaCheck(() => {})} // dummy callback
+            >
+                <FormattedMessage
+                    id='channel_invite.invite_guest'
+                    defaultMessage='Invite as a Guest'
+                />
+                <wc-ksuite-pro-upgrade-tag/>
+            </div>
+
+        );
+
+        let inviteGuestComp = null;
+        if (this.props.remainingGuestSlots < 0) {
+            inviteGuestComp = inviteGuestLink;
+        } else {
+            inviteGuestComp = inviteGuestQuotaReached;
+        }
 
         return (
             <Modal
@@ -610,7 +647,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                             teamId={this.props.channel.team_id}
                             users={this.state.usersNotInTeam}
                         />
-                        {(this.props.emailInvitationsEnabled && this.props.canInviteGuests) && inviteGuestLink}
+                        {(this.props.emailInvitationsEnabled && this.props.canInviteGuests) && inviteGuestComp}
                     </div>
                 </Modal.Body>
             </Modal>

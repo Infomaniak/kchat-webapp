@@ -35,6 +35,14 @@ export function createCustomEmoji(emoji: any, image: any) {
     });
 }
 
+export function createCustomEmojiWithRefreshUsage(emoji: any, image: any): ActionFuncAsync {
+    return async (dispatch) => {
+        const result = await dispatch(createCustomEmoji(emoji, image));
+
+        return result;
+    };
+}
+
 export function getCustomEmoji(emojiId: string) {
     return bindClientFunc({
         clientFunc: Client4.getCustomEmoji,

@@ -5,6 +5,20 @@
     margin-top: 24px;
     padding: 16px;
     gap: 12px;
-    background: #F4F6FD;
-    border-radius: 10px;
+
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: 4px;
+    background: var(--center-channel-bg);
+    color: var(--center-channel-color);
+
+    &__trigger-upgrade {
+        background: none;
+        border: none;
+        color: var(--link-color);
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 0;
+        font: inherit;
+    }
 }
+

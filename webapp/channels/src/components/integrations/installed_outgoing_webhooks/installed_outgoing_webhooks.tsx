@@ -56,6 +56,11 @@ export type Props = {
     */
     teamId: string;
 
+    /**
+    *  Wether or not user is capped with limitation
+    */
+    isQuotaExceeded: boolean;
+
     actions: {
 
         /**
@@ -176,6 +181,7 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
                     this.props.team.name +
                     '/integrations/outgoing_webhooks/add'
                 }
+                isQuotaExceeded={this.props.isQuotaExceeded}
                 addButtonId='addOutgoingWebhook'
                 emptyText={
                     <FormattedMessage

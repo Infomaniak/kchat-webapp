@@ -39,7 +39,7 @@ describe('components/ChannelHeaderMenu/MenuItems/UnarchiveChannel', () => {
         expect(menuItem).toBeInTheDocument();
 
         fireEvent.click(menuItem); // Simulate click on the menu item
-        expect(useDispatch).toHaveBeenCalledTimes(1); // Ensure dispatch was called
+        expect(useDispatch).toHaveBeenCalledTimes(3); // Ensure dispatch was called
         expect(modalActions.openModal).toHaveBeenCalledTimes(1);
         expect(modalActions.openModal).toHaveBeenCalledWith({
             modalId: ModalIdentifiers.UNARCHIVE_CHANNEL,

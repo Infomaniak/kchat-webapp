@@ -81,6 +81,7 @@ export type Props = {
     isCloud: boolean;
     canAddUsers: boolean;
     canInviteGuests: boolean;
+    remainingGuestSlot?: number;
     onExited: () => void;
     channelToInvite?: Channel;
     initialValue?: string;
@@ -400,6 +401,7 @@ export default class InvitationModal extends React.PureComponent<Props, State> {
                 usersLoader={this.usersLoader}
                 emailInvitationsEnabled={this.props.emailInvitationsEnabled}
                 onChangeUsersEmails={this.onChangeUsersEmails}
+                remainingGuestSlot={this.props.remainingGuestSlot}
                 onUsersInputChange={this.onUsersInputChange}
                 isCloud={this.props.isCloud}
                 canAddUsers={this.props.canAddUsers}

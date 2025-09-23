@@ -8,10 +8,12 @@ import type {Dispatch} from 'redux';
 import * as Actions from 'mattermost-redux/actions/integrations';
 import {Permissions} from 'mattermost-redux/constants';
 import {getAllChannels} from 'mattermost-redux/selectors/entities/channels';
+import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getOutgoingHooks} from 'mattermost-redux/selectors/entities/integrations';
 import {haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getUsers} from 'mattermost-redux/selectors/entities/users';
 
 import {loadOutgoingHooksAndProfilesForTeam} from 'actions/integration_actions';
@@ -29,6 +31,9 @@ function mapStateToProps(state: GlobalState) {
         map((key) => outgoingHooks[key]).
         filter((outgoingWebhook) => outgoingWebhook.team_id === teamId);
     const enableOutgoingWebhooks = config.EnableOutgoingWebhooks === 'true';
+    const usage = getUsage(state);
+    const limits = getCloudLimits(state);
+    const isQuotaExceeded = (usage.outgoing_webhooks - limits.outgoing_webhooks) >= 0;
 
     return {
         outgoingWebhooks,
@@ -37,6 +42,7 @@ function mapStateToProps(state: GlobalState) {
         teamId,
         canManageOthersWebhooks,
         enableOutgoingWebhooks,
+        isQuotaExceeded,
     };
 }
 
