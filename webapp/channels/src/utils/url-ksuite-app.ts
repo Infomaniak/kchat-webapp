@@ -17,8 +17,8 @@ export const KSUITE_APP_NAMES: KSuiteAppName[] = [
     'euria',
 ];
 
-export function isKSuiteAppName(string?: string): string is KSuiteAppName {
-    return typeof string === 'string' && KSUITE_APP_NAMES.includes(string as KSuiteAppName);
+export function isKSuiteAppName(name?: string): name is KSuiteAppName {
+    return typeof name === 'string' && KSUITE_APP_NAMES.includes(name as KSuiteAppName);
 }
 
 export function extractKSuiteAppName(url: string): KSuiteAppName | null {

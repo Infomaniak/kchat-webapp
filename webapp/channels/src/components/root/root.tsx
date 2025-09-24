@@ -467,23 +467,26 @@ export default class Root extends React.PureComponent<Props, State> {
         ksuiteBridge?.sendMessage({type: NavigateMessageKey, path: location.pathname});
     };
 
-    ksuiteLinkHandler = (e: MouseEvent) => {
+    ksuiteLinkHandler: EventListener = (e) => {
         const {ksuiteBridge} = this.props;
 
         if (!ksuiteBridge.isConnected) {
             return;
         }
 
-        const target = e.target as HTMLElement | undefined;
-        if (!target || target.tagName !== 'A' || target.getAttribute('target') !== '_blank') {
-            return;
-        }
-        const href = target.getAttribute('href');
-        if (!href) {
+        const target = e.target;
+        if (!(target instanceof HTMLAnchorElement)) {
             return;
         }
 
-        const appName = extractKSuiteAppName(href);
+        if (target.target !== '_blank') {
+            return;
+        }
+        if (!target.href) {
+            return;
+        }
+
+        const appName = extractKSuiteAppName(target.href);
         if (!appName) {
             return;
         }
@@ -491,7 +494,7 @@ export default class Root extends React.PureComponent<Props, State> {
         e.preventDefault();
         e.stopPropagation();
 
-        const {pathname, search} = new URL(href);
+        const {pathname, search} = new URL(target.href);
 
         ksuiteBridge.sendMessage({
             type: OpenAppMessageKey,
