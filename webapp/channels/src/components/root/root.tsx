@@ -219,7 +219,7 @@ export default class Root extends React.PureComponent<Props, State> {
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
         document.removeEventListener('drop', this.handleDropEvent);
         document.removeEventListener('dragover', this.handleDragOverEvent);
-        document.removeEventListener('click', this.ksuiteLinkHandler as EventListener);
+        document.removeEventListener('click', this.ksuiteLinkHandler);
     }
 
     onConfigLoaded = () => {
@@ -569,7 +569,7 @@ export default class Root extends React.PureComponent<Props, State> {
         }
 
         if (this.embeddedInIFrame) {
-            document.addEventListener('click', this.ksuiteLinkHandler as EventListener);
+            document.addEventListener('click', this.ksuiteLinkHandler);
         }
 
         injectWebcomponentInit();
