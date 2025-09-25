@@ -46,12 +46,12 @@ export function isQuotaExceeded(
 }
 
 export const quotaGate = (
-    remaining: number | boolean,
+    remainingDelta: number | boolean, //Positive or zero = caped | Negative = remaining available
     currentPlan: PackName | undefined,
 ) => {
     const isQuotaExceeded =
-        (typeof remaining === 'number' && remaining >= 0) ||
-        (typeof remaining === 'boolean' && remaining === false);
+        (typeof remainingDelta === 'number' && remainingDelta >= 0) ||
+        (typeof remainingDelta === 'boolean' && remainingDelta === false);
 
     const withQuotaCheck = (cb: () => void) => {
         return () => {

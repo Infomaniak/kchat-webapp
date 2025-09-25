@@ -32,7 +32,7 @@ function makeMapStateToProps() {
         const usage = getUsage(state);
         const limits = getCloudLimits(state);
         const guestCount = usage.guests + usage.pending_guests;
-        const canAddGuest = isQuotaExceeded(guestCount, limits.guests);
+        const canAddGuest = !isQuotaExceeded(guestCount, limits.guests);
         return {
             channelIds: getChannelIdsForCategory(state, ownProps.category),
             draggingState: getDraggingState(state),

@@ -14,7 +14,6 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 import {isEmail} from 'mattermost-redux/utils/helpers';
 
-import {openExternalLimitModalIfNeeded} from 'actions/cloud';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import {focusElement} from 'utils/a11y_utils';
@@ -81,7 +80,7 @@ export type Props = {
     isCloud: boolean;
     canAddUsers: boolean;
     canInviteGuests: boolean;
-    remainingGuestSlot?: number;
+    remainingGuestSlot: number;
     onExited: () => void;
     channelToInvite?: Channel;
     initialValue?: string;
@@ -106,7 +105,7 @@ type State = {
     shouldOpenMenu: boolean;
 };
 
-export default class InvitationModal extends React.PureComponent<Props, State> {
+class InvitationModal extends React.PureComponent<Props, State> {
     defaultState: State = deepFreeze({
         view: View.INVITE,
         termWithoutResults: null,
@@ -222,7 +221,6 @@ export default class InvitationModal extends React.PureComponent<Props, State> {
                 users,
                 emails,
                 this.state.invite.customMessage.open ? this.state.invite.customMessage.message : '',
-                openExternalLimitModalIfNeeded,
             );
             invites = result.data!;
         }
@@ -402,6 +400,7 @@ export default class InvitationModal extends React.PureComponent<Props, State> {
                 emailInvitationsEnabled={this.props.emailInvitationsEnabled}
                 onChangeUsersEmails={this.onChangeUsersEmails}
                 remainingGuestSlot={this.props.remainingGuestSlot}
+
                 onUsersInputChange={this.onUsersInputChange}
                 isCloud={this.props.isCloud}
                 canAddUsers={this.props.canAddUsers}
@@ -455,3 +454,5 @@ export default class InvitationModal extends React.PureComponent<Props, State> {
         );
     }
 }
+
+export default InvitationModal;

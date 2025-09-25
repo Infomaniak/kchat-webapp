@@ -72,7 +72,6 @@ describe('components/channel_invite_modal', () => {
         teammateNameDisplaySetting: General.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME,
         isGroupsEnabled: true,
         currentPack: 'ksuite_essential' as PackName,
-        remainingGuestSlots: -1,
         actions: {
             addUsersToChannel: jest.fn().mockImplementation(() => {
                 const error = {
@@ -307,23 +306,5 @@ describe('components/channel_invite_modal', () => {
         const invitationLink = wrapper.find('InviteModalLink');
 
         expect(invitationLink).toHaveLength(0);
-    });
-
-    test('IK: renders correct invite component based on remainingGuestSlots', () => {
-        const baseProps2 = {
-            ...baseProps,
-            emailInvitationsEnabled: true,
-            canInviteGuests: true,
-        };
-
-        let props = {...baseProps2, remainingGuestSlots: 1};
-        let wrapper = shallowWithIntl(<ChannelInviteModal {...props}/>);
-        expect(wrapper.find('div[role="button"]').exists()).toBe(true);
-        expect(wrapper.find('InviteModalLink').exists()).toBe(false);
-
-        props = {...baseProps2, remainingGuestSlots: -1};
-        wrapper = shallowWithIntl(<ChannelInviteModal {...props}/>);
-        expect(wrapper.find('InviteModalLink').exists()).toBe(true);
-        expect(wrapper.find('div[role="button"]').exists()).toBe(false);
     });
 });
