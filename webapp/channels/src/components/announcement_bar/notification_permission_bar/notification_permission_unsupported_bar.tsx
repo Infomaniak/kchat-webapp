@@ -13,7 +13,7 @@ import {isMobileBrowser} from 'utils/user_agent';
 
 export default function UnsupportedNotificationAnnouncementBar() {
     //IK: we don't want to show this announcement on mobile browser
-    const isAllowedToShow = isMobileBrowser() && !BrowserStore.getHideNotificationPermissionRequestBanner();
+    const isAllowedToShow = !isMobileBrowser() && !BrowserStore.getHideNotificationPermissionRequestBanner();
     const [show, setShow] = useState(isAllowedToShow);
     const {locale} = useIntl();
 
