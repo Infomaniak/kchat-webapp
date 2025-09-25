@@ -400,7 +400,6 @@ class InvitationModal extends React.PureComponent<Props, State> {
                 emailInvitationsEnabled={this.props.emailInvitationsEnabled}
                 onChangeUsersEmails={this.onChangeUsersEmails}
                 remainingGuestSlot={this.props.remainingGuestSlot}
-
                 onUsersInputChange={this.onUsersInputChange}
                 isCloud={this.props.isCloud}
                 canAddUsers={this.props.canAddUsers}
