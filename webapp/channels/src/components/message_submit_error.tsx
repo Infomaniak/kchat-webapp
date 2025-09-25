@@ -32,9 +32,9 @@ function MessageSubmitError(props: Props) {
                 <div className='control-label'>
                     <FormattedMessage
                         id='message_submit_error.invalidCommand'
-                        defaultMessage="Command with a trigger of ''{slashCommand}'' not found. "
+                        defaultMessage="Command with a trigger of ''{command}'' not found. "
                         values={{
-                            slashCommand,
+                            command: slashCommand,
                         }}
                     />
                     <a
