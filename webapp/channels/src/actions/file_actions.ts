@@ -24,12 +24,20 @@ export interface UploadFile {
     rootId: string;
     channelId: string;
     clientId: string;
+    isAdmin: boolean;
+    isPaidPlan: boolean;
     onProgress: (filePreviewInfo: FilePreviewInfo) => void;
     onSuccess: (data: any, channelId: string, rootId: string) => void;
     onError: (err: string | ServerError, clientId: string, channelId: string, rootId: string) => void;
 }
 
-export function uploadFile({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError}: UploadFile, isBookmark?: boolean): ThunkActionFunc<XMLHttpRequest> {
+const quotaMessages = new Map<string, string>([
+    ['admin|paid', 'file_upload.quota.exceeded.paidPlan.admin'],
+    ['admin|free', 'file_upload.quota.exceeded.admin'],
+    ['user|_', 'file_upload.quota.exceeded'],
+]);
+
+export function uploadFile({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError, isAdmin, isPaidPlan}: UploadFile, isBookmark?: boolean): ThunkActionFunc<XMLHttpRequest> {
     return (dispatch, getState) => {
         dispatch({type: FileTypes.UPLOAD_FILES_REQUEST});
 
@@ -98,8 +106,20 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                     let errorMessage = '';
                     try {
                         const errorResponse = JSON.parse(xhr.response);
-                        errorMessage =
-                        (errorResponse?.id && errorResponse?.message) ? localizeMessage({id: errorResponse.id, defaultMessage: errorResponse.message}) : localizeMessage({id: 'file_upload.generic_error', defaultMessage: 'There was a problem uploading your files.'});
+                        if (xhr.status === 409 && errorResponse.id === 'quota-exceeded') {
+                            let role = 'user';
+                            let plan = '_';
+
+                            if (isAdmin) {
+                                role = 'admin';
+                                plan = isPaidPlan ? 'paid' : 'free';
+                            }
+
+                            errorMessage = quotaMessages.get(`${role}|${plan}`) ?? '';
+                        } else {
+                            errorMessage =
+                                (errorResponse?.id && errorResponse?.message) ? localizeMessage({id: errorResponse.id, defaultMessage: errorResponse.message}) : localizeMessage({id: 'file_upload.generic_error', defaultMessage: 'There was a problem uploading your files.'});
+                        }
                     } catch (e) {
                         errorMessage = localizeMessage({id: 'file_upload.generic_error', defaultMessage: 'There was a problem uploading your files.'});
                     }

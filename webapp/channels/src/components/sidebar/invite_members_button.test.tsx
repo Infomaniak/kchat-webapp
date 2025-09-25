@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-
 import React from 'react';
 import {Provider} from 'react-redux';
 
 import * as teams from 'mattermost-redux/selectors/entities/teams';
+import * as plansUtil from 'mattermost-redux/utils/plans_util';
 
 import InviteMembersButton from 'components/sidebar/invite_members_button';
 
@@ -48,6 +48,7 @@ describe('components/sidebar/invite_members_button', () => {
 
     const props = {
         isAdmin: false,
+        canAddGuest: false,
     };
 
     const store = mockStore(state);
@@ -83,4 +84,21 @@ describe('components/sidebar/invite_members_button', () => {
         );
         expect(wrapper.find('i').exists()).toBeFalsy();
     });
+
+    test('IK: renders quota exceeded state with upgrade tag', () => {
+        jest.spyOn(plansUtil, 'quotaGate').mockReturnValue({
+            isQuotaExceeded: true,
+            withQuotaCheck: (cb) => cb,
+        });
+
+        const wrapper = mountWithIntl(
+            <Provider store={store}>
+                <InviteMembersButton {...props}/>
+            </Provider>,
+        );
+
+        expect(wrapper.find('wc-ksuite-pro-upgrade-tag').exists()).toBe(true);
+        expect(wrapper.find('div[role="button"]').exists()).toBe(true);
+    });
 });
+

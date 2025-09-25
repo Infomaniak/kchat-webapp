@@ -4,12 +4,15 @@
 import React, {useEffect, useMemo} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage, defineMessages, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
+import {getNextWcPack, openUpgradeDialog} from 'mattermost-redux/utils/plans_util';
 
 import UsersEmailsInput from 'components/widgets/inputs/users_emails_input';
 
@@ -61,6 +64,7 @@ export type Props = InviteState & {
     headerClass: string;
     footerClass: string;
     canInviteGuests: boolean;
+    remainingGuestSlot?: number;
     canAddUsers: boolean;
     townSquareDisplayName: string;
     channelToInvite?: Channel;
@@ -69,6 +73,17 @@ export type Props = InviteState & {
 }
 
 export default function InviteView(props: Props) {
+    const intl = useIntl();
+
+    const isGuest = props.inviteType === InviteType.GUEST;
+    const guestSlots = props.remainingGuestSlot ?? 0;
+    const requestedGuests = props.usersEmails.length;
+
+    const isGuestQuotaExceeded = isGuest && (guestSlots - requestedGuests) < 0;
+
+    const currentPack = useSelector(getCurrentPackName);
+    const nextPlan = getNextWcPack(currentPack);
+
     useEffect(() => {
         if (!props.currentTeam.invite_id) {
             props.regenerateTeamInviteId(props.currentTeam.id);
@@ -77,7 +92,7 @@ export default function InviteView(props: Props) {
 
     const {formatMessage} = useIntl();
 
-    const errorProperties = {
+    const errorProperties: {showError: boolean; errorMessage: {id: string; defaultMessage: string}; errorMessageValues: Record<string, any>} = {
         showError: false,
         errorMessage: messages.exceededMaxBatch,
         errorMessageValues: {
@@ -87,6 +102,22 @@ export default function InviteView(props: Props) {
 
     if (props.usersEmails.length > Constants.MAX_ADD_MEMBERS_BATCH) {
         errorProperties.showError = true;
+    }
+
+    if (isGuestQuotaExceeded) {
+        const upgradeText = intl.formatMessage({id: 'upgrade.offer', defaultMessage: 'upgrade your plan'});
+
+        errorProperties.showError = true;
+        errorProperties.errorMessage = messages.exceededGuestSlot;
+        errorProperties.errorMessageValues = {
+            count: props.remainingGuestSlot! * -1,
+            action: (
+                <a
+                    href='#'
+                    onClick={() => openUpgradeDialog(nextPlan)}
+                >{upgradeText}</a>
+            ),
+        };
     }
 
     let placeholder;
@@ -117,6 +148,9 @@ export default function InviteView(props: Props) {
 
     const isInviteValid = useMemo(() => {
         if (props.inviteType === InviteType.GUEST) {
+            if (isGuestQuotaExceeded) {
+                return false;
+            }
             return props.inviteChannels.channels.length > 0 && props.usersEmails.length > 0;
         }
         return props.usersEmails.length > 0;
@@ -249,5 +283,9 @@ const messages = defineMessages({
     validAddressMember: {
         id: 'invitation_modal.members.users_emails_input.valid_email',
         defaultMessage: 'Invite **{email}** as a team member',
+    },
+    exceededGuestSlot: {
+        id: 'invitation_modal.invite_members.exceeded_max_guest',
+        defaultMessage: 'There are {count} external invitations remaining. Remove users or {action}.',
     },
 });

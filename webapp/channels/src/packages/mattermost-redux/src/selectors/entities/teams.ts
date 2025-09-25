@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {GlobalState} from '@mattermost/types/store';
-import type {Team, TeamMembership, TeamStats} from '@mattermost/types/teams';
+import type {PackName, Team, TeamMembership, TeamStats} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
@@ -90,6 +90,14 @@ export const getCurrentTeam: (state: GlobalState) => Team | undefined = createSe
     getCurrentTeamId,
     (teams, currentTeamId) => {
         return teams[currentTeamId];
+    },
+);
+
+export const getCurrentPackName: (state: GlobalState) => PackName | undefined = createSelector(
+    'getCurrentPackName',
+    getCurrentTeam,
+    (currentTeam) => {
+        return currentTeam?.pack_name;
     },
 );
 

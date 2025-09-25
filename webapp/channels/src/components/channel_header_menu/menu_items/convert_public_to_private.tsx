@@ -3,12 +3,16 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
 
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
+
 import {openModal} from 'actions/views/modals';
 
+import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import ConvertChannelModal from 'components/convert_channel_modal';
 import * as Menu from 'components/menu';
 
@@ -20,6 +24,10 @@ type Props = {
 
 const ConvertPublictoPrivate = ({channel}: Props): JSX.Element => {
     const dispatch = useDispatch();
+    const currentPack = useSelector(getCurrentPackName);
+    const {private_channels: privateChannels} = useGetUsageDeltas();
+    const {isQuotaExceeded, withQuotaCheck} = quotaGate(privateChannels, currentPack);
+
     const handleConvertToPrivate = () => {
         dispatch(
             openModal({
@@ -36,12 +44,21 @@ const ConvertPublictoPrivate = ({channel}: Props): JSX.Element => {
     return (
         <Menu.Item
             id='channelConvertToPrivate'
-            onClick={handleConvertToPrivate}
+            onClick={withQuotaCheck(handleConvertToPrivate)}
             labels={
-                <FormattedMessage
-                    id='channel_header.convert'
-                    defaultMessage='Convert to Private Channel'
-                />
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                    }}
+                >
+                    <FormattedMessage
+                        id='channel_header.convert'
+                        defaultMessage='Convert to Private Channel'
+                    />
+                    {isQuotaExceeded && <wc-ksuite-pro-upgrade-tag/>}
+                </div>
             }
         />
     );

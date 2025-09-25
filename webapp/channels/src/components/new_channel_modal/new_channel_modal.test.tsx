@@ -24,6 +24,7 @@ import type {GlobalState} from 'types/store';
 jest.mock('mattermost-redux/actions/channels');
 jest.mock('mattermost-redux/actions/cloud', () => ({
     openChannelLimitModalIfNeeded: jest.fn,
+    getUsage: jest.fn,
 }));
 
 import NewChannelModal from './new_channel_modal';
@@ -413,57 +414,4 @@ describe('components/new_channel_modal', () => {
         expect(serverError).toBeInTheDocument();
         expect(createChannelButton).toBeDisabled();
     });
-
-    // test('should request team creation on submit', async () => {
-    //     const name = 'Channel name';
-
-    // renderWithContext(
-    //     <NewChannelModal/>,
-    //     initialState,
-    // );
-
-    //     const wrapper = mountWithIntl(
-    //         <NewChannelModal/>,
-    //     );
-
-    //     const genericModal = wrapper.find('GenericModal');
-    //     const displayName = genericModal.find('.new-channel-modal-name-input');
-    //     const confirmButton = genericModal.find('button[type=\'submit\']');
-
-    //     // Confirm button should be disabled
-    //     expect((confirmButton.instance() as unknown as HTMLButtonElement).disabled).toEqual(true);
-
-    //     // Enter data
-    //     displayName.simulate('change', mockChangeEvent);
-
-    //     // Display name should be updated
-    //     expect((displayName.instance() as unknown as HTMLInputElement).value).toEqual(name);
-
-    //     // Confirm button should be enabled
-    //     expect((confirmButton.instance() as unknown as HTMLButtonElement).disabled).toEqual(false);
-
-    //     // Submit
-    //     await act(async () => {
-    //         confirmButton.simulate('click');
-    //     });
-
-    //     // Request should be sent
-    //     expect(createChannel).toHaveBeenCalledWith({
-    //         create_at: 0,
-    //         creator_id: '',
-    //         delete_at: 0,
-    //         display_name: name,
-    //         group_constrained: false,
-    //         header: '',
-    //         id: '',
-    //         last_post_at: 0,
-    //         last_root_post_at: 0,
-    //         name: 'channel-name',
-    //         purpose: '',
-    //         scheme_id: '',
-    //         team_id: 'current_team_id',
-    //         type: 'O',
-    //         update_at: 0,
-    //     }, '', openChannelLimitModalIfNeeded);
-    // });
 });

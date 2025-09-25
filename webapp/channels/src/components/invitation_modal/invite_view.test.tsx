@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 
 import type {Team} from '@mattermost/types/teams';
 
@@ -16,6 +16,11 @@ import mockStore from 'tests/test_store';
 import InviteAs, {InviteType} from './invite_as';
 import type {Props} from './invite_view';
 import InviteView from './invite_view';
+
+jest.mock('react-redux', () => ({
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn(),
+}));
 
 const defaultProps: Props = deepFreeze({
     setInviteAs: jest.fn(),
@@ -104,6 +109,10 @@ describe('InviteView', () => {
             },
         },
     };
+
+    const mockedUseSelector = useSelector as jest.Mock;
+
+    mockedUseSelector.mockReturnValue('mockedPackValue');
 
     const store = mockStore(state);
 

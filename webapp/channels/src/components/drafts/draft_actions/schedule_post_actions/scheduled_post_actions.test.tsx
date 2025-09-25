@@ -127,7 +127,7 @@ describe('ScheduledPostActions Component', () => {
         expect(buttonIds).toContain('draft_icon-trash-can-outline_delete');
         expect(buttonIds).toContain('draft_icon-pencil-outline_edit');
         expect(buttonIds).toContain('draft_icon-content-copy_copy_text');
-        expect(buttonIds).toContain('draft_icon-clock-send-outline_reschedule');
+        expect(buttonIds).toContain('button_send_post_options');
         expect(buttonIds).toContain('draft_icon-send-outline_sendNow');
     });
 
@@ -143,7 +143,7 @@ describe('ScheduledPostActions Component', () => {
         expect(buttonIds).toContain('draft_icon-trash-can-outline_delete');
         expect(buttonIds).toContain('draft_icon-pencil-outline_edit');
         expect(buttonIds).toContain('draft_icon-content-copy_copy_text');
-        expect(buttonIds).toContain('draft_icon-clock-send-outline_reschedule');
+        expect(buttonIds).toContain('button_send_post_options');
         expect(buttonIds).toContain('draft_icon-send-outline_sendNow');
     });
 
@@ -165,7 +165,7 @@ describe('ScheduledPostActions Component', () => {
         // validate action buttons are not present
         expect(buttonIds).not.toContain('draft_icon-send-outline_sendNow');
         expect(buttonIds).not.toContain('draft_icon-pencil-outline_edit');
-        expect(buttonIds).not.toContain('draft_icon-clock-send-outline_reschedule');
+        expect(buttonIds).not.toContain('button_send_post_options');
     });
 
     it('should render all action buttons when user is not member of the channel but is an admin', () => {
@@ -181,7 +181,7 @@ describe('ScheduledPostActions Component', () => {
         expect(buttonIds).toContain('draft_icon-trash-can-outline_delete');
         expect(buttonIds).toContain('draft_icon-pencil-outline_edit');
         expect(buttonIds).toContain('draft_icon-content-copy_copy_text');
-        expect(buttonIds).toContain('draft_icon-clock-send-outline_reschedule');
+        expect(buttonIds).toContain('button_send_post_options');
         expect(buttonIds).toContain('draft_icon-send-outline_sendNow');
     });
 
@@ -206,7 +206,7 @@ describe('ScheduledPostActions Component', () => {
         // Validate that other action buttons are not present
         expect(buttonIds).not.toContain('draft_icon-send-outline_sendNow');
         expect(buttonIds).not.toContain('draft_icon-pencil-outline_edit');
-        expect(buttonIds).not.toContain('draft_icon-clock-send-outline_reschedule');
+        expect(buttonIds).not.toContain('button_send_post_options');
     });
 
     it('should render all action buttons when the channel is archived and the user is admin', () => {
@@ -230,6 +230,6 @@ describe('ScheduledPostActions Component', () => {
         expect(buttonIds).toContain('draft_icon-content-copy_copy_text');
         expect(buttonIds).toContain('draft_icon-send-outline_sendNow');
         expect(buttonIds).toContain('draft_icon-pencil-outline_edit');
-        expect(buttonIds).toContain('draft_icon-clock-send-outline_reschedule');
+        expect(buttonIds).toContain('button_send_post_options');
     });
 });

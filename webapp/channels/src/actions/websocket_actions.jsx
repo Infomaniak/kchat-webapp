@@ -37,7 +37,7 @@ import {
     fetchAllMyChannelMembers,
     fetchAllMyTeamsChannels,
 } from 'mattermost-redux/actions/channels';
-import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
+import {getCloudSubscription, getUsage} from 'mattermost-redux/actions/cloud';
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
 import {setServerVersion, getClientConfig} from 'mattermost-redux/actions/general';
 import {getGroup as fetchGroup} from 'mattermost-redux/actions/groups';
@@ -104,9 +104,7 @@ import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, i
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_actions';
-import {
-    getTeamsUsage,
-} from 'actions/cloud';
+import {getTeamsUsage} from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
 import {sendDesktopNotification} from 'actions/notification_actions';
@@ -448,6 +446,10 @@ function handleClose(failCount) {
 
 export function handleEvent(msg) {
     switch (msg.event) {
+    case SocketEvents.QUOTA_CHANGED: {
+        handleLimitationChanged(msg);
+        break;
+    }
     case SocketEvents.POSTED:
     case SocketEvents.EPHEMERAL_MESSAGE:
         handleNewPostEventDebounced(msg);
@@ -1759,6 +1761,8 @@ function handleSidebarCategoryCreated(msg) {
         // Fetch all categories, including ones that weren't explicitly updated, in case any other categories had channels
         // moved out of them.
         doDispatch(fetchMyCategories(msg.data.team_id));
+
+        doDispatch(getUsage());
     };
 }
 
@@ -1795,6 +1799,8 @@ function handleSidebarCategoryDeleted(msg) {
 
         // Fetch all categories since any channels that were in the deleted category were moved to other categories.
         doDispatch(fetchMyCategories(msg.data.team_id));
+
+        doDispatch(getUsage());
     };
 }
 
@@ -2307,6 +2313,24 @@ export function handleCustomAttributesDeleted(msg) {
         type: GeneralTypes.CUSTOM_PROFILE_ATTRIBUTE_FIELD_DELETED,
         data: msg.data.field_id,
     };
+}
+
+export function handleLimitationChanged(msg) {
+    const usage = {
+        public_channels: msg.data.limitations.channels.public.count,
+        private_channels: msg.data.limitations.channels.private.count,
+        guests: msg.data.limitations.guests.count,
+        pending_guests: msg.data.limitations.guests.pending,
+        members: msg.data.limitations.users.count,
+        incoming_webhooks: msg.data.limitations.webhooks.incoming.count,
+        outgoing_webhooks: msg.data.limitations.webhooks.outgoing.count,
+        custom_emojis: msg.data.limitations.emojis.count,
+    };
+
+    dispatch({
+        type: CloudTypes.RECEIVED_USAGE,
+        data: usage,
+    });
 }
 
 // IK: Our msg.data is an object, but MM expects it to be stringified (for some, but not all props).

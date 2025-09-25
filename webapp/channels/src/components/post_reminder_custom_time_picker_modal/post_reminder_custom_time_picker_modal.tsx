@@ -5,6 +5,8 @@ import type {Moment} from 'moment-timezone';
 import React, {useCallback} from 'react';
 import {useIntl} from 'react-intl';
 
+import type {CustomReminderTimestamp, ReminderTimestamp} from 'mattermost-redux/actions/posts';
+
 import {getRoundedTime} from 'components/custom_status/date_time_input';
 import DateTimePickerModal from 'components/date_time_picker_modal/date_time_picker_modal';
 
@@ -19,7 +21,7 @@ type Props = PropsFromRedux & {
     postpone?: boolean;
     reminderPostId?: string;
     actions: {
-        addPostReminder: (postId: string, userId: string, timestamp: number) => void;
+        addPostReminder: (postId: string, userId: string, timestamp: ReminderTimestamp) => void;
     };
 };
 
@@ -33,7 +35,9 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
     const initialReminderTime = getRoundedTime(currentTime);
 
     const handleConfirm = useCallback((dateTime: Moment) => {
-        actions.addPostReminder(userId, postId, toUTCUnixInSeconds(dateTime.toDate()));
+        const timestandInSeconds = toUTCUnixInSeconds(dateTime.toDate());
+        const targetTime: CustomReminderTimestamp = {type: 'custom', value: timestandInSeconds};
+        actions.addPostReminder(userId, postId, targetTime);
         onExited();
     }, [actions, postId, userId, onExited]);
 

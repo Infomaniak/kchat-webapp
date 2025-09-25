@@ -16,9 +16,9 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getFilesDropdownPluginMenuItems} from 'selectors/plugins';
 
 import FileSearchResultItem from 'components/file_search_results';
+import OptionnalUpgradeBanner from 'components/ik_upgrade_ksuite_banner/ik_upgrade_ksuite_banner';
 import NoResultsIndicator from 'components/no_results_indicator/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
-import ChannelMessageLimitationBanner from 'components/post_view/channel_message_limitation_banner/channel_message_limitation_banner';
 import SearchHint from 'components/search_hint/search_hint';
 import SearchResultsHeader from 'components/search_results_header';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
@@ -297,7 +297,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                     {'sidebar-expanded': isSideBarExpanded},
                 ])}
             >
-                <ChannelMessageLimitationBanner olderMessagesDate={hasLimitDate}/>
+                <OptionnalUpgradeBanner/>
                 <NoResultsIndicator {...noResultsProps}/>
             </div>
         );
