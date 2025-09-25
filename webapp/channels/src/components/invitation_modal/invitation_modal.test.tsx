@@ -48,6 +48,7 @@ const defaultProps: Props = deepFreeze({
     isCloud: false,
     canAddUsers: true,
     canInviteGuests: true,
+    remainingGuestSlot: 1,
     intl: {} as IntlShape,
     townSquareDisplayName: '',
     onExited: jest.fn(),

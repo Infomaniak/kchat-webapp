@@ -71,6 +71,7 @@ describe('components/channel_invite_modal', () => {
         userStatuses: {},
         teammateNameDisplaySetting: General.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME,
         isGroupsEnabled: true,
+        guestQuotaExceeded: false,
         currentPack: 'ksuite_essential' as PackName,
         actions: {
             addUsersToChannel: jest.fn().mockImplementation(() => {
