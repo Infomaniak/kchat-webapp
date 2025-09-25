@@ -3814,6 +3814,8 @@
   "manage_team_groups_modal.search_placeholder": "Rechercher des groupes",
   "mark_all_threads_as_read_modal.cancel": "Annuler",
   "mark_as_read_confirm_modal.body": "Voulez-vous vraiment marquer {numChannels} salons comme lues ?",
+  "mark_as_read_confirm_modal.confirm": "Marquer comme lu", 
+  "mark_as_read_confirm_modal.header": "Marquer comme lu",
   "marketplace_modal.install_plugins": "Installer des plugins",
   "marketplace_modal.installing": "Installation en cours...",
   "marketplace_modal.list.configure": "Configurer",

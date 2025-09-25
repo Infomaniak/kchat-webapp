@@ -3742,6 +3742,8 @@
   "mark_all_threads_as_read_modal.title": "¿Marcar todos tus hilos como leídos?",
   "mark_all_threads_as_read_modal.confirm": "Marcar todo como leído",
   "mark_all_threads_as_read_modal.description": "Esto borrará el estado no leído y mencionará las insignias en todos tus hilos. ¿Estás seguro?",
+  "mark_as_read_confirm_modal.confirm": "Marcar como leído",
+  "mark_as_read_confirm_modal.header": "Marcar como leído",
   "marketplace_modal.install_plugins": "Instalar Plugins",
   "marketplace_modal.installing": "Instalando...",
   "marketplace_modal.list.configure": "Configurar",

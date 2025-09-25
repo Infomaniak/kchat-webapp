@@ -2990,6 +2990,8 @@
   "mark_all_threads_as_read_modal.confirm": "Contrassegnare tutti come letti",
   "mark_all_threads_as_read_modal.cancel": "Annullare",
   "mark_all_threads_as_read_modal.description": "Questo cancellerà lo stato di non lettura e menzionerà i badge su tutte le discussioni. Sei sicuro?",
+  "mark_as_read_confirm_modal.confirm": "Segna come letto",
+  "mark_as_read_confirm_modal.header": "Segna come letto",
   "navbar.addGroups": "Aggiungi Gruppi",
   "navbar.addMembers": "Aggiungi membri",
   "navbar.preferences": "Preferenze delle Notifiche",
