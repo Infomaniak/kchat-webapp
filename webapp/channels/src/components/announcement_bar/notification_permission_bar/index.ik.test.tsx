@@ -45,7 +45,7 @@ describe('NotificationPermissionBar', () => {
     });
 
     test('should NOT render the NotificationUnsupportedBar if notifications are not supported on mobile', () => {
-        jest.spyOn(utilsNotifications, 'isNotificationAPISupported').mockReturnValue(true);
+        jest.spyOn(utilsNotifications, 'isNotificationAPISupported').mockReturnValue(false);
         (isMobileBrowser as jest.Mock).mockReturnValue(true);
 
         const {container} = renderWithContext(<NotificationPermissionBar/>, initialState);
