@@ -105,7 +105,7 @@ type State = {
     shouldOpenMenu: boolean;
 };
 
-class InvitationModal extends React.PureComponent<Props, State> {
+export default class InvitationModal extends React.PureComponent<Props, State> {
     defaultState: State = deepFreeze({
         view: View.INVITE,
         termWithoutResults: null,
@@ -453,5 +453,3 @@ class InvitationModal extends React.PureComponent<Props, State> {
         );
     }
 }
-
-export default InvitationModal;
