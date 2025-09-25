@@ -93,7 +93,7 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
     const limits = getCloudLimits(state);
     const totalGuest = usage.guests + usage.pending_guests;
 
-    // IK: special case we need to have the number or remainign guest
+    // IK: special case we need to have the number or remaining guest
     // so we can't use the helper function plan_utils.isQuotaExceeded
     const remainingGuestSlot = limits.guests === -1 ? Number.MAX_VALUE : limits.guests - totalGuest;
 
