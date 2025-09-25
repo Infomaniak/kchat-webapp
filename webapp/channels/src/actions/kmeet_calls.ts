@@ -124,7 +124,7 @@ export function handleCallFromUrl(): ActionFuncAsync {
             const conference = getConferenceByChannelId(state, conferenceId);
             if (!conference) {
                 // eslint-disable-next-line no-console
-                console.log('Conference not found');
+                console.error('Conference not found');
                 return {data: false};
             }
             await dispatch(joinCall(conference.channel_id));

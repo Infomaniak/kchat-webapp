@@ -98,7 +98,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, crossS
     useEffect(() => {
         window.addEventListener('offline', onHandleDecline);
         return () => window.removeEventListener('offline', onHandleDecline);
-    }, []);
+    }, [onHandleDecline]);
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -125,8 +125,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, crossS
         return () => {
             abortController.abort();
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [crossServerEvent, otherServerName, user.nickname]);
 
     useEffect(() => {
         window.addEventListener('offline', onHandleDecline);
