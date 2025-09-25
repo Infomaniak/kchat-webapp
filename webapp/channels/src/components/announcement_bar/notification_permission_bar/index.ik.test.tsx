@@ -28,14 +28,16 @@ describe('NotificationPermissionBar', () => {
         },
     };
 
+    beforeEach(() => {
+        jest.spyOn(utilsNotifications, 'isNotificationAPISupported').mockReturnValue(false);
+        (isMobileBrowser as jest.Mock).mockReturnValue(false);
+    });
+
     afterEach(() => {
         jest.restoreAllMocks();
     });
 
     test('should render the NotificationUnsupportedBar if notifications are not supported and NOT on mobile', () => {
-        jest.spyOn(utilsNotifications, 'isNotificationAPISupported').mockReturnValue(false);
-        (isMobileBrowser as jest.Mock).mockReturnValue(false);
-
         const {container} = renderWithContext(<NotificationPermissionBar/>, initialState);
 
         expect(container).toMatchSnapshot();
@@ -45,7 +47,6 @@ describe('NotificationPermissionBar', () => {
     });
 
     test('should NOT render the NotificationUnsupportedBar if notifications are not supported on mobile', () => {
-        jest.spyOn(utilsNotifications, 'isNotificationAPISupported').mockReturnValue(false);
         (isMobileBrowser as jest.Mock).mockReturnValue(true);
 
         const {container} = renderWithContext(<NotificationPermissionBar/>, initialState);
