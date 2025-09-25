@@ -49,6 +49,7 @@ const defaultProps: Props = deepFreeze({
     footerClass: '',
     canInviteGuests: true,
     canAddUsers: true,
+    remainingGuestSlot: 1,
 
     customMessage: {
         message: '',

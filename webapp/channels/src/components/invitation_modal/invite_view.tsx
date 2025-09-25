@@ -64,7 +64,7 @@ export type Props = InviteState & {
     headerClass: string;
     footerClass: string;
     canInviteGuests: boolean;
-    remainingGuestSlot?: number;
+    remainingGuestSlot: number;
     canAddUsers: boolean;
     townSquareDisplayName: string;
     channelToInvite?: Channel;
@@ -76,10 +76,9 @@ export default function InviteView(props: Props) {
     const intl = useIntl();
 
     const isGuest = props.inviteType === InviteType.GUEST;
-    const guestSlots = props.remainingGuestSlot ?? 0;
     const requestedGuests = props.usersEmails.length;
 
-    const isGuestQuotaExceeded = isGuest && (guestSlots - requestedGuests) < 0;
+    const isGuestQuotaExceeded = isGuest && (props.remainingGuestSlot - requestedGuests) < 0;
 
     const currentPack = useSelector(getCurrentPackName);
     const nextPlan = getNextWcPack(currentPack);
@@ -110,7 +109,7 @@ export default function InviteView(props: Props) {
         errorProperties.showError = true;
         errorProperties.errorMessage = messages.exceededGuestSlot;
         errorProperties.errorMessageValues = {
-            count: props.remainingGuestSlot! * -1,
+            count: props.remainingGuestSlot,
             action: (
                 <a
                     href='#'

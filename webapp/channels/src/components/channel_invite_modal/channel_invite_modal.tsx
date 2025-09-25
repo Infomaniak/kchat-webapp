@@ -65,12 +65,17 @@ export type Props = {
     // Dictionaries of userid mapped users to exclude or include from this list
     excludeUsers?: Record<string, UserProfileValue>;
     includeUsers?: Record<string, UserProfileValue>;
+
+    // Two props are needed: `canInviteGuests` indicates permission to add guests,
+    // while `guestQuotaExceeded` handles the case where the user is allowed to invite
+    // but has reached the quota.
     canInviteGuests?: boolean;
+    guestQuotaExceeded: boolean;
+
     emailInvitationsEnabled?: boolean;
     groups: Group[];
     isGroupsEnabled: boolean;
     currentPack: PackName | undefined;
-    remainingGuestSlots: number;
     actions: {
         addUsersToChannel: (channelId: string, userIds: string[]) => Promise<ActionResult>;
         getProfilesNotInChannel: (teamId: string, channelId: string, groupConstrained: boolean, page: number, perPage?: number) => Promise<ActionResult>;
@@ -517,7 +522,6 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                         channelToInvite: this.props.channel,
                         initialValue: this.state.term,
                         inviteAsGuest: props.inviteAsGuest,
-                        remainingGuestSlot: props.inviteAsGuest ? this.props.remainingGuestSlots : undefined,
                         focusOriginElement: 'customNoOptionsMessageLink',
                     }}
                     onClick={closeMembersInviteModal}
@@ -569,7 +573,6 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             />
         );
 
-        const {withQuotaCheck} = quotaGate(this.props.remainingGuestSlots, this.props.currentPack);
         const inviteGuestLink = (
             <InviteModalLink inviteAsGuest={true}>
                 <FormattedMessage
@@ -579,6 +582,8 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
             </InviteModalLink>
         );
 
+        // Ik: This is for the case where Guest quota is reached, therefore we hardcode the value 0 (= capped)
+        const {withQuotaCheck: withQuotaCheckWhenCapped} = quotaGate(0, this.props.currentPack);
         const inviteGuestQuotaReached = (
             <div
                 style={{
@@ -590,7 +595,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                     gap: '8px',
                 }}
                 role='button'
-                onClick={withQuotaCheck(() => {})} // dummy callback
+                onClick={withQuotaCheckWhenCapped(() => {})} // dummy callback
             >
                 <FormattedMessage
                     id='channel_invite.invite_guest'
@@ -602,10 +607,10 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         );
 
         let inviteGuestComp = null;
-        if (this.props.remainingGuestSlots < 0) {
-            inviteGuestComp = inviteGuestLink;
-        } else {
+        if (this.props.guestQuotaExceeded) {
             inviteGuestComp = inviteGuestQuotaReached;
+        } else {
+            inviteGuestComp = inviteGuestLink;
         }
 
         return (
