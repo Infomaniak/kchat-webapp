@@ -30,6 +30,7 @@ type Props = {
     users: IDMappedObjects<UserProfile>;
     canManageOthersWebhooks: boolean;
     enableIncomingWebhooks: boolean;
+    isQuotaExceeded: boolean;
     actions: {
         removeIncomingHook: (hookId: string) => Promise<ActionResult>;
         loadIncomingHooksAndProfilesForTeam: (teamId: string, startPageNumber: number,
@@ -133,6 +134,7 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
                         defaultMessage='Add Incoming Webhook'
                     />
                 }
+                isQuotaExceeded={this.props.isQuotaExceeded}
                 addLink={'/' + this.props.team.name + '/integrations/incoming_webhooks/add'}
                 addButtonId='addIncomingWebhook'
                 emptyText={

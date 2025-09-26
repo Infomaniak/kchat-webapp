@@ -6,7 +6,8 @@ import {useIntl, FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
 import {Permissions} from 'mattermost-redux/constants';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -20,11 +21,13 @@ import {ModalIdentifiers} from 'utils/constants';
 type Props = {
     className?: string;
     isAdmin: boolean;
+    canAddGuest: boolean;
 }
 
 const InviteMembersButton = (props: Props): JSX.Element | null => {
     const intl = useIntl();
     const currentTeamId = useSelector(getCurrentTeamId);
+    const currentPack = useSelector(getCurrentPackName);
 
     const handleButtonClick = () => {
         trackEvent(getAnalyticsCategory(props.isAdmin), 'click_sidebar_invite_members_button');
@@ -34,34 +37,66 @@ const InviteMembersButton = (props: Props): JSX.Element | null => {
         return null;
     }
 
+    const {isQuotaExceeded, withQuotaCheck} = quotaGate(props.canAddGuest, currentPack);
+
+    const canAdd = (
+        <ToggleModalButton
+            ariaLabel={intl.formatMessage({id: 'sidebar_left.inviteMembers', defaultMessage: 'Invite Members'})}
+            id='inviteMembersButton'
+            className={`intro-links color--link cursor--pointer${props.className ? ` ${props.className}` : ''}`}
+            modalId={ModalIdentifiers.INVITATION}
+            dialogType={InvitationModal}
+            onClick={handleButtonClick}
+            dialogProps={{focusOriginElement: 'inviteMembersButton'}}
+        >
+            <div
+                className='SidebarChannelNavigator__inviteMembersLhsButton'
+                aria-label={intl.formatMessage({id: 'sidebar_left.sidebar_channel_navigator.inviteUsers', defaultMessage: 'Invite Members'})}
+            >
+                <i
+                    className='icon-plus-box'
+                    aria-hidden='true'
+                />
+                <FormattedMessage
+                    id={'sidebar_left.inviteMembers'}
+                    defaultMessage='Invite Members'
+                />
+            </div>
+        </ToggleModalButton>
+    );
+
+    const cantAdd = (
+        <div
+            className='SidebarChannelNavigator__inviteMembersLhsButton'
+            aria-label={intl.formatMessage({id: 'sidebar_left.sidebar_channel_navigator.inviteUsers', defaultMessage: 'Invite Members'})}
+            onClick={withQuotaCheck(() => {})}
+            role='button'
+
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+            }}
+        >
+            <i
+                className='icon-plus-box'
+                aria-hidden='true'
+            />
+            <FormattedMessage
+                id={'sidebar_left.inviteMembers'}
+                defaultMessage='Invite Members'
+            />
+            {isQuotaExceeded && <wc-ksuite-pro-upgrade-tag style={{marginLeft: '8px', marginRight: '8px'}}/>}
+        </div>
+    );
+
     return (
         <TeamPermissionGate
             teamId={currentTeamId}
             permissions={[Permissions.ADD_USER_TO_TEAM, Permissions.INVITE_GUEST]}
         >
-            <ToggleModalButton
-                ariaLabel={intl.formatMessage({id: 'sidebar_left.inviteMembers', defaultMessage: 'Invite Members'})}
-                id='inviteMembersButton'
-                className={`intro-links color--link cursor--pointer${props.className ? ` ${props.className}` : ''}`}
-                modalId={ModalIdentifiers.INVITATION}
-                dialogType={InvitationModal}
-                onClick={handleButtonClick}
-                dialogProps={{focusOriginElement: 'inviteMembersButton'}}
-            >
-                <div
-                    className='SidebarChannelNavigator__inviteMembersLhsButton'
-                    aria-label={intl.formatMessage({id: 'sidebar_left.sidebar_channel_navigator.inviteUsers', defaultMessage: 'Invite Members'})}
-                >
-                    <i
-                        className='icon-plus-box'
-                        aria-hidden='true'
-                    />
-                    <FormattedMessage
-                        id={'sidebar_left.inviteMembers'}
-                        defaultMessage='Invite Members'
-                    />
-                </div>
-            </ToggleModalButton>
+            {props.canAddGuest && canAdd}
+            {!props.canAddGuest && cantAdd}
         </TeamPermissionGate>
     );
 };

@@ -1,24 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import moment from 'moment';
+import classNames from 'classnames';
 import React, {memo, useCallback, useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
-import type {ScheduledPost} from '@mattermost/types/schedule_post';
+import type {ScheduledPost, SchedulingInfo} from '@mattermost/types/schedule_post';
 
 import {fetchMissingChannels} from 'mattermost-redux/actions/channels';
 import {isDeactivatedDirectChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
-import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import {openModal} from 'actions/views/modals';
 
-import ScheduledPostCustomTimeModal
-    from 'components/advanced_text_editor/send_button/scheduled_post_custom_time_modal/scheduled_post_custom_time_modal';
+import {SendPostOptions} from 'components/advanced_text_editor/send_button/send_post_options';
 import Action from 'components/drafts/draft_actions/action';
 import DeleteScheduledPostModal
     from 'components/drafts/draft_actions/schedule_post_actions/delete_scheduled_post_modal';
@@ -43,13 +41,6 @@ const editTooltipText = (
     />
 );
 
-const rescheduleTooltipText = (
-    <FormattedMessage
-        id='scheduled_post.action.reschedule'
-        defaultMessage='Reschedule post'
-    />
-);
-
 const sendNowTooltipText = (
     <FormattedMessage
         id='scheduled_post.action.send_now'
@@ -67,7 +58,7 @@ const copyTextTooltipText = (
 type Props = {
     scheduledPost: ScheduledPost;
     channel?: Channel;
-    onReschedule: (timestamp: number) => Promise<{error?: string}>;
+    onReschedule: (timestamp: number | 'monday' | 'tomorrow') => Promise<{error?: string}>;
     onDelete: (scheduledPostId: string) => Promise<{error?: string}>;
     onSend: (scheduledPostId: string) => void;
     onEdit: () => void;
@@ -76,7 +67,6 @@ type Props = {
 
 function ScheduledPostActions({scheduledPost, channel, onReschedule, onDelete, onSend, onEdit, onCopyText}: Props) {
     const dispatch = useDispatch();
-    const userTimezone = useSelector(getCurrentTimezone);
     const myChannelsMemberships = useSelector((state: GlobalState) => getMyChannelMemberships(state));
     const isAdmin = useSelector((state: GlobalState) => isCurrentUserSystemAdmin(state));
 
@@ -91,19 +81,9 @@ function ScheduledPostActions({scheduledPost, channel, onReschedule, onDelete, o
         }
     }, [channel, dispatch]);
 
-    const handleReschedulePost = useCallback(() => {
-        const initialTime = moment.tz(scheduledPost.scheduled_at, userTimezone);
-
-        dispatch(openModal({
-            modalId: ModalIdentifiers.SCHEDULED_POST_CUSTOM_TIME_MODAL,
-            dialogType: ScheduledPostCustomTimeModal,
-            dialogProps: {
-                channelId: scheduledPost.channel_id,
-                onConfirm: onReschedule,
-                initialTime,
-            },
-        }));
-    }, [dispatch, onReschedule, scheduledPost.channel_id, scheduledPost.scheduled_at, userTimezone]);
+    const handleReschedulePost = useCallback((schedulingInfo: SchedulingInfo) => {
+        onReschedule(schedulingInfo.scheduled_at);
+    }, [onReschedule]);
 
     const handleDelete = useCallback(() => {
         dispatch(openModal({
@@ -171,13 +151,25 @@ function ScheduledPostActions({scheduledPost, channel, onReschedule, onDelete, o
 
             {
                 (isAdmin || showRescheduleOption) &&
-                <Action
-                    icon='icon-clock-send-outline'
-                    id='reschedule'
-                    name='reschedule'
-                    tooltipText={rescheduleTooltipText}
-                    onClick={handleReschedulePost}
-                />
+                <div className='DraftAction'>
+                    <SendPostOptions
+                        disabled={false}
+                        onSelect={handleReschedulePost}
+                        channelId={channel!.id}
+                        transformOriginVertical='top'
+                        anchorOrigin='bottom'
+                        menuIcon={(
+                            <i
+                                className={classNames(
+                                    'icon',
+                                    'icon-clock-send-outline',
+                                )}
+                            />
+                        )}
+                        menuButtonClassName='DraftAction__button'
+                    />
+                </div>
+
             }
 
             {

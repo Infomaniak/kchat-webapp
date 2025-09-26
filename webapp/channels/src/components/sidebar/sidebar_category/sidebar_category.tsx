@@ -46,6 +46,7 @@ type Props = {
     isAdmin: boolean;
     showDirectMessagesTutorialStep: boolean;
     showChannelsTutorialStep: boolean;
+    canAddGuest: boolean;
     actions: {
         setCategoryCollapsed: (categoryId: string, collapsed: boolean) => void;
         setCategorySorting: (categoryId: string, sorting: CategorySorting) => void;
@@ -330,6 +331,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                             <InviteMembersButton
                                 className='followingSibling'
                                 isAdmin={this.props.isAdmin}
+                                canAddGuest={this.props.canAddGuest}
                             />
                         );
                     }

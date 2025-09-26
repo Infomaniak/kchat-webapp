@@ -10,11 +10,14 @@ import type {GlobalState} from '@mattermost/types/store';
 import {removeIncomingHook} from 'mattermost-redux/actions/integrations';
 import {Permissions} from 'mattermost-redux/constants';
 import {getAllChannels} from 'mattermost-redux/selectors/entities/channels';
+import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getFilteredIncomingHooks, getIncomingHooksTotalCount} from 'mattermost-redux/selectors/entities/integrations';
 import {haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getUsers} from 'mattermost-redux/selectors/entities/users';
+import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
 
 import {loadIncomingHooksAndProfilesForTeam} from 'actions/integration_actions';
 
@@ -27,6 +30,9 @@ function mapStateToProps(state: GlobalState) {
     const config = getConfig(state);
     const canManageOthersWebhooks = haveITeamPermission(state, teamId, Permissions.MANAGE_OTHERS_INCOMING_WEBHOOKS);
     const enableIncomingWebhooks = config.EnableIncomingWebhooks === 'true';
+    const usage = getUsage(state);
+    const limits = getCloudLimits(state);
+    const isIncomingWebhookQuotaExceeded = isQuotaExceeded(usage.incoming_webhooks, limits.incoming_webhooks);
 
     return {
         incomingHooks,
@@ -35,6 +41,7 @@ function mapStateToProps(state: GlobalState) {
         users: getUsers(state),
         canManageOthersWebhooks,
         enableIncomingWebhooks,
+        isQuotaExceeded: isIncomingWebhookQuotaExceeded,
     };
 }
 

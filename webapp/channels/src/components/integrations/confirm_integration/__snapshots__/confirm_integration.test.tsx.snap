@@ -95,7 +95,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, incom
     >
       <MemoizedFormattedMessage
         defaultMessage="Incoming Webhooks"
-        id="incoming_webhooks.header"
+        id="installed_incoming_webhooks.header"
       />
     </Link>
     <MemoizedFormattedMessage
@@ -307,7 +307,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, outgo
     >
       <MemoizedFormattedMessage
         defaultMessage="Outgoing Webhooks"
-        id="add_outgoing_webhook.header"
+        id="installed_outgoing_webhooks.header"
       />
     </Link>
     <MemoizedFormattedMessage

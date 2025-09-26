@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -53,7 +54,7 @@ export function selectChannel(channelId: string) {
     };
 }
 
-export function createChannel(channel: Channel, userId: string, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc): ActionFuncAsync<Channel> {
+export function createChannel(channel: Channel, userId: string): ActionFuncAsync<Channel> {
     return async (dispatch, getState) => {
         let created;
         try {
@@ -65,7 +66,6 @@ export function createChannel(channel: Channel, userId: string, openLimitModalIf
                 error,
             });
             dispatch(logError(error));
-            dispatch(openLimitModalIfNeeded(error, channel.type));
             return {error};
         }
 

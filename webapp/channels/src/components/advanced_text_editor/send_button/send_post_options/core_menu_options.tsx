@@ -24,6 +24,7 @@ import RecentUsedCustomDate from './recent_used_custom_date';
 type Props = {
     handleOnSelect: (e: React.FormEvent, scheduledAt: number) => void;
     channelId: string;
+    allowCustom: boolean;
 }
 
 function getScheduledTimeInTeammateTimezone(userCurrentTimestamp: number, teammateTimezoneString: string): string {
@@ -40,7 +41,7 @@ function getNextWeekday(dateTime: DateTime, targetWeekday: number) {
     return dateTime.plus({days: deltaDays});
 }
 
-function CoreMenuOptions({handleOnSelect, channelId}: Props) {
+function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
     const {
         userCurrentTimezone,
         teammateTimezone,
@@ -110,7 +111,8 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
         extraProps.trailingElements = teammateTimeDisplay;
     }
 
-    const tomorrowClickHandler = useCallback((e) => handleOnSelect(e, tomorrow8amTime), [handleOnSelect, tomorrow8amTime]);
+    // @ts-expect-error tyoe behind the scene 'tomorrow' and 'monday' is allowed
+    const tomorrowClickHandler = useCallback((e) => handleOnSelect(e, 'tomorrow'), [handleOnSelect]);
 
     const optionTomorrow = (
         <Menu.Item
@@ -129,7 +131,8 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
         />
     );
 
-    const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, nextMonday), [handleOnSelect, nextMonday]);
+    // @ts-expect-error tyoe behind the scene 'tomorrow' and 'monday' is allowed
+    const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, 'monday'), [handleOnSelect]);
 
     const optionNextMonday = (
         <Menu.Item
@@ -193,12 +196,14 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
     return (
         <>
             {options}
-            <RecentUsedCustomDate
-                handleOnSelect={handleOnSelect}
-                userCurrentTimezone={userCurrentTimezone}
-                tomorrow8amTime={tomorrow8amTime}
-                nextMonday={nextMonday}
-            />
+            {allowCustom && (
+                <RecentUsedCustomDate
+                    handleOnSelect={handleOnSelect}
+                    userCurrentTimezone={userCurrentTimezone}
+                    tomorrow8amTime={tomorrow8amTime}
+                    nextMonday={nextMonday}
+                />
+            )}
         </>
     );
 }
