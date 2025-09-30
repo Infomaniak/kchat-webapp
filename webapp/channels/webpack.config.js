@@ -346,6 +346,7 @@ function generateCSP() {
         'blob:',
         'cdn.rudderlabs.com',
         'js.stripe.com/v3',
+        'fonts.storage.infomaniak.com',
         'web-components.storage.infomaniak.com',
         'web-components-staging.dev.infomaniak.ch',
         'welcome.infomaniak.com',
