@@ -17,7 +17,6 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
 
     return (
         <>
-            {/*@ts-expect-error webcomponent*/}
             <wc-mail-attachment
                 class='mail_attachment'
                 mail-subject={subject}
@@ -26,7 +25,6 @@ export const MailAttachmentMessage = (props: {post: Post}) => {
                 target-name={to}
             >
                 <Timestamp value={createdAt * 1000}/>
-                {/*@ts-expect-error webcomponent*/}
             </wc-mail-attachment>
             <Markdown
                 message={post.message}

@@ -4,7 +4,11 @@
 import React, {useState} from 'react';
 import type {ChangeEvent, ReactNode} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
+
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import LoadingScreen from 'components/loading_screen';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
@@ -18,6 +22,7 @@ type Props = {
     header: ReactNode;
     addLink?: string;
     addText?: ReactNode;
+    isQuotaExceeded?: boolean;
     addButtonId?: string;
     emptyText?: ReactNode;
     emptyTextSearch?: JSX.Element;
@@ -51,6 +56,8 @@ const getPaging = (remainingProps: Props, childCount: number, hasFilter: boolean
 
 const BackstageList = (remainingProps: Props) => {
     const {formatMessage} = useIntl();
+
+    const currentPack = useSelector(getCurrentPackName);
 
     const [filter, setFilter] = useState('');
     const updateFilter = (e: ChangeEvent<HTMLInputElement>) => setFilter(e.target.value);
@@ -112,22 +119,41 @@ const BackstageList = (remainingProps: Props) => {
     let addLink = null;
 
     if (remainingProps.addLink && remainingProps.addText) {
-        addLink = (
-            <Link
-                className='add-link'
-                to={remainingProps.addLink}
-            >
+        if (remainingProps.isQuotaExceeded) {
+            const {withQuotaCheck} = quotaGate(!remainingProps.isQuotaExceeded, currentPack);
+
+            addLink = (
                 <button
                     type='button'
                     className='btn btn-primary'
                     id={remainingProps.addButtonId}
+                    onClick={withQuotaCheck(() => {})} //dummy function, as we now we are capped
                 >
+                    <wc-icon name='rocket'/>
                     <span>
                         {remainingProps.addText}
                     </span>
                 </button>
-            </Link>
-        );
+
+            );
+        } else {
+            addLink = (
+                <Link
+                    className='add-link'
+                    to={remainingProps.addLink}
+                >
+                    <button
+                        type='button'
+                        className='btn btn-primary'
+                        id={remainingProps.addButtonId}
+                    >
+                        <span>
+                            {remainingProps.addText}
+                        </span>
+                    </button>
+                </Link>
+            );
+        }
     }
 
     const hasFilter = filter.length > 0;

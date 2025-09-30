@@ -27,11 +27,14 @@ import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import type {ModalData} from 'types/actions';
 import type {MainMenuAction} from 'types/store/plugins';
 
-import {IKConstants} from '../../utils/constants-ik';
-
 // import {trackEvent} from 'actions/telemetry_actions';
 // import LearnAboutTeamsLink from './learn_about_teams_link';
 import './main_menu.scss';
+import {IKConstants} from '../../utils/constants-ik';
+import {
+    reportingToolsOnClick,
+    ReportingToolsLogo,
+} from '../global_header/right_controls/reporting_tools_button/reporting_tools_button';
 
 export type Props = {
     mobile: boolean;
@@ -45,6 +48,7 @@ export type Props = {
     enableIncomingWebhooks: boolean;
     enableOAuthServiceProvider: boolean;
     enableOutgoingWebhooks: boolean;
+    enableReportingTools: boolean;
     canManageSystemBots: boolean;
     canManageIntegrations: boolean;
 
@@ -207,6 +211,15 @@ export class MainMenu extends React.PureComponent<Props> {
                         icon={<i className='fa fa-bookmark'/>}
                         text={formatMessage({id: 'sidebar_right_menu.flagged', defaultMessage: 'Saved messages'})}
                     />
+
+                    {this.props.enableReportingTools && (
+                        <Menu.ItemAction
+                            id='reportingTools'
+                            onClick={reportingToolsOnClick}
+                            icon={<ReportingToolsLogo/>}
+                            text={formatMessage({id: 'sidebar_right_menu.reportingTools', defaultMessage: 'Reporting tools'})}
+                        />
+                    )}
                 </Menu.Group>
                 <Menu.Group>
                     <Menu.ItemAction

@@ -9,9 +9,12 @@ import BrowserStore from 'stores/browser_store';
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
 
 import {AnnouncementBarTypes} from 'utils/constants';
+import {isMobileBrowser} from 'utils/user_agent';
 
 export default function UnsupportedNotificationAnnouncementBar() {
-    const [show, setShow] = useState(!BrowserStore.getHideNotificationPermissionRequestBanner());
+    //IK: we don't want to show this announcement on mobile browser
+    const isAllowedToShow = !isMobileBrowser() && !BrowserStore.getHideNotificationPermissionRequestBanner();
+    const [show, setShow] = useState(isAllowedToShow);
     const {locale} = useIntl();
 
     const handleClick = useCallback(async () => {

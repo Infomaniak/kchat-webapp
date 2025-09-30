@@ -11,12 +11,15 @@ import {getTeamStats, getTeamMembersByIds} from 'mattermost-redux/actions/teams'
 import {getProfilesNotInChannel, getProfilesInChannel, searchProfiles} from 'mattermost-redux/actions/users';
 import {Permissions} from 'mattermost-redux/constants';
 import {getRecentProfilesFromDMs} from 'mattermost-redux/selectors/entities/channels';
+import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {makeGetAllAssociatedGroupsForReference} from 'mattermost-redux/selectors/entities/groups';
 import {getTeammateNameDisplaySetting, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentTeam, getMembersInCurrentTeam, getMembersInTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeam, getMembersInCurrentTeam, getMembersInTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getProfilesNotInCurrentChannel, getProfilesInCurrentChannel, getProfilesNotInCurrentTeam, getProfilesNotInTeam, getUserStatuses, makeGetProfilesNotInChannel, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
+import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
 
 import {addUsersToChannel} from 'actions/channel_actions';
 import {loadStatusesForProfilesList} from 'actions/status_actions';
@@ -71,7 +74,11 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
         const emailInvitationsEnabled = config.EnableEmailInvitations === 'true';
         const isLicensed = license && license.IsLicensed === 'true';
         const isGroupConstrained = Boolean(currentTeam?.group_constrained);
-        const canInviteGuests = !isGroupConstrained && isLicensed && guestAccountsEnabled && haveICurrentTeamPermission(state, Permissions.INVITE_GUEST);
+        const usage = getUsage(state);
+        const limits = getCloudLimits(state);
+        const totalGuest = usage.guests + usage.pending_guests;
+        const canInviteGuests = !isGroupConstrained && isLicensed && guestAccountsEnabled && haveICurrentTeamPermission(state, Permissions.INVITE_GUEST); // ik: user is allowed to add guest
+        const guestQuotaExceeded = isQuotaExceeded(totalGuest, limits.guests); // ik: organisation has guest slot available
         const enableCustomUserGroups = isCustomGroupsEnabled(state);
 
         const isGroupsEnabled = enableCustomUserGroups || (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true');
@@ -80,6 +87,8 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
 
         const teammateNameDisplaySetting = getTeammateNameDisplaySetting(state);
         const groups = getAllAssociatedGroupsForReference(state, true);
+
+        const currentPack = getCurrentPackName(state);
 
         return {
             profilesNotInCurrentChannel,
@@ -93,6 +102,8 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
             emailInvitationsEnabled,
             groups,
             isGroupsEnabled,
+            currentPack,
+            guestQuotaExceeded,
         };
     };
 }

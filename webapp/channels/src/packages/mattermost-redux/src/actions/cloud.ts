@@ -5,6 +5,7 @@ import type {Address, CloudCustomerPatch} from '@mattermost/types/cloud';
 
 import {CloudTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
+import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
 import {bindClientFunc} from './helpers';
 
@@ -59,4 +60,21 @@ export function updateCloudCustomerAddress(address: Address) {
         onSuccess: [CloudTypes.RECEIVED_CLOUD_CUSTOMER],
         params: [address],
     });
+}
+
+export function getUsage(): ActionFuncAsync {
+    return async (dispatch) => {
+        try {
+            const result = await Client4.getUsage();
+            if (result) {
+                dispatch({
+                    type: CloudTypes.RECEIVED_USAGE,
+                    data: result,
+                });
+            }
+        } catch (e) {
+            return e;
+        }
+        return {data: true};
+    };
 }

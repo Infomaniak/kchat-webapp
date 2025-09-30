@@ -832,8 +832,6 @@
         }
 
         blockquote {
-            display: flex;
-            flex-direction: column;
             padding: 3px 0 3px 20px;
 
             &::before {
@@ -1003,7 +1001,6 @@
     }
 
     .post-edited__indicator {
-        display: flex;
         align-items: center;
         color: rgba(var(--center-channel-color-rgb), 0.75);
         font-size: 11px;
@@ -2056,8 +2053,17 @@
     text-align: left;
 }
 
+// ik: added to fix empty blockquote min-height
 .post-message__text > blockquote {
-    display: list-item;
+    display: flex;
+    flex-direction: column;
+
+    &::after {
+        content: '.';
+        display: inline;
+        visibility: hidden;
+        color: transparent;
+    }
 }
 
 .view-history__text {

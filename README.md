@@ -2,8 +2,6 @@
 
 Infomaniak fork of the mattermost web client modified to work with our internal API as part of the kSuite.
 
-:warning: This project is still in beta.
-
 ## Running the project
 
 ### Prerequisites
@@ -22,6 +20,7 @@ WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current
 WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com
 MANAGER_ENDPOINT=https://manager.infomaniak.com
 LOGIN_ENDPOINT=https://login.infomaniak.com
+SHOP_ENDPOINT=https://shop.infomaniak.com/
 ```
 
 ### Hosts
@@ -57,7 +56,7 @@ yarn build:webapp
 ```shell
 Cannot find module '../build/Release/canvas.node'
 ```
-fix : 
+fix :
 ```shell
 brew install pkg-config cairo pango libpng jpeg giflib librsvg
 ```

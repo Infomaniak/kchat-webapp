@@ -8,13 +8,12 @@ import {useDispatch} from 'react-redux';
 
 import type {CardSize, InsightsWidgetTypes, TimeFrame} from '@mattermost/types/insights';
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
-
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
 import {InsightsScopes, InsightsCardTitles, ModalIdentifiers} from 'utils/constants';
+
+import type {DispatchFunc} from 'types/store';
 
 import InsightsCard from '../card/card';
 import InsightsModal from '../insights_modal/insights_modal';

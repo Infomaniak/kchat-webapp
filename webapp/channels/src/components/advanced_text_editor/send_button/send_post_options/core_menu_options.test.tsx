@@ -68,6 +68,7 @@ describe('CoreMenuOptions Component', () => {
                 <CoreMenuOptions
                     handleOnSelect={handleOnSelectOverride}
                     channelId='channelId'
+                    allowCustom={true}
                 />
             </WithTestMenuContext>,
             state,
@@ -139,13 +140,7 @@ describe('CoreMenuOptions Component', () => {
         const tomorrowOption = screen.getByText(/Tomorrow at/);
         fireEvent.click(tomorrowOption);
 
-        const expectedTimestamp = DateTime.now().
-            setZone(userCurrentTimezone).
-            plus({days: 1}).
-            set({hour: 8, minute: 0, second: 0, millisecond: 0}).
-            toMillis();
-
-        expect(handleOnSelect).toHaveBeenCalledWith(expect.anything(), expectedTimestamp);
+        expect(handleOnSelect).toHaveBeenCalledWith(expect.anything(), 'tomorrow');
     });
 
     it('should NOT include trailing element when isDM and isBot are true', () => {

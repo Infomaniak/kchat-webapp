@@ -48,7 +48,7 @@ function VoiceMessageAttachmentPlayer(props: Props) {
     useEffect(() => {
         const transcript = post?.metadata?.files?.[0]?.transcript;
 
-        if (isValidTranscript(transcript)) {
+        if (transcript) {
             setIsLoading(false);
         }
     }, [post?.metadata]);

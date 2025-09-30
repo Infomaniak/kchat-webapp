@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import IconButton from '@infomaniak/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 import classNames from 'classnames';
 import {DateTime} from 'luxon';
 import type {Moment} from 'moment-timezone';

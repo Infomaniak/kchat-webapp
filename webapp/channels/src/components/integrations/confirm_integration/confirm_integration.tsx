@@ -107,7 +107,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
 
         headerText = (
             <FormattedMessage
-                id={'incoming_webhooks.header'}
+                id={'installed_incoming_webhooks.header'}
                 defaultMessage='Incoming Webhooks'
             />
         );
@@ -150,7 +150,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
 
         headerText = (
             <FormattedMessage
-                id={'add_outgoing_webhook.header'}
+                id={'installed_outgoing_webhooks.header'}
                 defaultMessage='Outgoing Webhooks'
             />
         );

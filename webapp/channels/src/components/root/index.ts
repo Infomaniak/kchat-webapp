@@ -15,7 +15,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUserLocale} from 'mattermost-redux/selectors/entities/i18n';
 import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {getTeamsOrderPreference, getTheme} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {shouldShowTermsOfService, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {loadRecentlyUsedCustomEmojis, migrateRecentEmojis} from 'actions/emoji_actions';
@@ -54,6 +54,8 @@ function mapStateToProps(state: GlobalState) {
 
     const isConfigLoaded = config && !isEmpty(config);
 
+    const currentPack = getCurrentPackName(state);
+
     return {
         theme: getTheme(state),
         currentTeam: getCurrentTeam(state),
@@ -81,6 +83,7 @@ function mapStateToProps(state: GlobalState) {
         isCloud: isCurrentLicenseCloud(state),
         ksuiteBridge: getKSuiteBridge(state),
         isDevModeEnabled: isDevModeEnabled(state),
+        currentPack,
     };
 }
 

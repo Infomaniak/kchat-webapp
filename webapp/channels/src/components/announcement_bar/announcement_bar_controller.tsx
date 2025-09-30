@@ -9,8 +9,10 @@ import type {ClientLicense, ClientConfig, WarnMetricStatus} from '@mattermost/ty
 
 import withGetCloudSubscription from 'components/common/hocs/cloud/with_get_cloud_subscription';
 
+import AlmostFullStorageAnnouncementBar from './almost_full_storage_announcement_bar';
 import AppStoreBar from './appstore_announcement_bar';
 import AnnouncementBar from './default_announcement_bar';
+import {FullStorageAnnouncementBar} from './full_storage_announcement_bar/full_storage_announcement_bar';
 import MASMigrationBar from './mas_migration_bar';
 import NotificationPermissionBar from './notification_permission_bar';
 import OverageUsersBanner from './overage_users_banner';
@@ -69,17 +71,9 @@ class AnnouncementBarController extends React.PureComponent<Props> {
             );
         }
 
-        const paymentAnnouncementBar = null;
-        const cloudTrialAnnouncementBar = null;
-        const cloudTrialEndAnnouncementBar = null;
-        const notifyAdminDowngradeDelinquencyBar = null;
-        const toYearlyNudgeBannerDismissable = null;
-        const toPaidPlanNudgeBannerDismissable = null;
-
-        const autoStartTrialModal = null;
-
         return (
             <>
+                <FullStorageAnnouncementBar userIsAdmin={this.props.userIsAdmin}/>
                 <NotificationPermissionBar/>
                 {adminConfiguredAnnouncementBar}
                 {errorBar}
@@ -87,17 +81,11 @@ class AnnouncementBarController extends React.PureComponent<Props> {
                     license={this.props.license}
                     userIsAdmin={this.props.userIsAdmin}
                 />
-                {paymentAnnouncementBar}
-                {cloudTrialAnnouncementBar}
-                {cloudTrialEndAnnouncementBar}
-                {notifyAdminDowngradeDelinquencyBar}
-                {toYearlyNudgeBannerDismissable}
-                {toPaidPlanNudgeBannerDismissable}
                 {this.props.license?.Cloud !== 'true' && <OverageUsersBanner/>}
-                {autoStartTrialModal}
                 <VersionBar/>
                 <AppStoreBar/>
                 <MASMigrationBar/>
+                <AlmostFullStorageAnnouncementBar userIsAdmin={this.props.userIsAdmin}/>
             </>
         );
     }

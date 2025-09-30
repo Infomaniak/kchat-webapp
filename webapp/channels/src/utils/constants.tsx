@@ -778,6 +778,7 @@ export const SocketEvents = {
     CPA_FIELD_UPDATED: 'custom_profile_attributes_field_updated',
     CPA_FIELD_DELETED: 'custom_profile_attributes_field_deleted',
     CPA_VALUES_UPDATED: 'custom_profile_attributes_values_updated',
+    QUOTA_CHANGED: 'quota_changed',
 };
 
 export const TutorialSteps = {
@@ -1070,7 +1071,7 @@ export const JobStatuses = {
 };
 
 export const AnnouncementBarTypes = {
-    UPDATE_MAC: 'update_mac',
+    WARNING: 'warning',
     ANNOUNCEMENT: 'announcement',
     CRITICAL: 'critical',
     DEVELOPER: 'developer',
@@ -1621,6 +1622,10 @@ export const ZoomSettings = {
     MIN_SCALE: 0.25,
     MAX_SCALE: 3.0,
 };
+
+export const WCEventTypes = {
+    OPEN_REPORTING_TOOL: 'openReportingToolWC',
+} as const;
 
 export const Constants = {
     SettingsTypes,
@@ -2269,6 +2274,7 @@ export const Constants = {
     MAX_PURCHASE_SEATS: 1000000,
     MIN_PURCHASE_SEATS: 10,
     MIN_MEMBERS_FOR_CALL_CONFIRM_MODAL: 10,
+    STAFF_ONLY_TEAM_NAME_WHITELIST: ['infomaniak'],
 };
 
 export const ValidationErrors = {

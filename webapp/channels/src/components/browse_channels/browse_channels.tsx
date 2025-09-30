@@ -7,11 +7,15 @@ import {FormattedMessage} from 'react-intl';
 
 import {GenericModal} from '@mattermost/components';
 import type {Channel, ChannelMembership, ChannelSearchOpts, ChannelsWithTotalCount} from '@mattermost/types/channels';
+import type {CloudUsage} from '@mattermost/types/cloud';
+import type {PackName} from '@mattermost/types/teams';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import Permissions from 'mattermost-redux/constants/permissions';
 import type {ActionResult} from 'mattermost-redux/types/actions';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
+import withUseGetUsageDelta from 'components/common/hocs/cloud/with_use_get_usage_deltas';
 import LoadingScreen from 'components/loading_screen';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
@@ -71,6 +75,8 @@ export type Props = {
     rhsOpen?: boolean;
     channelsMemberCount?: Record<string, number>;
     actions: Actions;
+    usageDeltas: CloudUsage;
+    currentPack: PackName | undefined;
 }
 
 type State = {
@@ -83,7 +89,7 @@ type State = {
     searchTerm: string;
 }
 
-export default class BrowseChannels extends React.PureComponent<Props, State> {
+class BrowseChannels extends React.PureComponent<Props, State> {
     public searchTimeoutId: number;
     activeChannels: Channel[] = [];
 
@@ -305,6 +311,9 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
                 <div className='form-group has-error'><label className='control-label'>{serverErrorState}</label></div>;
         }
 
+        const delta = this.props.usageDeltas.public_channels >= 0 && this.props.usageDeltas.private_channels >= 0 ? 0 : -1;
+        const {isQuotaExceeded, withQuotaCheck} = quotaGate(delta, this.props.currentPack);
+
         const createNewChannelButton = (className: string, icon?: JSX.Element) => {
             const buttonClassName = classNames('btn', className);
             return (
@@ -316,10 +325,16 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
                         type='button'
                         id='createNewChannelButton'
                         className={buttonClassName}
-                        onClick={this.handleNewChannel}
+                        onClick={withQuotaCheck(this.handleNewChannel)}
                         aria-label={localizeMessage({id: 'more_channels.create', defaultMessage: 'Create New Channel'})}
                     >
                         {icon}
+                        {isQuotaExceeded && (
+                            <wc-icon
+                                name='rocket'
+                                style={{color: 'rgb(var(--button-bg-rgb))'}}
+                            />)
+                        }
                         <FormattedMessage
                             id='more_channels.create'
                             defaultMessage='Create New Channel'
@@ -389,3 +404,5 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
         );
     }
 }
+
+export default withUseGetUsageDelta(BrowseChannels);

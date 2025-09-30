@@ -10,10 +10,12 @@ import React, {lazy} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
+import {getUsage} from 'mattermost-redux/actions/cloud';
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
 import {storeBridge, storeBridgeParam} from 'mattermost-redux/actions/ksuiteBridge';
 import {Client4} from 'mattermost-redux/client';
+import {getNextWcPack, openUpgradeDialog} from 'mattermost-redux/utils/plans_util';
 
 import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
@@ -51,6 +53,8 @@ import {LLMBotPost} from 'plugins/ai/components/llmbot_post';
 import LuxonController from './luxon_controller';
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
+import {WcKsuiteUpgradeModal} from './wc_ksuite_upgrade_modal';
+import WithTitleObserver from './with_title_observer';
 
 import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
@@ -153,7 +157,7 @@ export default class Root extends React.PureComponent<Props, State> {
         trackSelectorMetrics();
     }
 
-    componentDidUpdate(prevProps: Props) {
+    componentDidUpdate(prevProps: Props, prevState: State) {
         if (!deepEqual(prevProps.theme, this.props.theme) || !deepEqual(prevProps.currentTeam, this.props.currentTeam)) {
             // add body class for webcomponents theming
             if (document.body.className.match(/kchat-.+-theme/)) {
@@ -197,8 +201,10 @@ export default class Root extends React.PureComponent<Props, State> {
             this.setRootMeta();
         }
 
-        if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
-            DesktopApp.reactAppInitialized();
+        if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
+            if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
+                DesktopApp.reactAppInitialized();
+            }
         }
 
         if (this.embeddedInIFrame && this.props.location !== prevProps.location) {
@@ -494,6 +500,17 @@ export default class Root extends React.PureComponent<Props, State> {
             }
         });
 
+        // Bind a handler for unexpected "out of quota" situations.
+        // This is rare and usually caused by either a race condition between two events (of differents user)
+        // before usage data is refreshed, or a failure in the 'quota-changed' websocket event.
+        // In such cases, we show the upgrade modal and refetch usage to ensure the user
+        // gets blocked before exceeding their quota.
+        Client4.bindOutOfQuotaEvent(() => {
+            store.dispatch(getUsage());
+            const nextPack = getNextWcPack(this.props.currentPack);
+            openUpgradeDialog(nextPack);
+        });
+
         const ksuiteBridge = new KSuiteBridge({debugPrefix: 'kchat'}); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch, store.getState);
 
@@ -567,8 +584,10 @@ export default class Root extends React.PureComponent<Props, State> {
 
         return (
             <RootProvider>
+                <WithTitleObserver/>
                 <MobileViewWatcher/>
                 <LuxonController/>
+                <WcKsuiteUpgradeModal/>
                 <Switch>
                     <Route
                         path={'/error'}

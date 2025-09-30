@@ -13,9 +13,11 @@ import {regenerateTeamInviteId} from 'mattermost-redux/actions/teams';
 import {getProfiles, searchProfiles as reduxSearchProfiles} from 'mattermost-redux/actions/users';
 import {Permissions} from 'mattermost-redux/constants';
 import {getCurrentChannel, getChannelsInCurrentTeam, getChannelsNameMapInCurrentTeam} from 'mattermost-redux/selectors/entities/channels';
+import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {haveIChannelPermission, haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeam, getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
@@ -87,6 +89,14 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
 
     const canAddUsers = haveICurrentTeamPermission(state, Permissions.ADD_USER_TO_TEAM);
 
+    const usage = getUsage(state);
+    const limits = getCloudLimits(state);
+    const totalGuest = usage.guests + usage.pending_guests;
+
+    // IK: special case we need to have the number or remaining guest
+    // so we can't use the helper function plan_utils.isQuotaExceeded
+    const remainingGuestSlot = limits.guests === -1 ? Number.MAX_VALUE : limits.guests - totalGuest;
+
     return {
         invitableChannels,
         currentTeam,
@@ -98,6 +108,7 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
         currentChannel,
         townSquareDisplayName,
         roleForTrackFlow: getRoleForTrackFlow(state),
+        remainingGuestSlot,
     };
 }
 

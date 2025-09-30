@@ -657,3 +657,16 @@
         height: 30px;
     }
 }
+
+.integrations-backstage-modal {
+    .modal-content {
+        .modal-title {
+            color:rgb(51, 51, 51) !important;
+
+        }
+        .alert-danger {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+    }
+}

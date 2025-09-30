@@ -6,9 +6,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import type {CloudUsage} from '@mattermost/types/cloud';
 
+import {getUsage as getUsageAction} from 'mattermost-redux/actions/cloud';
 import {getUsage} from 'mattermost-redux/selectors/entities/usage';
-
-import {getUsage as getUsageAction} from 'actions/cloud';
 
 import {useIsLoggedIn} from 'components/global_header/hooks';
 

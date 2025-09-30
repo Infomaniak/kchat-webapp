@@ -278,21 +278,16 @@
 .InputErrorBox {
     display: flex;
     width: 100%;
-    height: 60px;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
     margin-top: 2px;
-    background: rgba(var(--error-box-background), 0.1);
+    padding: 4px;
+    color: var(--error-text);
 
-    span {
-        position: relative;
-        height: 20px;
-        color: var(--error-text);
-        font-size: 16px;
-        line-height: 20px;
-        text-align: center;
-    }
+   span {
+    width: 100%;
+   }
 
     button.upgradeLink {
         padding: 0 !important;
