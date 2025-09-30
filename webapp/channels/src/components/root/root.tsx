@@ -54,6 +54,7 @@ import LuxonController from './luxon_controller';
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
 import {WcKsuiteUpgradeModal} from './wc_ksuite_upgrade_modal';
+import WithTitleObserver from './with_title_observer';
 
 import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
@@ -583,6 +584,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
         return (
             <RootProvider>
+                <WithTitleObserver/>
                 <MobileViewWatcher/>
                 <LuxonController/>
                 <WcKsuiteUpgradeModal/>
