@@ -255,7 +255,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
     safeUpdateRects() {
         this.updateRects();
         window.requestAnimationFrame(() => this.updateRects()); // expected duplication
-        window.requestAnimationFrame(() => this.updateRects()); // expected duplication
+        setTimeout(() => this.updateRects(), 50);// expected duplication
     }
 
     initScrollToIndex = (): {index: number; position: string; offset?: number} => {
