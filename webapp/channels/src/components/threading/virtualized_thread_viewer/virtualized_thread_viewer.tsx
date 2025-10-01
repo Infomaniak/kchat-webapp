@@ -111,8 +111,6 @@ const SCROLL_OFFSET_BUFFER = 5;
 const OVERSCAN_COUNT_FORWARD = 80;
 const OVERSCAN_COUNT_BACKWARD = 80;
 
-const CONTENT_PADDING_BOTTOM = 8;
-
 class ThreadViewerVirtualized extends PureComponent<Props, State> {
     private mounted = false;
     private scrollStopAction: DelayedAction;
@@ -529,7 +527,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                     role='application'
                     aria-label={Utils.localizeMessage({id: 'accessibility.sections.rhsContent', defaultMessage: 'message details complimentary region'})}
                     className='post-right__content a11y__region'
-                    style={{height: '100%', position: 'relative', paddingBottom: CONTENT_PADDING_BOTTOM}}
+                    style={{height: '100%', position: 'relative'}}
                     data-a11y-sort-order='3'
                     data-a11y-focus-child={true}
                     data-a11y-order-reversed={true}
@@ -538,8 +536,8 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                         disableWidth={true}
                     >
                         {({width, height: _height}) => {
-                            const available = _height - (postCreateContainerRefHeight - CONTENT_PADDING_BOTTOM);
-                            const desired = innerRefHeight + CONTENT_PADDING_BOTTOM + 1;
+                            const available = _height - (postCreateContainerRefHeight);
+                            const desired = innerRefHeight + 1;
                             const reachedMax = innerRefHeight && postCreateContainerRefHeight ? desired > available : false;
                             const height = innerRefHeight && postCreateContainerRefHeight ? Math.min(desired, available) : _height;
 
