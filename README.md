@@ -9,25 +9,19 @@ Infomaniak fork of the mattermost web client modified to work with our internal 
  - Node 16
  - Yarn
 
-### Environment
+### Environment & Hosts Setup
 
-Add an `NPM_TOKEN` env var with a Github token (read:packages scope)
+To run the application correctly, both environment variables and hosts configuration are required.
 
-Create a .env file with the following variables
+| Environment | .env Variables | Hosts Entry | Access URL |
+|------------|----------------|------------|------------|
+| **Preprod** | ```dotenv WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com MANAGER_ENDPOINT=https://manager.infomaniak.com LOGIN_ENDPOINT=https://login.infomaniak.com SHOP_ENDPOINT=https://shop.infomaniak.com/``` | `127.0.0.1 infomaniak.local.preprod.dev.infomaniak.ch` | `http://infomaniak.local.preprod.dev.infomaniak.ch` |
+| **Production** | ```dotenv MANAGER_ENDPOINT=https://manager.infomaniak.com/ LOGIN_ENDPOINT=https://login.infomaniak.com/ BASE_URL=https://infomaniak.kchat.infomaniak.com/ WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com``` | `127.0.0.1 local.infomaniak.com` | [https://local.infomaniak.com](https://local.infomaniak.com) |
 
-```dotenv
-WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current
-WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com
-MANAGER_ENDPOINT=https://manager.infomaniak.com
-LOGIN_ENDPOINT=https://login.infomaniak.com
-SHOP_ENDPOINT=https://shop.infomaniak.com/
-```
+> ⚠️ Make sure to add an `NPM_TOKEN` environment variable with a GitHub token (scope: `read:packages`) before running the app.
+> ⚠️ Updating hosts is mandatory for cookies to work properly.
 
-### Hosts
 
-Modify your hosts file located at `/etc/hosts` and add this line : `127.0.0.1 infomaniak.local.preprod.dev.infomaniak.ch`
-
-> Must be done, otherwise your application won't be able to read cookies set to infomaniak.com
 
 ### Installing and building dependencies
 
