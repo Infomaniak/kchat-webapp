@@ -162,15 +162,18 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
 
         /* ik: use to recompute resize [start]  */
 
-        this.innerResizeObserver = new ResizeObserver(() => this.updateRects());
-        this.composerResizeObserver = new ResizeObserver(() => this.updateRects());
-
         if (this.innerRef.current) {
+            this.innerResizeObserver = new ResizeObserver(() => this.updateRects());
             this.innerResizeObserver.observe(this.innerRef.current);
         }
+
         if (this.postCreateContainerRef.current) {
+            this.composerResizeObserver = new ResizeObserver(() => this.updateRects());
             this.composerResizeObserver.observe(this.postCreateContainerRef.current);
         }
+
+        // Initial measurement
+        this.safeUpdateRects();
 
         /* ik: use to recompute resize [end] */
     }
@@ -191,7 +194,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
 
         for (const postId of replyListIds) {
             if (prevProps.postsEditingMap[postId] !== postsEditingMap[postId]) {
-                this.updateRects(); // triggers recalculation for both start/cancel editing
+                this.safeUpdateRects(); // triggers recalculation for both start/cancel editing
                 break;
             }
         }
@@ -217,16 +220,15 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
 
         // ik: After updates (props/state) try to re-measure to keep sizes accurate.
         // schedule on next RAF to ensure DOM updated
-        window.requestAnimationFrame(() => {
-            this.updateRects();
-        });
+        this.safeUpdateRects();
     }
 
     canLoadMorePosts() {
         return Promise.resolve();
     }
 
-    // ik: compute resize
+    // Ik: compute resize
+    // updateRects() → single measurement pass, scheduled in rAF so DOM is painted.
     updateRects() {
         if (!this.mounted) {
             return;
@@ -243,6 +245,17 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                 });
             }
         });
+    }
+
+    // Ik: safeUpdateRects() → stronger variant that retries updateRects across multiple frames.
+    // Needed because some UI changes (edit → cancel, collapsing input, async virtual list render)
+    // don’t always produce a stable DOM height in the same frame as the Redux/prop change.
+    // By running up to 3 times (current frame + 2 rAFs), we guarantee the layout
+    // is eventually measured correctly without noticeable delay for the user.
+    safeUpdateRects() {
+        this.updateRects();
+        window.requestAnimationFrame(() => this.updateRects()); // expected duplication
+        window.requestAnimationFrame(() => this.updateRects()); // expected duplication
     }
 
     initScrollToIndex = (): {index: number; position: string; offset?: number} => {
