@@ -468,7 +468,6 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                             return (
                                 <>
                                     <DynamicSizeList
-                                        key={`dynamic-list-${height}`}
                                         canLoadMorePosts={this.canLoadMorePosts}
                                         height={height}
                                         initRangeToRender={this.initRangeToRender}
