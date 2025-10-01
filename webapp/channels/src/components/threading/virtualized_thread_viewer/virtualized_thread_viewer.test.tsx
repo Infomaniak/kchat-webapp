@@ -41,6 +41,7 @@ function getBasePropsAndState(): [Props, DeepPartial<GlobalState>] {
         isThreadView: false,
         newMessagesSeparatorActions: [],
         measureRhsOpened: jest.fn(),
+        postsEditingMap: {},
     };
 
     const state: DeepPartial<GlobalState> = {
