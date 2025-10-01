@@ -1,6 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/**
+ * ⚠️ IK WARNING: Heavily customized virtualized thread viewer ⚠️
+ *
+ * This implementation diverges significantly from upstream react-window behavior.
+ *
+ * Any upstream merges or refactors must be reviewed carefully,
+ * since assumptions about list measurement, resize timing,
+ * or edit handling may conflict with this logic.
+ *
+ * DO NOT casually replace with upstream changes without
+ * validating resize, scroll, and edit/cancel flows.
+ */
+
 import {DynamicSizeList} from 'dynamic-virtualized-list';
 import type {OnScrollArgs, OnItemsRenderedArgs} from 'dynamic-virtualized-list';
 import React, {PureComponent} from 'react';
@@ -46,6 +59,10 @@ type Props = {
     newMessagesSeparatorActions: NewMessagesSeparatorActionComponent[];
     inputPlaceholder?: string;
     measureRhsOpened: () => void;
+
+    // Ik: Needed to trigger a resize on the virtual list when a user cancels an edit,
+    // since canceling doesn’t otherwise trigger a component update.
+    postsEditingMap: Record<string, boolean>;
 }
 
 type State = {
@@ -105,6 +122,10 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
     innerRef: RefObject<HTMLDivElement>;
     initRangeToRender: number[];
 
+    // Ik: used to recompute resize
+    private innerResizeObserver?: ResizeObserver;
+    private composerResizeObserver?: ResizeObserver;
+
     constructor(props: Props) {
         super(props);
 
@@ -139,15 +160,43 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
 
         this.props.measureRhsOpened();
 
-        this.updateRects();
+        /* ik: use to recompute resize [start]  */
+
+        this.innerResizeObserver = new ResizeObserver(() => this.updateRects());
+        this.composerResizeObserver = new ResizeObserver(() => this.updateRects());
+
+        if (this.innerRef.current) {
+            this.innerResizeObserver.observe(this.innerRef.current);
+        }
+        if (this.postCreateContainerRef.current) {
+            this.composerResizeObserver.observe(this.postCreateContainerRef.current);
+        }
+
+        /* ik: use to recompute resize [end] */
     }
 
     componentWillUnmount() {
         this.mounted = false;
+
+        // ik: cleanup observers
+        this.innerResizeObserver?.disconnect();
+        this.composerResizeObserver?.disconnect();
     }
 
     componentDidUpdate(prevProps: Props) {
         const {highlightedPostId, selectedPostFocusedAt, lastPost, currentUserId, directTeammate, isMember} = this.props;
+
+        /* ik: use to recompute resize when editing [start]  */
+        const {replyListIds, postsEditingMap} = this.props;
+
+        for (const postId of replyListIds) {
+            if (prevProps.postsEditingMap[postId] !== postsEditingMap[postId]) {
+                this.updateRects(); // triggers recalculation for both start/cancel editing
+                break;
+            }
+        }
+
+        /* ik: use to recompute resize when editing [end]  */
 
         // In case the user is being deactivated, we need to trigger a re-render
         if (directTeammate?.delete_at !== prevProps.directTeammate?.delete_at) {
@@ -166,17 +215,33 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             this.scrollToBottom();
         }
 
-        this.updateRects();
+        // ik: After updates (props/state) try to re-measure to keep sizes accurate.
+        // schedule on next RAF to ensure DOM updated
+        window.requestAnimationFrame(() => {
+            this.updateRects();
+        });
     }
 
     canLoadMorePosts() {
         return Promise.resolve();
     }
 
+    // ik: compute resize
     updateRects() {
-        this.setState({
-            innerRefHeight: this.innerRef.current?.clientHeight || 0,
-            postCreateContainerRefHeight: this.postCreateContainerRef.current?.clientHeight || 0,
+        if (!this.mounted) {
+            return;
+        }
+
+        window.requestAnimationFrame(() => {
+            const innerH = this.innerRef.current?.clientHeight || 0;
+            const postCreateH = this.postCreateContainerRef.current?.clientHeight || 0;
+
+            if (innerH !== this.state.innerRefHeight || postCreateH !== this.state.postCreateContainerRefHeight) {
+                this.setState({
+                    innerRefHeight: innerH,
+                    postCreateContainerRefHeight: postCreateH,
+                });
+            }
         });
     }
 
@@ -463,7 +528,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                             const available = _height - (postCreateContainerRefHeight - CONTENT_PADDING_BOTTOM);
                             const desired = innerRefHeight + CONTENT_PADDING_BOTTOM + 1;
                             const reachedMax = innerRefHeight && postCreateContainerRefHeight ? desired > available : false;
-                            const height = innerRefHeight && postCreateContainerRefHeight ? Math.min(innerRefHeight + CONTENT_PADDING_BOTTOM + 1, _height - (postCreateContainerRefHeight - CONTENT_PADDING_BOTTOM)) : _height;
+                            const height = innerRefHeight && postCreateContainerRefHeight ? Math.min(desired, available) : _height;
 
                             return (
                                 <>

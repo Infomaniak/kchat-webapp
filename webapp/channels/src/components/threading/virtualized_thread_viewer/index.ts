@@ -11,6 +11,7 @@ import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import {measureRhsOpened} from 'actions/views/rhs';
+import {getIsPostBeingEditedInRHS} from 'selectors/posts';
 import {makePrepareReplyIdsForThreadViewer, makeGetThreadLastViewedAt} from 'selectors/views/threads';
 
 import type {GlobalState} from 'types/store';
@@ -50,6 +51,11 @@ function makeMapStateToProps() {
         const myChannelMemberships = getMyChannelMemberships(state);
         const isMember = Boolean(myChannelMemberships[channelId]);
 
+        const postsEditingMap: Record<string, boolean> = {};
+        replyListIds.forEach((postId) => {
+            postsEditingMap[postId] = getIsPostBeingEditedInRHS(state, postId);
+        });
+
         return {
             currentUserId,
             directTeammate,
@@ -57,6 +63,7 @@ function makeMapStateToProps() {
             replyListIds,
             isMember,
             newMessagesSeparatorActions,
+            postsEditingMap,
         };
     };
 }
