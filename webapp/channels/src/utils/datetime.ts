@@ -79,6 +79,15 @@ export function isToday(date: Date): boolean {
     return isSameDay(date);
 }
 
+// Ik change : I added this function to adress this issue https://redmine.infomaniak.ch/issues/459418
+export function isTodayOrTomorrow(date: Date): boolean {
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    return isSameDay(date, today) || isSameDay(date, tomorrow);
+}
+
 export function isYesterday(date: Date): boolean {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
