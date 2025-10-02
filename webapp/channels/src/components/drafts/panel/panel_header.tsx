@@ -13,7 +13,7 @@ import Tag from 'components/widgets/tag/tag';
 import WithTooltip from 'components/with_tooltip';
 
 import './panel_header.scss';
-import {isToday} from 'utils/datetime';
+import {isTodayOrTomorrow} from 'utils/datetime';
 
 const TIMESTAMP_PROPS: Partial<ComponentProps<typeof Timestamp>> = {
     day: 'numeric',
@@ -97,7 +97,9 @@ function PanelHeader({
                                                 useTime={scheduledPostTimeFormat}
                                             />
                                         ),
-                                        isTodayOrTomorrow: isToday(timestampDateObject),
+
+                                        // Ik changed: I added isTodayOrTomorrow function to adress this issue https://redmine.infomaniak.ch/issues/459418
+                                        isTodayOrTomorrow: isTodayOrTomorrow(timestampDateObject),
                                     }}
                                 />
                             )
