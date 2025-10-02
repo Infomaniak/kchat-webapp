@@ -9,18 +9,26 @@ Infomaniak fork of the mattermost web client modified to work with our internal 
  - Node 16
  - Yarn
 
-### Environment & Hosts Setup
+### Preprod Setup
 
-To run the application correctly, both environment variables and hosts configuration are required.
+| Type | Value |
+|------|-------|
+| **.env Variables** | WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current<br>WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com<br>MANAGER_ENDPOINT=https://manager.infomaniak.com<br>LOGIN_ENDPOINT=https://login.infomaniak.com<br>SHOP_ENDPOINT=https://shop.infomaniak.com/ |
+| **Hosts Entry** | 127.0.0.1 infomaniak.local.preprod.dev.infomaniak.ch |
+| **Access URL** | http://infomaniak.local.preprod.dev.infomaniak.ch |
 
-| Environment | .env Variables | Hosts Entry | Access URL |
-|------------|----------------|------------|------------|
-| **Preprod** | ```dotenv WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com MANAGER_ENDPOINT=https://manager.infomaniak.com LOGIN_ENDPOINT=https://login.infomaniak.com SHOP_ENDPOINT=https://shop.infomaniak.com/``` | `127.0.0.1 infomaniak.local.preprod.dev.infomaniak.ch` | `http://infomaniak.local.preprod.dev.infomaniak.ch` |
-| **Production** | ```dotenv MANAGER_ENDPOINT=https://manager.infomaniak.com/ LOGIN_ENDPOINT=https://login.infomaniak.com/ BASE_URL=https://infomaniak.kchat.infomaniak.com/ WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com``` | `127.0.0.1 local.infomaniak.com` | [https://local.infomaniak.com](https://local.infomaniak.com) |
+---
+
+### Production Setup
+
+| Type | Value |
+|------|-------|
+| **.env Variables** | MANAGER_ENDPOINT=https://manager.infomaniak.com/<br>LOGIN_ENDPOINT=https://login.infomaniak.com/<br>BASE_URL=https://infomaniak.kchat.infomaniak.com/<br>WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current<br>WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com |
+| **Hosts Entry** | 127.0.0.1 local.infomaniak.com |
+| **Access URL** | [https://local.infomaniak.com](https://local.infomaniak.com) |
 
 > ⚠️ Make sure to add an `NPM_TOKEN` environment variable with a GitHub token (scope: `read:packages`) before running the app.
 > ⚠️ Updating hosts is mandatory for cookies to work properly.
-
 
 
 ### Installing and building dependencies
