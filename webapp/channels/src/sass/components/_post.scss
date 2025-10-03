@@ -2065,15 +2065,8 @@
 
 // ik: added to fix empty blockquote min-height
 .post-message__text > blockquote {
-    display: flex;
-    flex-direction: column;
+    min-height: 20px;
 
-    &::after {
-        content: '.';
-        display: inline;
-        visibility: hidden;
-        color: transparent;
-    }
 }
 
 .view-history__text {
