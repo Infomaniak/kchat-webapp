@@ -2802,6 +2802,7 @@
   "channel_loader.unknown_error": "Hemos recibido un código de estado inesperado del servidor.",
   "channel_loader.uploadedFile": " cargó un archivo",
   "channel_loader.uploadedImage": " cargó una imagen",
+  "channel_loader.postVocal": " envió un mensaje de voz",
   "channel_members_dropdown.channel_admin": "Administrador del Canal",
   "channel_members_dropdown.channel_admins": "Administradores del Canal",
   "channel_members_dropdown.channel_guest": "Huésped del Canal",
