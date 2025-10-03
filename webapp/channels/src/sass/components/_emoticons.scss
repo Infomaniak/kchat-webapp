@@ -584,7 +584,7 @@ $emoji-footer-height: $emoji-footer-border-width + $emoji-half-height + $emoji-p
 
 .emoji-picker__custom {
     flex-shrink: 0;
-    margin: 10px;
+    margin: $emoji-picker-footer-margin;
     text-decoration: none;
 
     a,
