@@ -298,7 +298,7 @@ function PostComponent(props: Props) {
             hover || fileDropdownOpened || dropdownOpened || a11yActive || props.isPostBeingEdited;
         return classNames('a11y__section post', {
             'post--highlight': shouldHighlight && !fadeOutHighlight,
-            'same--root': hasSameRoot(props) && !isVocalMessage,
+            'same--root': hasSameRoot(props),
             'other--root': !hasSameRoot(props) && !isSystemMessage,
             'post--bot': PostUtils.isFromBot(post),
             'post--editing': props.isPostBeingEdited,
@@ -310,7 +310,7 @@ function PostComponent(props: Props) {
             'post--hovered': hovered,
 
             // Infomaniak: we disable this in threads
-            'same--user': (props.isConsecutivePost && props.location !== Locations.RHS_COMMENT && !props.compactDisplay) && !isVocalMessage,
+            'same--user': (props.isConsecutivePost && props.location !== Locations.RHS_COMMENT && !props.compactDisplay),
             'cursor--pointer': alt && !props.channelIsArchived,
             'post--hide-controls': post.failed || post.state === Posts.POST_DELETED,
             'post--comment same--root': fromAutoResponder,

@@ -73,9 +73,15 @@ function isConsecutivePost(state: GlobalState, ownProps: OwnProps) {
 
     let consecutivePost = false;
 
+    // Ik change : do not consider voice messages as consecutive posts
+    if (post?.type === 'voice') {
+        return false;
+    }
+
     if (previousPost && post && !post.metadata?.priority?.priority) {
         consecutivePost = areConsecutivePostsBySameUser(post, previousPost);
     }
+
     return consecutivePost;
 }
 
