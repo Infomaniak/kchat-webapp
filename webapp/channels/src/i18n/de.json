@@ -3379,6 +3379,7 @@
   "channel_loader.unknown_error": "Es wurde ein unerwarteter Statuscode vom Server empfangen.",
   "channel_loader.uploadedFile": " hat eine Datei hochgeladen",
   "channel_loader.uploadedImage": " hat ein Bild hochgeladen",
+  "channel_loader.postVocal": " hat eine Sprachnachricht gesendet",
   "channel_members_dropdown.channel_admin": "Kanaladministrator",
   "channel_members_dropdown.channel_admins": "Kanaladministratoren",
   "channel_members_dropdown.channel_guest": "Kanalgast",

@@ -2169,6 +2169,7 @@
   "channel_loader.unknown_error": "Abbiamo ricevuto un codice di stato inaspettato dal server.",
   "channel_loader.uploadedFile": " ha caricato un file",
   "channel_loader.uploadedImage": " ha caricato un'immagine",
+  "channel_loader.postVocal": " ha inviato un messaggio vocale",
   "channel_members_dropdown.channel_admin": "Amministrazione canale",
   "channel_members_dropdown.channel_admins": "Amministratore di canale",
   "channel_members_dropdown.channel_guest": "Ospite Canale",
