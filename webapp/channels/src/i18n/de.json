@@ -6567,6 +6567,7 @@
   "workspace_limits.upgrade": "Upgrade zur Vermeidung von {planName} Datenbeschränkungen",
   "workspace_limits.upgrade_reasons.free": "{planName} ist beschränkt auf {messagesLimit} Nachrichtenverlauf und {storageLimit} Dateispeicher. Du kannst etwas löschen um Platz freizugeben oder auf ein bezahltes Abonnement wechseln.",
   "yourcomputer": "Dein Computer",
+  "yourmobiledevice": "Ihr mobiles Gerät",
   "create_channel.limit_error": "Kanal-Limit erreicht.",
   "file_upload.limit_error": "Speichergrenze erreicht.",
   "file_upload.quota.exceeded.admin": "Der Speicherplatz reicht nicht aus, um diese Aktion auszuführen. Ändern Sie Ihren Tarif, um mehr Speicherplatz und neue Funktionen zu erhalten. <upsell>Upgrade</upsell>",
