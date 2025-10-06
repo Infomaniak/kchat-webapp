@@ -1,6 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/**
+ * ⚠️ IK WARNING: Heavily customized virtualized thread viewer ⚠️
+ *
+ * This implementation diverges significantly from upstream react-window behavior.
+ *
+ * Any upstream merges or refactors must be reviewed carefully,
+ * since assumptions about list measurement, resize timing,
+ * or edit handling may conflict with this logic.
+ *
+ * DO NOT casually replace with upstream changes without
+ * validating resize, scroll, and edit/cancel flows.
+ */
+
 import {DynamicSizeList} from 'dynamic-virtualized-list';
 import type {OnScrollArgs, OnItemsRenderedArgs} from 'dynamic-virtualized-list';
 import React, {PureComponent} from 'react';
@@ -28,7 +41,7 @@ import type {FakePost} from 'types/store/rhs';
 import CreateComment from './create_comment';
 import Row from './thread_viewer_row';
 
-// import './virtualized_thread_viewer.scss';
+import './virtualized_thread_viewer.scss';
 
 type Props = {
     currentUserId: string;
@@ -46,10 +59,13 @@ type Props = {
     newMessagesSeparatorActions: NewMessagesSeparatorActionComponent[];
     inputPlaceholder?: string;
     measureRhsOpened: () => void;
+
+    // Ik: Needed to trigger a resize on the virtual list when a user cancels an edit,
+    // since canceling doesn’t otherwise trigger a component update.
+    postsEditingMap: Record<string, boolean>;
 }
 
 type State = {
-    createCommentHeight: number;
     isScrolling: boolean;
     topRhsPostId?: string;
     userScrolledToBottom: boolean;
@@ -58,13 +74,15 @@ type State = {
     visibleStopIndex?: number;
     overscanStartIndex?: number;
     overscanStopIndex?: number;
+    innerRefHeight: number;
+    postCreateContainerRefHeight: number;
 }
 
 const virtListStyles = {
-    position: 'absolute',
-    top: '0',
-    height: '100%',
-    willChange: 'auto',
+    willChange: 'transform',
+    overflowY: 'auto',
+    overflowAnchor: 'none',
+    bottom: '0px',
 };
 
 const innerStyles = {
@@ -85,6 +103,11 @@ const THREADING_TIME: typeof BASE_THREADING_TIME = {
 };
 
 const OFFSET_TO_SHOW_TOAST = -50;
+
+// To handle issue caused by slight difference in scrollHeight and scrollOffset + clientHeight of virtaulized list
+// we add a buffer to the scrollOffset
+const SCROLL_OFFSET_BUFFER = 5;
+
 const OVERSCAN_COUNT_FORWARD = 80;
 const OVERSCAN_COUNT_BACKWARD = 80;
 
@@ -96,6 +119,10 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
     listRef: RefObject<DynamicSizeList>;
     innerRef: RefObject<HTMLDivElement>;
     initRangeToRender: number[];
+
+    // Ik: used to recompute resize
+    private innerResizeObserver?: ResizeObserver;
+    private composerResizeObserver?: ResizeObserver;
 
     constructor(props: Props) {
         super(props);
@@ -113,7 +140,6 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         this.scrollStopAction = new DelayedAction(this.handleScrollStop);
 
         this.state = {
-            createCommentHeight: 0,
             isScrolling: false,
             userScrolledToBottom: false,
             topRhsPostId: undefined,
@@ -122,6 +148,8 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             visibleStopIndex: undefined,
             overscanStartIndex: undefined,
             overscanStopIndex: undefined,
+            innerRefHeight: 0,
+            postCreateContainerRefHeight: 0,
         };
     }
 
@@ -129,14 +157,47 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         this.mounted = true;
 
         this.props.measureRhsOpened();
+
+        /* ik: use to recompute resize [start]  */
+
+        if (this.innerRef.current) {
+            this.innerResizeObserver = new ResizeObserver(() => this.updateRects());
+            this.innerResizeObserver.observe(this.innerRef.current);
+        }
+
+        if (this.postCreateContainerRef.current) {
+            this.composerResizeObserver = new ResizeObserver(() => this.updateRects());
+            this.composerResizeObserver.observe(this.postCreateContainerRef.current);
+        }
+
+        // Initial measurement
+        this.safeUpdateRects();
+
+        /* ik: use to recompute resize [end] */
     }
 
     componentWillUnmount() {
         this.mounted = false;
+
+        // ik: cleanup observers
+        this.innerResizeObserver?.disconnect();
+        this.composerResizeObserver?.disconnect();
     }
 
     componentDidUpdate(prevProps: Props) {
         const {highlightedPostId, selectedPostFocusedAt, lastPost, currentUserId, directTeammate, isMember} = this.props;
+
+        /* ik: use to recompute resize when editing [start]  */
+        const {replyListIds, postsEditingMap} = this.props;
+
+        for (const postId of replyListIds) {
+            if (prevProps.postsEditingMap[postId] !== postsEditingMap[postId]) {
+                this.safeUpdateRects(); // triggers recalculation for both start/cancel editing
+                break;
+            }
+        }
+
+        /* ik: use to recompute resize when editing [end]  */
 
         // In case the user is being deactivated, we need to trigger a re-render
         if (directTeammate?.delete_at !== prevProps.directTeammate?.delete_at) {
@@ -154,10 +215,45 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         } else if (prevProps.isMember !== isMember) {
             this.scrollToBottom();
         }
+
+        // ik: After updates (props/state) try to re-measure to keep sizes accurate.
+        // schedule on next RAF to ensure DOM updated
+        this.safeUpdateRects();
     }
 
     canLoadMorePosts() {
         return Promise.resolve();
+    }
+
+    // Ik: compute resize
+    // updateRects() → single measurement pass, scheduled in rAF so DOM is painted.
+    updateRects() {
+        if (!this.mounted) {
+            return;
+        }
+
+        window.requestAnimationFrame(() => {
+            const innerH = this.innerRef.current?.clientHeight || 0;
+            const postCreateH = this.postCreateContainerRef.current?.clientHeight || 0;
+
+            if (innerH !== this.state.innerRefHeight || postCreateH !== this.state.postCreateContainerRefHeight) {
+                this.setState({
+                    innerRefHeight: innerH,
+                    postCreateContainerRefHeight: postCreateH,
+                });
+            }
+        });
+    }
+
+    // Ik: safeUpdateRects() → stronger variant that retries updateRects across multiple frames.
+    // Needed because some UI changes (edit → cancel, collapsing input, async virtual list render)
+    // don’t always produce a stable DOM height in the same frame as the Redux/prop change.
+    // By running up to 3 times (current frame + 2 rAFs), we guarantee the layout
+    // is eventually measured correctly without noticeable delay for the user.
+    safeUpdateRects() {
+        this.updateRects();
+        window.requestAnimationFrame(() => this.updateRects()); // expected duplication
+        setTimeout(() => this.updateRects(), 50);// expected duplication
     }
 
     initScrollToIndex = (): {index: number; position: string; offset?: number} => {
@@ -190,11 +286,10 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         if (scrollHeight <= 0) {
             return;
         }
-        const {createCommentHeight} = this.state;
 
         const updatedState: Partial<State> = {};
 
-        const userScrolledToBottom = scrollHeight - scrollOffset - createCommentHeight <= clientHeight;
+        const userScrolledToBottom = scrollHeight - scrollOffset - SCROLL_OFFSET_BUFFER <= clientHeight;
 
         if (!scrollUpdateWasRequested) {
             this.scrollShortCircuit = 0;
@@ -358,18 +453,6 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             a11yIndex++;
         }
 
-        if (isCreateComment(itemId)) {
-            return (
-                <CreateComment
-                    placeholder={this.props.inputPlaceholder}
-                    isThreadView={this.props.isThreadView}
-                    ref={this.postCreateContainerRef}
-                    teammate={this.props.directTeammate}
-                    threadId={this.props.selected.id}
-                />
-            );
-        }
-
         return (
             <div
                 style={style}
@@ -429,10 +512,10 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
     };
 
     render() {
-        const {topRhsPostId} = this.state;
+        const {topRhsPostId, innerRefHeight, postCreateContainerRefHeight} = this.state;
 
         return (
-            <>
+            <div className='virtual-list__ctr'>
                 {this.props.isMobileView && topRhsPostId && !this.props.useRelativeTimestamp && (
                     <FloatingTimestamp
                         isRhsPost={true}
@@ -444,41 +527,61 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                     role='application'
                     aria-label={Utils.localizeMessage({id: 'accessibility.sections.rhsContent', defaultMessage: 'message details complimentary region'})}
                     className='post-right__content a11y__region'
-                    style={{height: '100%'}}
+                    style={{height: '100%', position: 'relative'}}
                     data-a11y-sort-order='3'
                     data-a11y-focus-child={true}
                     data-a11y-order-reversed={true}
                 >
-                    <AutoSizer>
-                        {({width, height}) => (
-                            <>
-                                <DynamicSizeList
-                                    canLoadMorePosts={this.canLoadMorePosts}
-                                    height={height}
-                                    initRangeToRender={this.initRangeToRender}
-                                    initScrollToIndex={this.initScrollToIndex}
-                                    innerListStyle={this.getInnerStyles()}
-                                    innerRef={this.innerRef}
-                                    itemData={this.props.replyListIds}
-                                    scrollToFailed={this.handleScrollToFailed}
-                                    onItemsRendered={this.onItemsRendered}
-                                    onScroll={this.handleScroll}
-                                    overscanCountBackward={OVERSCAN_COUNT_BACKWARD}
-                                    overscanCountForward={OVERSCAN_COUNT_FORWARD}
-                                    ref={this.listRef}
-                                    style={virtListStyles}
-                                    width={width}
-                                    className={'post-list__dynamic--RHS'}
-                                    correctScrollToBottom={true}
-                                >
-                                    {this.renderRow}
-                                </DynamicSizeList>
-                                {this.renderToast(width)}
-                            </>
-                        )}
+                    <AutoSizer
+                        disableWidth={true}
+                    >
+                        {({width, height: _height}) => {
+                            const available = _height - (postCreateContainerRefHeight);
+                            const desired = innerRefHeight + 1;
+                            const reachedMax = innerRefHeight && postCreateContainerRefHeight ? desired > available : false;
+                            const height = innerRefHeight && postCreateContainerRefHeight ? Math.min(desired, available) : _height;
+
+                            return (
+                                <>
+                                    <DynamicSizeList
+                                        canLoadMorePosts={this.canLoadMorePosts}
+                                        height={height}
+                                        initRangeToRender={this.initRangeToRender}
+                                        initScrollToIndex={this.initScrollToIndex}
+                                        innerListStyle={this.getInnerStyles()}
+                                        innerRef={this.innerRef}
+                                        itemData={this.props.replyListIds}
+                                        scrollToFailed={this.handleScrollToFailed}
+                                        onItemsRendered={this.onItemsRendered}
+                                        onScroll={this.handleScroll}
+                                        overscanCountBackward={OVERSCAN_COUNT_BACKWARD}
+                                        overscanCountForward={OVERSCAN_COUNT_FORWARD}
+                                        ref={this.listRef}
+                                        style={{...virtListStyles, height}}
+                                        width={width}
+                                        className={'post-list__dynamic--RHS'}
+                                        correctScrollToBottom={true}
+                                    >
+                                        {this.renderRow}
+                                    </DynamicSizeList>
+                                    {this.renderToast(width)}
+                                    <div
+                                        ref={this.postCreateContainerRef}
+                                        className={reachedMax ? 'thread-viewer__composer thread-viewer__composer--fixed' : 'thread-viewer__composer'}
+                                    >
+                                        <CreateComment
+                                            placeholder={this.props.inputPlaceholder}
+                                            isThreadView={this.props.isThreadView}
+                                            teammate={this.props.directTeammate}
+                                            threadId={this.props.selected.id}
+                                        />
+                                    </div>
+                                </>
+                            );
+                        }}
                     </AutoSizer>
                 </div>
-            </>
+            </div>
         );
     }
 }
