@@ -17,9 +17,10 @@ interface Props extends ListChildComponentProps<CategoryOrEmojiRow[]> {
     cursorEmojiId: SystemEmoji['unified'] | CustomEmoji['id'];
     onEmojiClick: (emoji: Emoji) => void;
     onEmojiMouseOver: (cursor: EmojiCursor) => void;
+    onMouseLeave: () => void;
 }
 
-function EmojiPickerCategoryOrEmojiRow({index, style, data, cursorRowIndex, cursorEmojiId, onEmojiClick, onEmojiMouseOver}: Props) {
+function EmojiPickerCategoryOrEmojiRow({index, style, data, cursorRowIndex, cursorEmojiId, onEmojiClick, onEmojiMouseOver, onMouseLeave}: Props) {
     const row = data[index];
 
     if (isCategoryHeaderRow(row)) {
@@ -49,6 +50,7 @@ function EmojiPickerCategoryOrEmojiRow({index, style, data, cursorRowIndex, curs
                         isSelected={isSelected}
                         onClick={onEmojiClick}
                         onMouseOver={onEmojiMouseOver}
+                        onMouseLeave={onMouseLeave}
                     />
                 );
             })}

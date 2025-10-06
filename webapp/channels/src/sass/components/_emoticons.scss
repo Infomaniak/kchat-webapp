@@ -576,7 +576,6 @@ $emoji-footer-height: $emoji-footer-border-width + $emoji-half-height + $emoji-p
 }
 
 .emoji-picker__footer {
-    display: flex;
     min-height: $emoji-footer-height; // prevents tiny layout shift when emoji replaces placeholder
     align-items: center;
     justify-content: space-between;
@@ -598,7 +597,7 @@ $emoji-footer-height: $emoji-footer-border-width + $emoji-half-height + $emoji-p
         font-weight: 600;
         text-decoration: none;
     }
-
+    
     a:hover {
         background-color: rgba(var(--button-bg-rgb), 0.12);
     }

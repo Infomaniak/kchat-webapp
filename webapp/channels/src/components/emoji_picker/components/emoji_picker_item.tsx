@@ -21,9 +21,10 @@ interface Props {
     isSelected?: boolean;
     onClick: (emoji: Emoji) => void;
     onMouseOver: (cursor: EmojiCursor) => void;
+    onMouseLeave: () => void;
 }
 
-function EmojiPickerItem({emoji, rowIndex, isSelected, onClick, onMouseOver}: Props) {
+function EmojiPickerItem({emoji, rowIndex, isSelected, onClick, onMouseOver, onMouseLeave}: Props) {
     const {formatMessage} = useIntl();
 
     const handleMouseOver = () => {
@@ -95,6 +96,7 @@ function EmojiPickerItem({emoji, rowIndex, isSelected, onClick, onMouseOver}: Pr
                     emojiName: (isSystemEmoji(emoji) ? emoji.short_name : emoji.name).replace(/_/g, ' '),
                 },
             )}
+            onMouseLeave={onMouseLeave}
         >
             {content}
         </button>
