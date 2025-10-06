@@ -141,6 +141,7 @@ import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
 import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';
 import {handleServerEvent} from './servers_actions';
+import {updateTeamsOrderForUser} from './team_actions';
 
 const RemovedFromChannelModal = withSuspense(lazy(() => import('components/removed_from_channel_modal')));
 
@@ -1004,20 +1005,25 @@ export function handlePostUnreadEvent(msg) {
 
 function handleKSuiteAdded(msg) {
     return (doDispatch, doGetState) => {
+        const teamOrder = [...getMyKSuites(doGetState()), msg.data.team];
         if (isDesktopApp()) {
             window.postMessage(
                 {
                     type: 'update-teams',
                     message: {
                         teams: [
-                            ...getMyKSuites(doGetState()),
-                            msg.data.team,
+                            teamOrder,
                         ],
                     },
                 },
                 window.origin,
             );
         }
+
+        const currentTeamIds = getMyKSuites(doGetState()).map((team) => team.id);
+        const teamOrderByIds = [...currentTeamIds, msg.data.team.id];
+
+        updateTeamsOrderForUser(teamOrderByIds)(doDispatch, doGetState);
         const currentTeamId = getCurrentTeamId(doGetState());
         doDispatch({type: TeamTypes.RECEIVED_TEAM, data: msg.data.team, userId: msg.data.user_id, currentTeamId});
     };
