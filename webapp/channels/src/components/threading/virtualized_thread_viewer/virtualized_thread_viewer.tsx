@@ -536,7 +536,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                         disableWidth={true}
                     >
                         {({width, height: _height}) => {
-                            const isAvailableSpaceComputed = innerRefHeight !== 0 && postCreateContainerRefHeight !== 0
+                            const isAvailableSpaceComputed = innerRefHeight !== 0 && postCreateContainerRefHeight !== 0;
 
                             const available = _height - (postCreateContainerRefHeight);
                             const desired = innerRefHeight + 8; //ik: Added offset to avoid scrollbar
@@ -544,6 +544,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                             const height = Math.min(desired, available);
 
                             return (
+
                                 // Ik: tricks to hide the content when size is not correctly computed
                                 // we have to draw the content in order to compute it, so no early return
                                 <div style={{opacity: isAvailableSpaceComputed ? 1 : 0}}>
