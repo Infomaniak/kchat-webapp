@@ -539,7 +539,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                             const isAvailableSpaceComputed = innerRefHeight !== 0 && postCreateContainerRefHeight !== 0
 
                             const available = _height - (postCreateContainerRefHeight);
-                            const desired = innerRefHeight + 1;
+                            const desired = innerRefHeight + 8; //ik: Added offset to avoid scrollbar
                             const reachedMax = innerRefHeight && postCreateContainerRefHeight ? desired > available : false;
                             const height = Math.min(desired, available);
 
