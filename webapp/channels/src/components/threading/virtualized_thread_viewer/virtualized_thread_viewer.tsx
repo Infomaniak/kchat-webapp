@@ -233,8 +233,8 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         }
 
         window.requestAnimationFrame(() => {
-            const innerH = this.innerRef.current?.clientHeight || 0;
-            const postCreateH = this.postCreateContainerRef.current?.clientHeight || 0;
+            const innerH = this.innerRef.current?.clientHeight ?? 0;
+            const postCreateH = this.postCreateContainerRef.current?.clientHeight ?? 0;
 
             if (innerH !== this.state.innerRefHeight || postCreateH !== this.state.postCreateContainerRefHeight) {
                 this.setState({
@@ -536,13 +536,17 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                         disableWidth={true}
                     >
                         {({width, height: _height}) => {
+                            const isAvailableSpaceComputed = innerRefHeight !== 0 && postCreateContainerRefHeight !== 0
+
                             const available = _height - (postCreateContainerRefHeight);
                             const desired = innerRefHeight + 1;
                             const reachedMax = innerRefHeight && postCreateContainerRefHeight ? desired > available : false;
-                            const height = innerRefHeight && postCreateContainerRefHeight ? Math.min(desired, available) : _height;
+                            const height = Math.min(desired, available);
 
                             return (
-                                <>
+                                // Ik: tricks to hide the content when size is not correctly computed
+                                // we have to draw the content in order to compute it, so no early return
+                                <div style={{opacity: isAvailableSpaceComputed ? 1 : 0}}>
                                     <DynamicSizeList
                                         canLoadMorePosts={this.canLoadMorePosts}
                                         height={height}
@@ -576,7 +580,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                                             threadId={this.props.selected.id}
                                         />
                                     </div>
-                                </>
+                                </div>
                             );
                         }}
                     </AutoSizer>
