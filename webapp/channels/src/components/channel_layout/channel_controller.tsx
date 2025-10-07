@@ -2,11 +2,13 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {lazy, useEffect} from 'react';
+import React, {lazy, useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {cleanUpStatusAndProfileFetchingPoll} from 'mattermost-redux/actions/status_profile_polling';
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
+import {get} from 'mattermost-redux/selectors/entities/preferences';
+import {getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 
 import {addVisibleUsersInCurrentChannelAndSelfToStatusPoll} from 'actions/status_actions';
 
@@ -18,10 +20,12 @@ import Sidebar from 'components/sidebar';
 import CRTPostsChannelResetWatcher from 'components/threading/channel_threads/posts_channel_reset_watcher';
 import UnreadsStatusHandler from 'components/unreads_status_handler';
 
-import {Constants} from 'utils/constants';
-import {isInternetExplorer, isEdge} from 'utils/user_agent';
+import {Constants, Preferences} from 'utils/constants';
+import {isInternetExplorer, isEdge, isDesktopApp} from 'utils/user_agent';
 
 import Pluggable from 'plugins/pluggable';
+
+import type {GlobalState} from 'types/store';
 
 const ResetStatusModal = makeAsyncComponent('ResetStatusModal', lazy(() => import('components/reset_status_modal')));
 
@@ -36,6 +40,9 @@ type Props = {
 
 export default function ChannelController(props: Props) {
     const enabledUserStatuses = useSelector(getIsUserStatusesConfigEnabled);
+    const mykSuite = useSelector(getMyKSuites);
+    const userTeamsOrderPreference = useSelector((state: GlobalState) => get(state, Preferences.TEAMS_ORDER, '', ''));
+
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -69,6 +76,40 @@ export default function ChannelController(props: Props) {
             clearInterval(loadStatusesIntervalId);
         };
     }, [enabledUserStatuses]);
+
+    const handleDesktopServerSwitchShortcut = useCallback((e: KeyboardEvent) => {
+        if ((e.metaKey || e.ctrlKey) && e.altKey) {
+            const orderedkSuite = [...mykSuite].sort((a, b) => {
+                return userTeamsOrderPreference.indexOf(a.id) - userTeamsOrderPreference.indexOf(b.id);
+            });
+
+            const digits = Array.from({length: Math.min(orderedkSuite.length, 10)}, (_, i) => {
+                return i === 9 ? 'Digit0' : `Digit${i + 1}`;
+            });
+
+            const idx = digits.indexOf(e.code);
+            if (idx !== -1) {
+                e.preventDefault();
+
+                if (isDesktopApp()) {
+                    window.postMessage({
+                        type: 'switch-server',
+                        data: orderedkSuite[idx].display_name,
+                    }, window.origin);
+                }
+            }
+        }
+    }, [mykSuite, userTeamsOrderPreference]);
+
+    useEffect(() => {
+        if (isDesktopApp()) {
+            window.addEventListener('keydown', handleDesktopServerSwitchShortcut);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleDesktopServerSwitchShortcut);
+        };
+    }, [handleDesktopServerSwitchShortcut]);
 
     return (
         <>
