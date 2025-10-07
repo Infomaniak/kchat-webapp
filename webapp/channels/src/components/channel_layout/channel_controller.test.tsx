@@ -36,9 +36,6 @@ jest.mock('mattermost-redux/selectors/entities/general', () => ({
 }));
 
 describe('ChannelController', () => {
-    const team1 = TestHelper.getTeamMock();
-    const team2 = TestHelper.getTeamMock();
-    const user = TestHelper.getUserMock();
     beforeEach(() => {
         mockState = {
             entities: {
@@ -49,16 +46,6 @@ describe('ChannelController', () => {
                 },
                 preferences: {
                     myPreferences: TestHelper.getPreferencesMock(),
-                },
-                teams: {
-                    teams: {
-                        [team1.id]: team1,
-                        [team2.id]: team2,
-                    },
-                    myMembers: {
-                        [team1.id]: {team_id: team1.id, user_id: user.id, roles: 'team_user', mention_count: 1},
-                        [team2.id]: {team_id: team2.id, user_id: user.id, roles: 'team_user', mention_count: 3},
-                    },
                 },
             },
         } as unknown as GlobalState;
