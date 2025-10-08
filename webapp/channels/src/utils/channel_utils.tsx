@@ -11,7 +11,7 @@ import {getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
-import {joinChannel} from 'actions/global_actions';
+import {joinChannelById} from 'actions/views/channel';
 import {openModal} from 'actions/views/modals';
 import LocalStorageStore from 'stores/local_storage_store';
 
@@ -80,7 +80,7 @@ export function joinPrivateChannelPrompt(team: Team, channelDisplayName: string,
                 dialogProps: {
                     channelName: channelDisplayName,
                     onJoin: () => {
-                        joinChannel(channelId);
+                        dispatch(joinChannelById(channelId));
                         LocalStorageStore.setTeamIdJoinedOnLoad(null);
                         resolve({
                             data: {join: true},
