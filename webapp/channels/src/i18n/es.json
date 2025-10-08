@@ -5093,6 +5093,7 @@
   "workspace_limits.teams_limit_reached.upgrade_to_unarchive": "Actualizar para desarchivar",
   "workspace_limits.upgrade": "Actualizar {planName} para evitar límites de datos",
   "yourcomputer": "Tu computador",
+  "yourmobiledevice": "Tu dispositivo móvil",
   "create_channel.limit_error": "Límite de canales alcanzado.",
   "file_upload.limit_error": "Límite de almacenamiento alcanzado.",
   "invite.guests.limit_error": "Límite de invitados alcanzado.",

@@ -34,6 +34,7 @@ import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import {hasPlainText, createFileFromClipboardDataItem} from 'utils/paste';
 import {
     isIosChrome,
+    isMobile,
     isMobileApp,
 } from 'utils/user_agent';
 import {
@@ -644,9 +645,28 @@ export class FileUpload extends PureComponent<Props, State> {
     render() {
         const {formatMessage} = this.props.intl;
         let multiple = true;
+        let deviceMessage;
+
         if (isMobileApp()) {
             // iOS WebViews don't upload videos properly in multiple mode
             multiple = false;
+        }
+
+        // Ik change : change message for mobile app
+        if (isMobile()) {
+            deviceMessage = (
+                <FormattedMessage
+                    id='yourmobiledevice'
+                    defaultMessage='Your mobile device'
+                />
+            );
+        } else {
+            deviceMessage = (
+                <FormattedMessage
+                    id='yourcomputer'
+                    defaultMessage='Your computer'
+                />
+            );
         }
 
         let accept = '';
@@ -780,12 +800,7 @@ export class FileUpload extends PureComponent<Props, State> {
 
                     >
                         <Menu.Item
-                            labels={
-                                <FormattedMessage
-                                    id='yourcomputer'
-                                    defaultMessage='Your computer'
-                                />
-                            }
+                            labels={deviceMessage}
                             leadingElement={
                                 <LaptopIcon size={16}/>
                             }
