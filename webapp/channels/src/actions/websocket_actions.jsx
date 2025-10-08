@@ -88,7 +88,7 @@ import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entitie
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getGroup} from 'mattermost-redux/selectors/entities/groups';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
-import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {callDialingEnabled, isCollapsedThreadsEnabled, getTeamsOrderPreference} from 'mattermost-redux/selectors/entities/preferences';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {
     getTeamIdByChannelId,
@@ -1020,10 +1020,11 @@ function handleKSuiteAdded(msg) {
             );
         }
 
-        const currentTeamIds = getMyKSuites(doGetState()).map((team) => team.id);
-        const teamOrderByIds = [...currentTeamIds, msg.data.team.id];
+        const teamsOrderPreference = getTeamsOrderPreference(doGetState()) || [];
+        const updatedTeamsOrderPreference = [...teamsOrderPreference, msg.data.team.id];
 
-        updateTeamsOrderForUser(teamOrderByIds)(doDispatch, doGetState);
+        updateTeamsOrderForUser(updatedTeamsOrderPreference)(doDispatch, doGetState);
+
         const currentTeamId = getCurrentTeamId(doGetState());
         doDispatch({type: TeamTypes.RECEIVED_TEAM, data: msg.data.team, userId: msg.data.user_id, currentTeamId});
     };
@@ -1046,6 +1047,11 @@ function handleKSuiteDeleted(msg) {
                 window.origin,
             );
         }
+
+        const teamsOrderPreference = getTeamsOrderPreference(doGetState()) || [];
+        const updatedTeamsOrderPreference = teamsOrderPreference.filter((id) => id !== msg.data.team.id);
+
+        updateTeamsOrderForUser(updatedTeamsOrderPreference)(doDispatch, doGetState);
 
         doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id, currentTeamId}});
         doDispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});

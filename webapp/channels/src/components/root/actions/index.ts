@@ -15,13 +15,14 @@ import {getMyKSuites, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux
 import {getMe, getProfiles} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
-import {isCollapsedThreadsEnabled, getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {isCollapsedThreadsEnabled, getIsOnboardingFlowEnabled, getTeamsOrderPreference} from 'mattermost-redux/selectors/entities/preferences';
 import {getActiveTeamsList, getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {checkIsFirstAdmin, getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
 import {getMyMeets} from 'actions/calls';
 import {redirectUserToDefaultTeam, emitUserLoggedOutEvent} from 'actions/global_actions';
+import {updateTeamsOrderForUser} from 'actions/team_actions';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, StoragePrefixes} from 'utils/constants';
@@ -99,6 +100,42 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
                     dispatch(getMyMeets()),
                 ]);
                 dispatch(getMyTeamUnreads(isCollapsedThreadsEnabled(getState())));
+
+                if (kSuiteCall?.data && Array.isArray(kSuiteCall.data)) {
+                    // IK change: The desktop logic for team order is based on the 'teams_order' preference.
+                    // Therefore, we need to update the preference while respecting the order already established by the desktop.
+                    // If there is a new team, we add it to the end of the array.
+                    // If one of the teams in the preference has been deleted, we remove it.
+
+                    const fetchedTeamIds = kSuiteCall.data.map((team) => team.id);
+                    const state = getState();
+
+                    // IK change: getTeamsOrderPreference returns an object, not an array
+                    // We need to convert the CSV string in prefObj.value into a proper array
+                    const prefObj = getTeamsOrderPreference(state);
+                    const currentPreferences: string[] = prefObj?.value ? prefObj.value.split(',') : [];
+
+                    // Filter out any preferences that no longer exist in fetchedTeamIds
+                    const cleanedPreferences = currentPreferences.filter((id) => fetchedTeamIds.includes(id));
+
+                    // Find any new teams that aren't already in the preferences
+                    const missingTeamIds = fetchedTeamIds.filter((id) => !cleanedPreferences.includes(id));
+
+                    // Combine the cleaned preferences with the missing teams appended at the end
+                    const updatedPreferences = [...cleanedPreferences, ...missingTeamIds];
+
+                    // Check if the preferences actually changed
+                    const hasChanged =
+        updatedPreferences.length !== currentPreferences.length ||
+        updatedPreferences.some((id, index) => id !== currentPreferences[index]);
+
+                    // If there was a change, update the user's team order preferences
+                    if (hasChanged) {
+                        // eslint-disable-next-line no-console
+                        console.log('[loadConfigAndMe] Syncing team order preferences after fetch:', updatedPreferences);
+                        updateTeamsOrderForUser(updatedPreferences);
+                    }
+                }
             } catch (error) {
                 dispatch(logError(error as ServerError));
                 return {
