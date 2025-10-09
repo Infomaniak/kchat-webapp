@@ -1,12 +1,12 @@
 /* eslint-disable no-console, no-process-env */
 const childProcess = require('child_process');
+const path = require('path');
 const url = require('url');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExternalTemplateRemotesPlugin = require('external-remotes-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const path = require('path');
 const webpack = require('webpack');
 const {ModuleFederationPlugin} = require('webpack').container;
 const LiveReloadPlugin = require('webpack-livereload-plugin');
@@ -32,10 +32,6 @@ const DEV = targetIsRun || targetIsStats || targetIsDevServer;
 const STANDARD_EXCLUDE = [
     /node_modules/,
 ];
-
-const CSP_UNSAFE_EVAL_IF_DEV = ' \'unsafe-eval\'';
-const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
-const CSP_WORKER_SRC = 'sentry-kchat.infomaniak.com';
 
 let publicPath = '/static/';
 
@@ -341,6 +337,8 @@ var config = {
 };
 
 function generateCSP() {
+    const CSP_UNSAFE_INLINE = '\'unsafe-inline\'';
+    const CSP_UNSAFE_EVAL_IF_DEV = '\'unsafe-eval\'';
     const scriptSrc = [
         "'self'",
         'blob:',
@@ -356,7 +354,11 @@ function generateCSP() {
         'onlyoffice.infomaniak.com',
         CSP_UNSAFE_INLINE,
         CSP_UNSAFE_EVAL_IF_DEV,
-    ].join(' ');
+    ];
+
+    if (IS_CANARY || IS_PREPROD) {
+        scriptSrc.push('sentry-kchat.infomaniak.com');
+    }
 
     const scriptSrcElem = [
         "'self'",
@@ -368,12 +370,12 @@ function generateCSP() {
         'web-components-staging.dev.infomaniak.ch',
         'documentserver.kdrive.infomaniak.com',
         'onlyoffice.infomaniak.com',
-    ].join(' ');
+    ];
 
-    let csp = `script-src ${scriptSrc}; script-src-elem ${scriptSrcElem};`;
-    if (IS_CANARY || IS_PREPROD) {
-        csp += CSP_WORKER_SRC;
-    }
+    const csp = [
+        `script-src ${scriptSrc.join(' ')}`,
+        `script-src-elem ${scriptSrcElem.join(' ')}`,
+    ].join('; ');
 
     console.log('csp for html: ', csp);
 
