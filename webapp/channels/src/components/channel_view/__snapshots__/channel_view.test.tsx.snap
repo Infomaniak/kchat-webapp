@@ -165,8 +165,5 @@ exports[`components/channel_view Should match snapshot with base props 1`] = `
   <DeferredRenderWrapper
     channelId="channelId"
   />
-  <BannerJoinChannel
-    onButtonClick={[Function]}
-  />
 </div>
 `;
