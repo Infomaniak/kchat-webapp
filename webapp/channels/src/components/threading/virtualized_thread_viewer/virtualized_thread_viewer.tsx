@@ -76,6 +76,8 @@ type State = {
     overscanStopIndex?: number;
     innerRefHeight: number;
     postCreateContainerRefHeight: number;
+    isAvailableSpaceComputed: boolean;
+    wentToHighlightPost: boolean;
 }
 
 const virtListStyles = {
@@ -150,6 +152,8 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             overscanStopIndex: undefined,
             innerRefHeight: 0,
             postCreateContainerRefHeight: 0,
+            isAvailableSpaceComputed: false,
+            wentToHighlightPost: false,
         };
     }
 
@@ -206,6 +210,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
 
         if ((highlightedPostId && prevProps.highlightedPostId !== highlightedPostId) ||
             prevProps.selectedPostFocusedAt !== selectedPostFocusedAt) {
+            this.setState({wentToHighlightPost: false});
             this.scrollToHighlightedPost();
         } else if (
             prevProps.lastPost.id !== lastPost.id &&
@@ -236,10 +241,13 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             const innerH = this.innerRef.current?.clientHeight ?? 0;
             const postCreateH = this.postCreateContainerRef.current?.clientHeight ?? 0;
 
+            const isAvailableSpaceComputed = innerH !== 0 && postCreateH !== 0;
+
             if (innerH !== this.state.innerRefHeight || postCreateH !== this.state.postCreateContainerRefHeight) {
                 this.setState({
                     innerRefHeight: innerH,
                     postCreateContainerRefHeight: postCreateH,
+                    isAvailableSpaceComputed,
                 });
             }
         });
@@ -339,6 +347,12 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             overscanStartIndex,
             overscanStopIndex,
         });
+
+        if (this.state.wentToHighlightPost === false) {
+            if (this.props.highlightedPostId) {
+                requestAnimationFrame(() => this.scrollToHighlightedPost());
+            }
+        }
     };
 
     getInitialPostIndex = (): number => {
@@ -415,6 +429,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             this.setState({userScrolledToBottom: false}, () => {
                 this.scrollToItem(replyListIds.indexOf(highlightedPostId), 'center');
             });
+            this.setState({wentToHighlightPost: true});
         }
     };
 
@@ -536,8 +551,6 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                         disableWidth={true}
                     >
                         {({width, height: _height}) => {
-                            const isAvailableSpaceComputed = innerRefHeight !== 0 && postCreateContainerRefHeight !== 0;
-
                             const available = _height - (postCreateContainerRefHeight);
                             const desired = innerRefHeight + 8; //ik: Added offset to avoid scrollbar
                             const reachedMax = innerRefHeight && postCreateContainerRefHeight ? desired > available : false;
@@ -547,7 +560,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
 
                                 // Ik: tricks to hide the content when size is not correctly computed
                                 // we have to draw the content in order to compute it, so no early return
-                                <div style={{opacity: isAvailableSpaceComputed ? 1 : 0}}>
+                                <div style={{opacity: this.state.isAvailableSpaceComputed ? 1 : 0}}>
                                     <DynamicSizeList
                                         canLoadMorePosts={this.canLoadMorePosts}
                                         height={height}
