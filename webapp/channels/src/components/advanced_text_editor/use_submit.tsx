@@ -298,98 +298,102 @@ const useSubmit = (
         setShowPreview(false);
         isDraftSubmitting.current = true;
 
-        const notificationsToChannel = enableConfirmNotificationsToChannel && useChannelMentions;
-        let memberNotifyCount = 0;
-        let channelTimezoneCount = 0;
-        let mentions: string[] = [];
+        try {
+            const notificationsToChannel = enableConfirmNotificationsToChannel && useChannelMentions;
+            let memberNotifyCount = 0;
+            let channelTimezoneCount = 0;
+            let mentions: string[] = [];
 
-        const specialMentions = specialMentionsInText(submittingDraft.message);
-        const hasSpecialMentions = Object.values(specialMentions).includes(true);
+            const specialMentions = specialMentionsInText(submittingDraft.message);
+            const hasSpecialMentions = Object.values(specialMentions).includes(true);
 
-        if (enableConfirmNotificationsToChannel && !hasSpecialMentions) {
-            ({memberNotifyCount, channelTimezoneCount, mentions} = getGroupMentions(submittingDraft.message));
-        }
+            if (enableConfirmNotificationsToChannel && !hasSpecialMentions) {
+                ({memberNotifyCount, channelTimezoneCount, mentions} = getGroupMentions(submittingDraft.message));
+            }
 
-        if (notificationsToChannel && channelMembersCount > Constants.NOTIFY_ALL_MEMBERS && hasSpecialMentions) {
-            memberNotifyCount = channelMembersCount - 1;
+            if (notificationsToChannel && channelMembersCount > Constants.NOTIFY_ALL_MEMBERS && hasSpecialMentions) {
+                memberNotifyCount = channelMembersCount - 1;
 
-            for (const k in specialMentions) {
-                if (specialMentions[k]) {
-                    mentions.push('@' + k);
+                for (const k in specialMentions) {
+                    if (specialMentions[k]) {
+                        mentions.push('@' + k);
+                    }
+                }
+
+                const {data} = await dispatch(getChannelTimezones(channelId));
+                channelTimezoneCount = data ? data.length : 0;
+            }
+
+            const onConfirm = () => doSubmit(submittingDraft, schedulingInfo);
+            if (prioritySubmitCheck(onConfirm)) {
+                isDraftSubmitting.current = false;
+                return;
+            }
+
+            if (memberNotifyCount > 0 && !isDirectOrGroup && !isInEditMode) {
+                showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, onConfirm);
+                isDraftSubmitting.current = false;
+                return;
+            }
+
+            if (!skipCommands && !schedulingInfo) {
+                const status = getStatusFromSlashCommand(submittingDraft.message);
+                if (userIsOutOfOffice && status) {
+                    const resetStatusModalData = {
+                        modalId: ModalIdentifiers.RESET_STATUS,
+                        dialogType: ResetStatusModal,
+                        dialogProps: {newStatus: status},
+                    };
+
+                    dispatch(openModal(resetStatusModalData));
+
+                    handleDraftChange({
+                        ...submittingDraft,
+                        message: '',
+                    });
+                    isDraftSubmitting.current = false;
+                    return;
+                }
+
+                if (submittingDraft.message.trimEnd() === '/header') {
+                    const editChannelHeaderModalData = {
+                        modalId: ModalIdentifiers.EDIT_CHANNEL_HEADER,
+                        dialogType: EditChannelHeaderModal,
+                        dialogProps: {channel},
+                    };
+
+                    dispatch(openModal(editChannelHeaderModalData));
+
+                    handleDraftChange({
+                        ...submittingDraft,
+                        message: '',
+                    });
+                    isDraftSubmitting.current = false;
+                    return;
+                }
+
+                if (!isDirectOrGroup && submittingDraft.message.trimEnd() === '/purpose') {
+                    const editChannelPurposeModalData = {
+                        modalId: ModalIdentifiers.EDIT_CHANNEL_PURPOSE,
+                        dialogType: EditChannelPurposeModal,
+                        dialogProps: {channel},
+                    };
+
+                    dispatch(openModal(editChannelPurposeModalData));
+
+                    handleDraftChange({
+                        ...submittingDraft,
+                        message: '',
+                    });
+                    isDraftSubmitting.current = false;
+                    return;
                 }
             }
 
-            const {data} = await dispatch(getChannelTimezones(channelId));
-            channelTimezoneCount = data ? data.length : 0;
-        }
-
-        const onConfirm = () => doSubmit(submittingDraft, schedulingInfo);
-        if (prioritySubmitCheck(onConfirm)) {
+            await doSubmit(submittingDraft, schedulingInfo, options);
+        } finally {
             isDraftSubmitting.current = false;
-            return;
         }
-
-        if (memberNotifyCount > 0 && !isDirectOrGroup && !isInEditMode) {
-            showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, onConfirm);
-            isDraftSubmitting.current = false;
-            return;
-        }
-
-        if (!skipCommands && !schedulingInfo) {
-            const status = getStatusFromSlashCommand(submittingDraft.message);
-            if (userIsOutOfOffice && status) {
-                const resetStatusModalData = {
-                    modalId: ModalIdentifiers.RESET_STATUS,
-                    dialogType: ResetStatusModal,
-                    dialogProps: {newStatus: status},
-                };
-
-                dispatch(openModal(resetStatusModalData));
-
-                handleDraftChange({
-                    ...submittingDraft,
-                    message: '',
-                });
-                isDraftSubmitting.current = false;
-                return;
-            }
-
-            if (submittingDraft.message.trimEnd() === '/header') {
-                const editChannelHeaderModalData = {
-                    modalId: ModalIdentifiers.EDIT_CHANNEL_HEADER,
-                    dialogType: EditChannelHeaderModal,
-                    dialogProps: {channel},
-                };
-
-                dispatch(openModal(editChannelHeaderModalData));
-
-                handleDraftChange({
-                    ...submittingDraft,
-                    message: '',
-                });
-                isDraftSubmitting.current = false;
-                return;
-            }
-
-            if (!isDirectOrGroup && submittingDraft.message.trimEnd() === '/purpose') {
-                const editChannelPurposeModalData = {
-                    modalId: ModalIdentifiers.EDIT_CHANNEL_PURPOSE,
-                    dialogType: EditChannelPurposeModal,
-                    dialogProps: {channel},
-                };
-
-                dispatch(openModal(editChannelPurposeModalData));
-
-                handleDraftChange({
-                    ...submittingDraft,
-                    message: '',
-                });
-                isDraftSubmitting.current = false;
-                return;
-            }
-        }
-
-        await doSubmit(submittingDraft, schedulingInfo, options);
     }, [
         doSubmit,
         draft,
