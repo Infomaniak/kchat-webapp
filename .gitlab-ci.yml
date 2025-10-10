@@ -1,4 +1,5 @@
 stages:
+  - translations
   - build
   - lint
   - test_unit
@@ -241,6 +242,17 @@ deploy:image:
 #   allow_failure: true
 #   script:
 #     - yarn test:types
+
+translations:check:
+  stage: translations
+  image: node:${NODE_VERSION}
+  tags:
+    - kubernetes
+  rules:
+    - *rule-merge-request
+    - *rule-commit
+  script:
+    - yarn workspace mattermost-webapp check:i18n
 
 lint:eslint:
   stage: lint
