@@ -1,12 +1,12 @@
 /* eslint-disable no-console, no-process-env */
 const childProcess = require('child_process');
-const path = require('path');
 const url = require('url');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExternalTemplateRemotesPlugin = require('external-remotes-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 const webpack = require('webpack');
 const {ModuleFederationPlugin} = require('webpack').container;
 const LiveReloadPlugin = require('webpack-livereload-plugin');
@@ -372,9 +372,12 @@ function generateCSP() {
         'onlyoffice.infomaniak.com',
     ];
 
+    const workerSrc = ["'self'", 'blob:'];
+
     const csp = [
         `script-src ${scriptSrc.join(' ')}`,
         `script-src-elem ${scriptSrcElem.join(' ')}`,
+        `worker-src ${workerSrc.join(' ')}`,
     ].join('; ');
 
     console.log('csp for html: ', csp);
