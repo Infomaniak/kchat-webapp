@@ -6758,5 +6758,6 @@
   "fileTypes.Videos": "Videos",
   "duration.year": "{count, plural, one {Jahr} other {Jahre}}",
   "duration.month": "{count, plural, one {Monat} other {Monate}}",
-  "duration.day": "{count, plural, one {Tag} other {Tage}}"
+  "duration.day": "{count, plural, one {Tag} other {Tage}}",
+  "yourmobiledevice": "Ihr mobiles Gerät"
 }

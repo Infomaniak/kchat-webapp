@@ -6352,5 +6352,6 @@
   "fileTypes.Videos": "Videos",
   "duration.year": "{count, plural, one {an} other {ans}}",
   "duration.month": "{count, plural, one {mois} other {mois}}",
-  "duration.day": "{count, plural, one {jour} other {jours}}"
+  "duration.day": "{count, plural, one {jour} other {jours}}",
+  "yourmobiledevice": "Votre appareil mobile"
 }

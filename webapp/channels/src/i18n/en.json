@@ -3061,13 +3061,13 @@
   "channel_limitation.messages": "Messages and files older than 3 months are hidden. To view more posts, {isAdmin, select, true {subscribe to a higher offer. <modifyOffer>Change my offer</modifyOffer>} other {contact an administrator to subscribe to a higher offer}}",
   "channel_loader.posted": "Posted",
   "channel_loader.postedImage": " posted an image",
+  "channel_loader.postVocal": " sent a voice message",
   "channel_loader.socketError": "Please check connection, kChat unreachable.",
   "channel_loader.someone": "Someone",
   "channel_loader.something": " did something new",
   "channel_loader.unknown_error": "We received an unexpected status code from the server.",
   "channel_loader.uploadedFile": " uploaded a file",
   "channel_loader.uploadedImage": " uploaded an image",
-  "channel_loader.postVocal": " sent a voice message",
   "channel_members_dropdown.channel_admin": "Channel Admin",
   "channel_members_dropdown.channel_admins": "Channel Admins",
   "channel_members_dropdown.channel_guest": "Channel Guest",
@@ -5817,5 +5817,6 @@
   "workspace_limits.search_message_limit.banner_text": "Some older messages may not be shown because your workspace has over {messages} messages. <a>{ctaAction}</a>",
   "workspace_limits.teams_limit_reached.tool_tip": "You've reached the team limit for your current plan. Consider upgrading to unarchive this team or archive your other teams",
   "workspace_limits.teams_limit_reached.upgrade_to_unarchive": "Upgrade to Unarchive",
-  "yourcomputer": "Your computer"
+  "yourcomputer": "Your computer",
+  "yourmobiledevice": "Your mobile device"
 }
