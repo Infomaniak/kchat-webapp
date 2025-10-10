@@ -4,6 +4,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import type {HTMLAttributes} from 'react';
+import {FormattedMessage} from 'react-intl';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
@@ -206,6 +207,10 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
 
         return (
             <>
+                <FormattedMessage
+                    id='testTOFail'
+                    defaultMessage={'should fail CI'}
+                />
                 <div className={classNames('ThreadViewer', this.props.className)}>
                     <div className='post-right-comments-container'>
                         <>
