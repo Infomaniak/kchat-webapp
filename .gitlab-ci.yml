@@ -253,6 +253,8 @@ translations:check:
     - *rule-commit
   script:
     - yarn workspace mattermost-webapp check:i18n
+    - git diff --exit-code webapp/channels/src/i18n/ || { echo "⛔ i18n files changed, commit the updates."; exit 1; }
+
 
 lint:eslint:
   stage: lint
