@@ -4,7 +4,6 @@
 import classNames from 'classnames';
 import React from 'react';
 import type {HTMLAttributes} from 'react';
-import {FormattedMessage} from 'react-intl';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
