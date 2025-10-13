@@ -21,6 +21,11 @@ export function forceLogoutIfNecessary(err: ServerError, dispatch: DispatchFunc<
 
     redirectToErrorPageIfNecessary(err);
 
+    // Ik: when it's autolog error, we want to bypass the logout
+    if (isIkAutologError(err)) {
+        return;
+    }
+
     if ('status_code' in err && err.status_code === HTTP_UNAUTHORIZED && err.url && err.url.indexOf('/login') === -1 && currentUserId) {
         Client4.setToken('');
         dispatch({type: UserTypes.LOGOUT_SUCCESS, data: {}});
@@ -33,6 +38,10 @@ const statusCodes = {
     FORCE_MIGRATION: 1,
 };
 
+function isIkAutologError(err: ServerError) {
+    return err.error?.code === 'not_authorized' && err.error.description === 'You are autologged but do not have the right to access this route';
+}
+
 export function redirectToErrorPageIfNecessary(err: ServerError) {
     switch (err.status_code) {
     case statusCodes.HTTP_MAINTENANCE:
@@ -41,7 +50,7 @@ export function redirectToErrorPageIfNecessary(err: ServerError) {
     case statusCodes.HTTP_BLOCKED:
         if (err.server_error_id === 'product_locked' || err.error?.code === 'product_locked') {
             getHistory().replace('/error?type=blocked');
-        } else if (err.error?.code === 'not_authorized' && err.error.description === 'You are autologged but do not have the right to access this route') {
+        } else if (isIkAutologError(err)) {
             getHistory().replace('/error?type=autolog_blocked');
         }
         break;
