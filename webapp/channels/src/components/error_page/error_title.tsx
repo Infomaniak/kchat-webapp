@@ -100,14 +100,12 @@ const ErrorTitle: React.FC<Props> = ({type, title, groupName}: Props) => {
                 />
             );
             break;
-        case ErrorPageTypes.BLOCKED:
+
+        case ErrorPageTypes.AUTOLOG_BLOCKED:
             errorTitle = (
                 <FormattedMessage
-                    id='error.blocked.title'
-                    defaultMessage='The kChat {groupName} is currently blocked'
-                    values={{
-                        groupName,
-                    }}
+                    id='error.autolog.blocked.title'
+                    defaultMessage='Access forbidden'
                 />
             );
             break;

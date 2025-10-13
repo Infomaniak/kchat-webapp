@@ -41,6 +41,8 @@ export function redirectToErrorPageIfNecessary(err: ServerError) {
     case statusCodes.HTTP_BLOCKED:
         if (err.server_error_id === 'product_locked' || err.error?.code === 'product_locked') {
             getHistory().replace('/error?type=blocked');
+        } else if (err.error?.code === 'not_authorized' && err.error.description === 'You are autologged but do not have the right to access this route') {
+            getHistory().replace('/error?type=autolog_blocked');
         }
         break;
     case statusCodes.FORCE_MIGRATION:

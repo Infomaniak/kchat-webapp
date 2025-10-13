@@ -1049,6 +1049,7 @@ export const ErrorPageTypes = {
     NO_KSUITE: 'no_ksuite',
     MAINTENANCE: 'maintenance',
     BLOCKED: 'blocked',
+    AUTOLOG_BLOCKED: 'autolog_blocked',
     FORCE_MIGRATION: 'force_migration',
 };
 
