@@ -1018,8 +1018,9 @@ function handleKSuiteAdded(msg) {
             );
         }
 
-        const teamsOrderPreference = getTeamsOrderPreference(doGetState()) || [];
-        const updatedTeamsOrderPreference = [...teamsOrderPreference, msg.data.team.id];
+        const prefObj = getTeamsOrderPreference(doGetState());
+        const currentPreferences = prefObj?.value ? prefObj.value.split(',') : [];
+        const updatedTeamsOrderPreference = [...currentPreferences, msg.data.team.id];
 
         updateTeamsOrderForUser(updatedTeamsOrderPreference)(doDispatch, doGetState);
 
@@ -1046,8 +1047,9 @@ function handleKSuiteDeleted(msg) {
             );
         }
 
-        const teamsOrderPreference = getTeamsOrderPreference(doGetState()) || [];
-        const updatedTeamsOrderPreference = teamsOrderPreference.filter((id) => id !== msg.data.team.id);
+        const prefObj = getTeamsOrderPreference(doGetState());
+        const currentPreferences = prefObj?.value ? prefObj.value.split(',') : [];
+        const updatedTeamsOrderPreference = currentPreferences.filter((id) => id !== msg.data.team.id);
 
         updateTeamsOrderForUser(updatedTeamsOrderPreference)(doDispatch, doGetState);
 
