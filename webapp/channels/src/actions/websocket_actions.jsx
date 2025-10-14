@@ -1005,15 +1005,13 @@ export function handlePostUnreadEvent(msg) {
 
 function handleKSuiteAdded(msg) {
     return (doDispatch, doGetState) => {
-        const teamOrder = [...getMyKSuites(doGetState()), msg.data.team];
+        const teamsOrder = [...getMyKSuites(doGetState()), msg.data.team];
         if (isDesktopApp()) {
             window.postMessage(
                 {
                     type: 'update-teams',
                     message: {
-                        teams: [
-                            teamOrder,
-                        ],
+                        teams: teamsOrder,
                     },
                 },
                 window.origin,
