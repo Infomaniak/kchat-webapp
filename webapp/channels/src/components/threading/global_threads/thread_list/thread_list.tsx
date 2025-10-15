@@ -19,7 +19,6 @@ import {closeModal, openModal} from 'actions/views/modals';
 import {getIsMobileView} from 'selectors/views/browser';
 
 import NoResultsIndicator from 'components/no_results_indicator';
-import ReadThreadIllustration from 'components/threading/common/read_thread_illustration';
 import CRTListTutorialTip from 'components/tours/crt_tour/crt_list_tutorial_tip';
 import CRTUnreadTutorialTip from 'components/tours/crt_tour/crt_unread_tutorial_tip';
 import Header from 'components/widgets/header';
@@ -168,11 +167,6 @@ const ThreadList = ({
     const handleOpenMarkAllAsReadModal = useCallback(() => {
         const handleCloseMarkAllAsReadModal = () => {
             dispatch(closeModal(ModalIdentifiers.MARK_ALL_THREADS_AS_READ));
-
-            // blur the modal toggle button to prevent displaying a tooltip
-            if (document.activeElement instanceof HTMLButtonElement) {
-                document.activeElement.blur();
-            }
         };
 
         const handleConfirm = () => {
@@ -273,7 +267,6 @@ const ThreadList = ({
                 {unread && !someUnread && isEmpty(unreadIds) ? (
                     <NoResultsIndicator
                         expanded={true}
-                        iconGraphic={<ReadThreadIllustration/>}
                         title={formatMessage({
                             id: 'globalThreads.threadList.noUnreadThreads',
                             defaultMessage: 'No unread threads',
