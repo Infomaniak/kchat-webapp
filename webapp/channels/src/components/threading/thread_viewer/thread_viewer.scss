@@ -15,10 +15,6 @@
         padding-bottom: 8px;
         scrollbar-color: var(--center-channel-color-32) #fff0;
         scrollbar-width: thin;
-
-        & > div[role="list"]:nth-child(1) {
-            margin-top: auto;
-        }
     }
 
     > div {

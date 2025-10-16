@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {DynamicSizeList} from 'dynamic-virtualized-list';
 import type {OnScrollArgs, OnItemsRenderedArgs} from 'dynamic-virtualized-list';
+import {DynamicSizeList} from 'dynamic-virtualized-list';
 import React, {PureComponent} from 'react';
 import type {RefObject} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
@@ -16,6 +16,7 @@ import {getNewMessagesIndex, isDateLine, isStartOfNewMessages, isCreateComment} 
 import NewRepliesBanner from 'components/new_replies_banner';
 import FloatingTimestamp from 'components/post_view/floating_timestamp';
 import {THREADING_TIME as BASE_THREADING_TIME} from 'components/threading/common/options';
+import ToastWrapper from 'components/toast_wrapper';
 
 import Constants from 'utils/constants';
 import DelayedAction from 'utils/delayed_action';
@@ -29,6 +30,7 @@ import CreateComment from './create_comment';
 import Row from './thread_viewer_row';
 
 import './virtualized_thread_viewer.scss';
+import {LastPostObserver} from '../thread_viewer/ik_last_post_observer';
 
 type Props = {
     currentUserId: string;
@@ -56,12 +58,14 @@ type State = {
     visibleStopIndex?: number;
     overscanStartIndex?: number;
     overscanStopIndex?: number;
+    showScrollToBottom: boolean;
+    isScrollToBottomDismissed: boolean;
 }
 
 const virtListStyles = {
     position: 'absolute',
     willChange: 'transform',
-    overflowY: 'auto',
+    overflowY: 'scroll',
     overflowAnchor: 'none',
     bottom: '0px',
     maxHeight: '100%',
@@ -97,8 +101,18 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
     private mounted = false;
     private scrollStopAction: DelayedAction;
     private scrollShortCircuit = 0;
+
+    // Ik: to observe if lastPost visibility to show a toast
+    lastPostRef = React.createRef<HTMLDivElement>();
+    lastPostObserver = new LastPostObserver((fullyInvisible) => {
+        if (!this.state.isScrollToBottomDismissed) {
+            this.setState({showScrollToBottom: fullyInvisible});
+        }
+    });
+
     listRef: RefObject<DynamicSizeList>;
     innerRef: RefObject<HTMLDivElement>;
+
     initRangeToRender: number[];
 
     constructor(props: Props) {
@@ -124,6 +138,8 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             visibleStopIndex: undefined,
             overscanStartIndex: undefined,
             overscanStopIndex: undefined,
+            showScrollToBottom: false,
+            isScrollToBottomDismissed: false,
         };
     }
 
@@ -135,6 +151,8 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
 
     componentWillUnmount() {
         this.mounted = false;
+
+        this.lastPostObserver.clear();
     }
 
     componentDidUpdate(prevProps: Props) {
@@ -154,6 +172,8 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         ) {
             this.scrollToBottom();
         }
+
+        this.lastPostObserver.observe(this.lastPostRef.current);
     }
 
     canLoadMorePosts() {
@@ -216,6 +236,10 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         }
 
         this.setState(updatedState as State);
+
+        if (!this.state.isScrollToBottomDismissed) {
+            // this.setState({showScrollToBottom: !userScrolledToBottom});
+        }
     };
 
     updateFloatingTimestamp = (visibleTopItem: number) => {
@@ -328,6 +352,13 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         }
     };
 
+    dismissScrollToBottomToast = () => {
+        this.setState({
+            showScrollToBottom: false,
+            isScrollToBottomDismissed: true,
+        });
+    };
+
     renderRow = ({data, itemId, style}: {data: any; itemId: any; style: any}) => {
         const index = data.indexOf(itemId);
         let className = '';
@@ -361,6 +392,7 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
             <div
                 style={style}
                 className={className}
+                ref={isLastPost ? this.lastPostRef : null}
             >
                 <Row
                     a11yIndex={a11yIndex}
@@ -415,6 +447,35 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         );
     };
 
+    //ik: we saw a toast if the last post is not visible
+    renderSrollToBottomToast() {
+        return (
+            <ToastWrapper
+                atLatestPost={true}
+                postListIds={this.props.replyListIds}
+                atBottom={null}
+                width={50}
+                lastViewedBottom={0}
+                scrollToUnreadMessages={() => {}}
+                scrollToNewMessage={() => {}}
+                scrollToLatestMessages={this.scrollToBottom}
+                updateNewMessagesAtInChannel={() => {}}
+                updateLastViewedBottomAt={() => {}}
+                shouldStartFromBottomWhenUnread={false}
+                isNewMessageLineReached={true}
+                channelId={'this.props.channelId'}
+                focusedPostId={'this.props.focusedPostId'}
+                initScrollOffsetFromBottom={1}
+                onSearchHintDismiss={() => {}}
+                showSearchHintToast={false}
+                showScrollToBottomToast={this.state.showScrollToBottom}
+                onScrollToBottomToastDismiss={this.dismissScrollToBottomToast}
+                hideScrollToBottomToast={() => this.setState({showScrollToBottom: false})}
+                isThreadView={false}
+            />
+        );
+    }
+
     render() {
         const {topRhsPostId} = this.state;
 
@@ -436,33 +497,36 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
                     data-a11y-focus-child={true}
                     data-a11y-order-reversed={true}
                 >
+                    {this.renderSrollToBottomToast()}
                     <AutoSizer>
-                        {({width, height}) => (
-                            <>
-                                <DynamicSizeList
-                                    canLoadMorePosts={this.canLoadMorePosts}
-                                    height={height}
-                                    initRangeToRender={this.initRangeToRender}
-                                    initScrollToIndex={this.initScrollToIndex}
-                                    innerListStyle={this.getInnerStyles()}
-                                    innerRef={this.innerRef}
-                                    itemData={this.props.replyListIds}
-                                    scrollToFailed={this.handleScrollToFailed}
-                                    onItemsRendered={this.onItemsRendered}
-                                    onScroll={this.handleScroll}
-                                    overscanCountBackward={OVERSCAN_COUNT_BACKWARD}
-                                    overscanCountForward={OVERSCAN_COUNT_FORWARD}
-                                    ref={this.listRef}
-                                    style={virtListStyles}
-                                    width={width}
-                                    className={'post-list__dynamic--RHS'}
-                                    correctScrollToBottom={true}
-                                >
-                                    {this.renderRow}
-                                </DynamicSizeList>
-                                {this.renderToast(width)}
-                            </>
-                        )}
+                        {({width, height}) => {
+                            return (
+                                <>
+                                    <DynamicSizeList
+                                        canLoadMorePosts={this.canLoadMorePosts}
+                                        height={height}
+                                        initRangeToRender={this.initRangeToRender}
+                                        initScrollToIndex={this.initScrollToIndex}
+                                        innerListStyle={this.getInnerStyles()}
+                                        innerRef={this.innerRef}
+                                        itemData={this.props.replyListIds}
+                                        scrollToFailed={this.handleScrollToFailed}
+                                        onItemsRendered={this.onItemsRendered}
+                                        onScroll={this.handleScroll}
+                                        overscanCountBackward={OVERSCAN_COUNT_BACKWARD}
+                                        overscanCountForward={OVERSCAN_COUNT_FORWARD}
+                                        ref={this.listRef}
+                                        style={virtListStyles}
+                                        width={width}
+                                        className={'post-list__dynamic--RHS'}
+                                        correctScrollToBottom={true}
+                                    >
+                                        {this.renderRow}
+                                    </DynamicSizeList>
+                                    {this.renderToast(width)}
+                                </>
+                            );
+                        }}
                     </AutoSizer>
                 </div>
                 <CreateComment
