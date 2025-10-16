@@ -16,9 +16,8 @@ import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
 
 import Menu from 'components/widgets/menu/menu';
 
-import {copyToClipboard} from 'utils/utils';
-
 import {fakeDate} from 'tests/helpers/date';
+import {copyToClipboard} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
