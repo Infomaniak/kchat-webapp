@@ -136,7 +136,7 @@ const IkPostponeReminderButtons = (props: Props) => {
         if (postReminder === PostReminders.TOMORROW) {
             const tomorrow = getCurrentMomentForTimezone(props.timezone).
                 add(1, 'day').
-                set({hour: 9, minute: 0}).
+                set({hour: 8, minute: 0}).
                 toDate();
 
             trailingElements = (
@@ -161,7 +161,7 @@ const IkPostponeReminderButtons = (props: Props) => {
             const monday = getCurrentMomentForTimezone(props.timezone).
                 add(1, 'week').
                 isoWeekday(1).
-                set({hour: 9, minute: 0}).
+                set({hour: 8, minute: 0}).
                 toDate();
 
             trailingElements = (
