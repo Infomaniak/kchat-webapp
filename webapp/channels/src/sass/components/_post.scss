@@ -52,7 +52,6 @@
         }
 
         p {
-            margin: 0;
             white-space: pre-wrap;
         }
 
@@ -769,6 +768,11 @@
             }
         }
 
+        .post__link {
+            padding-top: 3px;
+            margin: 0;
+        }
+
         .attachment {
             padding-top: 1px;
             clear: both;
@@ -787,6 +791,10 @@
         }
 
         &.post--comment {
+            .post__body {
+                padding-left: 8px;
+            }
+
             .attachment {
                 .attachment__body__wrap {
                     .btn-close {
@@ -832,7 +840,9 @@
         }
 
         blockquote {
-            padding: 3px 0 3px 20px;
+            display: flex;
+            flex-direction: column;
+            padding: 0 0 0 8px;
 
             &::before {
                 top: 0;
@@ -863,7 +873,7 @@
         }
 
         .post__body {
-            padding: 2px 0 0;
+            padding: 2px 0;
             background: transparent !important;
             line-height: 1.5;
 
@@ -1043,8 +1053,8 @@
 
     &.post--comment {
         .post__body {
-            padding-left: 7px;
-            border-left: 4px solid rgba(var(--center-channel-color-rgb), 0.2);
+            padding-left: 12px;
+            border-left: 4px solid rgba(var(--button-bg-rgb), 0.24);
         }
 
         &.mention-comment {
@@ -1408,7 +1418,7 @@
 
     .post__body {
         width: 100%;
-        padding: 0 0 0.2em;
+        padding: 0.2em 0;
         word-wrap: break-word;
 
         &-reactions-acks {
@@ -2055,15 +2065,8 @@
 
 // ik: added to fix empty blockquote min-height
 .post-message__text > blockquote {
-    display: flex;
-    flex-direction: column;
+    min-height: 20px;
 
-    &::after {
-        content: '.';
-        display: inline;
-        visibility: hidden;
-        color: transparent;
-    }
 }
 
 .view-history__text {
@@ -2322,6 +2325,19 @@
                 &-text {
                     color: var(--button-bg);
                 }
+            }
+        }
+    }
+
+    &.post--comment {
+        .post__body {
+            border-color: rgba(var(--button-bg-rgb), 0.24);
+        }
+
+        &.other--root {
+            .post-comment {
+                border-color: rgba(var(--center-channel-color-rgb), 0.1);
+                background-color: rgba(var(--center-channel-color-rgb), 0.05);
             }
         }
     }
