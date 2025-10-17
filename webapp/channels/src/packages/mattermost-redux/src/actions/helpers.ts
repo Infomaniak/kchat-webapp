@@ -21,11 +21,6 @@ export function forceLogoutIfNecessary(err: ServerError, dispatch: DispatchFunc<
 
     redirectToErrorPageIfNecessary(err);
 
-    // Ik: when it's autolog error, we want to bypass the logout
-    if (isIkAutologError(err)) {
-        return;
-    }
-
     if ('status_code' in err && err.status_code === HTTP_UNAUTHORIZED && err.url && err.url.indexOf('/login') === -1 && currentUserId) {
         Client4.setToken('');
         dispatch({type: UserTypes.LOGOUT_SUCCESS, data: {}});
