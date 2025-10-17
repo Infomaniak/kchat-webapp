@@ -122,14 +122,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
                     <button
                         className='btn btn-primary'
                         onClick={() => {
-                            const referrer = document.referrer;
-                            const isInternal = referrer && referrer.startsWith(window.location.origin);
-
-                            if (isInternal) {
-                                window.history.back();
-                            } else {
-                                window.location.href = '/';
-                            }
+                            window.location.href = '/';
                         }}
                     >
                         <FormattedMessage
