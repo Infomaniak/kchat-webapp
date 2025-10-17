@@ -3552,6 +3552,8 @@
   "emoji_skin.medium_dark_skin_tone": "Tonalità della pelle medio-scuro",
   "emoji_skin.medium_light_skin_tone": "Tonalità della pelle medio-chiara",
   "emoji_skin.medium_skin_tone": "Tonalità della pelle media",
+  "error.autolog.blocked.title" : "Accesso vietato",
+  "error.autolog.blocked.message" : "L'utente non ha autorizzato il team Infomaniak ad accedere al suo spazio.",
   "error.blocked.message": "Il prodotto kSuite è scaduto. Rinnovatelo per continuare a comunicare all'interno della vostra organizzazione con kChat.",
   "error.blocked.title": "La kChat {groupName} è attualmente bloccata",
   "error.channel_not_found.message": "Il canale richiesto è privato o non esiste. Contattare un Amministratore per essere aggiunto al canale.",
