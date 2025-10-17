@@ -315,6 +315,7 @@ test:e2e:
   rules:
     - if: *if-merge-request
       when: manual
+      allow_failure: true
     - when: never
   script:
     - echo "STAGING_BASE_URL=$(ruby .gitlab/get_staging_baseurl.rb)" >> test.env
