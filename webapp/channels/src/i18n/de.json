@@ -3552,6 +3552,8 @@
   "emoji_skin.medium_dark_skin_tone": "Mitteldunkler Hautton",
   "emoji_skin.medium_light_skin_tone": "Mittelheller Hautton",
   "emoji_skin.medium_skin_tone": "Mittlerer Hautton",
+  "error.autolog.blocked.title" : "Zugriff verboten",
+  "error.autolog.blocked.message" : "Der Benutzer hat dem Infomaniak-Team nicht erlaubt, auf seinen/ihr Raum zuzugreifen.",
   "error.blocked.message": "Das Produkt kSuite ist abgelaufen. Bitte verlängern Sie es, um weiterhin innerhalb Ihrer Organisation mit kChat kommunizieren zu können.",
   "error.blocked.title": "Der kChat {groupName} ist derzeit gesperrt",
   "error.channel_not_found.message": "Der Kanal, den du anforderst ist privat oder existiert nicht. Bitte kontaktiere einen Administrator, um dem Kanal hinzugefügt zu werden.",

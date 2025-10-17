@@ -258,6 +258,20 @@ export default class ErrorPage extends React.PureComponent<Props> {
                     </a>
                 );
             }
+        } else if (type === ErrorPageTypes.AUTOLOG_BLOCKED) {
+            illustration = <SvgIlluErrorBlocked/>;
+            backButton = (
+                <a
+                    className='btn btn-primary'
+                    onClick={() => reloadPage()}
+                >
+                    <FormattedMessage
+                        id='error.generic.reload'
+                        defaultMessage='Reload page'
+
+                    />
+                </a>
+            );
         } else if (type === ErrorPageTypes.OAUTH_ACCESS_DENIED || type === ErrorPageTypes.OAUTH_MISSING_CODE) {
             backButton = (
                 <Link
