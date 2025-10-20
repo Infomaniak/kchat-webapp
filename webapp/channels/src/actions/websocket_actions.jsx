@@ -1020,7 +1020,11 @@ function handleKSuiteAdded(msg) {
 
         const prefObj = getTeamsOrderPreference(doGetState());
         const currentPreferences = prefObj?.value ? prefObj.value.split(',') : [];
-        const updatedTeamsOrderPreference = [...currentPreferences, msg.data.team.id];
+
+        const updatedTeamsOrderPreference = [
+            ...currentPreferences.filter((id) => id !== msg.data.team.id),
+            msg.data.team.id,
+        ];
 
         updateTeamsOrderForUser(updatedTeamsOrderPreference)(doDispatch, doGetState);
 

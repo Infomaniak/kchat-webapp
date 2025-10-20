@@ -124,16 +124,19 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
                     // Combine the cleaned preferences with the missing teams appended at the end
                     const updatedPreferences = [...cleanedPreferences, ...missingTeamIds];
 
+                    // Ensure uniqueness just in case
+                    const uniquePreferences = [...new Set(updatedPreferences)];
+
                     // Check if the preferences actually changed
                     const hasChanged =
-        updatedPreferences.length !== currentPreferences.length ||
-        updatedPreferences.some((id, index) => id !== currentPreferences[index]);
+        uniquePreferences.length !== currentPreferences.length ||
+        uniquePreferences.some((id, index) => id !== currentPreferences[index]);
 
                     // If there was a change, update the user's team order preferences
                     if (hasChanged) {
                         // eslint-disable-next-line no-console
-                        console.log('[loadConfigAndMe] Syncing team order preferences after fetch:', updatedPreferences);
-                        updateTeamsOrderForUser(updatedPreferences);
+                        console.log('[loadConfigAndMe] Syncing team order preferences after fetch:', uniquePreferences);
+                        updateTeamsOrderForUser(uniquePreferences);
                     }
                 }
             } catch (error) {
