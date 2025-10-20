@@ -254,7 +254,7 @@ translations:check:
   before_script:
   - *script-yarn-install
   script:
-    - yarn workspace mattermost-webapp check:i18n
+    - yarn workspace mattermost-webapp check:i18n:ci
     - git diff --exit-code webapp/channels/src/i18n/ || { echo "⛔ i18n files changed, commit the updates."; exit 1; }
 
 
