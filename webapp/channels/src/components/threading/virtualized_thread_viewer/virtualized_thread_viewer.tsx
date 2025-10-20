@@ -236,10 +236,6 @@ class ThreadViewerVirtualized extends PureComponent<Props, State> {
         }
 
         this.setState(updatedState as State);
-
-        if (!this.state.isScrollToBottomDismissed) {
-            // this.setState({showScrollToBottom: !userScrolledToBottom});
-        }
     };
 
     updateFloatingTimestamp = (visibleTopItem: number) => {
