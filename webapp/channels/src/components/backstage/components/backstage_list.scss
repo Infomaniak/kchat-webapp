@@ -11,10 +11,10 @@
     height: auto;
     flex-direction: row;
     padding: 8px;
-    border: 1px solid variables.$light-gray;
+    border: 1px solid var(--ik-integrationHeaderBorder);
     border-top: none;
-    background: variables.$white;
-    color: rgba(0, 0, 0, 0.5);
+    background-color: var(--ik-backstage-background);
+    color: var(--center-channel-color);
     font-size: 1.1em;
     text-align: right;
 

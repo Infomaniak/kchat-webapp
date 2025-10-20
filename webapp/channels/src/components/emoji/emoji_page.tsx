@@ -7,13 +7,10 @@ import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
 import Permissions from 'mattermost-redux/constants/permissions';
-import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import AnyTeamPermissionGate from 'components/permissions_gates/any_team_permission_gate';
-
-import * as Utils from 'utils/utils';
 
 import EmojiList from './emoji_list';
 
@@ -22,7 +19,6 @@ type Props = {
     teamDisplayName?: string;
     siteName?: string;
     scrollToTop(): void;
-    currentTheme: Theme;
     isQuotaExceeded: boolean;
     actions: {
         loadRolesIfNeeded(roles: Iterable<string>): void;
@@ -37,7 +33,6 @@ export default function EmojiPage({
     teamName = '',
     siteName = '',
     scrollToTop,
-    currentTheme,
     actions,
     isQuotaExceeded,
 }: Props) {
@@ -47,11 +42,6 @@ export default function EmojiPage({
     useEffect(() => {
         updateTitle();
         actions.loadRolesIfNeeded(ROLES);
-        Utils.resetTheme();
-
-        return () => {
-            Utils.applyTheme(currentTheme);
-        };
     }, []);
 
     useEffect(() => {

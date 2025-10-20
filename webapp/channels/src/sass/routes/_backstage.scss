@@ -6,8 +6,8 @@
     z-index: 100;
     height: variables.$backstage-bar-height;
     padding: 10px 20px;
-    border-bottom: 1px solid variables.$light-gray;
-    background: variables.$white;
+    border-bottom: 1px solid var(--ik-integrationHeaderBorder);
+    background: var(--ik-integrationHeaderColor);
     grid-area: header;
 }
 
@@ -31,7 +31,7 @@
 .backstage-body {
     overflow-y: scroll;
     width: 100%;
-    background-color: variables.$bg--gray;
+    background-color: var(--ik-backstageBody);
     grid-area: main;
 }
 
@@ -39,7 +39,7 @@
     max-width: 1200px;
     padding-left: 135px;
     margin: 46px auto;
-    background-color: variables.$bg--gray;
+    background-color: var(--ik-backstageBody);
     vertical-align: top;
 
     @media screen and (min-width: 1920px) {
@@ -52,7 +52,7 @@
     width: 270px;
     padding: 46px 20px;
     vertical-align: top;
-    background-color: variables.$bg--gray;
+    background-color:var(--ik-backstageBody);
 
     ul {
         padding: 0;
@@ -63,8 +63,8 @@
         @include mixins.clearfix;
         border-radius: 2px;
 
-        border-right: 1px solid variables.$light-gray;
-        border-left: 1px solid variables.$light-gray;
+        border-right: 1px solid var(--ik-integrationHeaderBorder);
+        border-left: 1px solid var(--ik-integrationHeaderBorder);
     }
 }
 
@@ -79,9 +79,9 @@
         position: relative;
         display: block;
         padding: 0 10px;
-        border-top: 1px solid variables.$light-gray;
-        border-bottom: 1px solid variables.$light-gray;
-        color: variables.$black;
+        border-top: 1px solid var(--ik-integrationHeaderBorder);
+        border-bottom: 1px solid var(--ik-integrationHeaderBorder);
+        color: var(--ik-backstageText);
         line-height: 35px;
 
         .fa {
@@ -112,8 +112,8 @@
     }
 
     .sections {
-        border-bottom: 1px solid variables.$light-gray;
-        background: variables.$white;
+        border-bottom: 1px solid var(--ik-integrationHeaderBorder);
+        background: var(--ik-backstageBody);
     }
 
     .section-title,
@@ -149,6 +149,7 @@
     width: 100%;
     justify-content: space-between;
     margin-bottom: 20px;
+    color: var(--ik-backstageText);
 
     h1 {
         margin: 5px 0;
@@ -193,11 +194,13 @@
         top: 11px;
         left: 11px;
         opacity: 0.4;
+        color: #23A1FE;
     }
 
     input {
         padding-left: 30px;
-        background: variables.$white;
+        background: var(--ik-backgroundInput);
+        border: none;
     }
 }
 
@@ -205,13 +208,15 @@
     min-height: 50px;
     padding: 5px 15px;
     overflow: auto; // Infomaniak
-    border: 1px solid variables.$light-gray;
-    background-color: variables.$white;
+    border: 1px solid var(--ik-integrationHeaderBorder);
+    background-color: var(--ik-backstage-background);
+    color: var(--center-channel-color);
 }
 
 .backstage-list__help {
     display: block;
     margin: 1em 0;
+    color: var(--center-channel-color);
 }
 
 .backstage-list__item {
@@ -274,8 +279,9 @@
 .backstage-form {
     position: relative;
     padding: 40px 30px 30px;
-    border: 1px solid variables.$light-gray;
-    background-color: variables.$white;
+    border: 1px solid var(--ik-integrationHeaderBorder);
+    background-color: var(--ik-backstage-background);
+    color: var(--ik-backstageText);
 
     &.backstage-form__confirmation {
         padding: 30px 30px 20px;
@@ -310,7 +316,6 @@
 
     .form__help {
         margin-top: 1em;
-        color: variables.$dark-gray;
         font-size: 0.95em;
 
         & + .form__help {
@@ -365,7 +370,7 @@
     border: 1px solid variables.$light-gray;
     border-radius: 4px;
     margin: 0 30px 30px 0;
-    background-color: variables.$white;
+    background-color: var(--ik-backstage-background);
     text-align: center;
     transition: all 0.2s ease;
 
@@ -396,11 +401,11 @@
 
 .integration-option__title {
     margin-bottom: 10px;
-    color: variables.$black;
+    color: var(--center-channel-color);;
 }
 
 .integration-option__description {
-    color: variables.$dark-gray;
+    color: var(--center-channel-color);;
 }
 
 .emoji-list__table {

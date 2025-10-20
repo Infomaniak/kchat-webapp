@@ -637,6 +637,15 @@ export function applyTheme(theme: Theme) {
             'ik-modal-header': theme.ikModalHeader,
             'ik-btn-secondary': theme.ikBtnSecondary,
             'ik-btn-secondary-color': theme.ikBtnSecondaryColor,
+
+            // integrations
+            'ik-integrationHeaderColor': theme.integrationHeaderColor,
+            'ik-integrationHeaderBorder': theme.integrationHeaderBorder,
+            'ik-backstageBody': theme.backstageBody,
+            'ik-backstageText': theme.backstageText,
+            'ik-boxShadow': theme.boxShadow,
+            'ik-backgroundInput': theme.backgroundInput,
+            'ik-backstage-background': theme.backstageBackground,
         },
     });
 }
