@@ -6,8 +6,8 @@
     z-index: 100;
     height: variables.$backstage-bar-height;
     padding: 10px 20px;
-    border-bottom: 1px solid var(--ik-integrationHeaderBorder);
-    background: var(--ik-integrationHeaderColor);
+    border-bottom: 1px solid var(--ik-integration-header-border);
+    background: var(--ik-integration-header-color);
     grid-area: header;
 }
 
@@ -31,7 +31,7 @@
 .backstage-body {
     overflow-y: scroll;
     width: 100%;
-    background-color: var(--ik-backstageBody);
+    background-color: var(--ik-backstage-body);
     grid-area: main;
 }
 
@@ -39,7 +39,7 @@
     max-width: 1200px;
     padding-left: 135px;
     margin: 46px auto;
-    background-color: var(--ik-backstageBody);
+    background-color: var(--ik-backstage-body);
     vertical-align: top;
 
     @media screen and (min-width: 1920px) {
@@ -52,7 +52,7 @@
     width: 270px;
     padding: 46px 20px;
     vertical-align: top;
-    background-color:var(--ik-backstageBody);
+    background-color: var(--ik-backstage-body);
 
     ul {
         padding: 0;
@@ -63,8 +63,8 @@
         @include mixins.clearfix;
         border-radius: 2px;
 
-        border-right: 1px solid var(--ik-integrationHeaderBorder);
-        border-left: 1px solid var(--ik-integrationHeaderBorder);
+        border-right: 1px solid var(--ik-integration-header-border);
+        border-left: 1px solid var(--ik-integration-header-border);
     }
 }
 
@@ -79,9 +79,9 @@
         position: relative;
         display: block;
         padding: 0 10px;
-        border-top: 1px solid var(--ik-integrationHeaderBorder);
-        border-bottom: 1px solid var(--ik-integrationHeaderBorder);
-        color: var(--ik-backstageText);
+        border-top: 1px solid var(--ik-integration-header-border);
+        border-bottom: 1px solid var(--ik-integration-header-border);
+        color: var(--ik-backstage-text);
         line-height: 35px;
 
         .fa {
@@ -112,8 +112,8 @@
     }
 
     .sections {
-        border-bottom: 1px solid var(--ik-integrationHeaderBorder);
-        background: var(--ik-backstageBody);
+        border-bottom: 1px solid var(--ik-integration-header-border);
+        background: var(--ik-backstage-body);
     }
 
     .section-title,
@@ -149,7 +149,7 @@
     width: 100%;
     justify-content: space-between;
     margin-bottom: 20px;
-    color: var(--ik-backstageText);
+    color: var(--ik-backstage-text);
 
     h1 {
         margin: 5px 0;
@@ -199,7 +199,7 @@
 
     input {
         padding-left: 30px;
-        background: var(--ik-backgroundInput);
+        background: var(--ik-background-input);
         border: none;
     }
 }
@@ -208,7 +208,7 @@
     min-height: 50px;
     padding: 5px 15px;
     overflow: auto; // Infomaniak
-    border: 1px solid var(--ik-integrationHeaderBorder);
+    border: 1px solid var(--ik-integration-header-border);
     background-color: var(--ik-backstage-background);
     color: var(--center-channel-color);
 }
@@ -279,9 +279,9 @@
 .backstage-form {
     position: relative;
     padding: 40px 30px 30px;
-    border: 1px solid var(--ik-integrationHeaderBorder);
+    border: 1px solid var(--ik-integration-header-border);
     background-color: var(--ik-backstage-background);
-    color: var(--ik-backstageText);
+    color: var(--ik-backstage-text);
 
     &.backstage-form__confirmation {
         padding: 30px 30px 20px;
@@ -307,7 +307,9 @@
     }
 
     .form-control {
-        background: variables.$white;
+        background: var(--center-channel-bg);
+        border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+
 
         &:focus {
             border-color: variables.$primary-color;
@@ -367,7 +369,7 @@
 .integration-option {
     flex: 0 0 45%;
     padding: 20px;
-    border: 1px solid variables.$light-gray;
+    border: 1px solid var(--ik-integration-header-border);
     border-radius: 4px;
     margin: 0 30px 30px 0;
     background-color: var(--ik-backstage-background);
@@ -476,7 +478,7 @@
 }
 
 .bot-list {
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--ik-integration-header-border);
     border-radius: 4px;
     margin-top: 12px;
     line-height: 24px;

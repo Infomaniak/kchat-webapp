@@ -226,6 +226,7 @@ export type Theme = {
     backstageBackground: string;
     boxShadow: string;
     backgroundInput: string;
+    disableForm: string;
 };
 
 const getDefaultTheme = createSelector('getDefaultTheme', getConfig, (config): Theme => {

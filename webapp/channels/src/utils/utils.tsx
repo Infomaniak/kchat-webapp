@@ -639,13 +639,14 @@ export function applyTheme(theme: Theme) {
             'ik-btn-secondary-color': theme.ikBtnSecondaryColor,
 
             // integrations
-            'ik-integrationHeaderColor': theme.integrationHeaderColor,
-            'ik-integrationHeaderBorder': theme.integrationHeaderBorder,
-            'ik-backstageBody': theme.backstageBody,
-            'ik-backstageText': theme.backstageText,
-            'ik-boxShadow': theme.boxShadow,
-            'ik-backgroundInput': theme.backgroundInput,
+            'ik-integration-header-color': theme.integrationHeaderColor,
+            'ik-integration-header-border': theme.integrationHeaderBorder,
+            'ik-backstage-body': theme.backstageBody,
+            'ik-backstage-text': theme.backstageText,
+            'ik-box-shadow': theme.boxShadow,
+            'ik-background-input': theme.backgroundInput,
             'ik-backstage-background': theme.backstageBackground,
+            'ik-disable-form': theme.disableForm,
         },
     });
 }
