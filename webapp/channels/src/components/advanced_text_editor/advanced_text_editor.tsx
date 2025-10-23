@@ -181,12 +181,19 @@ const AdvancedTextEditor = ({
     const teammateDisplayName = useSelector((state: GlobalState) => (teammateId ? getDisplayName(state, teammateId) : ''));
     const selectedPostFocussedAt = useSelector((state: GlobalState) => getSelectedPostFocussedAt(state));
 
+    const isMember = useSelector((state: GlobalState) => {
+        const channel = getChannel(state, channelId);
+        if (!channel) {
+            return false;
+        }
+        return getMyChannelMembership(state, channel.id);
+    })
+
     const canPost = useSelector((state: GlobalState) => {
         const channel = getChannel(state, channelId);
         if (!channel) {
             return false;
         }
-        const isMember = getMyChannelMembership(state, channel.id);
 
         return isMember && haveIChannelPermission(state, channel.team_id, channel.id, Permissions.CREATE_POST);
     });
@@ -232,6 +239,8 @@ const AdvancedTextEditor = ({
     const [keepEditorInFocus, setKeepEditorInFocus] = useState(false);
 
     const readOnlyChannel = !canPost;
+    const shouldShowJoinBanner = !isMember
+
     const hasDraftMessage = Boolean(draft.message);
     const showFormattingBar = !isFormattingBarHidden && !readOnlyChannel;
     const enableSharedChannelsDMs = useSelector((state: GlobalState) => getFeatureFlagValue(state, 'EnableSharedChannelsDMs') === 'true');
@@ -760,7 +769,7 @@ const AdvancedTextEditor = ({
 
     const showFormattingSpacer = isMessageLong || showPreview || attachmentPreview || isRHS || isThreadView;
 
-    if (readOnlyChannel) {
+    if (shouldShowJoinBanner) {
         return (
             <BannerJoinChannel onButtonClick={() => GlobalActions.joinChannel(channelId)}/>
         );
