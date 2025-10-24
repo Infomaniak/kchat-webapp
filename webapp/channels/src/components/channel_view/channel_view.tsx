@@ -177,25 +177,16 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                     </div>
                 </div>
             );
-        } else if (this.props.isMember) {
+        } else {
             createPost = (
                 <div
-                    className='post-create__container AdvancedTextEditor__ctr'
                     id='post-create'
                     data-testid='post-create'
+                    className='post-create__container AdvancedTextEditor__ctr'
                 >
                     <AdvancedCreatePost/>
                 </div>
             );
-        } else if (this.props.channel?.type !== 'P' && this.props.channel) {
-            createPost = (
-                <BannerJoinChannel
-                    onButtonClick={() => GlobalActions.joinChannel(this.props.channelId)}
-                />
-            );
-        } else {
-            // Default case : User is not a member of a private channel and cannot join publicly → no create post UI
-            createPost = null;
         }
 
         const DeferredPostView = this.state.deferredPostView;
