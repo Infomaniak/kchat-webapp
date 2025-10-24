@@ -3061,13 +3061,13 @@
   "channel_limitation.messages": "I messaggi e i file più vecchi di 3 mesi sono nascosti. Per visualizzare altri messaggi, {isAdmin, select, true {sottoscriversi a un'offerta superiore. <modifyOffer>Cambia la mia offerta</modifyOffer>} other {contatta un amministratore per iscriverti a un'offerta superiore}}.",
   "channel_loader.posted": "Pubblicato",
   "channel_loader.postedImage": " ha caricato un'immagine",
+  "channel_loader.postVocal": " ha inviato un messaggio vocale",
   "channel_loader.socketError": "Si prega di controllare la connessione, kChat non è raggiungibile.",
   "channel_loader.someone": "Qualcuno",
   "channel_loader.something": " ha fatto qualcosa di nuovo",
   "channel_loader.unknown_error": "Abbiamo ricevuto un codice di stato inaspettato dal server.",
   "channel_loader.uploadedFile": " ha caricato un file",
   "channel_loader.uploadedImage": " ha caricato un'immagine",
-  "channel_loader.postVocal": " ha inviato un messaggio vocale",
   "channel_members_dropdown.channel_admin": "Amministrazione canale",
   "channel_members_dropdown.channel_admins": "Amministratore di canale",
   "channel_members_dropdown.channel_guest": "Ospite Canale",
@@ -3793,6 +3793,7 @@
   "globalThreads.sidebarLink": "Hilos",
   "globalThreads.threadList.noUnreadThreads": "No hay hilos sin leer",
   "globalThreads.threadList.noUnreadThreads.subtitle": "Sei completamente aggiornato",
+  "globalThreads.threadPane.unreadMessageLink": "Tu {numUnread, plural, =0 {non hai nessun thread non letto} =1 {hai <link>{numUnread} thread non letto</link>} other {hai <link>{numUnread} thread non letti</link>}} {numUnread, plural, =0 {} other {con messaggi non letti}}",
   "globalThreads.threadPane.unselectedTitle": "Seleccione un hilo",
   "globalThreads.title": "{prefix}Hilos - {displayName} {siteName}",
   "group_list_modal.addGroupButton": "Aggiungi Gruppi",
@@ -5820,6 +5821,7 @@
   "workspace_limits.teams_limit_reached.tool_tip": "Hai raggiunto il limite di team per il tuo piano attuale. Considera l'upgrade per disarchiviare questo team o archivia gli altri tuoi team",
   "workspace_limits.teams_limit_reached.upgrade_to_unarchive": "Aggiorna per Disarchiviare",
   "yourcomputer": "Il tuo pc",
+  "yourmobiledevice": "Il tuo dispositivo mobile",
   "accessibility.sections.lhsHeader": "regione menu squadra",
   "activityAndInsights.title": "Attività ed Informazioni utili - {displayName} {siteName}",
   "add_command.trigger.help.link": "https://www.infomaniak.com/fr/support/faq/2134/utiliser-les-commandes-slash-de-kchat?noCache=1",
@@ -6097,6 +6099,5 @@
   "fileTypes.Videos": "Video",
   "duration.year": "{count, plural, one {anno} other {anni}}",
   "duration.month": "{count, plural, one {mese} other {mesi}}",
-  "duration.day": "{count, plural, one {giorno} other {giorni}}",
-  "yourmobiledevice": "Il tuo dispositivo mobile"
+  "duration.day": "{count, plural, one {giorno} other {giorni}}"
 }

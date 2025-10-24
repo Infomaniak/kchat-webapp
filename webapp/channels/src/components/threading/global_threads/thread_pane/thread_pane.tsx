@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
-import type {ReactNode} from 'react';
 import React, {memo, useCallback} from 'react';
+import type {ReactNode} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -22,6 +22,7 @@ import Button from '../../common/button';
 import FollowButton from '../../common/follow_button';
 import {useThreadRouting} from '../../hooks';
 import ThreadMenu from '../thread_menu';
+
 import './thread_pane.scss';
 
 const getChannel = makeGetChannel();

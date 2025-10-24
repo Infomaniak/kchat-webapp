@@ -3792,6 +3792,7 @@
   "globalThreads.sidebarLink": "Threads",
   "globalThreads.threadList.noUnreadThreads": "No unread threads",
   "globalThreads.threadList.noUnreadThreads.subtitle": "You're all caught up",
+  "globalThreads.threadPane.unreadMessageLink": "You have {numUnread, plural, =0 {no unread threads} =1 {<link>{numUnread} thread</link>} other {<link>{numUnread} threads</link>}} {numUnread, plural, =0 {} other {with unread messages}}",
   "globalThreads.threadPane.unselectedTitle": "Select a Thread",
   "globalThreads.title": "{prefix}Threads - {displayName} {siteName}",
   "group_list_modal.addGroupButton": "Add Groups",

@@ -7,9 +7,6 @@ import type {ComponentProps} from 'react';
 
 import {getThreadsForCurrentTeam} from 'mattermost-redux/actions/threads';
 
-jest.mock('mattermost-redux/actions/threads');
-jest.mock('actions/views/modals');
-
 import {openModal} from 'actions/views/modals';
 
 import Header from 'components/widgets/header';
@@ -21,6 +18,9 @@ import ThreadList, {ThreadFilter} from './thread_list';
 import VirtualizedThreadList from './virtualized_thread_list';
 
 import Button from '../../common/button';
+
+jest.mock('mattermost-redux/actions/threads');
+jest.mock('actions/views/modals');
 
 const mockRouting = {
     currentUserId: 'uid',
