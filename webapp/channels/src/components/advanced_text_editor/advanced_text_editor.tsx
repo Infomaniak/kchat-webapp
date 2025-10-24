@@ -187,7 +187,7 @@ const AdvancedTextEditor = ({
             return false;
         }
         return getMyChannelMembership(state, channel.id);
-    })
+    });
 
     const canPost = useSelector((state: GlobalState) => {
         const channel = getChannel(state, channelId);
@@ -239,7 +239,7 @@ const AdvancedTextEditor = ({
     const [keepEditorInFocus, setKeepEditorInFocus] = useState(false);
 
     const readOnlyChannel = !canPost;
-    const shouldShowJoinBanner = !isMember
+    const shouldShowJoinBanner = !isMember;
 
     const hasDraftMessage = Boolean(draft.message);
     const showFormattingBar = !isFormattingBarHidden && !readOnlyChannel;
