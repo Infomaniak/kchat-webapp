@@ -12,7 +12,7 @@ jest.mock('actions/global_actions', () => ({
 
 jest.mock('components/banner_join_channel', () => ({
     BannerJoinChannel: jest.fn(({onButtonClick}) => (
-        <button onClick={onButtonClick}>Join</button>
+        <button onClick={onButtonClick}>{'Join'}</button>
     )),
 }));
 
