@@ -25,7 +25,7 @@ describe('IkChannelInputGuard', () => {
                 isMember={false}
                 channel={undefined}
             >
-                <div>child</div>
+                <div>{'child'}</div>
             </IkChannelInputGuard>,
         );
         expect(container.firstChild).toBeNull();
@@ -38,7 +38,7 @@ describe('IkChannelInputGuard', () => {
                 isMember={false}
                 channel={channel}
             >
-                <div>child</div>
+                <div>{'child'}</div>
             </IkChannelInputGuard>,
         );
         expect(container.firstChild).toBeNull();
@@ -50,7 +50,7 @@ describe('IkChannelInputGuard', () => {
                 isMember={false}
                 channel={baseChannel}
             >
-                <div>child</div>
+                <div>{'child'}</div>
             </IkChannelInputGuard>,
         );
         expect(screen.getByText('Join')).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe('IkChannelInputGuard', () => {
                 isMember={false}
                 channel={baseChannel}
             >
-                <div>child</div>
+                <div>{'child'}</div>
             </IkChannelInputGuard>,
         );
         fireEvent.click(screen.getByText('Join'));
@@ -75,7 +75,7 @@ describe('IkChannelInputGuard', () => {
                 isMember={true}
                 channel={baseChannel}
             >
-                <div>child</div>
+                <div>{'child'}</div>
             </IkChannelInputGuard>,
         );
         expect(screen.getByText('child')).toBeInTheDocument();
