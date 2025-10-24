@@ -165,5 +165,12 @@ exports[`components/channel_view Should match snapshot with base props 1`] = `
   <DeferredRenderWrapper
     channelId="channelId"
   />
+  <div
+    className="post-create__container AdvancedTextEditor__ctr"
+    data-testid="post-create"
+    id="post-create"
+  >
+    <Memo(AdvancedCreatePost) />
+  </div>
 </div>
 `;

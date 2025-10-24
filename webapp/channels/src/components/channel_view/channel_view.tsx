@@ -5,11 +5,8 @@ import React, {lazy} from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
-import * as GlobalActions from 'actions/global_actions';
-
 import AdvancedCreatePost from 'components/advanced_create_post';
 import {makeAsyncComponent} from 'components/async_load';
-import {BannerJoinChannel} from 'components/banner_join_channel';
 import deferComponentRender from 'components/deferComponentRender';
 import FileUploadOverlay from 'components/file_upload_overlay';
 import {DropOverlayIdCenterChannel} from 'components/file_upload_overlay/file_upload_overlay';
@@ -177,25 +174,16 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                     </div>
                 </div>
             );
-        } else if (this.props.isMember) {
+        } else {
             createPost = (
                 <div
-                    className='post-create__container AdvancedTextEditor__ctr'
                     id='post-create'
                     data-testid='post-create'
+                    className='post-create__container AdvancedTextEditor__ctr'
                 >
                     <AdvancedCreatePost/>
                 </div>
             );
-        } else if (this.props.channel?.type !== 'P' && this.props.channel) {
-            createPost = (
-                <BannerJoinChannel
-                    onButtonClick={() => GlobalActions.joinChannel(this.props.channelId)}
-                />
-            );
-        } else {
-            // Default case : User is not a member of a private channel and cannot join publicly → no create post UI
-            createPost = null;
         }
 
         const DeferredPostView = this.state.deferredPostView;
