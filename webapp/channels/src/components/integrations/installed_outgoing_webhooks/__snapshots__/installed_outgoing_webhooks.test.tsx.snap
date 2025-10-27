@@ -275,6 +275,7 @@ exports[`components/integrations/InstalledOutgoingWebhooks should match snapshot
       }
     />
   }
+  isQuotaExceeded={false}
   loading={true}
   searchPlaceholder="Search Outgoing Webhooks"
 >

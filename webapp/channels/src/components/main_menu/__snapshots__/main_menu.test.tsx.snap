@@ -474,6 +474,13 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
       show={true}
       text="Saved messages"
     />
+    <MenuItemAction
+      icon={<ReportingToolsLogo />}
+      id="reportingTools"
+      onClick={[Function]}
+      show={true}
+      text="Reporting tools"
+    />
   </Memo(MenuGroup)>
   <Memo(MenuGroup)>
     <MenuItemAction

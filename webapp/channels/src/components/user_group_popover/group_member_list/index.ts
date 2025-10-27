@@ -15,17 +15,15 @@ import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getProfilesInGroupWithoutSorting, searchProfilesInGroupWithoutSorting} from 'mattermost-redux/selectors/entities/users';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {openDirectChannelToUserId} from 'actions/channel_actions';
 import {closeRightHandSide} from 'actions/views/rhs';
 
-import type {GlobalState} from 'types/store';
+import type {DispatchFunc, GlobalState} from 'types/store';
 
 import GroupMemberList from './group_member_list';
-import type {GroupMember} from './group_member_list';
+import type {GroupMember} from './group_member_list_item';
 
 type OwnProps = {
     group: Group;

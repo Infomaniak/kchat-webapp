@@ -221,6 +221,14 @@ export type Theme = {
     guestBannerBackground: string;
     contactSheetPillColor: string;
     contactSheetPillBackgroundColor: string;
+    integrationHeaderColor: string;
+    integrationHeaderBorder: string;
+    backstageBody: string;
+    backstageText: string;
+    backstageBackground: string;
+    boxShadow: string;
+    backgroundInput: string;
+    disableForm: string;
 };
 
 const getDefaultTheme = createSelector('getDefaultTheme', getConfig, (config): Theme => {
@@ -406,3 +414,10 @@ export const getOverageBannerPreferences = makeGetCategory('getOverageBannerPref
 export function callDialingEnabled(state: GlobalState): boolean {
     return getFeatureFlagValue(state, 'IkCallDialing') === 'true';
 }
+
+export const getAlmostFullStorageVisibilityBar: (state: GlobalState, userPreferences?: PreferencesType) => 'visible' | 'dismissed' = createSelector(
+    'getStorageAnnouncementBarDismissState',
+    (state: GlobalState, userPreferences?: PreferencesType) =>
+        get(state, Preferences.CATEGORY_ANNOUNCEMENT_BAR_VISIBILITY, Preferences.ALMOST_FULL_ANNOUNCEMENT_BAR, 'visible', userPreferences),
+    (value: string) => (value === 'dismissed' ? 'dismissed' : 'visible'),
+);

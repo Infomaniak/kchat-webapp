@@ -38,6 +38,7 @@ describe('components/Menu', () => {
         enableIncomingWebhooks: false,
         enableOAuthServiceProvider: false,
         enableOutgoingWebhooks: false,
+        enableReportingTools: false,
         canManageSystemBots: false,
         canManageIntegrations: true,
 
@@ -137,6 +138,7 @@ describe('components/Menu', () => {
             enableIncomingWebhooks: true,
             enableOAuthServiceProvider: true,
             enableOutgoingWebhooks: true,
+            enableReportingTools: true,
 
             // helpLink: 'test-link-help',
             // reportAProblemLink: 'test-report-link',
@@ -157,6 +159,7 @@ describe('components/Menu', () => {
             enableIncomingWebhooks: true,
             enableOAuthServiceProvider: true,
             enableOutgoingWebhooks: true,
+            enableReportingTools: true,
 
             // helpLink: 'test-link-help',
             // reportAProblemLink: 'test-report-link',

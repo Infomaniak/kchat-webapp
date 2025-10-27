@@ -34,6 +34,7 @@ import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import {hasPlainText, createFileFromClipboardDataItem} from 'utils/paste';
 import {
     isIosChrome,
+    isMobile,
     isMobileApp,
 } from 'utils/user_agent';
 import {
@@ -160,13 +161,15 @@ export type Props = {
     handleDriveSharelink: (e: React.ChangeEvent<TextboxElement>) => void;
     centerChannelPostBeingEdited: boolean;
     rhsPostBeingEdited: boolean;
+    isAdmin: boolean;
+    isPaidPlan: boolean;
 
     actions: {
 
         /**
          * Function to be called to upload file
          */
-        uploadFile: ({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError}: UploadFile) => XMLHttpRequest;
+        uploadFile: ({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError, isAdmin, isPaidPlan}: UploadFile) => XMLHttpRequest;
     };
 };
 
@@ -332,6 +335,8 @@ export class FileUpload extends PureComponent<Props, State> {
                 onProgress: this.props.onUploadProgress,
                 onSuccess: this.fileUploadSuccess,
                 onError: this.fileUploadFail,
+                isAdmin: this.props.isAdmin,
+                isPaidPlan: this.props.isPaidPlan,
             });
 
             this.setState({requests: {...this.state.requests, [clientId]: request}});
@@ -640,9 +645,28 @@ export class FileUpload extends PureComponent<Props, State> {
     render() {
         const {formatMessage} = this.props.intl;
         let multiple = true;
+        let deviceMessage;
+
         if (isMobileApp()) {
             // iOS WebViews don't upload videos properly in multiple mode
             multiple = false;
+        }
+
+        // Ik change : change message for mobile app
+        if (isMobile()) {
+            deviceMessage = (
+                <FormattedMessage
+                    id='yourmobiledevice'
+                    defaultMessage='Your mobile device'
+                />
+            );
+        } else {
+            deviceMessage = (
+                <FormattedMessage
+                    id='yourcomputer'
+                    defaultMessage='Your computer'
+                />
+            );
         }
 
         let accept = '';
@@ -708,7 +732,7 @@ export class FileUpload extends PureComponent<Props, State> {
                         key={item.pluginId + '_fileuploadpluginmenuitem'}
                         onClick={() => {
                             if (item.action) {
-                                //IK: for kDrive internal plugin
+                                // IK: for kDrive internal plugin
                                 if (item.customArgs) {
                                     const args: Array<keyof FileUpload | keyof Props> = [];
                                     item.customArgs.forEach((arg) => {
@@ -776,12 +800,7 @@ export class FileUpload extends PureComponent<Props, State> {
 
                     >
                         <Menu.Item
-                            labels={
-                                <FormattedMessage
-                                    id='yourcomputer'
-                                    defaultMessage='Your computer'
-                                />
-                            }
+                            labels={deviceMessage}
                             leadingElement={
                                 <LaptopIcon size={16}/>
                             }

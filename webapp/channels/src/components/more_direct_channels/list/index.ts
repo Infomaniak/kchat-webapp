@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import type {UserProfile} from '@mattermost/types/users';
@@ -11,8 +11,6 @@ import {getProfilesInGroupChannels} from 'mattermost-redux/actions/users';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getAllChannels, getChannelsWithUserProfiles} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 import {filterProfilesStartingWithTerm} from 'mattermost-redux/utils/user_utils';
 
@@ -20,7 +18,6 @@ import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
-import type {Props} from './list';
 import List from './list';
 
 import {isGroupChannel, type Option, type OptionValue} from '../types';
@@ -155,9 +152,9 @@ function makeMapStateToProps() {
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc | GenericAction>, Props['actions']>({
+        actions: bindActionCreators({
             getProfilesInGroupChannels,
         }, dispatch),
     };

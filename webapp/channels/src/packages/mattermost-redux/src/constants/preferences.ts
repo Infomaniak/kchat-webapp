@@ -85,6 +85,9 @@ const Preferences = {
     CATEGORY_TEAMS_ORDER: 'teams_order',
     CATEGORY_OVERAGE_USERS_BANNER: 'overage_users_banner',
 
+    CATEGORY_ANNOUNCEMENT_BAR_VISIBILITY: 'announcement_bar_visiblity',
+    ALMOST_FULL_ANNOUNCEMENT_BAR: 'almost_full_storage', // options should either 'visible' or 'dismissed'
+
     CATEGORY_THEME: 'theme',
     THEMES: {
         ik: {
@@ -145,6 +148,17 @@ const Preferences = {
             guestBannerBackground: '#F4F6FD',
             contactSheetPillColor: 'white',
             contactSheetPillBackgroundColor: '#0088B2',
+
+            // Ik change for integration page colors
+            integrationHeaderColor: '#ffffff',
+            integrationHeaderBorder: 'rgba(0, 0, 0, 0.15)',
+            backstageBody: 'rgb(245, 245, 245)',
+            backstageText: '#3f4350',
+            integrationOptionBackground: '#ffffff',
+            boxShadow: '0 1px 16px rgba(0, 0, 0, 0.1)',
+            backgroundInput: '#ffffff',
+            backstageBackground: '#ffffff',
+            disableForm: '#f9f9f9',
         },
         indigo: {
             type: 'Indigo',
@@ -261,6 +275,17 @@ const Preferences = {
             guestBannerBackground: '#1f2328',
             contactSheetPillColor: 'white',
             contactSheetPillBackgroundColor: '#005E7A',
+
+            // Ik change for integration page colors
+            integrationHeaderColor: '#1A1D21',
+            integrationHeaderBorder: 'rgba(255, 255, 255, 0.15)',
+            backstageBody: '#1A1D21',
+            backstageText: '#dddfe4',
+            integrationOptionBackground: 'rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 4px 16px rgba(255, 255, 255, 0.1)',
+            backgroundInput: 'rgba(var(--sidebar-text-rgb), 0.15)',
+            backstageBackground: '#1A1D21',
+            disableForm: '#2A2E33',
         },
         quartz: {
             type: 'Quartz',

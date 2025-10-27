@@ -48,7 +48,7 @@ describe('CoreMenuOptions Component', () => {
     const handleOnSelect = jest.fn();
 
     let now: DateTime;
-    let tomorrow9amTime: number;
+    let tomorrow8amTime: number;
     let nextMonday: number;
 
     beforeEach(() => {
@@ -58,8 +58,8 @@ describe('CoreMenuOptions Component', () => {
         jest.useFakeTimers();
         jest.setSystemTime(now.toJSDate());
 
-        // Hardcode `tomorrow9amTime` and `nextMonday`
-        tomorrow9amTime = DateTime.fromISO('2024-11-02T09:00:00', {zone: userCurrentTimezone}).toMillis();
+        // Hardcode `tomorrow8amTime` and `nextMonday`
+        tomorrow8amTime = DateTime.fromISO('2024-11-02T08:00:00', {zone: userCurrentTimezone}).toMillis();
         nextMonday = DateTime.fromISO('2024-11-04T09:00:00', {zone: userCurrentTimezone}).toMillis();
     });
 
@@ -88,7 +88,7 @@ describe('CoreMenuOptions Component', () => {
             <RecentUsedCustomDate
                 handleOnSelect={handleOnSelectOverride}
                 userCurrentTimezone={userCurrentTimezone}
-                tomorrow9amTime={tomorrow9amTime}
+                tomorrow8amTime={tomorrow8amTime}
                 nextMonday={nextMonday}
             />,
             state,
@@ -177,12 +177,12 @@ describe('CoreMenuOptions Component', () => {
         expect(screen.queryByText(recentUsedCustomDateString)).not.toBeInTheDocument();
     });
 
-    it('should not render recently used custom time when timestamp equals tomorrow9amTime', () => {
+    it('should not render recently used custom time when timestamp equals tomorrow8amTime', () => {
         const nowMillis = now.toMillis();
 
         const recentlyUsedCustomDateVal = {
             update_at: nowMillis,
-            timestamp: tomorrow9amTime, // Use the value from beforeEach
+            timestamp: tomorrow8amTime, // Use the value from beforeEach
         };
 
         const state = createStateWithRecentlyUsedCustomDate(JSON.stringify(recentlyUsedCustomDateVal));

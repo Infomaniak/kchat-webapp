@@ -14,10 +14,12 @@ import {fakeDate} from 'tests/helpers/date';
 
 import type {FakePost} from 'types/store/rhs';
 
-import type {Props} from './thread_viewer';
 import ThreadViewer from './thread_viewer';
+import type {Props} from './thread_viewer';
 
-jest.mock('components/advanced_text_editor/voice_message_attachment', () => () => <div/>);
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(),
+}));
 
 describe('components/threading/ThreadViewer', () => {
     const post: Post = TestHelper.getPostMock({

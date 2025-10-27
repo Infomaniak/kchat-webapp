@@ -3,8 +3,9 @@
 
 /* eslint-disable max-lines */
 
-import {getName} from 'country-list';
 import crypto from 'crypto';
+
+import {getName} from 'country-list';
 import cssVars from 'css-vars-ponyfill';
 import type {Locale} from 'date-fns';
 import isNil from 'lodash/isNil';
@@ -390,15 +391,14 @@ export function applyTheme(theme: Theme) {
         changeCss('.app__body .search-item-container', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.1));
         changeCss('.app__body .modal .custom-textarea:focus', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.3));
         changeCss('.app__body .channel-intro, .app__body hr, .app__body .modal .settings-modal .settings-table .settings-content .appearance-section .theme-elements__header, .app__body .user-settings .authorized-app:not(:last-child)', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
-        changeCss('.app__body .post.post--comment.other--root.current--user .post-comment, .app__body pre', 'background:' + changeOpacity(theme.centerChannelColor, 0.05));
-        changeCss('.app__body .post.post--comment.other--root.current--user .post-comment, .app__body .more-modal__list .more-modal__row, .app__body .member-div:first-child, .app__body .member-div, .app__body .access-history__table .access__report, .app__body .activity-log__table', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.1));
+        changeCss('.app__body pre', 'background:' + changeOpacity(theme.centerChannelColor, 0.05));
+        changeCss('.app__body .more-modal__list .more-modal__row, .app__body .member-div:first-child, .app__body .member-div, .app__body .access-history__table .access__report, .app__body .activity-log__table', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.1));
         changeCss('@media(max-width: 1800px){.app__body .inner-wrap.move--left .post.post--comment.same--root', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.07));
         changeCss('.app__body .post.post--hovered', 'background:' + changeOpacity(theme.centerChannelColor, 0.08));
         changeCss('.app__body .attachment__body__wrap.btn-close', 'background:' + changeOpacity(theme.centerChannelColor, 0.08));
         changeCss('.app__body .attachment__body__wrap.btn-close', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('@media(min-width: 768px){.app__body .post.a11y--active, .app__body .modal .settings-modal .settings-table .settings-content .section-min:hover', 'background:' + changeOpacity(theme.centerChannelColor, 0.04));
         changeCss('@media(min-width: 768px){.app__body .post.post--editing', 'background:' + changeOpacity(theme.buttonBg, 0.08));
-        changeCss('@media(min-width: 768px){.app__body .post.current--user:hover .post__body ', 'background: transparent;');
         changeCss('.app__body .more-modal__row.more-modal__row--selected, .app__body .date-separator.hovered--before:after, .app__body .date-separator.hovered--after:before, .app__body .new-separator.hovered--after:before, .app__body .new-separator.hovered--before:after', 'background:' + changeOpacity(theme.centerChannelColor, 0.07));
         changeCss('@media(min-width: 768px){.app__body .dropdown-menu>li>a:focus, .app__body .dropdown-menu>li>a:hover', 'background:' + changeOpacity(theme.centerChannelColor, 0.15));
         changeCss('.app__body .form-control[disabled], .app__body .form-control[readonly], .app__body fieldset[disabled] .form-control', 'background:' + changeOpacity(theme.centerChannelColor, 0.1));
@@ -407,8 +407,6 @@ export function applyTheme(theme: Theme) {
         changeCss('body', 'scrollbar-arrow-color:' + theme.centerChannelColor);
         changeCss('.app__body .post.post--compact .post-image__column .post-image__details svg, .app__body .modal .about-modal .about-modal__logo svg, .app__body .status svg, .app__body .edit-post__actions .icon svg', 'fill:' + theme.centerChannelColor);
         changeCss('.app__body .post-list__new-messages-below', 'background:' + changeColor(theme.centerChannelColor, 0.5));
-        changeCss('@media(min-width: 768px){.app__body .post.post--compact.same--root.post--comment .post__content', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
-        changeCss('.app__body .post.post--comment.current--user .post__body', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('.app__body .emoji-picker', 'color:' + theme.centerChannelColor);
         changeCss('.app__body .emoji-picker', 'border-color:' + changeOpacity(theme.centerChannelColor, 0.2));
         changeCss('.app__body .emoji-picker__search-icon', 'color:' + changeOpacity(theme.centerChannelColor, 0.4));
@@ -464,6 +462,7 @@ export function applyTheme(theme: Theme) {
 
         changeCss('.app__body .SendMessageButton:not(.disabled):hover', 'background:' + blendColors(theme.buttonBg, '#000000', 0.1));
         changeCss('.app__body #button_send_post_options:not(.disabled):hover', 'background:' + blendColors(theme.buttonBg, '#000000', 0.1));
+        changeCss('@media(min-width: 768px){.app__body .post.post--compact.same--root.post--comment .post__content', 'border-color:' + changeOpacity(theme.buttonBg, 0.24));
     }
 
     if (theme.buttonColor) {
@@ -641,6 +640,16 @@ export function applyTheme(theme: Theme) {
             'ik-btn-secondary-color': theme.ikBtnSecondaryColor,
             'wc-contact-sheet-pill-color': theme.contactSheetPillColor,
             'wc-contact-sheet-pill-background-color': theme.contactSheetPillBackgroundColor,
+
+            // integrations
+            'ik-integration-header-color': theme.integrationHeaderColor,
+            'ik-integration-header-border': theme.integrationHeaderBorder,
+            'ik-backstage-body': theme.backstageBody,
+            'ik-backstage-text': theme.backstageText,
+            'ik-box-shadow': theme.boxShadow,
+            'ik-background-input': theme.backgroundInput,
+            'ik-backstage-background': theme.backstageBackground,
+            'ik-disable-form': theme.disableForm,
         },
     });
 }
@@ -1153,6 +1162,17 @@ export function defaultImageURLForUser(userId: UserProfile['id']) {
     return Client4.getUsersRoute() + '/' + userId + '/image/default';
 }
 
+export function getShopUrl() {
+    // eslint-disable-next-line no-process-env
+    const baseUrl = process.env.SHOP_ENDPOINT;
+    if (!baseUrl) {
+        throw new Error('SHOP_ENDPOINT is not defined in environment variables');
+    }
+
+    const path = 'order2/select/ksuite_change_offer';
+    return new URL(path, baseUrl).toString();
+}
+
 // in contrast to Client4.getTeamIconUrl, for ui logic this function returns null if last_team_icon_update is unset
 export function imageURLForTeam(team: Team) {
     return team.last_team_icon_update ? Client4.getTeamIconUrl(team.id, team.last_team_icon_update) : null;
@@ -1415,7 +1435,7 @@ export async function handleFormattedTextClick(e: React.MouseEvent, currentRelat
                                 }
                             }
                             if (!member) {
-                                const {data} = await store.dispatch(joinPrivateChannelPrompt(team, channel.display_name, false));
+                                const {data} = await store.dispatch(joinPrivateChannelPrompt(team, channel.display_name, channel.id, false));
                                 if (data!.join) {
                                     let error = false;
                                     if (!getTeamMemberships(state)[team.id]) {

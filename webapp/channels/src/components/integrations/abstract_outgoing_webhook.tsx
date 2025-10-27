@@ -274,7 +274,7 @@ export default class AbstractOutgoingWebhook extends React.PureComponent<Props, 
                 <BackstageHeader>
                     <Link to={`/${this.props.team.name}/integrations/outgoing_webhooks`}>
                         <FormattedMessage
-                            id='add_outgoing_webhook.header'
+                            id='installed_outgoing_webhooks.header'
                             defaultMessage='Outgoing Webhooks'
                         />
                     </Link>

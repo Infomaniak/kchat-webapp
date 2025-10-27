@@ -111,6 +111,7 @@ export type PostState = 'DELETED';
 export enum PostPriority {
     URGENT = 'urgent',
     IMPORTANT = 'important',
+    TRANSCRIPT = 'transcript'
 }
 
 export type PostList = {

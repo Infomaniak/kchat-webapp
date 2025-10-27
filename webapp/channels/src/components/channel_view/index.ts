@@ -45,6 +45,7 @@ function mapStateToProps(state: GlobalState) {
     const missingChannelRole = isMissingChannelRoles(state, channel);
 
     return {
+        channel,
         channelId: channel ? channel.id : '',
         deactivatedChannel: channel ? isDeactivatedDirectChannel(state, channel.id) : false,
         enableOnboardingFlow,

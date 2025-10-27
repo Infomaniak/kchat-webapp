@@ -1,4 +1,5 @@
 stages:
+  - translations
   - build
   - lint
   - test_unit
@@ -242,6 +243,21 @@ deploy:image:
 #   script:
 #     - yarn test:types
 
+translations:check:
+  stage: translations
+  image: node:${NODE_VERSION}
+  tags:
+    - kubernetes
+  rules:
+    - *rule-merge-request
+    - *rule-commit
+  before_script:
+  - *script-yarn-install
+  script:
+    - yarn workspace mattermost-webapp check:i18n
+    - git diff --exit-code webapp/channels/src/i18n/ || { echo "⛔ i18n files changed, commit the updates."; exit 1; }
+
+
 lint:eslint:
   stage: lint
   image: node:${NODE_VERSION}
@@ -299,6 +315,7 @@ test:e2e:
   rules:
     - if: *if-merge-request
       when: manual
+      allow_failure: true
     - when: never
   script:
     - echo "STAGING_BASE_URL=$(ruby .gitlab/get_staging_baseurl.rb)" >> test.env

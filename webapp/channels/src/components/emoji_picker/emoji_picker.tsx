@@ -63,6 +63,8 @@ const EmojiPicker = ({
 }: Props) => {
     const getInitialActiveCategory = () => (recentEmojis.length ? RECENT : SMILEY_EMOTION);
     const [activeCategory, setActiveCategory] = useState<EmojiCategory>(getInitialActiveCategory);
+    const [isHovered, setIsHovered] = useState(false);
+    const pickerContainerRef = useRef<HTMLDivElement>(null);
 
     const [cursor, setCursor] = useState<EmojiCursor>({
         rowIndex: -1,
@@ -93,6 +95,27 @@ const EmojiPicker = ({
         }
     }, CUSTOM_EMOJI_SEARCH_THROTTLE_TIME_MS));
 
+    // Ik change : handle edge case when onMouseLeave isn't triggered when the mouse is moved quickly
+    useEffect(() => {
+        function handleMouseMove(e: MouseEvent) {
+            const picker = pickerContainerRef.current;
+            if (!picker) {
+                return;
+            }
+            const rect = picker.getBoundingClientRect();
+            if (
+                e.clientX < rect.left ||
+                e.clientX > rect.right ||
+                e.clientY < rect.top ||
+                e.clientY > rect.bottom
+            ) {
+                handleContainerMouseLeave();
+            }
+        }
+        document.addEventListener('mousemove', handleMouseMove);
+        return () => document.removeEventListener('mousemove', handleMouseMove);
+    }, []);
+
     useEffect(() => {
         // Delay taking focus because this briefly renders offscreen when using an Overlay
         // so focusing it immediately on mount can cause weird scrolling
@@ -121,10 +144,6 @@ const EmojiPicker = ({
         shouldRunCreateCategoryAndEmojiRows.current = false;
 
         const [updatedCategoryOrEmojisRows, updatedEmojiPositions] = createCategoryAndEmojiRows(allEmojis, categories, filter, userSkinTone);
-
-        if (activeCategory !== 'custom') {
-            selectFirstEmoji(updatedEmojiPositions);
-        }
 
         setCategoryOrEmojisRows(updatedCategoryOrEmojisRows);
         setEmojiPositionsArray(updatedEmojiPositions);
@@ -156,22 +175,6 @@ const EmojiPicker = ({
         }
         const emoji = allEmojis[emojiId] || allEmojis[emojiId.toUpperCase()] || allEmojis[emojiId.toLowerCase()];
         return emoji;
-    };
-
-    const selectFirstEmoji = (emojiPositions: EmojiPosition[]) => {
-        if (!emojiPositions[0]) {
-            return;
-        }
-
-        const {rowIndex, emojiId} = emojiPositions[0];
-        const cursorEmoji = getEmojiById(emojiId);
-        if (cursorEmoji) {
-            setCursor({
-                rowIndex,
-                emojiId,
-                emoji: cursorEmoji,
-            });
-        }
     };
 
     const handleCategoryClick = useCallback((categoryRowIndex: CategoryOrEmojiRow['index'], categoryName: EmojiCategory, emojiId: string) => {
@@ -356,9 +359,20 @@ const EmojiPicker = ({
     }, [cursor.emojiId]);
 
     const handleEmojiOnMouseOver = (mouseOverCursor: EmojiCursor) => {
+        setIsHovered(true);
         if (mouseOverCursor.emojiId !== cursor.emojiId || cursor.emojiId === '') {
             setCursor(mouseOverCursor);
         }
+    };
+
+    const handleContainerMouseLeave = () => {
+        // IK Changes : Reset the cursor when mouse leaves the emoji picker
+        setCursor({
+            rowIndex: -1,
+            emojiId: '',
+            emoji: undefined,
+        });
+        setIsHovered(false);
     };
 
     const cursorEmojiName = useMemo(() => {
@@ -373,6 +387,21 @@ const EmojiPicker = ({
     }, [cursor.emojiId]);
 
     const areSearchResultsEmpty = filter.length !== 0 && categoryOrEmojisRows.length === 1 && categoryOrEmojisRows?.[0]?.items?.[0]?.categoryName === SEARCH_RESULTS;
+
+    let footerContent;
+    if (areSearchResultsEmpty) {
+        footerContent = <div/>;
+    } else if (isHovered) {
+        footerContent = <EmojiPickerPreview emoji={cursor.emoji}/>;
+    } else {
+        footerContent = (
+            <EmojiPickerCustomEmojiButton
+                currentTeamName={currentTeamName}
+                customEmojisEnabled={customEmojisEnabled}
+                onClick={onAddCustomEmojiClickInner}
+            />
+        );
+    }
 
     return (
         <>
@@ -419,7 +448,9 @@ const EmojiPicker = ({
                     titleValues={{channelName: `${filter}`}}
                 />
             ) : (
+
                 <EmojiPickerCurrentResults
+                    childRef={pickerContainerRef}
                     ref={infiniteLoaderRef}
                     isFiltering={filter.length > 0}
                     activeCategory={activeCategory}
@@ -433,15 +464,13 @@ const EmojiPicker = ({
                     customEmojiPage={customEmojiPage}
                     incrementEmojiPickerPage={incrementEmojiPickerPage}
                     customEmojisEnabled={customEmojisEnabled}
+                    onMouseLeave={handleContainerMouseLeave}
                 />
             )}
-            <div className='emoji-picker__footer'>
-                {areSearchResultsEmpty ? <div/> : <EmojiPickerPreview emoji={cursor.emoji}/>}
-                <EmojiPickerCustomEmojiButton
-                    currentTeamName={currentTeamName}
-                    customEmojisEnabled={customEmojisEnabled}
-                    onClick={onAddCustomEmojiClickInner}
-                />
+            <div
+                className='emoji-picker__footer'
+            >
+                {footerContent}
             </div>
         </>
     );

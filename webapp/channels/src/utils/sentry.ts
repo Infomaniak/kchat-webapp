@@ -61,6 +61,9 @@ export default function init({SENTRY_DSN}: Args) {
             /chrome-extension/,
             /moz-extension/,
             /ResizeObserver loop/,
+
+            //Ik: For notification, user didn't interact before the sound is played
+            'NotAllowedError: play() failed because the user didn\'t interact with the document first',
         ],
     };
 

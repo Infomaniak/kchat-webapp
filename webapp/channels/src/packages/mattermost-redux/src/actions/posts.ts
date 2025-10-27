@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -5,7 +6,7 @@ import type {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
 import type {Channel, ChannelUnread} from '@mattermost/types/channels';
-import type {FetchPaginatedThreadOptions} from '@mattermost/types/client4';
+import type {FetchPaginatedThreadOptions, ReminderTimestamp} from '@mattermost/types/client4';
 import type {Group} from '@mattermost/types/groups';
 import {isMessageAttachmentArray} from '@mattermost/types/message_attachments';
 import type {Post, PostList, PostAcknowledgement} from '@mattermost/types/posts';
@@ -1195,10 +1196,10 @@ export function markPostReminderAsDone(userId: string, postId: string): ActionFu
     };
 }
 
-export function addPostReminder(userId: string, postId: string, timestamp: number, reschedule?: boolean, reminderPostId?: string): ActionFuncAsync {
+export function addPostReminder(userId: string, postId: string, timestamp: ReminderTimestamp, reschedule?: boolean, reminderPostId?: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         try {
-            await Client4.addPostReminder(userId, postId, timestamp, reschedule, reminderPostId);
+            await Client4.addPostReminder(userId, postId, timestamp.value, reschedule, reminderPostId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -1367,11 +1368,12 @@ export function unacknowledgePost(postId: string): ActionFuncAsync {
     };
 }
 
-export function translatePost(postId: string) {
+export function translatePost(postId: string, forceThread?: boolean) {
     return bindClientFunc({
         clientFunc: Client4.translatePost,
         params: [
             postId,
+            forceThread,
         ],
     });
 }

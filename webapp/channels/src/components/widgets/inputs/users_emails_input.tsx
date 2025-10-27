@@ -475,8 +475,6 @@ export default class UsersEmailsInput extends React.PureComponent<Props, State> 
     render() {
         const values = this.formatValuesForCreatable();
 
-        const Msg: any = components.NoOptionsMessage;
-
         const styles = {
             placeholder: (css) => ({
                 ...css,
@@ -539,13 +537,10 @@ export default class UsersEmailsInput extends React.PureComponent<Props, State> 
                 />
                 {this.props.showError && (
                     <div className='InputErrorBox'>
-                        <Msg>
-                            <FormattedMarkdownMessage
-                                {...this.props.errorMessage}
-                                values={this.props.errorMessageValues}
-                                disableLinks={true}
-                            />
-                        </Msg>
+                        <FormattedMessage
+                            {...this.props.errorMessage}
+                            values={this.props.errorMessageValues}
+                        />
                         {this.props.extraErrorText || null}
                     </div>
                 )}

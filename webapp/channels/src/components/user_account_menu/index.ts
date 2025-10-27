@@ -18,13 +18,11 @@ import {openModal} from 'actions/views/modals';
 import {getCurrentLocale} from 'selectors/i18n';
 import {makeGetCustomStatus, isCustomStatusExpired, isCustomStatusEnabled} from 'selectors/views/custom_status';
 
+import {isStaff} from 'utils/team_utils';
+
 import type {GlobalState} from 'types/store';
 
 import UserAccountMenu from './user_account_menu';
-
-const STAFF_ONLY_TEAM_NAME_WHITELIST = [
-    'infomaniak',
-];
 
 function makeMapStateToProps() {
     const getCustomStatus = makeGetCustomStatus();
@@ -37,7 +35,7 @@ function makeMapStateToProps() {
         const userLastName = currentUser?.last_name;
         const customStatus = getCustomStatus(state, userId);
         const currentTeam = getCurrentTeam(state);
-        const showNextSwitch = currentTeam ? STAFF_ONLY_TEAM_NAME_WHITELIST.includes(currentTeam.name) : false;
+        const showNextSwitch = isStaff(currentTeam);
         const ksuiteBridge = getKSuiteBridge(state);
         const locale = getCurrentLocale(state);
 

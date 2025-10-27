@@ -2,17 +2,14 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators, type ActionCreatorsMapObject, type Dispatch} from 'redux';
+import {bindActionCreators, type Dispatch} from 'redux';
 
 import {getChannelGuestMembers} from 'mattermost-redux/actions/channels';
 import {getChannelGuestMembersCount} from 'mattermost-redux/selectors/entities/channels';
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 
-import type {GlobalState} from 'types/store/index';
+import type {GlobalState} from 'types/store';
 
-import type {Props} from './guest_banner';
 import GuestBanner from './guest_banner';
 
 export type GuestBannerConnectorProps = {
@@ -32,7 +29,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc | GenericAction>, Props['actions']>({
+        actions: bindActionCreators({
             getChannelGuestMembers,
         }, dispatch),
     };

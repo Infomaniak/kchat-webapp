@@ -48,7 +48,7 @@ describe('component/ConvertChannelModal', () => {
         userEvent.click(screen.getByRole('button', {name: 'Yes, convert to private channel'}));
 
         expect(updateChannelPrivacy).toHaveBeenCalledTimes(1);
-        expect(updateChannelPrivacy).toHaveBeenCalledWith(baseProps.channelId, General.PRIVATE_CHANNEL, expect.any(Function));
+        expect(updateChannelPrivacy).toHaveBeenCalledWith(baseProps.channelId, General.PRIVATE_CHANNEL);
     });
 
     test('should not call updateChannelPrivacy when Close button is clicked', async () => {

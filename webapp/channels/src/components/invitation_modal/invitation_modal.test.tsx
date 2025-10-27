@@ -3,7 +3,7 @@
 
 import React from 'react';
 import type {IntlShape} from 'react-intl';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 
 import type {Team} from '@mattermost/types/teams';
 
@@ -20,6 +20,11 @@ import InvitationModal, {View} from './invitation_modal';
 import InviteView from './invite_view';
 import NoPermissionsView from './no_permissions_view';
 import ResultView from './result_view';
+
+jest.mock('react-redux', () => ({
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn(),
+}));
 
 const defaultProps: Props = deepFreeze({
     actions: {
@@ -43,6 +48,7 @@ const defaultProps: Props = deepFreeze({
     isCloud: false,
     canAddUsers: true,
     canInviteGuests: true,
+    remainingGuestSlot: 1,
     intl: {} as IntlShape,
     townSquareDisplayName: '',
     onExited: jest.fn(),
@@ -94,6 +100,10 @@ describe('InvitationModal', () => {
             },
         },
     };
+
+    const mockedUseSelector = useSelector as jest.Mock;
+
+    mockedUseSelector.mockReturnValue('mockedPackValue');
 
     const store = mockStore(state);
 

@@ -163,27 +163,17 @@ export default function TeamButton({
         </WithTeamTooltip>
     );
 
-    let teamButton = (
-        <Link
-            id={`${url.slice(1)}TeamButton`}
-            aria-label={isNotCreateTeamButton ? ariaLabel : displayName}
-            to={url}
-            onClick={handleSwitch}
-        >
-            {btn}
-        </Link>
-    );
-
+    let teamButton;
     if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
         teamButton = (
-            <a
-                id={`${this.props.url.slice(1)}TeamButton`}
-                aria-label={ariaLabel}
-                to={this.props.url}
-                onClick={this.handleSwitch}
+            <Link
+                id={`${url.slice(1)}TeamButton`}
+                aria-label={isNotCreateTeamButton ? ariaLabel : displayName}
+                to={url}
+                onClick={handleSwitch}
             >
                 {btn}
-            </a>
+            </Link>
         );
     }
 

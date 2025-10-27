@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import type {ComponentProps} from 'react';
 import React, {memo} from 'react';
+import type {ComponentProps} from 'react';
 import {useIntl} from 'react-intl';
 
 import Button from '../button';

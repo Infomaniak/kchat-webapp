@@ -22,13 +22,14 @@ function AttachmentCard({
     author_name: authorName,
     pretext,
 }: Props) {
+    // ik : Attachement from bug tracker may produce undefined displayed values #65537 (redmine)
+    const content = [authorName, title].filter(Boolean).join(': ');
+
     return (
         <div>
-            {(authorName || title) && (
-                <div className='attachment__truncated'>
-                    {authorName} {authorName && title ? ':' : ''} {title}
-                </div>
-            )}
+            <div className='attachment__truncated'>
+                {content}
+            </div>
             <div className='attachment__truncated'>
                 {stripMarkdown(text || pretext || fallback || '')}
             </div>

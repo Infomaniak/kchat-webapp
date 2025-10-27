@@ -20,6 +20,7 @@ export type TeamMemberWithError = {
     error: ServerError;
 }
 
+export type PackName = 'ksuite_essential' | 'ksuite_standard' | 'ksuite_pro' | 'ksuite_entreprise'
 export type TeamType = 'O' | 'I';
 
 export type Team = {
@@ -44,6 +45,7 @@ export type Team = {
     url: string;
     last_team_icon_update?: number;
     user_id?: string;
+    pack_name: PackName;
 };
 
 export type TeamsState = {

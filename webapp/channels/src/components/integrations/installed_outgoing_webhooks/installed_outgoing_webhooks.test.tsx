@@ -79,6 +79,7 @@ describe('components/integrations/InstalledOutgoingWebhooks', () => {
         },
         enableOutgoingWebhooks: true,
         canManageOthersWebhooks: true,
+        isQuotaExceeded: false,
     };
 
     test('should match snapshot', () => {

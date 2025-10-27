@@ -8,6 +8,15 @@ import {renderWithContext} from 'tests/react_testing_utils';
 
 import TeamButton from './team_button';
 
+jest.mock('utils/user_agent', () => ({
+    isDesktopApp: jest.fn().mockReturnValue(true),
+    getDesktopVersion: jest.fn(() => '2.0.0'),
+}));
+
+jest.mock('utils/server_version', () => ({
+    isServerVersionGreaterThanOrEqualTo: jest.fn().mockReturnValue(true),
+}));
+
 describe('components/TeamSidebar/TeamButton', () => {
     const baseProps = {
         btnClass: '',
