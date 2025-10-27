@@ -11,7 +11,7 @@ import {
     updateChannelNotifyProps,
 } from 'mattermost-redux/actions/channels';
 import {getCustomEmojisInText} from 'mattermost-redux/actions/emojis';
-import {General} from 'mattermost-redux/constants';
+import {Permissions, General} from 'mattermost-redux/constants';
 import {
     getCurrentChannel,
     getMyCurrentChannelMembership,
@@ -19,6 +19,7 @@ import {
     getCurrentChannelStats,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {
     displayLastActiveLabel,
@@ -88,10 +89,15 @@ function makeMapStateToProps() {
             timestampUnits = getLastActiveTimestampUnits(state, dmUser.id);
         }
 
+        // ik: for meet button visibility
+        const channelMembership = getMyCurrentChannelMembership(state);
+        const canPost = (channelMembership && haveIChannelPermission(state, channel?.team_id, channel?.id, Permissions.CREATE_POST)) ?? false;
+
         return {
             teamId: getCurrentTeamId(state),
             channel,
-            channelMember: getMyCurrentChannelMembership(state),
+            channelMember: channelMembership,
+            canPost,
             memberCount: stats?.member_count || 0,
             currentUser: user,
             dmUser,
