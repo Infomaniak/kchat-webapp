@@ -106,7 +106,7 @@ function ThreadItem({
 
     const participantIds = useMemo(() => {
         const ids = (thread?.participants || []).flatMap(({id}) => {
-            if (id === post.user_id && !thread?.post.props?.from_webhook) {
+            if (id === post.user_id) {
                 return [];
             }
             return id;

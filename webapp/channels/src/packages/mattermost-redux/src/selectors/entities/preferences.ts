@@ -219,6 +219,14 @@ export type Theme = {
     switchServerIconColor: string;
     switchServerHoverBackground: string;
     guestBannerBackground: string;
+    integrationHeaderColor: string;
+    integrationHeaderBorder: string;
+    backstageBody: string;
+    backstageText: string;
+    backstageBackground: string;
+    boxShadow: string;
+    backgroundInput: string;
+    disableForm: string;
 };
 
 const getDefaultTheme = createSelector('getDefaultTheme', getConfig, (config): Theme => {
