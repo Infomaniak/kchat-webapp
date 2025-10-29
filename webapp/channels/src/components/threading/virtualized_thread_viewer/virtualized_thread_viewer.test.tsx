@@ -15,10 +15,6 @@ import {TestHelper} from 'utils/test_helper';
 
 import VirtualizedThreadViewer from './virtualized_thread_viewer';
 
-jest.mock('wasm-media-encoders', () => ({
-    createEncoder: jest.fn(),
-}));
-
 type Props = ComponentProps<typeof VirtualizedThreadViewer>;
 function getBasePropsAndState(): [Props, DeepPartial<GlobalState>] {
     const channel = TestHelper.getChannelMock();
@@ -74,6 +70,10 @@ function getBasePropsAndState(): [Props, DeepPartial<GlobalState>] {
     };
     return [props, state];
 }
+
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(),
+}));
 
 describe('components/threading/VirtualizedThreadViewer', () => {
     const [baseProps] = getBasePropsAndState();
@@ -147,3 +147,4 @@ describe('components/threading/VirtualizedThreadViewer', () => {
         expect(scrollToBottom).not.toHaveBeenCalled();
     });
 });
+

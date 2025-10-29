@@ -14,8 +14,8 @@ import {isMessageDescriptor} from 'utils/i18n';
 import TooltipShortcut from './tooltip_shortcut';
 import {type ShortcutDefinition} from './tooltip_shortcut';
 
-const TOOLTIP_EMOTICON_SIZE = 16;
-const TOOLTIP_EMOTICON_LARGE_SIZE = 28;
+const TOOLTIP_EMOTICON_SIZE = 28;
+const TOOLTIP_EMOTICON_LARGE_SIZE = 48;
 
 interface Props {
     title: string | ReactNode | MessageDescriptor;

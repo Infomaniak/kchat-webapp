@@ -3,7 +3,7 @@
 
 import noop from 'lodash/noop';
 import React, {memo, useCallback, useMemo, useEffect, useState, useRef} from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
@@ -211,6 +211,8 @@ function DraftRow({
         true,
     );
 
+    const [showUpdatedFeedback, setShowUpdatedFeedback] = useState(false);
+
     const onScheduleDraft = useCallback(async (scheduledAt: number): Promise<{error?: string}> => {
         isBeingScheduled.current = true;
         await handleOnSend(item as PostDraft, {scheduled_at: scheduledAt});
@@ -251,15 +253,21 @@ function DraftRow({
         setIsEditing(false);
     }, []);
 
-    const handleSchedulePostOnReschedule = useCallback(async (updatedScheduledAtTime: number) => {
+    const handleSchedulePostOnReschedule = useCallback(async (updatedScheduledAtTime: number | 'monday' | 'tomorrow') => {
         handleCancelEdit();
 
         const updatedScheduledPost: ScheduledPost = {
             ...(item as ScheduledPost),
+
+            // @ts-expect-error type mistmatch to avoid plenty of changes, but scheduled_at accept 'monday' and 'tomorrow'
             scheduled_at: updatedScheduledAtTime,
         };
 
         const result = await dispatch(updateScheduledPost(updatedScheduledPost, connectionId));
+        setShowUpdatedFeedback(true);
+        setTimeout(() => {
+            setShowUpdatedFeedback(false);
+        }, 2000);
         return {
             error: result.error?.message,
         };
@@ -372,12 +380,21 @@ function DraftRow({
                     <Header
                         kind={isScheduledPost ? 'scheduledPost' : 'draft'}
                         hover={hover}
-                        actions={actions}
+                        actions={showUpdatedFeedback ? (
+                            <span className='glow-message'>
+                                <span className='icon icon-check-circle-outline'/>
+                                <FormattedMessage
+                                    id='drafts.schedule.updated'
+                                    defaultMessage='The schedule has been successfully updated'
+                                />
+                            </span>
+                        ) : actions}
                         title={title}
                         timestamp={timestamp}
                         remote={isRemote || false}
                         error={postError || serverError?.message}
                     />
+
                     {isEditing && (
                         <EditScheduledPost
                             scheduledPost={item as ScheduledPost}

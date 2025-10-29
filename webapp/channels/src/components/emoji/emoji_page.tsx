@@ -3,14 +3,14 @@
 
 import React, {useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
 import Permissions from 'mattermost-redux/constants/permissions';
-import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import AnyTeamPermissionGate from 'components/permissions_gates/any_team_permission_gate';
-
-import * as Utils from 'utils/utils';
 
 import EmojiList from './emoji_list';
 
@@ -19,7 +19,7 @@ type Props = {
     teamDisplayName?: string;
     siteName?: string;
     scrollToTop(): void;
-    currentTheme: Theme;
+    isQuotaExceeded: boolean;
     actions: {
         loadRolesIfNeeded(roles: Iterable<string>): void;
     };
@@ -33,19 +33,15 @@ export default function EmojiPage({
     teamName = '',
     siteName = '',
     scrollToTop,
-    currentTheme,
     actions,
+    isQuotaExceeded,
 }: Props) {
     const intl = useIntl();
+    const currentPack = useSelector(getCurrentPackName);
 
     useEffect(() => {
         updateTitle();
         actions.loadRolesIfNeeded(ROLES);
-        Utils.resetTheme();
-
-        return () => {
-            Utils.applyTheme(currentTheme);
-        };
     }, []);
 
     useEffect(() => {
@@ -55,6 +51,42 @@ export default function EmojiPage({
     const updateTitle = () => {
         document.title = intl.formatMessage({id: 'custom_emoji.header', defaultMessage: 'Custom Emoji'}) + ' - ' + teamDisplayName + ' ' + siteName;
     };
+
+    let action = null;
+    if (isQuotaExceeded) {
+        const {withQuotaCheck} = quotaGate(false, currentPack);
+        action = (
+            <button
+                type='button'
+                className='btn btn-primary'
+                onClick={withQuotaCheck(() => {})} // dummy callback, we know we are capped
+            >
+                <wc-icon
+                    name='rocket'
+                />
+                <FormattedMessage
+                    id='emoji_list.add'
+                    defaultMessage='Add Custom Emoji'
+                />
+            </button>
+        );
+    } else {
+        action = (
+            <Link
+                className='add-link'
+                to={'/' + teamName + '/emoji/add'}
+            >
+                <button
+                    type='button'
+                    className='btn btn-primary'
+                >
+                    <FormattedMessage
+                        id='emoji_list.add'
+                        defaultMessage='Add Custom Emoji'
+                    />
+                </button>
+            </Link>);
+    }
 
     return (
         <div className='backstage-content emoji-list'>
@@ -66,20 +98,7 @@ export default function EmojiPage({
                     />
                 </h1>
                 <AnyTeamPermissionGate permissions={CREATE_EMOJIS_PERMISSIONS}>
-                    <Link
-                        className='add-link'
-                        to={'/' + teamName + '/emoji/add'}
-                    >
-                        <button
-                            type='button'
-                            className='btn btn-primary'
-                        >
-                            <FormattedMessage
-                                id='emoji_list.add'
-                                defaultMessage='Add Custom Emoji'
-                            />
-                        </button>
-                    </Link>
+                    {action}
                 </AnyTeamPermissionGate>
             </div>
             <EmojiList scrollToTop={scrollToTop}/>

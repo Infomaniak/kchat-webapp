@@ -127,7 +127,7 @@ type Props = {
          */
         setThreadFollow: (userId: string, teamId: string, threadId: string, newState: boolean) => void;
 
-        translatePost: (postId: string) => void;
+        translatePost: (postId: string, forceThread?: boolean) => void;
     }; // TechDebt: Made non-mandatory while converting to typescript
 
     canEdit: boolean;
@@ -137,6 +137,7 @@ type Props = {
     isCollapsedThreadsEnabled: boolean;
     isFollowingThread?: boolean;
     isMentionedInRootPost?: boolean;
+    isInThread?: boolean;
     threadReplyCount?: number;
 }
 
@@ -433,8 +434,8 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     };
 
     translatePost = () => {
-        const {actions, post} = this.props;
-        actions.translatePost(post.id);
+        const {actions, post, isInThread} = this.props;
+        actions.translatePost(post.id, isInThread);
     };
 
     render(): JSX.Element {

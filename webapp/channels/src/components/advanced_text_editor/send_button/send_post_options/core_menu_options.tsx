@@ -24,6 +24,7 @@ import RecentUsedCustomDate from './recent_used_custom_date';
 type Props = {
     handleOnSelect: (e: React.FormEvent, scheduledAt: number) => void;
     channelId: string;
+    allowCustom: boolean;
 }
 
 function getScheduledTimeInTeammateTimezone(userCurrentTimestamp: number, teammateTimezoneString: string): string {
@@ -40,7 +41,7 @@ function getNextWeekday(dateTime: DateTime, targetWeekday: number) {
     return dateTime.plus({days: deltaDays});
 }
 
-function CoreMenuOptions({handleOnSelect, channelId}: Props) {
+function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
     const {
         userCurrentTimezone,
         teammateTimezone,
@@ -67,14 +68,14 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
     }, [currentUserId]);
 
     const now = DateTime.now().setZone(userCurrentTimezone);
-    const tomorrow9amTime = DateTime.now().
+    const tomorrow8amTime = DateTime.now().
         setZone(userCurrentTimezone).
         plus({days: 1}).
-        set({hour: 9, minute: 0, second: 0, millisecond: 0}).
+        set({hour: 8, minute: 0, second: 0, millisecond: 0}).
         toMillis();
 
     const nextMonday = getNextWeekday(now, 1).set({
-        hour: 9,
+        hour: 8,
         minute: 0,
         second: 0,
         millisecond: 0,
@@ -82,7 +83,7 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
 
     const timeComponent = (
         <Timestamp
-            value={tomorrow9amTime.valueOf()}
+            value={tomorrow8amTime.valueOf()}
             useDate={false}
         />
     );
@@ -91,7 +92,7 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
 
     if (isDM && !isBot && !isSelfDM) {
         const teammateTimezoneString = teammateTimezone.useAutomaticTimezone ? teammateTimezone.automaticTimezone : teammateTimezone.manualTimezone || 'UTC';
-        const scheduledTimeInTeammateTimezone = getScheduledTimeInTeammateTimezone(tomorrow9amTime, teammateTimezoneString);
+        const scheduledTimeInTeammateTimezone = getScheduledTimeInTeammateTimezone(tomorrow8amTime, teammateTimezoneString);
         const teammateTimeDisplay = (
             <FormattedMessage
                 id='create_post_button.option.schedule_message.options.teammate_user_hour'
@@ -110,17 +111,18 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
         extraProps.trailingElements = teammateTimeDisplay;
     }
 
-    const tomorrowClickHandler = useCallback((e) => handleOnSelect(e, tomorrow9amTime), [handleOnSelect, tomorrow9amTime]);
+    // @ts-expect-error tyoe behind the scene 'tomorrow' and 'monday' is allowed
+    const tomorrowClickHandler = useCallback((e) => handleOnSelect(e, 'tomorrow'), [handleOnSelect]);
 
     const optionTomorrow = (
         <Menu.Item
-            key={'scheduling_time_tomorrow_9_am'}
+            key={'scheduling_time_tomorrow_8_am'}
             onClick={tomorrowClickHandler}
             labels={
                 <FormattedMessage
                     id='create_post_button.option.schedule_message.options.tomorrow'
-                    defaultMessage='Tomorrow at {9amTime}'
-                    values={{'9amTime': timeComponent}}
+                    defaultMessage='Tomorrow at {8amTime}'
+                    values={{'8amTime': timeComponent}}
                 />
             }
             className='core-menu-options'
@@ -129,17 +131,18 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
         />
     );
 
-    const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, nextMonday), [handleOnSelect, nextMonday]);
+    // @ts-expect-error tyoe behind the scene 'tomorrow' and 'monday' is allowed
+    const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, 'monday'), [handleOnSelect]);
 
     const optionNextMonday = (
         <Menu.Item
-            key={'scheduling_time_next_monday_9_am'}
+            key={'scheduling_time_next_monday_8_am'}
             onClick={nextMondayClickHandler}
             labels={
                 <FormattedMessage
                     id='create_post_button.option.schedule_message.options.next_monday'
-                    defaultMessage='Next Monday at {9amTime}'
-                    values={{'9amTime': timeComponent}}
+                    defaultMessage='Next Monday at {8amTime}'
+                    values={{'8amTime': timeComponent}}
                 />
             }
             className='core-menu-options'
@@ -149,14 +152,14 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
 
     const optionMonday = (
         <Menu.Item
-            key={'scheduling_time_monday_9_am'}
+            key={'scheduling_time_monday_8_am'}
             onClick={nextMondayClickHandler}
             labels={
                 <FormattedMessage
                     id='create_post_button.option.schedule_message.options.monday'
-                    defaultMessage='Monday at {9amTime}'
+                    defaultMessage='Monday at {8amTime}'
                     values={{
-                        '9amTime': timeComponent,
+                        '8amTime': timeComponent,
                     }}
                 />
             }
@@ -193,12 +196,14 @@ function CoreMenuOptions({handleOnSelect, channelId}: Props) {
     return (
         <>
             {options}
-            <RecentUsedCustomDate
-                handleOnSelect={handleOnSelect}
-                userCurrentTimezone={userCurrentTimezone}
-                tomorrow9amTime={tomorrow9amTime}
-                nextMonday={nextMonday}
-            />
+            {allowCustom && (
+                <RecentUsedCustomDate
+                    handleOnSelect={handleOnSelect}
+                    userCurrentTimezone={userCurrentTimezone}
+                    tomorrow8amTime={tomorrow8amTime}
+                    nextMonday={nextMonday}
+                />
+            )}
         </>
     );
 }

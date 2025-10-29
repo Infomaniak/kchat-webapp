@@ -66,3 +66,6 @@ export type ThunkActionFunc<
     ReturnType,
     State extends GlobalState = GlobalState
 > = MMReduxTypes.ThunkActionFunc<ReturnType, State, MMAction>;
+
+export type ActionResult<Data = any, Error = any> = MMReduxTypes.ActionResult<Data, Error>
+

@@ -33,10 +33,6 @@ const STANDARD_EXCLUDE = [
     /node_modules/,
 ];
 
-const CSP_UNSAFE_EVAL_IF_DEV = ' \'unsafe-eval\'';
-const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
-const CSP_WORKER_SRC = ' sentry-kchat.infomaniak.com/';
-
 let publicPath = '/static/';
 
 // Allow overriding the publicPath in dev from the exported SiteURL.
@@ -341,11 +337,48 @@ var config = {
 };
 
 function generateCSP() {
-    let csp = 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.preprod.dev.infomaniak.ch/ onlyoffice.infomaniak.com/ ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV;
+    const CSP_UNSAFE_INLINE = '\'unsafe-inline\'';
+    const CSP_UNSAFE_EVAL_IF_DEV = '\'unsafe-eval\'';
+    const scriptSrc = [
+        "'self'",
+        'blob:',
+        'cdn.rudderlabs.com',
+        'js.stripe.com/v3',
+        'fonts.storage.infomaniak.com',
+        'web-components.storage.infomaniak.com',
+        'web-components-staging.dev.infomaniak.ch',
+        'welcome.infomaniak.com',
+        'welcome.preprod.dev.infomaniak.ch',
+        'kmeet.infomaniak.com',
+        'kmeet.preprod.dev.infomaniak.ch',
+        'onlyoffice.infomaniak.com',
+        CSP_UNSAFE_INLINE,
+        CSP_UNSAFE_EVAL_IF_DEV,
+    ];
 
     if (IS_CANARY || IS_PREPROD) {
-        csp += CSP_WORKER_SRC;
+        scriptSrc.push('sentry-kchat.infomaniak.com');
     }
+
+    const scriptSrcElem = [
+        "'self'",
+        "'unsafe-inline'",
+        'blob:',
+        'kchat.preprod.dev.infomaniak.ch',
+        'kmeet.preprod.dev.infomaniak.ch',
+        'web-components.storage.infomaniak.com',
+        'web-components-staging.dev.infomaniak.ch',
+        'documentserver.kdrive.infomaniak.com',
+        'onlyoffice.infomaniak.com',
+    ];
+
+    const workerSrc = ["'self'", 'blob:'];
+
+    const csp = [
+        `script-src ${scriptSrc.join(' ')}`,
+        `script-src-elem ${scriptSrcElem.join(' ')}`,
+        `worker-src ${workerSrc.join(' ')}`,
+    ].join('; ');
 
     console.log('csp for html: ', csp);
 
@@ -464,6 +497,7 @@ if (DEV) {
     env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.preprod.dev.infomaniak.ch/');
     env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.preprod.dev.infomaniak.ch/');
     env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.preprod.dev.infomaniak.ch');
+    env.SHOP_ENDPOINT = JSON.stringify(process.env.SHOP_ENDPOINT || 'https://shop.preprod.dev.infomaniak.ch/');
     env.SENTRY_PERFORMANCE_SAMPLE_RATE = JSON.stringify(process.env.SENTRY_PERFORMANCE_SAMPLE_RATE || 0);
     if (process.env.MM_LIVE_RELOAD) {
         config.plugins.push(new LiveReloadPlugin());
@@ -478,6 +512,7 @@ if (DEV) {
     env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.infomaniak.com/');
     env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.infomaniak.com/');
     env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.infomaniak.com');
+    env.SHOP_ENDPOINT = JSON.stringify(process.env.SHOP_ENDPOINT || 'https://shop.infomaniak.com/');
     env.SENTRY_PERFORMANCE_SAMPLE_RATE = JSON.stringify(process.env.SENTRY_PERFORMANCE_SAMPLE_RATE || 0);
 }
 

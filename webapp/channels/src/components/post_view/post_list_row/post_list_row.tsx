@@ -9,11 +9,11 @@ import type {CloudUsage, Limits} from '@mattermost/types/cloud';
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
 
-import {hasLimitDate} from 'mattermost-redux/actions/posts';
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
 
 import type {emitShortcutReactToLastPostFrom} from 'actions/post_actions';
 
+import OptionnalUpgradeBanner from 'components/ik_upgrade_ksuite_banner/ik_upgrade_ksuite_banner';
 import PostComponent from 'components/post';
 import ChannelIntroMessage from 'components/post_view/channel_intro_message/';
 import CombinedUserActivityPost from 'components/post_view/combined_user_activity_post';
@@ -24,8 +24,6 @@ import {PostListRowListIds, Locations} from 'utils/constants';
 import {isIdNotPost} from 'utils/post_utils';
 
 import type {NewMessagesSeparatorActionComponent} from 'types/store/plugins';
-
-import ChannelMessageLimitationBanner from '../channel_message_limitation_banner/channel_message_limitation_banner';
 
 export type PostListRowProps = {
     listId: string;
@@ -95,7 +93,7 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
     }
 
     render() {
-        const {listId, previousListId, loadingOlderPosts, loadingNewerPosts, isLastPost} = this.props;
+        const {listId, previousListId, loadingOlderPosts, loadingNewerPosts} = this.props;
         const {
             OLDER_MESSAGES_LOADER,
             NEWER_MESSAGES_LOADER,
@@ -125,24 +123,12 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
             );
         }
 
-        // todo: mattermost version
-        // if (this.props.exceededLimitChannelId) {
-        //     return (
-        //         <CenterMessageLock
-        //             channelId={this.props.exceededLimitChannelId}
-        //             firstInaccessiblePostTime={this.props.firstInaccessiblePostTime}
-
-        if (hasLimitDate && listId === CHANNEL_INTRO_MESSAGE && !isLastPost) {
-            return (
-                <ChannelMessageLimitationBanner
-                    olderMessagesDate={hasLimitDate}
-                />
-            );
-        }
-
         if (listId === CHANNEL_INTRO_MESSAGE) {
             return (
-                <ChannelIntroMessage/>
+                <>
+                    <ChannelIntroMessage/>
+                    <OptionnalUpgradeBanner/>
+                </>
             );
         }
 

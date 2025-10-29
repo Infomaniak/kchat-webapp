@@ -5,11 +5,8 @@ import React, {lazy} from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
-import * as GlobalActions from 'actions/global_actions';
-
 import AdvancedCreatePost from 'components/advanced_create_post';
 import {makeAsyncComponent} from 'components/async_load';
-import {BannerJoinChannel} from 'components/banner_join_channel';
 import deferComponentRender from 'components/deferComponentRender';
 import FileUploadOverlay from 'components/file_upload_overlay';
 import {DropOverlayIdCenterChannel} from 'components/file_upload_overlay/file_upload_overlay';
@@ -30,6 +27,7 @@ const ChannelBookmarks = makeAsyncComponent('ChannelBookmarks', lazy(() => impor
 
 export type Props = PropsFromRedux & RouteComponentProps<{
     postid?: string;
+    channel?: string | undefined;
 }>;
 
 type State = {
@@ -176,21 +174,15 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                     </div>
                 </div>
             );
-        } else if (this.props.isMember) {
+        } else {
             createPost = (
                 <div
-                    className='post-create__container AdvancedTextEditor__ctr'
                     id='post-create'
                     data-testid='post-create'
+                    className='post-create__container AdvancedTextEditor__ctr'
                 >
                     <AdvancedCreatePost/>
                 </div>
-            );
-        } else {
-            createPost = (
-                <BannerJoinChannel
-                    onButtonClick={() => GlobalActions.joinChannel(this.props.channelId)}
-                />
             );
         }
 

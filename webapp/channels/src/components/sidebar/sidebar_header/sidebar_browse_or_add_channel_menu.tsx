@@ -13,8 +13,10 @@ import {
     AccountOutlineIcon,
 } from '@mattermost/compass-icons/components';
 
-import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
+import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import * as Menu from 'components/menu';
 import {OnboardingTourSteps} from 'components/tours';
 import {useShowOnboardingTutorialStep, CreateAndJoinChannelsTour} from 'components/tours/onboarding_tour';
@@ -42,24 +44,40 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
 
     const showCreateAndJoinChannelsTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS);
     const currentTeam = useSelector(getCurrentTeam);
+    const currentPack = useSelector(getCurrentPackName);
 
     const goToIntegration = () => {
         getHistory().push(`/${currentTeam?.name}/integrations`);
     };
+
+    const {sidebar_categories: sidebarCategories, private_channels: privateChannels, public_channels: publicChannels} = useGetUsageDeltas();
+
+    const privateAndPublicQuotas = (privateChannels >= 0 && publicChannels >= 0) ? 0 : -1;
+    const {isQuotaExceeded: isQuotaExceededChannels, withQuotaCheck: withQuotaCheckChannels} = quotaGate(privateAndPublicQuotas, currentPack);
 
     let createNewChannelMenuItem: JSX.Element | null = null;
     if (props.canCreateChannel) {
         createNewChannelMenuItem = (
             <Menu.Item
                 id='createNewChannelMenuItem'
-                onClick={props.onCreateNewChannelClick}
+                onClick={withQuotaCheckChannels(props.onCreateNewChannelClick)}
                 leadingElement={<PlusIcon size={18}/>}
+                isLabelsRowLayout={true}
                 labels={(
-                    <FormattedMessage
-                        id='sidebarLeft.browserOrCreateChannelMenu.createNewChannelMenuItem.primaryLabel'
-                        defaultMessage='Create new channel'
-                    />
-                )}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        <FormattedMessage
+                            id='sidebarLeft.browserOrCreateChannelMenu.createNewChannelMenuItem.primaryLabel'
+                            defaultMessage='Create new channel'
+                        />
+                        {isQuotaExceededChannels && <wc-ksuite-pro-upgrade-tag/>}
+                    </div>)}
                 trailingElements={showCreateAndJoinChannelsTutorialTip && <CreateAndJoinChannelsTour/>}
             />
         );
@@ -113,18 +131,32 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
         );
     }
 
+    const {isQuotaExceeded: isQuotaExceededCategories, withQuotaCheck: withQuotaCheckCategories} = quotaGate(sidebarCategories, currentPack);
+
     let createNewCategoryMenuItem: JSX.Element | null = null;
     if (!props.unreadFilterEnabled) {
         createNewCategoryMenuItem = (
             <Menu.Item
                 id='createCategoryMenuItem'
-                onClick={props.onCreateNewCategoryClick}
+                onClick={withQuotaCheckCategories(props.onCreateNewCategoryClick)}
                 leadingElement={<FolderPlusOutlineIcon size={18}/>}
+                isLabelsRowLayout={true}
                 labels={(
-                    <FormattedMessage
-                        id='sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel'
-                        defaultMessage='Create new category'
-                    />
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        <FormattedMessage
+                            id='sidebarLeft.browserOrCreateChannelMenu.createCategoryMenuItem.primaryLabel'
+                            defaultMessage='Create new category'
+                        />
+
+                        {isQuotaExceededCategories && <wc-ksuite-pro-upgrade-tag/>}
+                    </div>
                 )}
             />
         );

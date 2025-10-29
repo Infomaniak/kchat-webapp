@@ -6,11 +6,12 @@ import {connect} from 'react-redux';
 import type {Post} from '@mattermost/types/posts';
 
 import {getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUserId, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import {measureRhsOpened} from 'actions/views/rhs';
+import {getIsMobileView} from 'selectors/views/browser';
 import {makePrepareReplyIdsForThreadViewer, makeGetThreadLastViewedAt} from 'selectors/views/threads';
 
 import type {GlobalState} from 'types/store';
@@ -47,15 +48,12 @@ function makeMapStateToProps() {
         });
         const newMessagesSeparatorActions = state.plugins.components.NewMessagesSeparatorAction;
 
-        const myChannelMemberships = getMyChannelMemberships(state);
-        const isMember = Boolean(myChannelMemberships[channelId]);
-
         return {
             currentUserId,
             directTeammate,
+            isMobileView: getIsMobileView(state),
             lastPost,
             replyListIds,
-            isMember,
             newMessagesSeparatorActions,
         };
     };

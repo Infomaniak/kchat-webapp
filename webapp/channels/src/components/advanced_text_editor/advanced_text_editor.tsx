@@ -31,7 +31,6 @@ import LocalStorageStore from 'stores/local_storage_store';
 
 import PostBoxIndicator from 'components/advanced_text_editor/post_box_indicator/post_box_indicator';
 import {makeAsyncComponent} from 'components/async_load';
-import {BannerJoinChannel} from 'components/banner_join_channel';
 import AutoHeightSwitcher from 'components/common/auto_height_switcher';
 import useDidUpdate from 'components/common/hooks/useDidUpdate';
 import DeletePostModal from 'components/delete_post_modal';
@@ -42,6 +41,7 @@ import {
     DropOverlayIdEditPost, FileUploadOverlay,
 } from 'components/file_upload_overlay/file_upload_overlay';
 import GuestBanner from 'components/guest_banner';
+import IkChannelInputGuard from 'components/ik_channel_input_guard/ik_channel_input_guard';
 import Poll from 'components/post_poll';
 import RhsSuggestionList from 'components/suggestion/rhs_suggestion_list';
 import SuggestionList from 'components/suggestion/suggestion_list';
@@ -181,12 +181,17 @@ const AdvancedTextEditor = ({
     const teammateDisplayName = useSelector((state: GlobalState) => (teammateId ? getDisplayName(state, teammateId) : ''));
     const selectedPostFocussedAt = useSelector((state: GlobalState) => getSelectedPostFocussedAt(state));
 
-    const canPost = useSelector((state: GlobalState) => {
-        const channel = getChannel(state, channelId);
+    const isMember = useSelector((state: GlobalState) => {
         if (!channel) {
             return false;
         }
-        const isMember = getMyChannelMembership(state, channel.id);
+        return Boolean(getMyChannelMembership(state, channel.id));
+    });
+
+    const canPost = useSelector((state: GlobalState) => {
+        if (!channel) {
+            return false;
+        }
 
         return isMember && haveIChannelPermission(state, channel.team_id, channel.id, Permissions.CREATE_POST);
     });
@@ -232,6 +237,7 @@ const AdvancedTextEditor = ({
     const [keepEditorInFocus, setKeepEditorInFocus] = useState(false);
 
     const readOnlyChannel = !canPost;
+
     const hasDraftMessage = Boolean(draft.message);
     const showFormattingBar = !isFormattingBarHidden && !readOnlyChannel;
     const enableSharedChannelsDMs = useSelector((state: GlobalState) => getFeatureFlagValue(state, 'EnableSharedChannelsDMs') === 'true');
@@ -329,6 +335,7 @@ const AdvancedTextEditor = ({
         handleDraftChange,
         focusTextbox,
         setServerError,
+        caretPosition,
         isInEditMode,
     );
 
@@ -759,162 +766,164 @@ const AdvancedTextEditor = ({
 
     const showFormattingSpacer = isMessageLong || showPreview || attachmentPreview || isRHS || isThreadView;
 
-    if (readOnlyChannel) {
-        return (
-            <BannerJoinChannel onButtonClick={() => GlobalActions.joinChannel(channelId)}/>
-        );
-    }
     const containsAtMentionsInMessage = allAtMentions(draft?.message)?.length > 0;
 
     return (
-        <form
-            id={rootId ? undefined : 'create_post'}
-            data-testid={rootId ? undefined : 'create-post'}
-            className={(!rootId && !fullWidthTextBox) ? 'center' : undefined}
-            onSubmit={handleSubmitWithEvent}
+
+        // Ik: for our peek channel feature
+        <IkChannelInputGuard
+            channel={channel}
+            isMember={Boolean(isMember)}
         >
-            {canPost && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0) && (
-                <FileLimitStickyBanner/>
-            )}
-            {!isInEditMode && (
-                <PostBoxIndicator
-                    channelId={channelId}
-                    teammateDisplayName={teammateDisplayName}
-                    location={location}
-                    postId={rootId}
-                />
-            )}
-            <div
-                className={classNames('AdvancedTextEditor', {
-                    'AdvancedTextEditor__attachment-disabled': !canUploadFiles,
-                    scroll: renderScrollbar,
-                    'formatting-bar': showFormattingBar,
-                })}
+            <form
+                id={rootId ? undefined : 'create_post'}
+                data-testid={rootId ? undefined : 'create-post'}
+                className={(!rootId && !fullWidthTextBox) ? 'center' : undefined}
+                onSubmit={handleSubmitWithEvent}
             >
-                {!wasNotifiedOfLogIn && (
-                    <div
-                        aria-live='assertive'
-                        className='sr-only'
-                    >
-                        <FormattedMessage
-                            id='channelView.login.successfull'
-                            defaultMessage='Login Successful'
-                        />
-                    </div>
+                {canPost && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0) && (
+                    <FileLimitStickyBanner/>
+                )}
+                {!isInEditMode && (
+                    <PostBoxIndicator
+                        channelId={channelId}
+                        teammateDisplayName={teammateDisplayName}
+                        location={location}
+                        postId={rootId}
+                    />
                 )}
                 <div
-                    className={'AdvancedTextEditor__body'}
-                    disabled={isDisabled}
+                    className={classNames('AdvancedTextEditor', {
+                        'AdvancedTextEditor__attachment-disabled': !canUploadFiles,
+                        scroll: renderScrollbar,
+                        'formatting-bar': showFormattingBar,
+                    })}
                 >
-                    <GuestBanner channelId={channelId}/>
-                    <DndBanner channelId={channelId}/>
-                    {fileUploadOverlay}
+                    {!wasNotifiedOfLogIn && (
+                        <div
+                            aria-live='assertive'
+                            className='sr-only'
+                        >
+                            <FormattedMessage
+                                id='channelView.login.successfull'
+                                defaultMessage='Login Successful'
+                            />
+                        </div>
+                    )}
                     <div
-                        ref={editorBodyRef}
-                        role='application'
-                        id='advancedTextEditorCell'
-                        data-a11y-sort-order='2'
-                        aria-label={ariaLabel}
-                        tabIndex={-1}
-                        className='AdvancedTextEditor__cell a11y__region'
+                        className={'AdvancedTextEditor__body'}
+                        disabled={isDisabled}
                     >
-                        {!isInEditMode && priorityLabels}
-                        {/* IK: Prevent writing any text if we are doing a voice message */}
-                        {draft.postType !== Constants.PostTypes.VOICE && (
-                            <Textbox
-                                hasLabels={isInEditMode ? false : Boolean(priorityLabels)}
-                                suggestionList={location === Locations.RHS_COMMENT ? RhsSuggestionList : SuggestionList}
-                                onChange={handleChange}
-                                onKeyPress={postMsgKeyPress}
-                                onKeyDown={handleKeyDown}
-                                onMouseUp={handleMouseUpKeyUp}
-                                onKeyUp={handleMouseUpKeyUp}
-                                onComposition={emitTypingEvent}
-                                onHeightChange={handleHeightChange}
-                                handlePostError={handlePostError}
-                                value={messageValue}
-                                onBlur={handleBlur}
-                                onFocus={handleFocus}
-                                emojiEnabled={enableEmojiPicker}
-                                createMessage={createMessage}
+                        <GuestBanner channelId={channelId}/>
+                        <DndBanner channelId={channelId}/>
+                        {fileUploadOverlay}
+                        <div
+                            ref={editorBodyRef}
+                            role='application'
+                            id='advancedTextEditorCell'
+                            data-a11y-sort-order='2'
+                            aria-label={ariaLabel}
+                            tabIndex={-1}
+                            className='AdvancedTextEditor__cell a11y__region'
+                        >
+                            {!isInEditMode && priorityLabels}
+                            {/* IK: Prevent writing any text if we are doing a voice message */}
+                            {draft.postType !== Constants.PostTypes.VOICE && (
+                                <Textbox
+                                    hasLabels={isInEditMode ? false : Boolean(priorityLabels)}
+                                    suggestionList={location === Locations.RHS_COMMENT ? RhsSuggestionList : SuggestionList}
+                                    onChange={handleChange}
+                                    onKeyPress={postMsgKeyPress}
+                                    onKeyDown={handleKeyDown}
+                                    onMouseUp={handleMouseUpKeyUp}
+                                    onKeyUp={handleMouseUpKeyUp}
+                                    onComposition={emitTypingEvent}
+                                    onHeightChange={handleHeightChange}
+                                    handlePostError={handlePostError}
+                                    value={messageValue}
+                                    onBlur={handleBlur}
+                                    onFocus={handleFocus}
+                                    emojiEnabled={enableEmojiPicker}
+                                    createMessage={createMessage}
+                                    channelId={channelId}
+                                    id={textboxId}
+                                    ref={textboxRef!}
+                                    disabled={isDisabled}
+                                    characterLimit={maxPostSize}
+                                    preview={showPreview}
+                                    badConnection={badConnection}
+                                    useChannelMentions={useChannelMentions}
+                                    rootId={rootId}
+                                    onWidthChange={handleWidthChange}
+                                    isInEditMode={isInEditMode}
+                                />
+                            )}
+                            {attachmentPreview}
+                            {!isDisabled && (showFormattingBar || showPreview) && (
+                                <TexteditorActions
+                                    placement='top'
+                                    isScrollbarRendered={renderScrollbar}
+                                >
+                                    {showFormatJSX}
+                                </TexteditorActions>
+                            )}
+                            {showFormattingSpacer ? (
+                                <FormattingBarSpacer>
+                                    {formattingBar}
+                                </FormattingBarSpacer>
+                            ) : formattingBar}
+                            {!isDisabled && (
+                                <TexteditorActions
+                                    ref={editorActionsRef}
+                                    placement='bottom'
+                                >
+                                    <ToggleFormattingBar
+                                        onClick={toggleAdvanceTextEditor}
+                                        active={showFormattingBar}
+                                        disabled={showPreview}
+                                    />
+                                    <Separator/>
+                                    {fileUploadJSX}
+                                    {emojiPicker}
+                                    {voiceMessageJSX}
+                                    {sendButton}
+                                </TexteditorActions>
+                            )}
+                        </div>
+                        {showSendTutorialTip && (
+                            <SendMessageTour
+                                prefillMessage={prefillMessage}
                                 channelId={channelId}
-                                id={textboxId}
-                                ref={textboxRef!}
-                                disabled={isDisabled}
-                                characterLimit={maxPostSize}
-                                preview={showPreview}
-                                badConnection={badConnection}
-                                useChannelMentions={useChannelMentions}
-                                rootId={rootId}
-                                onWidthChange={handleWidthChange}
-                                isInEditMode={isInEditMode}
+                                currentUserId={currentUserId}
                             />
                         )}
-                        {attachmentPreview}
-                        {!isDisabled && (showFormattingBar || showPreview) && (
-                            <TexteditorActions
-                                placement='top'
-                                isScrollbarRendered={renderScrollbar}
-                            >
-                                {showFormatJSX}
-                            </TexteditorActions>
-                        )}
-                        {showFormattingSpacer ? (
-                            <FormattingBarSpacer>
-                                {formattingBar}
-                            </FormattingBarSpacer>
-                        ) : formattingBar}
-                        {!isDisabled && (
-                            <TexteditorActions
-                                ref={editorActionsRef}
-                                placement='bottom'
-                            >
-                                <ToggleFormattingBar
-                                    onClick={toggleAdvanceTextEditor}
-                                    active={showFormattingBar}
-                                    disabled={showPreview}
-                                />
-                                <Separator/>
-                                {fileUploadJSX}
-                                {emojiPicker}
-                                {voiceMessageJSX}
-                                {sendButton}
-                            </TexteditorActions>
-                        )}
                     </div>
-                    {showSendTutorialTip && (
-                        <SendMessageTour
-                            prefillMessage={prefillMessage}
-                            channelId={channelId}
-                            currentUserId={currentUserId}
-                        />
-                    )}
                 </div>
-            </div>
-            {isInEditMode && containsAtMentionsInMessage && (
-                <MessageWithMentionsFooter/>
-            )}
-            <Footer
-                postError={postError}
-                errorClass={errorClass}
-                serverError={serverError}
-                channelId={channelId}
-                rootId={rootId}
-                noArgumentHandleSubmit={handleSubmitWrapper}
-                isInEditMode={isInEditMode}
-            />
-            {isInEditMode && (
-                <EditPostFooter
-                    onSave={handleSubmitWrapper}
-                    onCancel={handleCancel}
+                {isInEditMode && containsAtMentionsInMessage && (
+                    <MessageWithMentionsFooter/>
+                )}
+                <Footer
+                    postError={postError}
+                    errorClass={errorClass}
+                    serverError={serverError}
+                    channelId={channelId}
+                    rootId={rootId}
+                    noArgumentHandleSubmit={handleSubmitWrapper}
+                    isInEditMode={isInEditMode}
                 />
-            )}
-            <div
-                ref={messageStatusRef}
-                aria-live='assertive'
-                className='sr-only'
-            />
-        </form>
+                {isInEditMode && (
+                    <EditPostFooter
+                        onSave={handleSubmitWrapper}
+                        onCancel={handleCancel}
+                    />
+                )}
+                <div
+                    ref={messageStatusRef}
+                    aria-live='assertive'
+                    className='sr-only'
+                />
+            </form>
+        </IkChannelInputGuard>
     );
 };
 

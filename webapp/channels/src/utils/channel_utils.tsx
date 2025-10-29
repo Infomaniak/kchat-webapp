@@ -11,6 +11,7 @@ import {getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
+import {joinChannelById} from 'actions/views/channel';
 import {openModal} from 'actions/views/modals';
 import LocalStorageStore from 'stores/local_storage_store';
 
@@ -70,7 +71,7 @@ type JoinPrivateChannelPromptResult = {
     };
 };
 
-export function joinPrivateChannelPrompt(team: Team, channelDisplayName: string, handleOnCancel = true): ActionFuncAsync<JoinPrivateChannelPromptResult['data']> {
+export function joinPrivateChannelPrompt(team: Team, channelDisplayName: string, channelId: string, handleOnCancel = true): ActionFuncAsync<JoinPrivateChannelPromptResult['data']> {
     return async (dispatch, getState) => {
         const result: JoinPrivateChannelPromptResult = await new Promise((resolve) => {
             const modalData = {
@@ -79,6 +80,7 @@ export function joinPrivateChannelPrompt(team: Team, channelDisplayName: string,
                 dialogProps: {
                     channelName: channelDisplayName,
                     onJoin: () => {
+                        dispatch(joinChannelById(channelId));
                         LocalStorageStore.setTeamIdJoinedOnLoad(null);
                         resolve({
                             data: {join: true},

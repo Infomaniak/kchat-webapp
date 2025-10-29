@@ -6,7 +6,7 @@ import React, {useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useHistory} from 'react-router-dom';
 
-import type {ServerError} from '@mattermost/types/errors';
+import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
 import ProfilePopover from 'components/profile_popover';
@@ -14,6 +14,8 @@ import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
 
 import * as Utils from 'utils/utils';
+
+import type {ActionResult} from 'types/store';
 
 import {DMButton, DMContainer, Gap, UserButton, UserList, UserListItem, Username, getListHeight, ProfileTag} from './styled';
 
@@ -35,7 +37,7 @@ export type Props = {
     hide: () => void;
 
     actions: {
-        openDirectChannelToUserId: (userId?: string) => Promise<{ error: ServerError }>;
+        openDirectChannelToUserId: (userId: string) => Promise<ActionResult<Channel, any>>;
         closeRightHandSide: () => void;
     };
 }
@@ -59,7 +61,7 @@ const UserListProfiles: FC<Props> = ({
             return;
         }
         setCurrentDMLoading(user.id);
-        actions.openDirectChannelToUserId(user.id).then((result: { error: ServerError }) => {
+        actions.openDirectChannelToUserId(user.id).then((result) => {
             if (!result.error) {
                 actions.closeRightHandSide();
                 setCurrentDMLoading(undefined);

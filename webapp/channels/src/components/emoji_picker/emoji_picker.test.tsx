@@ -67,17 +67,4 @@ describe('components/emoji_picker/EmojiPicker', () => {
 
         expect(screen.queryByLabelText('Recent')).not.toBeNull();
     });
-
-    test('First emoji should be selected on search', () => {
-        const props = {
-            ...baseProps,
-            filter: 'wave',
-        };
-
-        renderWithContext(
-            <EmojiPicker {...props}/>,
-        );
-
-        expect(screen.queryByText('Preview for wave emoji')).not.toBeNull();
-    });
 });

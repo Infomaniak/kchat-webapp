@@ -193,6 +193,7 @@ export default function WithTooltip({
                             context={floatingContext}
                             width={OverlayArrow.WIDTH}
                             height={OverlayArrow.HEIGHT}
+                            fill='#333333'
                         />
                     </div>
                 </FloatingPortal>

@@ -1,0 +1,26 @@
+@media screen and (max-width: 768px) {
+    .modal-body {
+        .MenuWrapper {
+            .Menu {
+                .dropdown-menu {
+                    top: 108%;
+                    right: 0;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .app__body {
+        .modal {
+            overflow-y: auto;
+
+            .about-modal {
+                .modal-header {
+                    padding: 24px 32px;
+                }
+            }
+        }
+    }
+}

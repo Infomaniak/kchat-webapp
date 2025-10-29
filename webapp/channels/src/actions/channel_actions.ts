@@ -17,8 +17,6 @@ import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/commo
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentTeamUrl, getCurrentTeamId, getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {ActionFuncAsync, ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {loadNewDMIfNeeded, loadNewGMIfNeeded, loadProfilesForSidebar} from 'actions/user_actions';
@@ -26,6 +24,8 @@ import {loadNewDMIfNeeded, loadNewGMIfNeeded, loadProfilesForSidebar} from 'acti
 import {getHistory} from 'utils/browser_history';
 import {Constants, Preferences, NotificationLevels} from 'utils/constants';
 import {getDirectChannelName} from 'utils/utils';
+
+import type {ActionFuncAsync, ActionFunc, ActionResult} from 'types/store';
 
 export function openDirectChannelToUserId(userId: UserProfile['id']): ActionFuncAsync<Channel> {
     return async (dispatch, getState) => {

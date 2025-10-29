@@ -19,7 +19,7 @@ import {RequestStatus} from 'mattermost-redux/constants';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getChannelsInCurrentTeam, getMyChannelMemberships, getChannelsMemberCount as getChannelsMemberCountSelector} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentTeam, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeam, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {setGlobalItem} from 'actions/storage';
@@ -70,6 +70,7 @@ function mapStateToProps(state: GlobalState) {
         rhsState: getRhsState(state),
         rhsOpen: getIsRhsOpen(state),
         channelsMemberCount: getChannelsMemberCountSelector(state),
+        currentPack: getCurrentPackName(state),
     };
 }
 

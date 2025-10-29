@@ -21,6 +21,7 @@ describe('plugins/MainMenuActions', () => {
         enableIncomingWebhooks: true,
         enableOutgoingWebhooks: true,
         enableOAuthServiceProvider: true,
+        enableReportingTools: true,
         canManageSystemBots: true,
         pluginMenuItems: [{
             id: 'someplugin',
