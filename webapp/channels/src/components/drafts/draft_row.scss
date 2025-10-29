@@ -8,18 +8,18 @@
 }
 
 @keyframes softFade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .glow-message {
-  display: inline-flex;
-  animation: softFade 0.6s ease-out;
-  align-items: center;
+    display: inline-flex;
+    align-items: center;
+    animation: softFade 0.6s ease-out;
 }
 
 

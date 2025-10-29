@@ -29,10 +29,10 @@
 }
 
 .backstage-body {
-    overflow-y: scroll;
     width: 100%;
     background-color: var(--ik-backstage-body);
     grid-area: main;
+    overflow-y: scroll;
 }
 
 .backstage-content {
@@ -51,8 +51,8 @@
     position: absolute;
     width: 270px;
     padding: 46px 20px;
-    vertical-align: top;
     background-color: var(--ik-backstage-body);
+    vertical-align: top;
 
     ul {
         padding: 0;
@@ -193,21 +193,21 @@
         position: absolute;
         top: 11px;
         left: 11px;
-        opacity: 0.4;
         color: #23A1FE;
+        opacity: 0.4;
     }
 
     input {
         padding-left: 30px;
-        background: var(--ik-background-input);
         border: none;
+        background: var(--ik-background-input);
     }
 }
 
 .backstage-list {
+    overflow: auto; // Infomaniak
     min-height: 50px;
     padding: 5px 15px;
-    overflow: auto; // Infomaniak
     border: 1px solid var(--ik-integration-header-border);
     background-color: var(--ik-backstage-background);
     color: var(--center-channel-color);
@@ -307,8 +307,8 @@
     }
 
     .form-control {
-        background: var(--center-channel-bg);
         border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+        background: var(--center-channel-bg);
 
 
         &:focus {
@@ -346,13 +346,13 @@
 }
 
 .integrations-list {
+    display: flex;
     width: 100%;
     min-height: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    display: flex;
     flex-wrap: wrap;
     gap: 30px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .integration__icon {

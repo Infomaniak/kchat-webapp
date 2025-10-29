@@ -280,14 +280,14 @@
     width: 100%;
     align-items: center;
     justify-content: center;
+    padding: 4px;
     border-radius: 4px;
     margin-top: 2px;
-    padding: 4px;
     color: var(--error-text);
 
-   span {
-    width: 100%;
-   }
+    span {
+        width: 100%;
+    }
 
     button.upgradeLink {
         padding: 0 !important;

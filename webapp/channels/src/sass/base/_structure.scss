@@ -319,14 +319,17 @@ body.app__body #root {
 
 #channel_view.channel-view {
     overflow: hidden;
+
+    // IK: insights need explicit height for overflow to apply,
+    // the actual height is calculated implicitly from child elements.
+    min-height: 1px;
+
     // border-radius: var(--radius-l);
     border-left: var(--border-light);
     background: var(--center-channel-bg);
     // box-shadow: var(--elevation-1);
 
-    // IK: insights need explicit height for overflow to apply,
-    // the actual height is calculated implicitly from child elements.
-    min-height: 1px;
+
 }
 
 .rhs-open #channel_view.channel-view,

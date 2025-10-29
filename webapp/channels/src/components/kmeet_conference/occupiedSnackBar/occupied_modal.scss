@@ -6,15 +6,15 @@
 
     &.modal-dialog.call_ringing_occupied_modal{
         position: absolute;
-        width: 30%;
-        left: 50%;
         top: 65%;
+        left: 50%;
+        width: 30%;
         transform: translate(-50%, -50%);
         
         .modal-header .close {
             span {
-                color: var(--dark-modal-font-color);
                 margin-top: 64px;
+                color: var(--dark-modal-font-color);
             }
         }
         .modal-content {
@@ -24,12 +24,12 @@
                
         }
         .content-body {
+            display: flex;
+            height: 84px;
+            align-items: center;
+            padding: 22px, 24px, 22px, 24px;
             color: var(--dark-modal-font-color);
             transition-property: 10%;
-            padding: 22px, 24px, 22px, 24px;
-            display: flex;
-            align-items: center;
-            height: 84px;
             .text {
                 margin: 16px 32px 16px 0px;
             }
@@ -42,8 +42,8 @@
             display: none;
         }
         @media (max-width: 768px) {
-            margin-left: auto;
             margin-right: auto;
+            margin-left: auto;
         }
     }
 }

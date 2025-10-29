@@ -2,9 +2,9 @@
     display: flex;
     align-items: center;
     padding: 8px 16px;
+    border-radius: 10px;
     margin: 15px 10px;
     background: var(--link-color-08);
-    border-radius: 10px;
     gap: 12px;
 
     &__button {

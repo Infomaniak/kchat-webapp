@@ -166,9 +166,9 @@
     input[type="radio"]::before {
         width: 8px;
         height: 8px;
+        border-radius: 50%;
         // Infomaniak edit
         background: var(--button-bg);
-        border-radius: 50%;
         // background: var(--denim-button-bg);
         content: '';
         transform: scale(0);
