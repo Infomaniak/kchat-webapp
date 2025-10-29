@@ -258,6 +258,11 @@ body.app__body #root {
                 grid-area: main;
             }
 
+            .main-wrapper:has(.backstage-body) {
+                display: flex;
+                flex-direction: column; 
+            }
+
             #SidebarContainer.move--right {
                 position: relative;
             }
