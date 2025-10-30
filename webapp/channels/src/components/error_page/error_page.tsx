@@ -104,24 +104,40 @@ export default class ErrorPage extends React.PureComponent<Props> {
         let illustration: JSX.Element | null = <SvgIlluErrorQuestion/>;
         const illustrationMigration: JSX.Element | null = <SvgIlluMigration/>;
         let fullscreenIllustration;
-        if (type === ErrorPageTypes.PERMALINK_NOT_FOUND && returnTo) {
-            backButton = (
-                <Link
-                    className='btn btn-primary'
-                    to={returnTo}
-                >
-                    <FormattedMessage
-                        id='error.generic.link'
-                        defaultMessage='Back to kChat'
-                    />
-                </Link>
-            );
+        if (type === ErrorPageTypes.PERMALINK_NOT_FOUND) {
+            if (returnTo) {
+                backButton = (
+                    <Link
+                        className='btn btn-primary'
+                        to={returnTo}
+                    >
+                        <FormattedMessage
+                            id='error.generic.back'
+                            defaultMessage='Back'
+                        />
+                    </Link>
+                );
+            } else {
+                backButton = (
+                    <button
+                        className='btn btn-primary'
+                        onClick={() => {
+                            window.location.href = '/';
+                        }}
+                    >
+                        <FormattedMessage
+                            id='error.generic.back'
+                            defaultMessage='Back'
+                        />
+                    </button>
+                );
+            }
         } else if (type === ErrorPageTypes.CLOUD_ARCHIVED && returnTo) {
             backButton = (
                 <Link to={returnTo}>
                     <FormattedMessage
-                        id='error.generic.link'
-                        defaultMessage='Back to kChat'
+                        id='error.generic.back'
+                        defaultMessage='Back'
                     />
                 </Link>
             );

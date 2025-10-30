@@ -9,6 +9,5 @@ fi
 # May add more browsers in the future.
 # https://playwright.dev/docs/library#browser-downloads
 npx playwright install-deps
-
 npx playwright install chromium
 npx playwright install firefox
