@@ -3565,6 +3565,7 @@
   "error.force_migration.title": "Télécharger la nouvelle version de l’application kChat",
   "error.generic.dl_link": "Télécharger la nouvelle version",
   "error.generic.link": "Retour à {siteName}",
+  "error.generic.back": "Retour",
   "error.generic.link_ksuite": "Découvrir kSuite",
   "error.generic.link_login": "Retourner à la page de connexion",
   "error.generic.message": "Veuillez réessayer ultérieurement ou essayer de rafraîchir la page. Si le problème persiste, veuillez contacter le support.",
