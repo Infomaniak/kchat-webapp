@@ -39,13 +39,13 @@
     min-height: 37px;
 
     .textbox-preview-area {
-        // Infomaniak
-        white-space: normal;
 
         position: relative;
         z-index: 2;
         top: 0;
         left: 0;
+        // Infomaniak
+        white-space: normal;
 
         &:focus {
             border-color: rgba(functions.v(center-channel-color-rgb), 0.4);
@@ -586,9 +586,9 @@
         }
 
         .custom-textarea {
+            overflow: auto;
             max-height: calc(50vh - 40px);
             background-color: var(--center-channel-bg);
-            overflow: auto;
             scrollbar-width: thin;
 
             &.custom-textarea--emoji-picker {
@@ -765,6 +765,9 @@
                     // ik: hide profile icon
                     display: none;
                 }
+
+                cursor: auto;
+                pointer-events: none;
             }
         }
 
@@ -806,11 +809,6 @@
 
         .auto-responder {
             background: functions.alpha-color(variables.$white, 0.7);
-        }
-
-        .post__img .status-wrapper {
-            cursor: auto;
-            pointer-events: none;
         }
 
         .ThreadFooter .status-wrapper {
@@ -919,8 +917,8 @@
             &--audio {
                 .post-image__thumbnail {
                     display: flex;
-                    width: auto;
                     overflow: hidden;
+                    width: auto;
 
                     .post-image__icon-background {
                         border-radius: unset;
@@ -929,8 +927,8 @@
 
                 #post-image-end-button {
                     height: 100%;
-                    margin: 0;
                     border-radius: unset;
+                    margin: 0;
 
                     svg {
                         top: unset;

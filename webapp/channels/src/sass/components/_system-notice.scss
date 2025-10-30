@@ -69,8 +69,8 @@
         }
 
         &:last-child {
-            border-left: 1px solid alpha-color(variables.$black, 0.2);
             border-radius: 0 0 4px 0;
+            border-left: 1px solid alpha-color(variables.$black, 0.2);
         }
     }
 }

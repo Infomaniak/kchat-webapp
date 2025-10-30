@@ -5,11 +5,11 @@
     .post-image__download {
         .file-kdrive__icon--wrapper {
             display: flex;
+            width: 3.2rem;
+            height: 3.2rem;
             align-items: center;
             justify-content: center;
             border-radius: 4px;
-            width: 3.2rem;
-            height: 3.2rem;
 
             &:hover {
                 background: rgba(var(center-channel-color-rgb), 0.08);
