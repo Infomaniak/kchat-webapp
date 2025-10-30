@@ -8,5 +8,7 @@ fi
 # Install needed Playwright browsers only -- chromium and firefox only for these are the ones being used by the tests.
 # May add more browsers in the future.
 # https://playwright.dev/docs/library#browser-downloads
+npx playwright install-deps
+
 npx playwright install chromium
 npx playwright install firefox
