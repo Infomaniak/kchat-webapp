@@ -765,6 +765,9 @@
                     // ik: hide profile icon
                     display: none;
                 }
+
+                cursor: auto;
+                pointer-events: none;
             }
         }
 
@@ -806,11 +809,6 @@
 
         .auto-responder {
             background: functions.alpha-color(variables.$white, 0.7);
-        }
-
-        .post__img .status-wrapper {
-            cursor: auto;
-            pointer-events: none;
         }
 
         .ThreadFooter .status-wrapper {

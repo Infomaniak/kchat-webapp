@@ -102,12 +102,12 @@
     }
 
     &.medium {
-        width: calc((100%/2) - 16px);
+        width: calc((100% / 2) - 16px);
         float: left;
     }
 
     &.small {
-        width: calc((100%/3) - 16px);
+        width: calc((100% / 3) - 16px);
         min-height: 310px;
         float: left;
     }

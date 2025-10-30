@@ -378,30 +378,6 @@
                 }
             }
 
-            .button-footer {
-                padding-top: 24px;
-                text-align: right;
-
-                button {
-                    height: 40px;
-                    border-radius: 4px;
-                    font-size: 14px;
-                    font-weight: 600;
-
-                    &.join-channel-cancel {
-                        padding: 13px 20px;
-                        margin-right: 8px;
-                        background: rgba(var(--button-bg-rgb), 0.08);
-                        color: rgb(var(--button-bg-rgb));
-                        line-height: 14px;
-                    }
-
-                    &.save-button {
-                        padding: 0 20px;
-                    }
-                }
-            }
-
             .pagination-buttons {
                 display: flex;
                 align-items: center;

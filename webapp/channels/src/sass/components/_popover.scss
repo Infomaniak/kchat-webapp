@@ -1,4 +1,5 @@
 @use "utils/functions";
+@use 'sass:color';
 @use "utils/variables";
 
 .popover {
@@ -6,7 +7,7 @@
     border-radius: var(--radius-s);
     background: var(--center-channel-bg);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    color: lighten(variables.$black, 25%);
+    color: color.adjust(variables.$black, $lightness: 25%);
     font-family: inherit;
 
     .app__body & {

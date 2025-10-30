@@ -132,10 +132,6 @@
     &:hover {
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
     }
-
-    &:active,
-    &:focus {
-    }
 }
 
 .get-app__continue {
@@ -148,8 +144,6 @@
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
     }
 
-    &:focus {
-    }
 }
 
 .get-app__preference {

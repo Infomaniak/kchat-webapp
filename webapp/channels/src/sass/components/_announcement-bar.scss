@@ -52,13 +52,13 @@
         }
 
         .full_storage_announcement_bar__upgrade-offer, .almost_full_storage_announcement_bar__upgrade-offer {
-            background: none;
-            border: none;
             padding: 0;
+            border: none;
             margin: 0;
-            text-decoration: underline;
+            background: none;
             cursor: pointer;
             font: inherit;
+            text-decoration: underline;
         }
     }
 
@@ -128,7 +128,7 @@
 
 .announcement-bar-critical {
     background-color: #FFCCC8;
-     color: #333333;
+    color: #333333;
 }
 
 .announcement-bar-success {

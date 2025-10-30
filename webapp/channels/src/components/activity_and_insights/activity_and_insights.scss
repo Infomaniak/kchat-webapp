@@ -78,7 +78,7 @@
         .top-threads-card {
             &.small {
                 @media screen and (max-width: 1279px) and (min-width: 1020px) {
-                    width: calc((100%/2) - 16px);
+                    width: calc((100% / 2) - 16px);
                 }
 
                 @media screen and (max-width: 1019px) and (min-width: 769px) {

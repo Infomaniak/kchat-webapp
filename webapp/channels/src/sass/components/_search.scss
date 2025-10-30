@@ -207,15 +207,6 @@
         opacity: 0.5;
     }
 
-    // global header style adjustments
-    &:hover {
-        // background: rgba(var(--sidebar-text-rgb), 0.16);
-    }
-
-    &.active {
-        // background: rgba(var(--sidebar-text-rgb), 0.32);
-    }
-
     &:focus-within {
         // background: var(--center-channel-bg);
 
