@@ -98,8 +98,7 @@ export const getCurrentTeamName: (state: GlobalState) => string | undefined = cr
     getCurrentTeam,
     (team) => {
         return team?.name;
-    },
-);
+    });
 
 export const getCurrentPackName: (state: GlobalState) => PackName | undefined = createSelector(
     'getCurrentPackName',

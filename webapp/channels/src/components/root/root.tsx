@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {AppName, NavigateMessage} from '@infomaniak/ksuite-bridge';
-import {KSuiteBridge, NavigateMessageKey, OpenAppMessageKey} from '@infomaniak/ksuite-bridge';
+import {KSuiteBridge, LogoutMessageKey, NavigateMessageKey, OpenAppMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import deepEqual from 'fast-deep-equal';
@@ -523,6 +523,7 @@ export default class Root extends React.PureComponent<Props, State> {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
                 if (this.embeddedInIFrame) {
+                    this.props.ksuiteBridge?.sendMessage({type: LogoutMessageKey});
                     window.open(window.location.href, '_top');
                 } else {
                     window.location.href = data.uri;

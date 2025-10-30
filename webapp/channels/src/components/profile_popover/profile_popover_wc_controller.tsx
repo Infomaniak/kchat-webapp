@@ -2,6 +2,8 @@
 // See LICENSE.txt for license information.
 import './wc_profile_popover.scss';
 import type {
+    CSSProperties,
+    LegacyRef,
     ReactNode,
 } from 'react';
 import React, {
@@ -41,7 +43,7 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     triggerComponentAs?: React.ElementType;
     triggerComponentId?: HTMLElement['id'];
     triggerComponentClass?: HTMLElement['className'];
-    triggerComponentStyle?: HTMLElement['style'];
+    triggerComponentStyle?: CSSProperties;
 
     /**
      * Source URL from the image to display in the popover
@@ -88,21 +90,16 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     onToggle?: (isMounted: boolean) => void;
 }
 
-export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; hiddenOptions: string[];hiddenInformations: string[]};
-
 const mapCustomBadges = (badge: string) => (
     <>
 
         {/* @ts-expect-error webcomponent */}
         <wc-pill
-            class='test'
             slot='custom-badges'
             style={{
                 color: 'var(--wc-contact-sheet-pill-color)',
                 '--wc-pill-background': 'var(--wc-contact-sheet-pill-background-color)',
             }}
-
-            // style="--wc-pill-background: #13B4D0;color: #fff"
             size='small'
             round={true}
             prevent-removal={true}
@@ -139,7 +136,8 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     const hasOverriddenProps = Boolean(overwriteName) || Boolean(overwriteIcon);
     const shouldDisplayMinimalPanel = hasOverriddenProps || props.fromWebhook;
     const displayedUsername = username || user?.username;
-    const localRef = useRef<WcContactSheetElement | undefined>(undefined);
+    const localRef = useRef<JSX.IntrinsicElements['wc-contact-sheet'] | undefined>(undefined);
+    const triggerRef = useRef<HTMLSpanElement | undefined>(undefined);
     const {formatMessage} = useIntl();
 
     if (!shouldDisplayMinimalPanel) {
@@ -171,7 +169,8 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
 
     useEffect(() => {
         const current = localRef?.current;
-        if (!current) {
+        const customTrigger = triggerRef?.current;
+        if (!current || !customTrigger) {
             return () => {};
         }
 
@@ -193,6 +192,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             }
         };
 
+        current.customTrigger = customTrigger;
         current.addEventListener('close', returnFocus);
         current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         if (user?.is_bot) {
@@ -204,12 +204,17 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             current?.removeEventListener('close', returnFocus);
             current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         };
-    }, []);
+    }, [triggerRef?.current, localRef?.current]);
 
     return (
         <>
-            {/*@ts-expect-error webcomponent*/}
+            <span
+                ref={triggerRef as LegacyRef<HTMLSpanElement>}
+                className={triggerComponentClass}
+                style={triggerComponentStyle}
+            >{children}</span>
             <wc-contact-sheet
+                hide-default-slot={true}
                 disabled={disabled}
                 prevent-stop-propagation={true}
                 ref={localRef}
@@ -227,14 +232,10 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                 user-id={!shouldDisplayMinimalPanel && user?.user_id} // prevent fetching user data if not needed
                 user-mail={user?.is_bot ? `@${displayedUsername}` : user?.email} // if user is bot display username instead of mail
                 user-name={overwriteName || user?.first_name + ' ' + user?.last_name}
-                style={triggerComponentStyle}
+                style={{display: 'none'}}
             >
-                <span
-                    slot='trigger'
-                    className={triggerComponentClass}
-                >{children}</span>
                 {badges.map(mapCustomBadges)}
-                {(shouldDisplayMinimalPanel) &&
+                {shouldDisplayMinimalPanel &&
                     <div
                         slot='custom-content'
                     >
@@ -246,7 +247,6 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                             username: displayedUsername,
                         })}
                     </div>}
-                {/*@ts-expect-error webcomponent*/}
             </wc-contact-sheet>
         </>
     );

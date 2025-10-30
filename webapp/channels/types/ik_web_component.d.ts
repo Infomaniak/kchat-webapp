@@ -3,6 +3,7 @@
 // when web-components will expose types (stencil generated d.ts), we should remove this part
 declare namespace JSX {
     interface IntrinsicElements {
+        'wc-contact-sheet': any;
         'wc-ksuite-pro-upgrade-banner': any;
         'wc-ksuite-pro-upgrade-dialog': any;
         'wc-ksuite-pro-upgrade-button': any;
