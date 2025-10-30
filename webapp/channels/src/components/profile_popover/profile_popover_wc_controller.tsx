@@ -236,7 +236,8 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                     className={triggerComponentClass}
                 >{children}</span>
                 {badges.map(mapCustomBadges)}
-                {(shouldDisplayMinimalPanel) && <div
+                {(shouldDisplayMinimalPanel) && (
+                    <div
                     slot='custom-content'
                 >
                     {formatMessage({
@@ -245,8 +246,8 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                     },
                     {
                         username: displayedUsername,
-                    })}
-                </div>}
+                        })}
+                    </div>)}
             </wc-contact-sheet>
         </>
     );
