@@ -7,7 +7,7 @@ import React from 'react';
 import {
     StateEntitiesChannelsMock,
     StateEntitiesPostsMock,
-    StateViewRhsMock, StateEntitiesTeamsMock, StateEntitiesUsersMock,
+    StateViewRhsMock, StateEntitiesTeamsMock, StateEntitiesUsersMock, StateViewModalsMock,
 } from 'mattermost-redux/selectors/entities/state.mock';
 
 import WithTooltip from 'components/with_tooltip';
@@ -95,6 +95,7 @@ describe('components/widgets/users/Avatars', () => {
         },
         views: {
             rhs: StateViewRhsMock,
+            modals: StateViewModalsMock,
         },
     };
 

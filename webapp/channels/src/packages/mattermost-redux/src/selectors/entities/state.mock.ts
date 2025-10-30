@@ -108,6 +108,14 @@ export const StateViewRhsMock = {
     searchType: '',
 };
 
+export const StateViewModalsMock = {
+    modalState: {
+        1: {
+            open: false,
+        },
+    },
+};
+
 export const StateEntitiesTeamsMock = {
     membersInTeam: {},
     currentTeamId: 'tid',

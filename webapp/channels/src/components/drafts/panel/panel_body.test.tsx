@@ -11,7 +11,7 @@ import type {UserProfile, UserStatus} from '@mattermost/types/users';
 import {
     StateEntitiesChannelsMock,
     StateEntitiesTeamsMock,
-    StateEntitiesUsersMock,
+    StateEntitiesUsersMock, StateViewModalsMock,
 } from 'mattermost-redux/selectors/entities/state.mock';
 
 import * as utils from 'utils/utils';
@@ -92,6 +92,7 @@ describe('components/drafts/panel/panel_body', () => {
                 isSidebarExpanded: false,
                 isSidebarOpen: false,
             },
+            modals: StateViewModalsMock,
         },
     };
 

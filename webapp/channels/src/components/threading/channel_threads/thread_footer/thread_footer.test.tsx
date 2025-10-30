@@ -10,7 +10,7 @@ import type {UserThread} from '@mattermost/types/threads';
 import {
     StateEntitiesChannelsMock,
     StateEntitiesTeamsMock,
-    StateEntitiesUsersMock, StateViewRhsMock,
+    StateEntitiesUsersMock, StateViewModalsMock, StateViewRhsMock,
 } from 'mattermost-redux/selectors/entities/state.mock';
 
 import Timestamp from 'components/timestamp';
@@ -128,6 +128,7 @@ describe('components/threading/channel_threads/thread_footer', () => {
         },
         views: {
             rhs: StateViewRhsMock,
+            modals: StateViewModalsMock,
         },
 
     };

@@ -2,8 +2,6 @@
 // See LICENSE.txt for license information.
 import './wc_profile_popover.scss';
 import type {
-    CSSProperties,
-    LegacyRef,
     ReactNode,
 } from 'react';
 import React, {
@@ -33,6 +31,7 @@ export interface ProfilePopoverAdditionalProps {
     isTeamAdmin?: boolean;
     isChannelAdmin?: boolean;
     channelId?: string;
+    isAnyModalOpen: boolean;
 }
 
 export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
@@ -43,7 +42,7 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     triggerComponentAs?: React.ElementType;
     triggerComponentId?: HTMLElement['id'];
     triggerComponentClass?: HTMLElement['className'];
-    triggerComponentStyle?: CSSProperties;
+    triggerComponentStyle?: HTMLElement['style'];
 
     /**
      * Source URL from the image to display in the popover
@@ -90,6 +89,8 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     onToggle?: (isMounted: boolean) => void;
 }
 
+export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; hiddenOptions: string[];hiddenInformations: string[]};
+
 const mapCustomBadges = (badge: string) => (
     <>
 
@@ -112,6 +113,7 @@ const mapCustomBadges = (badge: string) => (
 
 export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     const {
+        isAnyModalOpen,
         disabled,
         username,
         hideStatus,
@@ -136,8 +138,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
     const hasOverriddenProps = Boolean(overwriteName) || Boolean(overwriteIcon);
     const shouldDisplayMinimalPanel = hasOverriddenProps || props.fromWebhook;
     const displayedUsername = username || user?.username;
-    const localRef = useRef<JSX.IntrinsicElements['wc-contact-sheet'] | undefined>(undefined);
-    const triggerRef = useRef<HTMLSpanElement | undefined>(undefined);
+    const localRef = useRef<WcContactSheetElement | undefined>(undefined);
     const {formatMessage} = useIntl();
 
     if (!shouldDisplayMinimalPanel) {
@@ -169,8 +170,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
 
     useEffect(() => {
         const current = localRef?.current;
-        const customTrigger = triggerRef?.current;
-        if (!current || !customTrigger) {
+        if (!current) {
             return () => {};
         }
 
@@ -192,7 +192,6 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             }
         };
 
-        current.customTrigger = customTrigger;
         current.addEventListener('close', returnFocus);
         current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         if (user?.is_bot) {
@@ -204,17 +203,15 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             current?.removeEventListener('close', returnFocus);
             current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         };
-    }, [triggerRef?.current, localRef?.current]);
+    }, []);
+
+    useEffect(() => {
+        localRef?.current?.close?.();
+    }, [isAnyModalOpen]);
 
     return (
         <>
-            <span
-                ref={triggerRef as LegacyRef<HTMLSpanElement>}
-                className={triggerComponentClass}
-                style={triggerComponentStyle}
-            >{children}</span>
             <wc-contact-sheet
-                hide-default-slot={true}
                 disabled={disabled}
                 prevent-stop-propagation={true}
                 ref={localRef}
@@ -232,21 +229,24 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                 user-id={!shouldDisplayMinimalPanel && user?.user_id} // prevent fetching user data if not needed
                 user-mail={user?.is_bot ? `@${displayedUsername}` : user?.email} // if user is bot display username instead of mail
                 user-name={overwriteName || user?.first_name + ' ' + user?.last_name}
-                style={{display: 'none'}}
+                style={triggerComponentStyle}
             >
+                <span
+                    slot='trigger'
+                    className={triggerComponentClass}
+                >{children}</span>
                 {badges.map(mapCustomBadges)}
-                {shouldDisplayMinimalPanel &&
-                    <div
-                        slot='custom-content'
-                    >
-                        {formatMessage({
-                            id: 'user_profile.account.post_was_created',
-                            defaultMessage: 'This post was created by an integration from @{username}',
-                        },
-                        {
-                            username: displayedUsername,
-                        })}
-                    </div>}
+                {(shouldDisplayMinimalPanel) && <div
+                    slot='custom-content'
+                >
+                    {formatMessage({
+                        id: 'user_profile.account.post_was_created',
+                        defaultMessage: 'This post was created by an integration from @{username}',
+                    },
+                    {
+                        username: displayedUsername,
+                    })}
+                </div>}
             </wc-contact-sheet>
         </>
     );

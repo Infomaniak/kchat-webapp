@@ -65,6 +65,7 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                 }
               }
               dispatch={[Function]}
+              isAnyModalOpen={false}
               isChannelAdmin={false}
               isTeamAdmin={false}
               src="/api/v4/users/user_id/image?_=0"
@@ -80,70 +81,9 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
               userStatus="offline"
               username="username"
             >
-              <span
-                className="status-wrapper style--none"
-                style={
-                  Object {
-                    "borderRadius": "50%",
-                    "height": "32px",
-                    "width": "32px",
-                  }
-                }
-              >
-                <span
-                  className="profile-icon "
-                >
-                  <Avatar
-                    size="md"
-                    url="/api/v4/users/user_id/image?_=0"
-                    username="username"
-                  >
-                    <img
-                      alt="username profile image"
-                      className="Avatar Avatar-md"
-                      loading="lazy"
-                      onError={[Function]}
-                      src="/api/v4/users/user_id/image?_=0"
-                    />
-                  </Avatar>
-                </span>
-                <Memo(StatusIcon)
-                  status="status"
-                >
-                  <StatusOfflineIcon
-                    className="status "
-                  >
-                    <span
-                      className="status "
-                    >
-                      <svg
-                        aria-label="Offline Icon"
-                        className="offline--icon"
-                        height="100%"
-                        role="img"
-                        style={
-                          Object {
-                            "clipRule": "evenodd",
-                            "fillRule": "evenodd",
-                            "strokeLinejoin": "round",
-                            "strokeMiterlimit": 1.41421,
-                          }
-                        }
-                        viewBox="0 0 20 20"
-                        width="100%"
-                      >
-                        <path
-                          d="M10,0c5.519,0 10,4.481 10,10c0,5.519 -4.481,10 -10,10c-5.519,0 -10,-4.481 -10,-10c0,-5.519 4.481,-10 10,-10Zm0,2c4.415,0 8,3.585 8,8c0,4.415 -3.585,8 -8,8c-4.415,0 -8,-3.585 -8,-8c0,-4.415 3.585,-8 8,-8Z"
-                        />
-                      </svg>
-                    </span>
-                  </StatusOfflineIcon>
-                </Memo(StatusIcon)>
-              </span>
               <wc-contact-sheet
                 background-color="transparent"
                 class="status-wrapper style--none"
-                hide-default-slot={true}
                 is-external={false}
                 k-chat-team-name="team-id"
                 k-chat-user-name="username"
@@ -154,11 +94,68 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                 src="/api/v4/users/user_id/image?_=0"
                 style={
                   Object {
-                    "display": "none",
+                    "borderRadius": "50%",
+                    "height": "32px",
+                    "width": "32px",
                   }
                 }
                 user-name="undefined undefined"
-              />
+              >
+                <span
+                  className="status-wrapper style--none"
+                  slot="trigger"
+                >
+                  <span
+                    className="profile-icon "
+                  >
+                    <Avatar
+                      size="md"
+                      url="/api/v4/users/user_id/image?_=0"
+                      username="username"
+                    >
+                      <img
+                        alt="username profile image"
+                        className="Avatar Avatar-md"
+                        loading="lazy"
+                        onError={[Function]}
+                        src="/api/v4/users/user_id/image?_=0"
+                      />
+                    </Avatar>
+                  </span>
+                  <Memo(StatusIcon)
+                    status="status"
+                  >
+                    <StatusOfflineIcon
+                      className="status "
+                    >
+                      <span
+                        className="status "
+                      >
+                        <svg
+                          aria-label="Offline Icon"
+                          className="offline--icon"
+                          height="100%"
+                          role="img"
+                          style={
+                            Object {
+                              "clipRule": "evenodd",
+                              "fillRule": "evenodd",
+                              "strokeLinejoin": "round",
+                              "strokeMiterlimit": 1.41421,
+                            }
+                          }
+                          viewBox="0 0 20 20"
+                          width="100%"
+                        >
+                          <path
+                            d="M10,0c5.519,0 10,4.481 10,10c0,5.519 -4.481,10 -10,10c-5.519,0 -10,-4.481 -10,-10c0,-5.519 4.481,-10 10,-10Zm0,2c4.415,0 8,3.585 8,8c0,4.415 -3.585,8 -8,8c-4.415,0 -8,-3.585 -8,-8c0,-4.415 3.585,-8 8,-8Z"
+                          />
+                        </svg>
+                      </span>
+                    </StatusOfflineIcon>
+                  </Memo(StatusIcon)>
+                </span>
+              </wc-contact-sheet>
             </ProfilePopoverWcController>
           </Connect(ProfilePopoverWcController)>
         </ProfilePicture>
@@ -338,6 +335,7 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                 }
               }
               dispatch={[Function]}
+              isAnyModalOpen={false}
               isChannelAdmin={false}
               isTeamAdmin={false}
               src="/api/v4/users/user_id/image?_=0"
@@ -353,70 +351,9 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
               userStatus="offline"
               username="username"
             >
-              <span
-                className="status-wrapper style--none"
-                style={
-                  Object {
-                    "borderRadius": "50%",
-                    "height": "32px",
-                    "width": "32px",
-                  }
-                }
-              >
-                <span
-                  className="profile-icon "
-                >
-                  <Avatar
-                    size="md"
-                    url="/api/v4/users/user_id/image?_=0"
-                    username="username"
-                  >
-                    <img
-                      alt="username profile image"
-                      className="Avatar Avatar-md"
-                      loading="lazy"
-                      onError={[Function]}
-                      src="/api/v4/users/user_id/image?_=0"
-                    />
-                  </Avatar>
-                </span>
-                <Memo(StatusIcon)
-                  status="status"
-                >
-                  <StatusOfflineIcon
-                    className="status "
-                  >
-                    <span
-                      className="status "
-                    >
-                      <svg
-                        aria-label="Offline Icon"
-                        className="offline--icon"
-                        height="100%"
-                        role="img"
-                        style={
-                          Object {
-                            "clipRule": "evenodd",
-                            "fillRule": "evenodd",
-                            "strokeLinejoin": "round",
-                            "strokeMiterlimit": 1.41421,
-                          }
-                        }
-                        viewBox="0 0 20 20"
-                        width="100%"
-                      >
-                        <path
-                          d="M10,0c5.519,0 10,4.481 10,10c0,5.519 -4.481,10 -10,10c-5.519,0 -10,-4.481 -10,-10c0,-5.519 4.481,-10 10,-10Zm0,2c4.415,0 8,3.585 8,8c0,4.415 -3.585,8 -8,8c-4.415,0 -8,-3.585 -8,-8c0,-4.415 3.585,-8 8,-8Z"
-                        />
-                      </svg>
-                    </span>
-                  </StatusOfflineIcon>
-                </Memo(StatusIcon)>
-              </span>
               <wc-contact-sheet
                 background-color="transparent"
                 class="status-wrapper style--none"
-                hide-default-slot={true}
                 is-external={false}
                 k-chat-team-name="team-id"
                 k-chat-user-name="username"
@@ -427,11 +364,68 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                 src="/api/v4/users/user_id/image?_=0"
                 style={
                   Object {
-                    "display": "none",
+                    "borderRadius": "50%",
+                    "height": "32px",
+                    "width": "32px",
                   }
                 }
                 user-name="undefined undefined"
-              />
+              >
+                <span
+                  className="status-wrapper style--none"
+                  slot="trigger"
+                >
+                  <span
+                    className="profile-icon "
+                  >
+                    <Avatar
+                      size="md"
+                      url="/api/v4/users/user_id/image?_=0"
+                      username="username"
+                    >
+                      <img
+                        alt="username profile image"
+                        className="Avatar Avatar-md"
+                        loading="lazy"
+                        onError={[Function]}
+                        src="/api/v4/users/user_id/image?_=0"
+                      />
+                    </Avatar>
+                  </span>
+                  <Memo(StatusIcon)
+                    status="status"
+                  >
+                    <StatusOfflineIcon
+                      className="status "
+                    >
+                      <span
+                        className="status "
+                      >
+                        <svg
+                          aria-label="Offline Icon"
+                          className="offline--icon"
+                          height="100%"
+                          role="img"
+                          style={
+                            Object {
+                              "clipRule": "evenodd",
+                              "fillRule": "evenodd",
+                              "strokeLinejoin": "round",
+                              "strokeMiterlimit": 1.41421,
+                            }
+                          }
+                          viewBox="0 0 20 20"
+                          width="100%"
+                        >
+                          <path
+                            d="M10,0c5.519,0 10,4.481 10,10c0,5.519 -4.481,10 -10,10c-5.519,0 -10,-4.481 -10,-10c0,-5.519 4.481,-10 10,-10Zm0,2c4.415,0 8,3.585 8,8c0,4.415 -3.585,8 -8,8c-4.415,0 -8,-3.585 -8,-8c0,-4.415 3.585,-8 8,-8Z"
+                          />
+                        </svg>
+                      </span>
+                    </StatusOfflineIcon>
+                  </Memo(StatusIcon)>
+                </span>
+              </wc-contact-sheet>
             </ProfilePopoverWcController>
           </Connect(ProfilePopoverWcController)>
         </ProfilePicture>
@@ -617,6 +611,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                 }
               }
               dispatch={[Function]}
+              isAnyModalOpen={false}
               isChannelAdmin={false}
               isTeamAdmin={false}
               src="/api/v4/users/user_id/image?_=0"
@@ -632,70 +627,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
               userStatus="offline"
               username="username"
             >
-              <span
-                className="status-wrapper style--none"
-                style={
-                  Object {
-                    "borderRadius": "50%",
-                    "height": "32px",
-                    "width": "32px",
-                  }
-                }
-              >
-                <span
-                  className="profile-icon "
-                >
-                  <Avatar
-                    size="md"
-                    url="/api/v4/users/user_id/image?_=0"
-                    username="username"
-                  >
-                    <img
-                      alt="username profile image"
-                      className="Avatar Avatar-md"
-                      loading="lazy"
-                      onError={[Function]}
-                      src="/api/v4/users/user_id/image?_=0"
-                    />
-                  </Avatar>
-                </span>
-                <Memo(StatusIcon)
-                  status="status"
-                >
-                  <StatusOfflineIcon
-                    className="status "
-                  >
-                    <span
-                      className="status "
-                    >
-                      <svg
-                        aria-label="Offline Icon"
-                        className="offline--icon"
-                        height="100%"
-                        role="img"
-                        style={
-                          Object {
-                            "clipRule": "evenodd",
-                            "fillRule": "evenodd",
-                            "strokeLinejoin": "round",
-                            "strokeMiterlimit": 1.41421,
-                          }
-                        }
-                        viewBox="0 0 20 20"
-                        width="100%"
-                      >
-                        <path
-                          d="M10,0c5.519,0 10,4.481 10,10c0,5.519 -4.481,10 -10,10c-5.519,0 -10,-4.481 -10,-10c0,-5.519 4.481,-10 10,-10Zm0,2c4.415,0 8,3.585 8,8c0,4.415 -3.585,8 -8,8c-4.415,0 -8,-3.585 -8,-8c0,-4.415 3.585,-8 8,-8Z"
-                        />
-                      </svg>
-                    </span>
-                  </StatusOfflineIcon>
-                </Memo(StatusIcon)>
-              </span>
               <wc-contact-sheet
                 background-color="transparent"
                 class="status-wrapper style--none"
-                hide-default-slot={true}
                 is-external={false}
                 k-chat-team-name="team-id"
                 k-chat-user-name="username"
@@ -706,11 +640,68 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                 src="/api/v4/users/user_id/image?_=0"
                 style={
                   Object {
-                    "display": "none",
+                    "borderRadius": "50%",
+                    "height": "32px",
+                    "width": "32px",
                   }
                 }
                 user-name="undefined undefined"
-              />
+              >
+                <span
+                  className="status-wrapper style--none"
+                  slot="trigger"
+                >
+                  <span
+                    className="profile-icon "
+                  >
+                    <Avatar
+                      size="md"
+                      url="/api/v4/users/user_id/image?_=0"
+                      username="username"
+                    >
+                      <img
+                        alt="username profile image"
+                        className="Avatar Avatar-md"
+                        loading="lazy"
+                        onError={[Function]}
+                        src="/api/v4/users/user_id/image?_=0"
+                      />
+                    </Avatar>
+                  </span>
+                  <Memo(StatusIcon)
+                    status="status"
+                  >
+                    <StatusOfflineIcon
+                      className="status "
+                    >
+                      <span
+                        className="status "
+                      >
+                        <svg
+                          aria-label="Offline Icon"
+                          className="offline--icon"
+                          height="100%"
+                          role="img"
+                          style={
+                            Object {
+                              "clipRule": "evenodd",
+                              "fillRule": "evenodd",
+                              "strokeLinejoin": "round",
+                              "strokeMiterlimit": 1.41421,
+                            }
+                          }
+                          viewBox="0 0 20 20"
+                          width="100%"
+                        >
+                          <path
+                            d="M10,0c5.519,0 10,4.481 10,10c0,5.519 -4.481,10 -10,10c-5.519,0 -10,-4.481 -10,-10c0,-5.519 4.481,-10 10,-10Zm0,2c4.415,0 8,3.585 8,8c0,4.415 -3.585,8 -8,8c-4.415,0 -8,-3.585 -8,-8c0,-4.415 3.585,-8 8,-8Z"
+                          />
+                        </svg>
+                      </span>
+                    </StatusOfflineIcon>
+                  </Memo(StatusIcon)>
+                </span>
+              </wc-contact-sheet>
             </ProfilePopoverWcController>
           </Connect(ProfilePopoverWcController)>
         </ProfilePicture>
@@ -953,6 +944,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                 }
               }
               dispatch={[Function]}
+              isAnyModalOpen={false}
               isChannelAdmin={false}
               isTeamAdmin={false}
               src="/api/v4/users/user_id/image?_=0"
@@ -968,70 +960,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
               userStatus="offline"
               username="username"
             >
-              <span
-                className="status-wrapper style--none"
-                style={
-                  Object {
-                    "borderRadius": "50%",
-                    "height": "32px",
-                    "width": "32px",
-                  }
-                }
-              >
-                <span
-                  className="profile-icon "
-                >
-                  <Avatar
-                    size="md"
-                    url="/api/v4/users/user_id/image?_=0"
-                    username="username"
-                  >
-                    <img
-                      alt="username profile image"
-                      className="Avatar Avatar-md"
-                      loading="lazy"
-                      onError={[Function]}
-                      src="/api/v4/users/user_id/image?_=0"
-                    />
-                  </Avatar>
-                </span>
-                <Memo(StatusIcon)
-                  status="status"
-                >
-                  <StatusOfflineIcon
-                    className="status "
-                  >
-                    <span
-                      className="status "
-                    >
-                      <svg
-                        aria-label="Offline Icon"
-                        className="offline--icon"
-                        height="100%"
-                        role="img"
-                        style={
-                          Object {
-                            "clipRule": "evenodd",
-                            "fillRule": "evenodd",
-                            "strokeLinejoin": "round",
-                            "strokeMiterlimit": 1.41421,
-                          }
-                        }
-                        viewBox="0 0 20 20"
-                        width="100%"
-                      >
-                        <path
-                          d="M10,0c5.519,0 10,4.481 10,10c0,5.519 -4.481,10 -10,10c-5.519,0 -10,-4.481 -10,-10c0,-5.519 4.481,-10 10,-10Zm0,2c4.415,0 8,3.585 8,8c0,4.415 -3.585,8 -8,8c-4.415,0 -8,-3.585 -8,-8c0,-4.415 3.585,-8 8,-8Z"
-                        />
-                      </svg>
-                    </span>
-                  </StatusOfflineIcon>
-                </Memo(StatusIcon)>
-              </span>
               <wc-contact-sheet
                 background-color="transparent"
                 class="status-wrapper style--none"
-                hide-default-slot={true}
                 is-external={false}
                 k-chat-team-name="team-id"
                 k-chat-user-name="username"
@@ -1042,11 +973,68 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                 src="/api/v4/users/user_id/image?_=0"
                 style={
                   Object {
-                    "display": "none",
+                    "borderRadius": "50%",
+                    "height": "32px",
+                    "width": "32px",
                   }
                 }
                 user-name="undefined undefined"
-              />
+              >
+                <span
+                  className="status-wrapper style--none"
+                  slot="trigger"
+                >
+                  <span
+                    className="profile-icon "
+                  >
+                    <Avatar
+                      size="md"
+                      url="/api/v4/users/user_id/image?_=0"
+                      username="username"
+                    >
+                      <img
+                        alt="username profile image"
+                        className="Avatar Avatar-md"
+                        loading="lazy"
+                        onError={[Function]}
+                        src="/api/v4/users/user_id/image?_=0"
+                      />
+                    </Avatar>
+                  </span>
+                  <Memo(StatusIcon)
+                    status="status"
+                  >
+                    <StatusOfflineIcon
+                      className="status "
+                    >
+                      <span
+                        className="status "
+                      >
+                        <svg
+                          aria-label="Offline Icon"
+                          className="offline--icon"
+                          height="100%"
+                          role="img"
+                          style={
+                            Object {
+                              "clipRule": "evenodd",
+                              "fillRule": "evenodd",
+                              "strokeLinejoin": "round",
+                              "strokeMiterlimit": 1.41421,
+                            }
+                          }
+                          viewBox="0 0 20 20"
+                          width="100%"
+                        >
+                          <path
+                            d="M10,0c5.519,0 10,4.481 10,10c0,5.519 -4.481,10 -10,10c-5.519,0 -10,-4.481 -10,-10c0,-5.519 4.481,-10 10,-10Zm0,2c4.415,0 8,3.585 8,8c0,4.415 -3.585,8 -8,8c-4.415,0 -8,-3.585 -8,-8c0,-4.415 3.585,-8 8,-8Z"
+                          />
+                        </svg>
+                      </span>
+                    </StatusOfflineIcon>
+                  </Memo(StatusIcon)>
+                </span>
+              </wc-contact-sheet>
             </ProfilePopoverWcController>
           </Connect(ProfilePopoverWcController)>
         </ProfilePicture>
