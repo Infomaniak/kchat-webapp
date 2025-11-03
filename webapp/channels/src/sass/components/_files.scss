@@ -161,9 +161,8 @@
             align-items: center;
 
             &.transcript {
-                display: flex;
-                align-items: flex-end;
                 cursor: pointer;
+                direction:ltr;
             }
         }
 
@@ -360,6 +359,8 @@
 
     &--audio {
         overflow: visible;
+        direction:ltr;
+        justify-self: left;
 
         > .post-image__details {
             overflow: visible;
