@@ -12,6 +12,12 @@ jest.mock('../thread_viewer', () => ({
     default: () => null,
 }));
 
+jest.mock('mattermost-redux/selectors/entities/threads', () => ({
+    ...jest.requireActual('mattermost-redux/selectors/entities/threads'),
+    getThreadOrderInCurrentTeam: () => ['thread1', 'thread2'],
+    getUnreadThreadOrderInCurrentTeam: () => [],
+}));
+
 import GlobalThreads from './global_threads';
 
 const mockRouting = {
@@ -90,21 +96,9 @@ describe('components/threading/global_threads - Infomaniak specific tests', () =
     test('NoResultsIndicator uses IkNoThreadIllustration as iconGraphic', () => {
         const wrapper = shallow(<GlobalThreads/>);
 
-        // Debug pour voir la structure
-        // eslint-disable-next-line no-console
-        console.log('Wrapper debug:', wrapper.debug());
+        const noResultsIndicator = wrapper.find(NoResultsIndicator);
+        const iconGraphic = noResultsIndicator.prop('iconGraphic');
 
-        const noResultsIndicators = wrapper.find(NoResultsIndicator);
-
-        // eslint-disable-next-line no-console
-        console.log('Found NoResultsIndicators:', noResultsIndicators.length);
-
-        // Le deuxième NoResultsIndicator devrait avoir IkNoThreadIllustration
-        const threadPaneIndicator = noResultsIndicators.filterWhere((node) => {
-            const iconGraphic = node.prop('iconGraphic');
-            return Boolean(iconGraphic && typeof iconGraphic === 'object' && 'type' in iconGraphic && iconGraphic.type === IkNoThreadIllustration);
-        });
-
-        expect(threadPaneIndicator).toHaveLength(1);
+        expect(iconGraphic).toEqual(<IkNoThreadIllustration/>);
     });
 });
