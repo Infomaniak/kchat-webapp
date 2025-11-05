@@ -26,7 +26,6 @@ import {getSelectedThreadIdInCurrentTeam} from 'selectors/views/threads';
 import {useGlobalState} from 'stores/hooks';
 import LocalStorageStore from 'stores/local_storage_store';
 
-import ChatIllustration from 'components/common/svg_images_components/chat_illustration';
 import LoadingScreen from 'components/loading_screen';
 import NoResultsIndicator from 'components/no_results_indicator';
 
@@ -156,7 +155,7 @@ const GlobalThreads = () => {
                     ) : (
                         <NoResultsIndicator
                             expanded={true}
-                            iconGraphic={ChatIllustration}
+                            iconGraphic={IK_NO_THREAD_ILLUSTRATION}
                             title={formatMessage({
                                 id: 'globalThreads.noThreads.title',
                                 defaultMessage: 'No followed threads yet',
