@@ -19,6 +19,7 @@ import {closeModal, openModal} from 'actions/views/modals';
 import {getIsMobileView} from 'selectors/views/browser';
 
 import NoResultsIndicator from 'components/no_results_indicator';
+import IkReadThreadIllustration from 'components/threading/common/ik_read_thread_illustration';
 import CRTListTutorialTip from 'components/tours/crt_tour/crt_list_tutorial_tip';
 import CRTUnreadTutorialTip from 'components/tours/crt_tour/crt_unread_tutorial_tip';
 import Header from 'components/widgets/header';
@@ -267,6 +268,7 @@ const ThreadList = ({
                 {unread && !someUnread && isEmpty(unreadIds) ? (
                     <NoResultsIndicator
                         expanded={true}
+                        iconGraphic={<IkReadThreadIllustration/>}
                         title={formatMessage({
                             id: 'globalThreads.threadList.noUnreadThreads',
                             defaultMessage: 'No unread threads',

@@ -39,10 +39,13 @@ import {LhsItemType, LhsPage} from 'types/store/lhs';
 import ThreadList, {ThreadFilter, FILTER_STORAGE_KEY} from './thread_list';
 import ThreadPane from './thread_pane';
 
+import IkNoThreadIllustration from '../common/ik_no_thread_illustration';
 import {useThreadRouting} from '../hooks';
 import ThreadViewer from '../thread_viewer';
 
 import './global_threads.scss';
+
+const IK_NO_THREAD_ILLUSTRATION = (<IkNoThreadIllustration/>);
 
 const GlobalThreads = () => {
     const {formatMessage} = useIntl();
@@ -188,7 +191,7 @@ const GlobalThreads = () => {
                     ) : (
                         <NoResultsIndicator
                             expanded={true}
-                            iconGraphic={ChatIllustration}
+                            iconGraphic={IK_NO_THREAD_ILLUSTRATION}
                             title={formatMessage({
                                 id: 'globalThreads.threadPane.unselectedTitle',
                                 defaultMessage: '{numUnread, plural, =0 {Looks like you’re all caught up} other {Catch up on your threads}}',
