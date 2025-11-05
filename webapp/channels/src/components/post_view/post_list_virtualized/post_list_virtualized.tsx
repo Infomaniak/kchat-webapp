@@ -247,8 +247,9 @@ export default class PostList extends React.PureComponent<Props, State> {
 
         // Check if posts were added at the bottom (new messages)
         // In the reversed list, index 0 is the newest post, so if it changed, new posts were added at bottom
-        const postsAddedAtBottom = presentPostsCount !== prevPostsCount &&
-                                  (this.props.postListIds || [])[0] !== (prevProps.postListIds || [])[0];
+        const postCountChanged = presentPostsCount !== prevPostsCount;
+        const newestPostChanged = (this.props.postListIds || [])[0] !== (prevProps.postListIds || [])[0];
+        const postsAddedAtBottom = postCountChanged && newestPostChanged;
 
         // When new posts arrive at the bottom, re-check if we're still at bottom
         // This fixes a race condition where atBottom state might not be updated before new posts render
