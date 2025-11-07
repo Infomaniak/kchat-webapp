@@ -6,7 +6,7 @@ import React, {memo, useCallback, useMemo} from 'react';
 import {defineMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 
-import {SendIcon} from '@mattermost/compass-icons/components';
+import {SendIcon} from '@infomaniak/compass-icons/components';
 import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
 import {isScheduledPostsEnabled} from 'mattermost-redux/selectors/entities/scheduled_posts';

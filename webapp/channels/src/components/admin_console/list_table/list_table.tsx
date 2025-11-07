@@ -12,7 +12,7 @@ import {FormattedMessage, defineMessages, useIntl} from 'react-intl';
 import ReactSelect, {components} from 'react-select';
 import type {IndicatorsContainerProps, OnChangeValue} from 'react-select';
 
-import {DragVerticalIcon} from '@mattermost/compass-icons/components';
+import {DragVerticalIcon} from '@infomaniak/compass-icons/components';
 
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 

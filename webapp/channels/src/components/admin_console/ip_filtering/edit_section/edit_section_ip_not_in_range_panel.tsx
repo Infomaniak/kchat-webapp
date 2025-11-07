@@ -4,7 +4,7 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import {AlertOutlineIcon} from '@mattermost/compass-icons/components';
+import {AlertOutlineIcon} from '@infomaniak/compass-icons/components';
 
 type IPNotInRangeErrorPanelProps = {
     currentUsersIP: string | null;

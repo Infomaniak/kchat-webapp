@@ -5,7 +5,7 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
-import {AccountMultipleOutlineIcon} from '@mattermost/compass-icons/components';
+import {AccountMultipleOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {openModal} from 'actions/views/modals';
 

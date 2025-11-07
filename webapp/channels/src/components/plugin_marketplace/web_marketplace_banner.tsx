@@ -5,7 +5,7 @@ import React from 'react';
 import {useIntl} from 'react-intl';
 import styled from 'styled-components';
 
-import {ArrowRightIcon} from '@mattermost/compass-icons/components';
+import {ArrowRightIcon} from '@infomaniak/compass-icons/components';
 
 import pluginIconConfluence from 'images/icons/confluence.svg';
 import pluginIconGiphy from 'images/icons/giphy.svg';

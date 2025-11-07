@@ -4,7 +4,7 @@
 import React, {memo} from 'react';
 import {useIntl} from 'react-intl';
 
-import {ChevronDownIcon, ChevronUpIcon, FormatLetterCaseIcon} from '@mattermost/compass-icons/components';
+import {ChevronDownIcon, ChevronUpIcon, FormatLetterCaseIcon} from '@infomaniak/compass-icons/components';
 
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import WithTooltip from 'components/with_tooltip';

@@ -6,15 +6,15 @@ import styled from 'styled-components';
 import type {GlobalState} from '@mattermost/types/store';
 
 import {RHSPaddingContainer, RHSText, RHSTitle} from './common';
-import RHSHeader from './rhs_header';
-import RHSNewTab from './rhs_new_tab';
 import ThreadItem from './thread_item';
 
-import RHSImage from '../assets/rhs_image';
-
-import {useBotlist} from '@/bots';
-import {getAIThreads, updateRead} from '@/client';
-import manifest from '@/manifest';
+const RHSHeader = () => null;
+const RHSNewTab = () => null;
+const RHSImage = () => null;
+const useBotlist = () => [];
+const getAIThreads = async () => [];
+const updateRead = async () => {};
+const manifest = {id: 'ai'};
 
 const ThreadViewer = (window as any).Components.ThreadViewer && styled((window as any).Components.ThreadViewer)`
     height: 100%;

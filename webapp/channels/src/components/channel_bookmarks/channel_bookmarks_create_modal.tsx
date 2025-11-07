@@ -7,7 +7,7 @@ import {FormattedMessage, defineMessages, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import {PencilOutlineIcon, CheckIcon} from '@mattermost/compass-icons/components';
+import {PencilOutlineIcon, CheckIcon} from '@infomaniak/compass-icons/components';
 import {GenericModal} from '@mattermost/components';
 import type {ChannelBookmark, ChannelBookmarkCreate, ChannelBookmarkPatch} from '@mattermost/types/channel_bookmarks';
 import type {FileInfo} from '@mattermost/types/files';

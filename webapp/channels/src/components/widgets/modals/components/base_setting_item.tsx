@@ -7,7 +7,7 @@ import React from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {useIntl} from 'react-intl';
 
-import {AlertCircleOutlineIcon} from '@mattermost/compass-icons/components';
+import {AlertCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import './base_setting_item.scss';
 

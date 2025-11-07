@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
     ChevronRightIcon,
     CogOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 import type {Channel} from '@mattermost/types/channels';
 
 import {Permissions} from 'mattermost-redux/constants';

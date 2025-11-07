@@ -6,7 +6,7 @@ import React, {useState, useEffect} from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {useIntl} from 'react-intl';
 
-import {CloseCircleIcon} from '@mattermost/compass-icons/components';
+import {CloseCircleIcon} from '@infomaniak/compass-icons/components';
 
 import WithTooltip from 'components/with_tooltip';
 

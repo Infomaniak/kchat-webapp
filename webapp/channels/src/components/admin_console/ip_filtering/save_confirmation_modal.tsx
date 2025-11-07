@@ -5,7 +5,7 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import {InformationOutlineIcon} from '@mattermost/compass-icons/components';
+import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import ExternalLink from 'components/external_link';
 

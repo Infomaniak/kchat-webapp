@@ -5,7 +5,7 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {CloseIcon} from '@mattermost/compass-icons/components';
+import {CloseIcon} from '@infomaniak/compass-icons/components';
 import type {Channel} from '@mattermost/types/channels';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';

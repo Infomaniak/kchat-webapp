@@ -4,7 +4,7 @@
 import type {ReactNode} from 'react';
 import React from 'react';
 
-import {CogOutlineIcon} from '@mattermost/compass-icons/components';
+import {CogOutlineIcon} from '@infomaniak/compass-icons/components';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 

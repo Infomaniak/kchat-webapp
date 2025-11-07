@@ -6,7 +6,7 @@ import React, {useCallback, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
+import ChevronDownIcon from '@infomaniak/compass-icons/components/chevron-down';
 import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
 import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';

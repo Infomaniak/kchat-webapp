@@ -11,7 +11,7 @@ import {
     CheckIcon,
     CloseIcon,
     InformationOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 
 import WithTooltip from 'components/with_tooltip';
 

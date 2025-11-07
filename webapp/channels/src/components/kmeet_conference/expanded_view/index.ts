@@ -16,9 +16,9 @@ import type {UserState} from 'reducers/views/calls';
 
 import type {GlobalState} from 'types/store';
 
-import ExpandedView from './component';
+import {expandedView, voiceChannelCallStartAt, connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelScreenSharingID} from 'selectors/calls';
 
-import {expandedView, voiceChannelCallStartAt, connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelScreenSharingID} from '../../selectors';
+import ExpandedView from './component';
 import {alphaSortProfiles, stateSortProfiles, isDMChannel, getUserIdFromDM} from '../utils';
 
 const mapStateToProps = (state: GlobalState) => {

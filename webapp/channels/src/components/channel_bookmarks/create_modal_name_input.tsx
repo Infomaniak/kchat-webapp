@@ -6,7 +6,7 @@ import React, {useCallback, useRef} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import styled from 'styled-components';
 
-import {ChevronDownIcon} from '@mattermost/compass-icons/components';
+import {ChevronDownIcon} from '@infomaniak/compass-icons/components';
 import type {ChannelBookmark} from '@mattermost/types/channel_bookmarks';
 import type {Emoji} from '@mattermost/types/emojis';
 import type {FileInfo} from '@mattermost/types/files';

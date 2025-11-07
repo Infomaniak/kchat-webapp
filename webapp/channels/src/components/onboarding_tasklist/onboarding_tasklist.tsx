@@ -6,7 +6,7 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled, {css} from 'styled-components';
 
-import {CloseIcon, PlaylistCheckIcon} from '@mattermost/compass-icons/components';
+import {CloseIcon, PlaylistCheckIcon} from '@infomaniak/compass-icons/components';
 
 import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {getMyPreferences, savePreferences} from 'mattermost-redux/actions/preferences';

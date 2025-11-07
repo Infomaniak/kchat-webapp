@@ -3,7 +3,7 @@
 
 import React, {useState} from 'react';
 
-import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
+import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
 import {GenericModal} from '@mattermost/components';
 
 import {

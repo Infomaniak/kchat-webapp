@@ -7,7 +7,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import styled, {css} from 'styled-components';
 
-import {MenuVariantIcon, PlusIcon, TrashCanOutlineIcon} from '@mattermost/compass-icons/components';
+import {MenuVariantIcon, PlusIcon, TrashCanOutlineIcon} from '@infomaniak/compass-icons/components';
 import type {UserPropertyField} from '@mattermost/types/properties';
 import {collectionToArray} from '@mattermost/types/utilities';
 

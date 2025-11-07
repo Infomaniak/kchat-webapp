@@ -11,7 +11,7 @@ import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
-import {MagnifyIcon} from '@mattermost/compass-icons/components';
+import {MagnifyIcon} from '@infomaniak/compass-icons/components';
 import {FooterPagination, GenericModal} from '@mattermost/components';
 
 import {getPluginStatuses} from 'mattermost-redux/actions/admin';

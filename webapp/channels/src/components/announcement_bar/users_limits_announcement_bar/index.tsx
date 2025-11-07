@@ -5,7 +5,7 @@ import React, {useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
-import {AlertOutlineIcon} from '@mattermost/compass-icons/components';
+import {AlertOutlineIcon} from '@infomaniak/compass-icons/components';
 import type {ClientLicense} from '@mattermost/types/config';
 
 import {getServerLimits} from 'mattermost-redux/selectors/entities/limits';

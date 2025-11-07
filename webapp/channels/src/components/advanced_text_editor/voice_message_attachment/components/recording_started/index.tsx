@@ -6,7 +6,7 @@ import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import {MicrophoneOutlineIcon, CloseIcon, CheckIcon} from '@mattermost/compass-icons/components';
+import {MicrophoneOutlineIcon, CloseIcon, CheckIcon} from '@infomaniak/compass-icons/components';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 

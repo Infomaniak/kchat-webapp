@@ -13,7 +13,7 @@ import {
     ArrowExpandIcon,
     OpenInNewIcon,
     BookOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 import type {ChannelBookmark, ChannelBookmarkPatch} from '@mattermost/types/channel_bookmarks';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';

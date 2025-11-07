@@ -5,7 +5,7 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
-import {BellOffOutlineIcon} from '@mattermost/compass-icons/components';
+import {BellOffOutlineIcon} from '@infomaniak/compass-icons/components';
 import type {Channel} from '@mattermost/types/channels';
 
 import {updateChannelNotifyProps} from 'mattermost-redux/actions/channels';

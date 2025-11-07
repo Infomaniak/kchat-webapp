@@ -8,7 +8,7 @@ import type {MessageDescriptor} from 'react-intl';
 import {useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
 
-import {AlertOutlineIcon, CheckCircleOutlineIcon} from '@mattermost/compass-icons/components';
+import {AlertOutlineIcon, CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import type {OutgoingOAuthConnection} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
 

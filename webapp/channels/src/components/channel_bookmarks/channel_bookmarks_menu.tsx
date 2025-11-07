@@ -11,7 +11,7 @@ import {
     LinkVariantIcon,
     PaperclipIcon,
     PlusIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 import type {ChannelBookmarkCreate} from '@mattermost/types/channel_bookmarks';
 
 import {createBookmark} from 'actions/channel_bookmarks';

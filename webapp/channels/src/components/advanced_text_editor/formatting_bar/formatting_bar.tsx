@@ -8,7 +8,7 @@ import {useIntl} from 'react-intl';
 import {CSSTransition} from 'react-transition-group';
 import styled from 'styled-components';
 
-import {DotsHorizontalIcon} from '@mattermost/compass-icons/components';
+import {DotsHorizontalIcon} from '@infomaniak/compass-icons/components';
 
 import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 

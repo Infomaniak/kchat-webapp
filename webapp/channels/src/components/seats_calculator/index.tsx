@@ -4,7 +4,7 @@
 import React, {useEffect} from 'react';
 import {useIntl, FormattedMessage, FormattedNumber, defineMessages} from 'react-intl';
 
-import {InformationOutlineIcon} from '@mattermost/compass-icons/components';
+import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import Input from 'components/widgets/inputs/input/input';
 import WithTooltip from 'components/with_tooltip';

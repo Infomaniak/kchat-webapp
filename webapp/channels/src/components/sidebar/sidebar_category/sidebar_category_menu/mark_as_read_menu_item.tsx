@@ -5,7 +5,7 @@ import React, {useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
-import {MarkAsUnreadIcon} from '@mattermost/compass-icons/components';
+import {MarkAsUnreadIcon} from '@infomaniak/compass-icons/components';
 
 import {openModal} from 'actions/views/modals';
 

@@ -11,7 +11,7 @@ import {
     LinkVariantIcon,
     PaperclipIcon,
     BookmarkOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 import type {Channel} from '@mattermost/types/channels';
 
 import {getChannelBookmarks} from 'mattermost-redux/selectors/entities/channel_bookmarks';

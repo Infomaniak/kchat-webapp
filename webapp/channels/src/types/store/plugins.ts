@@ -5,7 +5,7 @@ import type React from 'react';
 import type {RouteComponentProps} from 'react-router-dom';
 
 import type {WebSocketClient} from '@mattermost/client';
-import type {IconGlyphTypes} from '@mattermost/compass-icons/IconGlyphs';
+import type {IconGlyphTypes} from '@infomaniak/compass-icons/IconGlyphs';
 import type {PluginAnalyticsRow} from '@mattermost/types/admin';
 import type {Board} from '@mattermost/types/boards';
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';

@@ -20,7 +20,7 @@ import {setCSRFFromCookie} from 'utils/utils';
 import './sass/styles.scss';
 import 'katex/dist/katex.min.css';
 
-import '@mattermost/compass-icons/css/compass-icons.css';
+import '@infomaniak/compass-icons/css/compass-icons.css';
 import '@mattermost/components/dist/index.esm.css';
 
 sentry({SENTRY_DSN: 'https://6f9a56a8dc39412c9a67b37869e3f346@sentry-kchat.infomaniak.com/4'});

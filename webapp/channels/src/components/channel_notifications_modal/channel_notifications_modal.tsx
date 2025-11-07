@@ -5,7 +5,7 @@ import React, {useCallback, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import type {OnChangeValue} from 'react-select';
 
-import {BellOffOutlineIcon} from '@mattermost/compass-icons/components';
+import {BellOffOutlineIcon} from '@infomaniak/compass-icons/components';
 import {GenericModal} from '@mattermost/components';
 import type {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
 import type {UserNotifyProps, UserProfile} from '@mattermost/types/users';

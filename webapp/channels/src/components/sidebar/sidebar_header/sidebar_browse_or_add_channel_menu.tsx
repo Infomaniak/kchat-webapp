@@ -11,7 +11,7 @@ import {
     AccountMultiplePlusOutlineIcon,
     GlobeIcon,
     AccountOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 
 import {getCurrentPackName, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';

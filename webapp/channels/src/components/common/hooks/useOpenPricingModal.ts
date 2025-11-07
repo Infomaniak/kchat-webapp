@@ -9,9 +9,9 @@ import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
-import PricingModal from 'components/pricing_modal';
-
 import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
+
+const PricingModal = null;
 
 export type TelemetryProps = {
     trackingLocation: string;

@@ -5,7 +5,7 @@ import React from 'react';
 import {ProgressBar} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import {MicrophoneOutlineIcon, CloseIcon} from '@mattermost/compass-icons/components';
+import {MicrophoneOutlineIcon, CloseIcon} from '@infomaniak/compass-icons/components';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 

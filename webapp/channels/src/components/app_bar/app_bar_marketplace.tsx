@@ -5,7 +5,7 @@ import React, {useCallback} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
-import {ViewGridPlusOutlineIcon} from '@mattermost/compass-icons/components';
+import {ViewGridPlusOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {openModal} from 'actions/views/modals';
 

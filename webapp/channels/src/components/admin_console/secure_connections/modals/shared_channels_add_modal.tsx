@@ -7,8 +7,8 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import {ArchiveOutlineIcon, GlobeIcon, LockIcon} from '@mattermost/compass-icons/components';
-import type IconProps from '@mattermost/compass-icons/components/props';
+import {ArchiveOutlineIcon, GlobeIcon, LockIcon} from '@infomaniak/compass-icons/components';
+import type IconProps from '@infomaniak/compass-icons/components/props';
 import {GenericModal} from '@mattermost/components';
 import type {Channel, ChannelWithTeamData} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';

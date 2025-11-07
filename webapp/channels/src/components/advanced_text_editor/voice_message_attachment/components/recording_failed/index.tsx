@@ -4,7 +4,7 @@
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import {MicrophoneOutlineIcon, CloseIcon} from '@mattermost/compass-icons/components';
+import {MicrophoneOutlineIcon, CloseIcon} from '@infomaniak/compass-icons/components';
 
 import {
     AttachmentRootContainer,
