@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import ChevronDownIcon from '@infomaniak/compass-icons/components/chevron-down';
 import classNames from 'classnames';
 import type {ReactNode} from 'react';
 import React from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 
-import ChevronDownIcon from '@infomaniak/compass-icons/components/chevron-down';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {

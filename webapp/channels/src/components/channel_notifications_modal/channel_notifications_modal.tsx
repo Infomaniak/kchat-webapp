@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {BellOffOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {useCallback, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import type {OnChangeValue} from 'react-select';
 
-import {BellOffOutlineIcon} from '@infomaniak/compass-icons/components';
 import {GenericModal} from '@mattermost/components';
 import type {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
 import type {UserNotifyProps, UserProfile} from '@mattermost/types/users';

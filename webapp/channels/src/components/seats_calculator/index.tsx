@@ -1,10 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {useEffect} from 'react';
 import {useIntl, FormattedMessage, FormattedNumber, defineMessages} from 'react-intl';
-
-import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import Input from 'components/widgets/inputs/input/input';
 import WithTooltip from 'components/with_tooltip';

@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {MagnifyIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
@@ -11,7 +12,6 @@ import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
-import {MagnifyIcon} from '@infomaniak/compass-icons/components';
 import {FooterPagination, GenericModal} from '@mattermost/components';
 
 import {getPluginStatuses} from 'mattermost-redux/actions/admin';

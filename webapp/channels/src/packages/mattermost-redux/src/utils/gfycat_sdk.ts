@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 class Gfycat {
-    constructor(config: any) {}
 }
 
 const defaultKey = '2_KtH_W5';

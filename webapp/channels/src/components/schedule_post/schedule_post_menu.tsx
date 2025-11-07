@@ -18,7 +18,7 @@ import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import './schedule_post_menu.scss';
 
-const MuiMenuStyled = () => null
+const MuiMenuStyled = () => null;
 
 type Props = {
     open: boolean;

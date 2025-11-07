@@ -5,7 +5,7 @@ import React from 'react';
 
 import './icon_message_with_progress_bar.scss';
 
-const IconMessage = ({...props}: any) => null;
+const IconMessage = () => null;
 
 export const enum ProcessState {
     PROCESSING = 0,

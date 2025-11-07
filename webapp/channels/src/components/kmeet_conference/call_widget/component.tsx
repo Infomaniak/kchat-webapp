@@ -7,8 +7,10 @@ import type {CSSProperties} from 'react';
 import React from 'react';
 
 import type {Channel} from '@mattermost/types/channels';
+import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 import type {IDMappedObjects} from '@mattermost/types/utilities';
+
 import {localizeMessage} from 'mattermost-redux/utils/i18n_utils';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
@@ -30,8 +32,6 @@ import ShrinkConvIcon from 'components/widgets/icons/shrink_conv_icon';
 import Avatar from 'components/widgets/users/avatar';
 import Avatars from 'components/widgets/users/avatars/avatars';
 import WithTooltip from 'components/with_tooltip';
-
-import type {Team} from '@mattermost/types/teams';
 
 import Constants from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';

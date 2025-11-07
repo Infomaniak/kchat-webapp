@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ArrowRightIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {useIntl} from 'react-intl';
 import styled from 'styled-components';
-
-import {ArrowRightIcon} from '@infomaniak/compass-icons/components';
 
 import pluginIconConfluence from 'images/icons/confluence.svg';
 import pluginIconGiphy from 'images/icons/giphy.svg';

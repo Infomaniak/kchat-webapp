@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {FileGenericOutlineIcon, BookOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import {FileGenericOutlineIcon, BookOutlineIcon} from '@infomaniak/compass-icons/components';
 import type {ChannelBookmark} from '@mattermost/types/channel_bookmarks';
 import type {FileInfo} from '@mattermost/types/files';
 

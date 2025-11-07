@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {MenuVariantIcon, PlusIcon, TrashCanOutlineIcon} from '@infomaniak/compass-icons/components';
 import {createColumnHelper, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef} from '@tanstack/react-table';
 import type {ReactNode} from 'react';
 import React, {useEffect, useMemo, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import styled, {css} from 'styled-components';
 
-import {MenuVariantIcon, PlusIcon, TrashCanOutlineIcon} from '@infomaniak/compass-icons/components';
 import type {UserPropertyField} from '@mattermost/types/properties';
 import {collectionToArray} from '@mattermost/types/utilities';
 

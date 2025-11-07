@@ -1,12 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import ChevronDownIcon from '@infomaniak/compass-icons/components/chevron-down';
 import classNames from 'classnames';
 import React, {useCallback, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import ChevronDownIcon from '@infomaniak/compass-icons/components/chevron-down';
 import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
 import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';

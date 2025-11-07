@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {AlertCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import type {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
 import React from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {useIntl} from 'react-intl';
-
-import {AlertCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import './base_setting_item.scss';
 

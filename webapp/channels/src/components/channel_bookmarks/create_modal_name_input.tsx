@@ -1,12 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ChevronDownIcon} from '@infomaniak/compass-icons/components';
 import type {ComponentProps} from 'react';
 import React, {useCallback, useRef} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import styled from 'styled-components';
 
-import {ChevronDownIcon} from '@infomaniak/compass-icons/components';
 import type {ChannelBookmark} from '@mattermost/types/channel_bookmarks';
 import type {Emoji} from '@mattermost/types/emojis';
 import type {FileInfo} from '@mattermost/types/files';

@@ -1,9 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
 import React, {useState} from 'react';
 
-import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
 import {GenericModal} from '@mattermost/components';
 
 import {

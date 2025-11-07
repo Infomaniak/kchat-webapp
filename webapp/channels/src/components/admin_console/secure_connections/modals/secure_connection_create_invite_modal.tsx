@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {CheckIcon, ContentCopyIcon} from '@infomaniak/compass-icons/components';
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import {CheckIcon, ContentCopyIcon} from '@infomaniak/compass-icons/components';
 import {GenericModal} from '@mattermost/components';
 import type {RemoteCluster} from '@mattermost/types/remote_clusters';
 

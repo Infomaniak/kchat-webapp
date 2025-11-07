@@ -1,12 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {CloseCircleIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {useState, useEffect} from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {useIntl} from 'react-intl';
-
-import {CloseCircleIcon} from '@infomaniak/compass-icons/components';
 
 import WithTooltip from 'components/with_tooltip';
 

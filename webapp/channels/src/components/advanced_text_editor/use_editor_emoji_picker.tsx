@@ -2,12 +2,12 @@
 // See LICENSE.txt for license information.
 
 import {flip, offset, shift} from '@floating-ui/react';
+import {EmoticonHappyOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {useCallback, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 
-import {EmoticonHappyOutlineIcon} from '@infomaniak/compass-icons/components';
 import type {Emoji} from '@mattermost/types/emojis';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';

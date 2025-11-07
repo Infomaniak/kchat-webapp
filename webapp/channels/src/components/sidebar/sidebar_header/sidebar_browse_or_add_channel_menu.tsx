@@ -1,10 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
-
 import {
     PlusIcon,
     FolderPlusOutlineIcon,
@@ -12,6 +8,9 @@ import {
     GlobeIcon,
     AccountOutlineIcon,
 } from '@infomaniak/compass-icons/components';
+import React from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
 
 import {getCurrentPackName, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';

@@ -2,16 +2,16 @@
 // See LICENSE.txt for license information.
 
 // Purpose of this file to exists is only required until channel header dropdown is migrated to new menus
-import React, {memo} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
-
 import {
     ChevronRightIcon,
     LinkVariantIcon,
     PaperclipIcon,
     BookmarkOutlineIcon,
 } from '@infomaniak/compass-icons/components';
+import React, {memo} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
+
 import type {Channel} from '@mattermost/types/channels';
 
 import {getChannelBookmarks} from 'mattermost-redux/selectors/entities/channel_bookmarks';

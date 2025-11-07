@@ -1,14 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ArchiveOutlineIcon, GlobeIcon, LockIcon} from '@infomaniak/compass-icons/components';
+import type IconProps from '@infomaniak/compass-icons/components/props';
 import type {ComponentProps, DependencyList} from 'react';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import {ArchiveOutlineIcon, GlobeIcon, LockIcon} from '@infomaniak/compass-icons/components';
-import type IconProps from '@infomaniak/compass-icons/components/props';
 import {GenericModal} from '@mattermost/components';
 import type {Channel, ChannelWithTeamData} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
