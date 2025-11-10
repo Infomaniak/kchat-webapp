@@ -20,7 +20,9 @@ exports[`components/sidebar/sidebar_category/sidebar_category_sorting_menu shoul
         />,
         "class": "SidebarMenu_menuButton sortingMenu",
         "id": "SidebarCategorySortingMenu-Button-category_id",
-        "ref": undefined,
+        "ref": Object {
+          "current": null,
+        },
       }
     }
     menuButtonTooltip={
