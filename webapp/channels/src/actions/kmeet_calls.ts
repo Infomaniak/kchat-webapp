@@ -153,7 +153,7 @@ export function cancelCall(channelId: string) {
         const state = getState();
         const conference = getConferenceByChannelId(state, channelId);
         if (!conference) {
-            return;
+            return undefined;
         }
         const currentUserId = getCurrentUserId(getState());
 
