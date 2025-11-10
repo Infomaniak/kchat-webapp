@@ -39,7 +39,7 @@ interface Props extends Menu.FirstMenuItemProps {
     pluginItems: ReactNode[];
 }
 
-const ChannelHeaderGroupMenu = ({channel, user, isMuted, isMobile, isFavorite, pluginItems, ...rest}: Props) => {
+const ChannelHeaderGroupMenu = ({channel, user, isMuted, isMobile, isFavorite, pluginItems, parentMenuId, ...rest}: Props) => {
     const isGroupConstrained = channel?.group_constrained === true;
     const isArchived = channel.delete_at !== 0;
     const {formatMessage} = useIntl();
@@ -120,7 +120,9 @@ const ChannelHeaderGroupMenu = ({channel, user, isMuted, isMobile, isFavorite, p
                     <Menu.Separator/>
                 </ChannelPermissionGate>
             )}
-            <ChannelMoveToSubMenu channel={channel}/>
+            <ChannelMoveToSubMenu
+                channel={channel}
+            />
             {!isMobile && (
                 <MenuItemPluginItems pluginItems={pluginItems}/>
             )}

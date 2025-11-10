@@ -62,6 +62,7 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
         pluginMenuItems: state.plugins.components.PostDropdownMenu,
         teamId: getCurrentTeamId(state),
         isMobileView: getIsMobileView(state),
+        canOpenMarketplace: false,
     };
 }
 

@@ -16,8 +16,9 @@ describe('components/global/global_header', () => {
         const spyProduct = jest.spyOn(productUtils, 'useCurrentProductId');
         spyProduct.mockReturnValue(null);
 
+        const headerRef = React.createRef<HTMLDivElement>();
         const wrapper = shallow(
-            <GlobalHeader/>,
+            <GlobalHeader headerRef={headerRef}/>,
         );
 
         // Global header should render null
@@ -30,8 +31,9 @@ describe('components/global/global_header', () => {
         const spyProduct = jest.spyOn(productUtils, 'useCurrentProductId');
         spyProduct.mockReturnValue(null);
 
+        const headerRef = React.createRef<HTMLDivElement>();
         const wrapper = shallow(
-            <GlobalHeader/>,
+            <GlobalHeader headerRef={headerRef}/>,
         );
 
         // Global header should not be null

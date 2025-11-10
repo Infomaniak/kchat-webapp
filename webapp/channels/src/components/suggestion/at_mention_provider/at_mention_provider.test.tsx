@@ -32,6 +32,7 @@ describe('components/suggestion/at_mention_provider/AtMentionProvider', () => {
         useChannelMentions: true,
         searchAssociatedGroupsForReference: jest.fn().mockResolvedValue(false),
         priorityProfiles: [],
+        loading: false,
     };
 
     it('should ignore pretexts that are not at-mentions', () => {

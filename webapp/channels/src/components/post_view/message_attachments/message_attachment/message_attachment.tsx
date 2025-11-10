@@ -60,6 +60,7 @@ type Props = {
         doPostActionWithCookie: (postId: string, actionId: string, actionCookie: string, selectedOption?: string) => Promise<ActionResult>;
         openModal: <P>(modalData: ModalData<P>) => void;
         fetchMetadataIfPostIsPoll: (postId: string) => void;
+        saveFileToKDrive: (fileId: string, fileName: string) => void;
     };
 
     currentRelativeTeamUrl: string;
@@ -102,6 +103,11 @@ export default class MessageAttachment extends React.PureComponent<Props, State>
     fetchPollMetadata() {
         this.props.actions.fetchMetadataIfPostIsPoll(this.props.postId);
     }
+
+    handleKDriveSave = async (fileId: string, fileName: string) => {
+        this.props.actions.saveFileToKDrive(fileId, fileName);
+        return {data: true};
+    };
 
     handleHeightReceivedForThumbUrl = ({height}: {height: number}) => {
         const {attachment} = this.props;
@@ -481,6 +487,7 @@ export default class MessageAttachment extends React.PureComponent<Props, State>
                                 src={imageUrl}
                                 dimensions={imageMetadata}
                                 onClick={this.showModal}
+                                handleKDriveSave={this.handleKDriveSave}
                             />
                         )}
                     </ExternalImage>
@@ -535,6 +542,7 @@ export default class MessageAttachment extends React.PureComponent<Props, State>
                                 onImageLoaded={this.handleHeightReceivedForThumbUrl}
                                 src={thumbUrl}
                                 dimensions={thumbMetadata}
+                                handleKDriveSave={this.handleKDriveSave}
                             />
                         )}
                     </ExternalImage>
