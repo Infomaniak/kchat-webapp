@@ -17,7 +17,7 @@ import {getNavigationBlocked} from 'selectors/views/admin';
 
 import {OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
 
-import {isMobile} from 'utils/utils';
+import {isMobile} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
 
