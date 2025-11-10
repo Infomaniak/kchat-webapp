@@ -66,7 +66,7 @@ const WorkspaceOptimizationDashboard = (props: Props) => {
     // get the currently installed server version
     const installedVersion = useSelector((state: GlobalState) => getServerVersion(state));
     const analytics = useSelector((state: GlobalState) => state.entities.admin.analytics);
-    const {TOTAL_USERS: totalUsers, TOTAL_POSTS: totalPosts} = analytics!;
+    const {TOTAL_USERS: totalUsers = 0, TOTAL_POSTS: totalPosts = 0} = analytics || {};
 
     // gather locally available data
     const {

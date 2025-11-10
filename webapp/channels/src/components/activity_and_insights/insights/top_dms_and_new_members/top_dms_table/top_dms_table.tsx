@@ -42,7 +42,7 @@ const TopDMsTable = (props: Props) => {
     const currentTeam = useSelector(getCurrentTeam);
 
     const getMyTopTeamDMs = useCallback(async () => {
-        if (props.filterType === InsightsScopes.MY) {
+        if (props.filterType === InsightsScopes.MY && currentTeam) {
             setLoading(true);
             const data: any = await dispatch(getMyTopDMs(currentTeam.id, 0, 10, props.timeFrame));
             if (data.data?.items) {
@@ -121,6 +121,9 @@ const TopDMsTable = (props: Props) => {
     }, []);
 
     const getRows = useMemo((): Row[] => {
+        if (!currentTeam) {
+            return [];
+        }
         return topDMs.map((dm, i) => {
             const barSize = (dm.post_count / topDMs[0].post_count);
             return (
