@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {PencilOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import type {MouseEvent, KeyboardEvent} from 'react';
 import {useIntl} from 'react-intl';
-
-import {PencilOutlineIcon} from '@mattermost/compass-icons/components';
 
 import {getDateForTimezone} from 'mattermost-redux/utils/timezone_utils';
 

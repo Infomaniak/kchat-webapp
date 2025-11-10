@@ -1,11 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo} from 'react';
-import {defineMessages, useIntl} from 'react-intl';
-import type {MessageDescriptor} from 'react-intl';
-import styled from 'styled-components';
-
 import {
     FormatBoldIcon,
     FormatItalicIcon,
@@ -16,8 +11,12 @@ import {
     FormatQuoteOpenIcon,
     FormatListBulletedIcon,
     FormatListNumberedIcon,
-} from '@mattermost/compass-icons/components';
-import type IconProps from '@mattermost/compass-icons/components/props';
+} from '@infomaniak/compass-icons/components';
+import type IconProps from '@infomaniak/compass-icons/components/props';
+import React, {memo} from 'react';
+import {defineMessages, useIntl} from 'react-intl';
+import type {MessageDescriptor} from 'react-intl';
+import styled from 'styled-components';
 
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,

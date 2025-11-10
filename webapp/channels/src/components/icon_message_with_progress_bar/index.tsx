@@ -3,8 +3,9 @@
 
 import React from 'react';
 
-import IconMessage from 'components/purchase_modal/icon_message';
 import './icon_message_with_progress_bar.scss';
+
+const IconMessage = () => null;
 
 export const enum ProcessState {
     PROCESSING = 0,

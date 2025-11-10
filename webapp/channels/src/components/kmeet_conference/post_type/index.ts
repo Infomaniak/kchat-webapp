@@ -5,9 +5,10 @@ import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
+import type {Post} from '@mattermost/types/posts';
+
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import type {Post} from 'mattermost-redux/types/posts';
 
 import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannelV2} from 'actions/calls';
 import {joinCall} from 'actions/kmeet_calls';

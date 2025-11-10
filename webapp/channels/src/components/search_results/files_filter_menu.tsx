@@ -1,10 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {FilterVariantIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-
-import {FilterVariantIcon} from '@mattermost/compass-icons/components';
 
 import {IconContainer} from 'components/advanced_text_editor/formatting_bar/formatting_icon';
 import type {SearchFilterType} from 'components/search/types';
