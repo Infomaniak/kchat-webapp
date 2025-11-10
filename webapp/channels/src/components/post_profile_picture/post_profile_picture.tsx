@@ -14,7 +14,6 @@ import MattermostLogo from 'components/widgets/icons/mattermost_logo';
 import Constants, {UserStatuses} from 'utils/constants';
 import * as PostUtils from 'utils/post_utils';
 import {getProfilePictureURL} from 'utils/post_utils';
-import * as Utils from 'utils/utils';
 
 type Props = {
     availabilityStatusOnPosts: string;
