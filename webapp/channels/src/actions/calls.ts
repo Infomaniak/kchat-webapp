@@ -164,6 +164,9 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             }
             const data = await Client4.startMeet(channelID, version);
             const channel = getChannel(state, channelID);
+            if (!channel) {
+                return;
+            }
 
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,

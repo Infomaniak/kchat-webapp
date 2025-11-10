@@ -33,7 +33,7 @@ const mapStateToProps = (state: GlobalState) => {
 
     const profiles: UserProfile[] = [];
     const pictures: string[] = [];
-    if (channels) {
+    if (channels && channel) {
         let users;
         if (channels[channel.id] && channels[channel.id][connectedConfID]) {
             users = channels[channel.id][connectedConfID];

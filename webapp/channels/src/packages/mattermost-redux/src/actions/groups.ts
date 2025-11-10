@@ -182,7 +182,7 @@ export function getGroups(opts: GetGroupsParams): ActionFuncAsync {
                 if (!opts.per_page || currentFetch.length < opts.per_page) {
                     break;
                 }
-                opts.page += 1;
+                opts.page = (opts.page || 0) + 1;
             }
             dispatch({
                 type: GroupTypes.RECEIVED_GROUPS,

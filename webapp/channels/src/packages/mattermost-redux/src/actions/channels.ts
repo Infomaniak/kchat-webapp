@@ -738,7 +738,10 @@ export function unarchiveChannel(channelId: string, openLimitModalIfNeeded: (err
             await Client4.unarchiveChannel(channelId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
-            dispatch(openLimitModalIfNeeded(error, getChannelSelector(getState(), channelId).type));
+            const channel = getChannelSelector(getState(), channelId);
+            if (channel) {
+                dispatch(openLimitModalIfNeeded(error, channel.type));
+            }
             dispatch(logError(error));
             return {error};
         }
