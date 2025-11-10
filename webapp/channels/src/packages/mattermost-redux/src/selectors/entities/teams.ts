@@ -393,7 +393,7 @@ export function searchTeamsInPolicy(teams: Team[], term: string): Team[] {
 export const getCurrentTeamAccountId = createSelector(
     'getCurrentTeamAccountId',
     getCurrentTeam,
-    (currentTeam: Team) => currentTeam.account_id,
+    (currentTeam?: Team) => currentTeam?.account_id,
 );
 
 export function getTeamIdByChannelId(state: GlobalState, channelId: string): string | undefined {

@@ -7,6 +7,7 @@ import React from 'react';
 import type {DroppableProvided, DropResult} from 'react-beautiful-dnd';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Scrollbars from 'react-custom-scrollbars';
+import type {WrappedComponentProps} from 'react-intl';
 import {injectIntl} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
@@ -25,7 +26,7 @@ import Pluggable from 'plugins/pluggable';
 
 import type {PropsFromRedux} from './index';
 
-export type Props = PropsFromRedux & RouteComponentProps;
+export type Props = PropsFromRedux & RouteComponentProps & WrappedComponentProps<'intl'>;
 
 type State = {
     showOrder: boolean;

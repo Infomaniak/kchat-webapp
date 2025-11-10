@@ -84,7 +84,7 @@ interface State {
     showMenu: boolean;
     showParticipantsList: boolean;
     screenSharingID?: string;
-    intervalID?: NodeJS.Timer;
+    intervalID?: ReturnType<typeof setInterval>;
     screenStream?: any;
     currentAudioInputDevice?: any;
     currentAudioOutputDevice?: any;

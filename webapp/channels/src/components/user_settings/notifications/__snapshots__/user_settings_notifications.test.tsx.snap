@@ -56,7 +56,7 @@ Object {
             >
               <a
                 class="btn btn-link"
-                href="https://mattermost.com/pl/about-notifications"
+                href="https://mattermost.com/pl/about-notifications?utm_source=kchat&utm_content=user_settings_notifications&uid=&sid="
                 location="user_settings_notifications"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -362,7 +362,7 @@ Object {
           >
             <a
               class="btn btn-link"
-              href="https://mattermost.com/pl/about-notifications"
+              href="https://mattermost.com/pl/about-notifications?utm_source=kchat&utm_content=user_settings_notifications&uid=&sid="
               location="user_settings_notifications"
               rel="noopener noreferrer"
               target="_blank"
@@ -727,7 +727,7 @@ Object {
             >
               <a
                 class="btn btn-link"
-                href="https://mattermost.com/pl/about-notifications"
+                href="https://mattermost.com/pl/about-notifications?utm_source=kchat&utm_content=user_settings_notifications&uid=&sid="
                 location="user_settings_notifications"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -1021,7 +1021,7 @@ Object {
           >
             <a
               class="btn btn-link"
-              href="https://mattermost.com/pl/about-notifications"
+              href="https://mattermost.com/pl/about-notifications?utm_source=kchat&utm_content=user_settings_notifications&uid=&sid="
               location="user_settings_notifications"
               rel="noopener noreferrer"
               target="_blank"
@@ -1374,7 +1374,7 @@ Object {
             >
               <a
                 class="btn btn-link"
-                href="https://mattermost.com/pl/about-notifications"
+                href="https://mattermost.com/pl/about-notifications?utm_source=kchat&utm_content=user_settings_notifications&uid=&sid="
                 location="user_settings_notifications"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -1645,7 +1645,7 @@ Object {
           >
             <a
               class="btn btn-link"
-              href="https://mattermost.com/pl/about-notifications"
+              href="https://mattermost.com/pl/about-notifications?utm_source=kchat&utm_content=user_settings_notifications&uid=&sid="
               location="user_settings_notifications"
               rel="noopener noreferrer"
               target="_blank"

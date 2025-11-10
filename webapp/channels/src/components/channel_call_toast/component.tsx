@@ -22,7 +22,7 @@ interface Props {
 interface State {
     hidden: boolean;
     connectedID?: string;
-    intervalID?: NodeJS.Timer;
+    intervalID?: ReturnType<typeof setInterval>;
 }
 
 export default class ChannelCallToast extends React.PureComponent<Props, State> {
