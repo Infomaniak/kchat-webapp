@@ -15,6 +15,7 @@ import type {ServerError} from '@mattermost/types/errors';
 import {getUsage} from 'mattermost-redux/actions/cloud';
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
+import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
 import {storeBridge, storeBridgeParam} from 'mattermost-redux/actions/ksuiteBridge';
 import {Client4} from 'mattermost-redux/client';
 import {getNextWcPack, openUpgradeDialog} from 'mattermost-redux/utils/plans_util';
@@ -65,7 +66,6 @@ import type {PropsFromRedux} from './index';
 
 import 'plugins/export';
 import 'utils/a11y_controller_instance';
-import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
 
 const MobileViewWatcher = makeAsyncComponent('MobileViewWatcher', lazy(() => import('components/mobile_view_watcher')));
 const WindowSizeObserver = makeAsyncComponent('WindowSizeObserver', lazy(() => import('components/window_size_observer/WindowSizeObserver')));
@@ -138,14 +138,16 @@ export default class Root extends React.PureComponent<Props, State> {
             // Login will send us back here with a code after we give it the challange.
             // Use code to refresh token.
 
-            if (getDesktopVersion() === '2.1.0') {
+            if (!isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.2')) {
                 const forceMigrationError: ServerError = {
                     message: 'Maintenance mode',
                     status_code: 1,
                 };
 
                 redirectToErrorPageIfNecessary(forceMigrationError);
+                return;
             }
+
             const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
 
             if (loginCode) {

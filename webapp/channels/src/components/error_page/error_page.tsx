@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import crypto from 'crypto';
-import React, {useCallback} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
 
