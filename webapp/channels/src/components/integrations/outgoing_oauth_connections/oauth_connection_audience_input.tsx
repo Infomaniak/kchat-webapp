@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {OauthIcon, InformationOutlineIcon} from '@infomaniak/compass-icons/components';
 import debounce from 'lodash/debounce';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {OauthIcon, InformationOutlineIcon} from '@mattermost/compass-icons/components';
 import type {OutgoingOAuthConnection} from '@mattermost/types/integrations';
 
 import {

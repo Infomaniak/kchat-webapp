@@ -388,6 +388,7 @@ export default class Root extends React.PureComponent<Props, State> {
         const loginCode = this.IKLoginCode;
         console.log('[component/root] try get token'); // eslint-disable-line no-console
         try { // Get new token
+            Client4.setIncludeCookies(false);
             const response: {
                 expires_in?: number;
                 access_token: string;
@@ -399,6 +400,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 IKConstants.LOGIN_URL!,
                 IKConstants.CLIENT_ID,
             );
+            Client4.setIncludeCookies(true);
 
             // Store in localstorage
             storeTokenResponse(response);

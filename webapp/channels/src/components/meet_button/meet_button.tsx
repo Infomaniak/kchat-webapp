@@ -67,6 +67,9 @@ function MeetButton(props: Props) {
     };
 
     const openModal = () => {
+        if (!channel) {
+            return;
+        }
         const title = (
             <FormattedMessage
                 id='kmeet_call_modal.title'
@@ -112,6 +115,9 @@ function MeetButton(props: Props) {
     };
 
     const startCall = () => {
+        if (!channel) {
+            return;
+        }
         if (props.hasCall) {
             props.actions?.joinCall(channel.id);
         } else {

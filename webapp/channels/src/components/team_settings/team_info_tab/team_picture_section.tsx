@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {TrashCanOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {type ChangeEvent, useRef, useState, useEffect, useCallback} from 'react';
 import {useIntl} from 'react-intl';
 
-import {TrashCanOutlineIcon} from '@mattermost/compass-icons/components';
 import type {Team} from '@mattermost/types/teams';
 
 import EditIcon from 'components/widgets/icons/fa_edit_icon';

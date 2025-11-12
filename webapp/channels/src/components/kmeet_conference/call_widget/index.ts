@@ -6,6 +6,7 @@ import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import type {UserProfile} from '@mattermost/types/users';
+import type {IDMappedObjects} from '@mattermost/types/utilities';
 
 import {Client4} from 'mattermost-redux/client';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -14,7 +15,6 @@ import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/tea
 import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
-import type {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
 import {hideExpandedView, showExpandedView, updateAudioStatus, updateCameraStatus, updateScreenSharingStatus} from 'actions/calls';
 import {connectedCallID, connectedChannelID, expandedView, voiceChannelCallStartAt, voiceConnectedChannels, voiceConnectedProfilesInChannel, voiceUsersStatuses} from 'selectors/calls';
@@ -33,7 +33,7 @@ const mapStateToProps = (state: GlobalState) => {
 
     const profiles: UserProfile[] = [];
     const pictures: string[] = [];
-    if (channels) {
+    if (channels && channel) {
         let users;
         if (channels[channel.id] && channels[channel.id][connectedConfID]) {
             users = channels[channel.id][connectedConfID];

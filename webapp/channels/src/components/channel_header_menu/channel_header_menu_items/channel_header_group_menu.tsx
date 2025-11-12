@@ -1,14 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {
+    ChevronRightIcon,
+    CogOutlineIcon,
+} from '@infomaniak/compass-icons/components';
 import type {ReactNode} from 'react';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import {
-    ChevronRightIcon,
-    CogOutlineIcon,
-} from '@mattermost/compass-icons/components';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 

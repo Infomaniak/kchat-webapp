@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
-import {useIntl} from 'react-intl';
-
 import {
     PencilOutlineIcon,
     TrashCanOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
+import React from 'react';
+import {useIntl} from 'react-intl';
+
 import type {AllowedIPRange} from '@mattermost/types/config';
 
 import WithTooltip from 'components/with_tooltip';

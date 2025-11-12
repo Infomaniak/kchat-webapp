@@ -13,12 +13,12 @@ import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/use
 
 import {hideExpandedView} from 'actions/calls';
 import type {UserState} from 'reducers/views/calls';
+import {expandedView, voiceChannelCallStartAt, connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelScreenSharingID} from 'selectors/calls';
 
 import type {GlobalState} from 'types/store';
 
 import ExpandedView from './component';
 
-import {expandedView, voiceChannelCallStartAt, connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelScreenSharingID} from '../../selectors';
 import {alphaSortProfiles, stateSortProfiles, isDMChannel, getUserIdFromDM} from '../utils';
 
 const mapStateToProps = (state: GlobalState) => {

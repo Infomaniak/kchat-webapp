@@ -4,9 +4,9 @@
     width: 65px;
     height: calc(100% + 46px);
     flex-direction: column;
+    margin-top: -46px;
     background-color: var(--sidebar-header-bg);
     text-align: center;
-    margin-top: -46px;
 
     .fa {
         color: var(--sidebar-header-text-color);
@@ -154,8 +154,8 @@
     }
 
     #calls-widget {
-        margin-left: 60px;
         width: 225px !important;
+        margin-left: 60px;
     }
 }
 

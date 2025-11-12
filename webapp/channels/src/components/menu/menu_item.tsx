@@ -4,6 +4,7 @@
 import MuiMenuItem from '@mui/material/MenuItem';
 import type {MenuItemProps as MuiMenuItemProps} from '@mui/material/MenuItem';
 import {styled} from '@mui/material/styles';
+import cloneDeep from 'lodash/cloneDeep';
 import React, {
     Children,
     useContext,
@@ -137,6 +138,7 @@ export function MenuItem(props: Props) {
         children,
         onClick,
         role = 'menuitem',
+        forceCloseOnSelect = false,
         ...otherProps
     } = props;
 
@@ -147,12 +149,10 @@ export function MenuItem(props: Props) {
 
     function handleClick(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
         if (isCorrectKeyPressedOnMenuItem(event)) {
-            if (
-                // If the menu item is a checkbox, radio button, or if it has a submenu, we don't want to close the menu when it is clicked.
-                // see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
-                isRoleCheckboxOrRadio(role) ||
-                hasElementPopup(event.currentTarget)
-            ) {
+            // If the menu item is a checkbox or radio button, we don't want to close the menu when it is clicked.
+            // unless forceCloseOnSelect is set to true.
+            // see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
+            if (isRoleCheckboxOrRadio(role) && !forceCloseOnSelect) {
                 event.stopPropagation();
             } else {
                 // close submenu first if it is open
@@ -172,7 +172,12 @@ export function MenuItem(props: Props) {
                 if (isMobileView || isRoleCheckboxOrRadio(role)) {
                     onClick(event);
                 } else {
-                    onClick(event);
+                    // Clone the event since we delay the click handler until after the menu has closed.
+                    const clonedEvent = cloneDeep(event);
+
+                    menuContext.addOnClosedListener(() => {
+                        onClick(clonedEvent);
+                    });
                 }
             }
         }
@@ -223,8 +228,7 @@ export const MenuItemStyled = styled(MuiMenuItem, {
             '&.MuiMenuItem-root': {
                 fontFamily: '"SuisseIntl", sans-serif',
                 color: isRegular ? 'var(--center-channel-color)' : 'var(--error-text)',
-                padding: '5px 10px',
-                borderRadius: '4px',
+                padding: '6px 20px',
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'nowrap',
@@ -354,9 +358,3 @@ function isRoleCheckboxOrRadio(role: AriaRole) {
     return role === 'menuitemcheckbox' || role === 'menuitemradio';
 }
 
-export function hasElementPopup(node: HTMLElement) {
-    return (
-        node.getAttribute('aria-haspopup') === 'true' &&
-        node.getAttribute('aria-expanded') !== null
-    );
-}

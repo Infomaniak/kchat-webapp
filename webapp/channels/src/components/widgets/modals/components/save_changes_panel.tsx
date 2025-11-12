@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {AlertCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {AlertCircleOutlineIcon} from '@mattermost/compass-icons/components';
 
 import './save_changes_panel.scss';
 
@@ -98,15 +97,17 @@ function SaveChangesPanel({handleSubmit, handleCancel, handleClose, tabChangeErr
                     className={saveButtonClassName}
                     onClick={handleSubmit}
                 >
-                    {state === 'error' ?
+                    {state === 'error' ? (
                         <FormattedMessage
                             id='saveChangesPanel.tryAgain'
                             defaultMessage='Try again'
-                        /> :
+                        />
+                    ) : (
                         <FormattedMessage
                             id='saveChangesPanel.save'
                             defaultMessage='Save'
                         />
+                    )
                     }
                 </button>
             </div>

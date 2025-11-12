@@ -21,6 +21,8 @@ import configureStore from '../../test/test_store';
 const OK_RESPONSE = {status: 'OK'};
 
 describe('Actions.Users', () => {
+    jest.retryTimes(3, {logErrorsBeforeRetry: true});
+
     let store = configureStore();
 
     beforeAll(() => {

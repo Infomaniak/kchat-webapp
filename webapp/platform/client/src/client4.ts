@@ -4492,8 +4492,13 @@ export default class Client4 {
 
         let data;
         try {
-            if (headers.get('Content-Type').indexOf('application/json') >= 0) { // Ik changes : our API always return json and don't return same content type as MM
+            const contentType = headers.get('Content-Type');
+            if (contentType.indexOf('application/json') >= 0) { // Ik changes : our API always return json and don't return same content type as MM
                 data = await response.json();
+            } else if (contentType === 'application/x-ndjson') {
+                const text = await response.text();
+                const objects = text.trim().split('\n');
+                data = objects.map((obj) => JSON.parse(obj));
             } else {
                 data = await response.text();
             }

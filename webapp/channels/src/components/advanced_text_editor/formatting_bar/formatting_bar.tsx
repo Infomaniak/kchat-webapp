@@ -2,13 +2,12 @@
 // See LICENSE.txt for license information.
 
 import {useFloating, offset, useClick, useDismiss, useInteractions} from '@floating-ui/react';
+import {DotsHorizontalIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {CSSTransition} from 'react-transition-group';
 import styled from 'styled-components';
-
-import {DotsHorizontalIcon} from '@mattermost/compass-icons/components';
 
 import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 

@@ -104,11 +104,10 @@
     display: flex;
     align-items: center;
     padding: 0;
-    // Infomaniak TODO MM-9.3: check if need this background + color
-    background: rgba(var(--sidebar-text-rgb), 0.15);
-    color: rgba(var(--sidebar-text-rgb), 0.9);
     border-radius: 4px;
+    // Infomaniak TODO MM-9.3: check if need this background + color
     background: rgba(var(--sidebar-text-rgb), 0.08);
+    color: rgba(var(--sidebar-text-rgb), 0.9);
 
     .searchTypeBadge {
         position: relative;
@@ -206,15 +205,6 @@
         right: 25px;
         font-size: 1em;
         opacity: 0.5;
-    }
-
-    // global header style adjustments
-    &:hover {
-        // background: rgba(var(--sidebar-text-rgb), 0.16);
-    }
-
-    &.active {
-        // background: rgba(var(--sidebar-text-rgb), 0.32);
     }
 
     &:focus-within {
