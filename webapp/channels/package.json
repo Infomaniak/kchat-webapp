@@ -236,6 +236,7 @@
     "check:eslint": "eslint --format gitlab --ext .js,.jsx,.tsx,.ts ./src --quiet --cache",
     "check:stylelint": "stylelint \"**/*.{css,scss}\" --cache",
     "check:i18n": "node ../scripts/i18n-check.js",
+    "check:i18n:ci": "node ../scripts/i18n-check.js --ci",
     "fix": "eslint --ext .js,.jsx,.tsx,.ts ./src --quiet --fix --cache && stylelint \"**/*.{css,scss}\" --fix --cache",
     "build": "cross-env NODE_ENV=production webpack",
     "run": "webpack --progress --watch",
