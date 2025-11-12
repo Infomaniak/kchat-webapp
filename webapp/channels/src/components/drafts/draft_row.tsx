@@ -139,12 +139,6 @@ function DraftRow({
         return getChannelURL(state, channel, teamId);
     });
 
-    const goToChannel = useCallback(() => {
-        if (channelUrl) {
-            history.push(channelUrl);
-        }
-    }, [channelUrl, history]);
-
     const goToMessage = useCallback(async () => {
         if (isEditing) {
             return;
@@ -364,7 +358,6 @@ function DraftRow({
                 type={(rootId ? 'thread' : 'channel')}
                 channel={channel}
                 userId={user.id}
-                goToChannel={goToChannel}
             />
         );
     } else {
