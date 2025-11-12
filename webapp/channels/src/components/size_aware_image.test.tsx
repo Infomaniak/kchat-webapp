@@ -27,6 +27,7 @@ describe('components/SizeAwareImage', () => {
             name: 'photo-1533709752211-118fcaf03312',
         }),
         enablePublicLink: true,
+        handleKDriveSave: jest.fn().mockResolvedValue({data: true}),
     };
 
     const store = mockStore({

@@ -24,7 +24,6 @@ type Props = {
     teammate?: UserProfile;
     teammateId?: string;
     type: 'channel' | 'thread';
-    goToChannel: () => void;
 }
 
 function DraftTitle({
@@ -34,7 +33,6 @@ function DraftTitle({
     teammate,
     teammateId,
     type,
-    goToChannel,
 }: Props) {
     const dispatch = useDispatch();
 
@@ -156,13 +154,10 @@ function DraftTitle({
     }
 
     return (
-        <span
-            onClick={goToChannel}
-            style={{minWidth: '200px', cursor: 'pointer'}}
-        >
+        <>
             {title}
             {you}
-        </span>
+        </>
     );
 }
 

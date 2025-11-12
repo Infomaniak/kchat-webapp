@@ -279,6 +279,7 @@ describe('components/dot_menu/DotMenu', () => {
                             has_preview_image: false,
                             clientId: '',
                             archived: false,
+                            channel_id: '',
                         }, {
                             id: 'file_id_2',
                             user_id: '',
@@ -294,6 +295,7 @@ describe('components/dot_menu/DotMenu', () => {
                             has_preview_image: false,
                             clientId: '',
                             archived: false,
+                            channel_id: '',
                         }]}}),
         };
 
@@ -331,6 +333,7 @@ describe('components/dot_menu/DotMenu', () => {
                         has_preview_image: false,
                         clientId: '',
                         archived: false,
+                        channel_id: '',
                     }],
                 },
             }),

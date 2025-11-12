@@ -26,7 +26,7 @@ type Props = {
     icon?: TIconGlyph;
     tooltipPlacement?: string;
     tooltipContent?: string;
-    currentTeam: Team;
+    currentTeam?: Team;
 }
 
 const SettingsButton = ({tab = 'display', className, icon, currentTeam}: Props): JSX.Element | null => {
@@ -38,7 +38,7 @@ const SettingsButton = ({tab = 'display', className, icon, currentTeam}: Props):
     const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (!isDesktopApp()) {
-            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-kchat', 'ksuite-kchat-personalization', {selectedId: currentTeam.product_id}]}));
+            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-kchat', 'ksuite-kchat-personalization', {selectedId: currentTeam?.product_id}]}));
         } else if (rhsState === RHSStates.SETTINGS) {
             dispatch(closeRightHandSide());
         } else {

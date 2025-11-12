@@ -17,7 +17,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should match sn
       />,
       "class": "SidebarMenu_menuButton",
       "id": "SidebarChannelMenu-Button-channel_id",
-      "ref": undefined,
+      "ref": Object {
+        "current": null,
+      },
     }
   }
   menuButtonTooltip={
@@ -164,7 +166,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should match sn
       />,
       "class": "SidebarMenu_menuButton",
       "id": "SidebarChannelMenu-Button-channel_id",
-      "ref": undefined,
+      "ref": Object {
+        "current": null,
+      },
     }
   }
   menuButtonTooltip={
@@ -311,7 +315,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should match sn
       />,
       "class": "SidebarMenu_menuButton",
       "id": "SidebarChannelMenu-Button-channel_id",
-      "ref": undefined,
+      "ref": Object {
+        "current": null,
+      },
     }
   }
   menuButtonTooltip={
@@ -458,7 +464,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
       />,
       "class": "SidebarMenu_menuButton",
       "id": "SidebarChannelMenu-Button-channel_id",
-      "ref": undefined,
+      "ref": Object {
+        "current": null,
+      },
     }
   }
   menuButtonTooltip={
@@ -573,7 +581,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
       />,
       "class": "SidebarMenu_menuButton",
       "id": "SidebarChannelMenu-Button-channel_id",
-      "ref": undefined,
+      "ref": Object {
+        "current": null,
+      },
     }
   }
   menuButtonTooltip={
@@ -703,7 +713,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
       />,
       "class": "SidebarMenu_menuButton",
       "id": "SidebarChannelMenu-Button-channel_id",
-      "ref": undefined,
+      "ref": Object {
+        "current": null,
+      },
     }
   }
   menuButtonTooltip={
@@ -850,7 +862,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
       />,
       "class": "SidebarMenu_menuButton",
       "id": "SidebarChannelMenu-Button-channel_id",
-      "ref": undefined,
+      "ref": Object {
+        "current": null,
+      },
     }
   }
   menuButtonTooltip={
@@ -997,7 +1011,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
       />,
       "class": "SidebarMenu_menuButton",
       "id": "SidebarChannelMenu-Button-channel_id",
-      "ref": undefined,
+      "ref": Object {
+        "current": null,
+      },
     }
   }
   menuButtonTooltip={
@@ -1144,7 +1160,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
       />,
       "class": "SidebarMenu_menuButton",
       "id": "SidebarChannelMenu-Button-channel_id",
-      "ref": undefined,
+      "ref": Object {
+        "current": null,
+      },
     }
   }
   menuButtonTooltip={
@@ -1291,7 +1309,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
       />,
       "class": "SidebarMenu_menuButton",
       "id": "SidebarChannelMenu-Button-channel_id",
-      "ref": undefined,
+      "ref": Object {
+        "current": null,
+      },
     }
   }
   menuButtonTooltip={

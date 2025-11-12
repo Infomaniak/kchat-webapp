@@ -38,6 +38,7 @@ export type Props = {
     };
     hideUtilities?: boolean;
     isUnsafeLinksPost: boolean;
+    handleKDriveSave: (fileId: string, fileName: string) => Promise<{data: boolean}>;
 };
 
 type State = {
@@ -213,6 +214,7 @@ export default class MarkdownImage extends PureComponent<Props, State> {
                             hideUtilities={hideUtilities}
                             onImageLoadFail={this.handleLoadFail}
                             onImageLoaded={this.handleImageLoaded}
+                            handleKDriveSave={this.props.handleKDriveSave}
                         />
                     );
 

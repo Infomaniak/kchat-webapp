@@ -31,6 +31,7 @@ describe('components/sidebar/sidebar_category/sidebar_category_sorting_menu', ()
     const baseProps = {
         category: TestHelper.getCategoryMock(),
         handleOpenDirectMessagesModal: jest.fn(),
+        menuTriggerRef: React.createRef<HTMLButtonElement>(),
     };
 
     test('should match snapshot', () => {
