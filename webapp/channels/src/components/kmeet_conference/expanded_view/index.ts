@@ -13,7 +13,7 @@ import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/use
 
 import {hideExpandedView} from 'actions/calls';
 import type {UserState} from 'reducers/views/calls';
-import {expandedView, voiceChannelCallStartAt, connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelScreenSharingID} from 'selectors/calls';
+import {expandedView, voiceChannelCallStartAt, connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses} from 'selectors/calls';
 
 import type {GlobalState} from 'types/store';
 
@@ -23,7 +23,7 @@ import {alphaSortProfiles, stateSortProfiles, isDMChannel, getUserIdFromDM} from
 
 const mapStateToProps = (state: GlobalState) => {
     const channel = getChannel(state, connectedChannelID(state));
-    const screenSharingID = voiceChannelScreenSharingID(state, channel?.id) || '';
+    const screenSharingID = '';
 
     const sortedProfiles = (profiles: UserProfile[], statuses: {[key: string]: UserState}) => {
         return [...profiles].sort(alphaSortProfiles(profiles)).sort(stateSortProfiles(profiles, statuses, screenSharingID));
