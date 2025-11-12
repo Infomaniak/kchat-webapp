@@ -10,6 +10,8 @@ import React, {lazy} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
+import type {ServerError} from '@mattermost/types/errors';
+
 import {getUsage} from 'mattermost-redux/actions/cloud';
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
@@ -63,6 +65,7 @@ import type {PropsFromRedux} from './index';
 
 import 'plugins/export';
 import 'utils/a11y_controller_instance';
+import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
 
 const MobileViewWatcher = makeAsyncComponent('MobileViewWatcher', lazy(() => import('components/mobile_view_watcher')));
 const WindowSizeObserver = makeAsyncComponent('WindowSizeObserver', lazy(() => import('components/window_size_observer/WindowSizeObserver')));
@@ -134,6 +137,15 @@ export default class Root extends React.PureComponent<Props, State> {
             // we dont need to do it manually.
             // Login will send us back here with a code after we give it the challange.
             // Use code to refresh token.
+
+            if (getDesktopVersion() === '2.1.0') {
+                const forceMigrationError: ServerError = {
+                    message: 'Maintenance mode',
+                    status_code: 1,
+                };
+
+                redirectToErrorPageIfNecessary(forceMigrationError);
+            }
             const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
 
             if (loginCode) {

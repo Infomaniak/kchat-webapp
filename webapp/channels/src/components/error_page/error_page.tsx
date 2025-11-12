@@ -2,13 +2,14 @@
 // See LICENSE.txt for license information.
 
 import crypto from 'crypto';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
 
 import * as GlobalActions from 'actions/global_actions';
 
 import {ErrorPageTypes} from 'utils/constants';
+import {isMacApp} from 'utils/user_agent';
 
 import kSuite from 'images/ik/kSuite.svg';
 import MattermostLogoSvg from 'images/logo.svg';
@@ -33,6 +34,7 @@ type Props = {
     isAdmin?: boolean;
     ikGroupId?: number;
     ikGroupName?: string;
+    locale?: string;
 }
 
 export default class ErrorPage extends React.PureComponent<Props> {
@@ -67,7 +69,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
     };
 
     public render() {
-        const {isGuest, isAdmin, ikGroupId, ikGroupName} = this.props;
+        const {isGuest, isAdmin, ikGroupId, ikGroupName, locale} = this.props;
         const params: URLSearchParams = new URLSearchParams(this.props.location ? this.props.location.search : '');
         const signature = params.get('s');
         let customClasses = '';
@@ -80,6 +82,10 @@ export default class ErrorPage extends React.PureComponent<Props> {
         const goToAppStore = () => {
             window.open('https://apps.apple.com/app/infomaniak-kchat/id6443845553', '_blank');
         };
+
+        const goToKChatDownload = () => (
+            window.open(`https://www.infomaniak.com/${locale}/ksuite/kchat`, '_blank')
+        );
 
         let trustParams = false;
         if (signature) {
@@ -316,10 +322,11 @@ export default class ErrorPage extends React.PureComponent<Props> {
             );
         } else if (type === ErrorPageTypes.FORCE_MIGRATION) {
             illustration = illustrationMigration;
+            const downloadRedirect = isMacApp() ? goToAppStore : goToKChatDownload;
             backButton = (
                 <a
                     className='btn btn-primary'
-                    onClick={goToAppStore}
+                    onClick={downloadRedirect}
                 >
                     <FormattedMessage
                         id='error.generic.dl_link'
