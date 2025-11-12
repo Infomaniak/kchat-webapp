@@ -140,7 +140,8 @@ export default function RHS() {
                             postMessage={p.Message}
                             repliesCount={p.ReplyCount}
                             lastActivityDate={p.UpdateAt}
-                            label={bots.find((bot) => bot.dmChannelID === p.ChannelID)?.displayName ?? ''}
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            label={bots.find((bot: any) => bot.dmChannelID === p.ChannelID)?.displayName ?? ''}
                             onClick={() => {
                                 setCurrentTab('thread');
                                 selectPost(p.ID);

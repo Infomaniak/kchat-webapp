@@ -263,7 +263,8 @@ export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, 
         this.props.handleSubmit();
     };
 
-    private onChange: ComponentProps<ReactSelect>['onChange'] = (_, change) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private onChange: ComponentProps<ReactSelect>['onChange'] = (_: any, change: any) => {
         if (change.action !== 'remove-value' && change.action !== 'pop-value') {
             return;
         }

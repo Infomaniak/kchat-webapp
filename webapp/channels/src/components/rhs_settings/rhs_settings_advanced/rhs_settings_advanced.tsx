@@ -236,7 +236,8 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                 id='limitVisibleGMsDMs'
                 options={ctrlSendLabels}
                 clearable={false}
-                onChange={(e) => handleSelectChange(e)}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onChange={(e: any) => handleSelectChange(e)}
                 value={ctrlSendLabels[this.state.settings.enterSelect]}
                 isSearchable={false}
                 menuPortalTarget={document.body}

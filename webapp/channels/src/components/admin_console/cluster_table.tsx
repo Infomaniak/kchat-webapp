@@ -48,7 +48,8 @@ export default class ClusterTable extends React.PureComponent {
             singleItem = this.props.clusterInfos.length === 1;
         }
 
-        this.props.clusterInfos.map((clusterInfo) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.props.clusterInfos.map((clusterInfo: any) => {
             if (clusterInfo.version !== version) {
                 versionMismatch = (
                     <img
@@ -84,7 +85,8 @@ export default class ClusterTable extends React.PureComponent {
             return null;
         });
 
-        var items = this.props.clusterInfos.map((clusterInfo) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        var items = this.props.clusterInfos.map((clusterInfo: any) => {
             var status = null;
 
             let hostname: React.ReactNode = clusterInfo.hostname;
