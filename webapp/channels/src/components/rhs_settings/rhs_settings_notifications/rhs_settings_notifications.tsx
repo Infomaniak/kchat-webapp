@@ -8,7 +8,6 @@ import debounce from 'lodash/debounce';
 import type {RefObject} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import type {ValueType} from 'react-select';
 import ReactSelect from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import semver from 'semver';
@@ -354,7 +353,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                         options={options}
                         clearable={false}
                         value={options.filter((opt: { value: string | boolean }) => opt.value === this.state.pushActivity)}
-                        onChange={(e) => this.setStateValue('pushActivity', e?.value)}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        onChange={(e: any) => this.setStateValue('pushActivity', e?.value)}
                         isSearchable={false}
                         menuPortalTarget={document.body}
                         styles={reactStyles}
@@ -430,7 +430,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
             }
         };
 
-        const handleOnChange = (newValues: ValueType<{ label: string; value: string }>) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const handleOnChange = (newValues: any) => {
             const valuesArray = Array.isArray(newValues) ? newValues : [];
             this.setState({keywordsValues: valuesArray}, () => {
                 this.handleSubmit();
@@ -551,7 +552,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                         options={options}
                         clearable={false}
                         value={options.filter((opt: { value: string | boolean }) => opt.value === this.state.pushStatus)}
-                        onChange={(e) => this.setStateValue('pushStatus', e?.value)}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        onChange={(e: any) => this.setStateValue('pushStatus', e?.value)}
                         isSearchable={false}
                         menuPortalTarget={document.body}
                         styles={reactStyles}
@@ -848,7 +850,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                             options={options}
                             clearable={false}
                             value={options.filter((option) => option.value === (this.state.enableEmail === 'true'))}
-                            onChange={(e) => {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            onChange={(e: any) => {
                                 this.setStateValue('enableEmail', e?.value?.toString());
                                 if (!e?.value) {
                                     this.handleSaveEmailInterval('0');
@@ -882,7 +885,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                                 options={frequencyOptions}
                                 clearable={false}
                                 value={frequencyOptions.filter((opt: { value: number }) => opt.value === this.state.emailInterval)}
-                                onChange={(e) => this.handleSaveEmailInterval(e?.value)}
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                onChange={(e: any) => this.handleSaveEmailInterval(e?.value)}
                                 isSearchable={false}
                                 menuPortalTarget={document.body}
                                 styles={reactToTheTopStyles}

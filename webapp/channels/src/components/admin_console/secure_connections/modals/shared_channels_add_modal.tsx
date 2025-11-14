@@ -102,7 +102,8 @@ function SharedChannelsAddModal({
         return [];
     }, [searchAllChannels, remotesByChannelId], {delay: TYPING_DELAY_MS});
 
-    const formatLabel: ComponentProps<typeof ChannelsInput<ChannelWithTeamData>>['formatOptionLabel'] = (channel) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formatLabel: ComponentProps<typeof ChannelsInput<ChannelWithTeamData>>['formatOptionLabel'] = (channel: any) => {
         return (
             <>
                 <ChannelLabel channel={channel}/>

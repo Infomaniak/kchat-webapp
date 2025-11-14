@@ -103,7 +103,8 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
 
     const handleClose = () => setOpen(false);
 
-    const handleSchedulePostMenu = (e, optionName: SchedulePostMenuOption['name']) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleSchedulePostMenu = (e: any, optionName: SchedulePostMenuOption['name']) => {
         setOpen(false);
         const timestamp = getCurrentMomentForTimezone(timezone);
         switch (optionName) {
