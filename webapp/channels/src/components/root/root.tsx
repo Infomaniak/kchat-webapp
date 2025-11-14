@@ -10,12 +10,9 @@ import React, {lazy} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
-import type {ServerError} from '@mattermost/types/errors';
-
 import {getUsage} from 'mattermost-redux/actions/cloud';
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
-import {redirectToErrorPageIfNecessary} from 'mattermost-redux/actions/helpers';
 import {storeBridge, storeBridgeParam} from 'mattermost-redux/actions/ksuiteBridge';
 import {Client4} from 'mattermost-redux/client';
 import {getNextWcPack, openUpgradeDialog} from 'mattermost-redux/utils/plans_util';
@@ -137,17 +134,6 @@ export default class Root extends React.PureComponent<Props, State> {
             // we dont need to do it manually.
             // Login will send us back here with a code after we give it the challange.
             // Use code to refresh token.
-
-            if (!isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.2')) {
-                const forceMigrationError: ServerError = {
-                    message: 'Maintenance mode',
-                    status_code: 1,
-                };
-
-                redirectToErrorPageIfNecessary(forceMigrationError);
-                return;
-            }
-
             const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
 
             if (loginCode) {
