@@ -1,6 +1,6 @@
 import React from 'react';
 
-import iconEuria from 'images/ik/euria_logo.gif';
+import iconEuria from 'images/euria_logo.gif';
 
 export interface IconEuriaProps {
     className?: string;
