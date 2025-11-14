@@ -48,8 +48,6 @@ import {getMissingProfilesByIds} from './users';
 
 import {General, Preferences} from '../constants';
 
-type TranscriptData = any;
-
 export function selectChannel(channelId: string) {
     return {
         type: ChannelTypes.SELECT_CHANNEL,
@@ -1103,11 +1101,6 @@ export function notifyChannelMember(channelId: string, userIds: string[], postId
         }
         return {data: member};
     };
-}
-
-export async function fetchTranscriptData(fileId: string): Promise<TranscriptData> {
-    const transcript = await Client4.getTranscript(fileId);
-    return transcript;
 }
 
 export function addChannelMember(channelId: string, userId: string, postRootId = ''): ActionFuncAsync<ChannelMembership> {
