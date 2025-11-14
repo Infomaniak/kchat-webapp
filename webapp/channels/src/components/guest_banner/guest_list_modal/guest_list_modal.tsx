@@ -30,7 +30,7 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
     const ref = useRef<HTMLAnchorElement>(null);
 
     const [show, setShow] = useState(false);
-    const [placement, setPlacement] = useState(('top'));
+    const [placement, setPlacement] = useState<'top' | 'right' | 'bottom' | 'left' | undefined>(('top'));
     const [showUser, setShowUser] = useState<UserProfile | undefined>();
     const [target, setTarget] = useState<HTMLAnchorElement | undefined>();
 

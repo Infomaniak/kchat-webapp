@@ -212,7 +212,7 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
         </Sc.Duration>
     ) : (
         <Sc.Duration>
-            {moment(post.props.start_at).from(now)}
+            {moment(post.props.start_at as number).from(now)}
         </Sc.Duration>
     );
 
