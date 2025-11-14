@@ -11,8 +11,6 @@ import type {PasswordConfig} from 'mattermost-redux/selectors/entities/general';
 
 import {oauthToEmail} from 'actions/admin_actions.jsx';
 
-import LocalizedInput from 'components/localized_input/localized_input';
-
 import Constants from 'utils/constants';
 import {isValidPassword} from 'utils/password';
 import {toTitleCase} from 'utils/utils';
@@ -74,8 +72,6 @@ const OAuthToEmail = (props: Props) => {
     };
 
     const uiType = `${(props.currentType === Constants.SAML_SERVICE ? Constants.SAML_SERVICE.toUpperCase() : toTitleCase(props.currentType || ''))} SSO`;
-    const placeholderPasswordMessage = {id: 'claim.oauth_to_email.newPwd', defaultMessage: 'New Password'};
-    const placeholderConfirmMessage = {id: 'claim.oauth_to_email.confirm', defaultMessage: 'Confirm Password'};
 
     return (
         <>
@@ -101,22 +97,28 @@ const OAuthToEmail = (props: Props) => {
                     />
                 </p>
                 <div className={classNames('form-group', {'has-error': error})}>
-                    <LocalizedInput
+                    <input
                         type='password'
                         className='form-control'
                         name='password'
                         ref={passwordInput}
-                        placeholder={placeholderPasswordMessage}
+                        placeholder={intl.formatMessage({
+                            id: 'claim.oauth_to_email.newPwd',
+                            defaultMessage: 'New Password',
+                        })}
                         spellCheck='false'
                     />
                 </div>
                 <div className={classNames('form-group', {'has-error': error})}>
-                    <LocalizedInput
+                    <input
                         type='password'
                         className='form-control'
                         name='passwordconfirm'
                         ref={passwordConfirmInput}
-                        placeholder={placeholderConfirmMessage}
+                        placeholder={intl.formatMessage({
+                            id: 'claim.oauth_to_email.confirm',
+                            defaultMessage: 'Confirm Password',
+                        })}
                         spellCheck='false'
                     />
                 </div>
