@@ -8,6 +8,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {isAdmin, isGuest} from 'mattermost-redux/utils/user_utils';
 
+import {getCurrentLocale} from 'selectors/i18n';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import type {GlobalState} from 'types/store';
@@ -35,6 +36,7 @@ function mapStateToProps(state: GlobalState) {
         isAdmin: Boolean(user && isAdmin(user.roles)),
         ikGroupId,
         ikGroupName,
+        locale: getCurrentLocale(state),
     };
 }
 
