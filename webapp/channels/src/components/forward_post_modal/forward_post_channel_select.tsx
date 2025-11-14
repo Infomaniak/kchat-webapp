@@ -238,12 +238,11 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight, validChan
     const getDefaultResults = () => {
         let options: OptionsOrGroups<ChannelOption, GroupBase<ChannelOption>> = [];
 
-        const handleDefaultResults = (res: ProviderResult) => {
+        const handleDefaultResults = (res: ProviderResult<any>) => {
             options = [
                 {
                     label: formatMessage({id: 'suggestion.mention.recent.channels', defaultMessage: 'Recent'}),
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    options: res.items.filter((item: any) => item?.channel && isValidChannelType(item.channel) && !item.deactivated).map((item: any) => {
+                    options: res.items.filter((item) => item?.channel && isValidChannelType(item.channel) && !item.deactivated).map((item) => {
                         const {channel} = item;
                         return makeSelectedChannelOption(channel);
                     }),
