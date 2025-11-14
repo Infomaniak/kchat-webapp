@@ -1001,7 +1001,7 @@ function roles(state: RelationOneToOne<Channel, Set<string>> = {}, action: MMRed
     }
 }
 
-function pendingGuests(state: Record<Channel['id'], PendingGuests> = {}, action: GenericAction) {
+function pendingGuests(state: Record<Channel['id'], PendingGuests> = {}, action: AnyAction) {
     switch (action.type) {
     case ChannelTypes.RECEIVED_CHANNEL_PENDING_GUESTS: {
         const {channelId, pendingGuests} = action.data;

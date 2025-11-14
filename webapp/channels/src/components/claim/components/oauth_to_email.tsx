@@ -3,7 +3,7 @@
 
 import classNames from 'classnames';
 import React, {useRef, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {AuthChangeResponse} from '@mattermost/types/users';
 
@@ -27,6 +27,7 @@ type Props = {
 }
 
 const OAuthToEmail = (props: Props) => {
+    const intl = useIntl();
     const passwordInput = useRef<HTMLInputElement>(null);
     const passwordConfirmInput = useRef<HTMLInputElement>(null);
 
@@ -73,8 +74,8 @@ const OAuthToEmail = (props: Props) => {
     };
 
     const uiType = `${(props.currentType === Constants.SAML_SERVICE ? Constants.SAML_SERVICE.toUpperCase() : toTitleCase(props.currentType || ''))} SSO`;
-    const placeholderPasswordMessage = {id: t('claim.oauth_to_email.newPwd'), defaultMessage: 'New Password'};
-    const placeholderConfirmMessage = {id: t('claim.oauth_to_email.confirm'), defaultMessage: 'Confirm Password'};
+    const placeholderPasswordMessage = {id: 'claim.oauth_to_email.newPwd', defaultMessage: 'New Password'};
+    const placeholderConfirmMessage = {id: 'claim.oauth_to_email.confirm', defaultMessage: 'Confirm Password'};
 
     return (
         <>

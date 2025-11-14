@@ -12,6 +12,7 @@ import type {
     ChannelModerationPatch,
     ChannelsWithTotalCount,
     ChannelSearchOpts,
+    ChannelType,
     ServerChannel,
     ChannelStats,
     ChannelWithTeamData,
@@ -46,6 +47,8 @@ import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
 
 import {General, Preferences} from '../constants';
+
+type TranscriptData = any;
 
 export function selectChannel(channelId: string) {
     return {
