@@ -11,8 +11,8 @@ import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
 import useGetLimits from 'components/common/hooks/useGetLimits';
-import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import useGetUsage from 'components/common/hooks/useGetUsage';
+import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 
 import {DataSearchTypes} from 'utils/constants';
 import {asGBString} from 'utils/limits';
