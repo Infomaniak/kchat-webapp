@@ -3,6 +3,7 @@
 
 /* eslint-disable max-lines */
 
+import * as Sentry from '@sentry/react';
 import {getName} from 'country-list';
 import crypto from 'crypto';
 import cssVars from 'css-vars-ponyfill';

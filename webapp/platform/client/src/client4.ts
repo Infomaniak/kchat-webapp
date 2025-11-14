@@ -223,12 +223,6 @@ export default class Client4 {
         return this.url;
     }
 
-    getTranscript = (fileId: string) => {
-        return this.doFetch(
-            `${this.getFileRoute(fileId)}/transcript`,
-            {method: 'POST'},
-        );
-    };
     getAbsoluteUrl(baseUrl: string) {
         if (typeof baseUrl !== 'string' || !baseUrl.startsWith('/')) {
             return baseUrl;

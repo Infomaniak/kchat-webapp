@@ -514,6 +514,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             return null;
         }
 
+        const msg = '';
         return (
             <div
                 className='Menu'

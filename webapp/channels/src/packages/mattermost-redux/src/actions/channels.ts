@@ -12,6 +12,7 @@ import type {
     ChannelModerationPatch,
     ChannelsWithTotalCount,
     ChannelSearchOpts,
+    ChannelType,
     ServerChannel,
     ChannelStats,
     ChannelWithTeamData,
@@ -1100,11 +1101,6 @@ export function notifyChannelMember(channelId: string, userIds: string[], postId
         }
         return {data: member};
     };
-}
-
-export async function fetchTranscriptData(fileId: string): Promise<TranscriptData> {
-    const transcript = await Client4.getTranscript(fileId);
-    return transcript;
 }
 
 export function addChannelMember(channelId: string, userId: string, postRootId = ''): ActionFuncAsync<ChannelMembership> {
