@@ -245,19 +245,6 @@ export default class PostList extends React.PureComponent<Props, State> {
 
         this.newMessageLineIndex = getNewMessagesIndex(this.props.postListIds || []);
 
-        // Check if posts were added at the bottom (new messages)
-        // In the reversed list, index 0 is the newest post, so if it changed, new posts were added at bottom
-        const postCountChanged = presentPostsCount !== prevPostsCount;
-        const newestPostChanged = (this.props.postListIds || [])[0] !== (prevProps.postListIds || [])[0];
-        const postsAddedAtBottom = postCountChanged && newestPostChanged;
-
-        // When new posts arrive at the bottom, re-check if we're still at bottom
-        // This fixes a race condition where atBottom state might not be updated before new posts render
-        if (postsAddedAtBottom && this.postListRef.current.parentElement) {
-            const element = this.postListRef.current.parentElement;
-            this.checkBottom(element.scrollTop, element.scrollHeight, element.clientHeight);
-        }
-
         if (snapshot) {
             const postlistScrollHeight = this.postListRef.current.scrollHeight;
             const postsAddedAtTop = presentPostsCount !== prevPostsCount && (this.props.postListIds || [])[0] === (prevProps.postListIds || [])[0];
@@ -387,6 +374,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                     loadingNewerPosts={this.props.loadingNewerPosts}
                     loadingOlderPosts={this.props.loadingOlderPosts}
                     channelId={this.props.channelId}
+                    lastViewedAt={this.props.lastViewedAt}
                 />
             </div>
         );
