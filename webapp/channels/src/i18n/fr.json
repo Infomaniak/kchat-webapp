@@ -3328,7 +3328,7 @@
   "create_post.schedule_post.modal.header": "Planifier un message",
   "create_post.schedule_post.modal.remove_schedule": "Supprimer la planification",
   "create_post.shortcutsNotSupported": "Les raccourcis clavier ne sont pas pris en charge sur votre appareil.",
-  "create_post.write": "Écrire à {channelDisplayName}",
+  "create_post.write": "Écrire {channelType, select, O {dans} P {dans} D {à} G {à} other {à}} {channelDisplayName}",
   "create_team.createTeamRestricted.message": "Votre plan d'espace de travail a atteint la limite de création d'équipes. Créez un nombre illimité d'équipes avec un essai gratuit de 30 jours. Contactez votre administrateur système.",
   "create_team.createTeamRestricted.title": "Fonctionnalité professionnelle",
   "create_team.display_name.charLength": "Le nom doit être de {min} caractères ou plus, jusqu'à un maximum de {max}. Vous pourrez ajouter une description d'équipe plus longue par la suite.",
