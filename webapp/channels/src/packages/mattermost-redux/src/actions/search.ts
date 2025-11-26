@@ -118,8 +118,7 @@ export function searchPosts(teamId: string, terms: string, isOrSearch: boolean, 
 
 export function getMorePostsForSearch(teamId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
-        const searchKey = teamId || 'ALL_TEAMS';
-        const {params, isEnd} = getState().entities.search.current[searchKey];
+        const {params, isEnd} = getState().entities.search.current[teamId || 'ALL_TEAMS'];
         if (!isEnd) {
             const newParams = Object.assign({}, params);
             newParams.page += 1;
@@ -183,8 +182,7 @@ export function searchFilesWithParams(teamId: string, params: SearchParameter): 
 
 export function getMoreFilesForSearch(teamId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
-        const searchKey = teamId || 'ALL_TEAMS';
-        const {params, isFilesEnd} = getState().entities.search.current[searchKey];
+        const {params, isFilesEnd} = getState().entities.search.current[teamId || 'ALL_TEAMS'];
         if (!isFilesEnd) {
             const newParams = Object.assign({}, params);
             newParams.page += 1;
