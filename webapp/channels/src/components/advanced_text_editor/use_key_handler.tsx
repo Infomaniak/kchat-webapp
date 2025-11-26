@@ -420,9 +420,12 @@ const useKeyHandler = (
     }, [messageHistory]);
 
     // Update last channel switch at
+    // Only track channel switches when NOT in edit mode to avoid blocking rapid edits
     useEffect(() => {
-        lastChannelSwitchAt.current = Date.now();
-    }, [channelId]);
+        if (!isInEditMode) {
+            lastChannelSwitchAt.current = Date.now();
+        }
+    }, [channelId, isInEditMode]);
 
     return [handleKeyDown, postMsgKeyPress];
 };
