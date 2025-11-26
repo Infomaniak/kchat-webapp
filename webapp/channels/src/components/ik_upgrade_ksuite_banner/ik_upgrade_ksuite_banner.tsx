@@ -7,10 +7,15 @@ import {formatYMDDurationHuman} from 'mattermost-redux/utils/duration';
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import {useNextPlan} from 'components/common/hooks/useNextPlan';
 import './ik_upgrade_ksuite_banner.css';
+import {useIsCurrentUserSystemAdmin} from 'components/global_header/hooks';
 
 const OptionnalUpgradeBanner: FC = () => {
     const nextPlan = useNextPlan();
     const [limits] = useGetLimits();
+
+    const isAdmin = useIsCurrentUserSystemAdmin();
+    const role = isAdmin ? 'admin' : undefined;
+
     const intl = useIntl();
 
     const historyDurationLimit = sanitizeHistoryDuration(limits.messages?.history);
@@ -39,6 +44,7 @@ const OptionnalUpgradeBanner: FC = () => {
             offer={nextPlan}
             class='upgrade-banner'
             variant='chat::history'
+            role={role}
         >
             {historyDurationLimit && descriptionSlot}
         </wc-ksuite-pro-upgrade-banner>

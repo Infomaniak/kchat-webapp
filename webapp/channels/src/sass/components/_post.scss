@@ -761,10 +761,10 @@
                 width: 14px !important;
                 height: 14px !important;
 
-                .profile-icon {
+            .profile-icon {
                     // ik: hide profile icon
-                    display: none;
-                }
+                display: none;
+            }
 
                 cursor: auto;
                 pointer-events: none;
@@ -1642,19 +1642,12 @@
         }
 
         &--small-image {
-            position: absolute;
             top: -8px;
-            left: 24px;
-            width: 68px;
+            right:0;
         }
 
-        &--small-image-no-copy-button {
-            left: 32px;
-            width: 38px;
-        }
 
         &:hover button.size-aware-image__copy_link,
-        &:hover a.size-aware-image__download--kdrive,
         &:hover a.size-aware-image__download {
             color: rgba(var(--center-channel-color-rgb), 0.75);
         }
