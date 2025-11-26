@@ -30,7 +30,7 @@ export default function UserAccountProfileMenuItem(props: Props) {
 
     //IK: Redirect to manager profile
     function handleClick() {
-        window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
+        window.open(new URL('/v3/ng/profile/user/dashboard', IKConstants.MANAGER_URL).toString(), '_blank');
     }
 
     function handleTourClick() {
