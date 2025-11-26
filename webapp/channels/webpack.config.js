@@ -143,7 +143,7 @@ var config = {
                 ],
             },
             {
-                test: /\.(png|eot|tiff|svg|woff2|woff|ttf|gif|mp3|jpg|webp)$/,
+                test: /\.(png|eot|tiff|svg|woff2|woff|ttf|gif|mp3|jpg)$/,
                 type: 'asset/resource',
                 use: [
                     {
@@ -250,7 +250,7 @@ var config = {
                 {from: 'src/images/only_office_slide_logo.png', to: 'images'},
                 {from: 'src/images/only_office_word_logo.png', to: 'images'},
                 {from: 'src/images/bot_default_icon.png', to: 'images'},
-                {from: 'src/images/euria_logo.webp', to: 'images'},
+                {from: 'src/images/euria_logo.gif', to: 'images'},
                 {from: 'src/images/poll_bot_default_icon.png', to: 'images'},
                 {from: 'src/images/chat_gpt.png', to: 'images'},
                 {from: 'src/images/payment_processing.png', to: 'images'},
