@@ -98,7 +98,7 @@ export function searchPostsWithParams(teamId: string, params: SearchParameter): 
             {
                 type: SearchTypes.RECEIVED_SEARCH_TERM,
                 data: {
-                    teamId,
+                    teamId: teamId || 'ALL_TEAMS',
                     params,
                     isEnd: posts.order.length === 0,
                 },
@@ -118,7 +118,8 @@ export function searchPosts(teamId: string, terms: string, isOrSearch: boolean, 
 
 export function getMorePostsForSearch(teamId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
-        const {params, isEnd} = getState().entities.search.current[teamId || 'ALL_TEAMS'];
+        const searchKey = teamId || 'ALL_TEAMS';
+        const {params, isEnd} = getState().entities.search.current[searchKey];
         if (!isEnd) {
             const newParams = Object.assign({}, params);
             newParams.page += 1;
@@ -166,7 +167,7 @@ export function searchFilesWithParams(teamId: string, params: SearchParameter): 
             {
                 type: SearchTypes.RECEIVED_SEARCH_TERM,
                 data: {
-                    teamId,
+                    teamId: teamId || 'ALL_TEAMS',
                     params,
                     isFilesEnd: files.order.length === 0,
                 },
@@ -182,7 +183,8 @@ export function searchFilesWithParams(teamId: string, params: SearchParameter): 
 
 export function getMoreFilesForSearch(teamId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
-        const {params, isFilesEnd} = getState().entities.search.current[teamId || 'ALL_TEAMS'];
+        const searchKey = teamId || 'ALL_TEAMS';
+        const {params, isFilesEnd} = getState().entities.search.current[searchKey];
         if (!isFilesEnd) {
             const newParams = Object.assign({}, params);
             newParams.page += 1;
