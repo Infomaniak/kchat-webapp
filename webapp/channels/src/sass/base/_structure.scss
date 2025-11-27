@@ -260,7 +260,7 @@ body.app__body #root {
 
             .main-wrapper:has(.backstage-body) {
                 display: flex;
-                flex-direction: column; 
+                flex-direction: column;
             }
 
             #SidebarContainer.move--right {
@@ -347,4 +347,9 @@ body.app__body #root {
 
 img {
     max-width: 100%;
+}
+
+// Hide all children except triggers when web component is not defined
+wc-contact-sheet:not(:defined) > *:not([slot="trigger"]) {
+    display: none;
 }
