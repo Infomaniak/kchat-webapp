@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {CloseIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage, defineMessage, injectIntl} from 'react-intl';
 import type {IntlShape, MessageDescriptor} from 'react-intl';
 import {CSSTransition} from 'react-transition-group';
 
-import {CloseIcon} from '@mattermost/compass-icons/components';
 import type {SystemEmoji} from '@mattermost/types/emojis';
 
 import WithTooltip from 'components/with_tooltip';

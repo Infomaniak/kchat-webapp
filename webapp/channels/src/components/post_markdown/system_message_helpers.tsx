@@ -491,9 +491,9 @@ export function renderSystemMessage(post: Post, currentTeamName: string, channel
         ) {
             return (
                 <PostNotifyChannelMember
-                    username={post.props.username}
-                    channelName={post.props.channel_name}
-                    postLink={post.props.post_link}
+                    username={post.props.username as string}
+                    channelName={post.props.channel_name as string}
+                    postLink={post.props.post_link as string}
                 />
             );
         }
@@ -533,7 +533,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
     let endReminderTime;
 
     if (post.props.target_time) {
-        const targetTime = new Date(post.props.target_time);
+        const targetTime = new Date(post.props.target_time as number);
         const now = new Date();
         const diffInMs = targetTime.getTime() - now.getTime();
         const diffInDays = Math.round(Math.abs(diffInMs) / (1000 * 60 * 60 * 24));

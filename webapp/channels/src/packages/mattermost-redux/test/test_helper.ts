@@ -567,6 +567,7 @@ class TestHelper {
             post: {
                 channel_id: channelId,
                 user_id: userId,
+                props: {},
             },
             ...override,
         };
@@ -671,6 +672,7 @@ class TestHelper {
             has_syncables: false,
             member_count: 0,
             scheme_admin: false,
+            member_ids: [],
         };
     };
 

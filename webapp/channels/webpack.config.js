@@ -1,12 +1,12 @@
 /* eslint-disable no-console, no-process-env */
 const childProcess = require('child_process');
+const path = require('path');
 const url = require('url');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExternalTemplateRemotesPlugin = require('external-remotes-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const path = require('path');
 const webpack = require('webpack');
 const {ModuleFederationPlugin} = require('webpack').container;
 const LiveReloadPlugin = require('webpack-livereload-plugin');
@@ -143,7 +143,7 @@ var config = {
                 ],
             },
             {
-                test: /\.(png|eot|tiff|svg|woff2|woff|ttf|gif|mp3|jpg)$/,
+                test: /\.(png|eot|tiff|svg|woff2|woff|ttf|gif|mp3|jpg|webp)$/,
                 type: 'asset/resource',
                 use: [
                     {
@@ -250,8 +250,7 @@ var config = {
                 {from: 'src/images/only_office_slide_logo.png', to: 'images'},
                 {from: 'src/images/only_office_word_logo.png', to: 'images'},
                 {from: 'src/images/bot_default_icon.png', to: 'images'},
-                {from: 'src/images/euria_logo.gif', to: 'images'},
-                {from: 'src/images/euria_logo.png', to: 'images'},
+                {from: 'src/images/euria_logo.webp', to: 'images'},
                 {from: 'src/images/poll_bot_default_icon.png', to: 'images'},
                 {from: 'src/images/chat_gpt.png', to: 'images'},
                 {from: 'src/images/payment_processing.png', to: 'images'},

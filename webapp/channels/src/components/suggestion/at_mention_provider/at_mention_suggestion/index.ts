@@ -21,5 +21,5 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     };
 }
 
-export default connect(mapStateToProps)(AtMentionSuggestion);
+export default connect(mapStateToProps, null, null, {forwardRef: true})(AtMentionSuggestion);
 

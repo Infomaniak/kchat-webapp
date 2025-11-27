@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {DragVerticalIcon} from '@infomaniak/compass-icons/components';
 import type {SortDirection, Table} from '@tanstack/react-table';
 import {flexRender} from '@tanstack/react-table';
 import classNames from 'classnames';
@@ -11,8 +12,6 @@ import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {FormattedMessage, defineMessages, useIntl} from 'react-intl';
 import ReactSelect, {components} from 'react-select';
 import type {IndicatorsContainerProps, OnChangeValue} from 'react-select';
-
-import {DragVerticalIcon} from '@mattermost/compass-icons/components';
 
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 

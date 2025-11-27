@@ -45,33 +45,6 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
       />
       <span
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
-        style={
-          Object {
-            "right": "50px",
-          }
-        }
-      >
-        <WithTooltip
-          title="Save file to kDrive"
-        >
-          <a
-            className="style--none size-aware-image__download--kdrive"
-          >
-            <KDriveIcon
-              onClick={[Function]}
-              style={
-                Object {
-                  "height": "20px",
-                  "transform": "scale(1.5)",
-                  "width": "20px",
-                }
-              }
-            />
-          </a>
-        </WithTooltip>
-      </span>
-      <span
-        className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
       >
         <WithTooltip
           title={
@@ -91,6 +64,24 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
               size={20}
             />
           </button>
+        </WithTooltip>
+        <WithTooltip
+          title="Save file to kDrive"
+        >
+          <a
+            className="style--none size-aware-image__download--kdrive"
+          >
+            <KDriveIcon
+              onClick={[Function]}
+              style={
+                Object {
+                  "height": "20px",
+                  "transform": "scale(1.5)",
+                  "width": "20px",
+                }
+              }
+            />
+          </a>
         </WithTooltip>
         <WithTooltip
           title={
@@ -166,33 +157,6 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
       />
       <span
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
-        style={
-          Object {
-            "right": "50px",
-          }
-        }
-      >
-        <WithTooltip
-          title="Save file to kDrive"
-        >
-          <a
-            className="style--none size-aware-image__download--kdrive"
-          >
-            <KDriveIcon
-              onClick={[Function]}
-              style={
-                Object {
-                  "height": "20px",
-                  "transform": "scale(1.5)",
-                  "width": "20px",
-                }
-              }
-            />
-          </a>
-        </WithTooltip>
-      </span>
-      <span
-        className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
       >
         <WithTooltip
           title={
@@ -212,6 +176,24 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
               size={20}
             />
           </button>
+        </WithTooltip>
+        <WithTooltip
+          title="Save file to kDrive"
+        >
+          <a
+            className="style--none size-aware-image__download--kdrive"
+          >
+            <KDriveIcon
+              onClick={[Function]}
+              style={
+                Object {
+                  "height": "20px",
+                  "transform": "scale(1.5)",
+                  "width": "20px",
+                }
+              }
+            />
+          </a>
         </WithTooltip>
         <WithTooltip
           title={
@@ -300,33 +282,6 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
       />
       <span
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
-        style={
-          Object {
-            "right": "50px",
-          }
-        }
-      >
-        <WithTooltip
-          title="Save file to kDrive"
-        >
-          <a
-            className="style--none size-aware-image__download--kdrive"
-          >
-            <KDriveIcon
-              onClick={[Function]}
-              style={
-                Object {
-                  "height": "20px",
-                  "transform": "scale(1.5)",
-                  "width": "20px",
-                }
-              }
-            />
-          </a>
-        </WithTooltip>
-      </span>
-      <span
-        className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
       >
         <WithTooltip
           title={
@@ -346,6 +301,24 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
               size={20}
             />
           </button>
+        </WithTooltip>
+        <WithTooltip
+          title="Save file to kDrive"
+        >
+          <a
+            className="style--none size-aware-image__download--kdrive"
+          >
+            <KDriveIcon
+              onClick={[Function]}
+              style={
+                Object {
+                  "height": "20px",
+                  "transform": "scale(1.5)",
+                  "width": "20px",
+                }
+              }
+            />
+          </a>
         </WithTooltip>
         <WithTooltip
           title={

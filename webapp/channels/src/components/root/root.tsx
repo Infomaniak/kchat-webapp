@@ -496,12 +496,13 @@ export default class Root extends React.PureComponent<Props, State> {
         e.preventDefault();
         e.stopPropagation();
 
-        const {pathname, search} = new URL(target.href);
+        const {origin, pathname, search} = new URL(target.href);
 
         ksuiteBridge.sendMessage({
             type: OpenAppMessageKey,
             name: appName as AppName,
             path: pathname.concat(search),
+            origin,
         });
     };
 

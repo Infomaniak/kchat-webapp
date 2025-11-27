@@ -4,7 +4,7 @@
 import type {ChangeEvent, RefObject} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import type {ValueType} from 'react-select';
+import type {SingleValue} from 'react-select';
 import ReactSelect from 'react-select';
 import semver from 'semver';
 
@@ -68,7 +68,8 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         }
     };
 
-    handleOnSelectChange = (key, value): void => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    handleOnSelectChange = (key: any, value: any): void => {
         if (key && value) {
             this.props.setParentState(key, value);
         }
@@ -78,7 +79,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         this.props.setParentState('desktopThreads', value);
     };
 
-    setDesktopNotificationSound: ReactSelect['onChange'] = (selectedOption: ValueType<SelectedOption>): void => {
+    setDesktopNotificationSound: ReactSelect['onChange'] = (selectedOption: SingleValue<SelectedOption>): void => {
         if (selectedOption && 'value' in selectedOption) {
             this.props.setParentState('desktopNotificationSound', selectedOption.value);
             this.setState({selectedOption});
@@ -125,7 +126,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
                         key='desktopNotificationLevel'
                         options={options}
                         clearable={false}
-                        onChange={(e) => this.handleOnSelectChange('desktopActivity', e.value)}
+                        onChange={(e: SingleValue<{value: string | boolean; label: string}>) => this.handleOnSelectChange('desktopActivity', e?.value)}
                         value={options.filter((opt: { value: string | boolean }) => opt.value === this.props.activity)}
                         isSearchable={false}
                         menuPortalTarget={document.body}

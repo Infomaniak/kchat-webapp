@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {MarkAsUnreadIcon} from '@infomaniak/compass-icons/components';
 import React, {useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
-
-import {MarkAsUnreadIcon} from '@mattermost/compass-icons/components';
 
 import {openModal} from 'actions/views/modals';
 

@@ -28,6 +28,7 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             member_count: 3,
             scheme_admin: false,
             allow_reference: false,
+            member_ids: [],
         }];
         const allGroups = {
             123: groups[0],
@@ -152,6 +153,7 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             member_count: 3,
             scheme_admin: false,
             allow_reference: false,
+            member_ids: [],
         }];
         const allGroups = {
             123: groups[0],
@@ -277,6 +279,7 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             member_count: 3,
             scheme_admin: false,
             allow_reference: false,
+            member_ids: [],
         }];
         const allGroups = {
             123: groups[0],

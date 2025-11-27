@@ -1,10 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {defineMessage, defineMessages, useIntl} from 'react-intl';
-
-import {InformationOutlineIcon} from '@mattermost/compass-icons/components';
 
 import ExternalLink from 'components/external_link';
 import WithTooltip from 'components/with_tooltip';

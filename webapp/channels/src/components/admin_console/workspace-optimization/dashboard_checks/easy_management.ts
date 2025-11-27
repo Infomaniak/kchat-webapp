@@ -9,9 +9,8 @@ import {ldapTest} from 'actions/admin_actions';
 
 import {ConsolePages, DocLinks} from 'utils/constants';
 
-import {impactModifiers} from '../dashboard.data';
-import {ItemStatus} from '../dashboard.type';
-import type {ItemModel, Options} from '../dashboard.type';
+import {impactModifiers, ItemStatus} from '../dashboard.data';
+import type {ItemModel, Options} from '../dashboard.data';
 
 // import {Client4} from 'mattermost-redux/client';
 // import {AnalyticsRow} from '@mattermost/types/admin';

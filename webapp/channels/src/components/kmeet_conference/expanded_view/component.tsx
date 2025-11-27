@@ -43,7 +43,7 @@ interface Props {
 }
 
 interface State {
-    intervalID?: NodeJS.Timer;
+    intervalID?: ReturnType<typeof setInterval>;
     screenStream: MediaStream | null;
     showParticipantsList: boolean;
 }

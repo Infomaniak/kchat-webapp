@@ -27,7 +27,8 @@ export const useUserPropertyFields = () => {
     const [fieldCollection, readIO] = useThing<UserPropertyFields>(useMemo(() => ({
         get: async () => {
             const data = await Client4.getCustomProfileAttributeFields();
-            const sorted = data.sort((a, b) => (a.attrs?.sort_order ?? 0) - (b.attrs?.sort_order ?? 0));
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const sorted = data.sort((a: any, b: any) => (a.attrs?.sort_order ?? 0) - (b.attrs?.sort_order ?? 0));
             return collectionFromArray(sorted);
         },
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

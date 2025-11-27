@@ -56,9 +56,13 @@ describe('ChannelController', () => {
         mockState.entities.general.config.EnableUserStatuses = 'true';
         const store = mockStore(mockState);
 
+        const headerRef = React.createRef<HTMLDivElement>();
         renderWithContext(
             <Provider store={store}>
-                <ChannelController shouldRenderCenterChannel={true}/>
+                <ChannelController
+                    shouldRenderCenterChannel={true}
+                    headerRef={headerRef}
+                />
             </Provider>,
         );
 
@@ -73,9 +77,13 @@ describe('ChannelController', () => {
         const store = mockStore(mockState);
         mockState.entities.general.config.EnableUserStatuses = 'false';
 
+        const headerRef = React.createRef<HTMLDivElement>();
         renderWithContext(
             <Provider store={store}>
-                <ChannelController shouldRenderCenterChannel={true}/>
+                <ChannelController
+                    shouldRenderCenterChannel={true}
+                    headerRef={headerRef}
+                />
             </Provider>,
         );
 

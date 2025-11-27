@@ -13,7 +13,6 @@ import * as ChannelActions from 'mattermost-redux/actions/channels';
 import {fetchDeletedPostsIds, postDeleted} from 'mattermost-redux/actions/posts';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getChannelByName, getUnreadChannelIds, getChannel, getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
-import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentTeamUrl, getCurrentTeamId, getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
@@ -25,7 +24,7 @@ import {getHistory} from 'utils/browser_history';
 import {Constants, Preferences, NotificationLevels} from 'utils/constants';
 import {getDirectChannelName} from 'utils/utils';
 
-import type {ActionFuncAsync, ActionFunc, ActionResult} from 'types/store';
+import type {ActionFuncAsync, ActionResult} from 'types/store';
 
 export function openDirectChannelToUserId(userId: UserProfile['id']): ActionFuncAsync<Channel> {
     return async (dispatch, getState) => {
@@ -125,26 +124,6 @@ export function loadDeletedPosts(channelId: string, lastDisconnectAt: number): A
         }
 
         return {data: true};
-    };
-}
-
-export function searchMoreChannels(term: string, showArchivedChannels: boolean, hideJoinedChannels: boolean): ActionFunc<Channel[], ServerError> {
-    return async (dispatch, getState) => {
-        const state = getState();
-        const teamId = getCurrentTeamId(state);
-
-        if (!teamId) {
-            throw new Error('No team id');
-        }
-
-        const {data, error} = await dispatch(ChannelActions.searchChannels(teamId, term, showArchivedChannels));
-        if (data) {
-            const myMembers = getMyChannelMemberships(state);
-            const channels = hideJoinedChannels ? (data as Channel[]).filter((channel) => !myMembers[channel.id]) : data;
-            return {data: channels};
-        }
-
-        return {error};
     };
 }
 

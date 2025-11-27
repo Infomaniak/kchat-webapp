@@ -12,6 +12,7 @@ import type {
     ChannelModerationPatch,
     ChannelsWithTotalCount,
     ChannelSearchOpts,
+    ChannelType,
     ServerChannel,
     ChannelStats,
     ChannelWithTeamData,
@@ -428,8 +429,8 @@ export function getChannelTimezones(channelId: string): ActionFuncAsync<string[]
 
 export function fetchChannelsAndMembers(teamId: string): ActionFuncAsync<{channels: ServerChannel[]; channelMembers: ChannelMembership[]}> {
     return async (dispatch, getState) => {
-        let channels;
-        let channelMembers;
+        let channels: ServerChannel[] = [];
+        let channelMembers: ChannelMembership[] = [];
         try {
             [channels, channelMembers] = await Promise.all([
                 Client4.getMyChannels(teamId),
@@ -472,32 +473,33 @@ export function fetchAllMyChannelMembers(): ActionFuncAsync {
         const state = getState();
         const {currentUserId} = state.entities.users;
 
-        let channelsMembers: ChannelMembership[] = [];
-        let hasMoreMembers = true;
-        let page = 0;
+        let channelMembers: ChannelMembership[] = [];
         try {
-            while (hasMoreMembers) {
-                // Expected to disable since we don't have number of pages, so we can't use Promise.all
-                // eslint-disable-next-line no-await-in-loop
-                const data = await Client4.getAllChannelsMembers(currentUserId, page, 200);
-                channelsMembers = [...channelsMembers, ...data];
-                if (data.length < 200) {
-                    hasMoreMembers = false;
-                }
-                page++;
-            }
+            // The server exposes a streaming API if page is set to -1
+            // We don't need to paginate through the responses, and thefore pageSize doesn't matter
+            channelMembers = await Client4.getAllChannelsMembers(currentUserId, -1);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
             return {error};
         }
 
+        const roles = new Set<string>();
+        for (const member of channelMembers) {
+            for (const role of member.roles.split(' ')) {
+                roles.add(role);
+            }
+        }
+        if (roles.size > 0) {
+            dispatch(loadRolesIfNeeded(roles));
+        }
+
         dispatch({
             type: ChannelTypes.RECEIVED_MY_CHANNEL_MEMBERS,
-            data: channelsMembers,
+            data: channelMembers,
             currentUserId,
         });
-        return {data: channelsMembers};
+        return {data: channelMembers};
     };
 }
 
@@ -513,7 +515,7 @@ export function fetchAllMyTeamsChannels(): ActionFuncAsync {
         }
 
         dispatch({
-            type: ChannelTypes.RECEIVED_ALL_CHANNELS,
+            type: ChannelTypes.RECEIVED_CHANNELS,
             data: channels,
         });
         return {data: channels};
@@ -737,7 +739,10 @@ export function unarchiveChannel(channelId: string, openLimitModalIfNeeded: (err
             await Client4.unarchiveChannel(channelId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
-            dispatch(openLimitModalIfNeeded(error, getChannelSelector(getState(), channelId).type));
+            const channel = getChannelSelector(getState(), channelId);
+            if (channel) {
+                dispatch(openLimitModalIfNeeded(error, channel.type));
+            }
             dispatch(logError(error));
             return {error};
         }
@@ -1096,11 +1101,6 @@ export function notifyChannelMember(channelId: string, userIds: string[], postId
         }
         return {data: member};
     };
-}
-
-export async function fetchTranscriptData(fileId: string): Promise<TranscriptData> {
-    const transcript = await Client4.getTranscript(fileId);
-    return transcript;
 }
 
 export function addChannelMember(channelId: string, userId: string, postRootId = ''): ActionFuncAsync<ChannelMembership> {

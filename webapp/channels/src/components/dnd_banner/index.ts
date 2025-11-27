@@ -19,7 +19,7 @@ export type GuestBannerConnectorProps = {
 function makeMapStateToProps() {
     return function mapStateToProps(state: GlobalState, ownProps: GuestBannerConnectorProps) {
         const channel = getChannel(state, ownProps.channelId);
-        const user = channel.type === 'D' ? getUser(state, getUserIdFromChannelId(channel.name)) : null;
+        const user = channel?.type === 'D' ? getUser(state, getUserIdFromChannelId(channel.name)) : null;
         const status = user ? getUserStatusById(state, user.id) : null;
         const shouldDisplay = Boolean(status && status === 'dnd');
 

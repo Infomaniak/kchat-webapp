@@ -11,6 +11,8 @@ import {getCloudErrors} from 'mattermost-redux/selectors/entities/cloud';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 import {isModalOpen} from 'selectors/views/modals';
 
+import ExternalLimitReachedModal from 'components/limits/external_limit_reached_modal';
+
 import {ModalIdentifiers} from 'utils/constants';
 import {isLimitExceeded} from 'utils/limits';
 

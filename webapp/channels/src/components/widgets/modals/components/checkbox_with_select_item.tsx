@@ -70,7 +70,7 @@ export default function CheckboxWithSelectSettingItem({
                     isDisabled={isSelectDisabled}
                     isSearchable={false}
                     placeholder={selectPlaceholder}
-                    onChange={(value) => handleSelectChange(value)}
+                    onChange={(value: OnChangeValue<Option, boolean>) => handleSelectChange(value)}
                     value={selectFieldValue}
                     components={{IndicatorSeparator: NoIndicatorSeparatorComponent}}
                 />

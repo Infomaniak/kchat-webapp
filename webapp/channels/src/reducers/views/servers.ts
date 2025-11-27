@@ -2,9 +2,9 @@
 // See LICENSE.txt for license information.
 
 import {combineReducers} from 'redux';
+import type {AnyAction} from 'redux';
 
 import {TeamTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {Servers, ServerStatus, ServerDefaultBadgeValue} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
@@ -14,7 +14,7 @@ import WebClient from 'client/web_websocket_client';
 import type {Server} from 'types/store/servers';
 import type {ViewsState} from 'types/store/views';
 
-export const servers = (state: ViewsState['servers']['servers'] = {}, action: GenericAction) => {
+export const servers = (state: ViewsState['servers']['servers'] = {}, action: AnyAction) => {
     if (isDesktopApp()) {
         return state;
     }
