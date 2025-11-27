@@ -98,7 +98,7 @@ export function searchPostsWithParams(teamId: string, params: SearchParameter): 
             {
                 type: SearchTypes.RECEIVED_SEARCH_TERM,
                 data: {
-                    teamId,
+                    teamId: teamId || 'ALL_TEAMS',
                     params,
                     isEnd: posts.order.length === 0,
                 },
@@ -166,7 +166,7 @@ export function searchFilesWithParams(teamId: string, params: SearchParameter): 
             {
                 type: SearchTypes.RECEIVED_SEARCH_TERM,
                 data: {
-                    teamId,
+                    teamId: teamId || 'ALL_TEAMS',
                     params,
                     isFilesEnd: files.order.length === 0,
                 },
