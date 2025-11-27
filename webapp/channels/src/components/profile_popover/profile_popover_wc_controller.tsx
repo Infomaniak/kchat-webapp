@@ -238,14 +238,14 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                 {badges.map(mapCustomBadges)}
                 {(shouldDisplayMinimalPanel) && (
                     <div
-                    slot='custom-content'
-                >
-                    {formatMessage({
-                        id: 'user_profile.account.post_was_created',
-                        defaultMessage: 'This post was created by an integration from @{username}',
-                    },
-                    {
-                        username: displayedUsername,
+                        slot='custom-content'
+                    >
+                        {formatMessage({
+                            id: 'user_profile.account.post_was_created',
+                            defaultMessage: 'This post was created by an integration from @{username}',
+                        },
+                        {
+                            username: displayedUsername,
                         })}
                     </div>)}
             </wc-contact-sheet>
