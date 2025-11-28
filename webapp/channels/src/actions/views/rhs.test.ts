@@ -486,11 +486,15 @@ describe('rhs view actions', () => {
 
             const compareStore = mockStore(initialState);
 
-            compareStore.dispatch(performSearch('@mattermost ', '', true));
+            compareStore.dispatch(performSearch('@mattermost ', currentTeamId, true));
             compareStore.dispatch(batchActions([
                 {
                     type: ActionTypes.UPDATE_RHS_SEARCH_TERMS,
                     terms: '@mattermost ',
+                },
+                {
+                    type: ActionTypes.UPDATE_RHS_SEARCH_TEAM,
+                    teamId: currentTeamId,
                 },
                 {
                     type: ActionTypes.UPDATE_RHS_STATE,
@@ -763,11 +767,15 @@ describe('rhs view actions', () => {
             store.dispatch(openAtPrevious({isMentionSearch: true}));
             const compareStore = mockStore(initialState);
 
-            compareStore.dispatch(performSearch('@mattermost ', '', true));
+            compareStore.dispatch(performSearch('@mattermost ', currentTeamId, true));
             compareStore.dispatch(batchActions([
                 {
                     type: ActionTypes.UPDATE_RHS_SEARCH_TERMS,
                     terms: '@mattermost ',
+                },
+                {
+                    type: ActionTypes.UPDATE_RHS_SEARCH_TEAM,
+                    teamId: currentTeamId,
                 },
                 {
                     type: ActionTypes.UPDATE_RHS_STATE,
