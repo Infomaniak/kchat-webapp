@@ -69,8 +69,14 @@ export default class ErrorPage extends React.PureComponent<Props> {
 
     restoreAutologRight() {
         const base = env.MANAGER_ENDPOINT;
+
+        console.log('🚀 ~ ErrorPage ~ restoreAutologRight ~ base:', base);
         const path = '/v3/api/app/autologout';
+
+        console.log('🚀 ~ ErrorPage ~ restoreAutologRight ~ path:', path);
         const url = new URL(path, base);
+
+        console.log('🚀 ~ ErrorPage ~ restoreAutologRight ~ url:', url);
 
         fetch(url.toString()).then(() => {
             window.location.assign(window.location.origin);
