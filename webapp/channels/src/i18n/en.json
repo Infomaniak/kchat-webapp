@@ -3557,6 +3557,7 @@
   "emoji_skin.medium_skin_tone": "Medium skin tone",
   "error.autolog.blocked.message": "The user has not authorised the Infomaniak team to access his/her space.",
   "error.autolog.blocked.title": "Access forbidden",
+  "error.autolog.restore": "Restore my rights",
   "error.blocked.message": "The kSuite product has expired. Please renew it to continue communicating within your organization with kChat.",
   "error.channel_not_found.message": "The channel you're requesting is private or does not exist. Please contact an Administrator to be added to the channel.",
   "error.channel_not_found.message_guest": "Your guest account has no channels assigned. Please contact an administrator.",

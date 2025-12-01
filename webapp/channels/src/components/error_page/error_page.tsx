@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import crypto from 'crypto';
+import {env} from 'process';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
@@ -65,6 +66,16 @@ export default class ErrorPage extends React.PureComponent<Props> {
 
         return header;
     };
+
+    restoreAutologRight() {
+        const base = env.MANAGER_ENDPOINT;
+        const path = '/v3/api/app/autologout';
+        const url = new URL(path, base);
+
+        fetch(url).then(() => {
+            window.location.assign(window.location.origin);
+        });
+    }
 
     public render() {
         const {isGuest, isAdmin, ikGroupId, ikGroupName} = this.props;
@@ -285,6 +296,18 @@ export default class ErrorPage extends React.PureComponent<Props> {
                         id='error.generic.reload'
                         defaultMessage='Reload page'
 
+                    />
+                </a>
+            );
+
+            secondaryButton = (
+                <a
+                    className='btn-secondary'
+                    onClick={this.restoreAutologRight}
+                >
+                    <FormattedMessage
+                        id='error.autolog.restore'
+                        defaultMessage='Restore my rights'
                     />
                 </a>
             );
