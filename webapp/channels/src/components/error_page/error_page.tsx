@@ -72,7 +72,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
         const path = '/v3/api/app/autologout';
         const url = new URL(path, base);
 
-        fetch(url).then(() => {
+        fetch(url.toString()).then(() => {
             window.location.assign(window.location.origin);
         });
     }
