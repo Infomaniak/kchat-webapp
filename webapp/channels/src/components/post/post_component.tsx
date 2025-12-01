@@ -420,7 +420,7 @@ function PostComponent(props: Props) {
         }
     }, [handleCommentClick, handleJumpClick, props.currentTeam?.id, teamId]);
 
-    const postClass = classNames('post__body', {'post--edited': PostUtils.isEdited(post), 'search-item-snippet': isSearchResultItem});
+    const postClass = classNames('post__body', {'post--edited': PostUtils.isEdited(post), 'search-item-snippet': isSearchResultItem, 'post--failed': post.failed});
 
     let comment;
     if (props.isFirstReply && props.parentPost && props.parentPostUser && post.type !== Constants.PostTypes.EPHEMERAL) {

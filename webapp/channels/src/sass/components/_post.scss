@@ -560,6 +560,10 @@
         }
     }
 
+    &:has(.post--failed) {
+        background-color:rgba(var(--center-channel-color-rgb), 0.08) !important;
+    }
+
     .hide-element {
         display: none;
     }
@@ -761,10 +765,10 @@
                 width: 14px !important;
                 height: 14px !important;
 
-            .profile-icon {
+                .profile-icon {
                     // ik: hide profile icon
-                display: none;
-            }
+                    display: none;
+                }
 
                 cursor: auto;
                 pointer-events: none;
