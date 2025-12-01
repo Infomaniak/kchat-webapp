@@ -102,7 +102,17 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
 
     incomingWebhooks = (filter: string) => this.props.incomingHooks.
         sort(this.incomingWebhookCompare).
-        filter((incomingWebhook: IncomingWebhook) => matchesFilter(incomingWebhook, this.props.channels[incomingWebhook.channel_id], filter)).
+        filter((incomingWebhook: IncomingWebhook) => {
+            const creator = this.props.users[incomingWebhook.user_id];
+            const creatorUsername = creator?.username;
+
+            return matchesFilter(
+                incomingWebhook,
+                this.props.channels[incomingWebhook.channel_id],
+                filter,
+                creatorUsername,
+            );
+        }).
         map((incomingWebhook: IncomingWebhook) => {
             const canChange = this.props.canManageOthersWebhooks || this.props.user.id === incomingWebhook.user_id;
             const channel = this.props.channels[incomingWebhook.channel_id];

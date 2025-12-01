@@ -15,8 +15,12 @@ import {getSiteURL} from 'utils/url';
 
 import DeleteIntegrationLink from './delete_integration_link';
 
-export function matchesFilter(incomingWebhook: IncomingWebhook, channel: Channel, filter: string) {
+export function matchesFilter(incomingWebhook: IncomingWebhook, channel: Channel, filter: string, username?: string) {
     if (!filter) {
+        return true;
+    }
+
+    if (username && username.toLowerCase().indexOf(filter) !== -1) {
         return true;
     }
 
@@ -84,7 +88,7 @@ export default class InstalledIncomingWebhook extends React.PureComponent<Props>
         const channel = this.props.channel;
         const filter = this.props.filter ? this.props.filter.toLowerCase() : '';
 
-        if (!matchesFilter(incomingWebhook, channel, filter)) {
+        if (!matchesFilter(incomingWebhook, channel, filter, this.props.creator.username)) {
             return null;
         }
 

@@ -14,7 +14,7 @@ import CopyText from 'components/copy_text';
 
 import DeleteIntegrationLink from './delete_integration_link';
 
-export function matchesFilter(outgoingWebhook: OutgoingWebhook, channel: Channel, filter: string) {
+export function matchesFilter(outgoingWebhook: OutgoingWebhook, channel: Channel, filter: string, username?: string) {
     if (!filter) {
         return true;
     }
@@ -44,6 +44,10 @@ export function matchesFilter(outgoingWebhook: OutgoingWebhook, channel: Channel
         if (channel.name.toLowerCase().indexOf(filter) !== -1) {
             return true;
         }
+    }
+
+    if (username && username.toLowerCase().indexOf(filter) !== -1) {
+        return true;
     }
 
     return false;
