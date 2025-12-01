@@ -227,7 +227,6 @@ button {
         &:disabled:hover,
         &:disabled:active {
             background: rgba(var(--center-channel-color-rgb), 0.08);
-            color: rgba(var(--center-channel-color-rgb), 0.32) !important;
             opacity: 1;
         }
     }
