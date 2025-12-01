@@ -3,9 +3,10 @@
 
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
-import type {Dispatch} from 'redux';
+import type {Dispatch, AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 import type {MockStoreEnhanced} from 'redux-mock-store';
+import type {ThunkDispatch} from 'redux-thunk';
 
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
@@ -139,7 +140,7 @@ describe('rhs view actions', () => {
         },
     } as GlobalState;
 
-    let store: MockStoreEnhanced<GlobalState>;
+    let store: MockStoreEnhanced<GlobalState, ThunkDispatch<GlobalState, Record<string, never>, AnyAction>>;
 
     beforeEach(() => {
         store = mockStore(initialState);
