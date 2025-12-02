@@ -15,12 +15,16 @@ import {getSiteURL} from 'utils/url';
 
 import DeleteIntegrationLink from './delete_integration_link';
 
-export function matchesFilter(incomingWebhook: IncomingWebhook, channel: Channel, filter: string, username?: string) {
-    if (!filter) {
-        return true;
+// Ik change : also match the creator username
+export function matchCreator(creator: {username?: string}, filter: string): boolean {
+    if (!filter || !creator?.username) {
+        return false;
     }
+    return creator.username.toLowerCase().indexOf(filter) !== -1;
+}
 
-    if (username && username.toLowerCase().indexOf(filter) !== -1) {
+export function matchesFilter(incomingWebhook: IncomingWebhook, channel: Channel, filter: string) {
+    if (!filter) {
         return true;
     }
 
@@ -88,7 +92,7 @@ export default class InstalledIncomingWebhook extends React.PureComponent<Props>
         const channel = this.props.channel;
         const filter = this.props.filter ? this.props.filter.toLowerCase() : '';
 
-        if (!matchesFilter(incomingWebhook, channel, filter, this.props.creator.username)) {
+        if (!matchesFilter(incomingWebhook, channel, filter)) {
             return null;
         }
 

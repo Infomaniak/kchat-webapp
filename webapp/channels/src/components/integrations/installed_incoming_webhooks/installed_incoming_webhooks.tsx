@@ -15,7 +15,7 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 
 import BackstageList from 'components/backstage/components/backstage_list';
-import InstalledIncomingWebhook, {matchesFilter} from 'components/integrations/installed_incoming_webhook';
+import InstalledIncomingWebhook, {matchesFilter, matchCreator} from 'components/integrations/installed_incoming_webhook';
 
 import * as Utils from 'utils/utils';
 
@@ -104,14 +104,8 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
         sort(this.incomingWebhookCompare).
         filter((incomingWebhook: IncomingWebhook) => {
             const creator = this.props.users[incomingWebhook.user_id];
-            const creatorUsername = creator?.username;
-
-            return matchesFilter(
-                incomingWebhook,
-                this.props.channels[incomingWebhook.channel_id],
-                filter,
-                creatorUsername,
-            );
+            return matchCreator(creator, filter) || // Ik change : also match the creator username
+               matchesFilter(incomingWebhook, this.props.channels[incomingWebhook.channel_id], filter);
         }).
         map((incomingWebhook: IncomingWebhook) => {
             const canChange = this.props.canManageOthersWebhooks || this.props.user.id === incomingWebhook.user_id;

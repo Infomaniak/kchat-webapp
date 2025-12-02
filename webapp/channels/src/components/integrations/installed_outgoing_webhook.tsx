@@ -14,7 +14,15 @@ import CopyText from 'components/copy_text';
 
 import DeleteIntegrationLink from './delete_integration_link';
 
-export function matchesFilter(outgoingWebhook: OutgoingWebhook, channel: Channel, filter: string, username?: string) {
+// Ik change : also match the creator username
+export function matchCreator(creator: UserProfile | undefined, filter: string): boolean {
+    if (!filter || !creator?.username) {
+        return false;
+    }
+    return creator.username.toLowerCase().indexOf(filter) !== -1;
+}
+
+export function matchesFilter(outgoingWebhook: OutgoingWebhook, channel: Channel, filter: string) {
     if (!filter) {
         return true;
     }
@@ -44,10 +52,6 @@ export function matchesFilter(outgoingWebhook: OutgoingWebhook, channel: Channel
         if (channel.name.toLowerCase().indexOf(filter) !== -1) {
             return true;
         }
-    }
-
-    if (username && username.toLowerCase().indexOf(filter) !== -1) {
-        return true;
     }
 
     return false;
