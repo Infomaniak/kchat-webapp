@@ -12,6 +12,7 @@ import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetUsage from 'components/common/hooks/useGetUsage';
+import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 
 import {DataSearchTypes} from 'utils/constants';
 import {asGBString} from 'utils/limits';
@@ -49,6 +50,7 @@ function SearchLimitsBanner(props: Props) {
     const [cloudLimits] = useGetLimits();
     const isAdminUser = isAdmin(useSelector(getCurrentUser).roles);
     const isCloud = useSelector(isCurrentLicenseCloud);
+    const openPricingModal = useOpenPricingModal();
 
     if (!isCloud) {
         return null;
@@ -92,9 +94,7 @@ function SearchLimitsBanner(props: Props) {
             ctaAction,
             storage: asGBString(fileStorageLimit, formatNumber),
             a: (chunks: React.ReactNode | React.ReactNodeArray) => (
-                <StyledA
-                    // onClick={() => openPricingModal({trackingLocation: 'file_search_limits_banner'})}
-                >
+                <StyledA >
                     {chunks}
                 </StyledA>
             ),

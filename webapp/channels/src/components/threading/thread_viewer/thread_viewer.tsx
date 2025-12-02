@@ -13,9 +13,8 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import deferComponentRender from 'components/deferComponentRender';
 import FileUploadOverlay from 'components/file_upload_overlay';
+import {DropOverlayIdThreads} from 'components/file_upload_overlay/file_upload_overlay';
 import LoadingScreen from 'components/loading_screen';
-
-import WebSocketClient from 'client/web_websocket_client';
 
 import type {FakePost} from 'types/store/rhs';
 
@@ -31,7 +30,7 @@ export type Props = Attrs & {
     isCollapsedThreadsEnabled: boolean;
     appsEnabled: boolean;
     userThread?: UserThread | null;
-    channel: Channel | null;
+    channel?: Channel;
     selected?: Post | FakePost;
     currentUserId: string;
     currentTeamId: string;
@@ -52,7 +51,6 @@ export type Props = Attrs & {
     isThreadView: boolean;
     inputPlaceholder?: string;
     rootPostId: string;
-    fromSuppressed?: boolean;
     enableWebSocketEventScope: boolean;
 };
 
@@ -78,12 +76,6 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
 
         if (this.props.appsEnabled) {
             this.props.actions.fetchRHSAppsBindings(this.props.channel?.id || '', this.props.selected?.id || this.props.rootPostId);
-        }
-    }
-
-    public componentWillUnmount() {
-        if (this.props.enableWebSocketEventScope) {
-            WebSocketClient.updateActiveThread(this.props.isThreadView, '');
         }
     }
 
@@ -182,9 +174,6 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
             await this.fetchThread();
         }
 
-        if (this.props.channel && this.props.enableWebSocketEventScope) {
-            WebSocketClient.updateActiveThread(this.props.isThreadView, this.props.channel?.id);
-        }
         this.setState({isLoading: false});
     };
 
@@ -220,12 +209,15 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
                 <div className={classNames('ThreadViewer', this.props.className)}>
                     <div className='post-right-comments-container'>
                         <>
-                            <FileUploadOverlay overlayType='right'/>
+                            <FileUploadOverlay
+                                overlayType='right'
+                                id={DropOverlayIdThreads}
+                            />
                             {this.props.selected && (
                                 <DeferredThreadViewerVirt
                                     inputPlaceholder={this.props.inputPlaceholder}
                                     key={this.props.selected.id}
-                                    channel={this.props.channel}
+                                    channelId={this.props.channel.id}
                                     onCardClick={this.handleCardClick}
                                     postIds={this.props.postIds}
                                     selected={this.props.selected}
@@ -233,7 +225,6 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
                                     highlightedPostId={this.props.highlightedPostId}
                                     selectedPostFocusedAt={this.props.selectedPostFocusedAt}
                                     isThreadView={Boolean(this.props.isCollapsedThreadsEnabled && this.props.isThreadView)}
-                                    fromSuppressed={this.props.fromSuppressed}
                                 />
                             )}
                         </>

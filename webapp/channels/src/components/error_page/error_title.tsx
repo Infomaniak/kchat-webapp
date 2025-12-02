@@ -5,7 +5,6 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {ErrorPageTypes} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 type Props = {
     type?: string | null;
@@ -101,14 +100,12 @@ const ErrorTitle: React.FC<Props> = ({type, title, groupName}: Props) => {
                 />
             );
             break;
-        case ErrorPageTypes.BLOCKED:
+
+        case ErrorPageTypes.AUTOLOG_BLOCKED:
             errorTitle = (
                 <FormattedMessage
-                    id='error.blocked.title'
-                    defaultMessage='The kChat {groupName} is currently blocked'
-                    values={{
-                        groupName,
-                    }}
+                    id='error.autolog.blocked.title'
+                    defaultMessage='Access forbidden'
                 />
             );
             break;
@@ -132,7 +129,12 @@ const ErrorTitle: React.FC<Props> = ({type, title, groupName}: Props) => {
     } else if (title) {
         errorTitle = <>{title}</>;
     } else {
-        errorTitle = <>{Utils.localizeMessage('error.generic.title', 'Error')}</>;
+        errorTitle = (
+            <FormattedMessage
+                id='error.generic.title'
+                defaultMessage='Error'
+            />
+        );
     }
 
     return errorTitle;

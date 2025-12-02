@@ -3,6 +3,7 @@
 
 import {act} from '@testing-library/react';
 import React from 'react';
+import {createIntl} from 'react-intl';
 import {Provider} from 'react-redux';
 import {BrowserRouter as Router} from 'react-router-dom';
 
@@ -12,9 +13,12 @@ import {Permissions} from 'mattermost-redux/constants';
 
 import OAuthConnectionAudienceInput from 'components/integrations/outgoing_oauth_connections/oauth_connection_audience_input';
 
+import {TestHelper} from 'utils/test_helper';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
-import {TestHelper} from 'utils/test_helper';
+
+jest.unmock('react-intl');
 
 describe('components/integrations/outgoing_oauth_connections/OAuthConnectionAudienceInput', () => {
     const connection: OutgoingOAuthConnection = {
@@ -33,7 +37,7 @@ describe('components/integrations/outgoing_oauth_connections/OAuthConnectionAudi
     const baseProps: React.ComponentProps<typeof OAuthConnectionAudienceInput> = {
         value: '',
         onChange: jest.fn(),
-        placeholder: '',
+        placeholder: {id: 'test-placeholder', defaultMessage: ''},
     };
 
     const team = TestHelper.getTeamMock({name: 'test'});
@@ -74,6 +78,14 @@ describe('components/integrations/outgoing_oauth_connections/OAuthConnectionAudi
         };
     };
 
+    const intl = createIntl({
+        locale: 'en',
+        defaultLocale: 'en',
+        timeZone: 'Etc/UTC',
+        messages: {'test-placeholder': 'aaa'},
+        textComponent: 'span',
+    });
+
     test('should match snapshot with no existing connections', async () => {
         const props = {...baseProps};
         const state = stateFromOAuthConnections({});
@@ -85,6 +97,7 @@ describe('components/integrations/outgoing_oauth_connections/OAuthConnectionAudi
                         <OAuthConnectionAudienceInput {...props}/>
                     </Provider>
                 </Router>,
+                {intl},
             );
 
             expect(wrapper).toMatchSnapshot();
@@ -102,6 +115,7 @@ describe('components/integrations/outgoing_oauth_connections/OAuthConnectionAudi
                         <OAuthConnectionAudienceInput {...props}/>
                     </Provider>
                 </Router>,
+                {intl},
             );
 
             expect(wrapper).toMatchSnapshot();
@@ -119,6 +133,7 @@ describe('components/integrations/outgoing_oauth_connections/OAuthConnectionAudi
                         <OAuthConnectionAudienceInput {...props}/>
                     </Provider>
                 </Router>,
+                {intl},
             );
 
             expect(wrapper).toMatchSnapshot();
@@ -137,6 +152,7 @@ describe('components/integrations/outgoing_oauth_connections/OAuthConnectionAudi
                         <OAuthConnectionAudienceInput {...props}/>
                     </Provider>
                 </Router>,
+                {intl},
             );
             expect(wrapper).toMatchSnapshot();
         });
@@ -154,6 +170,7 @@ describe('components/integrations/outgoing_oauth_connections/OAuthConnectionAudi
                         <OAuthConnectionAudienceInput {...props}/>
                     </Provider>
                 </Router>,
+                {intl},
             );
             expect(wrapper).toMatchSnapshot();
         });

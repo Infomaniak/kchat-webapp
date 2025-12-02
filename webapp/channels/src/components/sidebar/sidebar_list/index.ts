@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import {moveCategory} from 'mattermost-redux/actions/channel_categories';
 import {getCurrentChannelId, getUnreadChannelIds} from 'mattermost-redux/selectors/entities/channels';
@@ -17,10 +17,8 @@ import {
     setDraggingState,
     stopDragging,
     clearChannelSelection,
-    multiSelectChannelAdd,
 } from 'actions/views/channel_sidebar';
 import {close, switchToLhsStaticPage} from 'actions/views/lhs';
-import {closeModal, openModal} from 'actions/views/modals';
 import {getCurrentStaticPageId, getVisibleStaticPages} from 'selectors/lhs';
 import {
     getDisplayedChannels,
@@ -28,8 +26,6 @@ import {
     getCategoriesForCurrentTeam,
     isUnreadFilterEnabled,
 } from 'selectors/views/channel_sidebar';
-
-import {markAllChannelsAsRead} from 'packages/mattermost-redux/src/actions/channels';
 
 import type {GlobalState} from 'types/store';
 
@@ -72,10 +68,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
             setDraggingState,
             stopDragging,
             clearChannelSelection,
-            multiSelectChannelAdd,
-            markAllChannelsAsRead,
-            openModal,
-            closeModal,
             switchToLhsStaticPage,
         }, dispatch),
     };

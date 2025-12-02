@@ -7,7 +7,7 @@ import type {Dispatch} from 'redux';
 
 import type {GlobalState} from '@mattermost/types/store';
 
-import {doPostActionWithCookie} from 'mattermost-redux/actions/posts';
+import {fetchMetadataIfPostIsPoll, doPostActionWithCookie} from 'mattermost-redux/actions/posts';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 
 import {openModal} from 'actions/views/modals';
@@ -23,7 +23,7 @@ function mapStateToProps(state: GlobalState) {
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
-            doPostActionWithCookie, openModal,
+            doPostActionWithCookie, openModal, fetchMetadataIfPostIsPoll,
         }, dispatch),
     };
 }

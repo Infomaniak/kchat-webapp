@@ -1,10 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useCallback} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch, useSelector} from 'react-redux';
-
 import {
     BellOutlineIcon,
     TrashCanOutlineIcon,
@@ -13,7 +9,12 @@ import {
     SortAlphabeticalAscendingIcon,
     ClockOutlineIcon,
     ChevronRightIcon,
-} from '@mattermost/compass-icons/components';
+    CheckIcon,
+} from '@infomaniak/compass-icons/components';
+import React, {memo, useCallback, useMemo} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
+
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import {CategorySorting} from '@mattermost/types/channel_categories';
 
@@ -43,16 +44,14 @@ type Props = {
     menuTriggerRef: React.RefObject<HTMLButtonElement>;
 };
 
-const getUnreadsIdsForCategory = makeGetUnreadIdsForCategory();
-
 const SidebarCategoryMenu = ({
     category,
     menuTriggerRef,
 }: Props) => {
     const dispatch = useDispatch();
     const showUnreadsCategory = useSelector(shouldShowUnreadsCategory);
+    const getUnreadsIdsForCategory = useMemo(makeGetUnreadIdsForCategory, [category]);
     const unreadsIds = useSelector((state: GlobalState) => getUnreadsIdsForCategory(state, category));
-
     const {formatMessage} = useIntl();
 
     let muteUnmuteCategoryMenuItem: JSX.Element | null = null;
@@ -197,6 +196,7 @@ const SidebarCategoryMenu = ({
                     />
                 )}
                 onClick={() => handleSortChannels(CategorySorting.Alphabetical)}
+                trailingElements={category.sorting === CategorySorting.Alphabetical ? <CheckIcon size={16}/> : null}
             />
             <Menu.Item
                 id={`sortByMostRecent-${category.id}`}
@@ -207,6 +207,7 @@ const SidebarCategoryMenu = ({
                     />
                 )}
                 onClick={() => handleSortChannels(CategorySorting.Recency)}
+                trailingElements={category.sorting === CategorySorting.Recency ? <CheckIcon size={16}/> : null}
             />
             <Menu.Item
                 id={`sortManual-${category.id}`}
@@ -217,6 +218,7 @@ const SidebarCategoryMenu = ({
                     />
                 )}
                 onClick={() => handleSortChannels(CategorySorting.Manual)}
+                trailingElements={category.sorting === CategorySorting.Manual ? <CheckIcon size={16}/> : null}
             />
         </Menu.SubMenu>
     );
@@ -237,6 +239,7 @@ const SidebarCategoryMenu = ({
     return (
         <SidebarCategoryGenericMenu
             id={category.id}
+            name={category.display_name}
             menuTriggerRef={menuTriggerRef}
         >
             {markAsReadMenuItem}

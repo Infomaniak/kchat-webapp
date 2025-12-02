@@ -5,6 +5,7 @@ import React, {createRef} from 'react';
 import type {RefObject} from 'react';
 import type {WrappedComponentProps} from 'react-intl';
 import {FormattedMessage, defineMessages, injectIntl} from 'react-intl';
+import type {SelectInstance, StylesConfig, CSSObjectWithLabel} from 'react-select';
 import ReactSelect from 'react-select';
 
 import type {AdminConfig} from '@mattermost/types/config';
@@ -44,7 +45,7 @@ type Props = {
         createJob: (job: JobTypeBase) => Promise<ActionResult>;
         getJobsByType: (job: JobType) => Promise<ActionResult>;
         deleteDataRetentionCustomPolicy: (id: string) => Promise<ActionResult>;
-        updateConfig: (config: AdminConfig) => Promise<ActionResult>;
+        patchConfig: (config: DeepPartial<AdminConfig>) => Promise<ActionResult>;
     };
 } & WrappedComponentProps;
 
@@ -81,7 +82,7 @@ export const searchableStrings = [
 ];
 
 class DataRetentionSettings extends React.PureComponent<Props, State> {
-    inputRef: RefObject<ReactSelect<OptionType>>;
+    inputRef: RefObject<SelectInstance<OptionType>>;
     constructor(props: Props) {
         super(props);
         this.inputRef = createRef();
@@ -437,7 +438,7 @@ class DataRetentionSettings extends React.PureComponent<Props, State> {
         const newConfig = JSON.parse(JSON.stringify(this.props.config));
         newConfig.DataRetentionSettings.DeletionJobStartTime = value;
 
-        await this.props.actions.updateConfig(newConfig);
+        await this.props.actions.patchConfig(newConfig);
         this.inputRef.current?.blur();
     };
 
@@ -616,20 +617,20 @@ class DataRetentionSettings extends React.PureComponent<Props, State> {
                                                         DropdownIndicator: () => null,
                                                         IndicatorSeparator: () => null,
                                                     }}
-                                                    onChange={(e) => {
+                                                    onChange={(e: unknown) => {
                                                         this.changeJobTimeConfig((e as OptionType).value);
                                                     }}
                                                     styles={{
-                                                        control: (base) => ({
+                                                        control: (base: CSSObjectWithLabel) => ({
                                                             ...base,
                                                             height: 32,
                                                             minHeight: 32,
                                                         }),
-                                                        menu: (base) => ({
+                                                        menu: (base: CSSObjectWithLabel) => ({
                                                             ...base,
                                                             width: 210,
                                                         }),
-                                                    }}
+                                                    } as StylesConfig<OptionType, false>}
                                                     onBlur={() => {
                                                         this.showEditJobTime(false);
                                                     }}

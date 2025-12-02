@@ -19,6 +19,8 @@ import {showMentions, showFlaggedPosts, showSettings, closeRightHandSide, closeM
 import {getRhsState} from 'selectors/rhs';
 
 import {RHSStates} from 'utils/constants';
+import {isStaff} from 'utils/team_utils';
+import {isInIframe} from 'utils/url-ksuite-redirect';
 
 import type {GlobalState} from 'types/store';
 
@@ -34,6 +36,7 @@ function mapStateToProps(state: GlobalState) {
     const enableIncomingWebhooks = config.EnableIncomingWebhooks === 'true';
     const enableOAuthServiceProvider = config.EnableOAuthServiceProvider === 'true';
     const enableOutgoingWebhooks = config.EnableOutgoingWebhooks === 'true';
+    const enableReportingTools = isStaff(currentTeam) && !isInIframe();
     const experimentalPrimaryTeam = config.ExperimentalPrimaryTeam;
     const helpLink = config.HelpLink;
     const reportAProblemLink = config.ReportAProblemLink;
@@ -47,7 +50,7 @@ function mapStateToProps(state: GlobalState) {
     const moreTeamsToJoin = joinableTeams && joinableTeams.length > 0;
     const rhsState = getRhsState(state);
 
-    const ikGroupId = state.entities.teams.teams[currentTeam.id].account_id;
+    const ikGroupId = currentTeam ? state.entities.teams.teams[currentTeam.id]?.account_id : undefined;
 
     return {
         appDownloadLink,
@@ -56,18 +59,19 @@ function mapStateToProps(state: GlobalState) {
         enableIncomingWebhooks,
         enableOAuthServiceProvider,
         enableOutgoingWebhooks,
+        enableReportingTools,
         canManageSystemBots,
         experimentalPrimaryTeam,
         helpLink,
         reportAProblemLink,
         pluginMenuItems: state.plugins.components.MainMenu,
         moreTeamsToJoin,
-        teamId: currentTeam.id,
-        teamName: currentTeam.name,
+        teamId: currentTeam?.id,
+        teamName: currentTeam?.name,
         currentUser,
         isMentionSearch: rhsState === RHSStates.MENTION,
         isRhsSettings: rhsState === RHSStates.SETTINGS,
-        teamIsGroupConstrained: Boolean(currentTeam.group_constrained),
+        teamIsGroupConstrained: Boolean(currentTeam?.group_constrained),
         isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
         guestAccessEnabled: config.EnableGuestAccounts === 'true',
         canInviteTeamMember,

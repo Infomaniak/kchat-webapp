@@ -9,7 +9,6 @@ import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentChannelId, getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-import type {ActionFunc, ActionFuncAsync, DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {
     callConferenceId,
@@ -22,6 +21,7 @@ import {
 } from 'selectors/calls';
 import {getCurrentLocale} from 'selectors/i18n';
 
+import {getHistory} from 'utils/browser_history';
 import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_utils';
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {stopRing} from 'utils/notification_sounds';
@@ -29,7 +29,7 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {imageURLForUser} from 'utils/utils';
 
-import type {GlobalState} from 'types/store';
+import type {ActionFunc, ActionFuncAsync, DispatchFunc, GetStateFunc, GlobalState} from 'types/store';
 
 import {openCallDialingModal} from './kmeet_calls';
 import {closeModal} from './views/modals';
@@ -104,6 +104,7 @@ export function joinCallInChannel(): ActionFuncAsync {
         setTimeout(() => {
             if (msg) {
                 const kmeetUrl = new URL(msg.url);
+                // eslint-disable-next-line no-console
                 console.log('[calls: joinCallInChannel]', msg.url);
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
@@ -163,6 +164,9 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             }
             const data = await Client4.startMeet(channelID, version);
             const channel = getChannel(state, channelID);
+            if (!channel) {
+                return;
+            }
 
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
@@ -197,10 +201,28 @@ export function startOrJoinCallInChannelV2(channelID: string) {
 
                 // keep ringing behaviour for DM and GM
                 dispatch(openCallDialingModal(channelID));
-                return;
             }
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('call could not be started', error);
+        }
+    };
+}
+
+// Initiate a call if the URL contains the query parameter `call`
+export function initiateCallIfParam(channelID: string) {
+    return async (dispatch: DispatchFunc) => {
+        const params = new URLSearchParams(window.location.search);
+        const hasCallParam = params.has('call');
+
+        if (hasCallParam) {
+            dispatch(startOrJoinCallInChannelV2(channelID));
+
+            params.delete('call');
+
+            // Keep existing params if there is
+            const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+            getHistory().replace(newUrl);
         }
     };
 }
@@ -268,6 +290,7 @@ export function receivedCall(call: Call, currentUserId: string) {
 
             dispatch(openCallDialingModal(call.channel_id));
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('[calls] receivedCall error:', error);
         }
     };
@@ -284,9 +307,9 @@ export function callNoLongerExist(endMsg: any) {
 }
 
 export function joinCall(conferenceId: string, meetingUrl: string) {
-    return async (dispatch: DispatchFunc) => {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         Client4.acceptIncomingMeetCall(conferenceId);
-        const channelID = getCurrentChannelId(state);
+        const channelID = getCurrentChannelId(getState());
 
         if (isDesktopApp()) {
             // si desktop app on rejoins bien sur la fenetre integrée.
@@ -304,6 +327,7 @@ export function hangUpCall() {
         const state = getState();
         const conferenceId = callConferenceId(state);
         await Client4.declineIncomingMeetCall(conferenceId);
+        // eslint-disable-next-line no-console
         console.log('[calls: hangUpCall]', conferenceId);
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         stopRing();

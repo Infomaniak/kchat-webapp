@@ -51,6 +51,15 @@ const baseProps = {
     isThreadView: false,
 };
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('components/post_view/post_list', () => {
     it('snapshot for loading when there are no posts', () => {
         const wrapper = shallow(

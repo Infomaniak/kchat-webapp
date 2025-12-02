@@ -6,9 +6,10 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {sendMembersInvites, sendGuestsInvites} from 'actions/invite_actions';
 
-import mockStore from 'tests/test_store';
 import {ConsolePages} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import mockStore from 'tests/test_store';
 
 jest.mock('actions/team_actions', () => ({
     addUsersToTeam: () => ({ // since we are using addUsersToTeamGracefully, this call will always succeed
@@ -37,11 +38,11 @@ jest.mock('mattermost-redux/actions/teams', () => ({
     getTeamMembersByIds: () => ({type: 'MOCK_RECEIVED_ME'}),
     sendEmailInvitesToTeamGracefully: (team: string, emails: string[]) => {
         if (team === 'incorrect-default-smtp') {
-            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'SMTP is not configured in System Console.', id: 'api.team.invite_members.unable_to_send_email_with_defaults.app_error'}}))});
+            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: '(From server) SMTP is not configured in System Console.', id: 'api.team.invite_members.unable_to_send_email_with_defaults.app_error'}}))});
         } else if (emails.length > 21) { // Poor attempt to mock rate limiting.
-            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'Invite emails rate limit exceeded.'}}))});
+            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: '(From server) Invite emails rate limit exceeded.'}}))});
         } else if (team === 'error') {
-            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'Unable to add the user to the team.'}}))});
+            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: '(From server) Unable to add the user to the team.'}}))});
         }
 
         // team === 'correct' i.e no error
@@ -50,11 +51,11 @@ jest.mock('mattermost-redux/actions/teams', () => ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sendEmailGuestInvitesToChannelsGracefully: (teamId: string, _channelIds: string[], emails: string[], _message: string) => {
         if (teamId === 'incorrect-default-smtp') {
-            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'SMTP is not configured in System Console.', id: 'api.team.invite_members.unable_to_send_email_with_defaults.app_error'}}))});
+            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: '(From server) SMTP is not configured in System Console.', id: 'api.team.invite_members.unable_to_send_email_with_defaults.app_error'}}))});
         } else if (emails.length > 21) { // Poor attempt to mock rate limiting.
-            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'Invite emails rate limit exceeded.'}}))});
+            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: '(From server) Invite emails rate limit exceeded.'}}))});
         } else if (teamId === 'error') {
-            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'Unable to add the guest to the channels.'}}))});
+            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: '(From server) Unable to add the guest to the channels.'}}))});
         }
 
         // teamId === 'correct' i.e no error
@@ -146,15 +147,24 @@ describe('actions/invite_actions', () => {
                     sent: [
                         {
                             email: 'email-one@email-one.com',
-                            reason: 'An invitation email has been sent.',
+                            reason: {
+                                id: 'invite.members.invite-sent',
+                                defaultMessage: 'An invitation email has been sent.',
+                            },
                         },
                         {
                             email: 'email-two@email-two.com',
-                            reason: 'An invitation email has been sent.',
+                            reason: {
+                                id: 'invite.members.invite-sent',
+                                defaultMessage: 'An invitation email has been sent.',
+                            },
                         },
                         {
                             email: 'email-three@email-three.com',
-                            reason: 'An invitation email has been sent.',
+                            reason: {
+                                id: 'invite.members.invite-sent',
+                                defaultMessage: 'An invitation email has been sent.',
+                            },
                         },
                     ],
                 },
@@ -170,15 +180,15 @@ describe('actions/invite_actions', () => {
                     notSent: [
                         {
                             email: 'email-one@email-one.com',
-                            reason: 'Unable to add the user to the team.',
+                            reason: '(From server) Unable to add the user to the team.',
                         },
                         {
                             email: 'email-two@email-two.com',
-                            reason: 'Unable to add the user to the team.',
+                            reason: '(From server) Unable to add the user to the team.',
                         },
                         {
                             email: 'email-three@email-three.com',
-                            reason: 'Unable to add the user to the team.',
+                            reason: '(From server) Unable to add the user to the team.',
                         },
                     ],
                 },
@@ -197,7 +207,10 @@ describe('actions/invite_actions', () => {
                 data: {
                     sent: [
                         {
-                            reason: 'This member has been added to the team.',
+                            reason: {
+                                id: 'invite.members.added-to-team',
+                                defaultMessage: 'This member has been added to the team.',
+                            },
                             user: {
                                 id: 'other-user',
                                 roles: 'system_user',
@@ -206,21 +219,30 @@ describe('actions/invite_actions', () => {
                     ],
                     notSent: [
                         {
-                            reason: 'This person is already a team member.',
+                            reason: {
+                                id: 'invite.members.already-member',
+                                defaultMessage: 'This person is already a team member.',
+                            },
                             user: {
                                 id: 'user1',
                                 roles: 'system_user',
                             },
                         },
                         {
-                            reason: 'Contact your admin to make this guest a full member.',
+                            reason: {
+                                id: 'invite.members.user-is-guest',
+                                defaultMessage: 'Contact your admin to make this guest a full member.',
+                            },
                             user: {
                                 id: 'guest1',
                                 roles: 'system_guest',
                             },
                         },
                         {
-                            reason: 'Contact your admin to make this guest a full member.',
+                            reason: {
+                                id: 'invite.members.user-is-guest',
+                                defaultMessage: 'Contact your admin to make this guest a full member.',
+                            },
                             user: {
                                 id: 'other-guest',
                                 roles: 'system_guest',
@@ -241,24 +263,44 @@ describe('actions/invite_actions', () => {
             const response = await store.dispatch(sendMembersInvites('error', users, []));
             expect(response).toEqual({
                 data: {
-                    sent: [{user: {id: 'other-user', roles: 'system_user'}, reason: 'This member has been added to the team.'}],
+                    sent: [
+                        {
+                            reason: {
+                                id: 'invite.members.added-to-team',
+                                defaultMessage: 'This member has been added to the team.',
+                            },
+                            user: {
+                                id: 'other-user',
+                                roles: 'system_user',
+                            },
+                        },
+                    ],
                     notSent: [
                         {
-                            reason: 'This person is already a team member.',
+                            reason: {
+                                id: 'invite.members.already-member',
+                                defaultMessage: 'This person is already a team member.',
+                            },
                             user: {
                                 id: 'user1',
                                 roles: 'system_user',
                             },
                         },
                         {
-                            reason: 'Contact your admin to make this guest a full member.',
+                            reason: {
+                                id: 'invite.members.user-is-guest',
+                                defaultMessage: 'Contact your admin to make this guest a full member.',
+                            },
                             user: {
                                 id: 'guest1',
                                 roles: 'system_guest',
                             },
                         },
                         {
-                            reason: 'Contact your admin to make this guest a full member.',
+                            reason: {
+                                id: 'invite.members.user-is-guest',
+                                defaultMessage: 'Contact your admin to make this guest a full member.',
+                            },
                             user: {
                                 id: 'other-guest',
                                 roles: 'system_guest',
@@ -276,7 +318,7 @@ describe('actions/invite_actions', () => {
                 emails.push('email-' + i + '@example.com');
                 expectedNotSent.push({
                     email: 'email-' + i + '@example.com',
-                    reason: 'Invite emails rate limit exceeded.',
+                    reason: '(From server) Invite emails rate limit exceeded.',
                 });
             }
             const response = await store.dispatch(sendMembersInvites('correct', [], emails));
@@ -298,7 +340,7 @@ describe('actions/invite_actions', () => {
                             email: 'email-one@email-one.com',
                             reason: {
                                 id: 'admin.environment.smtp.smtpFailure',
-                                message: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
+                                defaultMessage: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
                             },
                             path: ConsolePages.SMTP,
                         }],
@@ -329,15 +371,24 @@ describe('actions/invite_actions', () => {
                     sent: [
                         {
                             email: 'email-one@email-one.com',
-                            reason: 'An invitation email has been sent.',
+                            reason: {
+                                id: 'invite.guests.added-to-channel',
+                                defaultMessage: 'An invitation email has been sent.',
+                            },
                         },
                         {
                             email: 'email-two@email-two.com',
-                            reason: 'An invitation email has been sent.',
+                            reason: {
+                                id: 'invite.guests.added-to-channel',
+                                defaultMessage: 'An invitation email has been sent.',
+                            },
                         },
                         {
                             email: 'email-three@email-three.com',
-                            reason: 'An invitation email has been sent.',
+                            reason: {
+                                id: 'invite.guests.added-to-channel',
+                                defaultMessage: 'An invitation email has been sent.',
+                            },
                         },
                     ],
                 },
@@ -354,15 +405,15 @@ describe('actions/invite_actions', () => {
                     notSent: [
                         {
                             email: 'email-one@email-one.com',
-                            reason: 'Unable to add the guest to the channels.',
+                            reason: '(From server) Unable to add the guest to the channels.',
                         },
                         {
                             email: 'email-two@email-two.com',
-                            reason: 'Unable to add the guest to the channels.',
+                            reason: '(From server) Unable to add the guest to the channels.',
                         },
                         {
                             email: 'email-three@email-three.com',
-                            reason: 'Unable to add the guest to the channels.',
+                            reason: '(From server) Unable to add the guest to the channels.',
                         },
                     ],
                 },
@@ -384,7 +435,7 @@ describe('actions/invite_actions', () => {
                         {
                             reason: {
                                 id: 'invite.guests.new-member',
-                                message: 'This guest has been added to the team and {count, plural, one {channel} other {channels}}.',
+                                defaultMessage: 'This guest has been added to the team and {count, plural, one {channel} other {channels}}.',
                                 values: {count: channels.length},
                             },
                             user: {
@@ -395,7 +446,7 @@ describe('actions/invite_actions', () => {
                         {
                             reason: {
                                 id: 'invite.guests.new-member',
-                                message: 'This guest has been added to the team and {count, plural, one {channel} other {channels}}.',
+                                defaultMessage: 'This guest has been added to the team and {count, plural, one {channel} other {channels}}.',
                                 values: {count: channels.length},
                             },
                             user: {
@@ -406,14 +457,20 @@ describe('actions/invite_actions', () => {
                     ],
                     notSent: [
                         {
-                            reason: 'This person is already a member.',
+                            reason: {
+                                id: 'invite.members.user-is-not-guest',
+                                defaultMessage: 'This person is already a member of the workspace. Invite them as a member instead of a guest.',
+                            },
                             user: {
                                 id: 'user1',
                                 roles: 'system_user',
                             },
                         },
                         {
-                            reason: 'This person is already a member.',
+                            reason: {
+                                id: 'invite.members.user-is-not-guest',
+                                defaultMessage: 'This person is already a member of the workspace. Invite them as a member instead of a guest.',
+                            },
                             user: {
                                 id: 'other-user',
                                 roles: 'system_user',
@@ -435,14 +492,20 @@ describe('actions/invite_actions', () => {
                     sent: [],
                     notSent: [
                         {
-                            reason: 'This person is already a member of all the channels.',
+                            reason: {
+                                id: 'invite.guests.already-all-channels-member',
+                                defaultMessage: 'This person is already a member of all the channels.',
+                            },
                             user: {
                                 id: 'guest2',
                                 roles: 'system_guest',
                             },
                         },
                         {
-                            reason: 'This person is already a member of some of the channels.',
+                            reason: {
+                                id: 'invite.guests.already-some-channels-member',
+                                defaultMessage: 'This person is already a member of some of the channels.',
+                            },
                             user: {
                                 id: 'guest3',
                                 roles: 'system_guest',
@@ -472,7 +535,7 @@ describe('actions/invite_actions', () => {
                             },
                             reason: {
                                 id: 'invite.guests.new-member',
-                                message: 'This guest has been added to the team and {count, plural, one {channel} other {channels}}.',
+                                defaultMessage: 'This guest has been added to the team and {count, plural, one {channel} other {channels}}.',
                                 values: {
                                     count: 1,
                                 },
@@ -485,7 +548,7 @@ describe('actions/invite_actions', () => {
                             },
                             reason: {
                                 id: 'invite.guests.new-member',
-                                message: 'This guest has been added to the team and {count, plural, one {channel} other {channels}}.',
+                                defaultMessage: 'This guest has been added to the team and {count, plural, one {channel} other {channels}}.',
                                 values: {
                                     count: 1,
                                 },
@@ -494,14 +557,20 @@ describe('actions/invite_actions', () => {
                     ],
                     notSent: [
                         {
-                            reason: 'This person is already a member.',
+                            reason: {
+                                id: 'invite.members.user-is-not-guest',
+                                defaultMessage: 'This person is already a member of the workspace. Invite them as a member instead of a guest.',
+                            },
                             user: {
                                 id: 'user1',
                                 roles: 'system_user',
                             },
                         },
                         {
-                            reason: 'This person is already a member.',
+                            reason: {
+                                id: 'invite.members.user-is-not-guest',
+                                defaultMessage: 'This person is already a member of the workspace. Invite them as a member instead of a guest.',
+                            },
                             user: {
                                 id: 'other-user',
                                 roles: 'system_user',
@@ -525,28 +594,40 @@ describe('actions/invite_actions', () => {
                     sent: [],
                     notSent: [
                         {
-                            reason: 'This person is already a member.',
+                            reason: {
+                                id: 'invite.members.user-is-not-guest',
+                                defaultMessage: 'This person is already a member of the workspace. Invite them as a member instead of a guest.',
+                            },
                             user: {
                                 id: 'user1',
                                 roles: 'system_user',
                             },
                         },
                         {
-                            reason: 'Unable to add the guest to the channels.',
+                            reason: {
+                                id: 'invite.guests.unable-to-add-the-user-to-the-channels',
+                                defaultMessage: 'Unable to add the guest to the channels.',
+                            },
                             user: {
                                 id: 'guest1',
                                 roles: 'system_guest',
                             },
                         },
                         {
-                            reason: 'This person is already a member.',
+                            reason: {
+                                id: 'invite.members.user-is-not-guest',
+                                defaultMessage: 'This person is already a member of the workspace. Invite them as a member instead of a guest.',
+                            },
                             user: {
                                 id: 'other-user',
                                 roles: 'system_user',
                             },
                         },
                         {
-                            reason: 'Unable to add the guest to the channels.',
+                            reason: {
+                                id: 'invite.guests.unable-to-add-the-user-to-the-channels',
+                                defaultMessage: 'Unable to add the guest to the channels.',
+                            },
                             user: {
                                 id: 'other-guest',
                                 roles: 'system_guest',
@@ -564,7 +645,7 @@ describe('actions/invite_actions', () => {
                 emails.push('email-' + i + '@example.com');
                 expectedNotSent.push({
                     email: 'email-' + i + '@example.com',
-                    reason: 'Invite emails rate limit exceeded.',
+                    reason: '(From server) Invite emails rate limit exceeded.',
                 });
             }
 
@@ -587,7 +668,7 @@ describe('actions/invite_actions', () => {
                             email: 'email-one@email-one.com',
                             reason: {
                                 id: 'admin.environment.smtp.smtpFailure',
-                                message: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
+                                defaultMessage: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
                             },
                             path: ConsolePages.SMTP,
                         }],

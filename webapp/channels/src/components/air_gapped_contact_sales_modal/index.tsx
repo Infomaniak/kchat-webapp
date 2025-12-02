@@ -11,8 +11,9 @@ import {closeModal} from 'actions/views/modals';
 
 import ExternalLink from 'components/external_link';
 
-import accessProblemImage from 'images/air_gapped_contact_us_image.png';
 import {ModalIdentifiers} from 'utils/constants';
+
+import accessProblemImage from 'images/air_gapped_contact_us_image.png';
 
 import './style.scss';
 

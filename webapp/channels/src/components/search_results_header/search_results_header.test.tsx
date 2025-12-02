@@ -3,8 +3,9 @@
 
 import React from 'react';
 
-import {renderWithContext, screen} from 'tests/react_testing_utils';
 import {RHSStates} from 'utils/constants';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import type {RhsState} from 'types/store/rhs';
 

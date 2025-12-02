@@ -36,7 +36,7 @@ const EmailToOAuth = (props: Props) => {
 
         const password = passwordInput.current?.value;
         if (!password) {
-            setServerError(localizeMessage('claim.email_to_oauth.pwdError', 'Please enter your password.'));
+            setServerError(localizeMessage({id: 'claim.email_to_oauth.pwdError', defaultMessage: 'Please enter your password.'}));
             return;
         }
 

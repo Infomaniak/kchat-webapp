@@ -5,13 +5,14 @@ import React from 'react';
 
 import type {Channel, ChannelStats} from '@mattermost/types/channels';
 
+import Constants from 'utils/constants';
+
 import {
     act,
     fireEvent,
     renderWithContext,
     screen,
 } from 'tests/react_testing_utils';
-import Constants from 'utils/constants';
 
 import Menu from './menu';
 
@@ -20,6 +21,7 @@ describe('channel_info_rhs/menu', () => {
         channel: {type: Constants.OPEN_CHANNEL} as Channel,
         channelStats: {files_count: 3, pinnedpost_count: 12, member_count: 32} as ChannelStats,
         isArchived: false,
+        isPreview: false,
         actions: {
             openNotificationSettings: jest.fn(),
             showChannelFiles: jest.fn(),

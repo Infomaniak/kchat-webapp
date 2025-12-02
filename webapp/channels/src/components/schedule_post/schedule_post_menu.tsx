@@ -12,19 +12,20 @@ import type {GlobalState} from '@mattermost/types/store';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 
 import {MenuItem} from 'components/menu/menu_item';
-import {MuiMenuStyled} from 'components/menu/menu_styled';
 
 import {A11yClassNames, Preferences} from 'utils/constants';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import './schedule_post_menu.scss';
 
+const MuiMenuStyled = () => null;
+
 type Props = {
     open: boolean;
     timezone?: string;
     getAnchorEl: () => HTMLDivElement | null;
     onClose: () => void;
-    handleSchedulePostMenu: (optionName: SchedulePostMenuOption['name']) => void;
+    handleSchedulePostMenu: (e: React.KeyboardEvent<HTMLLIElement>, optionName: SchedulePostMenuOption['name']) => void;
     handleKeyDown: (e: React.KeyboardEvent) => void;
 };
 
@@ -105,7 +106,7 @@ const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleScheduleP
         <MenuItem
             key={'schedule-post-menu-' + option.name}
             labels={getMenuItemLabel(option)}
-            onClick={() => handleSchedulePostMenu(option.name)}
+            onClick={(e) => handleSchedulePostMenu(e, option.name)}
             tabIndex={0}
         />
     ));

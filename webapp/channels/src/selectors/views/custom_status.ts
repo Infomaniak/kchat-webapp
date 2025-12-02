@@ -26,11 +26,16 @@ export function makeGetCustomStatus(): (state: GlobalState, userID?: string) => 
         (state: GlobalState, userID?: string) => (userID ? getUser(state, userID) : getCurrentUser(state)),
         (user) => {
             const userProps = user?.props || {};
+            let customStatus;
             if (userProps.customStatus) {
-                return typeof userProps.customStatus === 'string' ? JSON.parse(userProps.customStatus) : userProps.customStatus;
+                try {
+                    // Infomaniak edit, handles both string and objects
+                    customStatus = typeof userProps.customStatus === 'string' ? JSON.parse(userProps.customStatus) : userProps.customStatus;
+                } catch (error) {
+                    // do nothing if invalid, return undefined custom status.
+                }
             }
-
-            return undefined;
+            return customStatus;
         },
     );
 }

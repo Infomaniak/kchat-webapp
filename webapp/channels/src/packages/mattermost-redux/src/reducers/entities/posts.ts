@@ -4,6 +4,7 @@
 import type {AnyAction} from 'redux';
 
 import type {TopThread} from '@mattermost/types/insights';
+import type {MessageAttachment} from '@mattermost/types/message_attachments';
 import type {
     OpenGraphMetadata,
     Post,
@@ -20,9 +21,9 @@ import type {
     RelationOneToMany,
 } from '@mattermost/types/utilities';
 
+import type {MMReduxAction} from 'mattermost-redux/action_types';
 import {ChannelTypes, GeneralTypes, PostTypes, UserTypes, ThreadTypes, InsightTypes, CloudTypes} from 'mattermost-redux/action_types';
 import {Posts} from 'mattermost-redux/constants';
-import {PostTypes as PostConstant} from 'mattermost-redux/constants/posts';
 import {comparePosts, isPermalink, shouldUpdatePost} from 'mattermost-redux/utils/post_utils';
 
 export function removeUnneededMetadata(post: Post) {
@@ -98,7 +99,7 @@ export function removeUnneededMetadata(post: Post) {
     };
 }
 
-export function nextPostsReplies(state: {[x in Post['id']]: number} = {}, action: AnyAction) {
+export function nextPostsReplies(state: {[x in Post['id']]: number} = {}, action: MMReduxAction) {
     switch (action.type) {
     case PostTypes.RECEIVED_POST:
     case PostTypes.RECEIVED_NEW_POST: {
@@ -157,7 +158,7 @@ export function nextPostsReplies(state: {[x in Post['id']]: number} = {}, action
     }
 }
 
-export function handlePosts(state: IDMappedObjects<Post> = {}, action: AnyAction) {
+export function handlePosts(state: IDMappedObjects<Post> = {}, action: MMReduxAction) {
     switch (action.type) {
     case PostTypes.RECEIVED_POST:
     case PostTypes.RECEIVED_NEW_POST: {
@@ -193,6 +194,7 @@ export function handlePosts(state: IDMappedObjects<Post> = {}, action: AnyAction
             [post.id]: {
                 ...state[post.id],
                 state: Posts.POST_DELETED,
+                message: '',
                 file_ids: [],
                 has_reactions: false,
             },
@@ -242,6 +244,59 @@ export function handlePosts(state: IDMappedObjects<Post> = {}, action: AnyAction
                 ...state[postId],
                 is_pinned: isPinned,
                 last_update_at: updateAt,
+            },
+        };
+    }
+
+    case PostTypes.IK_RECEIVED_POLL_METADATA: {
+        const {postId, metadata} = action.data;
+        if (!postId || !metadata || !state[postId]) {
+            return state;
+        }
+
+        let attachments: MessageAttachment[] = state[postId].props.attachments;
+        if (attachments.length === 0) {
+            return state;
+        }
+
+        // Find the correct attachment by poll_id. Although the poll typically has only one attachment,
+        // this code ensures that the correct one is identified even if multiple attachments exist (technically possible).
+        const correspondingAttachmentIndex = attachments.findIndex((att) =>
+            att?.actions?.[0]?.integration?.context?.['poll-id'] === metadata.poll_id,
+        );
+
+        if (correspondingAttachmentIndex === -1) {
+            return state;
+        }
+
+        const correspondingAttachment = attachments[correspondingAttachmentIndex];
+
+        // Function to detect if an action has been voted on.
+        // It checks if the action name is included in the voted answers.
+        // If `setting_progress` is true, it removes the trailing text (votes count) which is embedded in the action name.
+        const detectVote = (actionName?: string) => metadata.voted_answers?.includes(
+            metadata.setting_progress ? actionName?.replace(/\s\(\d+\)/g, '') : actionName);
+
+        // This adds an `isVoted` property to each action, indicating whether it has been voted on.
+        const actionsWithVotes = correspondingAttachment.actions?.map((action) => ({
+            ...action,
+            isVoted: detectVote(action.name),
+        }));
+
+        attachments = [
+            ...attachments.slice(0, correspondingAttachmentIndex),
+            {...correspondingAttachment, actions: actionsWithVotes},
+            ...attachments.slice(correspondingAttachmentIndex + 1),
+        ];
+
+        return {
+            ...state,
+            [postId]: {
+                ...state[postId],
+                props: {
+                    ...state[postId].props,
+                    attachments,
+                },
             },
         };
     }
@@ -381,7 +436,7 @@ function handlePostReceived(nextState: any, post: Post, nestedPermalinkLevel?: n
     return currentState;
 }
 
-export function handlePendingPosts(state: string[] = [], action: AnyAction) {
+export function handlePendingPosts(state: string[] = [], action: MMReduxAction) {
     switch (action.type) {
     case PostTypes.RECEIVED_NEW_POST: {
         const post = action.data;
@@ -447,7 +502,7 @@ export function handlePendingPosts(state: string[] = [], action: AnyAction) {
     }
 }
 
-export function postsInChannel(state: Record<string, PostOrderBlock[]> = {}, action: AnyAction, prevPosts: IDMappedObjects<Post>, nextPosts: Record<string, Post>) {
+export function postsInChannel(state: Record<string, PostOrderBlock[]> = {}, action: MMReduxAction, prevPosts: IDMappedObjects<Post>, nextPosts: Record<string, Post>) {
     switch (action.type) {
     case PostTypes.RESET_POSTS_IN_CHANNEL: {
         return {};
@@ -455,7 +510,7 @@ export function postsInChannel(state: Record<string, PostOrderBlock[]> = {}, act
     case PostTypes.RECEIVED_NEW_POST: {
         const post = action.data as Post;
 
-        if (action.features?.crtEnabled && post.root_id && post.type !== PostConstant.EPHEMERAL) {
+        if (action.features?.crtEnabled && post.root_id) {
             return state;
         }
 
@@ -937,7 +992,7 @@ export function mergePostOrder(left: string[], right: string[], posts: Record<st
     return result;
 }
 
-export function postsInThread(state: RelationOneToMany<Post, Post> = {}, action: AnyAction, prevPosts: Record<string, Post>) {
+export function postsInThread(state: RelationOneToMany<Post, Post> = {}, action: MMReduxAction, prevPosts: Record<string, Post>) {
     switch (action.type) {
     case PostTypes.RECEIVED_NEW_POST:
     case PostTypes.RECEIVED_POST: {
@@ -1136,7 +1191,7 @@ export function postsInThread(state: RelationOneToMany<Post, Post> = {}, action:
     }
 }
 
-export function postEditHistory(state: Post[] = [], action: AnyAction) {
+export function postEditHistory(state: Post[] = [], action: MMReduxAction) {
     switch (action.type) {
     case PostTypes.RECEIVED_POST_HISTORY:
         return action.data;
@@ -1147,7 +1202,7 @@ export function postEditHistory(state: Post[] = [], action: AnyAction) {
     }
 }
 
-function currentFocusedPostId(state = '', action: AnyAction) {
+function currentFocusedPostId(state = '', action: MMReduxAction) {
     switch (action.type) {
     case PostTypes.RECEIVED_FOCUSED_POST:
         return action.data;
@@ -1158,7 +1213,7 @@ function currentFocusedPostId(state = '', action: AnyAction) {
     }
 }
 
-export function reactions(state: RelationOneToOne<Post, Record<string, Reaction>> = {}, action: AnyAction) {
+export function reactions(state: RelationOneToOne<Post, Record<string, Reaction>> = {}, action: MMReduxAction) {
     switch (action.type) {
     case PostTypes.RECEIVED_REACTION: {
         const reaction = action.data as Reaction;
@@ -1219,7 +1274,7 @@ export function reactions(state: RelationOneToOne<Post, Record<string, Reaction>
     }
 }
 
-export function acknowledgements(state: RelationOneToOne<Post, Record<UserProfile['id'], number>> = {}, action: AnyAction) {
+export function acknowledgements(state: RelationOneToOne<Post, Record<UserProfile['id'], number>> = {}, action: MMReduxAction) {
     switch (action.type) {
     case PostTypes.CREATE_ACK_POST_SUCCESS: {
         const ack = action.data as PostAcknowledgement;
@@ -1331,7 +1386,7 @@ function storeAcknowledgementsForPost(state: any, post: Post) {
     };
 }
 
-export function openGraph(state: RelationOneToOne<Post, Record<string, OpenGraphMetadata>> = {}, action: AnyAction) {
+export function openGraph(state: RelationOneToOne<Post, Record<string, OpenGraphMetadata>> = {}, action: MMReduxAction) {
     switch (action.type) {
     case PostTypes.RECEIVED_OPEN_GRAPH_METADATA: {
         const nextState = {...state};
@@ -1402,7 +1457,7 @@ function messagesHistory(state: Partial<MessageHistory> = {
         post: -1,
         comment: -1,
     },
-}, action: AnyAction) {
+}, action: MMReduxAction) {
     switch (action.type) {
     case PostTypes.ADD_MESSAGE_INTO_HISTORY: {
         const nextIndex: Record<string, number> = {};
@@ -1477,7 +1532,7 @@ function messagesHistory(state: Partial<MessageHistory> = {
     }
 }
 
-export function expandedURLs(state: Record<string, string> = {}, action: GenericAction) {
+export function expandedURLs(state: Record<string, string> = {}, action: AnyAction) {
     switch (action.type) {
     case GeneralTypes.REDIRECT_LOCATION_SUCCESS:
         return {
@@ -1501,7 +1556,7 @@ export const zeroStateLimitedViews = {
 
 export function limitedViews(
     state: PostsState['limitedViews'] = zeroStateLimitedViews,
-    action: AnyAction,
+    action: MMReduxAction,
 ): PostsState['limitedViews'] {
     switch (action.type) {
     case PostTypes.RECEIVED_POSTS:
@@ -1567,7 +1622,7 @@ export function limitedViews(
     }
 }
 
-export default function reducer(state: Partial<PostsState> = {}, action: AnyAction) {
+export default function reducer(state: Partial<PostsState> = {}, action: MMReduxAction) {
     const nextPosts = handlePosts(state.posts, action);
     const nextPostsInChannel = postsInChannel(state.postsInChannel, action, state.posts!, nextPosts);
 

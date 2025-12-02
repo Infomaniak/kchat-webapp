@@ -2,8 +2,6 @@
 
 Infomaniak fork of the mattermost web client modified to work with our internal API as part of the kSuite.
 
-:warning: This project is still in beta.
-
 ## Running the project
 
 ### Prerequisites
@@ -11,24 +9,27 @@ Infomaniak fork of the mattermost web client modified to work with our internal 
  - Node 16
  - Yarn
 
-### Environment
+### Preprod Setup
 
-Add an `NPM_TOKEN` env var with a Github token (read:packages scope)
+| Type | Value |
+|------|-------|
+| **.env Variables** | WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current<br>WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com<br>MANAGER_ENDPOINT=https://manager.infomaniak.com<br>LOGIN_ENDPOINT=https://login.infomaniak.com<br>SHOP_ENDPOINT=https://shop.infomaniak.com/ |
+| **Hosts Entry** | 127.0.0.1 infomaniak.local.preprod.dev.infomaniak.ch |
+| **Access URL** | http://infomaniak.local.preprod.dev.infomaniak.ch |
 
-Create a .env file with the following variables
+---
 
-```dotenv
-WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current
-WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com
-MANAGER_ENDPOINT=https://manager.infomaniak.com
-LOGIN_ENDPOINT=https://login.infomaniak.com
-```
+### Production Setup
 
-### Hosts
+| Type | Value |
+|------|-------|
+| **.env Variables** | MANAGER_ENDPOINT=https://manager.infomaniak.com/<br>LOGIN_ENDPOINT=https://login.infomaniak.com/<br>BASE_URL=https://infomaniak.kchat.infomaniak.com/<br>WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current<br>WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com |
+| **Hosts Entry** | 127.0.0.1 local.infomaniak.com |
+| **Access URL** | [https://local.infomaniak.com](https://local.infomaniak.com) |
 
-Modify your hosts file located at `/etc/hosts` and add this line : `127.0.0.1 infomaniak.local.preprod.dev.infomaniak.ch`
+> ⚠️ Make sure to add an `NPM_TOKEN` environment variable with a GitHub token (scope: `read:packages`) before running the app.
+> ⚠️ Updating hosts is mandatory for cookies to work properly.
 
-> Must be done, otherwise your application won't be able to read cookies set to infomaniak.com
 
 ### Installing and building dependencies
 
@@ -57,7 +58,11 @@ yarn build:webapp
 ```shell
 Cannot find module '../build/Release/canvas.node'
 ```
-fix : 
+fix :
 ```shell
 brew install pkg-config cairo pango libpng jpeg giflib librsvg
+```
+If problem persists (Require C++ compiler) :
+```shell
+yarn --cwd node_modules/canvas run install --build-from-source
 ```

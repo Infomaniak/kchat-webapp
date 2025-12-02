@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -10,7 +10,8 @@ import Permissions from 'mattermost-redux/constants/permissions';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {haveICurrentChannelPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {setAddChannelCtaDropdown} from 'actions/views/add_channel_dropdown';
@@ -18,6 +19,7 @@ import {openModal} from 'actions/views/modals';
 import {isAddChannelCtaDropdownOpen} from 'selectors/views/add_channel_dropdown';
 
 import BrowseChannels from 'components/browse_channels';
+import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
@@ -26,11 +28,18 @@ import {ModalIdentifiers, Preferences, Touched} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
+const MENU_HEIGHT = 74;
+
 const AddChannelsCtaButton = (): JSX.Element | null => {
     const dispatch = useDispatch();
     const currentTeamId = useSelector(getCurrentTeamId);
     const intl = useIntl();
     const touchedAddChannelsCtaButton = useSelector((state: GlobalState) => getBool(state, Preferences.TOUCHED, Touched.ADD_CHANNELS_CTA));
+
+    const currentPlan = useSelector(getCurrentPackName);
+    const {private_channels: privateChannels, public_channels: publicChannels} = useGetUsageDeltas();
+    const privateAndPublicQuotas = (privateChannels >= 0 && publicChannels >= 0) ? 0 : -1;
+    const {isQuotaExceeded, withQuotaCheck} = quotaGate(privateAndPublicQuotas, currentPlan);
 
     const canCreatePublicChannel = useSelector((state: GlobalState) => haveICurrentChannelPermission(state, Permissions.CREATE_PUBLIC_CHANNEL));
     const canCreatePrivateChannel = useSelector((state: GlobalState) => haveICurrentChannelPermission(state, Permissions.CREATE_PRIVATE_CHANNEL));
@@ -38,9 +47,19 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
     const canJoinPublicChannel = useSelector((state: GlobalState) => haveICurrentChannelPermission(state, Permissions.JOIN_PUBLIC_CHANNELS));
     const isAddChannelCtaOpen = useSelector(isAddChannelCtaDropdownOpen);
     const currentUserId = useSelector(getCurrentUserId);
+    const elementRef = useRef<HTMLButtonElement>(null);
+    const [openUp, setOpenUp] = useState(false);
     const openAddChannelsCtaOpen = useCallback((open: boolean) => {
         dispatch(setAddChannelCtaDropdown(open));
     }, []);
+
+    const updatePosition = () => {
+        if (elementRef.current) {
+            const {bottom} = elementRef.current.getBoundingClientRect();
+            const hasSpaceBelow = bottom + MENU_HEIGHT < window.innerHeight;
+            setOpenUp(!hasSpaceBelow);
+        }
+    };
 
     let buttonClass = 'SidebarChannelNavigator__addChannelsCtaLhsButton';
 
@@ -86,9 +105,10 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
             createChannel = (
                 <Menu.ItemAction
                     id='showNewChannel'
-                    onClick={showNewChannelModal}
+                    onClick={withQuotaCheck(showNewChannelModal)}
                     icon={<i className='icon-plus'/>}
                     text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.createNewChannel', defaultMessage: 'Create new channel'})}
+                    rightDecorator={isQuotaExceeded ? <wc-ksuite-pro-upgrade-tag/> : null}
                 />
             );
         }
@@ -107,6 +127,7 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
         const handleClick = () => btnCallback?.();
         return (
             <button
+                ref={elementRef}
                 className={buttonClass}
                 id={'addChannelsCta'}
                 aria-label={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channel Dropdown'})}
@@ -140,6 +161,9 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
     };
 
     const trackOpen = (opened: boolean) => {
+        if (opened) {
+            updatePosition();
+        }
         openAddChannelsCtaOpen(opened);
         storePreferencesAndTrackEvent();
     };
@@ -153,19 +177,22 @@ const AddChannelsCtaButton = (): JSX.Element | null => {
     }
 
     return (
-        <MenuWrapper
-            className='AddChannelsCtaDropdown'
-            onToggle={trackOpen}
-            open={isAddChannelCtaOpen}
-        >
-            {addChannelsButton()}
-            <Menu
-                id='AddChannelCtaDropdown'
-                ariaLabel={intl.formatMessage({id: 'sidebar_left.add_channel_cta_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channels Dropdown'})}
+        <>
+            <MenuWrapper
+                className='AddChannelsCtaDropdown'
+                onToggle={trackOpen}
+                open={isAddChannelCtaOpen}
             >
-                {renderDropdownItems()}
-            </Menu>
-        </MenuWrapper>
+                {addChannelsButton()}
+                <Menu
+                    id='AddChannelCtaDropdown'
+                    ariaLabel={intl.formatMessage({id: 'sidebar_left.add_channel_cta_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channels Dropdown'})}
+                    openUp={openUp}
+                >
+                    {renderDropdownItems()}
+                </Menu>
+            </MenuWrapper>
+        </>
     );
 };
 

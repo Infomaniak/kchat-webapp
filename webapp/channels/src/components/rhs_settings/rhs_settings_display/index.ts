@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {Dispatch} from 'redux';
+import type {Dispatch, AnyAction} from 'redux';
 import {bindActionCreators} from 'redux';
 import timezones from 'timezones.json';
 
@@ -15,7 +15,6 @@ import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general
 import {get, isCollapsedThreadsAllowed, getCollapsedThreadsPreference} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTimezone, getCurrentTimezoneFull, getCurrentTimezoneLabel} from 'mattermost-redux/selectors/entities/timezone';
 import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
-import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
 
 import {Preferences} from 'utils/constants';
 
@@ -74,7 +73,7 @@ export function makeMapStateToProps() {
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
     return {
         actions: bindActionCreators({
             autoUpdateTimezone,

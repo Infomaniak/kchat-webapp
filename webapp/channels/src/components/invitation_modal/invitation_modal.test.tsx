@@ -3,23 +3,28 @@
 
 import React from 'react';
 import type {IntlShape} from 'react-intl';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 
 import type {Team} from '@mattermost/types/teams';
 
+import {General} from 'mattermost-redux/constants';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import store from 'stores/redux_store';
+import {generateId} from 'utils/utils';
 
 import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';
 import mockStore from 'tests/test_store';
-import {generateId} from 'utils/utils';
 
 import type {Props} from './invitation_modal';
-import InvitationModal, {View, InvitationModal as BaseInvitationModal} from './invitation_modal';
+import InvitationModal, {View} from './invitation_modal';
 import InviteView from './invite_view';
 import NoPermissionsView from './no_permissions_view';
 import ResultView from './result_view';
+
+jest.mock('react-redux', () => ({
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn(),
+}));
 
 const defaultProps: Props = deepFreeze({
     actions: {
@@ -43,9 +48,12 @@ const defaultProps: Props = deepFreeze({
     isCloud: false,
     canAddUsers: true,
     canInviteGuests: true,
+    remainingGuestSlot: 1,
     intl: {} as IntlShape,
     townSquareDisplayName: '',
     onExited: jest.fn(),
+    roleForTrackFlow: {started_by_role: General.SYSTEM_USER_ROLE},
+    focusOriginElement: 'elementId',
 });
 
 let props = defaultProps;
@@ -93,7 +101,11 @@ describe('InvitationModal', () => {
         },
     };
 
-    store.getState = () => (state);
+    const mockedUseSelector = useSelector as jest.Mock;
+
+    mockedUseSelector.mockReturnValue('mockedPackValue');
+
+    const store = mockStore(state);
 
     beforeEach(() => {
         props = defaultProps;
@@ -114,7 +126,7 @@ describe('InvitationModal', () => {
                 <InvitationModal {...props}/>
             </Provider>,
         );
-        wrapper.find(BaseInvitationModal).at(0).setState({view: View.RESULT});
+        wrapper.find(InvitationModal).at(0).setState({view: View.RESULT});
 
         wrapper.update();
         expect(wrapper.find(ResultView).length).toBe(1);

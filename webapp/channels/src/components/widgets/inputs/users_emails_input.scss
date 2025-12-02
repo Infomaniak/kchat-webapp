@@ -1,4 +1,4 @@
-@import 'utils/variables';
+@use 'utils/variables';
 
 .UsersEmailsInput {
 
@@ -61,6 +61,10 @@
             .users-emails-input__value-container {
                 .users-emails-input__input {
                     border-bottom: 0;
+
+                    &-container{
+                        color: inherit;
+                    }
 
                     .a11y--focused {
                         box-shadow: none;
@@ -187,9 +191,9 @@
             width: 36px;
             height: 36px;
             padding: 3px;
+            border-radius: 18px;
             margin-right: 8px;
             background: var(--button-bg);
-            border-radius: 18px;
 
             svg {
                 width: 24px;
@@ -207,9 +211,9 @@
     .users-emails-input__multi-value {
         align-items: center;
         padding: 4px;
+        border-radius: 16px;
         margin: 4px;
         background: rgba(var(--center-channel-color-rgb), 0.08);
-        border-radius: 16px;
         color: var(--center-channel-color);
 
         &:nth-last-child(2) {
@@ -228,9 +232,9 @@
             width: 24px;
             height: 24px;
             padding: 3px;
+            border-radius: 16px;
             margin-right: 4px;
             background: rgba(var(--center-channel-color-rgb), 0.75);
-            border-radius: 16px;
 
             svg {
                 width: 18px;
@@ -274,20 +278,15 @@
 .InputErrorBox {
     display: flex;
     width: 100%;
-    height: 60px;
     align-items: center;
     justify-content: center;
-    margin-top: 2px;
-    background: rgba(var(--error-box-background), 0.1);
+    padding: 4px;
     border-radius: 4px;
+    margin-top: 2px;
+    color: var(--error-text);
 
     span {
-        position: relative;
-        height: 20px;
-        color: var(--error-text);
-        font-size: 16px;
-        line-height: 20px;
-        text-align: center;
+        width: 100%;
     }
 
     button.upgradeLink {

@@ -7,8 +7,9 @@ import {act} from 'react-dom/test-utils';
 
 import {Permissions} from 'mattermost-redux/constants';
 
-import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen, userEvent} from 'tests/react_testing_utils';
 
 import AccessTab from './team_access_tab';
 
@@ -100,7 +101,7 @@ describe('components/TeamSettings', () => {
     test('should call patchTeam on handleAllowedDomainsSubmit', async () => {
         const props = {...defaultProps, team: TestHelper.getTeamMock({allowed_domains: 'test.com'})};
         renderWithContext(<AccessTab {...props}/>);
-        const allowedDomainsInput = screen.getAllByRole('textbox')[0];
+        const allowedDomainsInput = screen.getAllByRole('combobox')[0];
         const newDomain = 'best.com';
         await act(async () => {
             await allowedDomainsInput.focus();
@@ -119,5 +120,32 @@ describe('components/TeamSettings', () => {
             allowed_domains: 'test.com, best.com',
             id: defaultProps.team?.id,
         });
+    });
+
+    test('MM-62891 should toggle the right checkboxes when their labels are clicked on', () => {
+        renderWithContext(<AccessTab {...defaultProps}/>);
+
+        expect(screen.getByRole('checkbox', {name: 'Allow only users with a specific email domain to join this team'})).not.toBeChecked();
+        expect(screen.getByRole('checkbox', {name: 'Allow any user with an account on this server to join this team'})).not.toBeChecked();
+
+        userEvent.click(screen.getByText('Allow only users with a specific email domain to join this team'));
+
+        expect(screen.getByRole('checkbox', {name: 'Allow only users with a specific email domain to join this team'})).toBeChecked();
+        expect(screen.getByRole('checkbox', {name: 'Allow any user with an account on this server to join this team'})).not.toBeChecked();
+
+        userEvent.click(screen.getByText('Allow only users with a specific email domain to join this team'));
+
+        expect(screen.getByRole('checkbox', {name: 'Allow only users with a specific email domain to join this team'})).not.toBeChecked();
+        expect(screen.getByRole('checkbox', {name: 'Allow any user with an account on this server to join this team'})).not.toBeChecked();
+
+        userEvent.click(screen.getByText('Allow any user with an account on this server to join this team'));
+
+        expect(screen.getByRole('checkbox', {name: 'Allow only users with a specific email domain to join this team'})).not.toBeChecked();
+        expect(screen.getByRole('checkbox', {name: 'Allow any user with an account on this server to join this team'})).toBeChecked();
+
+        userEvent.click(screen.getByText('Allow any user with an account on this server to join this team'));
+
+        expect(screen.getByRole('checkbox', {name: 'Allow only users with a specific email domain to join this team'})).not.toBeChecked();
+        expect(screen.getByRole('checkbox', {name: 'Allow any user with an account on this server to join this team'})).not.toBeChecked();
     });
 });

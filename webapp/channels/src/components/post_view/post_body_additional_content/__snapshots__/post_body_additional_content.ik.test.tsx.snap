@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PostBodyAdditionalContent with a permalinklink Render permalink preview 1`] = `
+<div>
+  <span>
+    some children
+  </span>
+</div>
+`;
+
+exports[`PostBodyAdditionalContent with a permalinklink Render permalink preview with no data 1`] = `
+<div>
+  <span>
+    some children
+  </span>
+</div>
+`;
+
+exports[`PostBodyAdditionalContent with a permalinklink should render MessageAttachmentList for ephemeral system post with permalink embed 1`] = `
+<div>
+  <span>
+    some children
+  </span>
+  <Memo(MessageAttachmentList)
+    attachments={
+      Array [
+        Object {
+          "id": "att1",
+          "text": "Vous recevrez un rappel de ce message",
+        },
+      ]
+    }
+    imagesMetadata={Object {}}
+    postId="post_id_1"
+  />
+</div>
+`;

@@ -2,12 +2,11 @@
 // See LICENSE.txt for license information.
 
 import {combineReducers} from 'redux';
+import type {AnyAction} from 'redux';
 
 import type {ServerChannel} from '@mattermost/types/channels';
 import type {Call} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
-
-import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {ActionTypes} from 'utils/constants';
 
@@ -431,7 +430,7 @@ const callStartAt = (state: {[channelID: string]: number} = {}, action: {type: s
 
 const callParameters = (
     state: {users: UserProfile[]; caller: UserProfile; channel: ServerChannel; msg: Call} = {users: [], caller: {} as any, channel: {}as any, msg: {}as any},
-    action: GenericAction) => {
+    action: AnyAction) => {
     switch (action.type) {
     case ActionTypes.CALL_USERS_IN_CONF:
         return {

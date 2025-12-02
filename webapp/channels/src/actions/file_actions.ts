@@ -10,11 +10,12 @@ import {FileTypes} from 'mattermost-redux/action_types';
 import {getLogErrorAction} from 'mattermost-redux/actions/errors';
 import {forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
-import type {ThunkActionFunc} from 'mattermost-redux/types/actions';
 
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 
 import {localizeMessage} from 'utils/utils';
+
+import type {ThunkActionFunc} from 'types/store';
 
 export interface UploadFile {
     file: File;
@@ -23,18 +24,31 @@ export interface UploadFile {
     rootId: string;
     channelId: string;
     clientId: string;
+    isAdmin: boolean;
+    isPaidPlan: boolean;
     onProgress: (filePreviewInfo: FilePreviewInfo) => void;
     onSuccess: (data: any, channelId: string, rootId: string) => void;
     onError: (err: string | ServerError, clientId: string, channelId: string, rootId: string) => void;
 }
 
-export function uploadFile({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError}: UploadFile): ThunkActionFunc<XMLHttpRequest> {
+const quotaMessages = new Map<string, string>([
+    ['admin|paid', 'file_upload.quota.exceeded.paidPlan.admin'],
+    ['admin|free', 'file_upload.quota.exceeded.admin'],
+    ['user|_', 'file_upload.quota.exceeded'],
+]);
+
+export function uploadFile({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError, isAdmin, isPaidPlan}: UploadFile, isBookmark?: boolean): ThunkActionFunc<XMLHttpRequest> {
     return (dispatch, getState) => {
         dispatch({type: FileTypes.UPLOAD_FILES_REQUEST});
 
+        let url = Client4.getFilesRoute();
+        if (isBookmark) {
+            url += '?bookmark=true';
+        }
+
         const xhr = new XMLHttpRequest();
 
-        xhr.open('POST', Client4.getFilesRoute(), true);
+        xhr.open('POST', url, true);
 
         const client4Headers = Client4.getOptions({method: 'POST'}).headers;
         Object.keys(client4Headers).forEach((client4Header) => {
@@ -92,10 +106,22 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                     let errorMessage = '';
                     try {
                         const errorResponse = JSON.parse(xhr.response);
-                        errorMessage =
-                        (errorResponse?.id && errorResponse?.message) ? localizeMessage(errorResponse.id, errorResponse.message) : localizeMessage('file_upload.generic_error', 'There was a problem uploading your files.');
+                        if (xhr.status === 409 && errorResponse.id === 'quota-exceeded') {
+                            let role = 'user';
+                            let plan = '_';
+
+                            if (isAdmin) {
+                                role = 'admin';
+                                plan = isPaidPlan ? 'paid' : 'free';
+                            }
+
+                            errorMessage = quotaMessages.get(`${role}|${plan}`) ?? '';
+                        } else {
+                            errorMessage =
+                                (errorResponse?.id && errorResponse?.message) ? localizeMessage({id: errorResponse.id, defaultMessage: errorResponse.message}) : localizeMessage({id: 'file_upload.generic_error', defaultMessage: 'There was a problem uploading your files.'});
+                        }
                     } catch (e) {
-                        errorMessage = localizeMessage('file_upload.generic_error', 'There was a problem uploading your files.');
+                        errorMessage = localizeMessage({id: 'file_upload.generic_error', defaultMessage: 'There was a problem uploading your files.'});
                     }
 
                     dispatch({
@@ -128,7 +154,7 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                     dispatch(batchActions([uploadFailureAction, getLogErrorAction(errorResponse)]));
                     onError(errorResponse, clientId, channelId, rootId);
                 } else {
-                    const errorMessage = xhr.status === 0 || !xhr.status ? localizeMessage('file_upload.generic_error', 'There was a problem uploading your files.') : localizeMessage('channel_loader.unknown_error', 'We received an unexpected status code from the server.') + ' (' + xhr.status + ')';
+                    const errorMessage = xhr.status === 0 || !xhr.status ? localizeMessage({id: 'file_upload.generic_error', defaultMessage: 'There was a problem uploading your files.'}) : localizeMessage({id: 'channel_loader.unknown_error', defaultMessage: 'We received an unexpected status code from the server.'}) + ' (' + xhr.status + ')';
 
                     dispatch({
                         type: FileTypes.UPLOAD_FILES_FAILURE,

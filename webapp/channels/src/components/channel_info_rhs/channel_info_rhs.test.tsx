@@ -24,6 +24,7 @@ describe('channel_info_rhs', () => {
         channelStats: {} as ChannelStats,
         currentUser: {} as UserProfile,
         currentTeam: {} as Team,
+        isPreview: false,
         isFavorite: false,
         isMuted: false,
         isInvitingPeople: false,

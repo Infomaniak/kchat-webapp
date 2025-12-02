@@ -3,12 +3,13 @@
 
 import store from 'stores/redux_store';
 
-import mockStore from 'tests/test_store';
 import {TestHelper} from 'utils/test_helper';
+
+import mockStore from 'tests/test_store';
 
 import SearchChannelWithPermissionsProvider from './search_channel_with_permissions_provider';
 
-const getState = store.getState;
+const getState = jest.mocked(store.getState);
 
 jest.mock('stores/redux_store', () => ({
     dispatch: jest.fn(),

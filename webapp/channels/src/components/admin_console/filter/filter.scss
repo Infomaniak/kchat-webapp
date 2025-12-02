@@ -8,8 +8,8 @@
         height: 32px;
         padding: 0 10px;
         border: 0;
-        background: var(--sys-center-channel-bg);
         border-radius: 4px;
+        background: var(--sys-center-channel-bg);
         color: var(--sys-button-bg);
         font-size: 12px;
 
@@ -36,10 +36,10 @@
         box-sizing: border-box;
         padding: 16px;
         border: 1px solid rgba(var(--sys-center-channel-color-rgb), 0.08);
+        border-radius: 4px;
         margin-top: 4px;
         margin-bottom: 24px;
         background: var(--sys-center-channel-bg);
-        border-radius: 4px;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 
         &.Filter__show {
@@ -78,8 +78,8 @@
     }
 
     .Filter_apply {
-        margin: 8px 8px 8px 0;
         border-radius: 4px;
+        margin: 8px 8px 8px 0;
         float: right;
         font-size: 12px;
 
@@ -112,8 +112,8 @@
             &__control {
                 min-height: 32px;
                 border: 1px solid rgba(var(--sys-center-channel-color-rgb), 0.16);
-                background: var(--sys-center-channel-bg);
                 border-radius: 4px;
+                background: var(--sys-center-channel-bg);
                 color: rgba(var(--sys-center-channel-color-rgb), 0.75);
                 font-size: 12px;
 

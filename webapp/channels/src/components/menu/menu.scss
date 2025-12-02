@@ -1,0 +1,53 @@
+@use "utils/variables";
+
+.MuiPopover-root.MuiModal-root.menu_menuStyled {
+    z-index: variables.$z-index-menu;
+
+    & .MuiPaper-root {
+        min-width: 114px;
+        max-width: 496px;
+        max-height: 80vh;
+        background-color: var(--center-channel-bg);
+        box-shadow: var(--elevation-4), 0 0 0 1px rgba(var(--center-channel-color-rgb), 0.12) inset;
+
+      
+    }
+    &.AsSubMenu {
+        pointer-events: none;
+        & .MuiPaper-root {
+            box-shadow: var(--elevation-5), 0 0 0 1px rgba(var(--center-channel-color-rgb), 0.12) inset;
+        }
+    }
+
+    .MuiDivider-root {
+        margin: 4px 0;
+    }
+
+    // IK: we seems to like it tightier
+    .menu_menuList {
+        padding: 0;
+        & li {
+            min-height: 32px;
+        }
+    }
+
+    // IK: a bit hacky, this menu is not a popover really
+    #browserOrAddChannelMenu > li > .label-elements  {
+        display:inline-flex;
+        overflow: hidden;
+        width:80%;
+        flex-wrap: wrap;
+        white-space: normal;
+    }
+}
+
+
+.menuModal {
+    & .modal-header {
+        display: none;
+    }
+
+    & .GenericModal__body {
+        padding: 0;
+    }
+}

@@ -4,7 +4,7 @@
 import type {PreferenceType} from '@mattermost/types/preferences';
 
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
+import type {ActionFunc, ActionFuncAsync, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
 

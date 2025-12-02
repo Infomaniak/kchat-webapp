@@ -1,18 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {AnyAction} from 'redux';
+
 import type {ServerError} from '@mattermost/types/errors';
+import type {GlobalState} from '@mattermost/types/store';
 
 import {UserTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
 import type {DispatchFunc, GetStateFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 
+// eslint-disable-next-line no-restricted-imports
 import {getHistory} from 'utils/browser_history';
 
 import {logError} from './errors';
 type ActionType = string;
 const HTTP_UNAUTHORIZED = 401;
-export function forceLogoutIfNecessary(err: ServerError, dispatch: DispatchFunc, getState: GetStateFunc) {
+export function forceLogoutIfNecessary(err: ServerError, dispatch: DispatchFunc<AnyAction>, getState: GetStateFunc) {
     const {currentUserId} = getState().entities.users;
 
     redirectToErrorPageIfNecessary(err);
@@ -29,6 +33,10 @@ const statusCodes = {
     FORCE_MIGRATION: 1,
 };
 
+function isIkAutologError(err: ServerError) {
+    return err.error?.code === 'not_authorized' && err.error.description === 'You are autologged but do not have the right to access this route';
+}
+
 export function redirectToErrorPageIfNecessary(err: ServerError) {
     switch (err.status_code) {
     case statusCodes.HTTP_MAINTENANCE:
@@ -37,6 +45,8 @@ export function redirectToErrorPageIfNecessary(err: ServerError) {
     case statusCodes.HTTP_BLOCKED:
         if (err.server_error_id === 'product_locked' || err.error?.code === 'product_locked') {
             getHistory().replace('/error?type=blocked');
+        } else if (isIkAutologError(err)) {
+            getHistory().replace('/error?type=autolog_blocked');
         }
         break;
     case statusCodes.FORCE_MIGRATION:
@@ -45,7 +55,7 @@ export function redirectToErrorPageIfNecessary(err: ServerError) {
     }
 }
 
-function dispatcher(type: ActionType, data: any, dispatch: DispatchFunc) {
+function dispatcher(type: ActionType, data: any, dispatch: DispatchFunc<AnyAction>) {
     if (type.indexOf('SUCCESS') === -1) { // we don't want to pass the data for the request types
         dispatch(requestSuccess(type, data));
     } else {
@@ -100,7 +110,7 @@ export function bindClientFunc<Func extends(...args: any[]) => Promise<any>>({
     onSuccess?: ActionType | ActionType[];
     onFailure?: ActionType;
     params?: Parameters<Func>;
-}): ActionFuncAsync<Awaited<ReturnType<Func>>> {
+}): ActionFuncAsync<Awaited<ReturnType<Func>>, GlobalState, AnyAction> {
     return async (dispatch, getState) => {
         if (onRequest) {
             dispatch(requestData(onRequest));

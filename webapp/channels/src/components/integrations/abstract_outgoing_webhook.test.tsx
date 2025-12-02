@@ -26,6 +26,7 @@ describe('components/integrations/AbstractOutgoingWebhook', () => {
         allow_open_invite: false,
         scheme_id: 'team_scheme_id',
         group_constrained: false,
+        pack_name: 'ksuite_essential',
     };
     const header = {id: 'header_id', defaultMessage: 'Header'};
     const footer = {id: 'footer_id', defaultMessage: 'Footer'};

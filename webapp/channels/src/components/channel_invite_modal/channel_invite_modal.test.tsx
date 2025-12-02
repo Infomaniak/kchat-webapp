@@ -5,6 +5,7 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 
 import type {Channel} from '@mattermost/types/channels';
+import type {PackName} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
@@ -22,7 +23,6 @@ jest.mock('utils/utils', () => {
     const original = jest.requireActual('utils/utils');
     return {
         ...original,
-        localizeMessage: jest.fn(),
         sortUsersAndGroups: jest.fn(),
     };
 });
@@ -71,6 +71,8 @@ describe('components/channel_invite_modal', () => {
         userStatuses: {},
         teammateNameDisplaySetting: General.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME,
         isGroupsEnabled: true,
+        guestQuotaExceeded: false,
+        currentPack: 'ksuite_essential' as PackName,
         actions: {
             addUsersToChannel: jest.fn().mockImplementation(() => {
                 const error = {

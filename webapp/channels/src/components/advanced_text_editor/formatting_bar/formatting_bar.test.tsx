@@ -4,13 +4,12 @@
 import {screen} from '@testing-library/react';
 import React from 'react';
 
-import {renderWithContext, userEvent} from 'tests/react_testing_utils';
 import {Locations} from 'utils/constants';
+
+import {renderWithContext, userEvent} from 'tests/react_testing_utils';
 
 import FormattingBar from './formatting_bar';
 import * as Hooks from './hooks';
-
-global.ResizeObserver = require('resize-observer-polyfill');
 
 jest.mock('./hooks');
 
@@ -76,7 +75,7 @@ describe('FormattingBar', () => {
             </form>,
         );
 
-        expect(screen.queryByLabelText('heading')).not.toBeVisible();
+        expect(screen.queryByLabelText('heading')).toBe(null);
 
         userEvent.click(screen.getByLabelText('show hidden formatting options'));
 

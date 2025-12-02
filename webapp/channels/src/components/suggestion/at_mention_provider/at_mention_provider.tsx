@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {defineMessages} from 'react-intl';
+
 import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -10,6 +12,7 @@ import {makeAddLastViewAtToProfiles} from 'mattermost-redux/selectors/entities/u
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {getSuggestionsSplitBy, getSuggestionsSplitByMultiple} from 'mattermost-redux/utils/user_utils';
 
+import {loadProfilesMissingStatus} from 'actions/status_actions';
 import store from 'stores/redux_store';
 
 import {Constants} from 'utils/constants';
@@ -43,6 +46,7 @@ type Results = {
 type ResultsCallback = (results: Results) => void;
 
 export type Props = {
+    textboxId?: string;
     currentUserId: string;
     channelId: string;
     autocompleteUsersInChannel: (prefix: string) => Promise<ActionResult>;
@@ -57,6 +61,7 @@ export type Props = {
 // users in the channel and users not in the channel. It mixes together results from the local
 // store with results fetched from the server.
 export default class AtMentionProvider extends Provider {
+    public textboxId?: string;
     public currentUserId: string;
     public channelId: string;
     public autocompleteUsersInChannel: (prefix: string) => Promise<ActionResult>;
@@ -75,8 +80,9 @@ export default class AtMentionProvider extends Provider {
     constructor(props: Props) {
         super();
 
-        const {currentUserId, channelId, autocompleteUsersInChannel, useChannelMentions, autocompleteGroups, searchAssociatedGroupsForReference, priorityProfiles, loading} = props;
+        const {currentUserId, channelId, autocompleteUsersInChannel, useChannelMentions, autocompleteGroups, searchAssociatedGroupsForReference, priorityProfiles, loading, textboxId} = props;
 
+        this.textboxId = textboxId;
         this.currentUserId = currentUserId;
         this.channelId = channelId;
         this.autocompleteUsersInChannel = autocompleteUsersInChannel;
@@ -94,7 +100,8 @@ export default class AtMentionProvider extends Provider {
         this.addLastViewAtToProfiles = makeAddLastViewAtToProfiles();
     }
 
-    setProps({currentUserId, channelId, autocompleteUsersInChannel, useChannelMentions, autocompleteGroups, searchAssociatedGroupsForReference, priorityProfiles}: Props) {
+    setProps({currentUserId, channelId, autocompleteUsersInChannel, useChannelMentions, autocompleteGroups, searchAssociatedGroupsForReference, priorityProfiles, textboxId}: Props) {
+        this.textboxId = textboxId;
         this.currentUserId = currentUserId;
         this.channelId = channelId;
         this.autocompleteUsersInChannel = autocompleteUsersInChannel;
@@ -355,6 +362,8 @@ export default class AtMentionProvider extends Provider {
             filter((member) => !localUserIds[member.id]).
             sort(orderUsers);
 
+        store.dispatch(loadProfilesMissingStatus([...localAndRemoteMembers, ...remoteNonMembers]));
+
         return [...priorityProfiles, ...localAndRemoteMembers, ...localAndRemoteGroups, ...specialMentions, ...remoteNonMembers];
     }
 
@@ -365,19 +374,24 @@ export default class AtMentionProvider extends Provider {
         } else if (this.lastPrefixWithNoResults === this.latestPrefix) {
             this.lastPrefixWithNoResults = '';
         }
-        const mentions = items.map((item) => {
+        const mentions: string[] = [];
+
+        // Add the textboxId for each suggestions
+        const modifiedItems = items.map((item) => {
             if (item.username) {
-                return '@' + item.username;
+                mentions.push('@' + item.username);
             } else if (item.name) {
-                return '@' + item.name;
+                mentions.push('@' + item.name);
+            } else {
+                mentions.push('');
             }
-            return '';
+            return {...item, textboxId: this.textboxId};
         });
 
         resultCallback({
             matchedPretext: `@${this.latestPrefix}`,
             terms: mentions,
-            items,
+            items: modifiedItems,
             component: AtMentionSuggestion,
         });
     }
@@ -465,3 +479,26 @@ export default class AtMentionProvider extends Provider {
         };
     }
 }
+
+defineMessages({
+    groupDivider: {
+        id: 'suggestion.search.group',
+        defaultMessage: 'Group Mentions',
+    },
+    memberDivider: {
+        id: 'suggestion.mention.members',
+        defaultMessage: 'Channel Members',
+    },
+    moreMembersDivider: {
+        id: 'suggestion.mention.moremembers',
+        defaultMessage: 'Other Members',
+    },
+    nonmemberDivider: {
+        id: 'suggestion.mention.nonmembers',
+        defaultMessage: 'Not in Channel',
+    },
+    specialDivider: {
+        id: 'suggestion.mention.special',
+        defaultMessage: 'Special Mentions',
+    },
+});

@@ -27,7 +27,7 @@ exports[`components/ChannelSelectorModal exclude already selected 1`] = `
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
 >
   <ModalHeader
@@ -40,9 +40,14 @@ exports[`components/ChannelSelectorModal exclude already selected 1`] = `
       componentClass="h1"
       id="channelSelectorModalLabel"
     >
-      <FormattedMarkdownMessage
-        defaultMessage="Add Channels to **Channel Selection** List"
-        id="add_channels_to_scheme.title"
+      <MemoizedFormattedMessage
+        defaultMessage="Add Channels to <b>Channel Selection</b> List"
+        id="channelSelectorModal.title"
+        values={
+          Object {
+            "b": [Function],
+          }
+        }
       />
     </ModalTitle>
   </ModalHeader>
@@ -52,7 +57,12 @@ exports[`components/ChannelSelectorModal exclude already selected 1`] = `
   >
     <MultiSelect
       ariaLabelRenderer={[Function]}
-      buttonSubmitText="Add"
+      buttonSubmitText={
+        Object {
+          "defaultMessage": "Add",
+          "id": "multiselect.add",
+        }
+      }
       changeMessageColor=""
       disableMultiSelectList={false}
       focusOnLoad={true}
@@ -135,7 +145,12 @@ exports[`components/ChannelSelectorModal exclude already selected 1`] = `
         ]
       }
       perPage={50}
-      placeholderText="Search and add channels"
+      placeholderText={
+        Object {
+          "defaultMessage": "Search and add channels",
+          "id": "multiselect.addChannelsPlaceholder",
+        }
+      }
       saveButtonPosition="top"
       saving={false}
       savingEnabled={true}
@@ -180,7 +195,7 @@ exports[`components/ChannelSelectorModal should match snapshot 1`] = `
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
 >
   <ModalHeader
@@ -193,9 +208,14 @@ exports[`components/ChannelSelectorModal should match snapshot 1`] = `
       componentClass="h1"
       id="channelSelectorModalLabel"
     >
-      <FormattedMarkdownMessage
-        defaultMessage="Add Channels to **Channel Selection** List"
-        id="add_channels_to_scheme.title"
+      <MemoizedFormattedMessage
+        defaultMessage="Add Channels to <b>Channel Selection</b> List"
+        id="channelSelectorModal.title"
+        values={
+          Object {
+            "b": [Function],
+          }
+        }
       />
     </ModalTitle>
   </ModalHeader>
@@ -205,7 +225,12 @@ exports[`components/ChannelSelectorModal should match snapshot 1`] = `
   >
     <MultiSelect
       ariaLabelRenderer={[Function]}
-      buttonSubmitText="Add"
+      buttonSubmitText={
+        Object {
+          "defaultMessage": "Add",
+          "id": "multiselect.add",
+        }
+      }
       changeMessageColor=""
       disableMultiSelectList={false}
       focusOnLoad={true}
@@ -310,7 +335,12 @@ exports[`components/ChannelSelectorModal should match snapshot 1`] = `
         ]
       }
       perPage={50}
-      placeholderText="Search and add channels"
+      placeholderText={
+        Object {
+          "defaultMessage": "Search and add channels",
+          "id": "multiselect.addChannelsPlaceholder",
+        }
+      }
       saveButtonPosition="top"
       saving={false}
       savingEnabled={true}

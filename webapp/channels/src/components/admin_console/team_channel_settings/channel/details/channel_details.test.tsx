@@ -7,7 +7,8 @@ import React from 'react';
 import type {Channel} from '@mattermost/types/channels';
 import type {Group} from '@mattermost/types/groups';
 import type {Scheme} from '@mattermost/types/schemes';
-import type {Team} from '@mattermost/types/teams';
+
+import {TestHelper} from 'utils/test_helper';
 
 import ChannelDetails from './channel_details';
 
@@ -27,6 +28,7 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             member_count: 3,
             scheme_admin: false,
             allow_reference: false,
+            member_ids: [],
         }];
         const allGroups = {
             123: groups[0],
@@ -49,9 +51,9 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             scheme_id: 'id',
             group_constrained: false,
         };
-        const team: Partial<Team> = {
+        const team = TestHelper.getTeamMock({
             display_name: 'test',
-        };
+        });
         const teamScheme: Scheme = {
             id: 'asdf',
             name: 'asdf',
@@ -125,7 +127,7 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             <ChannelDetails
                 teamScheme={teamScheme}
                 groups={groups}
-                team={{}}
+                team={undefined}
                 totalGroups={groups.length}
                 actions={actions}
                 channel={testChannel}
@@ -151,6 +153,7 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             member_count: 3,
             scheme_admin: false,
             allow_reference: false,
+            member_ids: [],
         }];
         const allGroups = {
             123: groups[0],
@@ -173,9 +176,9 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             scheme_id: 'id',
             group_constrained: false,
         };
-        const team: Partial<Team> = {
+        const team = TestHelper.getTeamMock({
             display_name: 'test',
-        };
+        });
         const teamScheme: Scheme = {
             id: 'asdf',
             name: 'asdf',
@@ -249,7 +252,7 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             <ChannelDetails
                 teamScheme={teamScheme}
                 groups={groups}
-                team={{}}
+                team={undefined}
                 totalGroups={groups.length}
                 actions={actions}
                 channel={testChannel}
@@ -276,6 +279,7 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             member_count: 3,
             scheme_admin: false,
             allow_reference: false,
+            member_ids: [],
         }];
         const allGroups = {
             123: groups[0],
@@ -298,9 +302,9 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             scheme_id: 'id',
             group_constrained: false,
         };
-        const team: Partial<Team> = {
+        const team = TestHelper.getTeamMock({
             display_name: 'test',
-        };
+        });
         const teamScheme: Scheme = {
             id: 'asdf',
             name: 'asdf',
@@ -374,7 +378,7 @@ describe('admin_console/team_channel_settings/channel/ChannelDetails', () => {
             <ChannelDetails
                 teamScheme={teamScheme}
                 groups={groups}
-                team={{}}
+                team={undefined}
                 totalGroups={groups.length}
                 actions={actions}
                 channel={testChannel}

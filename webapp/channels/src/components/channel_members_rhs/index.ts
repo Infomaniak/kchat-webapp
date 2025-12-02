@@ -20,6 +20,7 @@ import {
     getPendingGuestsInChannel,
     isCurrentChannelArchived,
 } from 'mattermost-redux/selectors/entities/channels';
+import {isCurrentChannelInPreview} from 'mattermost-redux/selectors/entities/common';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentRelativeTeamUrl, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
@@ -51,7 +52,7 @@ const buildProfileList = (
 ) => {
     const channelMembers: ChannelMember[] = [];
     profilesInCurrentChannel.forEach((profile) => {
-        if (!membersInCurrentChannel[profile.id]) {
+        if (!membersInCurrentChannel || !membersInCurrentChannel[profile.id]) {
             return;
         }
 
@@ -120,12 +121,13 @@ function mapStateToProps(state: GlobalState) {
 
     const isArchived = isCurrentChannelArchived(state);
     const isPrivate = channel.type === Constants.PRIVATE_CHANNEL;
+    const isPreview = isCurrentChannelInPreview(state);
     const canManageMembers = haveIChannelPermission(
         state,
-        currentTeam.id,
+        currentTeam?.id,
         channel.id,
         isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS : Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS,
-    ) && !isArchived;
+    ) && !isArchived && !isPreview;
 
     const searchTerms = state.views.search.channelMembersRhsSearch || '';
 

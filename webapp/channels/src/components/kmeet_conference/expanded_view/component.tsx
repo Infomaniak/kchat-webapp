@@ -4,7 +4,6 @@
 import moment from 'moment-timezone';
 import type {CSSProperties} from 'react';
 import React from 'react';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -20,6 +19,7 @@ import ScreenIcon from 'components/widgets/icons/screen_icon';
 import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
 import UnraisedHandIcon from 'components/widgets/icons/unraised_hand';
 import Avatar from 'components/widgets/users/avatar';
+import WithTooltip from 'components/with_tooltip';
 
 import {getUserDisplayName, isDMChannel} from '../utils';
 import './component.scss';
@@ -43,7 +43,7 @@ interface Props {
 }
 
 interface State {
-    intervalID?: NodeJS.Timer;
+    intervalID?: ReturnType<typeof setInterval>;
     screenStream: MediaStream | null;
     showParticipantsList: boolean;
 }
@@ -131,7 +131,7 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
     //     });
     // }
 
-    public componentDidUpdate(prevProps: Props, prevState: State) {
+    public componentDidUpdate() {
         if (window.opener) {
             if (document.title.indexOf('Call') === -1 && this.props.channel) {
                 if (isDMChannel(this.props.channel) && this.props.connectedDMUser) {
@@ -366,16 +366,9 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
                         style={style.controls}
                     >
                         <div style={style.leftControls}>
-                            <OverlayTrigger
+                            <WithTooltip
                                 key='show_participants_list'
-                                placement='top'
-                                overlay={
-                                    <Tooltip
-                                        id='show-participants-list'
-                                    >
-                                        {this.state.showParticipantsList ? 'Hide participants list' : 'Show participants list'}
-                                    </Tooltip>
-                                }
+                                title={this.state.showParticipantsList ? 'Hide participants list' : 'Show participants list'}
                             >
 
                                 <button
@@ -387,7 +380,7 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
                                         fill={this.state.showParticipantsList ? 'rgb(28, 88, 217)' : 'white'}
                                     />
                                 </button>
-                            </OverlayTrigger>
+                            </WithTooltip>
                         </div>
 
                         <div style={style.centerControls}>

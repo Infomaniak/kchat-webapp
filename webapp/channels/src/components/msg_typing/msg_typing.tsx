@@ -2,7 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React, {useCallback} from 'react';
-import {FormattedMessage} from 'react-intl';
+import type {MessageDescriptor} from 'react-intl';
+import {defineMessages, FormattedMessage} from 'react-intl';
 
 import type {WebSocketMessage} from '@mattermost/client';
 
@@ -11,7 +12,7 @@ import {useWebSocket} from 'utils/use_websocket';
 
 type Props = {
     channelId: string;
-    postId: string;
+    rootId: string;
     typingUsers: string[];
     recordingUsers: string[];
     userStartedTyping: (userId: string, channelId: string, rootId: string, now: number) => void;
@@ -19,6 +20,29 @@ type Props = {
     userStoppedRecording: (userId: string, channelId: string, rootId: string, now: number) => void;
     userStartedRecording: (userId: string, channelId: string, rootId: string, now: number) => void;
 }
+
+const msgTypingStrings: Record<string, Record<string, MessageDescriptor>> = {
+    typing: defineMessages({
+        simple: {
+            id: 'msg_typing.isTyping',
+            defaultMessage: '{user} is typing...',
+        },
+        multiple: {
+            id: 'msg_typing.areTyping',
+            defaultMessage: '{users} and {last} are typing...',
+        },
+    }),
+    recording: defineMessages({
+        simple: {
+            id: 'msg_recording.isRecording',
+            defaultMessage: '{user} is recording...',
+        },
+        multiple: {
+            id: 'msg_recording.areRecording',
+            defaultMessage: '{users} and {last} are recording...',
+        },
+    }),
+};
 
 export default function MsgTyping(props: Props) {
     const {userStartedTyping, userStoppedTyping, userStoppedRecording, userStartedRecording} = props;
@@ -46,13 +70,12 @@ export default function MsgTyping(props: Props) {
                 const rootId = post.root_id;
                 const userId = post.user_id;
 
-                if (props.channelId === channelId && props.postId === rootId) {
+                if (props.channelId === channelId && props.rootId === rootId) {
                     userStoppedTyping(userId, channelId, rootId, Date.now());
                     userStoppedRecording(userId, channelId, rootId, Date.now());
                 }
             }
-        }, [props.channelId, props.postId, userStartedTyping, userStartedRecording, userStoppedTyping,
-            userStoppedRecording]),
+        }, [userStartedTyping, userStartedRecording, props.channelId, props.rootId, userStoppedTyping, userStoppedRecording]),
     });
 
     const getInputText = (users: string[], eventType = 'typing') => {
@@ -60,13 +83,15 @@ export default function MsgTyping(props: Props) {
         if (numUsers === 0) {
             return '';
         }
-        const {simpleMessage, multipleMessage, defaultSimpleMessage, defaultMultipleMessage} = getMessages(eventType);
+
+        const messageKey = numUsers === 1 ? 'simple' : 'multiple';
+        const messageDescriptor = msgTypingStrings[eventType][messageKey];
 
         if (numUsers === 1) {
             return (
                 <FormattedMessage
-                    id={simpleMessage}
-                    defaultMessage={defaultSimpleMessage}
+                    {...messageDescriptor}
+
                     values={{
                         user: users[0],
                     }}
@@ -76,35 +101,13 @@ export default function MsgTyping(props: Props) {
         const last = users.pop();
         return (
             <FormattedMessage
-                id={multipleMessage}
-                defaultMessage={defaultMultipleMessage}
+                {...messageDescriptor}
                 values={{
                     users: (users.join(', ')),
                     last,
                 }}
             />
         );
-    };
-
-    const getMessages = (eventType = 'typing') => {
-        switch (eventType) {
-        case 'typing':
-            return {
-                simpleMessage: 'msg_typing.isTyping',
-                multipleMessage: 'msg_typing.areTyping',
-                defaultSimpleMessage: '{user} is typing...',
-                defaultMultipleMessage: '{users} and {last} are typing...',
-            };
-        case 'recording':
-            return {
-                simpleMessage: 'msg_recording.isRecording',
-                multipleMessage: 'msg_recording.areRecording',
-                defaultSimpleMessage: '{user} is recording...',
-                defaultMultipleMessage: '{users} and {last} are recording...',
-            };
-        default:
-            throw new Error('no messages found');
-        }
     };
 
     const typingText = getInputText([...props.typingUsers], 'typing');

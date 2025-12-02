@@ -1,0 +1,10 @@
+.console__body .modal .GenericModal,
+.app__body .modal .GenericModal {
+    &.GenericModal__compassDesign {
+        @media screen and (max-width: 640px) {
+            .modal-header {
+                box-shadow: none;
+            }
+        }
+    }
+}

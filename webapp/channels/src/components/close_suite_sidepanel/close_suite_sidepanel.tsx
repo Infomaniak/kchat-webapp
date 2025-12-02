@@ -9,10 +9,11 @@ import React from 'react';
 
 type Props = {
     bridge: KSuiteBridge;
+    kSuiteMode: string;
 }
 
 const CollapseKsuiteSidepanel: React.FunctionComponent<Props> = (props: Props) => {
-    if (!props.bridge.isConnected) {
+    if (!props.bridge?.isConnected || props.kSuiteMode !== 'side') {
         return null;
     }
 

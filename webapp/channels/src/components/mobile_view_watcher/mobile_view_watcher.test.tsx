@@ -4,8 +4,9 @@
 import {render} from '@testing-library/react';
 import React from 'react';
 
-import matchMedia from 'tests/helpers/match_media.mock';
 import Constants, {WindowSizes} from 'utils/constants';
+
+import matchMedia from 'tests/helpers/match_media.mock';
 
 import MobileViewWatcher from './mobile_view_watcher';
 

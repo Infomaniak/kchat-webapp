@@ -1,13 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {ComponentProps, cloneElement, useState} from 'react';
-import styled from 'styled-components';
-
+import type {
+    Placement} from '@floating-ui/react-dom-interactions';
 import {
     FloatingFocusManager,
     FloatingPortal,
-    Placement,
     autoUpdate,
     flip,
     offset,
@@ -17,6 +15,9 @@ import {
     useInteractions,
     useRole,
 } from '@floating-ui/react-dom-interactions';
+import type {ComponentProps} from 'react';
+import React, {cloneElement, useState} from 'react';
+import styled from 'styled-components';
 
 const FloatingContainer = styled.div`
     min-width: 16rem;

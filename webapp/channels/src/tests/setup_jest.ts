@@ -9,12 +9,16 @@ import Adapter from 'enzyme-adapter-react-17-updated';
 import '@testing-library/jest-dom';
 import 'isomorphic-fetch';
 
+import './performance_mock';
 import './redux-persist_mock';
 import './react-intl_mock';
 import './react-router-dom_mock';
 import './react-tippy_mock';
 
-global.performance = {} as any;
+module.exports = async () => {
+    // eslint-disable-next-line no-process-env
+    process.env.TZ = 'UTC';
+};
 
 configure({adapter: new (Adapter as any)()});
 
@@ -48,9 +52,13 @@ jest.mock('@mui/styled-engine', () => {
 });
 
 jest.mock('utils/url_import', () => ({
+    // eslint-disable-next-line no-process-env
     getWasmFileURL: jest.fn(() => `${process.env.BASE_URL}/wasm-media-encoders/wasm/mp3`),
+    // eslint-disable-next-line no-process-env
     getPdfJSWorkerURL: jest.fn(() => `${process.env.BASE_URL}/pdfjs-dist/build/pdf.worker.min.mjs`),
 }));
+
+global.ResizeObserver = require('resize-observer-polyfill');
 
 // isDependencyWarning returns true when the given console.warn message is coming from a dependency using deprecated
 // React lifecycle methods.
@@ -66,6 +74,7 @@ function isDependencyWarning(params: string[]) {
         paramsHasComponent('Portal') ||
         paramsHasComponent('Overlay') ||
         paramsHasComponent('Position') ||
+        paramsHasComponent('Dropdown') ||
 
         // React-Select
         paramsHasComponent('Select')

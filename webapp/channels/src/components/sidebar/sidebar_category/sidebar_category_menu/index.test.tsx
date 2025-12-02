@@ -59,6 +59,7 @@ describe('components/sidebar/sidebar_category/sidebar_category_menu', () => {
             muted: false,
             collapsed: false,
         },
+        menuTriggerRef: React.createRef<HTMLButtonElement>(),
     };
 
     test('should match snapshot and contain correct buttons', () => {

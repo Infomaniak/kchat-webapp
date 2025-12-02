@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {screen} from '@testing-library/react';
 import {shallow} from 'enzyme';
 import type {ComponentProps} from 'react';
 import React from 'react';
@@ -12,17 +11,9 @@ import type {DeepPartial} from '@mattermost/types/utilities';
 
 import {Permissions} from 'mattermost-redux/constants';
 
-import {renderWithContext} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
 
 import VirtualizedThreadViewer from './virtualized_thread_viewer';
-
-// Needed for apply markdown to properly work down the line
-global.ResizeObserver = require('resize-observer-polyfill');
-
-jest.mock('wasm-media-encoders', () => ({
-    createEncoder: jest.fn(),
-}));
 
 type Props = ComponentProps<typeof VirtualizedThreadViewer>;
 function getBasePropsAndState(): [Props, DeepPartial<GlobalState>] {
@@ -36,7 +27,6 @@ function getBasePropsAndState(): [Props, DeepPartial<GlobalState>] {
     const directTeammate: UserProfile = TestHelper.getUserMock();
     const props: Props = {
         selected: post,
-        channel,
         currentUserId: 'user_id',
         directTeammate,
         lastPost: post,
@@ -44,10 +34,9 @@ function getBasePropsAndState(): [Props, DeepPartial<GlobalState>] {
         replyListIds: ['create-comment'],
         useRelativeTimestamp: true,
         isMobileView: false,
-        isThreadView: true,
-        lastViewedAt: 0,
+        isThreadView: false,
         newMessagesSeparatorActions: [],
-        fromSuppressed: false,
+        measureRhsOpened: jest.fn(),
     };
 
     const state: DeepPartial<GlobalState> = {
@@ -81,6 +70,10 @@ function getBasePropsAndState(): [Props, DeepPartial<GlobalState>] {
     };
     return [props, state];
 }
+
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(),
+}));
 
 describe('components/threading/VirtualizedThreadViewer', () => {
     const [baseProps] = getBasePropsAndState();
@@ -154,3 +147,4 @@ describe('components/threading/VirtualizedThreadViewer', () => {
         expect(scrollToBottom).not.toHaveBeenCalled();
     });
 });
+

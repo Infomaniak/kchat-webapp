@@ -71,6 +71,10 @@ export function isIosChrome(): boolean {
     return userAgent().indexOf('CriOS') !== -1;
 }
 
+export function isIosFirefox(): boolean {
+    return userAgent().indexOf('FxiOS') !== -1;
+}
+
 export function isIosWeb(): boolean {
     return isIosSafari() || isIosChrome();
 }
@@ -105,6 +109,10 @@ export function isMobileApp(): boolean {
     return isMobile() && !isIosWeb() && !isAndroidWeb();
 }
 
+export function isMobileBrowser(): boolean {
+    return isMobile() && !isMobileApp();
+}
+
 // Returns true if and only if the user is using Mattermost from either the mobile app or the web browser on a mobile device.
 export function isMobile(): boolean {
     return isIos() || isAndroid();
@@ -124,6 +132,10 @@ export function isInternetExplorer(): boolean {
 
 export function isEdge(): boolean {
     return userAgent().indexOf('Edge') !== -1;
+}
+
+export function isChromiumEdge(): boolean {
+    return userAgent().indexOf('Edg') !== -1 && userAgent().indexOf('Edge') === -1;
 }
 
 export function isDesktopApp(): boolean {

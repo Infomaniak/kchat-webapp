@@ -15,14 +15,11 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
 import Avatar from 'components/widgets/users/avatar';
-
-import Constants from 'utils/constants';
-import {imageURLForUser} from 'utils/utils';
-
 import './../../../activity_and_insights.scss';
+import WithTooltip from 'components/with_tooltip';
+
+import {imageURLForUser} from 'utils/utils';
 
 type Props = {
     dm: TopDM;
@@ -35,17 +32,13 @@ const TopDMsItem = ({dm, barSize, team}: Props) => {
 
     const tooltip = useCallback((messageCount: number) => {
         return (
-            <Tooltip
-                id='total-messages'
-            >
-                <FormattedMessage
-                    id='insights.topChannels.messageCount'
-                    defaultMessage='{messageCount} total messages'
-                    values={{
-                        messageCount,
-                    }}
-                />
-            </Tooltip>
+            <FormattedMessage
+                id='insights.topChannels.messageCount'
+                defaultMessage='{messageCount} total messages'
+                values={{
+                    messageCount,
+                }}
+            />
         );
     }, []);
 
@@ -71,14 +64,9 @@ const TopDMsItem = ({dm, barSize, team}: Props) => {
                 </div>
                 <span className='dm-role'>{dm.second_participant.position}</span>
                 <div className='channel-message-count'>
-                    <OverlayTrigger
-                        trigger={['hover']}
-                        delayShow={Constants.OVERLAY_TIME_DELAY}
-                        placement='top'
-                        overlay={tooltip(dm.post_count)}
-                    >
+                    <WithTooltip title={tooltip(dm.post_count)}>
                         <span className='message-count'>{dm.post_count}</span>
-                    </OverlayTrigger>
+                    </WithTooltip>
                     <span
                         className='horizontal-bar'
                         style={{

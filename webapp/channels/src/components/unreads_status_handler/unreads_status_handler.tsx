@@ -10,6 +10,11 @@ import type {Team} from '@mattermost/types/teams';
 
 import {basicUnreadMeta} from 'mattermost-redux/selectors/entities/channels';
 import type {BasicUnreadStatus} from 'mattermost-redux/selectors/entities/channels';
+import {ensureString} from 'mattermost-redux/utils/post_utils';
+
+import {Constants} from 'utils/constants';
+import DesktopApp from 'utils/desktop_api';
+import * as UserAgent from 'utils/user_agent';
 
 import faviconDefault16x16 from 'images/favicon/favicon-default-16x16.png';
 import faviconDefault24x24 from 'images/favicon/favicon-default-24x24.png';
@@ -26,9 +31,6 @@ import faviconUnread24x24 from 'images/favicon/favicon-unread-24x24.png';
 import faviconUnread32x32 from 'images/favicon/favicon-unread-32x32.png';
 import faviconUnread64x64 from 'images/favicon/favicon-unread-64x64.png';
 import faviconUnread96x96 from 'images/favicon/favicon-unread-96x96.png';
-import {Constants} from 'utils/constants';
-import DesktopApp from 'utils/desktop_api';
-import * as UserAgent from 'utils/user_agent';
 
 enum BadgeStatus {
     Mention = 'Mention',
@@ -41,11 +43,11 @@ type Props = {
     unreadStatus: BasicUnreadStatus;
     siteName?: string;
     currentChannel?: Channel;
-    currentTeam: Team;
+    currentTeam?: Team;
     currentTeammate: Channel | null;
     inGlobalThreads: boolean;
     inDrafts: boolean;
-    inActivityAndInsights: boolean;
+    inScheduledPosts: boolean;
 };
 
 export class UnreadsStatusHandlerClass extends React.PureComponent<Props> {
@@ -90,7 +92,7 @@ export class UnreadsStatusHandlerClass extends React.PureComponent<Props> {
             unreadStatus,
             inGlobalThreads,
             inDrafts,
-            inActivityAndInsights,
+            inScheduledPosts,
         } = this.props;
         const {formatMessage} = this.props.intl;
 
@@ -127,11 +129,12 @@ export class UnreadsStatusHandlerClass extends React.PureComponent<Props> {
                 displayName: currentTeam.display_name,
                 siteName: currentSiteName,
             });
-        } else if (currentTeam && inActivityAndInsights) {
+        } else if (currentTeam && inScheduledPosts) {
             document.title = formatMessage({
-                id: 'activityAndInsights.title',
-                defaultMessage: 'Activity and Insights - {displayName} {siteName}',
+                id: 'scheduledPosts.title',
+                defaultMessage: '{prefix}Scheduled - {displayName} {siteName}',
             }, {
+                prefix: `${mentionTitle}${unreadTitle}`,
                 displayName: currentTeam.display_name,
                 siteName: currentSiteName,
             });
@@ -156,7 +159,7 @@ export class UnreadsStatusHandlerClass extends React.PureComponent<Props> {
         const link64x64 = document.querySelector<HTMLLinkElement>('link[rel="icon"][sizes="64x64"]');
         const link96x96 = document.querySelector<HTMLLinkElement>('link[rel="icon"][sizes="96x96"]');
 
-        const getFavicon = (url: string): string => (typeof url === 'string' ? url : '');
+        const getFavicon = (url: string): string => ensureString(url);
 
         switch (badgeStatus) {
         case BadgeStatus.Mention: {

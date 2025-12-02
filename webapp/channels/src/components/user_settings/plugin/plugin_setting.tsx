@@ -13,6 +13,8 @@ import SettingItemMin from 'components/setting_item_min';
 
 import {getPluginPreferenceKey} from 'utils/plugins/preferences';
 
+import PluggableErrorBoundary from 'plugins/pluggable/error_boundary';
+
 import type {PluginConfigurationSection} from 'types/plugins/user_settings';
 import type {GlobalState} from 'types/store';
 
@@ -87,6 +89,17 @@ const PluginSetting = ({
                     informChange={onSettingChanged}
                     pluginId={pluginId}
                 />);
+        } else if (setting.type === 'custom') {
+            const CustomComponent = setting.component;
+            const inputEl = (
+                <PluggableErrorBoundary
+                    key={setting.name}
+                    pluginId={pluginId}
+                >
+                    <CustomComponent informChange={onSettingChanged}/>
+                </PluggableErrorBoundary>
+            );
+            inputs.push(inputEl);
         }
     }
 
@@ -101,7 +114,6 @@ const PluginSetting = ({
                 inputs={inputs}
                 submit={updateSetting}
                 updateSection={updateSection}
-
             />
         );
     }

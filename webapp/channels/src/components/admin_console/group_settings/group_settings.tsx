@@ -12,6 +12,8 @@ import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import {DocLinks} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
 
+import Pluggable from 'plugins/pluggable';
+
 type Props = {
     isDisabled?: boolean;
 }
@@ -54,6 +56,7 @@ const GroupSettings = ({isDisabled}: Props) => {
                         subtitleValues={{
                             link: (msg: React.ReactNode) => (
                                 <ExternalLink
+                                    location='group_settings.ldap_groups'
                                     href={`${siteURL}/admin_console/authentication/ldap`}
                                 >
                                     {msg}
@@ -65,6 +68,9 @@ const GroupSettings = ({isDisabled}: Props) => {
                             readOnly={isDisabled}
                         />
                     </AdminPanel>
+                    <Pluggable
+                        pluggableName='SystemConsoleGroupTable'
+                    />
                 </div>
             </div>
         </div>

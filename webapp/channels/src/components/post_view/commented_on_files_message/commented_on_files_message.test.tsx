@@ -3,8 +3,9 @@
 
 import React from 'react';
 
-import {render, renderWithContext, screen} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {render, renderWithContext, screen} from 'tests/react_testing_utils';
 
 import CommentedOnFilesMessage from './commented_on_files_message';
 

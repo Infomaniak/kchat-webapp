@@ -7,12 +7,14 @@ import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {Post} from '@mattermost/types/posts';
 
+import {ensureString} from 'mattermost-redux/utils/post_utils';
+
 import PostHeaderCustomStatus from 'components/post_view/post_header_custom_status/post_header_custom_status';
 import UserProfile from 'components/user_profile';
 import BotTag from 'components/widgets/tag/bot_tag';
 import Tag from 'components/widgets/tag/tag';
 
-import Constants, {Locations} from 'utils/constants';
+import Constants from 'utils/constants';
 import {fromAutoResponder, isFromWebhook} from 'utils/post_utils';
 
 type Props = {
@@ -25,7 +27,6 @@ type Props = {
     isBot: boolean;
     isSystemMessage: boolean;
     isMobileView: boolean;
-    location: keyof typeof Locations;
 };
 
 const PostUserProfile = (props: Props): JSX.Element | null => {
@@ -33,7 +34,6 @@ const PostUserProfile = (props: Props): JSX.Element | null => {
     const {post, compactDisplay, isMobileView, isConsecutivePost, enablePostUsernameOverride, isBot, isSystemMessage, colorizeUsernames} = props;
     const isFromAutoResponder = fromAutoResponder(post);
     const colorize = compactDisplay && colorizeUsernames;
-    const isRHS = props.location === Locations.RHS_COMMENT || props.location === Locations.RHS_ROOT || props.location === Locations.SEARCH;
 
     let userProfile: ReactNode = null;
     let botIndicator = null;
@@ -56,7 +56,6 @@ const PostUserProfile = (props: Props): JSX.Element | null => {
             <UserProfile
                 userId={post.user_id}
                 channelId={post.channel_id}
-                isRHS={isRHS}
                 colorize={colorize}
             />
         );
@@ -67,7 +66,6 @@ const PostUserProfile = (props: Props): JSX.Element | null => {
             <UserProfile
                 userId={post.user_id}
                 channelId={post.channel_id}
-                isRHS={isRHS}
                 colorize={colorize}
             />
         );
@@ -76,13 +74,15 @@ const PostUserProfile = (props: Props): JSX.Element | null => {
             <UserProfile
                 userId={post.user_id}
                 channelId={post.channel_id}
-                isRHS={isRHS}
                 colorize={colorize}
             />
         );
 
         if (isFromWebhook(post)) {
-            const overwriteName = post.props.override_username && enablePostUsernameOverride ? post.props.override_username : undefined;
+            const propOverrideName = ensureString(post.props.override_username);
+            const overwriteName = propOverrideName && enablePostUsernameOverride ? propOverrideName : undefined;
+            const propOverrideIcon = ensureString(post.props.override_icon_url);
+            const overwriteIcon = propOverrideIcon || undefined;
             userProfile = (
                 <UserProfile
                     userId={post.user_id}
@@ -90,7 +90,7 @@ const PostUserProfile = (props: Props): JSX.Element | null => {
                     hideStatus={true}
                     overwriteName={overwriteName}
                     colorize={colorize}
-                    overwriteIcon={post.props.override_icon_url || undefined}
+                    overwriteIcon={overwriteIcon}
                 />
             );
 
@@ -105,7 +105,6 @@ const PostUserProfile = (props: Props): JSX.Element | null => {
                         userId={post.user_id}
                         channelId={post.channel_id}
                         hideStatus={true}
-                        isRHS={isRHS}
                         colorize={colorize}
                     />
                 </span>

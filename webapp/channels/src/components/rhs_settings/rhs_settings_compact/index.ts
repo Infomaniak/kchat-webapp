@@ -9,9 +9,9 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import type {GlobalState} from 'types/store';
 
-import RhsSettingsCompact from './rhs_settings_compact';
-
 import {Preferences} from '../../../utils/constants';
+
+const RhsSettingsCompact = () => null;
 
 function mapStateToProps(state: GlobalState) {
     return {

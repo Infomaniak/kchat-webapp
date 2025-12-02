@@ -2,31 +2,25 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect, useState, useRef} from 'react';
-import {useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
-import {useHistory} from 'react-router-dom';
+import {FormattedMessage} from 'react-intl';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {VariableSizeList} from 'react-window';
-import type {ListChildComponentProps} from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
-import styled, {css} from 'styled-components';
+import styled from 'styled-components';
 
 import type {Group} from '@mattermost/types/groups';
-import type {GlobalState} from '@mattermost/types/store';
 import type {UserProfile} from '@mattermost/types/users';
 
-import {getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import NoResultsIndicator from 'components/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
-import StatusIcon from 'components/status_icon';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
-import SimpleTooltip from 'components/widgets/simple_tooltip';
-import Avatar from 'components/widgets/users/avatar';
 
-import {UserStatuses} from 'utils/constants';
 import * as Utils from 'utils/utils';
+
+import type {GroupMember} from './group_member_list_item';
+import GroupMemberListItem, {ITEM_HEIGHT, MARGIN} from './group_member_list_item';
 
 import {Load} from '../constants';
 
@@ -34,19 +28,12 @@ const USERS_PER_PAGE = 100;
 
 // These constants must be changed if user list style is modified
 export const VIEWPORT_SCALE_FACTOR = 0.4;
-const ITEM_HEIGHT = 40;
-const MARGIN = 8;
 const getItemHeight = (isCap: boolean) => (isCap ? ITEM_HEIGHT + MARGIN : ITEM_HEIGHT);
 export const getListHeight = (num: number) => (num * ITEM_HEIGHT) + (2 * MARGIN);
 
 // Reasonable extrema for the user list
 const MIN_LIST_HEIGHT = 120;
 export const MAX_LIST_HEIGHT = 800;
-
-export type GroupMember = {
-    user: UserProfile;
-    displayName: string;
-}
 
 export type Props = {
 
@@ -61,11 +48,6 @@ export type Props = {
     hide: () => void;
 
     /**
-     * Function to call to show a profile popover and hide parent popover
-     */
-    showUserOverlay: (user: UserProfile) => void;
-
-    /**
      * State of current search
      */
     searchState: Load;
@@ -78,7 +60,9 @@ export type Props = {
     searchTerm: string;
 
     actions: {
+        getGroup: (groupId: string, includeMemberCount: boolean) => Promise<ActionResult<Group>>;
         getUsersInGroup: (groupId: string, page: number, perPage: number, sort: string) => Promise<ActionResult<UserProfile[]>>;
+        resetUsersInGroup: (groupId: string, members: GroupMember[]) => void;
         openDirectChannelToUserId: (userId: string) => Promise<ActionResult>;
         closeRightHandSide: () => void;
     };
@@ -93,16 +77,10 @@ const GroupMemberList = (props: Props) => {
         teamUrl,
         searchTerm,
         searchState,
-        showUserOverlay,
     } = props;
-
-    const history = useHistory();
-
-    const {formatMessage} = useIntl();
 
     const [nextPage, setNextPage] = useState(Math.floor(members.length / USERS_PER_PAGE));
     const [nextPageLoadState, setNextPageLoadState] = useState(Load.DONE);
-    const [currentDMLoading, setCurrentDMLoading] = useState<string | undefined>(undefined);
 
     const infiniteLoaderRef = useRef<InfiniteLoader | null>(null);
     const variableSizeListRef = useRef<VariableSizeList | null>(null);
@@ -120,6 +98,17 @@ const GroupMemberList = (props: Props) => {
         setHasMounted(true);
     }, [members.length, hasMounted]);
 
+    // IK: this is necessary to make sure the items in the list
+    // correspond to the displayed member count, and the height
+    // is calculated correctly
+    useEffect(() => {
+        if (!hasMounted) {
+            actions.getGroup(group.id, true);
+            actions.resetUsersInGroup(group.id, members);
+            actions.getUsersInGroup(group.id, 0, USERS_PER_PAGE, 'display_name');
+        }
+    }, [actions, group.id, hasMounted, members]);
+
     const loadNextPage = async () => {
         setNextPageLoadState(Load.LOADING);
         const res = await actions.getUsersInGroup(group.id, nextPage, USERS_PER_PAGE, 'display_name');
@@ -129,21 +118,6 @@ const GroupMemberList = (props: Props) => {
         } else {
             setNextPageLoadState(Load.FAILED);
         }
-    };
-
-    const showDirectChannel = (user: UserProfile) => {
-        if (currentDMLoading !== undefined) {
-            return;
-        }
-        setCurrentDMLoading(user.id);
-        actions.openDirectChannelToUserId(user.id).then((result: ActionResult) => {
-            if (!result.error) {
-                actions.closeRightHandSide();
-                setCurrentDMLoading(undefined);
-                hide?.();
-                history.push(`${teamUrl}/messages/@${user.username}`);
-            }
-        });
     };
 
     const isSearching = searchTerm !== '';
@@ -158,77 +132,6 @@ const GroupMemberList = (props: Props) => {
         return isSearching || !hasNextPage || index < members.length;
     };
 
-    const Item = ({index, style}: ListChildComponentProps) => {
-        // Remove explicit height provided by VariableSizeList
-        style.height = undefined;
-
-        const status = useSelector((state: GlobalState) => getStatusForUserId(state, members[index]?.user?.id) || UserStatuses.OFFLINE);
-        if (isUserLoaded(index)) {
-            const user = members[index].user;
-            const name = members[index].displayName;
-            return (
-                <UserListItem
-                    className='group-member-list_item'
-                    first={index === 0}
-                    last={index === group.member_count - 1}
-                    style={style}
-                    key={user.id}
-                    role='listitem'
-                >
-                    <UserButton
-                        onClick={() => showUserOverlay(user)}
-                        aria-haspopup='dialog'
-                    >
-                        <span className='status-wrapper'>
-                            <Avatar
-                                username={user.username}
-                                size={'sm'}
-                                url={Utils.imageURLForUser(user?.id ?? '')}
-                                className={'avatar-post-preview'}
-                                tabIndex={-1}
-                            />
-                            <StatusIcon
-                                className='status user-popover-status'
-                                status={status}
-                                button={true}
-                            />
-                        </span>
-                        <Username className='overflow--ellipsis text-nowrap'>{name}</Username>
-                        <Gap className='group-member-list_gap'/>
-                    </UserButton>
-                    <DMContainer className='group-member-list_dm-button'>
-                        <SimpleTooltip
-                            id={`name-${user.id}`}
-                            content={formatMessage({id: 'group_member_list.sendMessageTooltip', defaultMessage: 'Send message'})}
-                        >
-                            <DMButton
-                                className='btn btn-icon btn-xs'
-                                aria-label={formatMessage(
-                                    {id: 'group_member_list.sendMessageButton', defaultMessage: 'Send message to {user}'},
-                                    {user: name})}
-                                onClick={() => showDirectChannel(user)}
-                            >
-                                <i
-                                    className='icon icon-send'
-                                />
-                            </DMButton>
-                        </SimpleTooltip>
-                    </DMContainer>
-                </UserListItem>
-            );
-        }
-
-        return (
-            <LoadingItem
-                style={style}
-                first={index === 0}
-                last={index === members.length}
-            >
-                <LoadingSpinner/>
-            </LoadingItem>
-        );
-    };
-
     const renderContent = () => {
         if (searchState === Load.LOADING) {
             return (
@@ -239,7 +142,12 @@ const GroupMemberList = (props: Props) => {
         } else if (searchState === Load.FAILED) {
             return (
                 <LoadFailedItem>
-                    <span>{Utils.localizeMessage('group_member_list.searchError', 'There was a problem getting results. Clear your search term and try again.')}</span>
+                    <span>
+                        <FormattedMessage
+                            id='group_member_list.searchError'
+                            defaultMessage='There was a problem getting results. Clear your search term and try again.'
+                        />
+                    </span>
                 </LoadFailedItem>
             );
         } else if (isSearching && members.length === 0) {
@@ -255,12 +163,18 @@ const GroupMemberList = (props: Props) => {
             return (
                 <LoadFailedItem>
                     <span>
-                        {Utils.localizeMessage('group_member_list.loadError', 'Oops! Something went wrong while loading this group.')}
+                        <FormattedMessage
+                            id='group_member_list.loadError'
+                            defaultMessage='Oops! Something went wrong while loading this group.'
+                        />
                         {' '}
                         <RetryButton
                             onClick={loadMoreItems}
                         >
-                            {Utils.localizeMessage('group_member_list.retryLoadButton', 'Retry')}
+                            <FormattedMessage
+                                id='group_member_list.retryLoadButton'
+                                defaultMessage='Retry'
+                            />
                         </RetryButton>
                     </span>
                 </LoadFailedItem>
@@ -283,8 +197,19 @@ const GroupMemberList = (props: Props) => {
                             itemSize={(index) => getItemHeight(index === 0 || index === group.member_count - 1 || index === members.length + 1)}
                             height={height}
                             width={width}
+                            itemData={{
+                                members,
+                                group,
+                                hide,
+                                teamUrl,
+                                actions: {
+                                    openDirectChannelToUserId: actions.openDirectChannelToUserId,
+                                    closeRightHandSide: actions.closeRightHandSide,
+                                },
+                            }}
                         >
-                            {Item}
+                            {/* ik: replaced local Item for GroupMemberListItem component to fix a rendering issue */}
+                            {GroupMemberListItem}
                         </VariableSizeList>)}
                 </InfiniteLoader>
             )}
@@ -308,94 +233,6 @@ const UserList = styled.div`
     border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
     box-sizing: content-box;
     position: relative;
-`;
-
-const UserListItem = styled.div<{first?: boolean; last?: boolean}>`
-    ${(props) => props.first && css `
-        margin-top: ${MARGIN}px;
-    `}
-
-    ${(props) => props.last && css `
-        margin-bottom: ${MARGIN}px;
-    `}
-
-    &:hover {
-        background: rgba(var(--center-channel-color-rgb), 0.08);
-    }
-
-    .group-member-list_gap {
-        display: none;
-    }
-
-    .group-member-list_dm-button {
-        opacity: 0;
-    }
-
-    &:hover .group-member-list_gap,
-    &:focus-within .group-member-list_gap {
-        display: initial;
-    }
-
-    &:hover .group-member-list_dm-button,
-    &:focus-within .group-member-list_dm-button {
-        opacity: 1;
-    }
-`;
-
-const UserButton = styled.button`
-    display: flex;
-    width: 100%;
-    padding: 0px 20px;
-    border: none;
-    background: unset;
-    text-align: unset;
-    align-items: center;
-`;
-
-// A gap to make space for the DM button to be positioned on
-const Gap = styled.span`
-    width: 24px;
-    flex: 0 0 auto;
-    margin-left: 4px;
-`;
-
-const Username = styled.span`
-    padding-left: 12px;
-    flex: 1 1 auto;
-`;
-
-const DMContainer = styled.div`
-    height: 100%;
-    position: absolute;
-    right: 20px;
-    top: 0;
-    display: flex;
-    align-items: center;
-`;
-
-const DMButton = styled.button`
-    width: 24px;
-    height: 24px;
-
-    svg {
-        width: 16px;
-    }
-`;
-
-const LoadingItem = styled.div<{first?: boolean; last?: boolean}>`
-    ${(props) => props.first && css `
-        padding-top: ${MARGIN}px;
-    `}
-
-    ${(props) => props.last && css `
-        padding-bottom: ${MARGIN}px;
-    `}
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: ${ITEM_HEIGHT}px;
-    box-sizing: content-box;
 `;
 
 const LargeLoadingItem = styled.div`

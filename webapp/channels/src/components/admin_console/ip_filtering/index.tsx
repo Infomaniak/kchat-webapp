@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {AlertOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
-import {AlertOutlineIcon} from '@mattermost/compass-icons/components';
 import type {AllowedIPRange, FetchIPResponse} from '@mattermost/types/config';
 
 import {applyIPFilters, getCurrentIP, getIPFilters} from 'actions/admin_actions';
@@ -23,7 +23,7 @@ import EnableSectionContent from './enable_section';
 import {isIPAddressInRanges} from './ip_filtering_utils';
 import SaveConfirmationModal from './save_confirmation_modal';
 
-import SaveChangesPanel from '../team_channel_settings/save_changes_panel';
+import SaveChangesPanel from '../save_changes_panel';
 
 import './ip_filtering.scss';
 

@@ -12,11 +12,12 @@ import {Client4} from 'mattermost-redux/client';
 
 import * as Actions from 'actions/emoji_actions';
 
-import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import mockStore from 'tests/test_store';
 import {Preferences} from 'utils/constants';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import {TestHelper} from 'utils/test_helper';
+
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
+import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
 

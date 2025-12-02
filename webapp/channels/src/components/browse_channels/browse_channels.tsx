@@ -7,11 +7,15 @@ import {FormattedMessage} from 'react-intl';
 
 import {GenericModal} from '@mattermost/components';
 import type {Channel, ChannelMembership, ChannelSearchOpts, ChannelsWithTotalCount} from '@mattermost/types/channels';
+import type {CloudUsage} from '@mattermost/types/cloud';
+import type {PackName} from '@mattermost/types/teams';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import Permissions from 'mattermost-redux/constants/permissions';
 import type {ActionResult} from 'mattermost-redux/types/actions';
+import {quotaGate} from 'mattermost-redux/utils/plans_util';
 
+import withUseGetUsageDelta from 'components/common/hocs/cloud/with_use_get_usage_deltas';
 import LoadingScreen from 'components/loading_screen';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
@@ -43,6 +47,7 @@ type Actions = {
     getChannels: (teamId: string, page: number, perPage: number) => Promise<ActionResult<Channel[]>>;
     getArchivedChannels: (teamId: string, page: number, channelsPerPage: number) => Promise<ActionResult<Channel[]>>;
     joinChannel: (currentUserId: string, teamId: string, channelId: string) => Promise<ActionResult>;
+    previewChannel: (teamId: string, channelId: string) => Promise<ActionResult>;
     searchAllChannels: (term: string, opts?: ChannelSearchOpts) => Promise<ActionResult<Channel[] | ChannelsWithTotalCount>>;
     openModal: <P>(modalData: ModalData<P>) => void;
     closeModal: (modalId: string) => void;
@@ -61,7 +66,7 @@ export type Props = {
     privateChannels: Channel[];
     currentUserId: string;
     teamId: string;
-    teamName: string;
+    teamName?: string;
     channelsRequestStarted?: boolean;
     canShowArchivedChannels?: boolean;
     myChannelMemberships: RelationOneToOne<Channel, ChannelMembership>;
@@ -70,6 +75,8 @@ export type Props = {
     rhsOpen?: boolean;
     channelsMemberCount?: Record<string, number>;
     actions: Actions;
+    usageDeltas: CloudUsage;
+    currentPack: PackName | undefined;
 }
 
 type State = {
@@ -82,7 +89,7 @@ type State = {
     searchTerm: string;
 }
 
-export default class BrowseChannels extends React.PureComponent<Props, State> {
+class BrowseChannels extends React.PureComponent<Props, State> {
     public searchTimeoutId: number;
     activeChannels: Channel[] = [];
 
@@ -103,6 +110,11 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
+        if (!this.props.teamId) {
+            this.loadComplete();
+            return;
+        }
+
         const promises = [
             this.props.actions.getChannels(this.props.teamId, 0, CHANNELS_CHUNK_SIZE * 2),
         ];
@@ -172,13 +184,15 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
 
         if (!this.isMemberOfChannel(channel.id) && !preview) {
             result = await actions.joinChannel(currentUserId, teamId, channel.id);
+        } else { // ik: preview channel feature case
+            result = await actions.previewChannel(teamId, channel.id);
         }
 
         if (result?.error) {
             this.setState({serverError: result.error.message});
         } else {
             this.props.actions.getChannelsMemberCount([channel.id]);
-            getHistory().push(getRelativeChannelURL(teamName, channel.name));
+            getHistory().push(getRelativeChannelURL(teamName!, channel.name));
             this.closeEditRHS();
         }
 
@@ -288,6 +302,7 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
     render() {
         const {teamId, channelsRequestStarted, shouldHideJoinedChannels} = this.props;
         const {search, serverError: serverErrorState, searching} = this.state;
+
         this.activeChannels = this.getActiveChannels();
 
         let serverError;
@@ -295,6 +310,9 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
             serverError =
                 <div className='form-group has-error'><label className='control-label'>{serverErrorState}</label></div>;
         }
+
+        const delta = this.props.usageDeltas.public_channels >= 0 && this.props.usageDeltas.private_channels >= 0 ? 0 : -1;
+        const {isQuotaExceeded, withQuotaCheck} = quotaGate(delta, this.props.currentPack);
 
         const createNewChannelButton = (className: string, icon?: JSX.Element) => {
             const buttonClassName = classNames('btn', className);
@@ -307,10 +325,16 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
                         type='button'
                         id='createNewChannelButton'
                         className={buttonClassName}
-                        onClick={this.handleNewChannel}
-                        aria-label={localizeMessage('more_channels.create', 'Create New Channel')}
+                        onClick={withQuotaCheck(this.handleNewChannel)}
+                        aria-label={localizeMessage({id: 'more_channels.create', defaultMessage: 'Create New Channel'})}
                     >
                         {icon}
+                        {isQuotaExceeded && (
+                            <wc-icon
+                                name='rocket'
+                                style={{color: 'rgb(var(--button-bg-rgb))'}}
+                            />)
+                        }
                         <FormattedMessage
                             id='more_channels.create'
                             defaultMessage='Create New Channel'
@@ -333,7 +357,7 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
         );
 
         const body = this.state.loading ? <LoadingScreen/> : (
-            <React.Fragment>
+            <>
                 <SearchableChannelList
                     channels={this.activeChannels}
                     channelsPerPage={CHANNELS_PER_PAGE}
@@ -353,7 +377,7 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
                     channelsMemberCount={this.props.channelsMemberCount}
                 />
                 {serverError}
-            </React.Fragment>
+            </>
         );
 
         const title = (
@@ -365,9 +389,8 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
 
         return (
             <GenericModal
-                onExited={this.handleExit}
                 id='browseChannelsModal'
-                aria-labelledby='browseChannelsModalLabel'
+                onExited={this.handleExit}
                 compassDesign={true}
                 modalHeaderText={title}
                 headerButton={createNewChannelButton('btn-secondary btn-sm')}
@@ -381,3 +404,5 @@ export default class BrowseChannels extends React.PureComponent<Props, State> {
         );
     }
 }
+
+export default withUseGetUsageDelta(BrowseChannels);

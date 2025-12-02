@@ -4,30 +4,25 @@
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 
-import {getChannel, getChannelMember, selectChannel, joinChannel, getChannelStats} from 'mattermost-redux/actions/channels';
+import {getChannel, selectChannel, getChannelStats} from 'mattermost-redux/actions/channels';
 import {getPostThread} from 'mattermost-redux/actions/posts';
 import {getMissingProfilesByIds} from 'mattermost-redux/actions/users';
-import {Client4} from 'mattermost-redux/client';
-import {getCurrentChannel, getChannel as getChannelFromRedux} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFuncAsync, ThunkActionFunc} from 'mattermost-redux/types/actions';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
-import {isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {loadChannelsForCurrentUser} from 'actions/channel_actions';
 import {loadNewDMIfNeeded, loadNewGMIfNeeded} from 'actions/user_actions';
 import {selectPostAndHighlight} from 'actions/views/rhs';
 
 import {getHistory} from 'utils/browser_history';
-import {joinPrivateChannelPrompt} from 'utils/channel_utils';
 import {ActionTypes, Constants, ErrorPageTypes} from 'utils/constants';
 import {isComment, getPostURL} from 'utils/post_utils';
 
-import type {GlobalState} from 'types/store';
+import type {ActionFuncAsync, ThunkActionFunc} from 'types/store';
 
-let privateChannelJoinPromptVisible = false;
+const privateChannelJoinPromptVisible = false;
 
 type Option = {
     skipRedirectReplyPermalink: boolean;
@@ -35,7 +30,7 @@ type Option = {
 
 function focusRootPost(post: Post, channel: Channel): ActionFuncAsync {
     return async (dispatch, getState) => {
-        const postURL = getPostURL(getState() as GlobalState, post);
+        const postURL = getPostURL(getState(), post);
 
         dispatch(selectChannel(channel.id));
         dispatch({
@@ -58,12 +53,12 @@ function focusReplyPost(post: Post, channel: Channel, teamId: string, returnTo: 
             return {data: false};
         }
 
-        const state = getState() as GlobalState;
+        const state = getState();
 
         const team = getTeam(state, channel.team_id || teamId);
         const currentChannel = getCurrentChannel(state);
 
-        const sameTeam = currentChannel && currentChannel.team_id === team.id;
+        const sameTeam = currentChannel && currentChannel.team_id === team?.id;
 
         const {skipRedirectReplyPermalink} = option;
 
@@ -90,16 +85,13 @@ export function focusPost(postId: string, returnTo = '', currentUserId: string, 
             return;
         }
 
-        // let postInfo;
-        // try {
-        //     postInfo = await Client4.getPostThread(postId);
-        // } catch (e) {
-        //     getHistory().replace(`/error?type=${ErrorPageTypes.PERMALINK_NOT_FOUND}&returnTo=${returnTo}`);
-        //     return;
-        // }
-
         const state = getState();
         const currentTeam = getCurrentTeam(state);
+        if (!currentTeam) {
+            return;
+        }
+
+        //IK: We don't use postInfo
 
         const {data: threadData} = await dispatch(getPostThread(postId));
 
@@ -116,7 +108,7 @@ export function focusPost(postId: string, returnTo = '', currentUserId: string, 
         const isCollapsed = isCollapsedThreadsEnabled(state);
 
         const channelId = threadData.posts[threadData.order[0]].channel_id;
-        // let channel = getChannelFromRedux(state, channelId);
+
         let channel = state.entities.channels.channels[channelId];
 
         if (!channel) {
@@ -130,37 +122,9 @@ export function focusPost(postId: string, returnTo = '', currentUserId: string, 
             channel = channelData;
         }
 
+        //IK: we don't need to check membership
+
         const teamId = channel.team_id || currentTeam.id;
-        let myMember = state.entities.channels.myMembers[channelId];
-
-        if (!myMember) {
-            // If it's a DM or GM channel and we don't have a channel member for it already, user is not a member
-            if (channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) {
-                getHistory().replace(`/error?type=${ErrorPageTypes.PERMALINK_NOT_FOUND}&returnTo=${returnTo}`);
-                return;
-            }
-
-            const membership = await dispatch(getChannelMember(channel.id, currentUserId));
-            if ('data' in membership) {
-                myMember = membership.data!;
-            }
-
-            if (!myMember) {
-                // Prompt system admin before joining the private channel
-                const user = getCurrentUser(state);
-                if (channel.type === Constants.PRIVATE_CHANNEL && isSystemAdmin(user.roles)) {
-                    privateChannelJoinPromptVisible = true;
-                    const joinPromptResult = await dispatch(joinPrivateChannelPrompt(currentTeam, channel));
-                    privateChannelJoinPromptVisible = false;
-                    if ('data' in joinPromptResult && !joinPromptResult.data.join) {
-                        return;
-                    }
-                }
-
-                // [Preview feature] disabling join channel when focusing a post.
-                //await dispatch(joinChannel(currentUserId, '', channelId, channel.name));
-            }
-        }
 
         if (channel.team_id && channel.team_id !== teamId) {
             getHistory().replace(`/error?type=${ErrorPageTypes.PERMALINK_NOT_FOUND}&returnTo=${returnTo}`);

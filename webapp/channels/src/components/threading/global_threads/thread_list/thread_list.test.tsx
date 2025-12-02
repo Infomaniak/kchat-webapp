@@ -5,23 +5,22 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import type {ComponentProps} from 'react';
 
-import {TestHelper} from 'utils/test_helper';
-
-import {getThreads} from 'mattermost-redux/actions/threads';
-
-jest.mock('mattermost-redux/actions/threads');
-jest.mock('actions/views/modals');
+import {getThreadsForCurrentTeam} from 'mattermost-redux/actions/threads';
 
 import {openModal} from 'actions/views/modals';
 
 import Header from 'components/widgets/header';
 
-import {Constants, WindowSizes} from 'utils/constants';
+import {WindowSizes} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import ThreadList, {ThreadFilter} from './thread_list';
 import VirtualizedThreadList from './virtualized_thread_list';
 
 import Button from '../../common/button';
+
+jest.mock('mattermost-redux/actions/threads');
+jest.mock('actions/views/modals');
 
 const mockRouting = {
     currentUserId: 'uid',
@@ -120,7 +119,7 @@ describe('components/threading/global_threads/thread_list', () => {
             <ThreadList {...props}/>,
         );
 
-        wrapper.find(Header).shallow().find({content: 'Mark all as read'}).find(Button).simulate('click');
+        wrapper.find(Header).shallow().find(Button).find({id: 'threads-list__mark-all-as-read'}).simulate('click');
         expect(openModal).toHaveBeenCalledTimes(1);
     });
 
@@ -137,7 +136,7 @@ describe('components/threading/global_threads/thread_list', () => {
         const loadMoreItems = await handleLoadMoreItems(2, 3);
 
         expect(loadMoreItems).toEqual({data: true});
-        expect(getThreads).toHaveBeenCalledWith('uid', 'tid', {unread: false, perPage: Constants.THREADS_PAGE_SIZE, before: '2'});
+        expect(getThreadsForCurrentTeam).toHaveBeenCalledWith({unread: false, before: '2'});
         expect(setState.mock.calls).toEqual([[true], [false], [true]]);
     });
 });

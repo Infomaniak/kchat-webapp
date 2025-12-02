@@ -150,6 +150,20 @@ func TestAppErrorSerialize(t *testing.T) {
 		require.EqualError(t, berr, aerr.Error())
 	})
 
+	t.Run("Wipe Detailed", func(t *testing.T) {
+		aerr := NewAppError("", "message", nil, "detail", http.StatusTeapot)
+		aerr.WipeDetailed()
+		js := aerr.ToJSON()
+		err := AppErrorFromJSON(strings.NewReader(js))
+		berr, ok := err.(*AppError)
+		require.True(t, ok)
+		require.Equal(t, "message", berr.Id)
+		require.Equal(t, "", berr.DetailedError)
+		require.Equal(t, http.StatusTeapot, berr.StatusCode)
+
+		require.EqualError(t, berr, aerr.Error())
+	})
+
 	t.Run("Wrapped", func(t *testing.T) {
 		aerr := NewAppError("", "message", nil, "", http.StatusTeapot).Wrap(errors.New("wrapped"))
 		js := aerr.ToJSON()
@@ -163,6 +177,20 @@ func TestAppErrorSerialize(t *testing.T) {
 		require.EqualError(t, berr, aerr.Error())
 	})
 
+	t.Run("Wipe Wrapped", func(t *testing.T) {
+		aerr := NewAppError("", "message", nil, "", http.StatusTeapot).Wrap(errors.New("wrapped"))
+		aerr.WipeDetailed()
+		js := aerr.ToJSON()
+		err := AppErrorFromJSON(strings.NewReader(js))
+		berr, ok := err.(*AppError)
+		require.True(t, ok)
+		require.Equal(t, "message", berr.Id)
+		require.Equal(t, "", berr.DetailedError)
+		require.Equal(t, http.StatusTeapot, berr.StatusCode)
+
+		require.EqualError(t, berr, aerr.Error())
+	})
+
 	t.Run("Detailed + Wrapped", func(t *testing.T) {
 		aerr := NewAppError("", "message", nil, "detail", http.StatusTeapot).Wrap(errors.New("wrapped"))
 		js := aerr.ToJSON()
@@ -171,6 +199,20 @@ func TestAppErrorSerialize(t *testing.T) {
 		require.True(t, ok)
 		require.Equal(t, "message", berr.Id)
 		require.Equal(t, "detail, wrapped", berr.DetailedError)
+		require.Equal(t, http.StatusTeapot, berr.StatusCode)
+
+		require.EqualError(t, berr, aerr.Error())
+	})
+
+	t.Run("Detailed + Wrapped", func(t *testing.T) {
+		aerr := NewAppError("", "message", nil, "detail", http.StatusTeapot).Wrap(errors.New("wrapped"))
+		aerr.WipeDetailed()
+		js := aerr.ToJSON()
+		err := AppErrorFromJSON(strings.NewReader(js))
+		berr, ok := err.(*AppError)
+		require.True(t, ok)
+		require.Equal(t, "message", berr.Id)
+		require.Equal(t, "", berr.DetailedError)
 		require.Equal(t, http.StatusTeapot, berr.StatusCode)
 
 		require.EqualError(t, berr, aerr.Error())
@@ -352,6 +394,50 @@ func TestIsValidEmail(t *testing.T) {
 		},
 		{
 			Input:    "email1@domain.com, email2@domain.com",
+			Expected: false,
+		},
+		{
+			Input:    "\"attacker@attacker.com,admin\"@spaceship.com",
+			Expected: false,
+		},
+		{
+			Input:    "(email)@domain.com",
+			Expected: false,
+		},
+		{
+			Input:    "<email>@domain.com",
+			Expected: false,
+		},
+		{
+			Input:    "[email]@domain.com",
+			Expected: false,
+		},
+		{
+			Input:    "{email}@domain.com",
+			Expected: true,
+		},
+		{
+			Input:    "first\"name@domain.com",
+			Expected: false,
+		},
+		{
+			Input:    "first:name@domain.com",
+			Expected: false,
+		},
+		{
+			Input:    "first;name@domain.com",
+			Expected: false,
+		},
+		{
+			Input:    "first,name@domain.com",
+			Expected: false,
+		},
+		{
+			Input:    "first@name@domain.com",
+			Expected: false,
+		},
+		{
+			Input:    "john..doe@example.com",
 			Expected: false,
 		},
 	} {
@@ -921,7 +1007,6 @@ func TestNowhereNil(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testCase := testCase
 		t.Run(testCase.Description, func(t *testing.T) {
 			defer func() {
 				if r := recover(); r != nil {
@@ -1154,7 +1239,6 @@ func TestIsValidHTTPURL(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testCase := testCase
 		t.Run(testCase.Description, func(t *testing.T) {
 			defer func() {
 				if r := recover(); r != nil {

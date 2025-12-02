@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {RefreshIcon} from '@infomaniak/compass-icons/components';
 import React, {useCallback, useState, useEffect} from 'react';
 import {defineMessages, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 
-import {RefreshIcon} from '@mattermost/compass-icons/components';
 import type {Team} from '@mattermost/types/teams';
 
 import {Permissions} from 'mattermost-redux/constants';

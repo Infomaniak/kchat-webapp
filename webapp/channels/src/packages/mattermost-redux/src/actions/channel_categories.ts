@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import * as Sentry from '@sentry/react';
 import {batchActions} from 'redux-batched-actions';
 
 import type {OrderedChannelCategories, ChannelCategory} from '@mattermost/types/channel_categories';
@@ -331,6 +332,24 @@ export function moveChannelsToCategory(categoryId: string, channelIds: string[],
                 };
             }
         });
+
+        // IK changes : check if there is duplicate channel id in different categories and send sentry error
+        const channelIdSet = new Set<string>();
+        const duplicateChannelIds: string[] = [];
+
+        Object.values(categories).forEach((category) => {
+            category.channel_ids.forEach((channelId) => {
+                if (channelIdSet.has(channelId)) {
+                    duplicateChannelIds.push(channelId);
+                } else {
+                    channelIdSet.add(channelId);
+                }
+            });
+        });
+
+        if (duplicateChannelIds.length > 0) {
+            Sentry.captureMessage(`Duplicate channel IDs found in different categories: ${duplicateChannelIds.join(', ')}`, 'error');
+        }
 
         const categoriesArray = Object.values(categories).reduce((allCategories: ChannelCategory[], category) => {
             allCategories.push(category);

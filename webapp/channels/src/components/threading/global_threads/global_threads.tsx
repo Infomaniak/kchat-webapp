@@ -8,7 +8,7 @@ import {useIntl} from 'react-intl';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 import {Link, useRouteMatch} from 'react-router-dom';
 
-import {getThreadCounts, getThreads} from 'mattermost-redux/actions/threads';
+import {getThreadCounts, getThreadsForCurrentTeam} from 'mattermost-redux/actions/threads';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {
     getThreadOrderInCurrentTeam,
@@ -22,16 +22,15 @@ import {loadProfilesForSidebar} from 'actions/user_actions';
 import {selectLhsItem} from 'actions/views/lhs';
 import {suppressRHS, unsuppressRHS} from 'actions/views/rhs';
 import {setSelectedThreadId} from 'actions/views/threads';
-import {getIsRhsOpen} from 'selectors/rhs';
 import {getSelectedThreadIdInCurrentTeam} from 'selectors/views/threads';
 import {useGlobalState} from 'stores/hooks';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import LoadingScreen from 'components/loading_screen';
 import NoResultsIndicator from 'components/no_results_indicator';
-import Header from 'components/widgets/header';
 
-import {Constants, PreviousViewedTypes} from 'utils/constants';
+import {PreviousViewedTypes} from 'utils/constants';
+import {Mark, Measure, measureAndReport} from 'utils/performance_telemetry';
 
 import type {GlobalState} from 'types/store/index';
 import {LhsItemType, LhsPage} from 'types/store/lhs';
@@ -39,13 +38,13 @@ import {LhsItemType, LhsPage} from 'types/store/lhs';
 import ThreadList, {ThreadFilter, FILTER_STORAGE_KEY} from './thread_list';
 import ThreadPane from './thread_pane';
 
-import NoThreadIllustration from '../common/no_thread_illustration';
+import IkNoThreadIllustration from '../common/ik_no_thread_illustration';
 import {useThreadRouting} from '../hooks';
 import ThreadViewer from '../thread_viewer';
 
 import './global_threads.scss';
 
-const NO_THREAD_ILLUSTRATION = (<NoThreadIllustration/>);
+const IK_NO_THREAD_ILLUSTRATION = (<IkNoThreadIllustration/>);
 
 const GlobalThreads = () => {
     const {formatMessage} = useIntl();
@@ -59,10 +58,9 @@ const GlobalThreads = () => {
     const selectedThread = useSelector((state: GlobalState) => getThread(state, threadIdentifier));
     const selectedThreadId = useSelector(getSelectedThreadIdInCurrentTeam);
     const selectedPost = useSelector((state: GlobalState) => getPost(state, threadIdentifier!));
-    const threadIds = useSelector((state: GlobalState) => getThreadOrderInCurrentTeam(state, selectedThread?.id), shallowEqual);
-    const unreadThreadIds = useSelector((state: GlobalState) => getUnreadThreadOrderInCurrentTeam(state, selectedThread?.id), shallowEqual);
+    const threadIds = useSelector((state: GlobalState) => getThreadOrderInCurrentTeam(state), shallowEqual);
+    const unreadThreadIds = useSelector((state: GlobalState) => getUnreadThreadOrderInCurrentTeam(state), shallowEqual);
     const numUnread = counts?.total_unread_threads || 0;
-    const isRHSOpened = useSelector(getIsRhsOpen);
 
     useEffect(() => {
         dispatch(suppressRHS);
@@ -97,42 +95,36 @@ const GlobalThreads = () => {
 
     const [isLoading, setLoading] = useState(isEmptyList);
 
-    const fetchThreads = useCallback(async (unread): Promise<{data: any}> => {
-        await dispatch(getThreads(
-            currentUserId,
-            currentTeamId,
-            {
-                unread,
-                perPage: Constants.THREADS_PAGE_SIZE,
-            },
-        ));
-
-        return {data: true};
-    }, [currentUserId, currentTeamId]);
-
-    const isOnlySelectedThreadInList = (list: string[]) => {
-        return selectedThreadId && list.length === 1 && list[0] === selectedThreadId;
-    };
-
-    const shouldLoadThreads = isEmpty(threadIds) || isOnlySelectedThreadInList(threadIds);
-    const shouldLoadUnreadThreads = isEmpty(unreadThreadIds) || isOnlySelectedThreadInList(unreadThreadIds);
+    const shouldLoadThreads = isEmpty(threadIds);
+    const shouldLoadUnreadThreads = isEmpty(unreadThreadIds);
 
     useEffect(() => {
         const promises = [];
 
         // this is needed to jump start threads fetching
         if (shouldLoadThreads) {
-            promises.push(fetchThreads(false));
+            promises.push(dispatch(getThreadsForCurrentTeam({unread: false})));
         }
 
         if (filter === ThreadFilter.unread && shouldLoadUnreadThreads) {
-            promises.push(fetchThreads(true));
+            promises.push(dispatch(getThreadsForCurrentTeam({unread: true})));
         }
 
         Promise.all(promises).then(() => {
             setLoading(false);
         });
-    }, [fetchThreads, filter, threadIds, unreadThreadIds]);
+    }, [filter, threadIds, unreadThreadIds]);
+
+    useEffect(() => {
+        if (!isLoading) {
+            measureAndReport({
+                name: Measure.GlobalThreadsLoad,
+                startMark: Mark.GlobalThreadsLinkClicked,
+                canFail: true,
+            });
+            performance.clearMarks(Mark.GlobalThreadsLinkClicked);
+        }
+    }, [isLoading]);
 
     useEffect(() => {
         if (!selectedThread && !selectedPost && !isLoading) {
@@ -154,24 +146,8 @@ const GlobalThreads = () => {
     return (
         <div
             id='app-content'
-            className={classNames('GlobalThreads app__content', {
-                'thread-selected': Boolean(selectedThread),
-                'rhs-opened': isRHSOpened,
-            })}
+            className={classNames('GlobalThreads app__content', {'thread-selected': Boolean(selectedThread)})}
         >
-            <Header
-                level={2}
-                className={'GlobalThreads___header'}
-                heading={formatMessage({
-                    id: 'globalThreads.heading',
-                    defaultMessage: 'Followed threads',
-                })}
-                subtitle={formatMessage({
-                    id: 'globalThreads.subtitle',
-                    defaultMessage: 'Threads you’re participating in will automatically show here',
-                })}
-            />
-
             {isLoading || isEmptyList ? (
                 <div className='no-results__holder'>
                     {isLoading ? (
@@ -179,7 +155,7 @@ const GlobalThreads = () => {
                     ) : (
                         <NoResultsIndicator
                             expanded={true}
-                            iconGraphic={NO_THREAD_ILLUSTRATION}
+                            iconGraphic={IK_NO_THREAD_ILLUSTRATION}
                             title={formatMessage({
                                 id: 'globalThreads.noThreads.title',
                                 defaultMessage: 'No followed threads yet',
@@ -214,10 +190,25 @@ const GlobalThreads = () => {
                     ) : (
                         <NoResultsIndicator
                             expanded={true}
-                            iconGraphic={NO_THREAD_ILLUSTRATION}
+                            iconGraphic={IK_NO_THREAD_ILLUSTRATION}
                             title={formatMessage({
                                 id: 'globalThreads.threadPane.unselectedTitle',
-                                defaultMessage: 'Select a Thread',
+                                defaultMessage: '{numUnread, plural, =0 {Looks like you’re all caught up} other {Catch up on your threads}}',
+                            }, {numUnread})}
+                            subtitle={formatMessage({
+                                id: 'globalThreads.threadPane.unreadMessageLink',
+                                defaultMessage: 'You have {numUnread, plural, =0 {no unread threads} =1 {<link>{numUnread} thread</link>} other {<link>{numUnread} threads</link>}} {numUnread, plural, =0 {} other {with unread messages}}',
+                            }, {
+                                numUnread,
+                                link: (chunks) => (
+                                    <Link
+                                        key='single'
+                                        to={`${url}/${unreadThreadIds[0]}`}
+                                        onClick={handleSelectUnread}
+                                    >
+                                        {chunks}
+                                    </Link>
+                                ),
                             })}
                         />
                     )}

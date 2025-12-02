@@ -2,7 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React, {useRef} from 'react';
-import {FormattedMessage} from 'react-intl';
+import type {MessageDescriptor} from 'react-intl';
+import {defineMessages, FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -10,20 +11,18 @@ import type {Channel} from '@mattermost/types/channels';
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import ConfirmModal from 'components/confirm_modal';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {KmeetTour, useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 
-import './meet_button.scss';
 import type {ModalData} from 'types/actions';
 
+import './meet_button.scss';
 import meetSvg from './static/kmeet.svg';
 
 export type Props = {
-    channel: Channel;
+    channel?: Channel;
     hasCall?: boolean;
     membersCount: number;
 
@@ -44,9 +43,9 @@ function MeetButton(props: Props) {
     const kmeetTourStep = isGuest ? OnboardingTourStepsForGuestUsers.KMEET : OnboardingTourSteps.KMEET;
     const showKmeetTutorialStep = useShowOnboardingTutorialStep(kmeetTourStep);
 
-    const {startOrJoinCallInChannelV2, joinCall} = actions;
+    // const {startOrJoinCallInChannelV2, joinCall} = actions;
     const ref = useRef<HTMLButtonElement>(null);
-    const timeoutRef = useRef<NodeJS.Timeout|null>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const onClick = () => {
         if (timeoutRef.current) {
@@ -69,6 +68,9 @@ function MeetButton(props: Props) {
     };
 
     const openModal = () => {
+        if (!channel) {
+            return;
+        }
         const title = (
             <FormattedMessage
                 id='kmeet_call_modal.title'
@@ -114,10 +116,13 @@ function MeetButton(props: Props) {
     };
 
     const startCall = () => {
+        if (!channel) {
+            return;
+        }
         if (props.hasCall) {
-            joinCall(channel.id);
+            props.actions?.joinCall(channel.id);
         } else {
-            startOrJoinCallInChannelV2(channel.id);
+            props.actions?.startOrJoinCallInChannelV2(channel.id);
         }
     };
 
@@ -130,50 +135,43 @@ function MeetButton(props: Props) {
         actions.closeModal(ModalIdentifiers.KMEET_CALL_MODAL);
     };
 
-    const tooltip = (
-        <Tooltip
-            id='call'
-            className='meet-btn__overlay'
-        >
-            <FormattedMessage
-                id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
-                defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
-            />
-        </Tooltip>
-    );
-
     const btnClasses = 'btn meet-btn';
+
+    const messages: Record<string, MessageDescriptor> = defineMessages({
+        join: {
+            id: 'kmeet.calls.join',
+            defaultMessage: 'Join call',
+        },
+        start: {
+            id: 'kmeet.calls.start',
+            defaultMessage: 'Start call',
+        },
+    });
+
+    const messageKey = props.hasCall ? 'join' : 'start';
+
     return (
-        <OverlayTrigger
-            delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement='bottom'
-            overlay={tooltip}
+        <div
+            className='meet-btn__wrapper'
+            id='channel-header-kmeet-btn'
         >
-            <div
-                className='meet-btn__wrapper'
-                id='channel-header-kmeet-btn'
+            {showKmeetTutorialStep && <KmeetTour/>}
+            <button
+                type='button'
+                className={btnClasses}
+                onClick={onClick}
+                ref={ref}
             >
-                {showKmeetTutorialStep && <KmeetTour/>}
-                <button
-                    type='button'
-                    className={btnClasses}
-                    onClick={onClick}
-                    ref={ref}
-                >
-                    <img
-                        alt={props.hasCall ? 'join call' : 'start call'}
-                        src={meetSvg}
-                        className='meet-btn__icon meet-btn__icon--16'
-                    />
-                    <span className='meet-btn__text'>
-                        <FormattedMessage
-                            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
-                            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
-                        />
-                    </span>
-                </button>
-            </div>
-        </OverlayTrigger>
+                <img
+                    alt={props.hasCall ? 'join call' : 'start call'}
+                    src={meetSvg}
+                    className='meet-btn__icon meet-btn__icon--18'
+                />
+                <span className='meet-btn__text'>
+                    <FormattedMessage {...messages[messageKey]}/>
+                </span>
+            </button>
+        </div>
     );
 }
 

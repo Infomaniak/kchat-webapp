@@ -15,7 +15,8 @@ export type SearchState = {
     pinned: Record<string, string[]>;
     isSearchingTerm: boolean;
     isSearchGettingMore: boolean;
-    isLimitedResults: number;
+
+    // isLimitedResults: number; MM limitation
     matches: {
         [x: string]: string[];
     };

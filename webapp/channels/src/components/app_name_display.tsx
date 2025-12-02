@@ -4,8 +4,9 @@
 import type {ReactNode, CSSProperties} from 'react';
 import React from 'react';
 
-import loaderkChat from 'images/logo_compact.png';
 import {isDesktopApp} from 'utils/user_agent';
+
+import loaderkChat from 'images/logo_compact.png';
 import './app_name_display.scss';
 
 type Props = {

@@ -3,139 +3,123 @@
 
 import {SyncIcon} from '@infomaniak/compass-icons/components';
 import cn from 'classnames';
+import React, {useMemo} from 'react';
 import type {ComponentProps} from 'react';
-import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import Timestamp from 'components/timestamp';
-import Tooltip from 'components/tooltip';
+import Timestamp, {RelativeRanges} from 'components/timestamp';
 import Tag from 'components/widgets/tag/tag';
-
-import Constants from 'utils/constants';
+import WithTooltip from 'components/with_tooltip';
 
 import './panel_header.scss';
+import {isTodayOrTomorrow} from 'utils/datetime';
 
 const TIMESTAMP_PROPS: Partial<ComponentProps<typeof Timestamp>> = {
     day: 'numeric',
     useSemanticOutput: false,
     useTime: false,
-    units: [
-        'now',
-        'minute',
-        'hour',
-        'day',
-        'week',
-        'month',
-        'year',
-    ],
+    units: ['now', 'minute', 'hour', 'day', 'week', 'month', 'year'],
 };
 
+export const SCHEDULED_POST_TIME_RANGES = [
+    RelativeRanges.TODAY_TITLE_CASE,
+    RelativeRanges.YESTERDAY_TITLE_CASE,
+    RelativeRanges.TOMORROW_TITLE_CASE,
+];
+
+export const scheduledPostTimeFormat: ComponentProps<typeof Timestamp>['useTime'] = (_, {hour, minute}) => ({hour, minute});
+
 type Props = {
+    kind: 'draft' | 'scheduledPost';
     actions: React.ReactNode;
     hover: boolean;
     timestamp: number;
     remote: boolean;
     title: React.ReactNode;
-    isScheduled: boolean;
-    scheduledTimestamp?: number;
-    scheduledWillNotBeSent: boolean;
-}
+    error?: string;
+};
 
 function PanelHeader({
+    kind,
     actions,
     hover,
     timestamp,
     remote,
     title,
-    isScheduled,
-    scheduledTimestamp,
-    scheduledWillNotBeSent,
+    error,
 }: Props) {
-    const syncTooltip = (
-        <Tooltip id='drafts-sync-tooltip'>
-            <FormattedMessage
-                id='drafts.info.sync'
-                defaultMessage='Updated from another device'
-            />
-        </Tooltip>
-    );
-
-    let tag = (
-        <FormattedMessage
-            id='drafts.info.tag.not_scheduled'
-            defaultMessage='Not scheduled'
-        />
-    );
-    if (isScheduled) {
-        const tagVariant = scheduledWillNotBeSent ? 'danger' : 'info';
-        const tagText = scheduledWillNotBeSent ? (
-            <FormattedMessage
-                id='drafts.info.tag.will_not_be_sent'
-                defaultMessage='Will not be sent'
-            />
-        ) : (
-            <FormattedMessage
-                id='drafts.info.tag.scheduled'
-                defaultMessage='Scheduled'
-            />
-        );
-        tag = (
-            <Tag
-                variant={tagVariant}
-                text={tagText}
-                uppercase={true}
-            />
-        );
-    }
-
-    let time;
-    if (timestamp) {
-        time = (
-            <Timestamp
-                value={new Date(timestamp)}
-                {...TIMESTAMP_PROPS}
-            />
-        );
-    }
-    if (isScheduled && scheduledTimestamp) {
-        time = (
-            <FormattedMessage
-                id='draft.info.scheduled_timestamp'
-                defaultMessage='Send on {timestamp}'
-                values={{
-                    timestamp: <Timestamp value={new Date(scheduledTimestamp * 1000)}/>,
-                }}
-            />
-        );
-    }
+    const timestampDateObject = useMemo(() => new Date(timestamp), [timestamp]);
 
     return (
         <header className='PanelHeader'>
-            <div className='PanelHeader__left'>
-                {title}
-            </div>
+            <div className='PanelHeader__left'>{title}</div>
             <div className='PanelHeader__right'>
                 <div className={cn('PanelHeader__actions', {show: hover})}>
                     {actions}
                 </div>
                 <div className={cn('PanelHeader__info', {hide: hover})}>
-                    {remote && <div className='PanelHeader__sync-icon'>
-                        <OverlayTrigger
-                            trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
-                            delayShow={Constants.OVERLAY_TIME_DELAY}
-                            placement='top'
-                            overlay={syncTooltip}
-                        >
-                            <SyncIcon
-                                size={18}
-                            />
-                        </OverlayTrigger>
-                    </div>}
+                    {remote && (
+                        <div className='PanelHeader__sync-icon'>
+                            <WithTooltip
+                                title={
+                                    <FormattedMessage
+                                        id='drafts.info.sync'
+                                        defaultMessage='Updated from another device'
+                                    />
+                                }
+                            >
+                                <SyncIcon size={18}/>
+                            </WithTooltip>
+                        </div>
+                    )}
                     <div className='PanelHeader__timestamp'>
-                        {time}
+                        {
+                            Boolean(timestamp) && kind === 'draft' && (
+                                <Timestamp
+                                    value={new Date(timestamp)}
+                                    {...TIMESTAMP_PROPS}
+                                />
+                            )
+                        }
+
+                        {
+                            Boolean(timestamp) && kind === 'scheduledPost' && (
+                                <FormattedMessage
+                                    id='scheduled_post.panel.header.time'
+                                    defaultMessage='Send {isTodayOrTomorrow, select, true {} other {on}} {scheduledDateTime}'
+                                    values={{
+                                        scheduledDateTime: (
+                                            <Timestamp
+                                                value={timestamp}
+                                                ranges={SCHEDULED_POST_TIME_RANGES}
+                                                useSemanticOutput={false}
+                                                useTime={scheduledPostTimeFormat}
+                                            />
+                                        ),
+
+                                        // Ik changed: I added isTodayOrTomorrow function to adress this issue https://redmine.infomaniak.ch/issues/459418
+                                        isTodayOrTomorrow: isTodayOrTomorrow(timestampDateObject),
+                                    }}
+                                />
+                            )
+                        }
                     </div>
-                    {tag}
+
+                    {kind === 'draft' && !error && (
+                        <Tag
+                            variant={'danger'}
+                            uppercase={true}
+                            text={'draft'}
+                        />
+                    )}
+                    {error && (
+                        <Tag
+                            text={error}
+                            variant={'danger'}
+                            uppercase={true}
+                            icon={'alert-outline'}
+                        />
+                    )}
                 </div>
             </div>
         </header>

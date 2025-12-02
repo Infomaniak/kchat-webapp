@@ -392,8 +392,7 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
               <div
                 className="backstage-form__footer"
               >
-                <FormError
-                  error={null}
+                <Memo(FormError)
                   errors={
                     Array [
                       "",
@@ -427,7 +426,7 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                     </a>
                   </LinkAnchor>
                 </Link>
-                <SpinnerButton
+                <Memo(SpinnerButton)
                   className="btn btn-primary"
                   id="saveConnection"
                   onClick={[Function]}
@@ -442,7 +441,7 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                     onClick={[Function]}
                     type="submit"
                   >
-                    <LoadingWrapper
+                    <Memo(LoadingWrapper)
                       loading={false}
                       text="Loading"
                     >
@@ -454,9 +453,9 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                           Footer
                         </span>
                       </FormattedMessage>
-                    </LoadingWrapper>
+                    </Memo(LoadingWrapper)>
                   </button>
-                </SpinnerButton>
+                </Memo(SpinnerButton)>
                 <div>
                   renderExtra
                 </div>
@@ -479,7 +478,6 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                 Get help with 
                 <a
                   href="https://mattermost.com/pl/outgoing-oauth-connections"
-                  key=".$.1"
                 >
                   configuring outgoing OAuth connections
                 </a>
@@ -498,46 +496,34 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
             show={false}
             title="Save Outgoing OAuth Connection"
           >
-            <Modal
-              animation={true}
-              aria-describedby="confirmModalBody"
-              aria-labelledby="confirmModalLabel"
-              aria-modal={true}
-              autoFocus={true}
-              backdrop={true}
-              bsClass="modal"
+            <GenericModal
+              autoCloseOnCancelButton={true}
+              autoCloseOnConfirmButton={true}
+              bodyPadding={true}
               className="modal-confirm"
-              dialogClassName="a11y__modal"
-              dialogComponentClass={[Function]}
+              compassDesign={true}
               enforceFocus={true}
               id="confirmModal"
-              keyboard={true}
-              manager={
-                ModalManager {
-                  "add": [Function],
-                  "containers": Array [],
-                  "data": Array [],
-                  "handleContainerOverflow": true,
-                  "hideSiblingNodes": true,
-                  "isTopModal": [Function],
-                  "modals": Array [],
-                  "remove": [Function],
-                }
-              }
+              keyboardEscape={true}
+              modalHeaderText="Save Outgoing OAuth Connection"
+              modalLocation="center"
               onExited={[Function]}
               onHide={[Function]}
-              renderBackdrop={[Function]}
-              restoreFocus={true}
-              role="dialog"
               show={false}
+              showCloseButton={true}
+              showHeader={true}
             >
               <Modal
+                animation={true}
+                aria-labelledby="genericModalLabel"
+                aria-modal="true"
                 autoFocus={true}
                 backdrop={true}
-                backdropClassName="modal-backdrop"
-                backdropTransition={[Function]}
-                containerClassName="modal-open"
+                bsClass="modal"
+                dialogClassName="GenericModal__location--center a11y__modal GenericModal GenericModal__compassDesign modal-confirm"
+                dialogComponentClass={[Function]}
                 enforceFocus={true}
+                id="confirmModal"
                 keyboard={true}
                 manager={
                   ModalManager {
@@ -551,15 +537,43 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                     "remove": [Function],
                   }
                 }
-                onEntering={[Function]}
                 onExited={[Function]}
                 onHide={[Function]}
                 renderBackdrop={[Function]}
                 restoreFocus={true}
+                role="none"
                 show={false}
-                transition={[Function]}
-              />
-            </Modal>
+              >
+                <Modal
+                  autoFocus={true}
+                  backdrop={true}
+                  backdropClassName="modal-backdrop"
+                  backdropTransition={[Function]}
+                  containerClassName="modal-open"
+                  enforceFocus={true}
+                  keyboard={true}
+                  manager={
+                    ModalManager {
+                      "add": [Function],
+                      "containers": Array [],
+                      "data": Array [],
+                      "handleContainerOverflow": true,
+                      "hideSiblingNodes": true,
+                      "isTopModal": [Function],
+                      "modals": Array [],
+                      "remove": [Function],
+                    }
+                  }
+                  onEntering={[Function]}
+                  onExited={[Function]}
+                  onHide={[Function]}
+                  renderBackdrop={[Function]}
+                  restoreFocus={true}
+                  show={false}
+                  transition={[Function]}
+                />
+              </Modal>
+            </GenericModal>
           </ConfirmModal>
         </div>
       </AbstractOutgoingOAuthConnection>
@@ -960,8 +974,7 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
               <div
                 className="backstage-form__footer"
               >
-                <FormError
-                  error={null}
+                <Memo(FormError)
                   errors={
                     Array [
                       "serverError",
@@ -989,7 +1002,7 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                       </FormattedMessage>
                     </label>
                   </div>
-                </FormError>
+                </Memo(FormError)>
                 <Link
                   className="btn btn-tertiary"
                   to="/test/integrations/outgoing-oauth2-connections"
@@ -1015,7 +1028,7 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                     </a>
                   </LinkAnchor>
                 </Link>
-                <SpinnerButton
+                <Memo(SpinnerButton)
                   className="btn btn-primary"
                   id="saveConnection"
                   onClick={[Function]}
@@ -1030,7 +1043,7 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                     onClick={[Function]}
                     type="submit"
                   >
-                    <LoadingWrapper
+                    <Memo(LoadingWrapper)
                       loading={false}
                       text="Loading"
                     >
@@ -1042,9 +1055,9 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                           Footer
                         </span>
                       </FormattedMessage>
-                    </LoadingWrapper>
+                    </Memo(LoadingWrapper)>
                   </button>
-                </SpinnerButton>
+                </Memo(SpinnerButton)>
                 <div>
                   renderExtra
                 </div>
@@ -1067,7 +1080,6 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                 Get help with 
                 <a
                   href="https://mattermost.com/pl/outgoing-oauth-connections"
-                  key=".$.1"
                 >
                   configuring outgoing OAuth connections
                 </a>
@@ -1086,46 +1098,34 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
             show={false}
             title="Save Outgoing OAuth Connection"
           >
-            <Modal
-              animation={true}
-              aria-describedby="confirmModalBody"
-              aria-labelledby="confirmModalLabel"
-              aria-modal={true}
-              autoFocus={true}
-              backdrop={true}
-              bsClass="modal"
+            <GenericModal
+              autoCloseOnCancelButton={true}
+              autoCloseOnConfirmButton={true}
+              bodyPadding={true}
               className="modal-confirm"
-              dialogClassName="a11y__modal"
-              dialogComponentClass={[Function]}
+              compassDesign={true}
               enforceFocus={true}
               id="confirmModal"
-              keyboard={true}
-              manager={
-                ModalManager {
-                  "add": [Function],
-                  "containers": Array [],
-                  "data": Array [],
-                  "handleContainerOverflow": true,
-                  "hideSiblingNodes": true,
-                  "isTopModal": [Function],
-                  "modals": Array [],
-                  "remove": [Function],
-                }
-              }
+              keyboardEscape={true}
+              modalHeaderText="Save Outgoing OAuth Connection"
+              modalLocation="center"
               onExited={[Function]}
               onHide={[Function]}
-              renderBackdrop={[Function]}
-              restoreFocus={true}
-              role="dialog"
               show={false}
+              showCloseButton={true}
+              showHeader={true}
             >
               <Modal
+                animation={true}
+                aria-labelledby="genericModalLabel"
+                aria-modal="true"
                 autoFocus={true}
                 backdrop={true}
-                backdropClassName="modal-backdrop"
-                backdropTransition={[Function]}
-                containerClassName="modal-open"
+                bsClass="modal"
+                dialogClassName="GenericModal__location--center a11y__modal GenericModal GenericModal__compassDesign modal-confirm"
+                dialogComponentClass={[Function]}
                 enforceFocus={true}
+                id="confirmModal"
                 keyboard={true}
                 manager={
                   ModalManager {
@@ -1139,15 +1139,43 @@ exports[`components/integrations/AbstractOutgoingOAuthConnection should match sn
                     "remove": [Function],
                   }
                 }
-                onEntering={[Function]}
                 onExited={[Function]}
                 onHide={[Function]}
                 renderBackdrop={[Function]}
                 restoreFocus={true}
+                role="none"
                 show={false}
-                transition={[Function]}
-              />
-            </Modal>
+              >
+                <Modal
+                  autoFocus={true}
+                  backdrop={true}
+                  backdropClassName="modal-backdrop"
+                  backdropTransition={[Function]}
+                  containerClassName="modal-open"
+                  enforceFocus={true}
+                  keyboard={true}
+                  manager={
+                    ModalManager {
+                      "add": [Function],
+                      "containers": Array [],
+                      "data": Array [],
+                      "handleContainerOverflow": true,
+                      "hideSiblingNodes": true,
+                      "isTopModal": [Function],
+                      "modals": Array [],
+                      "remove": [Function],
+                    }
+                  }
+                  onEntering={[Function]}
+                  onExited={[Function]}
+                  onHide={[Function]}
+                  renderBackdrop={[Function]}
+                  restoreFocus={true}
+                  show={false}
+                  transition={[Function]}
+                />
+              </Modal>
+            </GenericModal>
           </ConfirmModal>
         </div>
       </AbstractOutgoingOAuthConnection>

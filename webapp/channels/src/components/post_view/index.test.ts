@@ -9,6 +9,15 @@ import {Constants} from 'utils/constants';
 
 import {isChannelLoading} from './index';
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('components/post_view/index', () => {
     test('should return false if loading a permalink view', () => {
         expect(isChannelLoading({postid: 'postId'})).toEqual(false);

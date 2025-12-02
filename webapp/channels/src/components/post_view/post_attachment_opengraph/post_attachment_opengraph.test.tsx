@@ -11,8 +11,9 @@ import type {OpenGraphMetadata, Post} from '@mattermost/types/posts';
 
 import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
-import mockStore from 'tests/test_store';
 import {Preferences} from 'utils/constants';
+
+import mockStore from 'tests/test_store';
 
 import {getBestImage, getIsLargeImage, PostAttachmentOpenGraphImage, PostAttachmentOpenGraphBody} from './post_attachment_opengraph';
 

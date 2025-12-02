@@ -29,7 +29,6 @@ import Sidebar from './sidebar';
 function mapStateToProps(state: GlobalState) {
     const currentTeam = getCurrentTeam(state);
     const unreadFilterEnabled = isUnreadFilterEnabled(state);
-    const userGroupsEnabled = isCustomGroupsEnabled(state);
     const rhsState = getRhsState(state);
 
     let canCreatePublicChannel = false;
@@ -42,7 +41,7 @@ function mapStateToProps(state: GlobalState) {
         canJoinPublicChannel = haveICurrentChannelPermission(state, Permissions.JOIN_PUBLIC_CHANNELS);
     }
 
-    const canCreateCustomGroups = haveISystemPermission(state, {permission: Permissions.CREATE_CUSTOM_GROUP}) && isCustomGroupsEnabled(state);
+    const canCreateCustomGroups = isCustomGroupsEnabled(state) && haveISystemPermission(state, {permission: Permissions.CREATE_CUSTOM_GROUP});
 
     const isRhsSettings = rhsState === RHSStates.SETTINGS;
 
@@ -55,7 +54,6 @@ function mapStateToProps(state: GlobalState) {
         unreadFilterEnabled,
         isMobileView: getIsMobileView(state),
         isKeyBoardShortcutModalOpen: isModalOpen(state, ModalIdentifiers.KEYBOARD_SHORTCUTS_MODAL),
-        userGroupsEnabled,
         canCreateCustomGroups,
         rhsState: getRhsState(state),
         rhsOpen: getIsRhsOpen(state),

@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {FormattedMessage} from 'react-intl';
 
 import MenuIcon from 'components/widgets/icons/menu_icon';
 
@@ -24,6 +25,12 @@ const CollapseRhsButton: React.FunctionComponent<Props> = (props: Props) => (
         onClick={props.actions.toggleRhsMenu}
         style={{marginRight: props.isBridgeActive ? 0 : 16}}
     >
+        <span className='sr-only'>
+            <FormattedMessage
+                id='navbar.toggle3'
+                defaultMessage='Toggle right sidebar'
+            />
+        </span>
         <MenuIcon/>
     </button>
 );

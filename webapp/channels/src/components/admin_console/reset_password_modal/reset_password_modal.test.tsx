@@ -7,8 +7,9 @@ import {FormattedMessage} from 'react-intl';
 
 import type {UserNotifyProps, UserProfile} from '@mattermost/types/users';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {TestHelper} from 'utils/test_helper';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import ResetPasswordModal from './reset_password_modal';
 
@@ -25,6 +26,7 @@ describe('components/admin_console/reset_password_modal/reset_password_modal.tsx
         highlight_keys: '',
         push: 'default',
         push_status: 'ooo',
+        calls_desktop_sound: 'true',
     };
     const user: UserProfile = TestHelper.getUserMock({
         auth_service: 'test',

@@ -6,6 +6,7 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 
+import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {General} from 'mattermost-redux/constants';
@@ -108,7 +109,9 @@ describe('component/user_group_popover/group_member_list', () => {
         members,
         teamUrl: 'team',
         actions: {
+            getGroup: jest.fn().mockImplementation(() => Promise.resolve()),
             getUsersInGroup: jest.fn().mockImplementation(() => Promise.resolve()),
+            resetUsersInGroup: jest.fn().mockImplementation(() => Promise.resolve()),
             openDirectChannelToUserId: jest.fn().mockImplementation(() => Promise.resolve()),
             closeRightHandSide: jest.fn(),
         },

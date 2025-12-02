@@ -13,10 +13,9 @@ import type {Team} from '@mattermost/types/teams';
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+import WithTooltip from 'components/with_tooltip';
 
-import Constants, {RHSStates} from 'utils/constants';
+import {RHSStates} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
@@ -27,10 +26,10 @@ type Props = {
     icon?: TIconGlyph;
     tooltipPlacement?: string;
     tooltipContent?: string;
-    currentTeam: Team;
+    currentTeam?: Team;
 }
 
-const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, tooltipContent, currentTeam}: Props): JSX.Element | null => {
+const SettingsButton = ({tab = 'display', className, icon, currentTeam}: Props): JSX.Element | null => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
@@ -39,24 +38,13 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
     const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (!isDesktopApp()) {
-            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-kchat', 'ksuite-kchat-personalization', {selectedId: currentTeam.product_id}]}));
+            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-kchat', 'ksuite-kchat-personalization', {selectedId: currentTeam?.product_id}]}));
         } else if (rhsState === RHSStates.SETTINGS) {
             dispatch(closeRightHandSide());
         } else {
             dispatch(showSettings(tab));
         }
     };
-
-    const tooltip = (
-        <Tooltip id='productSettings'>
-            {tooltipContent || (
-                <FormattedMessage
-                    id='global_header.productSettings'
-                    defaultMessage='Settings'
-                />
-            )}
-        </Tooltip>
-    );
 
     useEffect(() => {
         const handleWcNavigate = (e: any) => {
@@ -72,11 +60,13 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
     }, [history]);
 
     return (
-        <OverlayTrigger
-            trigger={['hover', 'focus']}
-            delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement={tooltipPlacement || 'bottom'}
-            overlay={tooltip}
+        <WithTooltip
+            title={
+                <FormattedMessage
+                    id='global_header.productSettings'
+                    defaultMessage='Settings'
+                />
+            }
         >
             <IconButton
                 id='right-controls-settings'
@@ -90,8 +80,7 @@ const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, too
                 aria-haspopup='dialog'
                 aria-label={formatMessage({id: 'global_header.productSettings', defaultMessage: 'Settings'})}
             />
-
-        </OverlayTrigger>
+        </WithTooltip>
     );
 };
 

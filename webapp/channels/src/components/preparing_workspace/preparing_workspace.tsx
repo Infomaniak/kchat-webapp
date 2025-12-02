@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React, {useState, useCallback, useEffect, useRef} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import type {RouterProps} from 'react-router-dom';
 
@@ -33,7 +33,6 @@ import {
     mapStepToPageView,
     mapStepToSubmitFail,
     PLUGIN_NAME_TO_ID_MAP,
-    mapStepToPrevious,
 } from './steps';
 import type {
     WizardStep,
@@ -123,9 +122,6 @@ const PreparingWorkspace = ({
         WizardSteps.LaunchingWorkspace,
     ].filter((x) => Boolean(x)) as WizardStep[];
 
-    // first steporder that is not false
-    const firstShowablePage = stepOrder[0];
-
     const firstAdminSetupComplete = useSelector(getFirstAdminSetupComplete);
 
     const [[mostRecentStep, currentStep], setStepHistory] = useState<[WizardStep, WizardStep]>([stepOrder[0], stepOrder[0]]);
@@ -151,11 +147,9 @@ const PreparingWorkspace = ({
         }
     }, [pluginsEnabled, currentStep, mostRecentStep]);
 
-    const [showFirstPage, setShowFirstPage] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
 
     useEffect(() => {
-        showOnMountTimeout.current = setTimeout(() => setShowFirstPage(true), 40);
         actions.getProfiles(0, General.PROFILE_CHUNK_SIZE, {roles: General.SYSTEM_ADMIN_ROLE});
         dispatch(getFirstAdminSetupCompleteAction());
         document.body.classList.add('admin-onboarding');
@@ -167,39 +161,12 @@ const PreparingWorkspace = ({
         };
     }, []);
 
-    const shouldShowPage = (step: WizardStep) => {
-        if (currentStep !== step) {
-            return false;
-        }
-        const isFirstPage = stepOrder.indexOf(step) === 0;
-        if (isFirstPage) {
-            return showFirstPage;
-        }
-        return true;
-    };
-
     const redirectWithError = useCallback((redirectTo: WizardStep, error: string) => {
         setStepHistory([WizardSteps.LaunchingWorkspace, redirectTo]);
         setSubmissionState(SubmissionStates.SubmitFail);
         setSubmitError(error);
         trackSubmitFail[redirectTo]();
     }, []);
-
-    // const createTeam = async (OrganizationName: string): Promise<{error: string | null; newTeam: Team | undefined | null}> => {
-    //     const data = await actions.createTeam(makeNewTeam(OrganizationName, teamNameToUrl(OrganizationName || '').url));
-    //     if (data.error) {
-    //         return {error: genericSubmitError, newTeam: null};
-    //     }
-    //     return {error: null, newTeam: data.data};
-    // };
-
-    // const updateTeam = async (teamToUpdate: Team): Promise<{error: string | null; updatedTeam: Team | null}> => {
-    //     const data = await actions.updateTeam(teamToUpdate);
-    //     if (data.error) {
-    //         return {error: genericSubmitError, updatedTeam: null};
-    //     }
-    //     return {error: null, updatedTeam: data.data};
-    // };
 
     const sendForm = async () => {
         const sendFormStart = Date.now();
@@ -273,55 +240,6 @@ const PreparingWorkspace = ({
         }
         return stepIndex > currentStepIndex ? Animations.Reasons.ExitToBefore : Animations.Reasons.ExitToAfter;
     };
-
-    const goPrevious = useCallback((e?: React.KeyboardEvent | React.MouseEvent) => {
-        if (e && (e as React.KeyboardEvent).key) {
-            const key = (e as React.KeyboardEvent).key;
-            if (key !== Constants.KeyCodes.ENTER[0] && key !== Constants.KeyCodes.SPACE[0]) {
-                return;
-            }
-        }
-        if (submissionState !== SubmissionStates.Presubmit && submissionState !== SubmissionStates.SubmitFail) {
-            return;
-        }
-        const stepIndex = stepOrder.indexOf(currentStep);
-        if (stepIndex <= 0) {
-            return;
-        }
-        trackEvent('first_admin_setup', mapStepToPrevious(currentStep));
-        setStepHistory([currentStep, stepOrder[stepIndex - 1]]);
-    }, [currentStep]);
-
-    const skipTeamMembers = useCallback((skipped: boolean) => {
-        if (skipped === form.teamMembers.skipped) {
-            return;
-        }
-        setForm({
-            ...form,
-            teamMembers: {
-                ...form.teamMembers,
-                skipped,
-            },
-        });
-    }, [form]);
-
-    let previous: React.ReactNode = (
-        <div
-            onClick={goPrevious}
-            onKeyUp={goPrevious}
-            tabIndex={0}
-            className='PreparingWorkspace__previous'
-        >
-            <i className='icon-chevron-up'/>
-            <FormattedMessage
-                id={'onboarding_wizard.previous'}
-                defaultMessage='Previous'
-            />
-        </div>
-    );
-    if (currentStep === firstShowablePage) {
-        previous = null;
-    }
 
     return (
         <div className='PreparingWorkspace PreparingWorkspaceContainer'>

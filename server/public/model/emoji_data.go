@@ -1484,7 +1484,6 @@ var SystemEmojis = map[string]string{
 "open_file_folder": "1f4c2",
 "card_index_dividers": "1f5c2-fe0f",
 "date": "1f4c5",
-"calendar": "1f4c6",
 "spiral_note_pad": "1f5d2-fe0f",
 "spiral_notepad": "1f5d2-fe0f",
 "spiral_calendar_pad": "1f5d3-fe0f",

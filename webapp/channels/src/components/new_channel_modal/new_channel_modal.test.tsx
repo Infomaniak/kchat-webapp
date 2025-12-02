@@ -2,27 +2,17 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
-import {GenericModal} from '@mattermost/components';
-import type {ChannelType} from '@mattermost/types/channels';
+import type {DeepPartial} from '@mattermost/types/utilities';
 
-import {createChannel} from 'mattermost-redux/actions/channels';
 import Permissions from 'mattermost-redux/constants/permissions';
 
-import {openChannelLimitModalIfNeeded} from 'actions/cloud';
-
-import Input from 'components/widgets/inputs/input/input';
-import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
-
-import Constants, {suitePluginIds} from 'utils/constants';
+import {suitePluginIds} from 'utils/constants';
 import {cleanUpUrlable} from 'utils/url';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {
-    render,
-
-    // renderWithContext,
+    act,
+    renderWithContext,
     screen,
     userEvent,
 
@@ -34,137 +24,94 @@ import type {GlobalState} from 'types/store';
 jest.mock('mattermost-redux/actions/channels');
 jest.mock('mattermost-redux/actions/cloud', () => ({
     openChannelLimitModalIfNeeded: jest.fn,
+    getUsage: jest.fn,
 }));
 
 import NewChannelModal from './new_channel_modal';
 
-import {shallow} from 'enzyme';
-import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
-
-const mockDispatch = jest.fn();
-let mockState: GlobalState;
-
-jest.mock('react-redux', () => ({
-    ...jest.requireActual('react-redux') as typeof import('react-redux'),
-    useSelector: (selector: (state: typeof mockState) => unknown) => selector(mockState),
-    useDispatch: () => mockDispatch,
-}));
-
 describe('components/new_channel_modal', () => {
-    beforeEach(() => {
-        mockState = {
-            entities: {
-                general: {
-                    config: {},
-                },
+    const initialState: DeepPartial<GlobalState> = {
+        entities: {
+            general: {
+                config: {},
+            },
+            channels: {
+                currentChannelId: 'current_channel_id',
                 channels: {
-                    currentChannelId: 'current_channel_id',
-                    channels: {
-                        current_channel_id: {
-                            id: 'current_channel_id',
-                            display_name: 'Current channel',
-                            name: 'current_channel',
-                        },
-                    },
-                    roles: {
-                        current_channel_id: [
-                            'channel_user',
-                            'channel_admin',
-                        ],
-                    },
-                },
-                teams: {
-                    currentTeamId: 'current_team_id',
-                    myMembers: {
-                        current_team_id: {
-                            roles: 'team_user team_admin',
-                        },
-                    },
-                    teams: {
-                        current_team_id: {
-                            id: 'current_team_id',
-                            description: 'Curent team description',
-                            name: 'current-team',
-                        },
-                    },
-                },
-                preferences: {
-                    myPreferences: {},
-                },
-                users: {
-                    currentUserId: 'current_user_id',
-                    profiles: {
-                        current_user_id: {roles: 'system_admin system_user'},
+                    current_channel_id: {
+                        id: 'current_channel_id',
+                        display_name: 'Current channel',
+                        name: 'current_channel',
                     },
                 },
                 roles: {
-                    roles: {
-                        channel_admin: {
-                            permissions: [],
-                        },
-                        channel_user: {
-                            permissions: [],
-                        },
-                        team_admin: {
-                            permissions: [],
-                        },
-                        team_user: {
-                            permissions: [
-                                Permissions.CREATE_PRIVATE_CHANNEL,
-                            ],
-                        },
-                        system_admin: {
-                            permissions: [
-                                Permissions.CREATE_PUBLIC_CHANNEL,
-                            ],
-                        },
-                        system_user: {
-                            permissions: [],
-                        },
+                    current_channel_id: new Set([
+                        'channel_user',
+                        'channel_admin',
+                    ]),
+                },
+            },
+            teams: {
+                currentTeamId: 'current_team_id',
+                myMembers: {
+                    current_team_id: {
+                        roles: 'team_user team_admin',
                     },
                 },
-                usage: {
-                    storage: 0,
-                    public_channels: 0,
-                    private_channels: 0,
-                    guests: 0,
-                    members: 0,
-                    files: {
-                        totalStorage: 0,
-                    },
-                    messages: {
-                        history: 0,
-                    },
-                    teams: {
-                        active: 0,
-                        cloudArchived: 0,
-                    },
-                    boards: {
-                        cards: 0,
-                    },
-                    usageLoaded: true,
-                },
-                cloud: {
-                    limits: {
-                        limits: {
-                            storage: 10,
-                            public_channels: 10,
-                            private_channels: 10,
-                            guests: 10,
-                            members: 10,
-                        },
-                        limitsLoaded: true,
+                teams: {
+                    current_team_id: {
+                        id: 'current_team_id',
+                        description: 'Curent team description',
+                        name: 'current-team',
                     },
                 },
             },
-            plugins: {
-                plugins: {focalboard: {id: suitePluginIds.focalboard}},
+            preferences: {
+                myPreferences: {},
             },
-        } as unknown as GlobalState;
-    });
+            users: {
+                currentUserId: 'current_user_id',
+                profiles: {
+                    current_user_id: {roles: 'system_admin system_user'},
+                },
+            },
+            roles: {
+                roles: {
+                    channel_admin: {
+                        permissions: [],
+                    },
+                    channel_user: {
+                        permissions: [],
+                    },
+                    team_admin: {
+                        permissions: [],
+                    },
+                    team_user: {
+                        permissions: [
+                            Permissions.CREATE_PRIVATE_CHANNEL,
+                        ],
+                    },
+                    system_admin: {
+                        permissions: [
+                            Permissions.CREATE_PUBLIC_CHANNEL,
+                        ],
+                    },
+                    system_user: {
+                        permissions: [],
+                    },
+                },
+            },
+        },
+        plugins: {
+            plugins: {focalboard: {id: suitePluginIds.focalboard}},
+        },
+    };
 
     test('should match component state with given props', () => {
-        render(<NewChannelModal/>);
+        renderWithContext(
+            <NewChannelModal/>,
+            initialState,
+        );
 
         const heading = screen.getByRole('heading');
         expect(heading).toBeInTheDocument();
@@ -223,8 +170,9 @@ describe('components/new_channel_modal', () => {
     test('should handle display name change', () => {
         const value = 'Channel name';
 
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Change display name
@@ -265,9 +213,10 @@ describe('components/new_channel_modal', () => {
     //         },
     //     } as unknown as React.ChangeEvent<HTMLInputElement>;
 
-    //     const wrapper = shallow(
-    //         <NewChannelModal/>,
-    //     );
+    // renderWithContext(
+    //     <NewChannelModal/>,
+    //     initialState,
+    // );
 
     //     // Change display name
     //     const input = wrapper.find(ChannelNameFormField).first();
@@ -294,8 +243,9 @@ describe('components/new_channel_modal', () => {
     // });
 
     test('should handle type changes', () => {
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Change type to private
@@ -320,8 +270,9 @@ describe('components/new_channel_modal', () => {
     test('should handle purpose changes', () => {
         const value = 'Purpose';
 
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Change purpose
@@ -336,8 +287,9 @@ describe('components/new_channel_modal', () => {
     });
 
     test('should enable confirm button when having valid display name, url and type', () => {
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Confirm button should be disabled
@@ -363,8 +315,9 @@ describe('components/new_channel_modal', () => {
     });
 
     test('should disable confirm button when display name in error', () => {
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Change display name
@@ -392,8 +345,9 @@ describe('components/new_channel_modal', () => {
     });
 
     test('should disable confirm button when url in error', () => {
-        render(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Change display name
@@ -428,123 +382,36 @@ describe('components/new_channel_modal', () => {
     });
 
     test('should disable confirm button when server error', async () => {
-        // render(
-        //     <NewChannelModal/>,
-        // );
-
-        // // Confirm button should be disabled
-        // const createChannelButton = screen.getByText('Create channel');
-        // expect(createChannelButton).toBeDisabled();
-
-        // // Change display name
-        // const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
-        // expect(channelNameInput).toBeInTheDocument();
-        // expect(channelNameInput).toHaveAttribute('value', '');
-
-        // userEvent.type(channelNameInput, 'Channel name');
-
-        // // Change type to private
-        // const privateChannel = screen.getByText('Private Channel');
-        // expect(privateChannel).toBeInTheDocument();
-
-        // userEvent.click(privateChannel);
-
-        // // Confirm button should be enabled
-        // expect(createChannelButton).toBeEnabled();
-
-        // // Submit
-        // await act(async () => userEvent.click(createChannelButton));
-
-        // const serverError = screen.getByText('Something went wrong. Please try again.');
-        // expect(serverError).toBeInTheDocument();
-        // expect(createChannelButton).toBeDisabled();
-        const mockChangeEvent = {
-            preventDefault: jest.fn(),
-            target: {
-                value: 'Channel name',
-            },
-        } as unknown as React.ChangeEvent<HTMLInputElement>;
-
-        const wrapper = shallow(
+        renderWithContext(
             <NewChannelModal/>,
+            initialState,
         );
 
         // Confirm button should be disabled
-        let genericModal = wrapper.find(GenericModal);
-        expect(genericModal.props().isConfirmDisabled).toEqual(true);
+        const createChannelButton = screen.getByText('Create channel');
+        expect(createChannelButton).toBeDisabled();
 
         // Change display name
-        const input = wrapper.find(ChannelNameFormField).first();
-        input.props().onDisplayNameChange!(mockChangeEvent.target.value);
+        const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
+        expect(channelNameInput).toBeInTheDocument();
+        expect(channelNameInput).toHaveAttribute('value', '');
+
+        userEvent.type(channelNameInput, 'Channel name');
 
         // Change type to private
-        const selector = wrapper.find(PublicPrivateSelector);
-        selector.props().onChange!(Constants.PRIVATE_CHANNEL as ChannelType);
+        const privateChannel = screen.getByText('Private Channel');
+        expect(privateChannel).toBeInTheDocument();
+
+        userEvent.click(privateChannel);
 
         // Confirm button should be enabled
-        genericModal = wrapper.find(GenericModal);
-        expect(genericModal.props().isConfirmDisabled).toEqual(false);
+        expect(createChannelButton).toBeEnabled();
 
         // Submit
-        await genericModal.props().handleConfirm!();
+        await act(async () => userEvent.click(createChannelButton));
 
-        genericModal = wrapper.find(GenericModal);
-        expect(genericModal.props().errorText).toEqual('Something went wrong. Please try again.');
-        expect(genericModal.props().isConfirmDisabled).toEqual(true);
+        const serverError = screen.getByText('Something went wrong. Please try again.');
+        expect(serverError).toBeInTheDocument();
+        expect(createChannelButton).toBeDisabled();
     });
-
-    // test('should request team creation on submit', async () => {
-    //     const name = 'Channel name';
-
-    //     const mockChangeEvent = {
-    //         preventDefault: jest.fn(),
-    //         target: {
-    //             value: name,
-    //         },
-    //     } as unknown as React.ChangeEvent<HTMLInputElement>;
-
-    //     const wrapper = mountWithIntl(
-    //         <NewChannelModal/>,
-    //     );
-
-    //     const genericModal = wrapper.find('GenericModal');
-    //     const displayName = genericModal.find('.new-channel-modal-name-input');
-    //     const confirmButton = genericModal.find('button[type=\'submit\']');
-
-    //     // Confirm button should be disabled
-    //     expect((confirmButton.instance() as unknown as HTMLButtonElement).disabled).toEqual(true);
-
-    //     // Enter data
-    //     displayName.simulate('change', mockChangeEvent);
-
-    //     // Display name should be updated
-    //     expect((displayName.instance() as unknown as HTMLInputElement).value).toEqual(name);
-
-    //     // Confirm button should be enabled
-    //     expect((confirmButton.instance() as unknown as HTMLButtonElement).disabled).toEqual(false);
-
-    //     // Submit
-    //     await act(async () => {
-    //         confirmButton.simulate('click');
-    //     });
-
-    //     // Request should be sent
-    //     expect(createChannel).toHaveBeenCalledWith({
-    //         create_at: 0,
-    //         creator_id: '',
-    //         delete_at: 0,
-    //         display_name: name,
-    //         group_constrained: false,
-    //         header: '',
-    //         id: '',
-    //         last_post_at: 0,
-    //         last_root_post_at: 0,
-    //         name: 'channel-name',
-    //         purpose: '',
-    //         scheme_id: '',
-    //         team_id: 'current_team_id',
-    //         type: 'O',
-    //         update_at: 0,
-    //     }, '', openChannelLimitModalIfNeeded);
-    // });
 });

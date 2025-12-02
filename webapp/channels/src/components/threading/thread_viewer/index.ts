@@ -2,15 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {ClientConfig} from '@mattermost/types/config';
 import type {UserThread} from '@mattermost/types/threads';
 
 import {fetchRHSAppsBindings} from 'mattermost-redux/actions/apps';
-import {removePost, getNewestPostThread, getPostThread} from 'mattermost-redux/actions/posts';
+import {getNewestPostThread, getPostThread} from 'mattermost-redux/actions/posts';
 import {getThread as fetchThread, updateThreadRead} from 'mattermost-redux/actions/threads';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -50,12 +50,12 @@ function makeMapStateToProps() {
 
         let postIds: string[] = [];
         let userThread: UserThread | null = null;
-        let channel: Channel | null = null;
+        let channel: Channel | undefined;
 
         if (selected) {
             postIds = getPostIdsForThread(state, selected.id);
             userThread = getThread(state, selected.id);
-            channel = getChannel(state, {id: selected.channel_id});
+            channel = getChannel(state, selected.channel_id);
         }
 
         return {
@@ -82,7 +82,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
             getNewestPostThread,
             getPostThread,
             getThread: fetchThread,
-            removePost,
             selectPostCard,
             updateThreadLastOpened,
             updateThreadRead,

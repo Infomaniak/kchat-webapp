@@ -63,9 +63,9 @@
         display: flex;
         align-items: center;
         padding: 2px 0 2px 8px;
+        border-radius: 12px;
         margin: 4px;
         background-color: rgba(var(--center-channel-color-rgb), 0.08);
-        border-radius: 12px;
 
         > div {
             padding: 0;

@@ -4,7 +4,11 @@
 import {LaptopIcon, PaperclipIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {PureComponent} from 'react';
-import type {ChangeEvent, DragEvent, MouseEvent, TouchEvent, RefObject} from 'react';
+import type {ChangeEvent, DragEvent, MouseEvent, RefObject,
+    KeyboardEvent as ReactKeyboardEvent,
+    MouseEvent as ReactMouseEvent,
+    TouchEvent as ReactTouchEvent,
+} from 'react';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
 
@@ -14,13 +18,15 @@ import type {FileInfo, FileUploadResponse} from '@mattermost/types/files';
 import type {UploadFile} from 'actions/file_actions';
 
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
+import {
+    DropOverlayIdCreateComment,
+    DropOverlayIdEditPost,
+    DropOverlayIdRHS,
+} from 'components/file_upload_overlay/file_upload_overlay';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import * as Menu from 'components/menu';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
-
-// import Menu from 'components/widgets/menu/menu';
-// import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+import type {TextboxElement} from 'components/textbox';
+import WithTooltip from 'components/with_tooltip';
 
 import Constants from 'utils/constants';
 import DelayedAction from 'utils/delayed_action';
@@ -29,6 +35,7 @@ import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import {hasPlainText, createFileFromClipboardDataItem} from 'utils/paste';
 import {
     isIosChrome,
+    isMobile,
     isMobileApp,
 } from 'utils/user_agent';
 import {
@@ -40,7 +47,7 @@ import {
     isTextDroppableEvent,
 } from 'utils/utils';
 
-import type {FilesWillUploadHook, PluginComponent} from 'types/store/plugins';
+import type {FilesWillUploadHook, FileUploadMethodAction} from 'types/store/plugins';
 
 const holders = defineMessages({
     limited: {
@@ -71,12 +78,7 @@ const holders = defineMessages({
 
 const OVERLAY_TIMEOUT = 500;
 
-const customStyles = {
-    left: 'inherit',
-    right: 0,
-    bottom: '100%',
-    top: 'auto',
-};
+export type TextEditorLocationType = 'post' | 'comment' | 'thread' | 'edit_post';
 
 export type Props = {
     channelId: string;
@@ -129,7 +131,7 @@ export type Props = {
     /**
      * Type of the object which the uploaded file is attached to
      */
-    postType: string;
+    postType: TextEditorLocationType;
 
     /**
      * The maximum uploaded file size.
@@ -144,7 +146,7 @@ export type Props = {
     /**
      * Plugin file upload methods to be added
      */
-    pluginFileUploadMethods: PluginComponent[];
+    pluginFileUploadMethods: FileUploadMethodAction[];
     pluginFilesWillUploadHooks: FilesWillUploadHook[];
 
     /**
@@ -158,13 +160,17 @@ export type Props = {
     message: string;
     caretPosition: number;
     handleDriveSharelink: (e: React.ChangeEvent<TextboxElement>) => void;
+    centerChannelPostBeingEdited: boolean;
+    rhsPostBeingEdited: boolean;
+    isAdmin: boolean;
+    isPaidPlan: boolean;
 
     actions: {
 
         /**
          * Function to be called to upload file
          */
-        uploadFile: ({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError}: UploadFile) => XMLHttpRequest;
+        uploadFile: ({file, name, type, rootId, channelId, clientId, onProgress, onSuccess, onError, isAdmin, isPaidPlan}: UploadFile) => XMLHttpRequest;
     };
 };
 
@@ -191,17 +197,58 @@ export class FileUpload extends PureComponent<Props, State> {
         this.fileInput = React.createRef();
     }
 
-    componentDidMount() {
-        if (this.props.postType === 'post') {
-            this.registerDragEvents('.row.main', '.center-file-overlay');
-        } else if (this.props.postType === 'comment') {
-            this.registerDragEvents('.post-right__container', '.right-file-overlay');
-        } else if (this.props.postType === 'thread') {
-            this.registerDragEvents('.ThreadPane', '.right-file-overlay');
+    getDragEventDefinition = () => {
+        let containerSelector: string;
+        let overlaySelector: string;
+
+        switch (this.props.postType) {
+        case 'post': {
+            containerSelector = this.props.centerChannelPostBeingEdited ? 'form#create_post .AdvancedTextEditor__body' : '.row.main';
+            overlaySelector = this.props.centerChannelPostBeingEdited ? '#createPostFileDropOverlay' : '.center-file-overlay';
+            break;
         }
+        case 'comment': {
+            containerSelector = this.props.rhsPostBeingEdited ? '#sidebar-right .post-create__container .AdvancedTextEditor__body' : '.post-right__container';
+            overlaySelector = this.props.rhsPostBeingEdited ? '#' + DropOverlayIdCreateComment : '#' + DropOverlayIdRHS;
+            break;
+        }
+        case 'thread': {
+            containerSelector = this.props.rhsPostBeingEdited ? '.post-create__container .AdvancedTextEditor__body' : '.ThreadPane';
+            overlaySelector = this.props.rhsPostBeingEdited ? '#createPostFileDropOverlay' : '.right-file-overlay';
+            break;
+        }
+        case 'edit_post': {
+            containerSelector = '.post--editing';
+            overlaySelector = '#' + DropOverlayIdEditPost;
+            break;
+        }
+        }
+
+        return {
+            containerSelector,
+            overlaySelector,
+        };
+    };
+
+    componentDidMount() {
+        const {containerSelector, overlaySelector} = this.getDragEventDefinition();
+        this.registerDragEvents(containerSelector, overlaySelector);
 
         document.addEventListener('paste', this.pasteUpload);
         document.addEventListener('keydown', this.keyUpload);
+    }
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
+        // when a post starts or finishes being edited, we need to
+        // clear existing drag handlers and register fresh ones in the right place.
+        if (
+            prevProps.centerChannelPostBeingEdited !== this.props.centerChannelPostBeingEdited ||
+            prevProps.rhsPostBeingEdited !== this.props.rhsPostBeingEdited
+        ) {
+            this.unbindDragsterEvents?.();
+            const {containerSelector, overlaySelector} = this.getDragEventDefinition();
+            this.registerDragEvents(containerSelector, overlaySelector);
+        }
     }
 
     componentWillUnmount() {
@@ -289,6 +336,8 @@ export class FileUpload extends PureComponent<Props, State> {
                 onProgress: this.props.onUploadProgress,
                 onSuccess: this.fileUploadSuccess,
                 onError: this.fileUploadFail,
+                isAdmin: this.props.isAdmin,
+                isPaidPlan: this.props.isPaidPlan,
             });
 
             this.setState({requests: {...this.state.requests, [clientId]: request}});
@@ -338,7 +387,7 @@ export class FileUpload extends PureComponent<Props, State> {
 
     handleDrop = (e: DragEvent<HTMLInputElement>) => {
         if (!this.props.canUploadFiles) {
-            this.props.onUploadError(localizeMessage('file_upload.disabled', 'File attachments are disabled.'));
+            this.props.onUploadError(localizeMessage({id: 'file_upload.disabled', defaultMessage: 'File attachments are disabled.'}));
             return;
         }
 
@@ -368,7 +417,7 @@ export class FileUpload extends PureComponent<Props, State> {
         }
 
         if (files.length === 0) {
-            this.props.onUploadError(localizeMessage('file_upload.drag_folder', 'This attachment cannot be uploaded.'));
+            this.props.onUploadError(localizeMessage({id: 'file_upload.drag_folder', defaultMessage: 'This attachment cannot be uploaded.'}));
             return;
         }
 
@@ -380,13 +429,19 @@ export class FileUpload extends PureComponent<Props, State> {
     };
 
     registerDragEvents = (containerSelector: string, overlaySelector: string) => {
-        const overlay = document.querySelector(overlaySelector);
+        let overlay = document.querySelector(overlaySelector);
 
         const dragTimeout = new DelayedAction(() => {
             overlay?.classList.add('hidden');
         });
 
         const enter = (e: CustomEvent) => {
+            // this null check is to deal with the race condition between rendering the post edit advanced text editor
+            // and this hook querying the same in DOM to register event handler on it.
+            if (!overlay) {
+                overlay = document.querySelector(overlaySelector);
+            }
+
             const files = e.detail.dataTransfer;
             if (!isUriDrop(files) && isFileTransfer(files)) {
                 overlay?.classList.remove('hidden');
@@ -503,7 +558,7 @@ export class FileUpload extends PureComponent<Props, State> {
             e.preventDefault();
 
             if (!this.props.canUploadFiles) {
-                this.props.onUploadError(localizeMessage('file_upload.disabled', 'File attachments are disabled.'));
+                this.props.onUploadError(localizeMessage({id: 'file_upload.disabled', defaultMessage: 'File attachments are disabled.'}));
                 return;
             }
             const postTextbox = this.props.postType === 'post' && document.activeElement?.id === 'post_textbox';
@@ -551,7 +606,7 @@ export class FileUpload extends PureComponent<Props, State> {
         this.setState({menuOpen: false});
     };
 
-    simulateInputClick = (e: MouseEvent<HTMLButtonElement | HTMLAnchorElement> | TouchEvent) => {
+    simulateInputClick = (e: ReactMouseEvent<HTMLLIElement> | ReactKeyboardEvent<HTMLLIElement> | MouseEvent | ReactTouchEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
         this.fileInput.current?.click();
@@ -591,9 +646,28 @@ export class FileUpload extends PureComponent<Props, State> {
     render() {
         const {formatMessage} = this.props.intl;
         let multiple = true;
+        let deviceMessage;
+
         if (isMobileApp()) {
             // iOS WebViews don't upload videos properly in multiple mode
             multiple = false;
+        }
+
+        // Ik change : change message for mobile app
+        if (isMobile()) {
+            deviceMessage = (
+                <FormattedMessage
+                    id='yourmobiledevice'
+                    defaultMessage='Your mobile device'
+                />
+            );
+        } else {
+            deviceMessage = (
+                <FormattedMessage
+                    id='yourcomputer'
+                    defaultMessage='Your computer'
+                />
+            );
         }
 
         let accept = '';
@@ -611,18 +685,13 @@ export class FileUpload extends PureComponent<Props, State> {
         if (this.props.pluginFileUploadMethods.length === 0) {
             bodyAction = (
                 <div>
-                    <OverlayTrigger
-                        delayShow={Constants.OVERLAY_TIME_DELAY}
-                        placement='top'
-                        trigger={['hover', 'focus']}
-                        overlay={
-                            <Tooltip id='upload-tooltip'>
-                                <KeyboardShortcutSequence
-                                    shortcut={KEYBOARD_SHORTCUTS.filesUpload}
-                                    hoistDescription={true}
-                                    isInsideTooltip={true}
-                                />
-                            </Tooltip>
+                    <WithTooltip
+                        title={
+                            <KeyboardShortcutSequence
+                                shortcut={KEYBOARD_SHORTCUTS.filesUpload}
+                                hoistDescription={true}
+                                isInsideTooltip={true}
+                            />
                         }
                     >
                         <button
@@ -642,7 +711,7 @@ export class FileUpload extends PureComponent<Props, State> {
                                 aria-label={iconAriaLabel}
                             />
                         </button>
-                    </OverlayTrigger>
+                    </WithTooltip>
                     <input
                         id='fileUploadInput'
                         tabIndex={-1}
@@ -664,9 +733,9 @@ export class FileUpload extends PureComponent<Props, State> {
                         key={item.pluginId + '_fileuploadpluginmenuitem'}
                         onClick={() => {
                             if (item.action) {
+                                // IK: for kDrive internal plugin
                                 if (item.customArgs) {
                                     const args: Array<keyof FileUpload | keyof Props> = [];
-
                                     item.customArgs.forEach((arg) => {
                                         if (arg in this || arg in this.props) {
                                             // @ts-expect-error ts can't infer this properly
@@ -674,6 +743,7 @@ export class FileUpload extends PureComponent<Props, State> {
                                         }
                                     });
 
+                                    // @ts-expect-error not typed correctly
                                     item.action(...args);
                                 } else {
                                     item.action(this.checkPluginHooksAndUploadFiles);
@@ -698,40 +768,44 @@ export class FileUpload extends PureComponent<Props, State> {
                         onClick={this.handleLocalFileUploaded}
                         multiple={multiple}
                         accept={accept}
-                        disabled={this.props.disabled}
                     />
+
                     <Menu.Container
-                        menuButton={{
-                            id: 'FileUploadMenu',
-                            'aria-label': formatMessage({id: 'file_upload.upload_files', defaultMessage: 'Upload files'}),
-                            class: 'AdvancedTextEditor__action-button',
-                            children: <PaperclipIcon size={16}/>,
-                        }}
                         menuButtonTooltip={{
-                            id: 'FileUploadMenuBT',
-                            text: formatMessage({id: 'file_upload.upload_files', defaultMessage: 'Upload files'}),
-                            class: 'hidden-xs',
+                            text: formatMessage(holders.uploadFile),
+                        }}
+                        menuButton={{
+                            id: 'fileUploadButton',
+                            class: 'style--none AdvancedTextEditor__action-button',
+                            'aria-label': iconAriaLabel,
+                            children: (
+
+                                <PaperclipIcon
+                                    size={18}
+                                    color={'currentColor'}
+                                    aria-label={iconAriaLabel}
+                                />
+                            ),
                         }}
                         menu={{
-                            id: 'FileUploadMenuMenu',
-                            'aria-label': formatMessage({id: 'file_upload.upload_files', defaultMessage: 'Upload files'}),
-                            transformOrigin: {
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            },
+                            id: 'fileUploadOptions',
                         }}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left',
+                        }}
+                        transformOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+
                     >
                         <Menu.Item
-                            onClick={this.simulateInputClick}
-                            labels={
-                                <FormattedMessage
-                                    id='yourcomputer'
-                                    defaultMessage='Your computer'
-                                />
-                            }
+                            labels={deviceMessage}
                             leadingElement={
                                 <LaptopIcon size={16}/>
                             }
+                            onClick={this.simulateInputClick}
                         />
                         {pluginFileUploadMethods}
                     </Menu.Container>
@@ -752,5 +826,4 @@ export class FileUpload extends PureComponent<Props, State> {
 }
 
 const wrappedComponent = injectIntl(FileUpload, {forwardRef: true});
-wrappedComponent.displayName = 'injectIntl(FileUpload)';
 export default wrappedComponent;

@@ -12,7 +12,6 @@ import {getLicense, getConfig} from 'mattermost-redux/selectors/entities/general
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, shouldShowTermsOfService} from 'mattermost-redux/selectors/entities/users';
-import type {ThunkActionFunc} from 'mattermost-redux/types/actions';
 
 import {registerInternalAiPlugin} from 'actions/ai_actions';
 import {registerInternalKdrivePlugin} from 'actions/kdrive_actions';
@@ -25,7 +24,7 @@ import {getHistory} from 'utils/browser_history';
 import {checkIfMFARequired} from 'utils/route';
 import {isPermalinkURL} from 'utils/url';
 
-import type {GlobalState} from 'types/store';
+import type {ThunkActionFunc, GlobalState} from 'types/store';
 
 import LoggedIn from './logged_in';
 
@@ -55,15 +54,18 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
 }
 
 // NOTE: suggestions where to keep this welcomed
-const getChannelURLAction = (channelId: string, teamId: string, url: string): ThunkActionFunc<void, GlobalState> => (dispatch, getState) => {
+const getChannelURLAction = (channelId: string, teamId: string, url: string): ThunkActionFunc<void> => (dispatch, getState) => {
     const state = getState();
 
     if (url && isPermalinkURL(url)) {
-        return getHistory().push(url);
+        getHistory().push(url);
+        return;
     }
 
     const channel = getChannel(state, channelId);
-    return getHistory().push(getChannelURL(state, channel, teamId));
+    if (channel) {
+        getHistory().push(getChannelURL(state, channel, teamId));
+    }
 };
 
 function mapDispatchToProps(dispatch: Dispatch) {

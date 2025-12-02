@@ -25,13 +25,13 @@ import TeamMembers from './team_members/index';
 import {TeamModes} from './team_modes';
 import {TeamProfile} from './team_profile';
 
+import SaveChangesPanel from '../../../save_changes_panel';
 import {NeedDomainsError, NeedGroupsError, UsersWillBeRemovedError} from '../../errors';
 import RemoveConfirmModal from '../../remove_confirm_modal';
-import SaveChangesPanel from '../../save_changes_panel';
 
 export type Props = {
     teamID: string;
-    team: Team;
+    team?: Team;
     totalGroups: number;
     groups: Group[];
     allGroups: Record<string, Group>;
@@ -89,10 +89,10 @@ export default class TeamDetails extends React.PureComponent<Props, State> {
         const team = props.team;
         this.state = {
             groups: props.groups,
-            syncChecked: Boolean(team.group_constrained),
-            allAllowedChecked: team.allow_open_invite,
-            allowedDomainsChecked: Boolean(team.allowed_domains && team.allowed_domains !== ''),
-            allowedDomains: team.allowed_domains || '',
+            syncChecked: Boolean(team?.group_constrained),
+            allAllowedChecked: Boolean(team?.allow_open_invite),
+            allowedDomainsChecked: Boolean(team?.allowed_domains),
+            allowedDomains: team?.allowed_domains || '',
             saving: false,
             showRemoveConfirmation: false,
             usersToRemoveCount: 0,
@@ -103,21 +103,21 @@ export default class TeamDetails extends React.PureComponent<Props, State> {
             saveNeeded: false,
             serverError: undefined,
             previousServerError: undefined,
-            isLocalArchived: team.delete_at > 0,
+            isLocalArchived: team ? team.delete_at > 0 : true,
             showArchiveConfirmModal: false,
         };
     }
 
     componentDidUpdate(prevProps: Props) {
         const {totalGroups, team} = this.props;
-        if (prevProps.team.id !== team.id || totalGroups !== prevProps.totalGroups) {
+        if (prevProps.team?.id !== team?.id || totalGroups !== prevProps.totalGroups) {
             this.setState({
                 totalGroups,
-                syncChecked: Boolean(team.group_constrained),
-                allAllowedChecked: team.allow_open_invite,
-                allowedDomainsChecked: Boolean(team.allowed_domains && team.allowed_domains !== ''),
-                allowedDomains: team.allowed_domains || '',
-                isLocalArchived: team.delete_at > 0,
+                syncChecked: Boolean(team?.group_constrained),
+                allAllowedChecked: Boolean(team?.allow_open_invite),
+                allowedDomainsChecked: Boolean(team?.allowed_domains),
+                allowedDomains: team?.allowed_domains || '',
+                isLocalArchived: team ? team.delete_at > 0 : true,
             });
         }
     }
@@ -140,12 +140,16 @@ export default class TeamDetails extends React.PureComponent<Props, State> {
     };
 
     handleSubmit = async () => {
+        const {team, groups: origGroups, teamID, actions} = this.props;
+        if (!team) {
+            return;
+        }
+
         this.setState({showRemoveConfirmation: false, saving: true});
         const {groups, allAllowedChecked, allowedDomainsChecked, allowedDomains, syncChecked, usersToAdd, usersToRemove, rolesToUpdate} = this.state;
 
         let serverError: JSX.Element | undefined;
 
-        const {team, groups: origGroups, teamID, actions} = this.props;
         if (this.teamToBeArchived()) {
             let saveNeeded = false;
             const result = await actions.deleteTeam(team.id);
@@ -401,13 +405,13 @@ export default class TeamDetails extends React.PureComponent<Props, State> {
 
     teamToBeArchived = () => {
         const {isLocalArchived} = this.state;
-        const isServerArchived = this.props.team.delete_at !== 0;
+        const isServerArchived = this.props.team?.delete_at !== 0;
         return isLocalArchived && !isServerArchived;
     };
 
     teamToBeRestored = () => {
         const {isLocalArchived} = this.state;
-        const isServerArchived = this.props.team.delete_at !== 0;
+        const isServerArchived = this.props.team?.delete_at !== 0;
         return !isLocalArchived && isServerArchived;
     };
 
@@ -443,6 +447,11 @@ export default class TeamDetails extends React.PureComponent<Props, State> {
 
     render = () => {
         const {team, isLicensedForLDAPGroups} = this.props;
+
+        if (!team) {
+            return null;
+        }
+
         const {totalGroups, saving, saveNeeded, serverError, groups, allAllowedChecked, allowedDomainsChecked, allowedDomains, syncChecked, showRemoveConfirmation, usersToRemoveCount, isLocalArchived, showArchiveConfirmModal} = this.state;
         const missingGroup = (og: {id: string}) => !groups.find((g) => g.id === og.id);
         const removedGroups = this.props.groups.filter(missingGroup);
@@ -529,7 +538,7 @@ export default class TeamDetails extends React.PureComponent<Props, State> {
                             message={
                                 <FormattedMessage
                                     id='admin.team_settings.team_detail.archive_confirm.message'
-                                    defaultMessage='Saving will archive the team and make its contents inaccessible for all users. Are you sure you wish to save and archive this team?'
+                                    defaultMessage={'Archiving will remove the team from the user interface but it\'s contents remain in the database and may still be accessible with the API. Are you sure you wish to save and archive this team?'}
                                 />
                             }
                             confirmButtonText={

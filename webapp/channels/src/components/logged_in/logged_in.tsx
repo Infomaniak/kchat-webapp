@@ -20,9 +20,11 @@ import DesktopApp from 'utils/desktop_api';
 import {isKeyPressed} from 'utils/keyboard';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getBrowserTimezone} from 'utils/timezone';
-import * as UserAgent from 'utils/user_agent';
+import {getDesktopVersion, isAndroid, isDesktopApp, isIos} from 'utils/user_agent';
 
 import WebSocketClient from 'client/web_websocket_client';
+
+// import {doesCookieContainsMMUserId} from 'utils/utils';
 
 declare global {
     interface Window {
@@ -80,14 +82,17 @@ export default class LoggedIn extends React.PureComponent<Props> {
         // Initialize websocket
         WebSocketActions.initialize();
 
-        if (!UserAgent.isDesktopApp() || isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.4.0')) {
+        if (!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) {
             this.props.actions.registerInternalKdrivePlugin();
         }
+        this.updateTimeZone();
         this.props.actions.registerInternalAiPlugin();
-        this.props.actions.autoUpdateTimezone(getBrowserTimezone());
 
         // Make sure the websockets close and reset version
         window.addEventListener('beforeunload', this.handleBeforeUnload);
+
+        // listen for the app visibility state
+        window.addEventListener('visibilitychange', this.handleVisibilityChange, false);
 
         // Listen for focused tab/window state
         window.addEventListener('focus', this.onFocusListener);
@@ -115,9 +120,9 @@ export default class LoggedIn extends React.PureComponent<Props> {
         this.setCallListeners();
 
         // Device tracking setup
-        if (UserAgent.isIos()) {
+        if (isIos()) {
             document.body.classList.add('ios');
-        } else if (UserAgent.isAndroid()) {
+        } else if (isAndroid()) {
             document.body.classList.add('android');
         }
 
@@ -134,6 +139,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         if (this.isValidState()) {
             BrowserStore.signalLogin();
+            DesktopApp.signalLogin();
         }
     }
 
@@ -154,6 +160,16 @@ export default class LoggedIn extends React.PureComponent<Props> {
         }
 
         return this.props.children;
+    }
+
+    private handleVisibilityChange = (): void => {
+        if (!document.hidden) {
+            this.updateTimeZone();
+        }
+    };
+
+    private updateTimeZone(): void {
+        this.props.actions.autoUpdateTimezone(getBrowserTimezone());
     }
 
     private onFocusListener(): void {
@@ -237,7 +253,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
     };
 
     private setCallListeners() {
-        if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.3.0')) {
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.3.0')) {
             window?.callManager?.onCallJoined?.((_: any, {channelId, channelID}) => this.props.actions.joinCall(channelID || channelId));
             window?.callManager?.onCallDeclined?.((_: any, {channelId, channelID}) => this.props.actions.declineCall(channelID || channelId));
             window?.callManager?.onCallCancel?.((_: any, {channelId}) => this.props.actions.cancelCall(channelId));

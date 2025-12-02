@@ -1,16 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {ComponentProps, useState} from 'react';
+import type {ComponentProps} from 'react';
+import React, {useState} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {useUpdateEffect} from 'react-use';
 import styled, {css} from 'styled-components';
 
-import {useUpdateEffect} from 'react-use';
-
-import Dropdown from './dropdown';
-import {PrimaryButton} from './assets/buttons';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import type {PrimaryButton} from './assets/buttons';
+import Dropdown from './dropdown';
 
 export const DotMenuButton = styled.button<{isActive: boolean}>`
     display: inline-flex;
@@ -95,8 +96,7 @@ const DotMenu = ({
     }, [isOpen]);
 
     const button = (
-
-        <MenuButton 
+        <MenuButton
             title={title}
             isActive={(isActive ?? false) || isOpen}
             onClick={(e: React.MouseEvent<HTMLButtonElement>) => {

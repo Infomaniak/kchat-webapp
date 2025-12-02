@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
-
-import {InformationOutlineIcon} from '@mattermost/compass-icons/components';
 
 import ExternalLink from 'components/external_link';
 
@@ -52,6 +51,7 @@ export default function SaveConfirmationModal({onExited, onConfirm, title, subti
                                     values={{
                                         customerportal: (msg) => (
                                             <ExternalLink
+                                                location='save_confirmation_modal'
                                                 href='https://customers.mattermost.com/console/ip_filtering'
                                             >
                                                 {msg}

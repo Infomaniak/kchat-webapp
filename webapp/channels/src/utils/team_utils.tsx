@@ -3,6 +3,8 @@
 
 import type {Team} from '@mattermost/types/teams';
 
+import Constants from 'utils/constants';
+
 // Use when sorting multiple teams by their `display_name` field
 function compareTeamsByDisplayName(locale: string, a: Team, b: Team) {
     if (a.display_name !== null) {
@@ -64,4 +66,8 @@ export function makeNewTeam(displayName: string, name: string): Team {
         scheme_id: '',
         group_constrained: false,
     };
+}
+
+export function isStaff(currentTeam: Team | undefined): boolean {
+    return currentTeam ? Constants.STAFF_ONLY_TEAM_NAME_WHITELIST.includes(currentTeam.name) : false;
 }

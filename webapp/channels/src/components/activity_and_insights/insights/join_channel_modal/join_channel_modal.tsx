@@ -87,7 +87,7 @@ const JoinChannelModal = (props: Props) => {
                         }}
                         className='btn join-channel-cancel'
                     >
-                        {localizeMessage('joinChannel.cancelButton', 'Cancel')}
+                        {localizeMessage({id: 'joinChannel.cancelButton', defaultMessage: 'Cancel'})}
                     </button>
                     <SaveButton
                         id='saveItems'
@@ -96,8 +96,8 @@ const JoinChannelModal = (props: Props) => {
                             e.preventDefault();
                             openRHS();
                         }}
-                        defaultMessage={localizeMessage('joinChannel.JoinButton', 'Join')}
-                        savingMessage={localizeMessage('joinChannel.joiningButton', 'Joining...')}
+                        defaultMessage={localizeMessage({id: 'joinChannel.JoinButton', defaultMessage: 'Join'})}
+                        savingMessage={localizeMessage({id: 'joinChannel.joiningButton', defaultMessage: 'Joining...'})}
                     />
                 </div>
             </Modal.Body>

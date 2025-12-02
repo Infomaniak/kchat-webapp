@@ -4,10 +4,8 @@
 import {lazy} from 'react';
 
 import {Client4} from 'mattermost-redux/client';
-import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getUserById} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale} from 'selectors/i18n';
 import {getConferenceByChannelId, getIsCurrentUserInCall} from 'selectors/kmeet_calls';
@@ -19,7 +17,7 @@ import {isDesktopExtendedCallSupported, openWebCallInNewTab} from 'utils/calls_u
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 
-import type {GlobalState} from 'types/store';
+import type {DispatchFunc, GlobalState} from 'types/store';
 
 import {closeModal, openModal} from './views/modals';
 
@@ -35,6 +33,9 @@ export function openCallDialingModal(channelId: string) {
 
         if (isDesktopApp()) {
             const conference = getConferenceByChannelId(state, channelId);
+            if (!conference) {
+                return;
+            }
             const currentUser = getCurrentUser(state);
             const caller = getUserById(state, conference.user_id);
 
@@ -98,10 +99,14 @@ export function externalJoinCall(msg: any) {
 export function joinCall(channelId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const conference = getConferenceByChannelId(getState(), channelId);
+        if (!conference) {
+            return;
+        }
         try {
             const answer = await Client4.acceptIncomingMeetCall(conference.id);
             dispatch(startCall(channelId, answer.jwt, conference.url, answer.name));
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.warn('cant join, call no longer exists', error);
             dispatch(deleteConference(conference.id, channelId));
         }
@@ -144,9 +149,12 @@ export function declineCall(channelId: string) {
 }
 
 export function cancelCall(channelId: string) {
-    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState): Promise<{data: boolean} | undefined> => {
         const state = getState();
         const conference = getConferenceByChannelId(state, channelId);
+        if (!conference) {
+            return undefined;
+        }
         const currentUserId = getCurrentUserId(getState());
 
         await Client4.cancelMeet(conference.id);
@@ -190,6 +198,9 @@ export function startDesktopCall(channelId: string, jwt: string, subject: string
         const state = getState();
         const user = getCurrentUser(state);
         const conference = getConferenceByChannelId(state, channelId);
+        if (!conference) {
+            return;
+        }
         const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
         const locale = getCurrentLocale(state);
 

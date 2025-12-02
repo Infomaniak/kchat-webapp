@@ -1,9 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
 import React, {useState} from 'react';
 
-import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
 import {GenericModal} from '@mattermost/components';
 
 import {
@@ -139,7 +139,7 @@ describe('menu click handlers', () => {
             expect(screen.getByText('Open modal from submenu')).toBeInTheDocument();
 
             // Press the down arrow once to focus first submenu item and then twice more to select the one we want
-            userEvent.keyboard('{arrowdown}{arrowdown}{arrowdown}');
+            userEvent.keyboard('{arrowdown}{arrowdown}');
 
             expect(screen.getByText('Open modal from submenu').closest('li')).toHaveFocus();
 

@@ -13,6 +13,7 @@ import {
     getMyChannelMemberships,
     getMyCurrentChannelMembership,
 } from 'mattermost-redux/selectors/entities/channels';
+import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 
@@ -21,7 +22,6 @@ import {
     closeRightHandSide as closeRhs,
     closeMenu as closeRhsMenu,
 } from 'actions/views/rhs';
-import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {getIsMobileView} from 'selectors/views/browser';
 
 import type {GlobalState} from 'types/store';

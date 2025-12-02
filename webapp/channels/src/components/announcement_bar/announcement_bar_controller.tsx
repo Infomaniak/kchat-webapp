@@ -9,22 +9,18 @@ import type {ClientLicense, ClientConfig, WarnMetricStatus} from '@mattermost/ty
 
 import withGetCloudSubscription from 'components/common/hocs/cloud/with_get_cloud_subscription';
 
+import AlmostFullStorageAnnouncementBar from './almost_full_storage_announcement_bar';
 import AppStoreBar from './appstore_announcement_bar';
 import AnnouncementBar from './default_announcement_bar';
+import {FullStorageAnnouncementBar} from './full_storage_announcement_bar/full_storage_announcement_bar';
 import MASMigrationBar from './mas_migration_bar';
+import NotificationPermissionBar from './notification_permission_bar';
 import OverageUsersBanner from './overage_users_banner';
 import TextDismissableBar from './text_dismissable_bar';
 import UsersLimitsAnnouncementBar from './users_limits_announcement_bar';
 import VersionBar from './version_bar';
 
-// import ShowThreeDaysLeftTrialModal from './show_tree_days_left_trial_modal/show_three_days_left_trial_modal';
-// import AutoStartTrialModal from './show_start_trial_modal/show_start_trial_modal';
-// import {ToPaidPlanBannerDismissable} from 'components/admin_console/billing/billing_subscriptions/to_paid_plan_nudge_banner';
-// import CloudAnnualRenewalAnnouncementBar from './cloud_annual_renewal';
-// import CloudDelinquencyAnnouncementBar from './cloud_delinquency';
-// import CloudTrialAnnouncementBar from './cloud_trial_announcement_bar';
 // import CloudTrialEndAnnouncementBar from './cloud_trial_ended_announcement_bar';
-// import PaymentAnnouncementBar from './payment_announcement_bar';
 
 type Props = {
     intl: IntlShape;
@@ -49,6 +45,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
         if (this.props.config?.EnableBanner === 'true' && this.props.config.BannerText?.trim()) {
             adminConfiguredAnnouncementBar = (
                 <TextDismissableBar
+                    className='admin-announcement'
                     color={this.props.config.BannerColor}
                     textColor={this.props.config.BannerTextColor}
                     allowDismissal={this.props.config.AllowBannerDismissal === 'true'}
@@ -74,62 +71,21 @@ class AnnouncementBarController extends React.PureComponent<Props> {
             );
         }
 
-        const paymentAnnouncementBar = null;
-        const cloudTrialAnnouncementBar = null;
-        const cloudTrialEndAnnouncementBar = null;
-        const cloudDelinquencyAnnouncementBar = null;
-        const cloudRenewalAnnouncementBar = null;
-        const notifyAdminDowngradeDelinquencyBar = null;
-        const toYearlyNudgeBannerDismissable = null;
-        let toPaidPlanNudgeBannerDismissable = null;
-        if (this.props.license?.Cloud === 'true') {
-            // paymentAnnouncementBar = (
-            //     <PaymentAnnouncementBar/>
-            // );
-            // cloudTrialAnnouncementBar = (
-            //     <CloudTrialAnnouncementBar/>
-            // );
-            // cloudTrialEndAnnouncementBar = (
-            //     <CloudTrialEndAnnouncementBar/>
-            // );
-            // cloudDelinquencyAnnouncementBar = (
-            //     <CloudDelinquencyAnnouncementBar/>
-            // );
-            // cloudRenewalAnnouncementBar = (
-            //     <CloudAnnualRenewalAnnouncementBar/>
-            // );
-            // toPaidPlanNudgeBannerDismissable = (<ToPaidPlanBannerDismissable/>);
-        }
-
-        let autoStartTrialModal = null;
-
-        // if (this.props.userIsAdmin) {
-        //     autoStartTrialModal = (
-        //         <AutoStartTrialModal/>
-        //     );
-        // }
-
         return (
             <>
+                <FullStorageAnnouncementBar userIsAdmin={this.props.userIsAdmin}/>
+                <NotificationPermissionBar/>
                 {adminConfiguredAnnouncementBar}
                 {errorBar}
                 <UsersLimitsAnnouncementBar
                     license={this.props.license}
                     userIsAdmin={this.props.userIsAdmin}
                 />
-                {paymentAnnouncementBar}
-                {cloudTrialAnnouncementBar}
-                {cloudTrialEndAnnouncementBar}
-                {cloudDelinquencyAnnouncementBar}
-                {cloudRenewalAnnouncementBar}
-                {notifyAdminDowngradeDelinquencyBar}
-                {toYearlyNudgeBannerDismissable}
-                {toPaidPlanNudgeBannerDismissable}
                 {this.props.license?.Cloud !== 'true' && <OverageUsersBanner/>}
-                {autoStartTrialModal}
                 <VersionBar/>
                 <AppStoreBar/>
                 <MASMigrationBar/>
+                <AlmostFullStorageAnnouncementBar userIsAdmin={this.props.userIsAdmin}/>
             </>
         );
     }

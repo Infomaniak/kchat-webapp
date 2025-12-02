@@ -54,7 +54,7 @@ const PremadeThemeChooser = ({theme, storedTheme, updateTheme, allowedThemes = [
     };
 
     for (const k in Preferences.THEMES) {
-        if (Preferences.THEMES.hasOwnProperty(k)) {
+        if (Object.prototype.hasOwnProperty.call(Preferences.THEMES, k)) {
             if ((hasAllowedThemes && allowedThemes.indexOf(k) < 0)) {
                 continue;
             }

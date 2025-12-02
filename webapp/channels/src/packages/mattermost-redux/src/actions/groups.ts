@@ -4,9 +4,8 @@
 import type {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
-import type {GroupPatch, SyncablePatch, GroupCreateWithUserIds, CustomGroupPatch, GroupSearchParams, GetGroupsParams, GetGroupsForUserParams, Group} from '@mattermost/types/groups';
+import type {GroupPatch, SyncablePatch, GroupCreateWithUserIds, CustomGroupPatch, GroupSearchParams, GetGroupsParams, GetGroupsForUserParams, Group, GroupMember} from '@mattermost/types/groups';
 import {SyncableType, GroupSource} from '@mattermost/types/groups';
-import type {UserProfile} from '@mattermost/types/users';
 
 import {ChannelTypes, GroupTypes, UserTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
@@ -183,7 +182,7 @@ export function getGroups(opts: GetGroupsParams): ActionFuncAsync {
                 if (!opts.per_page || currentFetch.length < opts.per_page) {
                     break;
                 }
-                opts.page += 1;
+                opts.page = (opts.page || 0) + 1;
             }
             dispatch({
                 type: GroupTypes.RECEIVED_GROUPS,
@@ -196,7 +195,7 @@ export function getGroups(opts: GetGroupsParams): ActionFuncAsync {
     };
 }
 
-export function getGroupsNotAssociatedToTeam(teamID: string, q = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT, source = GroupSource.Ldap) {
+export function getGroupsNotAssociatedToTeam(teamID: string, q = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT, source: GroupSource | string = GroupSource.Ldap, onlySyncableSources = false) {
     return bindClientFunc({
         clientFunc: Client4.getGroupsNotAssociatedToTeam,
         onSuccess: [GroupTypes.RECEIVED_GROUPS],
@@ -206,11 +205,12 @@ export function getGroupsNotAssociatedToTeam(teamID: string, q = '', page = 0, p
             page,
             perPage,
             source,
+            onlySyncableSources,
         ],
     });
 }
 
-export function getGroupsNotAssociatedToChannel(channelID: string, q = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT, filterParentTeamPermitted = false, source = GroupSource.Ldap) {
+export function getGroupsNotAssociatedToChannel(channelID: string, q = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT, filterParentTeamPermitted = false, source: GroupSource | string = GroupSource.Ldap, onlySyncableSources = false) {
     return bindClientFunc({
         clientFunc: Client4.getGroupsNotAssociatedToChannel,
         onSuccess: [GroupTypes.RECEIVED_GROUPS],
@@ -221,6 +221,7 @@ export function getGroupsNotAssociatedToChannel(channelID: string, q = '', page 
             perPage,
             filterParentTeamPermitted,
             source,
+            onlySyncableSources,
         ],
     });
 }
@@ -367,7 +368,7 @@ export function createGroupWithUserIds(group: GroupCreateWithUserIds): ActionFun
     };
 }
 
-export function addUsersToGroup(groupId: string, userIds: string[]): ActionFuncAsync<UserProfile[]> {
+export function addUsersToGroup(groupId: string, userIds: string[]): ActionFuncAsync<GroupMember[]> {
     return async (dispatch, getState) => {
         let data;
         try {
@@ -389,7 +390,7 @@ export function addUsersToGroup(groupId: string, userIds: string[]): ActionFuncA
     };
 }
 
-export function removeUsersFromGroup(groupId: string, userIds: string[]): ActionFuncAsync<UserProfile[]> {
+export function removeUsersFromGroup(groupId: string, userIds: string[]): ActionFuncAsync<GroupMember[]> {
     return async (dispatch, getState) => {
         let data;
         try {

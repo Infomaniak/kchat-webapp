@@ -16,6 +16,7 @@ import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import {NotifyStatus} from 'components/common/hooks/useGetNotifyAdmin';
+import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import {useNotifyAdmin} from 'components/notify_admin_cta/notify_admin_cta';
 
 import {LicenseSkus, MattermostFeatures} from 'utils/constants';
@@ -45,6 +46,7 @@ export default function CenterMessageLock(props: Props) {
     const isAdminUser = isAdmin(useSelector(getCurrentUser).roles);
     const [cloudLimits, limitsLoaded] = useGetLimits();
     const currentTeam = useSelector(getCurrentTeam);
+    const openPricingModal = useOpenPricingModal();
 
     // firstInaccessiblePostTime is the most recently inaccessible post's created at date.
     // It is used as a backup for when there are no available posts in the channel;

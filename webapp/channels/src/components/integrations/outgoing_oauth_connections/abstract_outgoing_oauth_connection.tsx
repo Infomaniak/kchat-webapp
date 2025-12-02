@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {AlertOutlineIcon, CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import type {ChangeEvent, FormEvent} from 'react';
 import React, {useMemo, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
@@ -8,7 +9,6 @@ import type {MessageDescriptor} from 'react-intl';
 import {useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
 
-import {AlertOutlineIcon, CheckCircleOutlineIcon} from '@mattermost/compass-icons/components';
 import type {OutgoingOAuthConnection} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
 

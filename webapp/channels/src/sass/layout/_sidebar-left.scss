@@ -1,4 +1,4 @@
-@charset "UTF-8";
+@use "utils/variables";
 
 /* Height durations for height and opacity of sidebar channels needs to be different for optimum fps see PR #9732 */
 $sidebarHeightTransitionDuration: 0.18s;
@@ -7,7 +7,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
 #TeamSidebar {
     z-index: 13;
     display: flex;
-    width: 65px;
+    width: 64px;
     height: 100%;
     flex-direction: column;
     background-color: var(--sidebar-header-bg);
@@ -28,17 +28,17 @@ $sidebarOpacityAnimationDuration: 0.15s;
     z-index: 16;
     left: 0;
     display: flex;
-    width: var(--overrideLhsWidth, 240px);
     min-width: 240px;
     max-width: 240px;
     height: 100%;
     flex-direction: column;
-    border-right: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
     background-color: var(--sidebar-bg);
 
     @media screen and (min-width: 769px) {
+        width: var(--overrideLhsWidth, 264px);
         min-width: 200px;
         max-width: 264px;
+        background: none;
     }
 
     @media screen and (min-width: 1201px) {
@@ -109,8 +109,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
     }
 
     .SidebarHeader {
-        background-color: var(--sidebar-header-bg);
-
         .header__info {
             color: var(--sidebar-header-text-color);
 
@@ -163,7 +161,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
         &.desktop {
             display: block;
 
-            .AddChannelDropdown_dropdownButton,
             .SidebarFilters_filterButton,
             .SidebarChannelNavigator_backButton,
             .SidebarChannelNavigator_inviteUsers,
@@ -180,7 +177,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
         &.webapp {
             display: flex;
 
-            .AddChannelDropdown_dropdownButton,
             .SidebarChannelNavigator_inviteUsers,
             .SidebarChannelNavigator_jumpToButton,
             .SidebarFilters_filterButton {
@@ -208,18 +204,12 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
 
             span {
-                align-self: flex-end;
-                margin-top: -2px;
                 margin-left: 5px;
             }
 
             &--untouched {
                 color: var(--sidebar-unread-text);
-                font-weight: $font-weight--semibold;
-
-                i::before {
-                    font-weight: $font-weight--semibold;
-                }
+                font-weight: variables.$font-weight--semibold;
             }
         }
 
@@ -234,7 +224,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
         }
 
-        .AddChannelDropdown_dropdownButton,
         .SidebarChannelNavigator_inviteUsers,
         .SidebarChannelNavigator_jumpToButton,
         .SidebarFilters_filterButtontton,
@@ -257,9 +246,9 @@ $sidebarOpacityAnimationDuration: 0.15s;
             width: 100%;
             align-items: center;
             padding: 0 5px 0 2px;
+            border-radius: 4px;
             margin-bottom: 8px;
             background: rgba(var(--sidebar-text-rgb), 0.08);
-            border-radius: 4px;
             font-family: 'SuisseIntl', sans-serif;
             font-size: 12px;
             text-align: left;
@@ -301,14 +290,14 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
         .SidebarChannelNavigator_backButton {
             padding: 0;
-            background: transparent;
             border-radius: 4px;
+            background: transparent;
         }
 
         .SidebarChannelNavigator_forwardButton {
             padding: 0;
-            background: transparent;
             border-radius: 4px;
+            background: transparent;
         }
     }
 
@@ -342,10 +331,10 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
         &.isWebApp {
             .dropdown-menu {
+                width: 100%;
                 // Infomaniak
                 min-width: 0;
                 max-width: 100%;
-                width: 100%;
             }
         }
 
@@ -368,28 +357,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
         }
 
-        &.isWebApp {
-            height: auto;
-            width: 100%;
-
-            .AddChannelDropdown_dropdownButton {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: #0088B2;
-                height: 44px;
-                width: 100%;
-                padding: 0;
-                border: none;
-                color: #FFF;
-                border-radius: 4px;
-                font-size: 14px;
-                border-radius: 4px;
-                gap: 5px;
-                line-height: 1;
-                margin-top: 16px;
-            }
-        }
     }
 
     .AddChannelDropdown_dropdownButton,
@@ -399,22 +366,10 @@ $sidebarOpacityAnimationDuration: 0.15s;
         height: 28px;
         padding: 0;
         border: none;
-        background: transparent;
         border-radius: 4px;
+        background: transparent;
         color: rgba(var(--sidebar-text-rgb), 0.8);
         font-size: 20px;
-    }
-
-    .AddChannelDropdown_dropdownButton:hover,
-    .AddChannelDropdown_dropdownButton:active,
-    .AddChannelDropdown_dropdownButton:focus {
-        background-color: rgba(var(--sidebar-text-rgb), 0.16);
-        color: var(--sidebar-text);
-        cursor: pointer;
-    }
-
-    .AddChannelDropdown_dropdownButton:focus {
-        outline-style: none;
     }
 
     .sidebar-header {
@@ -427,8 +382,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
     .SidebarHeaderMenuWrapper {
         overflow: hidden;
         padding-left: 5px;
-        background: transparent;
         border-radius: 4px;
+        background: transparent;
 
         &:hover,
         &:active,
@@ -439,11 +394,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
         &.MenuWrapper--open {
             background-color: rgba(var(--sidebar-text-rgb), 0.16);
         }
-    }
-
-    .AddChannelDropdown_dropdownButton {
-        background-color: rgba(var(--sidebar-text-rgb), 0.08);
-        color: rgba(var(--sidebar-text-rgb), 0.64);
     }
 
     .SidebarMenu {
@@ -572,8 +522,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
         justify-content: center;
         padding: 0;
         border: none;
-        background: transparent;
         border-radius: 4px;
+        background: transparent;
         color: rgba(var(--sidebar-text-rgb), 0.64);
         font-size: 16px;
         line-height: 16px;
@@ -626,10 +576,10 @@ $sidebarOpacityAnimationDuration: 0.15s;
         height: 16px;
         align-items: center;
         padding: 0 4px;
+        border-radius: 4px;
         margin-right: 16px;
         margin-left: 4px;
         background: var(--mention-bg);
-        border-radius: 4px;
         color: var(--mention-color);
         font-size: 10px;
         font-weight: 600;
@@ -647,8 +597,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
             align-items: center;
             padding: 10px;
             border: 1px dashed rgba(var(--sidebar-text-rgb), 0.3);
-            margin: 0 16px;
             border-radius: 4px;
+            margin: 0 16px;
             opacity: 1;
 
             >i {
@@ -798,17 +748,15 @@ $sidebarOpacityAnimationDuration: 0.15s;
         }
 
         span {
-            align-self: flex-end;
-            margin-top: -2px;
             margin-left: 5px;
         }
 
         &--untouched {
             color: var(--sidebar-unread-text);
-            font-weight: $font-weight--semibold;
+            font-weight: variables.$font-weight--semibold;
 
             i::before {
-                font-weight: $font-weight--semibold;
+                font-weight: variables.$font-weight--semibold;
             }
         }
     }
@@ -822,6 +770,14 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
             i {
                 color: rgba(var(--center-channel-color-rgb), 0.64);
+            }
+        }
+
+        .MenuItem__primary-text {
+            align-items: center;
+
+            .text {
+                margin-right: 8px;
             }
         }
     }
@@ -852,8 +808,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
             height: 32px;
             padding: 3px 10px;
             border: 1px solid var(--sidebar-text);
-            background-color: inherit;
             border-radius: 4px;
+            background-color: inherit;
             color: var(--sidebar-text);
             cursor: pointer;
             font-size: 12px;
@@ -887,6 +843,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
         font-family: 'SuisseIntl', sans-serif;
         font-size: 12px;
         font-weight: 600;
+        letter-spacing: 0.05em;
         text-align: left;
         text-transform: uppercase;
         transition: box-shadow 0.25s ease-in-out;
@@ -987,8 +944,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
         box-shadow: inset -1px 0 0 rgba(var(--sidebar-text-rgb), 0.64), inset 0 -1px 0 rgba(var(--sidebar-text-rgb), 0.64), inset 1px 0 0 rgba(var(--sidebar-text-rgb), 0.64), inset 0 1px 0 rgba(var(--sidebar-text-rgb), 0.64);
 
         .SidebarChannelGroupHeader {
-            background-color: var(--sidebar-bg);
             border-radius: 4px 4px 0 0;
+            background-color: var(--sidebar-bg);
             box-shadow: inset -1px 0 0 rgba(var(--sidebar-text-rgb), 0.64), inset 1px 0 0 rgba(var(--sidebar-text-rgb), 0.64), inset 0 1px 0 rgba(var(--sidebar-text-rgb), 0.64);
         }
     }
@@ -1018,9 +975,9 @@ $sidebarOpacityAnimationDuration: 0.15s;
         height: 28px;
         padding: 0;
         border: none;
+        border-radius: 4px;
         margin: 2px 16px 2px 2px;
         background: transparent;
-        border-radius: 4px;
         color: rgba(var(--sidebar-text-rgb), 0.64);
         font-size: 18px;
         line-height: 16px;
@@ -1044,9 +1001,9 @@ $sidebarOpacityAnimationDuration: 0.15s;
         height: 28px;
         padding: 0;
         border: none;
+        border-radius: 4px;
         margin: 2px 2px 2px auto;
         background: transparent;
-        border-radius: 4px;
         color: rgba(var(--sidebar-text-rgb), 0.64);
         font-size: 16px;
         line-height: 16px;
@@ -1121,13 +1078,13 @@ $sidebarOpacityAnimationDuration: 0.15s;
         &.dragging {
             /* MM-32401: Needed to ensure that the channel selected count is displayed correctly */
             overflow: visible;
-            background-color: var(--sidebar-bg);
             border-radius: 4px;
+            background-color: var(--sidebar-bg);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
 
             .SidebarLink {
-                background: rgba(255, 255, 255, 0.08);
                 border-radius: 4px;
+                background: rgba(255, 255, 255, 0.08);
             }
         }
 
@@ -1174,8 +1131,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
             right: -8px;
             height: 25px;
             padding: 2px 9px 7px 9px;
-            background: var(--center-channel-color);
             border-radius: 20px;
+            background: var(--center-channel-color);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
 
             >span {
@@ -1192,10 +1149,13 @@ $sidebarOpacityAnimationDuration: 0.15s;
         }
 
         & span.SidebarChannelLinkLabel {
+            overflow: hidden;
             max-width: 100%;
             height: 18px;
             line-height: 18px;
             text-align: justify;
+            text-overflow: ellipsis;
+            user-select: none;
             white-space: nowrap;
         }
 
@@ -1331,16 +1291,19 @@ $sidebarOpacityAnimationDuration: 0.15s;
         left: -2px;
         width: 4px;
         height: 100%;
-        background: var(--sidebar-text-active-border);
         border-radius: 4px;
+        background: var(--sidebar-text-active-border);
         content: '';
     }
 
     .SidebarChannel.unread .SidebarChannelLinkLabel,
-    .SidebarChannel.unread .SidebarLink > i,
     .SidebarChannel.unread .SidebarLink:hover .SidebarChannelLinkLabel {
         color: var(--sidebar-unread-text);
         font-weight: 600;
+    }
+
+    .SidebarChannel.unread .SidebarLink > i {
+        color: var(--sidebar-unread-text);
     }
 
     .SidebarChannel .SidebarLink > i {
@@ -1354,13 +1317,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
         display: flex;
         overflow: hidden;
         flex-grow: 1;
-    }
-
-    .SidebarChannelLinkLabel_wrapper > div.truncated {
-        display: block;
-        overflow: hidden;
-        width: 100%;
-        text-overflow: ellipsis;
+        gap: 8px;
     }
 
     .DirectChannel__profile-picture {
@@ -1376,8 +1333,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
             height: 13px;
             align-items: center;
             justify-content: center;
-            background: var(--sidebar-bg);
             border-radius: 100%;
+            background: var(--sidebar-bg);
             font-size: 12px;
         }
     }
@@ -1446,8 +1403,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
     z-index: 100;
     padding: 2px 0;
     border: 1px solid #c6c6c6;
-    background: #f0f0f0;
     border-radius: 5px;
+    background: #f0f0f0;
     color: black;
     cursor: pointer;
 }
@@ -1458,7 +1415,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
     &:hover {
         background: #489dfe;
-        color: $white;
+        color: variables.$white;
     }
 
     &:focus,

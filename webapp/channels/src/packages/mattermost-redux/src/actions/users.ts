@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-imports */
+/* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -5,15 +7,14 @@ import type {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
 import type {UserAutocomplete} from '@mattermost/types/autocomplete';
+import type {Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
 import type {UserProfile, UserStatus, GetFilteredUsersStatsOpts, UsersStats, UserCustomStatus, UserAccessToken} from '@mattermost/types/users';
 
 import {UserTypes, AdminTypes} from 'mattermost-redux/action_types';
 import {logError} from 'mattermost-redux/actions/errors';
 import {setServerVersion, getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
-import {bindClientFunc, forceLogoutIfNecessary, debounce} from 'mattermost-redux/actions/helpers';
-import {bridgeRecreate} from 'mattermost-redux/actions/ksuiteBridge';
-import {getUsersLimits} from 'mattermost-redux/actions/limits';
+import {bindClientFunc, forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 import {getMyTeamMembers, getMyTeamUnreads, getMyKSuites} from 'mattermost-redux/actions/teams';
@@ -21,19 +22,25 @@ import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getTeams} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
-import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
+import {getCurrentUserId, getUser as selectUser, getUsers, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
+import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
+import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
 
-// TODO fix import restriction
-import {getMyMeets} from 'actions/calls';
+import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 
+import type {GlobalState} from 'types/store';
+
 // import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
 // import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
+
+// Delay requests for missing profiles for up to 100ms to allow for simulataneous requests to be batched
+const missingProfilesWait = 100;
+
+export const maxUserIdsPerProfilesRequest = 100; // users ids per 'users/ids' request
+export const maxUserIdsPerStatusesRequest = 200; // users ids per 'users/status/ids'request
 
 export function generateMfaSecret(userId: string) {
     return bindClientFunc({
@@ -70,77 +77,30 @@ export function createUser(user: UserProfile, token: string, inviteId: string, r
 export function loadMe(): ActionFuncAsync<boolean> {
     return async (dispatch, getState) => {
         // Sometimes the server version is set in one or the other
-        // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
-        const serverVersion = Client4.getServerVersion();
+        const serverVersion = getState().entities.general.serverVersion || Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
 
         const bridge = getState().entities.ksuiteBridge.bridge;
 
-        if (!bridge.isConnected && !isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+        if (!bridge?.isConnected && !isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
             // eslint-disable-next-line no-process-env
             window.location.assign(`https://ksuite.${process.env.BASE_URL?.split('kchat.')[1]}/kchat`);
 
-            return;
+            return {data: false};
         }
 
         try {
-            const kSuiteCall = await dispatch(getMyKSuites());
-            const kSuites = getTeams(getState());
+            await Promise.all([
+                dispatch(getClientConfig()),
+                dispatch(getLicenseConfig()),
+                dispatch(getMe()),
+                dispatch(getMyPreferences()),
+                dispatch(getMyKSuites()),
+                dispatch(getMyTeamMembers()),
+            ]);
 
-            const suiteArr = Object.values(kSuites);
-
-            // allow through in tests to launch promise.all but not trigger redirect
-            if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
-                const lastKSuiteSeenId = getLastKSuiteSeenId();
-                const sortedSuites = suiteArr.sort((a, b) => {
-                    if (a.id === lastKSuiteSeenId) {
-                        return -1;
-                    }
-                    if (b.id === lastKSuiteSeenId) {
-                        return 1;
-                    }
-                    return b.update_at - a.update_at;
-                });
-                const lastKSuiteSeen = sortedSuites[0];
-
-                if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    window.postMessage({
-                        type: 'switch-server',
-                        data: lastKSuiteSeen.display_name,
-                    }, window.origin);
-                }
-
-                // don't redirect to the error page if it is a testing environment
-                if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    dispatch(bridgeRecreate(lastKSuiteSeen.url));
-
-                    window.open(lastKSuiteSeen.url, '_self');
-                }
-
-                try {
-                    await Promise.all([
-                        dispatch(getClientConfig()),
-                        dispatch(getLicenseConfig()),
-                        dispatch(getMe()),
-                        dispatch(getMyPreferences()),
-                        dispatch(getMyTeamMembers()),
-                        dispatch(getMyMeets()),
-                    ]);
-
-                    const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
-                    await dispatch(getMyTeamUnreads(isCollapsedThreads));
-
-                    await dispatch(getUsersLimits());
-                } catch (error) {
-                    dispatch(logError(error as ServerError));
-                    return {error: error as ServerError};
-                }
-            } else if (!isDesktopApp()) {
-                // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
-                if (kSuiteCall && kSuiteCall.data) {
-                    getHistory().push('/error?type=no_ksuite');
-                }
-            }
+            const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
+            await dispatch(getMyTeamUnreads(isCollapsedThreads));
         } catch (error) {
             dispatch(logError(error as ServerError));
             return {error: error as ServerError};
@@ -159,13 +119,6 @@ export function logout(): ActionFuncAsync {
         } catch (error) {
             // nothing to do here
         }
-
-        // TODO: remove
-        // Causes a redirect in web which stops logout.
-        // Since app state rebuilds after redirecting to our external login as apposed
-        // to mattermost where login is in the app this is not needed.
-        //
-        // dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null});
 
         return {data: true};
     };
@@ -232,49 +185,61 @@ export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SI
     };
 }
 
-export function getMissingProfilesByIds(userIds: string[]): ActionFuncAsync<UserProfile[]> {
-    return async (dispatch, getState) => {
-        const state = getState();
-        const {profiles} = state.entities.users;
-        const enabledUserStatuses = getIsUserStatusesConfigEnabled(state);
-        const missingIds: string[] = [];
-        userIds.forEach((id) => {
-            if (!profiles[id]) {
-                missingIds.push(id);
-            }
-        });
-
-        if (missingIds.length > 0) {
-            if (enabledUserStatuses) {
-                dispatch(getStatusesByIds(missingIds));
-            }
-            return dispatch(getProfilesByIds(missingIds));
+export function getMissingProfilesByIds(userIds: string[]): ActionFuncAsync<Array<UserProfile['id']>> {
+    return async (dispatch, getState, {loaders}: any) => {
+        if (!loaders.missingStatusLoader) {
+            loaders.missingStatusLoader = new DelayedDataLoader<UserProfile['id']>({
+                fetchBatch: (userIds) => dispatch(getStatusesByIds(userIds)),
+                maxBatchSize: maxUserIdsPerProfilesRequest,
+                wait: missingProfilesWait,
+            });
         }
 
-        return {data: []};
+        if (!loaders.missingProfileLoader) {
+            loaders.missingProfileLoader = new DelayedDataLoader<UserProfile['id']>({
+                fetchBatch: (userIds) => dispatch(getProfilesByIds(userIds)),
+                maxBatchSize: maxUserIdsPerProfilesRequest,
+                wait: missingProfilesWait,
+            });
+        }
+
+        const state = getState();
+
+        const missingIds = userIds.filter((id) => !selectUser(state, id));
+
+        if (missingIds.length > 0) {
+            if (getIsUserStatusesConfigEnabled(state)) {
+                loaders.missingStatusLoader.queue(missingIds);
+            }
+
+            await loaders.missingProfileLoader.queueAndWait(missingIds);
+        }
+
+        return {
+            data: missingIds,
+        };
     };
 }
 
-export function getMissingProfilesByUsernames(usernames: string[]): ActionFuncAsync<UserProfile[]> {
-    return async (dispatch, getState) => {
-        const {profiles} = getState().entities.users;
-
-        const usernameProfiles = Object.values(profiles).reduce((acc, profile: any) => {
-            acc[profile.username] = profile;
-            return acc;
-        }, {} as Record<string, UserProfile>);
-        const missingUsernames: string[] = [];
-        usernames.forEach((username) => {
-            if (!usernameProfiles[username]) {
-                missingUsernames.push(username);
-            }
-        });
-
-        if (missingUsernames.length > 0) {
-            return dispatch(getProfilesByUsernames(missingUsernames));
+export function getMissingProfilesByUsernames(usernames: string[]): ActionFuncAsync<Array<UserProfile['username']>> {
+    return async (dispatch, getState, {loaders}: any) => {
+        if (!loaders.userByUsernameLoader) {
+            loaders.userByUsernameLoader = new DelayedDataLoader<UserProfile['username']>({
+                fetchBatch: (usernames) => dispatch(getProfilesByUsernames(usernames)),
+                maxBatchSize: maxUserIdsPerProfilesRequest,
+                wait: missingProfilesWait,
+            });
         }
 
-        return {data: []};
+        const usersByUsername = getUsersByUsername(getState());
+
+        const missingUsernames = usernames.filter((username) => !usersByUsername[username]);
+
+        if (missingUsernames.length > 0) {
+            await loaders.userByUsernameLoader.queueAndWait(missingUsernames);
+        }
+
+        return {data: missingUsernames};
     };
 }
 
@@ -436,6 +401,21 @@ export function getProfilesInChannel(channelId: string, page: number, perPage: n
     };
 }
 
+export function batchGetProfilesInChannel(channelId: string): ActionFuncAsync<Array<Channel['id']>> {
+    return async (dispatch, getState, {loaders}: any) => {
+        if (!loaders.profilesInChannelLoader) {
+            loaders.profilesInChannelLoader = new DelayedDataLoader<Channel['id']>({
+                fetchBatch: (channelIds) => dispatch(getProfilesInChannel(channelIds[0], 0)),
+                maxBatchSize: 1,
+                wait: missingProfilesWait,
+            });
+        }
+
+        await loaders.profilesInChannelLoader.queueAndWait([channelId]);
+        return {};
+    };
+}
+
 export function getProfilesInGroupChannels(channelsIds: string[]): ActionFuncAsync {
     return async (dispatch, getState) => {
         let channelProfiles;
@@ -450,7 +430,7 @@ export function getProfilesInGroupChannels(channelsIds: string[]): ActionFuncAsy
 
         const actions: AnyAction[] = [];
         for (const channelId in channelProfiles) {
-            if (channelProfiles.hasOwnProperty(channelId)) {
+            if (Object.hasOwn(channelProfiles, channelId)) {
                 const profiles = channelProfiles[channelId];
 
                 actions.push(
@@ -521,6 +501,24 @@ export function getMe(): ActionFuncAsync<UserProfile> {
             dispatch(loadRolesIfNeeded(me.data!.roles.split(' ')));
         }
         return me;
+    };
+}
+
+export function getCustomProfileAttributeValues(userID: string): ActionFuncAsync<Record<string, string>> {
+    return async (dispatch) => {
+        let data;
+        try {
+            data = await Client4.getUserCustomProfileAttributesValues(userID);
+        } catch (error) {
+            return {error};
+        }
+
+        dispatch({
+            type: UserTypes.RECEIVED_CPA_VALUES,
+            data: {userID, customAttributeValues: data},
+        });
+
+        return {data};
     };
 }
 
@@ -672,59 +670,94 @@ export function getUserByEmail(email: string) {
     });
 }
 
-// We create an array to hold the id's that we want to get a status for. We build our
-// debounced function that will get called after a set period of idle time in which
-// the array of id's will be passed to the getStatusesByIds with a cb that clears out
-// the array. Helps with performance because instead of making 75 different calls for
-// statuses, we are only making one call for 75 ids.
-// We could maybe clean it up somewhat by storing the array of ids in redux state possbily?
-let ids: string[] = [];
-const debouncedGetStatusesByIds = debounce(async (dispatch: DispatchFunc) => {
-    dispatch(getStatusesByIds([...new Set(ids)]));
-}, 20, false, () => {
-    ids = [];
-});
-export function getStatusesByIdsBatchedDebounced(id: string) {
-    ids = [...ids, id];
-    return debouncedGetStatusesByIds;
-}
-
-export function getStatusesByIds(userIds: string[]) {
-    return bindClientFunc({
-        clientFunc: Client4.getStatusesByIds,
-        onSuccess: UserTypes.RECEIVED_STATUSES,
-        params: [
-            userIds,
-        ],
-    });
-}
-
-export function getStatus(userId: string) {
-    return bindClientFunc({
-        clientFunc: Client4.getStatus,
-        onSuccess: UserTypes.RECEIVED_STATUS,
-        params: [
-            userId,
-        ],
-    });
-}
-
-export function setStatus(status: UserStatus): ActionFuncAsync {
+export function getStatusesByIds(userIds: Array<UserProfile['id']>): ActionFuncAsync<UserStatus[]> {
     return async (dispatch, getState) => {
+        if (!userIds || userIds.length === 0) {
+            return {data: []};
+        }
+
+        let receivedStatuses: UserStatus[];
         try {
-            await Client4.updateStatus(status);
+            receivedStatuses = await Client4.getStatusesByIds(userIds);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
             return {error};
         }
 
-        dispatch({
-            type: UserTypes.RECEIVED_STATUS,
-            data: status,
-        });
+        const statuses: Record<UserProfile['id'], UserStatus['status']> = {};
+        const dndEndTimes: Record<UserProfile['id'], UserStatus['dnd_end_time']> = {};
+        const isManualStatuses: Record<UserProfile['id'], UserStatus['manual']> = {};
+        const lastActivity: Record<UserProfile['id'], UserStatus['last_activity_at']> = {};
 
-        return {data: status};
+        for (const receivedStatus of receivedStatuses) {
+            statuses[receivedStatus.user_id] = receivedStatus?.status ?? '';
+            dndEndTimes[receivedStatus.user_id] = receivedStatus?.dnd_end_time ?? 0;
+            isManualStatuses[receivedStatus.user_id] = receivedStatus?.manual ?? false;
+            lastActivity[receivedStatus.user_id] = receivedStatus?.last_activity_at ?? 0;
+        }
+
+        dispatch(batchActions([
+            {
+                type: UserTypes.RECEIVED_STATUSES,
+                data: statuses,
+            },
+            {
+                type: UserTypes.RECEIVED_DND_END_TIMES,
+                data: dndEndTimes,
+            },
+            {
+                type: UserTypes.RECEIVED_STATUSES_IS_MANUAL,
+                data: isManualStatuses,
+            },
+            {
+                type: UserTypes.RECEIVED_LAST_ACTIVITIES,
+                data: lastActivity,
+            },
+        ],
+        'BATCHING_STATUSES',
+        ));
+
+        return {data: receivedStatuses};
+    };
+}
+
+export function setStatus(status: UserStatus): ActionFuncAsync<UserStatus> {
+    return async (dispatch, getState) => {
+        let recievedStatus: UserStatus;
+        try {
+            recievedStatus = await Client4.updateStatus(status);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error};
+        }
+
+        const updatedStatus = {[recievedStatus.user_id]: recievedStatus.status};
+        const dndEndTimes = {[recievedStatus.user_id]: recievedStatus?.dnd_end_time ?? 0};
+        const isManualStatus = {[recievedStatus.user_id]: recievedStatus?.manual ?? false};
+        const lastActivity = {[recievedStatus.user_id]: recievedStatus?.last_activity_at ?? 0};
+
+        dispatch(batchActions([
+            {
+                type: UserTypes.RECEIVED_STATUSES,
+                data: updatedStatus,
+            },
+            {
+                type: UserTypes.RECEIVED_DND_END_TIMES,
+                data: dndEndTimes,
+            },
+            {
+                type: UserTypes.RECEIVED_STATUSES_IS_MANUAL,
+                data: isManualStatus,
+            },
+            {
+                type: UserTypes.RECEIVED_LAST_ACTIVITIES,
+                data: lastActivity,
+            },
+        ], 'BATCHING_STATUS'));
+
+        return {data: recievedStatus};
     };
 }
 
@@ -983,6 +1016,19 @@ export function updateMe(user: Partial<UserProfile>): ActionFuncAsync<UserProfil
     };
 }
 
+export function saveCustomProfileAttribute(userID: string, attributeID: string, attributeValue: string): ActionFuncAsync<Record<string, string>> {
+    return async (dispatch) => {
+        try {
+            const values = {[attributeID]: attributeValue.trim()};
+            const data = await Client4.updateCustomProfileAttributeValues(values);
+            return {data};
+        } catch (error) {
+            dispatch(logError(error));
+            return {error};
+        }
+    };
+}
+
 export function patchUser(user: UserProfile): ActionFuncAsync<UserProfile> {
     return async (dispatch) => {
         let data: UserProfile;
@@ -1046,6 +1092,24 @@ export function updateUserPassword(userId: string, currentPassword: string, newP
         const profile = getState().entities.users.profiles[userId];
         if (profile) {
             dispatch({type: UserTypes.RECEIVED_PROFILE, data: {...profile, last_password_update: new Date().getTime()}});
+        }
+
+        return {data: true};
+    };
+}
+
+export function resetFailedAttempts(userId: string): ActionFuncAsync<true> {
+    return async (dispatch, getState) => {
+        try {
+            await Client4.resetFailedAttempts(userId);
+        } catch (error) {
+            dispatch(logError(error));
+            return {error};
+        }
+
+        const profile = getState().entities.users.profiles[userId];
+        if (profile) {
+            dispatch({type: UserTypes.RECEIVED_PROFILE, data: {...profile, failed_attempts: 0}});
         }
 
         return {data: true};
@@ -1361,16 +1425,26 @@ export function clearUserAccessTokens(): ActionFuncAsync {
     };
 }
 
-export function checkForModifiedUsers(): ActionFuncAsync {
+export function checkForModifiedUsers(channelId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
         const users = getUsers(state);
+        const firstDisconnectAt = state.websocket.firstDisconnect;
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
+        const lastPostsApiCallForChannel = getLastPostsApiTimeForChannel(state as GlobalState, channelId);
+        let since = firstDisconnectAt;
+        if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < lastDisconnectAt) {
+            since = lastPostsApiCallForChannel;
+        }
         const userIds = Object.keys(users);
+        // eslint-disable-next-line no-console
         console.log('checking for modified users with lastDisconnect:', lastDisconnectAt);
+        // eslint-disable-next-line no-console
+        console.log('checking for modified users since', since);
+        // eslint-disable-next-line no-console
         console.log('fetch profile count:', userIds.length);
 
-        await dispatch(getProfilesByIds(userIds, {since: lastDisconnectAt}));
+        await dispatch(getProfilesByIds(userIds, {since}));
         return {data: true};
     };
 }
@@ -1386,7 +1460,6 @@ export default {
     getUser,
     getMe,
     getUserByUsername,
-    getStatus,
     getStatusesByIds,
     getSessions,
     getTotalUsersStats,

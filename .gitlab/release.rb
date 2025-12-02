@@ -10,8 +10,8 @@ REDMINE_API_KEY = ENV['REDMINE_API_KEY']
 GIT_RELEASE_TAG = ARGV[0]
 MILESTONE = ARGV[1]
 NOTIFY_CHANNEL = ARGV[2]
-STABLE_BRANCH = 'stable'
-NEXT_BRANCH = 'next'
+
+# NEXT_BRANCH = 'next'
 
 =begin
 # Creates and configures a new instance of the Net::HTTP class.
@@ -150,34 +150,34 @@ def create_changelog(tag, branch)
   puts "Creating changelog for tag #{tag}"
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
-  commit_sha = get_commit_sha(last_tag)
+  from_commit_sha = get_commit_sha(last_tag)
+  to_commit_sha = get_commit_sha(tag)
   bot_message = "Add changelog for version #{tag} [skip ci]"
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Post.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  # "branch" => branch,
-  request.set_form_data("version" => tag, "from" => commit_sha, "message" => bot_message)
+  request.set_form_data("version" => tag, "from" => from_commit_sha, "to" => to_commit_sha, "message" => bot_message)
 
   response = get_http(uri).request(request)
   response.body if response.code.to_i == 201
 end
 
 =begin
-# Sends a GET request to fetch the changelog for a given tag on a specific branch.
+# Sends a GET request to fetch the changelog for a given tag.
 #
 # @param tag [String] The tag for which to fetch the changelog.
-# @param branch [String] The branch where the changelog changes were committed.
 # @return [Array, nil] The changelog if the status code is 200, null otherwise.
 =end
 def get_changelog(tag)
   puts "Fetching changelog for tag #{tag}"
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
-  commit_sha = get_commit_sha(last_tag)
+  from_commit_sha = get_commit_sha(last_tag)
+  to_commit_sha = get_commit_sha(tag)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Get.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  request.set_form_data("version" => tag, "from" => commit_sha)
+  request.set_form_data("version" => tag, "from" => from_commit_sha, "to" => to_commit_sha)
 
   response = get_http(uri).request(request)
   JSON.parse(response.body)["notes"] if response.code.to_i == 200
@@ -196,8 +196,7 @@ def create_release(changelog)
   request.set_form_data({
     "name" => GIT_RELEASE_TAG,
     "tag_name" => GIT_RELEASE_TAG,
-    "description" => changelog,
-    "milestones" => MILESTONE
+    "description" => changelog
   })
 
   response = get_http(uri).request(request)
@@ -320,9 +319,10 @@ end
 # [stable] Update labels and changelog
 if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   puts "Processing full release tag: #{GIT_RELEASE_TAG}"
-  branch = STABLE_BRANCH
-  # Creates the changelog entry on gitlab
-  create_changelog(GIT_RELEASE_TAG, branch)
+
+  # Creates the changelog entry in git
+  # create_changelog(GIT_RELEASE_TAG, branch)
+
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
@@ -356,10 +356,12 @@ end
 
 # [next] Update labels and changelog
 if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
-  branch = NEXT_BRANCH
+  # branch = NEXT_BRANCH
   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
-  # Creates the changelog entry on gitlab
-  create_changelog(GIT_RELEASE_TAG, branch)
+
+  # Creates the changelog entry in git
+  # create_changelog(GIT_RELEASE_TAG, branch)
+
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
@@ -391,12 +393,13 @@ end
 
 # [preprod] Update labels and changelog
 if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
-  # TODO: clean, not used by function
-  branch = NEXT_BRANCH
+  # branch = NEXT_BRANCH
 
   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
+
   # Creates the changelog entry on gitlab
-  create_changelog(GIT_RELEASE_TAG, branch)
+  # create_changelog(GIT_RELEASE_TAG, branch)
+
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 

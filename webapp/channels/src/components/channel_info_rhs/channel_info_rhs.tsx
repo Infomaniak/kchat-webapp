@@ -42,19 +42,16 @@ export interface Props {
     channelStats: ChannelStats;
     currentUser: UserProfile;
     currentTeam: Team;
-
     isArchived: boolean;
+    isPreview: boolean;
     isFavorite: boolean;
     isMuted: boolean;
     isInvitingPeople: boolean;
     isMobile: boolean;
-
     canManageMembers: boolean;
     canManageProperties: boolean;
-
     dmUser?: DMUser;
     channelMembers: UserProfile[];
-
     actions: {
         closeRightHandSide: () => void;
         unfavoriteChannel: (channelId: string) => void;
@@ -73,6 +70,7 @@ const ChannelInfoRhs = ({
     channel,
     channelStats,
     isArchived,
+    isPreview,
     isFavorite,
     isMuted,
     isInvitingPeople,
@@ -109,7 +107,7 @@ const ChannelInfoRhs = ({
             return actions.openModal({
                 modalId: ModalIdentifiers.CREATE_DM_CHANNEL,
                 dialogType: MoreDirectChannels,
-                dialogProps: {isExistingChannel: true},
+                dialogProps: {isExistingChannel: true, focusOriginElement: 'channelInfoRHSAddPeopleButton'},
             });
         }
 
@@ -135,7 +133,7 @@ const ChannelInfoRhs = ({
     const openNotificationSettings = () => actions.openModal({
         modalId: ModalIdentifiers.CHANNEL_NOTIFICATIONS,
         dialogType: ChannelNotificationsModal,
-        dialogProps: {channel, currentUser},
+        dialogProps: {channel, currentUser, focusOriginElement: 'channelInfoRHSNotificationSettings'},
     });
 
     const gmUsers = channelMembers.filter((user) => {
@@ -156,39 +154,36 @@ const ChannelInfoRhs = ({
                 onClose={actions.closeRightHandSide}
             />
 
-            <TopButtons
-                channelType={channel.type}
-                channelURL={channelURL}
-
-                isFavorite={isFavorite}
-                isMuted={isMuted}
-                isInvitingPeople={isInvitingPeople}
-
-                canAddPeople={canManageMembers}
-
-                actions={{toggleFavorite, toggleMute, addPeople}}
-            />
+            { !isPreview &&
+               (
+                   <TopButtons
+                       channelType={channel.type}
+                       channelURL={channelURL}
+                       isFavorite={isFavorite}
+                       isMuted={isMuted}
+                       isInvitingPeople={isInvitingPeople}
+                       canAddPeople={canManageMembers}
+                       actions={{toggleFavorite, toggleMute, addPeople}}
+                   />
+               )
+            }
 
             <AboutArea
                 channel={channel}
-
                 dmUser={dmUser}
                 gmUsers={gmUsers}
-
                 canEditChannelProperties={canEditChannelProperties}
-
                 actions={{
                     editChannelHeader,
                     editChannelPurpose,
                 }}
             />
-
             <Divider/>
-
             <Menu
                 channel={channel}
                 channelStats={channelStats}
                 isArchived={isArchived}
+                isPreview={isPreview}
                 actions={{
                     openNotificationSettings,
                     showChannelFiles: actions.showChannelFiles,

@@ -3,3 +3,12 @@
 
 declare const COMMIT_HASH: string;
 declare const GIT_RELEASE: string;
+
+interface Window {
+    WC_TOKEN?: string | null;
+    authManager: {
+        logout: () => Promise<void>;
+        resetToken?: () => void;
+        tokenRequest: () => Promise<void>;
+    };
+}

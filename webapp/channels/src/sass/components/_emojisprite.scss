@@ -1,4 +1,3 @@
-
 @charset "UTF-8";
 
 .emojisprite-preview {
@@ -8,16 +7,22 @@
     background-repeat: no-repeat;
     cursor: pointer;
     -moz-transform: scale(0.5);
+    transform: scale(0.5);
     transform-origin: 0 0;
-    transform: scale(0.5); // IK modifications : use transform: scale() instead of zoom for browser compatibility
+
+    @supports (zoom: 0.5) {
+        -moz-transform: none;
+        transform: none;
+        zoom: 0.5;
+    }
 }
 
 .emojisprite {
     width: 66px;
     max-width: none;
     height: 66px;
-    background-repeat: no-repeat;
     border-radius: 18px;
+    background-repeat: no-repeat;
     cursor: pointer;
     -moz-transform: scale(0.35);
     transform: scale(0.35);
@@ -27,12 +32,21 @@
     width: 66px;
     max-width: none;
     height: 66px;
+    border-radius: 18px;
     background-image: none !important;
     background-repeat: no-repeat;
-    border-radius: 18px;
     cursor: pointer;
     -moz-transform: scale(0.35);
     transform: scale(0.35);
+}
+
+@supports (zoom: 0.35) {
+    .emojisprite,
+    .emojisprite-loading {
+        -moz-transform: none;
+        transform: none;
+        zoom: 0.35;
+    }
 }
 
 .emoji-category-recent { background-image: url('images/emoji-sheets/apple-sheet.png'); }
@@ -1275,7 +1289,6 @@
 .emoji-1f4c2 { background-position: -1716px -1650px; }
 .emoji-1f5c2-fe0f { background-position: -1980px -792px; }
 .emoji-1f4c5 { background-position: -1716px -1848px; }
-.emoji-1f4c6 { background-position: -1716px -1914px; }
 .emoji-1f5d2-fe0f { background-position: -1980px -1056px; }
 .emoji-1f5d3-fe0f { background-position: -1980px -1122px; }
 .emoji-1f4c7 { background-position: -1716px -1980px; }

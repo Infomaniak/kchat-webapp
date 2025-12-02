@@ -2,15 +2,13 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {defineMessage, FormattedMessage} from 'react-intl';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {isEmail} from 'mattermost-redux/utils/helpers';
 
 import BackButton from 'components/common/back_button';
-import LocalizedInput from 'components/localized_input/localized_input';
-
-import {t} from 'utils/i18n';
+import LocalizedPlaceholderInput from 'components/localized_placeholder_input';
 
 export interface Props {
     actions: {
@@ -122,15 +120,15 @@ export default class PasswordResetSendLink extends React.PureComponent<Props, St
                                 />
                             </p>
                             <div className={formClass}>
-                                <LocalizedInput
+                                <LocalizedPlaceholderInput
                                     id='passwordResetEmailInput'
                                     type='email'
                                     className='form-control'
                                     name='email'
-                                    placeholder={{
-                                        id: t('password_send.email'),
+                                    placeholder={defineMessage({
+                                        id: 'password_send.email',
                                         defaultMessage: 'Email',
-                                    }}
+                                    })}
                                     ref={this.emailInput}
                                     spellCheck='false'
                                     autoFocus={true}

@@ -11,10 +11,11 @@ import {DATE_LINE} from 'mattermost-redux/utils/post_list';
 import {HINT_TOAST_TESTID} from 'components/hint-toast/hint_toast';
 import {SCROLL_TO_BOTTOM_DISMISS_BUTTON_TESTID, SCROLL_TO_BOTTOM_TOAST_TESTID} from 'components/scroll_to_bottom_toast/scroll_to_bottom_toast';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-import {renderWithContext} from 'tests/react_testing_utils';
 import {getHistory} from 'utils/browser_history';
 import {PostListRowListIds} from 'utils/constants';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import {renderWithContext} from 'tests/react_testing_utils';
 
 import ToastWrapper from './toast_wrapper';
 import type {Props, ToastWrapperClass} from './toast_wrapper';
@@ -85,7 +86,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -104,7 +105,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -162,7 +163,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -191,7 +192,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -247,7 +248,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -277,7 +278,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -312,7 +313,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -334,7 +335,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -356,7 +357,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -381,7 +382,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -403,7 +404,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -426,7 +427,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -464,7 +465,7 @@ describe('components/ToastWrapper', () => {
                 postListIds: [
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -480,7 +481,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
@@ -497,7 +498,7 @@ describe('components/ToastWrapper', () => {
                     'post1',
                     'post2',
                     'post3',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                     DATE_LINE + 1551711600000,
                     'post4',
                     'post5',
