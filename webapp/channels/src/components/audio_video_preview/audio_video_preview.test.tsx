@@ -18,6 +18,16 @@ describe('AudioVideoPreview', () => {
         isMobileView: false,
     };
 
+    beforeEach(() => {
+        // Mock HTMLMediaElement.prototype.play to return a resolved promise
+        HTMLMediaElement.prototype.play = jest.fn(() => Promise.resolve());
+        HTMLMediaElement.prototype.pause = jest.fn();
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     test('should match snapshot without children', () => {
         const wrapper = shallow(
             <AudioVideoPreview {...baseProps}/>,
