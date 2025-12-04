@@ -7,15 +7,15 @@ type Unit = 'years' | 'months' | 'days';
 const messages = defineMessages({
     year: {
         id: 'duration.year',
-        defaultMessage: '{count, plural, one {#} other {#s}}',
+        defaultMessage: '{count, plural, one {year} other {years}}',
     },
     month: {
         id: 'duration.month',
-        defaultMessage: '{count, plural, one {#} other {#s}}',
+        defaultMessage: '{count, plural, one {month} other {months}}',
     },
     day: {
         id: 'duration.day',
-        defaultMessage: '{count, plural, one {#} other {#s}}',
+        defaultMessage: '{count, plural, one {day} other {days}}',
     },
 });
 
