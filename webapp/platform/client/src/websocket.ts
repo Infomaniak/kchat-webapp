@@ -93,7 +93,6 @@ export default class WebSocketClient {
     private errorListeners = new Set<ErrorListener>();
     private closeListeners = new Set<CloseListener>();
     private otherServersMessageListeners = new Set<MessageListener>();
-    private isServerErrorReconnect: boolean = false;
 
     private connectionId: string | null;
 
@@ -105,6 +104,13 @@ export default class WebSocketClient {
     private _currentUserId: any;
     private _currentUserTeamId: any;
     private _presenceChannelId: any;
+
+    private isServerErrorReconnect: boolean = false;
+    private lastErrorTime: number = 0;
+    private errorBackoffMs: number = 1000;
+    private readonly MAX_ERROR_BACKOFF_MS = 30000;
+    private readonly RECONNECT_TRIGGER_DEBOUNCE_MS = 3000;
+    private lastReconnectTriggerTime: number = 0;
 
     reconnecting: boolean = false;
 
@@ -252,6 +258,17 @@ export default class WebSocketClient {
         });
 
         this.conn.connection.bind('error', (evt: any) => {
+            const now = Date.now();
+            const timeSinceLastError = now - this.lastErrorTime;
+
+            if (timeSinceLastError < this.errorBackoffMs) {
+                console.log(`${debugId} Error throttled (last error was ${timeSinceLastError}ms ago, backoff: ${this.errorBackoffMs}ms)`);
+                return;
+            }
+
+            this.lastErrorTime = now;
+            this.errorBackoffMs = Math.min(this.errorBackoffMs * 2, this.MAX_ERROR_BACKOFF_MS);
+
             console.log(`${debugId} unexpected error:`, evt);
             this.errorCount++;
             this.connectFailCount++;
@@ -273,6 +290,7 @@ export default class WebSocketClient {
         });
 
         this.conn.connection.bind('connected', () => {
+            this.errorBackoffMs = 1000;
             console.log(`${debugId} socketId: ${this.conn?.connection.socket_id}`);
 
             this._teamId = teamId;
@@ -394,6 +412,18 @@ export default class WebSocketClient {
             console.log(`${debugId} Successfully subscribed to private-team.${teamId}`);
 
             const wasReconnecting = this.reconnecting;
+            const now = Date.now();
+            const timeSinceLastTrigger = now - this.lastReconnectTriggerTime;
+
+            if (timeSinceLastTrigger < this.RECONNECT_TRIGGER_DEBOUNCE_MS) {
+                console.log(`${debugId} Skipping reconnect trigger (last trigger was ${timeSinceLastTrigger}ms ago, min interval: ${this.RECONNECT_TRIGGER_DEBOUNCE_MS}ms)`);
+                if (wasReconnecting) {
+                    this.reconnecting = false;
+                }
+                return;
+            }
+
+            this.lastReconnectTriggerTime = now;
 
             if (this.reconnecting) {
                 const debugId2 = `[WS reconnect-${Date.now()}]`;
