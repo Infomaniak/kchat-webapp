@@ -93,6 +93,7 @@ export default class WebSocketClient {
     private errorListeners = new Set<ErrorListener>();
     private closeListeners = new Set<CloseListener>();
     private otherServersMessageListeners = new Set<MessageListener>();
+    private isServerErrorReconnect: boolean = false;
 
     private connectionId: string | null;
 
@@ -117,6 +118,7 @@ export default class WebSocketClient {
         this.responseSequence = 1;
         this.connectFailCount = 0;
         this.errorCount = 0;
+        this.isServerErrorReconnect = false;
         this.responseCallbacks = {};
         this.connectionId = '';
         this.socketId = null;
@@ -235,6 +237,11 @@ export default class WebSocketClient {
                 this.connectFailCount++;
                 console.log(`${debugId} connectFailCount updated: ${this.connectFailCount}`);
 
+                if (states.current === 'unavailable' || states.current === 'failed') {
+                    this.isServerErrorReconnect = true;
+                    console.log(`${debugId} Server error detected: ${states.current}`);
+                }
+
                 this.closeCallback?.(this.connectFailCount);
                 this.closeListeners.forEach((listener) => {
                     const funcName = listener.name || '<anonymous>';
@@ -248,6 +255,7 @@ export default class WebSocketClient {
             console.log(`${debugId} unexpected error:`, evt);
             this.errorCount++;
             this.connectFailCount++;
+            this.isServerErrorReconnect = true;
 
             if (this.presenceChannel) {
                 this.conn?.unsubscribe(this.presenceChannel.name);
@@ -274,42 +282,47 @@ export default class WebSocketClient {
             this._currentUserTeamId = currentUserTeamId;
             this._presenceChannelId = presenceChannelId;
 
+            const isServerError = this.isServerErrorReconnect;
+
             if (this.connectFailCount > 0) {
                 this.reconnecting = true;
-                console.log(`${debugId} reconnecting`);
+                console.log(`${debugId} reconnecting (server error: ${isServerError})`);
 
                 if (this.reconnectListeners.size <= 0 && !this.reconnectCallback) {
                     console.warn(`${debugId} No reconnect handlers found, reloading app`);
                     window.location.reload();
                     return;
                 }
-                this.reconnectAllChannels();
+                this.reconnectAllChannels(isServerError);
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
-                this.reconnectAllChannels();
+                this.reconnectAllChannels(false);
             }
 
             this.connectFailCount = 0;
             this.errorCount = 0;
+            this.isServerErrorReconnect = false;
             this.socketId = this.conn?.connection.socket_id as string;
 
             console.log(`${debugId} Initialization complete`);
         });
     }
 
-    reconnectAllChannels() {
+    reconnectAllChannels(isServerError: boolean = false) {
         const debugId = `[WS reconnectAllChannels-${Date.now()}]`;
         console.log(`${debugId} reconnectAllChannels state`, this.conn?.connection.state);
         if (this.conn?.connection.state !== 'connected') {
             console.log(`${debugId} reconnectAllChannels retrying`);
             setTimeout(() => {
-                this.reconnectAllChannels();
+                this.reconnectAllChannels(isServerError);
             }, 2000);
 
             return;
         }
 
-        const SUBSCRIPTION_DELAY_BASE = 100;
-        const SUBSCRIPTION_DELAY_RANDOM = 300;
+        const SUBSCRIPTION_DELAY_BASE = isServerError ? 500 : 100;
+        const SUBSCRIPTION_DELAY_RANDOM = isServerError ? 1000 : 300;
+
+        console.log(`${debugId} Using ${isServerError ? 'extended' : 'normal'} delays (base: ${SUBSCRIPTION_DELAY_BASE}ms, random: ${SUBSCRIPTION_DELAY_RANDOM}ms)`);
 
         this.subscribeToTeamChannel(this._teamId as string);
 
