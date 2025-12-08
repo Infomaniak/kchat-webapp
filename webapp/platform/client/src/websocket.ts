@@ -105,13 +105,24 @@ export default class WebSocketClient {
     private _currentUserTeamId: any;
     private _presenceChannelId: any;
 
-    private isServerErrorReconnect: boolean = false;
+    // Ik change : error backoff
     private lastErrorTime: number = 0;
     private errorBackoffMs: number = 1000;
     private readonly MAX_ERROR_BACKOFF_MS = 30000;
+
+    // Ik change : reconnect trigger debounce
     private readonly RECONNECT_TRIGGER_DEBOUNCE_MS = 3000;
     private lastReconnectTriggerTime: number = 0;
 
+    // Ik config : backoff for initial connection
+    private readonly MAX_WEBSOCKET_FAILS = 7;
+    private readonly MIN_WEBSOCKET_RETRY_TIME = 3000;
+    private readonly MAX_WEBSOCKET_RETRY_TIME = 300000;
+    private readonly RECONNECT_JITTER_RANGE = 2000;
+
+    // Ik change : reconnecting state
+    private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
+    private isServerErrorReconnect: boolean = false;
     reconnecting: boolean = false;
 
     constructor() {
@@ -200,8 +211,67 @@ export default class WebSocketClient {
             return;
         }
 
+        console.log('🚀 ~ WebSocketClient ~ initialize ~ this.reconnectTimeout:', this.reconnectTimeout);
+        if (this.reconnectTimeout) {
+            console.debug(`${debugId} Reconnect timeout in progress, skipping init`);
+            return;
+        }
+
         if (!connectionUrl) {
             console.log(`${debugId} websocket must have connection url`);
+            return;
+        }
+
+        console.log('🚀 ~ WebSocketClient ~ initialize ~ this.connectFailCount :', this.connectFailCount);
+        if (this.connectFailCount > 0) {
+            let retryTime = this.MIN_WEBSOCKET_RETRY_TIME;
+            const baseRetryTime = retryTime;
+
+            console.log('[BACKOFF INIT] Starting backoff calculation:', {
+                connectFailCount: this.connectFailCount,
+                baseRetryTime: `${baseRetryTime}ms (${baseRetryTime / 1000}s)`,
+                maxFails: this.MAX_WEBSOCKET_FAILS,
+                maxRetryTime: `${this.MAX_WEBSOCKET_RETRY_TIME}ms (${this.MAX_WEBSOCKET_RETRY_TIME / 1000 / 60}min)`,
+            });
+
+            if (this.connectFailCount > this.MAX_WEBSOCKET_FAILS) {
+                const beforeExponential = retryTime;
+                retryTime = retryTime * this.connectFailCount * this.connectFailCount;
+                console.log('[BACKOFF INIT] Exponential calculation:', {
+                    before: `${beforeExponential}ms`,
+                    formula: `${baseRetryTime} × ${this.connectFailCount}²`,
+                    after: `${retryTime}ms (${retryTime / 1000}s)`,
+                });
+                retryTime = retryTime * this.connectFailCount * this.connectFailCount;
+                if (retryTime > this.MAX_WEBSOCKET_RETRY_TIME) {
+                    console.log('[BACKOFF INIT] Capping at max retry time:', {
+                        calculated: `${retryTime}ms (${retryTime / 1000 / 60}min)`,
+                        max: `${this.MAX_WEBSOCKET_RETRY_TIME}ms (${this.MAX_WEBSOCKET_RETRY_TIME / 1000 / 60}min)`,
+                    });
+                    retryTime = this.MAX_WEBSOCKET_RETRY_TIME;
+                }
+            }
+
+            const jitter = Math.random() * this.RECONNECT_JITTER_RANGE;
+            const beforeJitter = retryTime;
+            retryTime += jitter;
+
+            console.log('[BACKOFF INIT] Adding jitter:', {
+                beforeJitter: `${beforeJitter}ms`,
+                jitterRange: `${this.RECONNECT_JITTER_RANGE}ms`,
+                jitterValue: `${Math.round(jitter)}ms`,
+                finalRetryTime: `${Math.round(retryTime)}ms (${Math.round(retryTime / 1000)}s)`,
+            });
+
+            retryTime += Math.random() * this.RECONNECT_JITTER_RANGE;
+
+            console.log(`${debugId} Scheduling reconnect in ${retryTime}ms (failCount: ${this.connectFailCount})`);
+
+            this.reconnectTimeout = setTimeout(() => {
+                this.reconnectTimeout = null;
+                this.initialize(connectionUrl, userId, userTeamId, teamId, authToken, presenceChannelId);
+            }, retryTime);
+
             return;
         }
 
@@ -261,18 +331,46 @@ export default class WebSocketClient {
             const now = Date.now();
             const timeSinceLastError = now - this.lastErrorTime;
 
+            console.log('[BACKOFF ERROR] Error received:', {
+                timeSinceLastError: `${timeSinceLastError}ms`,
+                currentBackoff: `${this.errorBackoffMs}ms (${this.errorBackoffMs / 1000}s)`,
+                errorCount: this.errorCount,
+                connectFailCount: this.connectFailCount,
+            });
+
             if (timeSinceLastError < this.errorBackoffMs) {
-                console.log(`${debugId} Error throttled (last error was ${timeSinceLastError}ms ago, backoff: ${this.errorBackoffMs}ms)`);
+                const remainingBackoff = this.errorBackoffMs - timeSinceLastError;
+                console.log('[BACKOFF ERROR] ⚠️ Error THROTTLED:', {
+                    timeSinceLastError: `${timeSinceLastError}ms`,
+                    requiredBackoff: `${this.errorBackoffMs}ms`,
+                    remainingBackoff: `${remainingBackoff}ms`,
+                    action: 'Ignoring error callback',
+                });
                 return;
             }
+            const previousBackoff = this.errorBackoffMs;
 
             this.lastErrorTime = now;
             this.errorBackoffMs = Math.min(this.errorBackoffMs * 2, this.MAX_ERROR_BACKOFF_MS);
+
+            console.log('[BACKOFF ERROR] ✅ Error callback ALLOWED:', {
+                timeSinceLastError: `${timeSinceLastError}ms`,
+                previousBackoff: `${previousBackoff}ms (${previousBackoff / 1000}s)`,
+                newBackoff: `${this.errorBackoffMs}ms (${this.errorBackoffMs / 1000}s)`,
+                maxBackoff: `${this.MAX_ERROR_BACKOFF_MS}ms (${this.MAX_ERROR_BACKOFF_MS / 1000}s)`,
+                backoffMultiplied: this.errorBackoffMs === previousBackoff * 2 ? 'Yes (doubled)' : 'No (capped at max)',
+            });
 
             console.log(`${debugId} unexpected error:`, evt);
             this.errorCount++;
             this.connectFailCount++;
             this.isServerErrorReconnect = true;
+
+            console.log('[BACKOFF ERROR] Counters updated:', {
+                errorCount: this.errorCount,
+                connectFailCount: this.connectFailCount,
+                isServerErrorReconnect: this.isServerErrorReconnect,
+            });
 
             if (this.presenceChannel) {
                 this.conn?.unsubscribe(this.presenceChannel.name);
@@ -290,7 +388,14 @@ export default class WebSocketClient {
         });
 
         this.conn.connection.bind('connected', () => {
+            this.clearReconnectTimeout();
             this.errorBackoffMs = 1000;
+            const wasReconnecting = this.connectFailCount > 0;
+            const isServerError = this.isServerErrorReconnect;
+
+            this.connectFailCount = 0;
+            this.errorCount = 0;
+            this.isServerErrorReconnect = false;
             console.log(`${debugId} socketId: ${this.conn?.connection.socket_id}`);
 
             this._teamId = teamId;
@@ -300,9 +405,7 @@ export default class WebSocketClient {
             this._currentUserTeamId = currentUserTeamId;
             this._presenceChannelId = presenceChannelId;
 
-            const isServerError = this.isServerErrorReconnect;
-
-            if (this.connectFailCount > 0) {
+            if (wasReconnecting) {
                 this.reconnecting = true;
                 console.log(`${debugId} reconnecting (server error: ${isServerError})`);
 
@@ -316,13 +419,17 @@ export default class WebSocketClient {
                 this.reconnectAllChannels(false);
             }
 
-            this.connectFailCount = 0;
-            this.errorCount = 0;
-            this.isServerErrorReconnect = false;
             this.socketId = this.conn?.connection.socket_id as string;
 
             console.log(`${debugId} Initialization complete`);
         });
+    }
+
+    clearReconnectTimeout() {
+        if (this.reconnectTimeout) {
+            clearTimeout(this.reconnectTimeout);
+            this.reconnectTimeout = null;
+        }
     }
 
     reconnectAllChannels(isServerError: boolean = false) {
@@ -413,7 +520,9 @@ export default class WebSocketClient {
 
             const wasReconnecting = this.reconnecting;
             const now = Date.now();
+            console.log('🚀 ~ WebSocketClient ~ subscribeToTeamChannel ~ now:', now);
             const timeSinceLastTrigger = now - this.lastReconnectTriggerTime;
+            console.log('🚀 ~ WebSocketClient ~ subscribeToTeamChannel ~ timeSinceLastTrigger:', timeSinceLastTrigger);
 
             if (timeSinceLastTrigger < this.RECONNECT_TRIGGER_DEBOUNCE_MS) {
                 console.log(`${debugId} Skipping reconnect trigger (last trigger was ${timeSinceLastTrigger}ms ago, min interval: ${this.RECONNECT_TRIGGER_DEBOUNCE_MS}ms)`);
@@ -425,6 +534,7 @@ export default class WebSocketClient {
 
             this.lastReconnectTriggerTime = now;
 
+            console.log('🚀 ~ WebSocketClient ~ subscribeToTeamChannel ~ this.reconnecting:', this.reconnecting);
             if (this.reconnecting) {
                 const debugId2 = `[WS reconnect-${Date.now()}]`;
                 this.reconnectCallback?.(this.conn?.connection.socket_id);
