@@ -111,6 +111,7 @@ export default class WebSocketClient {
     private readonly MAX_ERROR_BACKOFF_MS = 30000;
     private readonly RECONNECT_TRIGGER_DEBOUNCE_MS = 3000;
     private lastReconnectTriggerTime: number = 0;
+    private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
 
     reconnecting: boolean = false;
 
@@ -141,6 +142,7 @@ export default class WebSocketClient {
         this._userTeamId = undefined;
         this._currentUserTeamId = undefined;
         this._presenceChannelId = undefined;
+        this.reconnectTimeout = null;
     }
 
     unbindPusherEvents() {
@@ -258,8 +260,34 @@ export default class WebSocketClient {
         });
 
         this.conn.connection.bind('error', (evt: any) => {
+            console.log('🚀 ~ WebSocketClient ~ initialize ~ evt:', evt);
             const now = Date.now();
             const timeSinceLastError = now - this.lastErrorTime;
+
+            const errorCode = evt?.data?.code;
+            console.log('🚀 ~ WebSocketClient ~ initialize ~ errorCode:', errorCode);
+
+            console.log('🚀 ~ WebSocketClient ~ initialize ~ errorCode === 4200:', errorCode === 4200);
+            console.log('🚀 ~ WebSocketClient ~ initialize ~ errorCode:', errorCode);
+            if (errorCode === 4200) {
+                this.errorCount++;
+                this.connectFailCount++;
+
+                this.conn?.disconnect();
+                this.conn = null;
+                const backoffDelay = Math.min(1000 * Math.pow(2, this.errorCount), 30000);
+                console.log('🚀 ~ WebSocketClient ~ initialize ~ backoffDelay:', backoffDelay);
+                if (this.reconnectTimeout) {
+                    clearTimeout(this.reconnectTimeout);
+                }
+
+                this.reconnectTimeout = setTimeout(() => {
+                    this.reconnectTimeout = null;
+                    this.initialize(connectionUrl, userId, userTeamId, teamId, authToken, presenceChannelId);
+                }, backoffDelay);
+
+                return;
+            }
 
             if (timeSinceLastError < this.errorBackoffMs) {
                 console.log(`${debugId} Error throttled (last error was ${timeSinceLastError}ms ago, backoff: ${this.errorBackoffMs}ms)`);
@@ -270,8 +298,7 @@ export default class WebSocketClient {
             this.errorBackoffMs = Math.min(this.errorBackoffMs * 2, this.MAX_ERROR_BACKOFF_MS);
 
             console.log(`${debugId} unexpected error:`, evt);
-            this.errorCount++;
-            this.connectFailCount++;
+
             this.isServerErrorReconnect = true;
 
             if (this.presenceChannel) {
@@ -321,6 +348,10 @@ export default class WebSocketClient {
             this.isServerErrorReconnect = false;
             this.socketId = this.conn?.connection.socket_id as string;
 
+            // this?.conn?.connection.emit('error', {
+            //     type: 'PusherError',
+            //     data: {code: 4200, message: 'Test error fezfze'},
+            // });
             console.log(`${debugId} Initialization complete`);
         });
     }
