@@ -72,16 +72,6 @@ export default class WebSocketClient {
     private reconnectCallback: ReconnectListener | null = null;
 
     /**
-     * @deprecated Use missedMessageListeners instead
-     */
-    private missedEventCallback: MissedMessageListener | null = null;
-
-    /**
-     * @deprecated Use errorListeners instead
-     */
-    private errorCallback: ErrorListener | null = null;
-
-    /**
      * @deprecated Use closeListeners instead
      */
     private closeCallback: CloseListener | null = null;
@@ -93,9 +83,6 @@ export default class WebSocketClient {
     private errorListeners = new Set<ErrorListener>();
     private closeListeners = new Set<CloseListener>();
     private otherServersMessageListeners = new Set<MessageListener>();
-    private error4200Count: number = 0;
-
-    private connectionId: string | null;
 
     private _teamId: string | undefined;
     private _userId: number | undefined;
@@ -106,14 +93,7 @@ export default class WebSocketClient {
     private _currentUserTeamId: any;
     private _presenceChannelId: any;
 
-    private isServerErrorReconnect: boolean = false;
-    private lastErrorTime: number = 0;
-    private errorBackoffMs: number = 1000;
-    private readonly MAX_ERROR_BACKOFF_MS = 30000;
-    private readonly RECONNECT_TRIGGER_DEBOUNCE_MS = 3000;
-    private lastReconnectTriggerTime: number = 0;
     private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
-
     reconnecting: boolean = false;
 
     constructor() {
@@ -126,10 +106,7 @@ export default class WebSocketClient {
         this.responseSequence = 1;
         this.connectFailCount = 0;
         this.errorCount = 0;
-        this.error4200Count = 0;
-        this.isServerErrorReconnect = false;
         this.responseCallbacks = {};
-        this.connectionId = '';
         this.socketId = null;
         this.currentPresence = '';
         this.currentUser = null;
@@ -247,11 +224,6 @@ export default class WebSocketClient {
                 this.connectFailCount++;
                 console.log(`${debugId} connectFailCount updated: ${this.connectFailCount}`);
 
-                if (states.current === 'unavailable' || states.current === 'failed') {
-                    this.isServerErrorReconnect = true;
-                    console.log(`${debugId} Server error detected: ${states.current}`);
-                }
-
                 this.closeCallback?.(this.connectFailCount);
                 this.closeListeners.forEach((listener) => {
                     const funcName = listener.name || '<anonymous>';
@@ -261,48 +233,9 @@ export default class WebSocketClient {
             }
         });
 
-        this.conn.connection.bind('error', (evt: any) => {
-            console.log('🚀 ~ WebSocketClient ~ initialize ~ evt:', evt);
-            const now = Date.now();
-            const timeSinceLastError = now - this.lastErrorTime;
-
-            const errorCode = evt?.data?.code;
-            console.log('🚀 ~ WebSocketClient ~ initialize ~ errorCode:', errorCode);
-
-            console.log('🚀 ~ WebSocketClient ~ initialize ~ errorCode === 4200:', errorCode === 4200);
-            console.log('🚀 ~ WebSocketClient ~ initialize ~ errorCode:', errorCode);
-            if (errorCode === 4200) {
-                this.errorCount++;
-                this.error4200Count++;
-                this.connectFailCount++;
-
-                this.conn?.disconnect();
-                this.conn = null;
-                const backoffDelay = Math.min(1000 * Math.pow(2, this.error4200Count), 30000);
-                console.log('🚀 ~ WebSocketClient ~ initialize ~ backoffDelay:', backoffDelay);
-                if (this.reconnectTimeout) {
-                    clearTimeout(this.reconnectTimeout);
-                }
-
-                this.reconnectTimeout = setTimeout(() => {
-                    this.reconnectTimeout = null;
-                    this.initialize(connectionUrl, userId, userTeamId, teamId, authToken, presenceChannelId);
-                }, backoffDelay);
-
-                return;
-            }
-
-            if (timeSinceLastError < this.errorBackoffMs) {
-                console.log(`${debugId} Error throttled (last error was ${timeSinceLastError}ms ago, backoff: ${this.errorBackoffMs}ms)`);
-                return;
-            }
-
-            this.lastErrorTime = now;
-            this.errorBackoffMs = Math.min(this.errorBackoffMs * 2, this.MAX_ERROR_BACKOFF_MS);
-
-            console.log(`${debugId} unexpected error:`, evt);
-
-            this.isServerErrorReconnect = true;
+        this.conn.connection.bind('error', () => {
+            this.errorCount++;
+            this.connectFailCount++;
 
             if (this.presenceChannel) {
                 this.conn?.unsubscribe(this.presenceChannel.name);
@@ -310,17 +243,29 @@ export default class WebSocketClient {
                 this.presenceChannel = null;
             }
 
-            console.log(`${debugId} calling close callbacks`);
-            this.closeCallback?.(this.connectFailCount);
             this.closeListeners.forEach((listener) => {
                 const funcName = listener.name || '<anonymous>';
                 console.debug(`${debugId} Calling closeListener (${funcName})`);
                 listener(this.connectFailCount);
             });
+
+            this.conn?.disconnect();
+            this.conn = null;
+
+            if (this.reconnectTimeout) {
+                clearTimeout(this.reconnectTimeout);
+            }
+
+            const backoffDelay = Math.min(1000 * Math.pow(2, this.errorCount), 30000);
+            console.log('🚀 ~ WebSocketClient ~ initialize ~ backoffDelay:', backoffDelay);
+
+            this.reconnectTimeout = setTimeout(() => {
+                this.reconnectTimeout = null;
+                this.initialize(connectionUrl, userId, userTeamId, teamId, authToken, presenceChannelId);
+            }, backoffDelay);
         });
 
         this.conn.connection.bind('connected', () => {
-            this.errorBackoffMs = 1000;
             console.log(`${debugId} socketId: ${this.conn?.connection.socket_id}`);
 
             this._teamId = teamId;
@@ -330,51 +275,43 @@ export default class WebSocketClient {
             this._currentUserTeamId = currentUserTeamId;
             this._presenceChannelId = presenceChannelId;
 
-            const isServerError = this.isServerErrorReconnect;
-
             if (this.connectFailCount > 0) {
                 this.reconnecting = true;
-                console.log(`${debugId} reconnecting (server error: ${isServerError})`);
 
                 if (this.reconnectListeners.size <= 0 && !this.reconnectCallback) {
                     console.warn(`${debugId} No reconnect handlers found, reloading app`);
                     window.location.reload();
                     return;
                 }
-                this.reconnectAllChannels(isServerError);
+                this.reconnectAllChannels();
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
-                this.reconnectAllChannels(false);
+                this.reconnectAllChannels();
             }
 
             this.connectFailCount = 0;
             this.errorCount = 0;
-            this.isServerErrorReconnect = false;
             this.socketId = this.conn?.connection.socket_id as string;
 
-            // this?.conn?.connection.emit('error', {
-            //     type: 'PusherError',
-            //     data: {code: 4200, message: 'Test error fezfze'},
-            // });
             console.log(`${debugId} Initialization complete`);
         });
     }
 
-    reconnectAllChannels(isServerError: boolean = false) {
+    reconnectAllChannels() {
         const debugId = `[WS reconnectAllChannels-${Date.now()}]`;
         console.log(`${debugId} reconnectAllChannels state`, this.conn?.connection.state);
         if (this.conn?.connection.state !== 'connected') {
             console.log(`${debugId} reconnectAllChannels retrying`);
             setTimeout(() => {
-                this.reconnectAllChannels(isServerError);
+                this.reconnectAllChannels();
             }, 2000);
 
             return;
         }
 
-        const SUBSCRIPTION_DELAY_BASE = isServerError ? 500 : 100;
-        const SUBSCRIPTION_DELAY_RANDOM = isServerError ? 1000 : 300;
+        const SUBSCRIPTION_DELAY_BASE = 100;
+        const SUBSCRIPTION_DELAY_RANDOM = 300;
 
-        console.log(`${debugId} Using ${isServerError ? 'extended' : 'normal'} delays (base: ${SUBSCRIPTION_DELAY_BASE}ms, random: ${SUBSCRIPTION_DELAY_RANDOM}ms)`);
+        console.log(`${debugId} Using normal delays (base: ${SUBSCRIPTION_DELAY_BASE}ms, random: ${SUBSCRIPTION_DELAY_RANDOM}ms)`);
 
         this.subscribeToTeamChannel(this._teamId as string);
 
@@ -446,18 +383,6 @@ export default class WebSocketClient {
             console.log(`${debugId} Successfully subscribed to private-team.${teamId}`);
 
             const wasReconnecting = this.reconnecting;
-            const now = Date.now();
-            const timeSinceLastTrigger = now - this.lastReconnectTriggerTime;
-
-            if (timeSinceLastTrigger < this.RECONNECT_TRIGGER_DEBOUNCE_MS) {
-                console.log(`${debugId} Skipping reconnect trigger (last trigger was ${timeSinceLastTrigger}ms ago, min interval: ${this.RECONNECT_TRIGGER_DEBOUNCE_MS}ms)`);
-                if (wasReconnecting) {
-                    this.reconnecting = false;
-                }
-                return;
-            }
-
-            this.lastReconnectTriggerTime = now;
 
             if (this.reconnecting) {
                 const debugId2 = `[WS reconnect-${Date.now()}]`;
@@ -700,13 +625,6 @@ export default class WebSocketClient {
         this.reconnectListeners.delete(listener);
     }
 
-    /**
-     * @deprecated Use addMissedMessageListener instead
-     */
-    setMissedEventCallback(callback: MissedMessageListener) {
-        this.missedEventCallback = callback;
-    }
-
     addMissedMessageListener(listener: MissedMessageListener) {
         this.missedMessageListeners.add(listener);
 
@@ -718,13 +636,6 @@ export default class WebSocketClient {
 
     removeMissedMessageListener(listener: MissedMessageListener) {
         this.missedMessageListeners.delete(listener);
-    }
-
-    /**
-     * @deprecated Use addErrorListener instead
-     */
-    setErrorCallback(callback: ErrorListener) {
-        this.errorCallback = callback;
     }
 
     addErrorListener(listener: ErrorListener) {
