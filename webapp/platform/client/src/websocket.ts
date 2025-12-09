@@ -93,6 +93,7 @@ export default class WebSocketClient {
     private errorListeners = new Set<ErrorListener>();
     private closeListeners = new Set<CloseListener>();
     private otherServersMessageListeners = new Set<MessageListener>();
+    private error4200Count: number = 0;
 
     private connectionId: string | null;
 
@@ -125,6 +126,7 @@ export default class WebSocketClient {
         this.responseSequence = 1;
         this.connectFailCount = 0;
         this.errorCount = 0;
+        this.error4200Count = 0;
         this.isServerErrorReconnect = false;
         this.responseCallbacks = {};
         this.connectionId = '';
@@ -271,11 +273,12 @@ export default class WebSocketClient {
             console.log('🚀 ~ WebSocketClient ~ initialize ~ errorCode:', errorCode);
             if (errorCode === 4200) {
                 this.errorCount++;
+                this.error4200Count++;
                 this.connectFailCount++;
 
                 this.conn?.disconnect();
                 this.conn = null;
-                const backoffDelay = Math.min(1000 * Math.pow(2, this.errorCount), 30000);
+                const backoffDelay = Math.min(1000 * Math.pow(2, this.error4200Count), 30000);
                 console.log('🚀 ~ WebSocketClient ~ initialize ~ backoffDelay:', backoffDelay);
                 if (this.reconnectTimeout) {
                     clearTimeout(this.reconnectTimeout);
