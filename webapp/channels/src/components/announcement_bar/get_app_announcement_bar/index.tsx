@@ -5,8 +5,6 @@ import React, {useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
-
 import {openModal} from 'actions/views/modals';
 import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
 
