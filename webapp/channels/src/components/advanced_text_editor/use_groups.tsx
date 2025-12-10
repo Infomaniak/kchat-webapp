@@ -77,9 +77,9 @@ const useGroups = (
                             return;
                         }
                         const mappedValue = channelMemberCountsByGroup[group.id];
-                        if (mappedValue && mappedValue.channel_member_count > Constants.NOTIFY_ALL_MEMBERS && mappedValue.channel_member_count > memberNotifyCount) {
-                            memberNotifyCount = mappedValue.channel_member_count;
-                            channelTimezoneCount = mappedValue.channel_member_timezones_count;
+                        if (mappedValue && mappedValue.channel_member_count) {
+                            memberNotifyCount += mappedValue.channel_member_count;
+                            channelTimezoneCount += mappedValue.channel_member_timezones_count;
                         }
                         mentions.push(`@${group.name}`);
                     });
