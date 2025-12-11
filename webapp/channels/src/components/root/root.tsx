@@ -525,8 +525,13 @@ export default class Root extends React.PureComponent<Props, State> {
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
-                if (this.embeddedInIFrame) {
-                    window.open(window.location.href, '_top');
+                if (this.embeddedInIFrame && window.top) {
+                    try {
+                        window.top.location.href = window.location.href;
+                    } catch (e) {
+                        // Extra saferty : if cross-origin prevents access to window.top
+                        window.location.href = data.uri;
+                    }
                 } else {
                     window.location.href = data.uri;
                 }
