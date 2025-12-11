@@ -5,8 +5,6 @@ import React, {useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
-
 import {openModal} from 'actions/views/modals';
 import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
 
@@ -27,7 +25,6 @@ const COOLDOWN = 172800000; // 48h
 const GetAppAnnoucementBar = () => {
     const dispatch = useDispatch();
     const announcementBarCount = useSelector(getAnnouncementBarCount);
-    const {isConnected: isBridgeConnected} = useSelector(getKSuiteBridge);
     const {formatMessage} = useIntl();
     const os = useGetOperatingSystem();
     const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT) || 1;
@@ -76,11 +73,6 @@ const GetAppAnnoucementBar = () => {
             },
         }));
         setShow(false);
-        return null;
-    }
-
-    // infomaniak: do not show banners in ksuite context
-    if (isBridgeConnected) {
         return null;
     }
 
