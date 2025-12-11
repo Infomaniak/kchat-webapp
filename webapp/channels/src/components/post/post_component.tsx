@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import type {MouseEvent} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {useSelector} from 'react-redux';
 
 import type {Emoji} from '@mattermost/types/emojis';
 import {PostPriority, type Post} from '@mattermost/types/posts';
@@ -17,6 +18,7 @@ import {
     isPostPendingOrFailed} from 'mattermost-redux/utils/post_utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
+import {getCurrentLocale} from 'selectors/i18n';
 
 import AutoHeightSwitcher, {AutoHeightSlots} from 'components/common/auto_height_switcher';
 import EditPost from 'components/edit_post';
@@ -131,6 +133,11 @@ function PostComponent(props: Props) {
     const postRef = useRef<HTMLDivElement>(null);
     const postHeaderRef = useRef<HTMLDivElement>(null);
     const teamId = props.team?.id ?? props.currentTeam?.id ?? '';
+    const currentLocale = useSelector(getCurrentLocale);
+
+    // French locale uses mathematical notation (e.g., "-9 min") with 'narrow' style,
+    // so we use 'short' style instead to get natural language (e.g., "il y a 9 min")
+    const compactTimestampStyle = currentLocale === 'fr' ? 'short' : 'narrow';
 
     const [hover, setHover] = useState(false);
     const [a11yActive, setA11y] = useState(false);
@@ -608,7 +615,7 @@ function PostComponent(props: Props) {
                                         eventTime={post.create_at}
                                         postId={post.id}
                                         location={props.location}
-                                        timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay ? 'narrow' : undefined}}
+                                        timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay ? compactTimestampStyle : undefined}}
                                     />
                                 }
                                 {priority}
