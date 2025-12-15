@@ -53,10 +53,10 @@ function TeamController(props: Props) {
         DesktopApp.reactAppInitialized();
         async function fetchAllChannels() {
             await props.fetchAllMyTeamsChannels();
+            await props.fetchAllMyChannelMembers();
             setInitialChannelsLoaded(true);
         }
 
-        props.fetchAllMyChannelMembers();
         fetchAllChannels();
     }, []);
 
