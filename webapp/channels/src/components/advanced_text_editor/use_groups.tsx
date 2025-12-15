@@ -76,8 +76,9 @@ const useGroups = (
                             return;
                         }
                         const mappedValue = channelMemberCountsByGroup[group.id];
-                        if (mappedValue && mappedValue.channel_member_count) {
-                            memberNotifyCount += mappedValue.channel_member_count;
+                        memberNotifyCount += group?.member_count || 0;
+
+                        if (mappedValue && mappedValue.channel_member_timezones_count) {
                             channelTimezoneCount += mappedValue.channel_member_timezones_count;
                         }
                         mentions.push(`@${group.name}`);
