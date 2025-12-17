@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {AppName, NavigateMessage} from '@infomaniak/ksuite-bridge';
-import {KSuiteBridge, LogoutMessageKey, NavigateMessageKey, OpenAppMessageKey} from '@infomaniak/ksuite-bridge';
+import {KSuiteBridge, NavigateMessageKey, OpenAppMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import deepEqual from 'fast-deep-equal';
