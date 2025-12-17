@@ -45,7 +45,11 @@ const ChannelHeaderTitleGroup = ({
         }
     }
 
-    const displayNames = channel.display_name.split(', ');
+    // Get current user's display name to filter it out
+    const currentUserDisplayName = currentUser ? displayUsername(currentUser, teammateNameDisplaySetting) : '';
+
+    // Filter out current user from display names
+    const displayNames = channel.display_name.split(', ').filter((name) => name !== currentUserDisplayName);
 
     return (
         <>
