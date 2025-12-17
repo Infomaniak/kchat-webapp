@@ -6,6 +6,7 @@ import type {
 } from 'react';
 import React, {
     useEffect,
+    useMemo,
     useRef,
 } from 'react';
 import {useIntl} from 'react-intl';
@@ -89,8 +90,13 @@ export interface ProfilePopoverProps extends ProfilePopoverAdditionalProps{
     onToggle?: (isMounted: boolean) => void;
 }
 
-export type WcContactSheetElement = HTMLElement & {open: () => void; close: () => void; hiddenOptions: string[];hiddenInformations: string[]};
-
+export interface WcContactSheetElement extends HTMLElement {
+    open(): void;
+    close(): void;
+    hiddenOptions: string[];
+    hiddenInformations: string[];
+    customTrigger: HTMLElement | null;
+}
 const mapCustomBadges = (badge: string) => (
     <>
 
@@ -134,42 +140,61 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
         isChannelAdmin,
     } = props;
 
-    const badges: string[] = [];
+    const contactSheetRef = useRef<WcContactSheetElement | null>(null);
+    const triggerRef = useRef<HTMLDivElement | null>(null);
+    const {formatMessage} = useIntl();
+
     const hasOverriddenProps = Boolean(overwriteName) || Boolean(overwriteIcon);
     const shouldDisplayMinimalPanel = hasOverriddenProps || props.fromWebhook;
     const displayedUsername = username || user?.username;
-    const localRef = useRef<WcContactSheetElement | undefined>(undefined);
-    const {formatMessage} = useIntl();
+    const isUserGuest = user?.roles ? isGuest(user.roles) : isExternal;
 
-    if (!shouldDisplayMinimalPanel) {
-        if (user?.is_bot) {
-            badges.push(formatMessage({
-                id: 'tag.default.bot',
-                defaultMessage: 'BOT',
-            }));
+    const badges = useMemo(() => {
+        const badgeList: string[] = [];
+
+        if (!shouldDisplayMinimalPanel) {
+            if (user?.is_bot) {
+                badgeList.push(formatMessage({
+                    id: 'tag.default.bot',
+                    defaultMessage: 'BOT',
+                }));
+            }
+            if (user?.roles && isSystemAdmin(user?.roles)) {
+                badgeList.push(formatMessage({
+                    id: 'user_profile.roleTitle.system_admin',
+                    defaultMessage: 'System Admin',
+                }));
+            }
+            if (isTeamAdmin) {
+                badgeList.push(formatMessage({
+                    id: 'user_profile.roleTitle.team_admin',
+                    defaultMessage: 'Team Admin',
+                }));
+            }
+            if (isChannelAdmin) {
+                badgeList.push(formatMessage({
+                    id: 'user_profile.roleTitle.channel_admin',
+                    defaultMessage: 'Channel Admin',
+                }));
+            }
         }
-        if (user?.roles && isSystemAdmin(user?.roles)) {
-            badges.push(formatMessage({
-                id: 'user_profile.roleTitle.system_admin',
-                defaultMessage: 'System Admin',
-            }));
+
+        return badgeList;
+    }, [shouldDisplayMinimalPanel, user?.is_bot, user?.roles, isTeamAdmin, isChannelAdmin, formatMessage]);
+
+    const onClick = async () => {
+        await customElements.whenDefined('wc-contact-sheet');
+
+        const el = contactSheetRef?.current;
+        if (!el) {
+            return;
         }
-        if (isTeamAdmin) {
-            badges.push(formatMessage({
-                id: 'user_profile.roleTitle.team_admin',
-                defaultMessage: 'Team Admin',
-            }));
-        }
-        if (isChannelAdmin) {
-            badges.push(formatMessage({
-                id: 'user_profile.roleTitle.channel_admin',
-                defaultMessage: 'Channel Admin',
-            }));
-        }
-    }
+
+        el.open?.();
+    };
 
     useEffect(() => {
-        const current = localRef?.current;
+        const current = contactSheetRef?.current;
         if (!current) {
             return () => {};
         }
@@ -194,6 +219,7 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
 
         current.addEventListener('close', returnFocus);
         current.addEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
+
         if (user?.is_bot) {
             current.hiddenInformations = ['timezone', 'userMail'];
             current.hiddenOptions = ['send-mail', 'search-incoming-mail', 'block-user', 'schedule-event', 'create-contact', 'show-contact', 'start-call', 'manage-profile'];
@@ -203,43 +229,52 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
             current?.removeEventListener('close', returnFocus);
             current?.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         };
-    }, []);
+    }, [returnFocus, currentTeamName, user?.username, user?.is_bot, props.userId]);
 
     useEffect(() => {
-        localRef?.current?.close?.();
+        const wcRef = contactSheetRef.current;
+        if (wcRef) {
+            wcRef.customTrigger = triggerRef.current;
+        }
+    }, [isAnyModalOpen]);
+
+    useEffect(() => {
+        contactSheetRef?.current?.close?.();
     }, [isAnyModalOpen]);
 
     return (
         <>
+            <div
+                ref={triggerRef}
+                className={triggerComponentClass}
+                onClick={onClick}
+            >
+                {children}
+            </div>
             <wc-contact-sheet
                 disabled={disabled}
                 prevent-stop-propagation={true}
-                ref={localRef}
+                ref={contactSheetRef}
                 class={triggerComponentClass}
                 prevent-open-on-hover={true}
                 account-id={currentTeamAccountId}
                 background-color={'transparent'}
-                is-external={user?.roles ? isGuest(user.roles) : isExternal}
+                is-external={isUserGuest}
                 k-chat-team-name={currentTeamName}
                 k-chat-user-name={displayedUsername}
                 presence={hideStatus ? undefined : userStatus}
                 size={size}
                 src={overwriteIcon || src}
                 timezone={user?.timezone?.useAutomaticTimezone ? user?.timezone.automaticTimezone : user?.timezone?.manualTimezone}
-                user-id={!shouldDisplayMinimalPanel && user?.user_id} // prevent fetching user data if not needed
-                user-mail={user?.is_bot ? `@${displayedUsername}` : user?.email} // if user is bot display username instead of mail
+                user-id={!shouldDisplayMinimalPanel && user?.user_id}
+                user-mail={user?.is_bot ? `@${displayedUsername}` : user?.email}
                 user-name={overwriteName || user?.first_name + ' ' + user?.last_name}
-                style={triggerComponentStyle}
+                style={{triggerComponentStyle, display: 'none'}}
             >
-                <span
-                    slot='trigger'
-                    className={triggerComponentClass}
-                >{children}</span>
                 {badges.map(mapCustomBadges)}
-                {(shouldDisplayMinimalPanel) && (
-                    <div
-                        slot='custom-content'
-                    >
+
+                {shouldDisplayMinimalPanel && (
+                    <div slot='custom-content'>
                         {formatMessage({
                             id: 'user_profile.account.post_was_created',
                             defaultMessage: 'This post was created by an integration from @{username}',
@@ -247,8 +282,10 @@ export const ProfilePopoverWcController = (props: ProfilePopoverProps) => {
                         {
                             username: displayedUsername,
                         })}
-                    </div>)}
+                    </div>
+                )}
             </wc-contact-sheet>
+
         </>
     );
 };
