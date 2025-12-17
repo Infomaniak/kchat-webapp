@@ -15,6 +15,14 @@ import {getSiteURL} from 'utils/url';
 
 import DeleteIntegrationLink from './delete_integration_link';
 
+// Ik change : also match the creator username
+export function matchCreator(creator: {username?: string}, filter: string): boolean {
+    if (!filter || !creator?.username) {
+        return false;
+    }
+    return creator.username.toLowerCase().indexOf(filter) !== -1;
+}
+
 export function matchesFilter(incomingWebhook: IncomingWebhook, channel: Channel, filter: string) {
     if (!filter) {
         return true;

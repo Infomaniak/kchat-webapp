@@ -525,9 +525,8 @@ export default class Root extends React.PureComponent<Props, State> {
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
-                if (this.embeddedInIFrame) {
-                    this.props.ksuiteBridge?.sendMessage({type: LogoutMessageKey});
-                    window.open(window.location.href, '_top');
+                if (this.embeddedInIFrame && window.top) {
+                    window.top.location.href = window.location.href;
                 } else {
                     window.location.href = data.uri;
                 }
