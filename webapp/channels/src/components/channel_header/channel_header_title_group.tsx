@@ -51,7 +51,12 @@ const ChannelHeaderTitleGroup = ({
         <>
             {displayNames.map((displayName, index) => {
                 if (!membersMap[displayName]) {
-                    return displayName;
+                    return (
+                        <React.Fragment key={displayName}>
+                            {index > 0 && ', '}
+                            {displayName}
+                        </React.Fragment>
+                    );
                 }
 
                 const user = membersMap[displayName].shift();
