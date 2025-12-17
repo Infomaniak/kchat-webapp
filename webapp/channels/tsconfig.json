@@ -37,7 +37,6 @@
   "include": [
     "./src/**/*",
     "./src/**/*.json",
-    "./types/*"
   ],
   "references": [
     {"path": "../platform/client"},
