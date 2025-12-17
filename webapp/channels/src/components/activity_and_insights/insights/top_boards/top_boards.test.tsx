@@ -50,6 +50,9 @@ describe('components/activity_and_insights/insights/top_boards', () => {
     const initialState = {
         views: {
             rhs: StateViewRhsMock,
+            modals: {
+                modalState: {},
+            },
         },
         entities: {
 

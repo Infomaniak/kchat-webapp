@@ -54,6 +54,53 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
           userId="1"
           userStatus="offline"
         >
+          <div
+            className="style--none btn-round"
+            onClick={[Function]}
+          >
+            <WithTooltip
+              title="first.last1"
+            >
+              <Avatar
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
+                size="xl"
+                style={
+                  Object {
+                    "background": "rgb(240, 240, 241)",
+                  }
+                }
+                tabIndex={-1}
+                url="/api/v4/users/1/image?_=1620680333191"
+              >
+                <img
+                  alt="user profile image"
+                  className="Avatar Avatar-xl"
+                  loading="lazy"
+                  onBlur={[Function]}
+                  onError={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseMove={[Function]}
+                  onPointerDown={[Function]}
+                  onPointerEnter={[Function]}
+                  src="/api/v4/users/1/image?_=1620680333191"
+                  style={
+                    Object {
+                      "background": "rgb(240, 240, 241)",
+                    }
+                  }
+                  tabIndex={-1}
+                />
+              </Avatar>
+            </WithTooltip>
+          </div>
           <wc-contact-sheet
             background-color="transparent"
             class="style--none btn-round"
@@ -65,56 +112,14 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
             prevent-stop-propagation={true}
             size="md"
             src="/api/v4/users/1/image?_=0"
+            style={
+              Object {
+                "display": "none",
+                "triggerComponentStyle": undefined,
+              }
+            }
             user-name="First1 Last1"
-          >
-            <span
-              className="style--none btn-round"
-              slot="trigger"
-            >
-              <WithTooltip
-                title="first.last1"
-              >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="xl"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/1/image?_=1620680333191"
-                >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-xl"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/1/image?_=1620680333191"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
-                      }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </span>
-          </wc-contact-sheet>
+          />
         </ProfilePopoverWcController>
       </Connect(ProfilePopoverWcController)>
     </UserAvatar>
@@ -145,6 +150,53 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
           userId="6"
           userStatus="offline"
         >
+          <div
+            className="style--none btn-round"
+            onClick={[Function]}
+          >
+            <WithTooltip
+              title="Someone"
+            >
+              <Avatar
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
+                size="xl"
+                style={
+                  Object {
+                    "background": "rgb(240, 240, 241)",
+                  }
+                }
+                tabIndex={-1}
+                url="/api/v4/users/6/image?_=0"
+              >
+                <img
+                  alt="user profile image"
+                  className="Avatar Avatar-xl"
+                  loading="lazy"
+                  onBlur={[Function]}
+                  onError={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseMove={[Function]}
+                  onPointerDown={[Function]}
+                  onPointerEnter={[Function]}
+                  src="/api/v4/users/6/image?_=0"
+                  style={
+                    Object {
+                      "background": "rgb(240, 240, 241)",
+                    }
+                  }
+                  tabIndex={-1}
+                />
+              </Avatar>
+            </WithTooltip>
+          </div>
           <wc-contact-sheet
             background-color="transparent"
             class="style--none btn-round"
@@ -155,56 +207,14 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
             prevent-stop-propagation={true}
             size="md"
             src="/api/v4/users/6/image?_=0"
+            style={
+              Object {
+                "display": "none",
+                "triggerComponentStyle": undefined,
+              }
+            }
             user-name="undefined undefined"
-          >
-            <span
-              className="style--none btn-round"
-              slot="trigger"
-            >
-              <WithTooltip
-                title="Someone"
-              >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="xl"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/6/image?_=0"
-                >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-xl"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/6/image?_=0"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
-                      }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </span>
-          </wc-contact-sheet>
+          />
         </ProfilePopoverWcController>
       </Connect(ProfilePopoverWcController)>
     </UserAvatar>
@@ -235,6 +245,53 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
           userId="7"
           userStatus="offline"
         >
+          <div
+            className="style--none btn-round"
+            onClick={[Function]}
+          >
+            <WithTooltip
+              title="Someone"
+            >
+              <Avatar
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
+                size="xl"
+                style={
+                  Object {
+                    "background": "rgb(240, 240, 241)",
+                  }
+                }
+                tabIndex={-1}
+                url="/api/v4/users/7/image?_=0"
+              >
+                <img
+                  alt="user profile image"
+                  className="Avatar Avatar-xl"
+                  loading="lazy"
+                  onBlur={[Function]}
+                  onError={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseMove={[Function]}
+                  onPointerDown={[Function]}
+                  onPointerEnter={[Function]}
+                  src="/api/v4/users/7/image?_=0"
+                  style={
+                    Object {
+                      "background": "rgb(240, 240, 241)",
+                    }
+                  }
+                  tabIndex={-1}
+                />
+              </Avatar>
+            </WithTooltip>
+          </div>
           <wc-contact-sheet
             background-color="transparent"
             class="style--none btn-round"
@@ -245,56 +302,14 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
             prevent-stop-propagation={true}
             size="md"
             src="/api/v4/users/7/image?_=0"
+            style={
+              Object {
+                "display": "none",
+                "triggerComponentStyle": undefined,
+              }
+            }
             user-name="undefined undefined"
-          >
-            <span
-              className="style--none btn-round"
-              slot="trigger"
-            >
-              <WithTooltip
-                title="Someone"
-              >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="xl"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/7/image?_=0"
-                >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-xl"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/7/image?_=0"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
-                      }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </span>
-          </wc-contact-sheet>
+          />
         </ProfilePopoverWcController>
       </Connect(ProfilePopoverWcController)>
     </UserAvatar>
@@ -394,6 +409,53 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
           userId="1"
           userStatus="offline"
         >
+          <div
+            className="style--none btn-round"
+            onClick={[Function]}
+          >
+            <WithTooltip
+              title="first.last1"
+            >
+              <Avatar
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
+                size="xl"
+                style={
+                  Object {
+                    "background": "rgb(240, 240, 241)",
+                  }
+                }
+                tabIndex={-1}
+                url="/api/v4/users/1/image?_=1620680333191"
+              >
+                <img
+                  alt="user profile image"
+                  className="Avatar Avatar-xl"
+                  loading="lazy"
+                  onBlur={[Function]}
+                  onError={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseMove={[Function]}
+                  onPointerDown={[Function]}
+                  onPointerEnter={[Function]}
+                  src="/api/v4/users/1/image?_=1620680333191"
+                  style={
+                    Object {
+                      "background": "rgb(240, 240, 241)",
+                    }
+                  }
+                  tabIndex={-1}
+                />
+              </Avatar>
+            </WithTooltip>
+          </div>
           <wc-contact-sheet
             background-color="transparent"
             class="style--none btn-round"
@@ -405,56 +467,14 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
             prevent-stop-propagation={true}
             size="md"
             src="/api/v4/users/1/image?_=0"
+            style={
+              Object {
+                "display": "none",
+                "triggerComponentStyle": undefined,
+              }
+            }
             user-name="First1 Last1"
-          >
-            <span
-              className="style--none btn-round"
-              slot="trigger"
-            >
-              <WithTooltip
-                title="first.last1"
-              >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="xl"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/1/image?_=1620680333191"
-                >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-xl"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/1/image?_=1620680333191"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
-                      }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </span>
-          </wc-contact-sheet>
+          />
         </ProfilePopoverWcController>
       </Connect(ProfilePopoverWcController)>
     </UserAvatar>
@@ -495,6 +515,53 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
           userId="2"
           userStatus="offline"
         >
+          <div
+            className="style--none btn-round"
+            onClick={[Function]}
+          >
+            <WithTooltip
+              title="first.last2"
+            >
+              <Avatar
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
+                size="xl"
+                style={
+                  Object {
+                    "background": "rgb(240, 240, 241)",
+                  }
+                }
+                tabIndex={-1}
+                url="/api/v4/users/2/image?_=1620680333191"
+              >
+                <img
+                  alt="user profile image"
+                  className="Avatar Avatar-xl"
+                  loading="lazy"
+                  onBlur={[Function]}
+                  onError={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseMove={[Function]}
+                  onPointerDown={[Function]}
+                  onPointerEnter={[Function]}
+                  src="/api/v4/users/2/image?_=1620680333191"
+                  style={
+                    Object {
+                      "background": "rgb(240, 240, 241)",
+                    }
+                  }
+                  tabIndex={-1}
+                />
+              </Avatar>
+            </WithTooltip>
+          </div>
           <wc-contact-sheet
             background-color="transparent"
             class="style--none btn-round"
@@ -506,56 +573,14 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
             prevent-stop-propagation={true}
             size="md"
             src="/api/v4/users/2/image?_=0"
+            style={
+              Object {
+                "display": "none",
+                "triggerComponentStyle": undefined,
+              }
+            }
             user-name="First2 Last2"
-          >
-            <span
-              className="style--none btn-round"
-              slot="trigger"
-            >
-              <WithTooltip
-                title="first.last2"
-              >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="xl"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/2/image?_=1620680333191"
-                >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-xl"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/2/image?_=1620680333191"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
-                      }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </span>
-          </wc-contact-sheet>
+          />
         </ProfilePopoverWcController>
       </Connect(ProfilePopoverWcController)>
     </UserAvatar>
@@ -596,6 +621,53 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
           userId="3"
           userStatus="offline"
         >
+          <div
+            className="style--none btn-round"
+            onClick={[Function]}
+          >
+            <WithTooltip
+              title="first.last3"
+            >
+              <Avatar
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
+                size="xl"
+                style={
+                  Object {
+                    "background": "rgb(240, 240, 241)",
+                  }
+                }
+                tabIndex={-1}
+                url="/api/v4/users/3/image?_=1620680333191"
+              >
+                <img
+                  alt="user profile image"
+                  className="Avatar Avatar-xl"
+                  loading="lazy"
+                  onBlur={[Function]}
+                  onError={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseMove={[Function]}
+                  onPointerDown={[Function]}
+                  onPointerEnter={[Function]}
+                  src="/api/v4/users/3/image?_=1620680333191"
+                  style={
+                    Object {
+                      "background": "rgb(240, 240, 241)",
+                    }
+                  }
+                  tabIndex={-1}
+                />
+              </Avatar>
+            </WithTooltip>
+          </div>
           <wc-contact-sheet
             background-color="transparent"
             class="style--none btn-round"
@@ -607,56 +679,14 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
             prevent-stop-propagation={true}
             size="md"
             src="/api/v4/users/3/image?_=0"
+            style={
+              Object {
+                "display": "none",
+                "triggerComponentStyle": undefined,
+              }
+            }
             user-name="First3 Last3"
-          >
-            <span
-              className="style--none btn-round"
-              slot="trigger"
-            >
-              <WithTooltip
-                title="first.last3"
-              >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="xl"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/3/image?_=1620680333191"
-                >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-xl"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/3/image?_=1620680333191"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
-                      }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </span>
-          </wc-contact-sheet>
+          />
         </ProfilePopoverWcController>
       </Connect(ProfilePopoverWcController)>
     </UserAvatar>
@@ -754,6 +784,53 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
           userId="1"
           userStatus="offline"
         >
+          <div
+            className="style--none btn-round"
+            onClick={[Function]}
+          >
+            <WithTooltip
+              title="first.last1"
+            >
+              <Avatar
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
+                size="xl"
+                style={
+                  Object {
+                    "background": "rgb(240, 240, 241)",
+                  }
+                }
+                tabIndex={-1}
+                url="/api/v4/users/1/image?_=1620680333191"
+              >
+                <img
+                  alt="user profile image"
+                  className="Avatar Avatar-xl"
+                  loading="lazy"
+                  onBlur={[Function]}
+                  onError={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseMove={[Function]}
+                  onPointerDown={[Function]}
+                  onPointerEnter={[Function]}
+                  src="/api/v4/users/1/image?_=1620680333191"
+                  style={
+                    Object {
+                      "background": "rgb(240, 240, 241)",
+                    }
+                  }
+                  tabIndex={-1}
+                />
+              </Avatar>
+            </WithTooltip>
+          </div>
           <wc-contact-sheet
             background-color="transparent"
             class="style--none btn-round"
@@ -765,56 +842,14 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
             prevent-stop-propagation={true}
             size="md"
             src="/api/v4/users/1/image?_=0"
+            style={
+              Object {
+                "display": "none",
+                "triggerComponentStyle": undefined,
+              }
+            }
             user-name="First1 Last1"
-          >
-            <span
-              className="style--none btn-round"
-              slot="trigger"
-            >
-              <WithTooltip
-                title="first.last1"
-              >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="xl"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/1/image?_=1620680333191"
-                >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-xl"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/1/image?_=1620680333191"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
-                      }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </span>
-          </wc-contact-sheet>
+          />
         </ProfilePopoverWcController>
       </Connect(ProfilePopoverWcController)>
     </UserAvatar>
@@ -855,6 +890,53 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
           userId="2"
           userStatus="offline"
         >
+          <div
+            className="style--none btn-round"
+            onClick={[Function]}
+          >
+            <WithTooltip
+              title="first.last2"
+            >
+              <Avatar
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
+                size="xl"
+                style={
+                  Object {
+                    "background": "rgb(240, 240, 241)",
+                  }
+                }
+                tabIndex={-1}
+                url="/api/v4/users/2/image?_=1620680333191"
+              >
+                <img
+                  alt="user profile image"
+                  className="Avatar Avatar-xl"
+                  loading="lazy"
+                  onBlur={[Function]}
+                  onError={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseMove={[Function]}
+                  onPointerDown={[Function]}
+                  onPointerEnter={[Function]}
+                  src="/api/v4/users/2/image?_=1620680333191"
+                  style={
+                    Object {
+                      "background": "rgb(240, 240, 241)",
+                    }
+                  }
+                  tabIndex={-1}
+                />
+              </Avatar>
+            </WithTooltip>
+          </div>
           <wc-contact-sheet
             background-color="transparent"
             class="style--none btn-round"
@@ -866,56 +948,14 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
             prevent-stop-propagation={true}
             size="md"
             src="/api/v4/users/2/image?_=0"
+            style={
+              Object {
+                "display": "none",
+                "triggerComponentStyle": undefined,
+              }
+            }
             user-name="First2 Last2"
-          >
-            <span
-              className="style--none btn-round"
-              slot="trigger"
-            >
-              <WithTooltip
-                title="first.last2"
-              >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="xl"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/2/image?_=1620680333191"
-                >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-xl"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/2/image?_=1620680333191"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
-                      }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </span>
-          </wc-contact-sheet>
+          />
         </ProfilePopoverWcController>
       </Connect(ProfilePopoverWcController)>
     </UserAvatar>
@@ -956,6 +996,53 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
           userId="3"
           userStatus="offline"
         >
+          <div
+            className="style--none btn-round"
+            onClick={[Function]}
+          >
+            <WithTooltip
+              title="first.last3"
+            >
+              <Avatar
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
+                size="xl"
+                style={
+                  Object {
+                    "background": "rgb(240, 240, 241)",
+                  }
+                }
+                tabIndex={-1}
+                url="/api/v4/users/3/image?_=1620680333191"
+              >
+                <img
+                  alt="user profile image"
+                  className="Avatar Avatar-xl"
+                  loading="lazy"
+                  onBlur={[Function]}
+                  onError={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseMove={[Function]}
+                  onPointerDown={[Function]}
+                  onPointerEnter={[Function]}
+                  src="/api/v4/users/3/image?_=1620680333191"
+                  style={
+                    Object {
+                      "background": "rgb(240, 240, 241)",
+                    }
+                  }
+                  tabIndex={-1}
+                />
+              </Avatar>
+            </WithTooltip>
+          </div>
           <wc-contact-sheet
             background-color="transparent"
             class="style--none btn-round"
@@ -967,56 +1054,14 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
             prevent-stop-propagation={true}
             size="md"
             src="/api/v4/users/3/image?_=0"
+            style={
+              Object {
+                "display": "none",
+                "triggerComponentStyle": undefined,
+              }
+            }
             user-name="First3 Last3"
-          >
-            <span
-              className="style--none btn-round"
-              slot="trigger"
-            >
-              <WithTooltip
-                title="first.last3"
-              >
-                <Avatar
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseMove={[Function]}
-                  onPointerDown={[Function]}
-                  onPointerEnter={[Function]}
-                  size="xl"
-                  style={
-                    Object {
-                      "background": "rgb(240, 240, 241)",
-                    }
-                  }
-                  tabIndex={-1}
-                  url="/api/v4/users/3/image?_=1620680333191"
-                >
-                  <img
-                    alt="user profile image"
-                    className="Avatar Avatar-xl"
-                    loading="lazy"
-                    onBlur={[Function]}
-                    onError={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseMove={[Function]}
-                    onPointerDown={[Function]}
-                    onPointerEnter={[Function]}
-                    src="/api/v4/users/3/image?_=1620680333191"
-                    style={
-                      Object {
-                        "background": "rgb(240, 240, 241)",
-                      }
-                    }
-                    tabIndex={-1}
-                  />
-                </Avatar>
-              </WithTooltip>
-            </span>
-          </wc-contact-sheet>
+          />
         </ProfilePopoverWcController>
       </Connect(ProfilePopoverWcController)>
     </UserAvatar>
