@@ -17,7 +17,7 @@ import UserProfileElement from 'components/user_profile';
 import EditableArea from './components/editable_area';
 import LineLimiter from './components/linelimiter';
 
-const Usernames = styled.p`
+const Usernames = styled.div`
     font-family: SuisseIntl, sans-serif;
     font-size: 18px;
     line-height: 24px;
