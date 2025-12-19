@@ -89,7 +89,8 @@ import ValidationResult from './validation';
 import WorkspaceOptimizationDashboard from './workspace-optimization/dashboard';
 
 // component not available - using stub
-const RestrictedIndicator = () => null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const RestrictedIndicator = (props: any) => null;
 const BillingHistory = null;
 const billingHistorySearchableStrings: string[] = [];
 const BillingSubscriptions = null;

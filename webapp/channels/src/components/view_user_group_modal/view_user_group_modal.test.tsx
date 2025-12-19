@@ -42,6 +42,7 @@ describe('component/view_user_group_modal', () => {
             delete_at: 0,
             has_syncables: false,
             member_count: 6,
+            member_ids: [],
             allow_reference: true,
             scheme_admin: false,
         },

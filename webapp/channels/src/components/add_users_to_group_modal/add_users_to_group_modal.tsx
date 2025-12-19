@@ -10,9 +10,9 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import AddUserToGroupMultiSelect from 'components/add_user_to_group_multiselect';
+import type {openModal} from 'actions/views/modals';
 
-import type {ModalData} from 'types/actions';
+import AddUserToGroupMultiSelect from 'components/add_user_to_group_multiselect';
 
 import 'components/user_groups_modal/user_groups_modal.scss';
 
@@ -23,7 +23,7 @@ export type Props = {
     backButtonCallback: () => void;
     actions: {
         addUsersToGroup: (groupId: string, userIds: string[]) => Promise<ActionResult>;
-        openModal: <P>(modalData: ModalData<P>) => void;
+        openModal: typeof openModal;
     };
 }
 

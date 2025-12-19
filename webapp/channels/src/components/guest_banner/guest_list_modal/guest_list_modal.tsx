@@ -10,7 +10,7 @@ import {Client4} from 'mattermost-redux/client';
 import GuestListPopover from 'components/guest_list_popover';
 import {getListHeight} from 'components/guest_list_popover/user_list/styled';
 import {MAX_LIST_HEIGHT, VIEWPORT_SCALE_FACTOR} from 'components/guest_list_popover/user_list/user_list';
-import ProfilePopover from 'components/profile_popover';
+import ProfilePopover from 'components/profile_popover/profile_popover';
 
 import type {A11yFocusEventDetail} from 'utils/constants';
 import Constants, {A11yCustomEventTypes} from 'utils/constants';
@@ -132,11 +132,9 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
             >
                 {showUser ? (
                     <ProfilePopover
-                        className='user-profile-popover'
                         userId={showUser.id}
                         src={Client4.getProfilePictureUrl(showUser.id, showUser.last_picture_update)}
                         channelId={channelId}
-                        hasMention={false}
                         hide={hideUserOverlay}
                         returnFocus={returnFocus}
                     />

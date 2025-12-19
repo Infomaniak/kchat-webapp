@@ -55,7 +55,6 @@ const SidebarHeader = (props: Props) => {
                     onCreateNewUserGroupClick={props.showCreateUserGroupModal}
                     unreadFilterEnabled={props.unreadFilterEnabled}
                     onCreateNewCategoryClick={props.showCreateCategoryModal}
-                    onInvitePeopleClick={props.invitePeopleModal}
                 />
             )}
         </header>

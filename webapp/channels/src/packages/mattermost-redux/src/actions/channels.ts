@@ -1089,7 +1089,7 @@ export function getChannelsMemberCount(channelIds: string[]): ActionFuncAsync<Re
     };
 }
 
-export function notifyChannelMember(channelId: string, userIds: string[], postId: string): ActionFuncAsync<ChannelMembership> {
+export function notifyChannelMember(channelId: string, userIds: string[], postId: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         let member;
         try {

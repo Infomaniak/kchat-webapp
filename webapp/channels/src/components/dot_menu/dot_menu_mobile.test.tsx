@@ -47,6 +47,7 @@ describe('components/dot_menu/DotMenu on mobile view', () => {
                 setThreadFollow: jest.fn(),
                 addPostReminder: jest.fn(),
                 setGlobalItem: jest.fn(),
+                translatePost: jest.fn(),
             },
             canEdit: false,
             canDelete: false,

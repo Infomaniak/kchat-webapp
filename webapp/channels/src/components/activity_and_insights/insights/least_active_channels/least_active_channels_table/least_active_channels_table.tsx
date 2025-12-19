@@ -185,8 +185,6 @@ const LeastActiveChannelsTable = (props: Props) => {
                                     <Avatars
                                         userIds={channel.participants}
                                         size='xs'
-                                        disableProfileOverlay={true}
-                                        showDeleted={false}
                                     />
                                 ) : null}
                             </>

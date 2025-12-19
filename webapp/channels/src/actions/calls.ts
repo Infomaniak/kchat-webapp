@@ -360,7 +360,7 @@ export function getCallingUser(userId: string) {
         clientFunc: Client4.getProfilesByIds,
         onSuccess: [ActionTypes.CALL_CALLING_USER],
         params: [
-            userId,
+            [userId],
         ],
     });
 }

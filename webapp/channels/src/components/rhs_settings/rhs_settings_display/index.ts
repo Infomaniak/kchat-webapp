@@ -20,7 +20,14 @@ import {Preferences} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
+import type {Props} from './rhs_settings_display';
 import RhsSettingsDisplay from './rhs_settings_display';
+
+type OwnProps = {
+    user: Props['user'];
+    updateSection: Props['updateSection'];
+    activeSection: Props['activeSection'];
+};
 
 export function makeMapStateToProps() {
     return (state: GlobalState) => {

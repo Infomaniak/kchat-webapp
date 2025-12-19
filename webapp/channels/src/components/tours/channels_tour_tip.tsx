@@ -139,7 +139,6 @@ export const ChannelsTourTip = ({
             hideBackdrop={hideBackdrop}
             tippyBlueStyle={tippyBlueStyle}
             showOptOut={showOptOut}
-            link={link}
         />
     );
 };

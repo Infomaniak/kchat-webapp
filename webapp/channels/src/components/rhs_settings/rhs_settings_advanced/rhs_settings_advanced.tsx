@@ -145,7 +145,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                 user_id: userId,
                 category: Constants.Preferences.CATEGORY_ADVANCED_SETTINGS,
                 name: setting,
-                value: this.state.settings[setting],
+                value: String(this.state.settings[setting] ?? ''),
             });
         });
 

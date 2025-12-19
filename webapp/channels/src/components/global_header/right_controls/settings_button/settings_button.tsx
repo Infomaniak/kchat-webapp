@@ -69,6 +69,8 @@ const SettingsButton = ({tab = 'display', className, icon, currentTeam}: Props):
             }
         >
             <IconButton
+
+                // @ts-expect-error id is possible
                 id='right-controls-settings'
                 className={`grey ${rhsState === RHSStates.SETTINGS ? 'active' : ''} ${className || ''}`}
                 size={'sm'}

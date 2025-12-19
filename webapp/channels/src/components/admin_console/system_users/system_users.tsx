@@ -37,7 +37,8 @@ import './system_users.scss';
 
 import type {PropsFromRedux} from './index';
 
-const SystemUsersExport = () => null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const SystemUsersExport = (props: any) => null;
 
 type Props = PropsFromRedux;
 
@@ -563,7 +564,7 @@ function SystemUsers(props: Props) {
                         />
                         <SystemUsersExport
                             currentUserId={props.currentUser.id}
-                            usersLenght={userReports.length}
+                            usersLength={userReports.length}
                         />
                     </div>
                     <AdminConsoleListTable<UserReport>

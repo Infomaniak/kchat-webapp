@@ -552,9 +552,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
                             <PopOutIcon
                                 fill='white'
-                                width='16px'
-                                height='16px'
-                                style={{marginRight: '8px'}}
+                                style={{marginRight: '8px', width: '16px', height: '16px'}}
                             />
                             <span>{'Pop out'}</span>
                         </button>
@@ -707,7 +705,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                     !speakingPictureURL &&
                     <Avatar
                         size='md'
-                        icon='account-outline'
                         style={{
                             background: 'lightblue',
                             color: '#333',

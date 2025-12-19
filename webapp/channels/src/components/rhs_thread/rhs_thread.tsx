@@ -58,7 +58,6 @@ const RhsThread = ({
                 rootPostId={selected.id}
                 channel={channel}
                 previousRhsState={previousRhsState}
-                onChatHistoryClick={onChatHistoryClick}
             />
             {displayThreadList ? (
                 <PostView

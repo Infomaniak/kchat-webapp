@@ -28,7 +28,7 @@ import {copyToClipboard} from 'utils/utils';
 import './channel_actions_menu.scss';
 
 type Props = {
-    channel: LeastActiveChannel & Channel;
+    channel: LeastActiveChannel;
     actionCallback?: () => Promise<void>;
 }
 
