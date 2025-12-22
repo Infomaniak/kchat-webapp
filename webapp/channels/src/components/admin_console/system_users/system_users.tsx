@@ -37,8 +37,7 @@ import './system_users.scss';
 
 import type {PropsFromRedux} from './index';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const SystemUsersExport = (props: any) => null;
+const SystemUsersExport = () => null;
 
 type Props = PropsFromRedux;
 

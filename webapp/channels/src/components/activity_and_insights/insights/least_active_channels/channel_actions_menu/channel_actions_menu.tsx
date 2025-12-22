@@ -5,7 +5,6 @@ import React, {memo, useCallback} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import type {Channel} from '@mattermost/types/channels';
 import type {LeastActiveChannel} from '@mattermost/types/insights';
 import type {GlobalState} from '@mattermost/types/store';
 

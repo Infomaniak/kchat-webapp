@@ -90,7 +90,7 @@ import WorkspaceOptimizationDashboard from './workspace-optimization/dashboard';
 
 // component not available - using stub
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const RestrictedIndicator = (props: any) => null;
+const RestrictedIndicator = () => null;
 const BillingHistory = null;
 const billingHistorySearchableStrings: string[] = [];
 const BillingSubscriptions = null;

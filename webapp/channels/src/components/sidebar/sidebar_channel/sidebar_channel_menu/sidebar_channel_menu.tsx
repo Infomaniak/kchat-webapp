@@ -285,8 +285,6 @@ const SidebarChannelMenu = ({
         );
     }
 
-    const menuId = `SidebarChannelMenu-MenuList-${channel.id}`;
-
     return (
         <Menu.Container
             menuButton={{
