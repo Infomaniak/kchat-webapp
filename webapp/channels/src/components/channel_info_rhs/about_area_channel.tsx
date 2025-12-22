@@ -111,8 +111,7 @@ const AboutAreaChannel = ({channel, canEditChannelProperties, actions}: Props) =
             )}
 
             <ChannelCreationDate>
-                {formatMessage({id: 'channel_info_rhs.about_area.creation_date', defaultMessage: 'Created on:'})}
-
+                {formatMessage({id: 'channel_info_rhs.about_area.creation_date', defaultMessage: 'Created on: '})}
                 <FormattedDate
                     value={new Date(channel.create_at)}
                     year='numeric'
