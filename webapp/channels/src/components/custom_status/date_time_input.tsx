@@ -150,7 +150,13 @@ const DateTimeInputContainer: React.FC<Props> = ({
     }, []);
 
     const formatDate = (date: Moment): string => {
-        return relativeDate ? relativeFormatDate(date, formatMessage) : DateTime.fromJSDate(date.toDate()).toLocaleString();
+        if (relativeDate) {
+            return relativeFormatDate(date, formatMessage);
+        }
+
+        // IK : Use en-GB for English to get UK date format (DD/MM/YYYY) instead of US format (MM/DD/YYYY)
+        const normalizedLocale = locale === 'en' ? 'en-GB' : locale;
+        return DateTime.fromJSDate(date.toDate()).setLocale(normalizedLocale).toLocaleString();
     };
 
     const inputIcon = (
