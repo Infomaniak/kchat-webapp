@@ -3020,6 +3020,7 @@
   "channel_info_rhs.about_area.channel_purpose.heading": "Objectif du canal",
   "channel_info_rhs.about_area.channel_purpose.line_limiter.less": "moins",
   "channel_info_rhs.about_area.channel_purpose.line_limiter.more": "plus",
+  "channel_info_rhs.about_area.creation_date": "Créé le : ",
   "channel_info_rhs.edit_link": "Modifier",
   "channel_info_rhs.header.title": "Information",
   "channel_info_rhs.menu.files": "Fichiers",

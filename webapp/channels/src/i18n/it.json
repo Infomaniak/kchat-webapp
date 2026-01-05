@@ -3023,6 +3023,7 @@
   "channel_info_rhs.about_area.channel_purpose.heading": "Scopo del canale",
   "channel_info_rhs.about_area.channel_purpose.line_limiter.less": "meno",
   "channel_info_rhs.about_area.channel_purpose.line_limiter.more": "altro",
+  "channel_info_rhs.about_area.creation_date": "Creato il: ",
   "channel_info_rhs.edit_link": "Modifica",
   "channel_info_rhs.header.title": "Informazioni",
   "channel_info_rhs.menu.files": "File",
