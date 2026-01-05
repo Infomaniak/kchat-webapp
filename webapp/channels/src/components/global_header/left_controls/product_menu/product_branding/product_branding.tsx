@@ -31,7 +31,7 @@ const ProductBranding = (): JSX.Element => {
 
     return (
         <ProductBrandingContainer tabIndex={-1}>
-            <Icon size={24}/>
+            <Icon size={20}/>
 
             {/* Heading for screen readers since an h1 shouldn't be inside a button */}
             <Heading

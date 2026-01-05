@@ -199,7 +199,7 @@ function isValidTokenV2(token: {token: string; refreshToken?: string; expiresAt?
 }
 
 export async function refreshIKToken(redirectToTeam = false): Promise<string> {
-    const updatedToken: {token: string; refreshToken?: string; expiresAt?: number} = await window.authManager.tokenRequest();
+    const updatedToken = await window.authManager.tokenRequest();
 
     // If desktop doesn't have a valid token/refresh token
     if (!Object.keys(updatedToken).length) {

@@ -38,7 +38,10 @@ describe('components/IkWelcomeButtons', () => {
 
         expect(baseProps.actions.openModal).toHaveBeenCalledWith(expect.objectContaining({
             modalId: 'create_dm_channel',
-            dialogProps: {isExistingChannel: false},
+            dialogProps: {
+                isExistingChannel: false,
+                focusOriginElement: 'ik-welcome-button-send-message',
+            },
         }));
     });
 

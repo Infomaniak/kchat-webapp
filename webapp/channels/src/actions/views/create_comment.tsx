@@ -225,7 +225,7 @@ export function submitImmediateCommand(channelId: string, command: string, rootI
 
         const teamId = getCurrentTeamId(state);
 
-        let args = {
+        let args: CommandArgs = {
             channel_id: channelId,
             team_id: teamId,
             root_id: rootId,

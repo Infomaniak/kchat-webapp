@@ -53,7 +53,21 @@ describe('components/LeaveChannelModal', () => {
                 getTeamMembersByIds: jest.fn().mockResolvedValue({data: true}),
                 loadProfilesAndReloadChannelMembers: jest.fn(),
             },
-            currentUser: {user_id: 'user-1'},
+            currentUser: {
+                user_id: 'user-1',
+                channel_id: 'channel7',
+                roles: 'channel_user',
+                last_viewed_at: 0,
+                msg_count: 0,
+                msg_count_root: 0,
+                mention_count: 0,
+                mention_count_root: 0,
+                urgent_mention_count: 0,
+                notify_props: {},
+                last_update_at: 0,
+                scheme_user: true,
+                scheme_admin: false,
+            },
             onExited: jest.fn(),
             callback: jest.fn(),
             profilesInCurrentChannel: [{id: 'user1'}],
@@ -62,6 +76,7 @@ describe('components/LeaveChannelModal', () => {
 
         const wrapper = renderWithContext(
 
+            // @ts-expect-error old error
             <LeaveChannelModal
                 {...props}
             />,
@@ -113,13 +128,29 @@ describe('components/LeaveChannelModal', () => {
                 getTeamMembersByIds: jest.fn().mockResolvedValue({data: true}),
                 loadProfilesAndReloadChannelMembers: jest.fn(),
             },
-            currentUser: {user_id: 'user-1'},
+            currentUser: {
+                user_id: 'user-1',
+                channel_id: 'channel7',
+                roles: 'channel_user',
+                last_viewed_at: 0,
+                msg_count: 0,
+                msg_count_root: 0,
+                mention_count: 0,
+                mention_count_root: 0,
+                urgent_mention_count: 0,
+                notify_props: {},
+                last_update_at: 0,
+                scheme_user: true,
+                scheme_admin: false,
+            },
             onExited: jest.fn(),
             callback: jest.fn(),
             profilesInCurrentChannel: [{id: 'user1'}],
             isInvite: true,
         };
         renderWithContext(
+
+            // @ts-expect-error old error
             <LeaveChannelModal
                 {...props}
             />,
@@ -169,7 +200,21 @@ describe('components/LeaveChannelModal', () => {
                 getProfilesInChannel: jest.fn().mockResolvedValue({data: true}),
                 getTeamMembersByIds: jest.fn().mockResolvedValue({data: true}),
             },
-            currentUser: {user_id: 'user-1'},
+            currentUser: {
+                user_id: 'user-1',
+                channel_id: 'channel7',
+                roles: 'channel_user',
+                last_viewed_at: 0,
+                msg_count: 0,
+                msg_count_root: 0,
+                mention_count: 0,
+                mention_count_root: 0,
+                urgent_mention_count: 0,
+                notify_props: {},
+                last_update_at: 0,
+                scheme_user: true,
+                scheme_admin: false,
+            },
             onExited: jest.fn(),
             callback: jest.fn(),
             hasChannelMembersAdmin: true,
@@ -181,6 +226,8 @@ describe('components/LeaveChannelModal', () => {
 
         await act(async () => {
             renderWithContext(
+
+                // @ts-expect-error old error
                 <LeaveChannelModal
                     {...props}
                 />,

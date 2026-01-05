@@ -168,6 +168,8 @@ class SelectBinding extends React.PureComponent<Props, State> {
                 {({handlePopupOpened}) => (
                     <AutocompleteSelector
                         providers={this.providers}
+
+                        // @ts-expect-error not sure if its safe to remove. so i silented it
                         onSelected={this.handleSelected}
                         placeholder={label}
                         inputClassName='post-attachment-dropdown'

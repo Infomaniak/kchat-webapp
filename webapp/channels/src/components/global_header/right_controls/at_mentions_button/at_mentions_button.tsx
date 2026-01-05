@@ -46,19 +46,20 @@ const AtMentionsButton = (): JSX.Element => {
                 </>
             }
         >
-            <IconButton
-                id='right-controls-at-mentions'
-                className={`grey ${rhsState === RHSStates.MENTION ? 'active' : ''}`}
-                size={'sm'}
-                icon={'mentions'}
-                toggled={rhsState === RHSStates.MENTION}
-                onClick={mentionButtonClick}
-                inverted={true}
-                compact={true}
-                aria-expanded={rhsState === RHSStates.MENTION}
-                aria-controls='searchContainer' // Must be changed if the ID of the container changes
-                aria-label={formatMessage({id: 'channel_header.recentMentions', defaultMessage: 'Recent mentions'})}
-            />
+            <span id='right-controls-at-mentions'>
+                <IconButton
+                    className={`grey ${rhsState === RHSStates.MENTION ? 'active' : ''}`}
+                    size={'sm'}
+                    icon={'mentions'}
+                    toggled={rhsState === RHSStates.MENTION}
+                    onClick={mentionButtonClick}
+                    inverted={true}
+                    compact={true}
+                    aria-expanded={rhsState === RHSStates.MENTION}
+                    aria-controls='searchContainer' // Must be changed if the ID of the container changes
+                    aria-label={formatMessage({id: 'channel_header.recentMentions', defaultMessage: 'Recent mentions'})}
+                />
+            </span>
         </WithTooltip>
     );
 };

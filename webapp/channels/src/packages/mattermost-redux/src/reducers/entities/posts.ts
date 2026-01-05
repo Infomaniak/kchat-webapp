@@ -254,7 +254,7 @@ export function handlePosts(state: IDMappedObjects<Post> = {}, action: MMReduxAc
             return state;
         }
 
-        let attachments: MessageAttachment[] = state[postId].props.attachments;
+        let attachments: MessageAttachment[] = state[postId].props.attachments as MessageAttachment[];
         if (attachments.length === 0) {
             return state;
         }

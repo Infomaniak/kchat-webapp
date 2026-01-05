@@ -374,7 +374,6 @@ export default class PostList extends React.PureComponent<Props, State> {
                     loadingNewerPosts={this.props.loadingNewerPosts}
                     loadingOlderPosts={this.props.loadingOlderPosts}
                     channelId={this.props.channelId}
-                    lastViewedAt={this.props.lastViewedAt}
                 />
             </div>
         );
@@ -668,7 +667,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                 showScrollToBottomToast={this.state.showScrollToBottomToast}
                 onScrollToBottomToastDismiss={this.handleScrollToBottomToastDismiss}
                 hideScrollToBottomToast={this.hideScrollToBottomToast}
-                isThreadView={this.props.isThreadView}
+                isThreadView={this.props.isThreadView ?? false}
             />
         );
     };

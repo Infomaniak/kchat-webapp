@@ -36,7 +36,7 @@ export interface AtMentionSuggestionProps extends SuggestionProps<Item> {
     status?: string;
 }
 
-export const AtMentionSuggestion = React.forwardRef<HTMLDivElement, AtMentionSuggestionProps>((props, ref) => {
+export const AtMentionSuggestion = React.forwardRef<HTMLLIElement, AtMentionSuggestionProps>((props, ref) => {
     const {item} = props;
     const intl = useIntl();
 

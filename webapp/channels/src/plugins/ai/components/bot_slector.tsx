@@ -49,7 +49,7 @@ const BotPill = styled(GrayPill)`
 	gap: 0;
 `;
 
-const BotSelectorContainer = styled.div`
+const BotSelectorContainer = styled.button<{isActive: boolean}>`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -57,6 +57,9 @@ const BotSelectorContainer = styled.div`
 
 	margin: 8px 16px;
 	color: rgba(var(--center-channel-color-rgb), 0.56);
+	background: transparent;
+	border: none;
+	padding: 0;
 `;
 
 type BotDropdownProps = {

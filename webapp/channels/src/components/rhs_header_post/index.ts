@@ -33,7 +33,7 @@ import type {GlobalState} from 'types/store';
 
 import RhsHeaderPost from './rhs_header_post';
 
-type OwnProps = Pick<ComponentProps<typeof RhsHeaderPost>, 'rootPostId'>
+type OwnProps = Pick<ComponentProps<typeof RhsHeaderPost>, 'rootPostId' | 'channel' | 'previousRhsState'>
 
 function makeMapStateToProps() {
     const getThreadOrSynthetic = makeGetThreadOrSynthetic();

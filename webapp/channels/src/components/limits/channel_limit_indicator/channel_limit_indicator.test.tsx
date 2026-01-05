@@ -43,7 +43,7 @@ describe('channel limit indicator', () => {
                 teams: {
                     current_team_id: {
                         id: 'current_team_id',
-                        account_id: 'current_team_account_id',
+                        account_id: 0,
                     },
                 },
             },

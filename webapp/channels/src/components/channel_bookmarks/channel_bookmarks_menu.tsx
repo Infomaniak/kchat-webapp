@@ -126,7 +126,9 @@ export const useBookmarkAddActions = (channelId: string) => {
                 channelId,
                 bookmarkType: file ? 'file' : 'link',
                 file,
-                onConfirm: async (data: ChannelBookmarkCreate) => dispatch(createBookmark(channelId, data)),
+                onConfirm: async (data: ChannelBookmarkCreate) => {
+                    return dispatch(createBookmark(channelId, data)) as any;
+                },
             },
         }));
     }, [channelId, dispatch]);
