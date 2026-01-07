@@ -26,73 +26,17 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, more t
 exports[`components/post_view/PostAddChannelMember should match snapshot, more than 3 users 2`] = `
 <Fragment>
   <p>
-    <span>
-      <Connect(Component)
-        channelId="channel_id"
-        key="username_1"
-        mentionName="username_1"
-      />
-      <span
-        key="1"
-      >
-        , 
-      </span>
-      <Connect(Component)
-        channelId="channel_id"
-        key="username_2"
-        mentionName="username_2"
-      />
-      <span
-        key="2"
-      >
-        , 
-      </span>
-      <Connect(Component)
-        channelId="channel_id"
-        key="username_3"
-        mentionName="username_3"
-      />
-      <MemoizedFormattedMessage
-        defaultMessage=" and "
-        id="post_body.check_for_out_of_channel_mentions.link.and"
-        key="3"
-      />
-      <Connect(Component)
-        channelId="channel_id"
-        key="username_4"
-        mentionName="username_4"
-      />
-    </span>
-     
     <MemoizedFormattedMessage
-      defaultMessage="did not get notified by this mention because they are not in the channel. Would you like to "
-      id="post_body.check_for_out_of_channel_mentions.message.multiple"
-    />
-    <a
-      className="PostBody_addChannelMemberLink"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="add them to the channel"
-        id="post_body.check_for_out_of_channel_mentions.link.public"
-      />
-    </a>
-    <MemoizedFormattedMessage
-      defaultMessage="or "
-      id="post_body.check_for_out_of_channel_groups_mentions_choice.message.multiple"
-    />
-    <a
-      className="PostBody_addChannelMemberLink-notify"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="notify them"
-        id="post_body.check_for_out_of_channel_groups_mentions_notify.message.multiple"
-      />
-    </a>
-    <MemoizedFormattedMessage
-      defaultMessage=" ? They will have access to all message history."
-      id="post_body.check_for_out_of_channel_mentions.message_last"
+      defaultMessage="<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Would you like to <addLink>add them to the channel</addLink> or <notifyLink>notify them</notifyLink>? They will have access to all message history.} other {did not get notified by this mention because they are not in the channel. Would you like to <addLink>add them to the channel</addLink> or <notifyLink>notify them</notifyLink>? They will have access to all message history.}}"
+      id="post_body.check_for_out_of_channel_mentions.public_with_notify"
+      values={
+        Object {
+          "addLink": [Function],
+          "count": 4,
+          "mentions": [Function],
+          "notifyLink": [Function],
+        }
+      }
     />
   </p>
 </Fragment>
