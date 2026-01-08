@@ -72,6 +72,7 @@ export default function MsgTyping(props: Props) {
 
             const {channelId, rootId, userId, date} = messageData;
 
+            // IK change: we are using Pusher "client events" (not like MM), so the current user must be omitted here
             const isSameUser = userId === currentUserId;
             if (isSameUser) {
                 return;

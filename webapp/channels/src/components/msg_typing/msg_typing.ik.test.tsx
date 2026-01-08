@@ -19,29 +19,19 @@ describe('components/MsgTyping', () => {
         userStoppedRecording: jest.fn(),
     };
 
-    test('should match snapshot, on nobody typing', () => {
-        const wrapper = shallow(<MsgTyping {...baseProps}/>);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should match snapshot, on one user typing', () => {
-        const typingUsers = ['test.user'];
-        const props = {...baseProps, typingUsers};
+    test('should match snapshot, on one user recording', () => {
+        const recordingUsers = ['test.user'];
+        const props = {...baseProps, recordingUsers};
 
         const wrapper = shallow(<MsgTyping {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should match snapshot, on multiple users typing', () => {
-        const typingUsers = ['test.user', 'other.test.user', 'another.user'];
-        const props = {...baseProps, typingUsers};
+    test('should match snapshot, on multiple users recording', () => {
+        const recordingUsers = ['test.user', 'other.test.user', 'another.user'];
+        const props = {...baseProps, recordingUsers};
 
         const wrapper = shallow(<MsgTyping {...props}/>);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should should match snapshot, on nobody recording', () => {
-        const wrapper = shallow(<MsgTyping {...baseProps}/>);
         expect(wrapper).toMatchSnapshot();
     });
 });
