@@ -9,13 +9,13 @@ import {bindActionCreators} from 'redux';
 
 import type {Team} from '@mattermost/types/teams';
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import {bridgeRecreate} from 'mattermost-redux/actions/ksuiteBridge';
-import type {GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {switchTeam} from 'actions/team_actions';
 import {makeGetBadgeCountForServerId} from 'selectors/views/servers';
 
-import type {GlobalState} from 'types/store';
+import type {GetStateFunc, GlobalState} from 'types/store';
 import type {Server} from 'types/store/servers';
 
 import SwitchItem from './switch_item';

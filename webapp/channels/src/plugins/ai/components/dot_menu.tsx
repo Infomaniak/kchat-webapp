@@ -1,16 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {ComponentProps, useState} from 'react';
+import type {ComponentProps} from 'react';
+import React, {useState} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {useUpdateEffect} from 'react-use';
 import styled, {css} from 'styled-components';
 
-import {useUpdateEffect} from 'react-use';
-
-import Dropdown from './dropdown';
-import {PrimaryButton} from './assets/buttons';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import type {PrimaryButton} from './assets/buttons';
+import Dropdown from './dropdown';
 
 export const DotMenuButton = styled.button<{isActive: boolean}>`
     display: inline-flex;
@@ -23,6 +24,7 @@ export const DotMenuButton = styled.button<{isActive: boolean}>`
     justify-content: center;
     fill: rgba(var(--center-channel-color-rgb), 0.56);
     cursor: pointer;
+    user-select: none;
 
     color: ${(props) => (props.isActive ? 'var(--button-bg)' : 'rgba(var(--center-channel-color-rgb), 0.56)')};
     background-color: ${(props) => (props.isActive ? 'rgba(var(--button-bg-rgb), 0.08)' : 'transparent')};
@@ -95,8 +97,7 @@ const DotMenu = ({
     }, [isOpen]);
 
     const button = (
-
-        <MenuButton 
+        <MenuButton
             title={title}
             isActive={(isActive ?? false) || isOpen}
             onClick={(e: React.MouseEvent<HTMLButtonElement>) => {

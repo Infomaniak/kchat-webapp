@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import type {ValueType} from 'react-select';
+import type {SingleValue} from 'react-select';
 import ReactSelect from 'react-select';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
@@ -18,7 +18,6 @@ import Constants, {Preferences} from 'utils/constants';
 import {t} from 'utils/i18n';
 import {isLinux, isMac} from 'utils/user_agent';
 
-import * as Utils from '../../../utils/utils';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from '../../keyboard_shortcuts/keyboard_shortcuts_sequence';
 import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
 
@@ -146,7 +145,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                 user_id: userId,
                 category: Constants.Preferences.CATEGORY_ADVANCED_SETTINGS,
                 name: setting,
-                value: this.state.settings[setting],
+                value: String(this.state.settings[setting] ?? ''),
             });
         });
 
@@ -191,16 +190,15 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
 
     render() {
         const serverError = this.state.serverError || null;
-        let ctrlSendSection;
         const {ctrlSendTitle, ctrlSendDesc} = this.getCtrlSendText();
 
         const ctrlSendLabels = [
-            {value: 0, label: localizeMessage('user.settings.advance.onForAllMessages', 'On for all messages')},
-            {value: 1, label: localizeMessage('user.settings.advance.onForCode', 'On only for code blocks starting with ```')},
-            {value: 2, label: localizeMessage('user.settings.advance.off', 'Off')},
+            {value: 0, label: localizeMessage({id: 'user.settings.advance.onForAllMessages', defaultMessage: 'On for all messages'})},
+            {value: 1, label: localizeMessage({id: 'user.settings.advance.onForCode', defaultMessage: 'On only for code blocks starting with ```'})},
+            {value: 2, label: localizeMessage({id: 'user.settings.advance.off', defaultMessage: 'Off'})},
         ];
 
-        const handleSelectChange = (selected: ValueType<any>) => {
+        const handleSelectChange = (selected: SingleValue<any>) => {
             const settings = this.state.settings;
 
             switch (selected.value) {
@@ -238,14 +236,15 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                 id='limitVisibleGMsDMs'
                 options={ctrlSendLabels}
                 clearable={false}
-                onChange={(e) => handleSelectChange(e)}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onChange={(e: any) => handleSelectChange(e)}
                 value={ctrlSendLabels[this.state.settings.enterSelect]}
                 isSearchable={false}
                 menuPortalTarget={document.body}
                 styles={reactStyles}
             />,
         ];
-        ctrlSendSection = (
+        const ctrlSendSection = (
             <RhsSettingsItem
                 title={
                     <FormattedMessage {...ctrlSendTitle}/>
@@ -266,7 +265,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                     {ctrlSendSection}
                     <div className='rhs-settings-section rhs-custom-bb'>
                         <div>
-                            <h5 className='section-title mb-8'><strong>{localizeMessage('shortcuts.nav.header', 'Navigation')}</strong></h5>
+                            <h5 className='section-title mb-8'><strong>{localizeMessage({id: 'shortcuts.nav.header', defaultMessage: 'Navigation'})}</strong></h5>
                             <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navPrev}/>
                             <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navNext}/>
                             <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navUnreadPrev}/>
@@ -286,8 +285,8 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                     </div>
                     <div className='rhs-settings-section rhs-custom-bb'>
                         <div>
-                            <h5 className='section-title mb-8'><strong>{localizeMessage('shortcuts.msgs.header', 'Messages')}</strong></h5>
-                            <h5 className='section-title mb-4'><strong>{localizeMessage('shortcuts.msgs.input.header', 'Works inside an empty input field')}</strong></h5>
+                            <h5 className='section-title mb-8'><strong>{localizeMessage({id: 'shortcuts.msgs.header', defaultMessage: 'Messages'})}</strong></h5>
+                            <h5 className='section-title mb-4'><strong>{localizeMessage({id: 'shortcuts.msgs.input.header', defaultMessage: 'Works inside an empty input field'})}</strong></h5>
                             <div className='subsection mt-4'>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgEdit}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReply}/>
@@ -296,19 +295,19 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReprintPrev}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReprintNext}/>
                             </div>
-                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage('shortcuts.msgs.comp.header', 'Autocomplete')}</strong></h5>
+                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage({id: 'shortcuts.msgs.comp.header', defaultMessage: 'Autocomplete'})}</strong></h5>
                             <div className='subsection mt-4'>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgCompUsername}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgCompChannel}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgCompEmoji}/>
                             </div>
-                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage('shortcuts.msgs.markdown.header', 'Formatting')}</strong></h5>
+                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage({id: 'shortcuts.msgs.markdown.header', defaultMessage: 'Formatting'})}</strong></h5>
                             <div className='subsection mt-4'>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgMarkdownBold}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgMarkdownItalic}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgMarkdownLink}/>
                             </div>
-                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage('shortcuts.msgs.search.header', 'Searching')}</strong></h5>
+                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage({id: 'shortcuts.msgs.search.header', defaultMessage: 'Searching'})}</strong></h5>
                             <div className='subsection mt-4'>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgSearchChannel}/>
                             </div>
@@ -316,16 +315,16 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                     </div>
                     <div className='rhs-settings-section mb-8'>
                         <div>
-                            <h5 className='section-title mb-4'><strong>{localizeMessage('shortcuts.files.header', 'Files')}</strong></h5>
+                            <h5 className='section-title mb-4'><strong>{localizeMessage({id: 'shortcuts.files.header', defaultMessage: 'Files'})}</strong></h5>
                             <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.filesUpload}/>
                         </div>
                         <div className='section--lower'>
-                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage('shortcuts.browser.header', 'Built-in Browser Commands')}</strong></h5>
+                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage({id: 'shortcuts.browser.header', defaultMessage: 'Built-in Browser Commands'})}</strong></h5>
                             <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserChannelPrev}/>
                             <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserChannelNext}/>
                             <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserFontIncrease}/>
                             <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserFontDecrease}/>
-                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage('shortcuts.browser.input.header', 'Works inside an input field')}</strong></h5>
+                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage({id: 'shortcuts.browser.input.header', defaultMessage: 'Works inside an input field'})}</strong></h5>
                             <div className='subsection'>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserHighlightPrev}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserHighlightNext}/>

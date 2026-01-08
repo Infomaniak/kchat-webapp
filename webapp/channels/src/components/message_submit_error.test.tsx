@@ -3,8 +3,13 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import * as reactRedux from 'react-redux';
 
 import MessageSubmitError from 'components/message_submit_error';
+
+jest.spyOn(reactRedux, 'useSelector').mockImplementation(() => {
+    return 'MockPlanName';
+});
 
 describe('components/MessageSubmitError', () => {
     const baseProps = {

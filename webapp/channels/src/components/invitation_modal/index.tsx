@@ -13,9 +13,11 @@ import {regenerateTeamInviteId} from 'mattermost-redux/actions/teams';
 import {getProfiles, searchProfiles as reduxSearchProfiles} from 'mattermost-redux/actions/users';
 import {Permissions} from 'mattermost-redux/constants';
 import {getCurrentChannel, getChannelsInCurrentTeam, getChannelsNameMapInCurrentTeam} from 'mattermost-redux/selectors/entities/channels';
+import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {haveIChannelPermission, haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeam, getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
@@ -28,6 +30,7 @@ import {
 import {makeAsyncComponent} from 'components/async_load';
 
 import {Constants} from 'utils/constants';
+import {getRoleForTrackFlow} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -73,18 +76,26 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
             return false;
         }
         if (channel.type === Constants.PRIVATE_CHANNEL) {
-            return haveIChannelPermission(state, currentTeam.id, channel.id, Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS);
+            return haveIChannelPermission(state, currentTeam?.id, channel.id, Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS);
         }
-        return haveIChannelPermission(state, currentTeam.id, channel.id, Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS);
+        return haveIChannelPermission(state, currentTeam?.id, channel.id, Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS);
     });
     const guestAccountsEnabled = config.EnableGuestAccounts === 'true';
     const emailInvitationsEnabled = config.EnableEmailInvitations === 'true';
     const isEnterpriseReady = config.BuildEnterpriseReady === 'true';
-    const isGroupConstrained = Boolean(currentTeam.group_constrained);
+    const isGroupConstrained = Boolean(currentTeam?.group_constrained);
     const canInviteGuests = !isGroupConstrained && isEnterpriseReady && guestAccountsEnabled && haveICurrentTeamPermission(state, Permissions.INVITE_GUEST);
     const isCloud = license.Cloud === 'true';
 
     const canAddUsers = haveICurrentTeamPermission(state, Permissions.ADD_USER_TO_TEAM);
+
+    const usage = getUsage(state);
+    const limits = getCloudLimits(state);
+    const totalGuest = usage.guests + usage.pending_guests;
+
+    // IK: special case we need to have the number or remaining guest
+    // so we can't use the helper function plan_utils.isQuotaExceeded
+    const remainingGuestSlot = limits.guests === -1 ? Number.MAX_VALUE : limits.guests - totalGuest;
 
     return {
         invitableChannels,
@@ -96,6 +107,8 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
         isAdmin: isAdmin(getCurrentUser(state).roles),
         currentChannel,
         townSquareDisplayName,
+        roleForTrackFlow: getRoleForTrackFlow(state),
+        remainingGuestSlot,
     };
 }
 

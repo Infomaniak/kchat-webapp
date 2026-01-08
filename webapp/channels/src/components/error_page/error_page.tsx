@@ -13,7 +13,6 @@ import {ErrorPageTypes} from 'utils/constants';
 import kSuite from 'images/ik/kSuite.svg';
 import MattermostLogoSvg from 'images/logo.svg';
 import loaderkChat from 'images/logo_compact.png';
-import NoTeamIcon from 'images/no_team_icon.png';
 
 import SvgIlluErrorBlocked from './assets/SvgIlluErrorBlocked';
 import SvgIlluErrorMaintenance from './assets/SvgIlluErrorMaintenance';
@@ -82,12 +81,6 @@ export default class ErrorPage extends React.PureComponent<Props> {
             window.open('https://apps.apple.com/app/infomaniak-kchat/id6443845553', '_blank');
         };
 
-        const goToKsuite = () => {
-            if (window) {
-                window.open('https://infomaniak.com/ksuite', '_blank');
-            }
-        };
-
         let trustParams = false;
         if (signature) {
             params.delete('s');
@@ -111,24 +104,40 @@ export default class ErrorPage extends React.PureComponent<Props> {
         let illustration: JSX.Element | null = <SvgIlluErrorQuestion/>;
         const illustrationMigration: JSX.Element | null = <SvgIlluMigration/>;
         let fullscreenIllustration;
-        if (type === ErrorPageTypes.PERMALINK_NOT_FOUND && returnTo) {
-            backButton = (
-                <Link
-                    className='btn btn-primary'
-                    to={returnTo}
-                >
-                    <FormattedMessage
-                        id='error.generic.link'
-                        defaultMessage='Back to kChat'
-                    />
-                </Link>
-            );
+        if (type === ErrorPageTypes.PERMALINK_NOT_FOUND) {
+            if (returnTo) {
+                backButton = (
+                    <Link
+                        className='btn btn-primary'
+                        to={returnTo}
+                    >
+                        <FormattedMessage
+                            id='error.generic.back'
+                            defaultMessage='Back'
+                        />
+                    </Link>
+                );
+            } else {
+                backButton = (
+                    <button
+                        className='btn btn-primary'
+                        onClick={() => {
+                            window.location.href = '/';
+                        }}
+                    >
+                        <FormattedMessage
+                            id='error.generic.back'
+                            defaultMessage='Back'
+                        />
+                    </button>
+                );
+            }
         } else if (type === ErrorPageTypes.CLOUD_ARCHIVED && returnTo) {
             backButton = (
                 <Link to={returnTo}>
                     <FormattedMessage
-                        id='error.generic.link'
-                        defaultMessage='Back to kChat'
+                        id='error.generic.back'
+                        defaultMessage='Back'
                     />
                 </Link>
             );
@@ -136,7 +145,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
             backButton = (
                 <a
                     className='btn btn-primary'
-                    onClick={() => goToKsuite()}
+                    onClick={GlobalActions.redirectToKSuite}
                 >
                     <FormattedMessage
                         id='error.generic.link_ksuite'
@@ -265,6 +274,20 @@ export default class ErrorPage extends React.PureComponent<Props> {
                     </a>
                 );
             }
+        } else if (type === ErrorPageTypes.AUTOLOG_BLOCKED) {
+            illustration = <SvgIlluErrorBlocked/>;
+            backButton = (
+                <a
+                    className='btn btn-primary'
+                    onClick={() => reloadPage()}
+                >
+                    <FormattedMessage
+                        id='error.generic.reload'
+                        defaultMessage='Reload page'
+
+                    />
+                </a>
+            );
         } else if (type === ErrorPageTypes.OAUTH_ACCESS_DENIED || type === ErrorPageTypes.OAUTH_MISSING_CODE) {
             backButton = (
                 <Link

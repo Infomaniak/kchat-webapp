@@ -3,8 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import type {ValueType} from 'react-select';
-import ReactSelect from 'react-select';
+import type {OnChangeValue} from 'react-select';
 import type {Timezone} from 'timezones.json';
 
 import type {UserProfile} from '@mattermost/types/users';
@@ -20,6 +19,7 @@ import {getBrowserTimezone} from 'utils/timezone';
 
 type Actions = {
     updateMe: (user: UserProfile) => Promise<ActionResult>;
+    patchUser: (user: UserProfile) => Promise<ActionResult>;
 }
 
 type OnChangeActions = {
@@ -42,6 +42,7 @@ type Props = {
     timezones: Timezone[];
     timezoneLabel: string;
     actions: Actions;
+    adminMode?: boolean;
     compact?: boolean;
     onChange?: (values: OnChangeActions) => void;
 }
@@ -76,7 +77,7 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
         };
     }
 
-    onChange = (selectedOption: ValueType<SelectedOption>) => {
+    onChange = (selectedOption: OnChangeValue<SelectedOption, boolean>) => {
         if (selectedOption && 'value' in selectedOption) {
             this.setState({
                 manualTimezone: selectedOption.value,
@@ -123,7 +124,7 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
     };
 
     submitUser = () => {
-        const {user, actions} = this.props;
+        const {user} = this.props;
         const {useAutomaticTimezone, automaticTimezone, manualTimezone} = this.state;
 
         const timezone = {
@@ -137,7 +138,8 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
             timezone,
         };
 
-        actions.updateMe(updatedUser).
+        const action = this.props.adminMode ? this.props.actions.patchUser : this.props.actions.updateMe;
+        action(updatedUser).
             then((res) => {
                 if ('data' in res) {
                     this.props.updateSection('');
@@ -186,53 +188,13 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
         });
     };
 
-    handleManualTimezone = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        this.setState({manualTimezone: e.target.value});
-    };
     render() {
-        const {timezones, compact} = this.props;
+        const {compact} = this.props;
         const {useAutomaticTimezone} = this.state;
 
-        const timeOptions = this.props.timezones.map((timeObject) => {
-            return {
-                value: timeObject.utc[0],
-                label: timeObject.text,
-            };
-        });
-        let serverError;
-        if (this.state.serverError) {
-            serverError = <label className='has-error'>{this.state.serverError}</label>;
-        }
-
         const inputs = [];
-        const reactStyles = {
 
-            menuPortal: (provided: React.CSSProperties) => ({
-                ...provided,
-                zIndex: 9999,
-            }),
-
-        };
-
-        const noTimezonesFromServer = timezones.length === 0;
         const automaticTimezoneInput = (
-
-            // <div className='checkbox'>
-            //     <label>
-            //         <input
-            //             id='automaticTimezoneInput'
-            //             type='checkbox'
-            //             checked={useAutomaticTimezone}
-            //             onChange={this.handleAutomaticTimezone}
-            //             disabled={noTimezonesFromServer}
-            //         />
-            //         <FormattedMessage
-            //             id='user.settings.timezones.automatic'
-            //             defaultMessage='Automatic'
-            //         />
-
-            //     </label>
-            // </div>
             <Toggle
                 id={'automaticTimezoneInput childOption'}
                 onToggle={this.handleAutomaticTimezone}
@@ -261,15 +223,6 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
 
         inputs.push(manualTimezoneInput);
 
-        // inputs.push(
-        //     <div>
-        //         <br/>
-        //         <FormattedMessage
-        //             id='user.settings.timezones.promote'
-        //             defaultMessage='Select the time zone used for timestamps in the user interface and email notifications.'
-        //         />
-        //     </div>,
-        // );
         if (compact) {
             return inputs;
         }
@@ -282,11 +235,11 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
                     />
                 }
                 containerStyle='timezone-container'
-                width='medium'
                 submit={this.changeTimezone}
                 saving={this.state.isSaving}
                 inputs={inputs}
                 updateSection={this.props.updateSection}
+                disableEnterSubmit={true}
             />
         );
     }

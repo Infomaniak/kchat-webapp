@@ -8,15 +8,18 @@ import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import type {UserThread} from '@mattermost/types/threads';
 
-import {fakeDate} from 'tests/helpers/date';
 import {TestHelper} from 'utils/test_helper';
+
+import {fakeDate} from 'tests/helpers/date';
 
 import type {FakePost} from 'types/store/rhs';
 
-import type {Props} from './thread_viewer';
 import ThreadViewer from './thread_viewer';
+import type {Props} from './thread_viewer';
 
-jest.mock('components/advanced_text_editor/voice_message_attachment', () => () => <div/>);
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(),
+}));
 
 describe('components/threading/ThreadViewer', () => {
     const post: Post = TestHelper.getPostMock({
@@ -34,6 +37,7 @@ describe('components/threading/ThreadViewer', () => {
         user_id: post.user_id,
         channel_id: post.channel_id,
         message: post.message,
+        reply_count: 3,
     };
 
     const channel: Channel = TestHelper.getChannelMock({

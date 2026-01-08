@@ -16,7 +16,7 @@ import type {Props as TimestampProps} from 'components/timestamp/timestamp';
 
 import {Locations} from 'utils/constants';
 
-import type {PluginComponent} from 'types/store/plugins';
+import type {NewMessagesSeparatorActionComponent} from 'types/store/plugins';
 
 import Reply from './reply';
 
@@ -24,14 +24,14 @@ type Props = {
     a11yIndex: number;
     currentUserId: string;
     isRootPost: boolean;
+    isDeletedPost: boolean;
     isLastPost: boolean;
     listId: string;
     onCardClick: (post: Post) => void;
     previousPostId: string;
     timestampProps?: Partial<TimestampProps>;
-    lastViewedAt: number;
     threadId: string;
-    newMessagesSeparatorActions: PluginComponent[];
+    newMessagesSeparatorActions: NewMessagesSeparatorActionComponent[];
 };
 
 function noop() {}
@@ -39,12 +39,12 @@ function ThreadViewerRow({
     a11yIndex,
     currentUserId,
     isRootPost,
+    isDeletedPost,
     isLastPost,
     listId,
     onCardClick,
     previousPostId,
     timestampProps,
-    lastViewedAt,
     threadId,
     newMessagesSeparatorActions,
 }: Props) {
@@ -63,7 +63,6 @@ function ThreadViewerRow({
         return (
             <NewMessageSeparator
                 separatorId={listId}
-                lastViewedAt={lastViewedAt}
                 threadId={threadId}
                 newMessagesSeparatorActions={newMessagesSeparatorActions}
             />
@@ -79,7 +78,7 @@ function ThreadViewerRow({
                     timestampProps={timestampProps}
                     location={Locations.RHS_ROOT}
                 />
-                <RootPostDivider postId={listId}/>
+                {!isDeletedPost && <RootPostDivider postId={listId}/>}
             </>
         );
     case PostListUtils.isCombinedUserActivityPost(listId): {

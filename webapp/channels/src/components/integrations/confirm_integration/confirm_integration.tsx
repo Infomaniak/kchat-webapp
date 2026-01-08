@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {defineMessages, FormattedMessage} from 'react-intl';
 import {Link, useHistory} from 'react-router-dom';
 
 import type {Bot} from '@mattermost/types/bots';
@@ -13,9 +13,8 @@ import type {IDMappedObjects} from '@mattermost/types/utilities';
 import BackstageHeader from 'components/backstage/components/backstage_header';
 import CopyText from 'components/copy_text';
 import ExternalLink from 'components/external_link';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
-import {Constants, ErrorPageTypes} from 'utils/constants';
+import {Constants, DeveloperLinks, ErrorPageTypes} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
 
 type Props = {
@@ -65,7 +64,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
 
         headerText = (
             <FormattedMessage
-                id={'installed_commands.header'}
+                id='slash_commands.header'
                 defaultMessage='Slash Commands'
             />
         );
@@ -77,7 +76,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
                     values={{
                         link: (msg: string) => (
                             <ExternalLink
-                                href='https://developers.mattermost.com/integrate/admin-guide/admin-slash-commands/'
+                                href={DeveloperLinks.SETUP_CUSTOM_SLASH_COMMANDS}
                                 location='confirm_integration'
                             >
                                 {msg}
@@ -89,12 +88,18 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
         );
         tokenText = (
             <p className='word-break--all'>
-                <FormattedMarkdownMessage
+                <FormattedMessage
                     id='add_command.token'
-                    defaultMessage='**Token**: {token}'
-                    values={{token: commandToken}}
+                    defaultMessage='<b>Token</b>: {token}'
+                    values={{
+                        token: commandToken,
+                        b: (chunks: string) => <b>{chunks}</b>,
+                    }}
                 />
-                <CopyText value={commandToken}/>
+                <CopyText
+                    label={messages.copyToken}
+                    value={commandToken}
+                />
             </p>
         );
     } else if (type === Constants.Integrations.INCOMING_WEBHOOK && incomingHook) {
@@ -113,13 +118,12 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
                     defaultMessage='Your incoming webhook is set up. Please send data to the following URL (details at <link>Incoming Webhooks</link>).'
                     values={{
                         link: (msg: string) => (
-                            <a
-                                href='https://developers.mattermost.com/integrate/webhooks/incoming/'
-                                target='_blank'
-                                rel='noreferrer'
+                            <ExternalLink
+                                href={DeveloperLinks.SETUP_INCOMING_WEBHOOKS}
+                                location='confirm_integration'
                             >
                                 {msg}
-                            </a>
+                            </ExternalLink>
                         ),
                     }}
                 />
@@ -127,12 +131,18 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
         );
         tokenText = (
             <p className='word-break--all'>
-                <FormattedMarkdownMessage
+                <FormattedMessage
                     id='add_incoming_webhook.url'
-                    defaultMessage='**URL**: {url}'
-                    values={{url: '`' + incomingHookToken + '`'}}
+                    defaultMessage='<b>URL</b>: {url}'
+                    values={{
+                        url: '`' + incomingHookToken + '`',
+                        b: (chunks: string) => <b>{chunks}</b>,
+                    }}
                 />
-                <CopyText value={incomingHookToken}/>
+                <CopyText
+                    label={messages.copyToken}
+                    value={incomingHookToken}
+                />
             </p>
         );
     } else if (type === Constants.Integrations.OUTGOING_WEBHOOK && outgoingHook) {
@@ -152,7 +162,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
                     values={{
                         link: (msg: string) => (
                             <ExternalLink
-                                href='https://developers.mattermost.com/integrate/admin-guide/admin-webhooks-outgoing/'
+                                href={DeveloperLinks.SETUP_OUTGOING_WEBHOOKS}
                                 location='confirm_integration'
                             >
                                 {msg}
@@ -164,12 +174,18 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
         );
         tokenText = (
             <p className='word-break--all'>
-                <FormattedMarkdownMessage
+                <FormattedMessage
                     id='add_outgoing_webhook.token'
-                    defaultMessage='**Token**: {token}'
-                    values={{token: outgoingHookToken}}
+                    defaultMessage='<b>Token</b>: {token}'
+                    values={{
+                        token: outgoingHookToken,
+                        b: (chunks: string) => <b>{chunks}</b>,
+                    }}
                 />
-                <CopyText value={outgoingHookToken}/>
+                <CopyText
+                    label={messages.copyToken}
+                    value={outgoingHookToken}
+                />
             </p>
         );
     } else if (type === Constants.Integrations.OAUTH_APP && oauthApp) {
@@ -178,7 +194,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
 
         headerText = (
             <FormattedMessage
-                id={'installed_oauth_apps.header'}
+                id={'installed_oauth2_apps.header'}
                 defaultMessage='OAuth 2.0 Applications'
             />
         );
@@ -192,7 +208,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
                     values={{
                         link: (msg: string) => (
                             <ExternalLink
-                                href='https://developers.mattermost.com/integrate/admin-guide/admin-oauth2/'
+                                href={DeveloperLinks.SETUP_OAUTH2}
                                 location='confirm_integration'
                             >
                                 {msg}
@@ -204,25 +220,29 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
         );
         helpText.push(
             <p key='add_oauth_app.clientId'>
-                <FormattedMarkdownMessage
+                <FormattedMessage
                     id='add_oauth_app.clientId'
-                    defaultMessage='**Client ID**: {id}'
-                    values={{id: oauthAppToken}}
+                    defaultMessage='<b>Client ID</b>: {id}'
+                    values={{
+                        id: oauthAppToken,
+                        b: (chunks: string) => <b>{chunks}</b>,
+                    }}
                 />
                 <CopyText
-                    idMessage='integrations.copy_client_id'
-                    defaultMessage='Copy Client Id'
+                    label={messages.copyClientId}
                     value={oauthAppToken}
                 />
                 <br/>
-                <FormattedMarkdownMessage
+                <FormattedMessage
                     id='add_oauth_app.clientSecret'
-                    defaultMessage='**Client Secret**: {secret}'
-                    values={{secret: oauthAppSecret}}
+                    defaultMessage='<b>Client Secret</b>: {secret}'
+                    values={{
+                        secret: oauthAppSecret,
+                        b: (chunks: string) => <b>{chunks}</b>,
+                    }}
                 />
                 <CopyText
-                    idMessage='integrations.copy_client_secret'
-                    defaultMessage='Copy Client Secret'
+                    label={messages.copyClientSecret}
                     value={oauthAppSecret}
                 />
             </p>,
@@ -239,10 +259,13 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
 
         tokenText = (
             <p className='word-break--all'>
-                <FormattedMarkdownMessage
+                <FormattedMessage
                     id='add_oauth_app.url'
-                    defaultMessage='**URL(s)**: {url}'
-                    values={{url: oauthApp.callback_urls.join(', ')}}
+                    defaultMessage='<b>URL(s)</b>: {url}'
+                    values={{
+                        url: oauthApp.callback_urls.join(', '),
+                        b: (chunks: string) => <b>{chunks}</b>,
+                    }}
                 />
             </p>
         );
@@ -280,16 +303,22 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
         );
         helpText.push(
             <p key='add_outgoing_oauth_connection.clientId'>
-                <FormattedMarkdownMessage
+                <FormattedMessage
                     id='add_outgoing_oauth_connection.clientId'
-                    defaultMessage='**Client ID**: {id}'
-                    values={{id: clientId}}
+                    defaultMessage='<b>Client ID</b>: {id}'
+                    values={{
+                        id: clientId,
+                        b: (chunks: string) => <b>{chunks}</b>,
+                    }}
                 />
                 <br/>
-                <FormattedMarkdownMessage
+                <FormattedMessage
                     id='add_outgoing_oauth_connection.clientSecret'
-                    defaultMessage='**Client Secret**: \*\*\*\*\*\*\*\*'
-                    values={{secret: clientSecret}}
+                    defaultMessage='<b>Client Secret</b>: \*\*\*\*\*\*\*\*'
+                    values={{
+                        secret: clientSecret,
+                        b: (chunks: string) => <b>{chunks}</b>,
+                    }}
                 />
             </p>,
         );
@@ -297,21 +326,26 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
         if (outgoingOAuthConnection.grant_type === 'password') {
             helpText.push(
                 <p key='add_outgoing_oauth_connection.username'>
-                    <FormattedMarkdownMessage
+                    <FormattedMessage
                         id='add_outgoing_oauth_connection.username'
-                        defaultMessage='**Username**: {username}'
-                        values={{username}}
+                        defaultMessage='<b>Username</b>: {username}'
+                        values={{
+                            username,
+                            b: (chunks: string) => <b>{chunks}</b>,
+                        }}
                     />
                     <CopyText
-                        idMessage='integrations.copy_username'
-                        defaultMessage='Copy Username'
+                        label={messages.copyUsername}
                         value={username || ''}
                     />
                     <br/>
-                    <FormattedMarkdownMessage
+                    <FormattedMessage
                         id='add_outgoing_oauth_connection.password'
-                        defaultMessage='**Password**: {password}'
-                        values={{password}}
+                        defaultMessage='<b>Password</b>: {password}'
+                        values={{
+                            password,
+                            b: (chunks: string) => <b>{chunks}</b>,
+                        }}
                     />
                 </p>,
             );
@@ -320,17 +354,23 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
         tokenText = (
             <>
                 <p className='word-break--all'>
-                    <FormattedMarkdownMessage
+                    <FormattedMessage
                         id='add_outgoing_oauth_connection.token_url'
-                        defaultMessage='**Token URL**: `{url}`'
-                        values={{url: outgoingOAuthConnection.oauth_token_url}}
+                        defaultMessage='<b>Token URL</b>: `{url}`'
+                        values={{
+                            url: outgoingOAuthConnection.oauth_token_url,
+                            b: (chunks: string) => <b>{chunks}</b>,
+                        }}
                     />
                 </p>
                 <p className='word-break--all'>
-                    <FormattedMarkdownMessage
+                    <FormattedMessage
                         id='add_outgoing_oauth_connection.audience_urls'
-                        defaultMessage='**Audience URL(s)**: `{url}`'
-                        values={{url: outgoingOAuthConnection.audiences.join(', ')}}
+                        defaultMessage='<b>Audience URL(s)</b>: `{url}`'
+                        values={{
+                            url: outgoingOAuthConnection.audiences.join(', '),
+                            b: (chunks: string) => <b>{chunks}</b>,
+                        }}
                     />
                 </p>
             </>
@@ -351,7 +391,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
                     defaultMessage='Your bot account **{botname}** has been created successfully. Please use the following access token to connect to the bot (see [documentation](https://mattermost.com/pl/default-bot-accounts) for further details).'
                     values={{
                         botname: bot.display_name || bot.username,
-                        strong: (msg: string) => <strong>{msg}</strong>,
+                        b: (msg: string) => <b>{msg}</b>,
                         link: (msg: string) => (
                             <ExternalLink
                                 href='https://mattermost.com/pl/default-bot-accounts'
@@ -366,12 +406,18 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
         );
         tokenText = (
             <p className='word-break--all'>
-                <FormattedMarkdownMessage
+                <FormattedMessage
                     id='add_outgoing_webhook.token'
-                    defaultMessage='**Token**: {token}'
-                    values={{token: botToken}}
+                    defaultMessage='<b>Token</b>: {token}'
+                    values={{
+                        token: botToken,
+                        b: (chunks: string) => <b>{chunks}</b>,
+                    }}
                 />
-                <CopyText value={botToken}/>
+                <CopyText
+                    label={messages.copyToken}
+                    value={botToken}
+                />
                 <br/>
                 <br/>
                 <FormattedMessage
@@ -435,5 +481,24 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
         </div>
     );
 };
+
+const messages = defineMessages({
+    copyClientId: {
+        id: 'integrations.copy_client_id',
+        defaultMessage: 'Copy Client Id',
+    },
+    copyClientSecret: {
+        id: 'integrations.copy_client_secret',
+        defaultMessage: 'Copy Client Secret',
+    },
+    copyToken: {
+        id: 'integrations.copy_token',
+        defaultMessage: 'Copy Token',
+    },
+    copyUsername: {
+        id: 'integrations.copy_username',
+        defaultMessage: 'Copy Username',
+    },
+});
 
 export default ConfirmIntegration;

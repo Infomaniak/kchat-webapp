@@ -3,6 +3,8 @@
 
 import debounce from 'lodash/debounce';
 import type {PDFDocumentProxy, PDFPageProxy} from 'pdfjs-dist';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
+import 'pdfjs-dist/build/pdf.worker.min.mjs';
 import type {RenderParameters} from 'pdfjs-dist/types/src/display/api';
 import React from 'react';
 
@@ -13,7 +15,7 @@ import {getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 import FileInfoPreview from 'components/file_info_preview';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
-import {getPdfJSWorkerURL} from 'utils/url_import';
+import {getSiteURL} from 'utils/url';
 
 const INITIAL_RENDERED_PAGES = 3;
 
@@ -166,11 +168,11 @@ export default class PDFPreview extends React.PureComponent<Props, State> {
 
     getPdfDocument = async () => {
         try {
-            const PDFJS = await import('pdfjs-dist');
-            const url = getPdfJSWorkerURL();
-            PDFJS.GlobalWorkerOptions.workerSrc = url.href;
-
-            const pdf = await PDFJS.getDocument(this.props.fileUrl).promise;
+            const pdf = await pdfjsLib.getDocument({
+                url: this.props.fileUrl,
+                cMapUrl: getSiteURL() + '/static/cmaps/',
+                cMapPacked: true,
+            }).promise;
             this.onDocumentLoad(pdf);
         } catch (err) {
             this.onDocumentLoadError(err);

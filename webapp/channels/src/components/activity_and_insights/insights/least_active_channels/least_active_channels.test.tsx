@@ -95,14 +95,14 @@ describe('components/activity_and_insights/insights/top_boards', () => {
                     ztbmh49z7pgtbbuximwxrogxzr: {
                         id: 'ztbmh49z7pgtbbuximwxrogxzr',
                         team_id: 'team_id1',
-                        type: 'O',
+                        type: 'O' as const,
                         display_name: 'ut',
                         name: 'ratione-1',
                         last_activity_at: 1660175452131,
                     },
                     fbgmxnxxmfy1z8m855d9m88ipe: {
                         id: 'fbgmxnxxmfy1z8m855d9m88ipe',
-                        type: 'O',
+                        type: 'O' as const,
                         display_name: 'veritatis',
                         name: 'minima-3',
                         last_activity_at: 1660175525869,
@@ -110,7 +110,7 @@ describe('components/activity_and_insights/insights/top_boards', () => {
                     },
                     uziynciroprq3g6ohhnednoeuw: {
                         id: 'uziynciroprq3g6ohhnednoeuw',
-                        type: 'O',
+                        type: 'O' as const,
                         display_name: 'autem',
                         name: 'aut-8',
                         last_activity_at: 1660175775169,
@@ -118,7 +118,7 @@ describe('components/activity_and_insights/insights/top_boards', () => {
                     },
                     uziynciroprq4g6ohhnednoeuw: {
                         id: 'uziynciroprq4g6ohhnednoeuw',
-                        type: 'O',
+                        type: 'O' as const,
                         display_name: 'dolor',
                         name: 'aut-9',
                         last_activity_at: 0,

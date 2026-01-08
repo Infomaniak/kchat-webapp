@@ -1,7 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import debounce from 'lodash/debounce';
 import React from 'react';
+import {defineMessages} from 'react-intl';
 
 import type {Emoji} from '@mattermost/types/emojis';
 
@@ -11,7 +13,6 @@ import {getEmojiImageUrl, isSystemEmoji} from 'mattermost-redux/utils/emoji_util
 import {getEmojiMap, getRecentEmojisNames} from 'selectors/emojis';
 import store from 'stores/redux_store';
 
-import {Preferences} from 'utils/constants';
 import {compareEmojis, emojiMatchesSkin} from 'utils/emoji_utils';
 import * as Emoticons from 'utils/emoticons';
 
@@ -22,6 +23,7 @@ import type {SuggestionProps} from './suggestion';
 
 export const MIN_EMOTICON_LENGTH = 2;
 export const EMOJI_CATEGORY_SUGGESTION_BLOCKLIST = ['skintone'];
+export const AUTOCOMPLETE_DEBOUNCE_DELAY = 250;
 
 type EmojiItem = {
     name: string;
@@ -29,7 +31,9 @@ type EmojiItem = {
     type: string;
 }
 
-const EmoticonSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<EmojiItem>>((props, ref) => {
+const suggestionTypeEmoji = 'emoji';
+
+const EmoticonSuggestion = React.forwardRef<HTMLLIElement, SuggestionProps<EmojiItem>>((props, ref) => {
     const text = props.term;
     const emoji = props.item.emoji;
 
@@ -61,6 +65,16 @@ export default class EmoticonProvider extends Provider {
         this.triggerCharacter = ':';
     }
 
+    debouncedAutocompleteAndSuggestEmojis = debounce((partialName: string, text: string, resultsCallback: ResultsCallback<EmojiItem>) => {
+        store.dispatch(autocompleteCustomEmojis(partialName)).then(() => {
+            this.findAndSuggestEmojis(text, partialName, resultsCallback);
+        });
+    }, AUTOCOMPLETE_DEBOUNCE_DELAY);
+
+    debouncedFindAndSuggestEmojis = debounce((partialName: string, text: string, resultsCallback: ResultsCallback<EmojiItem>) => {
+        this.findAndSuggestEmojis(text, partialName, resultsCallback);
+    }, AUTOCOMPLETE_DEBOUNCE_DELAY);
+
     handlePretextChanged(pretext: string, resultsCallback: ResultsCallback<EmojiItem>) {
         // Look for the potential emoticons at the start of the text, after whitespace, and at the start of emoji reaction commands
         const captured = (/(^|\s|^\+|^-)(:([^:\s]*))$/g).exec(pretext.toLowerCase());
@@ -87,9 +101,9 @@ export default class EmoticonProvider extends Provider {
         }
 
         if (store.getState().entities.general.config.EnableCustomEmoji === 'true') {
-            store.dispatch(autocompleteCustomEmojis(partialName)).then(() => this.findAndSuggestEmojis(text, partialName, resultsCallback));
+            this.debouncedAutocompleteAndSuggestEmojis(partialName, text, resultsCallback);
         } else {
-            this.findAndSuggestEmojis(text, partialName, resultsCallback);
+            this.debouncedFindAndSuggestEmojis(partialName, text, resultsCallback);
         }
 
         return true;
@@ -131,7 +145,7 @@ export default class EmoticonProvider extends Provider {
 
                         // if the emoji has skin, only add those that match with the user selected skin.
                         if (emojiMatchesSkin(emoji, skintone)) {
-                            matchedArray.push({name: alias, emoji, type: Preferences.CATEGORY_EMOJI});
+                            matchedArray.push({name: alias, emoji, type: suggestionTypeEmoji});
                         }
                         break;
                     }
@@ -145,7 +159,7 @@ export default class EmoticonProvider extends Provider {
 
                 const matchedArray = recentEmojis.includes(name) ? recentMatched : matched;
 
-                matchedArray.push({name, emoji, type: Preferences.CATEGORY_EMOJI});
+                matchedArray.push({name, emoji, type: suggestionTypeEmoji});
             }
         }
 
@@ -176,3 +190,10 @@ export default class EmoticonProvider extends Provider {
         });
     }
 }
+
+defineMessages({
+    emojisDivider: {
+        id: 'suggestion.emoji',
+        defaultMessage: 'Emoji',
+    },
+});

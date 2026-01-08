@@ -3,17 +3,27 @@
 
 /* eslint-disable max-lines */
 
+import {AccountMultipleOutlineIcon, ChartBarIcon, CogOutlineIcon, CreditCardOutlineIcon, FlaskOutlineIcon, FormatListBulletedIcon, InformationOutlineIcon, PowerPlugOutlineIcon, ServerVariantIcon, ShieldOutlineIcon, SitemapIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {FormattedMessage, defineMessage, defineMessages} from 'react-intl';
+import {Link} from 'react-router-dom';
 
-import {AccountMultipleOutlineIcon, ChartBarIcon, CogOutlineIcon, CreditCardOutlineIcon, FlaskOutlineIcon, FormatListBulletedIcon, InformationOutlineIcon, PowerPlugOutlineIcon, ServerVariantIcon, ShieldOutlineIcon, SitemapIcon} from '@mattermost/compass-icons/components';
 import type {CloudState, Product} from '@mattermost/types/cloud';
 import type {AdminConfig, ClientLicense} from '@mattermost/types/config';
+import type {Job} from '@mattermost/types/jobs';
 
 import {RESOURCE_KEYS} from 'mattermost-redux/constants/permissions_sysconsole';
 
-import {invalidateAllCaches, reloadConfig, testS3Connection, testSmtp, testSiteURL} from 'actions/admin_actions';
+import {
+    ldapTest, invalidateAllCaches, reloadConfig, testS3Connection,
+    removeIdpSamlCertificate, uploadIdpSamlCertificate,
+    removePrivateSamlCertificate, uploadPrivateSamlCertificate,
+    removePublicSamlCertificate, uploadPublicSamlCertificate,
+    removePrivateLdapCertificate, uploadPrivateLdapCertificate,
+    removePublicLdapCertificate, uploadPublicLdapCertificate,
+    invalidateAllEmailInvites, testSmtp, testSiteURL, getSamlMetadataFromIdp, setSamlIdpCertificateFromMetadata,
+} from 'actions/admin_actions';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import CustomPluginSettings from 'components/admin_console/custom_plugin_settings';
@@ -24,8 +34,9 @@ import TeamAnalytics from 'components/analytics/team_analytics';
 import {searchableStrings as teamAnalyticsSearchableStrings} from 'components/analytics/team_analytics/team_analytics';
 import ExternalLink from 'components/external_link';
 
-import {Constants, CloudProducts, LicenseSkus, AboutLinks, DocLinks, DeveloperLinks} from 'utils/constants';
+import {Constants, CloudProducts, LicenseSkus, AboutLinks, DocLinks, DeveloperLinks, CacheTypes} from 'utils/constants';
 import {isCloudLicense} from 'utils/license_utils';
+import {ID_PATH_PATTERN} from 'utils/path';
 import {getSiteURL} from 'utils/url';
 
 import * as DefinitionConstants from './admin_definition_constants';
@@ -33,7 +44,9 @@ import Audits from './audits';
 import {searchableStrings as auditSearchableStrings} from './audits/audits';
 import BleveSettings, {searchableStrings as bleveSearchableStrings} from './bleve_settings';
 import BrandImageSetting from './brand_image_setting/brand_image_setting';
+import ClientSideUserIdsSetting from './client_side_userids_setting';
 import ClusterSettings, {searchableStrings as clusterSearchableStrings} from './cluster_settings';
+import CustomEnableDisableGuestAccountsSetting from './custom_enable_disable_guest_accounts_setting';
 import CustomTermsOfServiceSettings from './custom_terms_of_service_settings';
 import {messages as customTermsOfServiceMessages, searchableStrings as customTermsOfServiceSearchableStrings} from './custom_terms_of_service_settings/custom_terms_of_service_settings';
 import CustomURLSchemesSetting from './custom_url_schemes_setting';
@@ -48,15 +61,20 @@ import GroupDetails from './group_settings/group_details';
 import GroupSettings from './group_settings/group_settings';
 import IPFiltering from './ip_filtering';
 import MessageExportSettings, {searchableStrings as messageExportSearchableStrings} from './message_export_settings';
+import OpenIdConvert from './openid_convert';
+import PasswordSettings, {searchableStrings as passwordSearchableStrings} from './password_settings';
 import PermissionSchemesSettings from './permission_schemes_settings';
 import {searchableStrings as PermissionSchemeSearchableStrings} from './permission_schemes_settings/permission_schemes_settings';
 import PermissionSystemSchemeSettings from './permission_schemes_settings/permission_system_scheme_settings';
 import PermissionTeamSchemeSettings from './permission_schemes_settings/permission_team_scheme_settings';
 import {searchableStrings as pluginManagementSearchableStrings} from './plugin_management/plugin_management';
 import PushNotificationsSettings, {searchableStrings as pushSearchableStrings} from './push_settings';
+import SecureConnections, {searchableStrings as secureConnectionsSearchableStrings} from './secure_connections';
+import SecureConnectionDetail from './secure_connections/secure_connection_detail';
 import ServerLogs from './server_logs';
 import {searchableStrings as serverLogsSearchableStrings} from './server_logs/logs';
 import SessionLengthSettings, {searchableStrings as sessionLengthSearchableStrings} from './session_length_settings';
+import SystemProperties, {searchableStrings as systemPropertiesSearchableStrings} from './system_properties';
 import SystemRoles from './system_roles';
 import SystemRole from './system_roles/system_role';
 import SystemUserDetail from './system_user_detail';
@@ -70,16 +88,40 @@ import type {Check, AdminDefinition as AdminDefinitionType, ConsoleAccess} from 
 import ValidationResult from './validation';
 import WorkspaceOptimizationDashboard from './workspace-optimization/dashboard';
 
+// component not available - using stub
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const RestrictedIndicator = () => null;
+const BillingHistory = null;
+const billingHistorySearchableStrings: string[] = [];
+const BillingSubscriptions = null;
+const billingSubscriptionSearchableStrings: string[] = [];
+const CompanyInfo = null;
+const billingCompanyInfoSearchableStrings: string[] = [];
+const CompanyInfoEdit = null;
+const LDAPFeatureDiscovery = null;
+const SAMLFeatureDiscovery = null;
+const OpenIDFeatureDiscovery = null;
+const OpenIDCustomFeatureDiscovery = null;
+const AnnouncementBannerFeatureDiscovery = null;
+const ComplianceExportFeatureDiscovery = null;
+const CustomTermsOfServiceFeatureDiscovery = null;
+const DataRetentionFeatureDiscovery = null;
+const GuestAccessFeatureDiscovery = null;
+const SystemRolesFeatureDiscovery = null;
+const GroupsFeatureDiscovery = null;
+const LicenseSettings = null;
+const licenseSettingsSearchableStrings: string[] = [];
+
 const FILE_STORAGE_DRIVER_LOCAL = 'local';
 const FILE_STORAGE_DRIVER_S3 = 'amazons3';
 const MEBIBYTE = Math.pow(1024, 2);
 
-// const SAML_SETTINGS_SIGNATURE_ALGORITHM_SHA1 = 'RSAwithSHA1';
-// const SAML_SETTINGS_SIGNATURE_ALGORITHM_SHA256 = 'RSAwithSHA256';
-// const SAML_SETTINGS_SIGNATURE_ALGORITHM_SHA512 = 'RSAwithSHA512';
+const SAML_SETTINGS_SIGNATURE_ALGORITHM_SHA1 = 'RSAwithSHA1';
+const SAML_SETTINGS_SIGNATURE_ALGORITHM_SHA256 = 'RSAwithSHA256';
+const SAML_SETTINGS_SIGNATURE_ALGORITHM_SHA512 = 'RSAwithSHA512';
 
-// const SAML_SETTINGS_CANONICAL_ALGORITHM_C14N = 'Canonical1.0';
-// const SAML_SETTINGS_CANONICAL_ALGORITHM_C14N11 = 'Canonical1.1';
+const SAML_SETTINGS_CANONICAL_ALGORITHM_C14N = 'Canonical1.0';
+const SAML_SETTINGS_CANONICAL_ALGORITHM_C14N11 = 'Canonical1.1';
 
 // admin_definitions data structure define the autogenerated admin_console
 // section. It defines the structure of the menu based on sections, subsections
@@ -184,7 +226,7 @@ export const it = {
     configContains: (group: keyof Partial<AdminConfig>, setting: string, word: string) => (config: Partial<AdminConfig>) => Boolean((config[group] as any)?.[setting]?.includes(word)),
     enterpriseReady: (config: Partial<AdminConfig>, state: any, license?: ClientLicense, enterpriseReady?: boolean) => Boolean(enterpriseReady),
     licensed: (config: Partial<AdminConfig>, state: any, license?: ClientLicense) => license?.IsLicensed === 'true',
-    cloudLicensed: (config: Partial<AdminConfig>, state: any, license?: ClientLicense) => Boolean(license?.IsLicenced && isCloudLicense(license)),
+    cloudLicensed: (config: Partial<AdminConfig>, state: any, license?: ClientLicense) => Boolean(license?.IsLicensed && isCloudLicense(license)),
     licensedForFeature: (feature: string) => (config: Partial<AdminConfig>, state: any, license?: ClientLicense) => Boolean(license?.IsLicensed && license[feature] === 'true'),
     licensedForSku: (skuName: string) => (config: Partial<AdminConfig>, state: any, license?: ClientLicense) => Boolean(license?.IsLicensed && license.SkuShortName === skuName),
     licensedForCloudStarter: (config: Partial<AdminConfig>, state: any, license?: ClientLicense) => Boolean(license?.IsLicensed && isCloudLicense(license) && license.SkuShortName === LicenseSkus.Starter),
@@ -241,25 +283,41 @@ const usesLegacyOauth = (config: Partial<AdminConfig>, state: any, license?: Cli
 };
 
 const getRestrictedIndicator = (displayBlocked = false, minimumPlanRequiredForFeature = LicenseSkus.Professional) => ({
-    value: (cloud: CloudState) => null,
-
-    // (
-    //     <RestrictedIndicator
-    //         useModal={false}
-    //         blocked={displayBlocked || !(cloud?.subscription?.is_free_trial === 'true')}
-    //         minimumPlanRequiredForFeature={minimumPlanRequiredForFeature}
-    //         tooltipMessageBlocked={defineMessage({
-    //             id: 'admin.sidebar.restricted_indicator.tooltip.message.blocked',
-    //             defaultMessage: 'This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial',
-    //         })}
-    //     />
-    // ),
+    value: (cloud: CloudState) => (
+        <RestrictedIndicator
+            useModal={false}
+            blocked={displayBlocked || !(cloud?.subscription?.is_free_trial === 'true')}
+            minimumPlanRequiredForFeature={minimumPlanRequiredForFeature}
+            tooltipMessageBlocked={defineMessage({
+                id: 'admin.sidebar.restricted_indicator.tooltip.message.blocked',
+                defaultMessage: 'This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial',
+            })}
+        />
+    ),
     shouldDisplay: (license: ClientLicense, subscriptionProduct: Product|undefined) => displayBlocked || (isCloudLicense(license) && subscriptionProduct?.sku === CloudProducts.STARTER),
 });
 
 const adminDefinitionMessages = defineMessages({
     data_retention_title: {id: 'admin.data_retention.title', defaultMessage: 'Data Retention Policy'},
     ip_filtering_title: {id: 'admin.sidebar.ip_filtering', defaultMessage: 'IP Filtering'},
+    cache_settings_title: {id: 'admin.cacheSettings.title', defaultMessage: 'Cache Settings'},
+
+    cache_type_title: {id: 'admin.cacheSettings.cacheTypeTitle', defaultMessage: 'Cache Type'},
+    cache_type_desc: {id: 'admin.cacheSettings.cacheTypeDesc', defaultMessage: 'The type of the cache backend. E.g.: "redis" or "lru"'},
+
+    redis_address_title: {id: 'admin.cacheSettings.redisAddress', defaultMessage: 'Redis Address'},
+    redis_address_desc: {id: 'admin.cacheSettings.redisAddressDesc', defaultMessage: 'The hostname:port of the Redis server. E.g.: "localhost:6379"'},
+    redis_address_placeholder: {id: 'admin.cacheSettings.redisAddressPlaceholder', defaultMessage: 'localhost:6379'},
+
+    redis_password_title: {id: 'admin.cacheSettings.redisPassword', defaultMessage: 'Redis Password'},
+    redis_password_desc: {id: 'admin.cacheSettings.redisPasswordDesc', defaultMessage: 'The password of the Redis server.'},
+
+    redis_db_title: {id: 'admin.cacheSettings.redisDB', defaultMessage: 'Redis DB'},
+    redis_db_desc: {id: 'admin.cacheSettings.redisDBDesc', defaultMessage: 'The database of the Redis server. E.g.: "0"'},
+    redis_db_placeholder: {id: 'admin.cacheSettings.redisDBPlaceholder', defaultMessage: '0'},
+
+    redis_clientcache_title: {id: 'admin.cacheSettings.redisClientCache', defaultMessage: 'Disable Client Cache'},
+    redis_clientcache_desc: {id: 'admin.cacheSettings.redisClientCacheDesc', defaultMessage: 'When true, client-side caching is disabled.'},
 });
 const AdminDefinition: AdminDefinitionType = {
     about: {
@@ -274,7 +332,79 @@ const AdminDefinition: AdminDefinitionType = {
             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
             it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.ABOUT)),
         ),
-        subsections: {},
+        subsections: {
+            license: {
+                url: 'about/license',
+                title: defineMessage({id: 'admin.sidebar.license', defaultMessage: 'Edition and License'}),
+                searchableStrings: licenseSettingsSearchableStrings,
+                isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                schema: {
+                    id: 'LicenseSettings',
+                    component: LicenseSettings,
+                },
+            },
+        },
+    },
+    billing: {
+        icon: (
+            <CreditCardOutlineIcon
+                size={16}
+                color={'currentColor'}
+            />
+        ),
+        sectionTitle: defineMessage({id: 'admin.sidebar.billing', defaultMessage: 'Billing & Account'}),
+        isHidden: it.not(it.licensedForFeature('Cloud')),
+        subsections: {
+            subscription: {
+                url: 'billing/subscription',
+                title: defineMessage({id: 'admin.sidebar.subscription', defaultMessage: 'Subscription'}),
+                searchableStrings: billingSubscriptionSearchableStrings,
+                schema: {
+                    id: 'BillingSubscriptions',
+                    component: BillingSubscriptions,
+                },
+
+                // cloud only view
+                isHidden: it.not(it.licensedForFeature('Cloud')),
+                isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
+            },
+            billing_history: {
+                url: 'billing/billing_history',
+                title: defineMessage({id: 'admin.sidebar.billing_history', defaultMessage: 'Billing History'}),
+                searchableStrings: billingHistorySearchableStrings,
+                schema: {
+                    id: 'BillingHistory',
+                    component: BillingHistory,
+                },
+                isHidden: it.not(it.licensedForFeature('Cloud')),
+                isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
+            },
+            company_info: {
+                url: 'billing/company_info',
+                title: defineMessage({id: 'admin.sidebar.company_info', defaultMessage: 'Company Information'}),
+                searchableStrings: billingCompanyInfoSearchableStrings,
+                schema: {
+                    id: 'CompanyInfo',
+                    component: CompanyInfo,
+                },
+
+                // cloud only view
+                isHidden: it.not(it.licensedForFeature('Cloud')),
+                isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
+            },
+            company_info_edit: {
+                url: 'billing/company_info_edit',
+                schema: {
+                    id: 'CompanyInfoEdit',
+                    component: CompanyInfoEdit,
+                },
+
+                // cloud only view
+                isHidden: it.not(it.licensedForFeature('Cloud')),
+                isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
+            },
+        },
     },
     reporting: {
         icon: (
@@ -355,7 +485,7 @@ const AdminDefinition: AdminDefinitionType = {
                 },
             },
             system_user_detail: {
-                url: 'user_management/user/:user_id',
+                url: `user_management/user/:user_id(${ID_PATH_PATTERN})`,
                 isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.USERS)),
                 schema: {
                     id: 'SystemUserDetail',
@@ -363,7 +493,7 @@ const AdminDefinition: AdminDefinitionType = {
                 },
             },
             group_detail: {
-                url: 'user_management/groups/:group_id',
+                url: `user_management/groups/:group_id(${ID_PATH_PATTERN})`,
                 isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.GROUPS)),
                 isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.GROUPS)),
                 schema: {
@@ -385,8 +515,30 @@ const AdminDefinition: AdminDefinitionType = {
                 },
                 restrictedIndicator: getRestrictedIndicator(),
             },
+            groups_feature_discovery: {
+                url: 'user_management/groups',
+                isDiscovery: true,
+                title: defineMessage({id: 'admin.sidebar.groups', defaultMessage: 'Groups'}),
+                isHidden: it.any(
+                    it.licensedForFeature('LDAPGroups'),
+                    it.not(it.enterpriseReady),
+                ),
+                schema: {
+                    id: 'Groups',
+                    name: defineMessage({id: 'admin.group_settings.groupsPageTitle', defaultMessage: 'Groups'}),
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: GroupsFeatureDiscovery,
+                            key: 'GroupsFeatureDiscovery',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
+            },
             team_detail: {
-                url: 'user_management/teams/:team_id',
+                url: `user_management/teams/:team_id(${ID_PATH_PATTERN})`,
                 isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.TEAMS)),
                 isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.TEAMS)),
                 schema: {
@@ -406,7 +558,7 @@ const AdminDefinition: AdminDefinitionType = {
                 },
             },
             channel_detail: {
-                url: 'user_management/channels/:channel_id',
+                url: `user_management/channels/:channel_id(${ID_PATH_PATTERN})`,
                 isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.CHANNELS)),
                 isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.CHANNELS)),
                 schema: {
@@ -426,6 +578,7 @@ const AdminDefinition: AdminDefinitionType = {
             },
             systemScheme: {
                 url: 'user_management/permissions/system_scheme',
+                isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.PERMISSIONS)),
                 isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.PERMISSIONS)),
                 schema: {
                     id: 'PermissionSystemScheme',
@@ -433,7 +586,8 @@ const AdminDefinition: AdminDefinitionType = {
                 },
             },
             teamSchemeDetail: {
-                url: 'user_management/permissions/team_override_scheme/:scheme_id',
+                url: `user_management/permissions/team_override_scheme/:scheme_id(${ID_PATH_PATTERN})`,
+                isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.PERMISSIONS)),
                 isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.PERMISSIONS)),
                 schema: {
                     id: 'PermissionSystemScheme',
@@ -442,6 +596,7 @@ const AdminDefinition: AdminDefinitionType = {
             },
             teamScheme: {
                 url: 'user_management/permissions/team_override_scheme',
+                isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.PERMISSIONS)),
                 isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.PERMISSIONS)),
                 schema: {
                     id: 'PermissionSystemScheme',
@@ -462,7 +617,11 @@ const AdminDefinition: AdminDefinitionType = {
                 },
             },
             system_role: {
-                url: 'user_management/system_roles/:role_id',
+                url: `user_management/system_roles/:role_id(${ID_PATH_PATTERN})`,
+                isHidden: it.any(
+                    it.not(it.licensedForFeature('LDAPGroups')),
+                    it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.SYSTEM_ROLES)),
+                ),
                 isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.SYSTEM_ROLES)),
                 schema: {
                     id: 'SystemRole',
@@ -471,7 +630,7 @@ const AdminDefinition: AdminDefinitionType = {
             },
             system_roles: {
                 url: 'user_management/system_roles',
-                title: defineMessage({id: 'admin.sidebar.systemRoles', defaultMessage: 'System Roles'}),
+                title: defineMessage({id: 'admin.sidebar.systemRoles', defaultMessage: 'Delegated Granular Administration'}),
                 isHidden: it.any(
                     it.not(it.licensedForFeature('LDAPGroups')),
                     it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.USER_MANAGEMENT.SYSTEM_ROLES)),
@@ -482,6 +641,28 @@ const AdminDefinition: AdminDefinitionType = {
                     component: SystemRoles,
                 },
                 restrictedIndicator: getRestrictedIndicator(),
+            },
+            system_roles_feature_discovery: {
+                url: 'user_management/system_roles',
+                isDiscovery: true,
+                title: defineMessage({id: 'admin.sidebar.systemRoles', defaultMessage: 'Delegated Granular Administration'}),
+                isHidden: it.any(
+                    it.licensedForFeature('LDAPGroups'),
+                    it.not(it.enterpriseReady),
+                ),
+                schema: {
+                    id: 'SystemRoles',
+                    name: defineMessage({id: 'admin.permissions.systemRoles', defaultMessage: 'Delegated Granular Administration'}),
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: SystemRolesFeatureDiscovery,
+                            key: 'SystemRolesFeatureDiscovery',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
             },
         },
     },
@@ -546,6 +727,7 @@ const AdminDefinition: AdminDefinitionType = {
                             disabled_help_text: defineMessage({id: 'admin.service.forward80To443Description.disabled', defaultMessage: 'Forwards all insecure traffic from port 80 to secure port 443. Not recommended when using a proxy server. This setting cannot be enabled until your server is [listening](#ServiceSettings.ListenAddress) on port 443.'}),
                             disabled_help_text_markdown: true,
                             isDisabled: it.any(
+                                it.cloudLicensed,
                                 it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
                                 it.not(it.stateMatches('ServiceSettings.ListenAddress', /:443$/)),
                             ),
@@ -592,7 +774,7 @@ const AdminDefinition: AdminDefinitionType = {
                             key: 'ServiceSettings.UseLetsEncrypt',
                             label: defineMessage({id: 'admin.service.useLetsEncrypt', defaultMessage: 'Use Let\'s Encrypt:'}),
                             help_text: defineMessage({id: 'admin.service.useLetsEncryptDescription', defaultMessage: 'Enable the automatic retrieval of certificates from Let\'s Encrypt. The certificate will be retrieved when a client attempts to connect from a new domain. This will work with multiple domains.'}),
-                            disabled_help_text: defineMessage({id: 'admin.service.useLetsEncryptDescription.disabled', defaultMessage: "Enable the automatic retrieval of certificates from Let's Encrypt. The certificate will be retrieved when a client attempts to connect from a new domain. This will work with multiple domains. This setting cannot be enabled unless the [Forward port 80 to 443](#SystemSettings.Forward80To443) setting is set to true."}),
+                            disabled_help_text: defineMessage({id: 'admin.service.useLetsEncryptDescription.disabled', defaultMessage: "Enable the automatic retrieval of certificates from Let's Encrypt. The certificate will be retrieved when a client attempts to connect from a new domain. This will work with multiple domains. This setting cannot be enabled unless the [Forward port 80 to 443](#ServiceSettings.Forward80To443) setting is set to true."}),
                             disabled_help_text_markdown: true,
                             isDisabled: it.any(
                                 it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
@@ -621,6 +803,13 @@ const AdminDefinition: AdminDefinitionType = {
                             key: 'ServiceSettings.WriteTimeout',
                             label: defineMessage({id: 'admin.service.writeTimeout', defaultMessage: 'Write Timeout:'}),
                             help_text: defineMessage({id: 'admin.service.writeTimeoutDescription', defaultMessage: 'If using HTTP (insecure), this is the maximum time allowed from the end of reading the request headers until the response is written. If using HTTPS, it is the total time from when the connection is accepted until the response is written.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+                        },
+                        {
+                            type: 'number',
+                            key: 'ServiceSettings.MaximumPayloadSizeBytes',
+                            label: defineMessage({id: 'admin.service.maximumPayloadSize', defaultMessage: 'Maximum Payload Size (Bytes):'}),
+                            help_text: defineMessage({id: 'admin.service.maximumPayloadSizeDescription', defaultMessage: 'The maximum number of bytes allowed in the payload of incoming HTTP calls'}),
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
                         },
                         {
@@ -715,6 +904,7 @@ const AdminDefinition: AdminDefinitionType = {
                 title: defineMessage({id: 'admin.sidebar.database', defaultMessage: 'Database'}),
                 searchableStrings: databaseSearchableStrings,
                 isHidden: it.any(
+                    it.cloudLicensed,
                     it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
                     it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DATABASE)),
                 ),
@@ -939,6 +1129,17 @@ const AdminDefinition: AdminDefinitionType = {
                             ),
                         },
                         {
+                            type: 'text',
+                            key: 'FileSettings.AmazonS3StorageClass',
+                            label: defineMessage({id: 'admin.image.amazonS3StorageClassTitle', defaultMessage: 'Amazon S3 Storage Class:'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3StorageClassDescription', defaultMessage: 'Storage class for your S3 Compatible Storage provider. Defaults to empty.'}),
+                            placeholder: defineMessage({id: 'admin.image.amazonS3StorageClassExample', defaultMessage: 'E.g.: "STANDARD" or "STANDARD_IA"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+                            ),
+                        },
+                        {
                             type: 'button',
                             action: testS3Connection,
                             key: 'TestS3Connection',
@@ -947,6 +1148,202 @@ const AdminDefinition: AdminDefinitionType = {
                             error_message: defineMessage({id: 'admin.s3.s3Fail', defaultMessage: 'Connection unsuccessful: {error}'}),
                             success_message: defineMessage({id: 'admin.s3.s3Success', defaultMessage: 'Connection was successful'}),
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                        },
+                    ],
+                },
+            },
+            export_storage: {
+                url: 'environment/export_storage',
+                title: defineMessage({id: 'admin.sidebar.exportStorage', defaultMessage: 'Export Storage'}),
+                isHidden: it.any(
+                    it.not(it.licensedForFeature('Cloud')),
+                    it.not(it.licensedForSku(LicenseSkus.Enterprise)),
+                    it.configIsFalse('FeatureFlags', 'CloudDedicatedExportUI'),
+                ),
+                schema: {
+                    id: 'ExportFileSettings',
+                    name: defineMessage({id: 'admin.sidebar.exportStorage', defaultMessage: 'Export Storage'}),
+                    settings: [
+                        {
+                            type: 'bool',
+                            key: 'FileSettings.DedicatedExportStore',
+                            label: defineMessage({id: 'admin.exportStorage.dedicatedExportStore', defaultMessage: 'Enable Dedicated Export Store:'}),
+                            help_text: defineMessage({id: 'admin.exportStorage.dedicatedExportStoreDescription', defaultMessage: 'When enabled, Mattermost will use a dedicated export storage bucket for all export operations. This is required for Mattermost Cloud deployments.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                        },
+                        {
+                            type: 'dropdown',
+                            key: 'FileSettings.ExportDriverName',
+                            label: defineMessage({id: 'admin.exportStorage.exportDriverName', defaultMessage: 'Export Storage Driver:'}),
+                            isDisabled: true,
+                            isHidden: it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            options: [
+                                {
+                                    value: FILE_STORAGE_DRIVER_S3,
+                                    display_name: defineMessage({id: 'admin.image.storeAmazonS3', defaultMessage: 'Amazon S3'}),
+                                },
+                            ],
+                        },
+                        {
+                            type: 'text',
+                            key: 'FileSettings.ExportDirectory',
+                            label: defineMessage({id: 'admin.exportStorage.exportDirectory', defaultMessage: 'Export Directory'}),
+                            help_text: defineMessage({id: 'admin.image.exportDirectoryDescription', defaultMessage: 'Directory to which files are written. If blank, defaults to ./data/.'}),
+                            placeholder: defineMessage({id: 'admin.image.localExample', defaultMessage: 'E.g.: "./data/"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            ),
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'FileSettings.ExportAmazonS3AccessKeyId',
+                            label: defineMessage({id: 'admin.image.amazonS3IdTitle', defaultMessage: 'Amazon S3 Access Key ID:'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3IdDescription', defaultMessage: '(Optional) Only required if you do not want to authenticate to S3 using an <link>IAM role</link>. Enter the Access Key ID provided by your Amazon EC2 administrator.'}),
+                            help_text_values: {
+                                link: (msg: string) => (
+                                    <ExternalLink
+                                        location='admin_console'
+                                        href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html'
+                                    >
+                                        {msg}
+                                    </ExternalLink>
+                                ),
+                            },
+                            help_text_markdown: false,
+                            placeholder: defineMessage({id: 'admin.image.amazonS3IdExample', defaultMessage: 'E.g.: "AKIADTOVBGERKLCBV"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            ),
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'FileSettings.ExportAmazonS3SecretAccessKey',
+                            label: defineMessage({id: 'admin.image.amazonS3SecretTitle', defaultMessage: 'Amazon S3 Secret Access Key:'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3SecretDescription', defaultMessage: '(Optional) The secret access key associated with your Amazon S3 Access Key ID.'}),
+                            placeholder: defineMessage({id: 'admin.image.amazonS3SecretExample', defaultMessage: 'E.g.: "jcuS8PuvcpGhpgHhlcpT1Mx42pnqMxQY"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            ),
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'FileSettings.ExportAmazonS3Bucket',
+                            label: defineMessage({id: 'admin.image.amazonS3BucketTitle', defaultMessage: 'Amazon S3 Bucket:'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3BucketDescription', defaultMessage: 'Name you selected for your S3 bucket in AWS.'}),
+                            placeholder: defineMessage({id: 'admin.image.amazonS3BucketExample', defaultMessage: 'E.g.: "mattermost-export"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            ),
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'FileSettings.ExportAmazonS3PathPrefix',
+                            label: defineMessage({id: 'admin.image.amazonS3PathPrefixTitle', defaultMessage: 'Amazon S3 Path Prefix:'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3PathPrefixDescription', defaultMessage: 'Prefix you selected for your S3 bucket in AWS.'}),
+                            placeholder: defineMessage({id: 'admin.image.amazonS3PathPrefixExample', defaultMessage: 'E.g.: "subdir1/" or you can leave it .'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            ),
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'FileSettings.ExportAmazonS3Region',
+                            label: defineMessage({id: 'admin.image.amazonS3RegionTitle', defaultMessage: 'Amazon S3 Region:'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3RegionDescription', defaultMessage: 'AWS region you selected when creating your S3 bucket. If no region is set, Mattermost attempts to get the appropriate region from AWS, or sets it to "us-east-1" if none found.'}),
+                            placeholder: defineMessage({id: 'admin.image.amazonS3RegionExample', defaultMessage: 'E.g.: "us-east-1"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            ),
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'FileSettings.ExportAmazonS3Endpoint',
+                            label: defineMessage({id: 'admin.image.amazonS3EndpointTitle', defaultMessage: 'Amazon S3 Endpoint:'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3EndpointDescription', defaultMessage: 'Hostname of your S3 Compatible Storage provider. Defaults to "s3.amazonaws.com".'}),
+                            placeholder: defineMessage({id: 'admin.image.amazonS3EndpointExample', defaultMessage: 'E.g.: "s3.amazonaws.com"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            ),
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'FileSettings.ExportAmazonS3SSL',
+                            label: defineMessage({id: 'admin.image.amazonS3SSLTitle', defaultMessage: 'Enable Secure Amazon S3 Connections:'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3SSLDescription', defaultMessage: 'When false, allow insecure connections to Amazon S3. Defaults to secure connections only.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            ),
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'FileSettings.ExportAmazonSignV2',
+                            label: defineMessage({id: 'admin.image.amazonS3SignV2', defaultMessage: 'Enable Sign V2'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3SignV2Description', defaultMessage: 'When true, use Sign V2 for Amazon S3 connections'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            ),
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'FileSettings.ExportAmazonS3SSE',
+                            label: defineMessage({id: 'admin.image.amazonS3SSETitle', defaultMessage: 'Enable Server-Side Encryption for Amazon S3:'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3SSEDescription', defaultMessage: 'When true, encrypt files in Amazon S3 using server-side encryption with Amazon S3-managed keys. See <link>documentation</link> to learn more.'}),
+                            help_text_values: {
+                                link: (msg: string) => (
+                                    <ExternalLink
+                                        location='admin_console'
+                                        href={DocLinks.SESSION_LENGTHS}
+                                    >
+                                        {msg}
+                                    </ExternalLink>
+                                ),
+                            },
+                            help_text_markdown: false,
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.stateEquals('FileSettings.DedicatedExportStore', false),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'FileSettings.ExportAmazonS3StorageClass',
+                            label: defineMessage({id: 'admin.image.amazonS3StorageClassTitle', defaultMessage: 'Amazon S3 Storage Class:'}),
+                            help_text: defineMessage({id: 'admin.image.amazonS3StorageClassDescription', defaultMessage: 'Storage class for your S3 Compatible Storage provider. Defaults to empty.'}),
+                            placeholder: defineMessage({id: 'admin.image.amazonS3StorageClassExample', defaultMessage: 'E.g.: "STANDARD" or "STANDARD_IA"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                                it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+                            ),
+                        },
+                        {
+                            type: 'button',
+                            action: testS3Connection,
+                            key: 'TestS3Connection',
+                            label: defineMessage({id: 'admin.s3.connectionS3Test', defaultMessage: 'Test Connection'}),
+                            loading: defineMessage({id: 'admin.s3.testing', defaultMessage: 'Testing...'}),
+                            error_message: defineMessage({id: 'admin.s3.s3Fail', defaultMessage: 'Connection unsuccessful: {error}'}),
+                            success_message: defineMessage({id: 'admin.s3.s3Success', defaultMessage: 'Connection was successful'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+                            isHidden: it.any(it.stateEquals('FileSettings.ExportDriverName', 'NONE'), it.stateEquals('FileSettings.DedicatedExportStore', false)),
                         },
                     ],
                 },
@@ -1156,6 +1553,101 @@ const AdminDefinition: AdminDefinitionType = {
                 schema: {
                     id: 'ClusterSettings',
                     component: ClusterSettings,
+                },
+            },
+            cache_settings: {
+                url: 'environment/cache_settings',
+                title: adminDefinitionMessages.cache_settings_title,
+                isHidden: it.any(
+                    it.not(it.licensedForFeature('Cluster')),
+                    it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+                    it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
+                ),
+                searchableStrings: [
+                    adminDefinitionMessages.cache_settings_title,
+                    adminDefinitionMessages.cache_type_title,
+                    adminDefinitionMessages.cache_type_desc,
+                    adminDefinitionMessages.redis_address_title,
+                    adminDefinitionMessages.redis_address_desc,
+                    adminDefinitionMessages.redis_password_title,
+                    adminDefinitionMessages.redis_password_desc,
+                    adminDefinitionMessages.redis_db_title,
+                    adminDefinitionMessages.redis_db_desc,
+                    adminDefinitionMessages.redis_clientcache_title,
+                    adminDefinitionMessages.redis_clientcache_desc,
+                ],
+                isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
+                schema: {
+                    id: 'CacheSettings',
+                    name: adminDefinitionMessages.cache_settings_title,
+                    settings: [
+                        {
+                            type: 'banner',
+                            label: defineMessage({id: 'admin.rate.noteDescription', defaultMessage: 'Changing properties in this section will require a server restart before taking effect.'}),
+                            banner_type: 'info',
+                        },
+                        {
+                            type: 'dropdown',
+                            key: 'CacheSettings.CacheType',
+                            label: adminDefinitionMessages.cache_type_title,
+                            help_text: adminDefinitionMessages.cache_type_desc,
+                            help_text_markdown: true,
+                            options: [
+                                {
+                                    value: CacheTypes.LRU,
+                                    display_name: defineMessage({id: 'admin.cacheSettings.cacheType.lru', defaultMessage: 'LRU'}),
+                                },
+                                {
+                                    value: CacheTypes.REDIS,
+                                    display_name: defineMessage({id: 'admin.cacheSettings.cacheType.redis', defaultMessage: 'Redis'}),
+                                },
+                            ],
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'CacheSettings.RedisAddress',
+                            label: adminDefinitionMessages.redis_address_title,
+                            help_text: adminDefinitionMessages.redis_address_desc,
+                            placeholder: adminDefinitionMessages.redis_address_placeholder,
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
+                                it.not(it.stateEquals('CacheSettings.CacheType', CacheTypes.REDIS)),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'CacheSettings.RedisPassword',
+                            label: adminDefinitionMessages.redis_password_title,
+                            help_text: adminDefinitionMessages.redis_password_desc,
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
+                                it.not(it.stateEquals('CacheSettings.CacheType', CacheTypes.REDIS)),
+                            ),
+                        },
+                        {
+                            type: 'number',
+                            key: 'CacheSettings.RedisDB',
+                            label: adminDefinitionMessages.redis_db_title,
+                            help_text: adminDefinitionMessages.redis_db_desc,
+                            placeholder: adminDefinitionMessages.redis_db_placeholder,
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
+                                it.not(it.stateEquals('CacheSettings.CacheType', CacheTypes.REDIS)),
+                            ),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'CacheSettings.DisableClientCache',
+                            label: adminDefinitionMessages.redis_clientcache_title,
+                            help_text: adminDefinitionMessages.redis_clientcache_desc,
+                            help_text_markdown: false,
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
+                                it.not(it.stateEquals('CacheSettings.CacheType', CacheTypes.REDIS)),
+                            ),
+                        },
+                    ],
                 },
             },
             rate_limiting: {
@@ -1456,6 +1948,36 @@ const AdminDefinition: AdminDefinitionType = {
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PERFORMANCE_MONITORING)),
                         },
                         {
+                            type: 'bool',
+                            key: 'MetricsSettings.EnableClientMetrics',
+                            label: defineMessage({id: 'admin.metrics.enableClientMetricsTitle', defaultMessage: 'Enable Client Performance Monitoring:'}),
+                            help_text: defineMessage({id: 'admin.metrics.enableClientMetricsDescription', defaultMessage: 'When true, Mattermost will enable performance monitoring collection for web and desktop app users. Please see <link>documentation</link> to learn more about configuring performance monitoring for Mattermost.'}),
+                            help_text_markdown: false,
+                            help_text_values: {
+                                link: (msg: string) => (
+                                    <ExternalLink
+                                        location='admin_console'
+                                        href={DocLinks.SETUP_PERFORMANCE_MONITORING}
+                                    >
+                                        {msg}
+                                    </ExternalLink>
+                                ),
+                            },
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PERFORMANCE_MONITORING)),
+                                it.configIsFalse('MetricsSettings', 'Enable'),
+                            ),
+                        },
+                        {
+                            type: 'custom',
+                            key: 'MetricsSettings.ClientSideUserIds',
+                            component: ClientSideUserIdsSetting,
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PERFORMANCE_MONITORING)),
+                                it.configIsFalse('MetricsSettings', 'EnableClientMetrics'),
+                            ),
+                        },
+                        {
                             type: 'text',
                             key: 'MetricsSettings.ListenAddress',
                             label: defineMessage({id: 'admin.metrics.listenAddressTitle', defaultMessage: 'Listen Address:'}),
@@ -1662,7 +2184,27 @@ const AdminDefinition: AdminDefinitionType = {
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.CUSTOMIZATION)),
                             isHidden: it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
                         },
+                        {
+                            type: 'bool',
+                            key: 'ServiceSettings.EnableDesktopLandingPage',
+                            label: defineMessage({id: 'admin.customization.enableDesktopLandingPageTitle', defaultMessage: 'Enable Desktop App Landing Page:'}),
+                            help_text: defineMessage({id: 'admin.customization.enableDesktopLandingPageDesc', defaultMessage: 'Whether or not to prompt a user to use the Desktop App when they first use Mattermost.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.CUSTOMIZATION)),
+                        },
                     ],
+                },
+            },
+            system_properties: {
+                url: 'site_config/system_properties',
+                title: defineMessage({id: 'admin.sidebar.system_properties', defaultMessage: 'System Properties'}),
+                searchableStrings: systemPropertiesSearchableStrings,
+                isHidden: it.not(it.all(
+                    it.licensedForSku(LicenseSkus.Enterprise),
+                    it.configIsTrue('FeatureFlags', 'CustomProfileAttributes'),
+                )),
+                schema: {
+                    id: 'SystemProperties',
+                    component: SystemProperties,
                 },
             },
             localization: {
@@ -1706,6 +2248,13 @@ const AdminDefinition: AdminDefinitionType = {
                             },
                             multiple: true,
                             no_result: defineMessage({id: 'admin.general.localization.availableLocalesNoResults', defaultMessage: 'No results found'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.LOCALIZATION)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'LocalizationSettings.EnableExperimentalLocales',
+                            label: defineMessage({id: 'admin.general.localization.enableExperimentalLocalesTitle', defaultMessage: 'Enable Experimental Locales:'}),
+                            help_text: defineMessage({id: 'admin.general.localization.enableExperimentalLocalesDescription', defaultMessage: 'When true, it allows users to select experimental (e.g., in progress) languages.'}),
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.LOCALIZATION)),
                         },
                     ],
@@ -1830,7 +2379,7 @@ const AdminDefinition: AdminDefinitionType = {
                         {
                             type: 'bool',
                             key: 'ServiceSettings.EnableCustomGroups',
-                            label: defineMessage({id: 'admin.team.customUserGroupsTitle', defaultMessage: 'Enable Custom User Groups (Beta): '}),
+                            label: defineMessage({id: 'admin.team.customUserGroupsTitle', defaultMessage: 'Enable Custom User Groups: '}),
                             help_text: defineMessage({id: 'admin.team.customUserGroupsDescription', defaultMessage: 'When true, users with appropriate permissions can create custom user groups and enables at-mentions for those groups.'}),
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.USERS_AND_TEAMS)),
                             isHidden: it.not(it.any(
@@ -2021,24 +2570,34 @@ const AdminDefinition: AdminDefinitionType = {
                             isHidden: it.not(it.licensedForFeature('IDLoadedPushNotifications')),
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.NOTIFICATIONS)),
                         },
+                        {
+                            type: 'bool',
+                            key: 'MetricsSettings.EnableNotificationMetrics',
+                            label: defineMessage({id: 'admin.metrics.enableNotificationMetricsTitle', defaultMessage: 'Enable Notification Monitoring:'}),
+                            help_text: defineMessage({id: 'admin.metrics.enableNotificationMetricsDescription', defaultMessage: 'When true, Mattermost will enable notification data collection for web and Desktop App users.'}),
+                            isDisabled: it.any(
+                                it.configIsFalse('MetricsSettings', 'Enable'),
+                            ),
+                            isHidden: it.configIsFalse('FeatureFlags', 'NotificationMonitoring'),
+                        },
                     ],
                 },
             },
             announcement_banner: {
                 url: 'site_config/announcement_banner',
-                title: defineMessage({id: 'admin.sidebar.announcement', defaultMessage: 'Announcement Banner'}),
+                title: defineMessage({id: 'admin.sidebar.announcement', defaultMessage: 'System-wide Notifications'}),
                 isHidden: it.any(
                     it.not(it.licensedForFeature('Announcement')),
                     it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.SITE.ANNOUNCEMENT_BANNER)),
                 ),
                 schema: {
                     id: 'AnnouncementSettings',
-                    name: defineMessage({id: 'admin.site.announcementBanner', defaultMessage: 'Announcement Banner'}),
+                    name: defineMessage({id: 'admin.site.announcementBanner', defaultMessage: 'System-wide Notifications'}),
                     settings: [
                         {
                             type: 'bool',
                             key: 'AnnouncementSettings.EnableBanner',
-                            label: defineMessage({id: 'admin.customization.announcement.enableBannerTitle', defaultMessage: 'Enable Announcement Banner:'}),
+                            label: defineMessage({id: 'admin.customization.announcement.enableBannerTitle', defaultMessage: 'Enable System-wide Notifications:'}),
                             help_text: defineMessage({id: 'admin.customization.announcement.enableBannerDesc', defaultMessage: 'Enable an announcement banner across all teams.'}),
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.ANNOUNCEMENT_BANNER)),
                         },
@@ -2084,6 +2643,28 @@ const AdminDefinition: AdminDefinitionType = {
                 },
                 restrictedIndicator: getRestrictedIndicator(),
             },
+            announcement_banner_feature_discovery: {
+                url: 'site_config/announcement_banner',
+                isDiscovery: true,
+                title: defineMessage({id: 'admin.sidebar.announcement', defaultMessage: 'System-wide Notifications'}),
+                isHidden: it.any(
+                    it.licensedForFeature('Announcement'),
+                    it.not(it.enterpriseReady),
+                ),
+                schema: {
+                    id: 'AnnouncementSettings',
+                    name: defineMessage({id: 'admin.site.announcementBanner', defaultMessage: 'System-wide Notifications'}),
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: AnnouncementBannerFeatureDiscovery,
+                            key: 'AnnouncementBannerFeatureDiscovery',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(true),
+            },
             emoji: {
                 url: 'site_config/emoji',
                 title: defineMessage({id: 'admin.sidebar.emoji', defaultMessage: 'Emoji'}),
@@ -2121,7 +2702,7 @@ const AdminDefinition: AdminDefinitionType = {
                             type: 'bool',
                             key: 'ServiceSettings.ThreadAutoFollow',
                             label: defineMessage({id: 'admin.experimental.threadAutoFollow.title', defaultMessage: 'Automatically Follow Threads'}),
-                            help_text: defineMessage({id: 'admin.experimental.threadAutoFollow.desc', defaultMessage: 'This setting must be enabled in order to enable Collapsed Reply Threads. When enabled, threads a user starts, participates in, or is mentioned in are automatically followed. A new `Threads` table is added in the database that tracks threads and thread participants, and a `ThreadMembership` table tracks followed threads for each user and the read or unread state of each followed thread. When false, all backend operations to support Collapsed Reply Threads are disabled.'}),
+                            help_text: defineMessage({id: 'admin.experimental.threadAutoFollow.desc', defaultMessage: 'This setting must be enabled in order to enable Threaded Discussions. When enabled, threads a user starts, participates in, or is mentioned in are automatically followed. A new `Threads` table is added in the database that tracks threads and thread participants, and a `ThreadMembership` table tracks followed threads for each user and the read or unread state of each followed thread. When false, all backend operations to support Threaded Discussions are disabled.'}),
                             help_text_markdown: true,
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
                             isHidden: it.licensedForFeature('Cloud'),
@@ -2129,8 +2710,8 @@ const AdminDefinition: AdminDefinitionType = {
                         {
                             type: 'dropdown',
                             key: 'ServiceSettings.CollapsedThreads',
-                            label: defineMessage({id: 'admin.experimental.collapsedThreads.title', defaultMessage: 'Collapsed Reply Threads'}),
-                            help_text: defineMessage({id: 'admin.experimental.collapsedThreads.desc', defaultMessage: 'When enabled (default off), users must enable collapsed reply threads in Settings. When disabled, users cannot access Collapsed Reply Threads. Please review our <linkKnownIssues>documentation for known issues</linkKnownIssues> and help provide feedback in our <linkCommunityChannel>Community Channel</linkCommunityChannel>.'}),
+                            label: defineMessage({id: 'admin.experimental.collapsedThreads.title', defaultMessage: 'Threaded Discussions'}),
+                            help_text: defineMessage({id: 'admin.experimental.collapsedThreads.desc', defaultMessage: 'When enabled (default off), users must enable Threaded Discussions in Settings. When disabled, users cannot access Threaded Discussions. Please review our <linkKnownIssues>documentation for known issues</linkKnownIssues> and help provide feedback in our <linkCommunityChannel>Community Channel</linkCommunityChannel>.'}),
                             help_text_values: {
                                 linkKnownIssues: (msg: string) => (
                                     <ExternalLink
@@ -2187,7 +2768,6 @@ const AdminDefinition: AdminDefinitionType = {
                             },
                             help_text_markdown: false,
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.POSTS)),
-                            isHidden: it.configIsFalse('FeatureFlags', 'PostPriority'),
                         },
                         {
                             type: 'bool',
@@ -2206,10 +2786,16 @@ const AdminDefinition: AdminDefinitionType = {
                             },
                             help_text_markdown: false,
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.POSTS)),
-                            isHidden: it.any(
-                                it.configIsFalse('FeatureFlags', 'PostPriority'),
-                                it.configIsFalse('ServiceSettings', 'PostPriority'),
-                            ),
+                            isHidden: it.configIsFalse('ServiceSettings', 'PostPriority'),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'ServiceSettings.ScheduledPosts',
+                            label: defineMessage({id: 'admin.posts.scheduledPosts.title', defaultMessage: 'Scheduled Posts'}),
+                            help_text: defineMessage({id: 'admin.posts.scheduledPosts.description', defaultMessage: 'When enabled, users can schedule and send messages in the future.'}),
+                            help_text_markdown: false,
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.POSTS)),
+                            isHidden: it.not(it.licensed),
                         },
                         {
                             type: 'number',
@@ -2229,7 +2815,6 @@ const AdminDefinition: AdminDefinitionType = {
                             help_text_markdown: false,
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.POSTS)),
                             isHidden: it.any(
-                                it.configIsFalse('FeatureFlags', 'PostPriority'),
                                 it.configIsFalse('ServiceSettings', 'PostPriority'),
                                 it.configIsFalse('ServiceSettings', 'AllowPersistentNotifications'),
                             ),
@@ -2252,7 +2837,6 @@ const AdminDefinition: AdminDefinitionType = {
                             help_text_markdown: false,
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.POSTS)),
                             isHidden: it.any(
-                                it.configIsFalse('FeatureFlags', 'PostPriority'),
                                 it.configIsFalse('ServiceSettings', 'PostPriority'),
                                 it.configIsFalse('ServiceSettings', 'AllowPersistentNotifications'),
                             ),
@@ -2276,7 +2860,6 @@ const AdminDefinition: AdminDefinitionType = {
                             help_text_markdown: false,
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.POSTS)),
                             isHidden: it.any(
-                                it.configIsFalse('FeatureFlags', 'PostPriority'),
                                 it.configIsFalse('ServiceSettings', 'PostPriority'),
                                 it.configIsFalse('ServiceSettings', 'AllowPersistentNotifications'),
                             ),
@@ -2300,7 +2883,6 @@ const AdminDefinition: AdminDefinitionType = {
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.SITE.POSTS)),
                             isHidden: it.any(
                                 it.configIsFalse('GuestAccountsSettings', 'Enable'),
-                                it.configIsFalse('FeatureFlags', 'PostPriority'),
                                 it.configIsFalse('ServiceSettings', 'PostPriority'),
                                 it.configIsFalse('ServiceSettings', 'AllowPersistentNotifications'),
                             ),
@@ -2636,6 +3218,2307 @@ const AdminDefinition: AdminDefinitionType = {
                     component: IPFiltering,
                 },
             },
+            secure_connection_detail: {
+                url: `site_config/secure_connections/:connection_id(create|${ID_PATH_PATTERN})`,
+                isHidden: it.not(it.all(
+                    it.configIsTrue('ConnectedWorkspacesSettings', 'EnableSharedChannels'),
+                    it.configIsTrue('ConnectedWorkspacesSettings', 'EnableRemoteClusterService'),
+                    it.licensedForFeature('SharedChannels'),
+                )),
+                schema: {
+                    id: 'SecureConnectionDetail',
+                    component: SecureConnectionDetail,
+                },
+            },
+            secure_connections: {
+                url: 'site_config/secure_connections',
+                title: defineMessage({id: 'admin.sidebar.secureConnections', defaultMessage: 'Connected Workspaces (Beta)'}),
+                searchableStrings: secureConnectionsSearchableStrings,
+                isHidden: it.not(it.all(
+                    it.configIsTrue('ConnectedWorkspacesSettings', 'EnableSharedChannels'),
+                    it.configIsTrue('ConnectedWorkspacesSettings', 'EnableRemoteClusterService'),
+                    it.licensedForFeature('SharedChannels'),
+                )),
+                schema: {
+                    id: 'SecureConnections',
+                    component: SecureConnections,
+                },
+            },
+        },
+    },
+    authentication: {
+        icon: (
+            <ShieldOutlineIcon
+                size={16}
+                color={'currentColor'}
+            />
+        ),
+        sectionTitle: defineMessage({id: 'admin.sidebar.authentication', defaultMessage: 'Authentication'}),
+        isHidden: it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.AUTHENTICATION)),
+        subsections: {
+            signup: {
+                url: 'authentication/signup',
+                title: defineMessage({id: 'admin.sidebar.signup', defaultMessage: 'Signup'}),
+                isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SIGNUP)),
+                schema: {
+                    id: 'SignupSettings',
+                    name: defineMessage({id: 'admin.authentication.signup', defaultMessage: 'Signup'}),
+                    settings: [
+                        {
+                            type: 'bool',
+                            key: 'TeamSettings.EnableUserCreation',
+                            label: defineMessage({id: 'admin.team.userCreationTitle', defaultMessage: 'Enable Account Creation: '}),
+                            help_text: defineMessage({id: 'admin.team.userCreationDescription', defaultMessage: 'When false, the ability to create accounts is disabled, and selecting Create Account displays an error. Applies to Email, OpenID Connect, and OAuth 2.0 user account authentication.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SIGNUP)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'TeamSettings.RestrictCreationToDomains',
+                            label: defineMessage({id: 'admin.team.restrictTitle', defaultMessage: 'Restrict new system and team members to specified email domains:'}),
+                            help_text: defineMessage({id: 'admin.team.restrictDescription', defaultMessage: 'New user accounts are restricted to the above specified email domain (e.g. "mattermost.com") or list of comma-separated domains (e.g. "corp.mattermost.com, mattermost.com"). New teams can only be created by users from the above domain(s). This setting only affects email login for users.'}),
+                            placeholder: defineMessage({id: 'admin.team.restrictExample', defaultMessage: 'E.g.: "corp.mattermost.com, mattermost.com"'}),
+                            isHidden: it.all(
+                                it.licensed,
+                                it.not(it.licensedForSku('starter')),
+                            ),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SIGNUP)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'TeamSettings.RestrictCreationToDomains',
+                            label: defineMessage({id: 'admin.team.restrictTitle', defaultMessage: 'Restrict new system and team members to specified email domains:'}),
+                            help_text: defineMessage({id: 'admin.team.restrictGuestDescription', defaultMessage: 'New user accounts are restricted to the above specified email domain (e.g. "mattermost.com") or list of comma-separated domains (e.g. "corp.mattermost.com, mattermost.com"). New teams can only be created by users from the above domain(s). This setting affects email login for users. For Guest users, please add domains under Signup > Guest Access.'}),
+                            placeholder: defineMessage({id: 'admin.team.restrictExample', defaultMessage: 'E.g.: "corp.mattermost.com, mattermost.com"'}),
+                            isHidden: it.any(
+                                it.not(it.licensed),
+                                it.licensedForSku('starter'),
+                            ),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SIGNUP)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'TeamSettings.EnableOpenServer',
+                            label: defineMessage({id: 'admin.team.openServerTitle', defaultMessage: 'Enable Open Server: '}),
+                            help_text: defineMessage({id: 'admin.team.openServerDescription', defaultMessage: 'When true, anyone can sign up for a user account on this server without the need to be invited. Applies to Email-based signups only.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SIGNUP)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'ServiceSettings.EnableEmailInvitations',
+                            label: defineMessage({id: 'admin.team.emailInvitationsTitle', defaultMessage: 'Enable Email Invitations: '}),
+                            help_text: defineMessage({id: 'admin.team.emailInvitationsDescription', defaultMessage: 'When true users can invite others to the system using email.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SIGNUP)),
+                            isHidden: it.licensedForFeature('Cloud'),
+                        },
+                        {
+                            type: 'button',
+                            key: 'InvalidateEmailInvitesButton',
+                            action: invalidateAllEmailInvites,
+                            label: defineMessage({id: 'admin.team.invalidateEmailInvitesTitle', defaultMessage: 'Invalidate pending email invites'}),
+                            help_text: defineMessage({id: 'admin.team.invalidateEmailInvitesDescription', defaultMessage: 'This will invalidate active email invitations that have not been accepted by the user. By default email invitations expire after 48 hours.'}),
+                            error_message: defineMessage({id: 'admin.team.invalidateEmailInvitesFail', defaultMessage: 'Unable to invalidate pending email invites: {error}'}),
+                            success_message: defineMessage({id: 'admin.team.invalidateEmailInvitesSuccess', defaultMessage: 'Pending email invitations invalidated successfully'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SIGNUP)),
+                        },
+                    ],
+                },
+            },
+            email: {
+                url: 'authentication/email',
+                title: defineMessage({id: 'admin.sidebar.email', defaultMessage: 'Email'}),
+                isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.EMAIL)),
+                schema: {
+                    id: 'EmailSettings',
+                    name: defineMessage({id: 'admin.authentication.email', defaultMessage: 'Email'}),
+                    settings: [
+                        {
+                            type: 'bool',
+                            key: 'EmailSettings.EnableSignUpWithEmail',
+                            label: defineMessage({id: 'admin.email.allowSignupTitle', defaultMessage: 'Enable account creation with email:'}),
+                            help_text: defineMessage({id: 'admin.email.allowSignupDescription', defaultMessage: 'When true, Mattermost allows account creation using email and password. This value should be false only when you want to limit sign up to a single sign-on service like AD/LDAP, SAML or GitLab.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.EMAIL)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'EmailSettings.RequireEmailVerification',
+                            label: defineMessage({id: 'admin.email.requireVerificationTitle', defaultMessage: 'Require Email Verification: '}),
+                            help_text: defineMessage({id: 'admin.email.requireVerificationDescription', defaultMessage: 'Typically set to true in production. When true, Mattermost requires email verification after account creation prior to allowing login. Developers may set this field to false to skip sending verification emails for faster development.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.EMAIL)),
+                            isHidden: it.licensedForFeature('Cloud'),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'EmailSettings.EnableSignInWithEmail',
+                            label: defineMessage({id: 'admin.email.allowEmailSignInTitle', defaultMessage: 'Enable sign-in with email:'}),
+                            help_text: defineMessage({id: 'admin.email.allowEmailSignInDescription', defaultMessage: 'When true, Mattermost allows users to sign in using their email and password.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.EMAIL)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'EmailSettings.EnableSignInWithUsername',
+                            label: defineMessage({id: 'admin.email.allowUsernameSignInTitle', defaultMessage: 'Enable sign-in with username:'}),
+                            help_text: defineMessage({id: 'admin.email.allowUsernameSignInDescription', defaultMessage: 'When true, users with email login can sign in using their username and password. This setting does not affect AD/LDAP login.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.EMAIL)),
+                        },
+                    ],
+                },
+            },
+            password: {
+                url: 'authentication/password',
+                title: defineMessage({id: 'admin.sidebar.password', defaultMessage: 'Password'}),
+                searchableStrings: passwordSearchableStrings,
+                isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.PASSWORD)),
+                isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.PASSWORD)),
+                schema: {
+                    id: 'PasswordSettings',
+                    component: PasswordSettings,
+                },
+            },
+            mfa: {
+                url: 'authentication/mfa',
+                title: defineMessage({id: 'admin.sidebar.mfa', defaultMessage: 'MFA'}),
+                isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.MFA)),
+                schema: {
+                    id: 'ServiceSettings',
+                    name: defineMessage({id: 'admin.authentication.mfa', defaultMessage: 'Multi-factor Authentication'}),
+                    settings: [
+                        {
+                            type: 'banner',
+                            label: defineMessage({id: 'admin.mfa.bannerDesc', defaultMessage: '<link>Multi-factor authentication</link> is available for accounts with AD/LDAP or email login. If other login methods are used, MFA should be configured with the authentication provider.'}),
+                            label_values: {
+                                link: (msg: string) => (
+                                    <ExternalLink
+                                        location='admin_console'
+                                        href={DocLinks.MULTI_FACTOR_AUTH}
+                                    >
+                                        {msg}
+                                    </ExternalLink>
+                                ),
+                            },
+                            banner_type: 'info',
+                        },
+                        {
+                            type: 'bool',
+                            key: 'ServiceSettings.EnableMultifactorAuthentication',
+                            label: defineMessage({id: 'admin.service.mfaTitle', defaultMessage: 'Enable Multi-factor Authentication:'}),
+                            help_text: defineMessage({id: 'admin.service.mfaDesc', defaultMessage: 'When true, users with AD/LDAP or email login can add multi-factor authentication to their account using Google Authenticator.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.MFA)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'ServiceSettings.EnforceMultifactorAuthentication',
+                            label: defineMessage({id: 'admin.service.enforceMfaTitle', defaultMessage: 'Enforce Multi-factor Authentication:'}),
+                            help_text: defineMessage({id: 'admin.service.enforceMfaDesc', defaultMessage: 'When true, <link>multi-factor authentication</link> is required for login. New users will be required to configure MFA on signup. Logged in users without MFA configured are redirected to the MFA setup page until configuration is complete.\n \nIf your system has users with login methods other than AD/LDAP and email, MFA must be enforced with the authentication provider outside of Mattermost.'}),
+                            help_text_markdown: false,
+                            help_text_values: {
+                                link: (msg: string) => (
+                                    <ExternalLink
+                                        location='admin_console'
+                                        href={DocLinks.MULTI_FACTOR_AUTH}
+                                    >
+                                        {msg}
+                                    </ExternalLink>
+                                ),
+                            },
+                            isHidden: it.not(it.licensedForFeature('MFA')),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.MFA)),
+                                it.stateIsFalse('ServiceSettings.EnableMultifactorAuthentication'),
+                            ),
+                        },
+                    ],
+                },
+            },
+            ldap: {
+                url: 'authentication/ldap',
+                title: defineMessage({id: 'admin.sidebar.ldap', defaultMessage: 'AD/LDAP'}),
+                isHidden: it.any(
+                    it.not(it.licensedForFeature('LDAP')),
+                    it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                ),
+                schema: {
+                    id: 'LdapSettings',
+                    name: defineMessage({id: 'admin.authentication.ldap', defaultMessage: 'AD/LDAP'}),
+                    sections: [
+                        {
+                            key: 'admin.authentication.ldap.connection',
+                            title: 'Connection',
+                            subtitle: 'Connection and security level to your AD/LDAP server.',
+                            settings: [
+                                {
+                                    type: 'bool',
+                                    key: 'LdapSettings.Enable',
+                                    label: defineMessage({id: 'admin.ldap.enableTitle', defaultMessage: 'Enable sign-in with AD/LDAP:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.enableDesc', defaultMessage: 'When true, Mattermost allows login using AD/LDAP'}),
+                                    isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                },
+                                {
+                                    type: 'bool',
+                                    key: 'LdapSettings.EnableSync',
+                                    label: defineMessage({id: 'admin.ldap.enableSyncTitle', defaultMessage: 'Enable Synchronization with AD/LDAP:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.enableSyncDesc', defaultMessage: 'When true, Mattermost periodically synchronizes users from AD/LDAP. When false, user attributes are updated from AD/LDAP during user login only.'}),
+                                    isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.LoginFieldName',
+                                    label: defineMessage({id: 'admin.ldap.loginNameTitle', defaultMessage: 'Login Field Name:'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.loginNameEx', defaultMessage: 'E.g.: "AD/LDAP Username"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.loginNameDesc', defaultMessage: 'The placeholder text that appears in the login field on the login page. Defaults to "AD/LDAP Username".'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'number',
+                                    key: 'LdapSettings.MaximumLoginAttempts',
+                                    label: defineMessage({id: 'admin.ldap.maximumLoginAttemptsTitle', defaultMessage: 'Maximum Login Attempts:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.maximumLoginAttemptsDesc', defaultMessage: 'The maximum number of login attempts before the Mattermost account is locked. You can unlock the account in system console on the users page. Setting this value lower than your LDAP maximum login attempts ensures that the users won\'t be locked out of your LDAP server because of failed login attempts in Mattermost.'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.LdapServer',
+                                    label: defineMessage({id: 'admin.ldap.serverTitle', defaultMessage: 'AD/LDAP Server:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.serverDesc', defaultMessage: 'The domain or IP address of AD/LDAP server.'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.serverEx', defaultMessage: 'E.g.: "10.0.0.23"'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'number',
+                                    key: 'LdapSettings.LdapPort',
+                                    label: defineMessage({id: 'admin.ldap.portTitle', defaultMessage: 'AD/LDAP Port:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.portDesc', defaultMessage: 'The port Mattermost will use to connect to the AD/LDAP server. Default is 389.'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.portEx', defaultMessage: 'E.g.: "389"'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'dropdown',
+                                    key: 'LdapSettings.ConnectionSecurity',
+                                    label: defineMessage({id: 'admin.connectionSecurityTitle', defaultMessage: 'Connection Security:'}),
+                                    help_text: DefinitionConstants.CONNECTION_SECURITY_HELP_TEXT_LDAP,
+                                    options: [
+                                        {
+                                            value: '',
+                                            display_name: defineMessage({id: 'admin.connectionSecurityNone', defaultMessage: 'None'}),
+                                        },
+                                        {
+                                            value: 'TLS',
+                                            display_name: defineMessage({id: 'admin.connectionSecurityTls', defaultMessage: 'TLS (Recommended)'}),
+                                        },
+                                        {
+                                            value: 'STARTTLS',
+                                            display_name: defineMessage({id: 'admin.connectionSecurityStart', defaultMessage: 'STARTTLS'}),
+                                        },
+                                    ],
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'bool',
+                                    key: 'LdapSettings.SkipCertificateVerification',
+                                    label: defineMessage({id: 'admin.ldap.skipCertificateVerification', defaultMessage: 'Skip Certificate Verification:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.skipCertificateVerificationDesc', defaultMessage: 'Skips the certificate verification step for TLS or STARTTLS connections. Skipping certificate verification is not recommended for production environments where TLS is required.'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.stateIsFalse('LdapSettings.ConnectionSecurity'),
+                                    ),
+                                },
+                                {
+                                    type: 'fileupload',
+                                    key: 'LdapSettings.PrivateKeyFile',
+                                    label: defineMessage({id: 'admin.ldap.privateKeyFileTitle', defaultMessage: 'Private Key:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.privateKeyFileFileDesc', defaultMessage: 'The private key file for TLS Certificate. If using TLS client certificates as primary authentication mechanism. This will be provided by your LDAP Authentication Provider.'}),
+                                    remove_help_text: defineMessage({id: 'admin.ldap.privateKeyFileFileRemoveDesc', defaultMessage: 'Remove the private key file for TLS Certificate.'}),
+                                    remove_button_text: defineMessage({id: 'admin.ldap.remove.privKey', defaultMessage: 'Remove TLS Certificate Private Key'}),
+                                    removing_text: defineMessage({id: 'admin.ldap.removing.privKey', defaultMessage: 'Removing Private Key...'}),
+                                    uploading_text: defineMessage({id: 'admin.ldap.uploading.privateKey', defaultMessage: 'Uploading Private Key...'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                    fileType: '.key',
+                                    upload_action: uploadPrivateLdapCertificate,
+                                    remove_action: removePrivateLdapCertificate,
+                                },
+                                {
+                                    type: 'fileupload',
+                                    key: 'LdapSettings.PublicCertificateFile',
+                                    label: defineMessage({id: 'admin.ldap.publicCertificateFileTitle', defaultMessage: 'Public Certificate:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.publicCertificateFileDesc', defaultMessage: 'The public certificate file for TLS Certificate. If using TLS client certificates as primary authentication mechanism. This will be provided by your LDAP Authentication Provider.'}),
+                                    remove_help_text: defineMessage({id: 'admin.ldap.publicCertificateFileRemoveDesc', defaultMessage: 'Remove the public certificate file for TLS Certificate.'}),
+                                    remove_button_text: defineMessage({id: 'admin.ldap.remove.sp_certificate', defaultMessage: 'Remove Service Provider Certificate'}),
+                                    removing_text: defineMessage({id: 'admin.ldap.removing.certificate', defaultMessage: 'Removing Certificate...'}),
+                                    uploading_text: defineMessage({id: 'admin.ldap.uploading.certificate', defaultMessage: 'Uploading Certificate...'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                    fileType: '.crt,.cer',
+                                    upload_action: uploadPublicLdapCertificate,
+                                    remove_action: removePublicLdapCertificate,
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.BindUsername',
+                                    label: defineMessage({id: 'admin.ldap.bindUserTitle', defaultMessage: 'Bind Username:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.bindUserDesc', defaultMessage: 'The username used to perform the AD/LDAP search. This should typically be an account created specifically for use with Mattermost. It should have access limited to read the portion of the AD/LDAP tree specified in the Base DN field.'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.BindPassword',
+                                    label: defineMessage({id: 'admin.ldap.bindPwdTitle', defaultMessage: 'Bind Password:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.bindPwdDesc', defaultMessage: 'Password of the user given in "Bind Username".'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        {
+                            key: 'admin.authentication.ldap.dn_and_filters',
+                            title: 'Base DN & Filters',
+                            settings: [
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.BaseDN',
+                                    label: defineMessage({id: 'admin.ldap.baseTitle', defaultMessage: 'Base DN:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.baseDesc', defaultMessage: 'The Base DN is the Distinguished Name of the location where Mattermost should start its search for user and group objects in the AD/LDAP tree.'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.baseEx', defaultMessage: 'E.g.: "ou=Unit Name,dc=corp,dc=example,dc=com"'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.UserFilter',
+                                    label: defineMessage({id: 'admin.ldap.userFilterTitle', defaultMessage: 'User Filter:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.userFilterDisc', defaultMessage: '(Optional) Enter an AD/LDAP filter to use when searching for user objects. Only the users selected by the query will be able to access Mattermost. For Active Directory, the query to filter out disabled users is (&(objectCategory=Person)(!(UserAccountControl:1.2.840.113556.1.4.803:=2))).'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.userFilterEx', defaultMessage: 'Ex. "(objectClass=user)"'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.GroupFilter',
+                                    label: defineMessage({id: 'admin.ldap.groupFilterTitle', defaultMessage: 'Group Filter:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.groupFilterFilterDesc', defaultMessage: '(Optional) Enter an AD/LDAP filter to use when searching for group objects. Only the groups selected by the query will be available to Mattermost. From [User Management > Groups]({siteURL}/admin_console/user_management/groups), select which AD/LDAP groups should be linked and configured.'}),
+                                    help_text_markdown: true,
+                                    help_text_values: {siteURL: getSiteURL()},
+                                    placeholder: defineMessage({id: 'admin.ldap.groupFilterEx', defaultMessage: 'E.g.: "(objectClass=group)"'}),
+                                    isHidden: it.not(it.licensedForFeature('LDAPGroups')),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.stateIsFalse('LdapSettings.EnableSync'),
+                                    ),
+                                },
+                                {
+                                    type: 'bool',
+                                    key: 'LdapSettings.EnableAdminFilter',
+                                    label: defineMessage({id: 'admin.ldap.enableAdminFilterTitle', defaultMessage: 'Enable Admin Filter:'}),
+                                    isDisabled: it.any(
+                                        it.not(it.isSystemAdmin),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.AdminFilter',
+                                    label: defineMessage({id: 'admin.ldap.adminFilterTitle', defaultMessage: 'Admin Filter:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.adminFilterFilterDesc', defaultMessage: '(Optional) Enter an AD/LDAP filter to use for designating System Admins. The users selected by the query will have access to your Mattermost server as System Admins. By default, System Admins have complete access to the Mattermost System Console. Existing members that are identified by this attribute will be promoted from member to System Admin upon next login. The next login is based upon Session lengths set in **System Console > Session Lengths**. It is highly recommend to manually demote users to members in **System Console > User Management** to ensure access is restricted immediately. Note: If this filter is removed/changed, System Admins that were promoted via this filter will be demoted to members and will not retain access to the System Console. When this filter is not in use, System Admins can be manually promoted/demoted in **System Console > User Management**.'}),
+                                    help_text_markdown: true,
+                                    placeholder: defineMessage({id: 'admin.ldap.adminFilterEx', defaultMessage: 'E.g.: "(objectClass=user)"'}),
+                                    isDisabled: it.any(
+                                        it.not(it.isSystemAdmin),
+                                        it.stateIsFalse('LdapSettings.EnableAdminFilter'),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.GuestFilter',
+                                    label: defineMessage({id: 'admin.ldap.guestFilterTitle', defaultMessage: 'Guest Filter:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.guestFilterFilterDesc', defaultMessage: '(Optional) Requires Guest Access to be enabled before being applied. Enter an AD/LDAP filter to use when searching for guest objects. Only the users selected by the query will be able to access Mattermost as Guests. Guests are prevented from accessing teams or channels upon logging in until they are assigned a team and at least one channel. Note: If this filter is removed/changed, active guests will not be promoted to a member and will retain their Guest role. Guests can be promoted in **System Console > User Management**. Existing members that are identified by this attribute as a guest will be demoted from a member to a guest when they are asked to login next. The next login is based upon Session lengths set in **System Console > Session Lengths**. It is highly recommend to manually demote users to guests in **System Console > User Management ** to ensure access is restricted immediately.'}),
+                                    help_text_markdown: true,
+                                    placeholder: defineMessage({id: 'admin.ldap.guestFilterEx', defaultMessage: 'E.g.: "(objectClass=user)"'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.configIsFalse('GuestAccountsSettings', 'Enable'),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        {
+                            key: 'admin.authentication.ldap.account_synchronization',
+                            title: 'Account Synchronization',
+                            settings: [
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.IdAttribute',
+                                    label: defineMessage({id: 'admin.ldap.idAttrTitle', defaultMessage: 'ID Attribute: '}),
+                                    placeholder: defineMessage({id: 'admin.ldap.idAttrEx', defaultMessage: 'E.g.: "objectGUID" or "uid"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.idAttrDesc', defaultMessage: "The attribute in the AD/LDAP server used as a unique identifier in Mattermost. It should be an AD/LDAP attribute with a value that does not change such as `uid` for LDAP or `objectGUID` for Active Directory. If a user's ID Attribute changes, it will create a new Mattermost account unassociated with their old one. If you need to change this field after users have already logged in, use the <link>mattermost ldap idmigrate</link> CLI tool."}),
+                                    help_text_markdown: false,
+                                    help_text_values: {
+                                        link: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://docs.mattermost.com/manage/command-line-tools.html#mattermost-ldap-idmigrate'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                    },
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateEquals('LdapSettings.Enable', false),
+                                            it.stateEquals('LdapSettings.EnableSync', false),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.LoginIdAttribute',
+                                    label: defineMessage({id: 'admin.ldap.loginAttrTitle', defaultMessage: 'Login ID Attribute: '}),
+                                    placeholder: defineMessage({id: 'admin.ldap.loginIdAttrEx', defaultMessage: 'E.g.: "sAMAccountName"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.loginAttrDesc', defaultMessage: 'The attribute in the AD/LDAP server used to log in to Mattermost. Normally this attribute is the same as the "Username Attribute" field above. If your team typically uses domain/username to log in to other services with AD/LDAP, you may enter domain/username in this field to maintain consistency between sites.'}),
+                                    help_text_markdown: false,
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.UsernameAttribute',
+                                    label: defineMessage({id: 'admin.ldap.usernameAttrTitle', defaultMessage: 'Username Attribute:'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.usernameAttrEx', defaultMessage: 'E.g.: "sAMAccountName"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.usernameAttrDesc', defaultMessage: 'The attribute in the AD/LDAP server used to populate the username field in Mattermost. This may be the same as the Login ID Attribute.'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.EmailAttribute',
+                                    label: defineMessage({id: 'admin.ldap.emailAttrTitle', defaultMessage: 'Email Attribute:'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.emailAttrEx', defaultMessage: 'E.g.: "mail" or "userPrincipalName"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.emailAttrDesc', defaultMessage: 'The attribute in the AD/LDAP server used to populate the email address field in Mattermost.'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.FirstNameAttribute',
+                                    label: defineMessage({id: 'admin.ldap.firstnameAttrTitle', defaultMessage: 'First Name Attribute:'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.firstnameAttrEx', defaultMessage: 'E.g.: "givenName"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.firstnameAttrDesc', defaultMessage: '(Optional) The attribute in the AD/LDAP server used to populate the first name of users in Mattermost. When set, users cannot edit their first name, since it is synchronized with the LDAP server. When left blank, users can set their first name in <strong>Account Menu > Account Settings > Profile</strong>.'}),
+                                    help_text_values: {
+                                        strong: (msg: string) => <strong>{msg}</strong>,
+                                    },
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.LastNameAttribute',
+                                    label: defineMessage({id: 'admin.ldap.lastnameAttrTitle', defaultMessage: 'Last Name Attribute:'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.lastnameAttrEx', defaultMessage: 'E.g.: "sn"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.lastnameAttrDesc', defaultMessage: '(Optional) The attribute in the AD/LDAP server used to populate the last name of users in Mattermost. When set, users cannot edit their last name, since it is synchronized with the LDAP server. When left blank, users can set their last name in <strong>Account Menu > Account Settings > Profile</strong>.'}),
+                                    help_text_values: {
+                                        strong: (msg: string) => <strong>{msg}</strong>,
+                                    },
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.NicknameAttribute',
+                                    label: defineMessage({id: 'admin.ldap.nicknameAttrTitle', defaultMessage: 'Nickname Attribute:'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.nicknameAttrEx', defaultMessage: 'E.g.: "nickname"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.nicknameAttrDesc', defaultMessage: '(Optional) The attribute in the AD/LDAP server used to populate the nickname of users in Mattermost. When set, users cannot edit their nickname, since it is synchronized with the LDAP server. When left blank, users can set their nickname in <strong>Account Menu > Account Settings > Profile</strong>.'}),
+                                    help_text_values: {
+                                        strong: (msg: string) => <strong>{msg}</strong>,
+                                    },
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.PositionAttribute',
+                                    label: defineMessage({id: 'admin.ldap.positionAttrTitle', defaultMessage: 'Position Attribute:'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.positionAttrEx', defaultMessage: 'E.g.: "title"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.positionAttrDesc', defaultMessage: '(Optional) The attribute in the AD/LDAP server used to populate the position field in Mattermost. When set, users cannot edit their position, since it is synchronized with the LDAP server. When left blank, users can set their position in <strong>Account Menu > Account Settings > Profile</strong>.'}),
+                                    help_text_values: {
+                                        strong: (msg: string) => <strong>{msg}</strong>,
+                                    },
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.PictureAttribute',
+                                    label: defineMessage({id: 'admin.ldap.pictureAttrTitle', defaultMessage: 'Profile Picture Attribute:'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.pictureAttrEx', defaultMessage: 'E.g.: "thumbnailPhoto" or "jpegPhoto"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.pictureAttrDesc', defaultMessage: '(Optional) The attribute in the AD/LDAP server used to populate the profile picture in Mattermost.'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        {
+                            key: 'admin.authentication.ldap.group_synchronization',
+                            title: 'Group Synchronization',
+                            settings: [
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.GroupDisplayNameAttribute',
+                                    label: defineMessage({id: 'admin.ldap.groupDisplayNameAttributeTitle', defaultMessage: 'Group Display Name Attribute:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.groupDisplayNameAttributeDesc', defaultMessage: 'The attribute in the AD/LDAP server used to populate the group display names.'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.groupDisplayNameAttributeEx', defaultMessage: 'E.g.: "cn"'}),
+                                    isHidden: it.not(it.licensedForFeature('LDAPGroups')),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.stateIsFalse('LdapSettings.EnableSync'),
+                                    ),
+                                },
+                                {
+                                    type: 'text',
+                                    key: 'LdapSettings.GroupIdAttribute',
+                                    label: defineMessage({id: 'admin.ldap.groupIdAttributeTitle', defaultMessage: 'Group ID Attribute:'}),
+                                    help_text: defineMessage({id: 'admin.ldap.groupIdAttributeDesc', defaultMessage: 'The attribute in the AD/LDAP server used as a unique identifier for Groups. This should be a AD/LDAP attribute with a value that does not change such as `entryUUID` for LDAP or `objectGUID` for Active Directory.'}),
+                                    help_text_markdown: true,
+                                    placeholder: defineMessage({id: 'admin.ldap.groupIdAttributeEx', defaultMessage: 'E.g.: "objectGUID" or "entryUUID"'}),
+                                    isHidden: it.not(it.licensedForFeature('LDAPGroups')),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.stateIsFalse('LdapSettings.EnableSync'),
+                                    ),
+                                },
+                            ],
+                        },
+                        {
+                            key: 'admin.authentication.ldap.synchronization_performance',
+                            title: 'Synchronization Performance',
+                            settings: [
+                                {
+                                    type: 'number',
+                                    key: 'LdapSettings.SyncIntervalMinutes',
+                                    label: defineMessage({id: 'admin.ldap.syncIntervalTitle', defaultMessage: 'Synchronization Interval (minutes):'}),
+                                    help_text: defineMessage({id: 'admin.ldap.syncIntervalHelpText', defaultMessage: 'AD/LDAP Synchronization updates Mattermost user information to reflect updates on the AD/LDAP server. For example, when a user\'s name changes on the AD/LDAP server, the change updates in Mattermost when synchronization is performed. Accounts removed from or disabled in the AD/LDAP server have their Mattermost accounts set to "Inactive" and have their account sessions revoked. Mattermost performs synchronization on the interval entered. For example, if 60 is entered, Mattermost synchronizes every 60 minutes.'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'number',
+                                    key: 'LdapSettings.MaxPageSize',
+                                    label: defineMessage({id: 'admin.ldap.maxPageSizeTitle', defaultMessage: 'Maximum Page Size:'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.maxPageSizeEx', defaultMessage: 'E.g.: "2000"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.maxPageSizeHelpText', defaultMessage: 'The maximum number of users the Mattermost server will request from the AD/LDAP server at one time. 0 is unlimited.'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'number',
+                                    key: 'LdapSettings.QueryTimeout',
+                                    label: defineMessage({id: 'admin.ldap.queryTitle', defaultMessage: 'Query Timeout (seconds):'}),
+                                    placeholder: defineMessage({id: 'admin.ldap.queryEx', defaultMessage: 'E.g.: "60"'}),
+                                    help_text: defineMessage({id: 'admin.ldap.queryDesc', defaultMessage: 'The timeout value for queries to the AD/LDAP server. Increase if you are getting timeout errors caused by a slow AD/LDAP server.'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                                {
+                                    type: 'button',
+                                    action: ldapTest,
+                                    key: 'LdapSettings.LdapTest',
+                                    label: defineMessage({id: 'admin.ldap.ldap_test_button', defaultMessage: 'AD/LDAP Test'}),
+                                    help_text: defineMessage({id: 'admin.ldap.testHelpText', defaultMessage: 'Tests if the Mattermost server can connect to the AD/LDAP server specified. Please review "System Console > Logs" and <link>documentation</link> to troubleshoot errors.'}),
+                                    help_text_values: {
+                                        link: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href={DocLinks.CONFIGURE_AD_LDAP_QUERY_TIMEOUT}
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                    },
+                                    help_text_markdown: false,
+                                    error_message: defineMessage({id: 'admin.ldap.testFailure', defaultMessage: 'AD/LDAP Test Failure: {error}'}),
+                                    success_message: defineMessage({id: 'admin.ldap.testSuccess', defaultMessage: 'AD/LDAP Test Successful'}),
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.all(
+                                            it.stateIsFalse('LdapSettings.Enable'),
+                                            it.stateIsFalse('LdapSettings.EnableSync'),
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                        {
+                            key: 'admin.authentication.ldap.synchronization_history',
+                            title: 'Synchronization History',
+                            subtitle: 'See the table below for the status of each synchronization',
+                            settings: [
+                                {
+                                    type: 'jobstable',
+                                    job_type: Constants.JobTypes.LDAP_SYNC,
+                                    label: defineMessage({id: 'admin.ldap.sync_button', defaultMessage: 'AD/LDAP Synchronize Now'}),
+                                    help_text: defineMessage({id: 'admin.ldap.syncNowHelpText', defaultMessage: 'Initiates an AD/LDAP synchronization immediately. See the table below for status of each synchronization. Please review "System Console > Logs" and <link>documentation</link> to troubleshoot errors.'}),
+                                    help_text_markdown: false,
+                                    help_text_values: {
+                                        link: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href={DocLinks.SETUP_LDAP}
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                    },
+                                    isDisabled: it.any(
+                                        it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.LDAP)),
+                                        it.stateIsFalse('LdapSettings.EnableSync'),
+                                    ),
+                                    render_job: (job: Job) => {
+                                        if (job.status === 'pending') {
+                                            return <span>{'--'}</span>;
+                                        }
+
+                                        let ldapUsers = 0;
+                                        let deleteCount = 0;
+                                        let updateCount = 0;
+                                        let linkedLdapGroupsCount; // Deprecated.
+                                        let totalLdapGroupsCount = 0;
+                                        let groupDeleteCount = 0;
+                                        let groupMemberDeleteCount = 0;
+                                        let groupMemberAddCount = 0;
+
+                                        if (job && job.data) {
+                                            if (job.data.ldap_users_count && job.data.ldap_users_count.length > 0) {
+                                                ldapUsers = job.data.ldap_users_count;
+                                            }
+
+                                            if (job.data.delete_count && job.data.delete_count.length > 0) {
+                                                deleteCount = job.data.delete_count;
+                                            }
+
+                                            if (job.data.update_count && job.data.update_count.length > 0) {
+                                                updateCount = job.data.update_count;
+                                            }
+
+                                            // Deprecated groups count representing the number of linked LDAP groups.
+                                            if (job.data.ldap_groups_count) {
+                                                linkedLdapGroupsCount = job.data.ldap_groups_count;
+                                            }
+
+                                            // Groups count representing the total number of LDAP groups available based on
+                                            // the configured based DN and groups filter.
+                                            if (job.data.total_ldap_groups_count) {
+                                                totalLdapGroupsCount = job.data.total_ldap_groups_count;
+                                            }
+
+                                            if (job.data.group_delete_count) {
+                                                groupDeleteCount = job.data.group_delete_count;
+                                            }
+
+                                            if (job.data.group_member_delete_count) {
+                                                groupMemberDeleteCount = job.data.group_member_delete_count;
+                                            }
+
+                                            if (job.data.group_member_add_count) {
+                                                groupMemberAddCount = job.data.group_member_add_count;
+                                            }
+                                        }
+
+                                        return (
+                                            <span>
+                                                <FormattedMessage
+                                                    id={linkedLdapGroupsCount ? 'admin.ldap.jobExtraInfo' : 'admin.ldap.jobExtraInfoTotal'}
+                                                    defaultMessage={linkedLdapGroupsCount ? 'Scanned {ldapUsers, number} LDAP users and {ldapGroups, number} linked groups.' : 'Scanned {ldapUsers, number} LDAP users and {ldapGroups, number} groups.'}
+                                                    values={{
+                                                        ldapUsers,
+                                                        ldapGroups: linkedLdapGroupsCount || totalLdapGroupsCount, // Show the old count for jobs records containing the old JSON key.
+                                                    }}
+                                                />
+                                                <ul>
+                                                    {updateCount > 0 &&
+                                                    <li>
+                                                        <FormattedMessage
+                                                            id='admin.ldap.jobExtraInfo.updatedUsers'
+                                                            defaultMessage='Updated {updateCount, number} users.'
+                                                            values={{
+                                                                updateCount,
+                                                            }}
+                                                        />
+                                                    </li>
+                                                    }
+                                                    {deleteCount > 0 &&
+                                                    <li>
+                                                        <FormattedMessage
+                                                            id='admin.ldap.jobExtraInfo.deactivatedUsers'
+                                                            defaultMessage='Deactivated {deleteCount, number} users.'
+                                                            values={{
+                                                                deleteCount,
+                                                            }}
+                                                        />
+                                                    </li>
+                                                    }
+                                                    {groupDeleteCount > 0 &&
+                                                    <li>
+                                                        <FormattedMessage
+                                                            id='admin.ldap.jobExtraInfo.deletedGroups'
+                                                            defaultMessage='Deleted {groupDeleteCount, number} groups.'
+                                                            values={{
+                                                                groupDeleteCount,
+                                                            }}
+                                                        />
+                                                    </li>
+                                                    }
+                                                    {groupMemberDeleteCount > 0 &&
+                                                    <li>
+                                                        <FormattedMessage
+                                                            id='admin.ldap.jobExtraInfo.deletedGroupMembers'
+                                                            defaultMessage='Deleted {groupMemberDeleteCount, number} group members.'
+                                                            values={{
+                                                                groupMemberDeleteCount,
+                                                            }}
+                                                        />
+                                                    </li>
+                                                    }
+                                                    {groupMemberAddCount > 0 &&
+                                                    <li>
+                                                        <FormattedMessage
+                                                            id='admin.ldap.jobExtraInfo.addedGroupMembers'
+                                                            defaultMessage='Added {groupMemberAddCount, number} group members.'
+                                                            values={{
+                                                                groupMemberAddCount,
+                                                            }}
+                                                        />
+                                                    </li>
+                                                    }
+                                                </ul>
+                                            </span>
+                                        );
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(),
+            },
+            ldap_feature_discovery: {
+                url: 'authentication/ldap',
+                isDiscovery: true,
+                title: defineMessage({id: 'admin.sidebar.ldap', defaultMessage: 'AD/LDAP'}),
+                isHidden: it.any(
+                    it.licensedForFeature('LDAP'),
+                    it.not(it.enterpriseReady),
+                ),
+                schema: {
+                    id: 'LdapSettings',
+                    name: defineMessage({id: 'admin.authentication.ldap', defaultMessage: 'AD/LDAP'}),
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: LDAPFeatureDiscovery,
+                            key: 'LDAPFeatureDiscovery',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(true),
+            },
+            saml: {
+                url: 'authentication/saml',
+                title: defineMessage({id: 'admin.sidebar.saml', defaultMessage: 'SAML 2.0'}),
+                isHidden: it.any(
+                    it.not(it.licensedForFeature('SAML')),
+                    it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                ),
+                schema: {
+                    id: 'SamlSettings',
+                    name: defineMessage({id: 'admin.authentication.saml', defaultMessage: 'SAML 2.0'}),
+                    settings: [
+                        {
+                            type: 'bool',
+                            key: 'SamlSettings.Enable',
+                            label: defineMessage({id: 'admin.saml.enableTitle', defaultMessage: 'Enable Login With SAML 2.0:'}),
+                            help_text: defineMessage({id: 'admin.saml.enableDescription', defaultMessage: 'When true, Mattermost allows login using SAML 2.0. Please see <link>documentation</link> to learn more about configuring SAML for Mattermost.'}),
+                            help_text_markdown: false,
+                            help_text_values: {
+                                link: (msg: string) => (
+                                    <ExternalLink
+                                        location='admin_console'
+                                        href='http://docs.mattermost.com/deployment/sso-saml.html'
+                                    >
+                                        {msg}
+                                    </ExternalLink>
+                                ),
+                            },
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'SamlSettings.EnableSyncWithLdap',
+                            label: defineMessage({id: 'admin.saml.enableSyncWithLdapTitle', defaultMessage: 'Enable Synchronizing SAML Accounts With AD/LDAP:'}),
+                            help_text: defineMessage({id: 'admin.saml.enableSyncWithLdapDescription', defaultMessage: 'When true, Mattermost periodically synchronizes SAML user attributes, including user deactivation and removal, from AD/LDAP. Enable and configure synchronization settings at <strong>Authentication > AD/LDAP</strong>. When false, user attributes are updated from SAML during user login. See <link>documentation</link> to learn more.'}),
+                            help_text_values: {
+                                link: (msg: string) => (
+                                    <ExternalLink
+                                        location='admin_console'
+                                        href={DocLinks.SETUP_LDAP}
+                                    >
+                                        {msg}
+                                    </ExternalLink>
+                                ),
+                                strong: (msg: string) => <strong>{msg}</strong>,
+                            },
+                            help_text_markdown: false,
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'SamlSettings.IgnoreGuestsLdapSync',
+                            label: defineMessage({id: 'admin.saml.ignoreGuestsLdapSyncTitle', defaultMessage: 'Ignore Guest Users when Synchronizing with AD/LDAP'}),
+                            help_text: defineMessage({id: 'admin.saml.ignoreGuestsLdapSyncDesc', defaultMessage: 'When true, Mattermost will ignore Guest Users who are identified by the Guest Attribute, when synchronizing with AD/LDAP for user deactivation and removal and Guest deactivation will need to be managed manually via System Console > Users.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.configIsFalse('GuestAccountsSettings', 'Enable'),
+                                it.stateIsFalse('SamlSettings.EnableSyncWithLdap'),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'SamlSettings.EnableSyncWithLdapIncludeAuth',
+                            label: defineMessage({id: 'admin.saml.enableSyncWithLdapIncludeAuthTitle', defaultMessage: 'Override SAML bind data with AD/LDAP information:'}),
+                            help_text: defineMessage({id: 'admin.saml.enableSyncWithLdapIncludeAuthDescription', defaultMessage: 'When true, Mattermost will override the SAML ID attribute with the AD/LDAP ID attribute if configured or override the SAML Email attribute with the AD/LDAP Email attribute if SAML ID attribute is not present. This will allow you automatically migrate users from Email binding to ID binding to prevent creation of new users when an email address changes for a user. Moving from true to false, will remove the override from happening. <strong>Note:</strong> SAML IDs must match the LDAP IDs to prevent disabling of user accounts. Please review <link>documentation</link> for more information.'}),
+                            help_text_values: {
+                                link: (msg: string) => (
+                                    <ExternalLink
+                                        location='admin_console'
+                                        href={DocLinks.CONFIGURE_OVERRIDE_SAML_BIND_DATA_WITH_LDAP}
+                                    >
+                                        {msg}
+                                    </ExternalLink>
+                                ),
+                                strong: (msg: string) => <strong>{msg}</strong>,
+                            },
+                            help_text_markdown: false,
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                                it.stateIsFalse('SamlSettings.EnableSyncWithLdap'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.IdpMetadataURL',
+                            label: defineMessage({id: 'admin.saml.idpMetadataUrlTitle', defaultMessage: 'Identity Provider Metadata URL:'}),
+                            help_text: defineMessage({id: 'admin.saml.idpMetadataUrlDesc', defaultMessage: 'The Metadata URL for the Identity Provider you use for SAML requests'}),
+                            placeholder: defineMessage({id: 'admin.saml.idpMetadataUrlEx', defaultMessage: 'E.g.: "https://idp.example.org/SAML2/saml/metadata"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'button',
+                            key: 'getSamlMetadataFromIDPButton',
+                            action: getSamlMetadataFromIdp,
+                            label: defineMessage({id: 'admin.saml.getSamlMetadataFromIDPUrl', defaultMessage: 'Get SAML Metadata from IdP'}),
+                            loading: defineMessage({id: 'admin.saml.getSamlMetadataFromIDPFetching', defaultMessage: 'Fetching...'}),
+                            error_message: defineMessage({id: 'admin.saml.getSamlMetadataFromIDPFail', defaultMessage: 'SAML Metadata URL did not connect and pull data successfully'}),
+                            success_message: defineMessage({id: 'admin.saml.getSamlMetadataFromIDPSuccess', defaultMessage: 'SAML Metadata retrieved successfully. Two fields below have been updated'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                                it.stateEquals('SamlSettings.IdpMetadataURL', ''),
+                            ),
+                            sourceUrlKey: 'SamlSettings.IdpMetadataURL',
+                            skipSaveNeeded: true,
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.IdpURL',
+                            label: defineMessage({id: 'admin.saml.idpUrlTitle', defaultMessage: 'SAML SSO URL:'}),
+                            help_text: defineMessage({id: 'admin.saml.idpUrlDesc', defaultMessage: 'The URL where Mattermost sends a SAML request to start login sequence.'}),
+                            placeholder: defineMessage({id: 'admin.saml.idpUrlEx', defaultMessage: 'E.g.: "https://idp.example.org/SAML2/SSO/Login"'}),
+                            setFromMetadataField: 'idp_url',
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.IdpDescriptorURL',
+                            label: defineMessage({id: 'admin.saml.idpDescriptorUrlTitle', defaultMessage: 'Identity Provider Issuer URL:'}),
+                            help_text: defineMessage({id: 'admin.saml.idpDescriptorUrlDesc', defaultMessage: 'The issuer URL for the Identity Provider you use for SAML requests.'}),
+                            placeholder: defineMessage({id: 'admin.saml.idpDescriptorUrlEx', defaultMessage: 'E.g.: "https://idp.example.org/SAML2/issuer"'}),
+                            setFromMetadataField: 'idp_descriptor_url',
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'fileupload',
+                            key: 'SamlSettings.IdpCertificateFile',
+                            label: defineMessage({id: 'admin.saml.idpCertificateFileTitle', defaultMessage: 'Identity Provider Public Certificate:'}),
+                            help_text: defineMessage({id: 'admin.saml.idpCertificateFileDesc', defaultMessage: 'The public authentication certificate issued by your Identity Provider.'}),
+                            remove_help_text: defineMessage({id: 'admin.saml.idpCertificateFileRemoveDesc', defaultMessage: 'Remove the public authentication certificate issued by your Identity Provider.'}),
+                            remove_button_text: defineMessage({id: 'admin.saml.remove.idp_certificate', defaultMessage: 'Remove Identity Provider Certificate'}),
+                            removing_text: defineMessage({id: 'admin.saml.removing.certificate', defaultMessage: 'Removing Certificate...'}),
+                            uploading_text: defineMessage({id: 'admin.saml.uploading.certificate', defaultMessage: 'Uploading Certificate...'}),
+                            fileType: '.crt,.cer,.cert,.pem',
+                            upload_action: uploadIdpSamlCertificate,
+                            set_action: setSamlIdpCertificateFromMetadata,
+                            remove_action: removeIdpSamlCertificate,
+                            setFromMetadataField: 'idp_public_certificate',
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'SamlSettings.Verify',
+                            label: defineMessage({id: 'admin.saml.verifyTitle', defaultMessage: 'Verify Signature:'}),
+                            help_text: defineMessage({id: 'admin.saml.verifyDescription', defaultMessage: 'When false, Mattermost will not verify that the signature sent from a SAML Response matches the Service Provider Login URL. Disabling verification is not recommended for production environments.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.AssertionConsumerServiceURL',
+                            label: defineMessage({id: 'admin.saml.assertionConsumerServiceURLTitle', defaultMessage: 'Service Provider Login URL:'}),
+                            help_text: defineMessage({id: 'admin.saml.assertionConsumerServiceURLPopulatedDesc', defaultMessage: 'This field is also known as the Assertion Consumer Service URL.'}),
+                            placeholder: defineMessage({id: 'admin.saml.assertionConsumerServiceURLEx', defaultMessage: 'E.g.: "<urlChunk>your-mattermost-url</urlChunk>"'}),
+                            placeholder_values: {
+                                urlChunk: (chunk: string) => `https://'<${chunk}>'/login/sso/saml`,
+                            },
+                            onConfigLoad: (value, config) => {
+                                const siteUrl = config.ServiceSettings?.SiteURL || '';
+                                if (siteUrl.length > 0 && value.length === 0) {
+                                    const addSlashIfNeeded = siteUrl[siteUrl.length - 1] === '/' ? '' : '/';
+                                    return `${siteUrl}${addSlashIfNeeded}login/sso/saml`;
+                                }
+                                return value;
+                            },
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.ServiceProviderIdentifier',
+                            label: defineMessage({id: 'admin.saml.serviceProviderIdentifierTitle', defaultMessage: 'Service Provider Identifier:'}),
+                            help_text: defineMessage({id: 'admin.saml.serviceProviderIdentifierDesc', defaultMessage: 'The unique identifier for the Service Provider, usually the same as Service Provider Login URL. In ADFS, this MUST match the Relying Party Identifier.'}),
+                            placeholder: defineMessage({id: 'admin.saml.serviceProviderIdentifierEx', defaultMessage: 'E.g.: "<urlChunk>your-mattermost-url</urlChunk>"'}),
+                            placeholder_values: {
+                                urlChunk: (chunk: string) => `https://'<${chunk}>'/login/sso/saml`,
+                            },
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'SamlSettings.Encrypt',
+                            label: defineMessage({id: 'admin.saml.encryptTitle', defaultMessage: 'Enable Encryption:'}),
+                            help_text: defineMessage({id: 'admin.saml.encryptDescription', defaultMessage: 'When false, Mattermost will not decrypt SAML Assertions encrypted with your Service Provider Public Certificate. Disabling encryption is not recommended for production environments.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'fileupload',
+                            key: 'SamlSettings.PrivateKeyFile',
+                            label: defineMessage({id: 'admin.saml.privateKeyFileTitle', defaultMessage: 'Service Provider Private Key:'}),
+                            help_text: defineMessage({id: 'admin.saml.privateKeyFileFileDesc', defaultMessage: 'The private key used to decrypt SAML Assertions from the Identity Provider.'}),
+                            remove_help_text: defineMessage({id: 'admin.saml.privateKeyFileFileRemoveDesc', defaultMessage: 'Remove the private key used to decrypt SAML Assertions from the Identity Provider.'}),
+                            remove_button_text: defineMessage({id: 'admin.saml.remove.privKey', defaultMessage: 'Remove Service Provider Private Key'}),
+                            removing_text: defineMessage({id: 'admin.saml.removing.privKey', defaultMessage: 'Removing Private Key...'}),
+                            uploading_text: defineMessage({id: 'admin.saml.uploading.privateKey', defaultMessage: 'Uploading Private Key...'}),
+                            fileType: '.key',
+                            upload_action: uploadPrivateSamlCertificate,
+                            remove_action: removePrivateSamlCertificate,
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                                it.stateIsFalse('SamlSettings.Encrypt'),
+                            ),
+                        },
+                        {
+                            type: 'fileupload',
+                            key: 'SamlSettings.PublicCertificateFile',
+                            label: defineMessage({id: 'admin.saml.publicCertificateFileTitle', defaultMessage: 'Service Provider Public Certificate:'}),
+                            help_text: defineMessage({id: 'admin.saml.publicCertificateFileDesc', defaultMessage: 'The certificate used to generate the signature on a SAML request to the Identity Provider for a service provider initiated SAML login, when Mattermost is the Service Provider.'}),
+                            remove_help_text: defineMessage({id: 'admin.saml.publicCertificateFileRemoveDesc', defaultMessage: 'Remove the certificate used to generate the signature on a SAML request to the Identity Provider for a service provider initiated SAML login, when Mattermost is the Service Provider.'}),
+                            remove_button_text: defineMessage({id: 'admin.saml.remove.sp_certificate', defaultMessage: 'Remove Service Provider Certificate'}),
+                            removing_text: defineMessage({id: 'admin.saml.removing.certificate', defaultMessage: 'Removing Certificate...'}),
+                            uploading_text: defineMessage({id: 'admin.saml.uploading.certificate', defaultMessage: 'Uploading Certificate...'}),
+                            fileType: '.crt,.cer',
+                            upload_action: uploadPublicSamlCertificate,
+                            remove_action: removePublicSamlCertificate,
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                                it.stateIsFalse('SamlSettings.Encrypt'),
+                            ),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'SamlSettings.SignRequest',
+                            label: defineMessage({id: 'admin.saml.signRequestTitle', defaultMessage: 'Sign Request:'}),
+                            help_text: defineMessage({id: 'admin.saml.signRequestDescription', defaultMessage: 'When true, Mattermost will sign the SAML request using your private key. When false, Mattermost will not sign the SAML request.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Encrypt'),
+                                it.stateIsFalse('SamlSettings.PrivateKeyFile'),
+                                it.stateIsFalse('SamlSettings.PublicCertificateFile'),
+                            ),
+                        },
+                        {
+                            type: 'dropdown',
+                            key: 'SamlSettings.SignatureAlgorithm',
+                            label: defineMessage({id: 'admin.saml.signatureAlgorithmTitle', defaultMessage: 'Signature Algorithm'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Encrypt'),
+                                it.stateIsFalse('SamlSettings.SignRequest'),
+                            ),
+                            options: [
+                                {
+                                    value: SAML_SETTINGS_SIGNATURE_ALGORITHM_SHA1,
+                                    display_name: defineMessage({id: 'admin.saml.signatureAlgorithmDisplay.sha1', defaultMessage: 'RSAwithSHA1'}),
+                                    help_text: defineMessage({id: 'admin.saml.signatureAlgorithmDescription.sha1', defaultMessage: 'Specify the Signature algorithm used to sign the request (RSAwithSHA1). Please see more information provided at http://www.w3.org/2000/09/xmldsig#rsa-sha1'}),
+                                },
+                                {
+                                    value: SAML_SETTINGS_SIGNATURE_ALGORITHM_SHA256,
+                                    display_name: defineMessage({id: 'admin.saml.signatureAlgorithmDisplay.sha256', defaultMessage: 'RSAwithSHA256'}),
+                                    help_text: defineMessage({id: 'admin.saml.signatureAlgorithmDescription.sha256', defaultMessage: 'Specify the Signature algorithm used to sign the request (RSAwithSHA256). Please see more information provided at http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 [section 6.4.2 RSA (PKCS#1 v1.5)]'}),
+                                },
+                                {
+                                    value: SAML_SETTINGS_SIGNATURE_ALGORITHM_SHA512,
+                                    display_name: defineMessage({id: 'admin.saml.signatureAlgorithmDisplay.sha512', defaultMessage: 'RSAwithSHA512'}),
+                                    help_text: defineMessage({id: 'admin.saml.signatureAlgorithmDescription.sha512', defaultMessage: 'Specify the Signature algorithm used to sign the request (RSAwithSHA512). Please see more information provided at http://www.w3.org/2001/04/xmldsig-more#rsa-sha512'}),
+                                },
+                            ],
+                        },
+                        {
+                            type: 'dropdown',
+                            key: 'SamlSettings.CanonicalAlgorithm',
+                            label: defineMessage({id: 'admin.saml.canonicalAlgorithmTitle', defaultMessage: 'Canonicalization Algorithm'}),
+                            options: [
+                                {
+                                    value: SAML_SETTINGS_CANONICAL_ALGORITHM_C14N,
+                                    display_name: defineMessage({id: 'admin.saml.canonicalAlgorithmDisplay.n10', defaultMessage: 'Exclusive XML Canonicalization 1.0 (omit comments)'}),
+                                    help_text: defineMessage({id: 'admin.saml.canonicalAlgorithmDescription.exc', defaultMessage: 'Specify the Canonicalization algorithm (Exclusive XML Canonicalization 1.0). Please see more information provided at http://www.w3.org/2001/10/xml-exc-c14n#'}),
+                                },
+                                {
+                                    value: SAML_SETTINGS_CANONICAL_ALGORITHM_C14N11,
+                                    display_name: defineMessage({id: 'admin.saml.canonicalAlgorithmDisplay.n11', defaultMessage: 'Canonical XML 1.1 (omit comments)'}),
+                                    help_text: defineMessage({id: 'admin.saml.canonicalAlgorithmDescription.c14', defaultMessage: 'Specify the Canonicalization algorithm (Canonical XML 1.1). Please see more information provided at http://www.w3.org/2006/12/xml-c14n11'}),
+                                },
+                            ],
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Encrypt'),
+                                it.stateIsFalse('SamlSettings.SignRequest'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.EmailAttribute',
+                            label: defineMessage({id: 'admin.saml.emailAttrTitle', defaultMessage: 'Email Attribute:'}),
+                            placeholder: defineMessage({id: 'admin.saml.emailAttrEx', defaultMessage: 'E.g.: "Email" or "PrimaryEmail"'}),
+                            help_text: defineMessage({id: 'admin.saml.emailAttrDesc', defaultMessage: 'The attribute in the SAML Assertion that will be used to populate the email addresses of users in Mattermost.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.UsernameAttribute',
+                            label: defineMessage({id: 'admin.saml.usernameAttrTitle', defaultMessage: 'Username Attribute:'}),
+                            placeholder: defineMessage({id: 'admin.saml.usernameAttrEx', defaultMessage: 'E.g.: "Username"'}),
+                            help_text: defineMessage({id: 'admin.saml.usernameAttrDesc', defaultMessage: 'The attribute in the SAML Assertion that will be used to populate the username field in Mattermost.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.IdAttribute',
+                            label: defineMessage({id: 'admin.saml.idAttrTitle', defaultMessage: 'Id Attribute:'}),
+                            placeholder: defineMessage({id: 'admin.saml.idAttrEx', defaultMessage: 'E.g.: "Id"'}),
+                            help_text: defineMessage({id: 'admin.saml.idAttrDesc', defaultMessage: '(Optional) The attribute in the SAML Assertion that will be used to bind users from SAML to users in Mattermost.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.GuestAttribute',
+                            label: defineMessage({id: 'admin.saml.guestAttrTitle', defaultMessage: 'Guest Attribute:'}),
+                            placeholder: defineMessage({id: 'admin.saml.guestAttrEx', defaultMessage: 'E.g.: "usertype=Guest" or "isGuest=true"'}),
+                            help_text: defineMessage({id: 'admin.saml.guestAttrDesc', defaultMessage: '(Optional) Requires Guest Access to be enabled before being applied. The attribute in the SAML Assertion that will be used to apply a guest role to users in Mattermost. Guests are prevented from accessing teams or channels upon logging in until they are assigned a team and at least one channel. Note: If this attribute is removed/changed from your guest user in SAML and the user is still active, they will not be promoted to a member and will retain their Guest role. Guests can be promoted in **System Console > User Management**. Existing members that are identified by this attribute as a guest will be demoted from a member to a guest when they are asked to login next. The next login is based upon Session lengths set in **System Console > Session Lengths**. It is highly recommend to manually demote users to guests in **System Console > User Management ** to ensure access is restricted immediately.'}),
+                            help_text_markdown: true,
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.configIsFalse('GuestAccountsSettings', 'Enable'),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'SamlSettings.EnableAdminAttribute',
+                            label: defineMessage({id: 'admin.saml.enableAdminAttrTitle', defaultMessage: 'Enable Admin Attribute:'}),
+                            isDisabled: it.any(
+                                it.not(it.isSystemAdmin),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.AdminAttribute',
+                            label: defineMessage({id: 'admin.saml.adminAttrTitle', defaultMessage: 'Admin Attribute:'}),
+                            placeholder: defineMessage({id: 'admin.saml.adminAttrEx', defaultMessage: 'E.g.: "usertype=Admin" or "isAdmin=true"'}),
+                            help_text: defineMessage({id: 'admin.saml.adminAttrDesc', defaultMessage: '(Optional) The attribute in the SAML Assertion for designating System Admins. The users selected by the query will have access to your Mattermost server as System Admins. By default, System Admins have complete access to the Mattermost System Console. Existing members that are identified by this attribute will be promoted from member to System Admin upon next login. The next login is based upon Session lengths set in **System Console > Session Lengths.** It is highly recommend to manually demote users to members in **System Console > User Management** to ensure access is restricted immediately. Note: If this filter is removed/changed, System Admins that were promoted via this filter will be demoted to members and will not retain access to the System Console. When this filter is not in use, System Admins can be manually promoted/demoted in **System Console > User Management**.'}),
+                            help_text_markdown: true,
+                            isDisabled: it.any(
+                                it.not(it.isSystemAdmin),
+                                it.stateIsFalse('SamlSettings.EnableAdminAttribute'),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.FirstNameAttribute',
+                            label: defineMessage({id: 'admin.saml.firstnameAttrTitle', defaultMessage: 'First Name Attribute:'}),
+                            placeholder: defineMessage({id: 'admin.saml.firstnameAttrEx', defaultMessage: 'E.g.: "FirstName"'}),
+                            help_text: defineMessage({id: 'admin.saml.firstnameAttrDesc', defaultMessage: '(Optional) The attribute in the SAML Assertion that will be used to populate the first name of users in Mattermost.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.LastNameAttribute',
+                            label: defineMessage({id: 'admin.saml.lastnameAttrTitle', defaultMessage: 'Last Name Attribute:'}),
+                            placeholder: defineMessage({id: 'admin.saml.lastnameAttrEx', defaultMessage: 'E.g.: "LastName"'}),
+                            help_text: defineMessage({id: 'admin.saml.lastnameAttrDesc', defaultMessage: '(Optional) The attribute in the SAML Assertion that will be used to populate the last name of users in Mattermost.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.NicknameAttribute',
+                            label: defineMessage({id: 'admin.saml.nicknameAttrTitle', defaultMessage: 'Nickname Attribute:'}),
+                            placeholder: defineMessage({id: 'admin.saml.nicknameAttrEx', defaultMessage: 'E.g.: "Nickname"'}),
+                            help_text: defineMessage({id: 'admin.saml.nicknameAttrDesc', defaultMessage: '(Optional) The attribute in the SAML Assertion that will be used to populate the nickname of users in Mattermost.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.PositionAttribute',
+                            label: defineMessage({id: 'admin.saml.positionAttrTitle', defaultMessage: 'Position Attribute:'}),
+                            placeholder: defineMessage({id: 'admin.saml.positionAttrEx', defaultMessage: 'E.g.: "Role"'}),
+                            help_text: defineMessage({id: 'admin.saml.positionAttrDesc', defaultMessage: '(Optional) The attribute in the SAML Assertion that will be used to populate the position of users in Mattermost.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.LocaleAttribute',
+                            label: defineMessage({id: 'admin.saml.localeAttrTitle', defaultMessage: 'Preferred Language Attribute:'}),
+                            placeholder: defineMessage({id: 'admin.saml.localeAttrEx', defaultMessage: 'E.g.: "Locale" or "PrimaryLanguage"'}),
+                            help_text: defineMessage({id: 'admin.saml.localeAttrDesc', defaultMessage: '(Optional) The attribute in the SAML Assertion that will be used to populate the language of users in Mattermost.'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'SamlSettings.LoginButtonText',
+                            label: defineMessage({id: 'admin.saml.loginButtonTextTitle', defaultMessage: 'Login Button Text:'}),
+                            placeholder: defineMessage({id: 'admin.saml.loginButtonTextEx', defaultMessage: 'E.g.: "OKTA"'}),
+                            help_text: defineMessage({id: 'admin.saml.loginButtonTextDesc', defaultMessage: '(Optional) The text that appears in the login button on the login page. Defaults to "SAML".'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.SAML)),
+                                it.stateIsFalse('SamlSettings.Enable'),
+                            ),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(),
+            },
+            saml_feature_discovery: {
+                url: 'authentication/saml',
+                isDiscovery: true,
+                title: defineMessage({id: 'admin.sidebar.saml', defaultMessage: 'SAML 2.0'}),
+                isHidden: it.any(
+                    it.licensedForFeature('SAML'),
+                    it.not(it.enterpriseReady),
+                ),
+                schema: {
+                    id: 'SamlSettings',
+                    name: defineMessage({id: 'admin.authentication.saml', defaultMessage: 'SAML 2.0'}),
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: SAMLFeatureDiscovery,
+                            key: 'SAMLFeatureDiscovery',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(true),
+            },
+            gitlab: {
+                url: 'authentication/gitlab',
+                title: defineMessage({id: 'admin.sidebar.gitlab', defaultMessage: 'GitLab'}),
+                isHidden: it.any(
+                    it.licensed,
+                    it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                ),
+                schema: {
+                    id: 'GitLabSettings',
+                    name: defineMessage({id: 'admin.authentication.gitlab', defaultMessage: 'GitLab'}),
+                    onConfigLoad: (config) => {
+                        const newState: {'GitLabSettings.Url'?: string} = {};
+                        newState['GitLabSettings.Url'] = config.GitLabSettings?.UserAPIEndpoint?.replace('/api/v4/user', '');
+                        return newState;
+                    },
+                    onConfigSave: (config) => {
+                        const newConfig = {...config};
+                        newConfig.GitLabSettings.UserAPIEndpoint = config.GitLabSettings.Url.replace(/\/$/, '') + '/api/v4/user';
+                        return newConfig;
+                    },
+                    settings: [
+                        {
+                            type: 'bool',
+                            key: 'GitLabSettings.Enable',
+                            label: defineMessage({id: 'admin.gitlab.enableTitle', defaultMessage: 'Enable authentication with GitLab: '}),
+                            help_text: defineMessage({id: 'admin.gitlab.enableDescription', defaultMessage: 'When true, Mattermost allows team creation and account signup using GitLab OAuth.{lineBreak} {lineBreak}1. Log in to your GitLab account and go to Profile Settings -> Applications.{lineBreak}2. Enter Redirect URIs "<loginUrlChunk>your-mattermost-url</loginUrlChunk>" (example: http://localhost:8065/login/gitlab/complete) and "<signupUrlChunk>your-mattermost-url</signupUrlChunk>".\n3. Then use "Application Secret Key" and "Application ID" fields from GitLab to complete the options below.\n4. Complete the Endpoint URLs below.'}),
+                            help_text_values: {
+                                lineBreak: '\n',
+                                loginUrlChunk: (chunk: string) => `<${chunk}>/login/gitlab/complete"`,
+                                signupUrlChunk: (chunk: string) => `<${chunk}>/signup/gitlab/complete"`,
+                            },
+                            help_text_markdown: true,
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.Id',
+                            label: defineMessage({id: 'admin.gitlab.clientIdTitle', defaultMessage: 'Application ID:'}),
+                            help_text: defineMessage({id: 'admin.gitlab.clientIdDescription', defaultMessage: 'Obtain this value via the instructions above for logging into GitLab.'}),
+                            placeholder: defineMessage({id: 'admin.gitlab.clientIdExample', defaultMessage: 'E.g.: "jcuS8PuvcpGhpgHhlcpT1Mx42pnqMxQY"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                                it.stateIsFalse('GitLabSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.Secret',
+                            label: defineMessage({id: 'admin.gitlab.clientSecretTitle', defaultMessage: 'Application Secret Key:'}),
+                            help_text: defineMessage({id: 'admin.gitlab.clientSecretDescription', defaultMessage: 'Obtain this value via the instructions above for logging into GitLab.'}),
+                            placeholder: defineMessage({id: 'admin.gitlab.clientSecretExample', defaultMessage: 'E.g.: "jcuS8PuvcpGhpgHhlcpT1Mx42pnqMxQY"'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                                it.stateIsFalse('GitLabSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.Url',
+                            label: defineMessage({id: 'admin.gitlab.siteUrl', defaultMessage: 'GitLab Site URL:'}),
+                            help_text: defineMessage({id: 'admin.gitlab.siteUrlDescription', defaultMessage: 'Enter the URL of your GitLab instance, e.g. https://example.com:3000. If your GitLab instance is not set up with SSL, start the URL with http:// instead of https://.'}),
+                            placeholder: defineMessage({id: 'admin.gitlab.siteUrlExample', defaultMessage: 'E.g.: https://'}),
+                            isDisabled: it.any(
+                                it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                                it.stateIsFalse('GitLabSettings.Enable'),
+                            ),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.UserAPIEndpoint',
+                            label: defineMessage({id: 'admin.gitlab.userTitle', defaultMessage: 'User API Endpoint:'}),
+                            dynamic_value: (value, config, state) => {
+                                if (state['GitLabSettings.Url']) {
+                                    return state['GitLabSettings.Url'].replace(/\/$/, '') + '/api/v4/user';
+                                }
+                                return '';
+                            },
+                            isDisabled: true,
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.AuthEndpoint',
+                            label: defineMessage({id: 'admin.gitlab.authTitle', defaultMessage: 'Auth Endpoint:'}),
+                            dynamic_value: (value, config, state) => {
+                                if (state['GitLabSettings.Url']) {
+                                    return state['GitLabSettings.Url'].replace(/\/$/, '') + '/oauth/authorize';
+                                }
+                                return '';
+                            },
+                            isDisabled: true,
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.TokenEndpoint',
+                            label: defineMessage({id: 'admin.gitlab.tokenTitle', defaultMessage: 'Token Endpoint:'}),
+                            dynamic_value: (value, config, state) => {
+                                if (state['GitLabSettings.Url']) {
+                                    return state['GitLabSettings.Url'].replace(/\/$/, '') + '/oauth/token';
+                                }
+                                return '';
+                            },
+                            isDisabled: true,
+                        },
+                    ],
+                },
+            },
+            oauth: {
+                url: 'authentication/oauth',
+                title: defineMessage({id: 'admin.sidebar.oauth', defaultMessage: 'OAuth 2.0'}),
+                isHidden: it.any(
+                    it.any(
+                        it.not(it.licensed),
+                        it.licensedForSku('starter'),
+                    ),
+                    it.all(
+                        it.licensedForFeature('OpenId'),
+                        it.not(usesLegacyOauth),
+                    ),
+                    it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                ),
+                schema: {
+                    id: 'OAuthSettings',
+                    name: defineMessage({id: 'admin.authentication.oauth', defaultMessage: 'OAuth 2.0'}),
+                    onConfigLoad: (config) => {
+                        const newState: {oauthType?: string; 'GitLabSettings.Url'?: string} = {};
+                        if (config.GitLabSettings?.Enable) {
+                            newState.oauthType = Constants.GITLAB_SERVICE;
+                        }
+                        if (config.Office365Settings?.Enable) {
+                            newState.oauthType = Constants.OFFICE365_SERVICE;
+                        }
+                        if (config.GoogleSettings?.Enable) {
+                            newState.oauthType = Constants.GOOGLE_SERVICE;
+                        }
+
+                        newState['GitLabSettings.Url'] = config.GitLabSettings?.UserAPIEndpoint?.replace('/api/v4/user', '');
+
+                        return newState;
+                    },
+                    onConfigSave: (config) => {
+                        const newConfig = {...config};
+                        newConfig.GitLabSettings = config.GitLabSettings || {};
+                        newConfig.Office365Settings = config.Office365Settings || {};
+                        newConfig.GoogleSettings = config.GoogleSettings || {};
+                        newConfig.OpenIdSettings = config.OpenIdSettings || {};
+
+                        newConfig.GitLabSettings.Enable = false;
+                        newConfig.Office365Settings.Enable = false;
+                        newConfig.GoogleSettings.Enable = false;
+                        newConfig.OpenIdSettings.Enable = false;
+                        newConfig.GitLabSettings.UserAPIEndpoint = config.GitLabSettings.Url.replace(/\/$/, '') + '/api/v4/user';
+
+                        if (config.oauthType === Constants.GITLAB_SERVICE) {
+                            newConfig.GitLabSettings.Enable = true;
+                        }
+                        if (config.oauthType === Constants.OFFICE365_SERVICE) {
+                            newConfig.Office365Settings.Enable = true;
+                        }
+                        if (config.oauthType === Constants.GOOGLE_SERVICE) {
+                            newConfig.GoogleSettings.Enable = true;
+                        }
+                        delete newConfig.oauthType;
+                        return newConfig;
+                    },
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: OpenIdConvert,
+                            key: 'OpenIdConvert',
+                            isHidden: it.any(
+                                it.all(it.not(it.licensedForFeature('OpenId')), it.not(it.cloudLicensed)),
+                                it.not(usesLegacyOauth),
+                            ),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'dropdown',
+                            key: 'oauthType',
+                            label: defineMessage({id: 'admin.openid.select', defaultMessage: 'Select service provider:'}),
+                            options: [
+                                {
+                                    value: 'off',
+                                    display_name: defineMessage({id: 'admin.oauth.off', defaultMessage: 'Do not allow sign-in via an OAuth 2.0 provider.'}),
+                                },
+                                {
+                                    value: Constants.GITLAB_SERVICE,
+                                    display_name: defineMessage({id: 'admin.oauth.gitlab', defaultMessage: 'GitLab'}),
+                                    help_text: defineMessage({id: 'admin.gitlab.EnableMarkdownDesc', defaultMessage: '1. Log in to your GitLab account and go to Profile Settings -> Applications.\n2. Enter Redirect URIs "<loginUrlChunk>your-mattermost-url</loginUrlChunk>" (example: http://localhost:8065/login/gitlab/complete) and "<signupUrlChunk>your-mattermost-url</signupUrlChunk>".\n3. Then use "Application Secret Key" and "Application ID" fields from GitLab to complete the options below.\n4. Complete the Endpoint URLs below.'}),
+                                    help_text_values: {
+                                        loginUrlChunk: (chunk: string) => `<${chunk}>/login/gitlab/complete`,
+                                        signupUrlChunk: (chunk: string) => `<${chunk}>/signup/gitlab/complete`,
+                                    },
+                                    help_text_markdown: true,
+                                },
+                                {
+                                    value: Constants.GOOGLE_SERVICE,
+                                    display_name: defineMessage({id: 'admin.oauth.google', defaultMessage: 'Google Apps'}),
+                                    isHidden: it.all(it.not(it.licensedForFeature('GoogleOAuth')), it.not(it.cloudLicensed)),
+                                    help_text: defineMessage({id: 'admin.google.EnableMarkdownDesc', defaultMessage: '1. <linkLogin>Log in</linkLogin> to your Google account.\n2. Go to <linkConsole>https://console.developers.google.com</linkConsole>, click <strong>Credentials</strong> in the left hand sidebar and enter "Mattermost - your-company-name" as the <strong>Project Name</strong>, then click <strong>Create</strong>.\n3. Click the <strong>OAuth consent screen</strong> header and enter "Mattermost" as the <strong>Product name shown to users</strong>, then click <strong>Save</strong>.\n4. Under the <strong>Credentials</strong> header, click <strong>Create credentials</strong>, choose <strong>OAuth client ID</strong> and select <strong>Web Application</strong>.\n5. Under <strong>Restrictions</strong> and <strong>Authorized redirect URIs</strong> enter <strong>"your-mattermost-url/signup/google/complete"</strong> (example: http://localhost:8065/signup/google/complete). Click <strong>Create</strong>.\n6. Paste the <strong>Client ID</strong> and <strong>Client Secret</strong> to the fields below, then click <strong>Save</strong>.\n7. Go to the <linkAPI>Google People API</linkAPI> and click <strong>Enable</strong>.'}),
+                                    help_text_markdown: false,
+                                    help_text_values: {
+                                        linkLogin: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://accounts.google.com/login'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        linkConsole: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://console.developers.google.com'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        linkAPI: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://console.developers.google.com/apis/library/people.googleapis.com'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        strong: (msg: string) => <strong>{msg}</strong>,
+                                    },
+                                },
+                                {
+                                    value: Constants.OFFICE365_SERVICE,
+                                    display_name: defineMessage({id: 'admin.oauth.office365', defaultMessage: 'Entra ID'}),
+                                    isHidden: it.all(it.not(it.licensedForFeature('Office365OAuth')), it.not(it.cloudLicensed)),
+                                    help_text: defineMessage({id: 'admin.office365.EnableMarkdownDesc', defaultMessage: '1. <linkLogin>Log in</linkLogin> to your Microsoft account. \n2. In Microsoft, go to <strong>Applications</strong> and <strong>App Registrations</strong> in the left pane.\n3. Select <strong>New registration</strong>, then enter "Mattermost - your-company-name" as the <strong>Application Name</strong>. \n4. Under <strong>Redirect URI</strong>, select <strong>Web</strong>, and enter "your-mattermost-url/signup/office365/complete" as the <strong>Redirect URI</strong>. Select <strong>Register</strong>.\n5. Copy the Microsoft <strong>Application (client) ID</strong> value, and paste it below as the <strong>Client ID</strong> value. \n6. Copy the Microsoft <strong>Directory (tenant) ID</strong> value, and paste it below as the <strong>Directory (tenant) ID</strong> value. \n7. In Microsoft, create a new client secret. Copy the resulting client secret value, and paste it below as the <strong>Client Secret</strong> value. Select <strong>Save</strong>.'}),
+                                    help_text_markdown: false,
+                                    help_text_values: {
+                                        linkLogin: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://entra.microsoft.com'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        linkTenant: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://msdn.microsoft.com/en-us/library/azure/jj573650.aspx#Anchor_0'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        linkApps: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://entra.microsoft.com'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        strong: (msg: string) => <strong>{msg}</strong>,
+                                    },
+                                },
+                            ],
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.Id',
+                            label: defineMessage({id: 'admin.gitlab.clientIdTitle', defaultMessage: 'Application ID:'}),
+                            help_text: defineMessage({id: 'admin.gitlab.clientIdDescription', defaultMessage: 'Obtain this value via the instructions above for logging into GitLab.'}),
+                            placeholder: defineMessage({id: 'admin.gitlab.clientIdExample', defaultMessage: 'E.g.: "jcuS8PuvcpGhpgHhlcpT1Mx42pnqMxQY"'}),
+                            isHidden: it.not(it.stateEquals('oauthType', 'gitlab')),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.Secret',
+                            label: defineMessage({id: 'admin.gitlab.clientSecretTitle', defaultMessage: 'Application Secret Key:'}),
+                            help_text: defineMessage({id: 'admin.gitlab.clientSecretDescription', defaultMessage: 'Obtain this value via the instructions above for logging into GitLab.'}),
+                            placeholder: defineMessage({id: 'admin.gitlab.clientSecretExample', defaultMessage: 'E.g.: "jcuS8PuvcpGhpgHhlcpT1Mx42pnqMxQY"'}),
+                            isHidden: it.not(it.stateEquals('oauthType', 'gitlab')),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.Url',
+                            label: defineMessage({id: 'admin.gitlab.siteUrl', defaultMessage: 'GitLab Site URL:'}),
+                            help_text: defineMessage({id: 'admin.gitlab.siteUrlDescription', defaultMessage: 'Enter the URL of your GitLab instance, e.g. https://example.com:3000. If your GitLab instance is not set up with SSL, start the URL with http:// instead of https://.'}),
+                            placeholder: defineMessage({id: 'admin.gitlab.siteUrlExample', defaultMessage: 'E.g.: https://'}),
+                            isHidden: it.not(it.stateEquals('oauthType', 'gitlab')),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.UserAPIEndpoint',
+                            label: defineMessage({id: 'admin.gitlab.userTitle', defaultMessage: 'User API Endpoint:'}),
+                            dynamic_value: (value, config, state) => {
+                                if (state['GitLabSettings.Url']) {
+                                    return state['GitLabSettings.Url'].replace(/\/$/, '') + '/api/v4/user';
+                                }
+                                return '';
+                            },
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('oauthType', 'gitlab')),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.AuthEndpoint',
+                            label: defineMessage({id: 'admin.gitlab.authTitle', defaultMessage: 'Auth Endpoint:'}),
+                            dynamic_value: (value, config, state) => {
+                                if (state['GitLabSettings.Url']) {
+                                    return state['GitLabSettings.Url'].replace(/\/$/, '') + '/oauth/authorize';
+                                }
+                                return '';
+                            },
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('oauthType', 'gitlab')),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.TokenEndpoint',
+                            label: defineMessage({id: 'admin.gitlab.tokenTitle', defaultMessage: 'Token Endpoint:'}),
+                            dynamic_value: (value, config, state) => {
+                                if (state['GitLabSettings.Url']) {
+                                    return state['GitLabSettings.Url'].replace(/\/$/, '') + '/oauth/token';
+                                }
+                                return '';
+                            },
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('oauthType', 'gitlab')),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GoogleSettings.Id',
+                            label: defineMessage({id: 'admin.google.clientIdTitle', defaultMessage: 'Client ID:'}),
+                            help_text: defineMessage({id: 'admin.google.clientIdDescription', defaultMessage: 'The Client ID you received when registering your application with Google.'}),
+                            placeholder: defineMessage({id: 'admin.google.clientIdExample', defaultMessage: 'E.g.: "7602141235235-url0fhs1mayfasbmop5qlfns8dh4.apps.googleusercontent.com"'}),
+                            isHidden: it.not(it.stateEquals('oauthType', 'google')),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GoogleSettings.Secret',
+                            label: defineMessage({id: 'admin.google.clientSecretTitle', defaultMessage: 'Client Secret:'}),
+                            help_text: defineMessage({id: 'admin.google.clientSecretDescription', defaultMessage: 'The Client Secret you received when registering your application with Google.'}),
+                            placeholder: defineMessage({id: 'admin.google.clientSecretExample', defaultMessage: 'E.g.: "H8sz0Az-dDs2p15-7QzD231"'}),
+                            isHidden: it.not(it.stateEquals('oauthType', 'google')),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GoogleSettings.UserAPIEndpoint',
+                            label: defineMessage({id: 'admin.google.userTitle', defaultMessage: 'User API Endpoint:'}),
+                            dynamic_value: () => 'https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses,nicknames,metadata',
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('oauthType', 'google')),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GoogleSettings.AuthEndpoint',
+                            label: defineMessage({id: 'admin.google.authTitle', defaultMessage: 'Auth Endpoint:'}),
+                            dynamic_value: () => 'https://accounts.google.com/o/oauth2/v2/auth',
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('oauthType', 'google')),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GoogleSettings.TokenEndpoint',
+                            label: defineMessage({id: 'admin.google.tokenTitle', defaultMessage: 'Token Endpoint:'}),
+                            dynamic_value: () => 'https://www.googleapis.com/oauth2/v4/token',
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('oauthType', 'google')),
+                        },
+                        {
+                            type: 'text',
+                            key: 'Office365Settings.Id',
+                            label: defineMessage({id: 'admin.office365.clientIdTitle', defaultMessage: 'Application ID:'}),
+                            help_text: defineMessage({id: 'admin.office365.clientIdDescription', defaultMessage: 'The Application/Client ID you received when registering your application with Microsoft.'}),
+                            placeholder: defineMessage({id: 'admin.office365.clientIdExample', defaultMessage: 'E.g.: "adf3sfa2-ag3f-sn4n-ids0-sh1hdax192qq"'}),
+                            isHidden: it.not(it.stateEquals('oauthType', 'office365')),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'Office365Settings.Secret',
+                            label: defineMessage({id: 'admin.office365.clientSecretTitle', defaultMessage: 'Application Secret Password:'}),
+                            help_text: defineMessage({id: 'admin.office365.clientSecretDescription', defaultMessage: 'The Application Secret Password you generated when registering your application with Microsoft.'}),
+                            placeholder: defineMessage({id: 'admin.office365.clientSecretExample', defaultMessage: 'E.g.: "shAieM47sNBfgl20f8ci294"'}),
+                            isHidden: it.not(it.stateEquals('oauthType', 'office365')),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'Office365Settings.DirectoryId',
+                            label: defineMessage({id: 'admin.office365.directoryIdTitle', defaultMessage: 'Directory (tenant) ID:'}),
+                            help_text: defineMessage({id: 'admin.office365.directoryIdDescription', defaultMessage: 'The Directory (tenant) ID you received when registering your application with Microsoft.'}),
+                            placeholder: defineMessage({id: 'admin.office365.directoryIdExample', defaultMessage: 'E.g.: "adf3sfa2-ag3f-sn4n-ids0-sh1hdax192qq"'}),
+                            isHidden: it.not(it.stateEquals('oauthType', 'office365')),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'Office365Settings.UserAPIEndpoint',
+                            label: defineMessage({id: 'admin.office365.userTitle', defaultMessage: 'User API Endpoint:'}),
+                            dynamic_value: () => 'https://graph.microsoft.com/v1.0/me',
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('oauthType', 'office365')),
+                        },
+                        {
+                            type: 'text',
+                            key: 'Office365Settings.AuthEndpoint',
+                            label: defineMessage({id: 'admin.office365.authTitle', defaultMessage: 'Auth Endpoint:'}),
+                            dynamic_value: (value, config, state) => {
+                                if (state['Office365Settings.DirectoryId']) {
+                                    return 'https://login.microsoftonline.com/' + state['Office365Settings.DirectoryId'] + '/oauth2/v2.0/authorize';
+                                }
+                                return 'https://login.microsoftonline.com/{directoryId}/oauth2/v2.0/authorize';
+                            },
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('oauthType', 'office365')),
+                        },
+                        {
+                            type: 'text',
+                            key: 'Office365Settings.TokenEndpoint',
+                            label: defineMessage({id: 'admin.office365.tokenTitle', defaultMessage: 'Token Endpoint:'}),
+                            dynamic_value: (value, config, state) => {
+                                if (state['Office365Settings.DirectoryId']) {
+                                    return 'https://login.microsoftonline.com/' + state['Office365Settings.DirectoryId'] + '/oauth2/v2.0/token';
+                                }
+                                return 'https://login.microsoftonline.com/{directoryId}/oauth2/v2.0/token';
+                            },
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('oauthType', 'office365')),
+                        },
+                    ],
+                },
+            },
+            openid: {
+                url: 'authentication/openid',
+                title: defineMessage({id: 'admin.sidebar.openid', defaultMessage: 'OpenID Connect'}),
+                isHidden: it.any(
+                    it.all(it.not(it.licensedForFeature('OpenId')), it.not(it.cloudLicensed)),
+                    it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                ),
+                schema: {
+                    id: 'OpenIdSettings',
+                    name: defineMessage({id: 'admin.authentication.openid', defaultMessage: 'OpenID Connect'}),
+                    onConfigLoad: (config) => {
+                        const newState: {openidType?: string; 'GitLabSettings.Url'?: string} = {};
+                        if (config.Office365Settings?.Enable) {
+                            newState.openidType = Constants.OFFICE365_SERVICE;
+                        }
+                        if (config.GoogleSettings?.Enable) {
+                            newState.openidType = Constants.GOOGLE_SERVICE;
+                        }
+                        if (config.GitLabSettings?.Enable) {
+                            newState.openidType = Constants.GITLAB_SERVICE;
+                        }
+                        if (config.OpenIdSettings?.Enable) {
+                            newState.openidType = Constants.OPENID_SERVICE;
+                        }
+                        if (config.GitLabSettings?.UserAPIEndpoint) {
+                            newState['GitLabSettings.Url'] = config.GitLabSettings.UserAPIEndpoint.replace('/api/v4/user', '');
+                        } else if (config.GitLabSettings?.DiscoveryEndpoint) {
+                            newState['GitLabSettings.Url'] = config.GitLabSettings.DiscoveryEndpoint.replace('/.well-known/openid-configuration', '');
+                        }
+
+                        return newState;
+                    },
+                    onConfigSave: (config) => {
+                        const newConfig = {...config};
+                        newConfig.Office365Settings = config.Office365Settings || {};
+                        newConfig.GoogleSettings = config.GoogleSettings || {};
+                        newConfig.GitLabSettings = config.GitLabSettings || {};
+                        newConfig.OpenIdSettings = config.OpenIdSettings || {};
+
+                        newConfig.Office365Settings.Enable = false;
+                        newConfig.GoogleSettings.Enable = false;
+                        newConfig.GitLabSettings.Enable = false;
+                        newConfig.OpenIdSettings.Enable = false;
+
+                        let configSetting = '';
+                        if (config.openidType === Constants.OFFICE365_SERVICE) {
+                            configSetting = 'Office365Settings';
+                        } else if (config.openidType === Constants.GOOGLE_SERVICE) {
+                            configSetting = 'GoogleSettings';
+                        } else if (config.openidType === Constants.GITLAB_SERVICE) {
+                            configSetting = 'GitLabSettings';
+                        } else if (config.openidType === Constants.OPENID_SERVICE) {
+                            configSetting = 'OpenIdSettings';
+                        }
+
+                        if (configSetting !== '') {
+                            newConfig[configSetting].Enable = true;
+                            newConfig[configSetting].Scope = Constants.OPENID_SCOPES;
+                            newConfig[configSetting].UserAPIEndpoint = '';
+                            newConfig[configSetting].AuthEndpoint = '';
+                            newConfig[configSetting].TokenEndpoint = '';
+                        }
+
+                        delete newConfig.openidType;
+                        return newConfig;
+                    },
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: OpenIdConvert,
+                            key: 'OpenIdConvert',
+                            isHidden: it.any(
+                                it.not(usesLegacyOauth),
+                            ),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'dropdown',
+                            key: 'openidType',
+                            label: defineMessage({id: 'admin.openid.select', defaultMessage: 'Select service provider:'}),
+                            isHelpHidden: it.all(it.stateEquals('openidType', Constants.OPENID_SERVICE), it.licensedForCloudStarter),
+                            options: [
+                                {
+                                    value: 'off',
+                                    display_name: defineMessage({id: 'admin.openid.off', defaultMessage: 'Do not allow sign-in via an OpenID provider.'}),
+                                },
+                                {
+                                    value: Constants.GITLAB_SERVICE,
+                                    display_name: defineMessage({id: 'admin.openid.gitlab', defaultMessage: 'GitLab'}),
+                                    help_text: defineMessage({id: 'admin.gitlab.EnableMarkdownDesc', defaultMessage: '1. Log in to your GitLab account and go to Profile Settings -> Applications.\n2. Enter Redirect URIs "<loginUrlChunk>your-mattermost-url</loginUrlChunk>" (example: http://localhost:8065/login/gitlab/complete) and "<signupUrlChunk>your-mattermost-url</signupUrlChunk>".\n3. Then use "Application Secret Key" and "Application ID" fields from GitLab to complete the options below.\n4. Complete the Endpoint URLs below.'}),
+                                    help_text_values: {
+                                        loginUrlChunk: (chunk: string) => `<${chunk}>/login/gitlab/complete`,
+                                        signupUrlChunk: (chunk: string) => `<${chunk}>/signup/gitlab/complete`,
+                                    },
+                                    help_text_markdown: false,
+                                },
+                                {
+                                    value: Constants.GOOGLE_SERVICE,
+                                    display_name: defineMessage({id: 'admin.openid.google', defaultMessage: 'Google Apps'}),
+                                    help_text: defineMessage({id: 'admin.google.EnableMarkdownDesc', defaultMessage: '1. <linkLogin>Log in</linkLogin> to your Google account.\n2. Go to <linkConsole>https://console.developers.google.com]</linkConsole>, click <strong>Credentials</strong> in the left hand side.\n 3. Under the <strong>Credentials</strong> header, click <strong>Create credentials</strong>, choose <strong>OAuth client ID</strong> and select <strong>Web Application</strong>.\n 4. Enter "Mattermost - your-company-name" as the <strong>Name</strong>.\n 5. Under <strong>Authorized redirect URIs</strong> enter <strong>"your-mattermost-url/signup/google/complete"</strong> (example: http://localhost:8065/signup/google/complete). Click <strong>Create</strong>.\n 6. Paste the <strong>Client ID</strong> and <strong>Client Secret</strong> to the fields below, then click <strong>Save</strong>.\n 7. Go to the <linkAPI>Google People API</linkAPI> and click <strong>Enable</strong>.'}),
+                                    help_text_markdown: false,
+                                    help_text_values: {
+                                        linkLogin: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://accounts.google.com/login'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        linkConsole: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://console.developers.google.com'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        linkAPI: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://console.developers.google.com/apis/library/people.googleapis.com'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        strong: (msg: string) => <strong>{msg}</strong>,
+                                    },
+                                },
+                                {
+                                    value: Constants.OFFICE365_SERVICE,
+                                    display_name: defineMessage({id: 'admin.openid.office365', defaultMessage: 'Entra ID'}),
+                                    help_text: defineMessage({id: 'admin.office365.EnableMarkdownDesc', defaultMessage: '1. <linkLogin>Log in</linkLogin> to your Microsoft account. \n2. In Microsoft, go to <strong>Applications</strong> and <strong>App Registrations</strong> in the left pane.\n3. Select <strong>New registration</strong>, then enter "Mattermost - your-company-name" as the <strong>Application Name</strong>. \n4. Under <strong>Redirect URI</strong>, select <strong>Web</strong>, and enter "your-mattermost-url/signup/office365/complete" as the <strong>Redirect URI</strong>. Select <strong>Register</strong>.\n5. Copy the Microsoft <strong>Application (client) ID</strong> value, and paste it below as the <strong>Client ID</strong> value. \n6. Copy the Microsoft <strong>Directory (tenant) ID</strong> value, and paste it below as the <strong>Directory (tenant) ID</strong> value. \n7. In Microsoft, create a new client secret. Copy the resulting client secret value, and paste it below as the <strong>Client Secret</strong> value. Select <strong>Save</strong>.'}),
+                                    help_text_markdown: false,
+                                    help_text_values: {
+                                        linkLogin: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://entra.microsoft.com'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        linkTenant: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://msdn.microsoft.com/en-us/library/azure/jj573650.aspx#Anchor_0'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        linkApps: (msg: string) => (
+                                            <ExternalLink
+                                                location='admin_console'
+                                                href='https://entra.microsoft.com'
+                                            >
+                                                {msg}
+                                            </ExternalLink>
+                                        ),
+                                        strong: (msg: string) => <strong>{msg}</strong>,
+                                    },
+                                },
+                                {
+                                    value: Constants.OPENID_SERVICE,
+                                    display_name: defineMessage({id: 'admin.oauth.openid', defaultMessage: 'OpenID Connect (Other)'}),
+                                    help_text: defineMessage({id: 'admin.openid.EnableMarkdownDesc', defaultMessage: 'Follow provider directions for creating an OpenID Application. Most OpenID Connect providers require authorization of all redirect URIs. In the appropriate field, enter "your-mattermost-url/signup/openid/complete" (example: http://domain.com/signup/openid/complete)'}),
+                                    help_text_markdown: false,
+                                },
+                            ],
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.Url',
+                            label: defineMessage({id: 'admin.gitlab.siteUrl', defaultMessage: 'GitLab Site URL:'}),
+                            help_text: defineMessage({id: 'admin.gitlab.siteUrlDescription', defaultMessage: 'Enter the URL of your GitLab instance, e.g. https://example.com:3000. If your GitLab instance is not set up with SSL, start the URL with http:// instead of https://.'}),
+                            placeholder: defineMessage({id: 'admin.gitlab.siteUrlExample', defaultMessage: 'E.g.: https://'}),
+                            isHidden: it.not(it.stateEquals('openidType', Constants.GITLAB_SERVICE)),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.DiscoveryEndpoint',
+                            label: defineMessage({id: 'admin.openid.discoveryEndpointTitle', defaultMessage: 'Discovery Endpoint:'}),
+                            help_text: defineMessage({id: 'admin.gitlab.discoveryEndpointDesc', defaultMessage: 'The URL of the discovery document for OpenID Connect with GitLab.'}),
+                            help_text_markdown: false,
+                            dynamic_value: (value, config, state) => {
+                                if (state['GitLabSettings.Url']) {
+                                    return state['GitLabSettings.Url'].replace(/\/$/, '') + '/.well-known/openid-configuration';
+                                }
+                                return '';
+                            },
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('openidType', Constants.GITLAB_SERVICE)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.Id',
+                            label: defineMessage({id: 'admin.openid.clientIdTitle', defaultMessage: 'Client ID:'}),
+                            help_text: defineMessage({id: 'admin.openid.clientIdDescription', defaultMessage: 'Obtaining the Client ID differs across providers. Please check you provider\'s documentation'}),
+                            placeholder: defineMessage({id: 'admin.gitlab.clientIdExample', defaultMessage: 'E.g.: "jcuS8PuvcpGhpgHhlcpT1Mx42pnqMxQY"'}),
+                            isHidden: it.not(it.stateEquals('openidType', Constants.GITLAB_SERVICE)),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GitLabSettings.Secret',
+                            label: defineMessage({id: 'admin.openid.clientSecretTitle', defaultMessage: 'Client Secret:'}),
+                            help_text: defineMessage({id: 'admin.openid.clientSecretDescription', defaultMessage: 'Obtaining the Client Secret differs across providers. Please check you provider\'s documentation'}),
+                            placeholder: defineMessage({id: 'admin.gitlab.clientSecretExample', defaultMessage: 'E.g.: "jcuS8PuvcpGhpgHhlcpT1Mx442pnqMxQY"'}),
+                            isHidden: it.not(it.stateEquals('openidType', Constants.GITLAB_SERVICE)),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GoogleSettings.DiscoveryEndpoint',
+                            label: defineMessage({id: 'admin.openid.discoveryEndpointTitle', defaultMessage: 'Discovery Endpoint:'}),
+                            help_text: defineMessage({id: 'admin.google.discoveryEndpointDesc', defaultMessage: 'The URL of the discovery document for OpenID Connect with Google.'}),
+                            help_text_markdown: false,
+                            dynamic_value: () => 'https://accounts.google.com/.well-known/openid-configuration',
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('openidType', Constants.GOOGLE_SERVICE)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GoogleSettings.Id',
+                            label: defineMessage({id: 'admin.openid.clientIdTitle', defaultMessage: 'Client ID:'}),
+                            help_text: defineMessage({id: 'admin.openid.clientIdDescription', defaultMessage: 'Obtaining the Client ID differs across providers. Please check you provider\'s documentation'}),
+                            placeholder: defineMessage({id: 'admin.google.clientIdExample', defaultMessage: 'E.g.: "7602141235235-url0fhs1mayfasbmop5qlfns8dh4.apps.googleusercontent.com"'}),
+                            isHidden: it.not(it.stateEquals('openidType', Constants.GOOGLE_SERVICE)),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GoogleSettings.Secret',
+                            label: defineMessage({id: 'admin.openid.clientSecretTitle', defaultMessage: 'Client Secret:'}),
+                            help_text: defineMessage({id: 'admin.openid.clientSecretDescription', defaultMessage: 'Obtaining the Client Secret differs across providers. Please check you provider\'s documentation'}),
+                            placeholder: defineMessage({id: 'admin.google.clientSecretExample', defaultMessage: 'E.g.: "H8sz0Az-dDs2p15-7QzD231"'}),
+                            isHidden: it.not(it.stateEquals('openidType', Constants.GOOGLE_SERVICE)),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'Office365Settings.DirectoryId',
+                            label: defineMessage({id: 'admin.office365.directoryIdTitle', defaultMessage: 'Directory (tenant) ID:'}),
+                            help_text: defineMessage({id: 'admin.office365.directoryIdDescription', defaultMessage: 'The Directory (tenant) ID you received when registering your application with Microsoft.'}),
+                            placeholder: defineMessage({id: 'admin.office365.directoryIdExample', defaultMessage: 'E.g.: "adf3sfa2-ag3f-sn4n-ids0-sh1hdax192qq"'}),
+                            isHidden: it.not(it.stateEquals('openidType', Constants.OFFICE365_SERVICE)),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'Office365Settings.DiscoveryEndpoint',
+                            label: defineMessage({id: 'admin.openid.discoveryEndpointTitle', defaultMessage: 'Discovery Endpoint:'}),
+                            help_text: defineMessage({id: 'admin.office365.discoveryEndpointDesc', defaultMessage: 'The URL of the discovery document for OpenID Connect with Entra ID.'}),
+                            help_text_markdown: false,
+                            dynamic_value: (value, config, state) => {
+                                if (state['Office365Settings.DirectoryId']) {
+                                    return 'https://login.microsoftonline.com/' + state['Office365Settings.DirectoryId'] + '/v2.0/.well-known/openid-configuration';
+                                }
+                                return 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration';
+                            },
+                            isDisabled: true,
+                            isHidden: it.not(it.stateEquals('openidType', Constants.OFFICE365_SERVICE)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'Office365Settings.Id',
+                            label: defineMessage({id: 'admin.openid.clientIdTitle', defaultMessage: 'Client ID:'}),
+                            help_text: defineMessage({id: 'admin.openid.clientIdDescription', defaultMessage: 'Obtaining the Client ID differs across providers. Please check you provider\'s documentation'}),
+                            placeholder: defineMessage({id: 'admin.office365.clientIdExample', defaultMessage: 'E.g.: "adf3sfa2-ag3f-sn4n-ids0-sh1hdax192qq"'}),
+                            isHidden: it.not(it.stateEquals('openidType', Constants.OFFICE365_SERVICE)),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'Office365Settings.Secret',
+                            label: defineMessage({id: 'admin.openid.clientSecretTitle', defaultMessage: 'Client Secret:'}),
+                            help_text: defineMessage({id: 'admin.openid.clientSecretDescription', defaultMessage: 'Obtaining the Client Secret differs across providers. Please check you provider\'s documentation'}),
+                            placeholder: defineMessage({id: 'admin.office365.clientSecretExample', defaultMessage: 'E.g.: "shAieM47sNBfgl20f8ci294"'}),
+                            isHidden: it.not(it.stateEquals('openidType', Constants.OFFICE365_SERVICE)),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+
+                        {
+                            type: 'text',
+                            key: 'OpenIdSettings.ButtonText',
+                            label: defineMessage({id: 'admin.openid.buttonTextTitle', defaultMessage: 'Button Name:'}),
+                            placeholder: defineMessage({id: 'admin.openid.buttonTextEx', defaultMessage: 'Custom Button Name'}),
+                            help_text: defineMessage({id: 'admin.openid.buttonTextDesc', defaultMessage: 'The text that will show on the login button.'}),
+                            isHidden: it.any(it.not(it.stateEquals('openidType', Constants.OPENID_SERVICE)), it.licensedForCloudStarter),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'color',
+                            key: 'OpenIdSettings.ButtonColor',
+                            label: defineMessage({id: 'admin.openid.buttonColorTitle', defaultMessage: 'Button Color:'}),
+                            help_text: defineMessage({id: 'admin.openid.buttonColorDesc', defaultMessage: 'Specify the color of the OpenID login button for white labeling purposes. Use a hex code with a #-sign before the code.'}),
+                            help_text_markdown: false,
+                            isHidden: it.any(it.not(it.stateEquals('openidType', Constants.OPENID_SERVICE)), it.licensedForCloudStarter),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'OpenIdSettings.DiscoveryEndpoint',
+                            label: defineMessage({id: 'admin.openid.discoveryEndpointTitle', defaultMessage: 'Discovery Endpoint:'}),
+                            placeholder: defineMessage({id: 'admin.openid.discovery.placeholder', defaultMessage: 'https://id.mydomain.com/.well-known/openid-configuration'}),
+                            help_text: defineMessage({id: 'admin.openid.discoveryEndpointDesc', defaultMessage: 'Enter the URL of the discovery document of the OpenID Connect provider you want to connect with.'}),
+                            help_text_markdown: false,
+                            isHidden: it.any(it.not(it.stateEquals('openidType', Constants.OPENID_SERVICE)), it.licensedForCloudStarter),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'OpenIdSettings.Id',
+                            label: defineMessage({id: 'admin.openid.clientIdTitle', defaultMessage: 'Client ID:'}),
+                            help_text: defineMessage({id: 'admin.openid.clientIdDescription', defaultMessage: 'Obtaining the Client ID differs across providers. Please check you provider\'s documentation'}),
+                            placeholder: defineMessage({id: 'admin.openid.clientIdExample', defaultMessage: 'E.g.: "adf3sfa2-ag3f-sn4n-ids0-sh1hdax192qq"'}),
+                            isHidden: it.any(it.not(it.stateEquals('openidType', Constants.OPENID_SERVICE)), it.licensedForCloudStarter),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'OpenIdSettings.Secret',
+                            label: defineMessage({id: 'admin.openid.clientSecretTitle', defaultMessage: 'Client Secret:'}),
+                            help_text: defineMessage({id: 'admin.openid.clientSecretDescription', defaultMessage: 'Obtaining the Client Secret differs across providers. Please check you provider\'s documentation'}),
+                            placeholder: defineMessage({id: 'admin.openid.clientSecretExample', defaultMessage: 'E.g.: "H8sz0Az-dDs2p15-7QzD231"'}),
+                            isHidden: it.any(it.not(it.stateEquals('openidType', Constants.OPENID_SERVICE)), it.licensedForCloudStarter),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                        {
+                            type: 'custom',
+                            key: 'OpenIDCustomFeatureDiscovery',
+                            component: OpenIDCustomFeatureDiscovery,
+                            isHidden: it.not(it.all(it.stateEquals('openidType', Constants.OPENID_SERVICE), it.licensedForCloudStarter)),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.OPENID)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(),
+            },
+            openid_feature_discovery: {
+                url: 'authentication/openid',
+                isDiscovery: true,
+                title: defineMessage({id: 'admin.sidebar.openid', defaultMessage: 'OpenID Connect'}),
+                isHidden: it.any(
+                    it.any(it.licensedForFeature('OpenId'), it.cloudLicensed),
+                    it.not(it.enterpriseReady),
+                ),
+                schema: {
+                    id: 'OpenIdSettings',
+                    name: defineMessage({id: 'admin.authentication.openid', defaultMessage: 'OpenID Connect'}),
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: OpenIDFeatureDiscovery,
+                            key: 'OpenIDFeatureDiscovery',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(true),
+            },
+            guest_access: {
+                url: 'authentication/guest_access',
+                title: defineMessage({id: 'admin.sidebar.guest_access', defaultMessage: 'Guest Access'}),
+                isHidden: it.any(
+                    it.not(it.licensedForFeature('GuestAccounts')),
+                    it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.GUEST_ACCESS)),
+                ),
+                schema: {
+                    id: 'GuestAccountsSettings',
+                    name: defineMessage({id: 'admin.authentication.guest_access', defaultMessage: 'Guest Access'}),
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: CustomEnableDisableGuestAccountsSetting,
+                            key: 'GuestAccountsSettings.Enable',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.GUEST_ACCESS)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'GuestAccountsSettings.HideTags',
+                            label: defineMessage({id: 'admin.guest_access.hideTags', defaultMessage: 'Hide guest tag'}),
+                            help_text: defineMessage({id: 'admin.guest_access.hideTagsDescription', defaultMessage: 'When true, the "guest" tag will not be shown next to the name of all guest users in the Mattermost chat interface.'}),
+                            help_text_markdown: false,
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.GUEST_ACCESS)),
+                        },
+                        {
+                            type: 'text',
+                            key: 'GuestAccountsSettings.RestrictCreationToDomains',
+                            label: defineMessage({id: 'admin.guest_access.whitelistedDomainsTitle', defaultMessage: 'Whitelisted Guest Domains:'}),
+                            help_text: defineMessage({id: 'admin.guest_access.whitelistedDomainsDescription', defaultMessage: '(Optional) Guest accounts can be created at the system level from this list of allowed guest domains.'}),
+                            help_text_markdown: true,
+                            placeholder: defineMessage({id: 'admin.guest_access.whitelistedDomainsExample', defaultMessage: 'E.g.: "company.com, othercorp.org"'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.GUEST_ACCESS)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'GuestAccountsSettings.EnforceMultifactorAuthentication',
+                            label: defineMessage({id: 'admin.guest_access.mfaTitle', defaultMessage: 'Enforce Multi-factor Authentication: '}),
+                            help_text: defineMessage({id: 'admin.guest_access.mfaDescriptionMFANotEnabled', defaultMessage: '[Multi-factor authentication](./mfa) is currently not enabled.'}),
+                            help_text_markdown: true,
+                            isHidden: it.configIsTrue('ServiceSettings', 'EnableMultifactorAuthentication'),
+                            isDisabled: () => true,
+                        },
+                        {
+                            type: 'bool',
+                            key: 'GuestAccountsSettings.EnforceMultifactorAuthentication',
+                            label: defineMessage({id: 'admin.guest_access.mfaTitle', defaultMessage: 'Enforce Multi-factor Authentication: '}),
+                            help_text: defineMessage({id: 'admin.guest_access.mfaDescriptionMFANotEnforced', defaultMessage: '[Multi-factor authentication](./mfa) is currently not enforced.'}),
+                            help_text_markdown: true,
+                            isHidden: it.any(
+                                it.configIsFalse('ServiceSettings', 'EnableMultifactorAuthentication'),
+                                it.configIsTrue('ServiceSettings', 'EnforceMultifactorAuthentication'),
+                            ),
+                            isDisabled: () => true,
+                        },
+                        {
+                            type: 'bool',
+                            key: 'GuestAccountsSettings.EnforceMultifactorAuthentication',
+                            label: defineMessage({id: 'admin.guest_access.mfaTitle', defaultMessage: 'Enforce Multi-factor Authentication: '}),
+                            help_text: defineMessage({id: 'admin.guest_access.mfaDescription', defaultMessage: 'When true, <link>multi-factor authentication</link> for guests is required for login. New guest users will be required to configure MFA on signup. Logged in guest users without MFA configured are redirected to the MFA setup page until configuration is complete.\n \nIf your system has guest users with login methods other than AD/LDAP and email, MFA must be enforced with the authentication provider outside of Mattermost.'}),
+                            help_text_values: {
+                                link: (msg: string) => (
+                                    <ExternalLink
+                                        location='admin_console'
+                                        href={DocLinks.MULTI_FACTOR_AUTH}
+                                    >
+                                        {msg}
+                                    </ExternalLink>
+                                ),
+                            },
+                            help_text_markdown: false,
+                            isHidden: it.any(
+                                it.configIsFalse('ServiceSettings', 'EnableMultifactorAuthentication'),
+                                it.configIsFalse('ServiceSettings', 'EnforceMultifactorAuthentication'),
+                            ),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.AUTHENTICATION.GUEST_ACCESS)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(),
+            },
+            guest_access_feature_discovery: {
+                isDiscovery: true,
+                url: 'authentication/guest_access',
+                title: defineMessage({id: 'admin.sidebar.guest_access', defaultMessage: 'Guest Access'}),
+                isHidden: it.any(
+                    it.licensedForFeature('GuestAccounts'),
+                    it.not(it.enterpriseReady),
+                ),
+                schema: {
+                    id: 'GuestAccountsSettings',
+                    name: defineMessage({id: 'admin.authentication.guest_access', defaultMessage: 'Guest Access'}),
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: GuestAccessFeatureDiscovery,
+                            key: 'GuestAccessFeatureDiscovery',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(true),
+            },
         },
     },
     plugins: {
@@ -2905,13 +5788,13 @@ const AdminDefinition: AdminDefinitionType = {
             },
             gif: {
                 url: 'integrations/gif',
-                title: defineMessage({id: 'admin.sidebar.gif', defaultMessage: 'GIF (Beta)'}),
+                title: defineMessage({id: 'admin.sidebar.gif', defaultMessage: 'GIF'}),
                 isHidden: it.all(
                     it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.GIF)),
                 ),
                 schema: {
                     id: 'GifSettings',
-                    name: defineMessage({id: 'admin.integrations.gif', defaultMessage: 'GIF (Beta)'}),
+                    name: defineMessage({id: 'admin.integrations.gif', defaultMessage: 'GIF'}),
                     settings: [
                         {
                             type: 'bool',
@@ -2967,6 +5850,25 @@ const AdminDefinition: AdminDefinitionType = {
                     ],
                 },
             },
+            embedding: {
+                url: 'integrations/embedding',
+                title: defineMessage({id: 'admin.sidebar.embedding', defaultMessage: 'Embedding'}),
+                isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
+                schema: {
+                    id: 'EmbeddingSettings',
+                    name: defineMessage({id: 'admin.integrations.embedding', defaultMessage: 'Embedding'}),
+                    settings: [
+                        {
+                            type: 'text',
+                            key: 'ServiceSettings.FrameAncestors',
+                            label: defineMessage({id: 'admin.customization.frameAncestorTitle', defaultMessage: 'Frame Ancestors:'}),
+                            help_text: defineMessage({id: 'admin.customization.frameAncestorDesc', defaultMessage: 'Allows the Mattermost web client to be embedded in other websites. Enter a space-separated list of domains that are allowed to embed the Mattermost web client. Leave blank to disallow embedding.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
+                        },
+                    ],
+                },
+            },
+
         },
     },
     compliance: {
@@ -2980,7 +5882,7 @@ const AdminDefinition: AdminDefinitionType = {
         isHidden: it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.COMPLIANCE)),
         subsections: {
             custom_policy_form_edit: {
-                url: 'compliance/data_retention_settings/custom_policy/:policy_id',
+                url: `compliance/data_retention_settings/custom_policy/:policy_id(${ID_PATH_PATTERN})`,
                 isHidden: it.any(
                     it.not(it.licensedForFeature('DataRetention')),
                     it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
@@ -3035,6 +5937,28 @@ const AdminDefinition: AdminDefinitionType = {
                 },
                 restrictedIndicator: getRestrictedIndicator(),
             },
+            data_retention_feature_discovery: {
+                url: 'compliance/data_retention',
+                isDiscovery: true,
+                title: defineMessage({id: 'admin.sidebar.dataRetentionPolicy', defaultMessage: 'Data Retention Policy'}),
+                isHidden: it.any(
+                    it.licensedForFeature('DataRetention'),
+                    it.not(it.enterpriseReady),
+                ),
+                schema: {
+                    id: 'DataRetentionSettings',
+                    name: adminDefinitionMessages.data_retention_title,
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: DataRetentionFeatureDiscovery,
+                            key: 'DataRetentionFeatureDiscovery',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
+            },
             message_export: {
                 url: 'compliance/export',
                 title: defineMessage({id: 'admin.sidebar.complianceExport', defaultMessage: 'Compliance Export'}),
@@ -3049,6 +5973,28 @@ const AdminDefinition: AdminDefinitionType = {
                     component: MessageExportSettings,
                 },
                 restrictedIndicator: getRestrictedIndicator(),
+            },
+            compliance_export_feature_discovery: {
+                isDiscovery: true,
+                url: 'compliance/export',
+                title: defineMessage({id: 'admin.sidebar.complianceExport', defaultMessage: 'Compliance Export'}),
+                isHidden: it.any(
+                    it.licensedForFeature('MessageExport'),
+                    it.not(it.enterpriseReady),
+                ),
+                schema: {
+                    id: 'MessageExportSettings',
+                    name: defineMessage({id: 'admin.complianceExport.title', defaultMessage: 'Compliance Export'}),
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: ComplianceExportFeatureDiscovery,
+                            key: 'ComplianceExportFeatureDiscovery',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
             },
             audits: {
                 url: 'compliance/monitoring',
@@ -3067,9 +6013,14 @@ const AdminDefinition: AdminDefinitionType = {
                     settings: [
                         {
                             type: 'banner',
-                            label: defineMessage({id: 'admin.compliance.newComplianceExportBanner', defaultMessage: 'This feature is replaced by a new [Compliance Export]({siteURL}/admin_console/compliance/export) feature, and will be removed in a future release. We recommend migrating to the new system.'}),
-                            label_markdown: true,
-                            label_values: {siteURL: getSiteURL()},
+                            label: defineMessage({id: 'admin.compliance.newComplianceExportBanner', defaultMessage: 'This feature is replaced by a new <link>Compliance Export</link> feature, and will be removed in a future release. We recommend migrating to the new system.'}),
+                            label_values: {
+                                link: (msg: string) => (
+                                    <Link to='/admin_console/compliance/export'>
+                                        {msg}
+                                    </Link>
+                                ),
+                            },
                             banner_type: 'info',
                             isHidden: it.not(it.licensedForFeature('Compliance')),
                         },
@@ -3133,6 +6084,28 @@ const AdminDefinition: AdminDefinitionType = {
                     component: CustomTermsOfServiceSettings,
                 },
                 restrictedIndicator: getRestrictedIndicator(),
+            },
+            custom_terms_of_service_feature_discovery: {
+                url: 'compliance/custom_terms_of_service',
+                isDiscovery: true,
+                title: defineMessage({id: 'admin.sidebar.customTermsOfService', defaultMessage: 'Custom Terms of Service'}),
+                isHidden: it.any(
+                    it.licensedForFeature('CustomTermsOfService'),
+                    it.not(it.enterpriseReady),
+                ),
+                schema: {
+                    id: 'TermsOfServiceSettings',
+                    name: customTermsOfServiceMessages.termsOfServiceTitle,
+                    settings: [
+                        {
+                            type: 'custom',
+                            component: CustomTermsOfServiceFeatureDiscovery,
+                            key: 'CustomTermsOfServiceFeatureDiscovery',
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+                        },
+                    ],
+                },
+                restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
             },
         },
     },
@@ -3341,14 +6314,6 @@ const AdminDefinition: AdminDefinitionType = {
                         },
                         {
                             type: 'bool',
-                            key: 'ServiceSettings.EnablePreviewFeatures',
-                            label: defineMessage({id: 'admin.experimental.enablePreviewFeatures.title', defaultMessage: 'Enable Preview Features:'}),
-                            help_text: defineMessage({id: 'admin.experimental.enablePreviewFeatures.desc', defaultMessage: 'When true, preview features can be enabled from **Settings > Advanced > Preview pre-release features**. When false, disables and hides preview features from **Settings > Advanced > Preview pre-release features**.'}),
-                            help_text_markdown: true,
-                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                        },
-                        {
-                            type: 'bool',
                             key: 'ThemeSettings.EnableThemeSelection',
                             label: defineMessage({id: 'admin.experimental.enableThemeSelection.title', defaultMessage: 'Enable Theme Selection:'}),
                             help_text: defineMessage({id: 'admin.experimental.enableThemeSelection.desc', defaultMessage: 'Enables the **Display > Theme** tab in Settings so users can select their theme.'}),
@@ -3445,6 +6410,15 @@ const AdminDefinition: AdminDefinitionType = {
                             ),
                         },
                         {
+                            type: 'number',
+                            key: 'ExperimentalSettings.UsersStatusAndProfileFetchingPollIntervalMilliseconds',
+                            label: defineMessage({id: 'admin.experimental.UsersStatusAndProfileFetchingPollIntervalMilliseconds.title', defaultMessage: 'User\'s Status and Profile Fetching Poll Interval:'}),
+                            help_text: defineMessage({id: 'admin.experimental.UsersStatusAndProfileFetchingPollIntervalMilliseconds.desc', defaultMessage: 'The number of milliseconds to wait between fetching user statuses and profiles periodically.'}),
+                            help_text_markdown: false,
+                            placeholder: defineMessage({id: 'admin.experimental.timeBetweenUserTypingUpdatesMilliseconds.example', defaultMessage: 'E.g.: "5000"'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                        },
+                        {
                             type: 'text',
                             key: 'TeamSettings.ExperimentalPrimaryTeam',
                             label: defineMessage({id: 'admin.experimental.experimentalPrimaryTeam.title', defaultMessage: 'Primary Team:'}),
@@ -3499,19 +6473,6 @@ const AdminDefinition: AdminDefinitionType = {
                         },
                         {
                             type: 'bool',
-                            key: 'ExperimentalSettings.EnableSharedChannels',
-                            label: defineMessage({id: 'admin.experimental.enableSharedChannels.title', defaultMessage: 'Enable Shared Channels:'}),
-                            help_text: defineMessage({id: 'admin.experimental.enableSharedChannels.desc', defaultMessage: 'Toggles Shared Channels'}),
-                            help_text_markdown: false,
-                            isHidden: it.not(it.any(
-                                it.licensedForFeature('SharedChannels'),
-                                it.licensedForSku(LicenseSkus.Enterprise),
-                                it.licensedForSku(LicenseSkus.Professional),
-                            )),
-                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                        },
-                        {
-                            type: 'bool',
                             key: 'ExperimentalSettings.DisableAppBar',
                             label: defineMessage({id: 'admin.experimental.disableAppBar.title', defaultMessage: 'Disable Apps Bar:'}),
                             help_text: defineMessage({id: 'admin.experimental.disableAppBar.desc', defaultMessage: 'When false, all integrations move from the channel header to the Apps Bar. Channel header plugin icons that haven\'t explicitly registered an Apps Bar icon will be moved to the Apps Bar which may result in rendering issues.'}),
@@ -3528,9 +6489,23 @@ const AdminDefinition: AdminDefinitionType = {
                         },
                         {
                             type: 'bool',
+                            key: 'ExperimentalSettings.DisableWakeUpReconnectHandler',
+                            label: defineMessage({id: 'admin.experimental.disableWakeUpReconnectHandler.title', defaultMessage: 'Disable Wake Up Reconnect Handler:'}),
+                            help_text: defineMessage({id: 'admin.experimental.disableWakeUpReconnectHandler.desc', defaultMessage: 'When true, Mattermost will not attempt to detect when the computer has woken up and refetch data. This might reduce the amount of regular network traffic the app is sending.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                        },
+                        {
+                            type: 'bool',
                             key: 'ExperimentalSettings.DelayChannelAutocomplete',
                             label: defineMessage({id: 'admin.experimental.delayChannelAutocomplete.title', defaultMessage: 'Delay Channel Autocomplete:'}),
                             help_text: defineMessage({id: 'admin.experimental.delayChannelAutocomplete.desc', defaultMessage: 'When true, the autocomplete for channel links (such as ~town-square) will only trigger after typing a tilde followed by a couple letters. When false, the autocomplete will appear as soon as the user types a tilde.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'ExperimentalSettings.YoutubeReferrerPolicy',
+                            label: defineMessage({id: 'admin.experimental.youtubeReferrerPolicy.title', defaultMessage: 'YouTube Referrer Policy:'}),
+                            help_text: defineMessage({id: 'admin.experimental.youtubeReferrerPolicy.desc', defaultMessage: 'When true, the referrer policy for embedded YouTube videos will be set to "strict-origin-when-cross-origin" which resolves issues where YouTube video previews display as unavailable, while balancing the need to protect user privacy with some degree of referral data to support web functionalities, like analytics, logging, and third-party integrations. When false, the referrer policy will be set to "no-referrer" which enhances user privacy by not disclosing the source URL, but limits the ability to track user engagement and traffic sources in analytics tools.'}),
                             isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
                         },
                     ],
@@ -3563,6 +6538,113 @@ const AdminDefinition: AdminDefinitionType = {
                 schema: {
                     id: 'BleveSettings',
                     component: BleveSettings,
+                },
+            },
+            audit_logging: {
+                url: 'experimental/audit_logging',
+                title: defineMessage({id: 'admin.sidebar.audit_logging_experimental', defaultMessage: 'Audit Logging'}),
+                isHidden: it.any(it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)), it.configIsFalse('FeatureFlags', 'ExperimentalAuditSettingsSystemConsoleUI'), it.not(it.licensedForSku('enterprise'))),
+                schema: {
+                    id: 'ExperimentalAuditSettings',
+                    name: 'Audit Log Settings (Experimental)',
+                    settings: [
+                        {
+                            type: 'bool',
+                            key: 'ExperimentalAuditSettings.FileEnabled',
+                            label: defineMessage({id: 'admin.audit_logging_experimental.file_enabled.title', defaultMessage: 'File Enabled'}),
+                            help_text: defineMessage({id: 'admin.audit_logging_experimental.file_enabled.help_text', defaultMessage: 'Choose whether audit logs are written locally to a file or not.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                            isHidden: it.licensedForFeature('Cloud'),
+                        },
+                        {
+                            type: 'text',
+                            key: 'ExperimentalAuditSettings.FileName',
+                            label: defineMessage({id: 'admin.audit_logging_experimental.file_name.title', defaultMessage: 'File Name'}),
+                            help_text: defineMessage({id: 'admin.audit_logging_experimental.file_name.help_text', defaultMessage: 'The name of the file to write to. NOTE: If ExperimentalAuditSettings.FileEnabled is set to TRUE, this field is required.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                            isHidden: it.licensedForFeature('Cloud'),
+                        },
+                        {
+                            type: 'number',
+                            key: 'ExperimentalAuditSettings.FileMaxSizeMB',
+                            label: defineMessage({id: 'admin.audit_logging_experimental.file_max_size.title', defaultMessage: 'Max File Size (MB)'}),
+                            help_text: defineMessage({id: 'admin.audit_logging_experimental.file_max_size.help_text', defaultMessage: 'The maximum size of a single exported file, in MB.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                            isHidden: it.licensedForFeature('Cloud'),
+                        },
+                        {
+                            type: 'number',
+                            key: 'ExperimentalAuditSettings.FileMaxAgeDays',
+                            label: defineMessage({id: 'admin.audit_logging_experimental.file_max_age.title', defaultMessage: 'Max File Age (Days)'}),
+                            help_text: defineMessage({id: 'admin.audit_logging_experimental.file_max_age.help_text', defaultMessage: 'The maximum age of an exported file, in days.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                            isHidden: it.licensedForFeature('Cloud'),
+                        },
+                        {
+                            type: 'number',
+                            key: 'ExperimentalAuditSettings.FileMaxBackups',
+                            label: defineMessage({id: 'admin.audit_logging_experimental.file_max_backups.title', defaultMessage: 'Maximum File Backups'}),
+                            help_text: defineMessage({id: 'admin.audit_logging_experimental.file_max_backups.help_text', defaultMessage: 'The maximum number of backup files to retain'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                            isHidden: it.licensedForFeature('Cloud'),
+                        },
+                        {
+                            type: 'bool',
+                            key: 'ExperimentalAuditSettings.FileCompress',
+                            label: defineMessage({id: 'admin.audit_logging_experimental.file_compress.title', defaultMessage: 'File Compression'}),
+                            help_text: defineMessage({id: 'admin.audit_logging_experimental.file_compress.help_text', defaultMessage: 'Choose whether enable or disable file compression.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                            isHidden: it.licensedForFeature('Cloud'),
+                        },
+                        {
+                            type: 'number',
+                            key: 'ExperimentalAuditSettings.FileMaxQueueSize',
+                            label: defineMessage({id: 'admin.audit_logging_experimental.file_max_queue_size.title', defaultMessage: 'Maximum File Queue'}),
+                            help_text: defineMessage({id: 'admin.audit_logging_experimental.file_max_queue_size.help_text', defaultMessage: 'The maximum number of files to be retained in the queue.'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                            isHidden: it.licensedForFeature('Cloud'),
+                        },
+                        {
+                            type: 'longtext',
+                            key: 'ExperimentalAuditSettings.AdvancedLoggingJSON',
+                            label: defineMessage({id: 'admin.log.AdvancedLoggingJSONTitle', defaultMessage: 'Advanced Logging:'}),
+                            help_text: defineMessage({id: 'admin.log.AdvancedLoggingJSONDescription', defaultMessage: 'The JSON configuration for Advanced Audit Logging. Please see <link>documentation</link> to learn more about Advanced Logging and the JSON format it uses.'}),
+                            help_text_markdown: false,
+                            help_text_values: {
+                                link: (msg: string) => (
+                                    <ExternalLink
+                                        location='admin_console.experimental_audit_settings'
+                                        href={DocLinks.ADVANCED_LOGGING}
+                                    >
+                                        {msg}
+                                    </ExternalLink>
+                                ),
+                            },
+                            placeholder: defineMessage({id: 'admin.log.AdvancedLoggingJSONPlaceholder', defaultMessage: 'Enter your JSON configuration'}),
+                            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+                            validate: (value) => {
+                                const valid = new ValidationResult(true, '');
+                                if (!value) {
+                                    return valid;
+                                }
+                                try {
+                                    JSON.parse(value);
+                                    return valid;
+                                } catch (error) {
+                                    return new ValidationResult(false, error.message);
+                                }
+                            },
+                            onConfigLoad: (configVal) => JSON.stringify(configVal, null, '  '),
+                            onConfigSave: (displayVal) => {
+                                // Handle case where field is empty
+                                if (!displayVal) {
+                                    return {undefined};
+                                }
+
+                                return JSON.parse(displayVal);
+                            },
+                        },
+                    ],
                 },
             },
         },

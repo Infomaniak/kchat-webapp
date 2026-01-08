@@ -22,7 +22,10 @@ function mapStateToProps(state: GlobalState) {
     let ikGroupId;
     let ikGroupName;
     if (teamId) {
-        ({account_id: ikGroupId, display_name: ikGroupName} = getTeam(state, teamId));
+        const team = getTeam(state, teamId);
+        if (team) {
+            ({account_id: ikGroupId, display_name: ikGroupName} = team);
+        }
     }
 
     return {

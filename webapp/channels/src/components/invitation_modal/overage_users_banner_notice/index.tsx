@@ -10,13 +10,11 @@ import type {PreferenceType} from '@mattermost/types/preferences';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
-import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
+import {getOverageBannerPreferences} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import AlertBanner from 'components/alert_banner';
 import {useExpandOverageUsersCheck} from 'components/common/hooks/useExpandOverageUsersCheck';
-
-import './overage_users_banner_notice.scss';
 import ExternalLink from 'components/external_link';
 
 import {LicenseLinks, StatTypes, Preferences} from 'utils/constants';
@@ -24,6 +22,8 @@ import {getIsGovSku} from 'utils/license_utils';
 import {calculateOverageUserActivated} from 'utils/overage_team';
 
 import type {GlobalState} from 'types/store';
+
+import './overage_users_banner_notice.scss';
 
 type AdminHasDismissedArgs = {
     preferenceName: string;
@@ -42,10 +42,10 @@ const OverageUsersBannerNotice = () => {
     const isGovSku = getIsGovSku(license);
     const seatsPurchased = parseInt(license.Users, 10);
     const isCloud = useSelector(isCurrentLicenseCloud);
-    const getPreferencesCategory = makeGetCategory();
     const currentUser = useSelector((state: GlobalState) => getCurrentUser(state));
-    const overagePreferences = useSelector((state: GlobalState) => getPreferencesCategory(state, Preferences.OVERAGE_USERS_BANNER));
+    const overagePreferences = useSelector(getOverageBannerPreferences);
     const activeUsers = ((stats || {})[StatTypes.TOTAL_USERS]) as number || 0;
+
     const {
         isBetween5PercerntAnd10PercentPurchasedSeats,
         isOver10PercerntPurchasedSeats,
@@ -62,13 +62,8 @@ const OverageUsersBannerNotice = () => {
     const hasPermission = isAdmin && isOverageState && !isCloud;
     const {
         cta,
-        expandableLink,
         trackEventFn,
-        getRequestState,
-        isExpandable,
     } = useExpandOverageUsersCheck({
-        shouldRequest: hasPermission && !adminHasDismissed({overagePreferences, preferenceName}),
-        licenseId: license.Id,
         isWarningState: isBetween5PercerntAnd10PercentPurchasedSeats,
         banner: 'invite modal',
     });
@@ -87,6 +82,7 @@ const OverageUsersBannerNotice = () => {
     };
 
     let message;
+
     if (!isGovSku) {
         message = (
             <FormattedMessage
@@ -94,21 +90,18 @@ const OverageUsersBannerNotice = () => {
                 defaultMessage='Notify your Customer Success Manager on your next true-up check. <a></a>'
                 values={{
                     a: () => {
-                        if (getRequestState === 'IDLE' || getRequestState === 'LOADING') {
-                            return null;
-                        }
-
                         const handleClick = () => {
-                            trackEventFn(isExpandable ? 'Self Serve' : 'Contact Sales');
+                            trackEventFn('Contact Sales');
                         };
 
                         return (
                             <ExternalLink
+                                location='overage_users_banner'
                                 className='overage_users_banner__button'
-                                href={isExpandable ? expandableLink(license.Id) : LicenseLinks.CONTACT_SALES}
+                                href={LicenseLinks.CONTACT_SALES}
                                 onClick={handleClick}
                             >
-                                {cta}
+                                <FormattedMessage {...cta}/>
                             </ExternalLink>
                         );
                     },

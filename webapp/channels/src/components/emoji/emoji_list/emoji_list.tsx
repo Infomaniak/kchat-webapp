@@ -1,9 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ChangeEvent, ChangeEventHandler} from 'react';
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import type {ChangeEvent, ChangeEventHandler} from 'react';
+import {defineMessage, FormattedMessage} from 'react-intl';
 
 import type {CustomEmoji} from '@mattermost/types/emojis';
 
@@ -13,13 +13,11 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import EmojiListItem from 'components/emoji/emoji_list_item';
 import LoadingScreen from 'components/loading_screen';
-import LocalizedInput from 'components/localized_input/localized_input';
+import LocalizedPlaceholderInput from 'components/localized_placeholder_input';
 import SaveButton from 'components/save_button';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
 import SearchIcon from 'components/widgets/icons/fa_search_icon';
-
-import {t} from 'utils/i18n';
 
 const EMOJI_PER_PAGE = 50;
 const EMOJI_SEARCH_DELAY_MILLISECONDS = 200;
@@ -237,7 +235,7 @@ export default class EmojiList extends React.PureComponent<Props, State> {
 
                 nextButton = (
                     <SaveButton
-                        btnClass='btn-link'
+                        btnClass='btn-tertiary'
                         extraClasses='pull-right'
                         onClick={this.nextPage}
                         saving={this.state.nextLoading}
@@ -251,7 +249,7 @@ export default class EmojiList extends React.PureComponent<Props, State> {
             if (this.state.page > 0) {
                 previousButton = (
                     <button
-                        className='btn btn-link'
+                        className='btn btn-tertiary'
                         onClick={this.previousPage}
                     >
                         <PreviousIcon additionalClassName='mr-2'/>
@@ -269,13 +267,10 @@ export default class EmojiList extends React.PureComponent<Props, State> {
                 <div className='backstage-filters'>
                     <div className='backstage-filter__search'>
                         <SearchIcon/>
-                        <LocalizedInput
+                        <LocalizedPlaceholderInput
                             type='search'
                             className='form-control'
-                            placeholder={{
-                                id: t('emoji_list.search'),
-                                defaultMessage: 'Search Custom Emoji',
-                            }}
+                            placeholder={defineMessage({id: 'emoji_list.search', defaultMessage: 'Search Custom Emoji'})}
                             onChange={this.onSearchChange}
                             style={style.search}
                         />

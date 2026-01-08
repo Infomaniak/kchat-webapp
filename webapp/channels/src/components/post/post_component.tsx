@@ -5,9 +5,10 @@ import classNames from 'classnames';
 import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import type {MouseEvent} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {useSelector} from 'react-redux';
 
 import type {Emoji} from '@mattermost/types/emojis';
-import type {Post} from '@mattermost/types/posts';
+import {PostPriority, type Post} from '@mattermost/types/posts';
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -17,6 +18,7 @@ import {
     isPostPendingOrFailed} from 'mattermost-redux/utils/post_utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
+import {getCurrentLocale} from 'selectors/i18n';
 
 import AutoHeightSwitcher, {AutoHeightSlots} from 'components/common/auto_height_switcher';
 import EditPost from 'components/edit_post';
@@ -24,7 +26,6 @@ import FileAttachmentListContainer from 'components/file_attachment_list';
 import IkPostponeReminderButtons from 'components/ik_postpone_reminder_buttons/index';
 import IkWelcomeButtons from 'components/ik_welcome_buttons/index';
 import MessageWithAdditionalContent from 'components/message_with_additional_content';
-import OverlayTrigger from 'components/overlay_trigger';
 import PriorityLabel from 'components/post_priority/post_priority_label';
 import PostProfilePicture from 'components/post_profile_picture';
 import PostAcknowledgements from 'components/post_view/acknowledgements';
@@ -38,9 +39,9 @@ import PostTime from 'components/post_view/post_time';
 import ReactionList from 'components/post_view/reaction_list';
 import ThreadFooter from 'components/threading/channel_threads/thread_footer';
 import type {Props as TimestampProps} from 'components/timestamp/timestamp';
-import Tooltip from 'components/tooltip';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import InfoSmallIcon from 'components/widgets/icons/info_small_icon';
+import WithTooltip from 'components/with_tooltip';
 
 import {getHistory} from 'utils/browser_history';
 import Constants, {A11yCustomEventTypes, AppEvents, Locations} from 'utils/constants';
@@ -50,8 +51,9 @@ import * as PostUtils from 'utils/post_utils';
 import {isDesktopApp} from 'utils/user_agent';
 import {makeIsEligibleForClick} from 'utils/utils';
 
-import type {PostPluginComponent, PluginComponent} from 'types/store/plugins';
+import type {PostActionComponent, PostPluginComponent} from 'types/store/plugins';
 
+import {withPostErrorBoundary} from './post_error_boundary';
 import PostOptions from './post_options';
 import PostUserProfile from './user_profile';
 
@@ -94,7 +96,6 @@ export type Props = {
     actions: {
         markPostAsUnread: (post: Post, location: string) => void;
         emitShortcutReactToLastPostFrom: (emittedFrom: 'CENTER' | 'RHS_ROOT' | 'NO_WHERE') => void;
-        setActionsMenuInitialisationState: (viewed: Record<string, boolean>) => void;
         selectPost: (post: Post) => void;
         selectPostFromRightHandSideSearch: (post: Post) => void;
         removePost: (post: Post) => void;
@@ -120,11 +121,11 @@ export type Props = {
     isPostPriorityEnabled: boolean;
     isCardOpen?: boolean;
     canDelete?: boolean;
-    pluginActions: PluginComponent[];
+    pluginActions: PostActionComponent[];
     previousPostDate?: Date | null;
 };
 
-const PostComponent = (props: Props): JSX.Element => {
+function PostComponent(props: Props) {
     const {post, shouldHighlight, togglePostMenu} = props;
 
     const isSearchResultItem = (props.matches && props.matches.length > 0) || props.isMentionSearch || (props.term && props.term.length > 0);
@@ -132,6 +133,11 @@ const PostComponent = (props: Props): JSX.Element => {
     const postRef = useRef<HTMLDivElement>(null);
     const postHeaderRef = useRef<HTMLDivElement>(null);
     const teamId = props.team?.id ?? props.currentTeam?.id ?? '';
+    const currentLocale = useSelector(getCurrentLocale);
+
+    // French locale uses mathematical notation (e.g., "-9 min") with 'narrow' style,
+    // so we use 'short' style instead to get natural language (e.g., "il y a 9 min")
+    const compactTimestampStyle = currentLocale === 'fr' ? 'short' : 'narrow';
 
     const [hover, setHover] = useState(false);
     const [a11yActive, setA11y] = useState(false);
@@ -141,9 +147,18 @@ const PostComponent = (props: Props): JSX.Element => {
     const [alt, setAlt] = useState(false);
     const [hasReceivedA11yFocus, setHasReceivedA11yFocus] = useState(false);
 
+    const [isTranscriptAvailable, setIsTranscriptAvailable] = useState(false);
+    const isVocalMessage = post.type === 'voice';
     const isSystemMessage = PostUtils.isSystemMessage(post);
     const fromAutoResponder = PostUtils.fromAutoResponder(post);
     const isDesktop = isDesktopApp();
+
+    useEffect(() => {
+        const transcript = post?.metadata?.files?.[0]?.transcript;
+        if (transcript && typeof transcript.text === 'string' && transcript.text.length > 0) {
+            setIsTranscriptAvailable(true);
+        }
+    }, [post?.metadata]);
 
     useEffect(() => {
         if (shouldHighlight) {
@@ -300,9 +315,7 @@ const PostComponent = (props: Props): JSX.Element => {
             'post--comment': (post.root_id && post.root_id.length > 0 && !props.isCollapsedThreadsEnabled) || (props.location === Locations.RHS_COMMENT),
             'post--compact': props.compactDisplay,
             'post--hovered': hovered,
-
-            // Infomaniak: we disable this in threads
-            'same--user': props.isConsecutivePost && props.location !== Locations.RHS_COMMENT && !props.compactDisplay,
+            'same--user': props.isConsecutivePost && (!props.compactDisplay || props.location === Locations.RHS_COMMENT),
             'cursor--pointer': alt && !props.channelIsArchived,
             'post--hide-controls': post.failed || post.state === Posts.POST_DELETED,
             'post--comment same--root': fromAutoResponder,
@@ -323,7 +336,7 @@ const PostComponent = (props: Props): JSX.Element => {
         // IK: Handle case where clicking an item in dropdown outside post doesn't trigger mouse leave,
         // e.g., when threads are open.
         if (!opened && hover) {
-            setHover(false)
+            setHover(false);
         }
     }, [togglePostMenu, hover]);
 
@@ -393,14 +406,16 @@ const PostComponent = (props: Props): JSX.Element => {
         getHistory().push(`/${props.teamName}/pl/${post.id}`);
     }, [props.isMobileView, props.actions, props.teamName, post?.id]);
 
+    const {selectPostFromRightHandSideSearch} = props.actions;
+
     const handleCommentClick = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
 
         if (!post) {
             return;
         }
-        props.actions.selectPostFromRightHandSideSearch(post);
-    }, [post, props.actions, props.actions.selectPostFromRightHandSideSearch]);
+        selectPostFromRightHandSideSearch(post);
+    }, [post, selectPostFromRightHandSideSearch]);
 
     const handleThreadClick = useCallback((e: React.MouseEvent) => {
         if (props.currentTeam?.id === teamId) {
@@ -410,7 +425,7 @@ const PostComponent = (props: Props): JSX.Element => {
         }
     }, [handleCommentClick, handleJumpClick, props.currentTeam?.id, teamId]);
 
-    const postClass = classNames('post__body', {'post--edited': PostUtils.isEdited(post), 'search-item-snippet': isSearchResultItem});
+    const postClass = classNames('post__body', {'post--edited': PostUtils.isEdited(post), 'search-item-snippet': isSearchResultItem, 'post--failed': post.failed});
 
     let comment;
     if (props.isFirstReply && props.parentPost && props.parentPostUser && post.type !== Constants.PostTypes.EPHEMERAL) {
@@ -438,7 +453,7 @@ const PostComponent = (props: Props): JSX.Element => {
     let profilePic;
     const hideProfilePicture = hasSameRoot(props) && (!post.root_id && !props.hasReplies) && !PostUtils.isFromBot(post);
     const hideProfileCase = !(props.location === Locations.RHS_COMMENT && props.compactDisplay && props.isConsecutivePost);
-    if (!hideProfilePicture && hideProfileCase) {
+    if ((!hideProfilePicture && hideProfileCase) || isVocalMessage) {
         profilePic = (
             <PostProfilePicture
                 compactDisplay={props.compactDisplay}
@@ -484,7 +499,7 @@ const PostComponent = (props: Props): JSX.Element => {
         />
     );
 
-    const showSlot = props.isPostBeingEdited ? AutoHeightSlots.SLOT2 : AutoHeightSlots.SLOT1;
+    const slotBasedOnEditOrMessageView = props.isPostBeingEdited ? AutoHeightSlots.SLOT2 : AutoHeightSlots.SLOT1;
     const threadFooter = props.location !== Locations.RHS_ROOT && props.isCollapsedThreadsEnabled && !post.root_id && (props.hasReplies || post.is_following) ? (
         <ThreadFooter
             threadId={post.id}
@@ -518,6 +533,8 @@ const PostComponent = (props: Props): JSX.Element => {
     let priority;
     if (post.metadata?.priority && props.isPostPriorityEnabled) {
         priority = <span className='d-flex mr-2 ml-1'><PriorityLabel priority={post.metadata.priority.priority}/></span>;
+    } else if (isTranscriptAvailable) {
+        priority = <span className='d-flex mr-2 ml-1'><PriorityLabel priority={PostPriority.TRANSCRIPT}/></span>;
     }
 
     let postAriaLabelDivTestId = '';
@@ -527,13 +544,14 @@ const PostComponent = (props: Props): JSX.Element => {
         postAriaLabelDivTestId = 'rhsPostView';
     }
 
+    const showFileAttachments = post.file_ids && post.file_ids.length > 0 && !props.isPostBeingEdited;
+
     return (
         <>
             <PostAriaLabelDiv
                 ref={postRef}
                 id={getTestId()}
                 data-testid={postAriaLabelDivTestId}
-                tabIndex={0}
                 post={post}
                 className={getClassName()}
                 onClick={handlePostClick}
@@ -574,7 +592,6 @@ const PostComponent = (props: Props): JSX.Element => {
                     channelId={post.channel_id}
                 />
                 <div
-                    role='application'
                     className={`post__content ${props.center ? 'center' : ''}`}
                     data-testid='postContent'
                 >
@@ -598,21 +615,17 @@ const PostComponent = (props: Props): JSX.Element => {
                                         eventTime={post.create_at}
                                         postId={post.id}
                                         location={props.location}
-                                        timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay && props.location !== Locations.RHS_COMMENT ? 'narrow' : undefined}}
+                                        timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay ? compactTimestampStyle : undefined}}
                                     />
                                 }
                                 {priority}
                                 {post.props && post.props.card &&
-                                    <OverlayTrigger
-                                        delayShow={Constants.OVERLAY_TIME_DELAY}
-                                        placement='top'
-                                        overlay={
-                                            <Tooltip>
-                                                <FormattedMessage
-                                                    id='post_info.info.view_additional_info'
-                                                    defaultMessage='View additional info'
-                                                />
-                                            </Tooltip>
+                                    <WithTooltip
+                                        title={
+                                            <FormattedMessage
+                                                id='post_info.info.view_additional_info'
+                                                defaultMessage='View additional info'
+                                            />
                                         }
                                     >
                                         <button
@@ -627,7 +640,7 @@ const PostComponent = (props: Props): JSX.Element => {
                                                 aria-hidden='true'
                                             />
                                         </button>
-                                    </OverlayTrigger>
+                                    </WithTooltip>
                                 }
                                 {visibleMessage}
                             </div>
@@ -651,18 +664,19 @@ const PostComponent = (props: Props): JSX.Element => {
                         >
                             {post.failed && <FailedPostOptions post={post}/>}
                             <AutoHeightSwitcher
-                                showSlot={showSlot}
+                                showSlot={slotBasedOnEditOrMessageView}
                                 shouldScrollIntoView={props.isPostBeingEdited}
                                 slot1={message}
                                 slot2={<EditPost/>}
                                 onTransitionEnd={() => document.dispatchEvent(new Event(AppEvents.FOCUS_EDIT_TEXTBOX))}
                             />
-                            {post.file_ids && post.file_ids.length > 0 &&
-                            <FileAttachmentListContainer
-                                post={post}
-                                compactDisplay={props.compactDisplay}
-                                handleFileDropdownOpened={handleFileDropdownOpened}
-                            />
+                            {
+                                showFileAttachments &&
+                                <FileAttachmentListContainer
+                                    post={post}
+                                    compactDisplay={props.compactDisplay}
+                                    handleFileDropdownOpened={handleFileDropdownOpened}
+                                />
                             }
                             {(post.type === Posts.POST_TYPES.SYSTEM_POST_REMINDER && !(post.props.reschedule || post.props.completed)) ? <IkPostponeReminderButtons post={post}/> : null}
                             {(post.type === Posts.POST_TYPES.SYSTEM_WELCOME_MESSAGE) ? <IkWelcomeButtons/> : null}
@@ -683,6 +697,6 @@ const PostComponent = (props: Props): JSX.Element => {
             </PostAriaLabelDiv>
         </>
     );
-};
+}
 
-export default PostComponent;
+export default withPostErrorBoundary(PostComponent);

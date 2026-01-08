@@ -1,35 +1,23 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
+import type {AppName, NavigateMessage} from '@infomaniak/ksuite-bridge';
+import {KSuiteBridge, NavigateMessageKey, OpenAppMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import deepEqual from 'fast-deep-equal';
-import React from 'react';
+import React, {lazy} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
-import {ServiceEnvironment} from '@mattermost/types/config';
-import type {PreferenceType} from '@mattermost/types/preferences';
-import type {Team} from '@mattermost/types/teams';
-import type {UserProfile} from '@mattermost/types/users';
-
+import {getUsage} from 'mattermost-redux/actions/cloud';
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
 import {storeBridge, storeBridgeParam} from 'mattermost-redux/actions/ksuiteBridge';
 import {Client4} from 'mattermost-redux/client';
-import {rudderAnalytics, RudderTelemetryHandler} from 'mattermost-redux/client/rudder';
-import {General} from 'mattermost-redux/constants';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
-import {getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getActiveTeamsList} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUser, isCurrentUserSystemAdmin, checkIsFirstAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {ActionResult} from 'mattermost-redux/types/actions';
+import {getNextWcPack, openUpgradeDialog} from 'mattermost-redux/utils/plans_util';
 
-import {loadRecentlyUsedCustomEmojis} from 'actions/emoji_actions';
-import * as GlobalActions from 'actions/global_actions';
-import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
+import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
 import {setThemePreference} from 'actions/views/theme';
 import {close, initialize} from 'actions/websocket_actions';
@@ -37,320 +25,217 @@ import BrowserStore from 'stores/browser_store';
 import LocalStorageStore from 'stores/local_storage_store';
 import store from 'stores/redux_store';
 
-import AccessProblem from 'components/access_problem';
-import AnnouncementBarController from 'components/announcement_bar';
-import AppBar from 'components/app_bar/app_bar';
-import {makeAsyncComponent} from 'components/async_load';
-import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
+import {makeAsyncComponent, makeAsyncPluggableComponent} from 'components/async_load';
 import GlobalHeader from 'components/global_header/global_header';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
-import {HFTRoute} from 'components/header_footer_template_route';
-import MobileViewWatcher from 'components/mobile_view_watcher';
-import ModalController from 'components/modal_controller';
-import LaunchingWorkspace, {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_workspace/launching_workspace';
+import LoggedIn from 'components/logged_in';
+import LoggedInRoute from 'components/logged_in_route';
+import {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_workspace/launching_workspace';
 import {Animations} from 'components/preparing_workspace/steps';
-import SidebarRight from 'components/sidebar_right';
-import SidebarRightMenu from 'components/sidebar_right_menu';
-import SystemNotice from 'components/system_notice';
-import TeamSidebar from 'components/team_sidebar';
-import WindowSizeObserver from 'components/window_size_observer/WindowSizeObserver';
+import SidebarMobileRightMenu from 'components/sidebar_mobile_right_menu';
 
-import A11yController from 'utils/a11y_controller';
-import Constants, {DesktopThemePreferences, PageLoadContext, StoragePrefixes, WindowSizes} from 'utils/constants';
+import {getHistory} from 'utils/browser_history';
+import {DesktopThemePreferences, PageLoadContext, SCHEDULED_POST_URL_SUFFIX} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
+import DesktopApp from 'utils/desktop_api';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
-import * as UserAgent from 'utils/user_agent';
-import * as Utils from 'utils/utils';
+import {extractKSuiteAppName} from 'utils/url-ksuite-app';
+import {isInIframe} from 'utils/url-ksuite-redirect';
+import {getDesktopVersion, isAndroidWeb, isChromebook, isDesktopApp, isIosWeb} from 'utils/user_agent';
+import {applyTheme, injectWebcomponentInit, isTextDroppableEvent} from 'utils/utils';
 
 import webSocketClient from 'client/web_websocket_client';
 import {initializePlugins} from 'plugins';
-import Pluggable from 'plugins/pluggable';
+import {LLMBotPost} from 'plugins/ai/components/llmbot_post';
 
-import type {ProductComponent, PluginComponent} from 'types/store/plugins';
-
-import {applyLuxonDefaults} from './effects';
+import LuxonController from './luxon_controller';
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
+import {WcKsuiteUpgradeModal} from './wc_ksuite_upgrade_modal';
+import WithTitleObserver from './with_title_observer';
 
 import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
-import 'plugins/export.js';
-import {LLMBotPost} from 'plugins/ai/components/llmbot_post';
+import type {PropsFromRedux} from './index';
 
-const LazyErrorPage = React.lazy(() => import('components/error_page'));
-const LazyLogin = React.lazy(() => import('components/login/login'));
+import 'plugins/export';
+import 'utils/a11y_controller_instance';
 
-// const LazyAdminConsole = React.lazy(() => import('components/admin_console'));
-const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
+const MobileViewWatcher = makeAsyncComponent('MobileViewWatcher', lazy(() => import('components/mobile_view_watcher')));
+const WindowSizeObserver = makeAsyncComponent('WindowSizeObserver', lazy(() => import('components/window_size_observer/WindowSizeObserver')));
+const ErrorPage = makeAsyncComponent('ErrorPage', lazy(() => import('components/error_page')));
+const Login = makeAsyncComponent('LoginController', lazy(() => import('components/login/login')));
+const AccessProblem = makeAsyncComponent('AccessProblem', lazy(() => import('components/access_problem')));
 
-// const LazyPasswordResetSendLink = React.lazy(() => import('components/password_reset_send_link'));
-// const LazyPasswordResetForm = React.lazy(() => import('components/password_reset_form'));
-// const LazySignup = React.lazy(() => import('components/signup/signup'));
-// const LazyTermsOfService = React.lazy(() => import('components/terms_of_service'));
-// const LazyShouldVerifyEmail = React.lazy(() => import('components/should_verify_email/should_verify_email'));
-// const LazyDoVerifyEmail = React.lazy(() => import('components/do_verify_email/do_verify_email'));
-// const LazyClaimController = React.lazy(() => import('components/claim'));
-// const LazyLinkingLandingPage = React.lazy(() => import('components/linking_landing_page'));
-// const LazySelectTeam = React.lazy(() => import('components/select_team'));
-// const LazyAuthorize = React.lazy(() => import('components/authorize'));
-// const LazyCreateTeam = React.lazy(() => import('components/create_team'));
-// const LazyMfa = React.lazy(() => import('components/mfa/mfa_controller'));
-const LazyPreparingWorkspace = React.lazy(() => import('components/preparing_workspace'));
-const LazyTeamController = React.lazy(() => import('components/team_controller'));
-const LazyOnBoardingTaskList = React.lazy(() => import('components/onboarding_tasklist'));
+const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', lazy(() => import('components/preparing_workspace')));
+const LaunchingWorkspace = makeAsyncComponent('LaunchingWorkspace', lazy(() => import('components/preparing_workspace/launching_workspace')));
+const CompassThemeProvider = makeAsyncComponent('CompassThemeProvider', lazy(() => import('components/compass_theme_provider/compass_theme_provider')));
+const TeamController = makeAsyncComponent('TeamController', lazy(() => import('components/team_controller')));
+const AnnouncementBarController = makeAsyncComponent('AnnouncementBarController', lazy(() => import('components/announcement_bar')));
+const SystemNotice = makeAsyncComponent('SystemNotice', lazy(() => import('components/system_notice')));
 
-const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
-const Login = makeAsyncComponent('LoginController', LazyLogin);
-const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
+// const CloudEffects = makeAsyncComponent('CloudEffects', lazy(() => import('components/cloud_effects')));
+const TeamSidebar = makeAsyncComponent('TeamSidebar', lazy(() => import('components/team_sidebar')));
+const SidebarRight = makeAsyncComponent('SidebarRight', lazy(() => import('components/sidebar_right')));
+const ModalController = makeAsyncComponent('ModalController', lazy(() => import('components/modal_controller')));
+const AppBar = makeAsyncComponent('AppBar', lazy(() => import('components/app_bar/app_bar')));
 
-const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
-const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
-const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
-
-// const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
-// const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
-// const ClaimController = makeAsyncComponent('ClaimController', LazyClaimController);
-// const PasswordResetForm = makeAsyncComponent('PasswordResetForm', LazyPasswordResetForm);
-// const ShouldVerifyEmail = makeAsyncComponent('ShouldVerifyEmail', LazyShouldVerifyEmail);
-// const PasswordResetSendLink = makeAsyncComponent('PasswordResedSendLink', LazyPasswordResetSendLink);
-// const Signup = makeAsyncComponent('SignupController', LazySignup);
-// const TermsOfService = makeAsyncComponent('TermsOfService', LazyTermsOfService);
-// const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
-// const AdminConsole = makeAsyncComponent('AdminConsole', LazyAdminConsole);
-// const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
-// const DelinquencyModalController = makeAsyncComponent('DelinquencyModalController', LazyDelinquencyModalController);
-
-type LoggedInRouteProps = {
-    component: React.ComponentType<RouteComponentProps<any>>;
-    path: string | string[];
-    theme?: Theme; // the routes that send the theme are the ones that will actually need to show the onboarding tasklist
-    headerRef: React.RefObject<HTMLDivElement>; // IK: ref used for resisizng global header left controls when lhs is resized by user.
-};
-
-function LoggedInRoute(props: LoggedInRouteProps) {
-    const {component: Component, theme, headerRef, ...rest} = props;
-    return (
-        <Route
-            {...rest}
-            render={(routeProps) => (
-                <LoggedIn {...routeProps}>
-                    {theme && <CompassThemeProvider theme={theme}>
-                        <OnBoardingTaskList/>
-                    </CompassThemeProvider>}
-                    <Component
-                        {...(routeProps)}
-                        headerRef={headerRef}
-                    />
-                </LoggedIn>
-            )}
-        />
-    );
-}
+const Pluggable = makeAsyncPluggableComponent();
 
 const noop = () => {};
 
-export type Actions = {
-    getFirstAdminSetupComplete: () => Promise<ActionResult>;
-    getProfiles: (page?: number, pageSize?: number, options?: Record<string, any>) => Promise<ActionResult>;
-    migrateRecentEmojis: () => void;
-    loadConfigAndMe: () => Promise<ActionResult>;
-    registerCustomPostRenderer: (type: string, component: any, id: string) => Promise<ActionResult>;
-    initializeProducts: () => Promise<unknown>;
-
-    // IK
-    emitBrowserWindowResized: (size?: string) => void;
-}
-
-type Props = {
-    theme: Theme;
-    currentTeam: Team;
-    teamsOrderPreference: PreferenceType;
-    telemetryEnabled: boolean;
-    telemetryId?: string;
-    iosDownloadLink?: string;
-    androidDownloadLink?: string;
-    appDownloadLink?: string;
-    noAccounts: boolean;
-    showTermsOfService: boolean;
-    permalinkRedirectTeamName: string;
-    isCloud: boolean;
-    actions: Actions;
-    plugins?: PluginComponent[];
-    products: ProductComponent[];
-    showLaunchingWorkspace: boolean;
-    rhsIsExpanded: boolean;
-    rhsIsOpen: boolean;
-    shouldShowAppBar: boolean;
-    ksuiteBridge: KSuiteBridge;
-    userLocale: string;
-} & RouteComponentProps
+export type Props = PropsFromRedux & RouteComponentProps;
 
 interface State {
-    configLoaded?: boolean;
+    shouldMountAppRoutes?: boolean;
 }
 
 export default class Root extends React.PureComponent<Props, State> {
-    private themeMediaQuery: MediaQueryList;
-    private desktopMediaQuery: MediaQueryList;
-    private smallDesktopMediaQuery: MediaQueryList;
-    private tabletMediaQuery: MediaQueryList;
-    private mobileMediaQuery: MediaQueryList;
-    private mounted: boolean;
     private IKLoginCode: string | undefined;
-    private tokenCheckInterval: NodeJS.Timer | undefined;
     private headerResizerRef: React.RefObject<HTMLDivElement>;
-
-    // The constructor adds a bunch of event listeners,
-    // so we do need this.
-    private a11yController: A11yController;
 
     // Whether the app is running in an iframe.
     private embeddedInIFrame: boolean;
+    themeMediaQuery: MediaQueryList;
 
+    // The constructor adds a bunch of event listeners,
+    // so we do need this.
     constructor(props: Props) {
         super(props);
-        this.mounted = false;
         this.IKLoginCode = undefined;
-        this.tokenCheckInterval = undefined;
-
+        this.embeddedInIFrame = isInIframe();
         this.headerResizerRef = React.createRef();
 
-        // Redux
         setUrl(getSiteURL());
 
-        if (!UserAgent.isDesktopApp()) {
+        if (!isDesktopApp()) {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
 
         setSystemEmojis(new Set(EmojiIndicesByAlias.keys()));
 
-        // Force logout of all tabs if one tab is logged out
-        window.addEventListener('storage', this.handleLogoutLoginSignal);
-
-        // Prevent drag and drop files from navigating away from the app
-        document.addEventListener('drop', (e) => {
-            if (e.dataTransfer && e.dataTransfer.items.length > 0 && e.dataTransfer.items[0].kind === 'file') {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        });
-
-        document.addEventListener('dragover', (e) => {
-            if (!Utils.isTextDroppableEvent(e) && !document.body.classList.contains('focalboard-body')) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        });
-
         this.state = {
-            configLoaded: false,
+            shouldMountAppRoutes: false,
         };
-
-        this.a11yController = new A11yController();
-
-        // set initial window size state
-        this.desktopMediaQuery = window.matchMedia(`(min-width: ${Constants.DESKTOP_SCREEN_WIDTH + 1}px)`);
-        this.smallDesktopMediaQuery = window.matchMedia(`(min-width: ${Constants.TABLET_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.DESKTOP_SCREEN_WIDTH}px)`);
-        this.tabletMediaQuery = window.matchMedia(`(min-width: ${Constants.MOBILE_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.TABLET_SCREEN_WIDTH}px)`);
-        this.mobileMediaQuery = window.matchMedia(`(max-width: ${Constants.MOBILE_SCREEN_WIDTH}px)`);
 
         this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
         this.updateThemePreference(this.themeMediaQuery.matches);
-        this.updateWindowSize();
+    }
 
-        store.subscribe(() => applyLuxonDefaults(store.getState()));
+    componentDidMount() {
+        temporarilySetPageLoadContext(PageLoadContext.PAGE_LOAD);
+
+        if (isDesktopApp()) {
+            // Rely on initial client calls to 401 for the first redirect to login,
+            // we dont need to do it manually.
+            // Login will send us back here with a code after we give it the challange.
+            // Use code to refresh token.
+            const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
+
+            if (loginCode) {
+                console.log('[components/root] login with code'); // eslint-disable-line no-console
+                this.storeLoginCode(loginCode);
+                this.tryGetNewToken();
+            } else {
+                this.runMounted();
+            }
+        } else {
+            // Allow through initial requests for web.
+            this.runMounted();
+        }
+
+        if (this.themeMediaQuery?.addEventListener) {
+            this.themeMediaQuery.addEventListener('change', this.handleThemeMediaQueryChangeEvent);
+        }
+
+        this.props.actions.registerCustomPostRenderer('custom_llmbot', LLMBotPost, 'llmbot_post_message_renderer');
+
+        measurePageLoadTelemetry();
+        trackSelectorMetrics();
+    }
+
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        if (!deepEqual(prevProps.theme, this.props.theme) || !deepEqual(prevProps.currentTeam, this.props.currentTeam)) {
+            // add body class for webcomponents theming
+            if (document.body.className.match(/kchat-.+-theme/)) {
+                document.body.className = document.body.className.replace(/kchat-.+-theme/, `kchat-${this.props.theme.ikType}-theme`);
+            } else {
+                document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
+            }
+
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
+                window.postMessage({
+                    type: 'preferred-theme',
+                    data: {
+                        theme: this.props.theme,
+                        teamName: this.props.currentTeam?.display_name,
+                    },
+                }, window.origin);
+            }
+
+            this.applyTheme();
+        }
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
+            if (!deepEqual(prevProps.teamsOrderPreference, this.props.teamsOrderPreference)) {
+                window.postMessage({
+                    type: 'teams-order-preference',
+                    data: this.props.teamsOrderPreference?.value,
+                }, window.origin);
+            }
+            if (!deepEqual(prevProps.userLocale, this.props.userLocale)) {
+                window.postMessage({
+                    type: 'user-locale',
+                    data: this.props.userLocale,
+                }, window.origin);
+            }
+        }
+
+        if (
+            this.props.shouldShowAppBar !== prevProps.shouldShowAppBar ||
+            this.props.rhsIsOpen !== prevProps.rhsIsOpen ||
+            this.props.rhsIsExpanded !== prevProps.rhsIsExpanded
+        ) {
+            this.setRootMeta();
+        }
+
+        if (prevState.shouldMountAppRoutes === false && this.state.shouldMountAppRoutes === true) {
+            if (!doesRouteBelongToTeamControllerRoutes(this.props.location.pathname)) {
+                DesktopApp.reactAppInitialized();
+            }
+        }
+
+        if (this.embeddedInIFrame && this.props.location !== prevProps.location) {
+            this.sendBridgeNavigate();
+        }
+    }
+
+    componentWillUnmount() {
+        this.IKLoginCode = undefined;
+
+        window.removeEventListener('storage', this.handleLogoutLoginSignal);
+        document.removeEventListener('drop', this.handleDropEvent);
+        document.removeEventListener('dragover', this.handleDragOverEvent);
+        document.removeEventListener('click', this.ksuiteLinkHandler);
     }
 
     onConfigLoaded = () => {
-        // const config = getConfig(store.getState());
-        // const telemetryId = this.props.telemetryId;
-
-        // const rudderUrl = 'https://pdat.matterlytics.com';
-        // let rudderKey = '';
-        // switch (config.ServiceEnvironment) {
-        // case ServiceEnvironment.PRODUCTION:
-        //     rudderKey = '1aoejPqhgONMI720CsBSRWzzRQ9';
-        //     break;
-        // case ServiceEnvironment.TEST:
-        //     rudderKey = '1aoeoCDeh7OCHcbW2kseWlwUFyq';
-        //     break;
-        // case ServiceEnvironment.DEV:
-        //     break;
-        // }
-
-        // if (rudderKey !== '' && this.props.telemetryEnabled) {
-        //     const rudderCfg: {setCookieDomain?: string} = {};
-        //     const siteURL = getConfig(store.getState()).SiteURL;
-        //     if (siteURL !== '') {
-        //         try {
-        //             rudderCfg.setCookieDomain = new URL(siteURL || '').hostname;
-        //             // eslint-disable-next-line no-empty
-        //         } catch (_) {}
-        //     }
-        //     rudderAnalytics.load(rudderKey, rudderUrl || '', rudderCfg);
-
-        //     rudderAnalytics.identify(telemetryId, {}, {
-        //         context: {
-        //             ip: '0.0.0.0',
-        //         },
-        //         page: {
-        //             path: '',
-        //             referrer: '',
-        //             search: '',
-        //             title: '',
-        //             url: '',
-        //         },
-        //         anonymousId: '00000000000000000000000000',
-        //     });
-
-        //     rudderAnalytics.page('ApplicationLoaded', {
-        //         path: '',
-        //         referrer: '',
-        //         search: ('' as any),
-        //         title: '',
-        //         url: '',
-        //     } as any,
-        //     {
-        //         context: {
-        //             ip: '0.0.0.0',
-        //         },
-        //         anonymousId: '00000000000000000000000000',
-        //     });
-
-        //     const utmParams = this.captureUTMParams();
-        //     rudderAnalytics.ready(() => {
-        //         Client4.setTelemetryHandler(new RudderTelemetryHandler());
-        //         if (utmParams) {
-        //             trackEvent('utm_params', 'utm_params', utmParams);
-        //         }
-        //     });
-        // }
-
-        // if (this.props.location.pathname === '/' && this.props.noAccounts) {
-        //     this.props.history.push('/signup_user_complete');
-        // }
-
         Promise.all([
             this.props.actions.initializeProducts(),
             initializePlugins(),
         ]).then(() => {
-            if (this.mounted) {
-                // supports enzyme tests, set state if and only if
-                // the component is still mounted on screen
-                this.setState({configLoaded: true});
-            }
+            this.setState({shouldMountAppRoutes: true});
         });
 
         this.props.actions.migrateRecentEmojis();
-        store.dispatch(loadRecentlyUsedCustomEmojis());
+        this.props.actions.loadRecentlyUsedCustomEmojis();
 
         this.showLandingPageIfNecessary();
 
-        if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.2.0')) {
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0')) {
             window.postMessage({
                 type: 'preferred-theme',
                 data: {
@@ -370,23 +255,28 @@ export default class Root extends React.PureComponent<Props, State> {
             }, window.origin);
         }
 
-        Utils.applyTheme(this.props.theme);
+        this.applyTheme();
     };
 
     private showLandingPageIfNecessary = () => {
+        // Only show Landing Page if enabled
+        if (!this.props.enableDesktopLandingPage) {
+            return;
+        }
+
         // We have nothing to redirect to if we're already on Desktop App
         // Chromebook has no Desktop App to switch to
-        if (UserAgent.isDesktopApp() || UserAgent.isChromebook()) {
+        if (isDesktopApp() || isChromebook()) {
             return;
         }
 
         // Nothing to link to if we've removed the Android App download link
-        if (UserAgent.isAndroidWeb() && !this.props.androidDownloadLink) {
+        if (isAndroidWeb() && !this.props.androidDownloadLink) {
             return;
         }
 
         // Nothing to link to if we've removed the iOS App download link
-        if (UserAgent.isIosWeb() && !this.props.iosDownloadLink) {
+        if (isIosWeb() && !this.props.iosDownloadLink) {
             return;
         }
 
@@ -429,92 +319,14 @@ export default class Root extends React.PureComponent<Props, State> {
         BrowserStore.setLandingPageSeen(true);
     };
 
-    componentDidUpdate(prevProps: Props) {
-        if (!deepEqual(prevProps.theme, this.props.theme) || !deepEqual(prevProps.currentTeam, this.props.currentTeam)) {
-            // add body class for webcomponents theming
-            if (document.body.className.match(/kchat-.+-theme/)) {
-                document.body.className = document.body.className.replace(/kchat-.+-theme/, `kchat-${this.props.theme.ikType}-theme`);
-            } else {
-                document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
-            }
-
-            if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.2.0')) {
-                window.postMessage({
-                    type: 'preferred-theme',
-                    data: {
-                        theme: this.props.theme,
-                        teamName: this.props.currentTeam?.display_name,
-                    },
-                }, window.origin);
-            }
-
-            Utils.applyTheme(this.props.theme);
-        }
-        if (UserAgent.isDesktopApp() && isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.2.0')) {
-            if (!deepEqual(prevProps.teamsOrderPreference, this.props.teamsOrderPreference)) {
-                window.postMessage({
-                    type: 'teams-order-preference',
-                    data: this.props.teamsOrderPreference?.value,
-                }, window.origin);
-            }
-            if (!deepEqual(prevProps.userLocale, this.props.userLocale)) {
-                window.postMessage({
-                    type: 'user-locale',
-                    data: this.props.userLocale,
-                }, window.origin);
-            }
-        }
-        if (
-            this.props.shouldShowAppBar !== prevProps.shouldShowAppBar ||
-            this.props.rhsIsOpen !== prevProps.rhsIsOpen ||
-            this.props.rhsIsExpanded !== prevProps.rhsIsExpanded
-        ) {
-            this.setRootMeta();
-        }
-    }
-
-    async redirectToOnboardingOrDefaultTeam() {
-        const storeState = store.getState();
-        const isUserAdmin = isCurrentUserSystemAdmin(storeState);
-        if (!isUserAdmin) {
-            GlobalActions.redirectUserToDefaultTeam();
+    applyTheme() {
+        // don't apply theme when in system console; system console hardcoded to THEMES.denim
+        // AdminConsole will apply denim on mount re-apply user theme on unmount
+        if (this.props.location.pathname.startsWith('/admin_console')) {
             return;
         }
 
-        const teams = getActiveTeamsList(storeState);
-
-        const onboardingFlowEnabled = getIsOnboardingFlowEnabled(storeState);
-
-        if (teams.length > 0 || !onboardingFlowEnabled) {
-            GlobalActions.redirectUserToDefaultTeam();
-            return;
-        }
-
-        const firstAdminSetupComplete = await this.props.actions.getFirstAdminSetupComplete();
-        if (firstAdminSetupComplete?.data) {
-            GlobalActions.redirectUserToDefaultTeam();
-            return;
-        }
-
-        const profilesResult = await this.props.actions.getProfiles(0, General.PROFILE_CHUNK_SIZE, {roles: General.SYSTEM_ADMIN_ROLE});
-        if (profilesResult.error) {
-            GlobalActions.redirectUserToDefaultTeam();
-            return;
-        }
-        const currentUser = getCurrentUser(store.getState());
-        const adminProfiles = profilesResult.data.reduce(
-            (acc: Record<string, UserProfile>, curr: UserProfile) => {
-                acc[curr.id] = curr;
-                return acc;
-            },
-            {},
-        );
-        if (checkIsFirstAdmin(currentUser, adminProfiles)) {
-            this.props.history.push('/preparing-workspace');
-            return;
-        }
-
-        GlobalActions.redirectUserToDefaultTeam();
+        applyTheme(this.props.theme);
     }
 
     captureUTMParams() {
@@ -542,57 +354,29 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     initiateMeRequests = async () => {
-        const {data: isMeLoaded} = await this.props.actions.loadConfigAndMe();
+        const {isLoaded} = await this.props.actions.loadConfigAndMe();
 
-        if (isMeLoaded) {
-            const currentUser = getCurrentUser(store.getState());
-            if (currentUser) {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                const {email, id, user_id, username, first_name, last_name} = currentUser;
-                console.log('[components/root] set user for sentry', {email, id, username}); // eslint-disable-line no-console
-                Sentry.setUser({ip_address: '{{auto}}', email, id, username});
-
-                // @ts-ignore
-                window.CONST_USER = {
-                    iGlobalUserCode: user_id,
-                    sFirstname: first_name,
-                    sLastname: last_name,
-                    sEmail: email,
-                };
-            }
-
+        if (isLoaded) {
             if (this.props.location.pathname === '/') {
-                this.redirectToOnboardingOrDefaultTeam();
+                this.props.actions.redirectToOnboardingOrDefaultTeam(this.props.history);
             }
         }
-
         this.onConfigLoaded();
     };
 
-    componentDidMount() {
-        temporarilySetPageLoadContext(PageLoadContext.PAGE_LOAD);
-
-        this.mounted = true;
-
-        if (UserAgent.isDesktopApp()) {
-            // Rely on initial client calls to 401 for the first redirect to login,
-            // we dont need to do it manually.
-            // Login will send us back here with a code after we give it the challange.
-            // Use code to refresh token.
-            const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
-
-            if (loginCode) {
-                console.log('[components/root] login with code'); // eslint-disable-line no-console
-                this.storeLoginCode(loginCode);
-                this.tryGetNewToken();
-            } else {
-                this.runMounted();
-            }
-        } else {
-            // Allow through initial requests for web.
-            this.runMounted();
+    handleDropEvent = (e: DragEvent) => {
+        if (e.dataTransfer && e.dataTransfer.items.length > 0 && e.dataTransfer.items[0].kind === 'file') {
+            e.preventDefault();
+            e.stopPropagation();
         }
-    }
+    };
+
+    handleDragOverEvent = (e: DragEvent) => {
+        if (!isTextDroppableEvent(e) && !document.body.classList.contains('focalboard-body')) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
 
     storeLoginCode = (code: string) => {
         console.log('[components/root] store login code'); // eslint-disable-line no-console
@@ -604,6 +388,7 @@ export default class Root extends React.PureComponent<Props, State> {
         const loginCode = this.IKLoginCode;
         console.log('[component/root] try get token'); // eslint-disable-line no-console
         try { // Get new token
+            Client4.setIncludeCookies(false);
             const response: {
                 expires_in?: number;
                 access_token: string;
@@ -615,6 +400,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 IKConstants.LOGIN_URL!,
                 IKConstants.CLIENT_ID,
             );
+            Client4.setIncludeCookies(true);
 
             // Store in localstorage
             storeTokenResponse(response);
@@ -626,15 +412,18 @@ export default class Root extends React.PureComponent<Props, State> {
             this.IKLoginCode = undefined;
 
             let newToken;
-            if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.1.0')) {
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
                 newToken = {
                     token: response.access_token,
                 };
             } else {
+                if (response.expires_in === undefined) {
+                    throw new Error('IKLoginToken response does not contain expires_in');
+                }
                 newToken = {
                     token: response.access_token,
                     refreshToken: response.refresh_token,
-                    expiresAt: (Date.now() / 1000) + response.expires_in, // ignore as its never undefined in 2.0
+                    expiresAt: (Date.now() / 1000) + response.expires_in,
                 };
             }
 
@@ -675,69 +464,101 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     };
 
+    sendBridgeNavigate = () => {
+        const {ksuiteBridge, location} = this.props;
+        ksuiteBridge?.sendMessage({type: NavigateMessageKey, path: location.pathname});
+    };
+
+    ksuiteLinkHandler: EventListener = (e) => {
+        const {ksuiteBridge} = this.props;
+
+        if (!ksuiteBridge.isConnected) {
+            return;
+        }
+
+        const target = e.target;
+        if (!(target instanceof HTMLAnchorElement)) {
+            return;
+        }
+
+        if (target.target !== '_blank') {
+            return;
+        }
+        if (!target.href) {
+            return;
+        }
+
+        const appName = extractKSuiteAppName(target.href);
+        if (!appName) {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const {origin, pathname, search} = new URL(target.href);
+
+        ksuiteBridge.sendMessage({
+            type: OpenAppMessageKey,
+            name: appName as AppName,
+            path: pathname.concat(search),
+            origin,
+        });
+    };
+
     runMounted = () => {
         const token = localStorage.getItem('IKToken');
-        const tokenExpire = localStorage.getItem('IKTokenExpire');
-        const refreshToken = localStorage.getItem('IKRefreshToken');
 
-        // Validate infinite token or setup token keepalive for older tokens
-        if (UserAgent.isDesktopApp()) {
-            if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.1.0')) {
-                // TODO: find a way to clean this if into an else below, since its counterintuitive
-                // The reset teams will retrigger this func
+        if (isDesktopApp()) {
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
                 if (isDefaultAuthServer() && !token) {
                     getChallengeAndRedirectToLogin(true);
+                    console.log('[components/root] redirect to login'); // eslint-disable-line no-console
+                    return;
                 }
 
-                // Webcomponents oauth v2
                 window.WC_TOKEN = token;
-
-                // migration from 2.0
-                if (token && (tokenExpire || refreshToken)) {
-                    // Prepare migrate to infinite token by clearing all instances of old token
-                    clearLocalStorageToken();
-                    window.authManager.resetToken();
-
-                    // Need to reset teams before redirecting to login after token is cleared
-                    if (isDefaultAuthServer()) {
-                        getChallengeAndRedirectToLogin(true);
-                    } else {
-                        window.postMessage(
-                            {
-                                type: 'reset-teams',
-                                message: {},
-                            },
-                            window.origin,
-                        );
-                    }
-                }
-            } else if (token && refreshToken) {
-                // 2.0 and older apps
-                // set an interval to run every minute to check if token needs refresh soon
-                // for older versions of app.
-                this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
             }
         }
 
         // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
-            if (!UserAgent.isDesktopApp()) {
-                window.location.href = data.uri;
+            if (!isDesktopApp()) {
+                if (this.embeddedInIFrame && window.top) {
+                    window.top.location.href = window.location.href;
+                } else {
+                    window.location.href = data.uri;
+                }
             } else {
                 const lsToken = localStorage.getItem('IKToken');
-
                 if (lsToken) {
                     // Delete the token if it still exists.
                     clearLocalStorageToken();
                     clearUserCookie();
-                    await window.authManager.logout();
+                    await window.authManager?.logout();
                 }
             }
         });
 
-        const ksuiteBridge = new KSuiteBridge(); // eslint-disable-line no-process-env
+        // Bind a handler for unexpected "out of quota" situations.
+        // This is rare and usually caused by either a race condition between two events (of differents user)
+        // before usage data is refreshed, or a failure in the 'quota-changed' websocket event.
+        // In such cases, we show the upgrade modal and refetch usage to ensure the user
+        // gets blocked before exceeding their quota.
+        Client4.bindOutOfQuotaEvent(() => {
+            store.dispatch(getUsage());
+            const nextPack = getNextWcPack(this.props.currentPack);
+            openUpgradeDialog(nextPack);
+        });
+
+        const ksuiteBridge = new KSuiteBridge({debugPrefix: 'kchat'}); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch, store.getState);
+
+        // this message listener is outside the store because of how is handled navigation
+        ksuiteBridge.on(NavigateMessageKey, (navigateMessage: NavigateMessage) => {
+            getHistory().push(navigateMessage.path);
+        });
 
         const ksuiteMode = (new URLSearchParams(window.location.search)).get('ksuite-mode');
         const spaceId = (new URLSearchParams(window.location.search)).get('space-id');
@@ -750,80 +571,43 @@ export default class Root extends React.PureComponent<Props, State> {
             storeBridgeParam('spaceId', spaceId)(store.dispatch);
         }
 
-        Utils.injectWebcomponentInit();
+        if (this.embeddedInIFrame) {
+            document.addEventListener('click', this.ksuiteLinkHandler);
+        }
 
+        injectWebcomponentInit();
         this.initiateMeRequests();
 
-        // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
-
-        // this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
-        // this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
-        this.props.actions.registerCustomPostRenderer('custom_llmbot', LLMBotPost, 'llmbot_post_message_renderer');
-
-        if (this.themeMediaQuery.addEventListener) {
-            this.themeMediaQuery.addEventListener('change', this.handleThemeMediaQueryChangeEvent);
+        if (!isDesktopApp() && (window.location.hash || '').endsWith('/notifications-settings')) {
+            customElements.whenDefined('module-settings-component').then(() => {
+                document.dispatchEvent(new CustomEvent('openSettings', {
+                    detail: ['ksuite-kchat', 'ksuite-kchat-personalization'],
+                }));
+            }).catch((error) => {
+                // eslint-disable-next-line no-console
+                console.error('[channel_controller] Error waiting for wc-settings:', error);
+            });
         }
 
-        measurePageLoadTelemetry();
-        trackSelectorMetrics();
+        // Force logout of all tabs if one tab is logged out
+        window.addEventListener('storage', this.handleLogoutLoginSignal);
+
+        // Prevent drag and drop files from navigating away from the app
+        document.addEventListener('drop', this.handleDropEvent);
+
+        document.addEventListener('dragover', this.handleDragOverEvent);
     };
-
-    componentWillUnmount() {
-        this.mounted = false;
-        this.IKLoginCode = undefined;
-        window.removeEventListener('storage', this.handleLogoutLoginSignal);
-        if (this.tokenCheckInterval) {
-            console.log('[components/root] destroy token interval check'); // eslint-disable-line no-console
-            clearInterval(this.tokenCheckInterval);
-        }
-
-        if (this.loginCodeInterval) {
-            console.log('[components/root] destroy login with code interval'); // eslint-disable-line no-console
-            clearInterval(this.loginCodeInterval);
-        }
-
-        if (this.themeMediaQuery.removeEventListener) {
-            this.themeMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
-        }
-    }
 
     handleLogoutLoginSignal = (e: StorageEvent) => {
-        // when one tab on a browser logs out, it sets __logout__ in localStorage to trigger other tabs to log out
-        const isNewLocalStorageEvent = (event: StorageEvent) => event.storageArea === localStorage && event.newValue;
-
-        if (e.key === StoragePrefixes.LOGOUT && isNewLocalStorageEvent(e)) {
-            console.log('detected logout from a different tab'); //eslint-disable-line no-console
-            GlobalActions.emitUserLoggedOutEvent('/', false, false);
-        }
-        if (e.key === StoragePrefixes.LOGIN && isNewLocalStorageEvent(e)) {
-            const isLoggedIn = getCurrentUser(store.getState());
-
-            // make sure this is not the same tab which sent login signal
-            // because another tabs will also send login signal after reloading
-            if (isLoggedIn) {
-                return;
-            }
-
-            // detected login from a different tab
-            function reloadOnFocus() {
-                location.reload();
-            }
-            window.addEventListener('focus', reloadOnFocus);
-        }
-    };
-
-    // handleWindowResizeEvent = throttle(() => {
-    //     this.props.actions.emitBrowserWindowResized();
-    // }, 100);
-
-    handleMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
-        if (e.matches) {
-            this.updateWindowSize();
-        }
+        this.props.actions.handleLoginLogoutSignal(e);
     };
 
     handleThemeMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
         this.updateThemePreference(e.matches);
+    };
+
+    updateThemePreference = (isDark: boolean) => {
+        store.dispatch(setThemePreference(isDark ? DesktopThemePreferences.DARK : DesktopThemePreferences.LIGHT));
     };
 
     setRootMeta = () => {
@@ -838,43 +622,17 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     };
 
-    updateWindowSize = () => {
-        switch (true) {
-        case this.desktopMediaQuery.matches:
-            this.props.actions.emitBrowserWindowResized(WindowSizes.DESKTOP_VIEW);
-            break;
-        case this.smallDesktopMediaQuery.matches:
-            this.props.actions.emitBrowserWindowResized(WindowSizes.SMALL_DESKTOP_VIEW);
-            break;
-        case this.tabletMediaQuery.matches:
-            this.props.actions.emitBrowserWindowResized(WindowSizes.TABLET_VIEW);
-            break;
-        case this.mobileMediaQuery.matches:
-            this.props.actions.emitBrowserWindowResized(WindowSizes.MOBILE_VIEW);
-            break;
-        }
-    };
-
-    updateThemePreference = (isDark: boolean) => {
-        if (isDark) {
-            store.dispatch(setThemePreference(DesktopThemePreferences.DARK));
-            return;
-        }
-
-        store.dispatch(setThemePreference(DesktopThemePreferences.LIGHT));
-    };
-
     render() {
-        if (!this.state.configLoaded) {
+        if (!this.state.shouldMountAppRoutes) {
             return <div/>;
         }
 
-        const {ksuiteBridge, location} = this.props;
-        ksuiteBridge?.sendMessage({type: NavigateMessageKey, path: location.pathname});
-
         return (
             <RootProvider>
+                <WithTitleObserver/>
                 <MobileViewWatcher/>
+                <LuxonController/>
+                <WcKsuiteUpgradeModal/>
                 <Switch>
                     <Route
                         path={'/error'}
@@ -888,15 +646,6 @@ export default class Root extends React.PureComponent<Props, State> {
                         path={'/access_problem'}
                         component={AccessProblem}
                     />
-                    {/* <HFTRoute
-                        path={'/help'}
-                        component={HelpController}
-                    /> */}
-                    {/* <Route
-                        path={'/landing'}
-                        component={LinkingLandingPage}
-                    /> */}
-
                     <LoggedInRoute
                         headerRef={this.headerResizerRef}
                         path={'/preparing-workspace'}
@@ -925,82 +674,92 @@ export default class Root extends React.PureComponent<Props, State> {
                         <AnnouncementBarController/>
                         <SystemNotice/>
                         <GlobalHeader headerRef={this.headerResizerRef}/>
-                        {!this.embeddedInIFrame && UserAgent.isDesktopApp() && !isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.2.0') && <TeamSidebar/>}
-                        <Switch>
-                            {this.props.products?.filter((product) => Boolean(product.publicComponent)).map((product) => (
-                                <Route
-                                    key={`${product.id}-public`}
-                                    path={`${product.baseURL}/public`}
-                                    render={(props) => {
-                                        return (
-                                            <Pluggable
-                                                pluggableName={'Product'}
-                                                subComponentName={'publicComponent'}
-                                                pluggableId={product.id}
-                                                css={{gridArea: 'center'}}
-                                                {...props}
-                                            />
-                                        );
-                                    }}
-                                />
-                            ))}
-                            {this.props.products?.map((product) => (
-                                <Route
-                                    key={product.id}
-                                    path={product.baseURL}
-                                    render={(props) => {
-                                        let pluggable = (
-                                            <Pluggable
-                                                pluggableName={'Product'}
-                                                subComponentName={'mainComponent'}
-                                                pluggableId={product.id}
-                                                webSocketClient={webSocketClient}
-                                                css={product.wrapped ? undefined : {gridArea: 'center'}}
-                                            />
-                                        );
-                                        if (product.wrapped) {
-                                            pluggable = (
-                                                <div className={classNames(['product-wrapper', {wide: !product.showTeamSidebar}])}>
-                                                    {pluggable}
-                                                </div>
+                        {!this.embeddedInIFrame && isDesktopApp() && !isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.2.0') && <TeamSidebar/>}
+                        <div className='main-wrapper'>
+                            <Switch>
+                                {this.props.products?.filter((product) => Boolean(product.publicComponent)).map((product) => (
+                                    <Route
+                                        key={`${product.id}-public`}
+                                        path={`${product.baseURL}/public`}
+                                        render={(props) => {
+                                            return (
+                                                <Pluggable
+                                                    pluggableName={'Product'}
+                                                    subComponentName={'publicComponent'}
+                                                    pluggableId={product.id}
+                                                    css={{gridArea: 'center'}}
+                                                    {...props}
+                                                />
                                             );
-                                        }
-                                        return (
-                                            <LoggedIn {...props}>
-                                                {pluggable}
-                                            </LoggedIn>
-                                        );
-                                    }}
+                                        }}
+                                    />
+                                ))}
+                                {this.props.products?.map((product) => (
+                                    <Route
+                                        key={product.id}
+                                        path={product.baseURL}
+                                        render={(props) => {
+                                            let pluggable = (
+                                                <Pluggable
+                                                    pluggableName={'Product'}
+                                                    subComponentName={'mainComponent'}
+                                                    pluggableId={product.id}
+                                                    webSocketClient={webSocketClient}
+                                                    css={product.wrapped ? undefined : {gridArea: 'center'}}
+                                                />
+                                            );
+                                            if (product.wrapped) {
+                                                pluggable = (
+                                                    <div className={classNames(['product-wrapper', {wide: !product.showTeamSidebar}])}>
+                                                        {pluggable}
+                                                    </div>
+                                                );
+                                            }
+                                            return (
+                                                <LoggedIn {...props}>
+                                                    {pluggable}
+                                                </LoggedIn>
+                                            );
+                                        }}
+                                    />
+                                ))}
+                                {this.props.plugins?.map((plugin) => (
+                                    <Route
+                                        key={plugin.id}
+                                        path={'/plug/' + plugin.route}
+                                        render={() => (
+                                            <Pluggable
+                                                pluggableName={'CustomRouteComponent'}
+                                                pluggableId={plugin.id}
+                                                css={{gridArea: 'center'}}
+                                            />
+                                        )}
+                                    />
+                                ))}
+                                <LoggedInRoute
+                                    headerRef={this.headerResizerRef}
+                                    theme={this.props.theme}
+                                    path={`/:team(${TEAM_NAME_PATH_PATTERN})`}
+                                    component={TeamController}
                                 />
-                            ))}
-                            {this.props.plugins?.map((plugin) => (
-                                <Route
-                                    key={plugin.id}
-                                    path={'/plug/' + (plugin as any).route}
-                                    render={() => (
-                                        <Pluggable
-                                            pluggableName={'CustomRouteComponent'}
-                                            pluggableId={plugin.id}
-                                            css={{gridArea: 'center'}}
-                                        />
-                                    )}
-                                />
-                            ))}
-                            <LoggedInRoute
-                                theme={this.props.theme}
-                                headerRef={this.headerResizerRef}
-                                path={`/:team(${TEAM_NAME_PATH_PATTERN})`}
-                                component={TeamController}
-                            />
-                            <RootRedirect/>
-                        </Switch>
+                                <RootRedirect/>
+                            </Switch>
+                            <SidebarRight/>
+                        </div>
                         <Pluggable pluggableName='Global'/>
-                        <SidebarRight/>
                         <AppBar/>
-                        <SidebarRightMenu/>
+                        <SidebarMobileRightMenu/>
                     </CompassThemeProvider>
                 </Switch>
             </RootProvider>
         );
     }
+}
+
+export function doesRouteBelongToTeamControllerRoutes(pathname: RouteComponentProps['location']['pathname']): boolean {
+    // Note: we have specifically added admin_console to the negative lookahead as admin_console can have integrations as subpaths (admin_console/integrations/bot_accounts)
+    // and we don't want to treat those as team controller routes.
+    const TEAM_CONTROLLER_PATH_PATTERN = new RegExp(`^/([a-z0-9\\-_]+)/(channels|messages|threads|drafts|integrations|emoji|${SCHEDULED_POST_URL_SUFFIX})(/.*)?$`);
+
+    return TEAM_CONTROLLER_PATH_PATTERN.test(pathname);
 }

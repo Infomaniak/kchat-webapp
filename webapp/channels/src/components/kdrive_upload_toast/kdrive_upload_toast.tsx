@@ -12,13 +12,13 @@ interface Props {
             link: string;
         };
     };
-    setKDriveToast: () => void;
+    setKDriveToast?: () => void;
 }
 
 export default class KDriveUploadToast extends React.PureComponent<Props> {
     onDismissClick = () => {
         const {setKDriveToast} = this.props;
-        setKDriveToast();
+        setKDriveToast?.();
     };
 
     render() {

@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {PlusIcon, MinusIcon} from '@infomaniak/compass-icons/components';
-import {clamp} from 'lodash';
+import clamp from 'lodash/clamp';
 import type {ChangeEvent} from 'react';
 import React, {memo, useEffect, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';

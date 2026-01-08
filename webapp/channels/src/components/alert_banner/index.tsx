@@ -1,17 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
-import type {ReactNode} from 'react';
-import React, {useMemo} from 'react';
-import {useIntl} from 'react-intl';
-
 import {
     AlertOutlineIcon,
     CheckIcon,
     CloseIcon,
     InformationOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
+import classNames from 'classnames';
+import type {ReactNode} from 'react';
+import React, {useMemo} from 'react';
+import {useIntl} from 'react-intl';
 
 import WithTooltip from 'components/with_tooltip';
 
@@ -122,9 +121,8 @@ const AlertBanner = ({
             </div>
             {onDismiss && closeBtnTooltip && (
                 <WithTooltip
-                    id={`alertBannerTooltip_${id}`}
                     title={closeBtnTooltip}
-                    placement='left'
+                    isVertical={false}
                 >
                     {dismissButton}
                 </WithTooltip>

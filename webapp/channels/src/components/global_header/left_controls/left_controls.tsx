@@ -18,9 +18,9 @@ const LeftControlsContainer = styled.div`
     background: var(--sidebar-bg);
     border-bottom: solid 1px rgba(var(--sidebar-text-rgb), 0.25);
     padding-left: 10px;
-    width: var(--overrideLhsWidth, 240px);
-    min-width: 240px;
-    max-width: 240px;
+    width: var(--overrideLhsWidth, 264px);
+    min-width: 200px;
+    max-width: 200px;
     @media screen and (min-width: 769px) {
         min-width: 200px;
         max-width: 264px;

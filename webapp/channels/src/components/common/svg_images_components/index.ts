@@ -8,5 +8,4 @@ export {SavedMessagesSVG} from './saved_messages_svg';
 export {PinSVG} from './pin_svg';
 export {ChannelFilesSVG} from './channel_files_svg';
 export {UserGroupsSVG} from './user_groups_svg';
-export {UserGroupMembersSVG} from './user_groups_members_svg';
 export {InfomaniakChannelSearchSvg} from './infomaniak_channel_search_svg';

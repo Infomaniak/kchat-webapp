@@ -5,9 +5,9 @@
     }
 
     &.modal-dialog.CallRingingModal {
+        min-width: 267px;
         max-width: 270px;
         min-height: 267px;
-        min-width: 267px;
         .modal-content {
             background: #fff;
         }
@@ -20,32 +20,32 @@
             padding: 16px;
         }
         .content-calling {
-            text-align: center;
             padding: 8px;
+            text-align: center;
 
             &__user {
+                overflow: hidden;
                 color: #333333;
                 font-weight: 600;
-                white-space: nowrap;
-                overflow: hidden;
                 text-overflow: ellipsis;
+                white-space: nowrap;
             }
             &__info {
-                color: #666666;
                 padding-top: 8px;
+                color: #666666;
             }
         }
         .content-actions {
-            padding: 0;
-            padding-top: 15px;
             display: flex;
             flex-wrap: wrap;
-            gap: 16px;
             justify-content: center;
+            padding: 0;
+            padding-top: 15px;
+            gap: 16px;
             button {
-                flex: auto;
-                min-height: 44px;
                 min-width: 66px;
+                min-height: 44px;
+                flex: auto;
                 color: white;
                 &.accept {
                     background: var(--sys-link-color);
@@ -56,8 +56,8 @@
             }
         }
         @media (max-width: 768px) {
-            margin-left: auto;
             margin-right: auto;
+            margin-left: auto;
         }
     }
 }

@@ -30,22 +30,34 @@ const DowngradeFeedbackModal = (props: Props) => {
     });
 
     const downgradeFeedbackOptions = [
-        props.intl.formatMessage({
-            id: 'feedback.downgradeWorkspace.technicalIssues',
-            defaultMessage: 'Experienced technical issues',
-        }),
-        props.intl.formatMessage({
-            id: 'feedback.downgradeWorkspace.noLongerNeeded',
-            defaultMessage: 'No longer need Cloud Professional features',
-        }),
-        props.intl.formatMessage({
-            id: 'feedback.downgradeWorkspace.exploringOptions',
-            defaultMessage: 'Exploring other solutions',
-        }),
-        props.intl.formatMessage({
-            id: 'feedback.downgradeWorkspace.tooExpensive',
-            defaultMessage: 'Too expensive',
-        }),
+        {
+            translatedMessage: props.intl.formatMessage({
+                id: 'feedback.downgradeWorkspace.technicalIssues',
+                defaultMessage: 'Experienced technical issues',
+            }),
+            submissionValue: 'technical_issues',
+        },
+        {
+            translatedMessage: props.intl.formatMessage({
+                id: 'feedback.downgradeWorkspace.noLongerNeeded',
+                defaultMessage: 'No longer need Cloud Professional features',
+            }),
+            submissionValue: 'no_longer_needed',
+        },
+        {
+            translatedMessage: props.intl.formatMessage({
+                id: 'feedback.downgradeWorkspace.exploringOptions',
+                defaultMessage: 'Exploring other solutions',
+            }),
+            submissionValue: 'exploring_options',
+        },
+        {
+            translatedMessage: props.intl.formatMessage({
+                id: 'feedback.downgradeWorkspace.tooExpensive',
+                defaultMessage: 'Too expensive',
+            }),
+            submissionValue: 'too_expensive',
+        },
     ];
 
     return (

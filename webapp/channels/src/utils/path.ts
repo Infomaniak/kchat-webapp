@@ -1,7 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-export const ID_PATH_PATTERN = '[a-z0-9]{26}';
+// IK changes : we use UUID for ID
+export const ID_PATH_PATTERN = '[a-z0-9\\-]{36}';
 
 // This should cover:
 // - Team name (lowercase english characters, numbers or -)

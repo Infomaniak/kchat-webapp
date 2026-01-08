@@ -20,13 +20,13 @@ export interface Match {
 
 export type MatchAndHistory = Pick<Props, 'match' | 'history'>
 
-interface Props {
+type Props = {
     match: Match;
     actions: {
         onChannelByIdentifierEnter: (props: MatchAndHistory) => any;
     };
     history: any;
-}
+};
 
 export default class ChannelIdentifierRouter extends React.PureComponent<Props> {
     constructor(props: Props) {
@@ -45,6 +45,11 @@ export default class ChannelIdentifierRouter extends React.PureComponent<Props> 
             clearTimeout(this.replaceUrlTimeout);
             this.props.actions.onChannelByIdentifierEnter(this.props);
             this.replaceUrlIfPermalink();
+        }
+
+        // IK: enable search only changes to be consider as entering channel again (usefull for kMeet automatic call)
+        if (this.props.location.search !== prevProps.location.search) {
+            this.props.actions.onChannelByIdentifierEnter(this.props);
         }
     }
     componentDidMount() {

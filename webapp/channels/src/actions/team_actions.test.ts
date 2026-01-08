@@ -7,9 +7,10 @@ import * as userActions from 'mattermost-redux/actions/users';
 
 import * as Actions from 'actions/team_actions';
 
-import configureStore from 'tests/test_store';
 import {getHistory} from 'utils/browser_history';
 import {TestHelper} from 'utils/test_helper';
+
+import configureStore from 'tests/test_store';
 
 jest.mock('mattermost-redux/actions/teams', () => ({
     ...jest.requireActual('mattermost-redux/actions/teams'),

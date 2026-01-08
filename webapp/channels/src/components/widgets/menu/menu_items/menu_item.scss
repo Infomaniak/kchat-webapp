@@ -1,4 +1,4 @@
-@import '../../../../sass/utils/module';
+@use 'utils/variables';
 
 .Menu {
     .MenuItem {
@@ -46,11 +46,18 @@
             line-height: 16px;
         }
 
+        div.text{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         span.MenuItem__primary-text {
             display: inline-flex;
+            max-width: 100%;
             padding: 5px 0;
             line-height: 22px;
-            white-space: normal;
+            white-space: nowrap;
         }
 
         span.MenuItem__text-color {
@@ -63,7 +70,7 @@
             font-size: 12px;
             line-height: 16px;
             opacity: 0.7;
-            white-space: normal;
+            white-space: nowrap;
 
             @media (max-width: 768px) {
                 padding-left: 28px !important;
@@ -81,10 +88,9 @@
             overflow: hidden;
             width: 100%;
             align-items: center;
-            // Infomaniak edit
             padding: 0px 10px;
             clear: both;
-            color: rgba(var(--center-channel-color-rgb));
+            color: inherit;
             cursor: pointer;
             font-weight: normal;
             line-height: 28px;
@@ -96,7 +102,7 @@
                 padding: 0 3px;
                 margin-right: 4px;
                 margin-bottom: 2px;
-                color: rgba(var(--center-channel-color-rgb), 0.72);
+                color: rgba(var(--center-channel-color-rgb), 0.64);
                 vertical-align: middle;
 
                 &::before {
@@ -196,9 +202,9 @@
 
     .MenuCloudTrial {
         padding: 8px 12px;
+        border-radius: 4px;
         margin: 8px;
         margin-top: 0;
-        border-radius: 4px;
 
         &__free-trial {
             &__content-title {
@@ -314,12 +320,11 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        padding: 8px;
-        padding-left: 16px;
-        margin: 8px;
-        margin-top: 0;
-        background-color: rgba(var(--button-bg-rgb), 0.04);
+        padding: 8px 20px;
         border-radius: 4px;
+        margin-top: 0;
+        font-size: 12px;
+        line-height: 16px;
 
         button {
             padding: 3px 0;
@@ -328,15 +333,22 @@
             color: var(--link-color);
             font-style: normal;
             font-weight: 600;
+
+            &:hover {
+                background: transparent;
+                text-decoration: underline;
+            }
         }
 
-        button:hover {
-            background-color: transparent;
-        }
-
-        .start_trial_content {
+        .editionText {
             position: relative;
             width: 100%;
+            a {
+                color: var(--link-color);
+                &:hover {
+                    background: none;
+                }
+            }
         }
     }
 }
@@ -382,6 +394,6 @@
 }
 
 .MenuItem__divider {
-    border-top: $border-gray;
+    border-top: variables.$border-gray;
     margin: 8px 0;
 }

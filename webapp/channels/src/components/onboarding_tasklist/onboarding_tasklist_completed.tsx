@@ -93,13 +93,7 @@ const CompletedWrapper = styled.div`
     }
 `;
 
-interface Props {
-    dismissAction: () => void;
-    isCurrentUserSystemAdmin: boolean;
-    isFirstAdmin: boolean;
-}
-
-const Completed = (props: Props): JSX.Element => {
+const Completed = (): JSX.Element => {
     const dispatch = useDispatch();
 
     useEffect(() => {

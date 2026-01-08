@@ -3,7 +3,8 @@
 
 import React from 'react';
 
-const SvgIlluErrorBlocked = (props) => (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const SvgIlluErrorBlocked = (props: any) => (
     <svg
         width='240'
         height='194'

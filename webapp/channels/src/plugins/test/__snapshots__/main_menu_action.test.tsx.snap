@@ -4,11 +4,11 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
 <div
   aria-label="main menu"
   className="a11y__popup Menu"
-  role="menu"
 >
   <ul
     className="Menu__content dropdown-menu"
     onClick={[Function]}
+    role="menu"
     style={Object {}}
   >
     <Memo(MenuGroup)>
@@ -36,6 +36,13 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
         show={true}
         text="Saved messages"
       />
+      <MenuItemAction
+        icon={<ReportingToolsLogo />}
+        id="reportingTools"
+        onClick={[Function]}
+        show={true}
+        text="Reporting tools"
+      />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
       <MenuItemAction
@@ -52,7 +59,7 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
       />
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <Connect(TeamPermissionGate)
+      <Memo(TeamPermissionGate)
         permissions={
           Array [
             "manage_team",
@@ -79,11 +86,16 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
           show={true}
           text="Add Groups to Team"
         />
-      </Connect(TeamPermissionGate)>
+      </Memo(TeamPermissionGate)>
     </Memo(MenuGroup)>
     <Memo(MenuGroup) />
     <Memo(MenuGroup)>
       <MenuItemAction
+        icon={
+          <i
+            className="fa fa-anchor"
+          />
+        }
         id="someplugin_pluginmenuitem"
         key="someplugin_pluginmenuitem"
         onClick={[Function]}
@@ -120,15 +132,15 @@ exports[`plugins/MainMenuActions should match snapshot in web view 1`] = `
 <div
   aria-label="team menu"
   className="a11y__popup Menu"
-  role="menu"
 >
   <ul
     className="Menu__content dropdown-menu"
     onClick={[Function]}
+    role="menu"
     style={Object {}}
   >
     <Memo(MenuGroup)>
-      <Connect(SystemPermissionGate)
+      <Memo(SystemPermissionGate)
         permissions={
           Array [
             undefined,
@@ -141,10 +153,10 @@ exports[`plugins/MainMenuActions should match snapshot in web view 1`] = `
           show={true}
           text="Tableau de bord"
         />
-      </Connect(SystemPermissionGate)>
+      </Memo(SystemPermissionGate)>
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
-      <Connect(TeamPermissionGate)
+      <Memo(TeamPermissionGate)
         permissions={
           Array [
             "manage_team",
@@ -166,8 +178,8 @@ exports[`plugins/MainMenuActions should match snapshot in web view 1`] = `
           show={true}
           text="Add Groups to Team"
         />
-      </Connect(TeamPermissionGate)>
-      <Connect(TeamPermissionGate)
+      </Memo(TeamPermissionGate)>
+      <Memo(TeamPermissionGate)
         permissions={
           Array [
             "manage_team",
@@ -194,7 +206,7 @@ exports[`plugins/MainMenuActions should match snapshot in web view 1`] = `
           show={true}
           text="Manage Groups"
         />
-      </Connect(TeamPermissionGate)>
+      </Memo(TeamPermissionGate)>
     </Memo(MenuGroup)>
     <Memo(MenuGroup)>
       <MenuItemAction

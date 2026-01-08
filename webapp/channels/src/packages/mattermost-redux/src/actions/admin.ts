@@ -23,9 +23,9 @@ import type {
     Team,
     TeamSearchOpts,
 } from '@mattermost/types/teams';
+import type {DeepPartial} from '@mattermost/types/utilities';
 
 import {AdminTypes} from 'mattermost-redux/action_types';
-import {getUsersLimits} from 'mattermost-redux/actions/limits';
 import {Client4} from 'mattermost-redux/client';
 import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
@@ -79,9 +79,9 @@ export function getConfig() {
     });
 }
 
-export function updateConfig(config: AdminConfig) {
+export function patchConfig(config: DeepPartial<AdminConfig>) {
     return bindClientFunc({
-        clientFunc: Client4.updateConfig,
+        clientFunc: Client4.patchConfig,
         onSuccess: [AdminTypes.RECEIVED_CONFIG],
         params: [
             config,
@@ -357,9 +357,12 @@ export function testElasticsearch(config?: AdminConfig) {
     });
 }
 
-export function purgeElasticsearchIndexes() {
+export function purgeElasticsearchIndexes(indexes?: string[]) {
     return bindClientFunc({
         clientFunc: Client4.purgeElasticsearchIndexes,
+        params: [
+            indexes,
+        ],
     });
 }
 
@@ -370,22 +373,6 @@ export function uploadLicense(fileData: File) {
             fileData,
         ],
     });
-}
-
-export function removeLicense(): ActionFuncAsync<boolean> {
-    return async (dispatch, getState) => {
-        try {
-            await Client4.removeLicense();
-        } catch (error) {
-            forceLogoutIfNecessary(error as ServerError, dispatch, getState);
-            dispatch(logError(error as ServerError));
-            return {error: error as ServerError};
-        }
-
-        await dispatch(getUsersLimits());
-
-        return {data: true};
-    };
 }
 
 export function getPrevTrialLicense(): ActionFuncAsync {

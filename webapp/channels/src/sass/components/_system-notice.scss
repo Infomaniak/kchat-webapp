@@ -1,4 +1,4 @@
-@charset 'UTF-8';
+@use "utils/variables";
 
 .system-notice {
     position: absolute;
@@ -7,15 +7,10 @@
     bottom: 12px;
     width: 280px;
     padding: 18px 20px 0;
-    border: 1px solid alpha-color($black, 0.15);
-    background-color: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb, 0.12));
     border-radius: 4px;
-    box-shadow: 0 20px 30px alpha-color($black, 0.07), 0 14px 20px alpha-color($black, 0.07);
-}
-
-.system-notice__header {
-    display: flex;
-    align-items: flex-start;
+    background-color: var(--center-channel-bg);
+    box-shadow: rgba(var(--center-channel-color-rgb), 0.1) 0 20px 30px 0, rgba(var(--center-channel-color-rgb), 0.1) 0 14px 20px 0;
 }
 
 .system-notice__logo {
@@ -56,7 +51,7 @@
 
 .system-notice__footer {
     display: flex;
-    border-top: 1px solid alpha-color($black, 0.2);
+    border-top: 1px solid alpha-color(variables.$black, 0.2);
     margin: 0 -20px;
 
     .btn {
@@ -66,7 +61,7 @@
 
         &:hover {
             background: rgb(22, 109, 224);
-            color: $white;
+            color: variables.$white;
         }
 
         &:first-child {
@@ -74,8 +69,8 @@
         }
 
         &:last-child {
-            border-left: 1px solid alpha-color($black, 0.2);
             border-radius: 0 0 4px 0;
+            border-left: 1px solid alpha-color(variables.$black, 0.2);
         }
     }
 }

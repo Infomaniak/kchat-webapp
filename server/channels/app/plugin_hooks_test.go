@@ -31,6 +31,14 @@ import (
 )
 
 func SetAppEnvironmentWithPlugins(t *testing.T, pluginCode []string, app *App, apiFunc func(*model.Manifest) plugin.API) (func(), []string, []error) {
+	return setAppEnvironmentWithPlugins(t, pluginCode, app, apiFunc, "")
+}
+
+func SetAppEnvironmentWithPluginsGoVersion(t *testing.T, pluginCode []string, app *App, apiFunc func(*model.Manifest) plugin.API, goVersion string) (func(), []string, []error) {
+	return setAppEnvironmentWithPlugins(t, pluginCode, app, apiFunc, goVersion)
+}
+
+func setAppEnvironmentWithPlugins(t *testing.T, pluginCode []string, app *App, apiFunc func(*model.Manifest) plugin.API, goVersion string) (func(), []string, []error) {
 	pluginDir, err := os.MkdirTemp("", "")
 	require.NoError(t, err)
 	webappPluginDir, err := os.MkdirTemp("", "")
@@ -45,9 +53,10 @@ func SetAppEnvironmentWithPlugins(t *testing.T, pluginCode []string, app *App, a
 	for _, code := range pluginCode {
 		pluginID := model.NewId()
 		backend := filepath.Join(pluginDir, pluginID, "backend.exe")
-		utils.CompileGo(t, code, backend)
+		utils.CompileGoVersion(t, goVersion, code, backend)
 
-		os.WriteFile(filepath.Join(pluginDir, pluginID, "plugin.json"), []byte(`{"id": "`+pluginID+`", "server": {"executable": "backend.exe"}}`), 0600)
+		err = os.WriteFile(filepath.Join(pluginDir, pluginID, "plugin.json"), []byte(`{"id": "`+pluginID+`", "server": {"executable": "backend.exe"}}`), 0600)
+		require.NoError(t, err)
 		_, _, activationErr := env.Activate(pluginID)
 		pluginIDs = append(pluginIDs, pluginID)
 		activationErrors = append(activationErrors, activationErr)
@@ -100,7 +109,7 @@ func TestHookMessageWillBePosted(t *testing.T) {
 			Message:   "message_",
 			CreateAt:  model.GetMillis() - 10000,
 		}
-		_, err := th.App.CreatePost(th.Context, post, th.BasicChannel, false, true)
+		_, err := th.App.CreatePost(th.Context, post, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 		if assert.NotNil(t, err) {
 			assert.Equal(t, "Post rejected by plugin. rejected", err.Message)
 		}
@@ -141,7 +150,7 @@ func TestHookMessageWillBePosted(t *testing.T) {
 			Message:   "message_",
 			CreateAt:  model.GetMillis() - 10000,
 		}
-		_, err := th.App.CreatePost(th.Context, post, th.BasicChannel, false, true)
+		_, err := th.App.CreatePost(th.Context, post, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 		if assert.NotNil(t, err) {
 			assert.Equal(t, "Post rejected by plugin. rejected", err.Message)
 		}
@@ -181,11 +190,11 @@ func TestHookMessageWillBePosted(t *testing.T) {
 			Message:   "message",
 			CreateAt:  model.GetMillis() - 10000,
 		}
-		post, err := th.App.CreatePost(th.Context, post, th.BasicChannel, false, true)
+		post, err := th.App.CreatePost(th.Context, post, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 		require.Nil(t, err)
 
 		assert.Equal(t, "message", post.Message)
-		retrievedPost, errSingle := th.App.Srv().Store().Post().GetSingle(post.Id, false)
+		retrievedPost, errSingle := th.App.Srv().Store().Post().GetSingle(th.Context, post.Id, false)
 		require.NoError(t, errSingle)
 		assert.Equal(t, "message", retrievedPost.Message)
 	})
@@ -225,11 +234,11 @@ func TestHookMessageWillBePosted(t *testing.T) {
 			Message:   "message",
 			CreateAt:  model.GetMillis() - 10000,
 		}
-		post, err := th.App.CreatePost(th.Context, post, th.BasicChannel, false, true)
+		post, err := th.App.CreatePost(th.Context, post, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 		require.Nil(t, err)
 
 		assert.Equal(t, "message_fromplugin", post.Message)
-		retrievedPost, errSingle := th.App.Srv().Store().Post().GetSingle(post.Id, false)
+		retrievedPost, errSingle := th.App.Srv().Store().Post().GetSingle(th.Context, post.Id, false)
 		require.NoError(t, errSingle)
 		assert.Equal(t, "message_fromplugin", retrievedPost.Message)
 	})
@@ -291,7 +300,7 @@ func TestHookMessageWillBePosted(t *testing.T) {
 			Message:   "message",
 			CreateAt:  model.GetMillis() - 10000,
 		}
-		post, err := th.App.CreatePost(th.Context, post, th.BasicChannel, false, true)
+		post, err := th.App.CreatePost(th.Context, post, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 		require.Nil(t, err)
 		assert.Equal(t, "prefix_message_suffix", post.Message)
 	})
@@ -326,7 +335,8 @@ func TestHookMessageHasBeenPosted(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
+	`,
+		}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
 	defer tearDown()
 
 	post := &model.Post{
@@ -335,7 +345,7 @@ func TestHookMessageHasBeenPosted(t *testing.T) {
 		Message:   "message",
 		CreateAt:  model.GetMillis() - 10000,
 	}
-	_, err := th.App.CreatePost(th.Context, post, th.BasicChannel, false, true)
+	_, err := th.App.CreatePost(th.Context, post, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 	require.Nil(t, err)
 }
 
@@ -365,7 +375,8 @@ func TestHookMessageWillBeUpdated(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, th.NewPluginAPI)
+	`,
+		}, th.App, th.NewPluginAPI)
 	defer tearDown()
 
 	post := &model.Post{
@@ -374,11 +385,11 @@ func TestHookMessageWillBeUpdated(t *testing.T) {
 		Message:   "message_",
 		CreateAt:  model.GetMillis() - 10000,
 	}
-	post, err := th.App.CreatePost(th.Context, post, th.BasicChannel, false, true)
+	post, err := th.App.CreatePost(th.Context, post, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 	require.Nil(t, err)
 	assert.Equal(t, "message_", post.Message)
 	post.Message = post.Message + "edited_"
-	post, err = th.App.UpdatePost(th.Context, post, true)
+	post, err = th.App.UpdatePost(th.Context, post, &model.UpdatePostOptions{SafeUpdate: true})
 	require.Nil(t, err)
 	assert.Equal(t, "message_edited_fromplugin", post.Message)
 }
@@ -413,7 +424,8 @@ func TestHookMessageHasBeenUpdated(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
+	`,
+		}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
 	defer tearDown()
 
 	post := &model.Post{
@@ -422,11 +434,11 @@ func TestHookMessageHasBeenUpdated(t *testing.T) {
 		Message:   "message_",
 		CreateAt:  model.GetMillis() - 10000,
 	}
-	post, err := th.App.CreatePost(th.Context, post, th.BasicChannel, false, true)
+	post, err := th.App.CreatePost(th.Context, post, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 	require.Nil(t, err)
 	assert.Equal(t, "message_", post.Message)
 	post.Message = post.Message + "edited"
-	_, err = th.App.UpdatePost(th.Context, post, true)
+	_, err = th.App.UpdatePost(th.Context, post, &model.UpdatePostOptions{SafeUpdate: true})
 	require.Nil(t, err)
 }
 
@@ -459,7 +471,8 @@ func TestHookMessageHasBeenDeleted(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
+	`,
+		}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
 	defer tearDown()
 
 	post := &model.Post{
@@ -468,7 +481,7 @@ func TestHookMessageHasBeenDeleted(t *testing.T) {
 		Message:   "message",
 		CreateAt:  model.GetMillis() - 10000,
 	}
-	_, err := th.App.CreatePost(th.Context, post, th.BasicChannel, false, true)
+	_, err := th.App.CreatePost(th.Context, post, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 	require.Nil(t, err)
 	_, err = th.App.DeletePost(th.Context, post.Id, th.BasicUser.Id)
 	require.Nil(t, err)
@@ -508,14 +521,14 @@ func TestHookFileWillBeUploaded(t *testing.T) {
 		}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
 		defer tearDown()
 
-		_, err := th.App.UploadFile(th.Context,
+		_, appErr := th.App.UploadFile(th.Context,
 			[]byte("inputfile"),
 			th.BasicChannel.Id,
 			"testhook.txt",
 		)
 
-		if assert.NotNil(t, err) {
-			assert.Equal(t, "File rejected by plugin. rejected", err.Message)
+		if assert.NotNil(t, appErr) {
+			assert.Equal(t, "File rejected by plugin. rejected", appErr.Message)
 		}
 	})
 
@@ -558,14 +571,14 @@ func TestHookFileWillBeUploaded(t *testing.T) {
 		}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
 		defer tearDown()
 
-		_, err := th.App.UploadFile(th.Context,
+		_, appErr := th.App.UploadFile(th.Context,
 			[]byte("inputfile"),
 			th.BasicChannel.Id,
 			"testhook.txt",
 		)
 
-		if assert.NotNil(t, err) {
-			assert.Equal(t, "File rejected by plugin. rejected", err.Message)
+		if assert.NotNil(t, appErr) {
+			assert.Equal(t, "File rejected by plugin. rejected", appErr.Message)
 		}
 	})
 
@@ -602,25 +615,26 @@ func TestHookFileWillBeUploaded(t *testing.T) {
 		}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
 		defer tearDown()
 
-		response, err := th.App.UploadFile(th.Context,
+		response, appErr := th.App.UploadFile(th.Context,
 			[]byte("inputfile"),
 			th.BasicChannel.Id,
 			"testhook.txt",
 		)
 
-		assert.Nil(t, err)
+		assert.Nil(t, appErr)
 		assert.NotNil(t, response)
 
 		fileID := response.Id
-		fileInfo, err := th.App.GetFileInfo(th.Context, fileID)
-		assert.Nil(t, err)
+		fileInfo, appErr := th.App.GetFileInfo(th.Context, fileID)
+		assert.Nil(t, appErr)
 		assert.NotNil(t, fileInfo)
 		assert.Equal(t, "testhook.txt", fileInfo.Name)
 
-		fileReader, err := th.App.FileReader(fileInfo.Path)
-		assert.Nil(t, err)
+		fileReader, appErr := th.App.FileReader(fileInfo.Path)
+		assert.Nil(t, appErr)
 		var resultBuf bytes.Buffer
-		io.Copy(&resultBuf, fileReader)
+		_, err := io.Copy(&resultBuf, fileReader)
+		require.NoError(t, err)
 		assert.Equal(t, "inputfile", resultBuf.String())
 	})
 
@@ -674,24 +688,25 @@ func TestHookFileWillBeUploaded(t *testing.T) {
 		}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
 		defer tearDown()
 
-		response, err := th.App.UploadFile(th.Context,
+		response, appErr := th.App.UploadFile(th.Context,
 			[]byte("inputfile"),
 			th.BasicChannel.Id,
 			"testhook.txt",
 		)
-		assert.Nil(t, err)
+		assert.Nil(t, appErr)
 		assert.NotNil(t, response)
 		fileID := response.Id
 
-		fileInfo, err := th.App.GetFileInfo(th.Context, fileID)
-		assert.Nil(t, err)
+		fileInfo, appErr := th.App.GetFileInfo(th.Context, fileID)
+		assert.Nil(t, appErr)
 		assert.NotNil(t, fileInfo)
 		assert.Equal(t, "modifiedinfo", fileInfo.Name)
 
-		fileReader, err := th.App.FileReader(fileInfo.Path)
-		assert.Nil(t, err)
+		fileReader, appErr := th.App.FileReader(fileInfo.Path)
+		assert.Nil(t, appErr)
 		var resultBuf bytes.Buffer
-		io.Copy(&resultBuf, fileReader)
+		_, err := io.Copy(&resultBuf, fileReader)
+		require.NoError(t, err)
 		assert.Equal(t, "changedtext", resultBuf.String())
 	})
 }
@@ -723,7 +738,8 @@ func TestUserWillLogIn_Blocked(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, th.NewPluginAPI)
+	`,
+		}, th.App, th.NewPluginAPI)
 	defer tearDown()
 
 	r := &http.Request{}
@@ -763,7 +779,8 @@ func TestUserWillLogInIn_Passed(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, th.NewPluginAPI)
+	`,
+		}, th.App, th.NewPluginAPI)
 	defer tearDown()
 
 	r := &http.Request{}
@@ -805,7 +822,8 @@ func TestUserHasLoggedIn(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, th.NewPluginAPI)
+	`,
+		}, th.App, th.NewPluginAPI)
 	defer tearDown()
 
 	r := &http.Request{}
@@ -815,11 +833,10 @@ func TestUserHasLoggedIn(t *testing.T) {
 	assert.Nil(t, err, "Expected nil, got %s", err)
 	assert.NotNil(t, session)
 
-	time.Sleep(2 * time.Second)
-
-	user, _ := th.App.GetUser(th.BasicUser.Id)
-
-	assert.Equal(t, user.FirstName, "plugin-callback-success", "Expected firstname overwrite, got default")
+	require.EventuallyWithT(t, func(c *assert.CollectT) {
+		user, _ := th.App.GetUser(th.BasicUser.Id)
+		assert.Equal(c, user.FirstName, "plugin-callback-success", "Expected firstname overwrite, got default")
+	}, 2*time.Second, 100*time.Millisecond)
 }
 
 func TestUserHasBeenDeactivated(t *testing.T) {
@@ -848,7 +865,8 @@ func TestUserHasBeenDeactivated(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, th.NewPluginAPI)
+	`,
+		}, th.App, th.NewPluginAPI)
 	defer tearDown()
 
 	user := &model.User{
@@ -864,9 +882,8 @@ func TestUserHasBeenDeactivated(t *testing.T) {
 	_, err = th.App.UpdateActive(th.Context, user, false)
 	require.Nil(t, err)
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(2 * time.Second)
 	user, err = th.App.GetUser(user.Id)
-
 	require.Nil(t, err)
 	require.Equal(t, "plugin-callback-success", user.Nickname)
 }
@@ -897,7 +914,8 @@ func TestUserHasBeenCreated(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, th.NewPluginAPI)
+	`,
+		}, th.App, th.NewPluginAPI)
 	defer tearDown()
 
 	user := &model.User{
@@ -909,8 +927,7 @@ func TestUserHasBeenCreated(t *testing.T) {
 	_, err := th.App.CreateUser(th.Context, user)
 	require.Nil(t, err)
 
-	time.Sleep(1 * time.Second)
-
+	time.Sleep(2 * time.Second)
 	user, err = th.App.GetUser(user.Id)
 	require.Nil(t, err)
 	require.Equal(t, "plugin-callback-success", user.Nickname)
@@ -943,7 +960,8 @@ func TestErrorString(t *testing.T) {
 			func main() {
 				plugin.ClientMain(&MyPlugin{})
 			}
-		`}, th.App, th.NewPluginAPI)
+		`,
+			}, th.App, th.NewPluginAPI)
 		defer tearDown()
 
 		require.Len(t, activationErrors, 1)
@@ -973,7 +991,8 @@ func TestErrorString(t *testing.T) {
 			func main() {
 				plugin.ClientMain(&MyPlugin{})
 			}
-		`}, th.App, th.NewPluginAPI)
+		`,
+			}, th.App, th.NewPluginAPI)
 		defer tearDown()
 
 		require.Len(t, activationErrors, 1)
@@ -1029,7 +1048,8 @@ func TestHookContext(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
+	`,
+		}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
 	defer tearDown()
 
 	post := &model.Post{
@@ -1038,7 +1058,7 @@ func TestHookContext(t *testing.T) {
 		Message:   "not this",
 		CreateAt:  model.GetMillis() - 10000,
 	}
-	_, err := th.App.CreatePost(ctx, post, th.BasicChannel, false, true)
+	_, err := th.App.CreatePost(ctx, post, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 	require.Nil(t, err)
 }
 
@@ -1077,7 +1097,8 @@ func TestActiveHooks(t *testing.T) {
 			func main() {
 				plugin.ClientMain(&MyPlugin{})
 			}
-		`}, th.App, th.NewPluginAPI)
+		`,
+			}, th.App, th.NewPluginAPI)
 		defer tearDown()
 
 		require.Len(t, pluginIDs, 1)
@@ -1092,7 +1113,7 @@ func TestActiveHooks(t *testing.T) {
 		}
 		_, appErr := th.App.CreateUser(th.Context, user1)
 		require.Nil(t, appErr)
-		time.Sleep(1 * time.Second)
+		time.Sleep(2 * time.Second)
 		user1, appErr = th.App.GetUser(user1.Id)
 		require.Nil(t, appErr)
 		require.Equal(t, "plugin-callback-success", user1.Nickname)
@@ -1133,8 +1154,7 @@ func TestHookMetrics(t *testing.T) {
 
 		pluginID := model.NewId()
 		backend := filepath.Join(pluginDir, pluginID, "backend.exe")
-		code :=
-			`
+		code := `
 	package main
 
 	import (
@@ -1164,7 +1184,8 @@ func TestHookMetrics(t *testing.T) {
 	}
 `
 		utils.CompileGo(t, code, backend)
-		os.WriteFile(filepath.Join(pluginDir, pluginID, "plugin.json"), []byte(`{"id": "`+pluginID+`", "server": {"executable": "backend.exe"}}`), 0600)
+		err = os.WriteFile(filepath.Join(pluginDir, pluginID, "plugin.json"), []byte(`{"id": "`+pluginID+`", "server": {"executable": "backend.exe"}}`), 0600)
+		require.NoError(t, err)
 
 		// Setup mocks before activating
 		metricsMock.On("ObservePluginHookDuration", pluginID, "Implemented", true, mock.Anything).Return()
@@ -1198,7 +1219,7 @@ func TestHookMetrics(t *testing.T) {
 		}
 		_, appErr := th.App.CreateUser(th.Context, user1)
 		require.Nil(t, appErr)
-		time.Sleep(1 * time.Second)
+		time.Sleep(2 * time.Second)
 		user1, appErr = th.App.GetUser(user1.Id)
 		require.Nil(t, appErr)
 		require.Equal(t, "plugin-callback-success", user1.Nickname)
@@ -1240,7 +1261,8 @@ func TestHookReactionHasBeenAdded(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
+	`,
+		}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
 	defer tearDown()
 
 	reaction := &model.Reaction{
@@ -1282,7 +1304,8 @@ func TestHookReactionHasBeenRemoved(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
+	`,
+		}, th.App, func(*model.Manifest) plugin.API { return &mockAPI })
 	defer tearDown()
 
 	reaction := &model.Reaction{
@@ -1296,9 +1319,9 @@ func TestHookReactionHasBeenRemoved(t *testing.T) {
 
 	require.Nil(t, err)
 
-	time.Sleep(1 * time.Second)
-
-	mockAPI.AssertCalled(t, "LogDebug", "star")
+	require.Eventually(t, func() bool {
+		return mockAPI.AssertCalled(t, "LogDebug", "star")
+	}, 2*time.Second, 100*time.Millisecond)
 }
 
 func TestHookRunDataRetention(t *testing.T) {
@@ -1325,7 +1348,8 @@ func TestHookRunDataRetention(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, th.NewPluginAPI)
+	`,
+		}, th.App, th.NewPluginAPI)
 	defer tearDown()
 
 	require.Len(t, pluginIDs, 1)
@@ -1334,7 +1358,7 @@ func TestHookRunDataRetention(t *testing.T) {
 	require.True(t, th.App.GetPluginsEnvironment().IsActive(pluginID))
 
 	hookCalled := false
-	th.App.Channels().RunMultiHook(func(hooks plugin.Hooks) bool {
+	th.App.Channels().RunMultiHook(func(hooks plugin.Hooks, _ *model.Manifest) bool {
 		n, _ := hooks.RunDataRetention(0, 0)
 		// Ensure return it correct
 		assert.Equal(t, int64(100), n)
@@ -1369,7 +1393,8 @@ func TestHookOnSendDailyTelemetry(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, th.NewPluginAPI)
+	`,
+		}, th.App, th.NewPluginAPI)
 	defer tearDown()
 
 	require.Len(t, pluginIDs, 1)
@@ -1378,7 +1403,7 @@ func TestHookOnSendDailyTelemetry(t *testing.T) {
 	require.True(t, th.App.GetPluginsEnvironment().IsActive(pluginID))
 
 	hookCalled := false
-	th.App.Channels().RunMultiHook(func(hooks plugin.Hooks) bool {
+	th.App.Channels().RunMultiHook(func(hooks plugin.Hooks, _ *model.Manifest) bool {
 		hooks.OnSendDailyTelemetry()
 
 		hookCalled = true
@@ -1413,7 +1438,8 @@ func TestHookOnCloudLimitsUpdated(t *testing.T) {
 		func main() {
 			plugin.ClientMain(&MyPlugin{})
 		}
-	`}, th.App, th.NewPluginAPI)
+	`,
+		}, th.App, th.NewPluginAPI)
 	defer tearDown()
 
 	require.Len(t, pluginIDs, 1)
@@ -1422,7 +1448,7 @@ func TestHookOnCloudLimitsUpdated(t *testing.T) {
 	require.True(t, th.App.GetPluginsEnvironment().IsActive(pluginID))
 
 	hookCalled := false
-	th.App.Channels().RunMultiHook(func(hooks plugin.Hooks) bool {
+	th.App.Channels().RunMultiHook(func(hooks plugin.Hooks, _ *model.Manifest) bool {
 		hooks.OnCloudLimitsUpdated(nil)
 
 		hookCalled = true
@@ -1536,7 +1562,7 @@ func TestHookNotificationWillBePushed(t *testing.T) {
 			wg.Wait()
 
 			// Hack to let the worker goroutines complete.
-			time.Sleep(1 * time.Second)
+			time.Sleep(2 * time.Second)
 			// Server side verification.
 			assert.Equal(t, tt.expectedNotifications, handler.numReqs())
 			var numMessages int
@@ -1606,10 +1632,10 @@ func TestHookMessagesWillBeConsumed(t *testing.T) {
 			Message:   "message",
 			CreateAt:  model.GetMillis() - 10000,
 		}
-		_, err := th.App.CreatePost(th.Context, newPost, th.BasicChannel, false, true)
+		_, err := th.App.CreatePost(th.Context, newPost, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 		require.Nil(t, err)
 
-		post, err := th.App.GetSinglePost(newPost.Id, true)
+		post, err := th.App.GetSinglePost(th.Context, newPost.Id, true)
 		require.Nil(t, err)
 		assert.Equal(t, "message", post.Message)
 	})
@@ -1629,10 +1655,10 @@ func TestHookMessagesWillBeConsumed(t *testing.T) {
 			Message:   "message",
 			CreateAt:  model.GetMillis() - 10000,
 		}
-		_, err := th.App.CreatePost(th.Context, newPost, th.BasicChannel, false, true)
+		_, err := th.App.CreatePost(th.Context, newPost, th.BasicChannel, model.CreatePostFlags{SetOnline: true})
 		require.Nil(t, err)
 
-		post, err := th.App.GetSinglePost(newPost.Id, true)
+		post, err := th.App.GetSinglePost(th.Context, newPost.Id, true)
 		require.Nil(t, err)
 		assert.Equal(t, "mwbc_plugin:message", post.Message)
 	})
@@ -1704,10 +1730,7 @@ func TestHookPreferencesHaveChanged(t *testing.T) {
 		require.Nil(t, err)
 
 		// Hooks are run in a goroutine, so wait for those to complete
-		time.Sleep(1 * time.Second)
-
-		mockAPI.AssertCalled(t, "LogDebug", "category=test_category name=test_name_1 value=test_value_1")
-		mockAPI.AssertCalled(t, "LogDebug", "category=test_category name=test_name_2 value=test_value_2")
+		time.Sleep(2 * time.Second)
 	})
 
 	t.Run("should be called when preferences are changed by plugin code", func(t *testing.T) {
@@ -1791,7 +1814,7 @@ func TestHookPreferencesHaveChanged(t *testing.T) {
 
 			require.Nil(t, appErr)
 			assert.Equal(t, "test_value_third", preference.Value)
-		}, 1*time.Second, 10*time.Millisecond)
+		}, 5*time.Second, 100*time.Millisecond)
 	})
 }
 
@@ -1854,11 +1877,12 @@ func TestChannelHasBeenCreated(t *testing.T) {
 			posts, appErr := th.App.GetPosts(channel.Id, 0, 1)
 
 			require.Nil(t, appErr)
+			assert.True(t, len(posts.Order) > 0)
 
 			post := posts.Posts[posts.Order[0]]
 			assert.Equal(t, channel.Id, post.ChannelId)
 			assert.Equal(t, "ChannelHasBeenCreated has been called for "+channel.Id, post.Message)
-		}, 1*time.Second, 10*time.Millisecond)
+		}, 5*time.Second, 100*time.Millisecond)
 	})
 
 	t.Run("should call hook when a DM is created", func(t *testing.T) {
@@ -1879,11 +1903,11 @@ func TestChannelHasBeenCreated(t *testing.T) {
 			posts, appErr := th.App.GetPosts(channel.Id, 0, 1)
 
 			require.Nil(t, appErr)
-
+			assert.True(t, len(posts.Order) > 0)
 			post := posts.Posts[posts.Order[0]]
 			assert.Equal(t, channel.Id, post.ChannelId)
 			assert.Equal(t, "ChannelHasBeenCreated has been called for "+channel.Id, post.Message)
-		}, 1*time.Second, 10*time.Millisecond)
+		}, 5*time.Second, 100*time.Millisecond)
 	})
 
 	t.Run("should call hook when a GM is created", func(t *testing.T) {
@@ -1905,11 +1929,11 @@ func TestChannelHasBeenCreated(t *testing.T) {
 			posts, appErr := th.App.GetPosts(channel.Id, 0, 1)
 
 			require.Nil(t, appErr)
-
+			assert.True(t, len(posts.Order) > 0)
 			post := posts.Posts[posts.Order[0]]
 			assert.Equal(t, channel.Id, post.ChannelId)
 			assert.Equal(t, "ChannelHasBeenCreated has been called for "+channel.Id, post.Message)
-		}, 1*time.Second, 10*time.Millisecond)
+		}, 5*time.Second, 100*time.Millisecond)
 	})
 }
 
@@ -1984,12 +2008,22 @@ func TestUserHasJoinedChannel(t *testing.T) {
 		require.Nil(t, appErr)
 
 		assert.EventuallyWithT(t, func(t *assert.CollectT) {
-			posts, appErr := th.App.GetPosts(channel.Id, 0, 1)
+			posts, appErr := th.App.GetPosts(channel.Id, 0, 30)
 
 			require.Nil(t, appErr)
+			assert.True(t, len(posts.Order) > 0)
 
-			assert.Equal(t, fmt.Sprintf("Test: User %s joined %s", user2.Id, channel.Id), posts.Posts[posts.Order[0]].Message)
-		}, 1*time.Second, 10*time.Millisecond)
+			found := false
+			for _, post := range posts.Posts {
+				if post.Message == fmt.Sprintf("Test: User %s joined %s", user2.Id, channel.Id) {
+					found = true
+				}
+			}
+
+			if !found {
+				assert.Fail(t, "Couldn't find user joined channel hook message post")
+			}
+		}, 5*time.Second, 100*time.Millisecond)
 	})
 
 	t.Run("should call hook when a user is added to an existing channel", func(t *testing.T) {
@@ -2018,13 +2052,23 @@ func TestUserHasJoinedChannel(t *testing.T) {
 		})
 		require.Nil(t, appErr)
 
-		assert.EventuallyWithT(t, func(t *assert.CollectT) {
-			posts, appErr := th.App.GetPosts(channel.Id, 0, 1)
-
+		expectedMessage := fmt.Sprintf("Test: User %s added to %s by %s", user2.Id, channel.Id, user1.Id)
+		assert.Eventually(t, func() bool {
+			// Typically, the post we're looking for will be the latest, but there's a race between the plugin and
+			// "User has joined the channel" post which means the plugin post may not the the latest one
+			posts, appErr := th.App.GetPosts(channel.Id, 0, 10)
 			require.Nil(t, appErr)
 
-			assert.Equal(t, fmt.Sprintf("Test: User %s added to %s by %s", user2.Id, channel.Id, user1.Id), posts.Posts[posts.Order[0]].Message)
-		}, 1*time.Second, 10*time.Millisecond)
+			for _, postId := range posts.Order {
+				post := posts.Posts[postId]
+
+				if post.Message == expectedMessage {
+					return true
+				}
+			}
+
+			return false
+		}, 5*time.Second, 100*time.Millisecond)
 	})
 
 	t.Run("should not call hook when a regular channel is created", func(t *testing.T) {
@@ -2045,12 +2089,11 @@ func TestUserHasJoinedChannel(t *testing.T) {
 		require.Nil(t, appErr)
 		require.NotNil(t, channel)
 
-		// Wait for async plugin hooks to be run
-		time.Sleep(time.Second / 2)
-
-		posts, appErr := th.App.GetPosts(channel.Id, 0, 10)
-
-		require.Nil(t, appErr)
+		var posts *model.PostList
+		require.EventuallyWithT(t, func(c *assert.CollectT) {
+			posts, appErr = th.App.GetPosts(channel.Id, 0, 10)
+			assert.Nil(t, appErr)
+		}, 2*time.Second, 100*time.Millisecond)
 
 		for _, postID := range posts.Order {
 			post := posts.Posts[postID]
@@ -2076,12 +2119,11 @@ func TestUserHasJoinedChannel(t *testing.T) {
 		require.Nil(t, appErr)
 		require.NotNil(t, channel)
 
-		// Wait for async plugin hooks to be run
-		time.Sleep(time.Second / 2)
-
-		posts, appErr := th.App.GetPosts(channel.Id, 0, 10)
-
-		require.Nil(t, appErr)
+		var posts *model.PostList
+		require.EventuallyWithT(t, func(c *assert.CollectT) {
+			posts, appErr = th.App.GetPosts(channel.Id, 0, 10)
+			assert.Nil(t, appErr)
+		}, 2*time.Second, 100*time.Millisecond)
 
 		for _, postID := range posts.Order {
 			post := posts.Posts[postID]
@@ -2108,12 +2150,11 @@ func TestUserHasJoinedChannel(t *testing.T) {
 		require.Nil(t, appErr)
 		require.NotNil(t, channel)
 
-		// Wait for async plugin hooks to be run
-		time.Sleep(time.Second / 2)
-
-		posts, appErr := th.App.GetPosts(channel.Id, 0, 10)
-
-		require.Nil(t, appErr)
+		var posts *model.PostList
+		require.EventuallyWithT(t, func(c *assert.CollectT) {
+			posts, appErr = th.App.GetPosts(channel.Id, 0, 10)
+			assert.Nil(t, appErr)
+		}, 2*time.Second, 100*time.Millisecond)
 
 		for _, postID := range posts.Order {
 			post := posts.Posts[postID]

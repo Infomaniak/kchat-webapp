@@ -45,13 +45,20 @@ const ChannelHeaderTitleGroup = ({
         }
     }
 
-    const displayNames = channel.display_name.split(', ');
+    const currentUserDisplayName = currentUser ? displayUsername(currentUser, teammateNameDisplaySetting) : '';
+
+    const displayNames = channel.display_name.split(', ').filter((name) => name !== currentUserDisplayName);
 
     return (
-        <React.Fragment>
+        <>
             {displayNames.map((displayName, index) => {
                 if (!membersMap[displayName]) {
-                    return displayName;
+                    return (
+                        <React.Fragment key={displayName}>
+                            {index > 0 && ', '}
+                            {displayName}
+                        </React.Fragment>
+                    );
                 }
 
                 const user = membersMap[displayName].shift();
@@ -64,7 +71,7 @@ const ChannelHeaderTitleGroup = ({
                     </React.Fragment>
                 );
             })}
-        </React.Fragment>
+        </>
     );
 };
 

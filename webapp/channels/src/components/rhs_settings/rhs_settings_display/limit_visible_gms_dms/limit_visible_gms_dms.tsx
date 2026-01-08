@@ -97,7 +97,8 @@ export default class RhsLimitVisibleGMsDMs extends React.PureComponent<Props, St
                         id='limitVisibleGMsDMs'
                         options={limits}
                         clearable={false}
-                        onChange={(e) => this.handleChange(e)}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        onChange={(e: any) => this.handleChange(e)}
                         value={this.state.limit}
                         isSearchable={false}
                         styles={reactStyles}

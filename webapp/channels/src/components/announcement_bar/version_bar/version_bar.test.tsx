@@ -19,4 +19,72 @@ describe('components/VersionBar', () => {
         expect(wrapper).toMatchSnapshot();
         expect(wrapper.find(AnnouncementBar).exists()).toBe(true);
     });
+
+    test('should match snapshot - bar rendered after build hash change', () => {
+        const wrapper = shallow(
+            <VersionBar buildHash='none'/>,
+        );
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+
+        wrapper.setProps({buildHash: '83ea110da12da84442f92b4634a1e0e2'});
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(true);
+    });
+
+    test('should match snapshot - no bar since no update', () => {
+        const wrapper = shallow(
+            <VersionBar buildHash='none'/>,
+        );
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+
+        wrapper.setProps({buildHash: 'none'});
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+    });
+
+    test('should match snapshot - bar rendered but disappear afterward', () => {
+        const wrapper = shallow(
+            <VersionBar buildHash='none'/>,
+        );
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+
+        wrapper.setProps({buildHash: '83ea110da12da84442f92b4634a1e0e2'});
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(true);
+
+        wrapper.setProps({buildHash: 'none'});
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+    });
+
+    test('should match snapshot - No Render since new call is none', () => {
+        const wrapper = shallow(
+            <VersionBar buildHash='844f70a08ead47f06232ecb6fcad63d2'/>,
+        );
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+
+        wrapper.setProps({buildHash: 'none'});
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+    });
+
+    test('should match snapshot - On mount `none` become `GIT_REALEASE`', () => {
+        const wrapper = shallow(
+            <VersionBar buildHash='none'/>,
+        );
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+
+        wrapper.setProps({buildHash: GIT_RELEASE});
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(false);
+
+        wrapper.setProps({buildHash: '83ea110da12da84442f92b4634a1e0e2'});
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(AnnouncementBar).exists()).toBe(true);
+    });
 });

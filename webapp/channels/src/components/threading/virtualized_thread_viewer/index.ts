@@ -3,14 +3,15 @@
 
 import {connect} from 'react-redux';
 
-import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 
 import {getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUserId, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
+import {measureRhsOpened} from 'actions/views/rhs';
+import {getIsMobileView} from 'selectors/views/browser';
 import {makePrepareReplyIdsForThreadViewer, makeGetThreadLastViewedAt} from 'selectors/views/threads';
 
 import type {GlobalState} from 'types/store';
@@ -19,7 +20,7 @@ import type {FakePost} from 'types/store/rhs';
 import ThreadViewerVirtualized from './virtualized_thread_viewer';
 
 type OwnProps = {
-    channel: Channel;
+    channelId: string;
     postIds: Array<Post['id'] | FakePost['id']>;
     selected: Post | FakePost;
     useRelativeTimestamp: boolean;
@@ -31,12 +32,12 @@ function makeMapStateToProps() {
     const getThreadLastViewedAt = makeGetThreadLastViewedAt();
 
     return (state: GlobalState, ownProps: OwnProps) => {
-        const {postIds, useRelativeTimestamp, selected, channel} = ownProps;
+        const {postIds, useRelativeTimestamp, selected, channelId} = ownProps;
 
         const collapsedThreads = isCollapsedThreadsEnabled(state);
         const currentUserId = getCurrentUserId(state);
         const lastViewedAt = getThreadLastViewedAt(state, selected.id);
-        const directTeammate = getDirectTeammate(state, channel.id);
+        const directTeammate = getDirectTeammate(state, channelId);
 
         const lastPost = getPost(state, postIds[0]);
 
@@ -47,22 +48,19 @@ function makeMapStateToProps() {
         });
         const newMessagesSeparatorActions = state.plugins.components.NewMessagesSeparatorAction;
 
-        const myChannelMemberships = getMyChannelMemberships(state);
-        const isMember = channel ? Boolean(myChannelMemberships[channel.id]) : false;
-        const channelId = channel ? channel.id : '';
-
         return {
             currentUserId,
             directTeammate,
+            isMobileView: getIsMobileView(state),
             lastPost,
             replyListIds,
-            teamId: channel.team_id,
-            channelId,
-            isMember,
-            lastViewedAt,
             newMessagesSeparatorActions,
         };
     };
 }
 
-export default connect(makeMapStateToProps)(ThreadViewerVirtualized);
+const mapDispatchToProps = {
+    measureRhsOpened,
+};
+
+export default connect(makeMapStateToProps, mapDispatchToProps)(ThreadViewerVirtualized);

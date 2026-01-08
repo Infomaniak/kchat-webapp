@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {AnyAction} from 'redux';
 import {combineReducers} from 'redux';
 
 import {TeamTypes, UserTypes} from 'mattermost-redux/action_types';
@@ -10,7 +9,9 @@ import {SidebarSize} from 'components/resizable_sidebar/constants';
 
 import {ActionTypes} from 'utils/constants';
 
-function isOpen(state = false, action: AnyAction) {
+import type {MMAction} from 'types/store';
+
+function isOpen(state = false, action: MMAction) {
     switch (action.type) {
     case ActionTypes.TOGGLE_LHS:
         return !state;
@@ -22,6 +23,11 @@ function isOpen(state = false, action: AnyAction) {
         return false;
     case ActionTypes.OPEN_RHS_MENU:
         return false;
+
+    // ik: closeLhs when post is selected
+    case ActionTypes.SELECT_POST:
+        return false;
+
     case TeamTypes.SELECT_TEAM:
         return false;
 
@@ -32,7 +38,7 @@ function isOpen(state = false, action: AnyAction) {
     }
 }
 
-function size(state = SidebarSize.MEDIUM, action: AnyAction) {
+function size(state = SidebarSize.MEDIUM, action: MMAction) {
     switch (action.type) {
     case ActionTypes.SET_LHS_SIZE:
         return action.size;
@@ -41,7 +47,7 @@ function size(state = SidebarSize.MEDIUM, action: AnyAction) {
     }
 }
 
-function currentStaticPageId(state = '', action: AnyAction) {
+function currentStaticPageId(state = '', action: MMAction) {
     switch (action.type) {
     case ActionTypes.SELECT_STATIC_PAGE:
         return action.data;

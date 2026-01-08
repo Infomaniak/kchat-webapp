@@ -8,9 +8,10 @@ import {FormattedMessage} from 'react-intl';
 
 import DisplayName from 'components/create_team/components/display_name';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import Constants from 'utils/constants';
 import {cleanUpUrlable} from 'utils/url';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 jest.mock('images/logo.png', () => 'logo.png');
 

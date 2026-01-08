@@ -148,6 +148,7 @@ describe('components/dot_menu/DotMenu', () => {
         threadReplyCount: 0,
         userId: 'user_id_1',
         isMilitaryTime: false,
+        isInThread: false,
         canMove: true,
         postTranslationEnabled: false,
     };
@@ -278,6 +279,7 @@ describe('components/dot_menu/DotMenu', () => {
                             has_preview_image: false,
                             clientId: '',
                             archived: false,
+                            channel_id: '',
                         }, {
                             id: 'file_id_2',
                             user_id: '',
@@ -293,6 +295,7 @@ describe('components/dot_menu/DotMenu', () => {
                             has_preview_image: false,
                             clientId: '',
                             archived: false,
+                            channel_id: '',
                         }]}}),
         };
 
@@ -330,6 +333,7 @@ describe('components/dot_menu/DotMenu', () => {
                         has_preview_image: false,
                         clientId: '',
                         archived: false,
+                        channel_id: '',
                     }],
                 },
             }),

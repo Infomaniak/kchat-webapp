@@ -81,6 +81,7 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
         const result = await this.fetchFileInfoForUrl(fileId);
 
         if ('error' in result) {
+            // eslint-disable-next-line no-console
             console.warn(result.error);
             return null;
         }
@@ -93,6 +94,7 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
             const fileInfo = await Client4.getFileInfosForFile(fileId);
             return fileInfo;
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.warn(error);
             return {error};
         }

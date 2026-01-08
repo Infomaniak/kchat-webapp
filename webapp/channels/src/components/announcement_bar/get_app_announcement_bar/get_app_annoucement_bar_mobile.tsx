@@ -6,8 +6,9 @@ import {FormattedMessage} from 'react-intl';
 
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
 
-import loaderkChat from 'images/logo_compact.png';
 import {AnnouncementBarTypes} from 'utils/constants';
+
+import loaderkChat from 'images/logo_compact.png';
 
 import './get_app_annoucement_bar_mobile.scss';
 

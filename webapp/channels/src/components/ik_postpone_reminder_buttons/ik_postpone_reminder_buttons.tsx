@@ -7,13 +7,13 @@ import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
 import type {Post} from '@mattermost/types/posts';
 
+import type {ReminderTimestamp} from 'mattermost-redux/actions/posts';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import * as Menu from 'components/menu';
 import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal';
 
 import {ModalIdentifiers} from 'utils/constants';
-import {toUTCUnix} from 'utils/datetime';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import type {ModalData} from 'types/actions';
@@ -22,7 +22,7 @@ export type Props = {
     post: Post;
     actions: {
         markPostReminderAsDone: (userId: string, postId: string) => Promise<ActionResult<unknown, any>>;
-        addPostReminder: (userId: string, postId: string, timestamp: number, reschedule?: boolean, reminderPostId?: string) => void;
+        addPostReminder: (userId: string, postId: string, timestamp: ReminderTimestamp, reschedule?: boolean, reminderPostId?: string) => void;
         openModal: (modalData: ModalData<ComponentProps<typeof PostReminderCustomTimePicker>>) => void;
     };
     timezone?: string; /* Current user timezone */
@@ -62,33 +62,26 @@ const IkPostponeReminderButtons = (props: Props) => {
             };
             props.actions.openModal(postReminderCustomTimePicker);
         } else {
-            const currentDate = getCurrentMomentForTimezone(props.timezone);
-            let endTime = currentDate;
+            let targetTime: ReminderTimestamp | null = null;
             if (id === PostReminders.THIRTY_MINUTES) {
-                // add 30 minutes in current time
-                endTime = currentDate.add(30, 'minutes');
+                targetTime = {type: 'fixed', value: '30 minutes'};
             } else if (id === PostReminders.ONE_HOUR) {
-                // add 1 hour in current time
-                endTime = currentDate.add(1, 'hour');
+                targetTime = {type: 'fixed', value: '1 hour'};
             } else if (id === PostReminders.TWO_HOURS) {
-                // add 2 hours in current time
-                endTime = currentDate.add(2, 'hours');
+                targetTime = {type: 'fixed', value: '2 hours'};
             } else if (id === PostReminders.TOMORROW) {
-                // set to next day 9 in the morning
-                endTime = currentDate.add(1, 'day').set({hour: 9, minute: 0});
-            } else if (id === PostReminders.MONDAY) {
-                // set to next Monday 9 in the morning
-                endTime = currentDate.add(1, 'week').isoWeekday(1).set({hour: 9, minute: 0});
+                targetTime = {type: 'fixed', value: 'tomorrow'};
+            } else {
+                targetTime = {type: 'fixed', value: 'monday'};
             }
 
             const postId = props.post.props.post_id;
-            const timestamp = toUTCUnix(endTime.toDate());
             const reschedule = true;
             const reminderPostId = props.post.id;
 
             if (props.currentUserId) {
                 const userId = props.currentUserId;
-                props.actions.addPostReminder(userId, postId, timestamp, reschedule, reminderPostId);
+                props.actions.addPostReminder(userId, postId, targetTime, reschedule, reminderPostId);
             }
         }
     };
@@ -143,7 +136,7 @@ const IkPostponeReminderButtons = (props: Props) => {
         if (postReminder === PostReminders.TOMORROW) {
             const tomorrow = getCurrentMomentForTimezone(props.timezone).
                 add(1, 'day').
-                set({hour: 9, minute: 0}).
+                set({hour: 8, minute: 0}).
                 toDate();
 
             trailingElements = (
@@ -168,7 +161,7 @@ const IkPostponeReminderButtons = (props: Props) => {
             const monday = getCurrentMomentForTimezone(props.timezone).
                 add(1, 'week').
                 isoWeekday(1).
-                set({hour: 9, minute: 0}).
+                set({hour: 8, minute: 0}).
                 toDate();
 
             trailingElements = (

@@ -18,6 +18,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "123",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -26,20 +27,20 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
       },
     ]
   }
-  emptyListTextDefaultMessage="test"
-  emptyListTextId="test"
+  emptyListText={
+    Object {
+      "defaultMessage": "No groups specified yet",
+      "id": "admin.team_channel_settings.group_list.no-groups",
+    }
+  }
   groups={Array []}
   header={<Header />}
-  isModeSync={false}
   noPadding={false}
   onGroupRemoved={[MockFunction]}
   onPageChangedCallback={[MockFunction]}
-  removeGroup={[MockFunction]}
   renderRow={[Function]}
-  setNewGroupRole={[MockFunction]}
   total={1}
   totalGroups={0}
-  type="team"
 />
 `;
 
@@ -61,6 +62,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id0",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -76,6 +78,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id1",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -91,6 +94,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id2",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -106,6 +110,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id3",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -121,6 +126,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id4",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -136,6 +142,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id5",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -151,6 +158,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id6",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -166,6 +174,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id7",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -181,6 +190,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id8",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -196,6 +206,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id9",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -211,6 +222,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id10",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -226,6 +238,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id11",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -241,6 +254,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id12",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -256,6 +270,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id13",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -271,6 +286,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id14",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -286,6 +302,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id15",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -301,6 +318,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id16",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -316,6 +334,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id17",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -331,6 +350,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id18",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -346,6 +366,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id19",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -361,6 +382,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id20",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -376,6 +398,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id21",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -391,6 +414,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id22",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -406,6 +430,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id23",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -421,6 +446,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id24",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -436,6 +462,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id25",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -451,6 +478,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id26",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -466,6 +494,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id27",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -481,6 +510,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id28",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -496,6 +526,7 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
         "has_syncables": false,
         "id": "id29",
         "member_count": 3,
+        "member_ids": Array [],
         "name": "group_name",
         "remote_id": "",
         "scheme_admin": false,
@@ -504,19 +535,19 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
       },
     ]
   }
-  emptyListTextDefaultMessage="test"
-  emptyListTextId="test"
+  emptyListText={
+    Object {
+      "defaultMessage": "No groups specified yet",
+      "id": "admin.team_channel_settings.group_list.no-groups",
+    }
+  }
   groups={Array []}
   header={<Header />}
-  isModeSync={false}
   noPadding={false}
   onGroupRemoved={[MockFunction]}
   onPageChangedCallback={[MockFunction]}
-  removeGroup={[MockFunction]}
   renderRow={[Function]}
-  setNewGroupRole={[MockFunction]}
   total={30}
   totalGroups={0}
-  type="team"
 />
 `;

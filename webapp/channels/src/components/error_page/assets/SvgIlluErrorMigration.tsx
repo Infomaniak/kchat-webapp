@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-const SvgIlluMigration = (props) => {
+const SvgIlluMigration = () => {
     return (
         <svg
             width='232'

@@ -1,5 +1,3 @@
-@import '../../sass/utils/module';
-
 .DndModal {
     width: 600px;
 
@@ -55,8 +53,8 @@
     align-items: center;
     padding: 0 16px;
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    background: rgba(var(--center-channel-bg-rgb), 1);
     border-radius: 4px;
+    background: rgba(var(--center-channel-bg-rgb), 1);
     cursor: pointer;
     text-align: left;
 
@@ -80,8 +78,8 @@
         padding: 0 0 2px 40px;
         border: none;
         border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-        background: transparent;
         border-radius: 4px;
+        background: transparent;
         cursor: pointer;
         font-size: inherit;
 

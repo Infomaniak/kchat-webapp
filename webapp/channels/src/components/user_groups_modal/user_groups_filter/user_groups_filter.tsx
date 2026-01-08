@@ -28,10 +28,6 @@ const UserGroupsFilter = (props: Props) => {
         getGroups(0, 'my');
     }, [getGroups]);
 
-    const archivedGroupsOnClick = useCallback(() => {
-        getGroups(0, 'archived');
-    }, [getGroups]);
-
     const filterLabel = useCallback(() => {
         if (selectedFilter === 'all') {
             return intl.formatMessage({id: 'user_groups_modal.showAllGroups', defaultMessage: 'Show: All Groups'});

@@ -15,8 +15,7 @@ import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+import WithTooltip from 'components/with_tooltip';
 
 import Constants, {InsightsScopes} from 'utils/constants';
 
@@ -98,17 +97,13 @@ const TopChannels = (props: WidgetHocProps) => {
 
     const tooltip = useCallback((messageCount: number) => {
         return (
-            <Tooltip
-                id='total-messages'
-            >
-                <FormattedMessage
-                    id='insights.topChannels.messageCount'
-                    defaultMessage='{messageCount} total messages'
-                    values={{
-                        messageCount,
-                    }}
-                />
-            </Tooltip>
+            <FormattedMessage
+                id='insights.topChannels.messageCount'
+                defaultMessage='{messageCount} total messages'
+                values={{
+                    messageCount,
+                }}
+            />
         );
     }, []);
 
@@ -172,14 +167,9 @@ const TopChannels = (props: WidgetHocProps) => {
                                                 <span className='display-name'>{channel.display_name}</span>
                                             </div>
                                             <div className='channel-message-count'>
-                                                <OverlayTrigger
-                                                    trigger={['hover']}
-                                                    delayShow={Constants.OVERLAY_TIME_DELAY}
-                                                    placement='right'
-                                                    overlay={tooltip(channel.message_count)}
-                                                >
+                                                <WithTooltip title={tooltip(channel.message_count)}>
                                                     <span className='message-count'>{channel.message_count}</span>
-                                                </OverlayTrigger>
+                                                </WithTooltip>
                                                 <span
                                                     className='horizontal-bar'
                                                     style={{

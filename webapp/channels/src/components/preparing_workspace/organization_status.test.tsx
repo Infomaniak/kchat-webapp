@@ -3,9 +3,10 @@
 
 import React from 'react';
 
+import {BadUrlReasons} from 'utils/url';
+
 import {withIntl} from 'tests/helpers/intl-test-helper';
 import {render} from 'tests/react_testing_utils';
-import {BadUrlReasons} from 'utils/url';
 
 import OrganizationStatus, {TeamApiError} from './organization_status';
 

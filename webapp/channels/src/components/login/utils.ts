@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -8,6 +9,7 @@ import {Client4} from 'mattermost-redux/client';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 
 import {IKConstants} from 'utils/constants-ik';
+import getUserAgentWithVersion from 'utils/get_user_agent_with_version';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion} from 'utils/user_agent';
 
@@ -39,6 +41,7 @@ export function storeTokenResponse(response: { expires_in?: number; access_token
 
     console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
     Client4.setWebappVersion(GIT_RELEASE);
+    Client4.setUserAgent(getUserAgentWithVersion());
 }
 
 /**
@@ -196,7 +199,7 @@ function isValidTokenV2(token: {token: string; refreshToken?: string; expiresAt?
 }
 
 export async function refreshIKToken(redirectToTeam = false): Promise<string> {
-    const updatedToken: {token: string; refreshToken?: string; expiresAt?: number} = await window.authManager.tokenRequest();
+    const updatedToken = await window.authManager.tokenRequest();
 
     // If desktop doesn't have a valid token/refresh token
     if (!Object.keys(updatedToken).length) {

@@ -260,7 +260,10 @@ class Timestamp extends PureComponent<Props, State> {
     formatDateTime(value: Date, format: DateTimeOptions): string {
         const {timeZone, intl: {locale}} = this.props;
 
-        return (new Intl.DateTimeFormat(locale, {timeZone, ...format})).format(value);
+        // IK: Use en-GB for English to get UK date format (DD/MM/YYYY) instead of US format (MM/DD/YYYY)
+        const normalizedLocale = locale === 'en' ? 'en-GB' : locale;
+
+        return (new Intl.DateTimeFormat(normalizedLocale, {timeZone, ...format})).format(value);
     }
 
     static momentTime(value: Moment, {hour, minute, hourCycle, hour12}: DateTimeOptions): string | undefined {

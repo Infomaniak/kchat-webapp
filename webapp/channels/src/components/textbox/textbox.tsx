@@ -72,16 +72,11 @@ export type Props = {
     openWhenEmpty?: boolean;
     priorityProfiles?: UserProfile[];
     hasLabels?: boolean;
+    isInEditMode?: boolean;
 };
 
 const VISIBLE = {visibility: 'visible'};
 const HIDDEN = {visibility: 'hidden'};
-
-declare global {
-    interface Window {
-        isFocusedTextBox?: boolean;
-    }
-}
 
 export default class Textbox extends React.PureComponent<Props> {
     private readonly suggestionProviders: Provider[];
@@ -110,6 +105,7 @@ export default class Textbox extends React.PureComponent<Props> {
 
         this.suggestionProviders.push(
             new AtMentionProvider({
+                textboxId: this.props.id,
                 currentUserId: this.props.currentUserId,
                 channelId: this.props.channelId,
                 autocompleteUsersInChannel: (prefix: string) => this.props.actions.autocompleteUsersInChannel(prefix, this.props.channelId),
@@ -151,6 +147,7 @@ export default class Textbox extends React.PureComponent<Props> {
             for (const provider of this.suggestionProviders) {
                 if (provider instanceof AtMentionProvider) {
                     provider.setProps({
+                        textboxId: this.props.id,
                         currentUserId: this.props.currentUserId,
                         channelId: this.props.channelId,
                         autocompleteUsersInChannel: (prefix: string) => this.props.actions.autocompleteUsersInChannel(prefix, this.props.channelId),
@@ -249,8 +246,7 @@ export default class Textbox extends React.PureComponent<Props> {
 
     focus = () => {
         const textbox = this.getInputBox();
-        if (textbox && !window.isFocusedTextBox) {
-            window.isFocusedTextBox = true;
+        if (textbox) {
             textbox.focus();
             Utils.placeCaretAtEnd(textbox);
             setTimeout(() => {
@@ -260,10 +256,6 @@ export default class Textbox extends React.PureComponent<Props> {
             // reset character count warning
             this.checkMessageLength(textbox.value);
         }
-
-        setTimeout(() => {
-            window.isFocusedTextBox = false;
-        }, 500);
     };
 
     blur = () => {
@@ -282,7 +274,7 @@ export default class Textbox extends React.PureComponent<Props> {
 
         /*if (this.props.badConnection) {
             textboxClassName += ' bad-connection';
-        }*/
+            }*/
         if (this.props.hasLabels) {
             textboxClassName += ' textarea--has-labels';
         }

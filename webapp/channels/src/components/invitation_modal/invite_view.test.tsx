@@ -2,21 +2,25 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 
 import type {Team} from '@mattermost/types/teams';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import store from 'stores/redux_store';
+import {generateId} from 'utils/utils';
 
 import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';
 import mockStore from 'tests/test_store';
-import {generateId} from 'utils/utils';
 
 import InviteAs, {InviteType} from './invite_as';
 import type {Props} from './invite_view';
 import InviteView from './invite_view';
+
+jest.mock('react-redux', () => ({
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn(),
+}));
 
 const defaultProps: Props = deepFreeze({
     setInviteAs: jest.fn(),
@@ -45,6 +49,7 @@ const defaultProps: Props = deepFreeze({
     footerClass: '',
     canInviteGuests: true,
     canAddUsers: true,
+    remainingGuestSlot: 1,
 
     customMessage: {
         message: '',
@@ -106,7 +111,11 @@ describe('InviteView', () => {
         },
     };
 
-    store.getState = () => (state);
+    const mockedUseSelector = useSelector as jest.Mock;
+
+    mockedUseSelector.mockReturnValue('mockedPackValue');
+
+    const store = mockStore(state);
 
     beforeEach(() => {
         props = defaultProps;

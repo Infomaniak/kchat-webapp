@@ -12,7 +12,6 @@ test('Intro to channel as regular user', async ({pw, page, pages, browserName, v
     // const {page} = await pw.testBrowser.login(user);
 
     // Visit a default channel page
-    const channelsPage = new pages.ChannelsPage(page);
     await channelsPage.goto();
     await channelsPage.toBeVisible();
     await channelsPage.closeOnboardingIfOpen();

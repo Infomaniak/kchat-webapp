@@ -6,8 +6,12 @@ import React from 'react';
 import Popover from 'components/widgets/popover';
 
 type SuggestionItem = {
+    date: string;
+    label: string;
+}
+
+type SuggestionItemProps = {
     key: string;
-    ref: string;
     item: SuggestionItem;
     term: string;
     matchedPretext: string;
@@ -24,7 +28,7 @@ type Props = {
     terms: string[];
     preventClose: () => void;
     handleEscape: () => void;
-    components: Array<React.ComponentType<SuggestionItem>>;
+    components: Array<React.ComponentType<SuggestionItemProps>>;
 }
 
 export default class SuggestionDate extends React.PureComponent<Props> {
@@ -42,7 +46,6 @@ export default class SuggestionDate extends React.PureComponent<Props> {
         const itemComponent = (
             <Component
                 key={term}
-                ref={term}
                 item={item}
                 term={term}
                 matchedPretext={this.props.matchedPretext[0]}

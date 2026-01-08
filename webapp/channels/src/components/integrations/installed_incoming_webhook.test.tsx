@@ -54,6 +54,10 @@ describe('components/integrations/InstalledIncomingWebhook', () => {
                     company_name: '',
                     allowed_domains: '',
                     invite_id: '',
+                    url: '',
+                    account_id: 0,
+                    product_id: 0,
+                    pack_name: 'ksuite_essential',
                 }}
                 channel={{
                     id: '1jiw9kphbjrntfyrm7xpdcya4o',
@@ -103,6 +107,10 @@ describe('components/integrations/InstalledIncomingWebhook', () => {
                     company_name: '',
                     allowed_domains: '',
                     invite_id: '',
+                    url: '',
+                    account_id: 0,
+                    product_id: 0,
+                    pack_name: 'ksuite_essential',
                 }}
                 channel={{
                     id: '1jiw9kphbjrntfyrm7xpdcya4o',
@@ -152,6 +160,10 @@ describe('components/integrations/InstalledIncomingWebhook', () => {
                     company_name: '',
                     allowed_domains: '',
                     invite_id: '',
+                    url: '',
+                    account_id: 0,
+                    product_id: 0,
+                    pack_name: 'ksuite_essential',
                 }}
                 channel={{
                     id: '1jiw9kphbjrntfyrm7xpdcya4o',
@@ -202,6 +214,10 @@ describe('components/integrations/InstalledIncomingWebhook', () => {
                     company_name: '',
                     allowed_domains: '',
                     invite_id: '',
+                    url: '',
+                    account_id: 0,
+                    product_id: 0,
+                    pack_name: 'ksuite_essential',
                 }}
                 channel={{
                     id: '1jiw9kphbjrntfyrm7xpdcya4o',
@@ -253,6 +269,10 @@ describe('components/integrations/InstalledIncomingWebhook', () => {
                     company_name: '',
                     allowed_domains: '',
                     invite_id: '',
+                    url: '',
+                    account_id: 0,
+                    product_id: 0,
+                    pack_name: 'ksuite_essential',
                 }}
                 channel={{
                     id: '1jiw9kphbjrntfyrm7xpdcya4o',
@@ -302,6 +322,10 @@ describe('components/integrations/InstalledIncomingWebhook', () => {
                     company_name: '',
                     allowed_domains: '',
                     invite_id: '',
+                    url: '',
+                    account_id: 0,
+                    product_id: 0,
+                    pack_name: 'ksuite_essential',
                 }}
                 channel={{
                     id: '1jiw9kphbjrntfyrm7xpdcya4o',
@@ -351,6 +375,10 @@ describe('components/integrations/InstalledIncomingWebhook', () => {
                     company_name: '',
                     allowed_domains: '',
                     invite_id: '',
+                    url: '',
+                    account_id: 0,
+                    product_id: 0,
+                    pack_name: 'ksuite_essential',
                 }}
                 channel={{
                     id: '1jiw9kphbjrntfyrm7xpdcya4o',

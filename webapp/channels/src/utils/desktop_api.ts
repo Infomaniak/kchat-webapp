@@ -34,9 +34,10 @@ declare global {
 
 const dispatch = store.dispatch;
 
-class DesktopAppAPI {
+export class DesktopAppAPI {
     private name?: string;
     private version?: string | null;
+    private prereleaseVersion?: string;
     private dev?: boolean;
 
     /**
@@ -53,6 +54,7 @@ class DesktopAppAPI {
         this.getDesktopAppInfo().then(({name, version, ...rest}) => {
             this.name = name;
             this.version = semver.valid(semver.coerce(version));
+            this.prereleaseVersion = version?.split('-')?.[1];
 
             // Legacy Desktop App version, used by some plugins
             if (!window.desktop) {
@@ -61,6 +63,10 @@ class DesktopAppAPI {
 
             window.desktop.version = semver.valid(semver.coerce(version));
             if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.1.0') && 'theme' in rest) {
+                // May be undefined as declared in src/common/Validator.ts:152 in the desktop app
+                if (!rest.theme) {
+                    return;
+                }
                 window.desktop.theme = rest.theme as Theme;
                 dispatch(setTheme(window.desktop.theme as Theme));
             }
@@ -87,6 +93,10 @@ class DesktopAppAPI {
 
     getAppVersion = () => {
         return this.version;
+    };
+
+    getPrereleaseVersion = () => {
+        return this.prereleaseVersion;
     };
 
     isDev = () => {
@@ -206,11 +216,15 @@ class DesktopAppAPI {
         return () => this.removePostMessageListener('switch-server-sidebar', legacyListener);
     };
 
+    onReceiveMetrics = (listener: (metricsMap: Map<string, {cpu?: number; memory?: number}>) => void) => {
+        return window.desktopAPI?.onSendMetrics?.(listener);
+    };
+
     /**
      * One-ways
      */
 
-    dispatchNotification = (
+    dispatchNotification = async (
         title: string,
         body: string,
         channelId: string,
@@ -220,8 +234,8 @@ class DesktopAppAPI {
         url: string,
     ) => {
         if (window.desktopAPI?.sendNotification) {
-            window.desktopAPI.sendNotification(title, body, channelId, teamId, url, silent, soundName);
-            return;
+            const result = await window.desktopAPI.sendNotification(title, body, channelId, teamId, url, silent, soundName);
+            return result ?? {status: 'unsupported', reason: 'desktop_app_unsupported'};
         }
 
         // get the desktop app to trigger the notification
@@ -240,6 +254,7 @@ class DesktopAppAPI {
             },
             window.location.origin,
         );
+        return {status: 'unsupported', reason: 'desktop_app_unsupported'};
     };
 
     doBrowserHistoryPush = (path: string) => {
@@ -260,6 +275,9 @@ class DesktopAppAPI {
     updateUnreadsAndMentions = (isUnread: boolean, mentionCount: number) =>
         window.desktopAPI?.setUnreadsAndMentions && window.desktopAPI.setUnreadsAndMentions(isUnread, mentionCount);
     setSessionExpired = (expired: boolean) => window.desktopAPI?.setSessionExpired && window.desktopAPI.setSessionExpired(expired);
+    signalLogin = () => window.desktopAPI?.onLogin?.();
+    signalLogout = () => window.desktopAPI?.onLogout?.();
+    reactAppInitialized = () => window.desktopAPI?.reactAppInitialized?.();
 
     /*********************************************************************
      * Helper functions for legacy code

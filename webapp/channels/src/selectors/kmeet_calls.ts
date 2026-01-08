@@ -6,7 +6,10 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 
 import type {GlobalState} from 'types/store';
 
-export const getConferenceByChannelId = (state: GlobalState, channelId: string) => {
+export const getConferenceByChannelId = (state: GlobalState, channelId?: string) => {
+    if (!channelId) {
+        return null;
+    }
     return state.views.kmeetCalls.conferences[channelId];
 };
 

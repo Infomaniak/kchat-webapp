@@ -2,13 +2,13 @@
 // See LICENSE.txt for license information.
 
 import {combineReducers} from 'redux';
+import type {AnyAction} from 'redux';
 
 import {UserTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {KDriveActionTypes} from 'utils/constants';
 
-function toast(state = null, action: GenericAction) {
+function toast(state = null, action: AnyAction) {
     switch (action.type) {
     case KDriveActionTypes.TOAST:
         return action.toast;

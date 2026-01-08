@@ -8,18 +8,15 @@ import type {PreferenceType} from '@mattermost/types/preferences';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-import {getMyPreferences} from 'mattermost-redux/selectors/entities/preferences';
-import type {ActionResult} from 'mattermost-redux/types/actions';
-import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
+import {get as getPreference} from 'mattermost-redux/selectors/entities/preferences';
 
-export default function usePreference(category: string, name: string): [string | undefined, (value: string) => Promise<ActionResult>] {
+import type {ActionResult, GlobalState} from 'types/store';
+
+export default function usePreference(category: string, name: string): readonly [string | undefined, (value: string) => Promise<ActionResult>] {
     const dispatch = useDispatch();
 
     const userId = useSelector(getCurrentUserId);
-    const preferences = useSelector(getMyPreferences);
-
-    const key = getPreferenceKey(category, name);
-    const preference = preferences[key];
+    const preferenceValue = useSelector((state: GlobalState) => getPreference(state, category, name));
 
     const setPreference = useCallback((value: string) => {
         const preference: PreferenceType = {
@@ -29,7 +26,8 @@ export default function usePreference(category: string, name: string): [string |
             value,
         };
         return dispatch(savePreferences(userId, [preference]));
-    }, [category, name, userId]);
+    }, [category, dispatch, name, userId]);
 
-    return useMemo(() => ([preference?.value, setPreference]), [preference?.value, setPreference]);
+    // @ts-expect-error old error
+    return useMemo(() => ([preferenceValue, setPreference] as const), [preferenceValue, setPreference]);
 }

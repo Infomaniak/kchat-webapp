@@ -39,20 +39,20 @@
 
 //     const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
 
-//     // # Enter keyword 1
-//     await keywordsInput.type(keywords[0]);
+    // # Enter keyword 1
+    // await keywordsInput.fill(keywords[0]);
 
 //     // # Press Comma on the textbox
 //     await keywordsInput.press(',');
 
-//     // # Enter keyword 2
-//     await keywordsInput.type(keywords[1]);
+    // # Enter keyword 2
+    // await keywordsInput.fill(keywords[1]);
 
 //     // # Press Tab on the textbox
 //     await keywordsInput.press('Tab');
 
-//     // # Enter keyword 3
-//     await keywordsInput.type(keywords[2]);
+    // # Enter keyword 3
+    // await keywordsInput.fill(keywords[2]);
 
 //     // # Press Enter on the textbox
 //     await keywordsInput.press('Enter');
@@ -92,10 +92,10 @@
 //     // # Open keywords that get highlighted section
 //     await channelPage.settingsModal.notificationsSettings.expandSection('keysWithHighlight');
 
-//     // # Enter the keyword
-//     const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
-//     await keywordsInput.type(keywords[3]);
-//     await keywordsInput.press('Tab');
+    // # Enter the keyword
+    // const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
+    // await keywordsInput.fill(keywords[3]);
+    // await keywordsInput.press('Tab');
 
 //     // # Save the keyword
 //     await channelPage.settingsModal.notificationsSettings.save();
@@ -148,10 +148,10 @@
 //     // # Open keywords that get highlighted section
 //     await channelPage.settingsModal.notificationsSettings.expandSection('keysWithHighlight');
 
-//     // # Enter the keyword
-//     const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
-//     await keywordsInput.type(keywords[3]);
-//     await keywordsInput.press('Tab');
+    // # Enter the keyword
+    // const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
+    // await keywordsInput.fill(keywords[3]);
+    // await keywordsInput.press('Tab');
 
 //     // # Save the keyword
 //     await channelPage.settingsModal.notificationsSettings.save();
@@ -200,19 +200,19 @@
 //     await channelPage.globalHeader.openSettings();
 //     await channelPage.settingsModal.toBeVisible();
 
-//     // # Open notifications tab
-//     await channelPage.settingsModal.openNotificationsTab();
+    // // # Open notifications tab
+    // await channelPage.settingsModal.openNotificationsTab();
 
-//     // # Open keywords that get highlighted section
-//     await channelPage.settingsModal.notificationsSettings.expandSection('keysWithHighlight');
+    // // # Open keywords that get highlighted section
+    // await channelPage.settingsModal.notificationsSettings.expandSection('keysWithHighlight');
 
-//     // # Enter the keyword
-//     const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
-//     await keywordsInput.type(keywords[0]);
-//     await keywordsInput.press('Tab');
+    // // # Enter the keyword
+    // const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
+    // await keywordsInput.fill(keywords[0]);
+    // await keywordsInput.press('Tab');
 
-//     // # Save the keyword
-//     await channelPage.settingsModal.notificationsSettings.save();
+    // // # Save the keyword
+    // await channelPage.settingsModal.notificationsSettings.save();
 
 //     // # Close the settings modal
 //     await channelPage.settingsModal.closeModal();
@@ -268,10 +268,10 @@
 //     // # Open keywords that get highlighted section
 //     await channelPage.settingsModal.notificationsSettings.expandSection('keysWithHighlight');
 
-//     // # Enter the keyword
-//     const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
-//     await keywordsInput.type(keywords[0]);
-//     await keywordsInput.press('Tab');
+    // # Enter the keyword
+    // const keywordsInput = await channelPage.settingsModal.notificationsSettings.getKeywordsInput();
+    // await keywordsInput.fill(keywords[0]);
+    // await keywordsInput.press('Tab');
 
 //     // # Save the keyword
 //     await channelPage.settingsModal.notificationsSettings.save();

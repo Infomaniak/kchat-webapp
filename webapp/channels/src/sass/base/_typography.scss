@@ -1,4 +1,5 @@
-@charset 'UTF-8';
+@use "utils/mixins";
+@use "utils/variables";
 
 b,
 strong {
@@ -6,19 +7,19 @@ strong {
 }
 
 a {
-    color: $primary-color;
+    color: variables.$primary-color;
     cursor: pointer;
     text-decoration: none;
     word-break: break-word;
 
     &:focus,
     &:hover {
-        color: $primary-color--hover;
+        color: variables.$primary-color--hover;
     }
 }
 
 .color--link {
-    color: $link-color;
+    color: variables.$link-color;
     cursor: pointer;
 
     &:hover,
@@ -26,9 +27,59 @@ a {
         text-decoration: underline;
     }
 }
+/* Ik change : SuisseIntl weight 500 is declared as font-weight: 600 
+   to visually align with Metropolis design */
+@font-face {
+    font-display: swap;
+    font-family: "SuisseIntl";
+    font-style: normal;
+    font-weight: 600;
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.svg#suisse-intl-500-normal") format("svg")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: "SuisseIntl";
+    font-style: italic;
+    font-weight: 600;
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.svg#suisse-intl-500-italic") format("svg")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: "SuisseIntl";
+    font-style: normal;
+    font-weight: 400;
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.svg#suisse-intl-400-normal") format("svg")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: "SuisseIntl";
+    font-style: italic;
+    font-weight: 400;
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.svg#suisse-intl-400-italic") format("svg")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: "SuisseIntl";
+    font-style: normal;
+    font-weight: 300;
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.svg#suisse-intl-300-normal") format("svg")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: "SuisseIntl";
+    font-style: italic;
+    font-weight: 300;
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.svg#suisse-intl-300-italic") format("svg")
+}
+
 
 body {
-    @include font-smoothing;
+    @include mixins.font-smoothing;
 
     font-family: 'SuisseIntl', sans-serif;
 }
@@ -49,7 +100,7 @@ h1 {
 
 label {
     &.has-error {
-        color: $red;
+        color: variables.$red;
         font-weight: normal;
     }
 }
@@ -104,137 +155,6 @@ ol {
     cursor: pointer;
 }
 
-@font-face {
-    font-family: 'SuisseIntl';
-    font-style: normal;
-    font-weight: normal;
-
-    src: url("~@infomaniak/font-suisse/SuisseIntl-Regular.eot");
-    src: url("~@infomaniak/font-suisse/SuisseIntl-Regular.eot#iefix") format("embedded-opentype"),
-        url("~@infomaniak/font-suisse/SuisseIntl-Regular.woff") format("woff"),
-        url("~@infomaniak/font-suisse/SuisseIntl-Regular.ttf") format("truetype");
-}
-
-@font-face {
-    font-family: 'SuisseIntl';
-    font-style: normal;
-    font-weight: bold;
-
-    src: url("~@infomaniak/font-suisse/SuisseIntl-Medium.eot");
-    src: url("~@infomaniak/font-suisse/SuisseIntl-Medium.eot#iefix") format("embedded-opentype"),
-        url("~@infomaniak/font-suisse/SuisseIntl-Medium.woff") format("woff"),
-        url("~@infomaniak/font-suisse/SuisseIntl-Medium.ttf") format("truetype");
-}
-
-// SuisseIntl font definitions
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: normal;
-//     font-weight: 600;
-//     src: url('../fonts/SuisseIntl-SemiBold.woff') format('woff');
-// }
-
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: italic;
-//     font-weight: 600;
-//     src: url('../fonts/SuisseIntl-SemiBoldItalic.woff') format('woff');
-// }
-
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: normal;
-//     font-weight: 400;
-//     src: url('../fonts/SuisseIntl-Regular.woff') format('woff');
-// }
-
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: italic;
-//     font-weight: 400;
-//     src: url('../fonts/SuisseIntl-RegularItalic.woff') format('woff');
-// }
-
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: normal;
-//     font-weight: 300;
-//     src: url('../fonts/SuisseIntl-Light.woff') format('woff');
-// }
-
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: italic;
-//     font-weight: 300;
-//     src: url('../fonts/SuisseIntl-LightItalic.woff') format('woff');
-// }
-
-// /* open-sans-300 - vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic */
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: normal;
-//     font-weight: 300;
-//     src:
-//         local(''),
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-300.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-300.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-// }
-
-// /* open-sans-300italic - vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic */
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: italic;
-//     font-weight: 300;
-//     src:
-//         local(''),
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-300italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-300italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-// }
-
-// /* open-sans-regular - vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic */
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: normal;
-//     font-weight: 400;
-//     src:
-//         local(''),
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-// }
-
-// /* open-sans-italic - vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic */
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: italic;
-//     font-weight: 400;
-//     src:
-//         local(''),
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-// }
-
-// /* open-sans-600italic - vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic */
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: italic;
-//     font-weight: 600;
-//     src:
-//         local(''),
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-600italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-600italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-// }
-
-// /* open-sans-600 - vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic */
-// @font-face {
-//     font-family: 'SuisseIntl';
-//     font-style: normal;
-//     font-weight: 600;
-//     src:
-//         local(''),
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-600.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-//         url('../fonts/open-sans-v18-vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic-600.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-// }
-
 .app__body.font--open_sans {
     font-family: 'SuisseIntl', sans-serif;
 }
@@ -249,7 +169,7 @@ ol {
 
 .color--link--adminack {
     padding-left: 20px;
-    color: $white;
+    color: variables.$white;
     cursor: pointer;
     text-decoration: underline;
 

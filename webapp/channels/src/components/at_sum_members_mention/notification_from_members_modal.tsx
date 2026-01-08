@@ -109,6 +109,10 @@ function NotificationFromMembersModal(props: Props) {
         return null;
     }
 
+    if (!channel) {
+        return null;
+    }
+
     const modalTitle = formatMessage({id: 'postypes.custom_open_pricing_modal_post_renderer.membersThatRequested', defaultMessage: 'Members that requested '});
 
     const modalHeaderText = (
@@ -127,7 +131,6 @@ function NotificationFromMembersModal(props: Props) {
             backdrop={true}
             show={show}
             onExited={handleOnClose}
-            aria-modal='true'
             modalHeaderText={modalHeaderText}
         >
             <MembersContainer>
@@ -136,7 +139,8 @@ function NotificationFromMembersModal(props: Props) {
                     members={members}
                     searchTerms={''}
                     editing={false}
-                    actions={{openDirectMessage, loadMore}}
+                    openDirectMessage={openDirectMessage}
+                    loadMore={loadMore}
                     hasNextPage={false}
                     isNextPageLoading={false}
                 />

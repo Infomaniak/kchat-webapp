@@ -4,11 +4,11 @@
 import glyphMap from '@infomaniak/compass-icons/components';
 import type {IconGlyphTypes} from '@infomaniak/compass-icons/IconGlyphs';
 import classNames from 'classnames';
-import type {MouseEventHandler} from 'react';
 import React, {memo, useMemo} from 'react';
+import type {MouseEventHandler} from 'react';
 import styled, {css} from 'styled-components';
 
-export type TagVariant = 'info' | 'success' | 'warning' | 'danger';
+export type TagVariant = 'info' | 'success' | 'warning' | 'danger' | 'dangerDim' | 'transcript';
 
 export type TagSize = 'xs' | 'sm' | 'md' | 'lg'
 
@@ -25,10 +25,6 @@ type Props = {
 type TagWrapperProps = Required<Pick<Props, 'uppercase'>>;
 
 const TagWrapper = styled.div<TagWrapperProps>`
-    --tag-bg: var(--semantic-color-general);
-    --tag-bg-opacity: 0.08;
-    --tag-color: var(--semantic-color-general);
-
     appearance: none;
 
     display: inline-flex;
@@ -43,7 +39,7 @@ const TagWrapper = styled.div<TagWrapperProps>`
     border: none;
     border-radius: 4px;
 
-    font-family: 'SuisseIntl', sans-serif;
+    font-family: SuisseIntl, 'Open Sans', sans-serif;
     font-weight: 600;
     line-height: 16px;
     ${({uppercase}) => (
@@ -58,7 +54,7 @@ const TagWrapper = styled.div<TagWrapperProps>`
     &.Tag--xs {
         height: 16px;
         font-size: 10px;
-        line-height: 12px;
+        line-height: 1;
         padding: 1px 4px;
     }
 
@@ -83,38 +79,44 @@ const TagWrapper = styled.div<TagWrapperProps>`
         padding: 2px 5px;
     }
 
-    &.Tag--info,
-    &.Tag--success,
-    &.Tag--warning,
-    &.Tag--danger {
-        --tag-bg-opacity: 1;
-        --tag-color: 255, 255, 255;
-    }
+    background: rgba(var(--semantic-color-general), 0.08);
+    color: rgb(var(--semantic-color-general));
 
     &.Tag--info {
-        --tag-bg: var(--semantic-color-info);
+        background: rgba(var(--semantic-color-info), 1);
+        color: rgb(255, 255, 255);
     }
 
     &.Tag--success {
-        --tag-bg: var(--semantic-color-success);
+        background: rgba(var(--semantic-color-success), 1);
+        color: rgb(255, 255, 255);
+    }
+
+    &.Tag--transcript {
+        color: rgba(var(--center-channel-color-rgb), 0.75);
+        font-weight: 100;
     }
 
     &.Tag--warning {
-        --tag-bg: var(--semantic-color-warning);
+        background: rgba(var(--semantic-color-warning), 1);
+        color: rgb(255, 255, 255);
     }
 
     &.Tag--danger {
-        --tag-bg: var(--semantic-color-danger);
+        background: rgba(var(--semantic-color-danger), 1);
+        color: rgb(255, 255, 255);
     }
 
-    background: rgba(var(--tag-bg), var(--tag-bg-opacity));
-    color: rgb(var(--tag-color));
+    &.Tag--dangerDim {
+        background: rgba(var(--semantic-color-danger), 0.08);
+        color: rgb(var(--semantic-color-danger));
+    }
 
     ${({onClick}) => typeof onClick === 'function' && (
         css`
             &:hover,
             &:focus {
-                background: rgba(var(--tag-bg), 0.08);
+                background: rgba(var(--semantic-color-general), 0.08);
                 cursor: pointer;
             }
         `

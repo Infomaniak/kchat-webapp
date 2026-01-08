@@ -24,7 +24,7 @@ export const StatusTour = () => {
         />
     );
 
-    const overlayPunchOut = useMeasurePunchouts(['status-menu-online', 'status-menu-away', 'status-menu-dnd_menuitem', 'status-menu-offline'], []);
+    const overlayPunchOut = useMeasurePunchouts(['userAccountMenu'], []);
 
     return (
         <span className='tip__positioned'>

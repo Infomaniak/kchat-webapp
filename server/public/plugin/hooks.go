@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 
+	saml2 "github.com/mattermost/gosaml2"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
@@ -60,6 +61,8 @@ const (
 	PreferencesHaveChangedID                  = 42
 	OnSharedChannelsAttachmentSyncMsgID       = 43
 	OnSharedChannelsProfileImageSyncMsgID     = 44
+	GenerateSupportDataID                     = 45
+	OnSAMLLoginID                             = 46
 	TotalHooksID                              = iota
 )
 
@@ -382,4 +385,21 @@ type Hooks interface {
 	//
 	// Minimum server version: 9.5
 	OnSharedChannelsProfileImageSyncMsg(user *model.User, rc *model.RemoteCluster) error
+
+	// GenerateSupportData is invoked when a Support Packet gets generated.
+	// It allows plugins to include their own content in the Support Packet.
+	//
+	// Plugins may specififes a "support_packet" field in the manifest props with a custom text.
+	// By doing so, the plugin will be included in the Support Packet UI and the user will be able to select it.
+	// This hook will only be called, if the user selects the plugin in the Support Packet UI.
+	//
+	// If no "support_packet" is specified, this hook will always be called.
+	//
+	// Minimum server version: 9.8
+	GenerateSupportData(c *Context) ([]*model.FileData, error)
+
+	// OnSAMLLogin is invoked after a successful SAML login.
+	//
+	// Minimum server version: 10.7
+	OnSAMLLogin(c *Context, user *model.User, assertion *saml2.AssertionInfo) error
 }

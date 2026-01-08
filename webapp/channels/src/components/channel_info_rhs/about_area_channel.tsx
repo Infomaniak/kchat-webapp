@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedDate, useIntl} from 'react-intl';
 import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -20,11 +20,30 @@ const ChannelId = styled.div`
     color: rgba(var(--center-channel-color-rgb), 0.75);
 `;
 
+const ChannelCreationDate = styled.div`
+    margin-bottom: 12px;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+`;
+
 const ChannelPurpose = styled.div`
     margin-bottom: 12px;
     &.ChannelPurpose--is-dm {
         margin-bottom: 16px;
     }
+`;
+
+const ChannelDescriptionHeading = styled.div`
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 16px;
+    letter-spacing: 0.24px;
+    text-transform: uppercase;
+    padding: 6px 0px;
 `;
 
 const ChannelHeader = styled.div`
@@ -47,6 +66,9 @@ const AboutAreaChannel = ({channel, canEditChannelProperties, actions}: Props) =
         <>
             {(channel.purpose || canEditChannelProperties) && (
                 <ChannelPurpose>
+                    <ChannelDescriptionHeading>
+                        {formatMessage({id: 'channel_info_rhs.about_area.channel_purpose.heading', defaultMessage: 'Channel Purpose'})}
+                    </ChannelDescriptionHeading>
                     <EditableArea
                         editable={canEditChannelProperties}
                         content={channel.purpose && (
@@ -67,6 +89,9 @@ const AboutAreaChannel = ({channel, canEditChannelProperties, actions}: Props) =
 
             {(channel.header || canEditChannelProperties) && (
                 <ChannelHeader>
+                    <ChannelDescriptionHeading>
+                        {formatMessage({id: 'channel_info_rhs.about_area.channel_header.heading', defaultMessage: 'Channel Header'})}
+                    </ChannelDescriptionHeading>
                     <EditableArea
                         content={channel.header && (
                             <LineLimiter
@@ -84,6 +109,16 @@ const AboutAreaChannel = ({channel, canEditChannelProperties, actions}: Props) =
                     />
                 </ChannelHeader>
             )}
+
+            <ChannelCreationDate>
+                {formatMessage({id: 'channel_info_rhs.about_area.creation_date', defaultMessage: 'Created on: '})}
+                <FormattedDate
+                    value={new Date(channel.create_at)}
+                    year='numeric'
+                    month='long'
+                    day='numeric'
+                />
+            </ChannelCreationDate>
 
             <ChannelId>
                 {formatMessage({id: 'channel_info_rhs.about_area_id', defaultMessage: 'ID:'})} {channel.id}

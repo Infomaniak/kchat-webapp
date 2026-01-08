@@ -132,7 +132,7 @@ const SchedulePostModal = ({
                 time={scheduleTimestamp}
                 handleChange={setScheduleTimestamp}
                 timezone={timezone}
-                setIsDatePickerOpen={setIsDatePickerOpen}
+                setIsInteracting={setIsDatePickerOpen}
             />
         </GenericModal>
     );

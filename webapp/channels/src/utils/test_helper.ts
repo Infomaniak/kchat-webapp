@@ -275,6 +275,7 @@ export class TestHelper {
             member_count: 0,
             scheme_admin: false,
             allow_reference: true,
+            member_ids: [],
         };
         return Object.assign({}, defaultGroup, override);
     }
@@ -360,6 +361,7 @@ export class TestHelper {
         const defaultFileInfo: FileInfo = {
             id: 'file_info_id',
             user_id: 'user_id',
+            channel_id: 'channel_id',
             create_at: 1,
             update_at: 1,
             delete_at: 1,
@@ -431,7 +433,7 @@ export class TestHelper {
             showTeamSidebar: false,
             showAppBar: false,
             wrapped: true,
-            publicComponent: null,
+            publicComponent: () => null,
         };
     }
 

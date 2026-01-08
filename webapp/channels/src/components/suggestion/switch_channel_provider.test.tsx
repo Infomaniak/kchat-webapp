@@ -6,8 +6,9 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {Preferences} from 'mattermost-redux/constants';
 
-import mockStore from 'tests/test_store';
 import {TestHelper} from 'utils/test_helper';
+
+import mockStore from 'tests/test_store';
 
 import SwitchChannelProvider from './switch_channel_provider';
 
@@ -108,6 +109,9 @@ describe('components/SwitchChannelProvider', () => {
                 currentUserId: 'current_user_id',
                 profilesInChannel: {
                     current_user_id: new Set(['user_1']),
+                },
+                statuses: {
+                    other_user1: 'online',
                 },
             },
             teams: {
@@ -521,6 +525,13 @@ describe('components/SwitchChannelProvider', () => {
             ...defaultState,
             entities: {
                 ...defaultState.entities,
+                users: {
+                    ...defaultState.entities.users,
+                    statuses: {
+                        ...defaultState.entities.users.statuses,
+                        other_user1: 'online',
+                    },
+                },
                 channels: {
                     ...defaultState.entities.channels,
                     myMembers: {
@@ -645,6 +656,9 @@ describe('components/SwitchChannelProvider', () => {
                     currentUserId: 'current_user_id',
                     profilesInChannel: {
                         current_user_id: new Set(['user_1']),
+                    },
+                    statuses: {
+                        other_user1: 'online',
                     },
                 },
             },
@@ -970,7 +984,7 @@ describe('components/SwitchChannelProvider', () => {
                             last_viewed_at: 3,
                             type: 'G',
                             name: 'insight_gm_channel',
-display_name: 'insight_gm_channel',
+                            display_name: 'insight_gm_channel',
                         },
                     },
                     channelsInTeam: {

@@ -7,8 +7,9 @@ import React from 'react';
 
 import EmailNotificationSetting from 'components/user_settings/notifications/email_notification_setting/email_notification_setting';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {Preferences, NotificationLevels} from 'utils/constants';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 describe('components/user_settings/notifications/EmailNotificationSetting', () => {
     const requiredProps: ComponentProps<typeof EmailNotificationSetting> = {

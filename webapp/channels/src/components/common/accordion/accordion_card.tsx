@@ -2,8 +2,6 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-
-// See LICENSE.txt for license information.
 import type {RefObject} from 'react';
 import React, {useEffect, useRef, useState} from 'react';
 
@@ -51,7 +49,7 @@ const AccordionCard = ({
             setHeight(0);
         }
         setOpen(isExpanded);
-    }, [isExpanded]);
+    }, [data.items.length, isExpanded]);
 
     const hasItems = data.items.length > 0;
 

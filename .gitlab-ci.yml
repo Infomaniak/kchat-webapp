@@ -1,6 +1,9 @@
 stages:
+  - translations
   - build
-  - test
+  - lint
+  - test_unit
+  - test_e2e
   - release
   - deploy
 
@@ -15,7 +18,7 @@ stages:
 variables:
   KANIKO_VERSION: "debug" # https://github.com/GoogleContainerTools/kaniko/releases
   MINIO_CLIENT_VERSION: "RELEASE.2022-11-07T23-47-39Z" # https://hub.docker.com/r/minio/mc/tags
-  NODE_VERSION: 18.17.1 # Sould respect /.nvmrc
+  NODE_VERSION: 20.11.1 # Sould respect /.nvmrc
   SENTRY_VERSION: 2.17.1 # https://hub.docker.com/r/getsentry/sentry-cli/tags
   RUBY_VERSION: 3.3.1 # https://hub.docker.com/_/ruby/tags
   PLAYWRIGHT_VERSION: "v1.43.1-jammy" # https://mcr.microsoft.com/en-us/product/playwright/tags
@@ -226,6 +229,7 @@ deploy:image:
   script:
     - /kaniko/executor
       --cache=true
+      --registry-mirror=registry-mirror.infomaniak.ch
       --context ${CI_PROJECT_DIR}
       --dockerfile ${CI_PROJECT_DIR}/Dockerfile
       --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
@@ -239,9 +243,43 @@ deploy:image:
 #   script:
 #     - yarn test:types
 
+translations:check:
+  stage: translations
+  image: node:${NODE_VERSION}
+  tags:
+    - kubernetes
+  rules:
+    - *rule-merge-request
+    - *rule-commit
+  before_script:
+  - *script-yarn-install
+  script:
+    - yarn workspace mattermost-webapp check:i18n:ci
+    - git diff --exit-code webapp/channels/src/i18n/ || { echo "⛔ i18n files changed, commit the updates."; exit 1; }
+
+
+lint:eslint:
+  stage: lint
+  image: node:${NODE_VERSION}
+  tags:
+    - kubernetes
+  rules:
+    - *rule-merge-request
+    - *rule-commit
+  before_script:
+    - *script-yarn-install
+    - *script-build-packages
+  script:
+    - yarn workspace mattermost-webapp check:eslint
+  artifacts:
+    reports:
+      codequality: gl-codequality.json
+    expire_in: 1 week
+    when: on_failure
+
 # Execute unit tests
 test:unit:
-  stage: test
+  stage: test_unit
   extends:
     - .tests-node
   rules:
@@ -255,6 +293,7 @@ test:unit:
     paths:
       - webapp/channels/coverage/
     when: on_success
+    expire_in: 1 days
     reports:
       junit: webapp/channels/coverage/junit.xml
       coverage_report:
@@ -269,25 +308,27 @@ test:unit:
 # Triggers e2e tests
 # Parse staging base URL and store in dotenv artifact
 test:e2e:
-  stage: test
+  stage: test_e2e
   extends:
     - .tests
   image: ruby:${RUBY_VERSION}
   rules:
     - if: *if-merge-request
       when: manual
+      allow_failure: true
     - when: never
   script:
     - echo "STAGING_BASE_URL=$(ruby .gitlab/get_staging_baseurl.rb)" >> test.env
   # Pass env variables to Playwright/Cypress
   # https://docs.gitlab.com/ee/ci/variables/index.html#pass-an-environment-variable-to-another-job
   artifacts:
+    expire_in: 1 days
     reports:
       dotenv: test.env
 
 # Execute playwright tests
 test:e2e:pw:
-  stage: test
+  stage: test_e2e
   extends:
     - .tests-node
   image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
@@ -359,7 +400,7 @@ release:front:
 
 # Publish changelog to kChat
 release:changelog:
-  stage: release
+  stage: .post
   image: ruby:${RUBY_VERSION}
   needs: ["release:front"]
   rules:

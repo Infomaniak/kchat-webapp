@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
@@ -10,11 +10,9 @@ import {updateMe} from 'mattermost-redux/actions/users';
 import {Preferences} from 'mattermost-redux/constants';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {get as getPreference} from 'mattermost-redux/selectors/entities/preferences';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import type {GlobalState} from 'types/store';
 
-import type {Props} from './rhs_settings_notifications';
 import RhsSettingsNotifications from './rhs_settings_notifications';
 
 function mapStateToProps(state: GlobalState) {
@@ -38,7 +36,7 @@ function mapStateToProps(state: GlobalState) {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc>, Props['actions']>({
+        actions: bindActionCreators({
             updateMe,
             savePreferences,
         }, dispatch),

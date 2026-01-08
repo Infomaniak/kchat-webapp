@@ -464,6 +464,32 @@ No changes.
 
 No changes.
 
+## 2.9.24 (2025-02-26)
+
+### Added (1 change)
+
+- [feat: welcome kchat bot](kchat/webapp@f0fc2da40e13cea68f34a811fe8c2730620ee103) by @dimitar.slaev ([merge request](kchat/webapp!1012))
+
+### Fixed (8 changes)
+
+- [fix: set thread traduction if find in switch channel provider](kchat/webapp@6f50f0555d30fef07a5aee2c2ad048670ba6b9cd) by @boris.trombert ([merge request](kchat/webapp!1026))
+- [fix: add missing draft id if empty](kchat/webapp@cd4db7f1412ba99c68ae92b4862d2328ad7105ef) by @boris.trombert ([merge request](kchat/webapp!1023))
+- [fix: add closing backtick for all message chuck to avoid display flash](kchat/webapp@5e5bbeed9e25e62e186cfaa10625d6018de0f28c) by @boris.trombert ([merge request](kchat/webapp!1021))
+- [Fixed: Number list being truncated](kchat/webapp@cfec461a85b47f5611d648818e7c302f76c499f9) by @andy.lerandy ([merge request](kchat/webapp!1018))
+- [fix: set max height with vh instead of element.clientHeight](kchat/webapp@2edb2d39a1bfe46a47f906d12fbcb479c8c43523) by @boris.trombert ([merge request](kchat/webapp!1017))
+- [Fixed sentry errors for notification actions](kchat/webapp@b570b91835843982337b2dacfe26442cfff32832) by @dimitar.slaev ([merge request](kchat/webapp!1015))
+- [Fixed: No update on member list for mentions.](kchat/webapp@231793cd3398c40d08d023f3e8e34ceb564cf92b) by @andy.lerandy ([merge request](kchat/webapp!1000))
+- [ransform option values into strings, disallowing numeric entries in polls](kchat/webapp@c4c03a0caa16fe529f1f296919d552a4a13f0fc6) by @cyril.gromoff ([merge request](kchat/webapp!946))
+
+### Changed (2 changes)
+
+- [adapt changelog script to not use commits](kchat/webapp@1febe9fc58c1df8a8b39bcabd741df65209fb89b) by @antonbuksa ([merge request](kchat/webapp!1022))
+- [Updated: Date formating for web/desk - Harmonised behavior.](kchat/webapp@e7fd92f6b2fb3f941f01582cbc0d1d89e2deebfe) by @andy.lerandy ([merge request](kchat/webapp!1007))
+
+### Removed (1 change)
+
+- [removed unnecessary websocket logs](kchat/webapp@727d9ae10091dc15b22675c5763d2b52ecd2bdd8) by @dimitar.slaev ([merge request](kchat/webapp!1016))
+
 ## 2.9.23 (2025-02-18)
 
 ### Fixed (16 changes)

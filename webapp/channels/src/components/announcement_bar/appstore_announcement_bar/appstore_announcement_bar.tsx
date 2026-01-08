@@ -39,7 +39,7 @@ export default class AppStoreBar extends React.PureComponent<Props> {
         }
         return (
             <AnnouncementBar
-                type={AnnouncementBarTypes.UPDATE_MAC}
+                type={AnnouncementBarTypes.WARNING}
                 icon={
                     <img
                         className='version-alert-icon'
@@ -47,7 +47,7 @@ export default class AppStoreBar extends React.PureComponent<Props> {
                     />
                 }
                 message={
-                    <React.Fragment>
+                    <>
                         <div style={{fontWeight: 400}}>
 
                             <FormattedMessage
@@ -72,7 +72,7 @@ export default class AppStoreBar extends React.PureComponent<Props> {
                                 defaultMessage='before September 2nd to benefit from the latest improvements.'
                             />
                         </div>
-                    </React.Fragment>
+                    </>
                 }
             />
         );

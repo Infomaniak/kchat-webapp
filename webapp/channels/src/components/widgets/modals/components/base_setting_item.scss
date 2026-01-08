@@ -50,17 +50,26 @@
     &__content {
         display: flex;
         flex-direction: column;
+
+        &.inline {
+            flex-direction: row;
+            gap: 24px;
+        }
     }
 
     &__fieldset-checkbox-ctr {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        margin-bottom: 5px;
+        gap: 8px;
     }
 
     &__fieldset-checkbox {
         display: flex;
         flex-direction: row;
         align-items: center;
+        margin-bottom: 0;
         cursor: pointer;
         font-size: 14px;
         gap: 8px;
@@ -90,9 +99,10 @@
         line-height: 20px;
     }
 
-    // Todo: add styling for react select
-    //&__fieldset-react-select{
-    //}
+    &__fieldset-react-select {
+        max-width: 240px;
+        flex-grow: 1;
+    }
 
     &__input-checkbox {
         width: 1.6rem;
@@ -102,11 +112,11 @@
     input[type=checkbox] {
         display: grid;
         border: 1px solid rgba(var(--center-channel-color-rgb), 0.24);
+        border-radius: 3px;
         margin: 0;
         -webkit-appearance: none;
         appearance: none;
         background-color: transparent;
-        border-radius: 3px;
         color: rgba(var(--center-channel-color-rgb), 0.24);
         cursor: pointer;
         font: inherit;
@@ -142,11 +152,11 @@
         width: 1.6rem;
         height: 1.6rem;
         border: 1px solid rgba(var(--center-channel-color-rgb), 0.24);
+        border-radius: 50%;
         margin: 0;
         -webkit-appearance: none;
         appearance: none;
         background-color: transparent;
-        border-radius: 50%;
         color: rgba(var(--center-channel-color-rgb), 0.24);
         cursor: pointer;
         font: inherit;
@@ -156,8 +166,10 @@
     input[type="radio"]::before {
         width: 8px;
         height: 8px;
-        background: var(--button-bg);
         border-radius: 50%;
+        // Infomaniak edit
+        background: var(--button-bg);
+        // background: var(--denim-button-bg);
         content: '';
         transform: scale(0);
         transform-origin: center center;

@@ -3,10 +3,10 @@ import React, {useEffect} from 'react';
 import type {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import type {ChannelMembership} from '@mattermost/types/channels';
-
 import TextBanner from 'components/text_banner';
 import InfoIconFilled from 'components/widgets/icons/info_icon_filled';
+
+import type {ActionResult} from 'types/store';
 
 import GuestListModal from './guest_list_modal';
 
@@ -17,7 +17,7 @@ export type Props = GuestBannerConnectorProps & {
     isGuest: boolean;
 
     actions: {
-        getChannelGuestMembers: (channelId: string) => Promise<{data: ChannelMembership[]}>;
+        getChannelGuestMembers: (channelId: string) => Promise<ActionResult<unknown, any>>;
     };
 }
 

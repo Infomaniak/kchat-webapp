@@ -1,14 +1,11 @@
+/* eslint-disable no-underscore-dangle */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 
-import Pusher, {Channel} from 'pusher-js';
+import type {Channel} from 'pusher-js';
+import Pusher from 'pusher-js';
 
-// import * as Sentry from '@sentry/react';
-
-const MAX_WEBSOCKET_FAILS = 7;
-const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
-const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
 const JITTER_RANGE = 2000; // 2 sec
 
 // TODO: Fix error import
@@ -24,7 +21,16 @@ export type ReconnectListener = (socketId?: string) => void;
 export type MissedMessageListener = () => void;
 export type ErrorListener = (event: Event) => void;
 export type CloseListener = (connectFailCount: number) => void;
-export type OtherTeam = { userId: string, teamId: string }
+export type OtherTeam = { userId: string; teamId: string }
+
+export type WebSocketClientConfig = {
+    maxWebSocketFails: number;
+    minWebSocketRetryTime: number;
+    maxWebSocketRetryTime: number;
+    reconnectJitterRange: number;
+    newWebSocketFn: (url: string) => WebSocket;
+    clientPingInterval: number;
+}
 
 export default class WebSocketClient {
     private conn: Pusher | null;
@@ -39,16 +45,13 @@ export default class WebSocketClient {
     private currentTeamUser: string;
     private currentTeam: string;
     private otherTeams: OtherTeam[];
-    private otherTeamsChannel: Record<string, Array<Channel>>;
+    private otherTeamsChannel: Record<string, Channel[]>;
 
     // responseSequence is the number to track a response sent
     // via the websocket. A response will always have the same sequence number
     // as the request.
     private responseSequence: number;
 
-    // serverSequence is the incrementing sequence number from the
-    // server-sent event stream.
-    private serverSequence: number;
     private connectFailCount: number;
     private errorCount: number;
     private responseCallbacks: {[x: number]: ((msg: any) => void)};
@@ -96,6 +99,7 @@ export default class WebSocketClient {
     private _teamId: string | undefined;
     private _userId: number | undefined;
     private _userTeamId: string | undefined;
+
     // TODO type this
     private _currentUserId: any;
     private _currentUserTeamId: any;
@@ -111,7 +115,6 @@ export default class WebSocketClient {
         this.presenceChannel = null;
         this.connectionUrl = null;
         this.responseSequence = 1;
-        this.serverSequence = 0;
         this.connectFailCount = 0;
         this.errorCount = 0;
         this.responseCallbacks = {};
@@ -139,20 +142,20 @@ export default class WebSocketClient {
     }
 
     unbindGlobalsAndReset() {
-        console.log('unbindGlobalsAndReset')
-        this.teamChannel?.unbind('pusher:subscription_succeeded')
+        console.log('unbindGlobalsAndReset');
+        this.teamChannel?.unbind('pusher:subscription_succeeded');
         this.teamChannel?.unbind_global();
-        this.userChannel?.unbind('pusher:subscription_succeeded')
+        this.userChannel?.unbind('pusher:subscription_succeeded');
         this.userChannel?.unbind_global();
-        this.userTeamChannel?.unbind('pusher:subscription_succeeded')
+        this.userTeamChannel?.unbind('pusher:subscription_succeeded');
         this.userTeamChannel?.unbind_global();
         this.presenceChannel?.unbind_global();
-        Object.values(this.otherTeamsChannel)?.forEach(team => team.forEach(channel => channel.unbind_all()))
+        Object.values(this.otherTeamsChannel)?.forEach((team) => team.forEach((channel) => channel.unbind_all()));
         this.teamChannel = null;
         this.userChannel = null;
         this.userTeamChannel = null;
         this.presenceChannel = null;
-        this.otherTeamsChannel = {}
+        this.otherTeamsChannel = {};
     }
 
     // on connect, only send auth cookie and blank state.
@@ -166,10 +169,12 @@ export default class WebSocketClient {
         authToken?: string,
         presenceChannelId?: string,
     ) {
+        const debugId = `[WS initialize-${Date.now()}]`;
+        console.debug(`${debugId} Initializing WebSocket with URL: ${connectionUrl}`);
+
         let currentUserId: any;
         let currentUserTeamId: any;
 
-        // Store this for onmessage reconnect
         if (userId) {
             currentUserId = userId;
         }
@@ -183,27 +188,26 @@ export default class WebSocketClient {
         }
 
         if (this.conn) {
+            console.debug(`${debugId} WebSocket already connected, skipping init`);
             return;
         }
 
-        if (connectionUrl == null) {
-            console.log('websocket must have connection url'); //eslint-disable-line no-console
+        if (!connectionUrl) {
+            console.log(`${debugId} websocket must have connection url`);
             return;
         }
 
         if (this.connectFailCount === 0) {
-            console.log('websocket connecting to ' + connectionUrl); //eslint-disable-line no-console
+            console.log(`${debugId} websocket connecting to ${connectionUrl}`);
         }
 
-        // Add connection id, and last_sequence_number to the query param.
-        // We cannot use a cookie because it will bleed across tabs.
-        // We cannot also send it as part of the auth_challenge, because the session cookie is already sent with the request.
+        console.debug(`${debugId} Current listener counts`, {
+            closeListeners: this.closeListeners?.size || 0,
+            reconnectListeners: this.reconnectListeners?.size || 0,
+            firstConnectListeners: this.firstConnectListeners?.size || 0,
+        });
 
-        const auth = isDesktopApp() ? {
-            headers: {
-                Authorization: `Bearer ${authToken}`,
-            },
-        } : {};
+        const auth = isDesktopApp() ? {headers: {Authorization: `Bearer ${authToken}`}} : {};
 
         this.conn = new Pusher('kchat-key', {
             wsHost: connectionUrl,
@@ -221,41 +225,48 @@ export default class WebSocketClient {
         this.connectionUrl = connectionUrl;
 
         this.conn.connection.bind('state_change', (states: { current: string; previous: string }) => {
-            console.log('[websocket] current state is: ', states.current);
+            console.log(`${debugId} current state is: ${states.previous} → ${states.current}`);
 
-            if (states.current === 'unavailable' || states.current === 'failed' || (states.previous === 'connected' && states.current === 'connecting')) {
+            if (
+                states.current === 'unavailable' ||
+                states.current === 'failed' ||
+                (states.previous === 'connected' && states.current === 'connecting')
+            ) {
                 this.connectFailCount++;
-                console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
+                console.log(`${debugId} connectFailCount updated: ${this.connectFailCount}`);
 
                 this.closeCallback?.(this.connectFailCount);
-                this.closeListeners.forEach((listener) => listener(this.connectFailCount));
+                this.closeListeners.forEach((listener) => {
+                    const funcName = listener.name || '<anonymous>';
+                    console.debug(`${debugId} Calling closeListener (${funcName})`);
+                    listener(this.connectFailCount);
+                });
             }
         });
 
         this.conn.connection.bind('error', (evt: any) => {
-            console.log('[websocket] unexpected error: ', evt);
+            console.log(`${debugId} unexpected error:`, evt);
             this.errorCount++;
             this.connectFailCount++;
 
             if (this.presenceChannel) {
-                this.conn?.unsubscribe(this.presenceChannel.name)
-                this.presenceChannel.unbind_all()
+                this.conn?.unsubscribe(this.presenceChannel.name);
+                this.presenceChannel.unbind_all();
                 this.presenceChannel = null;
             }
 
-            // TODO: unsub other teams
-
-
-            console.log('[websocket] calling close callbacks');
-
+            console.log(`${debugId} calling close callbacks`);
             this.closeCallback?.(this.connectFailCount);
-            this.closeListeners.forEach((listener) => listener(this.connectFailCount));
+            this.closeListeners.forEach((listener) => {
+                const funcName = listener.name || '<anonymous>';
+                console.debug(`${debugId} Calling closeListener (${funcName})`);
+                listener(this.connectFailCount);
+            });
         });
 
         this.conn.connection.bind('connected', () => {
-            console.log('[websocket] socketId', this.conn?.connection.socket_id);
+            console.log(`${debugId} socketId: ${this.conn?.connection.socket_id}`);
 
-            // TODO: temp bind just to keep consistence with old code
             this._teamId = teamId;
             this._userId = userId;
             this._currentUserId = currentUserId;
@@ -264,29 +275,45 @@ export default class WebSocketClient {
             this._presenceChannelId = presenceChannelId;
 
             if (this.connectFailCount > 0) {
-                // used by websocket_actions to determine whether to call reconnectAllChannels after preload
                 this.reconnecting = true;
-                console.log('[websocket] reconnecting');
+                console.log(`${debugId} reconnecting`);
+
+                if (this.reconnectListeners.size <= 0 && !this.reconnectCallback) {
+                    console.warn(`${debugId} No reconnect handlers found, reloading app`);
+                    window.location.reload();
+                    return;
+                }
+
                 this.reconnectCallback?.(this.conn?.connection.socket_id);
-                this.reconnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
+                this.reconnectListeners.forEach((listener) => {
+                    const funcName = listener.name || '<anonymous>';
+                    console.debug(`${debugId} Calling reconnectListener (${funcName})`);
+                    listener(this.conn?.connection.socket_id);
+                });
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
-                // if first connect manually call reconnectAllChannels
                 this.reconnectAllChannels();
-                console.log('[websocket] calling first connect callbacks');
+                console.log(`${debugId} calling first connect callbacks`);
                 this.firstConnectCallback?.(this.conn?.connection.socket_id);
-                this.firstConnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
+                this.firstConnectListeners.forEach((listener) => {
+                    const funcName = listener.name || '<anonymous>';
+                    console.debug(`${debugId} Calling firstConnectListener (${funcName})`);
+                    listener(this.conn?.connection.socket_id);
+                });
             }
 
             this.connectFailCount = 0;
             this.errorCount = 0;
             this.socketId = this.conn?.connection.socket_id as string;
+
+            console.log(`${debugId} Initialization complete`);
         });
     }
 
     reconnectAllChannels() {
-        console.log('[websocket] reconnectAllChannels state', this.conn?.connection.state)
+        const debugId = `[WS reconnectAllChannels-${Date.now()}]`;
+        console.log(`${debugId} reconnectAllChannels state`, this.conn?.connection.state);
         if (this.conn?.connection.state !== 'connected') {
-            console.log('[websocket] reconnectAllChannels retrying');
+            console.log(`${debugId} reconnectAllChannels retrying`);
             setTimeout(() => {
                 this.reconnectAllChannels();
             }, 2000);
@@ -305,10 +332,13 @@ export default class WebSocketClient {
 
         this.reconnecting = false;
 
-        console.log('[websocket] connected at', Date.now());
+        console.log(`${debugId} connected at`, Date.now());
     }
 
     updateToken(token: string) {
+        const debugId = `[WS updateToken-${Date.now()}]`;
+        console.debug(`${debugId} Updating token`);
+
         if (this.conn) {
             this.conn.disconnect();
             this.conn = null;
@@ -324,70 +354,74 @@ export default class WebSocketClient {
     }
 
     subscribeToTeamChannel(teamId: string) {
+        const debugId = `[WS subscribeToTeamChannel-${Date.now()}]`;
         if (this.teamChannel) {
-            this.conn?.unsubscribe(this.teamChannel.name)
-            this.teamChannel.unbind_all()
+            this.conn?.unsubscribe(this.teamChannel.name);
+            this.teamChannel.unbind_all();
             this.teamChannel = null;
         }
 
-        console.log(`[websocket] subscribeToTeamChannel ~ private-team.${teamId}`)
+        console.log(`${debugId} subscribeToTeamChannel ~ private-team.${teamId}`);
         this.currentTeam = teamId;
         this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
         this.bindChannelGlobally(this.teamChannel);
 
         this.teamChannel?.bind('pusher:subscription_error', () => {
-            console.log(`[websocket] failed to subscribe to private-team.${teamId} queing retry`);
+            console.log(`${debugId} failed to subscribe to private-team.${teamId} queing retry`);
 
             setTimeout(() => {
                 this.subscribeToTeamChannel(teamId);
-            }, JITTER_RANGE)
-        })
+            }, JITTER_RANGE);
+        });
     }
 
     subscribeToUserChannel(userId: number) {
+        const debugId = `[WS subscribeToUserChannel-${Date.now()}]`;
         if (this.userChannel) {
-            this.conn?.unsubscribe(this.userChannel.name)
-            this.userChannel.unbind_all()
+            this.conn?.unsubscribe(this.userChannel.name);
+            this.userChannel.unbind_all();
             this.userChannel = null;
         }
 
-        console.log(`[websocket] subscribeToUserChannel ~ presence-user.${userId}`)
+        console.log(`${debugId} subscribeToUserChannel ~ presence-user.${userId}`);
         this.currentUser = userId;
         this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
         this.bindChannelGlobally(this.userChannel);
 
         this.userChannel?.bind('pusher:subscription_error', () => {
-            console.log(`[websocket] failed to subscribe to presence-user.${userId} queing retry`);
+            console.log(`${debugId} failed to subscribe to presence-user.${userId} queuing retry`);
 
             setTimeout(() => {
                 this.subscribeToUserChannel(userId);
-            }, JITTER_RANGE)
-        })
+            }, JITTER_RANGE);
+        });
     }
 
     subscribeToUserTeamScopedChannel(teamUserId: string) {
+        const debugId = `[WS subscribeTeamUser-${Date.now()}]`;
         if (this.userTeamChannel) {
-            this.conn?.unsubscribe(this.userTeamChannel.name)
-            this.userTeamChannel.unbind_all()
+            this.conn?.unsubscribe(this.userTeamChannel.name);
+            this.userTeamChannel.unbind_all();
             this.userTeamChannel = null;
         }
 
-        console.log(`[websocket] subscribeToUserTeamScopedChannel ~ presence-teamUser.${teamUserId}`)
+        console.log(`${debugId} subscribeToUserTeamScopedChannel ~ presence-teamUser.${teamUserId}`);
         this.currentTeamUser = teamUserId;
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
         this.bindChannelGlobally(this.userTeamChannel);
 
         this.userTeamChannel?.bind('pusher:subscription_error', () => {
-            console.log(`[websocket] failed to subscribe to presence-teamUser.${teamUserId} queing retry`);
+            console.log(`${debugId} failed to subscribe to presence-teamUser.${teamUserId} queuing retry`);
 
             setTimeout(() => {
                 this.subscribeToUserTeamScopedChannel(teamUserId);
-            }, JITTER_RANGE)
-        })
+            }, JITTER_RANGE);
+        });
     }
 
     bindPresenceChannel(channelID: string) {
-        console.log(`[websocket] bindPresenceChannel ~ presence-channel.${channelID}`)
+        const debugId = `[WS bindPresence-${Date.now()}]`;
+        console.log(`${debugId} bindPresenceChannel ~ presence-channel.${channelID}`);
         this.currentPresence = channelID;
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
         if (this.presenceChannel) {
@@ -396,7 +430,8 @@ export default class WebSocketClient {
     }
 
     unbindPresenceChannel(channelID: string) {
-        console.log(`[websocket] unbindPresenceChannel ~ presence-channel.${channelID}`)
+        const debugId = `[WS unbindPresence-${Date.now()}]`;
+        console.log(`${debugId} unbindPresenceChannel ~ presence-channel.${channelID}`);
         this.conn?.unsubscribe(`presence-channel.${channelID}`);
 
         if (this.presenceChannel) {
@@ -405,7 +440,7 @@ export default class WebSocketClient {
     }
 
     bindChannelGlobally(channel: Channel | null) {
-        // @ts-ignore
+        // @ts-expect-error old error ignore
         channel?.bind_global((evt, data) => {
             // console.error(`The event ${evt} was triggered with data`);
             // console.error(data);
@@ -427,17 +462,17 @@ export default class WebSocketClient {
                     Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
                 }
             } else if (this.eventCallback || this.messageListeners.size > 0) {
-                // @ts-ignore
+                // @ts-expect-error old error ignore
                 this.eventCallback?.({event: evt, data});
 
-                // @ts-ignore
+                // @ts-expect-error old error ignore
                 this.messageListeners.forEach((listener) => listener({event: evt, data}));
             }
         });
     }
 
     unbindChannelGlobally(channel: Channel | null) {
-        // @ts-ignore
+        // @ts-expect-error old error ignore
         channel.unbind_global((evt, data) => {
             if (!data) {
                 return;
@@ -452,10 +487,10 @@ export default class WebSocketClient {
                     Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
                 }
             } else if (this.eventCallback) {
-                // @ts-ignore
+                // @ts-expect-error old error ignore
                 this.serverSequence = data.seq + 1;
 
-                // @ts-ignore
+                // @ts-expect-error old error ignore
                 this.eventCallback({event: evt, data});
             }
         });
@@ -476,13 +511,12 @@ export default class WebSocketClient {
                     Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
                 }
             } else if (callback) {
-                // @ts-ignore
+                // @ts-expect-error old error ignore
                 this.serverSequence = data.seq + 1;
 
-                // @ts-ignore
-                callback?.(data)
+                callback?.(data);
             }
-        })
+        });
     }
 
     /**
@@ -624,6 +658,7 @@ export default class WebSocketClient {
 
         if (this.conn && this.conn.connection.state === 'connected') {
             this.conn.disconnect();
+
             // this.conn = null;
             console.log('websocket closed'); //eslint-disable-line no-console
         }
@@ -738,28 +773,6 @@ export default class WebSocketClient {
         this.sendPresenceMessage('client-user_recording', data, callback);
     }
 
-    updateActiveChannel(channelId: string, callback?: (msg: any) => void) {
-        const data = {
-            channel_id: channelId,
-        };
-        // this.sendMessage('presence', data, callback);
-    }
-
-    updateActiveTeam(teamId: string, callback?: (msg: any) => void) {
-        const data = {
-            team_id: teamId,
-        };
-        // this.sendMessage('presence', data, callback);
-    }
-
-    updateActiveThread(isThreadView: boolean, channelId: string, callback?: (msg: any) => void) {
-        const data = {
-            thread_channel_id: channelId,
-            is_thread_view: isThreadView,
-        };
-        // this.sendMessage('presence', data, callback);
-    }
-
     userUpdateActiveStatus(userIsActive: boolean, manual: boolean, callback?: () => void) {
         const data = {
             user_is_active: userIsActive,
@@ -782,73 +795,73 @@ export default class WebSocketClient {
     sendRemoveUnread(unreadMessagesCount: number, serverId: string) {
         const data = {
             unreadMessagesCount,
-            serverId
+            serverId,
         };
 
-        this.sendUserTeamMessage('client-unread_channel', data)
+        this.sendUserTeamMessage('client-unread_channel', data);
     }
 
     setOthersTeams(teams: OtherTeam[]) {
-        this.otherTeams = teams
+        this.otherTeams = teams;
     }
 
     subscribeToOtherTeams(teams?: OtherTeam[], currentTeamId?: string) {
         if (!teams) {
-            return
+            return;
         }
 
         for (const team of teams) {
-            const { teamId: teamId, userId } = team
+            const {teamId, userId} = team;
 
             if (teamId === currentTeamId || !userId) {
-                continue
+                continue;
             }
 
-            const presenceTeamUserChannel = this.conn?.subscribe(`presence-teamUser.${userId}`) as Channel
-            const privateTeamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel
+            const presenceTeamUserChannel = this.conn?.subscribe(`presence-teamUser.${userId}`) as Channel;
+            const privateTeamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
 
-            presenceTeamUserChannel.callbacks.remove('badge_updated')
-            privateTeamChannel.callbacks.remove('team_status_changed')
+            presenceTeamUserChannel.callbacks.remove('badge_updated');
+            privateTeamChannel.callbacks.remove('team_status_changed');
 
             this.bindChannelToEvent(presenceTeamUserChannel, 'badge_updated', (data) => {
-                // @ts-ignore
-                this.otherServersMessageListeners.forEach((listener) => listener({event: 'badge_updated', data, serverId: teamId }));
-            })
+                // @ts-expect-error old error ignore
+                this.otherServersMessageListeners.forEach((listener) => listener({event: 'badge_updated', data, serverId: teamId}));
+            });
 
             this.bindChannelToEvent(privateTeamChannel, 'team_status_changed', (data) => {
-                // @ts-ignore
-                this.otherServersMessageListeners.forEach((listener) => listener({event: 'team_status_changed', data, serverId: teamId }));
-            })
+                // @ts-expect-error old error ignore
+                this.otherServersMessageListeners.forEach((listener) => listener({event: 'team_status_changed', data, serverId: teamId}));
+            });
 
-            Reflect.set(this.otherTeamsChannel, teamId, [presenceTeamUserChannel, privateTeamChannel])
+            Reflect.set(this.otherTeamsChannel, teamId, [presenceTeamUserChannel, privateTeamChannel]);
         }
     }
 
     addNewTeam(userId: string, teamId: string, currentTeamId: string) {
-        const newTeam = { userId, teamId }
-        this.otherTeams.push(newTeam)
-        this.subscribeToOtherTeams([newTeam], currentTeamId)
+        const newTeam = {userId, teamId};
+        this.otherTeams.push(newTeam);
+        this.subscribeToOtherTeams([newTeam], currentTeamId);
     }
 
     removeTeam(teamId: string) {
-        const newTeams = this.otherTeams.filter(team => team.teamId !== teamId)
-        const channelsToUnbind = Reflect.get(this.otherTeamsChannel, teamId)
-        const newChannels = {...this.otherTeamsChannel}
-        Reflect.deleteProperty(newChannels, teamId)
+        const newTeams = this.otherTeams.filter((team) => team.teamId !== teamId);
+        const channelsToUnbind = Reflect.get(this.otherTeamsChannel, teamId);
+        const newChannels = {...this.otherTeamsChannel};
+        Reflect.deleteProperty(newChannels, teamId);
 
         if (channelsToUnbind && Array.isArray(channelsToUnbind) && this.conn?.connection.state === 'connected') {
-            this.unsubscribeChannels(channelsToUnbind)
+            this.unsubscribeChannels(channelsToUnbind);
         }
 
-        this.otherTeams = newTeams
-        this.otherTeamsChannel = newChannels
+        this.otherTeams = newTeams;
+        this.otherTeamsChannel = newChannels;
     }
 
-    unsubscribeChannels(channels: Array<Channel>) {
-        channels.forEach(channel => {
-            this.conn?.unsubscribe(channel.name)
-            channel.unbind_all()
-        })
+    unsubscribeChannels(channels: Channel[]) {
+        channels.forEach((channel) => {
+            this.conn?.unsubscribe(channel.name);
+            channel.unbind_all();
+        });
     }
 }
 

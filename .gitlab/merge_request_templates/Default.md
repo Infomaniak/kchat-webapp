@@ -8,6 +8,13 @@ A description of what this merge request does.
 If this merge request addresses a redmine ticket, please link it here
 -->
 
+#### How to test
+<!--
+Add here steps to replicate/test the issue/bug/feature. 
+
+Or simply add "See related Ticket"
+-->
+
 #### Screenshots
 <!--
 If the MR includes UI changes, include screenshots/GIFs.
@@ -52,3 +59,7 @@ NONE
 ```release-note
 
 ```
+
+/assign me  
+/reviewer @antonbuksa @boris.trombert @dimitar.slaev @andy.lerandy @aurelien.sberro @alexandre.pilloud
+/remove_reviewer me  

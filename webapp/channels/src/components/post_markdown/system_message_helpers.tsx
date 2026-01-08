@@ -3,14 +3,15 @@
 
 import React from 'react';
 import type {ReactNode} from 'react';
-import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
+import {FormattedDate, FormattedMessage, FormattedTime, defineMessages} from 'react-intl';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
-import type {Team} from '@mattermost/types/teams';
+import {isStringArray} from '@mattermost/types/utilities';
 
 import {General, Posts} from 'mattermost-redux/constants';
-import {isPostEphemeral} from 'mattermost-redux/utils/post_utils';
+import {isUserActivityProp} from 'mattermost-redux/utils/post_list';
+import {ensureNumber, ensureString, isPostEphemeral} from 'mattermost-redux/utils/post_utils';
 
 import CallNotificationMessage from 'components/kmeet_conference/post_type';
 import Markdown from 'components/markdown';
@@ -20,12 +21,13 @@ import PostAddChannelMember from 'components/post_view/post_add_channel_member';
 import PostNotifyChannelMember from 'components/post_view/post_notify_channel_member/post_notify_channel_member';
 import VoiceMessageAttachmentPlayer from 'components/voice/post_type';
 
-import {t} from 'utils/i18n';
-import type {TextFormattingOptions} from 'utils/text_formatting';
-import {getSiteURL} from 'utils/url';
+import {isChannelNamesMap, type TextFormattingOptions} from 'utils/text_formatting';
 
-export function renderUsername(value: string): ReactNode {
-    const username = (value[0] === '@') ? value : `@${value}`;
+import {MailAttachmentMessage} from '../mail_attachement/mail_attachment';
+
+export function renderUsername(value: unknown): ReactNode {
+    const verifiedValue = ensureString(value);
+    const username = (verifiedValue[0] === '@') ? verifiedValue : `@${verifiedValue}`;
 
     const options = {
         markdown: false,
@@ -34,10 +36,11 @@ export function renderUsername(value: string): ReactNode {
     return renderFormattedText(username, options);
 }
 
-function renderFormattedText(value: string, options?: Partial<TextFormattingOptions>, post?: Post): ReactNode {
+function renderFormattedText(value: unknown, options?: Partial<TextFormattingOptions>, post?: Post): ReactNode {
+    const verifiedValue = ensureString(value);
     return (
         <Markdown
-            message={value}
+            message={verifiedValue}
             options={options}
             postId={post && post.id}
             postType={post && post.type}
@@ -193,7 +196,7 @@ function renderHeaderChangeMessage(post: Post): ReactNode {
     }
 
     const headerOptions = {
-        channelNamesMap: post.props && post.props.channel_mentions,
+        channelNamesMap: isChannelNamesMap(post.props?.channel_mentions) ? post.props.channel_mentions : undefined,
         mentionHighlight: true,
     };
 
@@ -372,6 +375,12 @@ function renderCallNotificationMessage(post: Post): ReactNode {
     );
 }
 
+function renderMailAttachmentMessage(post: Post): ReactNode {
+    return (
+        <MailAttachmentMessage post={post}/>
+    );
+}
+
 function renderVoiceMessage(post: Post): ReactNode {
     return (
         <VoiceMessageAttachmentPlayer post={post}/>
@@ -418,19 +427,48 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CHANNEL_UNARCHIVED]: renderChannelUnarchivedMessage,
     [Posts.POST_TYPES.ME]: renderMeMessage,
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
+    [Posts.POST_TYPES.MAIL_ATTACHMENT]: renderMailAttachmentMessage,
     [Posts.POST_TYPES.VOICE]: renderVoiceMessage,
     [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
     [Posts.POST_TYPES.SYSTEM_WELCOME_MESSAGE]: () => <></>, // Infomaniak: return fragment to avoid displaying message from backend
     [Posts.POST_TYPES.CHANGE_CHANNEL_PRIVACY]: renderChangeChannelPrivacyMessage,
 };
 
-export function renderSystemMessage(post: Post, currentTeam: Team, channel: Channel, hideGuestTags: boolean, isUserCanManageMembers?: boolean, isMilitaryTime?: boolean, timezone?: string): ReactNode {
+export type AddMemberProps = {
+    post_id: string;
+    not_in_channel_user_ids: string[];
+    not_in_groups_usernames: string[];
+    not_in_channel_usernames: string[];
+}
+
+export function isAddMemberProps(v: unknown): v is AddMemberProps {
+    if (typeof v !== 'object' || !v) {
+        return false;
+    }
+
+    if (!('post_id' in v) || typeof v.post_id !== 'string') {
+        return false;
+    }
+
+    if (!('not_in_channel_user_ids' in v) || !isStringArray(v.not_in_channel_user_ids)) {
+        return false;
+    }
+
+    if (!('not_in_groups_usernames' in v) || !isStringArray(v.not_in_groups_usernames)) {
+        return false;
+    }
+
+    if (!('not_in_channel_usernames' in v) || !isStringArray(v.not_in_channel_usernames)) {
+        return false;
+    }
+
+    return true;
+}
+
+export function renderSystemMessage(post: Post, currentTeamName: string, channel: Channel, hideGuestTags: boolean, isUserCanManageMembers?: boolean): ReactNode {
     const isEphemeral = isPostEphemeral(post);
 
-    // if (isEphemeral && post.props?.type === Posts.POST_TYPES.REMINDER) {
-    //     return renderReminderACKMessage(post, currentTeam, Boolean(isMilitaryTime), timezone);
-    // }
-    if (post.props && post.props.add_channel_member) {
+    if (isAddMemberProps(post.props?.add_channel_member)) {
         if (channel && (channel.type === General.PRIVATE_CHANNEL || channel.type === General.OPEN_CHANNEL) &&
             isUserCanManageMembers &&
             isEphemeral
@@ -453,9 +491,9 @@ export function renderSystemMessage(post: Post, currentTeam: Team, channel: Chan
         ) {
             return (
                 <PostNotifyChannelMember
-                    username={post.props.username}
-                    channelName={post.props.channel_name}
-                    postLink={post.props.post_link}
+                    username={post.props.username as string}
+                    channelName={post.props.channel_name as string}
+                    postLink={post.props.post_link as string}
                 />
             );
         }
@@ -466,7 +504,7 @@ export function renderSystemMessage(post: Post, currentTeam: Team, channel: Chan
         return renderGuestJoinChannelMessage(post, hideGuestTags);
     } else if (post.type === Posts.POST_TYPES.ADD_GUEST_TO_CHANNEL) {
         return renderAddGuestToChannelMessage(post, hideGuestTags);
-    } else if (post.type === Posts.POST_TYPES.COMBINED_USER_ACTIVITY) {
+    } else if (post.type === Posts.POST_TYPES.COMBINED_USER_ACTIVITY && isUserActivityProp(post.props.user_activity)) {
         const {allUserIds, allUsernames, messageData} = post.props.user_activity;
 
         return (
@@ -488,59 +526,6 @@ export function renderSystemMessage(post: Post, currentTeam: Team, channel: Chan
     return null;
 }
 
-function renderReminderACKMessage(post: Post, currentTeam: Team, isMilitaryTime: boolean, timezone?: string): ReactNode {
-    const username = renderUsername(post.props.username);
-    const teamUrl = `${getSiteURL()}/${post.props.team_name || currentTeam.name}`;
-    const link = `${teamUrl}/pl/${post.props.post_id}`;
-    const permaLink = renderFormattedText(`[${link}](${link})`);
-    const localTime = new Date(post.props.target_time * 1000);
-
-    const reminderTime = (
-        <FormattedTime
-            value={localTime}
-            hour12={!isMilitaryTime}
-            timeZone={timezone}
-        />);
-    const reminderDate = (
-        <FormattedDate
-            value={localTime}
-            day='2-digit'
-            month='short'
-            year='numeric'
-            timeZone={timezone}
-        />);
-    return (
-        <FormattedMessage
-            id={'post.reminder.acknowledgement'}
-            defaultMessage='You will be reminded at {reminderTime}, {reminderDate} about this message from {username}: {permaLink}'
-            values={{
-                reminderTime,
-                reminderDate,
-                username,
-                permaLink,
-            }}
-        />
-    );
-}
-
-// Mattermost
-// export function renderReminderSystemBotMessage(post: Post, currentTeam: Team): ReactNode {
-//     const username = post.props.username ? renderUsername(post.props.username) : '';
-//     const teamUrl = `${getSiteURL()}/${post.props.team_name || currentTeam.name}`;
-//     const link = `${teamUrl}/pl/${post.props.post_id}`;
-//     const permaLink = renderFormattedText(`[${link}](${link})`);
-//     return (
-//         <FormattedMessage
-//             id={'post.reminder.systemBot'}
-//             defaultMessage="Hi there, here's your reminder about this message from {username}: {permaLink}"
-//             values={{
-//                 username,
-//                 permaLink,
-//             }}
-//         />
-//     );
-// }
-
 // Infomaniak
 export function renderReminderSystemBotMessage(post: Post): ReactNode {
     const username = post.props.username ? renderUsername(post.props.username) : '';
@@ -548,7 +533,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
     let endReminderTime;
 
     if (post.props.target_time) {
-        const targetTime = new Date(post.props.target_time);
+        const targetTime = new Date(post.props.target_time as number);
         const now = new Date();
         const diffInMs = targetTime.getTime() - now.getTime();
         const diffInDays = Math.round(Math.abs(diffInMs) / (1000 * 60 * 60 * 24));
@@ -592,7 +577,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
                 values={{
                     permaLink,
                     endReminderTime,
-                    a: (chunks: React.ReactNode) => <a href={post.props.link}>{chunks}</a>,
+                    a: (chunks: React.ReactNode) => <a href={post.props.link as string}>{chunks}</a>,
                 }}
             />
         );
@@ -605,7 +590,7 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
                 defaultMessage='Alright, I have marked the reminder for <a>this message</a> as completed!'
                 values={{
                     permaLink,
-                    a: (chunks: React.ReactNode) => <a href={post.props.link}>{chunks}</a>,
+                    a: (chunks: React.ReactNode) => <a href={post.props.link as string}>{chunks}</a>,
                 }}
             />
         );
@@ -623,20 +608,41 @@ export function renderReminderSystemBotMessage(post: Post): ReactNode {
     );
 }
 
-t('app.post.move_thread_command.direct_or_group.multiple_messages');
-t('app.post.move_thread_command.direct_or_group.one_message');
-t('app.post.move_thread_command.channel.multiple_messages');
-t('app.post.move_thread_command.channel.one_message');
-t('app.post.move_thread.from_another_channel');
+// These messages are used by app.MoveThread on the server
+defineMessages({
+    channelMultipleMessages: {
+        id: 'app.post.move_thread_command.channel.multiple_messages',
+        defaultMessage: 'A thread with {numMessages, number} messages has been moved: {link}\n',
+    },
+    channelOneMessage: {
+        id: 'app.post.move_thread_command.channel.one_message',
+        defaultMessage: 'A message has been moved: {link}\n',
+    },
+    dmMultipleMessages: {
+        id: 'app.post.move_thread_command.direct_or_group.multiple_messages',
+        defaultMessage: 'A thread with {numMessages, number} messages has been moved to a Direct/Group Message\n',
+    },
+    dmOneMessage: {
+        id: 'app.post.move_thread_command.direct_or_group.one_message',
+        defaultMessage: 'A message has been moved to a Direct/Group Message\n',
+    },
+    fromAnotherChannel: {
+        id: 'app.post.move_thread.from_another_channel',
+        defaultMessage: 'This thread was moved from another channel',
+    },
+});
+
 export function renderWranglerSystemMessage(post: Post): ReactNode {
-    let values = {} as any;
-    const id = post.props.TranslationID;
-    if (post.props && post.props.MovedThreadPermalink) {
+    let values: React.ComponentProps<typeof FormattedMessage>['values'] = {};
+    const id = ensureString(post.props?.TranslationID);
+    const movedThreadPermalink = ensureString(post.props?.MovedThreadPermalink);
+    if (movedThreadPermalink) {
         values = {
-            Link: post.props.MovedThreadPermalink,
+            link: movedThreadPermalink,
         };
-        if (post.props.NumMessages > 1) {
-            values.NumMessages = post.props.NumMessages;
+        const numMessages = ensureNumber(post.props.NumMessages);
+        if (numMessages > 1) {
+            values.number = post.props.NumMessages;
         }
     }
     return (

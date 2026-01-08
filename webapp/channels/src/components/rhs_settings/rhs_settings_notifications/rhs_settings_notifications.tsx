@@ -8,7 +8,6 @@ import debounce from 'lodash/debounce';
 import type {RefObject} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import type {ValueType} from 'react-select';
 import ReactSelect from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import semver from 'semver';
@@ -27,10 +26,11 @@ import {t} from 'utils/i18n';
 import {isDesktopApp} from 'utils/user_agent';
 import {localizeMessage, moveCursorToEnd} from 'utils/utils';
 
+import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
+
 import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
 
 import './rhs_settings_notifications.scss';
-import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
 type InputProps ={
     display: string;
     description: {
@@ -95,10 +95,10 @@ function getNotificationsStateFromProps(props: Props, state?: State): State {
     let pushActivity: UserNotifyProps['push'] = NotificationLevels.MENTION;
     let pushStatus: UserNotifyProps['push_status'] = Constants.UserStatuses.AWAY;
     let autoResponderActive = false;
-    let autoResponderMessage: UserNotifyProps['auto_responder_message'] = localizeMessage(
-        'user.settings.notifications.autoResponderDefault',
-        'Hello, I am out of office and unable to respond to messages.',
-    );
+    let autoResponderMessage: UserNotifyProps['auto_responder_message'] = localizeMessage({
+        id: 'user.settings.notifications.autoResponderDefault',
+        defaultMessage: 'Hello, I am out of office and unable to respond to messages.',
+    });
 
     if (user.notify_props) {
         if (user.notify_props.desktop) {
@@ -258,10 +258,10 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         data.auto_responder_message = this.state.autoResponderMessage;
 
         if (!data.auto_responder_message || data.auto_responder_message === '') {
-            data.auto_responder_message = localizeMessage(
-                'user.settings.notifications.autoResponderDefault',
-                'Hello, I am out of office and unable to respond to messages.',
-            );
+            data.auto_responder_message = localizeMessage({
+                id: 'user.settings.notifications.autoResponderDefault',
+                defaultMessage: 'Hello, I am out of office and unable to respond to messages.',
+            });
         }
 
         data.first_name = this.state.firstNameKey.toString() as UserNotifyProps['first_name'];
@@ -308,9 +308,9 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
 
     setEmailDescriptionMessage() {
         if (Number(this.props.emailInterval) === Preferences.INTERVAL_DAY) {
-            return localizeMessage('user.settings.notifications.email.subtitle.daily', 'The e-mail will be sent to your inbox between 06:00 and 08:00 a.m. each day.');
+            return localizeMessage({id: 'user.settings.notifications.email.subtitle.daily', defaultMessage: 'The e-mail will be sent to your inbox between 06:00 and 08:00 a.m. each day.'});
         } else if (Number(this.props.emailInterval) === Preferences.INTERVAL_WEEK) {
-            return localizeMessage('user.settings.notifications.email.subtitle.weekly', 'The e-mail will be sent to your inbox between 06:00 and 08:00 every Monday morning.');
+            return localizeMessage({id: 'user.settings.notifications.email.subtitle.weekly', defaultMessage: 'The e-mail will be sent to your inbox between 06:00 and 08:00 every Monday morning.'});
         }
         return '';
     }
@@ -327,13 +327,13 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         const options = [
             {
                 value: NotificationLevels.ALL,
-                label: localizeMessage('user.settings.notifications.allActivity', 'For all activity'),
+                label: localizeMessage({id: 'user.settings.notifications.allActivity', defaultMessage: 'For all activity'}),
             },
             {
                 value: NotificationLevels.MENTION,
-                label: localizeMessage('user.settings.notifications.onlyMentions', 'Only for mentions and direct messages'),
+                label: localizeMessage({id: 'user.settings.notifications.onlyMentions', defaultMessage: 'Only for mentions and direct messages'}),
             },
-            {value: NotificationLevels.NONE, label: localizeMessage('user.settings.notifications.never', 'Never')},
+            {value: NotificationLevels.NONE, label: localizeMessage({id: 'user.settings.notifications.never', defaultMessage: 'Never'})},
         ];
         return (
             <RhsSettingsItem
@@ -353,7 +353,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                         options={options}
                         clearable={false}
                         value={options.filter((opt: { value: string | boolean }) => opt.value === this.state.pushActivity)}
-                        onChange={(e) => this.setStateValue('pushActivity', e?.value)}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        onChange={(e: any) => this.setStateValue('pushActivity', e?.value)}
                         isSearchable={false}
                         menuPortalTarget={document.body}
                         styles={reactStyles}
@@ -429,7 +430,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
             }
         };
 
-        const handleOnChange = (newValues: ValueType<{ label: string; value: string }>) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const handleOnChange = (newValues: any) => {
             const valuesArray = Array.isArray(newValues) ? newValues : [];
             this.setState({keywordsValues: valuesArray}, () => {
                 this.handleSubmit();
@@ -520,15 +522,15 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         const options = [
             {
                 value: Constants.UserStatuses.ONLINE,
-                label: localizeMessage('user.settings.push_notification.online', 'Online, away or offline'),
+                label: localizeMessage({id: 'user.settings.push_notification.online', defaultMessage: 'Online, away or offline'}),
             },
             {
                 value: Constants.UserStatuses.AWAY,
-                label: localizeMessage('user.settings.push_notification.away', 'Away or offline'),
+                label: localizeMessage({id: 'user.settings.push_notification.away', defaultMessage: 'Away or offline'}),
             },
             {
                 value: Constants.UserStatuses.OFFLINE,
-                label: localizeMessage('user.settings.push_notification.offline', 'Offline'),
+                label: localizeMessage({id: 'user.settings.push_notification.offline', defaultMessage: 'Offline'}),
             },
         ];
 
@@ -550,7 +552,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                         options={options}
                         clearable={false}
                         value={options.filter((opt: { value: string | boolean }) => opt.value === this.state.pushStatus)}
-                        onChange={(e) => this.setStateValue('pushStatus', e?.value)}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        onChange={(e: any) => this.setStateValue('pushStatus', e?.value)}
                         isSearchable={false}
                         menuPortalTarget={document.body}
                         styles={reactStyles}
@@ -709,7 +712,7 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         return (
             <RhsSettingsItem
                 key='mentionKeys'
-                title={localizeMessage('user.settings.notifications.wordsTrigger', 'Words That Trigger Mentions')}
+                title={localizeMessage({id: 'user.settings.notifications.wordsTrigger', defaultMessage: 'Words That Trigger Mentions'})}
                 inputs={[
                     <ReactSelect
                         className='react-select settings-select advanced-select'
@@ -736,7 +739,7 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                             onInput={this.handleMentionKeysInput}
                             autoFocus={this.state.customKeysChecked}
                             type='text'
-                            placeholder={localizeMessage('user.settings.notifications.mentionsSubtitle', 'Mentions')}
+                            placeholder={localizeMessage({id: 'user.settings.notifications.mentionsSubtitle', defaultMessage: 'Mentions'})}
                             defaultValue={this.state.customKeys}
                             onFocus={moveCursorToEnd}
                             aria-labelledby='notificationTriggerCustom'
@@ -744,7 +747,7 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                     </div>
                 )}
                 updateSection={this.handleUpdateSection}
-                messageDesc={localizeMessage('user.settings.notifications.mentionsInfo', 'Mentions trigger when someone sends a message that includes your username (@{username}) or any of the options selected above.')}
+                messageDesc={localizeMessage({id: 'user.settings.notifications.mentionsInfo', defaultMessage: 'Mentions trigger when someone sends a message that includes your username (@{username}) or any of the options selected above.'})}
             />
         );
     };
@@ -781,15 +784,15 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                             className={classNames('form-control', {'settings-item__disabled': !this.state.autoResponderActive})}
                             onInput={this.handleAutoResponderInput}
                             type='text'
-                            placeholder={localizeMessage('user.settings.notifications.autoResponderPlaceholder', 'Message')}
+                            placeholder={localizeMessage({id: 'user.settings.notifications.autoResponderPlaceholder', defaultMessage: 'Message'})}
                             autoFocus={this.state.autoResponderActive}
                             onFocus={moveCursorToEnd}
-                            defaultValue={localizeMessage('user.settings.notifications.autoResponderDefault', 'Hello, I am out of office and unable to respond to messages.')}
+                            defaultValue={localizeMessage({id: 'user.settings.notifications.autoResponderDefault', defaultMessage: 'Hello, I am out of office and unable to respond to messages.'})}
                         />
                     </div>
                 )}
                 updateSection={this.handleUpdateSection}
-                messageDesc={localizeMessage('user.settings.notifications.autoResponderHint', 'Set a custom message that will be automatically sent in response to Direct Messages. Mentions in Public and Private Channels will not trigger the automated reply. Enabling Automatic Replies sets your status to Out of Office and disables email and push notifications.')}
+                messageDesc={localizeMessage({id: 'user.settings.notifications.autoResponderHint', defaultMessage: 'Set a custom message that will be automatically sent in response to Direct Messages. Mentions in Public and Private Channels will not trigger the automated reply. Enabling Automatic Replies sets your status to Out of Office and disables email and push notifications.'})}
             />
         );
     };
@@ -798,28 +801,28 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         const options = [
             {
                 value: true,
-                label: localizeMessage('user.settings.notifications.email.unreads', 'For unread mentions and direct messages'),
+                label: localizeMessage({id: 'user.settings.notifications.email.unreads', defaultMessage: 'For unread mentions and direct messages'}),
             },
             {
                 value: false,
-                label: localizeMessage('user.settings.notifications.never', 'Never'),
+                label: localizeMessage({id: 'user.settings.notifications.never', defaultMessage: 'Never'}),
             },
         ];
 
         const frequencyOptions = [
             {
                 value: Preferences.INTERVAL_DAY,
-                label: localizeMessage('user.settings.notifications.email.frequency.daily', 'Once a day'),
+                label: localizeMessage({id: 'user.settings.notifications.email.frequency.daily', defaultMessage: 'Once a day'}),
             },
 
             // Add this delay when it will be available
             /*{
                 value: Constants.EmailNotificationStatuses.FREQUENCY.WITHOUT_WEEKEND,
-                label: localizeMessage('user.settings.notifications.email.frequency.daily.monday.to.friday', 'Once a day (Monday to Friday)'),
+                label: localizeMessage({id: 'user.settings.notifications.email.frequency.daily.monday.to.friday', defaultMessage: 'Once a day (Monday to Friday)'}),
             },*/
             {
                 value: Preferences.INTERVAL_WEEK,
-                label: localizeMessage('user.settings.notifications.email.frequency.weekly', 'Once a week'),
+                label: localizeMessage({id: 'user.settings.notifications.email.frequency.weekly', defaultMessage: 'Once a week'}),
             },
         ];
 
@@ -847,7 +850,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                             options={options}
                             clearable={false}
                             value={options.filter((option) => option.value === (this.state.enableEmail === 'true'))}
-                            onChange={(e) => {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            onChange={(e: any) => {
                                 this.setStateValue('enableEmail', e?.value?.toString());
                                 if (!e?.value) {
                                     this.handleSaveEmailInterval('0');
@@ -881,7 +885,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                                 options={frequencyOptions}
                                 clearable={false}
                                 value={frequencyOptions.filter((opt: { value: number }) => opt.value === this.state.emailInterval)}
-                                onChange={(e) => this.handleSaveEmailInterval(e?.value)}
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                onChange={(e: any) => this.handleSaveEmailInterval(e?.value)}
                                 isSearchable={false}
                                 menuPortalTarget={document.body}
                                 styles={reactToTheTopStyles}

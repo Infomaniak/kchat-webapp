@@ -53,6 +53,7 @@ export default function FileAttachmentList(props: Props) {
                     postId={props.post.id}
                     compactDisplay={compactDisplay}
                     isInPermalink={isInPermalink}
+                    disableActions={props.disableActions}
                 />
             );
         }
@@ -62,10 +63,15 @@ export default function FileAttachmentList(props: Props) {
         );
     }
 
+    if (fileInfos.length === 0) {
+        return null;
+    }
+
     const postFiles = [];
     if (sortedFileInfos && sortedFileInfos.length > 0) {
         for (let i = 0; i < sortedFileInfos.length; i++) {
             const fileInfo = sortedFileInfos[i];
+            const isDeleted = fileInfo.delete_at > 0;
             postFiles.push(
                 <FileAttachment
                     key={fileInfo.id}
@@ -74,6 +80,10 @@ export default function FileAttachmentList(props: Props) {
                     handleImageClick={handleImageClick}
                     compactDisplay={compactDisplay}
                     handleFileDropdownOpened={props.handleFileDropdownOpened}
+                    preventDownload={props.disableDownload}
+                    disableActions={props.disableActions}
+                    disableThumbnail={isDeleted}
+                    disablePreview={isDeleted}
                 />,
             );
         }

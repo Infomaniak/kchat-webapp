@@ -18,7 +18,7 @@ import CallAccept from 'components/widgets/icons/call_accept';
 import CallHangUp from 'components/widgets/icons/call_hang_up';
 
 import {ModalIdentifiers} from 'utils/constants';
-import {ringing, stopRing} from 'utils/notification_sounds';
+import {ring, stopRing} from 'utils/notification_sounds';
 import {isDesktopApp} from 'utils/user_agent';
 
 import type {Conference} from 'types/conference';
@@ -63,43 +63,28 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
         }
     }, [dispatch, conference]);
 
-    if (
-        caller.id in conference?.registrants &&
-        (conference?.registrants[caller.id].status === 'approved' || conference?.registrants[caller.id].status === 'denied')
-    ) {
+    const registrants = conference?.registrants;
+    const callerStatus = caller && registrants?.[caller.id]?.status;
+
+    const isValidCaller = caller && registrants && caller.id in registrants;
+    const isApprovedOrDenied = callerStatus === 'approved' || callerStatus === 'denied';
+
+    if (isValidCaller && isApprovedOrDenied) {
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
     }
 
-    // const handleClickOutsideModal = useCallback((event: any) => {
-    //     if (modalRef.current && !modalRef.current.contains(event.target)) {
-    //         onHandleDecline();
-    //     }
-    // }, [onHandleDecline]);
-
     useEffect(() => {
-        window.addEventListener('offline', () => {
-            onHandleDecline();
-        });
-
-        // document.addEventListener('click', handleClickOutsideModal);
-
-        // const timeout = setTimeout(() => {
-        //     onHandleDecline();
-        // }, 30000);
-
-        // return () => {
-        //     // document.removeEventListener('click', handleClickOutsideModal);
-        //     clearTimeout(timeout);
-        // };
+        window.addEventListener('offline', onHandleDecline);
+        return () => window.removeEventListener('offline', onHandleDecline);
     }, [onHandleDecline]);
 
     useEffect(() => {
-        ringing(isCallerCurrentUser ? 'OutgoingRing' : 'Ring');
+        ring(isCallerCurrentUser ? 'OutgoingRing' : 'Ring');
 
         return () => {
             stopRing();
         };
-    }, []);
+    }, [isCallerCurrentUser]);
 
     useEffect(() => {
         if (!caller && conference) {
@@ -169,6 +154,12 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user}) => {
 
     const Container = isDesktopApp() === false ? GenericModal : 'div';
 
+    // This scenario can occur if the conference ended while the application was offline,
+    // causing this modal to remain visible. Upon websocket reconnection, the conference
+    // state is updated asynchronously, which may lead to a brief instant of undefined conference.
+    if (!conference) {
+        return null;
+    }
     return (
         <Container
             backdrop='static'

@@ -18,19 +18,23 @@ import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import TeamGroupsManageModal from 'components/team_groups_manage_modal';
+import UserSettingsModal from 'components/user_settings/modal';
 import Menu from 'components/widgets/menu/menu';
 
 import {Constants, ModalIdentifiers} from 'utils/constants';
 import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 
 import type {ModalData} from 'types/actions';
-import type {PluginComponent} from 'types/store/plugins';
-
-import {IKConstants} from '../../utils/constants-ik';
+import type {MainMenuAction} from 'types/store/plugins';
 
 // import {trackEvent} from 'actions/telemetry_actions';
 // import LearnAboutTeamsLink from './learn_about_teams_link';
 import './main_menu.scss';
+import {IKConstants} from '../../utils/constants-ik';
+import {
+    reportingToolsOnClick,
+    ReportingToolsLogo,
+} from '../global_header/right_controls/reporting_tools_button/reporting_tools_button';
 
 export type Props = {
     mobile: boolean;
@@ -44,13 +48,15 @@ export type Props = {
     enableIncomingWebhooks: boolean;
     enableOAuthServiceProvider: boolean;
     enableOutgoingWebhooks: boolean;
+    enableReportingTools: boolean;
     canManageSystemBots: boolean;
     canManageIntegrations: boolean;
 
     // experimentalPrimaryTeam?: string;
     // helpLink?: string;
     // reportAProblemLink?: string;
-    pluginMenuItems?: PluginComponent[];
+    moreTeamsToJoin: boolean;
+    pluginMenuItems?: MainMenuAction[];
     isMentionSearch?: boolean;
     isRhsSettings?: boolean;
     teamIsGroupConstrained: boolean;
@@ -92,11 +98,7 @@ export class MainMenu extends React.PureComponent<Props> {
     handleKeyDown = (e: KeyboardEvent): void => {
         if (cmdOrCtrlPressed(e) && e.shiftKey && isKeyPressed(e, Constants.KeyCodes.A)) {
             e.preventDefault();
-            if (this.props.isRhsSettings) {
-                this.props.actions.closeRightHandSide();
-            } else {
-                this.props.actions.showSettings();
-            }
+            this.props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true, focusOriginElement: 'userAccountMenuButton'}});
         }
     };
 
@@ -208,6 +210,15 @@ export class MainMenu extends React.PureComponent<Props> {
                         icon={<i className='fa fa-bookmark'/>}
                         text={formatMessage({id: 'sidebar_right_menu.flagged', defaultMessage: 'Saved messages'})}
                     />
+
+                    {this.props.enableReportingTools && (
+                        <Menu.ItemAction
+                            id='reportingTools'
+                            onClick={reportingToolsOnClick}
+                            icon={<ReportingToolsLogo/>}
+                            text={formatMessage({id: 'sidebar_right_menu.reportingTools', defaultMessage: 'Reporting tools'})}
+                        />
+                    )}
                 </Menu.Group>
                 <Menu.Group>
                     <Menu.ItemAction

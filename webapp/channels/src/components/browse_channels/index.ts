@@ -7,12 +7,19 @@ import type {Dispatch} from 'redux';
 
 import type {Channel} from '@mattermost/types/channels';
 
-import {getChannels, getArchivedChannels, joinChannel, getChannelsMemberCount, searchAllChannels} from 'mattermost-redux/actions/channels';
+import {
+    getChannels,
+    getArchivedChannels,
+    joinChannel,
+    getChannelsMemberCount,
+    searchAllChannels,
+    previewChannel,
+} from 'mattermost-redux/actions/channels';
 import {RequestStatus} from 'mattermost-redux/constants';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getChannelsInCurrentTeam, getMyChannelMemberships, getChannelsMemberCount as getChannelsMemberCountSelector} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeam, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {setGlobalItem} from 'actions/storage';
@@ -46,7 +53,7 @@ const getPrivateChannelsSelector = createSelector(
 );
 
 function mapStateToProps(state: GlobalState) {
-    const team = getCurrentTeam(state) || {};
+    const team = getCurrentTeam(state);
     const getGlobalItem = makeGetGlobalItem(StoragePrefixes.HIDE_JOINED_CHANNELS, 'false');
 
     return {
@@ -54,8 +61,8 @@ function mapStateToProps(state: GlobalState) {
         archivedChannels: getArchivedOtherChannels(state) || [],
         privateChannels: getPrivateChannelsSelector(state) || [],
         currentUserId: getCurrentUserId(state),
-        teamId: team.id,
-        teamName: team.name,
+        teamId: getCurrentTeamId(state),
+        teamName: team?.name,
         channelsRequestStarted: state.requests.channels.getChannels.status === RequestStatus.STARTED,
         canShowArchivedChannels: (getConfig(state).ExperimentalViewArchivedChannels === 'true'),
         myChannelMemberships: getMyChannelMemberships(state) || {},
@@ -63,6 +70,7 @@ function mapStateToProps(state: GlobalState) {
         rhsState: getRhsState(state),
         rhsOpen: getIsRhsOpen(state),
         channelsMemberCount: getChannelsMemberCountSelector(state),
+        currentPack: getCurrentPackName(state),
     };
 }
 
@@ -72,6 +80,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             getChannels,
             getArchivedChannels,
             joinChannel,
+            previewChannel,
             searchAllChannels,
             openModal,
             closeModal,

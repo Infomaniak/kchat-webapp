@@ -8,17 +8,17 @@ import type {Team} from '@mattermost/types/teams.js';
 
 import {Permissions} from 'mattermost-redux/constants';
 
-import ExternalLink from 'components/external_link';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 
+import * as Utils from 'utils/utils';
+
 import BotAccountsIcon from 'images/bot_default_icon.png';
-import IncomingWebhookIcon from 'images/incoming_webhook.jpg';
+import IncomingWebhookIcon from 'images/incoming_webhook.png';
 import OAuthIcon from 'images/oauth_icon.png';
 import OutgoingOAuthConnectionsIcon from 'images/outgoing_oauth_connection.png';
-import OutgoingWebhookIcon from 'images/outgoing_webhook.jpg';
-import SlashCommandIcon from 'images/slash_command_icon.jpg';
-import * as Utils from 'utils/utils';
+import OutgoingWebhookIcon from 'images/outgoing_webhook.png';
+import SlashCommandIcon from 'images/slash_command_icon.png';
 
 import IntegrationOption from './integration_option';
 
@@ -39,7 +39,7 @@ export default class Integrations extends React.PureComponent <Props> {
 
     updateTitle = () => {
         const currentSiteName = this.props.siteName || '';
-        document.title = Utils.localizeMessage('admin.sidebar.integrations', 'Integrations') + ' - ' + this.props.team.display_name + ' ' + currentSiteName;
+        document.title = Utils.localizeMessage({id: 'admin.sidebar.integrations', defaultMessage: 'Integrations'}) + ' - ' + this.props.team.display_name + ' ' + currentSiteName;
     };
 
     render() {

@@ -3,8 +3,9 @@
 
 import React from 'react';
 
-import {renderWithContext, screen} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import AdminUserCard from './admin_user_card';
 

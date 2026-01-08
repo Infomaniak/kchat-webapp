@@ -11,7 +11,7 @@ describe('reducers/entities/groups', () => {
         it('initial state', () => {
             const state = undefined;
             const action = {
-                type: '',
+                type: undefined,
             };
             const expectedState = {
                 syncables: {},
@@ -395,24 +395,6 @@ describe('reducers/entities/groups', () => {
             const newState = reducer(state, receivedMemberToAddAction);
             expect(newState.groups).toEqual(expectedState.groups);
         });
-        it('GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP, without member list', () => {
-            const state = {
-                ...stateTemplate,
-                groups: {
-                    [groupId]: {...groupTemplate, id: groupId, member_count: 0},
-                },
-            };
-
-            const expectedState = {
-                ...stateTemplate,
-                groups: {
-                    [groupId]: {...groupTemplate, id: groupId, member_count: 1},
-                },
-            };
-
-            const newState = reducer(state, receivedMemberToAddAction);
-            expect(newState.groups).toEqual(expectedState.groups);
-        });
         it('GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP, doublon', () => {
             const state = {
                 ...stateTemplate,
@@ -439,24 +421,6 @@ describe('reducers/entities/groups', () => {
                 groups: {
                     [userId]: {...groupTemplate, id: userId, member_ids: [], member_count: 0},
                     [groupId]: {...groupTemplate, id: groupId, member_ids: [], member_count: 0},
-                },
-            };
-
-            const newState = reducer(state, receivedMemberToDelAction);
-            expect(newState.groups).toEqual(expectedState.groups);
-        });
-        it('GroupTypes.RECEIVED_MEMBER_TO_REMOVE_FROM_GROUP, without member list', () => {
-            const state = {
-                ...stateTemplate,
-                groups: {
-                    [groupId]: {...groupTemplate, id: groupId, member_count: 1},
-                },
-            };
-
-            const expectedState = {
-                ...stateTemplate,
-                groups: {
-                    [groupId]: {...groupTemplate, id: groupId, member_count: 0},
                 },
             };
 

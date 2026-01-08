@@ -2,12 +2,12 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {IntlProvider} from 'react-intl';
 
 import type {SystemEmoji} from '@mattermost/types/emojis';
 
-import {render, screen} from 'tests/react_testing_utils';
 import EmojiMap from 'utils/emoji_map';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import EmojiPicker from './emoji_picker';
 
@@ -19,11 +19,6 @@ jest.mock('components/emoji_picker/components/emoji_picker_preview', () => ({emo
 ));
 
 describe('components/emoji_picker/EmojiPicker', () => {
-    const intlProviderProps = {
-        defaultLocale: 'en',
-        locale: 'en',
-    };
-
     const baseProps = {
         filter: '',
         visible: true,
@@ -45,23 +40,19 @@ describe('components/emoji_picker/EmojiPicker', () => {
     };
 
     test('should match snapshot', () => {
-        const {asFragment} = render(
-            <IntlProvider {...intlProviderProps}>
-                <EmojiPicker {...baseProps}/>
-            </IntlProvider>,
+        const {asFragment} = renderWithContext(
+            <EmojiPicker {...baseProps}/>,
         );
 
         expect(asFragment()).toMatchSnapshot();
     });
 
     test('Recent category should not exist if there are no recent emojis', () => {
-        render(
-            <IntlProvider {...intlProviderProps}>
-                <EmojiPicker {...baseProps}/>
-            </IntlProvider>,
+        renderWithContext(
+            <EmojiPicker {...baseProps}/>,
         );
 
-        expect(screen.queryByLabelText('emoji_picker.recent')).toBeNull();
+        expect(screen.queryByLabelText('Recent')).toBeNull();
     });
 
     test('Recent category should exist if there are recent emojis', () => {
@@ -70,27 +61,10 @@ describe('components/emoji_picker/EmojiPicker', () => {
             recentEmojis: ['smile'],
         };
 
-        render(
-            <IntlProvider {...intlProviderProps}>
-                <EmojiPicker {...props}/>
-            </IntlProvider>,
+        renderWithContext(
+            <EmojiPicker {...props}/>,
         );
 
-        expect(screen.queryByLabelText('emoji_picker.recent')).not.toBeNull();
-    });
-
-    test('First emoji should be selected on search', () => {
-        const props = {
-            ...baseProps,
-            filter: 'wave',
-        };
-
-        render(
-            <IntlProvider {...intlProviderProps}>
-                <EmojiPicker {...props}/>
-            </IntlProvider>,
-        );
-
-        expect(screen.queryByText('Preview for wave emoji')).not.toBeNull();
+        expect(screen.queryByLabelText('Recent')).not.toBeNull();
     });
 });

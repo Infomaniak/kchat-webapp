@@ -1,20 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {AnyAction} from 'redux';
 import {combineReducers} from 'redux';
 
-import type {GroupChannel, GroupSyncablesState, GroupTeam, Group} from '@mattermost/types/groups';
+import type {GroupChannel, GroupSyncablesState, GroupTeam, Group, GroupMember} from '@mattermost/types/groups';
 
+import type {MMReduxAction} from 'mattermost-redux/action_types';
 import {GroupTypes} from 'mattermost-redux/action_types';
 
-interface GroupMemberInfo {
-    id: string;
-    group_id: string;
-    user_id: string;
-}
-
-function syncables(state: Record<string, GroupSyncablesState> = {}, action: AnyAction) {
+function syncables(state: Record<string, GroupSyncablesState> = {}, action: MMReduxAction) {
     switch (action.type) {
     case GroupTypes.RECEIVED_GROUP_TEAMS: {
         return {
@@ -147,7 +141,7 @@ function syncables(state: Record<string, GroupSyncablesState> = {}, action: AnyA
     }
 }
 
-function myGroups(state: string[] = [], action: AnyAction) {
+function myGroups(state: string[] = [], action: MMReduxAction) {
     switch (action.type) {
     case GroupTypes.ADD_MY_GROUP: {
         const groupId = action.id;
@@ -191,7 +185,7 @@ function myGroups(state: string[] = [], action: AnyAction) {
     }
 }
 
-function stats(state: any = {}, action: AnyAction) {
+function stats(state: any = {}, action: MMReduxAction) {
     switch (action.type) {
     case GroupTypes.RECEIVED_GROUP_STATS: {
         const stat = action.data;
@@ -205,7 +199,7 @@ function stats(state: any = {}, action: AnyAction) {
     }
 }
 
-function groups(state: Record<string, Group> = {}, action: AnyAction) {
+function groups(state: Record<string, Group> = {}, action: MMReduxAction) {
     switch (action.type) {
     case GroupTypes.CREATE_GROUP_SUCCESS:
     case GroupTypes.PATCHED_GROUP:
@@ -250,15 +244,11 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
         return nextState;
     }
     case GroupTypes.RECEIVED_MEMBER_TO_REMOVE_FROM_GROUP: {
-        const dataInfo: GroupMemberInfo = action.data;
+        const dataInfo: GroupMember = action.data;
 
         const group = state[dataInfo.group_id];
-        if (!group) {
-            // Do not have group in cache - Skipping update
-            return state;
-        }
 
-        if (Array.isArray(group.member_ids)) {
+        if (Array.isArray(group?.member_ids)) {
             const newMemberIds = new Set(group.member_ids);
             newMemberIds.delete(dataInfo.user_id);
             const newGroup = {...group,
@@ -270,26 +260,15 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
                 [group.id]: newGroup,
             };
         }
-        const count = group.member_count;
 
-        return {
-            ...state,
-            [group.id]: {
-                ...group,
-                member_count: count > 1 ? count - 1 : 0,
-            },
-        };
+        return state;
     }
     case GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP: {
-        const {group_id: groupId, user_id: userId}: GroupMemberInfo = action.data;
+        const {group_id: groupId, user_id: userId}: GroupMember = action.data;
 
         const group = state[groupId];
-        if (!group) {
-            // Do not have group in cache - Skipping update
-            return state;
-        }
 
-        if (Array.isArray(group.member_ids)) {
+        if (Array.isArray(group?.member_ids)) {
             const newMemberIds = new Set(group.member_ids);
             newMemberIds.add(userId);
             const newGroup = {...group,
@@ -302,15 +281,7 @@ function groups(state: Record<string, Group> = {}, action: AnyAction) {
             };
         }
 
-        const count = group.member_count;
-
-        return {
-            ...state,
-            [group.id]: {
-                ...group,
-                member_count: count + 1,
-            },
-        };
+        return state;
     }
     default:
         return state;

@@ -114,6 +114,7 @@ describe('channel_info_rhs/about_area_channel', () => {
             id: 'test-c-id',
             header: 'my channel header',
             purpose: 'my channel purpose',
+            create_at: 1609459200000, // 2021-01-01 00:00:00 UTC
         } as Channel,
         channelURL: 'https://my-url.mm',
         canEditChannelProperties: true,

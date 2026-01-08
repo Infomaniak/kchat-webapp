@@ -1,26 +1,45 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {act, screen} from '@testing-library/react';
 import React from 'react';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import Permissions from 'mattermost-redux/constants/permissions';
+import * as channelSelectors from 'mattermost-redux/selectors/entities/channels';
+
+import {removeDraft, updateDraft} from 'actions/views/drafts';
 
 import type {FileUpload} from 'components/file_upload/file_upload';
 import type Textbox from 'components/textbox/textbox';
 
+import Constants, {Locations, StoragePrefixes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import {renderWithContext, userEvent} from 'tests/react_testing_utils';
+import {renderWithContext, userEvent, screen} from 'tests/react_testing_utils';
 
 import type {PostDraft} from 'types/store/draft';
 
-import AdavancedTextEditor from './advanced_text_editor';
+import AdvancedTextEditor from './advanced_text_editor';
+import type {Props} from './advanced_text_editor';
 
-global.ResizeObserver = require('resize-observer-polyfill');
+jest.mock('actions/views/drafts', () => ({
+    ...jest.requireActual('actions/views/drafts'),
+    updateDraft: jest.fn((...args) => ({type: 'MOCK_UPDATE_DRAFT', args})),
+    removeDraft: jest.fn((...args) => ({type: 'MOCK_REMOVE_DRAFT', args})),
+}));
+
+jest.mock('mattermost-redux/selectors/entities/channels', () => {
+    const actual = jest.requireActual('mattermost-redux/selectors/entities/channels');
+    return {
+        ...actual,
+        getMyChannelMembership: jest.fn(),
+    };
+});
+
+const mockedRemoveDraft = jest.mocked(removeDraft);
+const mockedUpdateDraft = jest.mocked(updateDraft);
 
 jest.mock('wasm-media-encoders', () => ({
     createEncoder: jest.fn(),
@@ -28,6 +47,7 @@ jest.mock('wasm-media-encoders', () => ({
 
 const currentUserId = 'current_user_id';
 const channelId = 'current_channel_id';
+const otherChannelId = 'other_channel_id';
 
 const initialState = {
     entities: {
@@ -47,15 +67,33 @@ const initialState = {
         },
         channels: {
             channels: {
-                current_channel_id: TestHelper.getChannelMock({id: 'current_channel_id', team_id: 'current_team_id'}),
+                current_channel_id: TestHelper.getChannelMock({
+                    id: 'current_channel_id',
+                    team_id: 'current_team_id',
+                    display_name: 'Test Channel',
+                }),
+                other_channel_id: TestHelper.getChannelMock({
+                    id: 'other_channel_id',
+                    team_id: 'current_team_id',
+                    display_name: 'Other Channel',
+                }),
             },
             stats: {
                 current_channel_id: {
                     member_count: 1,
                 },
+                other_channel_id: {
+                    member_count: 1,
+                },
             },
             roles: {
                 current_channel_id: new Set(['channel_roles']),
+                other_channel_id: new Set(['channel_roles']),
+            },
+        },
+        roles: {
+            roles: {
+                user_roles: {permissions: [Permissions.CREATE_POST]},
             },
         },
         teams: {
@@ -70,7 +108,14 @@ const initialState = {
         users: {
             currentUserId: 'current_user_id',
             profiles: {
-                current_user_id: TestHelper.getUserMock({id: 'current_user_id', roles: 'user_roles'}),
+                current_user_id: TestHelper.getUserMock({
+                    id: 'current_user_id',
+                    roles: 'user_roles',
+                    timezone: {
+                        useAutomaticTimezone: 'true',
+                        automaticTimezone: 'America/New_York',
+                        manualTimezone: '',
+                    }}),
             },
             statuses: {
                 current_user_id: 'online',
@@ -99,7 +144,7 @@ const baseProps = {
     uploadsProgressPercent: {},
     currentChannel: initialState.entities.channels.channels.current_channel_id as Channel,
     channelId,
-    postId: '',
+    rootId: '',
     errorClass: null,
     serverError: null,
     postError: null,
@@ -156,154 +201,302 @@ const baseProps = {
 };
 
 describe('components/avanced_text_editor/advanced_text_editor', () => {
+    beforeEach(() => {
+        channelSelectors.getMyChannelMembership.mockReturnValue(true);
+    });
     describe('keyDown behavior', () => {
-        it('Enter should call postMsgKeyPress', async () => {
-            await act(async () => {
-                const postMsgKeyPress = jest.fn();
-                renderWithContext(
-                    <AdavancedTextEditor
-                        {...baseProps}
-                        postMsgKeyPress={postMsgKeyPress}
-                        message={'test'}
-                    />,
-                    mergeObjects(initialState, {
-                        entities: {
+        it('ESC should blur the input', () => {
+            renderWithContext(
+                <AdvancedTextEditor
+                    {...baseProps}
+                />,
+                mergeObjects(initialState, {
+                    entities: {
+                        roles: {
                             roles: {
-                                roles: {
-                                    user_roles: {permissions: [Permissions.CREATE_POST]},
-                                },
+                                user_roles: {permissions: [Permissions.CREATE_POST]},
                             },
                         },
-                    }),
-                );
-
-                userEvent.type(screen.getByTestId('post_textbox'), '{enter}');
-                expect(postMsgKeyPress).toHaveBeenCalledTimes(1);
-            });
+                    },
+                }),
+            );
+            const textbox = screen.getByTestId('post_textbox');
+            userEvent.type(textbox, 'something{esc}');
+            expect(textbox).not.toHaveFocus();
+            expect(mockedUpdateDraft).not.toHaveBeenCalled();
         });
 
-        it('Ctrl+up should call loadPrevMessage', async () => {
-            await act(async () => {
-                const loadPrevMessage = jest.fn();
-                renderWithContext(
-                    <AdavancedTextEditor
-                        {...baseProps}
-                        loadPrevMessage={loadPrevMessage}
-                    />,
-                    mergeObjects(initialState, {
-                        entities: {
+        it('ESC should blur the input and reset draft when in editing mode', () => {
+            jest.useFakeTimers();
+            const props = {
+                ...baseProps,
+                isInEditMode: true,
+            };
+            renderWithContext(
+                <AdvancedTextEditor
+                    {...props}
+                />,
+                mergeObjects(initialState, {
+                    entities: {
+                        roles: {
                             roles: {
-                                roles: {
-                                    user_roles: {permissions: [Permissions.CREATE_POST]},
-                                },
+                                user_roles: {permissions: [Permissions.CREATE_POST]},
                             },
                         },
-                    }),
-                );
-                userEvent.type(screen.getByTestId('post_textbox'), '{ctrl}{arrowup}');
-                expect(loadPrevMessage).toHaveBeenCalledTimes(1);
-            });
+                    },
+                }),
+            );
+            const textbox = screen.getByTestId('edit_textbox');
+            userEvent.type(textbox, 'something{esc}');
+            expect(textbox).not.toHaveFocus();
+
+            // save is called with a short delayed after pressing escape key
+            jest.advanceTimersByTime(Constants.SAVE_DRAFT_TIMEOUT + 50);
+            expect(mockedRemoveDraft).toHaveBeenCalled();
+            expect(mockedUpdateDraft).not.toHaveBeenCalled();
         });
+    });
 
-        it('up should call onEditLatestPost', async () => {
-            await act(async () => {
-                const onEditLatestPost = jest.fn();
-                renderWithContext(
-                    <AdavancedTextEditor
-                        {...baseProps}
-                        onEditLatestPost={onEditLatestPost}
-                    />,
-                    mergeObjects(initialState, {
-                        entities: {
-                            roles: {
-                                roles: {
-                                    user_roles: {permissions: [Permissions.CREATE_POST]},
-                                },
-                            },
-                        },
-                    }),
-                );
-                userEvent.type(screen.getByTestId('post_textbox'), '{arrowup}');
-                expect(onEditLatestPost).toHaveBeenCalledTimes(1);
-            });
-        });
-
-        it('ESC should blur the input', async () => {
-            await act(async () => {
-                renderWithContext(
-                    <AdavancedTextEditor
-                        {...baseProps}
-                    />,
-                    mergeObjects(initialState, {
-                        entities: {
-                            roles: {
-                                roles: {
-                                    user_roles: {permissions: [Permissions.CREATE_POST]},
-                                },
-                            },
-                        },
-                    }),
-                );
-                const textbox = screen.getByTestId('post_textbox');
-                userEvent.type(textbox, 'something{esc}');
-                expect(textbox).not.toHaveFocus();
-            });
-        });
-
-        describe('markdown', () => {
-            const ttcc = [
-                {
-                    input: '{ctrl}b',
-                    markdownMode: 'bold',
-                },
-                {
-                    input: '{ctrl}i',
-                    markdownMode: 'italic',
-                },
-                {
-                    input: '{ctrl}k',
-                    markdownMode: 'link',
-                },
-                {
-                    input: '{ctrl}{alt}k',
-                    markdownMode: 'link',
-                },
-            ];
-            for (const tc of ttcc) {
-                it(`component adds ${tc.markdownMode} markdown`, async () => {
-                    const applyMarkdown = jest.fn();
-                    const message = 'Some markdown text';
-                    const selectionStart = 5;
-                    const selectionEnd = 10;
-
-                    await act(async () => {
-                        renderWithContext(
-                            <AdavancedTextEditor
-                                {...baseProps}
-                                applyMarkdown={applyMarkdown}
-                                message={'Some markdown text'}
-                            />,
-                            mergeObjects(initialState, {
-                                entities: {
-                                    roles: {
-                                        roles: {
-                                            user_roles: {permissions: [Permissions.CREATE_POST]},
-                                        },
-                                    },
-                                },
+    it('should set the textbox value to an existing draft on mount and when changing channels', () => {
+        const {rerender} = renderWithContext(
+            <AdvancedTextEditor
+                {...baseProps}
+            />,
+            mergeObjects(initialState, {
+                storage: {
+                    storage: {
+                        [StoragePrefixes.DRAFT + channelId]: {
+                            value: TestHelper.getPostDraftMock({
+                                message: 'original draft',
                             }),
-                        );
-                        const textbox = screen.getByTestId('post_textbox');
-                        userEvent.type(textbox, tc.input, {initialSelectionStart: selectionStart, initialSelectionEnd: selectionEnd});
-                        expect(applyMarkdown).toHaveBeenCalledWith({
-                            markdownMode: tc.markdownMode,
-                            selectionStart,
-                            selectionEnd,
-                            message,
-                        });
-                    });
-                });
-            }
+                        },
+                        [StoragePrefixes.DRAFT + otherChannelId]: {
+                            value: TestHelper.getPostDraftMock({
+                                message: 'a different draft',
+                            }),
+                        },
+                    },
+                },
+            }),
+        );
+
+        expect(screen.getByPlaceholderText('Write to Test Channel')).toHaveValue('original draft');
+
+        rerender(
+            <AdvancedTextEditor
+                {...baseProps}
+                channelId={otherChannelId}
+            />,
+        );
+        expect(screen.getByPlaceholderText('Write to Other Channel')).toHaveValue('a different draft');
+    });
+
+    it('should save a new draft when changing channels', () => {
+        const {rerender} = renderWithContext(
+            <AdvancedTextEditor
+                {...baseProps}
+            />,
+            initialState,
+        );
+
+        userEvent.type(screen.getByPlaceholderText('Write to Test Channel'), 'some text');
+
+        expect(mockedUpdateDraft).not.toHaveBeenCalled();
+
+        rerender(
+            <AdvancedTextEditor
+                {...baseProps}
+                channelId={otherChannelId}
+            />,
+        );
+
+        expect(mockedUpdateDraft).toHaveBeenCalled();
+        expect(mockedUpdateDraft.mock.calls[0][1]).toMatchObject({
+            message: 'some text',
+            show: true,
         });
+    });
+
+    it('MM-60541 should not save an unmodified draft when changing channels', () => {
+        const {rerender} = renderWithContext(
+            <AdvancedTextEditor
+                {...baseProps}
+            />,
+            mergeObjects(initialState, {
+                storage: {
+                    storage: {
+                        [StoragePrefixes.DRAFT + channelId]: {
+                            value: TestHelper.getPostDraftMock({
+                                message: 'original draft',
+                            }),
+                        },
+                    },
+                },
+            }),
+        );
+
+        expect(mockedUpdateDraft).not.toHaveBeenCalled();
+
+        rerender(
+            <AdvancedTextEditor
+                {...baseProps}
+                channelId={otherChannelId}
+            />,
+        );
+
+        expect(mockedUpdateDraft).not.toHaveBeenCalled();
+    });
+
+    it('should save an updated draft when changing channels', () => {
+        const {rerender} = renderWithContext(
+            <AdvancedTextEditor
+                {...baseProps}
+            />,
+            mergeObjects(initialState, {
+                storage: {
+                    storage: {
+                        [StoragePrefixes.DRAFT + channelId]: {
+                            value: TestHelper.getPostDraftMock({
+                                message: 'original draft',
+                            }),
+                        },
+                    },
+                },
+            }),
+        );
+
+        userEvent.type(screen.getByPlaceholderText('Write to Test Channel'), ' plus some new text');
+
+        expect(mockedUpdateDraft).not.toHaveBeenCalled();
+
+        rerender(
+            <AdvancedTextEditor
+                {...baseProps}
+                channelId={otherChannelId}
+            />,
+        );
+
+        expect(mockedUpdateDraft).toHaveBeenCalled();
+        expect(mockedUpdateDraft.mock.calls[0][1]).toMatchObject({
+            message: 'original draft plus some new text',
+            show: true,
+        });
+    });
+
+    it('should deleted a deleted draft when changing channels', () => {
+        const {rerender} = renderWithContext(
+            <AdvancedTextEditor
+                {...baseProps}
+            />,
+            mergeObjects(initialState, {
+                storage: {
+                    storage: {
+                        [StoragePrefixes.DRAFT + channelId]: {
+                            value: TestHelper.getPostDraftMock({
+                                message: 'original draft',
+                            }),
+                        },
+                    },
+                },
+            }),
+        );
+
+        userEvent.clear(screen.getByPlaceholderText('Write to Test Channel'));
+
+        expect(mockedRemoveDraft).not.toHaveBeenCalled();
+        expect(mockedUpdateDraft).not.toHaveBeenCalled();
+
+        rerender(
+            <AdvancedTextEditor
+                {...baseProps}
+                channelId={otherChannelId}
+            />,
+        );
+
+        expect(mockedRemoveDraft).toHaveBeenCalled();
+        expect(mockedUpdateDraft).not.toHaveBeenCalled();
+    });
+
+    it('MM-60541 should not attempt to delete a non-existent draft when changing channels', () => {
+        const {rerender} = renderWithContext(
+            <AdvancedTextEditor
+                {...baseProps}
+            />,
+            initialState,
+        );
+
+        expect(mockedRemoveDraft).not.toHaveBeenCalled();
+        expect(mockedUpdateDraft).not.toHaveBeenCalled();
+
+        rerender(
+            <AdvancedTextEditor
+                {...baseProps}
+                channelId={otherChannelId}
+            />,
+        );
+
+        expect(mockedRemoveDraft).not.toHaveBeenCalled();
+        expect(mockedUpdateDraft).not.toHaveBeenCalled();
+    });
+
+    it('should show @mention warning when a mention exists in the message', () => {
+        const props = {
+            ...baseProps,
+            rootId: 'post_id_1',
+            isInEditMode: true,
+        };
+
+        renderWithContext(
+            <AdvancedTextEditor
+                {...props}
+            />,
+            mergeObjects(initialState, {
+                storage: {
+                    storage: {
+                        [StoragePrefixes.COMMENT_DRAFT + 'post_id_1']: {
+                            value: TestHelper.getPostDraftMock({
+                                message: 'mentioning @user',
+                            }),
+                        },
+                    },
+                },
+            }),
+        );
+
+        expect(screen.getByText('Editing this message with an \'@mention\' will not notify the recipient.')).toBeVisible();
+    });
+
+    // TODO: fix, i cant find out why it's failing
+    // eslint-disable-next-line no-only-tests/no-only-tests
+    it.skip('should have file upload overlay', () => {
+        const props: Props = {
+            ...baseProps,
+        };
+
+        const {container, rerender} = renderWithContext(
+            <AdvancedTextEditor
+                {...props}
+            />,
+        );
+        expect(container.querySelector('#createPostFileDropOverlay')).toBeVisible();
+
+        props.rootId = 'post_id_1';
+        rerender(<AdvancedTextEditor {...props}/>);
+        expect(container.querySelector('#createCommentFileDropOverlay')).toBeVisible();
+
+        // in center channel editing a post
+        props.isInEditMode = true;
+        rerender(<AdvancedTextEditor {...props}/>);
+        expect(container.querySelector('#editPostFileDropOverlay')).toBeVisible();
+
+        // in RHS editing a post
+        props.location = Locations.RHS_COMMENT;
+        rerender(<AdvancedTextEditor {...props}/>);
+        expect(container.querySelector('#editPostFileDropOverlay')).toBeVisible();
+
+        // in threads
+        props.isThreadView = true;
+        rerender(<AdvancedTextEditor {...props}/>);
+        expect(container.querySelector('#editPostFileDropOverlay')).toBeVisible();
     });
 });

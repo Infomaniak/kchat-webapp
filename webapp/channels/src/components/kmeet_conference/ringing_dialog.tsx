@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {GenericModal} from '@mattermost/components';
 import type {UserProfile} from '@mattermost/types/users';
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {hangUpCall, joinCallInChannel} from 'actions/calls';
@@ -107,6 +108,8 @@ function DialingModal({toneTimeOut}: PropsType) {
                     </div>
                 </>
             );
+        default:
+            return null;
         }
     };
     const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
@@ -124,9 +127,6 @@ function DialingModal({toneTimeOut}: PropsType) {
                         userIds={getUsersForOverlay().map((usr) => usr.id)}
                         size='xl'
                         totalUsers={users.length}
-                        disableProfileOverlay={true}
-                        disablePopover={true}
-                        disableButton={true}
                     />
                 </div>
                 <div className='content-calling'>

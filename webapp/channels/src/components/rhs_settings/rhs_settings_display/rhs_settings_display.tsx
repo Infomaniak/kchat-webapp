@@ -24,7 +24,6 @@ import ManageTimezones from 'components/user_settings/display/manage_timezones';
 
 import Constants from 'utils/constants';
 import {t} from 'utils/i18n';
-import {getBrowserTimezone} from 'utils/timezone';
 import {localizeMessage} from 'utils/utils';
 
 import SvgCompactIcon from '../rhs_settings_compact/assets/SvgCompactIcon';
@@ -105,7 +104,7 @@ type CustomBtnSelectProps ={
     hasBottomBorder?: boolean;
 }
 
-type Props = {
+export type Props = {
     user: UserProfile;
     updateSection: (section: string) => void;
     activeSection?: string;
@@ -377,8 +376,13 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
     handleOnChange(display: {[key: string]: any}) {
         this.handleSubmit({...this.state, ...display});
     }
-    handleOnTimezoneChange: ComponentProps<typeof ManageTimezones>['onChange'] = (timezone, xd) => {
+
+    // @ts-expect-error this seems wrong  as props is OnChangeActions but to minimize changed i only silented it
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    handleOnTimezoneChange: ComponentProps<typeof ManageTimezones>['onChange'] = (timezone: any, xd: any) => {
+        // eslint-disable-next-line no-console
         console.log(timezone);
+        // eslint-disable-next-line no-console
         console.log(xd);
         this.handleOnChange({timezone: {
             useAutomaticTimezone: timezone.useAutomaticTimezone.toString(),
@@ -527,7 +531,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                         id={display}
                         options={options}
                         clearable={false}
-                        onChange={(e) => this.handleOnChange({[display]: e.value})}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        onChange={(e: any) => this.handleOnChange({[display]: e?.value})}
                         value={options.filter((opt: { value: string | boolean }) => opt.value === value)}
                         isSearchable={false}
                         styles={reactStyles}
@@ -691,11 +696,11 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             options: [
                 {
                     value: Preferences.MESSAGE_DISPLAY_CLEAN,
-                    label: localizeMessage('user.settings.display.messageDisplayClean', 'Standard'),
+                    label: localizeMessage({id: 'user.settings.display.messageDisplayClean', defaultMessage: 'Standard'}),
                     icon: <SvgNoCompactIcon/>},
                 {
                     value: Preferences.MESSAGE_DISPLAY_COMPACT,
-                    label: localizeMessage('user.settings.display.messageDisplayCompact', 'Compact'),
+                    label: localizeMessage({id: 'user.settings.display.messageDisplayCompact', defaultMessage: 'Compact'}),
                     icon: <SvgCompactIcon/>,
                     childOption: {
                         id: t('user.settings.display.colorize'),
@@ -725,8 +730,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 message: 'Channel Display',
             },
             options: [
-                {value: Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN, label: localizeMessage('user.settings.display.fullScreen', 'Full width')},
-                {value: Preferences.CHANNEL_DISPLAY_MODE_CENTERED, label: localizeMessage('user.settings.display.fixedWidthCentered', 'Fixed width, centered')},
+                {value: Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN, label: localizeMessage({id: 'user.settings.display.fullScreen', defaultMessage: 'Full width'})},
+                {value: Preferences.CHANNEL_DISPLAY_MODE_CENTERED, label: localizeMessage({id: 'user.settings.display.fixedWidthCentered', defaultMessage: 'Fixed width, centered'})},
             ],
             description: {
                 id: t('user.settings.display.channeldisplaymode'),
@@ -744,8 +749,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 message: 'Scroll position when viewing an unread channel',
             },
             options: [
-                {value: Preferences.UNREAD_SCROLL_POSITION_START_FROM_LEFT, label: localizeMessage('user.settings.advance.startFromLeftOff', 'Start me where I left off')},
-                {value: Preferences.UNREAD_SCROLL_POSITION_START_FROM_NEWEST, label: localizeMessage('user.settings.advance.startFromNewest', 'Start me at the newest message')},
+                {value: Preferences.UNREAD_SCROLL_POSITION_START_FROM_LEFT, label: localizeMessage({id: 'user.settings.advance.startFromLeftOff', defaultMessage: 'Start me where I left off'})},
+                {value: Preferences.UNREAD_SCROLL_POSITION_START_FROM_NEWEST, label: localizeMessage({id: 'user.settings.advance.startFromNewest', defaultMessage: 'Start me at the newest message'})},
             ],
         });
 
@@ -833,8 +838,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 message: 'Clock Display',
             },
             options: [
-                {value: 'false', label: localizeMessage('user.settings.display.normalClock', '12-hour clock (example: 4:00 PM)')},
-                {value: 'true', label: localizeMessage('user.settings.display.militaryClock', '24-hour clock (example: 16:00)')},
+                {value: 'false', label: localizeMessage({id: 'user.settings.display.normalClock', defaultMessage: '12-hour clock (example: 4:00 PM)'})},
+                {value: 'true', label: localizeMessage({id: 'user.settings.display.militaryClock', defaultMessage: '24-hour clock (example: 16:00)'})},
             ],
             description: {
                 id: t('user.settings.display.preferTime'),
@@ -852,10 +857,10 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 message: 'Teammate Name Display',
             },
             options: [
-                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME, label: localizeMessage('user.settings.display.teammateNameDisplayUsername', 'Show username')},
+                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME, label: localizeMessage({id: 'user.settings.display.teammateNameDisplayUsername', defaultMessage: 'Show username'})},
 
-                // {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayNicknameFullname', 'Show nickname if one exists, otherwise show first and last name')},
-                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayFullname', 'Show first and last name')},
+                // {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage({id: 'user.settings.display.teammateNameDisplayNicknameFullname', defaultMessage: 'Show nickname if one exists, otherwise show first and last name'})},
+                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME, label: localizeMessage({id: 'user.settings.display.teammateNameDisplayFullname', defaultMessage: 'Show first and last name'})},
             ],
             description: {
                 id: t('user.settings.display.teammateNameDisplayDescription'),

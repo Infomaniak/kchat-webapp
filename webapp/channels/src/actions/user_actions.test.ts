@@ -1,8 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import TestHelper from 'packages/mattermost-redux/test/test_helper';
-import mockStore from 'tests/test_store';
+import type {Dispatch, AnyAction} from 'redux';
 
 import type {Channel, ChannelMembership, ChannelMessageCount} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
@@ -15,6 +14,9 @@ import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
 import * as UserActions from 'actions/user_actions';
 import store from 'stores/redux_store';
+
+import TestHelper from 'packages/mattermost-redux/test/test_helper';
+import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
 
@@ -601,8 +603,8 @@ describe('Actions.User', () => {
         } as unknown as GlobalState;
 
         const testStore = mockStore(state);
-        store.getState.mockImplementation(testStore.getState);
-        store.dispatch.mockImplementation(testStore.dispatch);
+        (store.getState as jest.MockedFunction<() => GlobalState>).mockImplementation(testStore.getState);
+        (store.dispatch as jest.MockedFunction<Dispatch<AnyAction>>).mockImplementation(testStore.dispatch);
         const actions = testStore.getActions();
 
         await UserActions.loadProfilesForGM();

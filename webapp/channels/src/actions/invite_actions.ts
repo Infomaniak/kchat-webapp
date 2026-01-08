@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {defineMessage} from 'react-intl';
+
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {TeamMemberWithError, TeamInviteWithError} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
@@ -11,17 +13,17 @@ import * as TeamActions from 'mattermost-redux/actions/teams';
 import {getChannelMembersInChannels, getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {getTeamMember} from 'mattermost-redux/selectors/entities/teams';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {addUsersToTeam} from 'actions/team_actions';
 import {getIsRhsOpen} from 'selectors/rhs';
 
+import type {InviteResult} from 'components/invitation_modal/result_table';
 import type {InviteResults} from 'components/invitation_modal/result_view';
 
 import {ConsolePages} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
+
+import type {DispatchFunc, ActionFuncAsync} from 'types/store';
 
 export function sendMembersInvites(teamId: string, users: UserProfile[], emails: string[]): ActionFuncAsync<InviteResults> {
     return async (dispatch, getState) => {
@@ -35,9 +37,21 @@ export function sendMembersInvites(teamId: string, users: UserProfile[], emails:
         for (const user of users) {
             const member = getTeamMember(state, teamId, user.id);
             if (isGuest(user.roles)) {
-                notSent.push({user, reason: localizeMessage('invite.members.user-is-guest', 'Contact your admin to make this guest a full member.')});
+                notSent.push({
+                    user,
+                    reason: defineMessage({
+                        id: 'invite.members.user-is-guest',
+                        defaultMessage: 'Contact your admin to make this guest a full member.',
+                    }),
+                });
             } else if (member) {
-                notSent.push({user, reason: localizeMessage('invite.members.already-member', 'This person is already a team member.')});
+                notSent.push({
+                    user,
+                    reason: defineMessage({
+                        id: 'invite.members.already-member',
+                        defaultMessage: 'This person is already a team member.',
+                    }),
+                });
             } else {
                 usersToAdd.push(user);
             }
@@ -53,9 +67,18 @@ export function sendMembersInvites(teamId: string, users: UserProfile[], emails:
                 for (const userToAdd of usersToAdd) {
                     const memberWithError = members.find((m: TeamMemberWithError) => m.user_id === userToAdd.id && m.error);
                     if (memberWithError) {
-                        notSent.push({user: userToAdd, reason: memberWithError.error.message});
+                        notSent.push({
+                            user: userToAdd,
+                            reason: memberWithError.error.message,
+                        });
                     } else {
-                        sent.push({user: userToAdd, reason: localizeMessage('invite.members.added-to-team', 'This member has been added to the team.')});
+                        sent.push({
+                            user: userToAdd,
+                            reason: defineMessage({
+                                id: 'invite.members.added-to-team',
+                                defaultMessage: 'This member has been added to the team.',
+                            }),
+                        });
                     }
                 }
             }
@@ -68,17 +91,28 @@ export function sendMembersInvites(teamId: string, users: UserProfile[], emails:
                 response = {
                     data: emails.map((email) => ({
                         email,
-                        error: {error: localizeMessage('invite.members.unable-to-add-the-user-to-the-team', 'Unable to add the user to the team.')},
+                        error: {
+                            error: defineMessage({
+                                id: 'invite.members.unable-to-add-the-user-to-the-team',
+                                defaultMessage: 'Unable to add the user to the team.',
+                            }),
+                        },
                     })) as unknown as TeamInviteWithError[],
                 };
             }
             const invitesWithErrors = response.data || [];
             if (response.error) {
                 if (response.error.server_error_id === 'app.email.rate_limit_exceeded.app_error') {
-                    response.error.message = localizeMessage('invite.rate-limit-exceeded', 'Invite emails rate limit exceeded.');
+                    response.error.message = defineMessage({
+                        id: 'invite.rate-limit-exceeded',
+                        defaultMessage: 'Invite emails rate limit exceeded.',
+                    });
                 }
                 for (const email of emails) {
-                    notSent.push({email, reason: response.error.message});
+                    notSent.push({
+                        email,
+                        reason: response.error.message,
+                    });
                 }
             } else {
                 for (const email of emails) {
@@ -86,16 +120,25 @@ export function sendMembersInvites(teamId: string, users: UserProfile[], emails:
                     if (inviteWithError && inviteWithError.error.id === 'api.team.invite_members.unable_to_send_email_with_defaults.app_error' && isCurrentUserSystemAdmin(state)) {
                         notSent.push({
                             email,
-                            reason: {
-                                id: t('admin.environment.smtp.smtpFailure'),
-                                message: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
-                            },
+                            reason: defineMessage({
+                                id: 'admin.environment.smtp.smtpFailure',
+                                defaultMessage: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
+                            }),
                             path: ConsolePages.SMTP,
                         });
                     } else if (inviteWithError) {
-                        notSent.push({email, reason: inviteWithError.error.message});
+                        notSent.push({
+                            email,
+                            reason: inviteWithError.error.message,
+                        });
                     } else {
-                        sent.push({email, reason: localizeMessage('invite.members.invite-sent', 'An invitation email has been sent.')});
+                        sent.push({
+                            email,
+                            reason: defineMessage({
+                                id: 'invite.members.invite-sent',
+                                defaultMessage: 'An invitation email has been sent.',
+                            }),
+                        });
                     }
                 }
             }
@@ -115,9 +158,17 @@ export async function sendGuestInviteForUser(
     teamId: string,
     channels: Channel[],
     members: RelationOneToOne<Channel, Record<string, ChannelMembership>>,
-) {
+): Promise<({sent: InviteResult} | {notSent: InviteResult})> {
     if (!isGuest(user.roles)) {
-        return {notSent: {user, reason: localizeMessage('invite.members.user-is-not-guest', 'This person is already a member.')}};
+        return {
+            notSent: {
+                user,
+                reason: defineMessage({
+                    id: 'invite.members.user-is-not-guest',
+                    defaultMessage: 'This person is already a member of the workspace. Invite them as a member instead of a guest.',
+                }),
+            },
+        };
     }
     let memberOfAll = true;
     let memberOfAny = false;
@@ -132,7 +183,15 @@ export async function sendGuestInviteForUser(
     }
 
     if (memberOfAll) {
-        return {notSent: {user, reason: localizeMessage('invite.guests.already-all-channels-member', 'This person is already a member of all the channels.')}};
+        return {
+            notSent: {
+                user,
+                reason: defineMessage({
+                    id: 'invite.guests.already-all-channels-member',
+                    defaultMessage: 'This person is already a member of all the channels.',
+                }),
+            },
+        };
     }
 
     try {
@@ -144,13 +203,40 @@ export async function sendGuestInviteForUser(
             }
         }
     } catch (e) {
-        return {notSent: {user, reason: localizeMessage('invite.guests.unable-to-add-the-user-to-the-channels', 'Unable to add the guest to the channels.')}};
+        return {
+            notSent: {
+                user,
+                reason: defineMessage({
+                    id: 'invite.guests.unable-to-add-the-user-to-the-channels',
+                    defaultMessage: 'Unable to add the guest to the channels.',
+                }),
+            },
+        };
     }
 
     if (memberOfAny) {
-        return {notSent: {user, reason: localizeMessage('invite.guests.already-some-channels-member', 'This person is already a member of some of the channels.')}};
+        return {
+            notSent: {
+                user,
+                reason: defineMessage({
+                    id: 'invite.guests.already-some-channels-member',
+                    defaultMessage: 'This person is already a member of some of the channels.',
+                }),
+            },
+        };
     }
-    return {sent: {user, reason: {id: t('invite.guests.new-member'), message: 'This guest has been added to the team and {count, plural, one {channel} other {channels}}.', values: {count: channels.length}}}};
+    return {
+        sent: {
+            user,
+            reason: defineMessage({
+                id: 'invite.guests.new-member',
+                defaultMessage: 'This guest has been added to the team and {count, plural, one {channel} other {channels}}.',
+                values: {
+                    count: channels.length,
+                },
+            }),
+        },
+    };
 }
 
 export function sendGuestsInvites(
@@ -168,10 +254,10 @@ export function sendGuestsInvites(
         const results = await Promise.all(users.map((user) => sendGuestInviteForUser(dispatch, user, teamId, channels, members)));
 
         for (const result of results) {
-            if (result.sent) {
+            if ('sent' in result && result.sent) {
                 sent.push(result.sent);
             }
-            if (result.notSent) {
+            if ('notSent' in result && result.notSent) {
                 notSent.push(result.notSent);
             }
         }
@@ -189,17 +275,28 @@ export function sendGuestsInvites(
                 response = {
                     data: emails.map((email) => ({
                         email,
-                        error: {error: localizeMessage('invite.guests.unable-to-add-the-user-to-the-channels', 'Unable to add the guest to the channels.')},
+                        error: {
+                            error: defineMessage({
+                                id: 'invite.guests.unable-to-add-the-user-to-the-channels',
+                                defaultMessage: 'Unable to add the guest to the channels.',
+                            }),
+                        },
                     })) as unknown as TeamInviteWithError[],
                 };
             }
 
             if (response.error) {
                 if (response.error.server_error_id === 'app.email.rate_limit_exceeded.app_error') {
-                    response.error.message = localizeMessage('invite.rate-limit-exceeded', 'Invite emails rate limit exceeded.');
+                    response.error.message = defineMessage({
+                        id: 'invite.rate-limit-exceeded',
+                        defaultMessage: 'Invite emails rate limit exceeded.',
+                    });
                 }
                 for (const email of emails) {
-                    notSent.push({email, reason: response.error.message});
+                    notSent.push({
+                        email,
+                        reason: response.error.message,
+                    });
                 }
             } else {
                 for (const res of (response.data || [])) {
@@ -207,22 +304,36 @@ export function sendGuestsInvites(
                         if (res.error.id === 'api.team.invite_members.unable_to_send_email_with_defaults.app_error' && isCurrentUserSystemAdmin(state)) {
                             notSent.push({
                                 email: res.email,
-                                reason: {
-                                    id: t('admin.environment.smtp.smtpFailure'),
-                                    message: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
-                                },
+                                reason: defineMessage({
+                                    id: 'admin.environment.smtp.smtpFailure',
+                                    defaultMessage: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
+                                }),
                                 path: ConsolePages.SMTP,
                             });
                         } else {
-                            notSent.push({email: res.email, reason: res.error.message});
+                            notSent.push({
+                                email: res.email,
+                                reason: res.error.message,
+                            });
                         }
                     } else {
-                        sent.push({email: res.email, reason: localizeMessage('invite.guests.added-to-channel', 'An invitation email has been sent.')});
+                        sent.push({
+                            email: res.email,
+                            reason: defineMessage({
+                                id: 'invite.guests.added-to-channel',
+                                defaultMessage: 'An invitation email has been sent.',
+                            }),
+                        });
                     }
                 }
             }
         }
-        return {data: {sent, notSent}};
+        return {
+            data: {
+                sent,
+                notSent,
+            },
+        };
     };
 }
 
@@ -246,9 +357,21 @@ export function sendMembersInvitesToChannels(
         for (const user of users) {
             const member = getTeamMember(state, teamId, user.id);
             if (isGuest(user.roles)) {
-                notSent.push({user, reason: localizeMessage('invite.members.user-is-guest', 'Contact your admin to make this guest a full member.')});
+                notSent.push({
+                    user,
+                    reason: defineMessage({
+                        id: 'invite.members.user-is-guest',
+                        defaultMessage: 'Contact your admin to make this guest a full member.',
+                    }),
+                });
             } else if (member) {
-                notSent.push({user, reason: localizeMessage('invite.members.already-member', 'This person is already a team member.')});
+                notSent.push({
+                    user,
+                    reason: defineMessage({
+                        id: 'invite.members.already-member',
+                        defaultMessage: 'This person is already a team member.',
+                    }),
+                });
             } else {
                 usersToAdd.push(user);
             }
@@ -258,15 +381,27 @@ export function sendMembersInvitesToChannels(
             const members = response.data || [];
             if (response.error) {
                 for (const userToAdd of usersToAdd) {
-                    notSent.push({user: userToAdd, reason: response.error.message});
+                    notSent.push({
+                        user: userToAdd,
+                        reason: response.error.message,
+                    });
                 }
             } else {
                 for (const userToAdd of usersToAdd) {
                     const memberWithError = members.find((m: TeamMemberWithError) => m.user_id === userToAdd.id && m.error);
                     if (memberWithError) {
-                        notSent.push({user: userToAdd, reason: memberWithError.error.message});
+                        notSent.push({
+                            user: userToAdd,
+                            reason: memberWithError.error.message,
+                        });
                     } else {
-                        sent.push({user: userToAdd, reason: localizeMessage('invite.members.added-to-team', 'This member has been added to the team.')});
+                        sent.push({
+                            user: userToAdd,
+                            reason: defineMessage({
+                                id: 'invite.members.added-to-team',
+                                defaultMessage: 'This member has been added to the team.',
+                            }),
+                        });
                     }
                 }
             }
@@ -286,17 +421,25 @@ export function sendMembersInvitesToChannels(
                 response = {
                     data: emails.map((email) => ({
                         email,
-                        error: {error: localizeMessage('invite.members.unable-to-add-the-user-to-the-team', 'Unable to add the user to the team.')},
+                        error: {
+                            error: defineMessage({
+                                id: 'invite.members.unable-to-add-the-user-to-the-team',
+                                defaultMessage: 'Unable to add the user to the team.',
+                            }),
+                        },
                     })) as unknown as TeamInviteWithError[],
                 };
             }
             const invitesWithErrors = response.data || [];
             if (response.error) {
                 if (response.error.server_error_id === 'app.email.rate_limit_exceeded.app_error') {
-                    response.error.message = localizeMessage('invite.rate-limit-exceeded', 'Invite emails rate limit exceeded.');
+                    response.error.message = defineMessage({id: 'invite.rate-limit-exceeded', defaultMessage: 'Invite emails rate limit exceeded.'});
                 }
                 for (const email of emails) {
-                    notSent.push({email, reason: response.error.message});
+                    notSent.push({
+                        email,
+                        reason: response.error.message,
+                    });
                 }
             } else {
                 for (const email of emails) {
@@ -305,17 +448,26 @@ export function sendMembersInvitesToChannels(
                         if (inviteWithError.error.id === 'api.team.invite_members.unable_to_send_email_with_defaults.app_error' && isCurrentUserSystemAdmin(state)) {
                             notSent.push({
                                 email,
-                                reason: {
-                                    id: t('admin.environment.smtp.smtpFailure'),
-                                    message: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
-                                },
+                                reason: defineMessage({
+                                    id: 'admin.environment.smtp.smtpFailure',
+                                    defaultMessage: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
+                                }),
                                 path: ConsolePages.SMTP,
                             });
                         } else {
-                            notSent.push({email, reason: inviteWithError.error.message});
+                            notSent.push({
+                                email,
+                                reason: inviteWithError.error.message,
+                            });
                         }
                     } else {
-                        sent.push({email, reason: localizeMessage('invite.members.invite-sent', 'An invitation email has been sent.')});
+                        sent.push({
+                            email,
+                            reason: defineMessage({
+                                id: 'invite.members.invite-sent',
+                                defaultMessage: 'An invitation email has been sent.',
+                            }),
+                        });
                     }
                 }
             }

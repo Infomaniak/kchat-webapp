@@ -12,11 +12,10 @@ import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
 import {openModal} from 'actions/views/modals';
 
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import OverlayTrigger from 'components/overlay_trigger';
 import type {SchedulePostMenuOption} from 'components/schedule_post/schedule_post_menu';
 import SchedulePostMenu from 'components/schedule_post/schedule_post_menu';
 import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
-import Tooltip from 'components/tooltip';
+import WithTooltip from 'components/with_tooltip';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';
@@ -69,13 +68,11 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
     const timezone = useSelector(getUserCurrentTimezone);
 
     const tooltip = (
-        <Tooltip id='schedule-post-tooltip'>
-            <KeyboardShortcutSequence
-                shortcut={KEYBOARD_SHORTCUTS.schedulePost}
-                hoistDescription={true}
-                isInsideTooltip={true}
-            />
-        </Tooltip>
+        <KeyboardShortcutSequence
+            shortcut={KEYBOARD_SHORTCUTS.schedulePost}
+            hoistDescription={true}
+            isInsideTooltip={true}
+        />
     );
 
     useEffect(() => {
@@ -106,7 +103,8 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
 
     const handleClose = () => setOpen(false);
 
-    const handleSchedulePostMenu = (optionName: SchedulePostMenuOption['name']) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleSchedulePostMenu = (e: any, optionName: SchedulePostMenuOption['name']) => {
         setOpen(false);
         const timestamp = getCurrentMomentForTimezone(timezone);
         switch (optionName) {
@@ -128,17 +126,12 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
             }));
             return;
         }
-        handleSchedulePost(toUTCUnix(timestamp.toDate()));
+        handleSchedulePost(e, toUTCUnix(timestamp.toDate()));
     };
 
     return (
         <>
-            <OverlayTrigger
-                overlay={tooltip}
-                delayShow={Constants.OVERLAY_TIME_DELAY}
-                placement='top'
-                trigger={['hover']}
-            >
+            <WithTooltip title={tooltip}>
                 <StyledSchedulePostButton
                     disableRipple={true}
                     disabled={disabled}
@@ -150,7 +143,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
                 >
                     <ChevronDownIcon size={16}/>
                 </StyledSchedulePostButton>
-            </OverlayTrigger>
+            </WithTooltip>
             <SchedulePostMenu
                 open={open}
                 timezone={timezone}

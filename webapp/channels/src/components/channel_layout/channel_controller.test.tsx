@@ -1,14 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {render, act} from '@testing-library/react';
+import {act} from '@testing-library/react';
 import React from 'react';
 import {Provider} from 'react-redux';
 
 import * as actions from 'actions/status_actions';
 
-import mockStore from 'tests/test_store';
 import Constants from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
+
+import {renderWithContext} from 'tests/react_testing_utils';
+import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
 
@@ -25,7 +28,7 @@ jest.mock('components/product_notices_modal', () => () => <div/>);
 jest.mock('plugins/pluggable', () => () => <div/>);
 
 jest.mock('actions/status_actions', () => ({
-    loadStatusesForChannelAndSidebar: jest.fn().mockImplementation(() => () => {}),
+    addVisibleUsersInCurrentChannelAndSelfToStatusPoll: jest.fn().mockImplementation(() => () => {}),
 }));
 
 jest.mock('mattermost-redux/selectors/entities/general', () => ({
@@ -41,18 +44,25 @@ describe('ChannelController', () => {
                         EnableUserStatuses: 'false',
                     },
                 },
+                preferences: {
+                    myPreferences: TestHelper.getPreferencesMock(),
+                },
             },
         } as unknown as GlobalState;
         jest.useFakeTimers();
     });
 
-    it('dispatches loadStatusesForChannelAndSidebar when enableUserStatuses is true', () => {
+    it('dispatches addVisibleUsersInCurrentChannelAndSelfToStatusPoll when enableUserStatuses is true', () => {
         mockState.entities.general.config.EnableUserStatuses = 'true';
         const store = mockStore(mockState);
 
-        render(
+        const headerRef = React.createRef<HTMLDivElement>();
+        renderWithContext(
             <Provider store={store}>
-                <ChannelController shouldRenderCenterChannel={true}/>
+                <ChannelController
+                    shouldRenderCenterChannel={true}
+                    headerRef={headerRef}
+                />
             </Provider>,
         );
 
@@ -60,16 +70,20 @@ describe('ChannelController', () => {
             jest.advanceTimersByTime(Constants.STATUS_INTERVAL);
         });
 
-        expect(actions.loadStatusesForChannelAndSidebar).toHaveBeenCalled();
+        expect(actions.addVisibleUsersInCurrentChannelAndSelfToStatusPoll).toHaveBeenCalled();
     });
 
-    it('does not dispatch loadStatusesForChannelAndSidebar when enableUserStatuses is false', () => {
+    it('does not dispatch addVisibleUsersInCurrentChannelAndSelfToStatusPoll when enableUserStatuses is false', () => {
         const store = mockStore(mockState);
         mockState.entities.general.config.EnableUserStatuses = 'false';
 
-        render(
+        const headerRef = React.createRef<HTMLDivElement>();
+        renderWithContext(
             <Provider store={store}>
-                <ChannelController shouldRenderCenterChannel={true}/>
+                <ChannelController
+                    shouldRenderCenterChannel={true}
+                    headerRef={headerRef}
+                />
             </Provider>,
         );
 
@@ -77,7 +91,7 @@ describe('ChannelController', () => {
             jest.advanceTimersByTime(Constants.STATUS_INTERVAL);
         });
 
-        expect(actions.loadStatusesForChannelAndSidebar).not.toHaveBeenCalled();
+        expect(actions.addVisibleUsersInCurrentChannelAndSelfToStatusPoll).not.toHaveBeenCalled();
     });
 });
 

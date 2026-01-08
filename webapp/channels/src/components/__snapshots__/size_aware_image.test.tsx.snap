@@ -45,31 +45,28 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
       />
       <span
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
-        style={
-          Object {
-            "right": "50px",
-          }
-        }
       >
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              id="file-name__tooltip"
-            >
-              Save file to kDrive
-            </Tooltip>
+        <WithTooltip
+          title={
+            <Memo(MemoizedFormattedMessage)
+              defaultMessage="Copy link"
+              id="single_image_view.copy_link_tooltip"
+            />
           }
-          placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
-          }
+        >
+          <button
+            aria-label="Copy link"
+            className="style--none size-aware-image__copy_link"
+            onClick={[Function]}
+          >
+            <LinkVariantIcon
+              className="style--none"
+              size={20}
+            />
+          </button>
+        </WithTooltip>
+        <WithTooltip
+          title="Save file to kDrive"
         >
           <a
             className="style--none size-aware-image__download--kdrive"
@@ -85,68 +82,13 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
               }
             />
           </a>
-        </OverlayTrigger>
-      </span>
-      <span
-        className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
-      >
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              className="hidden-xs"
-              id="copy-link-tooltip"
-            >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="Copy link"
-                id="single_image_view.copy_link_tooltip"
-              />
-            </Tooltip>
-          }
-          placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
-          }
-        >
-          <button
-            aria-label="Copy link"
-            className="style--none size-aware-image__copy_link"
-            onClick={[Function]}
-          >
-            <LinkVariantIcon
-              className="style--none"
-              size={20}
+        </WithTooltip>
+        <WithTooltip
+          title={
+            <Memo(MemoizedFormattedMessage)
+              defaultMessage="Download"
+              id="single_image_view.download_tooltip"
             />
-          </button>
-        </OverlayTrigger>
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              className="hidden-xs"
-              id="download-preview-tooltip"
-            >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="Download"
-                id="single_image_view.download_tooltip"
-              />
-            </Tooltip>
-          }
-          placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
           }
         >
           <a
@@ -163,7 +105,7 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
               size={20}
             />
           </a>
-        </OverlayTrigger>
+        </WithTooltip>
       </span>
     </figure>
   </div>
@@ -215,31 +157,28 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
       />
       <span
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
-        style={
-          Object {
-            "right": "50px",
-          }
-        }
       >
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              id="file-name__tooltip"
-            >
-              Save file to kDrive
-            </Tooltip>
+        <WithTooltip
+          title={
+            <Memo(MemoizedFormattedMessage)
+              defaultMessage="Copy link"
+              id="single_image_view.copy_link_tooltip"
+            />
           }
-          placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
-          }
+        >
+          <button
+            aria-label="Copy link"
+            className="style--none size-aware-image__copy_link"
+            onClick={[Function]}
+          >
+            <LinkVariantIcon
+              className="style--none"
+              size={20}
+            />
+          </button>
+        </WithTooltip>
+        <WithTooltip
+          title="Save file to kDrive"
         >
           <a
             className="style--none size-aware-image__download--kdrive"
@@ -255,68 +194,13 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
               }
             />
           </a>
-        </OverlayTrigger>
-      </span>
-      <span
-        className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
-      >
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              className="hidden-xs"
-              id="copy-link-tooltip"
-            >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="Copy link"
-                id="single_image_view.copy_link_tooltip"
-              />
-            </Tooltip>
-          }
-          placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
-          }
-        >
-          <button
-            aria-label="Copy link"
-            className="style--none size-aware-image__copy_link"
-            onClick={[Function]}
-          >
-            <LinkVariantIcon
-              className="style--none"
-              size={20}
+        </WithTooltip>
+        <WithTooltip
+          title={
+            <Memo(MemoizedFormattedMessage)
+              defaultMessage="Download"
+              id="single_image_view.download_tooltip"
             />
-          </button>
-        </OverlayTrigger>
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              className="hidden-xs"
-              id="download-preview-tooltip"
-            >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="Download"
-                id="single_image_view.download_tooltip"
-              />
-            </Tooltip>
-          }
-          placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
           }
         >
           <a
@@ -332,7 +216,7 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
               size={20}
             />
           </a>
-        </OverlayTrigger>
+        </WithTooltip>
       </span>
     </figure>
   </div>
@@ -398,31 +282,28 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
       />
       <span
         className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
-        style={
-          Object {
-            "right": "50px",
-          }
-        }
       >
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              id="file-name__tooltip"
-            >
-              Save file to kDrive
-            </Tooltip>
+        <WithTooltip
+          title={
+            <Memo(MemoizedFormattedMessage)
+              defaultMessage="Copy link"
+              id="single_image_view.copy_link_tooltip"
+            />
           }
-          placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
-          }
+        >
+          <button
+            aria-label="Copy link"
+            className="style--none size-aware-image__copy_link"
+            onClick={[Function]}
+          >
+            <LinkVariantIcon
+              className="style--none"
+              size={20}
+            />
+          </button>
+        </WithTooltip>
+        <WithTooltip
+          title="Save file to kDrive"
         >
           <a
             className="style--none size-aware-image__download--kdrive"
@@ -438,68 +319,13 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
               }
             />
           </a>
-        </OverlayTrigger>
-      </span>
-      <span
-        className="image-preview-utility-buttons-container image-preview-utility-buttons-container--small-image"
-      >
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              className="hidden-xs"
-              id="copy-link-tooltip"
-            >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="Copy link"
-                id="single_image_view.copy_link_tooltip"
-              />
-            </Tooltip>
-          }
-          placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
-          }
-        >
-          <button
-            aria-label="Copy link"
-            className="style--none size-aware-image__copy_link"
-            onClick={[Function]}
-          >
-            <LinkVariantIcon
-              className="style--none"
-              size={20}
+        </WithTooltip>
+        <WithTooltip
+          title={
+            <Memo(MemoizedFormattedMessage)
+              defaultMessage="Download"
+              id="single_image_view.download_tooltip"
             />
-          </button>
-        </OverlayTrigger>
-        <OverlayTrigger
-          className="hidden-xs"
-          defaultOverlayShown={false}
-          delayShow={500}
-          overlay={
-            <Tooltip
-              className="hidden-xs"
-              id="download-preview-tooltip"
-            >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="Download"
-                id="single_image_view.download_tooltip"
-              />
-            </Tooltip>
-          }
-          placement="top"
-          rootClose={true}
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
           }
         >
           <a
@@ -515,7 +341,7 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
               size={20}
             />
           </a>
-        </OverlayTrigger>
+        </WithTooltip>
       </span>
     </figure>
   </div>

@@ -28,6 +28,9 @@ describe('components/channel_layout/CenterChannel', () => {
             onChannelByIdentifierEnter: jest.fn(),
         },
         history: [],
+        location: {
+            search: '',
+        },
     };
 
     test('should call onChannelByIdentifierEnter on props change', () => {

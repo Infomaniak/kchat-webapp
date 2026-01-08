@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {defineMessage, FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -14,6 +14,14 @@ import CopyText from 'components/copy_text';
 import {getSiteURL} from 'utils/url';
 
 import DeleteIntegrationLink from './delete_integration_link';
+
+// Ik change : also match the creator username
+export function matchCreator(creator: {username?: string}, filter: string): boolean {
+    if (!filter || !creator?.username) {
+        return false;
+    }
+    return creator.username.toLowerCase().indexOf(filter) !== -1;
+}
 
 export function matchesFilter(incomingWebhook: IncomingWebhook, channel: Channel, filter: string) {
     if (!filter) {
@@ -160,6 +168,10 @@ export default class InstalledIncomingWebhook extends React.PureComponent<Props>
                             />
                             <span>
                                 <CopyText
+                                    label={defineMessage({
+                                        id: 'integrations.copy_url',
+                                        defaultMessage: 'Copy URL',
+                                    })}
                                     value={incomingWebhookId}
                                 />
                             </span>

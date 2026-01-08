@@ -38,18 +38,20 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
     <AlertBanner
       footerMessage={
         Array [
-          <FormattedList
-            value={
-              Array [
-                <Memo(Connect(Component))
-                  mentionName="user-0"
-                />,
-                <Memo(Connect(Component))
-                  mentionName="user-1"
-                />,
-              ]
-            }
-          />,
+          <React.Fragment>
+            <FormattedList
+              value={
+                Array [
+                  <Memo(Connect(Component))
+                    mentionName="user-0"
+                  />,
+                  <Memo(Connect(Component))
+                    mentionName="user-1"
+                  />,
+                ]
+              }
+            />
+          </React.Fragment>,
           " are guest users and need to first be invited to the team before you can add them to the channel. Once they've joined the team, you can add them to this channel.",
         ]
       }
@@ -120,7 +122,6 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
             className="AlertBanner__footerMessage"
           >
             <FormattedList
-              key=".0"
               value={
                 Array [
                   <Memo(Connect(Component))
@@ -139,7 +140,7 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
                 >
                   <Memo(AtMention)
                     currentUserId="admin1"
-                    dispatch={[Function]}
+                    getMissingMentionedUsers={[Function]}
                     groupsByName={Object {}}
                     mentionName="user-0"
                     teammateNameDisplay="username"
@@ -153,7 +154,7 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
                 >
                   <Memo(AtMention)
                     currentUserId="admin1"
-                    dispatch={[Function]}
+                    getMissingMentionedUsers={[Function]}
                     groupsByName={Object {}}
                     mentionName="user-1"
                     teammateNameDisplay="username"
@@ -212,22 +213,26 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
       message={
         Array [
           "You can add ",
-          <FormattedList
-            value={
-              Array [
-                <Memo(Connect(Component))
-                  mentionName="user-0"
-                />,
-                <Memo(Connect(Component))
-                  mentionName="user-1"
-                />,
-              ]
-            }
-          />,
+          <React.Fragment>
+            <FormattedList
+              value={
+                Array [
+                  <Memo(Connect(Component))
+                    mentionName="user-0"
+                  />,
+                  <Memo(Connect(Component))
+                    mentionName="user-1"
+                  />,
+                ]
+              }
+            />
+          </React.Fragment>,
           " to this channel once they are members of the ",
-          <strong>
-            Team Name Display
-          </strong>,
+          <React.Fragment>
+            <strong>
+              Team Name Display
+            </strong>
+          </React.Fragment>,
           " team.",
         ]
       }
@@ -297,7 +302,6 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
           >
             You can add 
             <FormattedList
-              key=".1"
               value={
                 Array [
                   <Memo(Connect(Component))
@@ -316,7 +320,7 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
                 >
                   <Memo(AtMention)
                     currentUserId="admin1"
-                    dispatch={[Function]}
+                    getMissingMentionedUsers={[Function]}
                     groupsByName={Object {}}
                     mentionName="user-0"
                     teammateNameDisplay="username"
@@ -330,7 +334,7 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
                 >
                   <Memo(AtMention)
                     currentUserId="admin1"
-                    dispatch={[Function]}
+                    getMissingMentionedUsers={[Function]}
                     groupsByName={Object {}}
                     mentionName="user-1"
                     teammateNameDisplay="username"
@@ -340,9 +344,7 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
               </span>
             </FormattedList>
              to this channel once they are members of the 
-            <strong
-              key=".3"
-            >
+            <strong>
               Team Name Display
             </strong>
              team.
@@ -455,28 +457,31 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
     <AlertBanner
       footerMessage={
         Array [
-          <Memo(Connect(Component))
-            mentionName="user-0"
-          />,
+          <React.Fragment>
+            <Memo(Connect(Component))
+              mentionName="user-0"
+            />
+          </React.Fragment>,
           " and ",
-          <SimpleTooltip
-            content="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
-            id="usernames-overflow"
-          >
-            <span
-              className="add-others-link"
+          <React.Fragment>
+            <WithTooltip
+              title="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
             >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="{count} others"
-                id="channel_invite.invite_team_members.messageOthers"
-                values={
-                  Object {
-                    "count": 10,
+              <span
+                className="add-others-link"
+              >
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="{count} others"
+                  id="channel_invite.invite_team_members.messageOthers"
+                  values={
+                    Object {
+                      "count": 10,
+                    }
                   }
-                }
-              />
-            </span>
-          </SimpleTooltip>,
+                />
+              </span>
+            </WithTooltip>
+          </React.Fragment>,
           " are guest users and need to first be invited to the team before you can add them to the channel. Once they've joined the team, you can add them to this channel.",
         ]
       }
@@ -547,12 +552,12 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
             className="AlertBanner__footerMessage"
           >
             <Connect(Component)
-              key=".$user-0"
+              key="user-0"
               mentionName="user-0"
             >
               <Memo(AtMention)
                 currentUserId="admin1"
-                dispatch={[Function]}
+                getMissingMentionedUsers={[Function]}
                 groupsByName={Object {}}
                 mentionName="user-0"
                 teammateNameDisplay="username"
@@ -560,115 +565,34 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
               />
             </Connect(Component)>
              and 
-            <SimpleTooltip
-              content="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
-              id="usernames-overflow"
-              key=".2"
+            <WithTooltip
+              title="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
             >
-              <OverlayTrigger
-                defaultOverlayShown={false}
-                delayShow={100}
-                overlay={
-                  <Tooltip
-                    className="hidden-xs"
-                    id="usernames-overflow"
-                    placement="top"
-                  >
-                    @user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10
-                  </Tooltip>
-                }
-                placement="top"
-                trigger={
-                  Array [
-                    "hover",
-                    "focus",
-                  ]
-                }
+              <span
+                className="add-others-link"
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
               >
-                <OverlayTrigger
-                  defaultOverlayShown={false}
-                  delayShow={100}
-                  overlay={
-                    <OverlayWrapper
-                      className="hidden-xs"
-                      id="usernames-overflow"
-                      intl={
-                        Object {
-                          "$t": [Function],
-                          "defaultFormats": Object {},
-                          "defaultLocale": "en",
-                          "defaultRichTextElements": undefined,
-                          "fallbackOnEmptyString": true,
-                          "formatDate": [Function],
-                          "formatDateTimeRange": [Function],
-                          "formatDateToParts": [Function],
-                          "formatDisplayName": [Function],
-                          "formatList": [Function],
-                          "formatListToParts": [Function],
-                          "formatMessage": [Function],
-                          "formatNumber": [Function],
-                          "formatNumberToParts": [Function],
-                          "formatPlural": [Function],
-                          "formatRelativeTime": [Function],
-                          "formatTime": [Function],
-                          "formatTimeToParts": [Function],
-                          "formats": Object {},
-                          "formatters": Object {
-                            "getDateTimeFormat": [Function],
-                            "getDisplayNames": [Function],
-                            "getListFormat": [Function],
-                            "getMessageFormat": [Function],
-                            "getNumberFormat": [Function],
-                            "getPluralRules": [Function],
-                            "getRelativeTimeFormat": [Function],
-                          },
-                          "locale": "en",
-                          "messages": Object {},
-                          "onError": [Function],
-                          "onWarn": [Function],
-                          "textComponent": "span",
-                          "timeZone": "Etc/UTC",
-                          "wrapRichTextChunksInFragment": undefined,
-                        }
-                      }
-                      placement="top"
-                    >
-                      @user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10
-                    </OverlayWrapper>
-                  }
-                  placement="top"
-                  trigger={
-                    Array [
-                      "hover",
-                      "focus",
-                    ]
+                <FormattedMessage
+                  defaultMessage="{count} others"
+                  id="channel_invite.invite_team_members.messageOthers"
+                  values={
+                    Object {
+                      "count": 10,
+                    }
                   }
                 >
-                  <span
-                    className="add-others-link"
-                    onBlur={[Function]}
-                    onClick={null}
-                    onFocus={[Function]}
-                    onMouseOut={[Function]}
-                    onMouseOver={[Function]}
-                  >
-                    <FormattedMessage
-                      defaultMessage="{count} others"
-                      id="channel_invite.invite_team_members.messageOthers"
-                      values={
-                        Object {
-                          "count": 10,
-                        }
-                      }
-                    >
-                      <span>
-                        10 others
-                      </span>
-                    </FormattedMessage>
+                  <span>
+                    10 others
                   </span>
-                </OverlayTrigger>
-              </OverlayTrigger>
-            </SimpleTooltip>
+                </FormattedMessage>
+              </span>
+            </WithTooltip>
              are guest users and need to first be invited to the team before you can add them to the channel. Once they've joined the team, you can add them to this channel.
           </div>
         </div>
@@ -782,32 +706,37 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
       message={
         Array [
           "You can add ",
-          <Memo(Connect(Component))
-            mentionName="user-0"
-          />,
+          <React.Fragment>
+            <Memo(Connect(Component))
+              mentionName="user-0"
+            />
+          </React.Fragment>,
           " and ",
-          <SimpleTooltip
-            content="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
-            id="usernames-overflow"
-          >
-            <span
-              className="add-others-link"
+          <React.Fragment>
+            <WithTooltip
+              title="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
             >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="{count} others"
-                id="channel_invite.invite_team_members.messageOthers"
-                values={
-                  Object {
-                    "count": 10,
+              <span
+                className="add-others-link"
+              >
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="{count} others"
+                  id="channel_invite.invite_team_members.messageOthers"
+                  values={
+                    Object {
+                      "count": 10,
+                    }
                   }
-                }
-              />
-            </span>
-          </SimpleTooltip>,
+                />
+              </span>
+            </WithTooltip>
+          </React.Fragment>,
           " to this channel once they are members of the ",
-          <strong>
-            Team Name Display
-          </strong>,
+          <React.Fragment>
+            <strong>
+              Team Name Display
+            </strong>
+          </React.Fragment>,
           " team.",
         ]
       }
@@ -877,12 +806,12 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
           >
             You can add 
             <Connect(Component)
-              key=".$user-0"
+              key="user-0"
               mentionName="user-0"
             >
               <Memo(AtMention)
                 currentUserId="admin1"
-                dispatch={[Function]}
+                getMissingMentionedUsers={[Function]}
                 groupsByName={Object {}}
                 mentionName="user-0"
                 teammateNameDisplay="username"
@@ -890,119 +819,36 @@ exports[`components/channel_invite_modal/team_warning_banner should match snapsh
               />
             </Connect(Component)>
              and 
-            <SimpleTooltip
-              content="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
-              id="usernames-overflow"
-              key=".3"
+            <WithTooltip
+              title="@user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10"
             >
-              <OverlayTrigger
-                defaultOverlayShown={false}
-                delayShow={100}
-                overlay={
-                  <Tooltip
-                    className="hidden-xs"
-                    id="usernames-overflow"
-                    placement="top"
-                  >
-                    @user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10
-                  </Tooltip>
-                }
-                placement="top"
-                trigger={
-                  Array [
-                    "hover",
-                    "focus",
-                  ]
-                }
+              <span
+                className="add-others-link"
+                onBlur={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseMove={[Function]}
+                onPointerDown={[Function]}
+                onPointerEnter={[Function]}
               >
-                <OverlayTrigger
-                  defaultOverlayShown={false}
-                  delayShow={100}
-                  overlay={
-                    <OverlayWrapper
-                      className="hidden-xs"
-                      id="usernames-overflow"
-                      intl={
-                        Object {
-                          "$t": [Function],
-                          "defaultFormats": Object {},
-                          "defaultLocale": "en",
-                          "defaultRichTextElements": undefined,
-                          "fallbackOnEmptyString": true,
-                          "formatDate": [Function],
-                          "formatDateTimeRange": [Function],
-                          "formatDateToParts": [Function],
-                          "formatDisplayName": [Function],
-                          "formatList": [Function],
-                          "formatListToParts": [Function],
-                          "formatMessage": [Function],
-                          "formatNumber": [Function],
-                          "formatNumberToParts": [Function],
-                          "formatPlural": [Function],
-                          "formatRelativeTime": [Function],
-                          "formatTime": [Function],
-                          "formatTimeToParts": [Function],
-                          "formats": Object {},
-                          "formatters": Object {
-                            "getDateTimeFormat": [Function],
-                            "getDisplayNames": [Function],
-                            "getListFormat": [Function],
-                            "getMessageFormat": [Function],
-                            "getNumberFormat": [Function],
-                            "getPluralRules": [Function],
-                            "getRelativeTimeFormat": [Function],
-                          },
-                          "locale": "en",
-                          "messages": Object {},
-                          "onError": [Function],
-                          "onWarn": [Function],
-                          "textComponent": "span",
-                          "timeZone": "Etc/UTC",
-                          "wrapRichTextChunksInFragment": undefined,
-                        }
-                      }
-                      placement="top"
-                    >
-                      @user-1, @user-2, @user-3, @user-4, @user-5, @user-6, @user-7, @user-8, @user-9, @user-10
-                    </OverlayWrapper>
-                  }
-                  placement="top"
-                  trigger={
-                    Array [
-                      "hover",
-                      "focus",
-                    ]
+                <FormattedMessage
+                  defaultMessage="{count} others"
+                  id="channel_invite.invite_team_members.messageOthers"
+                  values={
+                    Object {
+                      "count": 10,
+                    }
                   }
                 >
-                  <span
-                    className="add-others-link"
-                    onBlur={[Function]}
-                    onClick={null}
-                    onFocus={[Function]}
-                    onMouseOut={[Function]}
-                    onMouseOver={[Function]}
-                  >
-                    <FormattedMessage
-                      defaultMessage="{count} others"
-                      id="channel_invite.invite_team_members.messageOthers"
-                      values={
-                        Object {
-                          "count": 10,
-                        }
-                      }
-                    >
-                      <span>
-                        10 others
-                      </span>
-                    </FormattedMessage>
+                  <span>
+                    10 others
                   </span>
-                </OverlayTrigger>
-              </OverlayTrigger>
-            </SimpleTooltip>
+                </FormattedMessage>
+              </span>
+            </WithTooltip>
              to this channel once they are members of the 
-            <strong
-              key=".5"
-            >
+            <strong>
               Team Name Display
             </strong>
              team.

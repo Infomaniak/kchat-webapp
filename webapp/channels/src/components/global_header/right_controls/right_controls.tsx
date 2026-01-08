@@ -7,14 +7,13 @@ import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 
+import type {ProductIdentifier} from '@mattermost/types/products';
+
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {getCurrentLocale} from 'selectors/i18n';
 
 import FlagNext from 'components/flag_next';
-import OverlayTrigger from 'components/overlay_trigger';
-import StatusDropdown from 'components/status_dropdown';
-import Tooltip from 'components/tooltip';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {
     AtMentionsTour,
@@ -22,8 +21,9 @@ import {
     SettingsTour,
     useShowOnboardingTutorialStep,
 } from 'components/tours/onboarding_tour';
+import UserAccountMenu from 'components/user_account_menu';
+import WithTooltip from 'components/with_tooltip';
 
-import Constants from 'utils/constants';
 import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
 
 import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
@@ -31,8 +31,9 @@ import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 import type {GlobalState} from 'types/store';
 
 import AtMentionsButton from './at_mentions_button/at_mentions_button';
+import ReportingToolsButton from './reporting_tools_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';
-import SettingsButton from './settings_button';
+import SettingsButton from './settings_button/index';
 
 // import PlanUpgradeButton from './plan_upgrade_button';
 
@@ -89,12 +90,10 @@ const ReportingToolsWrapper = styled.div`
 `;
 
 const tooltipUserReport = (
-    <Tooltip id='userReport'>
-        <FormattedMessage
-            id='global_header.userReport'
-            defaultMessage='Feedback'
-        />
-    </Tooltip>
+    <FormattedMessage
+        id='global_header.userReport'
+        defaultMessage='Feedback'
+    />
 );
 
 const userReportHrefs: Record<string, string> = {
@@ -104,6 +103,9 @@ const userReportHrefs: Record<string, string> = {
     it: 'https://feedback.userreport.com/066a68a7-e8f9-47a3-8099-18591dbdfd1f#ideas/popular',
     de: 'https://feedback.userreport.com/e68afd5f-31f2-4327-af79-fb0b665aee68#ideas/popular',
 };
+export type Props = {
+    productId?: ProductIdentifier;
+}
 
 const RightControls = (): JSX.Element => {
     // guest validation to see which point the messaging tour tip starts
@@ -144,16 +146,10 @@ const RightControls = (): JSX.Element => {
             id={'RightControlsContainer'}
         >
             <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <module-reporting-tools-component size='26'/>
+                <ReportingToolsButton/>
             </ReportingToolsWrapper>
-            <OverlayTrigger
-                trigger={['hover', 'focus']}
-                delayShow={Constants.OVERLAY_TIME_DELAY}
-                placement='bottom'
-                overlay={tooltipUserReport}
-            >
+            <WithTooltip title={tooltipUserReport}>
+                {/* eslint-disable-next-line @mattermost/use-external-link */}
                 <a
                     className='header-icon grey'
                     style={{height: 45, width: 42, display: 'flex', justifyContent: 'center', alignItems: 'center', textDecoration: 'none'}}
@@ -167,7 +163,7 @@ const RightControls = (): JSX.Element => {
                         alt='User Feedback'
                     />
                 </a>
-            </OverlayTrigger>
+            </WithTooltip>
             <>
                 <ButtonWrapper>
                     {showAtMentionsTutorialStep && <AtMentionsTour/>}
@@ -188,20 +184,29 @@ const RightControls = (): JSX.Element => {
                 <SettingsButton/>
             </ButtonWrapper>
             {!isDesktopApp && (
-                <div style={{position: 'relative'}}>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                    <module-products-component
-                        position='right'
-                        style={{height: '100%'}}
-                    >
-                        {trigger}
+                <WithTooltip
+                    title={
+                        <FormattedMessage
+                            id='global_header.ikProduct'
+                            defaultMessage='Your products'
+                        />
+                    }
+                >
+                    <div style={{position: 'relative'}}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                         {/* @ts-ignore */}
-                    </module-products-component>
-                </div>
+                        <module-products-component
+                            position='right'
+                            style={{height: '100%'}}
+                        >
+                            {trigger}
+                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                            {/* @ts-ignore */}
+                        </module-products-component>
+                    </div>
+                </WithTooltip>
             )}
-            <StatusDropdown/>
+            <UserAccountMenu/>
             <FlagNext/>
         </RightControlsContainer>
     );

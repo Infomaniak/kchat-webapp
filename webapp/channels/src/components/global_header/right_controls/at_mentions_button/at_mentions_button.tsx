@@ -10,10 +10,9 @@ import {closeRightHandSide, showMentions} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+import WithTooltip from 'components/with_tooltip';
 
-import Constants, {RHSStates} from 'utils/constants';
+import {RHSStates} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -31,41 +30,37 @@ const AtMentionsButton = (): JSX.Element => {
         }
     };
 
-    const tooltip = (
-        <Tooltip id='recentMentions'>
-            <FormattedMessage
-                id='channel_header.recentMentions'
-                defaultMessage='Recent mentions'
-            />
-            <KeyboardShortcutSequence
-                shortcut={KEYBOARD_SHORTCUTS.navMentions}
-                hideDescription={true}
-                isInsideTooltip={true}
-            />
-        </Tooltip>
-    );
-
     return (
-        <OverlayTrigger
-            trigger={['hover', 'focus']}
-            delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement='bottom'
-            overlay={tooltip}
+        <WithTooltip
+            title={
+                <>
+                    <FormattedMessage
+                        id='channel_header.recentMentions'
+                        defaultMessage='Recent mentions'
+                    />
+                    <KeyboardShortcutSequence
+                        shortcut={KEYBOARD_SHORTCUTS.navMentions}
+                        hideDescription={true}
+                        isInsideTooltip={true}
+                    />
+                </>
+            }
         >
-            <IconButton
-                id='right-controls-at-mentions'
-                className={`grey ${rhsState === RHSStates.MENTION ? 'active' : ''}`}
-                size={'sm'}
-                icon={'mentions'}
-                toggled={rhsState === RHSStates.MENTION}
-                onClick={mentionButtonClick}
-                inverted={true}
-                compact={true}
-                aria-expanded={rhsState === RHSStates.MENTION}
-                aria-controls='searchContainer' // Must be changed if the ID of the container changes
-                aria-label={formatMessage({id: 'channel_header.recentMentions', defaultMessage: 'Recent mentions'})}
-            />
-        </OverlayTrigger>
+            <span id='right-controls-at-mentions'>
+                <IconButton
+                    className={`grey ${rhsState === RHSStates.MENTION ? 'active' : ''}`}
+                    size={'sm'}
+                    icon={'mentions'}
+                    toggled={rhsState === RHSStates.MENTION}
+                    onClick={mentionButtonClick}
+                    inverted={true}
+                    compact={true}
+                    aria-expanded={rhsState === RHSStates.MENTION}
+                    aria-controls='searchContainer' // Must be changed if the ID of the container changes
+                    aria-label={formatMessage({id: 'channel_header.recentMentions', defaultMessage: 'Recent mentions'})}
+                />
+            </span>
+        </WithTooltip>
     );
 };
 

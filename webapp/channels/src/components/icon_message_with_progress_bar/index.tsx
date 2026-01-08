@@ -3,8 +3,10 @@
 
 import React from 'react';
 
-import IconMessage from 'components/purchase_modal/icon_message';
 import './icon_message_with_progress_bar.scss';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const IconMessage = (props: any) => null;
 
 export const enum ProcessState {
     PROCESSING = 0,
