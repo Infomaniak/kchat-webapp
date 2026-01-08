@@ -11,7 +11,7 @@ describe('components/MsgTyping', () => {
         typingUsers: [],
         recordingUsers: [],
         channelId: 'test',
-        postId: '',
+        rootId: '',
         currentUserId: '',
         userStartedTyping: jest.fn(),
         userStoppedTyping: jest.fn(),

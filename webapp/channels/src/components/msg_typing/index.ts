@@ -13,7 +13,6 @@ import MsgTyping from './msg_typing';
 
 type OwnProps = {
     channelId: string;
-    currentUserId: string;
     rootId: string;
 };
 
@@ -25,7 +24,7 @@ function makeMapStateToProps() {
         const typingUsers = getUsersTypingByChannelAndPost(state, {channelId: ownProps.channelId, postId: ownProps.rootId});
 
         const currentUserId = getCurrentUserId(state);
-        const recordingUsers = getUsersRecordingByChannelAndPost(state, {channelId: ownProps.channelId, postId: ownProps.postId});
+        const recordingUsers = getUsersRecordingByChannelAndPost(state, {channelId: ownProps.channelId, postId: ownProps.rootId});
         return {
             typingUsers,
             recordingUsers,
