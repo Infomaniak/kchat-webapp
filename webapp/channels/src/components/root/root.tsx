@@ -525,12 +525,11 @@ export default class Root extends React.PureComponent<Props, State> {
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
+                const searchParams = new URLSearchParams(window.location.search);
+                localStorage.setItem('IKRedirectUri', searchParams.get('redirect_to') || `${window.location.pathname}${window.location.search}`);
                 if (this.embeddedInIFrame && window.top) {
                     window.top.location.href = window.location.href;
                 } else {
-                    const searchParams = new URLSearchParams(window.location.search);
-                    localStorage.setItem('IKRedirectUri', searchParams.get('redirect_to') || `${window.location.pathname}${window.location.search}`);
-
                     window.location.href = data.uri;
                 }
             } else {
