@@ -466,11 +466,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     sendBridgeNavigate = () => {
         const {ksuiteBridge, location} = this.props;
-        console.log("test redirect", "will send bridge redirect soon")
-        setTimeout(() => {
-            console.log("test redirect", "sending bridge message navigate to", location.pathname)
-            ksuiteBridge?.sendMessage({type: NavigateMessageKey, path: location.pathname});
-        }, 2000); 
+        ksuiteBridge?.sendMessage({type: NavigateMessageKey, path: location.pathname});
     };
 
     ksuiteLinkHandler: EventListener = (e) => {
