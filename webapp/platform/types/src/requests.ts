@@ -12,7 +12,6 @@ export type ChannelsRequestsStatuses = {
     getAllChannels: RequestStatusType;
     myChannels: RequestStatusType;
     createChannel: RequestStatusType;
-    updateChannel: RequestStatusType;
 };
 
 export type GeneralRequestsStatuses = {
@@ -30,10 +29,8 @@ export type ThreadsRequestStatuses = {
 };
 
 export type TeamsRequestsStatuses = {
-    getMyTeams: RequestStatusType;
     getMyKSuites: RequestStatusType;
     getTeams: RequestStatusType;
-    joinTeam: RequestStatusType;
 };
 
 export type UsersRequestsStatuses = {

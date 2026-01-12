@@ -7,8 +7,13 @@ import {
     DEFAULT_LIMIT_BEFORE,
 } from '@mattermost/client';
 
+// eslint-disable-next-line no-restricted-imports
+import getUserAgentWithVersion from 'utils/get_user_agent_with_version';
+
 const Client4 = new ClientClass4();
 Client4.setWebappVersion(GIT_RELEASE);
+
+Client4.setUserAgent(getUserAgentWithVersion());
 
 export {
     Client4,

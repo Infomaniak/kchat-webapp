@@ -21,6 +21,7 @@ import ChipsList from './chips_list';
 import CtaButtons from './cta_buttons';
 import type {DataModel, UpdatesParam} from './dashboard.data';
 import useMetricsData, {ItemStatus} from './dashboard.data';
+import OverallScore from './overall-score';
 
 import {elasticsearchTest, ldapTest, testSiteURL} from '../../../actions/admin_actions';
 import LoadingScreen from '../../loading_screen';
@@ -28,7 +29,6 @@ import FormattedAdminHeader from '../../widgets/admin_console/formatted_admin_he
 import type {Props} from '../admin_console';
 
 import './dashboard.scss';
-import OverallScore from './overall-score';
 
 const AccordionItem = styled.div`
     padding: 12px;
@@ -66,7 +66,7 @@ const WorkspaceOptimizationDashboard = (props: Props) => {
     // get the currently installed server version
     const installedVersion = useSelector((state: GlobalState) => getServerVersion(state));
     const analytics = useSelector((state: GlobalState) => state.entities.admin.analytics);
-    const {TOTAL_USERS: totalUsers, TOTAL_POSTS: totalPosts} = analytics!;
+    const {TOTAL_USERS: totalUsers = 0, TOTAL_POSTS: totalPosts = 0} = analytics || {};
 
     // gather locally available data
     const {

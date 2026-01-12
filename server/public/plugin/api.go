@@ -32,7 +32,7 @@ type API interface {
 	// Minimum server version: 5.2
 	RegisterCommand(command *model.Command) error
 
-	// UnregisterCommand unregisters a command previously registered via RegisterCommand.
+	// UnregisterCommand unregisters a command previously register via RegisterCommand.
 	//
 	// @tag Command
 	// Minimum server version: 5.2
@@ -135,6 +135,12 @@ type API interface {
 	// Minimum server version: 5.10
 	GetUsers(options *model.UserGetOptions) ([]*model.User, *model.AppError)
 
+	// GetUsersByIds gets a list of users by their IDs.
+	//
+	// @tag User
+	// Minimum server version: 9.8
+	GetUsersByIds(userIDs []string) ([]*model.User, *model.AppError)
+
 	// GetUser gets a user.
 	//
 	// @tag User
@@ -165,6 +171,14 @@ type API interface {
 	// @tag Team
 	// Minimum server version: 5.6
 	GetUsersInTeam(teamID string, page int, perPage int) ([]*model.User, *model.AppError)
+
+	// GetPreferenceForUser gets a single preference for a user. An error is returned if the user has no preference
+	// set with the given category and name, an error is returned.
+	//
+	// @tag User
+	// @tag Preference
+	// Minimum server version: 9.5
+	GetPreferenceForUser(userID, category, name string) (model.Preference, *model.AppError)
 
 	// GetPreferencesForUser gets a user's preferences.
 	//
@@ -456,7 +470,8 @@ type API interface {
 	// Minimum server version: 5.2
 	GetChannelByNameForTeamName(teamName, channelName string, includeDeleted bool) (*model.Channel, *model.AppError)
 
-	// GetChannelsForTeamForUser gets a list of channels for given user ID in given team ID.
+	// GetChannelsForTeamForUser  gets a list of channels for given user ID in given team ID, including DMs.
+	// If an empty string is passed as the team ID, the user's channels on all teams and their DMs will be returned.
 	//
 	// @tag Channel
 	// @tag Team
@@ -592,6 +607,15 @@ type API interface {
 	// @tag User
 	// Minimum server version: 5.2
 	UpdateChannelMemberNotifications(channelId, userID string, notifications map[string]string) (*model.ChannelMember, *model.AppError)
+
+	// PatchChannelMembersNotifications updates the notification properties for multiple channel members.
+	// Other changes made to the channel memberships will be ignored. A maximum of 200 members can be
+	// updated at once.
+	//
+	// @tag Channel
+	// @tag User
+	// Minimum server version: 9.5
+	PatchChannelMembersNotifications(members []*model.ChannelMemberIdentifier, notifyProps map[string]string) *model.AppError
 
 	// GetGroup gets a group by ID.
 	//
@@ -1198,6 +1222,183 @@ type API interface {
 	//
 	// Minimum server version: 9.0
 	SendPushNotification(notification *model.PushNotification, userID string) *model.AppError
+
+	// UpdateUserAuth updates a user's auth data.
+	//
+	// It is not currently possible to use this to set a user's auth to e-mail with a hashed
+	// password. It is meant to be used exclusively in setting a non-email auth service.
+	//
+	// @tag User
+	// Minimum server version: 9.3
+	UpdateUserAuth(userID string, userAuth *model.UserAuth) (*model.UserAuth, *model.AppError)
+
+	// RegisterPluginForSharedChannels registers the plugin as a `Remote` for SharedChannels.
+	// The plugin will receive synchronization messages via the `OnSharedChannelsSyncMsg` hook.
+	// This API is idempotent - when called repeatedly with the same `RegisterPluginOpts.PluginID`
+	// it will return the same remoteID.
+	//
+	// @tag SharedChannels
+	// Minimum server version: 9.5
+	RegisterPluginForSharedChannels(opts model.RegisterPluginOpts) (remoteID string, err error)
+
+	// UnregisterPluginForSharedChannels unregisters the plugin as a `Remote` for SharedChannels.
+	// The plugin will no longer receive synchronization messages via the `OnSharedChannelsSyncMsg` hook.
+	//
+	// @tag SharedChannels
+	// Minimum server version: 9.5
+	UnregisterPluginForSharedChannels(pluginID string) error
+
+	// ShareChannel marks a channel for sharing via shared channels. Note, this does not automatically
+	// invite any remote clusters to the channel - use `InviteRemote` to invite a remote , or this plugin,
+	// to the shared channel and start synchronization.
+	//
+	// @tag SharedChannels
+	// Minimum server version: 9.5
+	ShareChannel(sc *model.SharedChannel) (*model.SharedChannel, error)
+
+	// UpdateSharedChannel updates a shared channel. This can be used to change the share name,
+	// display name, purpose, header, etc.
+	//
+	// @tag SharedChannels
+	// Minimum server version: 9.5
+	UpdateSharedChannel(sc *model.SharedChannel) (*model.SharedChannel, error)
+
+	// UnshareChannel unmarks a channel for sharing. The channel will no longer be shared and
+	// all remotes will be uninvited to the channel.
+	//
+	// @tag SharedChannels
+	// Minimum server version: 9.5
+	UnshareChannel(channelID string) (unshared bool, err error)
+
+	// UpdateSharedChannelCursor updates the cursor for the specified channel and RemoteID (passed by
+	// the plugin when registering).  This can be used to manually set the point of last sync, either
+	// forward to skip older posts, or backward to re-sync history.  This call by itself does not force
+	// a re-sync - a change to channel contents or a call to SyncSharedChannel are needed to force a sync.
+	//
+	// @tag SharedChannels
+	// Minimum server version: 9.5
+	UpdateSharedChannelCursor(channelID, remoteID string, cusror model.GetPostsSinceForSyncCursor) error
+
+	// SyncSharedChannel forces a shared channel to send any changed content to all remotes.
+	//
+	// @tag SharedChannels
+	// Minimum server version: 9.5
+	SyncSharedChannel(channelID string) error
+
+	// InviteRemoteToChannel invites a remote, or this plugin, as a target for synchronizing. Once invited, the
+	// remote will start to receive synchronization messages for any changed content in the specified channel.
+	// If `shareIfNotShared` is true, the channel's shared flag will be set, if not already.
+	//
+	// @tag SharedChannels
+	// Minimum server version: 9.5
+	InviteRemoteToChannel(channelID string, remoteID string, userID string, shareIfNotShared bool) error
+
+	// UninviteRemoteFromChannel uninvites a remote, or this plugin, such that it will stop receiving sychronization
+	// messages for the channel.
+	//
+	// @tag SharedChannels
+	// Minimum server version: 9.5
+	UninviteRemoteFromChannel(channelID string, remoteID string) error
+
+	// UpsertGroupMember adds a user to a group or updates their existing membership.
+	//
+	// @tag Group
+	// @tag User
+	// Minimum server version: 10.7
+	UpsertGroupMember(groupID string, userID string) (*model.GroupMember, *model.AppError)
+
+	// UpsertGroupMembers adds multiple users to a group or updates their existing memberships.
+	//
+	// @tag Group
+	// @tag User
+	// Minimum server version: 10.7
+	UpsertGroupMembers(groupID string, userIDs []string) ([]*model.GroupMember, *model.AppError)
+
+	// GetGroupByRemoteID gets a group by its remote ID.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	GetGroupByRemoteID(remoteID string, groupSource model.GroupSource) (*model.Group, *model.AppError)
+
+	// CreateGroup creates a new group.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	CreateGroup(group *model.Group) (*model.Group, *model.AppError)
+
+	// UpdateGroup updates a group.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	UpdateGroup(group *model.Group) (*model.Group, *model.AppError)
+
+	// DeleteGroup soft deletes a group.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	DeleteGroup(groupID string) (*model.Group, *model.AppError)
+
+	// RestoreGroup restores a soft deleted group.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	RestoreGroup(groupID string) (*model.Group, *model.AppError)
+
+	// DeleteGroupMember removes a user from a group.
+	//
+	// @tag Group
+	// @tag User
+	// Minimum server version: 10.7
+	DeleteGroupMember(groupID string, userID string) (*model.GroupMember, *model.AppError)
+
+	// GetGroupSyncable gets a group syncable.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	GetGroupSyncable(groupID string, syncableID string, syncableType model.GroupSyncableType) (*model.GroupSyncable, *model.AppError)
+
+	// GetGroupSyncables gets all group syncables for the given group.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	GetGroupSyncables(groupID string, syncableType model.GroupSyncableType) ([]*model.GroupSyncable, *model.AppError)
+
+	// UpsertGroupSyncable creates or updates a group syncable.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	UpsertGroupSyncable(groupSyncable *model.GroupSyncable) (*model.GroupSyncable, *model.AppError)
+
+	// UpdateGroupSyncable updates a group syncable.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	UpdateGroupSyncable(groupSyncable *model.GroupSyncable) (*model.GroupSyncable, *model.AppError)
+
+	// DeleteGroupSyncable deletes a group syncable.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	DeleteGroupSyncable(groupID string, syncableID string, syncableType model.GroupSyncableType) (*model.GroupSyncable, *model.AppError)
+
+	// UpdateUserRoles updates the role for a user.
+	//
+	// @tag Team
+	// @tag User
+	// Minimum server version: 9.8
+	UpdateUserRoles(userID, newRoles string) (*model.User, *model.AppError)
+
+	// GetPluginID returns the plugin ID.
+	//
+	// @tag Plugin
+	// Minimum server version: 10.1
+	GetPluginID() string
+
+	// GetGroups returns a list of all groups with the given options and restrictions.
+	//
+	// @tag Group
+	// Minimum server version: 10.7
+	GetGroups(page, perPage int, opts model.GroupSearchOpts, viewRestrictions *model.ViewUsersRestrictions) ([]*model.Group, *model.AppError)
 }
 
 var handshake = plugin.HandshakeConfig{

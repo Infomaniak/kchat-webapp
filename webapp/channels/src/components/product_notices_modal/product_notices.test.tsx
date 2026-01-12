@@ -41,6 +41,8 @@ describe('ProductNoticesModal', () => {
             connectionId: '',
             lastConnectAt: 1599760193593,
             lastDisconnectAt: 0,
+            firstDisconnect: 0,
+            serverHostname: '',
         },
         actions: {
             getInProductNotices: jest.fn().mockResolvedValue({data: noticesData}),

@@ -1,36 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/actions_menu/ActionsMenu has actions - end user - should not show actions and app marketplace 1`] = `
+exports[`components/actions_menu/ActionsMenu has actions - marketplace disabled or user not having SYSCONSOLE_WRITE_PLUGINS - should not show actions and app marketplace 1`] = `
 <MenuWrapper
   animationComponent={[Function]}
   className=""
   onToggle={[Function]}
   open={true}
 >
-  <OverlayTrigger
-    className="hidden-xs"
-    defaultOverlayShown={false}
-    delayShow={500}
-    overlay={
-      <Tooltip
-        bsClass="tooltip"
-        className="hidden-xs"
-        id="actions-menu-icon-tooltip"
-        placement="right"
-      >
-        <Memo(MemoizedFormattedMessage)
-          defaultMessage="Message actions"
-          id="post_info.tooltip.actions"
-        />
-      </Tooltip>
-    }
-    placement="top"
-    rootClose={true}
-    trigger={
-      Array [
-        "hover",
-        "focus",
-      ]
+  <WithTooltip
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Message actions"
+        id="post_info.tooltip.actions"
+      />
     }
   >
     <button
@@ -39,14 +21,13 @@ exports[`components/actions_menu/ActionsMenu has actions - end user - should not
       className="post-menu__item post-menu__item--active"
       id="center_actions_button_post_id_1"
       key="more-actions-button"
-      onClick={[Function]}
       type="button"
     >
       <i
         className="icon icon-apps"
       />
     </button>
-  </OverlayTrigger>
+  </WithTooltip>
   <Menu
     ariaLabel="Post extra options"
     id="center_actions_dropdown_post_id_1"
@@ -58,8 +39,9 @@ exports[`components/actions_menu/ActionsMenu has actions - end user - should not
       key="the_component_id_pluginmenuitem"
       onClick={[Function]}
       show={true}
+      text="Some text"
     />
-    <Connect(Pluggable)
+    <Pluggable
       key="post_id_1pluggable"
       pluggableName="PostDropdownMenuItem"
       postId="post_id_1"
@@ -68,37 +50,19 @@ exports[`components/actions_menu/ActionsMenu has actions - end user - should not
 </MenuWrapper>
 `;
 
-exports[`components/actions_menu/ActionsMenu has actions - sysadmin - should show actions and app marketplace 1`] = `
+exports[`components/actions_menu/ActionsMenu has actions - marketplace enabled and user has SYSCONSOLE_WRITE_PLUGINS - should show actions and app marketplace 1`] = `
 <MenuWrapper
   animationComponent={[Function]}
   className=""
   onToggle={[Function]}
   open={true}
 >
-  <OverlayTrigger
-    className="hidden-xs"
-    defaultOverlayShown={false}
-    delayShow={500}
-    overlay={
-      <Tooltip
-        bsClass="tooltip"
-        className="hidden-xs"
-        id="actions-menu-icon-tooltip"
-        placement="right"
-      >
-        <Memo(MemoizedFormattedMessage)
-          defaultMessage="Message actions"
-          id="post_info.tooltip.actions"
-        />
-      </Tooltip>
-    }
-    placement="top"
-    rootClose={true}
-    trigger={
-      Array [
-        "hover",
-        "focus",
-      ]
+  <WithTooltip
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Message actions"
+        id="post_info.tooltip.actions"
+      />
     }
   >
     <button
@@ -107,14 +71,13 @@ exports[`components/actions_menu/ActionsMenu has actions - sysadmin - should sho
       className="post-menu__item post-menu__item--active"
       id="center_actions_button_post_id_1"
       key="more-actions-button"
-      onClick={[Function]}
       type="button"
     >
       <i
         className="icon icon-apps"
       />
     </button>
-  </OverlayTrigger>
+  </WithTooltip>
   <Menu
     ariaLabel="Post extra options"
     id="center_actions_dropdown_post_id_1"
@@ -126,8 +89,9 @@ exports[`components/actions_menu/ActionsMenu has actions - sysadmin - should sho
       key="the_component_id_pluginmenuitem"
       onClick={[Function]}
       show={true}
+      text="Some text"
     />
-    <Connect(Pluggable)
+    <Pluggable
       key="post_id_1pluggable"
       pluggableName="PostDropdownMenuItem"
       postId="post_id_1"
@@ -139,8 +103,8 @@ exports[`components/actions_menu/ActionsMenu has actions - sysadmin - should sho
     />
     <MenuItemAction
       icon={
-        <span
-          className="icon-view-grid-plus-outline MenuItem__compass-icon"
+        <ActionsMenuIcon
+          name="icon-view-grid-plus-outline"
         />
       }
       id="marketplace_icon_post_id_1"
@@ -162,30 +126,12 @@ exports[`components/actions_menu/ActionsMenu no actions - sysadmin - menu should
   onToggle={[Function]}
   open={true}
 >
-  <OverlayTrigger
-    className="hidden-xs"
-    defaultOverlayShown={false}
-    delayShow={500}
-    overlay={
-      <Tooltip
-        bsClass="tooltip"
-        className="hidden-xs"
-        id="actions-menu-icon-tooltip"
-        placement="right"
-      >
-        <Memo(MemoizedFormattedMessage)
-          defaultMessage="Message actions"
-          id="post_info.tooltip.actions"
-        />
-      </Tooltip>
-    }
-    placement="top"
-    rootClose={true}
-    trigger={
-      Array [
-        "hover",
-        "focus",
-      ]
+  <WithTooltip
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Message actions"
+        id="post_info.tooltip.actions"
+      />
     }
   >
     <button
@@ -194,14 +140,13 @@ exports[`components/actions_menu/ActionsMenu no actions - sysadmin - menu should
       className="post-menu__item post-menu__item--active"
       id="center_actions_button_post_id_1"
       key="more-actions-button"
-      onClick={[Function]}
       type="button"
     >
       <i
         className="icon icon-apps"
       />
     </button>
-  </OverlayTrigger>
+  </WithTooltip>
   <Menu
     ariaLabel="Post extra options"
     id="center_actions_dropdown_post_id_1"
@@ -209,7 +154,7 @@ exports[`components/actions_menu/ActionsMenu no actions - sysadmin - menu should
     openLeft={true}
     openUp={false}
   >
-    <Connect(SystemPermissionGate)
+    <Memo(SystemPermissionGate)
       key="visit-marketplace-permissions"
       permissions={
         Array [
@@ -220,10 +165,18 @@ exports[`components/actions_menu/ActionsMenu no actions - sysadmin - menu should
       <div
         className="visit-marketplace-text"
       >
-        <FormattedMarkdownMessage
-          defaultMessage="No Actions currently\\\\nconfigured for this server"
-          id="post_info.actions.noActions"
-        />
+        <p>
+          <MemoizedFormattedMessage
+            defaultMessage="No Actions currently"
+            id="post_info.actions.noActions.first_line"
+          />
+        </p>
+        <p>
+          <MemoizedFormattedMessage
+            defaultMessage="configured for this server"
+            id="post_info.actions.noActions.second_line"
+          />
+        </p>
       </div>
       <div
         className="visit-marketplace"
@@ -233,20 +186,20 @@ exports[`components/actions_menu/ActionsMenu no actions - sysadmin - menu should
           id="marketPlaceButton"
           onClick={[Function]}
         >
-          <span
-            className="icon-view-grid-plus-outline visit-marketplace-button-icon MenuItem__compass-icon"
+          <ActionsMenuIcon
+            name="icon-view-grid-plus-outline visit-marketplace-button-icon"
           />
           <span
             className="visit-marketplace-button-text"
           >
-            <FormattedMarkdownMessage
+            <MemoizedFormattedMessage
               defaultMessage="Visit the Marketplace"
               id="post_info.actions.visitMarketplace"
             />
           </span>
         </button>
       </div>
-    </Connect(SystemPermissionGate)>
+    </Memo(SystemPermissionGate)>
   </Menu>
 </MenuWrapper>
 `;

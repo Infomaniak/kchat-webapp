@@ -5,12 +5,14 @@ import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
+import type {Post} from '@mattermost/types/posts';
+
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import type {Post} from 'mattermost-redux/types/posts';
 
 import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannelV2} from 'actions/calls';
-import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
+import {joinCall} from 'actions/kmeet_calls';
+import {getConferenceByChannelId, getIsAnyUserInConference} from 'selectors/kmeet_calls';
 
 import type {GlobalState} from 'types/store';
 
@@ -22,11 +24,13 @@ interface OwnProps {
 
 const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     const currentChannelID = getCurrentChannelId(state);
-    const connectedKmeetUrl = (ownProps.post.props.conference_id && !ownProps.post.props.end_at) ? connectedKmeetCallUrl(state, currentChannelID) : '';
+    const conference = (ownProps.post.props.conference_id && !ownProps.post.props.end_at) ? getConferenceByChannelId(state, currentChannelID) : undefined;
+    const hasConferenceStarted = (ownProps.post.props.conference_id && !ownProps.post.props.end_at) ? getIsAnyUserInConference(state, currentChannelID) : undefined;
 
     return {
         ...ownProps,
-        connectedKmeetUrl,
+        conference,
+        hasConferenceStarted,
         isDialingEnabled: callDialingEnabled(state),
     };
 };
@@ -35,6 +39,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     startOrJoinCallInChannelV2,
     showSwitchCallModal,
     leaveCallInChannel,
+    joinCall,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostType);

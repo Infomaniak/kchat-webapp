@@ -1,6 +1,6 @@
-@charset 'UTF-8';
-
 .alert {
+    // padding: 8px 12px;
+    // border-radius: var(--radius-s);
     padding: 16px 16px;
     border-radius: 10px;
     background: var(--ik-illustration-grey-15);
@@ -13,12 +13,30 @@
         display: flex;
         justify-content: space-between;
         i {
-            font-size: 16px;
             // 3px is directly on the pseudo element, +9 to make 12px
             padding-right: 9px;
+            font-size: 16px;
+        }
+    }
+    &.alert-with-icon-leave {
+        display: flex;
+        margin-right: 30px;
+        margin-left: 30px;
+        i {
+            padding-right: 9px;
+            font-size: 16px;
         }
     }
 }
+
+.alert-message {
+    display: flex;
+    justify-content: start;
+    margin-bottom: 10px;
+    margin-left: 30px;
+    font-weight: 600;
+}
+
 
 .alert-grey {
     i {

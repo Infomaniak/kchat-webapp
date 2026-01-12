@@ -43,7 +43,7 @@ exports[`components/integrations/AbstractIncomingWebhook should call action func
           <input
             className="form-control"
             id="displayName"
-            maxLength="64"
+            maxLength={64}
             onChange={[Function]}
             type="text"
             value="testIncomingWebhook"
@@ -76,7 +76,7 @@ exports[`components/integrations/AbstractIncomingWebhook should call action func
           <input
             className="form-control"
             id="description"
-            maxLength="500"
+            maxLength={500}
             onChange={[Function]}
             type="text"
             value="testing"
@@ -106,9 +106,9 @@ exports[`components/integrations/AbstractIncomingWebhook should call action func
         <div
           className="col-md-5 col-sm-8"
         >
-          <Connect(ChannelSelect)
-            id="channelId"
+          <Connect(Component)
             onChange={[Function]}
+            selectDm={false}
             selectOpen={true}
             selectPrivate={true}
             value="88cxd9wpzpbpfp8pad78xj75pr"
@@ -172,7 +172,7 @@ exports[`components/integrations/AbstractIncomingWebhook should call action func
           <input
             className="form-control"
             id="username"
-            maxLength="22"
+            maxLength={22}
             onChange={[Function]}
             type="text"
             value=""
@@ -205,7 +205,7 @@ exports[`components/integrations/AbstractIncomingWebhook should call action func
           <input
             className="form-control"
             id="iconURL"
-            maxLength="1024"
+            maxLength={1024}
             onChange={[Function]}
             type="text"
             value=""
@@ -223,8 +223,7 @@ exports[`components/integrations/AbstractIncomingWebhook should call action func
       <div
         className="backstage-form__footer"
       >
-        <FormError
-          error={null}
+        <Memo(FormError)
           errors={
             Array [
               "",
@@ -234,7 +233,7 @@ exports[`components/integrations/AbstractIncomingWebhook should call action func
           type="backstage"
         />
         <Link
-          className="btn btn-link btn-sm"
+          className="btn btn-tertiary"
           to="/team_name/integrations/incoming_webhooks"
         >
           <MemoizedFormattedMessage
@@ -242,19 +241,24 @@ exports[`components/integrations/AbstractIncomingWebhook should call action func
             id="add_incoming_webhook.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveWebhook"
           onClick={[Function]}
           spinning={false}
-          spinningText="Loading"
+          spinningText={
+            Object {
+              "defaultMessage": "Loading",
+              "id": "loading_id",
+            }
+          }
           type="submit"
         >
           <MemoizedFormattedMessage
             defaultMessage="Footer"
             id="footer_id"
           />
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
       </div>
     </form>
   </div>
@@ -304,7 +308,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot 1
           <input
             className="form-control"
             id="displayName"
-            maxLength="64"
+            maxLength={64}
             onChange={[Function]}
             type="text"
             value="testIncomingWebhook"
@@ -337,7 +341,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot 1
           <input
             className="form-control"
             id="description"
-            maxLength="500"
+            maxLength={500}
             onChange={[Function]}
             type="text"
             value="testing"
@@ -367,9 +371,9 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot 1
         <div
           className="col-md-5 col-sm-8"
         >
-          <Connect(ChannelSelect)
-            id="channelId"
+          <Connect(Component)
             onChange={[Function]}
+            selectDm={false}
             selectOpen={true}
             selectPrivate={true}
             value="88cxd9wpzpbpfp8pad78xj75pr"
@@ -433,7 +437,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot 1
           <input
             className="form-control"
             id="username"
-            maxLength="22"
+            maxLength={22}
             onChange={[Function]}
             type="text"
             value=""
@@ -466,7 +470,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot 1
           <input
             className="form-control"
             id="iconURL"
-            maxLength="1024"
+            maxLength={1024}
             onChange={[Function]}
             type="text"
             value=""
@@ -484,8 +488,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot 1
       <div
         className="backstage-form__footer"
       >
-        <FormError
-          error={null}
+        <Memo(FormError)
           errors={
             Array [
               "",
@@ -495,7 +498,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot 1
           type="backstage"
         />
         <Link
-          className="btn btn-link btn-sm"
+          className="btn btn-tertiary"
           to="/team_name/integrations/incoming_webhooks"
         >
           <MemoizedFormattedMessage
@@ -503,19 +506,24 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot 1
             id="add_incoming_webhook.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveWebhook"
           onClick={[Function]}
           spinning={false}
-          spinningText="Loading"
+          spinningText={
+            Object {
+              "defaultMessage": "Loading",
+              "id": "loading_id",
+            }
+          }
           type="submit"
         >
           <MemoizedFormattedMessage
             defaultMessage="Footer"
             id="footer_id"
           />
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
       </div>
     </form>
   </div>
@@ -565,7 +573,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="displayName"
-            maxLength="64"
+            maxLength={64}
             onChange={[Function]}
             type="text"
             value=""
@@ -598,7 +606,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="description"
-            maxLength="500"
+            maxLength={500}
             onChange={[Function]}
             type="text"
             value=""
@@ -628,9 +636,9 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
         <div
           className="col-md-5 col-sm-8"
         >
-          <Connect(ChannelSelect)
-            id="channelId"
+          <Connect(Component)
             onChange={[Function]}
+            selectDm={false}
             selectOpen={true}
             selectPrivate={true}
             value=""
@@ -694,7 +702,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="username"
-            maxLength="22"
+            maxLength={22}
             onChange={[Function]}
             type="text"
             value=""
@@ -727,7 +735,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="iconURL"
-            maxLength="1024"
+            maxLength={1024}
             onChange={[Function]}
             type="text"
             value=""
@@ -745,8 +753,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
       <div
         className="backstage-form__footer"
       >
-        <FormError
-          error={null}
+        <Memo(FormError)
           errors={
             Array [
               "",
@@ -759,7 +766,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           type="backstage"
         />
         <Link
-          className="btn btn-link btn-sm"
+          className="btn btn-tertiary"
           to="/team_name/integrations/incoming_webhooks"
         >
           <MemoizedFormattedMessage
@@ -767,19 +774,24 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
             id="add_incoming_webhook.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveWebhook"
           onClick={[Function]}
           spinning={false}
-          spinningText="Loading"
+          spinningText={
+            Object {
+              "defaultMessage": "Loading",
+              "id": "loading_id",
+            }
+          }
           type="submit"
         >
           <MemoizedFormattedMessage
             defaultMessage="Footer"
             id="footer_id"
           />
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
       </div>
     </form>
   </div>
@@ -829,7 +841,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="displayName"
-            maxLength="64"
+            maxLength={64}
             onChange={[Function]}
             type="text"
             value="testIncomingWebhook"
@@ -862,7 +874,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="description"
-            maxLength="500"
+            maxLength={500}
             onChange={[Function]}
             type="text"
             value="testing"
@@ -892,9 +904,9 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
         <div
           className="col-md-5 col-sm-8"
         >
-          <Connect(ChannelSelect)
-            id="channelId"
+          <Connect(Component)
             onChange={[Function]}
+            selectDm={false}
             selectOpen={true}
             selectPrivate={true}
             value="88cxd9wpzpbpfp8pad78xj75pr"
@@ -958,7 +970,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="username"
-            maxLength="22"
+            maxLength={22}
             onChange={[Function]}
             type="text"
             value=""
@@ -976,8 +988,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
       <div
         className="backstage-form__footer"
       >
-        <FormError
-          error={null}
+        <Memo(FormError)
           errors={
             Array [
               "",
@@ -987,7 +998,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           type="backstage"
         />
         <Link
-          className="btn btn-link btn-sm"
+          className="btn btn-tertiary"
           to="/team_name/integrations/incoming_webhooks"
         >
           <MemoizedFormattedMessage
@@ -995,19 +1006,24 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
             id="add_incoming_webhook.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveWebhook"
           onClick={[Function]}
           spinning={false}
-          spinningText="Loading"
+          spinningText={
+            Object {
+              "defaultMessage": "Loading",
+              "id": "loading_id",
+            }
+          }
           type="submit"
         >
           <MemoizedFormattedMessage
             defaultMessage="Footer"
             id="footer_id"
           />
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
       </div>
     </form>
   </div>
@@ -1057,7 +1073,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="displayName"
-            maxLength="64"
+            maxLength={64}
             onChange={[Function]}
             type="text"
             value="testIncomingWebhook"
@@ -1090,7 +1106,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="description"
-            maxLength="500"
+            maxLength={500}
             onChange={[Function]}
             type="text"
             value="testing"
@@ -1120,9 +1136,9 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
         <div
           className="col-md-5 col-sm-8"
         >
-          <Connect(ChannelSelect)
-            id="channelId"
+          <Connect(Component)
             onChange={[Function]}
+            selectDm={false}
             selectOpen={true}
             selectPrivate={true}
             value="88cxd9wpzpbpfp8pad78xj75pr"
@@ -1186,7 +1202,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="iconURL"
-            maxLength="1024"
+            maxLength={1024}
             onChange={[Function]}
             type="text"
             value=""
@@ -1204,8 +1220,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
       <div
         className="backstage-form__footer"
       >
-        <FormError
-          error={null}
+        <Memo(FormError)
           errors={
             Array [
               "",
@@ -1215,7 +1230,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           type="backstage"
         />
         <Link
-          className="btn btn-link btn-sm"
+          className="btn btn-tertiary"
           to="/team_name/integrations/incoming_webhooks"
         >
           <MemoizedFormattedMessage
@@ -1223,19 +1238,24 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
             id="add_incoming_webhook.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveWebhook"
           onClick={[Function]}
           spinning={false}
-          spinningText="Loading"
+          spinningText={
+            Object {
+              "defaultMessage": "Loading",
+              "id": "loading_id",
+            }
+          }
           type="submit"
         >
           <MemoizedFormattedMessage
             defaultMessage="Footer"
             id="footer_id"
           />
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
       </div>
     </form>
   </div>
@@ -1285,7 +1305,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="displayName"
-            maxLength="64"
+            maxLength={64}
             onChange={[Function]}
             type="text"
             value="testIncomingWebhook"
@@ -1318,7 +1338,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="description"
-            maxLength="500"
+            maxLength={500}
             onChange={[Function]}
             type="text"
             value="testing"
@@ -1348,9 +1368,9 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
         <div
           className="col-md-5 col-sm-8"
         >
-          <Connect(ChannelSelect)
-            id="channelId"
+          <Connect(Component)
             onChange={[Function]}
+            selectDm={false}
             selectOpen={true}
             selectPrivate={true}
             value="88cxd9wpzpbpfp8pad78xj75pr"
@@ -1414,7 +1434,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="username"
-            maxLength="22"
+            maxLength={22}
             onChange={[Function]}
             type="text"
             value=""
@@ -1447,7 +1467,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           <input
             className="form-control"
             id="iconURL"
-            maxLength="1024"
+            maxLength={1024}
             onChange={[Function]}
             type="text"
             value=""
@@ -1465,8 +1485,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
       <div
         className="backstage-form__footer"
       >
-        <FormError
-          error={null}
+        <Memo(FormError)
           errors={
             Array [
               "serverError",
@@ -1476,7 +1495,7 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
           type="backstage"
         />
         <Link
-          className="btn btn-link btn-sm"
+          className="btn btn-tertiary"
           to="/team_name/integrations/incoming_webhooks"
         >
           <MemoizedFormattedMessage
@@ -1484,19 +1503,24 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
             id="add_incoming_webhook.cancel"
           />
         </Link>
-        <SpinnerButton
+        <Memo(SpinnerButton)
           className="btn btn-primary"
           id="saveWebhook"
           onClick={[Function]}
           spinning={false}
-          spinningText="Loading"
+          spinningText={
+            Object {
+              "defaultMessage": "Loading",
+              "id": "loading_id",
+            }
+          }
           type="submit"
         >
           <MemoizedFormattedMessage
             defaultMessage="Footer"
             id="footer_id"
           />
-        </SpinnerButton>
+        </Memo(SpinnerButton)>
       </div>
     </form>
   </div>

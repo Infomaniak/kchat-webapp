@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {useEffect, useRef, useState, useMemo} from 'react';
+import {useEffect, useRef, useState, useMemo, useCallback} from 'react';
 
 export function useElementAvailable(
     elementIds: string[],
@@ -9,25 +9,29 @@ export function useElementAvailable(
 ): boolean {
     const checkAvailableInterval = useRef<NodeJS.Timeout | null>(null);
     const [available, setAvailable] = useState(false);
+
+    const cleanup = useCallback(() => {
+        if (checkAvailableInterval.current) {
+            clearInterval(checkAvailableInterval.current);
+            checkAvailableInterval.current = null;
+        }
+    }, []);
+
     useEffect(() => {
         if (available) {
-            if (checkAvailableInterval.current) {
-                clearInterval(checkAvailableInterval.current);
-                checkAvailableInterval.current = null;
-            }
-            return;
+            cleanup();
+            return () => {};
         } else if (checkAvailableInterval.current) {
-            return;
+            return () => {};
         }
         checkAvailableInterval.current = setInterval(() => {
             if (elementIds.every((x) => document.getElementById(x))) {
                 setAvailable(true);
-                if (checkAvailableInterval.current) {
-                    clearInterval(checkAvailableInterval.current);
-                    checkAvailableInterval.current = null;
-                }
+                cleanup();
             }
         }, intervalMS);
+
+        return cleanup;
     }, []);
 
     return useMemo(() => available, [available]);

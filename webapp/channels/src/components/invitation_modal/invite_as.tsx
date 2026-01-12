@@ -2,23 +2,17 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
-import {getSubscriptionProduct, checkHadPriorTrial} from 'mattermost-redux/selectors/entities/cloud';
+import {getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
-
-import {closeModal, openModal} from 'actions/views/modals';
 
 import RadioGroup from 'components/common/radio_group';
-import InvitationModal from 'components/invitation_modal';
-import RestrictedIndicator from 'components/widgets/menu/menu_items/restricted_indicator';
 
-import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
-import {CloudProducts, LicenseSkus, ModalIdentifiers, MattermostFeatures} from 'utils/constants';
+import {CloudProducts} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 import './invite_as.scss';
@@ -37,9 +31,8 @@ export type Props = {
 }
 
 export default function InviteAs(props: Props) {
-    const {formatMessage} = useIntl();
     const license = useSelector(getLicense);
-    const dispatch = useDispatch<DispatchFunc>();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getPrevTrialLicense());
@@ -64,70 +57,12 @@ export default function InviteAs(props: Props) {
     const isSelfHostedTrial = license.IsTrial === 'true';
     const isFreeTrial = isCloudFreeTrial || isSelfHostedTrial;
 
-    const hasCloudPriorTrial = useSelector(checkHadPriorTrial);
-    const prevTrialLicense = useSelector((state: GlobalState) => state.entities.admin.prevTrialLicense);
-    const hasSelfHostedPriorTrial = prevTrialLicense.IsLicensed === 'true';
-    const hasPriorTrial = hasCloudPriorTrial || hasSelfHostedPriorTrial;
-
     const isPaidSubscription = !isStarter && !isFreeTrial;
 
     // show the badge logic (the restricted indicator takes care of the look when it is trial or not)
     if (isSystemAdmin && !isPaidSubscription) {
-        const closeInviteModal = () => {
-            dispatch(closeModal(ModalIdentifiers.INVITATION));
-        };
+        const restrictedIndicator = '';
 
-        let ctaExtraContentMsg = '';
-        if (isFreeTrial) {
-            ctaExtraContentMsg = formatMessage({id: 'free.professional_feature.professional', defaultMessage: 'Professional feature'});
-        } else {
-            ctaExtraContentMsg = hasPriorTrial ? formatMessage({id: 'free.professional_feature.upgrade', defaultMessage: 'Upgrade'}) : formatMessage({id: 'free.professional_feature.try_free', defaultMessage: 'Professional feature- try it out free'});
-        }
-
-        const restrictedIndicator = (
-            <RestrictedIndicator
-                blocked={!isFreeTrial}
-                feature={MattermostFeatures.GUEST_ACCOUNTS}
-                minimumPlanRequiredForFeature={LicenseSkus.Professional}
-                titleAdminPreTrial={formatMessage({
-                    id: 'invite_modal.restricted_invite_guest.pre_trial_title',
-                    defaultMessage: 'Try inviting guests with a free trial',
-                })}
-                messageAdminPreTrial={formatMessage({
-                    id: 'invite_modal.restricted_invite_guest.pre_trial_description',
-                    defaultMessage: 'Collaborate with users outside of your organization while tightly controlling their access to channels and team members. Get the full experience of Enterprise when you start a free, {trialLength} day trial.',
-                },
-                {trialLength: FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS},
-                )}
-                titleAdminPostTrial={formatMessage({
-                    id: 'invite_modal.restricted_invite_guest.post_trial_title',
-                    defaultMessage: 'Upgrade to invite guest',
-                })}
-                messageAdminPostTrial={formatMessage({
-                    id: 'invite_modal.restricted_invite_guest.post_trial_description',
-                    defaultMessage: 'Collaborate with users outside of your organization while tightly controlling their access to channels and team members. Upgrade to the Professional plan to create unlimited user groups.',
-                })}
-                ctaExtraContent={(
-                    <span className='tag-text'>
-                        {ctaExtraContentMsg}
-                    </span>
-                )}
-                clickCallback={closeInviteModal}
-                tooltipMessage={hasPriorTrial ? formatMessage({id: 'free.professional_feature.upgrade', defaultMessage: 'Upgrade'}) : undefined}
-
-                // the secondary back button first closes the restridted feature modal and then opens back the invitation modal
-                customSecondaryButtonInModal={hasPriorTrial ? undefined : {
-                    msg: formatMessage({id: 'free.professional_feature.back', defaultMessage: 'Back'}),
-                    action: () => {
-                        dispatch(closeModal(ModalIdentifiers.FEATURE_RESTRICTED_MODAL));
-                        dispatch(openModal({
-                            modalId: ModalIdentifiers.INVITATION,
-                            dialogType: InvitationModal,
-                        }));
-                    },
-                }}
-            />
-        );
         guestDisabledClass = isFreeTrial ? '' : 'disabled-legend';
         badges = {
             matchVal: InviteType.GUEST as string,

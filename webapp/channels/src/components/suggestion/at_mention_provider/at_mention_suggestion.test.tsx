@@ -3,10 +3,12 @@
 
 import React from 'react';
 
-import AtMentionSuggestion from 'components/suggestion/at_mention_provider/at_mention_suggestion';
+import * as Utils from 'utils/utils';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import * as Utils from 'utils/utils';
+
+import {AtMentionSuggestion} from './at_mention_suggestion/at_mention_suggestion';
+import type {Item} from './at_mention_suggestion/at_mention_suggestion';
 
 jest.mock('components/custom_status/custom_status_emoji', () => () => <div/>);
 jest.spyOn(Utils, 'getFullName').mockReturnValue('a b');
@@ -19,7 +21,8 @@ describe('at mention suggestion', () => {
         last_name: 'b',
         nickname: 'c',
         isCurrentUser: true,
-    };
+        textboxId: 'post_textbox',
+    } as Item;
 
     const userid2 = {
         id: 'userid2',
@@ -27,14 +30,22 @@ describe('at mention suggestion', () => {
         first_name: 'a',
         last_name: 'b',
         nickname: 'c',
+        textboxId: 'post_textbox',
+    } as Item;
+
+    const baseProps = {
+        matchedPretext: '@',
+        term: '@user',
+        isSelection: false,
+        onClick: jest.fn(),
+        onMouseMove: jest.fn(),
     };
 
     it('Should not display nick name of the signed in user', () => {
         const wrapper = mountWithIntl(
             <AtMentionSuggestion
+                {...baseProps}
                 item={userid1}
-                matchedPretext='@'
-                term='@user'
             />,
         );
 
@@ -47,9 +58,8 @@ describe('at mention suggestion', () => {
     it('Should display nick name of non signed in user', () => {
         const wrapper = mountWithIntl(
             <AtMentionSuggestion
+                {...baseProps}
                 item={userid2}
-                matchedPretext='@'
-                term='@user'
             />,
         );
 

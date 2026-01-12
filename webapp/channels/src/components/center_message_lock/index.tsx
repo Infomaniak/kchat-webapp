@@ -43,10 +43,10 @@ function getNextDay(timestamp?: number): number {
 export default function CenterMessageLock(props: Props) {
     const intl = useIntl();
 
-    const openPricingModal = useOpenPricingModal();
     const isAdminUser = isAdmin(useSelector(getCurrentUser).roles);
     const [cloudLimits, limitsLoaded] = useGetLimits();
     const currentTeam = useSelector(getCurrentTeam);
+    const openPricingModal = useOpenPricingModal();
 
     // firstInaccessiblePostTime is the most recently inaccessible post's created at date.
     // It is used as a backup for when there are no available posts in the channel;
@@ -123,7 +123,8 @@ export default function CenterMessageLock(props: Props) {
                         href='#'
                         onClick={(e: React.MouseEvent) => {
                             e.preventDefault();
-                            openPricingModal({trackingLocation: 'center_channel_posts_over_limit_banner'});
+
+                            // openPricingModal({trackingLocation: 'center_channel_posts_over_limit_banner'});
                         }}
                     >
                         {chunks}
@@ -149,7 +150,7 @@ export default function CenterMessageLock(props: Props) {
 
     return (<div className='CenterMessageLock'>
         <div className='CenterMessageLock__left'>
-            <EyeOffOutlineIcon color={'rgba(var(--center-channel-color-rgb), 0.72)'}/>
+            <EyeOffOutlineIcon color={'rgba(var(--center-channel-color-rgb), 0.75)'}/>
         </div>
         <div className='CenterMessageLock__right'>
             <div className='CenterMessageLock__title'>

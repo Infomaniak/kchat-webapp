@@ -38,7 +38,7 @@ const TopDMsAndNewMembers = (props: WidgetHocProps) => {
     const currentTeam = useSelector(getCurrentTeam);
 
     const getMyTopTeamDMs = useCallback(async () => {
-        if (props.filterType === InsightsScopes.MY) {
+        if (props.filterType === InsightsScopes.MY && currentTeam) {
             setLoading(true);
             const data: any = await dispatch(getMyTopDMs(currentTeam.id, 0, 6, props.timeFrame));
             if (data.data?.items) {
@@ -49,7 +49,7 @@ const TopDMsAndNewMembers = (props: WidgetHocProps) => {
     }, [props.timeFrame, props.filterType]);
 
     const getNewTeamMembersList = useCallback(async () => {
-        if (props.filterType === InsightsScopes.TEAM) {
+        if (props.filterType === InsightsScopes.TEAM && currentTeam) {
             setLoading(true);
             const data: any = await dispatch(getNewTeamMembers(currentTeam.id, 0, 5, props.timeFrame));
             if (data.data?.items) {
@@ -115,7 +115,7 @@ const TopDMsAndNewMembers = (props: WidgetHocProps) => {
             dialogType: InsightsModal,
             dialogProps: {
                 widgetType: props.widgetType,
-                title: localizeMessage('insights.newTeamMembers.title', 'New team members'),
+                title: localizeMessage({id: 'insights.newTeamMembers.title', defaultMessage: 'New team members'}),
                 subtitle: '',
                 filterType: props.filterType,
                 timeFrame: props.timeFrame,
@@ -130,7 +130,7 @@ const TopDMsAndNewMembers = (props: WidgetHocProps) => {
                 skeletonLoader
             }
             {
-                (!loading && topDMs && props.filterType === InsightsScopes.MY) &&
+                (!loading && topDMs && props.filterType === InsightsScopes.MY && currentTeam) &&
                 topDMs.map((topDM: TopDM, index: number) => {
                     const barSize = ((topDM.post_count / topDMs[0].post_count) * 0.75);
                     return (
@@ -144,7 +144,7 @@ const TopDMsAndNewMembers = (props: WidgetHocProps) => {
                 })
             }
             {
-                (!loading && props.filterType === InsightsScopes.TEAM && newMembers.length > 0) && (
+                (!loading && props.filterType === InsightsScopes.TEAM && newMembers.length > 0 && currentTeam) && (
                     <>
                         <NewMembersTotal
                             total={totalNewMembers}

@@ -1,81 +1,79 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import {defineMessages, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 
-import type {
-    KeyboardShortcutDescriptor} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import {isCallsEnabled} from 'selectors/calls';
+
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import type {
+    KeyboardShortcutDescriptor} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 
-import {suitePluginIds} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
-
-import type {GlobalState} from 'types/store';
+import * as UserAgent from 'utils/user_agent';
 
 import './keyboard_shortcuts_modal.scss';
 
 const modalMessages = defineMessages({
     msgHeader: {
-        id: t('shortcuts.msgs.header'),
+        id: 'shortcuts.msgs.header',
         defaultMessage: 'Messages',
     },
     msgInputHeader: {
-        id: t('shortcuts.msgs.input.header'),
+        id: 'shortcuts.msgs.input.header',
         defaultMessage: 'Works inside an empty input field',
     },
     filesHeader: {
-        id: t('shortcuts.files.header'),
+        id: 'shortcuts.files.header',
         defaultMessage: 'Files',
     },
     browserHeader: {
-        id: t('shortcuts.browser.header'),
+        id: 'shortcuts.browser.header',
         defaultMessage: 'Built-in Browser Commands',
     },
     msgCompHeader: {
-        id: t('shortcuts.msgs.comp.header'),
+        id: 'shortcuts.msgs.comp.header',
         defaultMessage: 'Autocomplete',
     },
     browserInputHeader: {
-        id: t('shortcuts.browser.input.header'),
+        id: 'shortcuts.browser.input.header',
         defaultMessage: 'Works inside an input field',
     },
     msgMarkdownHeader: {
-        id: t('shortcuts.msgs.markdown.header'),
+        id: 'shortcuts.msgs.markdown.header',
         defaultMessage: 'Formatting',
     },
     info: {
-        id: t('shortcuts.info'),
+        id: 'shortcuts.info',
         defaultMessage:
             'Begin a message with / for a list of all the available slash commands.',
     },
     navHeader: {
-        id: t('shortcuts.nav.header'),
+        id: 'shortcuts.nav.header',
         defaultMessage: 'Navigation',
     },
     msgSearchHeader: {
-        id: t('shortcuts.msgs.search.header'),
+        id: 'shortcuts.msgs.search.header',
         defaultMessage: 'Searching',
     },
     callsHeader: {
-        id: t('shortcuts.calls.header'),
+        id: 'shortcuts.calls.header',
         defaultMessage: 'Calls',
     },
     callsGlobalHeader: {
-        id: t('shortcuts.calls.global.header'),
+        id: 'shortcuts.calls.global.header',
         defaultMessage: 'Global',
     },
     callsWidgetHeader: {
-        id: t('shortcuts.calls.widget.header'),
+        id: 'shortcuts.calls.widget.header',
         defaultMessage: 'Call widget',
     },
     callsExpandedHeader: {
-        id: t('shortcuts.calls.expanded.header'),
+        id: 'shortcuts.calls.expanded.header',
         defaultMessage: 'Expanded view (pop-out window)',
     },
 });
@@ -86,16 +84,15 @@ interface Props {
 
 const KeyboardShortcutsModal = ({onExited}: Props): JSX.Element => {
     const [show, setShow] = useState(true);
+    const contentRef = useRef<HTMLDivElement>(null);
 
     const {formatMessage} = useIntl();
 
     const handleHide = useCallback(() => setShow(false), []);
 
-    const isLinux = Utils.isLinux();
+    const isLinux = UserAgent.isLinux();
 
-    const isCallsEnabled = useSelector((state: GlobalState) => {
-        return Boolean(state.plugins.plugins[suitePluginIds.calls]);
-    });
+    const callsEnabled = useSelector(isCallsEnabled);
 
     const renderShortcutSequences = (shortcuts: {[key: string]: KeyboardShortcutDescriptor}) => {
         return Object.entries(shortcuts).map(([key, shortcut]) => {
@@ -108,17 +105,24 @@ const KeyboardShortcutsModal = ({onExited}: Props): JSX.Element => {
         });
     };
 
+    useEffect(() => {
+        contentRef.current?.focus();
+    }, []);
+
     return (
         <Modal
             dialogClassName='a11y__modal shortcuts-modal'
             show={show}
             onHide={handleHide}
             onExited={onExited}
-            role='dialog'
+            role='none'
             aria-labelledby='shortcutsModalLabel'
         >
             <div className='shortcuts-content'>
-                <Modal.Header closeButton={true}>
+                <Modal.Header
+                    closeButton={true}
+                    className='divider'
+                >
                     <Modal.Title
                         componentClass='h1'
                         id='shortcutsModalLabel'
@@ -126,7 +130,11 @@ const KeyboardShortcutsModal = ({onExited}: Props): JSX.Element => {
                         <strong><KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.mainHeader}/></strong>
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body tabIndex={0}>
+                    <div
+                        tabIndex={-1}
+                        ref={contentRef}
+                    />
                     <div className='row'>
                         <div className='col-sm-4'>
                             <div className='section'>
@@ -155,82 +163,75 @@ const KeyboardShortcutsModal = ({onExited}: Props): JSX.Element => {
                             <div className='section'>
                                 <div>
                                     <h3 className='section-title'><strong>{formatMessage(modalMessages.msgHeader)}</strong></h3>
-                                    <span><strong>{formatMessage(modalMessages.msgInputHeader)}</strong></span>
                                     <div className='subsection'>
+                                        <h4 className='subsection-title'>{formatMessage(modalMessages.msgInputHeader)}</h4>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgEdit}/>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReply}/>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgLastReaction}/>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReprintPrev}/>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReprintNext}/>
                                     </div>
-                                    <span><strong>{formatMessage(modalMessages.msgCompHeader)}</strong></span>
                                     <div className='subsection'>
+                                        <h4 className='subsection-title'>{formatMessage(modalMessages.msgCompHeader)}</h4>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgCompUsername}/>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgCompChannel}/>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgCompEmoji}/>
                                     </div>
-                                    <span><strong>{formatMessage(modalMessages.msgMarkdownHeader)}</strong></span>
                                     <div className='subsection'>
+                                        <h4 className='subsection-title'>{formatMessage(modalMessages.msgMarkdownHeader)}</h4>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgMarkdownBold}/>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgMarkdownItalic}/>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgMarkdownLink}/>
                                     </div>
-                                    <span><strong>{formatMessage(modalMessages.msgSearchHeader)}</strong></span>
                                     <div className='subsection'>
+                                        <h4 className='subsection-title'>{formatMessage(modalMessages.msgSearchHeader)}</h4>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgSearchChannel}/>
+                                    </div>
+                                    <div className='subsection'>
+                                        <h4 className='subsection-title'>{formatMessage(modalMessages.filesHeader)}</h4>
+                                        <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.filesUpload}/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className='col-sm-4'>
                             <div className='section'>
-                                <div>
-                                    <h3 className='section-title'><strong>{formatMessage(modalMessages.filesHeader)}</strong></h3>
-                                    <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.filesUpload}/>
-                                </div>
                                 <div className='section--lower'>
                                     <h3 className='section-title'><strong>{formatMessage(modalMessages.browserHeader)}</strong></h3>
                                     <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserChannelPrev}/>
                                     <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserChannelNext}/>
                                     <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserFontIncrease}/>
                                     <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserFontDecrease}/>
-                                    <span><strong>{formatMessage(modalMessages.browserInputHeader)}</strong></span>
                                     <div className='subsection'>
+                                        <h4 className='subsection-title'>{formatMessage(modalMessages.browserInputHeader)}</h4>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserHighlightPrev}/>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserHighlightNext}/>
                                         <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserNewline}/>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                    </div>
-                    { isCallsEnabled &&
-                    <div className='row'>
-                        <div className='col-sm-4'>
+                            { callsEnabled &&
                             <div className='section'>
                                 <div>
                                     <h3 className='section-title'><strong>{formatMessage(modalMessages.callsHeader)}</strong></h3>
-
-                                    <span><strong>{formatMessage(modalMessages.callsGlobalHeader)}</strong></span>
                                     <div className='subsection'>
+                                        <h4 className='subsection-title'>{formatMessage(modalMessages.callsGlobalHeader)}</h4>
                                         {renderShortcutSequences(KEYBOARD_SHORTCUTS.calls.global)}
                                     </div>
 
-                                    <span><strong>{formatMessage(modalMessages.callsWidgetHeader)}</strong></span>
                                     <div className='subsection'>
+                                        <h4 className='subsection-title'>{formatMessage(modalMessages.callsWidgetHeader)}</h4>
                                         {renderShortcutSequences(KEYBOARD_SHORTCUTS.calls.widget)}
                                     </div>
-
-                                    <span><strong>{formatMessage(modalMessages.callsExpandedHeader)}</strong></span>
                                     <div className='subsection'>
+                                        <h4 className='subsection-title'>{formatMessage(modalMessages.callsExpandedHeader)}</h4>
                                         {renderShortcutSequences(KEYBOARD_SHORTCUTS.calls.popout)}
                                     </div>
                                 </div>
                             </div>
+                            }
                         </div>
                     </div>
-                    }
                     <div className='info__label'>{formatMessage(modalMessages.info)}</div>
                 </Modal.Body>
             </div>

@@ -104,7 +104,7 @@ func (a *App) UpdateOAuthApp(oldApp, updatedApp *model.OAuthApp) (*model.OAuthAp
 	return oauthApp, nil
 }
 
-func (a *App) DeleteOAuthApp(appID string) *model.AppError {
+func (a *App) DeleteOAuthApp(rctx request.CTX, appID string) *model.AppError {
 	if !*a.Config().ServiceSettings.EnableOAuthServiceProvider {
 		return model.NewAppError("DeleteOAuthApp", "api.oauth.allow_oauth.turn_off.app_error", nil, "", http.StatusNotImplemented)
 	}
@@ -114,7 +114,7 @@ func (a *App) DeleteOAuthApp(appID string) *model.AppError {
 	}
 
 	if err := a.Srv().InvalidateAllCaches(); err != nil {
-		mlog.Warn("error in invalidating cache", mlog.Err(err))
+		rctx.Logger().Warn("error in invalidating cache", mlog.Err(err))
 	}
 
 	return nil
@@ -178,8 +178,8 @@ func (a *App) GetOAuthCodeRedirect(userID string, authRequest *model.AuthorizeRe
 		uri.RawQuery = queryParams.Encode()
 		return uri.String(), nil
 	}
-	queryParams.Set("code", url.QueryEscape(authData.Code))
-	queryParams.Set("state", url.QueryEscape(authData.State))
+	queryParams.Set("code", authData.Code)
+	queryParams.Set("state", authData.State)
 	uri.RawQuery = queryParams.Encode()
 	return uri.String(), nil
 }
@@ -220,7 +220,7 @@ func (a *App) AllowOAuthAppAccessToUser(c request.CTX, userID string, authReques
 	}
 
 	if err != nil {
-		mlog.Warn("error getting oauth redirect uri", mlog.Err(err))
+		c.Logger().Warn("error getting oauth redirect uri", mlog.Err(err))
 		return authRequest.RedirectURI + "?error=server_error&state=" + authRequest.State, nil
 	}
 
@@ -233,7 +233,7 @@ func (a *App) AllowOAuthAppAccessToUser(c request.CTX, userID string, authReques
 	}
 
 	if nErr := a.Srv().Store().Preference().Save(model.Preferences{authorizedApp}); nErr != nil {
-		mlog.Warn("error saving store preference", mlog.Err(nErr))
+		c.Logger().Warn("error saving store preference", mlog.Err(nErr))
 		return authRequest.RedirectURI + "?error=server_error&state=" + authRequest.State, nil
 	}
 
@@ -295,7 +295,7 @@ func (a *App) GetOAuthAccessTokenForCodeFlow(c request.CTX, clientId, grantType,
 
 		if authData.IsExpired() {
 			if nErr = a.Srv().Store().OAuth().RemoveAuthData(authData.Code); nErr != nil {
-				mlog.Warn("unable to remove auth data", mlog.Err(nErr))
+				c.Logger().Warn("unable to remove auth data", mlog.Err(nErr))
 			}
 			return nil, model.NewAppError("GetOAuthAccessToken", "api.oauth.get_access_token.expired_code.app_error", nil, "", http.StatusForbidden)
 		}
@@ -358,7 +358,7 @@ func (a *App) GetOAuthAccessTokenForCodeFlow(c request.CTX, clientId, grantType,
 		}
 
 		if nErr = a.Srv().Store().OAuth().RemoveAuthData(authData.Code); nErr != nil {
-			mlog.Warn("unable to remove auth data", mlog.Err(nErr))
+			c.Logger().Warn("unable to remove auth data", mlog.Err(nErr))
 		}
 	} else {
 		// When grantType is refresh_token
@@ -383,6 +383,11 @@ func (a *App) GetOAuthAccessTokenForCodeFlow(c request.CTX, clientId, grantType,
 }
 
 func (a *App) newSession(c request.CTX, app *model.OAuthApp, user *model.User) (*model.Session, *model.AppError) {
+	if err := a.limitNumberOfSessions(c, user.Id); err != nil {
+		return nil, model.NewAppError("newSession", "api.oauth.get_access_token.internal_session.app_error", nil,
+			"", http.StatusInternalServerError).Wrap(err)
+	}
+
 	// Set new token an session
 	session := &model.Session{UserId: user.Id, Roles: user.Roles, IsOAuth: true}
 	session.GenerateCSRF()
@@ -406,7 +411,7 @@ func (a *App) newSession(c request.CTX, app *model.OAuthApp, user *model.User) (
 func (a *App) newSessionUpdateToken(c request.CTX, app *model.OAuthApp, accessData *model.AccessData, user *model.User) (*model.AccessResponse, *model.AppError) {
 	// Remove the previous session
 	if err := a.Srv().Store().Session().Remove(accessData.Token); err != nil {
-		mlog.Warn("error removing access data token from session", mlog.Err(err))
+		c.Logger().Warn("error removing access data token from session", mlog.Err(err))
 	}
 
 	session, err := a.newSession(c, app, user)
@@ -622,7 +627,7 @@ func (a *App) LoginByOAuth(c request.CTX, service string, userData io.Reader, te
 			map[string]any{"Service": service}, "", http.StatusBadRequest)
 	}
 
-	user, err := a.GetUserByAuth(model.NewString(*authUser.AuthData), service)
+	user, err := a.GetUserByAuth(model.NewPointer(*authUser.AuthData), service)
 	if err != nil {
 		if err.Id == MissingAuthAccountError {
 			user, err = a.CreateOAuthUser(c, service, bytes.NewReader(buf.Bytes()), teamID, tokenUser)
@@ -694,7 +699,7 @@ func (a *App) CompleteSwitchWithOAuth(c request.CTX, service string, userData io
 
 	a.Srv().Go(func() {
 		if err := a.Srv().EmailService.SendSignInChangeEmail(user.Email, strings.Title(service)+" SSO", user.Locale, a.GetSiteURL()); err != nil {
-			mlog.Error("error sending signin change email", mlog.Err(err))
+			c.Logger().Error("error sending signin change email", mlog.Err(err))
 		}
 	})
 
@@ -822,22 +827,24 @@ func (a *App) AuthorizeOAuthUser(c request.CTX, w http.ResponseWriter, r *http.R
 	stateEmail := stateProps["email"]
 	stateAction := stateProps["action"]
 	if stateAction == model.OAuthActionEmailToSSO && stateEmail == "" {
-		return nil, "", stateProps, nil, model.NewAppError("AuthorizeOAuthUser", "api.user.authorize_oauth_user.invalid_state.app_error", nil, "", http.StatusBadRequest)
+		err := errors.New("No email provided in state when trying to switch from email to SSO")
+		return nil, "", stateProps, nil, model.NewAppError("AuthorizeOAuthUser", "api.user.authorize_oauth_user.invalid_state.app_error", nil, "", http.StatusBadRequest).Wrap(err)
 	}
 
 	cookie, cookieErr := r.Cookie(CookieOAuth)
 	if cookieErr != nil {
-		return nil, "", stateProps, nil, model.NewAppError("AuthorizeOAuthUser", "api.user.authorize_oauth_user.invalid_state.app_error", nil, "", http.StatusBadRequest)
+		return nil, "", stateProps, nil, model.NewAppError("AuthorizeOAuthUser", "api.user.authorize_oauth_user.invalid_state.app_error", nil, "", http.StatusBadRequest).Wrap(cookieErr)
 	}
 
 	expectedTokenExtra := generateOAuthStateTokenExtra(stateEmail, stateAction, cookie.Value)
 	if expectedTokenExtra != expectedToken.Extra {
-		return nil, "", stateProps, nil, model.NewAppError("AuthorizeOAuthUser", "api.user.authorize_oauth_user.invalid_state.app_error", nil, "", http.StatusBadRequest)
+		err := errors.New("Extra token value does not match token generated from state")
+		return nil, "", stateProps, nil, model.NewAppError("AuthorizeOAuthUser", "api.user.authorize_oauth_user.invalid_state.app_error", nil, "", http.StatusBadRequest).Wrap(err)
 	}
 
 	appErr = a.DeleteToken(expectedToken)
 	if appErr != nil {
-		mlog.Warn("error deleting token", mlog.Err(appErr))
+		c.Logger().Warn("error deleting token", mlog.Err(appErr))
 	}
 
 	subpath, _ := utils.GetSubpathFromConfig(a.Config())
@@ -921,7 +928,7 @@ func (a *App) AuthorizeOAuthUser(c request.CTX, w http.ResponseWriter, r *http.R
 		bodyBytes, _ := io.ReadAll(resp.Body)
 		bodyString := string(bodyBytes)
 
-		mlog.Error("Error getting OAuth user", mlog.Int("response", resp.StatusCode), mlog.String("body_string", bodyString))
+		c.Logger().Error("Error getting OAuth user", mlog.Int("response", resp.StatusCode), mlog.String("body_string", bodyString))
 
 		if service == model.ServiceGitlab && resp.StatusCode == http.StatusForbidden && strings.Contains(bodyString, "Terms of Service") {
 			url, err := url.Parse(*sso.UserAPIEndpoint)
@@ -949,7 +956,7 @@ func (a *App) SwitchEmailToOAuth(c request.CTX, w http.ResponseWriter, r *http.R
 		return "", err
 	}
 
-	if err = a.CheckPasswordAndAllCriteria(user, password, code); err != nil {
+	if err = a.CheckPasswordAndAllCriteria(c, user.Id, password, code); err != nil {
 		return "", err
 	}
 
@@ -958,7 +965,12 @@ func (a *App) SwitchEmailToOAuth(c request.CTX, w http.ResponseWriter, r *http.R
 	stateProps["email"] = email
 
 	if service == model.UserAuthServiceSaml {
-		return a.GetSiteURL() + "/login/sso/saml?action=" + model.OAuthActionEmailToSSO + "&email=" + utils.URLEncode(email), nil
+		samlToken, samlErr := a.CreateSamlRelayToken(email)
+		if samlErr != nil {
+			return "", samlErr
+		}
+
+		return a.GetSiteURL() + "/login/sso/saml?action=" + model.OAuthActionEmailToSSO + "&email_token=" + utils.URLEncode(samlToken.Token), nil
 	}
 
 	authURL, err := a.GetAuthorizationCode(c, w, r, service, stateProps, "")
@@ -974,6 +986,14 @@ func (a *App) SwitchOAuthToEmail(c request.CTX, email, password, requesterId str
 		return "", model.NewAppError("oauthToEmail", "api.user.oauth_to_email.not_available.app_error", nil, "", http.StatusForbidden)
 	}
 
+	if !*a.Config().EmailSettings.EnableSignUpWithEmail {
+		return "", model.NewAppError("SwitchOAuthToEmail", "api.user.auth_switch.not_available.email_signup_disabled.app_error", nil, "", http.StatusForbidden)
+	}
+
+	if !*a.Config().EmailSettings.EnableSignInWithEmail && !*a.Config().EmailSettings.EnableSignInWithUsername {
+		return "", model.NewAppError("SwitchOAuthToEmail", "api.user.auth_switch.not_available.login_disabled.app_error", nil, "", http.StatusForbidden)
+	}
+
 	user, err := a.GetUserByEmail(email)
 	if err != nil {
 		return "", err
@@ -983,7 +1003,7 @@ func (a *App) SwitchOAuthToEmail(c request.CTX, email, password, requesterId str
 		return "", model.NewAppError("SwitchOAuthToEmail", "api.user.oauth_to_email.context.app_error", nil, "", http.StatusForbidden)
 	}
 
-	if err := a.UpdatePassword(user, password); err != nil {
+	if err := a.UpdatePassword(c, user, password); err != nil {
 		return "", err
 	}
 

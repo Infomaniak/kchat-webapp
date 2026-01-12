@@ -39,7 +39,7 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
 
         this.placeholderId = 'onlyoffice-placeholder';
         this.scriptId = 'onlyoffice-script';
-        this.scriptSrc = 'https://documentserver.kdrive.infomaniak.com/web-apps/apps/api/documents/api.js';
+        this.scriptSrc = 'https://onlyoffice.infomaniak.com/web-apps/apps/api/documents/api.js';
         this.container = React.createRef();
     }
 
@@ -81,6 +81,7 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
         const result = await this.fetchFileInfoForUrl(fileId);
 
         if ('error' in result) {
+            // eslint-disable-next-line no-console
             console.warn(result.error);
             return null;
         }
@@ -93,6 +94,7 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
             const fileInfo = await Client4.getFileInfosForFile(fileId);
             return fileInfo;
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.warn(error);
             return {error};
         }

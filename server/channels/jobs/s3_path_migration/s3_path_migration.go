@@ -12,7 +12,6 @@ import (
 
 	"github.com/mattermost/mattermost/server/public/model"
 	"github.com/mattermost/mattermost/server/public/shared/mlog"
-	"github.com/mattermost/mattermost/server/public/shared/request"
 	"github.com/mattermost/mattermost/server/v8/channels/jobs"
 	"github.com/mattermost/mattermost/server/v8/channels/store"
 	"github.com/mattermost/mattermost/server/v8/platform/shared/filestore"
@@ -29,7 +28,7 @@ type S3PathMigrationWorker struct {
 	store       store.Store
 	fileBackend *filestore.S3FileBackend
 
-	stop    chan bool
+	stop    chan struct{}
 	stopped chan bool
 	jobs    chan model.Job
 }
@@ -45,7 +44,7 @@ func MakeWorker(jobServer *jobs.JobServer, store store.Store, fileBackend filest
 		logger:      jobServer.Logger().With(mlog.String("worker_name", workerName)),
 		store:       store,
 		fileBackend: s3Backend,
-		stop:        make(chan bool, 1),
+		stop:        make(chan struct{}),
 		stopped:     make(chan bool, 1),
 		jobs:        make(chan model.Job),
 	}
@@ -56,7 +55,7 @@ func (worker *S3PathMigrationWorker) Run() {
 	worker.logger.Debug("Worker started")
 	// We have to re-assign the stop channel again, because
 	// it might happen that the job was restarted due to a config change.
-	worker.stop = make(chan bool, 1)
+	worker.stop = make(chan struct{}, 1)
 
 	defer func() {
 		worker.logger.Debug("Worker finished")
@@ -106,10 +105,12 @@ func (worker *S3PathMigrationWorker) DoJob(job *model.Job) {
 	logger.Debug("Worker: Received a new candidate job.")
 	defer worker.jobServer.HandleJobPanic(logger, job)
 
-	if claimed, err := worker.jobServer.ClaimJob(job); err != nil {
-		logger.Warn("S3PathMigrationWorker experienced an error while trying to claim job", mlog.Err(err))
+	var appErr *model.AppError
+	job, appErr = worker.jobServer.ClaimJob(job)
+	if appErr != nil {
+		logger.Warn("S3PathMigrationWorker experienced an error while trying to claim job", mlog.Err(appErr))
 		return
-	} else if !claimed {
+	} else if job == nil {
 		return
 	}
 
@@ -117,17 +118,6 @@ func (worker *S3PathMigrationWorker) DoJob(job *model.Job) {
 		err := errors.New("no S3 file backend found")
 		logger.Error("S3PathMigrationWorker: ", mlog.Err(err))
 		worker.setJobError(logger, job, model.NewAppError("DoJob", model.NoTranslation, nil, "", http.StatusInternalServerError).Wrap(err))
-		return
-	}
-
-	c := request.EmptyContext(worker.logger)
-
-	var appErr *model.AppError
-	// We get the job again because ClaimJob changes the job status.
-	job, appErr = worker.jobServer.GetJob(c, job.Id)
-	if appErr != nil {
-		logger.Error("S3PathMigrationWorker: job execution error", mlog.Err(appErr))
-		worker.setJobError(logger, job, appErr)
 		return
 	}
 

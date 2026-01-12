@@ -17,10 +17,12 @@ export const PostTypes = {
     JOIN_CHANNEL: 'system_join_channel' as PostType,
     GUEST_JOIN_CHANNEL: 'system_guest_join_channel' as PostType,
     LEAVE_CHANNEL: 'system_leave_channel' as PostType,
+    JOIN_LEAVE_CHANNEL: 'system_join_leave_channel' as PostType,
     ADD_REMOVE: 'system_add_remove' as PostType,
     ADD_TO_CHANNEL: 'system_add_to_channel' as PostType,
     ADD_GUEST_TO_CHANNEL: 'system_add_guest_to_chan' as PostType,
     REMOVE_FROM_CHANNEL: 'system_remove_from_channel' as PostType,
+    SYSTEM_MENTIONED_CHANNEL: 'system_mentioned_channel' as PostType,
 
     JOIN_TEAM: 'system_join_team' as PostType,
     LEAVE_TEAM: 'system_leave_team' as PostType,
@@ -30,10 +32,15 @@ export const PostTypes = {
     COMBINED_USER_ACTIVITY: 'system_combined_user_activity' as PostType,
     ME: 'me' as PostType,
     ADD_BOT_TEAMS_CHANNELS: 'add_bot_teams_channels' as PostType,
-    SYSTEM_WARN_METRIC_STATUS: 'warn_metric_status' as PostType,
     REMINDER: 'reminder' as PostType,
+    WRANGLER: 'system_wrangler' as PostType,
+    GM_CONVERTED_TO_CHANNEL: 'system_gm_to_channel' as PostType,
+
+    // Infomaniak
     CALL: 'custom_call' as PostType,
+    MAIL_ATTACHMENT: 'mail_attachment' as PostType,
     SYSTEM_POST_REMINDER: 'system_post_reminder' as PostType,
+    SYSTEM_WELCOME_MESSAGE: 'system_welcome_message' as PostType,
     CHANGE_CHANNEL_PRIVACY: 'system_change_chan_privacy' as PostType,
     VOICE: 'voice' as PostType,
 };

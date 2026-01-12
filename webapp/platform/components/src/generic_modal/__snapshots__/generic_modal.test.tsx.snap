@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GenericModal should match snapshot for base case 1`] = `
-Object {
+{
   "asFragment": [Function],
   "baseElement": <body
     class="modal-open"
@@ -11,13 +11,14 @@ Object {
       aria-hidden="true"
     />
     <div
-      role="dialog"
+      role="none"
     >
       <div
         class="fade modal-backdrop in"
       />
       <div
         aria-labelledby="genericModalLabel"
+        aria-modal="true"
         class="fade in modal"
         id="genericModal"
         role="dialog"
@@ -25,14 +26,14 @@ Object {
         tabindex="-1"
       >
         <div
-          class="a11y__modal GenericModal modal-dialog"
+          class="GenericModal__location--center a11y__modal GenericModal modal-dialog"
         >
           <div
             class="modal-content"
             role="document"
           >
             <div
-              class="GenericModal__wrapper-enter-key-press-catcher"
+              class="GenericModal__wrapper GenericModal__wrapper-enter-key-press-catcher"
               tabindex="0"
             >
               <div
@@ -54,6 +55,9 @@ Object {
                     Close
                   </span>
                 </button>
+                <div
+                  class="GenericModal__header__text_container"
+                />
               </div>
               <div
                 class="modal-body"
@@ -62,6 +66,7 @@ Object {
                   class="GenericModal__header"
                 >
                   <h1
+                    class="modal-title"
                     id="genericModalLabel"
                   >
                     Modal Header Text

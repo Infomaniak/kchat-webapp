@@ -4,52 +4,19 @@
 import {batchActions} from 'redux-batched-actions';
 
 import {LogLevel} from '@mattermost/types/client4';
+import type {ClientConfig} from '@mattermost/types/config';
+import type {SystemSetting} from '@mattermost/types/general';
 
-import {GeneralTypes} from 'mattermost-redux/action_types';
+import {AppsTypes, GeneralTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
-import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
-import type {GetStateFunc, DispatchFunc, ActionFunc} from 'mattermost-redux/types/actions';
-import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
+import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
 import {logError} from './errors';
-import {bindClientFunc, forceLogoutIfNecessary, FormattedError} from './helpers';
+import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {loadRolesIfNeeded} from './roles';
 
-export function getPing(): ActionFunc {
-    return async () => {
-        let data;
-        let pingError = new FormattedError(
-            'mobile.server_ping_failed',
-            'Cannot connect to the server. Please check your server URL and internet connection.',
-        );
-        try {
-            data = await Client4.ping();
-            if (data.status !== 'OK') {
-                // successful ping but not the right return {data}
-                return {error: pingError};
-            }
-        } catch (error) { // ServerError
-            if (error.status_code === 401) {
-                // When the server requires a client certificate to connect.
-                pingError = error;
-            }
-            return {error: pingError};
-        }
-
-        return {data};
-    };
-}
-
-export function resetPing(): ActionFunc {
-    return async (dispatch: DispatchFunc) => {
-        dispatch({type: GeneralTypes.PING_RESET, data: {}});
-
-        return {data: true};
-    };
-}
-
-export function getClientConfig(): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function getClientConfig(): ActionFuncAsync<ClientConfig> {
+    return async (dispatch, getState) => {
         let data;
         try {
             data = await Client4.getClientConfigOld();
@@ -61,36 +28,18 @@ export function getClientConfig(): ActionFunc {
         Client4.setEnableLogging(data.EnableDeveloper === 'true');
         Client4.setDiagnosticId(data.DiagnosticId);
 
-        dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data});
+        const type = data.AppsPluginEnabled === 'true' ? AppsTypes.APPS_PLUGIN_ENABLED : AppsTypes.APPS_PLUGIN_DISABLED;
+        const actions = [{type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data}, {type}];
+        dispatch(batchActions(actions));
+
+        // IK: We need to reset IsNewVersionCanaryOnly when it's an API call
+        dispatch({type: GeneralTypes.CLIENT_CONFIG_RECEIVED, data: {...data, IsNewVersionCanaryOnly: undefined}});
 
         return {data};
     };
 }
 
-export function getDataRetentionPolicy(): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        let data;
-        try {
-            data = await Client4.getDataRetentionPolicy();
-        } catch (error) {
-            forceLogoutIfNecessary(error, dispatch, getState);
-            dispatch({
-                type: GeneralTypes.RECEIVED_DATA_RETENTION_POLICY,
-                error,
-            });
-            dispatch(logError(error));
-            return {error};
-        }
-
-        dispatch(batchActions([
-            {type: GeneralTypes.RECEIVED_DATA_RETENTION_POLICY, data},
-        ]));
-
-        return {data};
-    };
-}
-
-export function getLicenseConfig(): ActionFunc {
+export function getLicenseConfig() {
     return bindClientFunc({
         clientFunc: Client4.getClientLicenseOld,
         onSuccess: [GeneralTypes.CLIENT_LICENSE_RECEIVED],
@@ -110,7 +59,7 @@ export function logClientError(message: string, level = LogLevel.Error) {
     });
 }
 
-export function setServerVersion(serverVersion: string): ActionFunc {
+export function setServerVersion(serverVersion: string): ActionFuncAsync {
     return async (dispatch) => {
         dispatch({type: GeneralTypes.RECEIVED_SERVER_VERSION, data: serverVersion});
         dispatch(loadRolesIfNeeded([]));
@@ -124,46 +73,8 @@ export function setUrl(url: string) {
     return true;
 }
 
-export function getRedirectLocation(url: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        let pendingData: Promise<any>;
-        if (isMinimumServerVersion(getServerVersion(getState()), 5, 3)) {
-            pendingData = Client4.getRedirectLocation(url);
-        } else {
-            pendingData = Promise.resolve({location: url});
-        }
-
-        let data;
-        try {
-            data = await pendingData;
-        } catch (error) {
-            forceLogoutIfNecessary(error, dispatch, getState);
-            dispatch({type: GeneralTypes.REDIRECT_LOCATION_FAILURE, data: {error, url}});
-            return {error};
-        }
-
-        dispatch({type: GeneralTypes.REDIRECT_LOCATION_SUCCESS, data: {...data, url}});
-        return {data};
-    };
-}
-
-export function getWarnMetricsStatus(): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        let data;
-        try {
-            data = await Client4.getWarnMetricsStatus();
-        } catch (error) {
-            forceLogoutIfNecessary(error, dispatch, getState);
-            return {error};
-        }
-        dispatch({type: GeneralTypes.WARN_METRICS_STATUS_RECEIVED, data});
-
-        return {data};
-    };
-}
-
-export function setFirstAdminVisitMarketplaceStatus(): ActionFunc {
-    return async (dispatch: DispatchFunc) => {
+export function setFirstAdminVisitMarketplaceStatus(): ActionFuncAsync {
+    return async (dispatch) => {
         try {
             await Client4.setFirstAdminVisitMarketplaceStatus();
         } catch (e) {
@@ -175,25 +86,9 @@ export function setFirstAdminVisitMarketplaceStatus(): ActionFunc {
     };
 }
 
-export function getFirstAdminVisitMarketplaceStatus(): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        let data;
-        try {
-            data = await Client4.getFirstAdminVisitMarketplaceStatus();
-        } catch (error) {
-            forceLogoutIfNecessary(error, dispatch, getState);
-            return {error};
-        }
-
-        data = JSON.parse(data.value);
-        dispatch({type: GeneralTypes.FIRST_ADMIN_VISIT_MARKETPLACE_STATUS_RECEIVED, data});
-        return {data};
-    };
-}
-
 // accompanying "set" happens as part of Client4.completeSetup
-export function getFirstAdminSetupComplete(): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function getFirstAdminSetupComplete(): ActionFuncAsync<SystemSetting> {
+    return async (dispatch, getState) => {
         let data;
         try {
             data = await Client4.getFirstAdminSetupComplete();
@@ -209,14 +104,9 @@ export function getFirstAdminSetupComplete(): ActionFunc {
 }
 
 export default {
-    getPing,
     getClientConfig,
-    getDataRetentionPolicy,
     getLicenseConfig,
     logClientError,
     setServerVersion,
     setUrl,
-    getRedirectLocation,
-    getWarnMetricsStatus,
-    getFirstAdminVisitMarketplaceStatus,
 };

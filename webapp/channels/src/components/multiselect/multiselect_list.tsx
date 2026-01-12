@@ -3,17 +3,17 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import type {getOptionValue} from 'react-select/src/builtins';
+import type {GetOptionValue} from 'react-select';
 
 import LoadingScreen from 'components/loading_screen';
 
 import Constants from 'utils/constants';
-import {cmdOrCtrlPressed} from 'utils/utils';
+import {cmdOrCtrlPressed} from 'utils/keyboard';
 
 import type {Value} from './multiselect';
 
 export type Props<T extends Value> = {
-    ariaLabelRenderer: getOptionValue<T>;
+    ariaLabelRenderer: GetOptionValue<T>;
     loading?: boolean;
     onAdd: (value: T) => void;
     onPageChange?: (newPage: number, currentPage: number) => void;
@@ -26,6 +26,7 @@ export type Props<T extends Value> = {
     ) => void;
     query?: string;
     selectedItemRef?: React.RefObject<HTMLDivElement>;
+    showInputByDefault: boolean;
     options: T[];
     page: number;
     perPage: number;
@@ -42,6 +43,7 @@ export default class MultiSelectList<T extends Value> extends React.PureComponen
         options: [],
         perPage: 50,
         onAction: () => null,
+        showInputByDefault: false,
     };
 
     private toSelect = -1;

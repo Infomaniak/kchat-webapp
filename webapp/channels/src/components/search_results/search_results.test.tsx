@@ -3,6 +3,15 @@
 
 import {arePropsEqual} from 'components/search_results/search_results';
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('components/SearchResults', () => {
     describe('shouldRenderFromProps', () => {
         const result1 = {test: 'test'};

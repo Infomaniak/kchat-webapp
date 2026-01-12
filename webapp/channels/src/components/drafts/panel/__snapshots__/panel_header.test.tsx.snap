@@ -45,9 +45,10 @@ exports[`components/drafts/panel/panel_header should match snapshot 1`] = `
           value={1970-01-01T00:00:12.345Z}
         />
       </div>
-      <MemoizedFormattedMessage
-        defaultMessage="Not scheduled"
-        id="drafts.info.tag.not_scheduled"
+      <Memo(Tag)
+        text="draft"
+        uppercase={true}
+        variant="danger"
       />
     </div>
   </div>
@@ -99,9 +100,10 @@ exports[`components/drafts/panel/panel_header should show draft actions when hov
           value={1970-01-01T00:00:12.345Z}
         />
       </div>
-      <MemoizedFormattedMessage
-        defaultMessage="Not scheduled"
-        id="drafts.info.tag.not_scheduled"
+      <Memo(Tag)
+        text="draft"
+        uppercase={true}
+        variant="danger"
       />
     </div>
   </div>
@@ -135,31 +137,18 @@ exports[`components/drafts/panel/panel_header should show sync icon when draft i
       <div
         className="PanelHeader__sync-icon"
       >
-        <OverlayTrigger
-          defaultOverlayShown={false}
-          delayShow={400}
-          overlay={
-            <Tooltip
-              id="drafts-sync-tooltip"
-            >
-              <Memo(MemoizedFormattedMessage)
-                defaultMessage="Updated from another device"
-                id="drafts.info.sync"
-              />
-            </Tooltip>
-          }
-          placement="top"
-          trigger={
-            Array [
-              "hover",
-              "focus",
-            ]
+        <WithTooltip
+          title={
+            <Memo(MemoizedFormattedMessage)
+              defaultMessage="Updated from another device"
+              id="drafts.info.sync"
+            />
           }
         >
           <SyncIcon
             size={18}
           />
-        </OverlayTrigger>
+        </WithTooltip>
       </div>
       <div
         className="PanelHeader__timestamp"
@@ -182,9 +171,10 @@ exports[`components/drafts/panel/panel_header should show sync icon when draft i
           value={1970-01-01T00:00:12.345Z}
         />
       </div>
-      <MemoizedFormattedMessage
-        defaultMessage="Not scheduled"
-        id="drafts.info.tag.not_scheduled"
+      <Memo(Tag)
+        text="draft"
+        uppercase={true}
+        variant="danger"
       />
     </div>
   </div>

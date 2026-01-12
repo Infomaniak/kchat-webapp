@@ -32,14 +32,6 @@ describe('components/team_controller/actions', () => {
                 myPreferences: {},
             },
         },
-        requests: {
-            channels: {
-                getChannelsMembersCategories: {
-                    status: 'not_started',
-                    error: null,
-                },
-            },
-        },
     };
 
     describe('joinTeam', () => {

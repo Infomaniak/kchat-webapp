@@ -27,14 +27,14 @@ const getUsersTypingImpl = (profiles: IDMappedObjects<UserProfile>, teammateName
     return [];
 };
 
-export function makeGetUsersTypingByChannelAndPost(): (state: GlobalState, props: {channelId: string; postId: string}) => string[] {
+export function makeGetUsersTypingByChannelAndPost(eventType: 'typing' | 'recording' = 'typing'): (state: GlobalState, props: {channelId: string; postId: string}) => string[] {
     return createSelector(
         'makeGetUsersTypingByChannelAndPost',
         getUsers,
         getTeammateNameDisplaySetting,
         (state: GlobalState, options: {channelId: string; postId: string}) => options.channelId,
         (state: GlobalState, options: {channelId: string; postId: string}) => options.postId,
-        (state: GlobalState) => state.entities.typing,
+        (state: GlobalState) => state.entities[eventType],
         getUsersTypingImpl,
     );
 }

@@ -58,12 +58,12 @@ export default class AccessHistoryModal extends React.PureComponent<Props, State
 
         return (
             <Modal
-                dialogClassName='a11y__modal modal--scroll'
+                dialogClassName='a11y__modal modal--scroll access-history-modal'
                 show={this.state.show}
                 onHide={this.onHide}
                 onExited={this.props.onHide}
                 bsSize='large'
-                role='dialog'
+                role='none'
                 aria-labelledby='accessHistoryModalLabel'
             >
                 <Modal.Header closeButton={true}>
@@ -84,7 +84,7 @@ export default class AccessHistoryModal extends React.PureComponent<Props, State
                     <button
                         id='closeModalButton'
                         type='button'
-                        className='btn btn-link'
+                        className='btn btn-tertiary'
                     >
                         <FormattedMessage
                             id='general_button.close'

@@ -4,15 +4,24 @@
 import React from 'react';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+import {setThemeDefaults} from 'mattermost-redux/utils/theme_utils';
+
+import {setTheme} from 'actions/views/theme';
+import store from 'stores/redux_store';
 
 import {Constants} from 'utils/constants';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {applyTheme} from 'utils/utils';
+
+import type {DesktopThemePreference} from 'types/theme';
 
 import PremadeThemeChooser from './premade_theme_chooser';
 
 type Props = {
     currentTeamId: string;
     theme: Theme;
+    desktopThemePreference: DesktopThemePreference;
     selected: boolean;
     updateSection: (section: string) => void;
     setRequireConfirm?: (requireConfirm: boolean) => void;
@@ -71,23 +80,39 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
         };
     }
 
-    submitTheme = async (): Promise<void> => {
-        const teamId = this.props.currentTeamId;
+    submitTheme = async (theme: Theme): Promise<void> => {
+        const isUnifiedThemeActivatedForDesktop = isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.1.0');
 
-        this.setState({isSaving: true});
-        await this.props.actions.saveTheme(teamId, this.state.theme);
+        if (isUnifiedThemeActivatedForDesktop) {
+            window.postMessage(
+                {
+                    type: 'theme-changed',
+                    message: theme,
+                },
+                window.origin,
+            );
+
+            store.dispatch(setTheme(theme));
+        } else {
+            const teamId = this.props.currentTeamId;
+            this.setState({isSaving: true});
+            await this.props.actions.saveTheme(teamId, this.state.theme);
+        }
 
         this.props.setRequireConfirm?.(false);
         this.originalTheme = Object.assign({}, this.state.theme);
         this.props.updateSection('');
-        this.setState({isSaving: false});
+
+        if (!isUnifiedThemeActivatedForDesktop) {
+            this.setState({isSaving: false});
+        }
     };
 
     updateTheme = (theme: Theme): void => {
         let themeChanged = this.state.theme.length === theme.length;
         if (!themeChanged) {
             for (const field in theme) {
-                if (theme.hasOwnProperty(field)) {
+                if (Object.prototype.hasOwnProperty.call(theme, field)) {
                     if (this.state.theme[field] !== theme[field]) {
                         themeChanged = true;
                         break;
@@ -99,9 +124,9 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
         this.props.setRequireConfirm?.(themeChanged);
 
         this.setState({theme}, () => {
-            this.submitTheme();
+            this.submitTheme(theme);
         });
-        applyTheme(theme);
+        applyTheme(setThemeDefaults(theme, this.props.desktopThemePreference as string));
     };
 
     resetFields = (): void => {

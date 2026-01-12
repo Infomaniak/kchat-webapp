@@ -7,16 +7,7 @@
         }
 
         & .modal-body {
-            padding-bottom: 28px;
             overflow: visible;
-
-            .GenericModal__header {
-                span {
-                    font-weight: 400;
-                    font-size: 12px;
-                    line-height: 16px;
-                }
-            }
 
             .GenericModal__body {
                 display: flex;

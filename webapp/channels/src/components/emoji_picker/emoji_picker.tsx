@@ -9,7 +9,7 @@ import type InfiniteLoader from 'react-window-infinite-loader';
 
 import type {Emoji, EmojiCategory} from '@mattermost/types/emojis';
 
-import {isSystemEmoji} from 'mattermost-redux/utils/emoji_utils';
+import {getEmojiName} from 'mattermost-redux/utils/emoji_utils';
 
 import EmojiPickerCategories from 'components/emoji_picker/components/emoji_picker_categories';
 import EmojiPickerCurrentResults from 'components/emoji_picker/components/emoji_picker_current_results';
@@ -34,11 +34,12 @@ import {NoResultsVariant} from 'components/no_results_indicator/types';
 
 import type {PropsFromRedux} from './index';
 
-interface Props extends PropsFromRedux {
+export interface Props extends PropsFromRedux {
     filter: string;
     onEmojiClick: (emoji: Emoji) => void;
     handleFilterChange: (filter: string) => void;
     handleEmojiPickerClose: () => void;
+    onAddCustomEmojiClick?: () => void;
 }
 
 const EmojiPicker = ({
@@ -46,6 +47,7 @@ const EmojiPicker = ({
     onEmojiClick,
     handleFilterChange,
     handleEmojiPickerClose,
+    onAddCustomEmojiClick,
     customEmojisEnabled = false,
     customEmojiPage = 0,
     emojiMap,
@@ -61,6 +63,8 @@ const EmojiPicker = ({
 }: Props) => {
     const getInitialActiveCategory = () => (recentEmojis.length ? RECENT : SMILEY_EMOTION);
     const [activeCategory, setActiveCategory] = useState<EmojiCategory>(getInitialActiveCategory);
+    const [isHovered, setIsHovered] = useState(false);
+    const pickerContainerRef = useRef<HTMLDivElement>(null);
 
     const [cursor, setCursor] = useState<EmojiCursor>({
         rowIndex: -1,
@@ -90,6 +94,27 @@ const EmojiPicker = ({
             searchCustomEmojis(newFilter);
         }
     }, CUSTOM_EMOJI_SEARCH_THROTTLE_TIME_MS));
+
+    // Ik change : handle edge case when onMouseLeave isn't triggered when the mouse is moved quickly
+    useEffect(() => {
+        function handleMouseMove(e: MouseEvent) {
+            const picker = pickerContainerRef.current;
+            if (!picker) {
+                return;
+            }
+            const rect = picker.getBoundingClientRect();
+            if (
+                e.clientX < rect.left ||
+                e.clientX > rect.right ||
+                e.clientY < rect.top ||
+                e.clientY > rect.bottom
+            ) {
+                handleContainerMouseLeave();
+            }
+        }
+        document.addEventListener('mousemove', handleMouseMove);
+        return () => document.removeEventListener('mousemove', handleMouseMove);
+    }, []);
 
     useEffect(() => {
         // Delay taking focus because this briefly renders offscreen when using an Overlay
@@ -140,14 +165,6 @@ const EmojiPicker = ({
         infiniteLoaderRef?.current?._listRef?.scrollToItem(0, 'start');
     }, [filter]);
 
-    // scroll as little as possible on cursor navigation
-    useEffect(() => {
-        if (cursor.emojiId) {
-            // eslint-disable-next-line no-underscore-dangle
-            infiniteLoaderRef?.current?._listRef?.scrollToItem(cursor.rowIndex, 'auto');
-        }
-    }, [cursor.rowIndex]);
-
     const focusOnSearchInput = useCallback(() => {
         searchInputRef.current?.focus();
     }, []);
@@ -186,6 +203,14 @@ const EmojiPicker = ({
             emojiId: '',
             emoji: undefined,
         });
+
+        // eslint-disable-next-line no-underscore-dangle
+        infiniteLoaderRef.current?._listRef?.scrollTo(0);
+    }, []);
+
+    const onAddCustomEmojiClickInner = useCallback(() => {
+        handleEmojiPickerClose();
+        onAddCustomEmojiClick?.();
     }, []);
 
     const [cursorCategory, cursorCategoryIndex, cursorEmojiIndex] = getCursorProperties(cursor.rowIndex, cursor.emojiId, categoryOrEmojisRows as EmojiRow[]);
@@ -314,11 +339,15 @@ const EmojiPicker = ({
             return;
         }
 
+        searchInputRef.current?.setAttribute('aria-activedescendant', newCursorEmoji.name.toLocaleLowerCase().replaceAll(' ', '_'));
         setCursor({
             rowIndex: newCursor.rowIndex,
             emojiId: newCursor.emojiId,
             emoji: newCursorEmoji,
         });
+
+        // eslint-disable-next-line no-underscore-dangle
+        infiniteLoaderRef?.current?._listRef?.scrollToItem(newCursor.rowIndex, 'auto');
     };
 
     const handleEnterOnEmoji = useCallback(() => {
@@ -330,9 +359,20 @@ const EmojiPicker = ({
     }, [cursor.emojiId]);
 
     const handleEmojiOnMouseOver = (mouseOverCursor: EmojiCursor) => {
+        setIsHovered(true);
         if (mouseOverCursor.emojiId !== cursor.emojiId || cursor.emojiId === '') {
             setCursor(mouseOverCursor);
         }
+    };
+
+    const handleContainerMouseLeave = () => {
+        // IK Changes : Reset the cursor when mouse leaves the emoji picker
+        setCursor({
+            rowIndex: -1,
+            emojiId: '',
+            emoji: undefined,
+        });
+        setIsHovered(false);
     };
 
     const cursorEmojiName = useMemo(() => {
@@ -342,17 +382,29 @@ const EmojiPicker = ({
             return '';
         }
 
-        const name = isSystemEmoji(emoji) ? emoji.short_name : emoji.name;
+        const name = getEmojiName(emoji);
         return name.replace(/_/g, ' ');
     }, [cursor.emojiId]);
 
     const areSearchResultsEmpty = filter.length !== 0 && categoryOrEmojisRows.length === 1 && categoryOrEmojisRows?.[0]?.items?.[0]?.categoryName === SEARCH_RESULTS;
 
+    let footerContent;
+    if (areSearchResultsEmpty) {
+        footerContent = <div/>;
+    } else if (isHovered) {
+        footerContent = <EmojiPickerPreview emoji={cursor.emoji}/>;
+    } else {
+        footerContent = (
+            <EmojiPickerCustomEmojiButton
+                currentTeamName={currentTeamName}
+                customEmojisEnabled={customEmojisEnabled}
+                onClick={onAddCustomEmojiClickInner}
+            />
+        );
+    }
+
     return (
-        <div
-            className='emoji-picker__inner'
-            role='application'
-        >
+        <>
             <div
                 aria-live='assertive'
                 className='sr-only'
@@ -392,11 +444,13 @@ const EmojiPicker = ({
             />
             {areSearchResultsEmpty ? (
                 <NoResultsIndicator
-                    variant={NoResultsVariant.ChannelSearch}
-                    titleValues={{channelName: `"${filter}"`}}
+                    variant={NoResultsVariant.Search}
+                    titleValues={{channelName: `${filter}`}}
                 />
             ) : (
+
                 <EmojiPickerCurrentResults
+                    childRef={pickerContainerRef}
                     ref={infiniteLoaderRef}
                     isFiltering={filter.length > 0}
                     activeCategory={activeCategory}
@@ -410,19 +464,15 @@ const EmojiPicker = ({
                     customEmojiPage={customEmojiPage}
                     incrementEmojiPickerPage={incrementEmojiPickerPage}
                     customEmojisEnabled={customEmojisEnabled}
+                    onMouseLeave={handleContainerMouseLeave}
                 />
             )}
-            <div className='emoji-picker__footer'>
-                <EmojiPickerPreview
-                    emoji={cursor.emoji}
-                />
-                <EmojiPickerCustomEmojiButton
-                    currentTeamName={currentTeamName}
-                    customEmojisEnabled={customEmojisEnabled}
-                    handleEmojiPickerClose={handleEmojiPickerClose}
-                />
+            <div
+                className='emoji-picker__footer'
+            >
+                {footerContent}
             </div>
-        </div>
+        </>
     );
 };
 

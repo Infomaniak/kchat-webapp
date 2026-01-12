@@ -11,8 +11,9 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import ChannelMembersDropdown from 'components/channel_members_dropdown/channel_members_dropdown';
 
-import {mockDispatch} from 'packages/mattermost-redux/test/test_store';
 import {ModalIdentifiers} from 'utils/constants';
+
+import {mockDispatch} from 'packages/mattermost-redux/test/test_store';
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux') as typeof import('react-redux'),
@@ -53,6 +54,7 @@ describe('components/channel_members_dropdown', () => {
         canRemoveMember: true,
         index: 0,
         totalUsers: 10,
+        hasChannelMembersAdmin: true,
         actions: {
             removeChannelMember: jest.fn().mockImplementation(() => {
                 const error = {
@@ -80,6 +82,7 @@ describe('components/channel_members_dropdown', () => {
                 roles: 'channel_guest',
             },
             canChangeMemberRoles: true,
+            hasChannelMembersAdmin: true,
         };
         const wrapper = shallow(
             <ChannelMembersDropdown {...props}/>,

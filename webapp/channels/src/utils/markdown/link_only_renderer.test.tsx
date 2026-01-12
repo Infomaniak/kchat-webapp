@@ -54,7 +54,7 @@ describe('formatWithRenderer | LinkOnlyRenderer', () => {
         {
             description: 'code block: language highlighting',
             inputText: '```javascript\nvar s = "JavaScript syntax highlighting";\nalert(s);\n```',
-            outputText: 'var s = "JavaScript syntax highlighting"; alert(s);',
+            outputText: 'var s = &quot;JavaScript syntax highlighting&quot;; alert(s);',
         },
         {
             description: 'blockquote:',
@@ -282,6 +282,12 @@ describe('formatWithRenderer | LinkOnlyRenderer', () => {
             description: 'link: link with curly brackets',
             inputText: 'Let\'s try http://example/result?things={stuff}',
             outputText: 'Let&#39;s try <a class="theme markdown__link" href="http://example/result?things={stuff}" target="_blank">http://example/result?things={stuff}</a>',
+        },
+        {
+            description: 'link: link with a full-length punctuation',
+            inputText: 'Do you like https://mattermost.com/，這是第二個網址。?',
+            outputText: 'Do you like <a class="theme markdown__link" href="https://mattermost.com/" target="_blank">' +
+                'https://mattermost.com/</a>，這是第二個網址。?',
         },
     ];
 

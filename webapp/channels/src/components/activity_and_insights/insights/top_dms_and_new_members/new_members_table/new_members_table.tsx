@@ -46,7 +46,7 @@ const NewMembersTable = (props: Props) => {
     const currentTeam = useSelector(getCurrentTeam);
 
     const getNewTeamMembersList = useCallback(async () => {
-        if (props.filterType === InsightsScopes.TEAM) {
+        if (props.filterType === InsightsScopes.TEAM && currentTeam) {
             setLoading(true);
             const data: any = await dispatch(getNewTeamMembers(currentTeam.id, props.offset, 10, props.timeFrame));
             if (data.data?.items) {
@@ -88,16 +88,6 @@ const NewMembersTable = (props: Props) => {
             {
                 name: (
                     <FormattedMessage
-                        id='insights.newMembers.position'
-                        defaultMessage='Position'
-                    />
-                ),
-                field: 'position',
-                width: 0.4,
-            },
-            {
-                name: (
-                    <FormattedMessage
                         id='insights.newMembers.joined'
                         defaultMessage='Date joined'
                     />
@@ -110,6 +100,9 @@ const NewMembersTable = (props: Props) => {
     }, []);
 
     const getRows = useMemo((): Row[] => {
+        if (!currentTeam) {
+            return [];
+        }
         return newMembers.map((member) => {
             return (
                 {
@@ -127,11 +120,6 @@ const NewMembersTable = (props: Props) => {
                                 <span className='display-name'>{displayUsername(member as UserProfile, teammateNameDisplaySetting)}</span>
                             </Link>
 
-                        ),
-                        position: (
-                            <span className='role'>
-                                {member.position}
-                            </span>
                         ),
                         joined: (
                             <span className='cell-text'>

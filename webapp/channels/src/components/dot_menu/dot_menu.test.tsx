@@ -1,22 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {screen, fireEvent} from '@testing-library/react';
 import React from 'react';
 
 import type {PostType} from '@mattermost/types/posts';
 import type {DeepPartial} from '@mattermost/types/utilities';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-import {renderWithIntlAndStore} from 'tests/react_testing_utils';
 import {Locations} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import {fireEvent, renderWithContext, screen} from 'tests/react_testing_utils';
+
 import type {GlobalState} from 'types/store';
 
-import type {DotMenuClass} from './dot_menu';
 import DotMenu from './dot_menu';
-import * as dotUtils from './utils';
+import type {DotMenuClass} from './dot_menu';
+
 jest.mock('./utils');
 
 describe('components/dot_menu/DotMenu', () => {
@@ -77,7 +77,7 @@ describe('components/dot_menu/DotMenu', () => {
                 },
                 currentUserId: 'current_user_id',
                 profilesInChannel: {
-                    current_user_id: ['user_1'],
+                    current_user_id: new Set(['user_1']),
                 },
             },
             teams: {
@@ -124,18 +124,18 @@ describe('components/dot_menu/DotMenu', () => {
         channelIsArchived: false,
         currentTeamUrl: '',
         actions: {
-            flagPost: jest.fn(),
-            unflagPost: jest.fn(),
-            setEditingPost: jest.fn(),
-            pinPost: jest.fn(),
-            unpinPost: jest.fn(),
-            openModal: jest.fn(),
-            markPostAsUnread: jest.fn(),
-            postEphemeralCallResponseForPost: jest.fn(),
-            setThreadFollow: jest.fn(),
             addPostReminder: jest.fn(),
+            flagPost: jest.fn(),
+            markPostAsUnread: jest.fn(),
+            openModal: jest.fn(),
+            pinPost: jest.fn(),
+            postEphemeralCallResponseForPost: jest.fn(),
+            setEditingPost: jest.fn(),
             setGlobalItem: jest.fn(),
+            setThreadFollow: jest.fn(),
             translatePost: jest.fn(),
+            unflagPost: jest.fn(),
+            unpinPost: jest.fn(),
         },
         canEdit: false,
         canDelete: false,
@@ -148,9 +148,9 @@ describe('components/dot_menu/DotMenu', () => {
         threadReplyCount: 0,
         userId: 'user_id_1',
         isMilitaryTime: false,
-        showForwardPostNewLabel: false,
-        isMilitaryTime: false,
-        postTranslationEnabled: true,
+        isInThread: false,
+        canMove: true,
+        postTranslationEnabled: false,
     };
 
     test('should match snapshot, on Center', () => {
@@ -177,7 +177,7 @@ describe('components/dot_menu/DotMenu', () => {
             canEdit: true,
             canDelete: true,
         };
-        const wrapper = renderWithIntlAndStore(
+        const wrapper = renderWithContext(
             <DotMenu {...props}/>,
             initialState,
         );
@@ -185,12 +185,12 @@ describe('components/dot_menu/DotMenu', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should match snapshot, show "New" badge on forward post', () => {
+    test('should match snapshot, can move', () => {
         const props = {
             ...baseProps,
-            showForwardPostNewLabel: true,
+            canMove: true,
         };
-        const wrapper = renderWithIntlAndStore(
+        const wrapper = renderWithContext(
             <DotMenu {...props}/>,
             initialState,
         );
@@ -198,12 +198,12 @@ describe('components/dot_menu/DotMenu', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should match snapshot, hide "New" badge on forward post', () => {
+    test('should match snapshot, cannot move', () => {
         const props = {
             ...baseProps,
-            showForwardPostNewLabel: false,
+            canMove: false,
         };
-        const wrapper = renderWithIntlAndStore(
+        const wrapper = renderWithContext(
             <DotMenu {...props}/>,
             initialState,
         );
@@ -216,7 +216,7 @@ describe('components/dot_menu/DotMenu', () => {
             ...baseProps,
             location: Locations.CENTER,
         };
-        renderWithIntlAndStore(
+        renderWithContext(
             <DotMenu {...props}/>,
             initialState,
         );
@@ -231,7 +231,7 @@ describe('components/dot_menu/DotMenu', () => {
             ...baseProps,
             channelIsArchived: true,
         };
-        renderWithIntlAndStore(
+        renderWithContext(
             <DotMenu {...props}/>,
             initialState,
         );
@@ -246,7 +246,7 @@ describe('components/dot_menu/DotMenu', () => {
             ...baseProps,
             location: Locations.SEARCH,
         };
-        renderWithIntlAndStore(
+        renderWithContext(
             <DotMenu {...props}/>,
             initialState,
         );
@@ -254,6 +254,119 @@ describe('components/dot_menu/DotMenu', () => {
         fireEvent.click(button);
         const menuItem = screen.queryByTestId(`unread_post_${baseProps.post.id}`);
         expect(menuItem).toBeNull();
+    });
+
+    test('should display the download all attachments action', () => {
+        const props = {
+            ...baseProps,
+            post: TestHelper.getPostMock({id: 'post_id_1',
+                is_pinned: false,
+                type: '' as PostType,
+                metadata: {
+                    files: [
+                        {
+                            id: 'file_id_1',
+                            user_id: '',
+                            create_at: 0,
+                            update_at: 0,
+                            delete_at: 0,
+                            name: '',
+                            extension: '',
+                            size: 0,
+                            mime_type: '',
+                            width: 0,
+                            height: 0,
+                            has_preview_image: false,
+                            clientId: '',
+                            archived: false,
+                            channel_id: '',
+                        }, {
+                            id: 'file_id_2',
+                            user_id: '',
+                            create_at: 0,
+                            update_at: 0,
+                            delete_at: 0,
+                            name: '',
+                            extension: '',
+                            size: 0,
+                            mime_type: '',
+                            width: 0,
+                            height: 0,
+                            has_preview_image: false,
+                            clientId: '',
+                            archived: false,
+                            channel_id: '',
+                        }]}}),
+        };
+
+        const {getByTestId} = renderWithContext(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+        const button = screen.getByTestId(`PostDotMenu-Button-${baseProps.post.id}`);
+        fireEvent.click(button);
+        const downloadAction = getByTestId(`download_all_attachments_${props.post.id}`);
+        expect(downloadAction).toBeInTheDocument();
+        expect(downloadAction).toBeVisible();
+    });
+
+    test('should not display the download all attachments action for one or no file', () => {
+        let props = {
+            ...baseProps,
+            post: TestHelper.getPostMock({
+                id: 'post_id_1',
+                is_pinned: false,
+                type: '' as PostType,
+                metadata: {
+                    files: [{
+                        id: 'file_id_1',
+                        user_id: '',
+                        create_at: 0,
+                        update_at: 0,
+                        delete_at: 0,
+                        name: '',
+                        extension: '',
+                        size: 0,
+                        mime_type: '',
+                        width: 0,
+                        height: 0,
+                        has_preview_image: false,
+                        clientId: '',
+                        archived: false,
+                        channel_id: '',
+                    }],
+                },
+            }),
+        };
+
+        const {queryByTestId} = renderWithContext(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+        const button = screen.getByTestId(`PostDotMenu-Button-${baseProps.post.id}`);
+        fireEvent.click(button);
+        let downloadAction = queryByTestId(`download_all_attachments_${props.post.id}`);
+        expect(downloadAction).not.toBeInTheDocument();
+
+        props = {
+            ...baseProps,
+            post: TestHelper.getPostMock({
+                id: 'post_id_2',
+                is_pinned: false,
+                type: '' as PostType,
+                metadata: {
+                    files: [],
+                },
+            }),
+        };
+
+        renderWithContext(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+        fireEvent.click(button);
+        downloadAction = queryByTestId(`download_all_attachments_${props.post.id}`);
+        expect(downloadAction).not.toBeInTheDocument();
     });
 
     describe('RHS', () => {
@@ -266,7 +379,7 @@ describe('components/dot_menu/DotMenu', () => {
                 ...baseProps,
                 ...caseProps,
             };
-            renderWithIntlAndStore(
+            renderWithContext(
                 <DotMenu {...props}/>,
                 initialState,
             );
@@ -287,7 +400,7 @@ describe('components/dot_menu/DotMenu', () => {
                 ...baseProps,
                 ...caseProps,
             };
-            renderWithIntlAndStore(
+            renderWithContext(
                 <DotMenu {...props}/>,
                 initialState,
             );
@@ -308,7 +421,7 @@ describe('components/dot_menu/DotMenu', () => {
                 ...caseProps,
                 location: Locations.RHS_ROOT,
             };
-            renderWithIntlAndStore(
+            renderWithContext(
                 <DotMenu {...props}/>,
                 initialState,
             );
@@ -317,40 +430,6 @@ describe('components/dot_menu/DotMenu', () => {
             const menuItem = screen.getByTestId(`follow_post_thread_${baseProps.post.id}`);
             expect(menuItem).toBeVisible();
             expect(menuItem).toHaveTextContent(text);
-        });
-
-        test.each([
-            [false, {isFollowingThread: true}],
-            [true, {isFollowingThread: false}],
-        ])('should call setThreadFollow with following as %s', async (following, caseProps) => {
-            const spySetThreadFollow = jest.fn();
-            const spy = jest.spyOn(dotUtils, 'trackDotMenuEvent');
-
-            const props = {
-                ...baseProps,
-                ...caseProps,
-                location: Locations.RHS_ROOT,
-                actions: {
-                    ...baseProps.actions,
-                    setThreadFollow: spySetThreadFollow,
-                },
-            };
-            renderWithIntlAndStore(
-                <DotMenu {...props}/>,
-                initialState,
-            );
-            const button = screen.getByTestId(`PostDotMenu-Button-${baseProps.post.id}`);
-            fireEvent.click(button);
-            const menuItem = screen.getByTestId(`follow_post_thread_${baseProps.post.id}`);
-            expect(menuItem).toBeVisible();
-            fireEvent.mouseDown(menuItem);
-            expect(spy).toHaveBeenCalled();
-            expect(spySetThreadFollow).toHaveBeenCalledWith(
-                'user_id_1',
-                'team_id_1',
-                'post_id_1',
-                following,
-            );
         });
     });
 });

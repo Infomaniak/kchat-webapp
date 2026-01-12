@@ -9,8 +9,8 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {sendAddToChannelEphemeralPost} from 'actions/global_actions';
 
-import type {Props} from 'components/post_view/post_add_channel_member/post_add_channel_member';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member/post_add_channel_member';
+import type {Props} from 'components/post_view/post_add_channel_member/post_add_channel_member';
 
 import {TestHelper} from 'utils/test_helper';
 
@@ -41,6 +41,7 @@ describe('components/post_view/PostAddChannelMember', () => {
         actions: {
             removePost: jest.fn(),
             addChannelMember: jest.fn(),
+            notifyChannelMember: jest.fn(),
         },
         noGroupsUsernames: [],
     };
@@ -91,7 +92,9 @@ describe('components/post_view/PostAddChannelMember', () => {
         expect(wrapper.state('expanded')).toEqual(false);
         expect(wrapper).toMatchSnapshot();
 
-        wrapper.find('.PostBody_otherUsersLink').simulate('click');
+        // Call expand handler directly since the link is rendered inside FormattedMessage
+        (wrapper.instance() as PostAddChannelMember).expand();
+        wrapper.update();
         expect(wrapper.state('expanded')).toEqual(true);
         expect(wrapper).toMatchSnapshot();
     });
@@ -100,13 +103,15 @@ describe('components/post_view/PostAddChannelMember', () => {
         const actions = {
             removePost: jest.fn(),
             addChannelMember: jest.fn(),
+            notifyChannelMember: jest.fn(),
         };
         const props: Props = {...requiredProps, actions};
         const wrapper = shallow(
             <PostAddChannelMember {...props}/>,
         );
 
-        wrapper.find('.PostBody_addChannelMemberLink').simulate('click');
+        // Call handler directly since the link is rendered inside FormattedMessage
+        (wrapper.instance() as PostAddChannelMember).handleAddChannelMember();
 
         expect(actions.addChannelMember).toHaveBeenCalledTimes(1);
         expect(actions.addChannelMember).toHaveBeenCalledWith(post.channel_id, requiredProps.userIds[0], post.root_id);
@@ -122,14 +127,41 @@ describe('components/post_view/PostAddChannelMember', () => {
         const actions = {
             removePost: jest.fn(),
             addChannelMember: jest.fn(),
+            notifyChannelMember: jest.fn(),
         };
         const props: Props = {...requiredProps, userIds, usernames, actions};
         const wrapper = shallow(
             <PostAddChannelMember {...props}/>,
         );
 
-        wrapper.find('.PostBody_addChannelMemberLink').simulate('click');
+        // Call handler directly since the link is rendered inside FormattedMessage
+        (wrapper.instance() as PostAddChannelMember).handleAddChannelMember();
         expect(actions.addChannelMember).toHaveBeenCalledTimes(4);
+    });
+
+    test('handleAddChannelMember should be passed to FormattedMessage addLink callback', () => {
+        const wrapper = shallow(<PostAddChannelMember {...requiredProps}/>);
+        const formattedMessage = wrapper.find('MemoizedFormattedMessage').first();
+        const values = formattedMessage.prop('values');
+        expect(values).toBeDefined();
+
+        const {addLink} = values as unknown as Record<string, unknown>;
+
+        // Verify that addLink is a function
+        expect(typeof addLink).toBe('function');
+
+        // Create a mock onClick and verify it gets called when the link would be clicked
+        const instance = wrapper.instance() as PostAddChannelMember;
+        const handleAddSpy = jest.spyOn(instance, 'handleAddChannelMember');
+
+        // Simulate what happens when FormattedMessage renders the addLink
+        const linkElement = (addLink as (chunks: React.ReactNode) => React.ReactElement)('test content');
+        expect(linkElement.props.className).toBe('PostBody_addChannelMemberLink');
+        expect(linkElement.props.onClick).toBe(instance.handleAddChannelMember);
+
+        // Verify clicking the link calls the handler
+        linkElement.props.onClick();
+        expect(handleAddSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should match snapshot, with no-groups usernames', () => {

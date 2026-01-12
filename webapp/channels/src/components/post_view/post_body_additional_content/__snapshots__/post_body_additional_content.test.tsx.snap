@@ -60,9 +60,8 @@ exports[`PostBodyAdditionalContent with a message attachment should render corre
   <span>
     some children
   </span>
-  <MessageAttachmentList
+  <Memo(MessageAttachmentList)
     attachments={Array []}
-    imagesMetadata={Object {}}
     postId="post_id_1"
   />
 </div>
@@ -98,6 +97,12 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
     }
     webSocketClient={
       WebSocketClient {
+        "_currentUserId": undefined,
+        "_currentUserTeamId": undefined,
+        "_presenceChannelId": undefined,
+        "_teamId": undefined,
+        "_userId": undefined,
+        "_userTeamId": undefined,
         "closeCallback": null,
         "closeListeners": Set {},
         "conn": null,
@@ -117,12 +122,15 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "messageListeners": Set {},
         "missedEventCallback": null,
         "missedMessageListeners": Set {},
+        "otherServersMessageListeners": Set {},
+        "otherTeams": Array [],
+        "otherTeamsChannel": Object {},
         "presenceChannel": null,
         "reconnectCallback": null,
         "reconnectListeners": Set {},
+        "reconnecting": false,
         "responseCallbacks": Object {},
         "responseSequence": 1,
-        "serverSequence": 0,
         "socketId": null,
         "teamChannel": null,
         "userChannel": null,
@@ -154,6 +162,12 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
     }
     webSocketClient={
       WebSocketClient {
+        "_currentUserId": undefined,
+        "_currentUserTeamId": undefined,
+        "_presenceChannelId": undefined,
+        "_teamId": undefined,
+        "_userId": undefined,
+        "_userTeamId": undefined,
         "closeCallback": null,
         "closeListeners": Set {},
         "conn": null,
@@ -173,12 +187,15 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "messageListeners": Set {},
         "missedEventCallback": null,
         "missedMessageListeners": Set {},
+        "otherServersMessageListeners": Set {},
+        "otherTeams": Array [],
+        "otherTeamsChannel": Object {},
         "presenceChannel": null,
         "reconnectCallback": null,
         "reconnectListeners": Set {},
+        "reconnecting": false,
         "responseCallbacks": Object {},
         "responseSequence": 1,
-        "serverSequence": 0,
         "socketId": null,
         "teamChannel": null,
         "userChannel": null,
@@ -194,18 +211,6 @@ exports[`PostBodyAdditionalContent with a permalinklink Render permalink preview
   <span>
     some children
   </span>
-  <Connect(PostMessagePreview)
-    handleFileDropdownOpened={[MockFunction]}
-    metadata={
-      Object {
-        "channel_display_name": "channel1",
-        "channel_id": "channel_id",
-        "channel_type": "O",
-        "post_id": "post_id123",
-        "team_name": "core",
-      }
-    }
-  />
 </div>
 `;
 

@@ -2,6 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {Divider} from '@mui/material';
+import type {DividerProps} from '@mui/material';
+import type {ElementType} from 'react';
 import React from 'react';
 
 /**
@@ -11,17 +13,11 @@ import React from 'react';
  *   <Menu.Item>
  *   <Menu.Separator />
  */
-export function MenuItemSeparator() {
+export function MenuItemSeparator(props: DividerProps & {component?: ElementType }) {
     return (
         <Divider
-            component='li'
             aria-orientation='vertical'
-            sx={() => ({
-                '&.MuiDivider-root': {
-                    marginTop: '3px',
-                    marginBottom: '3px',
-                },
-            })}
+            {...props}
         />
     );
 }

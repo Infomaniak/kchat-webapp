@@ -1,0 +1,18 @@
+.ConfirmModal {
+    &__footer {
+        display: flex;
+        justify-content: end;
+        padding: 32px 0;
+
+        .checkbox {
+            margin-right: auto;
+        }
+    }
+}
+
+// IK changes : setting the width of the modal to fit-content with a minimum width of 600px
+// This is to ensure that the buttons are not cut off when the text is long
+.modal-confirm.reset-status-modal {
+    width: fit-content;
+    min-width: 600px
+}

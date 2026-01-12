@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import Constants from 'utils/constants';
-import {isKeyPressed} from 'utils/utils';
+import {isKeyPressed} from 'utils/keyboard';
 
 export default class RhsSettingsItem extends React.PureComponent {
     static defaultProps = {

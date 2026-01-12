@@ -1,19 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classNames from 'classnames';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
-
-import {t} from 'utils/i18n';
 
 import {InviteType} from './invite_as';
 import type {InviteResult} from './result_table';
 import ResultTable from './result_table';
-
-import './result_view.scss';
 
 export type InviteResults = {
     sent: InviteResult[];
@@ -42,22 +39,38 @@ type Props = {
 } & ResultState;
 
 export default function ResultView(props: Props) {
-    const {formatMessage} = useIntl();
+    let inviteType;
+    if (props.inviteType === InviteType.MEMBER) {
+        inviteType = (
+            <FormattedMessage
+                id='invite_modal.invited_members'
+                defaultMessage='Members'
+            />
+        );
+    } else {
+        inviteType = (
+            <FormattedMessage
+                id='invite_modal.invited_guests'
+                defaultMessage='Guests'
+            />
+        );
+    }
+
     return (
         <>
             <Modal.Header
                 closeButton={true}
                 className={props.headerClass}
             >
-                <h1 id='invitation_modal_title'>
+                <h1
+                    id='invitation_modal_title'
+                    className='modal-title'
+                >
                     <FormattedMessage
                         id='invite_modal.invited'
                         defaultMessage='{inviteType} invited to {team_name}'
                         values={{
-                            inviteType: formatMessage({
-                                id: props.inviteType === InviteType.MEMBER ? t('invite_modal.invited_members') : t('invite_modal.invited_guests'),
-                                defaultMessage: props.inviteType === InviteType.MEMBER ? 'Members' : 'Guests',
-                            }),
+                            inviteType,
                             team_name: props.currentTeamName,
                         }}
                     />
@@ -77,10 +90,10 @@ export default function ResultView(props: Props) {
                     />
                 )}
             </Modal.Body>
-            <Modal.Footer className={props.footerClass}>
+            <Modal.Footer className={classNames('InviteView__footer', props.footerClass)}>
                 <button
                     onClick={props.inviteMore}
-                    className='btn btn-cancel ResultView__inviteMore'
+                    className='btn btn-secondary btn-cancel ResultView__inviteMore'
                     data-testid='invite-more'
                 >
                     <FormattedMessage

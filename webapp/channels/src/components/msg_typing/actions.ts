@@ -2,53 +2,55 @@
 // See LICENSE.txt for license information.
 
 import type {GlobalState} from '@mattermost/types/store';
+import type {ValueOf} from '@mattermost/types/utilities';
 
 import {getMissingProfilesByIds, getStatusesByIds} from 'mattermost-redux/actions/users';
 import {General, Preferences, WebsocketEvents} from 'mattermost-redux/constants';
+import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
-import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+
+import type {ActionFuncAsync, ThunkActionFunc} from 'types/store';
 
 function getTimeBetweenTypingEvents(state: GlobalState) {
     const config = getConfig(state);
 
     return config.TimeBetweenUserTypingUpdatesMilliseconds === undefined ? 0 : parseInt(config.TimeBetweenUserTypingUpdatesMilliseconds, 10);
 }
+const createUserStartedAction = (action: ValueOf<typeof WebsocketEvents>, callback: ReturnType<typeof createUserStoppedAction>) =>
+    (userId: string, channelId: string, rootId: string, now: number): ThunkActionFunc<void> =>
+        (dispatch, getState) => {
+            const state = getState();
+            if (
+                isPerformanceDebuggingEnabled(state) &&
+                getBool(state, Preferences.CATEGORY_PERFORMANCE_DEBUGGING, Preferences.NAME_DISABLE_TYPING_MESSAGES)
+            ) {
+                return;
+            }
 
-export function userStartedTyping(userId: string, channelId: string, rootId: string, now: number) {
-    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState();
+            dispatch({
+                type: action,
+                data: {
+                    id: channelId + rootId,
+                    userId,
+                    now,
+                },
+            });
 
-        if (
-            isPerformanceDebuggingEnabled(state) &&
-            getBool(state, Preferences.CATEGORY_PERFORMANCE_DEBUGGING, Preferences.NAME_DISABLE_TYPING_MESSAGES)
-        ) {
-            return;
-        }
+            // Ideally this followup loading would be done by someone else
+            dispatch(fillInMissingInfo(userId));
 
-        dispatch({
-            type: WebsocketEvents.TYPING,
-            data: {
-                id: channelId + rootId,
-                userId,
-                now,
-            },
-        });
+            setTimeout(() => {
+                dispatch(callback(userId, channelId, rootId, now));
+            }, getTimeBetweenTypingEvents(state));
+        };
 
-        // Ideally this followup loading would be done by someone else
-        dispatch(fillInMissingInfo(userId));
-
-        setTimeout(() => {
-            dispatch(userStoppedTyping(userId, channelId, rootId, now));
-        }, getTimeBetweenTypingEvents(state));
-    };
-}
-
-function fillInMissingInfo(userId: string) {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+function fillInMissingInfo(userId: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         const state = getState();
         const currentUserId = getCurrentUserId(state);
+        const enabledUserStatuses = getIsUserStatusesConfigEnabled(state);
 
         if (userId !== currentUserId) {
             const result = await dispatch(getMissingProfilesByIds([userId]));
@@ -59,7 +61,7 @@ function fillInMissingInfo(userId: string) {
         }
 
         const status = getStatusForUserId(state, userId);
-        if (status !== General.ONLINE) {
+        if (status !== General.ONLINE && enabledUserStatuses) {
             dispatch(getStatusesByIds([userId]));
         }
 
@@ -67,13 +69,20 @@ function fillInMissingInfo(userId: string) {
     };
 }
 
-export function userStoppedTyping(userId: string, channelId: string, rootId: string, now: number) {
-    return {
-        type: WebsocketEvents.STOP_TYPING,
+const createUserStoppedAction = (action: ValueOf<typeof WebsocketEvents>) =>
+    (userId: string, channelId: string, rootId: string, now: number) => ({
+        type: action,
         data: {
             id: channelId + rootId,
             userId,
             now,
         },
-    };
-}
+    });
+
+export const userStoppedTyping = createUserStoppedAction(WebsocketEvents.STOP_TYPING);
+
+export const userStoppedRecording = createUserStoppedAction(WebsocketEvents.STOP_RECORDING);
+
+export const userStartedTyping = createUserStartedAction(WebsocketEvents.TYPING, userStoppedTyping);
+
+export const userStartedRecording = createUserStartedAction(WebsocketEvents.RECORDING, userStoppedRecording);

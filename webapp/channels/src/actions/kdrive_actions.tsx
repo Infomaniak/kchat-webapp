@@ -8,12 +8,13 @@ import React from 'react';
 
 import {Client4} from 'mattermost-redux/client';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
-import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
 import {ActionTypes, KDriveActionTypes} from 'utils/constants';
 import {generateId, localizeMessage} from 'utils/utils';
+
+import type {DispatchFunc, GetStateFunc} from 'types/store';
 
 interface IDriveSelectionOutput {
     attachmentsSize: number;
@@ -77,9 +78,10 @@ export function saveFileToKDrive(fileId: string, fileName: string) {
 
                     // TODO use env for preprod
                     const link = `https://kdrive.infomaniak.com/app/drive/${resDriveId}/redirect/${resElemId}`;
-                    dispatch(setKDriveToast(localizeMessage('kdrive.uploadSuccess', 'Your file has been saved to kDrive'), link));
+                    dispatch(setKDriveToast(localizeMessage({id: 'kdrive.uploadSuccess', defaultMessage: 'Your file has been saved to kDrive'}), link));
                 }
             }).
+            // eslint-disable-next-line no-console
             catch((error: string) => console.warn(error));
 
         return {data: true};
@@ -107,6 +109,7 @@ export function selectFileFromKdrive(
 
         driveModule.open('select-from-drive-mail', color, 104900000).
             then((data: IDriveSelectionOutput) => {
+                // eslint-disable-next-line no-console
                 console.log(data);
                 const reqs: Array<{
                     name: string;
@@ -141,6 +144,7 @@ export function selectFileFromKdrive(
                         onUpload(file_infos, client_ids, channelId, rootId);
                         stateRemove(req.clientId);
                     } catch (error) {
+                        // eslint-disable-next-line no-console
                         console.warn(error);
                     }
                 });
@@ -153,6 +157,7 @@ export function selectFileFromKdrive(
                 const newMessage = messageStart + linksConcat + messageEnd;
                 handleInputChange({target: {value: newMessage}});
             }).
+            // eslint-disable-next-line no-console
             catch((error: string) => console.warn(error));
 
         return {data: true};
@@ -160,12 +165,7 @@ export function selectFileFromKdrive(
 }
 
 /**
- * This action is called every channel switch in {@code ChannelView} to register a kdrive upload plugin.
- * The plugin needs to be reregistered every channel switch because it needs to bind the channel id to the
- * plugin action. The old one needs to be manually removed otherwise it adds a duplicate.
- *
- * @param channelId - Current channel id.
- * @returns {void}
+ * This action is called to register the kdrive upload plugin.
  */
 export function registerInternalKdrivePlugin() {
     return async (dispatch: DispatchFunc) => {
@@ -175,7 +175,7 @@ export function registerInternalKdrivePlugin() {
             data: {
                 id: 'kdrive',
                 pluginId: 'kdrive',
-                text: localizeMessage('kdrive.upload', 'Upload from kDrive'),
+                text: localizeMessage({id: 'kdrive.upload', defaultMessage: 'Upload from kDrive'}),
                 customArgs: [
                     'onFileUpload',
                     'onUploadStart',

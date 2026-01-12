@@ -2,13 +2,15 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import type {IntlShape, WrappedComponentProps} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
+import type {IntlShape, WrappedComponentProps} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
 import {Preferences} from 'mattermost-redux/constants';
+import {getNewMessagesIndex} from 'mattermost-redux/utils/post_list';
 
 import {HintToast} from 'components/hint-toast/hint_toast';
+import ScrollToBottomToast from 'components/scroll_to_bottom_toast';
 import {SearchShortcut} from 'components/search_shortcut';
 import Timestamp, {RelativeRanges} from 'components/timestamp';
 import Toast from 'components/toast/toast';
@@ -16,8 +18,10 @@ import Toast from 'components/toast/toast';
 import {getHistory} from 'utils/browser_history';
 import Constants from 'utils/constants';
 import {isToday} from 'utils/datetime';
-import {isIdNotPost, getNewMessageIndex} from 'utils/post_utils';
-import {isKeyPressed, localizeMessage} from 'utils/utils';
+import {isKeyPressed} from 'utils/keyboard';
+import {isIdNotPost} from 'utils/post_utils';
+
+import './toast__wrapper.scss';
 
 const TOAST_TEXT_COLLAPSE_WIDTH = 500;
 
@@ -41,6 +45,9 @@ export type Props = WrappedComponentProps & RouteComponentProps<{team: string}> 
     updateLastViewedBottomAt: (lastViewedBottom?: number) => void;
     showSearchHintToast: boolean;
     onSearchHintDismiss: () => void;
+    showScrollToBottomToast: boolean;
+    onScrollToBottomToastDismiss: () => void;
+    hideScrollToBottomToast: () => void;
     shouldStartFromBottomWhenUnread: boolean;
     isNewMessageLineReached: boolean;
     rootPosts: Record<string, boolean>;
@@ -49,9 +56,11 @@ export type Props = WrappedComponentProps & RouteComponentProps<{team: string}> 
     unreadScrollPosition: string;
     isCollapsedThreadsEnabled: boolean;
     unreadCountInChannel: number;
+    inCall: boolean;
     atLatestPost?: boolean;
     channelId: string;
     intl: IntlShape;
+    isThreadView: boolean;
     actions: {
         updateToastStatus: (status: boolean) => void;
     };
@@ -66,6 +75,8 @@ type State = {
     showNewMessagesToast?: boolean;
     showMessageHistoryToast?: boolean;
     showUnreadWithBottomStartToast?: boolean;
+    showScrollToBottomToast?: boolean;
+    showInCallToast?: boolean;
 };
 
 export class ToastWrapperClass extends React.PureComponent<Props, State> {
@@ -83,7 +94,7 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
     }
 
     static countNewMessages = (rootPosts: Record<string, boolean>, isCollapsedThreadsEnabled: boolean, postListIds: string[] = []) => {
-        const mark = getNewMessageIndex(postListIds);
+        const mark = getNewMessagesIndex(postListIds);
         if (mark <= 0) {
             return 0;
         }
@@ -95,7 +106,7 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
     };
 
     static getDerivedStateFromProps(props: Props, prevState: State) {
-        let {showUnreadToast, showNewMessagesToast, showMessageHistoryToast, showUnreadWithBottomStartToast} = prevState;
+        let {showUnreadToast, showNewMessagesToast, showMessageHistoryToast, showUnreadWithBottomStartToast, showInCallToast} = prevState;
         let unreadCount;
 
         if (props.atLatestPost) {
@@ -124,17 +135,17 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
         }
 
         // show unread toast when a channel is marked as unread
-        if (props.channelMarkedAsUnread && !props.atBottom && !prevState.channelMarkedAsUnread && !prevState.showUnreadToast) {
+        if (props.channelMarkedAsUnread && (props.atBottom === false) && !prevState.channelMarkedAsUnread && !prevState.showUnreadToast) {
             showUnreadToast = true;
         }
 
         // show unread toast when a channel is remarked as unread using the change in lastViewedAt
         // lastViewedAt changes only if a channel is remarked as unread in channelMarkedAsUnread state
-        if (props.channelMarkedAsUnread && props.lastViewedAt !== prevState.lastViewedAt && !props.atBottom) {
+        if (props.channelMarkedAsUnread && props.lastViewedAt !== prevState.lastViewedAt && (props.atBottom === false)) {
             showUnreadToast = true;
         }
 
-        if (!showUnreadToast && unreadCount > 0 && !props.atBottom && props.latestPostTimeStamp && (props.lastViewedBottom < props.latestPostTimeStamp)) {
+        if (!showUnreadToast && unreadCount > 0 && (props.atBottom === false) && props.latestPostTimeStamp && (props.lastViewedBottom < props.latestPostTimeStamp)) {
             showNewMessagesToast = true;
         }
 
@@ -162,6 +173,10 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
             showUnreadWithBottomStartToast = true;
         }
 
+        if (props.inCall && prevState.showInCallToast) {
+            showInCallToast = true;
+        }
+
         return {
             unreadCount,
             showUnreadToast,
@@ -171,19 +186,20 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
             atBottom: props.atBottom,
             channelMarkedAsUnread: props.channelMarkedAsUnread,
             showMessageHistoryToast,
+            showInCallToast,
         };
     }
 
     componentDidMount() {
         this.mounted = true;
-        const {showUnreadToast, showNewMessagesToast, showMessageHistoryToast, showUnreadWithBottomStartToast} = this.state;
-        const toastPresent = Boolean(showUnreadToast || showNewMessagesToast || showMessageHistoryToast || showUnreadWithBottomStartToast);
+        const {showUnreadToast, showNewMessagesToast, showMessageHistoryToast, showUnreadWithBottomStartToast, showInCallToast} = this.state;
+        const toastPresent = Boolean(showUnreadToast || showNewMessagesToast || showMessageHistoryToast || showUnreadWithBottomStartToast || showInCallToast);
         document.addEventListener('keydown', this.handleShortcut);
         this.props.actions.updateToastStatus(toastPresent);
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const {showUnreadToast, showNewMessagesToast, showMessageHistoryToast, showUnreadWithBottomStartToast} = this.state;
+        const {showUnreadToast, showNewMessagesToast, showMessageHistoryToast, showUnreadWithBottomStartToast, showInCallToast} = this.state;
         const {
             atBottom,
             atLatestPost,
@@ -213,7 +229,8 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
         const toastStateChanged = prevState.showUnreadToast !== showUnreadToast ||
                                   prevState.showNewMessagesToast !== showNewMessagesToast ||
                                   prevState.showMessageHistoryToast !== showMessageHistoryToast ||
-                                  prevState.showUnreadWithBottomStartToast !== showUnreadWithBottomStartToast;
+                                  prevState.showUnreadWithBottomStartToast !== showUnreadWithBottomStartToast ||
+                                  prevState.showInCallToast !== showInCallToast;
 
         if (toastStateChanged) {
             const toastPresent = Boolean(showUnreadToast || showNewMessagesToast || showMessageHistoryToast || showUnreadWithBottomStartToast);
@@ -280,6 +297,14 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
         }
     };
 
+    hideInCallToast = () => {
+        if (this.state.showInCallToast) {
+            this.setState({
+                showInCallToast: false,
+            });
+        }
+    };
+
     newMessagesToastText = (count: number | undefined, since: number) => {
         if (this.props.width > TOAST_TEXT_COLLAPSE_WIDTH && typeof since !== 'undefined') {
             return (
@@ -330,6 +355,15 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
         );
     };
 
+    inCallToastText = () => {
+        return (
+            <FormattedMessage
+                id='kmeet.calls.already_in_call'
+                defaultMessage='You are already in a call. End your call before starting a new one.'
+            />
+        );
+    };
+
     changeUrlToRemountChannelView = () => {
         const {match} = this.props;
 
@@ -367,6 +401,7 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
 
         scrollToLatestMessages();
         this.hideUnreadToast();
+        this.props.hideScrollToBottomToast?.();
     };
 
     scrollToUnreadMessages = () => {
@@ -375,16 +410,21 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
     };
 
     getToastToRender() {
-        const {atLatestPost, atBottom, width, lastViewedAt, showSearchHintToast} = this.props;
-        const {showUnreadToast, showNewMessagesToast, showMessageHistoryToast, showUnreadWithBottomStartToast, unreadCount} = this.state;
+        const {atLatestPost, atBottom, width, lastViewedAt, showSearchHintToast, showScrollToBottomToast, inCall} = this.props;
+        const {showUnreadToast, showNewMessagesToast, showMessageHistoryToast, showUnreadWithBottomStartToast, showInCallToast, unreadCount} = this.state;
 
         const unreadToastProps = {
             show: true,
             width,
             onDismiss: this.hideUnreadToast,
             onClick: this.scrollToLatestMessages,
-            onClickMessage: localizeMessage('postlist.toast.scrollToBottom', 'Jump to recents'),
-            showActions: !atLatestPost || (atLatestPost && !atBottom),
+            onClickMessage: (
+                <FormattedMessage
+                    id='postlist.toast.scrollToBottom'
+                    defaultMessage='Jump to recents'
+                />
+            ),
+            showActions: !atLatestPost || (atLatestPost && (atBottom === false)),
         };
 
         if (showUnreadToast && unreadCount > 0) {
@@ -395,12 +435,32 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
             );
         }
 
+        const inCallToastProps = {
+            show: true,
+            width,
+            extraClasses: 'toast--darker',
+            onDismiss: this.hideInCallToast,
+        };
+
+        if (inCall && showInCallToast) {
+            return (
+                <Toast {...inCallToastProps}>
+                    {this.inCallToastText()}
+                </Toast>
+            );
+        }
+
         const unreadWithBottomStartToastProps = {
             show: true,
             width,
             onDismiss: this.hideUnreadWithBottomStartToast,
             onClick: this.scrollToUnreadMessages,
-            onClickMessage: localizeMessage('postlist.toast.scrollToUnread', 'Jump to unreads'),
+            onClickMessage: (
+                <FormattedMessage
+                    id='postlist.toast.scrollToUnread'
+                    defaultMessage='Jump to unreads'
+                />
+            ),
             showActions: true,
             jumpDirection: 'up' as const,
         };
@@ -417,7 +477,12 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
             const showNewMessagesToastOverrides = {
                 onDismiss: this.hideNewMessagesToast,
                 onClick: this.scrollToNewMessage,
-                onClickMessage: localizeMessage('postlist.toast.scrollToLatest', 'Jump to new messages'),
+                onClickMessage: (
+                    <FormattedMessage
+                        id='postlist.toast.scrollToLatest'
+                        defaultMessage='Jump to new messages'
+                    />
+                ),
             };
 
             return (
@@ -436,7 +501,12 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
                 width,
                 onDismiss: this.hideArchiveToast,
                 onClick: this.scrollToLatestMessages,
-                onClickMessage: localizeMessage('postlist.toast.scrollToBottom', 'Jump to recents'),
+                onClickMessage: (
+                    <FormattedMessage
+                        id='postlist.toast.scrollToBottom'
+                        defaultMessage='Jump to recents'
+                    />
+                ),
                 showActions: true,
                 extraClasses: 'toast__history',
             };
@@ -448,13 +518,34 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
             );
         }
 
-        if (showSearchHintToast) {
-            return (
+        const toasts = [];
+        if (showScrollToBottomToast) {
+            toasts.push(
+                <ScrollToBottomToast
+                    key='scroll-to-bottom-toast'
+                    onClick={this.scrollToLatestMessages}
+                    onDismiss={this.props.onScrollToBottomToastDismiss}
+                />,
+            );
+        }
+
+        if (showSearchHintToast && !this.props.isThreadView) {
+            toasts.push(
                 <HintToast
+                    key='search-hint-toast'
                     onDismiss={this.hideSearchHintToast}
+                    isThreadView={this.props.isThreadView}
                 >
                     {this.getSearchHintToastText()}
-                </HintToast>
+                </HintToast>,
+            );
+        }
+
+        if (toasts.length > 0) {
+            return (
+                <div className={this.props.isThreadView ? 'toasts-wrapper-thread' : 'toasts-wrapper'}>
+                    {toasts}
+                </div>
             );
         }
 
@@ -465,9 +556,9 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
         const toastToRender = this.getToastToRender();
 
         return (
-            <React.Fragment>
+            <>
                 {toastToRender}
-            </React.Fragment>
+            </>
         );
     }
 }

@@ -1,11 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classNames from 'classnames';
 import React from 'react';
-import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
+import {GenericModal} from '@mattermost/components';
+
+import './confirm_modal.scss';
+
 type Props = {
+    id?: string;
 
     /*
      * Set to show modal
@@ -51,6 +56,11 @@ type Props = {
      * Text/jsx element to display with the checkbox
      */
     checkboxText?: React.ReactNode;
+
+    /*
+     * If true, show the checkbox in the footer instead of the modal body
+     */
+    checkboxInFooter?: boolean;
 
     /*
      * Function called when the confirm button or ENTER is pressed. Passes `true` if the checkbox is checked
@@ -147,7 +157,8 @@ export default class ConfirmModal extends React.Component<Props, State> {
             cancelButton = (
                 <button
                     type='button'
-                    className='btn btn-link btn-cancel secondary'
+                    data-testid='cancel-button'
+                    className='btn btn-tertiary'
                     onClick={this.handleCancel}
                     id='cancelModalButton'
                 >
@@ -157,43 +168,40 @@ export default class ConfirmModal extends React.Component<Props, State> {
         }
 
         return (
-            <Modal
-                className={'modal-confirm ' + this.props.modalClass}
-                dialogClassName='a11y__modal'
+            <GenericModal
+                id={classNames('confirmModal', this.props.id)}
+                className={classNames('modal-confirm', this.props.modalClass)}
                 show={this.props.show}
                 onHide={this.handleCancel}
                 onExited={this.props.onExited}
-                id='confirmModal'
-                role='dialog'
-                aria-modal={true}
-                aria-labelledby='confirmModalLabel'
-                aria-describedby='confirmModalBody'
+                compassDesign={true}
+                modalHeaderText={this.props.title}
             >
-                <Modal.Header closeButton={true}>
-                    <Modal.Title
-                        componentClass='h1'
-                        id='confirmModalLabel'
+                <div
+                    data-testid={this.props.id}
+                >
+                    <div
+                        className='ConfirmModal__body'
+                        id='confirmModalBody'
                     >
-                        {this.props.title}
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body id='confirmModalBody'>
-                    {this.props.message}
-                    {checkbox}
-                </Modal.Body>
-                <Modal.Footer>
-                    {cancelButton}
-                    <button
-                        autoFocus={true}
-                        type='button'
-                        className={this.props.confirmButtonClass}
-                        onClick={this.handleConfirm}
-                        id='confirmModalButton'
-                    >
-                        {this.props.confirmButtonText}
-                    </button>
-                </Modal.Footer>
-            </Modal>
+                        {this.props.message}
+                        {!this.props.checkboxInFooter && checkbox}
+                    </div>
+                    <div className='ConfirmModal__footer'>
+                        {this.props.checkboxInFooter && checkbox}
+                        {cancelButton}
+                        <button
+                            autoFocus={true}
+                            type='button'
+                            className={this.props.confirmButtonClass}
+                            onClick={this.handleConfirm}
+                            id='confirmModalButton'
+                        >
+                            {this.props.confirmButtonText}
+                        </button>
+                    </div>
+                </div>
+            </GenericModal>
         );
     }
 }

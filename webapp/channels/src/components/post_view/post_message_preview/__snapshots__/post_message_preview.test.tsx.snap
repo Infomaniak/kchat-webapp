@@ -23,7 +23,7 @@ exports[`PostMessagePreview direct and group messages should render preview for 
             <Memo(Avatar)
               className="avatar-post-preview"
               size="sm"
-              url="/api/v4/users/user_1/image?_=0"
+              url=""
               username="username1"
             />
           </span>
@@ -34,7 +34,6 @@ exports[`PostMessagePreview direct and group messages should render preview for 
       >
         <Connect(UserProfile)
           disablePopover={true}
-          hasMention={true}
           overwriteName=""
           userId="user_1"
         />
@@ -73,7 +72,7 @@ exports[`PostMessagePreview direct and group messages should render preview for 
     >
       <p>
         <MemoizedFormattedMessage
-          defaultMessage="Only visible to users in ~{channel}"
+          defaultMessage="~{channel}"
           id="post_message_preview.channel"
           values={
             Object {
@@ -110,7 +109,7 @@ exports[`PostMessagePreview direct and group messages should render preview for 
             <Memo(Avatar)
               className="avatar-post-preview"
               size="sm"
-              url="/api/v4/users/user_1/image?_=0"
+              url=""
               username="username1"
             />
           </span>
@@ -121,7 +120,6 @@ exports[`PostMessagePreview direct and group messages should render preview for 
       >
         <Connect(UserProfile)
           disablePopover={true}
-          hasMention={true}
           overwriteName=""
           userId="user_1"
         />
@@ -160,7 +158,7 @@ exports[`PostMessagePreview direct and group messages should render preview for 
     >
       <p>
         <MemoizedFormattedMessage
-          defaultMessage="Only visible to users in ~{channel}"
+          defaultMessage="~{channel}"
           id="post_message_preview.channel"
           values={
             Object {
@@ -197,7 +195,7 @@ exports[`PostMessagePreview nested previews should render file preview 1`] = `
             <Memo(Avatar)
               className="avatar-post-preview"
               size="sm"
-              url="/api/v4/users/user_1/image?_=0"
+              url=""
               username="username1"
             />
           </span>
@@ -208,7 +206,6 @@ exports[`PostMessagePreview nested previews should render file preview 1`] = `
       >
         <Connect(UserProfile)
           disablePopover={true}
-          hasMention={true}
           overwriteName=""
           userId="user_1"
         />
@@ -267,7 +264,7 @@ exports[`PostMessagePreview nested previews should render file preview 1`] = `
     >
       <p>
         <MemoizedFormattedMessage
-          defaultMessage="Only visible to users in ~{channel}"
+          defaultMessage="~{channel}"
           id="post_message_preview.channel"
           values={
             Object {
@@ -304,7 +301,7 @@ exports[`PostMessagePreview nested previews should render opengraph preview 1`] 
             <Memo(Avatar)
               className="avatar-post-preview"
               size="sm"
-              url="/api/v4/users/user_1/image?_=0"
+              url=""
               username="username1"
             />
           </span>
@@ -315,7 +312,6 @@ exports[`PostMessagePreview nested previews should render opengraph preview 1`] 
       >
         <Connect(UserProfile)
           disablePopover={true}
-          hasMention={true}
           overwriteName=""
           userId="user_1"
         />
@@ -382,7 +378,7 @@ exports[`PostMessagePreview nested previews should render opengraph preview 1`] 
     >
       <p>
         <MemoizedFormattedMessage
-          defaultMessage="Only visible to users in ~{channel}"
+          defaultMessage="~{channel}"
           id="post_message_preview.channel"
           values={
             Object {
@@ -419,7 +415,7 @@ exports[`PostMessagePreview should not render bot icon 1`] = `
             <Memo(Avatar)
               className="avatar-post-preview"
               size="sm"
-              url="/api/v4/users/user_1/image?_=0"
+              url=""
               username="username1"
             />
           </span>
@@ -430,7 +426,6 @@ exports[`PostMessagePreview should not render bot icon 1`] = `
       >
         <Connect(UserProfile)
           disablePopover={true}
-          hasMention={true}
           overwriteName=""
           userId="user_1"
         />
@@ -474,7 +469,7 @@ exports[`PostMessagePreview should not render bot icon 1`] = `
     >
       <p>
         <MemoizedFormattedMessage
-          defaultMessage="Only visible to users in ~{channel}"
+          defaultMessage="~{channel}"
           id="post_message_preview.channel"
           values={
             Object {
@@ -522,7 +517,6 @@ exports[`PostMessagePreview should render bot icon 1`] = `
       >
         <Connect(UserProfile)
           disablePopover={true}
-          hasMention={true}
           overwriteName=""
           userId="user_1"
         />
@@ -566,7 +560,7 @@ exports[`PostMessagePreview should render bot icon 1`] = `
     >
       <p>
         <MemoizedFormattedMessage
-          defaultMessage="Only visible to users in ~{channel}"
+          defaultMessage="~{channel}"
           id="post_message_preview.channel"
           values={
             Object {
@@ -603,7 +597,7 @@ exports[`PostMessagePreview should render correctly 1`] = `
             <Memo(Avatar)
               className="avatar-post-preview"
               size="sm"
-              url="/api/v4/users/user_1/image?_=0"
+              url=""
               username="username1"
             />
           </span>
@@ -614,7 +608,6 @@ exports[`PostMessagePreview should render correctly 1`] = `
       >
         <Connect(UserProfile)
           disablePopover={true}
-          hasMention={true}
           overwriteName=""
           userId="user_1"
         />
@@ -653,7 +646,7 @@ exports[`PostMessagePreview should render correctly 1`] = `
     >
       <p>
         <MemoizedFormattedMessage
-          defaultMessage="Only visible to users in ~{channel}"
+          defaultMessage="~{channel}"
           id="post_message_preview.channel"
           values={
             Object {

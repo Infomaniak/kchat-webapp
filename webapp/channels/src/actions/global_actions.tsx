@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {lazy} from 'react';
 import {batchActions} from 'redux-batched-actions';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
@@ -11,24 +12,23 @@ import type {UserProfile} from '@mattermost/types/users';
 import {ChannelTypes} from 'mattermost-redux/action_types';
 import {fetchAppBindings} from 'mattermost-redux/actions/apps';
 import {
-    fetchMyChannelsAndMembersREST,
+    fetchChannelsAndMembers,
     getChannelByNameAndTeamName,
     getChannelStats,
     selectChannel,
 } from 'mattermost-redux/actions/channels';
+import {fetchTeamScheduledPosts} from 'mattermost-redux/actions/scheduled_posts';
 import {logout, loadMe} from 'mattermost-redux/actions/users';
 import {Preferences} from 'mattermost-redux/constants';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedirectChannelNameForTeam, getChannelsNameMapInTeam, getAllDirectChannels, getChannelMessageCount} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
-import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getBool, getTeamsOrderPreference, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getTeam, getMyTeamMember, getTeamMemberships, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
 import {handleNewPost} from 'actions/post_actions';
-import {stopPeriodicStatusUpdates} from 'actions/status_actions';
 import {loadProfilesForSidebar} from 'actions/user_actions';
 import {clearUserCookie} from 'actions/views/cookie';
 import {close as closeLhs} from 'actions/views/lhs';
@@ -40,12 +40,13 @@ import BrowserStore from 'stores/browser_store';
 import LocalStorageStore from 'stores/local_storage_store';
 import store from 'stores/redux_store';
 
+import {withSuspense} from 'components/common/hocs/with_suspense';
 import {clearLocalStorageToken} from 'components/login/utils';
-import SubMenuModal from 'components/widgets/menu/menu_modals/submenu_modal/submenu_modal';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, PostTypes, RHSStates, ModalIdentifiers, PreviousViewedTypes} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
+import DesktopApp from 'utils/desktop_api';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
@@ -53,9 +54,12 @@ import * as Utils from 'utils/utils';
 
 import WebSocketClient from 'client/web_websocket_client';
 
-import type {GlobalState} from 'types/store';
+import type {ActionFuncAsync, ThunkActionFunc, GlobalState} from 'types/store';
 
+import {joinChannelById} from './views/channel';
 import {openModal} from './views/modals';
+
+const SubMenuModal = withSuspense(lazy(() => import('components/widgets/menu/menu_modals/submenu_modal/submenu_modal')));
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -174,8 +178,8 @@ export function showMobileSubMenuModal(elements: any[]) { // TODO Use more speci
     dispatch(openModal(submenuModalData));
 }
 
-export function sendEphemeralPost(message: string, channelId?: string, parentId?: string, userId?: string): ActionFunc {
-    return (doDispatch: DispatchFunc, doGetState: GetStateFunc) => {
+export function sendEphemeralPost(message: string, channelId?: string, parentId?: string, userId?: string): ActionFuncAsync<boolean> {
+    return (doDispatch, doGetState) => {
         const timestamp = Utils.getTimestamp();
         const post = {
             id: Utils.generateId(),
@@ -183,25 +187,6 @@ export function sendEphemeralPost(message: string, channelId?: string, parentId?
             channel_id: channelId || getCurrentChannelId(doGetState()),
             message,
             type: PostTypes.EPHEMERAL,
-            create_at: timestamp,
-            update_at: timestamp,
-            root_id: parentId || '',
-            props: {},
-        } as Post;
-
-        return doDispatch(handleNewPost(post));
-    };
-}
-
-export function sendGenericPostMessage(message: string, channelId?: string, parentId?: string, userId?: string): ActionFunc {
-    return (doDispatch: DispatchFunc, doGetState: GetStateFunc) => {
-        const timestamp = Utils.getTimestamp();
-        const post = {
-            id: Utils.generateId(),
-            user_id: userId || '0',
-            channel_id: channelId || getCurrentChannelId(doGetState()),
-            message,
-            type: PostTypes.SYSTEM_GENERIC,
             create_at: timestamp,
             update_at: timestamp,
             root_id: parentId || '',
@@ -233,8 +218,9 @@ export function sendAddToChannelEphemeralPost(user: UserProfile, addedUsername: 
 }
 
 let lastTimeTypingSent = 0;
-export function emitLocalUserTypingEvent(channelId: string, parentPostId: string) {
-    const userTyping = async (actionDispatch: DispatchFunc, actionGetState: GetStateFunc) => {
+let recordingInterval: ReturnType<typeof setInterval> | null = null;
+export function emitLocalUserTypingEvent(eventType = 'typing', channelId: string, parentPostId: string) {
+    const userTyping: ActionFuncAsync = async (actionDispatch, actionGetState) => {
         const state = actionGetState();
         const config = getConfig(state);
 
@@ -253,10 +239,21 @@ export function emitLocalUserTypingEvent(channelId: string, parentPostId: string
         const timeBetweenUserTypingUpdatesMilliseconds = Utils.stringToNumber(config.TimeBetweenUserTypingUpdatesMilliseconds);
         const maxNotificationsPerChannel = Utils.stringToNumber(config.MaxNotificationsPerChannel);
 
-        if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
-            (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
-            WebSocketClient.userTyping(channelId, userId, parentPostId);
-            lastTimeTypingSent = t;
+        if (eventType === 'typing') {
+            if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
+                (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
+                WebSocketClient.userTyping(channelId, userId, parentPostId);
+                lastTimeTypingSent = t;
+            }
+        } else if (eventType === 'recording') {
+            const TIMER = 1000;
+            recordingInterval = setInterval(() => {
+                WebSocketClient.userRecording(channelId, userId, parentPostId);
+            }, TIMER);
+        } else if (eventType === 'stop') {
+            if (recordingInterval !== null) {
+                clearInterval(recordingInterval);
+            }
         }
 
         return {data: true};
@@ -275,6 +272,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
     dispatch(logout()).then(() => {
         if (shouldSignalLogout) {
             BrowserStore.signalLogout();
+            DesktopApp.signalLogout();
         }
 
         // Waiting for deleteToken login ik
@@ -283,7 +281,8 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             (window as any).authManager.logout();
         }
 
-        stopPeriodicStatusUpdates();
+        BrowserStore.clearHideNotificationPermissionRequestBanner();
+
         WebsocketActions.close();
 
         clearUserCookie();
@@ -320,8 +319,8 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
     });
 }
 
-export function toggleSideBarRightMenuAction() {
-    return (doDispatch: DispatchFunc) => {
+export function toggleSideBarRightMenuAction(): ThunkActionFunc<void> {
+    return (doDispatch) => {
         doDispatch(closeRightHandSide());
         doDispatch(closeLhs());
         doDispatch(closeRhsMenu());
@@ -347,7 +346,7 @@ export async function getTeamRedirectChannelIfIsAccesible(user: UserProfile, tea
     let teamChannels = getChannelsNameMapInTeam(state, team.id);
     if (!teamChannels || Object.keys(teamChannels).length === 0) {
         // This should be executed in pretty limited scenarios (empty teams)
-        await dispatch(fetchMyChannelsAndMembersREST(team.id)); // eslint-disable-line no-await-in-loop
+        await dispatch(fetchChannelsAndMembers(team.id)); // eslint-disable-line no-await-in-loop
         state = getState();
         teamChannels = getChannelsNameMapInTeam(state, team.id);
     }
@@ -360,7 +359,7 @@ export async function getTeamRedirectChannelIfIsAccesible(user: UserProfile, tea
         channel = dmList.find((directChannel) => directChannel.name === channelName);
     }
 
-    let channelMember: ChannelMembership | null | undefined;
+    let channelMember: ChannelMembership | undefined;
     if (channel) {
         channelMember = getMyChannelMember(state, channel.id);
     }
@@ -386,13 +385,24 @@ export async function getTeamRedirectChannelIfIsAccesible(user: UserProfile, tea
     return null;
 }
 
-export async function redirectUserToDefaultTeam() {
+function historyPushWithQueryParams(path: string, queryParams?: URLSearchParams) {
+    if (queryParams) {
+        getHistory().push({
+            pathname: path,
+            search: queryParams.toString(),
+        });
+    } else {
+        getHistory().push(path);
+    }
+}
+
+export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) {
     let state = getState();
 
-    // Assume we need to load the user if they don't have any team memberships loaded or the user loaded
     let user = getCurrentUser(state);
     const shouldLoadUser = Utils.isEmptyObject(getTeamMemberships(state)) || !user;
 
+    // const onboardingFlowEnabled = getIsOnboardingFlowEnabled(state);
     if (shouldLoadUser) {
         await dispatch(loadMe());
         state = getState();
@@ -405,6 +415,16 @@ export async function redirectUserToDefaultTeam() {
 
     const locale = getCurrentLocale(state);
     const teamId = LocalStorageStore.getPreviousTeamId(user.id);
+
+    // let myTeams = getMyTeams(state);
+    // const teams = getActiveTeamsList(state);
+    // if (teams.length === 0) {
+    //     if (isUserFirstAdmin && onboardingFlowEnabled) {
+    //         historyPushWithQueryParams('/preparing-workspace', searchParams);
+    //         return;
+    //     }
+
+    //     historyPushWithQueryParams('/select_team', searchParams);
 
     let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
@@ -420,9 +440,9 @@ export async function redirectUserToDefaultTeam() {
     if (team && team.delete_at === 0) {
         const channel = await getTeamRedirectChannelIfIsAccesible(user, team);
         if (channel) {
+            dispatch(fetchTeamScheduledPosts(team.id, true));
             dispatch(selectChannel(channel.id));
-            const hashParams = window.location.hash ? `/${window.location.hash}` : '';
-            getHistory().push(`/${team.name}/channels/${channel.name}${hashParams}`);
+            historyPushWithQueryParams(`/${team.name}/channels/${channel.name}`, searchParams);
             return;
         }
     }
@@ -434,12 +454,39 @@ export async function redirectUserToDefaultTeam() {
         const channel = await getTeamRedirectChannelIfIsAccesible(user, myTeam); // eslint-disable-line no-await-in-loop
         if (channel) {
             dispatch(selectChannel(channel.id));
-            getHistory().push(`/${myTeam.name}/channels/${channel.name}`);
+            historyPushWithQueryParams(`/${myTeam.name}/channels/${channel.name}`, searchParams);
             return;
         }
     }
 
-    getHistory().push('/select_team');
+    historyPushWithQueryParams('/select_team', searchParams);
+}
+
+export async function redirectDesktopUserToDefaultTeam() {
+    const state = getState();
+    const locale = getCurrentLocale(state);
+    const teams = getMyKSuites(state);
+    const activeTeams = teams.filter((team) => team.delete_at === 0);
+
+    const orderPreference = getTeamsOrderPreference(state);
+    const orderedTeams = filterAndSortTeamsByDisplayName(activeTeams, locale, orderPreference.value);
+    const newCurrentTeam = orderedTeams[0];
+
+    if (newCurrentTeam) {
+        window.postMessage(
+            {
+                type: 'switch-server',
+                data: newCurrentTeam.display_name,
+            },
+            window.origin,
+        );
+    } else {
+        getHistory().push('/error?type=page_not_found');
+    }
+}
+
+export function joinChannel(channelId: string) {
+    dispatch(joinChannelById(channelId));
 }
 
 export function redirectToManagerDashboard(groupId: number) {
@@ -463,6 +510,6 @@ export function redirectTokSuiteDashboard(accountId?: number) {
 }
 
 export function redirectToDeveloperDocumentation() {
-    window.open('https://developer.infomaniak.com', '_blank', 'noopener,noreferrer');
+    window.open('https://faq.infomaniak.com/2001', '_blank', 'noopener,noreferrer');
 }
 

@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-
 import React from 'react';
 import {Provider} from 'react-redux';
 
 import * as teams from 'mattermost-redux/selectors/entities/teams';
+import * as plansUtil from 'mattermost-redux/utils/plans_util';
 
 import InviteMembersButton from 'components/sidebar/invite_members_button';
 
@@ -15,11 +15,6 @@ describe('components/sidebar/invite_members_button', () => {
     // required state to mount using the provider
     const state = {
         entities: {
-            general: {
-                config: {
-                    FeatureFlagInviteMembersButton: 'user_icon',
-                },
-            },
             teams: {
                 teams: {
                     team_id: {id: 'team_id', delete_at: 0},
@@ -52,9 +47,8 @@ describe('components/sidebar/invite_members_button', () => {
     };
 
     const props = {
-        onClick: jest.fn(),
-        touchedInviteMembersButton: false,
         isAdmin: false,
+        canAddGuest: false,
     };
 
     const store = mockStore(state);
@@ -91,58 +85,20 @@ describe('components/sidebar/invite_members_button', () => {
         expect(wrapper.find('i').exists()).toBeFalsy();
     });
 
-    test('should fire onClick prop on click', () => {
-        const mock = jest.fn();
-        const wrapper = mountWithIntl(
-            <Provider store={store}>
-                <InviteMembersButton {...{...props, onClick: mock}}/>
-            </Provider>,
-        );
-        expect(mock).not.toHaveBeenCalled();
-        wrapper.find('i').simulate('click');
-        expect(mock).toHaveBeenCalled();
-    });
+    test('IK: renders quota exceeded state with upgrade tag', () => {
+        jest.spyOn(plansUtil, 'quotaGate').mockReturnValue({
+            isQuotaExceeded: true,
+            withQuotaCheck: (cb) => cb,
+        });
 
-    test('should not be highlighted when button has been touched/clicked', () => {
-        const wrapper = mountWithIntl(
-            <Provider store={store}>
-                <InviteMembersButton {...{...props, touchedInviteMembersButton: true}}/>
-            </Provider>,
-        );
-        expect(wrapper.find('li').prop('className')).not.toContain('untouched');
-    });
-
-    test('should be highlighted when component has not been touched/clicked and has less than 10 users', () => {
-        const lessThan10Users = {
-            ...state.entities.users,
-            stats: {
-                total_users_count: 9,
-            },
-        };
-        const lessThan10UsersState = {...state, entities: {...state.entities, users: lessThan10Users}};
-        const store = mockStore(lessThan10UsersState);
         const wrapper = mountWithIntl(
             <Provider store={store}>
                 <InviteMembersButton {...props}/>
             </Provider>,
         );
-        expect(wrapper.find('li').prop('className')).toContain('untouched');
-    });
 
-    test('should not be highlighted when component has not been touched/clicked but the workspace has more than 10 users', () => {
-        const moreThan10Users = {
-            ...state.entities.users,
-            stats: {
-                total_users_count: 11,
-            },
-        };
-        const moreThan10UsersState = {...state, entities: {...state.entities, users: moreThan10Users}};
-        const store = mockStore(moreThan10UsersState);
-        const wrapper = mountWithIntl(
-            <Provider store={store}>
-                <InviteMembersButton {...props}/>
-            </Provider>,
-        );
-        expect(wrapper.find('li').prop('className')).not.toContain('untouched');
+        expect(wrapper.find('wc-ksuite-pro-upgrade-tag').exists()).toBe(true);
+        expect(wrapper.find('div[role="button"]').exists()).toBe(true);
     });
 });
+

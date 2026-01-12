@@ -1,12 +1,17 @@
+@use "utils/variables";
+
+@use 'sass:color';
+
 // Based on https://codepen.io/aanjulena/pen/ZLZjzV
 // Colors
 $brand-primary: #0098FF;
 $gray: #6b7381;
-$gray-light: lighten($gray, 15%);
+$gray-light: color.adjust($gray, $lightness: 15%);
+// $gray-lighter: color.adjust($gray, $lightness: 30%);
 $gray-lighter: #e0e0e0;
 
 // Button Colors
-$btn-default-color: $gray;
+$btn-default-color: variables.$gray;
 $btn-default-bg: $gray-lighter;
 
 // Toggle Sizes
@@ -28,7 +33,7 @@ $toggle-default-font-size: 0.75rem;
 // Mixin for Default Switch Styles
 // Variables: $size, $margin, $color, $bg, $active-bg, $font-size
 @mixin toggle-mixin($size: $toggle-default-size, $margin: $toggle-default-margin, $font-size: $toggle-default-font-size) {
-    $handlePosition: calc($size/10);
+    $handlePosition: calc($size / 7);
     $handleSize: calc($size - (2 * $handlePosition));
 
     position: relative;
@@ -55,8 +60,8 @@ $toggle-default-font-size: 0.75rem;
         left: $handlePosition;
         width: $handleSize;
         height: $handleSize;
+        border-radius: 1rem;
         background: #fff;
-        border-radius: calc($handleSize/2);
         transition: left 0.25s;
     }
 
@@ -82,6 +87,10 @@ $toggle-default-font-size: 0.75rem;
 
     &.btn-lg {
         @include toggle-mixin($size: 2rem, $font-size: 1rem, $margin: 5rem);
+    }
+
+    &.btn-md {
+        @include toggle-mixin($size: 2.2rem, $font-size: 0.8rem, $margin: 3rem);
     }
 
     &.btn-sm {
@@ -121,6 +130,10 @@ $toggle-default-font-size: 0.75rem;
 
     &.btn-lg {
         @include toggle-mixin($size: 2.8rem, $font-size: 1rem, $margin: 5rem);
+    }
+
+    &.btn-md {
+        @include toggle-mixin($size: 2.2rem, $font-size: 0.8rem, $margin: 3rem);
     }
 
     &.btn-sm {

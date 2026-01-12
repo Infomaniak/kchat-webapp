@@ -13,6 +13,7 @@ import {trackEvent} from 'actions/telemetry_actions.jsx';
 import ChannelInfoRhs from 'components/channel_info_rhs';
 import ChannelMembersRhs from 'components/channel_members_rhs';
 import FileUploadOverlay from 'components/file_upload_overlay';
+import {DropOverlayIdRHS} from 'components/file_upload_overlay/file_upload_overlay';
 import LoadingScreen from 'components/loading_screen';
 import PostEditHistory from 'components/post_edit_history';
 import ResizableRhs from 'components/resizable_sidebar/resizable_rhs';
@@ -21,20 +22,22 @@ import RhsSettings from 'components/rhs_settings';
 import RhsThread from 'components/rhs_thread';
 import Search from 'components/search/index';
 
-import RhsPlugin from 'plugins/rhs_plugin';
+import a11yController from 'utils/a11y_controller_instance';
+import {focusElement, getFirstFocusableChild} from 'utils/a11y_utils';
 import Constants from 'utils/constants';
 import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import {isMac} from 'utils/user_agent';
-import * as Utils from 'utils/utils';
+
+import RhsPlugin from 'plugins/rhs_plugin';
 
 import type {RhsState} from 'types/store/rhs';
 
 export type Props = {
     isExpanded: boolean;
     isOpen: boolean;
-    channel: Channel;
-    team: Team;
-    teamId: string;
+    channel?: Channel;
+    team?: Team;
+    teamId: Team['id'];
     productId: ProductIdentifier;
     postRightVisible: boolean;
     postCardVisible: boolean;
@@ -47,9 +50,13 @@ export type Props = {
     isPostEditHistory: boolean;
     isSettings: boolean;
     previousRhsState: RhsState;
-    rhsChannel: Channel;
+    rhsChannel?: Channel;
     selectedPostId: string;
     selectedPostCardId: string;
+    isSavedPosts?: boolean;
+    isRecentMentions?: boolean;
+    ariaLabel?: string;
+    ariaLabeledby?: string;
     actions: {
         setRhsExpanded: (expanded: boolean) => void;
         showPinnedPosts: (channelId: string) => void;
@@ -72,11 +79,12 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
     sidebarRightWidthHolder: React.RefObject<HTMLDivElement>;
     previous: Partial<Props> | undefined = undefined;
     focusSearchBar?: () => void;
+    private previousActiveElement: HTMLElement | null = null;
 
     constructor(props: Props) {
         super(props);
+
         this.sidebarRightWidthHolder = React.createRef<HTMLDivElement>();
-        this.sidebarRight = React.createRef();
         this.sidebarRight = React.createRef<HTMLDivElement>();
         this.state = {
             isOpened: false,
@@ -91,6 +99,8 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         this.previous = {
             searchVisible: this.props.searchVisible,
             isPinnedPosts: this.props.isPinnedPosts,
+            isRecentMentions: this.props.isRecentMentions,
+            isSavedPosts: this.props.isSavedPosts,
             isChannelFiles: this.props.isChannelFiles,
             isChannelInfo: this.props.isChannelInfo,
             isChannelMembers: this.props.isChannelMembers,
@@ -103,11 +113,11 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
     };
 
     handleShortcut = (e: KeyboardEvent) => {
-        const channelInfoShortcutMac = Utils.isMac() && e.shiftKey;
-        const channelInfoShortcut = !Utils.isMac() && e.altKey;
+        const channelInfoShortcutMac = isMac() && e.shiftKey;
+        const channelInfoShortcut = !isMac() && e.altKey;
 
-        if (Utils.cmdOrCtrlPressed(e, true)) {
-            if (e.shiftKey && Utils.isKeyPressed(e, Constants.KeyCodes.PERIOD)) {
+        if (cmdOrCtrlPressed(e, true)) {
+            if (e.shiftKey && isKeyPressed(e, Constants.KeyCodes.PERIOD)) {
                 e.preventDefault();
                 if (this.props.isOpen) {
                     if (this.props.isExpanded) {
@@ -118,14 +128,14 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                 } else {
                     this.props.actions.openAtPrevious(this.previous);
                 }
-            } else if (Utils.isKeyPressed(e, Constants.KeyCodes.PERIOD)) {
+            } else if (isKeyPressed(e, Constants.KeyCodes.PERIOD)) {
                 e.preventDefault();
                 if (this.props.isOpen) {
                     this.props.actions.closeRightHandSide();
                 } else {
                     this.props.actions.openAtPrevious(this.previous);
                 }
-            } else if (Utils.isKeyPressed(e, Constants.KeyCodes.I) && (channelInfoShortcutMac || channelInfoShortcut)) {
+            } else if (isKeyPressed(e, Constants.KeyCodes.I) && (channelInfoShortcutMac || channelInfoShortcut)) {
                 e.preventDefault();
                 if (this.props.isOpen && this.props.isChannelInfo) {
                     this.props.actions.closeRightHandSide();
@@ -136,20 +146,63 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         }
     };
 
+    handleRHSFocus(prevProps: Props) {
+        const wasOpen = prevProps.isOpen;
+        const isOpen = this.props.isOpen;
+
+        const contentChanged = (
+            (this.props.isPinnedPosts !== prevProps.isPinnedPosts) ||
+            (this.props.isRecentMentions !== prevProps.isRecentMentions) ||
+            (this.props.isSavedPosts !== prevProps.isSavedPosts) ||
+            (this.props.isChannelFiles !== prevProps.isChannelFiles) ||
+            (this.props.isChannelInfo !== prevProps.isChannelInfo) ||
+            (this.props.isChannelMembers !== prevProps.isChannelMembers) ||
+            (this.props.isPostEditHistory !== prevProps.isPostEditHistory) ||
+            (this.props.rhsChannel?.id !== prevProps.rhsChannel?.id) ||
+            (this.props.teamId !== prevProps.teamId)
+        );
+
+        if (this.props.isOpen && (contentChanged || (!wasOpen && isOpen))) {
+            this.previousActiveElement = document.activeElement as HTMLElement;
+
+            // Focus the sidebar after a tick
+            setTimeout(() => {
+                if (this.sidebarRight.current) {
+                    const rhsContainer = this.sidebarRight.current.querySelector('#rhsContainer') as HTMLElement;
+                    const searchContainer = this.sidebarRight.current.querySelector('#searchContainer') as HTMLElement;
+                    if (rhsContainer || searchContainer) {
+                        const firstFocusable = getFirstFocusableChild(rhsContainer || searchContainer);
+                        focusElement(firstFocusable || rhsContainer, true);
+                    } else {
+                        // Fallback: if rhsContainer isn't found, use sidebarRight.current directly.
+                        const firstFocusable = getFirstFocusableChild(this.sidebarRight.current);
+                        focusElement(firstFocusable || this.sidebarRight.current, true);
+                    }
+                }
+            }, 0);
+        } else if (!this.props.isOpen && wasOpen) {
+            // RHS just was closed, restore focus to the previous element had it
+            if (a11yController.originElement) {
+                a11yController.restoreOriginFocus();
+            } else {
+                setTimeout(() => {
+                    if (this.previousActiveElement) {
+                        focusElement(this.previousActiveElement, true);
+                        this.previousActiveElement = null;
+                    }
+                }, 0);
+            }
+        }
+    }
+
     componentDidMount() {
-        window.addEventListener('resize', this.determineTransition);
         document.addEventListener('keydown', this.handleShortcut);
         document.addEventListener('mousedown', this.handleClickOutside);
-        this.determineTransition();
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.determineTransition);
         document.removeEventListener('keydown', this.handleShortcut);
         document.removeEventListener('mousedown', this.handleClickOutside);
-        if (this.sidebarRight.current) {
-            this.sidebarRight.current.removeEventListener('transitionend', this.onFinishTransition);
-        }
     }
 
     componentDidUpdate(prevProps: Props) {
@@ -157,16 +210,17 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         const isOpen = this.props.searchVisible || this.props.postRightVisible;
 
         if (!wasOpen && isOpen) {
-            this.determineTransition();
             trackEvent('ui', 'ui_rhs_opened');
         }
 
+        this.handleRHSFocus(prevProps);
+
         const {actions, isChannelFiles, isPinnedPosts, rhsChannel, channel} = this.props;
-        if (isPinnedPosts && prevProps.isPinnedPosts === isPinnedPosts && rhsChannel.id !== prevProps.rhsChannel.id) {
+        if (isPinnedPosts && prevProps.isPinnedPosts === isPinnedPosts && rhsChannel && rhsChannel.id !== prevProps.rhsChannel?.id) {
             actions.showPinnedPosts(rhsChannel.id);
         }
 
-        if (isChannelFiles && prevProps.isChannelFiles === isChannelFiles && rhsChannel.id !== prevProps.rhsChannel.id) {
+        if (isChannelFiles && prevProps.isChannelFiles === isChannelFiles && rhsChannel && rhsChannel.id !== prevProps.rhsChannel?.id) {
             actions.showChannelFiles(rhsChannel.id);
         }
 
@@ -180,9 +234,9 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             this.props.actions.setRhsExpanded(false);
         }
 
-        // close when changing teams, close when changing products
+        // close when changing products or teams
         if (
-            this.props.teamId !== prevProps.teamId ||
+            (prevProps.teamId && this.props.teamId !== prevProps.teamId) ||
             this.props.productId !== prevProps.productId
         ) {
             this.props.actions.closeRightHandSide();
@@ -204,33 +258,6 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         }
     };
 
-    determineTransition = () => {
-        let transitionInfo;
-        if (this.sidebarRight.current) {
-            transitionInfo = window.getComputedStyle(this.sidebarRight.current).getPropertyValue('transition');
-        }
-        const hasTransition =
-            Boolean(transitionInfo) &&
-            transitionInfo !== 'all 0s ease 0s' &&
-            transitionInfo !== 'none 0s ease 0s';
-
-        if (this.sidebarRight.current && hasTransition) {
-            this.setState({isOpened: this.props.isOpen});
-            this.sidebarRight.current.addEventListener('transitionend', this.onFinishTransition);
-        } else {
-            this.setState({isOpened: true});
-            if (this.sidebarRight.current) {
-                this.sidebarRight.current.removeEventListener('transitionend', this.onFinishTransition);
-            }
-        }
-    };
-
-    onFinishTransition = (e: TransitionEvent) => {
-        if (e.propertyName === 'transform') {
-            this.setState({isOpened: this.props.isOpen});
-        }
-    };
-
     handleUpdateSearchTerms = (term: string) => {
         this.props.actions.updateSearchTerms(term);
         this.focusSearchBar?.();
@@ -242,6 +269,8 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
 
     render() {
         const {
+            team,
+            channel,
             rhsChannel,
             postRightVisible,
             postCardVisible,
@@ -253,8 +282,6 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             isChannelInfo,
             isChannelMembers,
             isExpanded,
-            team,
-            channel,
             isPostEditHistory,
         } = this.props;
 
@@ -267,42 +294,31 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         let currentChannelNeeded;
         let content = null;
 
-        switch (true) {
-        case postRightVisible:
+        if (postRightVisible) {
             selectedChannelNeeded = true;
             content = (
                 <div className='post-right__container'>
-                    <FileUploadOverlay overlayType='right'/>
+                    <FileUploadOverlay
+                        overlayType='right'
+                        id={DropOverlayIdRHS}
+                    />
                     <RhsThread previousRhsState={previousRhsState}/>
                 </div>
             );
-            break;
-        case postCardVisible:
+        } else if (postCardVisible) {
             content = <RhsCard previousRhsState={previousRhsState}/>;
-            break;
-        case isPluginView:
+        } else if (isPluginView) {
             content = <RhsPlugin/>;
-            break;
-        case isChannelInfo:
+        } else if (isChannelInfo) {
             currentChannelNeeded = true;
-            content = (
-                <ChannelInfoRhs/>
-            );
-            break;
-        case isChannelMembers:
+            content = <ChannelInfoRhs/>;
+        } else if (isChannelMembers) {
             currentChannelNeeded = true;
-            content = (
-                <ChannelMembersRhs/>
-            );
-            break;
-        case isSettings:
-            content = (
-                <RhsSettings/>
-            );
-            break;
-        case isPostEditHistory:
+            content = <ChannelMembersRhs/>;
+        } else if (isPostEditHistory) {
             content = <PostEditHistory/>;
-            break;
+        } else if (isSettings) {
+            content = <RhsSettings/>;
         }
 
         const isRHSLoading = Boolean(
@@ -316,7 +332,6 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || searchVisible || isPostEditHistory) && isExpanded;
         const containerClassName = classNames('sidebar--right', 'move--left is-open', {
             'sidebar--right--expanded expanded': isSidebarRightExpanded,
-            'move--left is-open': isOpen,
         });
 
         const rhs = isSettings ? content : (
@@ -330,7 +345,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             </Search>
         );
 
-        return isOpen && (
+        return (
             <>
                 <div
                     className={'sidebar--right sidebar--right--width-holder'}
@@ -339,10 +354,13 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                 <ResizableRhs
                     className={containerClassName}
                     id='sidebar-right'
-                    role='complementary'
+                    role='region'
                     rightWidthHolderRef={this.sidebarRightWidthHolder}
+                    ariaLabel={this.props.ariaLabel}
+                    ariaLabeledby={this.props.ariaLabeledby}
                 >
                     <div
+                        tabIndex={-1}
                         className='sidebar-right-container'
                         ref={this.sidebarRight}
                     >

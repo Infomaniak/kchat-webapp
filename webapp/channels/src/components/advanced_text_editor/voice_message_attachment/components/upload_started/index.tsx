@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {MicrophoneOutlineIcon, CloseIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {ProgressBar} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-
-import {MicrophoneOutlineIcon, CloseIcon} from '@mattermost/compass-icons/components';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 

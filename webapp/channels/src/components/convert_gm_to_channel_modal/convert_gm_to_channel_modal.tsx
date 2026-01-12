@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+// IK changes : We remove the check to commons_team as it's not possible in our case
+
 import classNames from 'classnames';
 import type {ComponentProps} from 'react';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
@@ -18,8 +20,10 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import ChannelNameFormField from 'components/channel_name_form_field/channel_name_form_field';
-import type {Actions} from 'components/convert_gm_to_channel_modal/index';
-import WarningTextSection from 'components/convert_gm_to_channel_modal/warning_text_section/warning_text_section';
+
+import WarningTextSection from './warning_text_section/warning_text_section';
+
+import type {Actions} from './index';
 
 const enum ServerErrorId {
     CHANNEL_NAME_EXISTS = 'store.sql_channel.save_channel.exists.app_error',
@@ -95,7 +99,7 @@ const ConvertGmToChannelModal = ({onExited, channel, actions, profilesInChannel,
     modalProps.isConfirmDisabled = !canCreate;
 
     const subBody = (
-        <React.Fragment>
+        <>
             <WarningTextSection channelMemberNames={channelMemberNames}/>
 
             <ChannelNameFormField
@@ -118,7 +122,7 @@ const ConvertGmToChannelModal = ({onExited, channel, actions, profilesInChannel,
                 </div>
             }
 
-        </React.Fragment>
+        </>
     );
 
     const modalBody = (

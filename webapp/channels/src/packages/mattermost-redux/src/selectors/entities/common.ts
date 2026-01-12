@@ -9,19 +9,6 @@ import type {RelationOneToOne, IDMappedObjects} from '@mattermost/types/utilitie
 
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 
-const CALLS_PLUGIN = 'plugins-com.mattermost.calls';
-
-type CallsConfig = {
-    ICEServers: string[];
-    ICEServersConfigs: RTCIceServer[];
-    AllowEnableCalls: boolean;
-    DefaultEnabled: boolean;
-    MaxCallParticipants: number;
-    NeedsTURNCredentials: boolean;
-    AllowScreenSharing: boolean;
-    sku_short_name: string;
-}
-
 // Channels
 
 export function getCurrentChannelId(state: GlobalState): string {
@@ -38,6 +25,14 @@ export const getMyCurrentChannelMembership: (a: GlobalState) => ChannelMembershi
     getMyChannelMemberships,
     (currentChannelId, channelMemberships) => {
         return channelMemberships[currentChannelId];
+    },
+);
+
+export const isCurrentChannelInPreview: (a: GlobalState) => boolean = createSelector(
+    'isCurrentChannelPreview',
+    getMyCurrentChannelMembership,
+    (channelMembership) => {
+        return !channelMembership;
     },
 );
 
@@ -69,16 +64,9 @@ export function getUsers(state: GlobalState): IDMappedObjects<UserProfile> {
     return state.entities.users.profiles;
 }
 
-// Calls
-
-export function getCalls(state: GlobalState): Record<string, UserProfile[]> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return state[CALLS_PLUGIN].voiceConnectedProfiles;
-}
-
-export function getCallsConfig(state: GlobalState): CallsConfig {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return state[CALLS_PLUGIN].callsConfig;
-}
+// Config
+export const getIsUserStatusesConfigEnabled: (a: GlobalState) => boolean = createSelector(
+    'getIsUserStatusesConfigEnabled',
+    (state: GlobalState) => state.entities.general.config.EnableUserStatuses,
+    (EnableUserStatuses) => EnableUserStatuses !== 'false',
+);

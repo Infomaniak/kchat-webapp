@@ -3,12 +3,13 @@
 
 import React from 'react';
 
+// eslint-disable-next-line react/prop-types
 const KDriveIcon = ({style, ...rest}: React.HTMLAttributes<HTMLSpanElement>) => (
     <span {...rest}>
         <svg
             className='file-kdrive__icon--svg'
-            width={20}
-            height={20}
+            width={24}
+            height={24}
             viewBox='0 0 80 80'
             style={style}
         >

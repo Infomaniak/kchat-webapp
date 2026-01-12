@@ -7,20 +7,20 @@ import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
+
 import {openModal} from 'actions/views/modals';
-import {getCurrentUserTimezone} from 'selectors/general';
 
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import OverlayTrigger from 'components/overlay_trigger';
 import type {SchedulePostMenuOption} from 'components/schedule_post/schedule_post_menu';
 import SchedulePostMenu from 'components/schedule_post/schedule_post_menu';
 import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
-import Tooltip from 'components/tooltip';
+import WithTooltip from 'components/with_tooltip';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';
+import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
-import {isKeyPressed, cmdOrCtrlPressed} from 'utils/utils';
 
 const StyledSchedulePostButton = styled(Button)`
     display: flex;
@@ -63,18 +63,16 @@ type Props = {
 
 const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) => {
     const dispatch = useDispatch();
-    const timezone = useSelector(getCurrentUserTimezone);
     const {formatMessage} = useIntl();
     const [open, setOpen] = useState(false);
+    const timezone = useSelector(getUserCurrentTimezone);
 
     const tooltip = (
-        <Tooltip id='schedule-post-tooltip'>
-            <KeyboardShortcutSequence
-                shortcut={KEYBOARD_SHORTCUTS.schedulePost}
-                hoistDescription={true}
-                isInsideTooltip={true}
-            />
-        </Tooltip>
+        <KeyboardShortcutSequence
+            shortcut={KEYBOARD_SHORTCUTS.schedulePost}
+            hoistDescription={true}
+            isInsideTooltip={true}
+        />
     );
 
     useEffect(() => {
@@ -105,15 +103,16 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
 
     const handleClose = () => setOpen(false);
 
-    const handleSchedulePostMenu = (optionName: SchedulePostMenuOption['name']) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleSchedulePostMenu = (e: any, optionName: SchedulePostMenuOption['name']) => {
         setOpen(false);
         const timestamp = getCurrentMomentForTimezone(timezone);
         switch (optionName) {
         case 'tomorrow':
-            timestamp.add(1, 'day').hours(9).minutes(0).seconds(0);
+            timestamp.add(1, 'day').hours(8).minutes(0).seconds(0);
             break;
         case 'monday':
-            timestamp.add(1, 'week').isoWeekday(1).hours(9).minutes(0).seconds(0);
+            timestamp.add(1, 'week').isoWeekday(1).hours(8).minutes(0).seconds(0);
             break;
         case 'custom':
             dispatch(openModal({
@@ -127,17 +126,12 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
             }));
             return;
         }
-        handleSchedulePost(toUTCUnix(timestamp.toDate()));
+        handleSchedulePost(e, toUTCUnix(timestamp.toDate()));
     };
 
     return (
         <>
-            <OverlayTrigger
-                overlay={tooltip}
-                delayShow={Constants.OVERLAY_TIME_DELAY}
-                placement='top'
-                trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
-            >
+            <WithTooltip title={tooltip}>
                 <StyledSchedulePostButton
                     disableRipple={true}
                     disabled={disabled}
@@ -149,7 +143,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
                 >
                     <ChevronDownIcon size={16}/>
                 </StyledSchedulePostButton>
-            </OverlayTrigger>
+            </WithTooltip>
             <SchedulePostMenu
                 open={open}
                 timezone={timezone}

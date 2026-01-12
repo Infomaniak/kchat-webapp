@@ -382,7 +382,9 @@ exports[`components/SearchHint should match snapshot, without searchType 1`] = `
 <div
   className="search-hint__search-type-selector"
 >
-  <div>
+  <div
+    className="search-hint_text-container"
+  >
     <MemoizedFormattedMessage
       defaultMessage="What are you searching for?"
       id="search_bar.usage.search_type_question"

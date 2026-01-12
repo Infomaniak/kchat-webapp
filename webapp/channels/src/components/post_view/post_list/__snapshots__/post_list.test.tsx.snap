@@ -3,7 +3,6 @@
 exports[`components/post_view/post_list snapshot for loading when there are no posts 1`] = `
 <div
   className="post-list-holder-by-time"
-  key="postlist-fake-id"
 >
   <div
     className="post-list__table"
@@ -17,7 +16,6 @@ exports[`components/post_view/post_list snapshot for loading when there are no p
           Object {
             "canLoadMorePosts": [Function],
             "changeUnreadChunkTimeStamp": [MockFunction],
-            "checkAndSetMobileView": [MockFunction],
             "loadNewerPosts": [Function],
             "loadOlderPosts": [Function],
             "toggleShouldStartFromBottomWhenUnread": [MockFunction],
@@ -28,6 +26,7 @@ exports[`components/post_view/post_list snapshot for loading when there are no p
         autoRetryEnable={true}
         channelId="fake-id"
         isMobileView={false}
+        isThreadView={false}
         lastViewedAt={1532345226632}
         loadingNewerPosts={false}
         loadingOlderPosts={false}
@@ -42,7 +41,6 @@ exports[`components/post_view/post_list snapshot for loading when there are no p
 exports[`components/post_view/post_list snapshot with couple of posts 1`] = `
 <div
   className="post-list-holder-by-time"
-  key="postlist-fake-id"
 >
   <div
     className="post-list__table"
@@ -56,7 +54,6 @@ exports[`components/post_view/post_list snapshot with couple of posts 1`] = `
           Object {
             "canLoadMorePosts": [Function],
             "changeUnreadChunkTimeStamp": [MockFunction],
-            "checkAndSetMobileView": [MockFunction],
             "loadNewerPosts": [Function],
             "loadOlderPosts": [Function],
             "toggleShouldStartFromBottomWhenUnread": [MockFunction],
@@ -67,6 +64,7 @@ exports[`components/post_view/post_list snapshot with couple of posts 1`] = `
         autoRetryEnable={true}
         channelId="fake-id"
         isMobileView={false}
+        isThreadView={false}
         lastViewedAt={1532345226632}
         loadingNewerPosts={false}
         loadingOlderPosts={false}

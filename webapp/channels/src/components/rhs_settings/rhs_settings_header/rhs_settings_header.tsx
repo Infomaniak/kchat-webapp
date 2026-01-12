@@ -3,18 +3,16 @@
 
 import React from 'react';
 /* eslint-disable react/no-string-refs */
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
-import LocalizedIcon from 'components/localized_icon';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+import WithTooltip from 'components/with_tooltip';
 
-import Constants, {RHSStates} from 'utils/constants';
+import {RHSStates} from 'utils/constants';
 import {t} from 'utils/i18n';
 
 import type {GlobalState} from 'types/store';
@@ -36,6 +34,7 @@ export default function RhsSettingsHeader({
     isMobile,
 }: Props) {
     const dispatch = useDispatch();
+    const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
 
     const onClose = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,12 +47,10 @@ export default function RhsSettingsHeader({
     };
 
     const closeSidebarTooltip = (
-        <Tooltip id='closeSidebarTooltip'>
-            <FormattedMessage
-                id='rhs_header.closeSidebarTooltip'
-                defaultMessage='Close'
-            />
-        </Tooltip>
+        <FormattedMessage
+            id='rhs_header.closeSidebarTooltip'
+            defaultMessage='Close'
+        />
     );
 
     return (
@@ -81,24 +78,22 @@ export default function RhsSettingsHeader({
 
             </span>
 
-            <OverlayTrigger
-                delayShow={Constants.OVERLAY_TIME_DELAY}
-                placement='top'
-                overlay={closeSidebarTooltip}
+            <WithTooltip
+                title={closeSidebarTooltip}
             >
                 <button
                     id='rhsCloseButton'
                     type='button'
-                    className='sidebar--right__close btn-icon'
+                    className='sidebar--right__close btn btn-icon'
                     aria-label='Close'
                     onClick={onClose}
                 >
-                    <LocalizedIcon
+                    <i
                         className='icon icon-close'
-                        ariaLabel={{id: t('rhs_header.closeTooltip.icon'), defaultMessage: 'Close Sidebar Icon'}}
+                        aria-label={formatMessage({id: t('rhs_header.closeTooltip.icon'), defaultMessage: 'Close Sidebar Icon'})}
                     />
                 </button>
-            </OverlayTrigger>
+            </WithTooltip>
         </div>
     );
 }

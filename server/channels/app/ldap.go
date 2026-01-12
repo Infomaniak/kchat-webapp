@@ -30,15 +30,17 @@ func (a *App) SyncLdap(c request.CTX, includeRemovedMembers bool) {
 				c.Logger().Error("Not executing ldap sync because ldap is not available")
 				return
 			}
-			ldapI.StartSynchronizeJob(c, false, includeRemovedMembers)
+			if _, appErr := ldapI.StartSynchronizeJob(c, false, includeRemovedMembers); appErr != nil {
+				c.Logger().Error("Failed to start LDAP sync job")
+			}
 		}
 	})
 }
 
-func (a *App) TestLdap() *model.AppError {
+func (a *App) TestLdap(rctx request.CTX) *model.AppError {
 	license := a.Srv().License()
-	if ldapI := a.Ldap(); ldapI != nil && license != nil && *license.Features.LDAP && (*a.Config().LdapSettings.Enable || *a.Config().LdapSettings.EnableSync) {
-		if err := ldapI.RunTest(); err != nil {
+	if ldapI := a.LdapDiagnostic(); ldapI != nil && license != nil && *license.Features.LDAP && (*a.Config().LdapSettings.Enable || *a.Config().LdapSettings.EnableSync) {
+		if err := ldapI.RunTest(rctx); err != nil {
 			err.StatusCode = 500
 			return err
 		}
@@ -51,12 +53,12 @@ func (a *App) TestLdap() *model.AppError {
 }
 
 // GetLdapGroup retrieves a single LDAP group by the given LDAP group id.
-func (a *App) GetLdapGroup(ldapGroupID string) (*model.Group, *model.AppError) {
+func (a *App) GetLdapGroup(rctx request.CTX, ldapGroupID string) (*model.Group, *model.AppError) {
 	var group *model.Group
 
 	if a.Ldap() != nil {
 		var err *model.AppError
-		group, err = a.Ldap().GetGroup(ldapGroupID)
+		group, err = a.Ldap().GetGroup(rctx, ldapGroupID)
 		if err != nil {
 			return nil, err
 		}
@@ -70,13 +72,13 @@ func (a *App) GetLdapGroup(ldapGroupID string) (*model.Group, *model.AppError) {
 
 // GetAllLdapGroupsPage retrieves all LDAP groups under the configured base DN using the default or configured group
 // filter.
-func (a *App) GetAllLdapGroupsPage(page int, perPage int, opts model.LdapGroupSearchOpts) ([]*model.Group, int, *model.AppError) {
+func (a *App) GetAllLdapGroupsPage(rctx request.CTX, page int, perPage int, opts model.LdapGroupSearchOpts) ([]*model.Group, int, *model.AppError) {
 	var groups []*model.Group
 	var total int
 
 	if a.Ldap() != nil {
 		var err *model.AppError
-		groups, total, err = a.Ldap().GetAllGroupsPage(page, perPage, opts)
+		groups, total, err = a.Ldap().GetAllGroupsPage(rctx, page, perPage, opts)
 		if err != nil {
 			return nil, 0, err
 		}
@@ -98,7 +100,7 @@ func (a *App) SwitchEmailToLdap(c request.CTX, email, password, code, ldapLoginI
 		return "", err
 	}
 
-	if err := a.CheckPasswordAndAllCriteria(user, password, code); err != nil {
+	if err := a.CheckPasswordAndAllCriteria(c, user.Id, password, code); err != nil {
 		return "", err
 	}
 
@@ -129,6 +131,14 @@ func (a *App) SwitchLdapToEmail(c request.CTX, ldapPassword, code, email, newPas
 		return "", model.NewAppError("ldapToEmail", "api.user.ldap_to_email.not_available.app_error", nil, "", http.StatusForbidden)
 	}
 
+	if !*a.Config().EmailSettings.EnableSignUpWithEmail {
+		return "", model.NewAppError("SwitchEmailToLdap", "api.user.auth_switch.not_available.email_signup_disabled.app_error", nil, "", http.StatusForbidden)
+	}
+
+	if !*a.Config().EmailSettings.EnableSignInWithEmail && !*a.Config().EmailSettings.EnableSignInWithUsername {
+		return "", model.NewAppError("SwitchEmailToLdap", "api.user.auth_switch.not_available.login_disabled.app_error", nil, "", http.StatusForbidden)
+	}
+
 	user, err := a.GetUserByEmail(email)
 	if err != nil {
 		return "", err
@@ -143,15 +153,12 @@ func (a *App) SwitchLdapToEmail(c request.CTX, ldapPassword, code, email, newPas
 		return "", model.NewAppError("SwitchLdapToEmail", "api.user.ldap_to_email.not_available.app_error", nil, "", http.StatusNotImplemented)
 	}
 
-	if err := ldapInterface.CheckPasswordAuthData(c, *user.AuthData, ldapPassword); err != nil {
+	user, err = a.checkLdapUserPasswordAndAllCriteria(c, user, ldapPassword, code)
+	if err != nil {
 		return "", err
 	}
 
-	if err := a.CheckUserMfa(user, code); err != nil {
-		return "", err
-	}
-
-	if err := a.UpdatePassword(user, newPassword); err != nil {
+	if err := a.UpdatePassword(c, user, newPassword); err != nil {
 		return "", err
 	}
 

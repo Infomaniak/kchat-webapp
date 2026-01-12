@@ -33,7 +33,7 @@ exports[`components/SingleImageView permalink preview should render with permali
         <div
           className="image-permalink clamp"
         >
-          <SizeAwareImage
+          <injectIntl(SizeAwareImage)
             className="image-permalink"
             dimensions={
               Object {
@@ -45,6 +45,7 @@ exports[`components/SingleImageView permalink preview should render with permali
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -62,6 +63,7 @@ exports[`components/SingleImageView permalink preview should render with permali
             }
             fileURL="/api/v4/files/file_info_id"
             getFilePublicLink={[Function]}
+            handleKDriveSave={[MockFunction]}
             handleSmallImageContainer={true}
             onClick={[Function]}
             onImageLoaded={[Function]}
@@ -108,7 +110,7 @@ exports[`components/SingleImageView should match snapshot 1`] = `
         <div
           className="clamp"
         >
-          <SizeAwareImage
+          <injectIntl(SizeAwareImage)
             className=""
             dimensions={
               Object {
@@ -120,6 +122,7 @@ exports[`components/SingleImageView should match snapshot 1`] = `
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -137,6 +140,7 @@ exports[`components/SingleImageView should match snapshot 1`] = `
             }
             fileURL="/api/v4/files/file_info_id"
             getFilePublicLink={[Function]}
+            handleKDriveSave={[MockFunction]}
             handleSmallImageContainer={true}
             onClick={[Function]}
             onImageLoaded={[Function]}
@@ -183,7 +187,7 @@ exports[`components/SingleImageView should match snapshot 2`] = `
         <div
           className="clamp"
         >
-          <SizeAwareImage
+          <injectIntl(SizeAwareImage)
             className=""
             dimensions={
               Object {
@@ -195,6 +199,7 @@ exports[`components/SingleImageView should match snapshot 2`] = `
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -212,6 +217,7 @@ exports[`components/SingleImageView should match snapshot 2`] = `
             }
             fileURL="/api/v4/files/file_info_id"
             getFilePublicLink={[Function]}
+            handleKDriveSave={[MockFunction]}
             handleSmallImageContainer={true}
             onClick={[Function]}
             onImageLoaded={[Function]}
@@ -262,7 +268,7 @@ exports[`components/SingleImageView should match snapshot, SVG image 1`] = `
         <div
           className="clamp"
         >
-          <SizeAwareImage
+          <injectIntl(SizeAwareImage)
             className=""
             dimensions={
               Object {
@@ -274,6 +280,7 @@ exports[`components/SingleImageView should match snapshot, SVG image 1`] = `
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -291,6 +298,7 @@ exports[`components/SingleImageView should match snapshot, SVG image 1`] = `
             }
             fileURL="/api/v4/files/svg_file_info_id"
             getFilePublicLink={[Function]}
+            handleKDriveSave={[MockFunction]}
             handleSmallImageContainer={true}
             onClick={[Function]}
             onImageLoaded={[Function]}
@@ -341,7 +349,7 @@ exports[`components/SingleImageView should match snapshot, SVG image 2`] = `
         <div
           className="clamp"
         >
-          <SizeAwareImage
+          <injectIntl(SizeAwareImage)
             className=""
             dimensions={
               Object {
@@ -353,6 +361,7 @@ exports[`components/SingleImageView should match snapshot, SVG image 2`] = `
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -370,6 +379,7 @@ exports[`components/SingleImageView should match snapshot, SVG image 2`] = `
             }
             fileURL="/api/v4/files/svg_file_info_id"
             getFilePublicLink={[Function]}
+            handleKDriveSave={[MockFunction]}
             handleSmallImageContainer={true}
             onClick={[Function]}
             onImageLoaded={[Function]}
@@ -416,7 +426,7 @@ exports[`components/SingleImageView should set loaded state on callback of onIma
         <div
           className="clamp"
         >
-          <SizeAwareImage
+          <injectIntl(SizeAwareImage)
             className=""
             dimensions={
               Object {
@@ -428,6 +438,7 @@ exports[`components/SingleImageView should set loaded state on callback of onIma
             fileInfo={
               Object {
                 "archived": false,
+                "channel_id": "channel_id",
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -445,6 +456,7 @@ exports[`components/SingleImageView should set loaded state on callback of onIma
             }
             fileURL="/api/v4/files/file_info_id"
             getFilePublicLink={[Function]}
+            handleKDriveSave={[MockFunction]}
             handleSmallImageContainer={true}
             onClick={[Function]}
             onImageLoaded={[Function]}

@@ -16,7 +16,7 @@ import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/tea
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
-import LeaveChannelModal from 'components/leave_channel_modal';
+import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
@@ -43,12 +43,11 @@ const ChannelActionsMenu = ({channel, actionCallback}: Props) => {
         trackEvent('insights', 'leave_channel_action');
 
         if (channel.type === Constants.PRIVATE_CHANNEL) {
-            dispatch(openModal({
+            dispatch(openModal<React.ComponentProps<typeof IkLeaveChannelModal>>({
                 modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
-                dialogType: LeaveChannelModal,
+                dialogType: IkLeaveChannelModal,
                 dialogProps: {
                     channel,
-                    callback: actionCallback,
                 },
             }));
         } else {

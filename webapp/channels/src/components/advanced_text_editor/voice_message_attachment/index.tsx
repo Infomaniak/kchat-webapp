@@ -11,6 +11,9 @@ import type {FileInfo, FileUploadResponse} from '@mattermost/types/files';
 import type {Post} from '@mattermost/types/posts';
 
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {isPaidPlan} from 'mattermost-redux/utils/plans_util';
 
 import {uploadFile} from 'actions/file_actions';
 
@@ -18,7 +21,7 @@ import VoiceMessageRecordingStarted from 'components/advanced_text_editor/voice_
 import VoiceMessageUploadingFailed from 'components/advanced_text_editor/voice_message_attachment/components/upload_failed';
 import VoiceMessageUploadingStarted from 'components/advanced_text_editor/voice_message_attachment/components/upload_started';
 import type {FilePreviewInfo} from 'components/file_preview/file_preview';
-import VoiceMessageAttachmentPlayer from 'components/voice_message_attachment_player';
+import VoiceMessageAttachmentPlayer from 'components/voice/post_type';
 
 import {AudioFileExtensions, Locations} from 'utils/constants';
 import {VoiceMessageStates} from 'utils/post_utils';
@@ -48,10 +51,15 @@ interface Props {
     onUploadError: (err: string | ServerError, clientId?: string, channelId?: Channel['id'], rootId?: Post['id']) => void;
     onRemoveDraft: (fileInfoIdOrClientId: FileInfo['id'] | string) => void;
     onSubmit: (e: FormEvent<Element>) => void;
+    onComplete: (eventType: string) => void;
+    onCancel: (eventType: string) => void;
+    onStarted: (eventType: string) => void;
 }
 
 const VoiceMessageAttachment = (props: Props) => {
     const theme = useSelector(getTheme);
+    const isAdmin = useSelector(isCurrentUserSystemAdmin);
+    const currentPack = useSelector(getCurrentPackName);
 
     const dispatch = useDispatch();
 
@@ -97,6 +105,8 @@ const VoiceMessageAttachment = (props: Props) => {
             onProgress: props.onUploadProgress,
             onSuccess: handleOnUploadComplete,
             onError: props.onUploadError,
+            isAdmin,
+            isPaidPlan: isPaidPlan(currentPack),
         })) as unknown as XMLHttpRequest;
 
         if (props.location === Locations.CENTER) {
@@ -131,6 +141,7 @@ const VoiceMessageAttachment = (props: Props) => {
     async function handleCompleteRecordingClicked(audioFile: File) {
         audioFileRef.current = audioFile;
         uploadRecording(audioFile);
+        props.onComplete?.('stop');
     }
 
     function handleCancelRecordingClicked() {
@@ -140,6 +151,7 @@ const VoiceMessageAttachment = (props: Props) => {
         if (props.location === Locations.RHS_COMMENT) {
             props.setDraftAsPostType(props.rootId, props.draft);
         }
+        props.onCancel?.('stop');
     }
 
     if (props.vmState === VoiceMessageStates.RECORDING) {
@@ -148,6 +160,7 @@ const VoiceMessageAttachment = (props: Props) => {
                 theme={theme}
                 onCancel={handleCancelRecordingClicked}
                 onComplete={handleCompleteRecordingClicked}
+                onStarted={props.onStarted}
             />
         );
     }
@@ -179,6 +192,7 @@ const VoiceMessageAttachment = (props: Props) => {
             <div className='file-preview__container'>
                 <VoiceMessageAttachmentPlayer
                     fileId={src}
+                    isPreview={true}
                     onCancel={handleRemoveAfterUpload}
                 />
             </div>

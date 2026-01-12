@@ -12,85 +12,73 @@ import Avatar from 'components/widgets/users/avatar';
 
 import * as Utils from 'utils/utils';
 
-import type {ProviderResults} from './generic_user_provider';
 import Provider from './provider';
-import Suggestion from './suggestion.jsx';
+import type {ResultsCallback} from './provider';
+import {SuggestionContainer} from './suggestion';
+import type {SuggestionProps} from './suggestion';
 
-class SearchUserSuggestion extends Suggestion {
-    private node?: HTMLDivElement | null;
-    render() {
-        const {item, isSelection} = this.props;
+export const SearchUserSuggestion = React.forwardRef<HTMLLIElement, SuggestionProps<UserProfile>>((props, ref) => {
+    const {item} = props;
 
-        let className = 'suggestion-list__item';
-        if (isSelection) {
-            className += ' suggestion--selected';
-        }
+    const username = item.username;
+    let description = '';
 
-        const username = item.username;
-        let description = '';
+    if ((item.first_name || item.last_name) && item.nickname) {
+        description = `${Utils.getFullName(item)} (${item.nickname})`;
+    } else if (item.nickname) {
+        description = `(${item.nickname})`;
+    } else if (item.first_name || item.last_name) {
+        description = `${Utils.getFullName(item)}`;
+    }
 
-        if ((item.first_name || item.last_name) && item.nickname) {
-            description = `${Utils.getFullName(item)} (${item.nickname})`;
-        } else if (item.nickname) {
-            description = `(${item.nickname})`;
-        } else if (item.first_name || item.last_name) {
-            description = `${Utils.getFullName(item)}`;
-        }
-
-        let sharedIcon;
-        if (item.remote_id) {
-            sharedIcon = (
-                <SharedUserIndicator
-                    className='mention__shared-user-icon'
-                    withTooltip={true}
-                />
-            );
-        }
-
-        return (
-            <div
-                className={className}
-                ref={(node) => {
-                    this.node = node;
-                }}
-                onClick={this.handleClick}
-                onMouseMove={this.handleMouseMove}
-                {...Suggestion.baseProps}
-            >
-                <Avatar
-                    size='sm'
-                    username={username}
-                    url={Utils.imageURLForUser(item.id, item.last_picture_update)}
-                />
-                <div className='suggestion-list__ellipsis'>
-                    <span className='suggestion-list__main'>
-                        {'@'}{username}
-                    </span>
-                    {item.is_bot && <BotTag/>}
-                    {description}
-                </div>
-                {sharedIcon}
-            </div>
+    let sharedIcon;
+    if (item.remote_id) {
+        sharedIcon = (
+            <SharedUserIndicator
+                className='mention__shared-user-icon'
+            />
         );
     }
-}
+
+    return (
+        <SuggestionContainer
+            ref={ref}
+            {...props}
+        >
+            <Avatar
+                size='sm'
+                username={username}
+                url={Utils.imageURLForUser(item.id, item.last_picture_update)}
+            />
+            <div className='suggestion-list__ellipsis'>
+                <span className='suggestion-list__main'>
+                    {'@'}{username}
+                </span>
+                {item.is_bot && <BotTag/>}
+                {description}
+            </div>
+            {sharedIcon}
+        </SuggestionContainer>
+    );
+});
+SearchUserSuggestion.displayName = 'SearchUserSuggestion';
 
 export default class SearchUserProvider extends Provider {
-    private autocompleteUsersInTeam: (username: string) => Promise<UserAutocomplete>;
-    constructor(userSearchFunc: (username: string) => Promise<UserAutocomplete>) {
+    private autocompleteUsersInTeam: (username: string, teamId: string) => Promise<UserAutocomplete>;
+    constructor(userSearchFunc: (username: string, teamId: string) => Promise<UserAutocomplete>) {
         super();
         this.autocompleteUsersInTeam = userSearchFunc;
     }
 
-    handlePretextChanged(pretext: string, resultsCallback: (res: ProviderResults) => void) {
+    handlePretextChanged(pretext: string, resultsCallback: ResultsCallback<UserProfile>, teamId: string) {
         const captured = (/\bfrom:\s*(\S*)$/i).exec(pretext.toLowerCase());
 
-        this.doAutocomplete(captured, resultsCallback);
+        this.doAutocomplete(captured, teamId, resultsCallback);
 
         return Boolean(captured);
     }
 
-    async doAutocomplete(captured: RegExpExecArray | null, resultsCallback: (res: ProviderResults) => void) {
+    async doAutocomplete(captured: RegExpExecArray | null, teamId: string, resultsCallback: ResultsCallback<UserProfile>) {
         if (!captured) {
             return;
         }
@@ -99,9 +87,9 @@ export default class SearchUserProvider extends Provider {
 
         this.startNewRequest(usernamePrefix);
 
-        const data = await this.autocompleteUsersInTeam(usernamePrefix);
+        const data = await this.autocompleteUsersInTeam(usernamePrefix, teamId);
 
-        if (!data || this.shouldCancelDispatch(usernamePrefix)) {
+        if (this.shouldCancelDispatch(usernamePrefix)) {
             return;
         }
 

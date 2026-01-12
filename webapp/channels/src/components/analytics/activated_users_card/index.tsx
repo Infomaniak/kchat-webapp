@@ -10,13 +10,15 @@ import StatisticCount from 'components/analytics/statistic_count';
 
 import {calculateOverageUserActivated} from 'utils/overage_team';
 
+import Title from './title';
+
 type ActivatedUserCardProps = {
     seatsPurchased: number;
     activatedUsers: number | undefined;
     isCloud: boolean;
 }
 
-export const ActivatedUserCard = ({activatedUsers, seatsPurchased, isCloud}: ActivatedUserCardProps) => {
+const ActivatedUserCard = ({activatedUsers, seatsPurchased, isCloud}: ActivatedUserCardProps) => {
     const {isBetween5PercerntAnd10PercentPurchasedSeats, isOver10PercerntPurchasedSeats} = calculateOverageUserActivated({seatsPurchased, activeUsers: activatedUsers || 0});
     const showOverageWarning = !isCloud && (isBetween5PercerntAnd10PercentPurchasedSeats || isOver10PercerntPurchasedSeats);
 
@@ -31,12 +33,7 @@ export const ActivatedUserCard = ({activatedUsers, seatsPurchased, isCloud}: Act
 
     return (
         <StatisticCount
-            title={
-                <FormattedMessage
-                    id='analytics.team.totalUsers'
-                    defaultMessage='Total Active Users'
-                />
-            }
+            title={<Title/>}
             icon='fa-users'
             status={activeUserStatus}
             count={activatedUsers}
@@ -63,3 +60,5 @@ export const ActivatedUserCard = ({activatedUsers, seatsPurchased, isCloud}: Act
         </StatisticCount>
     );
 };
+
+export default ActivatedUserCard;

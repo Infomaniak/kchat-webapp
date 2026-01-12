@@ -6,12 +6,11 @@ import {defineConfig, devices} from '@playwright/test';
 import {duration} from '@e2e-support/util';
 import testConfig from '@e2e-test.config';
 
-const defaultOutputFolder = './playwright-report';
-
 export default defineConfig({
     globalSetup: require.resolve('./global_setup'),
     forbidOnly: testConfig.isCI,
-    outputDir: './test-results',
+    outputDir: './results/output',
+    retries: testConfig.isCI ? 2 : 0,
     testDir: 'tests',
     timeout: duration.one_min,
     workers: testConfig.workers,
@@ -40,31 +39,27 @@ export default defineConfig({
         screenshot: 'only-on-failure',
         timezoneId: 'America/Los_Angeles',
         trace: 'off',
-        video: 'on-first-retry',
+        video: 'retain-on-failure',
         actionTimeout: duration.half_min,
-        storageState: {
-            cookies: [],
-            origins: [
-                {
-                    origin: testConfig.baseURL,
-                    localStorage: [{name: '__landingPageSeen__', value: 'true'}],
-                },
-            ],
-        },
     },
     projects: [
+        // Setup project
+        { name: 'setup', testMatch: /.*\.setup\.ts/ },
         {
             name: 'ipad',
             use: {
                 browserName: 'chromium',
+                storageState: '.auth/user.json',
                 ...devices['iPad Pro 11'],
+                permissions: ['notifications', 'clipboard-read', 'clipboard-write'],
             },
         },
         {
             name: 'chrome',
             use: {
                 browserName: 'chromium',
-                permissions: ['notifications'],
+                storageState: '.auth/user.json',
+                permissions: ['notifications', 'clipboard-read', 'clipboard-write'],
                 viewport: {width: 1280, height: 1024},
             },
         },
@@ -72,15 +67,16 @@ export default defineConfig({
             name: 'firefox',
             use: {
                 browserName: 'firefox',
+                storageState: '.auth/user.json',
                 permissions: ['notifications'],
                 viewport: {width: 1280, height: 1024},
             },
         },
     ],
     reporter: [
-        ['html', {open: 'never', outputFolder: defaultOutputFolder}],
-        ['json', {outputFile: `${defaultOutputFolder}/results.json`}],
-        ['junit', {outputFile: `${defaultOutputFolder}/results.xml`}],
+        ['html', {open: 'never', outputFolder: './results/reporter'}],
+        ['json', {outputFile: './results/reporter/results.json'}],
+        ['junit', {outputFile: './results/reporter/results.xml'}],
         ['list'],
     ],
 });

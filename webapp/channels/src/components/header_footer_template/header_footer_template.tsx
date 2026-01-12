@@ -10,7 +10,7 @@ import type {ClientConfig} from '@mattermost/types/config';
 import ExternalLink from 'components/external_link';
 
 type Props = {
-    config: Partial<ClientConfig> | undefined;
+    config?: Partial<ClientConfig> | undefined;
 }
 
 export default class NotLoggedIn extends React.PureComponent<Props> {

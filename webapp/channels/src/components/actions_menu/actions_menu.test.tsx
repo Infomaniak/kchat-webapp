@@ -5,13 +5,14 @@ import React from 'react';
 
 import type {PostType} from '@mattermost/types/posts';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import {TestHelper} from 'utils/test_helper';
 
-import type {PluginComponent} from 'types/store/plugins';
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
+import type {PostDropdownMenuAction} from 'types/store/plugins';
+
+import ActionsMenu from './actions_menu';
 import type {Props} from './actions_menu';
-import ActionsMenu, {PLUGGABLE_COMPONENT} from './actions_menu';
 
 jest.mock('utils/utils', () => {
     const original = jest.requireActual('utils/utils');
@@ -21,11 +22,13 @@ jest.mock('utils/utils', () => {
     };
 });
 
-const dropdownComponents: PluginComponent[] = [
+const dropdownComponents: PostDropdownMenuAction[] = [
     {
         id: 'the_component_id',
         pluginId: 'playbooks',
+        text: 'Some text',
         action: jest.fn(),
+        filter: () => true,
     },
 ];
 
@@ -39,13 +42,9 @@ describe('components/actions_menu/ActionsMenu', () => {
         isSysAdmin: true,
         pluginMenuItems: [],
         post: TestHelper.getPostMock({id: 'post_id_1', is_pinned: false, type: '' as PostType}),
-        showTutorialTip: false,
-        components: {},
-        handleOpenTip: jest.fn(),
-        handleNextTip: jest.fn(),
-        handleDismissTip: jest.fn(),
-        showPulsatingDot: false,
+        pluginMenuItemComponents: [],
         location: 'center',
+        canOpenMarketplace: false,
         actions: {
             openModal: jest.fn(),
             openAppsModal: jest.fn(),
@@ -63,27 +62,29 @@ describe('components/actions_menu/ActionsMenu', () => {
 
         wrapper.setProps({
             pluginMenuItems: dropdownComponents,
+            canOpenMarketplace: true,
         });
         expect(wrapper.find('#divider_post_post_id_1_marketplace').exists()).toBe(true);
     });
 
-    test('has actions - sysadmin - should show actions and app marketplace', () => {
+    test('has actions - marketplace enabled and user has SYSCONSOLE_WRITE_PLUGINS - should show actions and app marketplace', () => {
         const wrapper = shallowWithIntl(
             <ActionsMenu {...baseProps}/>,
         );
         wrapper.setProps({
             pluginMenuItems: dropdownComponents,
+            canOpenMarketplace: true,
         });
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('has actions - end user - should not show actions and app marketplace', () => {
+    test('has actions - marketplace disabled or user not having SYSCONSOLE_WRITE_PLUGINS - should not show actions and app marketplace', () => {
         const wrapper = shallowWithIntl(
             <ActionsMenu {...baseProps}/>,
         );
         wrapper.setProps({
             pluginMenuItems: dropdownComponents,
-            isSysAdmin: false,
+            canOpenMarketplace: false,
         });
         expect(wrapper).toMatchSnapshot();
     });
@@ -92,6 +93,11 @@ describe('components/actions_menu/ActionsMenu', () => {
         const wrapper = shallowWithIntl(
             <ActionsMenu {...baseProps}/>,
         );
+
+        wrapper.setProps({
+            canOpenMarketplace: true,
+        });
+
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -114,9 +120,8 @@ describe('components/actions_menu/ActionsMenu', () => {
         expect(wrapper.find('#divider_post_post_id_1_marketplace').exists()).toBe(false);
 
         wrapper.setProps({
-            components: {
-                [PLUGGABLE_COMPONENT]: dropdownComponents,
-            },
+            pluginMenuItemComponents: dropdownComponents,
+            canOpenMarketplace: true,
         });
         expect(wrapper.find('#divider_post_post_id_1_marketplace').exists()).toBe(true);
     });
@@ -131,9 +136,7 @@ describe('components/actions_menu/ActionsMenu', () => {
         expect(wrapper.find('#divider_post_post_id_1_marketplace').exists()).toBe(false);
 
         wrapper.setProps({
-            components: {
-                [PLUGGABLE_COMPONENT]: dropdownComponents,
-            },
+            pluginMenuItemComponents: dropdownComponents,
         });
         expect(wrapper.find('#divider_post_post_id_1_marketplace').exists()).toBe(false);
     });

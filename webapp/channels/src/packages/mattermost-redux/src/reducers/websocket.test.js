@@ -75,6 +75,20 @@ describe('websocket', () => {
 
             expect(state.connected).toBe(false);
             expect(state.lastDisconnectAt).toBe(2000);
+
+            // IK: make sure next disconnects are taken into account
+            state = reducer(state, {
+                type: GeneralTypes.WEBSOCKET_SUCCESS,
+                timestamp: 3000,
+            });
+
+            state = reducer(state, {
+                type: GeneralTypes.WEBSOCKET_FAILURE,
+                timestamp: 4000,
+            });
+
+            expect(state.connected).toBe(false);
+            expect(state.lastDisconnectAt).toBe(4000);
         });
 
         test('should not update lastDisconnectAt when failing to reconnect', () => {
@@ -93,6 +107,11 @@ describe('websocket', () => {
             state = reducer(state, {
                 type: GeneralTypes.WEBSOCKET_FAILURE,
                 timestamp: 3000,
+            });
+
+            state = reducer(state, {
+                type: GeneralTypes.WEBSOCKET_CLOSED,
+                timestamp: 4000,
             });
 
             expect(state.connected).toBe(false);

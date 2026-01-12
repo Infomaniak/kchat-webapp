@@ -1,0 +1,23 @@
+@charset 'UTF-8';
+
+.transcript-popover {
+    max-width: 350px;
+    max-height: 300px;
+    padding: 10px;
+    color: var(--center-channel-color);
+
+    .time-transcript {
+        margin-right:10px;
+    }
+
+    .transcript-text {
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    
+    .transcript-error {
+        margin-top: 3px;
+        text-align: left;
+    }
+}

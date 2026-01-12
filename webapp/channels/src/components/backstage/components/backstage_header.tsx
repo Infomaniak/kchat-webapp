@@ -1,18 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ReactNode} from 'react';
 import React from 'react';
-
-import LocalizedIcon from 'components/localized_icon';
-
-import {t} from 'utils/i18n';
+import type {ReactNode} from 'react';
+import {useIntl} from 'react-intl';
 
 type Props = {
     children?: ReactNode;
 }
 
 const BackstageHeader = ({children}: Props) => {
+    const {formatMessage} = useIntl();
     const childrenElements: ReactNode[] = [];
 
     React.Children.forEach(children, (child, index) => {
@@ -22,9 +20,9 @@ const BackstageHeader = ({children}: Props) => {
                     key={'divider' + index}
                     className='backstage-header__divider'
                 >
-                    <LocalizedIcon
+                    <i
                         className='fa fa-angle-right'
-                        title={{id: t('generic_icons.breadcrumb'), defaultMessage: 'Breadcrumb Icon'}}
+                        title={formatMessage({id: 'generic_icons.breadcrumb', defaultMessage: 'Breadcrumb Icon'})}
                     />
                 </span>,
             );

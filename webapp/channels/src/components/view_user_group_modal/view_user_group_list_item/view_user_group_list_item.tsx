@@ -2,18 +2,22 @@
 // See LICENSE.txt for license information.
 
 import React, {useCallback} from 'react';
+import {useSelector} from 'react-redux';
 
 import type {Group} from '@mattermost/types/groups';
-import {GroupSource} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
+import {isSyncableSource} from 'mattermost-redux/utils/group_utils';
 
-import LocalizedIcon from 'components/localized_icon';
+import StatusIcon from 'components/status_icon';
 import Avatar from 'components/widgets/users/avatar';
 
-import {t} from 'utils/i18n';
+import {UserStatuses} from 'utils/constants';
 import * as Utils from 'utils/utils';
+
+import type {GlobalState} from 'types/store';
 
 export type Props = {
     groupId: string;
@@ -43,19 +47,24 @@ const ViewUserGroupListItem = (props: Props) => {
         });
     }, [user.id, groupId, props.decrementMemberCount, props.actions.removeUsersFromGroup]);
 
+    const status = useSelector((state: GlobalState) => getStatusForUserId(state, user?.id) || UserStatuses.OFFLINE);
+
     return (
         <div
             key={user.id}
             className='group-member-row'
         >
-            <>
+            <span className='status-wrapper'>
                 <Avatar
                     username={user.username}
                     size={'sm'}
                     url={Utils.imageURLForUser(user?.id ?? '')}
                     className={'avatar-post-preview'}
                 />
-            </>
+                <StatusIcon
+                    status={status}
+                />
+            </span>
             <div className='group-member-name'>
                 {Utils.getFullName(user)}
             </div>
@@ -63,16 +72,15 @@ const ViewUserGroupListItem = (props: Props) => {
                 {`@${user.username}`}
             </div>
             {
-                (group.source.toLowerCase() !== GroupSource.Ldap && props.permissionToLeaveGroup) &&
+                (!isSyncableSource(group.source.toLowerCase()) && props.permissionToLeaveGroup) &&
                 <button
                     type='button'
-                    className='remove-group-member btn-icon'
+                    className='remove-group-member btn btn-icon btn-xs'
                     aria-label='Close'
                     onClick={removeUserFromGroup}
                 >
-                    <LocalizedIcon
+                    <i
                         className='icon icon-trash-can-outline'
-                        ariaLabel={{id: t('user_groups_modal.goBackLabel'), defaultMessage: 'Back'}}
                     />
                 </button>
             }

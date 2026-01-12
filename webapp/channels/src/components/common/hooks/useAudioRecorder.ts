@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import * as Sentry from '@sentry/react';
 import type {RefObject} from 'react';
 import {useRef, useState} from 'react';
 import type {WasmMediaEncoder} from 'wasm-media-encoders';
@@ -8,6 +9,8 @@ import {createEncoder} from 'wasm-media-encoders';
 
 import {AudioFileExtensions} from 'utils/constants';
 import {generateDateSpecificFileName} from 'utils/file_utils';
+import {getWasmFileURL} from 'utils/url_import';
+import {isFirefox, isLinux} from 'utils/user_agent';
 
 declare global {
     interface Window {
@@ -143,7 +146,13 @@ export function useAudioRecorder(props: Props) {
                 audio: true,
             });
 
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 48000});
+            const audioContextConfig: AudioContextOptions = {};
+
+            if (!(isFirefox() && isLinux())) {
+                audioContextConfig.sampleRate = 48000;
+            }
+
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)(audioContextConfig);
 
             const audioAnalyzer = audioContext.createAnalyser();
             audioAnalyzer.fftSize = props.audioAnalyzerFFTSize;
@@ -152,7 +161,7 @@ export function useAudioRecorder(props: Props) {
 
             // CHANGE LATER
             // migrate to use Audio Worklet instead.
-            const wasmFileURL = new URL('wasm-media-encoders/wasm/mp3', import.meta.url);
+            const wasmFileURL = getWasmFileURL();
             audioEncoderRef.current = await createEncoder(MP3MimeType, wasmFileURL.href);
 
             audioEncoderRef.current.configure({
@@ -185,6 +194,7 @@ export function useAudioRecorder(props: Props) {
             startElapsedTimer();
         } catch (error) {
             console.log('Error in recording', error); // eslint-disable-line no-console
+            Sentry.captureException(error);
             setError(true);
         }
     }

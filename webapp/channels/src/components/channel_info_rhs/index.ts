@@ -2,13 +2,13 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {AnyAction, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {AnyAction, Dispatch} from 'redux';
 
-import {unfavoriteChannel, favoriteChannel} from 'mattermost-redux/actions/channels';
+import {unfavoriteChannel, favoriteChannel, getChannelStats} from 'mattermost-redux/actions/channels';
 import {Permissions} from 'mattermost-redux/constants';
 import {getCurrentChannel, isCurrentChannelFavorite, isCurrentChannelMuted, isCurrentChannelArchived, getCurrentChannelStats} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentUser, isCurrentChannelInPreview} from 'mattermost-redux/selectors/entities/common';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getProfilesInCurrentChannel, getStatusForUserId, getUser} from 'mattermost-redux/selectors/entities/users';
@@ -25,8 +25,8 @@ import {getDisplayNameByUser, getUserIdFromChannelId} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
-import type {Props} from './channel_info_rhs';
 import RHS from './channel_info_rhs';
+import type {Props} from './channel_info_rhs';
 
 const EMPTY_CHANNEL_STATS = {
     member_count: 0,
@@ -41,14 +41,15 @@ function mapStateToProps(state: GlobalState) {
     const currentTeam = getCurrentTeam(state);
     const channelStats = getCurrentChannelStats(state) || EMPTY_CHANNEL_STATS;
     const isArchived = isCurrentChannelArchived(state);
+    const isPreview = isCurrentChannelInPreview(state);
     const isFavorite = isCurrentChannelFavorite(state);
     const isMuted = isCurrentChannelMuted(state);
     const isInvitingPeople = isModalOpen(state, ModalIdentifiers.CHANNEL_INVITE) || isModalOpen(state, ModalIdentifiers.CREATE_DM_CHANNEL);
     const isMobile = getIsMobileView(state);
 
-    const isPrivate = channel.type === Constants.PRIVATE_CHANNEL;
-    const canManageMembers = haveIChannelPermission(state, currentTeam.id, channel.id, isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS : Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS);
-    const canManageProperties = haveIChannelPermission(state, currentTeam.id, channel.id, isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_PROPERTIES : Permissions.MANAGE_PUBLIC_CHANNEL_PROPERTIES);
+    const isPrivate = channel?.type === Constants.PRIVATE_CHANNEL;
+    const canManageMembers = haveIChannelPermission(state, currentTeam?.id, channel?.id, isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS : Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS);
+    const canManageProperties = haveIChannelPermission(state, currentTeam?.id, channel?.id, isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_PROPERTIES : Permissions.MANAGE_PUBLIC_CHANNEL_PROPERTIES);
 
     const channelMembers = getProfilesInCurrentChannel(state);
 
@@ -57,6 +58,7 @@ function mapStateToProps(state: GlobalState) {
         currentUser,
         currentTeam,
         isArchived,
+        isPreview,
         isFavorite,
         isMuted,
         isInvitingPeople,
@@ -67,7 +69,7 @@ function mapStateToProps(state: GlobalState) {
         channelMembers,
     } as Props;
 
-    if (channel.type === Constants.DM_CHANNEL) {
+    if (channel?.type === Constants.DM_CHANNEL) {
         const user = getUser(state, getUserIdFromChannelId(channel.name, currentUser.id));
         props.dmUser = {
             user,
@@ -92,6 +94,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             showChannelFiles,
             showPinnedPosts,
             showChannelMembers,
+            getChannelStats,
         }, dispatch),
     };
 }

@@ -18,22 +18,22 @@ describe('components/widgets/settings/TextSetting', () => {
             />,
         );
         expect(wrapper).toMatchInlineSnapshot(`
-          <Setting
-            inputClassName=""
-            inputId="string.id"
-            label="some label"
-            labelClassName=""
-          >
-            <input
-              className="form-control"
-              data-testid="string.idinput"
-              id="string.id"
-              maxLength={-1}
-              onChange={[Function]}
-              type="input"
-              value="some value"
-            />
-          </Setting>
+            <Setting
+              inputClassName=""
+              inputId="string.id"
+              label="some label"
+              labelClassName=""
+            >
+              <input
+                className="form-control"
+                data-testid="string.idinput"
+                id="string.id"
+                maxLength={-1}
+                onChange={[Function]}
+                type="text"
+                value="some value"
+              />
+            </Setting>
         `);
     });
 
@@ -49,24 +49,23 @@ describe('components/widgets/settings/TextSetting', () => {
             />,
         );
         expect(wrapper).toMatchInlineSnapshot(`
-          <Setting
-            inputClassName=""
-            inputId="string.id"
-            label="some label"
-            labelClassName=""
-          >
-            <textarea
-              className="form-control"
-              data-testid="string.idinput"
-              dir="auto"
-              id="string.id"
-              maxLength={-1}
-              onChange={[Function]}
-              rows={5}
-              style={Object {}}
-              value="some value"
-            />
-          </Setting>
+            <Setting
+              inputClassName=""
+              inputId="string.id"
+              label="some label"
+              labelClassName=""
+            >
+              <textarea
+                className="form-control"
+                data-testid="string.idinput"
+                dir="auto"
+                id="string.id"
+                maxLength={-1}
+                onChange={[Function]}
+                rows={5}
+                value="some value"
+              />
+            </Setting>
         `);
     });
 
@@ -81,7 +80,9 @@ describe('components/widgets/settings/TextSetting', () => {
             />,
         );
 
-        wrapper.find('input').simulate('change', {target: {value: 'somenewvalue'}});
+        wrapper.
+            find('input').
+            simulate('change', {target: {value: 'somenewvalue'}});
 
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange).toHaveBeenCalledWith('string.id', 'somenewvalue');

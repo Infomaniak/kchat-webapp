@@ -1,40 +1,41 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {shallow} from 'enzyme';
 import React from 'react';
+
+import {renderWithContext, screen} from 'tests/react_testing_utils';
 
 import PostEmoji from './post_emoji';
 
 describe('PostEmoji', () => {
     const baseProps = {
+        children: ':emoji:',
         imageUrl: '/api/v4/emoji/1234/image',
         name: 'emoji',
     };
 
     test('should render image when imageUrl is provided', () => {
-        const wrapper = shallow(<PostEmoji {...baseProps}/>);
+        renderWithContext(<PostEmoji {...baseProps}/>);
 
-        expect(wrapper.find('span').prop('style')).toMatchObject({
-            backgroundImage: `url(${baseProps.imageUrl})`,
-        });
+        expect(screen.queryByTestId('postEmoji.:' + baseProps.name + ':')).toBeInTheDocument();
+        expect(screen.queryByTestId('postEmoji.:' + baseProps.name + ':')).toHaveStyle(`backgroundImage: url(${baseProps.imageUrl})}`);
     });
 
     test('should render shortcode text within span when imageUrl is provided', () => {
-        const wrapper = shallow(<PostEmoji {...baseProps}/>);
+        renderWithContext(<PostEmoji {...baseProps}/>);
 
-        expect(wrapper.find('span').text()).toBe(`:${baseProps.name}:`);
+        expect(screen.queryByTestId('postEmoji.:' + baseProps.name + ':')).toHaveTextContent(`:${baseProps.name}:`);
     });
 
-    test('should render original text when imageUrl is empty', () => {
+    test('should render children as fallback when imageUrl is empty', () => {
         const props = {
             ...baseProps,
             imageUrl: '',
         };
 
-        const wrapper = shallow(<PostEmoji {...props}/>);
+        renderWithContext(<PostEmoji {...props}/>);
 
-        expect(wrapper.find('span')).toHaveLength(0);
-        expect(wrapper.text()).toBe(`:${props.name}:`);
+        expect(screen.queryByTestId('postEmoji.:' + baseProps.name + ':')).not.toBeInTheDocument();
+        expect(screen.getByText(`:${props.name}:`)).toBeInTheDocument();
     });
 });

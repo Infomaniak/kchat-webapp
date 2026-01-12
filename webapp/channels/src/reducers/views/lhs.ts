@@ -4,13 +4,14 @@
 import {combineReducers} from 'redux';
 
 import {TeamTypes, UserTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {SidebarSize} from 'components/resizable_sidebar/constants';
 
 import {ActionTypes} from 'utils/constants';
 
-function isOpen(state = false, action: GenericAction) {
+import type {MMAction} from 'types/store';
+
+function isOpen(state = false, action: MMAction) {
     switch (action.type) {
     case ActionTypes.TOGGLE_LHS:
         return !state;
@@ -22,6 +23,11 @@ function isOpen(state = false, action: GenericAction) {
         return false;
     case ActionTypes.OPEN_RHS_MENU:
         return false;
+
+    // ik: closeLhs when post is selected
+    case ActionTypes.SELECT_POST:
+        return false;
+
     case TeamTypes.SELECT_TEAM:
         return false;
 
@@ -32,7 +38,7 @@ function isOpen(state = false, action: GenericAction) {
     }
 }
 
-function size(state = SidebarSize.MEDIUM, action: GenericAction) {
+function size(state = SidebarSize.MEDIUM, action: MMAction) {
     switch (action.type) {
     case ActionTypes.SET_LHS_SIZE:
         return action.size;
@@ -41,7 +47,7 @@ function size(state = SidebarSize.MEDIUM, action: GenericAction) {
     }
 }
 
-function currentStaticPageId(state = '', action: GenericAction) {
+function currentStaticPageId(state = '', action: MMAction) {
     switch (action.type) {
     case ActionTypes.SELECT_STATIC_PAGE:
         return action.data;

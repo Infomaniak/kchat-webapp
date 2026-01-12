@@ -1,28 +1,34 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useMemo} from 'react';
+import isEqual from 'lodash/isEqual';
+import type {ReactNode} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import MultiSelect from 'components/multiselect/multiselect';
+import MultiSelect from 'components/multiselect';
 
 import Constants from 'utils/constants';
+
+import {usePrevious} from './hooks';
 
 import ListItem from '../list_item';
 import type {Option, OptionValue} from '../types';
 import {optionValue} from '../types';
 
-const MAX_SELECTABLE_VALUES = Constants.MAX_USERS_IN_GM - 1;
+const MAX_SELECTABLE_VALUES = Constants.MAX_USERS_IN_GM;
 export const USERS_PER_PAGE = 50;
 
-type Props = {
+export type Props = {
     addValue: (value: OptionValue) => void;
+    children?: ReactNode;
     currentUserId: string;
     handleDelete: (values: OptionValue[]) => void;
     handlePageChange: (page: number, prevPage: number) => void;
     handleSubmit: (values?: OptionValue[]) => void;
+    handleHide: () => void;
     isExistingChannel: boolean;
     loading: boolean;
     options: Option[];
@@ -31,13 +37,19 @@ type Props = {
     selectedItemRef: React.RefObject<HTMLDivElement>;
     totalCount: number;
     users: UserProfile[];
+    emptyGroupChannelsIds: string[];
 
     /**
      * An array of values that have been selected by the user in the multiselect.
      */
     values: OptionValue[];
+
+    actions: {
+        getProfilesInGroupChannels: (ids: string[]) => object;
+    };
 }
 
+//@ts-expect-error Multiselect got a generic
 const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionValue>>) => {
     const renderOptionValue = useCallback((
         option: OptionValue,
@@ -62,6 +74,7 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
     }, [props.currentUserId]);
 
     const intl = useIntl();
+    const previousEmptyGroupIds = usePrevious(props.emptyGroupChannelsIds);
 
     let note;
     if (props.isExistingChannel) {
@@ -86,11 +99,20 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
         return props.options.map(optionValue);
     }, [props.options]);
 
+    useEffect(() => {
+        if (props.emptyGroupChannelsIds.length > 0 && !isEqual(previousEmptyGroupIds, props.emptyGroupChannelsIds)) {
+            props.actions.getProfilesInGroupChannels?.(props.emptyGroupChannelsIds);
+        }
+    }, [props.emptyGroupChannelsIds, props.actions, previousEmptyGroupIds]);
+
     return (
+
+        // @ts-expect-error Multiselect has a generic
         <MultiSelect<OptionValue>
             ref={ref}
             options={options}
             optionRenderer={renderOptionValue}
+            intl={intl}
             selectedItemRef={props.selectedItemRef}
             values={props.values}
             valueRenderer={renderValue}
@@ -102,15 +124,26 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
             handleAdd={props.addValue}
             handleSubmit={props.handleSubmit}
             noteText={note}
+            disableMultiSelectList={props.values.length > (Constants.MAX_USERS_IN_GM - 1)}
             maxValues={MAX_SELECTABLE_VALUES}
+
+            changeMessageColor='red'
+            showError={props.values.length === MAX_SELECTABLE_VALUES}
             numRemainingText={
-                <FormattedMessage
-                    id='multiselect.numPeopleRemaining'
-                    defaultMessage='Use ↑↓ to browse, ↵ to select. You can add {num, number} more {num, plural, one {person} other {people}}. '
-                    values={{
-                        num: MAX_SELECTABLE_VALUES - props.values.length,
-                    }}
-                />
+                props.values.length === MAX_SELECTABLE_VALUES ? (
+                    <FormattedMessage
+                        id='multiselect.noMorePeople'
+                        defaultMessage='A personal message is limited to {maxUsers} people.'
+                        values={{
+                            maxUsers: (Constants.MAX_USERS_IN_GM - 1),
+                        }}
+                    />
+                ) : (
+                    <FormattedMessage
+                        id='multiselect.numPeopleRemaining'
+                        defaultMessage='Use the ↑↓ arrows on the keyboard, ENTER to select.'
+                    />
+                )
             }
             buttonSubmitText={
                 <FormattedMessage
@@ -130,9 +163,13 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
             users={props.users}
             totalCount={props.totalCount}
             placeholderText={intl.formatMessage({id: 'multiselect.placeholder', defaultMessage: 'Search and add members'})}
-        />
+
+        >
+            {props.children}
+        </MultiSelect>
     );
 });
+
 export default List;
 
 function renderValue(props: {data: OptionValue}) {

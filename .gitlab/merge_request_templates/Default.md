@@ -5,10 +5,14 @@ A description of what this merge request does.
 
 #### Ticket Link
 <!--
-If this merge request addresses a Trello or Gitlab ticket, please link it here, e.g.
+If this merge request addresses a redmine ticket, please link it here
+-->
 
-[Related Trello](https://trello.com/c/5jJgvUo1)
+#### How to test
+<!--
+Add here steps to replicate/test the issue/bug/feature. 
 
+Or simply add "See related Ticket"
 -->
 
 #### Screenshots
@@ -55,3 +59,7 @@ NONE
 ```release-note
 
 ```
+
+/assign me  
+/reviewer @antonbuksa @boris.trombert @dimitar.slaev @andy.lerandy @aurelien.sberro @alexandre.pilloud
+/remove_reviewer me  

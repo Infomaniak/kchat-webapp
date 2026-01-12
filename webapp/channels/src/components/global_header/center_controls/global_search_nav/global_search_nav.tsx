@@ -8,13 +8,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {closeRightHandSide, showMentions} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
-import Search from 'components/search';
+import NewSearch from 'components/new_search/new_search';
 
 import {
     Constants,
     RHSStates,
 } from 'utils/constants';
-import * as Utils from 'utils/utils';
+import * as Keyboard from 'utils/keyboard';
 
 import type {GlobalState} from 'types/store';
 
@@ -24,8 +24,8 @@ const GlobalSearchNav = (): JSX.Element => {
 
     useEffect(() => {
         const handleShortcut = (e: KeyboardEvent) => {
-            if (Utils.cmdOrCtrlPressed(e) && e.shiftKey) {
-                if (Utils.isKeyPressed(e, Constants.KeyCodes.M)) {
+            if (Keyboard.cmdOrCtrlPressed(e) && e.shiftKey) {
+                if (Keyboard.isKeyPressed(e, Constants.KeyCodes.M)) {
                     e.preventDefault();
                     if (rhsState === RHSStates.MENTION) {
                         dispatch(closeRightHandSide());
@@ -49,9 +49,7 @@ const GlobalSearchNav = (): JSX.Element => {
             flex={1}
             alignment='center'
         >
-            <Search
-                enableFindShortcut={true}
-            />
+            <NewSearch/>
         </Flex>
     );
 };

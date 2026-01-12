@@ -4,7 +4,7 @@
 import classNames from 'classnames';
 import type {Moment} from 'moment-timezone';
 import React, {useState} from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
 import {GenericModal} from '@mattermost/components';
@@ -46,7 +46,7 @@ const SchedulePostModal = ({
 
     const handleExit = () => dispatch(closeModal(ModalIdentifiers.SCHEDULE_POST));
 
-    const handleConfirm = (close?: boolean) => {
+    const handleConfirm = (close = true) => {
         const currentMoment = getCurrentMomentForTimezone(timezone).add(1, 'minute');
         const scheduleMoment = scheduleTimestamp.isBefore(currentMoment) ? currentMoment : scheduleTimestamp;
         onConfirm(toUTCUnix(scheduleMoment.toDate()));
@@ -54,18 +54,6 @@ const SchedulePostModal = ({
             handleExit();
         }
     };
-
-    const modalHeaderText = (
-        <div>
-            <h1>
-                {formatMessage({
-                    id: 'create_post.schedule_post.modal.header',
-                    defaultMessage: 'Schedule draft',
-                })}
-            </h1>
-            {timezone && <span>{timezone}</span>}
-        </div>
-    );
 
     const removeScheduleButtonText = formatMessage({
         id: 'create_post.schedule_post.modal.remove_schedule',
@@ -121,21 +109,30 @@ const SchedulePostModal = ({
     return (
         <GenericModal
             className='schedule-post-modal'
-            modalHeaderText={modalHeaderText}
+            modalHeaderText={(
+                <>
+                    <FormattedMessage
+                        id='create_post.schedule_post.modal.header'
+                        defaultMessage='Schedule draft'
+                    />
+                    {timezone && <span>{timezone}</span>}
+                </>
+            )}
             confirmButtonText={confirmButtonText}
             isConfirmDisabled={isConfirmDisabled}
-            autoCloseOnEnterKeyDown={false}
+            autoCloseOnConfirmButton={false}
             enforceFocus={false}
+            compassDesign={true}
             handleConfirm={handleConfirm}
             handleCancel={handleExit}
             onExited={handleExit}
-            footer={footer}
+            footerContent={footer}
         >
             <DateTimeInput
                 time={scheduleTimestamp}
                 handleChange={setScheduleTimestamp}
                 timezone={timezone}
-                setIsDatePickerOpen={setIsDatePickerOpen}
+                setIsInteracting={setIsDatePickerOpen}
             />
         </GenericModal>
     );

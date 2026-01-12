@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {IDMappedObjects, RelationOneToMany, RelationOneToOne} from './utilities';
-import {Team} from './teams';
+import type {Team} from './teams';
+import type {IDMappedObjects, RelationOneToManyUnique, RelationOneToOne} from './utilities';
 
 // e.g.
 // **O**pen channel,
@@ -20,10 +20,14 @@ export type ChannelStats = {
 };
 
 export type ChannelNotifyProps = {
+    desktop_threads: 'default' | 'all' | 'mention' | 'none';
     desktop: 'default' | 'all' | 'mention' | 'none';
+    desktop_sound: 'default' | 'on' | 'off';
+    desktop_notification_sound?: 'default' | 'Bing' | 'Crackle' | 'Down' | 'Hello' | 'Ripple' | 'Upstairs';
     email: 'default' | 'all' | 'mention' | 'none';
     mark_unread: 'all' | 'mention';
     push: 'default' | 'all' | 'mention' | 'none';
+    push_threads: 'default' | 'all' | 'mention' | 'none';
     ignore_channel_mentions: 'default' | 'off' | 'on';
     channel_auto_follow_threads: 'off' | 'on';
 };
@@ -143,10 +147,11 @@ export type ChannelUnread = {
 export type ChannelsState = {
     currentChannelId: string;
     channels: IDMappedObjects<Channel>;
-    channelsInTeam: RelationOneToMany<Team, Channel>;
+    channelsInTeam: RelationOneToManyUnique<Team, Channel>;
     myMembers: RelationOneToOne<Channel, ChannelMembership>;
     roles: RelationOneToOne<Channel, Set<string>>;
     membersInChannel: RelationOneToOne<Channel, Record<string, ChannelMembership>>;
+    guestMembersInChannel: RelationOneToOne<Channel, Record<string, ChannelMembership>>;
     stats: RelationOneToOne<Channel, ChannelStats>;
     groupsAssociatedToChannel: any;
     totalCount: number;
@@ -154,6 +159,7 @@ export type ChannelsState = {
     channelModerations: RelationOneToOne<Channel, ChannelModeration[]>;
     channelMemberCountsByGroup: RelationOneToOne<Channel, ChannelMemberCountsByGroup>;
     messageCounts: RelationOneToOne<Channel, ChannelMessageCount>;
+    channelsMemberCount: Record<string, number>;
     pendingGuests: Record<Channel['id'], PendingGuests>;
 };
 
@@ -207,6 +213,7 @@ export type ChannelSearchOpts = {
     private?: boolean;
     include_deleted?: boolean;
     include_search_by_id?: boolean;
+    exclude_remote?: boolean;
     deleted?: boolean;
     page?: number;
     per_page?: number;

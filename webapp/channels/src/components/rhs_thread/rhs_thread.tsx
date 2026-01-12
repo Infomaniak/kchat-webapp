@@ -16,9 +16,8 @@ import ThreadViewer from 'components/threading/thread_viewer';
 import type {FakePost, RhsState} from 'types/store/rhs';
 
 type Props = {
-    currentTeam: Team;
-    posts: Post[];
-    channel: Channel | null;
+    currentTeam?: Team;
+    channel?: Channel;
     selected: Post | FakePost;
     previousRhsState?: RhsState;
 }
@@ -26,20 +25,19 @@ type Props = {
 const RhsThread = ({
     currentTeam,
     channel,
-    posts,
     selected,
     previousRhsState,
 }: Props) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (channel?.team_id && channel.team_id !== currentTeam.id) {
+        if (channel?.team_id && channel.team_id !== currentTeam?.id) {
             // if team-scoped and mismatched team, close rhs
             dispatch(closeRightHandSide());
         }
-    }, [currentTeam, channel]);
+    }, [currentTeam, channel, dispatch]);
 
-    if (posts == null || selected == null || !channel) {
+    if (selected == null || !channel) {
         return (
             <div/>
         );
@@ -55,6 +53,7 @@ const RhsThread = ({
                 channel={channel}
                 previousRhsState={previousRhsState}
             />
+
             <ThreadViewer
                 rootPostId={selected.id}
                 useRelativeTimestamp={false}

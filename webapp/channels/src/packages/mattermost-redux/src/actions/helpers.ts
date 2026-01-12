@@ -1,18 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {AnyAction} from 'redux';
+
 import type {ServerError} from '@mattermost/types/errors';
+import type {GlobalState} from '@mattermost/types/store';
 
 import {UserTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
-import type {ActionFunc, GenericAction, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import type {DispatchFunc, GetStateFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 
+// eslint-disable-next-line no-restricted-imports
 import {getHistory} from 'utils/browser_history';
 
 import {logError} from './errors';
 type ActionType = string;
 const HTTP_UNAUTHORIZED = 401;
-export function forceLogoutIfNecessary(err: ServerError, dispatch: DispatchFunc, getState: GetStateFunc) {
+export function forceLogoutIfNecessary(err: ServerError, dispatch: DispatchFunc<AnyAction>, getState: GetStateFunc) {
     const {currentUserId} = getState().entities.users;
 
     redirectToErrorPageIfNecessary(err);
@@ -26,9 +30,14 @@ export function forceLogoutIfNecessary(err: ServerError, dispatch: DispatchFunc,
 const statusCodes = {
     HTTP_MAINTENANCE: 503,
     HTTP_BLOCKED: 401,
+    FORCE_MIGRATION: 1,
 };
 
-function redirectToErrorPageIfNecessary(err: ServerError) {
+function isIkAutologError(err: ServerError) {
+    return err.error?.code === 'not_authorized' && err.error.description === 'You are autologged but do not have the right to access this route';
+}
+
+export function redirectToErrorPageIfNecessary(err: ServerError) {
     switch (err.status_code) {
     case statusCodes.HTTP_MAINTENANCE:
         getHistory().replace('/error?type=maintenance');
@@ -36,12 +45,17 @@ function redirectToErrorPageIfNecessary(err: ServerError) {
     case statusCodes.HTTP_BLOCKED:
         if (err.server_error_id === 'product_locked' || err.error?.code === 'product_locked') {
             getHistory().replace('/error?type=blocked');
+        } else if (isIkAutologError(err)) {
+            getHistory().replace('/error?type=autolog_blocked');
         }
+        break;
+    case statusCodes.FORCE_MIGRATION:
+        getHistory().replace('/error?type=force_migration');
         break;
     }
 }
 
-function dispatcher(type: ActionType, data: any, dispatch: DispatchFunc) {
+function dispatcher(type: ActionType, data: any, dispatch: DispatchFunc<AnyAction>) {
     if (type.indexOf('SUCCESS') === -1) { // we don't want to pass the data for the request types
         dispatch(requestSuccess(type, data));
     } else {
@@ -49,7 +63,7 @@ function dispatcher(type: ActionType, data: any, dispatch: DispatchFunc) {
     }
 }
 
-export function requestData(type: ActionType): GenericAction {
+export function requestData(type: ActionType) {
     return {
         type,
         data: null,
@@ -84,27 +98,31 @@ export function requestFailure(type: ActionType, error: ServerError): any {
  * @returns {ActionFunc} ActionFunc
  */
 
-export function bindClientFunc({
+export function bindClientFunc<Func extends(...args: any[]) => Promise<any>>({
     clientFunc,
     onRequest,
     onSuccess,
     onFailure,
-    params = [],
+    params,
 }: {
-    clientFunc: (...args: any[]) => Promise<any>;
+    clientFunc: Func;
     onRequest?: ActionType;
     onSuccess?: ActionType | ActionType[];
     onFailure?: ActionType;
-    params?: any[];
-}): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+    params?: Parameters<Func>;
+}): ActionFuncAsync<Awaited<ReturnType<Func>>, GlobalState, AnyAction> {
+    return async (dispatch, getState) => {
         if (onRequest) {
             dispatch(requestData(onRequest));
         }
 
-        let data: any = null;
+        let data: Awaited<ReturnType<Func>>;
         try {
-            data = await clientFunc(...params);
+            if (params) {
+                data = await clientFunc(...params);
+            } else {
+                data = await clientFunc();
+            }
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             if (onFailure) {

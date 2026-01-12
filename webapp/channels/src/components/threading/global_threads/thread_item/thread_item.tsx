@@ -3,8 +3,8 @@
 
 import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
-import type {MouseEvent} from 'react';
 import React, {memo, useCallback, useEffect, useMemo} from 'react';
+import type {MouseEvent} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -19,6 +19,7 @@ import {getMissingProfilesByIds} from 'mattermost-redux/actions/users';
 import {Posts} from 'mattermost-redux/constants';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {ensureString} from 'mattermost-redux/utils/post_utils';
 
 import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
 import {getIsMobileView} from 'selectors/views/browser';
@@ -28,9 +29,9 @@ import PriorityBadge from 'components/post_priority/post_priority_badge';
 import Button from 'components/threading/common/button';
 import Timestamp from 'components/timestamp';
 import CRTListTutorialTip from 'components/tours/crt_tour/crt_list_tutorial_tip';
-import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Tag from 'components/widgets/tag/tag';
 import Avatars from 'components/widgets/users/avatars';
+import WithTooltip from 'components/with_tooltip';
 
 import {CrtTutorialSteps, Preferences} from 'utils/constants';
 import * as Utils from 'utils/utils';
@@ -65,7 +66,7 @@ type Props = {
 const markdownPreviewOptions = {
     singleline: true,
     mentionHighlight: false,
-    atMentions: true,
+    atMentions: false,
 };
 
 function ThreadItem({
@@ -89,7 +90,7 @@ function ThreadItem({
     const tipStep = useSelector((state: GlobalState) => getInt(state, Preferences.CRT_TUTORIAL_STEP, currentUserId));
     const showListTutorialTip = tipStep === CrtTutorialSteps.LIST_POPOVER;
     const msgDeleted = formatMessage({id: 'post_body.deleted', defaultMessage: '(message deleted)'});
-    const postAuthor = post.props?.override_username || displayName;
+    const postAuthor = ensureString(post.props?.override_username) || displayName;
 
     useEffect(() => {
         if (channel?.teammate_id) {
@@ -105,7 +106,7 @@ function ThreadItem({
 
     const participantIds = useMemo(() => {
         const ids = (thread?.participants || []).flatMap(({id}) => {
-            if (id === post.user_id && !thread?.post.props?.from_webhook) {
+            if (id === post.user_id) {
                 return [];
             }
             return id;
@@ -169,9 +170,6 @@ function ThreadItem({
         is_following: isFollowing,
     } = thread;
 
-    // Makes the space a little bit bigger for quote blocks
-    const spacingClassName = post.message.startsWith('>') ? 'preview quote' : 'preview normalText';
-
     // if we have the whole thread, get the posts in it, sorted from newest to oldest.
     // First post is latest reply. Use that timestamp
     if (postsInThread.length > 1) {
@@ -190,7 +188,7 @@ function ThreadItem({
             id={isFirstThreadInList ? 'tutorial-threads-mobile-list' : ''}
             onClick={selectHandler}
         >
-            <h1>
+            <header>
                 {Boolean(newMentions || newReplies) && (
                     <div className='indicator'>
                         {newMentions ? (
@@ -225,7 +223,7 @@ function ThreadItem({
                     className='alt-hidden'
                     value={lastReplyAt}
                 />
-            </h1>
+            </header>
             <div className='menu-anchor alt-visible'>
                 <ThreadMenu
                     threadId={threadId}
@@ -233,9 +231,8 @@ function ThreadItem({
                     hasUnreads={Boolean(newReplies)}
                     unreadTimestamp={unreadTimestamp}
                 >
-                    <SimpleTooltip
-                        id='threadActionMenu'
-                        content={(
+                    <WithTooltip
+                        title={(
                             <FormattedMessage
                                 id='threading.threadItem.menu'
                                 defaultMessage='Actions'
@@ -248,12 +245,12 @@ function ThreadItem({
                         >
                             <DotsVerticalIcon size={18}/>
                         </Button>
-                    </SimpleTooltip>
+                    </WithTooltip>
                 </ThreadMenu>
             </div>
             <div
                 aria-readonly='true'
-                className={spacingClassName}
+                className='preview'
                 dir='auto'
                 tabIndex={0}
                 onClick={handleFormattedTextClick}

@@ -16,7 +16,6 @@ exports[`component/user_groups_modal should match snapshot with groups 1`] = `
   >
     <Component />
   </InfiniteLoader>
-  <Memo(ADLDAPUpsellBanner) />
 </div>
 `;
 
@@ -36,6 +35,5 @@ exports[`component/user_groups_modal should match snapshot without groups 1`] = 
   >
     <Component />
   </InfiniteLoader>
-  <Memo(ADLDAPUpsellBanner) />
 </div>
 `;

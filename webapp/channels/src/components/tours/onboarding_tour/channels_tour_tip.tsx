@@ -6,6 +6,10 @@ import {FormattedMessage} from 'react-intl';
 
 import {useMeasurePunchouts} from '@mattermost/components';
 
+import ExternalLink from 'components/external_link';
+
+import {localizeMessage} from 'utils/utils';
+
 import {CategoryTypes} from 'packages/mattermost-redux/src/constants/channel_categories';
 
 import OnboardingTourTip from './onboarding_tour_tip';
@@ -25,6 +29,17 @@ export const ChannelsTour = () => {
         <FormattedMessage
             id='onboardingTour.ChannelsTourTip.content'
             defaultMessage='Lists all your Public and Private Channels. Conversations can be seen by every member in the Channel, ideal to share informations !'
+            values={{
+                link: (
+                    <div>
+                        <ExternalLink
+                            href={localizeMessage({id: 'onboardingTour.ChannelsTourTip.linkUrl', defaultMessage: 'https://www.infomaniak.com/en/support/faq/2732/managing-a-kchat-channel'})}
+                        >
+                            {localizeMessage({id: 'onboardingTour.ChannelsTourTip.learnMore', defaultMessage: 'Learn more'})}
+                        </ExternalLink>
+                    </div>
+                ),
+            }}
         />
     );
 

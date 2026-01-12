@@ -1,20 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import React, {useCallback, useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 
-import type {Channel, ChannelMembership} from '@mattermost/types/channels';
+import type {Channel, ChannelMembership, PendingGuest, PendingGuests} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {ProfilesInChannelSortBy} from 'mattermost-redux/actions/users';
 
 import AlertBanner from 'components/alert_banner';
 import ChannelInviteModal from 'components/channel_invite_modal';
-import ExternalLink from 'components/external_link';
 import MoreDirectChannels from 'components/more_direct_channels';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
@@ -49,6 +48,7 @@ export interface Props {
     channelMembers: ChannelMember[];
     canManageMembers: boolean;
     editing: boolean;
+    pendingGuests: PendingGuests;
 
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
@@ -60,18 +60,21 @@ export interface Props {
         loadMyChannelMemberAndRole: (channelId: string) => void;
         setEditChannelMembers: (active: boolean) => void;
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;
+        getChannelPendingGuests: (channelId: string) => void;
     };
+    isGuestUser: boolean;
 }
 
 export enum ListItemType {
     Member = 'member',
+    PendingGuest = 'pending-guest',
     FirstSeparator = 'first-separator',
     Separator = 'separator',
 }
 
 export interface ListItem {
     type: ListItemType;
-    data: ChannelMember | JSX.Element;
+    data: ChannelMember | PendingGuest | JSX.Element;
 }
 
 export default function ChannelMembersRHS({
@@ -84,7 +87,9 @@ export default function ChannelMembersRHS({
     channelMembers,
     canManageMembers,
     editing = false,
+    pendingGuests,
     actions,
+    isGuestUser,
 }: Props) {
     const history = useHistory();
 
@@ -100,6 +105,12 @@ export default function ChannelMembersRHS({
 
     // show search if there's more than 20 or if the user have an active search.
     const showSearch = searching || membersCount >= 20;
+
+    const pendingGuestsCount = Object.keys(pendingGuests).length;
+
+    useEffect(() => {
+        actions.getChannelPendingGuests(channel.id);
+    }, [channel, actions]);
 
     useEffect(() => {
         return () => {
@@ -151,10 +162,29 @@ export default function ChannelMembersRHS({
 
             listcp.push({type: ListItemType.Member, data: member});
         }
+        if (!isGuestUser) {
+            Object.keys(pendingGuests).forEach((key, index) => {
+                const pendingGuest = pendingGuests[key];
+                if (index === 0) {
+                    const text = (
+                        <FormattedMessage
+                            id='channel_members_rhs.list.channel_pending_guests_title'
+                            defaultMessage='PENDING INVITATIONS'
+                        />
+                    );
+                    listcp.push({
+                        type: ListItemType.Separator,
+                        data: <MemberListSeparator>{text}</MemberListSeparator>,
+                    });
+                }
+                listcp.push({type: ListItemType.PendingGuest, data: pendingGuest});
+            });
+        }
+
         if (JSON.stringify(list) !== JSON.stringify(listcp)) {
             setList(listcp);
         }
-    }, [channelMembers]);
+    }, [channelMembers, pendingGuests]);
 
     useEffect(() => {
         if (channel.type === Constants.DM_CHANNEL) {
@@ -192,7 +222,7 @@ export default function ChannelMembersRHS({
             return actions.openModal({
                 modalId: ModalIdentifiers.CREATE_DM_CHANNEL,
                 dialogType: MoreDirectChannels,
-                dialogProps: {isExistingChannel: true},
+                dialogProps: {isExistingChannel: true, focusOriginElement: 'channelInfoRHSAddPeopleButton'},
             });
         }
 
@@ -239,6 +269,7 @@ export default function ChannelMembersRHS({
             <ActionBar
                 channelType={channel.type}
                 membersCount={membersCount}
+                pendingGuestsCount={pendingGuestsCount}
                 canManageMembers={canManageMembers}
                 editing={editing}
                 actions={{
@@ -298,7 +329,7 @@ const MemberListSeparator = styled.div`
     letter-spacing: 0.02em;
     text-transform: uppercase;
     padding: 0px 12px;
-    color: rgba(var(--center-channel-color-rgb), 0.56);
+    color: rgba(var(--center-channel-color-rgb), 0.75);
     margin-top: 16px;
 `;
 

@@ -8,10 +8,11 @@ import type {Channel} from '@mattermost/types/channels';
 import EditChannelPurposeModal from 'components/edit_channel_purpose_modal/edit_channel_purpose_modal';
 import type {EditChannelPurposeModal as EditChannelPurposeModalClass} from 'components/edit_channel_purpose_modal/edit_channel_purpose_modal';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
 import Constants from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
 
 describe('comoponents/EditChannelPurposeModal', () => {
     const channel = TestHelper.getChannelMock({
@@ -200,7 +201,7 @@ describe('comoponents/EditChannelPurposeModal', () => {
             {disableLifecycleMethods: true},
         );
 
-        wrapper.find('.save-button').simulate('click');
+        wrapper.find('.btn-primary').simulate('click');
 
         expect(patchChannel).toBeCalledWith('channel_id', {purpose: 'testPurpose'});
     });
@@ -261,5 +262,5 @@ describe('comoponents/EditChannelPurposeModal', () => {
             onExited={jest.fn()}
             actions={{patchChannel: jest.fn()}}
         />
-    ), (instance: EditChannelPurposeModalClass) => instance.state.purpose);
+    ), (instance: React.Component<any, any>) => instance.state.purpose);
 });

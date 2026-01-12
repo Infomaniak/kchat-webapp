@@ -2,10 +2,9 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, defineMessage} from 'react-intl';
 
 import {ErrorPageTypes} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import ErrorLink from './error_link';
 import CloudArchived from './messages/cloud_archived';
@@ -116,8 +115,10 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                                 link: (
                                     <ErrorLink
                                         url={'https://docs.mattermost.com/deployment/sso-google.html'}
-                                        messageId={t('error.oauth_missing_code.google.link')}
-                                        defaultMessage={'Google Apps'}
+                                        message={defineMessage({
+                                            id: 'error.oauth_missing_code.google.link',
+                                            defaultMessage: 'Google Apps',
+                                        })}
                                     />
                                 ),
                             }}
@@ -131,8 +132,10 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                                 link: (
                                     <ErrorLink
                                         url={'https://docs.mattermost.com/deployment/sso-office.html'}
-                                        messageId={t('error.oauth_missing_code.office365.link')}
-                                        defaultMessage={'Office 365'}
+                                        message={defineMessage({
+                                            id: 'error.oauth_missing_code.office365.link',
+                                            defaultMessage: 'Entra ID',
+                                        })}
                                     />
                                 ),
                             }}
@@ -146,8 +149,10 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                                 link: (
                                     <ErrorLink
                                         url={'https://docs.mattermost.com/deployment/sso-gitlab.html'}
-                                        messageId={t('error.oauth_missing_code.gitlab.link')}
-                                        defaultMessage={'GitLab'}
+                                        message={defineMessage({
+                                            id: 'error.oauth_missing_code.gitlab.link',
+                                            defaultMessage: 'GitLab',
+                                        })}
                                     />
                                 ),
                             }}
@@ -161,8 +166,10 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                                 link: (
                                     <ErrorLink
                                         url={'https://forum.mattermost.com/c/trouble-shoot'}
-                                        messageId={t('error.oauth_missing_code.forum.link')}
-                                        defaultMessage={'Troubleshooting forum'}
+                                        message={defineMessage({
+                                            id: 'error.oauth_missing_code.forum.link',
+                                            defaultMessage: 'Troubleshooting forum',
+                                        })}
                                     />
                                 ),
                             }}
@@ -218,6 +225,26 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                     <FormattedMessage
                         id='error.blocked.message'
                         defaultMessage='The kSuite product has expired. Please renew it to continue communicating within your organization with kChat.'
+                    />
+                </p>
+            );
+            break;
+        case ErrorPageTypes.AUTOLOG_BLOCKED:
+            errorMessage = (
+                <p>
+                    <FormattedMessage
+                        id='error.autolog.blocked.message'
+                        defaultMessage='The user has not authorised the Infomaniak team to access his/Her space.'
+                    />
+                </p>
+            );
+            break;
+        case ErrorPageTypes.FORCE_MIGRATION:
+            errorMessage = (
+                <p>
+                    <FormattedMessage
+                        id='error.force_migration.message'
+                        defaultMessage='Your version of the application is no longer supported. Please download and install the new version to benefit from the latest improvements.'
                     />
                 </p>
             );

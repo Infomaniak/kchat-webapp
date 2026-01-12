@@ -1,14 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classnames from 'classnames';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import type {ReactNode} from 'react';
-import React, {useEffect, useRef, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import type {Emoji} from '@mattermost/types/emojis';
 import type {Post} from '@mattermost/types/posts';
 
-import {Posts, Preferences} from 'mattermost-redux/constants/index';
+import {Posts} from 'mattermost-redux/constants/index';
 import {isPostEphemeral} from 'mattermost-redux/utils/post_utils';
 
 import ActionsMenu from 'components/actions_menu';
@@ -18,8 +19,10 @@ import PostFlagIcon from 'components/post_view/post_flag_icon';
 import PostReaction from 'components/post_view/post_reaction';
 import PostRecentReactions from 'components/post_view/post_recent_reactions';
 
-import {Locations} from 'utils/constants';
+import {Locations, Constants} from 'utils/constants';
 import {isSystemMessage, fromAutoResponder} from 'utils/post_utils';
+
+import type {PostActionComponent} from 'types/store/plugins';
 
 type Props = {
     post: Post;
@@ -29,22 +32,19 @@ type Props = {
     enableEmojiPicker?: boolean;
     isReadOnly?: boolean;
     channelIsArchived?: boolean;
-    setActionsMenuInitialisationState: (initializationState: Record<string, boolean>) => void;
     handleCommentClick?: (e: React.MouseEvent) => void;
     handleJumpClick?: (e: React.MouseEvent) => void;
     handleDropdownOpened?: (e: boolean) => void;
     collapsedThreadsEnabled?: boolean;
     shouldShowActionsMenu?: boolean;
-    showActionsMenuPulsatingDot?: boolean;
-    tourTipsEnabled: boolean;
     oneClickReactionsEnabled?: boolean;
     recentEmojis: Emoji[];
+    isBot: boolean;
     isExpanded?: boolean;
     hover?: boolean;
     isMobileView: boolean;
     hasReplies?: boolean;
     isFirstReply?: boolean;
-    isSearchResultsItem?: boolean;
     canReply?: boolean;
     replyCount?: number;
     location: keyof typeof Locations;
@@ -52,28 +52,43 @@ type Props = {
     shortcutReactToLastPostEmittedFrom?: string;
     isPostHeaderVisible?: boolean | null;
     isPostBeingEdited?: boolean;
-    shouldShowDotMenu: boolean;
+    canDelete?: boolean;
+    pluginActions: PostActionComponent[];
     actions: {
         emitShortcutReactToLastPostFrom: (emittedFrom: 'CENTER' | 'RHS_ROOT' | 'NO_WHERE') => void;
     };
 };
 
 const PostOptions = (props: Props): JSX.Element => {
-    const dotMenuRef = useRef<HTMLDivElement>(null);
-
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [showDotMenu, setShowDotMenu] = useState(false);
     const [showActionsMenu, setShowActionsMenu] = useState(false);
-    const [showActionTip, setShowActionTip] = useState(false);
 
+    const toggleEmojiPicker = useCallback((show: boolean) => {
+        setShowEmojiPicker(show);
+        props.handleDropdownOpened!(show);
+    }, [props.handleDropdownOpened]);
+
+    const lastEmittedFrom = useRef(props.shortcutReactToLastPostEmittedFrom);
     useEffect(() => {
-        if (props.isLastPost &&
-            (props.shortcutReactToLastPostEmittedFrom === props.location) &&
-                props.isPostHeaderVisible) {
-            toggleEmojiPicker();
-            props.actions.emitShortcutReactToLastPostFrom(Locations.NO_WHERE);
+        // Confirm that lastEmittedFrom actually changed to avoid toggling the emoji picker when another dependency
+        // changes without the user pressing the hotkey again
+        if (lastEmittedFrom.current === props.shortcutReactToLastPostEmittedFrom) {
+            return;
         }
-    }, [props.isLastPost, props.shortcutReactToLastPostEmittedFrom]);
+
+        lastEmittedFrom.current = props.shortcutReactToLastPostEmittedFrom;
+
+        const locationToUse = props.location === 'RHS_COMMENT' ? Locations.RHS_ROOT : props.location;
+
+        if (props.isLastPost &&
+            (props.shortcutReactToLastPostEmittedFrom === locationToUse) &&
+                props.isPostHeaderVisible) {
+            props.actions.emitShortcutReactToLastPostFrom(Locations.NO_WHERE);
+            toggleEmojiPicker(!showEmojiPicker);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.isLastPost, props.shortcutReactToLastPostEmittedFrom, props.location, props.isPostHeaderVisible, showEmojiPicker]);
 
     const {
         channelIsArchived,
@@ -81,8 +96,6 @@ const PostOptions = (props: Props): JSX.Element => {
         isReadOnly,
         post,
         oneClickReactionsEnabled,
-        showActionsMenuPulsatingDot,
-        tourTipsEnabled,
         isMobileView,
     } = props;
 
@@ -90,12 +103,9 @@ const PostOptions = (props: Props): JSX.Element => {
     const systemMessage = isSystemMessage(post);
     const isFromAutoResponder = fromAutoResponder(post);
 
-    const removePost = () => props.removePost(props.post);
-
-    const toggleEmojiPicker = () => {
-        setShowEmojiPicker(!showEmojiPicker);
-        props.handleDropdownOpened!(!showEmojiPicker);
-    };
+    function removePost() {
+        props.removePost(props.post);
+    }
 
     const handleDotMenuOpened = (open: boolean) => {
         setShowDotMenu(open);
@@ -103,34 +113,12 @@ const PostOptions = (props: Props): JSX.Element => {
     };
 
     const handleActionsMenuOpened = (open: boolean) => {
-        if (tourTipsEnabled && showActionsMenuPulsatingDot) {
-            setShowActionTip(true);
-            return;
-        }
         setShowActionsMenu(open);
         props.handleDropdownOpened!(open);
     };
 
-    const handleActionsMenuTipOpened = () => {
-        setShowActionTip(true);
-        props.handleDropdownOpened!(true);
-    };
-
-    const handleActionsMenuGotItClick = () => {
-        props.setActionsMenuInitialisationState?.(({[Preferences.ACTIONS_MENU_VIEWED]: true}));
-        setShowActionTip(false);
-        props.handleDropdownOpened!(false);
-    };
-
-    const handleTipDismissed = () => {
-        setShowActionTip(false);
-        props.handleDropdownOpened!(false);
-    };
-
-    const getDotMenuRef = () => dotMenuRef.current;
-
     const isPostDeleted = post && post.state === Posts.POST_DELETED;
-    const hoverLocal = props.hover || showEmojiPicker || showDotMenu || showActionsMenu || showActionTip;
+    const hoverLocal = props.hover || showEmojiPicker || showDotMenu || showActionsMenu;
     const showCommentIcon = isFromAutoResponder || (!systemMessage && (isMobileView ||
             hoverLocal || (!post.root_id && Boolean(props.hasReplies)) ||
             props.isFirstReply) && props.location === Locations.CENTER);
@@ -139,12 +127,14 @@ const PostOptions = (props: Props): JSX.Element => {
     let commentIcon;
     if (showCommentIcon) {
         commentIcon = (
-            <CommentIcon
-                handleCommentClick={props.handleCommentClick}
-                postId={post.id}
-                extraClass={commentIconExtraClass}
-                commentCount={props.collapsedThreadsEnabled ? 0 : props.replyCount}
-            />
+            <li>
+                <CommentIcon
+                    handleCommentClick={props.handleCommentClick}
+                    postId={post.id}
+                    extraClass={commentIconExtraClass}
+                    commentCount={props.collapsedThreadsEnabled ? 0 : props.replyCount}
+                />
+            </li>
         );
     }
 
@@ -152,13 +142,17 @@ const PostOptions = (props: Props): JSX.Element => {
 
     let showRecentReactions: ReactNode;
     if (showRecentlyUsedReactions) {
+        const showMoreReactions = props.isExpanded ||
+            props.location === 'CENTER' ||
+            (document.getElementById('sidebar-right')?.getBoundingClientRect().width ?? 0) > Constants.SIDEBAR_MINIMUM_WIDTH;
+
         showRecentReactions = (
             <PostRecentReactions
                 channelId={post.channel_id}
                 postId={post.id}
                 teamId={props.teamId}
                 emojis={props.recentEmojis}
-                size={props.isExpanded || props.location === 'CENTER' ? 3 : 1}
+                size={showMoreReactions ? 3 : 1}
             />
         );
     }
@@ -167,56 +161,79 @@ const PostOptions = (props: Props): JSX.Element => {
     let postReaction;
     if (showReactionIcon) {
         postReaction = (
-            <PostReaction
-                channelId={post.channel_id}
-                location={props.location}
-                postId={post.id}
-                teamId={props.teamId}
-                getDotMenuRef={getDotMenuRef}
-                showEmojiPicker={showEmojiPicker}
-                toggleEmojiPicker={toggleEmojiPicker}
-            />
+            <li>
+                <PostReaction
+                    channelId={post.channel_id}
+                    location={props.location}
+                    postId={post.id}
+                    teamId={props.teamId}
+                    showEmojiPicker={showEmojiPicker}
+                    setShowEmojiPicker={toggleEmojiPicker}
+                />
+            </li>
         );
     }
 
     let flagIcon: ReactNode = null;
     if (!isMobileView && (!isEphemeral && !post.failed && !systemMessage)) {
         flagIcon = (
-            <PostFlagIcon
-                location={props.location}
-                postId={post.id}
-                isFlagged={props.isFlagged}
-            />
+            <li>
+                <PostFlagIcon
+                    location={props.location}
+                    postId={post.id}
+                    isFlagged={props.isFlagged}
+                />
+            </li>
         );
     }
 
     // Action menus
     const showActionsMenuIcon = props.shouldShowActionsMenu && (isMobileView || hoverLocal);
     const actionsMenu = showActionsMenuIcon && (
-        <ActionsMenu
-            post={post}
-            location={props.location}
-            handleDropdownOpened={handleActionsMenuOpened}
-            isMenuOpen={showActionsMenu}
-            showPulsatingDot={tourTipsEnabled && showActionsMenuPulsatingDot}
-            showTutorialTip={tourTipsEnabled && showActionTip}
-            handleOpenTip={handleActionsMenuTipOpened}
-            handleNextTip={handleActionsMenuGotItClick}
-            handleDismissTip={handleTipDismissed}
-        />
+        <li>
+            <ActionsMenu
+                post={post}
+                location={props.location}
+                handleDropdownOpened={handleActionsMenuOpened}
+                isMenuOpen={showActionsMenu}
+            />
+        </li>
     );
+
+    let pluginItems: ReactNode = null;
+    if ((!isEphemeral && !post.failed && !systemMessage) && hoverLocal) {
+        pluginItems = props.pluginActions?.
+            map((item) => {
+                if (item.component) {
+                    const Component = item.component;
+                    return (
+                        <Component
+
+                            // @ts-expect-error not sure if its safe to remove so i silented it
+                            location={props.location}
+                            post={props.post}
+                            key={item.id}
+                        />
+                    );
+                }
+                return null;
+            }) || [];
+    }
+
     const dotMenu = (
-        <DotMenu
-            post={props.post}
-            location={props.location}
-            isFlagged={props.isFlagged}
-            handleDropdownOpened={handleDotMenuOpened}
-            handleCommentClick={props.handleCommentClick}
-            handleAddReactionClick={toggleEmojiPicker}
-            isReadOnly={isReadOnly || channelIsArchived}
-            isMenuOpen={showDotMenu}
-            enableEmojiPicker={props.enableEmojiPicker}
-        />
+        <li>
+            <DotMenu
+                post={props.post}
+                location={props.location}
+                isFlagged={props.isFlagged}
+                handleDropdownOpened={handleDotMenuOpened}
+                handleCommentClick={props.handleCommentClick}
+                handleAddReactionClick={toggleEmojiPicker}
+                isReadOnly={isReadOnly || channelIsArchived}
+                isMenuOpen={showDotMenu}
+                enableEmojiPicker={props.enableEmojiPicker}
+            />
+        </li>
     );
 
     // Build post options
@@ -232,15 +249,16 @@ const PostOptions = (props: Props): JSX.Element => {
                 </button>
             </div>
         );
-    } else if (isPostDeleted || !props.shouldShowDotMenu) {
+    } else if (isPostDeleted || (systemMessage && !props.canDelete)) {
         options = null;
     } else if (props.location === Locations.SEARCH) {
         const hasCRTFooter = props.collapsedThreadsEnabled && !post.root_id && (post.reply_count > 0 || post.is_following);
         options = (
-            <div className='col__controls post-menu'>
+            <ul className='col__controls post-menu'>
                 {dotMenu}
                 {flagIcon}
                 {props.canReply && !hasCRTFooter &&
+                <li>
                     <CommentIcon
                         location={props.location}
                         handleCommentClick={props.handleCommentClick}
@@ -249,34 +267,37 @@ const PostOptions = (props: Props): JSX.Element => {
                         searchStyle={'search-item__comment'}
                         extraClass={props.replyCount ? 'icon--visible' : ''}
                     />
+                </li>
                 }
-                <a
-                    href='#'
-                    onClick={props.handleJumpClick}
-                    className='search-item__jump'
-                >
-                    <FormattedMessage
-                        id='search_item.jump'
-                        defaultMessage='Jump'
-                    />
-                </a>
-            </div>
+                <li>
+                    <a
+                        href='#'
+                        onClick={props.handleJumpClick}
+                        className='search-item__jump'
+                    >
+                        <FormattedMessage
+                            id='search_item.jump'
+                            defaultMessage='Jump'
+                        />
+                    </a>
+                </li>
+            </ul>
         );
     } else if (!props.isPostBeingEdited) {
         options = (
-            <div
-                ref={dotMenuRef}
+            <ul
                 data-testid={`post-menu-${props.post.id}`}
-                className='col post-menu'
+                className={classnames('col post-menu', {'post-menu--position': !hoverLocal && showCommentIcon})}
             >
                 {!collapsedThreadsEnabled && !showRecentlyUsedReactions && dotMenu}
                 {showRecentReactions}
                 {postReaction}
                 {flagIcon}
+                {pluginItems}
                 {actionsMenu}
                 {commentIcon}
                 {(collapsedThreadsEnabled || showRecentlyUsedReactions) && dotMenu}
-            </div>
+            </ul>
         );
     }
 

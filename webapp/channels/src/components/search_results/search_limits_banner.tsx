@@ -33,7 +33,7 @@ border-radius: 4px;
 background-color: rgba(var(--center-channel-color-rgb), 0.04);
 padding: 10px;
 margin: 10px;
-color: rgba(var(--center-channel-color-rgb), 0.72);
+color: rgba(var(--center-channel-color-rgb), 0.75);
 font-weight: 400;
 font-size: 11px;
 line-height: 16px;
@@ -46,11 +46,11 @@ type Props = {
 
 function SearchLimitsBanner(props: Props) {
     const {formatMessage, formatNumber} = useIntl();
-    const openPricingModal = useOpenPricingModal();
     const usage = useGetUsage();
     const [cloudLimits] = useGetLimits();
     const isAdminUser = isAdmin(useSelector(getCurrentUser).roles);
     const isCloud = useSelector(isCurrentLicenseCloud);
+    const openPricingModal = useOpenPricingModal();
 
     if (!isCloud) {
         return null;
@@ -94,9 +94,7 @@ function SearchLimitsBanner(props: Props) {
             ctaAction,
             storage: asGBString(fileStorageLimit, formatNumber),
             a: (chunks: React.ReactNode | React.ReactNodeArray) => (
-                <StyledA
-                    onClick={() => openPricingModal({trackingLocation: 'file_search_limits_banner'})}
-                >
+                <StyledA >
                     {chunks}
                 </StyledA>
             ),

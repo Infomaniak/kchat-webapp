@@ -4,7 +4,7 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
-import BleveSettings from 'components/admin_console/bleve_settings.jsx';
+import BleveSettings from 'components/admin_console/bleve_settings';
 
 jest.mock('actions/admin_actions.jsx', () => {
     return {

@@ -13,7 +13,7 @@ import {getFirstAdminSetupComplete as getFirstAdminSetupCompleteAction} from 'ma
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
 import {getFirstAdminSetupComplete, getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
+import {getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 import {isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
@@ -25,22 +25,19 @@ import LogoSvg from 'components/common/svg_images_components/logo_dark_blue_svg'
 import Constants from 'utils/constants';
 
 import LaunchingWorkspace, {START_TRANSITIONING_OUT} from './launching_workspace';
-import Plugins from './plugins';
 import Progress from './progress';
-import type {
-    WizardStep,
-    AnimationReason,
-    Form} from './steps';
 import {
     WizardSteps,
     Animations,
     emptyForm,
-    mapStepToNextName,
-    mapStepToSkipName,
     mapStepToPageView,
     mapStepToSubmitFail,
     PLUGIN_NAME_TO_ID_MAP,
 } from './steps';
+import type {
+    WizardStep,
+    AnimationReason,
+    Form} from './steps';
 
 import './preparing_workspace.scss';
 
@@ -58,13 +55,13 @@ type SubmissionState = typeof SubmissionStates[keyof typeof SubmissionStates];
 const WAIT_FOR_REDIRECT_TIME = 2000 - START_TRANSITIONING_OUT;
 
 export type Actions = {
-    createTeam: (team: Team) => ActionResult;
-    checkIfTeamExists: (teamName: string) => ActionResult;
-    getProfiles: (page: number, perPage: number, options: Record<string, any>) => ActionResult;
+    createTeam: (team: Team) => Promise<ActionResult>;
+    updateTeam: (team: Team) => Promise<ActionResult>;
+    checkIfTeamExists: (teamName: string) => Promise<ActionResult<boolean>>;
+    getProfiles: (page: number, perPage: number, options: Record<string, any>) => Promise<ActionResult>;
 }
 
 type Props = RouterProps & {
-    handleForm(form: Form): void;
     background?: JSX.Element | string;
     actions: Actions;
 }
@@ -82,16 +79,24 @@ function makeSubmitFail(step: WizardStep) {
 }
 
 const trackSubmitFail = {
+    [WizardSteps.Organization]: makeSubmitFail(WizardSteps.Organization),
     [WizardSteps.Plugins]: makeSubmitFail(WizardSteps.Plugins),
+    [WizardSteps.InviteMembers]: makeSubmitFail(WizardSteps.InviteMembers),
     [WizardSteps.LaunchingWorkspace]: makeSubmitFail(WizardSteps.LaunchingWorkspace),
 };
 
 const onPageViews = {
+    [WizardSteps.Organization]: makeOnPageView(WizardSteps.Organization),
     [WizardSteps.Plugins]: makeOnPageView(WizardSteps.Plugins),
+    [WizardSteps.InviteMembers]: makeOnPageView(WizardSteps.InviteMembers),
     [WizardSteps.LaunchingWorkspace]: makeOnPageView(WizardSteps.LaunchingWorkspace),
 };
 
-const PreparingWorkspace = (props: Props) => {
+const PreparingWorkspace = ({
+    actions,
+    history,
+    background,
+}: Props) => {
     const dispatch = useDispatch();
     const intl = useIntl();
     const genericSubmitError = intl.formatMessage({
@@ -99,7 +104,7 @@ const PreparingWorkspace = (props: Props) => {
         defaultMessage: 'Something went wrong. Please try again.',
     });
     const isUserFirstAdmin = useSelector(isFirstAdmin);
-    const useCaseOnboarding = useSelector(getUseCaseOnboarding);
+    const onboardingFlowEnabled = useSelector(getIsOnboardingFlowEnabled);
 
     const currentTeam = useSelector(getCurrentTeam);
     const myTeams = useSelector(getMyKSuites);
@@ -142,12 +147,10 @@ const PreparingWorkspace = (props: Props) => {
         }
     }, [pluginsEnabled, currentStep, mostRecentStep]);
 
-    const [showFirstPage, setShowFirstPage] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
 
     useEffect(() => {
-        showOnMountTimeout.current = setTimeout(() => setShowFirstPage(true), 40);
-        props.actions.getProfiles(0, General.PROFILE_CHUNK_SIZE, {roles: General.SYSTEM_ADMIN_ROLE});
+        actions.getProfiles(0, General.PROFILE_CHUNK_SIZE, {roles: General.SYSTEM_ADMIN_ROLE});
         dispatch(getFirstAdminSetupCompleteAction());
         document.body.classList.add('admin-onboarding');
         return () => {
@@ -157,30 +160,6 @@ const PreparingWorkspace = (props: Props) => {
             }
         };
     }, []);
-
-    const shouldShowPage = (step: WizardStep) => {
-        if (currentStep !== step) {
-            return false;
-        }
-        const isFirstPage = stepOrder.indexOf(step) === 0;
-        if (isFirstPage) {
-            return showFirstPage;
-        }
-        return true;
-    };
-    const makeNext = useCallback((currentStep: WizardStep, skip?: boolean) => {
-        return function innerMakeNext(trackingProps?: Record<string, any>) {
-            const stepIndex = stepOrder.indexOf(currentStep);
-            if (stepIndex === -1 || stepIndex >= stepOrder.length) {
-                return;
-            }
-            setStepHistory([currentStep, stepOrder[stepIndex + 1]]);
-            setSubmitError(null);
-
-            const progressName = (skip ? mapStepToSkipName : mapStepToNextName)(currentStep);
-            trackEvent('first_admin_setup', progressName, trackingProps);
-        };
-    }, [stepOrder]);
 
     const redirectWithError = useCallback((redirectTo: WizardStep, error: string) => {
         setStepHistory([WizardSteps.LaunchingWorkspace, redirectTo]);
@@ -205,8 +184,10 @@ const PreparingWorkspace = (props: Props) => {
         // This endpoint sets setup complete state, so we need to make this request
         // even if admin skipped submitting plugins.
         const completeSetupRequest = {
+            organization: form.organization,
             install_plugins: pluginsToSetup,
         };
+
         try {
             await Client4.completeSetup(completeSetupRequest);
             dispatch({type: GeneralTypes.FIRST_ADMIN_COMPLETE_SETUP_RECEIVED, data: true});
@@ -217,11 +198,13 @@ const PreparingWorkspace = (props: Props) => {
 
         const goToChannels = () => {
             dispatch({type: GeneralTypes.SHOW_LAUNCHING_WORKSPACE, open: true});
-            props.history.push(`/${team.name}/channels${Constants.DEFAULT_CHANNEL}`);
+            history.push(`/${team.name}/channels/${Constants.DEFAULT_CHANNEL}`);
+            trackEvent('first_admin_setup', 'admin_setup_complete');
         };
 
         const sendFormEnd = Date.now();
         const timeToWait = WAIT_FOR_REDIRECT_TIME - (sendFormEnd - sendFormStart);
+
         if (timeToWait > 0) {
             setTimeout(goToChannels, timeToWait);
         } else {
@@ -237,10 +220,11 @@ const PreparingWorkspace = (props: Props) => {
     }, [submissionState]);
 
     const adminRevisitedPage = firstAdminSetupComplete && submissionState === SubmissionStates.Presubmit;
-    const shouldRedirect = !isUserFirstAdmin || adminRevisitedPage || !useCaseOnboarding;
+    const shouldRedirect = !isUserFirstAdmin || adminRevisitedPage || !onboardingFlowEnabled;
+
     useEffect(() => {
         if (shouldRedirect) {
-            props.history.push('/');
+            history.push('/');
         }
     }, [shouldRedirect]);
 
@@ -257,19 +241,6 @@ const PreparingWorkspace = (props: Props) => {
         return stepIndex > currentStepIndex ? Animations.Reasons.ExitToBefore : Animations.Reasons.ExitToAfter;
     };
 
-    const skipPlugins = useCallback((skipped: boolean) => {
-        if (skipped === form.plugins.skipped) {
-            return;
-        }
-        setForm({
-            ...form,
-            plugins: {
-                ...form.plugins,
-                skipped,
-            },
-        });
-    }, [form]);
-
     return (
         <div className='PreparingWorkspace PreparingWorkspaceContainer'>
             {submissionState === SubmissionStates.SubmitFail && submitError && (
@@ -282,7 +253,7 @@ const PreparingWorkspace = (props: Props) => {
                     />
                 </div>
             )}
-            {props.background}
+            {background}
             <div className='PreparingWorkspace__logo'>
                 <LogoSvg/>
             </div>
@@ -292,34 +263,6 @@ const PreparingWorkspace = (props: Props) => {
                 transitionSpeed={Animations.PAGE_SLIDE}
             />
             <div className='PreparingWorkspacePageContainer'>
-                <Plugins
-                    onPageView={onPageViews[WizardSteps.Plugins]}
-                    next={() => {
-                        const pluginChoices = {...form.plugins};
-                        delete pluginChoices.skipped;
-                        setSubmissionState(SubmissionStates.UserRequested);
-                        makeNext(WizardSteps.Plugins)(pluginChoices);
-                        skipPlugins(false);
-                    }}
-                    skip={() => {
-                        setSubmissionState(SubmissionStates.UserRequested);
-                        makeNext(WizardSteps.Plugins, true)();
-                        skipPlugins(true);
-                    }}
-                    options={form.plugins}
-                    setOption={(option: keyof Form['plugins']) => {
-                        setForm({
-                            ...form,
-                            plugins: {
-                                ...form.plugins,
-                                [option]: !form.plugins[option],
-                            },
-                        });
-                    }}
-                    show={shouldShowPage(WizardSteps.Plugins)}
-                    transitionDirection={getTransitionDirection(WizardSteps.Plugins)}
-                    className='child-page'
-                />
                 <LaunchingWorkspace
                     onPageView={onPageViews[WizardSteps.LaunchingWorkspace]}
                     show={currentStep === WizardSteps.LaunchingWorkspace}

@@ -5,23 +5,45 @@ import semver from 'semver';
 
 import type {DesktopAPI} from '@mattermost/desktop-api';
 
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+
+import {setTheme} from 'actions/views/theme';
+import store from 'stores/redux_store';
+
 import {isDesktopApp} from 'utils/user_agent';
+import * as UserAgent from 'utils/user_agent';
+
+import {isServerVersionGreaterThanOrEqualTo} from './server_version';
 
 declare global {
     interface Window {
-        desktopAPI?: Partial<DesktopAPI>;
+        desktopAPI?: Partial<DesktopAPI & {
+            openKmeetCallWindow: (params: object) => void;
+            closeRingCallWindow: () => void;
+            isRingCallWindowOpen: () => Promise<boolean>;
+            openCallDialing: (callInfo: object) => boolean;
+        }>;
+        callManager?: Partial<{
+            onCallJoined: (callback: (_: any, props: {channelId: string; channelID?: string}) => void) => void;
+            onCallDeclined: (callback: (_: any, props: {channelId: string; channelID?: string}) => void) => void;
+            onCallEnded: (callback: (_: any, props: {channelID: string}) => void) => void;
+            onCallCancel: (callback: (_: any, props: {channelId: string}) => void) => void;
+        }>;
     }
 }
 
-class DesktopAppAPI {
+const dispatch = store.dispatch;
+
+export class DesktopAppAPI {
     private name?: string;
     private version?: string | null;
+    private prereleaseVersion?: string;
     private dev?: boolean;
 
     /**
      * @deprecated
      */
-    private postMessageListeners?: Map<string, Set<(message: unknown) => void>>;
+    private postMessageListeners?: Map<string, Set<(message: unknown, rest: unknown) => void>>;
 
     constructor() {
         // Check the user agent string first
@@ -29,15 +51,25 @@ class DesktopAppAPI {
             return;
         }
 
-        this.getDesktopAppInfo().then(({name, version}) => {
+        this.getDesktopAppInfo().then(({name, version, ...rest}) => {
             this.name = name;
             this.version = semver.valid(semver.coerce(version));
+            this.prereleaseVersion = version?.split('-')?.[1];
 
             // Legacy Desktop App version, used by some plugins
             if (!window.desktop) {
                 window.desktop = {};
             }
+
             window.desktop.version = semver.valid(semver.coerce(version));
+            if (isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '3.1.0') && 'theme' in rest) {
+                // May be undefined as declared in src/common/Validator.ts:152 in the desktop app
+                if (!rest.theme) {
+                    return;
+                }
+                window.desktop.theme = rest.theme as Theme;
+                dispatch(setTheme(window.desktop.theme as Theme));
+            }
         });
         window.desktopAPI?.isDev?.().then((isDev) => {
             this.dev = isDev;
@@ -63,16 +95,20 @@ class DesktopAppAPI {
         return this.version;
     };
 
+    getPrereleaseVersion = () => {
+        return this.prereleaseVersion;
+    };
+
     isDev = () => {
         return this.dev;
     };
 
     private getDesktopAppInfo = () => {
-        if (window.desktopAPI?.getAppInfo) {
-            return window.desktopAPI.getAppInfo();
-        }
+        // if (window.desktopAPI?.getAppInfo) {
+        //     return window.desktopAPI.getAppInfo();
+        // }
 
-        return this.invokeWithMessaging<void, {name: string; version: string}>(
+        return this.invokeWithMessaging<void, {name: string; version: string; theme?: object}>(
             'webapp-ready',
             undefined,
             'register-desktop',
@@ -152,11 +188,43 @@ class DesktopAppAPI {
         return () => this.removePostMessageListener('history-button-return', legacyListener);
     };
 
+    onThemeChangedGlobal = (listener: (theme: Theme) => void) => {
+        const legacyListener = (_: any, {theme}: {theme: Theme}) => listener(theme);
+        this.addPostMessageListener('theme-changed-global', legacyListener);
+
+        return () => this.removePostMessageListener('theme-changed-global', legacyListener);
+    };
+
+    onGetServerTheme = (listener: () => void) => {
+        const legacyListener = () => listener();
+        this.addPostMessageListener('get-server-theme', legacyListener);
+
+        return () => this.removePostMessageListener('get-server-theme', legacyListener);
+    };
+
+    onTeamsOrderUpdated = (listener: (teamsOrder: string[]) => void) => {
+        const legacyListener = ({teamsOrder}: {teamsOrder: string[]}) => listener(teamsOrder);
+        this.addPostMessageListener('teams-order-updated', legacyListener);
+
+        return () => this.removePostMessageListener('teams-order-updated', legacyListener);
+    };
+
+    onSwitchServerSidebar = (listener: (serverId: string) => void) => {
+        const legacyListener = ({serverId}: {serverId: string}) => listener(serverId);
+        this.addPostMessageListener('switch-server-sidebar', legacyListener);
+
+        return () => this.removePostMessageListener('switch-server-sidebar', legacyListener);
+    };
+
+    onReceiveMetrics = (listener: (metricsMap: Map<string, {cpu?: number; memory?: number}>) => void) => {
+        return window.desktopAPI?.onSendMetrics?.(listener);
+    };
+
     /**
      * One-ways
      */
 
-    dispatchNotification = (
+    dispatchNotification = async (
         title: string,
         body: string,
         channelId: string,
@@ -166,8 +234,8 @@ class DesktopAppAPI {
         url: string,
     ) => {
         if (window.desktopAPI?.sendNotification) {
-            window.desktopAPI.sendNotification(title, body, channelId, teamId, url, silent, soundName);
-            return;
+            const result = await window.desktopAPI.sendNotification(title, body, channelId, teamId, url, silent, soundName);
+            return result ?? {status: 'unsupported', reason: 'desktop_app_unsupported'};
         }
 
         // get the desktop app to trigger the notification
@@ -186,6 +254,7 @@ class DesktopAppAPI {
             },
             window.location.origin,
         );
+        return {status: 'unsupported', reason: 'desktop_app_unsupported'};
     };
 
     doBrowserHistoryPush = (path: string) => {
@@ -206,6 +275,9 @@ class DesktopAppAPI {
     updateUnreadsAndMentions = (isUnread: boolean, mentionCount: number) =>
         window.desktopAPI?.setUnreadsAndMentions && window.desktopAPI.setUnreadsAndMentions(isUnread, mentionCount);
     setSessionExpired = (expired: boolean) => window.desktopAPI?.setSessionExpired && window.desktopAPI.setSessionExpired(expired);
+    signalLogin = () => window.desktopAPI?.onLogin?.();
+    signalLogout = () => window.desktopAPI?.onLogout?.();
+    reactAppInitialized = () => window.desktopAPI?.reactAppInitialized?.();
 
     /*********************************************************************
      * Helper functions for legacy code
@@ -215,7 +287,7 @@ class DesktopAppAPI {
     /**
      * @deprecated
      */
-    private postMessageListener = ({origin, data: {type, message}}: {origin: string; data: {type: string; message: unknown}}) => {
+    private postMessageListener = ({origin, data: {type, message, ...rest}}: {origin: string; data: {type: string; message: unknown}}) => {
         if (origin !== window.location.origin) {
             return;
         }
@@ -226,14 +298,14 @@ class DesktopAppAPI {
         }
 
         listeners.forEach((listener) => {
-            listener(message);
+            listener(message, rest);
         });
     };
 
     /**
      * @deprecated
      */
-    private addPostMessageListener = (channel: string, listener: (message: any) => void) => {
+    private addPostMessageListener = (channel: string, listener: (message: any, rest: any) => void) => {
         if (this.postMessageListeners?.has(channel)) {
             this.postMessageListeners.set(channel, this.postMessageListeners.get(channel)!.add(listener));
         } else {
@@ -244,7 +316,7 @@ class DesktopAppAPI {
     /**
      * @deprecated
      */
-    private removePostMessageListener = (channel: string, listener: (message: any) => void) => {
+    private removePostMessageListener = (channel: string, listener: (message: any, rest: any) => void) => {
         const set = this.postMessageListeners?.get(channel);
         set?.delete(listener);
         if (set?.size) {

@@ -1,22 +1,22 @@
 .modal{
 
     &.fade .menuModal.modal-dialog {
-        transform: translate(0, 25%);
         -webkit-transform: translate(0, 25%);
+        transform: translate(0, 25%);
     }
 
     &.fade.in .menuModal.modal-dialog {
-        transform: translate(0, 0) !important;
         -webkit-transform: translate(0, 0) !important;
+        transform: translate(0, 0) !important;
     }
 
     .GenericModal.menuModal.modal-dialog {
         position: absolute;
-        height: auto;
         top: auto;
+        right: 0;
         bottom: 0;
         left: 0;
-        right: 0;
+        height: auto;
         margin: 0;
     }
 }

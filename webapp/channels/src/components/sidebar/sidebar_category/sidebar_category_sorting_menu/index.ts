@@ -9,8 +9,6 @@ import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getVisibleDmGmLimit} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
-import Constants from 'utils/constants';
-
 import type {GlobalState} from 'types/store';
 
 import SidebarCategorySortingMenu from './sidebar_category_sorting_menu';

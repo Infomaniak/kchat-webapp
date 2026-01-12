@@ -1,18 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {render, fireEvent, screen} from '@testing-library/react';
 import {shallow} from 'enzyme';
-import type {ComponentProps} from 'react';
 import React from 'react';
-import {IntlProvider} from 'react-intl';
-import {Provider} from 'react-redux';
+import type {ComponentProps} from 'react';
 
 import {Preferences} from 'mattermost-redux/constants';
 
-import UserSettingsTheme from 'components/user_settings/display/user_settings_theme/user_settings_theme';
-
-import mockStore from 'tests/test_store';
+import UserSettingsTheme from './user_settings_theme';
 
 jest.mock('utils/utils', () => ({
     applyTheme: jest.fn(),
@@ -20,29 +15,13 @@ jest.mock('utils/utils', () => ({
     a11yFocus: jest.fn(),
 }));
 
-describe('components/user_settings/display/user_settings_theme/user_settings_theme.jsx', () => {
-    const initialState = {
-        entities: {
-            general: {
-                config: {},
-                license: {
-                    Cloud: 'false',
-                },
-            },
-            users: {
-                currentUserId: 'currentUserId',
-            },
-        },
-    };
-    const store = mockStore(initialState);
-
+describe('components/user_settings/display/user_settings_theme/user_settings_theme', () => {
     const requiredProps: ComponentProps<typeof UserSettingsTheme> = {
         theme: Preferences.THEMES.denim,
         currentTeamId: 'teamId',
         selected: false,
         updateSection: jest.fn(),
         setRequireConfirm: jest.fn(),
-        setEnforceFocus: jest.fn(),
         actions: {
             saveTheme: jest.fn().mockResolvedValue({data: true}),
             deleteTeamSpecificThemes: jest.fn().mockResolvedValue({data: true}),
@@ -105,12 +84,9 @@ describe('components/user_settings/display/user_settings_theme/user_settings_the
     //         selected: true,
     //     };
 
-    //     render(
-    //         <IntlProvider locale={'en'}>
-    //             <Provider store={store}>
-    //                 <UserSettingsTheme {...props}/>
-    //             </Provider>
-    //         </IntlProvider>,
+    //     renderWithContext(
+    //         <UserSettingsTheme {...props}/>,
+    //         initialState,
     //     );
 
     //     // Click the Slack Import button

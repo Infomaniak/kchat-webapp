@@ -11,8 +11,8 @@ exports[`components/SearchableChannelList should match init snapshot 1`] = `
       aria-hidden="true"
       id="searchIcon"
     >
-      <MagnifyIcon
-        size={18}
+      <i
+        className="icon icon-magnify"
       />
     </span>
     <QuickInput
@@ -22,6 +22,7 @@ exports[`components/SearchableChannelList should match init snapshot 1`] = `
       id="searchChannelsTextbox"
       onClear={[Function]}
       onInput={[Function]}
+      placeholder="Search channels"
       value=""
     />
   </div>
@@ -70,7 +71,7 @@ exports[`components/SearchableChannelList should match init snapshot 1`] = `
             />
           }
           leadingElement={
-            <GlobeIcon
+            <GlobeCheckedIcon
               size={16}
             />
           }

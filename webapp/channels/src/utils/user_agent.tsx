@@ -51,6 +51,10 @@ iOS App:
 
 const userAgent = () => window.navigator.userAgent;
 
+export function isPWA(): boolean {
+    return window.matchMedia('(display-mode: standalone)').matches;
+}
+
 export function isChrome(): boolean {
     return userAgent().indexOf('Chrome') > -1 && userAgent().indexOf('Edge') === -1;
 }
@@ -65,6 +69,10 @@ export function isIosSafari(): boolean {
 
 export function isIosChrome(): boolean {
     return userAgent().indexOf('CriOS') !== -1;
+}
+
+export function isIosFirefox(): boolean {
+    return userAgent().indexOf('FxiOS') !== -1;
 }
 
 export function isIosWeb(): boolean {
@@ -101,6 +109,10 @@ export function isMobileApp(): boolean {
     return isMobile() && !isIosWeb() && !isAndroidWeb();
 }
 
+export function isMobileBrowser(): boolean {
+    return isMobile() && !isMobileApp();
+}
+
 // Returns true if and only if the user is using Mattermost from either the mobile app or the web browser on a mobile device.
 export function isMobile(): boolean {
     return isIos() || isAndroid();
@@ -122,6 +134,10 @@ export function isEdge(): boolean {
     return userAgent().indexOf('Edge') !== -1;
 }
 
+export function isChromiumEdge(): boolean {
+    return userAgent().indexOf('Edg') !== -1 && userAgent().indexOf('Edge') === -1;
+}
+
 export function isDesktopApp(): boolean {
     return userAgent().indexOf('Mattermost') !== -1 && userAgent().indexOf('Electron') !== -1;
 }
@@ -132,6 +148,10 @@ export function isWindowsApp(): boolean {
 
 export function isMacApp(): boolean {
     return isDesktopApp() && isMac();
+}
+
+export function isNotMacMas(): boolean {
+    return isMacApp() && userAgent().indexOf('Mas') === -1;
 }
 
 export function isWindows(): boolean {

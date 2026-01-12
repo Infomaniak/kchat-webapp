@@ -6,7 +6,6 @@ exports[`components/admin_console/data_grid/DataGrid should match snapshot while
 >
   <DataGridSearch
     onSearch={[Function]}
-    placeholder=""
     term=""
   />
   <DataGridHeader
@@ -19,9 +18,7 @@ exports[`components/admin_console/data_grid/DataGrid should match snapshot while
     <div
       className="DataGrid_loading"
     >
-      <LoadingSpinner
-        text={null}
-      />
+      <Memo(LoadingSpinner) />
       <MemoizedFormattedMessage
         defaultMessage="Loading"
         id="admin.data_grid.loading"
@@ -37,7 +34,6 @@ exports[`components/admin_console/data_grid/DataGrid should match snapshot with 
 >
   <DataGridSearch
     onSearch={[Function]}
-    placeholder=""
     term=""
   />
   <DataGridHeader
@@ -149,7 +145,6 @@ exports[`components/admin_console/data_grid/DataGrid should match snapshot with 
 >
   <DataGridSearch
     onSearch={[Function]}
-    placeholder=""
     term=""
   />
   <DataGridHeader
@@ -249,7 +244,6 @@ exports[`components/admin_console/data_grid/DataGrid should match snapshot with 
 >
   <DataGridSearch
     onSearch={[Function]}
-    placeholder=""
     term=""
   />
   <DataGridHeader

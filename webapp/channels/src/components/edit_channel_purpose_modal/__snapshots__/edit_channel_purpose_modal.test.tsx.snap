@@ -28,7 +28,7 @@ exports[`comoponents/EditChannelPurposeModal clear error on next 1`] = `
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
 >
   <ModalHeader
@@ -89,7 +89,7 @@ exports[`comoponents/EditChannelPurposeModal clear error on next 1`] = `
     componentClass="div"
   >
     <button
-      className="btn btn-link cancel-button"
+      className="btn btn-tertiary cancel-button"
       onClick={[Function]}
       type="button"
     >
@@ -99,7 +99,7 @@ exports[`comoponents/EditChannelPurposeModal clear error on next 1`] = `
       />
     </button>
     <button
-      className="btn btn-primary save-button"
+      className="btn btn-primary"
       disabled={false}
       onClick={[Function]}
       type="button"
@@ -141,7 +141,7 @@ exports[`comoponents/EditChannelPurposeModal match with modal error 1`] = `
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
 >
   <ModalHeader
@@ -202,7 +202,7 @@ exports[`comoponents/EditChannelPurposeModal match with modal error 1`] = `
     componentClass="div"
   >
     <button
-      className="btn btn-link cancel-button"
+      className="btn btn-tertiary cancel-button"
       onClick={[Function]}
       type="button"
     >
@@ -212,7 +212,7 @@ exports[`comoponents/EditChannelPurposeModal match with modal error 1`] = `
       />
     </button>
     <button
-      className="btn btn-primary save-button"
+      className="btn btn-primary"
       disabled={false}
       onClick={[Function]}
       type="button"
@@ -254,7 +254,7 @@ exports[`comoponents/EditChannelPurposeModal match with modal error with fake id
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
 >
   <ModalHeader
@@ -315,7 +315,7 @@ exports[`comoponents/EditChannelPurposeModal match with modal error with fake id
     componentClass="div"
   >
     <button
-      className="btn btn-link cancel-button"
+      className="btn btn-tertiary cancel-button"
       onClick={[Function]}
       type="button"
     >
@@ -325,7 +325,7 @@ exports[`comoponents/EditChannelPurposeModal match with modal error with fake id
       />
     </button>
     <button
-      className="btn btn-primary save-button"
+      className="btn btn-primary"
       disabled={false}
       onClick={[Function]}
       type="button"
@@ -367,7 +367,7 @@ exports[`comoponents/EditChannelPurposeModal should match for private channel 1`
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
 >
   <ModalHeader
@@ -418,7 +418,7 @@ exports[`comoponents/EditChannelPurposeModal should match for private channel 1`
     componentClass="div"
   >
     <button
-      className="btn btn-link cancel-button"
+      className="btn btn-tertiary cancel-button"
       onClick={[Function]}
       type="button"
     >
@@ -428,7 +428,7 @@ exports[`comoponents/EditChannelPurposeModal should match for private channel 1`
       />
     </button>
     <button
-      className="btn btn-primary save-button"
+      className="btn btn-primary"
       disabled={false}
       onClick={[Function]}
       type="button"
@@ -470,7 +470,7 @@ exports[`comoponents/EditChannelPurposeModal should match on init 1`] = `
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
 >
   <ModalHeader
@@ -521,7 +521,7 @@ exports[`comoponents/EditChannelPurposeModal should match on init 1`] = `
     componentClass="div"
   >
     <button
-      className="btn btn-link cancel-button"
+      className="btn btn-tertiary cancel-button"
       onClick={[Function]}
       type="button"
     >
@@ -531,7 +531,7 @@ exports[`comoponents/EditChannelPurposeModal should match on init 1`] = `
       />
     </button>
     <button
-      className="btn btn-primary save-button"
+      className="btn btn-primary"
       disabled={false}
       onClick={[Function]}
       type="button"
@@ -581,7 +581,7 @@ exports[`comoponents/EditChannelPurposeModal should match submitted 1`] = `
     dialogClassName="a11y__modal"
     handleDialogMouseDown={[Function]}
     onClick={[Function]}
-    role="dialog"
+    role="none"
     style={Object {}}
   >
     <ModalHeader
@@ -632,7 +632,7 @@ exports[`comoponents/EditChannelPurposeModal should match submitted 1`] = `
       componentClass="div"
     >
       <button
-        className="btn btn-link cancel-button"
+        className="btn btn-tertiary cancel-button"
         onClick={[Function]}
         type="button"
       >
@@ -642,7 +642,7 @@ exports[`comoponents/EditChannelPurposeModal should match submitted 1`] = `
         />
       </button>
       <button
-        className="btn btn-primary save-button"
+        className="btn btn-primary"
         disabled={false}
         onClick={[Function]}
         type="button"
@@ -685,7 +685,7 @@ exports[`comoponents/EditChannelPurposeModal should match with display name 1`] 
   onHide={[Function]}
   renderBackdrop={[Function]}
   restoreFocus={true}
-  role="dialog"
+  role="none"
   show={true}
 >
   <ModalHeader
@@ -736,7 +736,7 @@ exports[`comoponents/EditChannelPurposeModal should match with display name 1`] 
     componentClass="div"
   >
     <button
-      className="btn btn-link cancel-button"
+      className="btn btn-tertiary cancel-button"
       onClick={[Function]}
       type="button"
     >
@@ -746,7 +746,7 @@ exports[`comoponents/EditChannelPurposeModal should match with display name 1`] 
       />
     </button>
     <button
-      className="btn btn-primary save-button"
+      className="btn btn-primary"
       disabled={false}
       onClick={[Function]}
       type="button"

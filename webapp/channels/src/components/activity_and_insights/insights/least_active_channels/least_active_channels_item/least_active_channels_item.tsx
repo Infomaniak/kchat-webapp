@@ -93,7 +93,6 @@ const LeastActiveChannelsItem = ({channel, actionCallback}: Props) => {
             <Avatars
                 userIds={channel.participants}
                 size='xs'
-                disableProfileOverlay={true}
             />
             <ChannelActionsMenu
                 channel={channel}

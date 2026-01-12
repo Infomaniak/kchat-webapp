@@ -3,13 +3,12 @@
 
 import type {MockStoreEnhanced} from 'redux-mock-store';
 
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
-
 import {close, open, toggle} from 'actions/views/lhs';
 import configureStore from 'store';
 
-import mockStore from 'tests/test_store';
 import {ActionTypes} from 'utils/constants';
+
+import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
 
@@ -24,7 +23,7 @@ describe('lhs view actions', () => {
         },
     };
 
-    let store: MockStoreEnhanced<GlobalState, DispatchFunc>;
+    let store: MockStoreEnhanced<GlobalState>;
 
     beforeEach(() => {
         store = mockStore(initialState);

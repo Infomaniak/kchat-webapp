@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 

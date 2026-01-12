@@ -2,10 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
-
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import type {Dispatch} from 'redux';
 
 import {joinChannelById, switchToChannel} from 'actions/views/channel';
 import {closeRightHandSide} from 'actions/views/rhs';
@@ -14,7 +12,6 @@ import {getIsMobileView} from 'selectors/views/browser';
 
 import type {GlobalState} from 'types/store';
 
-import type {Props} from './quick_switch_modal';
 import QuickSwitchModal from './quick_switch_modal';
 
 function mapStateToProps(state: GlobalState) {
@@ -27,7 +24,7 @@ function mapStateToProps(state: GlobalState) {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc>, Props['actions']>({
+        actions: bindActionCreators({
             joinChannelById,
             switchToChannel,
             closeRightHandSide,

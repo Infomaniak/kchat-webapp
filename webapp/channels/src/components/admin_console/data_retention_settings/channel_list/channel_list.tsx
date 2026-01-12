@@ -1,7 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {debounce, isEqual} from 'lodash';
+import debounce from 'lodash/debounce';
+import isEqual from 'lodash/isEqual';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
@@ -13,7 +14,6 @@ import type {Column, Row} from 'components/admin_console/data_grid/data_grid';
 import DataGrid from 'components/admin_console/data_grid/data_grid';
 import type {FilterOptions} from 'components/admin_console/filter/filter';
 import TeamFilterDropdown from 'components/admin_console/filter/team_filter_dropdown';
-
 import './channel_list.scss';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import GlobeIcon from 'components/widgets/icons/globe_icon';
@@ -36,10 +36,10 @@ type Props = {
     channelsToAdd: Record<string, ChannelWithTeamData>;
 
     actions: {
-        searchChannels: (id: string, term: string, opts: ChannelSearchOpts) => Promise<{ data: ChannelWithTeamData[] }>;
-        getDataRetentionCustomPolicyChannels: (id: string, page: number, perPage: number) => Promise<{ data: ChannelWithTeamData[] }>;
-        setChannelListSearch: (term: string) => ActionResult;
-        setChannelListFilters: (filters: ChannelSearchOpts) => ActionResult;
+        searchChannels: (id: string, term: string, opts: ChannelSearchOpts) => Promise<ActionResult>;
+        getDataRetentionCustomPolicyChannels: (id: string, page: number, perPage: number) => Promise<ActionResult>;
+        setChannelListSearch: (term: string) => void;
+        setChannelListFilters: (filters: ChannelSearchOpts) => void;
     };
 }
 

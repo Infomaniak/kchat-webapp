@@ -9,7 +9,7 @@ import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
-import {loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
+import {getChannelPendingGuests, loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
 import {Permissions} from 'mattermost-redux/constants';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {
@@ -17,14 +17,16 @@ import {
     getCurrentChannelStats,
     getMembersInCurrentChannel,
     getMyCurrentChannelMembership,
+    getPendingGuestsInChannel,
     isCurrentChannelArchived,
 } from 'mattermost-redux/selectors/entities/channels';
+import {isCurrentChannelInPreview} from 'mattermost-redux/selectors/entities/common';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentRelativeTeamUrl, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {
     getActiveProfilesInCurrentChannelWithoutSorting,
-    getUserStatuses, searchActiveProfilesInCurrentChannel,
+    getUserStatuses, isCurrentUserGuestUser, searchActiveProfilesInCurrentChannel,
 } from 'mattermost-redux/selectors/entities/users';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
@@ -50,7 +52,7 @@ const buildProfileList = (
 ) => {
     const channelMembers: ChannelMember[] = [];
     profilesInCurrentChannel.forEach((profile) => {
-        if (!membersInCurrentChannel[profile.id]) {
+        if (!membersInCurrentChannel || !membersInCurrentChannel[profile.id]) {
             return;
         }
 
@@ -99,6 +101,7 @@ function mapStateToProps(state: GlobalState) {
     const currentTeam = getCurrentTeam(state);
     const currentUser = getMyCurrentChannelMembership(state);
     const {member_count: membersCount} = getCurrentChannelStats(state) || {member_count: 0};
+    const isGuestUser = isCurrentUserGuestUser(state);
 
     if (!channel) {
         return {
@@ -111,17 +114,20 @@ function mapStateToProps(state: GlobalState) {
             canManageMembers: false,
             canGoBack: false,
             teamUrl: '',
+            pendingGuests: {},
+            isGuestUser: false,
         } as unknown as Props;
     }
 
     const isArchived = isCurrentChannelArchived(state);
     const isPrivate = channel.type === Constants.PRIVATE_CHANNEL;
+    const isPreview = isCurrentChannelInPreview(state);
     const canManageMembers = haveIChannelPermission(
         state,
-        currentTeam.id,
+        currentTeam?.id,
         channel.id,
         isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS : Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS,
-    ) && !isArchived;
+    ) && !isArchived && !isPreview;
 
     const searchTerms = state.views.search.channelMembersRhsSearch || '';
 
@@ -142,6 +148,7 @@ function mapStateToProps(state: GlobalState) {
     const editing = getIsEditingMembers(state);
 
     const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
+    const pendingGuests = getPendingGuestsInChannel(state, channel.id);
 
     return {
         channel,
@@ -153,6 +160,8 @@ function mapStateToProps(state: GlobalState) {
         canManageMembers,
         channelMembers,
         editing,
+        pendingGuests,
+        isGuestUser,
     } as Props;
 }
 
@@ -168,6 +177,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             loadMyChannelMemberAndRole,
             setEditChannelMembers,
             searchProfilesAndChannelMembers,
+            getChannelPendingGuests,
         }, dispatch),
     };
 }

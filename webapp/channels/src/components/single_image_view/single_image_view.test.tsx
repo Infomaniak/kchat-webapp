@@ -19,6 +19,7 @@ describe('components/SingleImageView', () => {
             toggleEmbedVisibility: jest.fn(),
             openModal: jest.fn(),
             getFilePublicLink: jest.fn(),
+            saveFileToKDrive: jest.fn(),
         },
         enablePublicLink: false,
     };
@@ -57,7 +58,7 @@ describe('components/SingleImageView', () => {
             <SingleImageView {...baseProps}/>,
         );
 
-        wrapper.find('SizeAwareImage').at(0).simulate('click', {preventDefault: () => {}});
+        wrapper.find(SizeAwareImage).at(0).simulate('click', {preventDefault: () => { }});
         expect(baseProps.actions.openModal).toHaveBeenCalledTimes(1);
     });
 
@@ -75,7 +76,10 @@ describe('components/SingleImageView', () => {
         );
 
         const instance = wrapper.instance() as SingleImageView;
-        instance.toggleEmbedVisibility();
+        const event = {
+            stopPropagation: jest.fn(),
+        } as unknown as React.MouseEvent<HTMLButtonElement>;
+        instance.toggleEmbedVisibility(event);
         expect(props.actions.toggleEmbedVisibility).toHaveBeenCalledTimes(1);
         expect(props.actions.toggleEmbedVisibility).toBeCalledWith('original_post_id');
     });
@@ -85,7 +89,7 @@ describe('components/SingleImageView', () => {
             <SingleImageView {...baseProps}/>,
         );
         expect(wrapper.state('loaded')).toEqual(false);
-        wrapper.find(SizeAwareImage).prop('onImageLoaded')({width: 0, height: 0});
+        wrapper.find(SizeAwareImage).prop('onImageLoaded')?.({height: 0, width: 0});
         expect(wrapper.state('loaded')).toEqual(true);
         expect(wrapper).toMatchSnapshot();
     });

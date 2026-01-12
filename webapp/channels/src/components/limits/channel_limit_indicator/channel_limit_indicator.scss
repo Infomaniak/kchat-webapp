@@ -2,9 +2,23 @@
     display: flex;
     width: 100%;
     align-items: flex-start;
-    margin-top: 24px;
     padding: 16px;
+
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: 4px;
+    margin-top: 24px;
+    background: var(--center-channel-bg);
+    color: var(--center-channel-color);
     gap: 12px;
-    background: #F4F6FD;
-    border-radius: 10px;
+
+    &__trigger-upgrade {
+        padding: 0;
+        border: none;
+        background: none;
+        color: var(--link-color);
+        cursor: pointer;
+        font: inherit;
+        text-decoration: underline;
+    }
 }
+

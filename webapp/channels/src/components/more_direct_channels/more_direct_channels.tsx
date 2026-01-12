@@ -1,35 +1,36 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {GenericModal} from '@mattermost/components';
+import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import type MultiSelect from 'components/multiselect/multiselect';
+import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 
+import {focusElement} from 'utils/a11y_utils';
 import {getHistory} from 'utils/browser_history';
 import Constants, {ModalIdentifiers} from 'utils/constants';
 
+import type {ModalData} from 'types/actions';
+
 import List from './list';
 import {USERS_PER_PAGE} from './list/list';
-import type {
-    OptionValue} from './types';
-import {
-    isGroupChannel,
-    optionValue,
-} from './types';
+import {isGroupChannel, optionValue} from './types';
+import type {OptionValue} from './types';
 
-import './more_direct_channels.scss';
+import CreateChannelTip from '../create_channel_tip/create_channel_tip';
 
 export type Props = {
     currentUserId: string;
-    currentTeamId: string;
-    currentTeamName: string;
+    currentTeamId?: string;
+    currentTeamName?: string;
     searchTerm: string;
     users: UserProfile[];
     totalCount: number;
@@ -51,25 +52,25 @@ export type Props = {
     onModalDismissed?: () => void;
     onExited?: () => void;
     actions: {
-        getProfiles: (page?: number | undefined, perPage?: number | undefined, options?: any) => Promise<any>;
-        getProfilesInTeam: (teamId: string, page: number, perPage?: number | undefined, sort?: string | undefined, options?: any) => Promise<any>;
+        getProfiles: (page?: number, perPage?: number, options?: any) => Promise<ActionResult>;
+        getProfilesInTeam: (teamId: string, page: number, perPage?: number, sort?: string, options?: any) => Promise<ActionResult>;
         loadProfilesMissingStatus: (users: UserProfile[]) => void;
         getTotalUsersStats: () => void;
-        loadStatusesForProfilesList: (users: any) => {
-            data: boolean;
-        };
-        loadProfilesForGroupChannels: (groupChannels: any) => void;
-        openDirectChannelToUserId: (userId: any) => Promise<any>;
-        openGroupChannelToUserIds: (userIds: any) => Promise<any>;
-        searchProfiles: (term: string, options?: any) => Promise<any>;
-        searchGroupChannels: (term: string) => Promise<any>;
-        setModalSearchTerm: (term: any) => GenericAction;
-        closeModal: (modalId: string) => void;
+        loadStatusesForProfilesList: (users: UserProfile[]) => void;
+        loadProfilesForGroupChannels: (groupChannels: Channel[]) => void;
+        openDirectChannelToUserId: (userId: string) => Promise<ActionResult>;
+        openGroupChannelToUserIds: (userIds: string[]) => Promise<ActionResult>;
+        searchProfiles: (term: string, options: any) => Promise<ActionResult<UserProfile[]>>;
+        searchGroupChannels: (term: string) => Promise<ActionResult<Channel[]>>;
+        setModalSearchTerm: (term: string) => void;
+        openModal: <P>(modalData: ModalData<P>) => void;
     };
+    focusOriginElement: string;
 }
 
 type State = {
     values: OptionValue[];
+    show: boolean;
     search: boolean;
     saving: boolean;
     loadingUsers: boolean;
@@ -80,6 +81,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
     exitToChannel?: string;
     multiselect: React.RefObject<MultiSelect<OptionValue>>;
     selectedItemRef: React.RefObject<HTMLDivElement>;
+
     constructor(props: Props) {
         super(props);
 
@@ -88,21 +90,19 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         this.selectedItemRef = React.createRef();
 
         const values: OptionValue[] = [];
-
         if (props.currentChannelMembers) {
             for (let i = 0; i < props.currentChannelMembers.length; i++) {
                 const user = Object.assign({}, props.currentChannelMembers[i]);
-
                 if (user.id === props.currentUserId) {
                     continue;
                 }
-
                 values.push(optionValue(user));
             }
         }
 
         this.state = {
             values,
+            show: true,
             search: false,
             saving: false,
             loadingUsers: true,
@@ -146,15 +146,9 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
             }
         }
 
-        if (
-            prevProps.users.length !== this.props.users.length
-        ) {
+        if (prevProps.users.length !== this.props.users.length) {
             this.props.actions.loadProfilesMissingStatus(this.props.users);
         }
-    }
-
-    componentDidMount() {
-        this.loadModalData();
     }
 
     componentDidUpdate(prevProps: Props) {
@@ -162,22 +156,30 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
     }
 
     setUsersLoadingState = (loadingState: boolean) => {
-        this.setState({
-            loadingUsers: loadingState,
-        });
+        this.setState({loadingUsers: loadingState});
+    };
+
+    handleHide = () => {
+        this.props.actions.setModalSearchTerm('');
+        this.setState({show: false});
     };
 
     handleExit = () => {
-        this.props.actions.closeModal(ModalIdentifiers.CREATE_DM_CHANNEL);
+        this.props.onExited?.();
+        this.props.onModalDismissed?.();
+
         if (this.exitToChannel) {
             getHistory().push(this.exitToChannel);
+        } else {
+            setTimeout(() => {
+                focusElement(this.props.focusOriginElement, true);
+            }, 0);
         }
-        this.props.onModalDismissed?.();
-        this.props.onExited?.();
     };
 
     handleSubmit = (values = this.state.values) => {
         const {actions} = this.props;
+
         if (this.state.saving) {
             return;
         }
@@ -195,8 +197,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
             if (!error) {
                 this.exitToChannel = '/' + this.props.currentTeamName + '/channels/' + data.name;
-                this.props.actions.setModalSearchTerm('');
-                this.handleExit();
+                this.handleHide();
             }
         };
 
@@ -211,37 +212,33 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         if (isGroupChannel(value)) {
             this.addUsers(value.profiles);
         } else {
-            const values = Object.assign([], this.state.values);
-
-            if (values.indexOf(value) === -1) {
+            const values = [...this.state.values];
+            if (!values.includes(value)) {
                 values.push(value);
             }
-
             this.setState({values});
         }
     };
 
     addUsers = (users: UserProfile[]) => {
-        const values: OptionValue[] = Object.assign([], this.state.values);
+        const values = [...this.state.values];
         const existingUserIds = values.map((user) => user.id);
         for (const user of users) {
-            if (existingUserIds.indexOf(user.id) !== -1) {
-                continue;
+            if (!existingUserIds.includes(user.id)) {
+                values.push(optionValue(user));
             }
-            values.push(optionValue(user));
         }
-
         this.setState({values});
     };
 
     getUserProfiles = (page?: number) => {
-        const pageNum = page || 0;
+        const pageNum = page ? page + 1 : 0;
         if (this.props.restrictDirectMessage === 'any') {
             this.props.actions.getProfiles(pageNum, USERS_PER_PAGE * 2).then(() => {
                 this.setUsersLoadingState(false);
             });
         } else {
-            this.props.actions.getProfilesInTeam(this.props.currentTeamId, pageNum, USERS_PER_PAGE * 2).then(() => {
+            this.props.actions.getProfilesInTeam(this.props.currentTeamId || '', pageNum, USERS_PER_PAGE * 2).then(() => {
                 this.setUsersLoadingState(false);
             });
         }
@@ -266,6 +263,17 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         this.setState({values});
     };
 
+    lampIcon = () => Constants.LAMP_ICON;
+
+    openModal = (): void => {
+        this.handleExit();
+        const newModal = {
+            modalId: ModalIdentifiers.NEW_CHANNEL_MODAL,
+            dialogType: NewChannelModal,
+        };
+        this.props.actions?.openModal(newModal);
+    };
+
     render() {
         const body = (
             <List
@@ -274,6 +282,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
                 handleDelete={this.handleDelete}
                 handlePageChange={this.handlePageChange}
                 handleSubmit={this.handleSubmit}
+                handleHide={this.handleHide}
                 isExistingChannel={this.props.isExistingChannel}
                 loading={this.state.loadingUsers}
                 saving={this.state.saving}
@@ -282,23 +291,37 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
                 totalCount={this.props.totalCount}
                 users={this.props.users}
                 values={this.state.values}
+            >
+                <CreateChannelTip
+                    values={this.state.values}
+                    openModal={this.openModal}
+                />
+            </List>
+        );
+
+        const modalHeaderText = (
+            <FormattedMessage
+                id='more_direct_channels.title'
+                defaultMessage='Direct Messages'
             />
         );
 
         return (
             <GenericModal
-                id={ModalIdentifiers.CREATE_DM_CHANNEL}
-                className='more-modal more-direct-channels'
+                id='moreDmModal'
+                className='a11y__modal more-modal more-direct-channels more-direct-channels-generic-modal'
+                show={this.state.show}
+                modalHeaderText={modalHeaderText}
                 onExited={this.handleExit}
-                autoCloseOnConfirmButton={false}
-                modalHeaderText={
-                    <FormattedMessage
-                        id='more_direct_channels.title'
-                        defaultMessage='Direct Messages'
-                    />
-                }
+                onHide={this.handleExit}
+                compassDesign={true}
+                bodyPadding={false}
+                onEntered={this.loadModalData}
+                modalLocation={'top'}
             >
-                {body}
+                <div role='application'>
+                    {body}
+                </div>
             </GenericModal>
         );
     }

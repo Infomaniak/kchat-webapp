@@ -28,7 +28,7 @@ describe('components/user_settings/display/user_settings_theme/user_settings_the
             },
         },
     };
-    const store = mockStore(initialState);
+    mockStore(initialState);
 
     const requiredProps: ComponentProps<typeof UserSettingsTheme> = {
         theme: Preferences.THEMES.denim,

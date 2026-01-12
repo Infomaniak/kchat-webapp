@@ -1,30 +1,37 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import IconButton from '@infomaniak/compass-components/components/icon-button';
 import {CheckIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {memo, useCallback, useState} from 'react';
 import {defineMessages, useIntl} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
 
 import type {Post} from '@mattermost/types/posts';
 
+import {getPostEditHistory, restorePostVersion} from 'mattermost-redux/actions/posts';
+import {ensureString} from 'mattermost-redux/utils/post_utils';
+
+import {removeDraft} from 'actions/views/drafts';
+import {getConnectionId} from 'selectors/general';
+
+import FileAttachmentListContainer from 'components/file_attachment_list';
 import InfoToast from 'components/info_toast/info_toast';
-import OverlayTrigger from 'components/overlay_trigger';
 import PostAriaLabelDiv from 'components/post_view/post_aria_label_div';
 import PostMessageContainer from 'components/post_view/post_message_view';
 import Timestamp, {RelativeRanges} from 'components/timestamp';
-import Tooltip from 'components/tooltip';
 import UserProfileComponent from 'components/user_profile';
 import Avatar from 'components/widgets/users/avatar';
+import WithTooltip from 'components/with_tooltip';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
+import {ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 import {imageURLForUser} from 'utils/utils';
 
 import RestorePostModal from '../restore_post_modal';
 
-import type {PropsFromRedux} from '.';
+import './edited_post_items.scss';
+
+import type {PropsFromRedux} from './index';
 
 const DATE_RANGES = [
     RelativeRanges.TODAY_TITLE_CASE,
@@ -33,15 +40,15 @@ const DATE_RANGES = [
 
 const itemMessages = defineMessages({
     helpText: {
-        id: t('post_info.edit.restore'),
+        id: 'post_info.edit.restore',
         defaultMessage: 'Restore this version',
     },
     currentVersionText: {
-        id: t('post_info.edit.current_version'),
+        id: 'post_info.edit.current_version',
         defaultMessage: 'Current Version',
     },
     ariaLabelMessage: {
-        id: t('post_info.edit.aria_label'),
+        id: 'post_info.edit.aria_label',
         defaultMessage: 'Select to restore an old message.',
     },
 });
@@ -55,7 +62,15 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
     const {formatMessage} = useIntl();
     const [open, setOpen] = useState(isCurrent);
 
-    const openRestorePostModal = useCallback(() => {
+    const dispatch = useDispatch();
+
+    const connectionId = useSelector(getConnectionId);
+
+    const openRestorePostModal = useCallback((e) => {
+        // this prevents history item from
+        // collapsing and closing when clicking on restore button
+        e.stopPropagation();
+
         const restorePostModalData = {
             modalId: ModalIdentifiers.RESTORE_POST_MODAL,
             dialogType: RestorePostModal,
@@ -71,7 +86,9 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
         actions.openModal(restorePostModalData);
     }, [actions, post]);
 
-    const togglePost = () => setOpen((prevState) => !prevState);
+    const togglePost = () => {
+        setOpen((prevState) => !prevState);
+    };
 
     if (!post) {
         return null;
@@ -94,22 +111,19 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
     };
 
     const handleRestore = async () => {
-        if (!postCurrentVersion || !post || postCurrentVersion.message === post.message) {
+        if (!postCurrentVersion || !post) {
             actions.closeRightHandSide();
             return;
         }
 
-        const updatedPost = {
-            message: post.message,
-            id: postCurrentVersion.id,
-            channel_id: postCurrentVersion.channel_id,
-        };
-
-        const result = await actions.editPost(updatedPost as Post);
+        const result = await dispatch(restorePostVersion(post.original_id, post.id, connectionId));
         if (result.data) {
             actions.closeRightHandSide();
             showInfoTooltip();
         }
+
+        const key = StoragePrefixes.EDIT_DRAFT + post.original_id;
+        dispatch(removeDraft(key, post.channel_id, post.root_id));
     };
 
     const handleUndo = async () => {
@@ -118,7 +132,16 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
             return;
         }
 
-        await actions.editPost(postCurrentVersion);
+        // To undo a recent restore, you need to restore the previous version of the post right before this restore.
+        // That would be the first history item in post's edit history as it is the most recent edit
+        // and edit history is sorted from most recent first to oldest.
+        const result = await dispatch(getPostEditHistory(post.original_id));
+        if (!result.data || result.data.length === 0) {
+            return;
+        }
+
+        const previousPostVersion = result.data[0];
+        await dispatch(restorePostVersion(previousPostVersion.original_id, previousPostVersion.id, connectionId));
     };
 
     const currentVersionIndicator = isCurrent ? (
@@ -129,7 +152,7 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
 
     const profileSrc = imageURLForUser(post.user_id);
 
-    const overwriteName = post.props ? post.props.override_username : '';
+    const overwriteName = ensureString(post.props?.override_username);
     const postHeader = (
         <div className='edit-post-history__header'>
             <span className='profile-icon'>
@@ -142,7 +165,6 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
             <div className={'edit-post-history__header__username'}>
                 <UserProfileComponent
                     userId={post.user_id}
-                    hasMention={true}
                     disablePopover={true}
                     overwriteName={overwriteName}
                 />
@@ -158,6 +180,8 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
         />
     );
 
+    const isFileDeleted = post.delete_at > 0;
+
     const messageContainer = (
         <div className='edit-post-history__content_container'>
             {postHeader}
@@ -166,34 +190,27 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
                     {message}
                 </div>
             </div>
+            <FileAttachmentListContainer
+                post={post}
+                isEditHistory={isFileDeleted}
+                disableDownload={isFileDeleted}
+                disableActions={isFileDeleted}
+            />
         </div>
     );
 
-    const tooltip = (
-        <Tooltip
-            id='editPostRestoreTooltip'
-            className='hidden-xs'
-        >
-            {formatMessage(itemMessages.helpText)}
-        </Tooltip>
-    );
-
     const restoreButton = isCurrent ? null : (
-        <OverlayTrigger
-            trigger={['hover', 'focus']}
-            delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement='left'
-            overlay={tooltip}
+        <WithTooltip
+            title={formatMessage(itemMessages.helpText)}
         >
-            <IconButton
+            <button
                 className='edit-post-history__icon__button restore-icon'
-                size={'sm'}
-                icon={'restore'}
                 onClick={openRestorePostModal}
-                compact={true}
                 aria-label={formatMessage(itemMessages.ariaLabelMessage)}
-            />
-        </OverlayTrigger>
+            >
+                <i className={'icon icon-restore'}/>
+            </button>
+        </WithTooltip>
     );
 
     const postContainerClass = classNames('edit-post-history__container', {'edit-post-history__container__background': open});
@@ -211,16 +228,14 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
             >
                 <div
                     className='edit-post-history__title__container'
-                    aria-hidden='true'
                 >
                     <div className='edit-post-history__date__badge__container'>
-                        <IconButton
-                            size={'sm'}
-                            icon={open ? 'chevron-down' : 'chevron-right'}
-                            compact={true}
+                        <button
                             aria-label='Toggle to see an old message.'
-                            className='edit-post-history__icon__button'
-                        />
+                            className='edit-post-history__icon__button toggleCollapseButton'
+                        >
+                            <i className={`icon ${open ? 'icon-chevron-down' : 'icon-chevron-right'}`}/>
+                        </button>
                         <span className='edit-post-history__date'>
                             <Timestamp
                                 value={timeStampValue}

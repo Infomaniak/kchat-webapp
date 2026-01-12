@@ -7,10 +7,10 @@ import {VariableSizeList} from 'react-window';
 import type {ListChildComponentProps} from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 
-import type {Channel, ChannelMembership} from '@mattermost/types/channels';
+import type {Channel, ChannelMembership, PendingGuest as PendingGuestType} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
-import Member from './member';
+import Member, {PendingGuest} from './member';
 
 interface ChannelMember {
     user: UserProfile;
@@ -21,13 +21,14 @@ interface ChannelMember {
 
 enum ListItemType {
     Member = 'member',
+    PendingGuest = 'pending-guest',
     FirstSeparator = 'first-separator',
     Separator = 'separator',
 }
 
 interface ListItem {
     type: ListItemType;
-    data: ChannelMember | JSX.Element;
+    data: ChannelMember | PendingGuestType | JSX.Element;
 }
 export interface Props {
     channel: Channel;
@@ -103,13 +104,30 @@ const MemberList = ({
                         <Member
                             channel={channel}
                             index={index}
-                            totalUsers={members.length}
+                            totalUsers={members.filter((l) => l.type === ListItemType.Member).length}
                             member={member}
                             editing={editing}
                             actions={{openDirectMessage}}
                         />
                     </div>
                 );
+            case ListItemType.PendingGuest: {
+                const pendingGuest = members[index].data as PendingGuestType;
+                return (
+                    <div
+                        style={style}
+                        key={`pending-guest-${pendingGuest.id}`}
+                    >
+                        <PendingGuest
+                            channel={channel}
+                            pendingGuest={pendingGuest}
+                            editing={editing}
+                            index={index}
+                            totalUsers={members.length}
+                        />
+                    </div>
+                );
+            }
             case ListItemType.Separator:
             case ListItemType.FirstSeparator:
                 return (

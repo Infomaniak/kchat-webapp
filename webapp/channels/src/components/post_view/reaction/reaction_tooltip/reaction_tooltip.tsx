@@ -1,18 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import * as React from 'react';
-import {FormattedMessage} from 'react-intl';
+import React from 'react';
+import {useIntl} from 'react-intl';
 
 import type {Reaction as ReactionType} from '@mattermost/types/reactions';
 
-import RenderEmoji from 'components/emoji/render_emoji';
+import WithTooltip from 'components/with_tooltip';
 
 type Props = {
     canAddReactions: boolean;
     canRemoveReactions: boolean;
+    children: React.ReactNode;
     currentUserReacted: boolean;
     emojiName: string;
+    onShow: () => void;
     reactions: ReactionType[];
     users: string[];
 };
@@ -22,130 +24,122 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
     const {
         canAddReactions,
         canRemoveReactions,
+        children,
         currentUserReacted,
         emojiName,
+        onShow,
         reactions,
         users,
     } = props;
 
+    const intl = useIntl();
+
     const reduceUsers = users.slice(0, MAX_DISPLAY_USER);
     const otherUsersCount = reactions.length - reduceUsers.length;
 
-    let names: React.ReactNode;
+    let names;
     if (otherUsersCount > 0) {
         if (reduceUsers.length > 0) {
-            names = (
-                <FormattedMessage
-                    id='reaction.usersAndOthersReacted'
-                    defaultMessage='{users} and {otherUsers, number} other {otherUsers, plural, one {user} other {users}}'
-                    values={{
-                        users: reduceUsers.join(', '),
-                        otherUsers: otherUsersCount,
-                    }}
-                />
+            names = intl.formatMessage(
+                {
+                    id: 'reaction.usersAndOthersReacted',
+                    defaultMessage: '{users} and {otherUsers, number} other {otherUsers, plural, one {user} other {users}}',
+                },
+                {
+                    users: reduceUsers.join(', '),
+                    otherUsers: otherUsersCount,
+                },
             );
         } else {
-            names = (
-                <FormattedMessage
-                    id='reaction.othersReacted'
-                    defaultMessage='{otherUsers, number} {otherUsers, plural, one {user} other {users}}'
-                    values={{
-                        otherUsers: otherUsersCount,
-                    }}
-                />
+            names = intl.formatMessage(
+                {
+                    id: 'reaction.othersReacted',
+                    defaultMessage: '{otherUsers, number} {otherUsers, plural, one {user} other {users}}',
+                },
+                {
+                    otherUsers: otherUsersCount,
+                },
             );
         }
     } else if (users.length > 1) {
-        names = (
-            <FormattedMessage
-                id='reaction.usersReacted'
-                defaultMessage='{users} and {lastUser}'
-                values={{
-                    users: reduceUsers.slice(0, -1).join(', '),
-                    lastUser: reduceUsers[reduceUsers.length - 1],
-                }}
-            />
+        names = intl.formatMessage(
+            {
+                id: 'reaction.usersReacted',
+                defaultMessage: '{users} and {lastUser}',
+            },
+            {
+                users: reduceUsers.slice(0, -1).join(', '),
+                lastUser: reduceUsers[reduceUsers.length - 1],
+            },
         );
     } else {
         names = users[0];
     }
 
-    let reactionVerb: React.ReactNode;
+    let reactionVerb;
     if (users.length > 1) {
         if (currentUserReacted) {
-            reactionVerb = (
-                <FormattedMessage
-                    id='reaction.reactionVerb.youAndUsers'
-                    defaultMessage='reacted'
-                />
-            );
+            reactionVerb = intl.formatMessage({
+                id: 'reaction.reactionVerb.youAndUsers',
+                defaultMessage: 'reacted',
+            });
         } else {
-            reactionVerb = (
-                <FormattedMessage
-                    id='reaction.reactionVerb.users'
-                    defaultMessage='reacted'
-                />
-            );
+            reactionVerb = intl.formatMessage({
+                id: 'reaction.reactionVerb.users',
+                defaultMessage: 'reacted',
+            });
         }
     } else if (currentUserReacted) {
-        reactionVerb = (
-            <FormattedMessage
-                id='reaction.reactionVerb.you'
-                defaultMessage='reacted'
-            />
-        );
+        reactionVerb = intl.formatMessage({
+            id: 'reaction.reactionVerb.you',
+            defaultMessage: 'reacted',
+        });
     } else {
-        reactionVerb = (
-            <FormattedMessage
-                id='reaction.reactionVerb.user'
-                defaultMessage='reacted'
-            />
-        );
+        reactionVerb = intl.formatMessage({
+            id: 'reaction.reactionVerb.user',
+            defaultMessage: 'reacted',
+        });
     }
 
-    const tooltip = (
-        <>
-            <RenderEmoji
-                emojiName={emojiName}
-                size={50}
-                emojiStyle={{backgroundColor: 'white', borderRadius: '3px', backgroundSize: '45px'}}
-            />
-            <br/>
-            <FormattedMessage
-                id='reaction.reacted'
-                defaultMessage='{users} {reactionVerb} with {emoji}'
-                values={{
-                    users: <b>{names}</b>,
-                    reactionVerb,
-                    emoji: <b>{':' + emojiName + ':'}</b>,
-                }}
-            />
-        </>
+    const tooltipTitle = intl.formatMessage(
+        {
+            id: 'reaction.reacted',
+            defaultMessage: '{users} {reactionVerb} with {emoji}',
+        },
+        {
+            users: names,
+            reactionVerb,
+            emoji: ':' + emojiName + ':',
+        },
     );
 
-    let clickTooltip: React.ReactNode;
+    let tooltipHint;
     if (currentUserReacted && canRemoveReactions) {
-        clickTooltip = (
-            <FormattedMessage
-                id='reaction.clickToRemove'
-                defaultMessage='(click to remove)'
-            />
-        );
+        tooltipHint = intl.formatMessage({
+            id: 'reaction.clickToRemove',
+            defaultMessage: '(click to remove)',
+        });
     } else if (!currentUserReacted && canAddReactions) {
-        clickTooltip = (
-            <FormattedMessage
-                id='reaction.clickToAdd'
-                defaultMessage='(click to add)'
-            />
-        );
+        tooltipHint = intl.formatMessage({
+            id: 'reaction.clickToAdd',
+            defaultMessage: '(click to add)',
+        });
+    }
+
+    if (!React.isValidElement(children)) {
+        return null;
     }
 
     return (
-        <div className={otherUsersCount > 0 ? 'reactions-xl' : ''}>
-            {tooltip}
-            <br/>
-            {clickTooltip}
-        </div>
+        <WithTooltip
+            title={tooltipTitle}
+            hint={tooltipHint}
+            emoji={emojiName}
+            isEmojiLarge={true}
+            onOpen={onShow}
+        >
+            {children}
+        </WithTooltip>
     );
 };
 

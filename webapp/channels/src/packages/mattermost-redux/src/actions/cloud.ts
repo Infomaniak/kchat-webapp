@@ -5,12 +5,11 @@ import type {Address, CloudCustomerPatch} from '@mattermost/types/cloud';
 
 import {CloudTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
-import {getCloudErrors} from 'mattermost-redux/selectors/entities/cloud';
-import type {DispatchFunc, GetStateFunc, ActionFunc} from 'mattermost-redux/types/actions';
+import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
 import {bindClientFunc} from './helpers';
 
-export function getCloudSubscription(): ActionFunc {
+export function getCloudSubscription() {
     return bindClientFunc({
         clientFunc: Client4.getSubscription,
         onSuccess: [CloudTypes.RECEIVED_CLOUD_SUBSCRIPTION],
@@ -19,7 +18,7 @@ export function getCloudSubscription(): ActionFunc {
     });
 }
 
-export function getCloudProducts(includeLegacyProducts?: boolean): ActionFunc {
+export function getCloudProducts(includeLegacyProducts?: boolean) {
     return bindClientFunc({
         clientFunc: Client4.getCloudProducts,
         onSuccess: [CloudTypes.RECEIVED_CLOUD_PRODUCTS],
@@ -29,7 +28,7 @@ export function getCloudProducts(includeLegacyProducts?: boolean): ActionFunc {
     });
 }
 
-export function getCloudCustomer(): ActionFunc {
+export function getCloudCustomer() {
     return bindClientFunc({
         clientFunc: Client4.getCloudCustomer,
         onSuccess: [CloudTypes.RECEIVED_CLOUD_CUSTOMER],
@@ -38,16 +37,7 @@ export function getCloudCustomer(): ActionFunc {
     });
 }
 
-export function getLicenseSelfServeStatus(): ActionFunc {
-    return bindClientFunc({
-        clientFunc: Client4.getLicenseSelfServeStatus,
-        onRequest: CloudTypes.LICENSE_SELF_SERVE_STATS_REQUEST,
-        onSuccess: [CloudTypes.RECEIVED_LICENSE_SELF_SERVE_STATS],
-        onFailure: CloudTypes.LICENSE_SELF_SERVE_STATS_FAILED,
-    });
-}
-
-export function getInvoices(): ActionFunc {
+export function getInvoices() {
     return bindClientFunc({
         clientFunc: Client4.getInvoices,
         onSuccess: [CloudTypes.RECEIVED_CLOUD_INVOICES],
@@ -56,34 +46,7 @@ export function getInvoices(): ActionFunc {
     });
 }
 
-export function retryFailedCloudFetches() {
-    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const errors = getCloudErrors(getState());
-        if (Object.keys(errors).length === 0) {
-            return {data: true};
-        }
-
-        if (errors.subscription) {
-            dispatch(getCloudSubscription());
-        }
-
-        if (errors.products) {
-            dispatch(getCloudProducts());
-        }
-
-        if (errors.customer) {
-            dispatch(getCloudCustomer());
-        }
-
-        if (errors.invoices) {
-            dispatch(getInvoices());
-        }
-
-        return {data: true};
-    };
-}
-
-export function updateCloudCustomer(customerPatch: CloudCustomerPatch): ActionFunc {
+export function updateCloudCustomer(customerPatch: CloudCustomerPatch) {
     return bindClientFunc({
         clientFunc: Client4.updateCloudCustomer,
         onSuccess: [CloudTypes.RECEIVED_CLOUD_CUSTOMER],
@@ -91,10 +54,27 @@ export function updateCloudCustomer(customerPatch: CloudCustomerPatch): ActionFu
     });
 }
 
-export function updateCloudCustomerAddress(address: Address): ActionFunc {
+export function updateCloudCustomerAddress(address: Address) {
     return bindClientFunc({
         clientFunc: Client4.updateCloudCustomerAddress,
         onSuccess: [CloudTypes.RECEIVED_CLOUD_CUSTOMER],
         params: [address],
     });
+}
+
+export function getUsage(): ActionFuncAsync {
+    return async (dispatch) => {
+        try {
+            const result = await Client4.getUsage();
+            if (result) {
+                dispatch({
+                    type: CloudTypes.RECEIVED_USAGE,
+                    data: result,
+                });
+            }
+        } catch (e) {
+            return e;
+        }
+        return {data: true};
+    };
 }

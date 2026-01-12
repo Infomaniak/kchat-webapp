@@ -81,9 +81,16 @@ Cypress.Commands.add('apiInstallTrialLicense', () => {
         url: '/api/v4/trial-license',
         method: 'POST',
         body: {
-            trialreceive_emails_accepted: true,
+            receive_emails_accepted: true,
             terms_accepted: true,
             users: Cypress.env('numberOfTrialUsers'),
+
+            // Enriched fields required for trial license as of v10.7
+            company_country: 'US',
+            company_name: 'mattermost',
+            contact_email: 'test@mattermost.com',
+            company_size: '1-10',
+            contact_name: 'John Doe',
         },
     }).then((response) => {
         expect(response.status).to.equal(200);
@@ -108,6 +115,9 @@ export const getDefaultConfig = () => {
     const fromCypressEnv = {
         ElasticsearchSettings: {
             ConnectionURL: cypressEnv.elasticsearchConnectionURL,
+        },
+        EmailSettings: {
+            PushNotificationServer: cypressEnv.pushNotificationServer,
         },
         LdapSettings: {
             LdapServer: cypressEnv.ldapServer,
@@ -143,7 +153,7 @@ const expectConfigToBeUpdatable = (currentConfig, newConfig) => {
 
         if (setting) {
             Object.keys(newSubSetting).forEach((newSubKey) => {
-                const isAvailable = setting.hasOwnProperty(newSubKey);
+                const isAvailable = Object.hasOwn(setting, newSubKey);
                 const name = `${newMainKey}.${newSubKey}`;
                 expect(isAvailable, isAvailable ? `${name} setting can be updated.` : errorMessage(name)).to.equal(true);
             });

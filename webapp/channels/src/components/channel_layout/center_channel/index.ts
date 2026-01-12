@@ -6,14 +6,13 @@ import {connect} from 'react-redux';
 import type {RouteComponentProps} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
 
 import {getProfiles} from 'mattermost-redux/actions/users';
 import {getRedirectChannelNameForTeam, getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {isCollapsedThreadsEnabled, insightsAreEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getTeamByName} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 
 import {connectedChannelID, expandedView} from 'selectors/calls';
 import {getIsLhsOpen} from 'selectors/lhs';
@@ -74,13 +73,9 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     };
 };
 
-type Actions = {
-    getProfiles: (page?: number, perPage?: number, options?: Record<string, string | boolean>) => ActionFunc;
-};
-
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject, Actions>({
+        actions: bindActionCreators({
             getProfiles,
         }, dispatch),
     };

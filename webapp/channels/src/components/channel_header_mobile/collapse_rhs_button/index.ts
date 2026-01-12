@@ -5,16 +5,24 @@ import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 
 import {toggleMenu as toggleRhsMenu} from 'actions/views/rhs';
 
+import type {GlobalState} from 'types/store';
+
 import CollapseRhsButton from './collapse_rhs_button';
 
-const mapDispatchToProps = (dispatch: Dispatch<GenericAction>) => ({
+const mapStateToProps = (state: GlobalState) => {
+    return {
+        isBridgeActive: getKSuiteBridge(state)?.isConnected ?? false,
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
     actions: bindActionCreators({
         toggleRhsMenu,
     }, dispatch),
 });
 
-export default connect(null, mapDispatchToProps)(CollapseRhsButton);
+export default connect(mapStateToProps, mapDispatchToProps)(CollapseRhsButton);

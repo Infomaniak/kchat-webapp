@@ -3,14 +3,14 @@
 
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
+import React, {lazy} from 'react';
 import type {CSSProperties} from 'react';
-import React from 'react';
-import type {DropResult, DragStart, BeforeCapture} from 'react-beautiful-dnd';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
+import type {DropResult, DragStart, BeforeCapture} from 'react-beautiful-dnd';
 import Scrollbars from 'react-custom-scrollbars';
-import {FormattedMessage} from 'react-intl';
-import type {Spring} from 'rebound';
+import {FormattedMessage, injectIntl, type WrappedComponentProps} from 'react-intl';
 import {SpringSystem} from 'rebound';
+import type {Spring} from 'rebound';
 
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import type {Channel} from '@mattermost/types/channels';
@@ -20,23 +20,24 @@ import {General} from 'mattermost-redux/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import ActivityAndInsightsLink
-    from 'components/activity_and_insights/activity_and_insights_link/activity_and_insights_link';
-import DraftsLink from 'components/drafts/drafts_link/drafts_link';
-import GlobalThreadsLink from 'components/threading/global_threads_link';
+import {makeAsyncComponent} from 'components/async_load';
+import SidebarCategory from 'components/sidebar/sidebar_category';
 
-import * as ChannelUtils from 'utils/channel_utils';
-import {Constants, DraggingStates, DraggingStateTypes, ModalIdentifiers} from 'utils/constants';
-import * as Utils from 'utils/utils';
+import {findNextUnreadChannelId} from 'utils/channel_utils';
+import {Constants, DraggingStates, DraggingStateTypes} from 'utils/constants';
+import {isKeyPressed, cmdOrCtrlPressed} from 'utils/keyboard';
+import {mod} from 'utils/utils';
 
 import type {DraggingState} from 'types/store';
 import type {StaticPage} from 'types/store/lhs';
 
-import SidebarCategory from '../sidebar_category';
-import UnreadChannelIndicator from '../unread_channel_indicator';
-import UnreadChannels from '../unread_channels';
+const ActivityAndInsightsLink = makeAsyncComponent('ActivityAndInsightsLink', lazy(() => import('components/activity_and_insights/activity_and_insights_link/activity_and_insights_link')));
+const DraftsLink = makeAsyncComponent('DraftsLink', lazy(() => import('components/drafts/drafts_link/drafts_link')));
+const GlobalThreadsLink = makeAsyncComponent('GlobalThreadsLink', lazy(() => import('components/threading/global_threads_link')));
+const UnreadChannelIndicator = makeAsyncComponent('UnreadChannelIndicator', lazy(() => import('../unread_channel_indicator')));
+const UnreadChannels = makeAsyncComponent('UnreadChannels', lazy(() => import('../unread_channels')));
 
-export function renderView(props: any) {
+export function renderView(props: React.HTMLProps<HTMLDivElement>) {
     return (
         <div
             {...props}
@@ -45,7 +46,7 @@ export function renderView(props: any) {
     );
 }
 
-export function renderThumbHorizontal(props: any) {
+export function renderThumbHorizontal(props: React.HTMLProps<HTMLDivElement>) {
     return (
         <div
             {...props}
@@ -54,7 +55,7 @@ export function renderThumbHorizontal(props: any) {
     );
 }
 
-export function renderTrackVertical(props: any) {
+export function renderTrackVertical(props: React.HTMLProps<HTMLDivElement>) {
     return (
         <div
             {...props}
@@ -63,7 +64,7 @@ export function renderTrackVertical(props: any) {
     );
 }
 
-export function renderThumbVertical(props: any) {
+export function renderThumbVertical(props: React.HTMLProps<HTMLDivElement>) {
     return (
         <div
             {...props}
@@ -74,8 +75,8 @@ export function renderThumbVertical(props: any) {
 
 const scrollbarStyles: CSSProperties = {position: 'absolute'};
 
-type Props = {
-    currentTeam: Team;
+type Props = WrappedComponentProps & {
+    currentTeam?: Team;
     currentChannelId: string;
     categories: ChannelCategory[];
     unreadChannelIds: string[];
@@ -103,16 +104,13 @@ type Props = {
         setDraggingState: (data: DraggingState) => void;
         stopDragging: () => void;
         clearChannelSelection: () => void;
-        multiSelectChannelAdd: (channelId: string) => void;
-        markAllChannelsAsRead: () => void;
-        openModal: <P>(modalData: ModalData<P>) => void;
-        closeModal: (ModalIdentifier: string) => void;
     };
 };
 
 type State = {
     showTopUnread: boolean;
     showBottomUnread: boolean;
+    autoHide: boolean;
 };
 
 // scrollMargin is the margin at the edge of the channel list that we leave when scrolling to a channel.
@@ -125,11 +123,12 @@ const categoryHeaderHeight = 32;
 // that the channel is not under the unread indicator.
 const scrollMarginWithUnread = 55;
 
-export default class SidebarList extends React.PureComponent<Props, State> {
+export class SidebarList extends React.PureComponent<Props, State> {
     channelRefs: Map<string, HTMLLIElement>;
     scrollbar: React.RefObject<Scrollbars>;
     animate: SpringSystem;
     scrollAnimation: Spring;
+    channelsListScrollTimeout: NodeJS.Timeout | null = null;
 
     constructor(props: Props) {
         super(props);
@@ -138,6 +137,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
         this.state = {
             showTopUnread: false,
             showBottomUnread: false,
+            autoHide: true,
         };
         this.scrollbar = React.createRef();
 
@@ -150,22 +150,14 @@ export default class SidebarList extends React.PureComponent<Props, State> {
     componentDidMount() {
         document.addEventListener('keydown', this.navigateChannelShortcut);
         document.addEventListener('keydown', this.navigateUnreadChannelShortcut);
-        document.addEventListener('keydown', this.markAllAsRead);
     }
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.navigateChannelShortcut);
         document.removeEventListener('keydown', this.navigateUnreadChannelShortcut);
-        document.removeEventListener('keydown', this.markAllAsRead);
     }
 
     componentDidUpdate(prevProps: Props) {
-        // TODO: Copying over so it doesn't get lost, but we don't have a design for the sidebar on mobile yet
-        // close the LHS on mobile when you change channels
-        if (this.props.currentChannelId !== prevProps.currentChannelId || this.props.currentStaticPageId !== prevProps.currentStaticPageId) {
-            this.props.actions.close();
-        }
-
         if (!this.props.currentChannelId || !prevProps.currentChannelId) {
             return;
         }
@@ -179,6 +171,12 @@ export default class SidebarList extends React.PureComponent<Props, State> {
         if (this.props.currentChannelId !== prevProps.currentChannelId) {
             // This will be re-enabled when we can avoid animating the scroll on first load and team switch
             // this.scrollToChannel(this.props.currentChannelId);
+        }
+
+        // TODO: Copying over so it doesn't get lost, but we don't have a design for the sidebar on mobile yet
+        // close the LHS on mobile when you change channels
+        if (this.props.currentChannelId !== prevProps.currentChannelId) {
+            this.props.actions.close();
         }
 
         this.updateUnreadIndicators();
@@ -322,7 +320,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
     };
 
     navigateChannelShortcut = (e: KeyboardEvent) => {
-        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && (Utils.isKeyPressed(e, Constants.KeyCodes.UP) || Utils.isKeyPressed(e, Constants.KeyCodes.DOWN))) {
+        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && (isKeyPressed(e, Constants.KeyCodes.UP) || isKeyPressed(e, Constants.KeyCodes.DOWN))) {
             e.preventDefault();
 
             const staticPageIds = this.getDisplayedStaticPageIds();
@@ -332,24 +330,24 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             const curIndex = allIds.indexOf(curSelectedId);
 
             let nextIndex;
-            if (Utils.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
+            if (isKeyPressed(e, Constants.KeyCodes.DOWN)) {
                 nextIndex = curIndex + 1;
             } else {
                 nextIndex = curIndex - 1;
             }
 
-            const nextId = allIds[Utils.mod(nextIndex, allIds.length)];
+            const nextId = allIds[mod(nextIndex, allIds.length)];
             this.navigateById(nextId);
             if (nextIndex >= staticPageIds.length) {
                 this.scrollToChannel(nextId);
             }
-        } else if (Utils.cmdOrCtrlPressed(e) && e.shiftKey && Utils.isKeyPressed(e, Constants.KeyCodes.K)) {
+        } else if (cmdOrCtrlPressed(e) && e.shiftKey && isKeyPressed(e, Constants.KeyCodes.K)) {
             this.props.handleOpenMoreDirectChannelsModal(e);
         }
     };
 
     navigateUnreadChannelShortcut = (e: KeyboardEvent) => {
-        if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && (Utils.isKeyPressed(e, Constants.KeyCodes.UP) || Utils.isKeyPressed(e, Constants.KeyCodes.DOWN))) {
+        if (e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey && (isKeyPressed(e, Constants.KeyCodes.UP) || isKeyPressed(e, Constants.KeyCodes.DOWN))) {
             e.preventDefault();
 
             const allChannelIds = this.getDisplayedChannelIds();
@@ -364,13 +362,13 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             }
 
             let direction = 0;
-            if (Utils.isKeyPressed(e, Constants.KeyCodes.UP)) {
+            if (isKeyPressed(e, Constants.KeyCodes.UP)) {
                 direction = -1;
             } else {
                 direction = 1;
             }
 
-            const nextIndex = ChannelUtils.findNextUnreadChannelId(
+            const nextIndex = findNextUnreadChannelId(
                 this.props.currentChannelId,
                 allChannelIds,
                 unreadChannelIds,
@@ -385,55 +383,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
         }
     };
 
-    markAllAsRead = (e: KeyboardEvent) => {
-        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && Utils.isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
-            e.preventDefault();
-            if (this.props.unreadChannelIds.length <= 0) {
-                return;
-            }
-            const title = (
-                <FormattedMessage
-                    id='mark_all_as_read_modal.title'
-                    defaultMessage='Mark all messages as read'
-                />
-            );
-            const message = (
-                <FormattedMessage
-                    id='mark_all_as_read_modal.message'
-                    defaultMessage='Are you sure want to mark all your messages as read ?'
-                />
-            );
-            const confirmButtonText = (
-                <FormattedMessage
-                    id='mark_all_as_read_modal.confirm'
-                    defaultMessage='Yes'
-                />
-            );
-            const onConfirm = () => {
-                this.props.actions.markAllChannelsAsRead();
-                this.props.actions.closeModal(ModalIdentifiers.MARK_ALL_AS_READ_MODAL);
-            };
-            const onCancel = () => {
-                this.props.actions.closeModal(ModalIdentifiers.MARK_ALL_AS_READ_MODAL);
-            };
-            this.props.actions.openModal({
-                modalId: ModalIdentifiers.MARK_ALL_AS_READ_MODAL,
-                dialogType: ConfirmModal,
-                dialogProps: {
-                    show: true,
-                    title,
-                    message,
-                    confirmButtonText,
-                    onConfirm,
-                    onCancel,
-                },
-            });
-        }
-    };
-
     renderCategory = (category: ChannelCategory, index: number) => {
-        const {categories} = this.props;
-        const isLastCategory = index === categories.length - 1;
         return (
             <SidebarCategory
                 key={category.id}
@@ -442,7 +392,6 @@ export default class SidebarList extends React.PureComponent<Props, State> {
                 setChannelRef={this.setChannelRef}
                 handleOpenMoreDirectChannelsModal={this.props.handleOpenMoreDirectChannelsModal}
                 isNewCategory={this.props.newCategoryIds.includes(category.id)}
-                isLastCategory={isLastCategory}
             />
         );
     };
@@ -510,12 +459,26 @@ export default class SidebarList extends React.PureComponent<Props, State> {
                 this.props.actions.moveChannelsInSidebar(result.destination.droppableId, result.destination.index, result.draggableId);
                 trackEvent('ui', 'ui_sidebar_dragdrop_dropped_channel');
             } else if (result.type === 'SIDEBAR_CATEGORY') {
-                this.props.actions.moveCategory(this.props.currentTeam.id, result.draggableId, result.destination.index);
+                this.props.actions.moveCategory(this.props.currentTeam!.id, result.draggableId, result.destination.index);
                 trackEvent('ui', 'ui_sidebar_dragdrop_dropped_category');
             }
         }
 
         this.props.actions.stopDragging();
+    };
+
+    showChannelListScrollbar = () => {
+        if (this.channelsListScrollTimeout !== null) {
+            clearTimeout(this.channelsListScrollTimeout);
+        }
+
+        this.setState({autoHide: false});
+    };
+
+    hideChannelListScrollbar = () => {
+        this.channelsListScrollTimeout = setTimeout(() => {
+            this.setState({autoHide: true});
+        }, 300);
     };
 
     render() {
@@ -585,13 +548,13 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             />
         );
 
-        const ariaLabel = Utils.localizeMessage('accessibility.sections.lhsList', 'channel sidebar region');
+        const ariaLabel = this.props.intl.formatMessage({id: 'accessibility.sections.lhsList', defaultMessage: 'channel sidebar region'});
 
         return (
 
             // NOTE: id attribute added to temporarily support the desktop app's at-mention DOM scraping of the old sidebar
             <>
-                <ActivityAndInsightsLink/>
+                <ActivityAndInsightsLink/> {/* Ik: we want to keep using Insights */}
                 <GlobalThreadsLink/>
                 <DraftsLink/>
                 <div
@@ -619,22 +582,27 @@ export default class SidebarList extends React.PureComponent<Props, State> {
                         extraClass='nav-pills__unread-indicator-bottom'
                         content={below}
                     />
-                    <Scrollbars
-                        ref={this.scrollbar}
-                        autoHide={true}
-                        autoHideTimeout={500}
-                        autoHideDuration={500}
-                        renderThumbHorizontal={renderThumbHorizontal}
-                        renderThumbVertical={renderThumbVertical}
-                        renderTrackVertical={renderTrackVertical}
-                        renderView={renderView}
-                        onScroll={this.onScroll}
-                        style={scrollbarStyles}
+                    <div
+                        onPointerLeave={this.hideChannelListScrollbar}
+                        onPointerOver={this.showChannelListScrollbar}
                     >
-                        {channelList}
-                    </Scrollbars>
+                        <Scrollbars
+                            ref={this.scrollbar}
+                            autoHide={this.state.autoHide}
+                            renderThumbHorizontal={renderThumbHorizontal}
+                            renderThumbVertical={renderThumbVertical}
+                            renderTrackVertical={renderTrackVertical}
+                            renderView={renderView}
+                            onScroll={this.onScroll}
+                            style={scrollbarStyles}
+                        >
+                            {channelList}
+                        </Scrollbars>
+                    </div>
                 </div>
             </>
         );
     }
 }
+
+export default injectIntl(SidebarList);

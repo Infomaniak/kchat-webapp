@@ -2,9 +2,12 @@
 // See LICENSE.txt for license information.
 
 import type {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
+import isEqual from 'lodash/isEqual';
+import type {ComponentProps} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import ReactSelect from 'react-select';
+import type {Timezone} from 'timezones.json';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile, UserTimezone} from '@mattermost/types/users';
@@ -17,10 +20,10 @@ import RhsLimitVisibleGMsDMs from 'components/rhs_settings/rhs_settings_display/
 import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_settings_item';
 import RhsThemeSetting from 'components/rhs_settings/rhs_settings_theme';
 import Toggle from 'components/toggle';
+import ManageTimezones from 'components/user_settings/display/manage_timezones';
 
 import Constants from 'utils/constants';
 import {t} from 'utils/i18n';
-import {getBrowserTimezone} from 'utils/timezone';
 import {localizeMessage} from 'utils/utils';
 
 import SvgCompactIcon from '../rhs_settings_compact/assets/SvgCompactIcon';
@@ -101,7 +104,7 @@ type CustomBtnSelectProps ={
     hasBottomBorder?: boolean;
 }
 
-type Props = {
+export type Props = {
     user: UserProfile;
     updateSection: (section: string) => void;
     activeSection?: string;
@@ -110,6 +113,8 @@ type Props = {
     setRequireConfirm?: () => void;
     setEnforceFocus?: () => void;
     userTimezone: UserTimezone;
+    timezones: Timezone[];
+    timezone: UserTimezone;
     allowCustomThemes: boolean;
     enableLinkPreviews: boolean;
     defaultClientLocale: string;
@@ -158,6 +163,7 @@ type State = {
     serverError?: string;
     militaryTime: string;
     lastActiveDisplay: string;
+    timezone: UserTimezone;
 }
 
 export default class RhsSettingsDisplay extends React.PureComponent<Props, State> {
@@ -175,6 +181,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             oneClickReactionsOnPosts: props.oneClickReactionsOnPosts ? props.oneClickReactionsOnPosts : 'true',
             showUnreadsCategory: props.showUnreadsCategory ? props.showUnreadsCategory : 'true',
             unreadScrollPosition: props.unreadScrollPosition ? props.unreadScrollPosition : Preferences.UNREAD_SCROLL_POSITION,
+            timezone: props.timezone,
         };
     }
 
@@ -204,6 +211,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             showUnreadsCategory: props.showUnreadsCategory ? props.showUnreadsCategory : 'true',
             unreadScrollPosition: props.unreadScrollPosition ? props.unreadScrollPosition : Preferences.UNREAD_SCROLL_POSITION,
             isSaving: false,
+            timezone: props.timezone,
         };
 
         this.prevSections = {
@@ -214,14 +222,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             channel_display_mode: 'message_display',
             languages: 'channel_display_mode',
         };
-    }
-
-    componentDidMount() {
-        const {actions, enableTimezone, shouldAutoUpdateTimezone} = this.props;
-
-        if (enableTimezone && shouldAutoUpdateTimezone) {
-            actions.autoUpdateTimezone(getBrowserTimezone());
-        }
     }
 
     trackChangeIfNecessary(preference: PreferenceType, oldValue: any): void {
@@ -244,9 +244,15 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         const userId = user.id;
 
         // User preferences patch user and don't need to update preferences
-        if (newSettingsState.lastActiveDisplay !== this.props.lastActiveDisplay) {
+        if (newSettingsState.lastActiveDisplay !== this.props.lastActiveDisplay ||
+            !isEqual(newSettingsState.timezone, this.props.timezone)) {
+            const updatedTimezone = {
+                ...newSettingsState.timezone,
+                useAutomaticTimezone: newSettingsState.timezone.useAutomaticTimezone.toString(),
+            };
             const updatedUser = {
                 ...user,
+                timezone: updatedTimezone,
                 props: {
                     ...user.props,
                     show_last_active: newSettingsState.lastActiveDisplay,
@@ -344,7 +350,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             name: Preferences.USE_MILITARY_TIME,
             value: newSettingsState.militaryTime,
         };
-
         this.setState({isSaving: true});
 
         const preferences = [
@@ -371,6 +376,21 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
     handleOnChange(display: {[key: string]: any}) {
         this.handleSubmit({...this.state, ...display});
     }
+
+    // @ts-expect-error this seems wrong  as props is OnChangeActions but to minimize changed i only silented it
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    handleOnTimezoneChange: ComponentProps<typeof ManageTimezones>['onChange'] = (timezone: any, xd: any) => {
+        // eslint-disable-next-line no-console
+        console.log(timezone);
+        // eslint-disable-next-line no-console
+        console.log(xd);
+        this.handleOnChange({timezone: {
+            useAutomaticTimezone: timezone.useAutomaticTimezone.toString(),
+
+            // manualTimezone: timezone.useAutomaticTimezone ? timezone.automaticTimezone : timezone.manualTimezone,
+            // automaticTimezone: timezone.useAutomaticTimezone ? timezone.automaticTimezone : timezone.manualTimezone,
+        }});
+    };
 
     updateSection = (section: string) => {
         this.props.updateSection(section);
@@ -511,7 +531,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                         id={display}
                         options={options}
                         clearable={false}
-                        onChange={(e) => this.handleOnChange({[display]: e.value})}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        onChange={(e: any) => this.handleOnChange({[display]: e?.value})}
                         value={options.filter((opt: { value: string | boolean }) => opt.value === value)}
                         isSearchable={false}
                         styles={reactStyles}
@@ -675,11 +696,11 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             options: [
                 {
                     value: Preferences.MESSAGE_DISPLAY_CLEAN,
-                    label: localizeMessage('user.settings.display.messageDisplayClean', 'Standard'),
+                    label: localizeMessage({id: 'user.settings.display.messageDisplayClean', defaultMessage: 'Standard'}),
                     icon: <SvgNoCompactIcon/>},
                 {
                     value: Preferences.MESSAGE_DISPLAY_COMPACT,
-                    label: localizeMessage('user.settings.display.messageDisplayCompact', 'Compact'),
+                    label: localizeMessage({id: 'user.settings.display.messageDisplayCompact', defaultMessage: 'Compact'}),
                     icon: <SvgCompactIcon/>,
                     childOption: {
                         id: t('user.settings.display.colorize'),
@@ -709,8 +730,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 message: 'Channel Display',
             },
             options: [
-                {value: Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN, label: localizeMessage('user.settings.display.fullScreen', 'Full width')},
-                {value: Preferences.CHANNEL_DISPLAY_MODE_CENTERED, label: localizeMessage('user.settings.display.fixedWidthCentered', 'Fixed width, centered')},
+                {value: Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN, label: localizeMessage({id: 'user.settings.display.fullScreen', defaultMessage: 'Full width'})},
+                {value: Preferences.CHANNEL_DISPLAY_MODE_CENTERED, label: localizeMessage({id: 'user.settings.display.fixedWidthCentered', defaultMessage: 'Fixed width, centered'})},
             ],
             description: {
                 id: t('user.settings.display.channeldisplaymode'),
@@ -728,8 +749,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 message: 'Scroll position when viewing an unread channel',
             },
             options: [
-                {value: Preferences.UNREAD_SCROLL_POSITION_START_FROM_LEFT, label: localizeMessage('user.settings.advance.startFromLeftOff', 'Start me where I left off')},
-                {value: Preferences.UNREAD_SCROLL_POSITION_START_FROM_NEWEST, label: localizeMessage('user.settings.advance.startFromNewest', 'Start me at the newest message')},
+                {value: Preferences.UNREAD_SCROLL_POSITION_START_FROM_LEFT, label: localizeMessage({id: 'user.settings.advance.startFromLeftOff', defaultMessage: 'Start me where I left off'})},
+                {value: Preferences.UNREAD_SCROLL_POSITION_START_FROM_NEWEST, label: localizeMessage({id: 'user.settings.advance.startFromNewest', defaultMessage: 'Start me at the newest message'})},
             ],
         });
 
@@ -817,8 +838,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 message: 'Clock Display',
             },
             options: [
-                {value: 'false', label: localizeMessage('user.settings.display.normalClock', '12-hour clock (example: 4:00 PM)')},
-                {value: 'true', label: localizeMessage('user.settings.display.militaryClock', '24-hour clock (example: 16:00)')},
+                {value: 'false', label: localizeMessage({id: 'user.settings.display.normalClock', defaultMessage: '12-hour clock (example: 4:00 PM)'})},
+                {value: 'true', label: localizeMessage({id: 'user.settings.display.militaryClock', defaultMessage: '24-hour clock (example: 16:00)'})},
             ],
             description: {
                 id: t('user.settings.display.preferTime'),
@@ -836,10 +857,10 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 message: 'Teammate Name Display',
             },
             options: [
-                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME, label: localizeMessage('user.settings.display.teammateNameDisplayUsername', 'Show username')},
+                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME, label: localizeMessage({id: 'user.settings.display.teammateNameDisplayUsername', defaultMessage: 'Show username'})},
 
-                // {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayNicknameFullname', 'Show nickname if one exists, otherwise show first and last name')},
-                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayFullname', 'Show first and last name')},
+                // {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage({id: 'user.settings.display.teammateNameDisplayNicknameFullname', defaultMessage: 'Show nickname if one exists, otherwise show first and last name'})},
+                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME, label: localizeMessage({id: 'user.settings.display.teammateNameDisplayFullname', defaultMessage: 'Show first and last name'})},
             ],
             description: {
                 id: t('user.settings.display.teammateNameDisplayDescription'),
@@ -881,6 +902,27 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             });
         }
 
+        let timezoneSelection;
+        if (this.props.enableTimezone && !this.props.shouldAutoUpdateTimezone) {
+            timezoneSelection = (
+                <>
+                    <label htmlFor='user.settings.display.timezone'>
+                        <FormattedMessage
+                            id='user.settings.display.timezone2'
+                            defaultMessage='Automatic timezone'
+                        />
+                    </label>
+                    <ManageTimezones
+                        user={this.props.user}
+                        updateSection={this.updateSection}
+                        onChange={this.handleOnTimezoneChange}
+                        compact={true}
+                        {...this.props.timezone}
+                    />
+                </>
+            );
+        }
+
         return (
             <div id='displaySettings'>
                 <div className='user-settings user-rhs-container container'>
@@ -894,6 +936,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     {lastActiveSection}
                     {channelDisplayModeSection}
                     {UnreadScrollPositionSection}
+                    {timezoneSelection}
                     {clockSection}
                     {teammateNameDisplaySection}
                     <RhsLimitVisibleGMsDMs/>

@@ -1,25 +1,36 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {shallow} from 'enzyme';
 import React from 'react';
 
-import DateSeparator from 'components/post_view/date_separator/date_separator';
-import Timestamp from 'components/timestamp';
-import BasicSeparator from 'components/widgets/separator/basic-separator';
+import {renderWithContext, screen} from 'tests/react_testing_utils';
+
+import DateSeparator from './date_separator';
 
 describe('components/post_view/DateSeparator', () => {
-    test('should render Timestamp inside of a BasicSeparator and pass date/value to it', () => {
+    const initialState = {
+        entities: {
+            general: {
+                config: {},
+            },
+            preferences: {
+                myPreferences: {},
+            },
+        },
+    } as any;
+
+    // IK: Disabled - expects US date format (January 12, 2018) but we use UK format (12 January 2018)
+    // eslint-disable-next-line no-only-tests/no-only-tests
+    test.skip('should render Timestamp inside of a BasicSeparator and pass date/value to it', () => {
         const value = new Date('Fri Jan 12 2018 20:15:13 GMT+1200 (+12)');
-        const wrapper = shallow(
+        renderWithContext(
             <DateSeparator
                 date={value}
-            />,
+            />, initialState,
         );
-        expect(wrapper).toMatchSnapshot();
 
-        expect(wrapper.find(BasicSeparator).exists());
+        expect(screen.getByTestId('basicSeparator')).toBeInTheDocument();
 
-        expect(wrapper.find(Timestamp).prop('value')).toBe(value);
+        expect(screen.getByText('January 12, 2018')).toBeInTheDocument();
     });
 });

@@ -3,6 +3,7 @@
 
 import classNames from 'classnames';
 import React from 'react';
+import {type WrappedComponentProps, injectIntl} from 'react-intl';
 import {Link} from 'react-router-dom';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -10,13 +11,15 @@ import type {Channel} from '@mattermost/types/channels';
 import {mark, trackEvent} from 'actions/telemetry_actions';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+import {ChannelsAndDirectMessagesTour} from 'components/tours/onboarding_tour';
+import WithTooltip from 'components/with_tooltip';
 
-import Pluggable from 'plugins/pluggable';
 import Constants, {RHSStates} from 'utils/constants';
 import {wrapEmojis} from 'utils/emoji_utils';
-import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
+import {cmdOrCtrlPressed} from 'utils/keyboard';
+import {Mark} from 'utils/performance_telemetry';
+
+import Pluggable from 'plugins/pluggable';
 
 import type {RhsState} from 'types/store/rhs';
 
@@ -25,7 +28,7 @@ import ChannelPencilIcon from '../channel_pencil_icon';
 import SidebarChannelIcon from '../sidebar_channel_icon';
 import SidebarChannelMenu from '../sidebar_channel_menu';
 
-type Props = {
+type Props = WrappedComponentProps & {
     channel: Channel;
     link: string;
     label: string;
@@ -52,9 +55,14 @@ type Props = {
 
     teammateId?: string;
 
+    firstChannelName?: string;
+
+    showChannelsTutorialStep: boolean;
+
     hasUrgent: boolean;
     rhsState?: RhsState;
     rhsOpen?: boolean;
+    isSharedChannel?: boolean;
 
     actions: {
         markMostRecentPostInChannelAsUnread: (channelId: string) => void;
@@ -71,16 +79,14 @@ type State = {
     showTooltip: boolean;
 };
 
-export default class SidebarChannelLink extends React.PureComponent<Props, State> {
+export class SidebarChannelLink extends React.PureComponent<Props, State> {
     labelRef: React.RefObject<HTMLDivElement>;
-    gmItemRef: React.RefObject<HTMLDivElement>;
     menuTriggerRef: React.RefObject<HTMLButtonElement>;
 
     constructor(props: Props) {
         super(props);
 
         this.labelRef = React.createRef();
-        this.gmItemRef = React.createRef();
         this.menuTriggerRef = React.createRef();
 
         this.state = {
@@ -100,13 +106,13 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
     }
 
     enableToolTipIfNeeded = (): void => {
-        const element = this.gmItemRef.current || this.labelRef.current;
+        const element = this.labelRef.current;
         const showTooltip = element && element.offsetWidth < element.scrollWidth;
         this.setState({showTooltip: Boolean(showTooltip)});
     };
 
     getAriaLabel = (): string => {
-        const {label, ariaLabelPrefix, unreadMentions} = this.props;
+        const {label, ariaLabelPrefix, unreadMentions, intl} = this.props;
 
         let ariaLabel = label;
 
@@ -115,23 +121,23 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
         }
 
         if (unreadMentions === 1) {
-            ariaLabel += ` ${unreadMentions} ${localizeMessage('accessibility.sidebar.types.mention', 'mention')}`;
+            ariaLabel += ` ${unreadMentions} ${intl.formatMessage({id: 'accessibility.sidebar.types.mention', defaultMessage: 'mention'})}`;
         } else if (unreadMentions > 1) {
-            ariaLabel += ` ${unreadMentions} ${localizeMessage('accessibility.sidebar.types.mentions', 'mentions')}`;
+            ariaLabel += ` ${unreadMentions} ${intl.formatMessage({id: 'accessibility.sidebar.types.mentions', defaultMessage: 'mentions'})}`;
         }
 
         if (this.props.isUnread && unreadMentions === 0) {
-            ariaLabel += ` ${localizeMessage('accessibility.sidebar.types.unread', 'unread')}`;
+            ariaLabel += ` ${intl.formatMessage({id: 'accessibility.sidebar.types.unread', defaultMessage: 'unread'})}`;
         }
 
         return ariaLabel.toLowerCase();
     };
 
     // Bootstrap adds the attr dynamically, removing it to prevent a11y readout
-    removeTooltipLink = (): void => this.gmItemRef.current?.removeAttribute?.('aria-describedby');
+    removeTooltipLink = (): void => this.labelRef.current?.removeAttribute?.('aria-describedby');
 
     handleChannelClick = (event: React.MouseEvent<HTMLAnchorElement>): void => {
-        mark('SidebarChannelLink#click');
+        mark(Mark.ChannelLinkClicked);
         this.handleSelectChannel(event);
 
         if (this.props.rhsOpen && this.props.rhsState === RHSStates.EDIT_HISTORY) {
@@ -176,34 +182,34 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
             label,
             link,
             unreadMentions,
+            firstChannelName,
+            showChannelsTutorialStep,
             hasUrgent,
         } = this.props;
 
+        let channelsTutorialTip: JSX.Element | null = null;
+
+        // firstChannelName is based on channel.name,
+        // but we want to display `display_name` to the user, so we check against `.name` for channel equality but pass in the .display_name value
+        if (firstChannelName === channel.name || (!firstChannelName && showChannelsTutorialStep && channel.name === Constants.DEFAULT_CHANNEL)) {
+            channelsTutorialTip = firstChannelName ? (<ChannelsAndDirectMessagesTour firstChannelName={channel.display_name}/>) : <ChannelsAndDirectMessagesTour/>;
+        }
+
         let labelElement: JSX.Element = (
-            <span className='SidebarChannelLinkLabel'>
+            <span
+                ref={this.labelRef}
+                className='SidebarChannelLinkLabel'
+            >
                 {wrapEmojis(label)}
             </span>
         );
         if (this.state.showTooltip) {
-            const displayNameToolTip = (
-                <Tooltip id='channel-displayname__tooltip'>
-                    {label}
-                </Tooltip>
-            );
             labelElement = (
-                <OverlayTrigger
-                    delayShow={Constants.OVERLAY_TIME_DELAY}
-                    placement='top'
-                    overlay={displayNameToolTip}
-                    onEntering={this.removeTooltipLink}
+                <WithTooltip
+                    title={label}
                 >
-                    <div
-                        className='truncated'
-                        ref={this.gmItemRef}
-                    >
-                        {labelElement}
-                    </div>
-                </OverlayTrigger>
+                    {labelElement}
+                </WithTooltip>
             );
         }
 
@@ -216,7 +222,6 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 }}
                 emojiStyle={{
                     marginTop: -4,
-                    marginLeft: 6,
                     marginBottom: 0,
                     opacity: 0.8,
                 }}
@@ -231,7 +236,6 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 />
                 <div
                     className='SidebarChannelLinkLabel_wrapper'
-                    ref={this.labelRef}
                 >
                     {labelElement}
                     {customStatus}
@@ -239,6 +243,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                         pluggableName='SidebarChannelLinkLabel'
                         channel={this.props.channel}
                     />
+                    {/* {sharedChannelIcon} */}
                 </div>
                 <ChannelPencilIcon id={channel.id}/>
                 <ChannelMentionBadge
@@ -275,7 +280,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 selected: isChannelSelected,
             },
         ]);
-        const element = (
+        return (
             <Link
                 className={className}
                 id={`sidebarItem_${channel.name}`}
@@ -291,20 +296,10 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 tabIndex={0}
             >
                 {content}
+                {channelsTutorialTip}
             </Link>
         );
-
-        // if (isDesktopApp()) {
-        //     element = (
-        //         <CopyUrlContextMenu
-        //             link={this.props.link}
-        //             menuId={channel.id}
-        //         >
-        //             {element}
-        //         </CopyUrlContextMenu>
-        //     );
-        // }
-
-        return element;
     }
 }
+
+export default injectIntl(SidebarChannelLink);

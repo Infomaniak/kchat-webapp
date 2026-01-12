@@ -20,7 +20,6 @@ import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
 import {getCategoryInTeamWithChannel} from 'mattermost-redux/selectors/entities/channel_categories';
 import {getAllChannels} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {addChannelsInSidebar} from 'actions/views/channel_sidebar';
@@ -37,13 +36,12 @@ import type {GlobalState} from 'types/store';
 type Props = {
     channel: Channel;
     inHeaderDropdown?: boolean;
-    parentMenuId: string;
 };
 
 const ChannelMoveToSubMenu = (props: Props) => {
     const {formatMessage} = useIntl();
 
-    const dispatch = useDispatch<DispatchFunc>();
+    const dispatch = useDispatch();
 
     const allChannels = useSelector(getAllChannels);
     const multiSelectedChannelIds = useSelector((state: GlobalState) => state.views.channelSidebar.multiSelectedChannelIds);
@@ -191,7 +189,6 @@ const ChannelMoveToSubMenu = (props: Props) => {
             trailingElements={<ChevronRightIcon size={16}/>}
             menuId={`moveTo-${props.channel.id}-menu`}
             menuAriaLabel={formatMessage({id: 'sidebar_left.sidebar_channel_menu.moveTo.dropdownAriaLabel', defaultMessage: 'Move to submenu'})}
-            parentMenuId={props.parentMenuId}
         >
             {getMoveToCategorySubmenuItems(categories, currentCategory)}
         </Menu.SubMenu>

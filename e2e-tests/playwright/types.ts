@@ -12,6 +12,7 @@ export type TestArgs = {
 export type TestConfig = {
     // Server
     baseURL: string;
+    authBaseURL?: string;
     adminUsername: string;
     adminPassword: string;
     adminEmail: string;
@@ -20,6 +21,7 @@ export type TestConfig = {
     haClusterEnabled: boolean;
     haClusterNodeCount: number;
     haClusterName: string;
+    pushNotificationServer: string;
     // CI
     isCI: boolean;
     // Playwright
@@ -29,7 +31,6 @@ export type TestConfig = {
     // Visual tests
     snapshotEnabled: boolean;
     percyEnabled: boolean;
-    percyToken?: string;
 };
 
 // Based on https://github.com/microsoft/playwright/blob/d6ec1ae3994f127e38b866a231a34efc6a4cac0d/packages/playwright/types/test.d.ts#L5692-L5759

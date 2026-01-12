@@ -1,22 +1,24 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {RefObject} from 'react';
 import React from 'react';
+import type {RefObject} from 'react';
 import {Modal} from 'react-bootstrap';
-import {FormattedMessage} from 'react-intl';
+import type {IntlShape} from 'react-intl';
+import {injectIntl, FormattedMessage, defineMessage} from 'react-intl';
 
-import type {Group, GroupsWithCount, SyncablePatch} from '@mattermost/types/groups';
+import type {Group, SyncablePatch, GroupSource} from '@mattermost/types/groups';
 import {SyncableType} from '@mattermost/types/groups';
 
+import type {ActionResult} from 'mattermost-redux/types/actions';
+
 import Nbsp from 'components/html_entities/nbsp';
-import type {Value} from 'components/multiselect/multiselect';
 import MultiSelect from 'components/multiselect/multiselect';
-import AddIcon from 'components/widgets/icons/fa_add_icon';
+import type {Value} from 'components/multiselect/multiselect';
+
+import Constants from 'utils/constants';
 
 import groupsAvatar from 'images/groups-avatar.png';
-import Constants from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 const GROUPS_PER_PAGE = 50;
 const MAX_SELECTABLE_VALUES = 10;
@@ -24,8 +26,9 @@ const MAX_SELECTABLE_VALUES = 10;
 type GroupValue = Value & {member_count?: number};
 
 type Props = {
-    currentTeamName: string;
+    currentTeamName?: string;
     currentTeamId: string;
+    intl: IntlShape;
     searchTerm: string;
     groups: Group[];
 
@@ -39,10 +42,10 @@ type Props = {
 }
 
 export type Actions = {
-    getGroupsNotAssociatedToTeam: (teamID: string, q?: string, page?: number, perPage?: number) => Promise<{ data: Group[] } | { error: Error }>;
+    getGroupsNotAssociatedToTeam: (teamID: string, q?: string, page?: number, perPage?: number, source?: GroupSource | string, onlySyncableSources?: boolean) => Promise<ActionResult>;
     setModalSearchTerm: (term: string) => void;
-    linkGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType, patch: SyncablePatch) => Promise<{ data?: boolean; error?: Error }>;
-    getAllGroupsAssociatedToTeam: (teamID: string, filterAllowReference: boolean, includeMemberCount: boolean) => Promise<{ data: GroupsWithCount } | { error: Error }>;
+    linkGroupSyncable: (groupID: string, syncableID: string, syncableType: SyncableType, patch: SyncablePatch) => Promise<ActionResult>;
+    getAllGroupsAssociatedToTeam: (teamID: string, filterAllowReference: boolean, includeMemberCount: boolean) => Promise<ActionResult>;
 };
 
 type State = {
@@ -54,7 +57,7 @@ type State = {
     loadingGroups: boolean;
 }
 
-export default class AddGroupsToTeamModal extends React.PureComponent<Props, State> {
+export class AddGroupsToTeamModal extends React.PureComponent<Props, State> {
     private searchTimeoutId: number;
     private readonly selectedItemRef: RefObject<HTMLDivElement>;
 
@@ -77,7 +80,7 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
 
     public componentDidMount() {
         Promise.all([
-            this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, '', 0, GROUPS_PER_PAGE + 1),
+            this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, '', 0, GROUPS_PER_PAGE + 1, '', true),
             this.props.actions.getAllGroupsAssociatedToTeam(this.props.currentTeamId, false, true),
         ]).then(() => {
             this.setGroupsLoadingState(false);
@@ -96,7 +99,7 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
             this.searchTimeoutId = window.setTimeout(
                 async () => {
                     this.setGroupsLoadingState(true);
-                    await this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, searchTerm);
+                    await this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, searchTerm, 0, GROUPS_PER_PAGE + 1, '', true);
                     this.setGroupsLoadingState(false);
                 },
                 Constants.SEARCH_TIMEOUT_MILLISECONDS,
@@ -174,7 +177,7 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
     public handlePageChange = (page: number, prevPage: number): void => {
         if (page > prevPage) {
             this.setGroupsLoadingState(true);
-            this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, this.props.searchTerm, page, GROUPS_PER_PAGE + 1).then(() => {
+            this.props.actions.getGroupsNotAssociatedToTeam(this.props.currentTeamId, this.props.searchTerm, page, GROUPS_PER_PAGE + 1, '', true).then(() => {
                 this.setGroupsLoadingState(false);
             });
         }
@@ -221,9 +224,12 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
                     </div>
                 </div>
                 <div className='more-modal__actions'>
-                    <div className='more-modal__actions--round'>
-                        <AddIcon/>
-                    </div>
+                    <button
+                        className='more-modal__actions--round'
+                        aria-label='Add groups to team'
+                    >
+                        <i className='icon icon-plus'/>
+                    </button>
                 </div>
             </div>
         );
@@ -245,8 +251,8 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
             </div>
         );
 
-        const buttonSubmitText = localizeMessage('multiselect.add', 'Add');
-        const buttonSubmitLoadingText = localizeMessage('multiselect.adding', 'Adding...');
+        const buttonSubmitText = defineMessage({id: 'multiselect.add', defaultMessage: 'Add'});
+        const buttonSubmitLoadingText = defineMessage({id: 'multiselect.adding', defaultMessage: 'Adding...'});
 
         let addError = null;
         if (this.state.addError) {
@@ -288,7 +294,7 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
                             defaultMessage='Add New Groups to {teamName} Team'
                             values={{
                                 teamName: (
-                                    <strong>{this.props.currentTeamName}</strong>
+                                    <strong>{this.props.currentTeamName ?? ''}</strong>
                                 ),
                             }}
                         />
@@ -300,6 +306,7 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
                         key='addGroupsToTeamKey'
                         options={groupsOptionsToShow}
                         optionRenderer={this.renderOption}
+                        intl={this.props.intl}
                         selectedItemRef={this.selectedItemRef}
                         values={this.state.values}
                         valueRenderer={this.renderValue}
@@ -315,10 +322,12 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
                         buttonSubmitLoadingText={buttonSubmitLoadingText}
                         saving={this.state.saving}
                         loading={this.state.loadingGroups}
-                        placeholderText={localizeMessage('multiselect.addGroupsPlaceholder', 'Search and add groups')}
+                        placeholderText={defineMessage({id: 'multiselect.addGroupsPlaceholder', defaultMessage: 'Search and add groups'})}
                     />
                 </Modal.Body>
             </Modal>
         );
     }
 }
+
+export default injectIntl(AddGroupsToTeamModal);

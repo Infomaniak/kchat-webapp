@@ -1,12 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {MicrophoneOutlineIcon, CloseIcon, CheckIcon} from '@infomaniak/compass-icons/components';
 import React, {useEffect, useRef} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
-
-import {MicrophoneOutlineIcon, CloseIcon, CheckIcon} from '@mattermost/compass-icons/components';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
@@ -25,8 +24,9 @@ import {convertSecondsToMSS} from 'utils/datetime';
 
 interface Props {
     theme: Theme;
-    onCancel: () => void;
-    onComplete: (audioFile: File) => Promise<void>;
+    onCancel: (eventType: string) => void;
+    onComplete: (audioFile: File, eventType: string) => Promise<void>;
+    onStarted: (eventType: string) => void;
 }
 
 function VoiceMessageRecordingStarted(props: Props) {
@@ -61,6 +61,9 @@ function VoiceMessageRecordingStarted(props: Props) {
 
     useEffect(() => {
         startRecording();
+        if (typeof props.onStarted === 'function') {
+            props.onStarted('recording');
+        }
 
         return () => {
             cleanPostRecording(true);
@@ -69,14 +72,14 @@ function VoiceMessageRecordingStarted(props: Props) {
 
     async function handleRecordingCancelled() {
         await cleanPostRecording(true);
-        props.onCancel();
+        props.onCancel('stop');
     }
 
     async function handleRecordingComplete() {
         const audioFile = await stopRecording();
 
         if (audioFile) {
-            props.onComplete(audioFile);
+            props.onComplete(audioFile, 'stop');
         }
     }
 

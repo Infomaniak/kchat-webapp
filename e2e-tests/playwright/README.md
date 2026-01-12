@@ -42,31 +42,30 @@ npm run test
 
 #### 1. Run docker container using latest focal version
 
-Change to root directory, run docker container
+Change to the root directory, then run the docker container. (See https://playwright.dev/docs/docker for reference.)
 
 ```
-docker run -it --rm -v "$(pwd):/mattermost/" --ipc=host mcr.microsoft.com/playwright:v1.38.1-jammy /bin/bash
+docker run -it --rm -v "$(pwd):/mattermost/" --ipc=host mcr.microsoft.com/playwright:v1.49.1-noble /bin/bash
 ```
 
 #### 2. Inside the docker container
 
 ```
+export NPM_TOKEN=[REPLACE_ME]
 export NODE_OPTIONS='--no-experimental-fetch'
-export PW_BASE_URL=http://host.docker.internal:8065
 export PW_HEADLESS=true
-cd mattermost/e2e-tests/playwright
 
-# Install npm packages. Use "npm ci" to match the automated environment
-npm ci
+# Install packages. Use "--immutable" to match the automated environment
+yarn --immutable
 
 # Run specific test. See https://playwright.dev/docs/test-cli.
-npm run test -- login --project=chrome
+yarn test -- login --project=chrome
 
 # Or run all tests
-npm run test
+yarn test
 
 # Update snapshots
-npm run test -- login --update-snapshots
+yarn workspace e2e-playwright test:update-snapshots
 ```
 
 ## Page/Component Object Model

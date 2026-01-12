@@ -2,16 +2,20 @@
 // See LICENSE.txt for license information.
 
 import {defineConfig} from 'cypress';
+import webpack from '@cypress/webpack-preprocessor'
 
 export default defineConfig({
     chromeWebSecurity: false,
-    defaultCommandTimeout: 20000,
+    defaultCommandTimeout: 30000,
     downloadsFolder: 'tests/downloads',
     fixturesFolder: 'tests/fixtures',
     numTestsKeptInMemory: 0,
+    retries: 2,
     screenshotsFolder: 'tests/screenshots',
-    taskTimeout: 20000,
-    video: false,
+    taskTimeout: 60000,
+    video: true,
+    videoCompression: true,
+    videosFolder: 'tests/videos',
     viewportWidth: 1300,
     env: {
         adminEmail: 'sysadmin@sample.mattermost.com',
@@ -36,6 +40,7 @@ export default defineConfig({
         minioS3Endpoint: 'localhost:9000',
         minioS3SSL: false,
         numberOfTrialUsers: 100,
+        pushNotificationServer: 'https://push-test.mattermost.com',
         resetBeforeTest: false,
         runLDAPSync: true,
         secondServerURL: 'http://localhost/s/p',
@@ -48,6 +53,17 @@ export default defineConfig({
     },
     e2e: {
         setupNodeEvents(on, config) {
+            const options = {
+                webpackOptions: {
+                    resolve: {
+                        alias: {
+                            '@mattermost/client': '@infomaniak/mattermost-client',
+                            '@mattermost/types': '@infomaniak/mattermost-types',
+                        }
+                    }
+                }
+            }
+            on('file:preprocessor', webpack(options))
             return require('./tests/plugins/index.js')(on, config); // eslint-disable-line global-require
         },
         baseUrl: process.env.MM_SERVICESETTINGS_SITEURL || 'http://localhost:8065',

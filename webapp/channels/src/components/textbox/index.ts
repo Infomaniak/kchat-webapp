@@ -2,26 +2,25 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import type {GlobalState} from '@mattermost/types/store';
 
 import Permissions from 'mattermost-redux/constants/permissions';
-import {getLicense} from 'mattermost-redux/selectors/entities/general';
+import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getAssociatedGroupsForReference} from 'mattermost-redux/selectors/entities/groups';
 import {makeGetProfilesForThread} from 'mattermost-redux/selectors/entities/posts';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {Action} from 'mattermost-redux/types/actions';
 
 import {autocompleteChannels} from 'actions/channel_actions';
 import {autocompleteUsersInChannel} from 'actions/views/channel';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
 
-import type {Props as TextboxProps} from './textbox';
 import Textbox from './textbox';
+import TextboxLinks from './textbox_links';
 
 type Props = {
     channelId: string;
@@ -47,12 +46,13 @@ const makeMapStateToProps = () => {
             currentTeamId: teamId,
             autocompleteGroups,
             priorityProfiles: getProfilesForThread(state, ownProps.rootId ?? ''),
+            delayChannelAutocomplete: getConfig(state).DelayChannelAutocomplete === 'true',
         };
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    actions: bindActionCreators<ActionCreatorsMapObject<Action>, TextboxProps['actions']>({
+    actions: bindActionCreators({
         autocompleteUsersInChannel,
         autocompleteChannels,
         searchAssociatedGroupsForReference,
@@ -62,3 +62,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export {Textbox as TextboxClass};
 
 export default connect(makeMapStateToProps, mapDispatchToProps, null, {forwardRef: true})(Textbox);
+export {TextboxLinks};

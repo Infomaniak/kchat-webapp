@@ -47,6 +47,8 @@ describe('components/dot_menu/DotMenu returning empty ("")', () => {
                 setThreadFollow: jest.fn(),
                 addPostReminder: jest.fn(),
                 setGlobalItem: jest.fn(),
+                translatePost: jest.fn(),
+
             },
             canEdit: false,
             canDelete: false,
@@ -60,7 +62,8 @@ describe('components/dot_menu/DotMenu returning empty ("")', () => {
             threadId: 'post_id_1',
             userId: 'user_id_1',
             isMilitaryTime: false,
-            showForwardPostNewLabel: false,
+            canMove: true,
+            postTranslationEnabled: false,
         };
 
         const wrapper = shallow(

@@ -4,14 +4,21 @@
 import type {Channel, ServerChannel} from '@mattermost/types/channels';
 import type {MarketplaceApp, MarketplacePlugin} from '@mattermost/types/marketplace';
 import type {Call} from '@mattermost/types/posts';
+import type {CursorPaginationDirection, ReportDuration} from '@mattermost/types/reports';
 import type {Team} from '@mattermost/types/teams';
 import type {UserThread} from '@mattermost/types/threads';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+
+import type {Conference} from 'types/conference';
+import type {DesktopThemePreference} from 'types/theme';
+
 import type {I18nState} from './i18n';
 import type {LhsViewState} from './lhs';
 import type {RhsViewState} from './rhs';
+import type {Server} from './servers';
 
 import type {DraggingState} from '.';
 
@@ -19,6 +26,30 @@ export type ModalFilters = {
     roles?: string[];
     channel_roles?: string[];
     team_roles?: string[];
+};
+
+export type AdminConsoleUserManagementTableProperties = {
+    sortColumn: string;
+    sortIsDescending: boolean;
+    pageSize: number;
+    pageIndex: number;
+    cursorUserId: string;
+    cursorColumnValue: string;
+    cursorDirection: CursorPaginationDirection;
+    columnVisibility: Record<string, boolean>;
+    searchTerm: string;
+    filterTeam: string;
+    filterTeamLabel: string;
+    filterStatus: string;
+    filterRole: string;
+    dateRange?: ReportDuration;
+};
+
+export type EditingPostDetails = {
+    postId: string;
+    refocusId: string;
+    isRHS: boolean;
+    show: boolean;
 };
 
 export type ViewsState = {
@@ -29,6 +60,7 @@ export type ViewsState = {
             showNavigationPrompt: boolean;
         };
         needsLoggedInLimitReachedCheck: boolean;
+        adminConsoleUserManagementTableProperties: AdminConsoleUserManagementTableProperties;
     };
 
     announcementBar: {
@@ -85,11 +117,8 @@ export type ViewsState = {
     };
 
     kmeetCalls: {
-        connectedKmeetUrls: {
-            [channelId: string]: {
-                url: string;
-                id: string;
-            };
+        conferences: {
+            [channelId: string]: Conference;
         };
     };
 
@@ -104,11 +133,7 @@ export type ViewsState = {
     rhsSuppressed: boolean;
 
     posts: {
-        editingPost: {
-            postId: string;
-            show: boolean;
-            isRHS: boolean;
-        };
+        editingPost: EditingPostDetails;
         menuActions: {
             [postId: string]: {
                 [actionId: string]: {
@@ -144,11 +169,6 @@ export type ViewsState = {
         popoverSearch: string;
         channelMembersRhsSearch: string;
         modalFilters: ModalFilters;
-        systemUsersSearch: {
-            term: string;
-            team: string;
-            filter: string;
-        };
         userGridSearch: {
             term: string;
             filters: {
@@ -206,14 +226,9 @@ export type ViewsState = {
         newCategoryIds: string[];
         multiSelectedChannelIds: string[];
         lastSelectedChannel: string;
-        firstChannelName: string;
     };
 
-    statusDropdown: {
-        isOpen: boolean;
-    };
-
-    addChannelDropdown: {
+    addChannelCtaDropdown: {
         isOpen: boolean;
     };
 
@@ -235,5 +250,12 @@ export type ViewsState = {
         shouldShowPreviewOnCreatePost: boolean;
         shouldShowPreviewOnEditChannelHeaderModal: boolean;
         shouldShowPreviewOnEditPostModal: boolean;
+    };
+    theme: {
+        storedTheme: Theme | null;
+        themePreference: DesktopThemePreference;
+    };
+    servers: {
+        servers: Record<string, Server>;
     };
 };

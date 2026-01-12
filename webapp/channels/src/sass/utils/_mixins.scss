@@ -1,5 +1,3 @@
-@charset "utf-8";
-
 @mixin file-icon($path) {
     background-image: url($path);
     background-position: center;
@@ -74,7 +72,6 @@
 
 @mixin clearfix {
     overflow: hidden;
-    *zoom: 1;
 }
 
 @mixin pie-clearfix {
@@ -83,16 +80,14 @@
         clear: both;
         content: "";
     }
-
-    *zoom: 1;
 }
 
 @mixin tertiary-button {
     display: inline-flex;
     align-items: center;
     border: 0;
-    background: rgba(var(--button-bg-rgb), 0.08);
     border-radius: 4px;
+    background: rgba(var(--button-bg-rgb), 0.08);
     color: var(--button-bg);
     font-weight: 600;
     transition: all 0.15s ease-out;
@@ -126,8 +121,8 @@
     align-items: center;
     justify-content: center;
     border: 0;
-    background: var(--button-bg);
     border-radius: 4px;
+    background: var(--button-bg);
     color: var(--button-color);
     font-weight: 600;
     transition: all 0.15s ease-out;
@@ -159,9 +154,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--ik-btn-secondary);
     border-radius: 4px;
+    // Infomaniak edit
+    background: var(--ik-btn-secondary);
     color: var(--ik-btn-secondary-color);
+    // border: 1px solid var(--denim-button-bg);
+    // border-radius: 4px;
+    // background: var(--center-channel-bg);
+    // color: var(--button-bg);
     font-weight: 600;
     transition: all 0.15s ease-out;
 
@@ -190,7 +190,7 @@
 @mixin button-focus {
     &:focus {
         border-width: 0;
-        box-shadow: inset 0 0 0 2px var(--sidebar-text-active-border);
+        box-shadow: 0 0 0 2px var(--sidebar-text-active-border);
     }
 
     &:focus:not(:focus-visible) {
@@ -200,7 +200,7 @@
 
     &:focus-visible {
         border-width: 0;
-        box-shadow: inset 0 0 0 2px var(--sidebar-text-active-border);
+        box-shadow: 0 0 0 2px var(--sidebar-text-active-border);
     }
 }
 
@@ -251,6 +251,49 @@
         cursor: not-allowed;
         text-decoration: none;
     }
+}
+
+@mixin icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+
+    &:focus,
+    &:focus-within {
+        box-sizing: border-box;
+        border: 2px solid rgba(var(--denim-button-bg-rgb), 0.32);
+        box-shadow: none;
+        outline: none;
+    }
+
+    &:hover {
+        border: 0;
+        background: rgba(var(--center-channel-color-rgb), 0.08);
+        color: rgba(var(--center-channel-color-rgb), 0.8);
+    }
+
+    &:active {
+        border: 0;
+        background: rgba(var(--button-bg-rgb), 0.08);
+        color: var(--button-bg);
+    }
+
+    &:disabled {
+        background: none;
+        color: rgba(var(--center-channel-color-rgb), 0.32);
+        cursor: not-allowed;
+    }
+}
+
+@mixin icon-button-small-compact {
+    width: 28px;
+    height: 28px;
+    padding: 6px;
+    font-size: 16px;
 }
 
 @mixin simple-in-and-out-after($classPrefix, $transition_time: 300ms) {
@@ -360,4 +403,10 @@
     60% {
         transform: translate3d(4px, 0, 0);
     }
+}
+
+@mixin textEllipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

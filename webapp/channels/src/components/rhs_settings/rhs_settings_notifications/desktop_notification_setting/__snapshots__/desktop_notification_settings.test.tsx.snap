@@ -5,13 +5,10 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
   containerStyle=""
   infoPosition="bottom"
   inputs={
-    <StateManager
+    <ForwardRef
       className="react-select settings-select advanced-select"
       classNamePrefix="react-select"
       clearable={false}
-      defaultInputValue=""
-      defaultMenuIsOpen={false}
-      defaultValue={null}
       id="desktopNotificationLevel"
       isSearchable={false}
       menuPortalTarget={<body />}
@@ -64,13 +61,10 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
   containerStyle=""
   infoPosition="bottom"
   inputs={
-    <StateManager
+    <ForwardRef
       className="react-select settings-select advanced-select"
       classNamePrefix="react-select"
       clearable={false}
-      defaultInputValue=""
-      defaultMenuIsOpen={false}
-      defaultValue={null}
       id="desktopNotificationLevel"
       isSearchable={false}
       menuPortalTarget={<body />}
@@ -124,13 +118,10 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
     containerStyle=""
     infoPosition="bottom"
     inputs={
-      <StateManager
+      <ForwardRef
         className="react-select settings-select advanced-select"
         classNamePrefix="react-select"
         clearable={false}
-        defaultInputValue=""
-        defaultMenuIsOpen={false}
-        defaultValue={null}
         id="desktopNotificationLevel"
         isSearchable={false}
         menuPortalTarget={<body />}
@@ -249,13 +240,10 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
     containerStyle=""
     infoPosition="bottom"
     inputs={
-      <StateManager
+      <ForwardRef
         className="react-select settings-select advanced-select"
         classNamePrefix="react-select"
         clearable={false}
-        defaultInputValue=""
-        defaultMenuIsOpen={false}
-        defaultValue={null}
         id="desktopNotificationLevel"
         isSearchable={false}
         menuPortalTarget={<body />}
@@ -363,13 +351,10 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
       <div
         className="setting-list"
       >
-        <StateManager
+        <ForwardRef
           className="react-select notification-sound-dropdown"
           classNamePrefix="react-select"
           clearable={false}
-          defaultInputValue=""
-          defaultMenuIsOpen={false}
-          defaultValue={null}
           id="displaySoundNotification"
           isSearchable={false}
           onChange={[Function]}
@@ -424,13 +409,10 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
     containerStyle=""
     infoPosition="bottom"
     inputs={
-      <StateManager
+      <ForwardRef
         className="react-select settings-select advanced-select"
         classNamePrefix="react-select"
         clearable={false}
-        defaultInputValue=""
-        defaultMenuIsOpen={false}
-        defaultValue={null}
         id="desktopNotificationLevel"
         isSearchable={false}
         menuPortalTarget={<body />}

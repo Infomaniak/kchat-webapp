@@ -3,8 +3,8 @@
 
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import type {Dispatch} from 'redux';
 import {bindActionCreators, compose} from 'redux';
+import type {Dispatch} from 'redux';
 
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 import {getKSuites} from 'mattermost-redux/actions/teams';
@@ -48,7 +48,6 @@ function mapStateToProps(state: GlobalState) {
         canManageSystem: haveISystemPermission(state, {permission: Permissions.MANAGE_SYSTEM}),
         canJoinPublicTeams: haveISystemPermission(state, {permission: Permissions.JOIN_PUBLIC_TEAMS}),
         canJoinPrivateTeams: haveISystemPermission(state, {permission: Permissions.JOIN_PRIVATE_TEAMS}),
-        siteURL: config.SiteURL,
         totalTeamsCount: state.entities.teams.totalCount || 0,
         isCloud,
         isFreeTrial,

@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import type {IntlShape} from 'react-intl';
 import {injectIntl} from 'react-intl';
+import type {IntlShape} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -18,17 +18,23 @@ import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import TeamGroupsManageModal from 'components/team_groups_manage_modal';
+import UserSettingsModal from 'components/user_settings/modal';
 import Menu from 'components/widgets/menu/menu';
 
 import {Constants, ModalIdentifiers} from 'utils/constants';
-import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
-
-// import {trackEvent} from 'actions/telemetry_actions';
+import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 
 import type {ModalData} from 'types/actions';
-import type {PluginComponent} from 'types/store/plugins';
+import type {MainMenuAction} from 'types/store/plugins';
 
+// import {trackEvent} from 'actions/telemetry_actions';
+// import LearnAboutTeamsLink from './learn_about_teams_link';
+import './main_menu.scss';
 import {IKConstants} from '../../utils/constants-ik';
+import {
+    reportingToolsOnClick,
+    ReportingToolsLogo,
+} from '../global_header/right_controls/reporting_tools_button/reporting_tools_button';
 
 export type Props = {
     mobile: boolean;
@@ -42,22 +48,28 @@ export type Props = {
     enableIncomingWebhooks: boolean;
     enableOAuthServiceProvider: boolean;
     enableOutgoingWebhooks: boolean;
+    enableReportingTools: boolean;
     canManageSystemBots: boolean;
     canManageIntegrations: boolean;
 
     // experimentalPrimaryTeam?: string;
     // helpLink?: string;
     // reportAProblemLink?: string;
-    pluginMenuItems?: PluginComponent[];
+    moreTeamsToJoin: boolean;
+    pluginMenuItems?: MainMenuAction[];
     isMentionSearch?: boolean;
     isRhsSettings?: boolean;
     teamIsGroupConstrained: boolean;
     isLicensedForLDAPGroups?: boolean;
     intl: IntlShape;
+    ikGroupId: number;
 
+    // isCloud: boolean;
+    // isStarterFree: boolean;
+    // isFreeTrial: boolean;
+    // usageDeltaTeams: number;
     // guestAccessEnabled: boolean;
     // canInviteTeamMember: boolean;
-    ikGroupId: number;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
         showMentions: () => void;
@@ -86,16 +98,12 @@ export class MainMenu extends React.PureComponent<Props> {
     handleKeyDown = (e: KeyboardEvent): void => {
         if (cmdOrCtrlPressed(e) && e.shiftKey && isKeyPressed(e, Constants.KeyCodes.A)) {
             e.preventDefault();
-            if (this.props.isRhsSettings) {
-                this.props.actions.closeRightHandSide();
-            } else {
-                this.props.actions.showSettings();
-            }
+            this.props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true, focusOriginElement: 'userAccountMenuButton'}});
         }
     };
 
     handleEmitUserLoggedOutEvent = (): void => {
-        GlobalActions.emitUserLoggedOutEvent();
+        GlobalActions.emitUserLoggedOutEvent('ikLogout');
     };
 
     handleEmitUserGoToDashboard = (e: Event): void => {
@@ -200,8 +208,17 @@ export class MainMenu extends React.PureComponent<Props> {
                         id='flaggedPosts'
                         onClick={this.getFlagged}
                         icon={<i className='fa fa-bookmark'/>}
-                        text={formatMessage({id: 'sidebar_right_menu.flagged', defaultMessage: 'Saved Posts'})}
+                        text={formatMessage({id: 'sidebar_right_menu.flagged', defaultMessage: 'Saved messages'})}
                     />
+
+                    {this.props.enableReportingTools && (
+                        <Menu.ItemAction
+                            id='reportingTools'
+                            onClick={reportingToolsOnClick}
+                            icon={<ReportingToolsLogo/>}
+                            text={formatMessage({id: 'sidebar_right_menu.reportingTools', defaultMessage: 'Reporting tools'})}
+                        />
+                    )}
                 </Menu.Group>
                 <Menu.Group>
                     <Menu.ItemAction
@@ -422,7 +439,63 @@ export class MainMenu extends React.PureComponent<Props> {
                         modalId={ModalIdentifiers.LEAVE_TEAM}
                         dialogType={LeaveTeamModal}
                         text={formatMessage({id: 'navbar_dropdown.leave', defaultMessage: 'Leave Team'})}
-                    /> */}
+                    />
+                </Menu.Group>
+                <Menu.Group>
+                    <SystemPermissionGate permissions={[Permissions.CREATE_TEAM]}>
+                        <Menu.ItemLink
+                            id='createTeam'
+                            to='/create_team'
+                            className={createTeamRestricted ? 'MenuItem__with-icon-tooltip' : ''}
+                            disabled={teamsLimitReached}
+                            text={formatMessage({id: 'navbar_dropdown.create', defaultMessage: 'Create a Team'})}
+                            sibling={createTeamRestricted && (
+                                <RestrictedIndicator
+                                    feature={MattermostFeatures.CREATE_MULTIPLE_TEAMS}
+                                    minimumPlanRequiredForFeature={LicenseSkus.Professional}
+                                    blocked={!this.props.isFreeTrial}
+                                    tooltipMessage={formatMessage({
+                                        id: 'navbar_dropdown.create.tooltip.cloudFreeTrial',
+                                        defaultMessage: 'During your trial you are able to create multiple teams. These teams will be archived after your trial.',
+                                    })}
+                                    titleAdminPreTrial={formatMessage({
+                                        id: 'navbar_dropdown.create.modal.titleAdminPreTrial',
+                                        defaultMessage: 'Try unlimited teams with a free trial',
+                                    })}
+                                    messageAdminPreTrial={formatMessage({
+                                        id: 'navbar_dropdown.create.modal.messageAdminPreTrial',
+                                        defaultMessage: 'Create unlimited teams with one of our paid plans. Get the full experience of Enterprise when you start a free, {trialLength} day trial.',
+                                    },
+                                    {
+                                        trialLength: FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS,
+                                    },
+                                    )}
+                                    titleAdminPostTrial={formatMessage({
+                                        id: 'navbar_dropdown.create.modal.titleAdminPostTrial',
+                                        defaultMessage: 'Upgrade to create unlimited teams',
+                                    })}
+                                    messageAdminPostTrial={formatMessage({
+                                        id: 'navbar_dropdown.create.modal.messageAdminPostTrial',
+                                        defaultMessage: 'Multiple teams allow for context-specific spaces that are more attuned to your and your teams’ needs. Upgrade to the Professional plan to create unlimited teams.',
+                                    })}
+                                    titleEndUser={formatMessage({
+                                        id: 'navbar_dropdown.create.modal.titleEndUser',
+                                        defaultMessage: 'Multiple teams available in paid plans',
+                                    })}
+                                    messageEndUser={formatMessage({
+                                        id: 'navbar_dropdown.create.modal.messageEndUser',
+                                        defaultMessage: 'Multiple teams allow for context-specific spaces that are more attuned to your teams’ needs.',
+                                    })}
+                                />
+                            )}
+                        />
+                    </SystemPermissionGate>
+                    <Menu.Group>
+                        <div className='MainMenu_dropdown-link'>
+                            <LearnAboutTeamsLink/>
+                        </div>
+                    </Menu.Group>
+                */}
                 </Menu.Group>
                 <Menu.Group>
                     {pluginItems}

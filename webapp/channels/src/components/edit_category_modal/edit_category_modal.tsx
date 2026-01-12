@@ -5,7 +5,6 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {GenericModal} from '@mattermost/components';
-import type {ChannelCategory} from '@mattermost/types/channel_categories';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -24,7 +23,7 @@ type Props = {
     initialCategoryName?: string;
     channelIdsToAdd?: string[];
     actions: {
-        createCategory: (teamId: string, displayName: string, channelIds?: string[] | undefined) => {data: ChannelCategory};
+        createCategory: (teamId: string, displayName: string, channelIds?: string[] | undefined) => void;
         renameCategory: (categoryId: string, newName: string) => void;
     };
 };
@@ -124,15 +123,14 @@ export default class EditCategoryModal extends React.PureComponent<Props, State>
         return (
             <GenericModal
                 id='editCategoryModal'
-                ariaLabel={localizeMessage('rename_category_modal.renameCategory', 'Rename Category')}
                 modalHeaderText={modalHeaderText}
                 confirmButtonText={editButtonText}
+                compassDesign={true}
                 onExited={this.props.onExited}
                 handleEnterKeyPress={this.handleConfirm}
                 handleConfirm={this.handleConfirm}
                 handleCancel={this.handleCancel}
                 cancelButtonClassName='secondary'
-                compassDesign={true}
                 isConfirmDisabled={this.isConfirmDisabled()}
                 enforceFocus={false}
             >
@@ -142,7 +140,7 @@ export default class EditCategoryModal extends React.PureComponent<Props, State>
                     className='form-control filter-textbox'
                     type='text'
                     value={this.state.categoryName}
-                    placeholder={localizeMessage('edit_category_modal.placeholder', 'Name your category')}
+                    placeholder={localizeMessage({id: 'edit_category_modal.placeholder', defaultMessage: 'Name your category'})}
                     clearable={true}
                     onClear={this.handleClear}
                     onChange={this.handleChange}

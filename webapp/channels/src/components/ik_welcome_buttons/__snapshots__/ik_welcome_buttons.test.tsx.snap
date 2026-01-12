@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/IkWelcomeButtons should match snapshot 1`] = `
+<div>
+  <div
+    class="system-bot-message"
+  >
+    <p>
+      Hello! Happy to see you here and welcome 
+      <span
+        class="emoticon emoticon--blush"
+      />
+      <br />
+      I'm here to answer your questions and send you reminders and notifications about your kSuite products when needed.
+    </p>
+    <p
+      class="mt-2"
+    >
+      <b>
+        To get started
+      </b>
+      , here are some quick actions to explore kChat
+    </p>
+    <div
+      class="system-bot-message__buttons"
+    >
+      <button
+        class="btn btn-sm btn-outline"
+        type="button"
+      >
+        <span
+          class="emoticon emoticon--writing_hand"
+        />
+         Write to someone
+      </button>
+      <button
+        class="btn btn-sm btn-outline"
+        type="button"
+      >
+        <span
+          class="emoticon emoticon--mag"
+        />
+         Browse channels
+      </button>
+      <button
+        class="btn btn-sm btn-outline"
+        type="button"
+      >
+        <span>
+          <span
+            class="emoticon emoticon--computer"
+          />
+          <span
+            class="emoticon emoticon--iphone"
+          />
+        </span>
+         Download the apps
+      </button>
+    </div>
+    <p
+      class="mt-1 mb-2"
+    >
+      <span
+        class="emoticon emoticon--arrow_down"
+      />
+       Or 
+      <b>
+        ask me a question
+      </b>
+       directly here!
+    </p>
+  </div>
+</div>
+`;

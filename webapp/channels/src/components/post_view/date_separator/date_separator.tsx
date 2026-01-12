@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import PropTypes from 'prop-types';
-import type {FC} from 'react';
 import React, {memo} from 'react';
+import type {FC} from 'react';
 
 import Timestamp, {RelativeRanges} from 'components/timestamp';
 import BasicSeparator from 'components/widgets/separator/basic-separator';
@@ -25,6 +25,7 @@ const DateSeparator: FC<Props> = ({date}) => {
                 useTime={false}
                 useSemanticOutput={false}
                 ranges={DATE_RANGES}
+                capitalize={true}
             />
         </BasicSeparator>
     );

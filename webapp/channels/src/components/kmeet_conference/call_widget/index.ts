@@ -6,25 +6,25 @@ import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import type {UserProfile} from '@mattermost/types/users';
+import type {IDMappedObjects} from '@mattermost/types/utilities';
 
 import {Client4} from 'mattermost-redux/client';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
-import type {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
 import {hideExpandedView, showExpandedView, updateAudioStatus, updateCameraStatus, updateScreenSharingStatus} from 'actions/calls';
 import {connectedCallID, connectedChannelID, expandedView, voiceChannelCallStartAt, voiceConnectedChannels, voiceConnectedProfilesInChannel, voiceUsersStatuses} from 'selectors/calls';
+import {getChannelURL} from 'selectors/urls';
 
 import {ActionTypes} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
 import CallWidget from './component';
-
-import {getChannelURL} from '../utils';
 
 const mapStateToProps = (state: GlobalState) => {
     const channel = getChannel(state, connectedChannelID(state));
@@ -33,7 +33,7 @@ const mapStateToProps = (state: GlobalState) => {
 
     const profiles: UserProfile[] = [];
     const pictures: string[] = [];
-    if (channels) {
+    if (channels && channel) {
         let users;
         if (channels[channel.id] && channels[channel.id][connectedConfID]) {
             users = channels[channel.id][connectedConfID];
@@ -50,6 +50,7 @@ const mapStateToProps = (state: GlobalState) => {
                 } else if (profiles && profiles[i]) {
                     try {
                         profiles.splice(i, 1);
+                    // eslint-disable-next-line no-empty
                     } catch {}
                 }
             }

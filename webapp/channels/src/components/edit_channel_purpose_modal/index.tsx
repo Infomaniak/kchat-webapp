@@ -2,14 +2,11 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
 import {bindActionCreators} from 'redux';
-
-import type {Channel} from '@mattermost/types/channels';
+import type {Dispatch} from 'redux';
 
 import {patchChannel} from 'mattermost-redux/actions/channels';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
-import type {ActionFunc, GenericAction, ActionResult} from 'mattermost-redux/types/actions';
 
 import Constants from 'utils/constants';
 
@@ -23,13 +20,9 @@ function mapStateToProps(state: GlobalState) {
     };
 }
 
-type Actions = {
-    patchChannel: (channelId: string, patch: Partial<Channel>) => Promise<ActionResult>;
-}
-
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc>, Actions>({
+        actions: bindActionCreators({
             patchChannel,
         }, dispatch),
     };

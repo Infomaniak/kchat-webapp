@@ -70,11 +70,9 @@ export function checkDialogElementForError(elem: DialogElement, value: any): Dia
 // If we're returned errors that don't match any of the elements we have,
 // ignore them and complete the dialog
 
-export function checkIfErrorsMatchElements(errors: {
-    [x: string]: DialogError;
-} = {}, elements: DialogElement[] = []) {
+export function checkIfErrorsMatchElements(errors: Record<string, string> = {}, elements: DialogElement[] = []) {
     for (const name in errors) {
-        if (!errors.hasOwnProperty(name)) {
+        if (!Object.hasOwn(errors, name)) {
             continue;
         }
         for (const elem of elements) {

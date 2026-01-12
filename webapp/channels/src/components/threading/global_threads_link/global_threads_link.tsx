@@ -23,7 +23,9 @@ import {isAnyModalOpen} from 'selectors/views/modals';
 
 import ChannelMentionBadge from 'components/sidebar/sidebar_channel/channel_mention_badge';
 import CollapsedReplyThreadsModal
-    from 'components/tours/crt_tour/collapsed_reply_threads_modal/collapsed_reply_threads_modal';
+    from 'components/tours/crt_tour/collapsed_reply_threads_modal';
+import CRTWelcomeTutorialTip
+    from 'components/tours/crt_tour/crt_welcome_tutorial_tip';
 
 import Constants, {
     CrtTutorialSteps,
@@ -32,14 +34,12 @@ import Constants, {
     Preferences,
     RHSStates,
 } from 'utils/constants';
-import {t} from 'utils/i18n';
+import {Mark} from 'utils/performance_telemetry';
 
 import type {GlobalState} from 'types/store';
 
 import ThreadsIcon from './threads_icon';
 
-import CRTWelcomeTutorialTip
-    from '../../tours/crt_tour/crt_welcome_tutorial_tip';
 import {useThreadRouting} from '../hooks';
 
 import './global_threads_link.scss';
@@ -61,20 +61,24 @@ const GlobalThreadsLink = () => {
     const crtTutorialTrigger = useSelector((state: GlobalState) => getInt(state, Preferences.CRT_TUTORIAL_TRIGGERED, currentUserId, Constants.CrtTutorialTriggerSteps.START));
     const threads = useSelector(getThreadsInCurrentTeam);
     const showTutorialTip = crtTutorialTrigger === CrtTutorialTriggerSteps.STARTED && tipStep === CrtTutorialSteps.WELCOME_POPOVER && threads.length >= 1;
-    const threadsCount = useSelector(getThreadCountsInCurrentTeam);
     const rhsOpen = useSelector(getIsRhsOpen);
     const rhsState = useSelector(getRhsState);
-    const showTutorialTrigger = isFeatureEnabled && crtTutorialTrigger === Constants.CrtTutorialTriggerSteps.START && !appHaveOpenModal && Boolean(threadsCount) && threadsCount.total >= 1;
+    const showTutorialTrigger = isFeatureEnabled && crtTutorialTrigger === Constants.CrtTutorialTriggerSteps.START && !appHaveOpenModal && Boolean(counts) && counts.total >= 1;
     const openThreads = useCallback((e) => {
         e.stopPropagation();
+
         trackEvent('crt', 'go_to_global_threads');
+
+        performance.mark(Mark.GlobalThreadsLinkClicked);
+
         if (showTutorialTrigger) {
             dispatch(openModal({modalId: ModalIdentifiers.COLLAPSED_REPLY_THREADS_MODAL, dialogType: CollapsedReplyThreadsModal, dialogProps: {}}));
         }
+
         if (rhsOpen && rhsState === RHSStates.EDIT_HISTORY) {
             dispatch(closeRightHandSide());
         }
-    }, [showTutorialTrigger, threadsCount, threads, rhsOpen, rhsState]);
+    }, [showTutorialTrigger, counts, threads, rhsOpen, rhsState]);
 
     useEffect(() => {
         // load counts if necessary
@@ -113,7 +117,7 @@ const GlobalThreadsLink = () => {
                     </span>
                     <div className='SidebarChannelLinkLabel_wrapper'>
                         <span className='SidebarChannelLinkLabel sidebar-item__name'>
-                            {formatMessage({id: t('globalThreads.sidebarLink'), defaultMessage: 'Threads'})}
+                            {formatMessage({id: 'globalThreads.sidebarLink', defaultMessage: 'Threads'})}
                         </span>
                     </div>
                     {counts?.total_unread_mentions > 0 && (

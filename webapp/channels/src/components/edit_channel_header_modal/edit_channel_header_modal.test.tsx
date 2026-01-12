@@ -6,13 +6,15 @@ import React from 'react';
 
 import type {Channel, ChannelType} from '@mattermost/types/channels';
 
-import type {default as EditChannelHeaderModalClass} from 'components/edit_channel_header_modal/edit_channel_header_modal';
-import EditChannelHeaderModal from 'components/edit_channel_header_modal/edit_channel_header_modal';
+import {EditChannelHeaderModal} from 'components/edit_channel_header_modal/edit_channel_header_modal';
+import type {EditChannelHeaderModal as EditChannelHeaderModalClass} from 'components/edit_channel_header_modal/edit_channel_header_modal';
 import Textbox from 'components/textbox';
 
-import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
 import Constants from 'utils/constants';
 import * as Utils from 'utils/utils';
+
+import {type MockIntl} from 'tests/helpers/intl-test-helper';
+import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
 
 const KeyCodes = Constants.KeyCodes;
 
@@ -52,6 +54,9 @@ describe('components/EditChannelHeaderModal', () => {
             setShowPreview: jest.fn(),
             patchChannel: jest.fn().mockResolvedValue({}),
         },
+        intl: {
+            formatMessage: ({defaultMessage}) => defaultMessage,
+        } as MockIntl,
     };
 
     test('should match snapshot, init', () => {
@@ -106,11 +111,13 @@ describe('components/EditChannelHeaderModal', () => {
 
     describe('handleSave', () => {
         test('on no change, should hide the modal without trying to patch a channel', async () => {
-            const wrapper = shallow<EditChannelHeaderModal>(
+            const wrapper = shallow(
                 <EditChannelHeaderModal {...baseProps}/>,
             );
 
-            await wrapper.instance().handleSave();
+            const instance = wrapper.instance() as EditChannelHeaderModalClass;
+
+            await instance.handleSave();
 
             expect(wrapper.state('show')).toBe(false);
 
@@ -120,13 +127,15 @@ describe('components/EditChannelHeaderModal', () => {
         test('on error, should not close modal and set server error state', async () => {
             baseProps.actions.patchChannel.mockResolvedValueOnce({error: serverError});
 
-            const wrapper = shallow<EditChannelHeaderModal>(
+            const wrapper = shallow(
                 <EditChannelHeaderModal {...baseProps}/>,
             );
 
+            const instance = wrapper.instance() as EditChannelHeaderModalClass;
+
             wrapper.setState({header: 'New header'});
 
-            await wrapper.instance().handleSave();
+            await instance.handleSave();
 
             expect(wrapper.state('show')).toBe(true);
             expect(wrapper.state('serverError')).toBe(serverError);
@@ -135,13 +144,15 @@ describe('components/EditChannelHeaderModal', () => {
         });
 
         test('on success, should close modal', async () => {
-            const wrapper = shallow<EditChannelHeaderModal>(
+            const wrapper = shallow(
                 <EditChannelHeaderModal {...baseProps}/>,
             );
 
+            const instance = wrapper.instance() as EditChannelHeaderModalClass;
+
             wrapper.setState({header: 'New header'});
 
-            await wrapper.instance().handleSave();
+            await instance.handleSave();
 
             expect(wrapper.state('show')).toBe(false);
 

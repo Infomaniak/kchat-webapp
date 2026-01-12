@@ -3,6 +3,7 @@
 
 import classNames from 'classnames';
 import React from 'react';
+import type {KeyboardEvent, MouseEvent} from 'react';
 
 import type {FileInfo} from '@mattermost/types/files';
 
@@ -21,7 +22,7 @@ import type {PropsFromRedux} from './index';
 const PREVIEW_IMAGE_MIN_DIMENSION = 50;
 const DISPROPORTIONATE_HEIGHT_RATIO = 20;
 
-interface Props extends PropsFromRedux {
+export interface Props extends PropsFromRedux {
     postId: string;
     fileInfo: FileInfo;
     isRhsOpen: boolean;
@@ -29,6 +30,7 @@ interface Props extends PropsFromRedux {
     compactDisplay?: boolean;
     isEmbedVisible?: boolean;
     isInPermalink?: boolean;
+    disableActions?: boolean;
 }
 
 type State = {
@@ -85,7 +87,7 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
         }
     };
 
-    handleImageClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    handleImageClick = (e: (KeyboardEvent<HTMLImageElement> | MouseEvent<HTMLDivElement | HTMLImageElement>)) => {
         e.preventDefault();
 
         this.props.actions.openModal({
@@ -99,7 +101,10 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
         });
     };
 
-    toggleEmbedVisibility = () => {
+    toggleEmbedVisibility = (e: React.MouseEvent) => {
+        // stopping propagation to avoid accidentally closing edit history
+        // section when clicking on image collapse/expand button.
+        e.stopPropagation();
         this.props.actions.toggleEmbedVisibility(this.props.postId);
     };
 
@@ -244,6 +249,7 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
                                     enablePublicLink={this.props.enablePublicLink}
                                     getFilePublicLink={this.getFilePublicLink}
                                     handleKDriveSave={this.props.actions.saveFileToKDrive}
+                                    hideUtilities={this.props.disableActions}
                                 />
                             </div>
                         </div>

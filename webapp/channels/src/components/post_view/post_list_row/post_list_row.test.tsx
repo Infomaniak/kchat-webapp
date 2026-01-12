@@ -20,6 +20,15 @@ import {TestHelper} from 'utils/test_helper';
 
 import PostListRow from './post_list_row';
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('components/post_view/post_list_row', () => {
     const defaultProps = {
         listId: '1234',
@@ -30,16 +39,29 @@ describe('components/post_view/post_list_row', () => {
         shortcutReactToLastPostEmittedFrom: 'NO_WHERE',
         loadingNewerPosts: false,
         loadingOlderPosts: false,
-        isCurrentUserLastPostGroupFirstPost: false,
         actions: {
             emitShortcutReactToLastPostFrom: jest.fn(),
         },
-        channelLimitExceeded: false,
         limitsLoaded: false,
-        limits: {},
+        limits: {
+            storage: 100,
+            public_channels: 100,
+            private_channels: 100,
+            guests: 100,
+            members: 100,
+            custom_emojis: 100,
+            incoming_webhooks: 100,
+            outgoing_webhooks: 100,
+            sidebar_categories: 100,
+            reminder_custom_date: true,
+            scheduled_draft_custom_date: true,
+        },
+
         usage: {} as CloudUsage,
         post: TestHelper.getPostMock({id: 'post_id_1'}),
         currentUserId: 'user_id_1',
+        newMessagesSeparatorActions: [],
+        channelId: 'channel_id_1',
     };
 
     test('should render more messages loading indicator', () => {
@@ -104,7 +126,7 @@ describe('components/post_view/post_list_row', () => {
     });
 
     test('should render new messages line', () => {
-        const listId = PostListRowListIds.START_OF_NEW_MESSAGES;
+        const listId = PostListRowListIds.START_OF_NEW_MESSAGES + '1553106600000';
         const props = {
             ...defaultProps,
             listId,

@@ -1,9 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {UserProfile} from './users';
-
-import {RelationOneToOne} from './utilities';
+import type {UserProfile} from './users';
+import type {RelationOneToOne} from './utilities';
 
 export enum SyncableType {
     Team = 'team',
@@ -37,15 +36,27 @@ export type Group = {
     delete_at: number;
     has_syncables: boolean;
     member_count: number;
+    member_ids: string[];
     scheme_admin: boolean;
     allow_reference: boolean;
     channel_member_count?: number;
     channel_member_timezones_count?: number;
 };
 
+/**
+ * Main sources for groups
+ */
 export enum GroupSource {
     Ldap = 'ldap',
     Custom = 'custom',
+}
+
+/**
+ * Special prefixes that can be added to group sources when they come from plugins
+ * Used for identifying plugin-created groups by checking if source starts with this prefix
+ */
+export enum PluginGroupSourcePrefix {
+    Plugin = 'plugin_'
 }
 
 export type GroupTeam = {
@@ -169,6 +180,13 @@ export type GroupSearchParams = GetGroupsParams & {
     filter_has_member?: string;
     include_timezones?: string;
     include_channel_member_count?: string;
+}
+
+export type GroupMember = {
+    user_id: string;
+    group_id: string;
+    created_at: number;
+    deleted_at: number;
 }
 
 export type GroupMembership = {

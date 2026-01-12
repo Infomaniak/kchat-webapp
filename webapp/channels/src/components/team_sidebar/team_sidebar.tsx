@@ -2,34 +2,31 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
+import type {ElementType} from 'react';
 import React from 'react';
 import type {DroppableProvided, DropResult} from 'react-beautiful-dnd';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Scrollbars from 'react-custom-scrollbars';
-import {FormattedMessage} from 'react-intl';
+import type {WrappedComponentProps} from 'react-intl';
+import {injectIntl} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
 import type {Team} from '@mattermost/types/teams';
 
-import Permissions from 'mattermost-redux/constants/permissions';
 import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
-import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import TeamButton from 'components/team_sidebar/components/team_button';
 
-import Pluggable from 'plugins/pluggable';
 import {Constants} from 'utils/constants';
-import {getCurrentProduct} from 'utils/products';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {isKeyPressed} from 'utils/keyboard';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
-import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
+
+import Pluggable from 'plugins/pluggable';
 
 import type {PropsFromRedux} from './index';
 
-export interface Props extends PropsFromRedux {
-    location: RouteComponentProps['location'];
-}
+export type Props = PropsFromRedux & RouteComponentProps & WrappedComponentProps<'intl'>;
 
 type State = {
     showOrder: boolean;
@@ -63,7 +60,7 @@ export function renderThumbVertical(props: Props) {
     );
 }
 
-export default class TeamSidebar extends React.PureComponent<Props, State> {
+export class TeamSidebar extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
@@ -74,9 +71,9 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
     }
 
     switchToPrevOrNextTeam = (e: KeyboardEvent, currentTeamId: string, teams: Team[]) => {
-        if (Utils.isKeyPressed(e, Constants.KeyCodes.UP) || Utils.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
+        if (isKeyPressed(e, Constants.KeyCodes.UP) || isKeyPressed(e, Constants.KeyCodes.DOWN)) {
             e.preventDefault();
-            const delta = Utils.isKeyPressed(e, Constants.KeyCodes.DOWN) ? 1 : -1;
+            const delta = isKeyPressed(e, Constants.KeyCodes.DOWN) ? 1 : -1;
             const pos = teams.findIndex((team: Team) => team.id === currentTeamId);
             const newPos = pos + delta;
 
@@ -89,7 +86,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
                 team = teams[newPos];
             }
 
-            this.props.actions.switchTeam(`/${team.name}`);
+            window.location.href = team.url;
             return true;
         }
         return false;
@@ -110,7 +107,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         ];
 
         for (const idx in digits) {
-            if (Utils.isKeyPressed(e, digits[idx]) && parseInt(idx, 10) < teams.length) {
+            if (isKeyPressed(e, digits[idx]) && parseInt(idx, 10) < teams.length) {
                 e.preventDefault();
 
                 // prevents reloading the current team, while still capturing the keyboard shortcut
@@ -118,7 +115,8 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
                     return false;
                 }
                 const team = teams[idx];
-                this.props.actions.switchTeam(`/${team.name}`);
+
+                window.location.href = team.url;
                 return true;
             }
         }
@@ -148,16 +146,23 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         }
     };
 
-    // componentDidMount() {
-    //     this.props.actions.getTeams(0, 200);
-    //     document.addEventListener('keydown', this.handleKeyDown);
-    //     document.addEventListener('keyup', this.handleKeyUp);
-    // }
+    componentDidUpdate(prevProps: Props) {
+        // TODO: debounce
+        if (prevProps.currentTeamId !== this.props.currentTeamId && this.props.enableWebSocketEventScope) {
+            // WebSocketClient.updateActiveTeam(this.props.currentTeamId);
+        }
+    }
 
-    // componentWillUnmount() {
-    //     document.removeEventListener('keydown', this.handleKeyDown);
-    //     document.removeEventListener('keyup', this.handleKeyUp);
-    // }
+    componentDidMount() {
+        // this.props.actions.getTeams(0, 200);
+        document.addEventListener('keydown', this.handleKeyDown);
+        document.addEventListener('keyup', this.handleKeyUp);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
+        document.removeEventListener('keyup', this.handleKeyUp);
+    }
 
     onDragEnd = (result: DropResult) => {
         const {
@@ -207,9 +212,6 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
     }
 
     render() {
-        // if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
-        //     return null;
-        // }
         const root: Element | null = document.querySelector('#root');
         if (this.props.myTeams.length <= 1) {
             root!.classList.remove('multi-teams');
@@ -220,7 +222,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         const plugins = [];
         const sortedTeams = filterAndSortTeamsByDisplayName(this.props.myTeams, this.props.locale, this.props.userTeamsOrderPreference);
 
-        const currentProduct = getCurrentProduct(this.props.products, this.props.location.pathname);
+        const {currentProduct} = this.props;
         if (currentProduct && !currentProduct.showTeamSidebar) {
             return null;
         }
@@ -239,6 +241,8 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
                     mentions={this.props.mentionsInTeamMap.has(team.id) ? this.props.mentionsInTeamMap.get(team.id) : 0}
                     hasUrgent={this.props.teamHasUrgentMap.has(team.id) ? this.props.teamHasUrgentMap.get(team.id) : false}
                     teamIconUrl={Utils.imageURLForTeam(team)}
+
+                    // @ts-expect-error for safety i silented it
                     switchTeam={this.switchTeamIK}
                     isDraggable={true}
                     teamId={team.id}
@@ -248,53 +252,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
             );
         });
 
-        const joinableTeams = [];
-
-        // const plusIcon = (
-        //     <i
-        //         className='icon icon-plus'
-        //         role={'img'}
-        //         aria-label={Utils.localizeMessage('sidebar.team_menu.button.plusIcon', 'Plus Icon')}
-        //     />
-        // );
-
-        // if (this.props.moreTeamsToJoin && !this.props.experimentalPrimaryTeam) {
-        //     joinableTeams.push(
-        //         <TeamButton
-        //             btnClass='team-btn__add'
-        //             key='more_teams'
-        //             url='/select_team'
-        //             tip={
-        //                 <FormattedMessage
-        //                     id='team_sidebar.join'
-        //                     defaultMessage='Other teams you can join'
-        //                 />
-        //             }
-        //             content={plusIcon}
-        //             switchTeam={this.props.actions.switchTeam}
-        //         />,
-        //     );
-        // } else {
-        // joinableTeams.push(
-        //     <SystemPermissionGate
-        //         permissions={[Permissions.CREATE_TEAM]}
-        //         key='more_teams'
-        //     >
-        //         <TeamButton
-        //             btnClass='team-btn__add'
-        //             url='/create_team'
-        //             tip={
-        //                 <FormattedMessage
-        //                     id='navbar_dropdown.create'
-        //                     defaultMessage='Create a Team'
-        //                 />
-        //             }
-        //             content={plusIcon}
-        //             switchTeam={this.props.actions.switchTeam}
-        //         />
-        //     </SystemPermissionGate>,
-        // );
-        // }
+        const joinableTeams = [] as ElementType[];
 
         // Disable team sidebar pluggables in products until proper support can be provided.
         const isNonChannelsProduct = !currentProduct;
@@ -355,3 +313,5 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         );
     }
 }
+
+export default injectIntl(TeamSidebar);

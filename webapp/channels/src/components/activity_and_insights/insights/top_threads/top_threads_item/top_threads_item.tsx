@@ -17,7 +17,8 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
-import {selectPostAndParentChannel} from 'actions/views/rhs';
+
+// import {selectPostAndParentChannel} from 'actions/views/rhs';
 
 import Markdown from 'components/markdown';
 import Attachment from 'components/threading/global_threads/thread_item/attachments';
@@ -53,7 +54,7 @@ const TopThreadsItem = ({thread, complianceExportEnabled}: Props) => {
                 },
             }));
         } else {
-            dispatch(selectPostAndParentChannel(thread.post));
+            // dispatch(selectPostAndParentChannel(thread.post));
         }
     }, [thread, isChannelMember, currentTeamId]);
 

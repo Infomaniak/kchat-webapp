@@ -1,12 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ConnectedProps} from 'react-redux';
-import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {connect, type ConnectedProps} from 'react-redux';
 import {bindActionCreators} from 'redux';
-
-import type {Post} from '@mattermost/types/posts';
+import type {Dispatch} from 'redux';
 
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 
@@ -15,7 +12,6 @@ import {editPost} from 'actions/views/posts';
 import {closeRightHandSide} from 'actions/views/rhs';
 import {getSelectedPostId} from 'selectors/rhs';
 
-import type {ModalData} from 'types/actions';
 import type {GlobalState} from 'types/store';
 
 import EditedPostItem from './edited_post_item';
@@ -28,15 +24,9 @@ function mapStateToProps(state: GlobalState) {
     };
 }
 
-type Actions = {
-    editPost: (post: Post) => Promise<{data: Post}>;
-    closeRightHandSide: () => void;
-    openModal: <P>(modalData: ModalData<P>) => void;
-};
-
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<any>, Actions>({
+        actions: bindActionCreators({
             editPost,
             closeRightHandSide,
             openModal,

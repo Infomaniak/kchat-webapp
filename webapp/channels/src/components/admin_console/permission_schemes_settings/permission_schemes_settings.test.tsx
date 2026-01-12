@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import type {ComponentProps} from 'react';
 import React from 'react';
+import type {ComponentProps} from 'react';
 import type {RouteComponentProps} from 'react-router-dom';
 
 import type {Scheme} from '@mattermost/types/schemes';

@@ -11,13 +11,12 @@ import {PostRequestTypes} from 'utils/constants';
 import PostList, {MAX_EXTRA_PAGES_LOADED} from './post_list';
 
 const actionsProp = {
+    loadDeletedPosts: jest.fn().mockImplementation(() => Promise.resolve()),
     loadPostsAround: jest.fn().mockImplementation(() => Promise.resolve({atLatestMessage: true, atOldestmessage: true})),
     loadUnreads: jest.fn().mockImplementation(() => Promise.resolve({atLatestMessage: true, atOldestmessage: true})),
     loadPosts: jest.fn().mockImplementation(() => Promise.resolve({moreToLoad: false})),
     syncPostsInChannel: jest.fn().mockResolvedValue({}),
     loadLatestPosts: jest.fn().mockImplementation(() => Promise.resolve({atLatestMessage: true, atOldestmessage: true})),
-    checkAndSetMobileView: jest.fn(),
-    markChannelAsViewed: jest.fn(),
     markChannelAsRead: jest.fn(),
     updateNewMessagesAtInChannel: jest.fn(),
     toggleShouldStartFromBottomWhenUnread: jest.fn(),
@@ -49,7 +48,17 @@ const baseProps = {
     isMobileView: false,
     hasInaccessiblePosts: false,
     shouldStartFromBottomWhenUnread: false,
+    isThreadView: false,
 };
+
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
 
 describe('components/post_view/post_list', () => {
     it('snapshot for loading when there are no posts', () => {
@@ -250,7 +259,6 @@ describe('components/post_view/post_list', () => {
 
             await wrapper.instance().postsOnLoad('undefined');
             expect(actionsProp.markChannelAsRead).toHaveBeenCalledWith(baseProps.channelId);
-            expect(actionsProp.markChannelAsViewed).toHaveBeenCalledWith(baseProps.channelId);
         });
         test('Should not call markChannelAsReadAndViewed as it is a permalink', async () => {
             const emptyPostList: string[] = [];
@@ -261,7 +269,6 @@ describe('components/post_view/post_list', () => {
 
             await actionsProp.loadPostsAround();
             expect(actionsProp.markChannelAsRead).not.toHaveBeenCalled();
-            expect(actionsProp.markChannelAsViewed).not.toHaveBeenCalled();
         });
     });
 });

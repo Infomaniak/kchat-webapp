@@ -1,30 +1,36 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {lazy} from 'react';
+
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
-import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {getTeamRedirectChannelIfIsAccesible} from 'actions/global_actions';
 import LocalStorageStore from 'stores/local_storage_store';
 
-import InvitationModal from 'components/invitation_modal';
-import WorkTemplateModal from 'components/work_templates';
+import {withSuspense} from 'components/common/hocs/with_suspense';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, Constants, ModalIdentifiers} from 'utils/constants';
 
-import type {GlobalState} from 'types/store';
+import type {ActionFunc, ActionFuncAsync} from 'types/store';
 
 import {openModal} from './modals';
 
-export function switchToChannels() {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState() as GlobalState;
+const InvitationModal = withSuspense(lazy(() => import('components/invitation_modal')));
+
+export function switchToChannels(): ActionFuncAsync<boolean> {
+    return async (dispatch, getState) => {
+        const state = getState();
         const currentUserId = getCurrentUserId(state);
         const user = getCurrentUser(state);
         const teamId = getCurrentTeamId(state) || LocalStorageStore.getPreviousTeamId(currentUserId);
         const team = getTeam(state, teamId || '');
+
+        if (!team) {
+            return {data: false};
+        }
 
         const channel = await getTeamRedirectChannelIfIsAccesible(user, team);
         const channelName = channel?.name || Constants.DEFAULT_CHANNEL;
@@ -34,32 +40,13 @@ export function switchToChannels() {
     };
 }
 
-export function openWorkTemplateModal(redirectToChannels = true) {
-    return (dispatch: DispatchFunc) => {
-        if (redirectToChannels) {
-            dispatch(switchToChannels());
-        }
-        setTimeout(() => {
-            dispatch(openModal({
-                modalId: ModalIdentifiers.WORK_TEMPLATE,
-                dialogType: WorkTemplateModal,
-                dialogProps: {
-                },
-            }));
-        }, redirectToChannels ? 1000 : 1);
-        return {data: true};
-    };
-}
-
-export function openInvitationsModal(timeout = 1) {
-    return (dispatch: DispatchFunc) => {
+export function openInvitationsModal(timeout = 1): ActionFunc {
+    return (dispatch) => {
         dispatch(switchToChannels());
         setTimeout(() => {
             dispatch(openModal({
                 modalId: ModalIdentifiers.INVITATION,
                 dialogType: InvitationModal,
-                dialogProps: {
-                },
             }));
         }, timeout);
         return {data: true};

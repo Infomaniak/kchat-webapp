@@ -1,0 +1,10 @@
+.TextBanner {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--ik-illustration-grey-7);
+    background: var(--guest-banner-background);
+    font-size: 12px;
+    gap: 8px;
+}

@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -14,7 +14,7 @@ import {
     getTotalUsersStats,
     searchProfiles,
 } from 'mattermost-redux/actions/users';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getConfig, getFeatureFlagValue} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {
     getCurrentUserId,
@@ -25,12 +25,11 @@ import {
     searchProfilesInCurrentTeam,
     getTotalUsersStats as getTotalUsersStatsSelector,
 } from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 
 import {openDirectChannelToUserId, openGroupChannelToUserIds} from 'actions/channel_actions';
 import {loadStatusesForProfilesList, loadProfilesMissingStatus} from 'actions/status_actions';
 import {loadProfilesForGroupChannels} from 'actions/user_actions';
-import {closeModal} from 'actions/views/modals';
+import {openModal} from 'actions/views/modals';
 import {setModalSearchTerm} from 'actions/views/search';
 
 import type {GlobalState} from 'types/store';
@@ -41,7 +40,7 @@ type OwnProps = {
     isExistingChannel: boolean;
 }
 
-const makeMapStateToProps = () => {
+export const makeMapStateToProps = () => {
     const searchProfilesStartingWithTerm = makeSearchProfilesStartingWithTerm();
 
     return (state: GlobalState, ownProps: OwnProps) => {
@@ -56,54 +55,45 @@ const makeMapStateToProps = () => {
 
         const searchTerm = state.views.search.modalSearch;
 
+        let filters;
+        const enableSharedChannelsDMs = getFeatureFlagValue(state, 'EnableSharedChannelsDMs') === 'true';
+        if (!enableSharedChannelsDMs) {
+            filters = {exclude_remote: true};
+        }
+
         let users: UserProfile[];
         if (searchTerm) {
             if (restrictDirectMessage === 'any') {
-                users = searchProfilesStartingWithTerm(state, searchTerm, false);
+                users = searchProfilesStartingWithTerm(state, searchTerm, false, filters);
             } else {
-                users = searchProfilesInCurrentTeam(state, searchTerm, false);
+                users = searchProfilesInCurrentTeam(state, searchTerm, false, filters);
             }
         } else if (restrictDirectMessage === 'any') {
-            users = selectProfiles(state);
+            users = selectProfiles(state, filters);
         } else {
-            users = getProfilesInCurrentTeam(state);
+            users = getProfilesInCurrentTeam(state, filters);
         }
 
         const team = getCurrentTeam(state);
         const stats = getTotalUsersStatsSelector(state) || {total_users_count: 0};
 
         return {
-            currentTeamId: team.id,
-            currentTeamName: team.name,
+            currentTeamId: team?.id,
+            currentTeamName: team?.name,
             searchTerm,
             users,
             currentChannelMembers,
             currentUserId,
             restrictDirectMessage,
-            totalCount: stats.total_users_count,
+            totalCount: stats.total_users_count ?? 0,
         };
     };
 };
 
-type Actions = {
-    getProfiles: (page?: number | undefined, perPage?: number | undefined, options?: any) => Promise<any>;
-    getProfilesInTeam: (teamId: string, page: number, perPage?: number | undefined, sort?: string | undefined, options?: any) => Promise<any>;
-    loadProfilesMissingStatus: (users: UserProfile[]) => ActionFunc;
-    getTotalUsersStats: () => ActionFunc;
-    loadStatusesForProfilesList: (users: any) => {
-        data: boolean;
-    };
-    loadProfilesForGroupChannels: (groupChannels: any) => Promise<any>;
-    openDirectChannelToUserId: (userId: any) => Promise<any>;
-    openGroupChannelToUserIds: (userIds: any) => Promise<any>;
-    searchProfiles: (term: string, options?: any) => Promise<any>;
-    searchGroupChannels: (term: string) => Promise<any>;
-    setModalSearchTerm: (term: any) => GenericAction;
-}
-
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<ActionFunc | GenericAction>, Actions>({
+        actions: bindActionCreators({
+            openModal,
             getProfiles,
             getProfilesInTeam,
             loadProfilesMissingStatus,
@@ -115,7 +105,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
             searchProfiles,
             searchGroupChannels,
             setModalSearchTerm,
-            closeModal,
         }, dispatch),
     };
 }

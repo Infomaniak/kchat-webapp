@@ -1,20 +1,26 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {AlertOutlineIcon, AlertCircleOutlineIcon, MessageTextOutlineIcon, CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
-import React, {useCallback, useEffect, useRef, useState, memo} from 'react';
+import {AlertCircleOutlineIcon} from '@infomaniak/compass-icons/components';
+import classNames from 'classnames';
+import React, {useCallback, useState, memo, useMemo, useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import styled from 'styled-components';
 
 import type {PostPriorityMetadata} from '@mattermost/types/posts';
 import {PostPriority} from '@mattermost/types/posts';
 
-import {isPostAcknowledgementsEnabled} from 'mattermost-redux/selectors/entities/posts';
+import {getPersistentNotificationIntervalMinutes, isPersistentNotificationsEnabled, isPostAcknowledgementsEnabled} from 'mattermost-redux/selectors/entities/posts';
+import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
-import Menu, {MenuGroup, MenuItem, ToggleItem} from './post_priority_picker_item';
+import {IconContainer} from 'components/advanced_text_editor/formatting_bar/formatting_icon';
+import CompassDesignProvider from 'components/compass_design_provider';
+import * as Menu from 'components/menu';
 
-import BetaTag from '../widgets/tag/beta_tag';
+import Constants from 'utils/constants';
+import * as Keyboard from 'utils/keyboard';
+
+import {Header, MenuItem, StyledCheckIcon, ToggleItem, StandardIcon, ImportantIcon, UrgentIcon, AcknowledgementIcon, PersistentNotificationsIcon, Footer} from './post_priority_picker_item';
 
 import './post_priority_picker.scss';
 
@@ -22,246 +28,268 @@ type Props = {
     settings?: PostPriorityMetadata;
     onClose: () => void;
     onApply: (props: PostPriorityMetadata) => void;
-    placement: string;
-    rightOffset?: number;
-    topOffset?: number;
-    leftOffset?: number;
-    style?: React.CSSProperties;
+    disabled: boolean;
 }
 
-const UrgentIcon = styled(AlertOutlineIcon)`
-    fill: rgb(var(--semantic-color-danger));
-`;
-
-const ImportantIcon = styled(AlertCircleOutlineIcon)`
-    fill: rgb(var(--semantic-color-info));
-`;
-
-const StandardIcon = styled(MessageTextOutlineIcon)`
-    fill: rgba(var(--center-channel-color-rgb), 0.56);
-`;
-
-const AcknowledgementIcon = styled(CheckCircleOutlineIcon)`
-    fill: rgba(var(--center-channel-color-rgb), 0.56);
-`;
-
-const Header = styled.h4`
-    align-items: center;
-    display: flex;
-    gap: 8px;
-    font-family: 'SuisseIntl', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: 20px;
-    padding: 14px 16px 6px;
-    text-align: left;
-`;
-
-const Feedback = styled.a`
-    margin-left: auto;
-    font-size: 11px;
-`;
-
-const Footer = styled.div`
-    align-items: center;
-    border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
-    display: flex;
-    font-family: SuisseIntl;
-    justify-content: flex-end;
-    padding: 16px;
-    gap: 8px;
-`;
-
-const Picker = styled.div`
-    position: absolute;
-    z-index: 1100;
-    display: flex;
-    flex-direction: column;
-    border: solid 1px rgba(var(--center-channel-color-rgb), 0.16);
-    margin-right: 3px;
-    background: var(--center-channel-bg);
-    border-radius: 4px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    user-select: none;
-    overflow: hidden;
-    *zoom: 1;
-`;
-
 function PostPriorityPicker({
-    leftOffset = 0,
     onApply,
     onClose,
-    placement,
-    rightOffset = 0,
     settings,
-    style,
-    topOffset = 0,
+    disabled,
 }: Props) {
     const {formatMessage} = useIntl();
-    const [priority, setPriority] = useState<PostPriority|''>(settings?.priority || '');
+
+    const [pickerOpen, setPickerOpen] = useState(false);
+    const [priority, setPriority] = useState<PostPriority | ''>(settings?.priority || '');
     const [requestedAck, setRequestedAck] = useState<boolean>(settings?.requested_ack || false);
+    const [persistentNotifications, setPersistentNotifications] = useState<boolean>(settings?.persistent_notifications || false);
 
-    const ref = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        ref.current?.focus();
-    }, []);
-
+    const theme = useSelector(getTheme);
     const postAcknowledgementsEnabled = useSelector(isPostAcknowledgementsEnabled);
+    const persistentNotificationsEnabled = useSelector(isPersistentNotificationsEnabled) && postAcknowledgementsEnabled;
+    const interval = useSelector(getPersistentNotificationIntervalMinutes);
 
-    const makeOnSelectPriority = useCallback((type?: PostPriority) => () => {
+    const messagePriority = formatMessage({id: 'shortcuts.msgs.formatting_bar.post_priority', defaultMessage: 'Message priority'});
+
+    const handleClose = useCallback(() => {
+        setPickerOpen(false);
+        onClose();
+    }, [onClose]);
+
+    const makeOnSelectPriority = useCallback((type?: PostPriority) => (e: React.MouseEvent<HTMLLIElement> | React.KeyboardEvent<HTMLLIElement>) => {
+        e.stopPropagation();
+        e.preventDefault();
+
         setPriority(type || '');
 
         if (!postAcknowledgementsEnabled) {
             onApply({
                 priority: type || '',
                 requested_ack: false,
+                persistent_notifications: false,
             });
-            onClose();
-        } else if (type === PostPriority.URGENT) {
-            setRequestedAck(true);
+            handleClose();
+        } else if (type !== PostPriority.URGENT) {
+            setPersistentNotifications(false);
         }
-    }, [onApply, onClose, postAcknowledgementsEnabled]);
+    }, [onApply, handleClose, postAcknowledgementsEnabled]);
 
     const handleAck = useCallback(() => {
         setRequestedAck(!requestedAck);
     }, [requestedAck]);
 
-    const handleApply = () => {
+    const handlePersistentNotifications = useCallback(() => {
+        setPersistentNotifications(!persistentNotifications);
+    }, [persistentNotifications]);
+
+    const handleApply = useCallback(() => {
         onApply({
             priority,
             requested_ack: requestedAck,
+            persistent_notifications: persistentNotifications,
         });
-        onClose();
-    };
+        handleClose();
+    }, [onApply, handleClose, persistentNotifications, priority, requestedAck]);
 
-    let pickerStyle: React.CSSProperties = {};
-    if (style && !(style.left === 0 && style.top === 0)) {
-        if (placement === 'top' || placement === 'bottom') {
-            // Only take the top/bottom position passed by React Bootstrap since we want to be left-aligned
-            pickerStyle = {
-                top: style.top,
-                bottom: style.bottom,
-                left: leftOffset,
-            };
-        } else {
-            pickerStyle = {...style};
+    const handleFooterButtonAction = useCallback((e: React.KeyboardEvent<HTMLButtonElement>, actionFn: () => void) => {
+        if (Keyboard.isKeyPressed(e, Constants.KeyCodes.ENTER)) {
+            e.preventDefault();
+            actionFn();
         }
+    }, []);
 
-        pickerStyle.top = pickerStyle.top ? Number(pickerStyle.top) + topOffset : topOffset;
+    const menuItems = useMemo(() => [
+        <MenuItem
+            key='menu-item-priority-standard'
+            id='menu-item-priority-standard'
+            role='menuitemradio'
+            aria-checked={!priority}
+            onClick={makeOnSelectPriority()}
+            trailingElements={!priority && <StyledCheckIcon size={18}/>}
+            leadingElement={<StandardIcon size={18}/>}
+            labels={
+                <FormattedMessage
+                    id='post_priority.priority.standard'
+                    defaultMessage='Standard'
+                />
+            }
+        />,
+        <MenuItem
+            key='menu-item-priority-important'
+            id='menu-item-priority-important'
+            role='menuitemradio'
+            aria-checked={priority === PostPriority.IMPORTANT}
+            onClick={makeOnSelectPriority(PostPriority.IMPORTANT)}
+            trailingElements={priority === PostPriority.IMPORTANT && <StyledCheckIcon size={18}/>}
+            leadingElement={<ImportantIcon size={18}/>}
+            labels={
+                <FormattedMessage
+                    id='post_priority.priority.important'
+                    defaultMessage='Important'
+                />
+            }
+        />,
+        <MenuItem
+            key='menu-item-priority-urgent'
+            id='menu-item-priority-urgent'
+            role='menuitemradio'
+            aria-checked={priority === PostPriority.URGENT}
+            onClick={makeOnSelectPriority(PostPriority.URGENT)}
+            trailingElements={priority === PostPriority.URGENT && <StyledCheckIcon size={18}/>}
+            leadingElement={<UrgentIcon size={18}/>}
+            labels={
+                <FormattedMessage
+                    id='post_priority.priority.urgent'
+                    defaultMessage='Urgent'
+                />
+            }
+        />,
+    ], [makeOnSelectPriority, priority]);
 
-        if (pickerStyle.right) {
-            pickerStyle.right = Number(pickerStyle.right) + rightOffset;
-        }
-    }
-
-    const feedbackLink = postAcknowledgementsEnabled ? 'https://forms.gle/noA8Azg7RdaBZtMB6' : 'https://forms.gle/XRb63s3KZqpLNyqr9';
-
-    return (
-        <Picker
-            ref={ref}
-            tabIndex={-1}
-            style={pickerStyle}
-            className='PostPriorityPicker'
-        >
-            <Header className='modal-title'>
-                {formatMessage({
-                    id: 'post_priority.picker.header',
-                    defaultMessage: 'Message priority',
+    const menuCheckboxItems = useMemo(() => (postAcknowledgementsEnabled || persistentNotificationsEnabled ? [
+        <Menu.Separator
+            key='menu-item-checkbox-separator'
+            component='li'
+        />,
+        postAcknowledgementsEnabled ? (
+            <ToggleItem
+                key='post_priority.requested_ack.item'
+                ariaLabel={formatMessage({
+                    id: 'post_priority.requested_ack.text',
+                    defaultMessage: 'Request acknowledgement',
                 })}
-                {/* <BetaTag/>
-                <Feedback
-                    href={feedbackLink}
-                    target='_blank'
-                    rel='noopener noreferrer'
+                disabled={false}
+                onClick={handleAck}
+                toggled={requestedAck}
+                icon={<AcknowledgementIcon size={18}/>}
+                text={formatMessage({
+                    id: 'post_priority.requested_ack.text',
+                    defaultMessage: 'Request acknowledgement',
+                })}
+                description={formatMessage({
+                    id: 'post_priority.requested_ack.description',
+                    defaultMessage: 'An acknowledgement button will appear with your message',
+                })}
+            />) : null,
+        priority === PostPriority.URGENT && persistentNotificationsEnabled ? (
+            <ToggleItem
+                key='post_priority.persistent_notifications.item'
+                ariaLabel={formatMessage({
+                    id: 'post_priority.persistent_notifications.text',
+                    defaultMessage: 'Send persistent notifications',
+                })}
+                disabled={priority !== PostPriority.URGENT}
+                onClick={handlePersistentNotifications}
+                toggled={persistentNotifications}
+                icon={<PersistentNotificationsIcon size={18}/>}
+                text={formatMessage({
+                    id: 'post_priority.persistent_notifications.text',
+                    defaultMessage: 'Send persistent notifications',
+                })}
+                description={formatMessage(
+                    {
+                        id: 'post_priority.persistent_notifications.description',
+                        defaultMessage: 'Recipients will be notified every {interval, plural, one {1 minute} other {{interval} minutes}} until they acknowledge or reply',
+                    }, {
+                        interval,
+                    },
+                )}
+            />) : null,
+    ] : []), [formatMessage, handleAck, handlePersistentNotifications, interval, persistentNotifications, persistentNotificationsEnabled, postAcknowledgementsEnabled, priority, requestedAck]);
+
+    const footer = useMemo(() => postAcknowledgementsEnabled &&
+        <div>
+            <Menu.Separator/>
+            <Footer key='footer'>
+                <button
+                    type='submit'
+                    className='PostPriorityPicker__cancel'
+                    onClick={handleClose}
+                    onKeyDown={(e) => handleFooterButtonAction(e, handleClose)}
                 >
                     <FormattedMessage
-                        id={'post_priority.picker.feedback'}
-                        defaultMessage={'Give feedback'}
+                        id='post_priority.picker.cancel'
+                        defaultMessage='Cancel'
                     />
-                </Feedback> */}
-            </Header>
-            <div role='application'>
-                <Menu className='Menu'>
-                    <MenuGroup>
-                        <MenuItem
-                            id='menu-item-priority-standard'
-                            onClick={makeOnSelectPriority()}
-                            isSelected={!priority}
-                            icon={<StandardIcon size={18}/>}
-                            text={formatMessage({
-                                id: 'post_priority.priority.standard',
-                                defaultMessage: 'Standard',
-                            })}
-                        />
-                        <MenuItem
-                            id='menu-item-priority-important'
-                            onClick={makeOnSelectPriority(PostPriority.IMPORTANT)}
-                            isSelected={priority === PostPriority.IMPORTANT}
-                            icon={<ImportantIcon size={18}/>}
-                            text={formatMessage({
-                                id: 'post_priority.priority.important',
-                                defaultMessage: 'Important',
-                            })}
-                        />
-                        <MenuItem
-                            id='menu-item-priority-urgent'
-                            onClick={makeOnSelectPriority(PostPriority.URGENT)}
-                            isSelected={priority === PostPriority.URGENT}
-                            icon={<UrgentIcon size={18}/>}
-                            text={formatMessage({
-                                id: 'post_priority.priority.urgent',
-                                defaultMessage: 'Urgent',
-                            })}
-                        />
-                    </MenuGroup>
-                    {postAcknowledgementsEnabled && (
-                        <MenuGroup>
-                            <ToggleItem
-                                disabled={false}
-                                onClick={handleAck}
-                                toggled={requestedAck}
-                                icon={<AcknowledgementIcon size={18}/>}
-                                text={formatMessage({
-                                    id: 'post_priority.requested_ack.text',
-                                    defaultMessage: 'Request acknowledgement',
-                                })}
-                                description={formatMessage({
-                                    id: 'post_priority.requested_ack.description',
-                                    defaultMessage: 'An acknowledgement button will appear with your message',
-                                })}
-                            />
-                        </MenuGroup>
-                    )}
-                </Menu>
-            </div>
-            {postAcknowledgementsEnabled && (
-                <Footer>
-                    <button
+                </button>
+                <button
+                    type='submit'
+                    className='PostPriorityPicker__apply'
+                    onClick={handleApply}
+                    onKeyDown={(e) => handleFooterButtonAction(e, handleApply)}
+                >
+                    <FormattedMessage
+                        id='post_priority.picker.apply'
+                        defaultMessage='Apply'
+                    />
+                </button>
+            </Footer>
+        </div>, [handleApply, handleClose, handleFooterButtonAction, postAcknowledgementsEnabled]);
+
+    useEffect(() => {
+        if (pickerOpen) {
+            setPriority(settings?.priority || '');
+            setPersistentNotifications(settings?.persistent_notifications || false);
+            setRequestedAck(settings?.requested_ack || false);
+        }
+    }, [pickerOpen, settings]);
+
+    return (<CompassDesignProvider theme={theme}>
+        <Menu.Container
+            menuButton={{
+                id: 'messagePriority',
+                as: 'div',
+                children: (
+                    <IconContainer
+                        id='messagePriority'
+                        className={classNames({control: true, active: pickerOpen})}
+                        disabled={disabled}
                         type='button'
-                        className='PostPriorityPicker__cancel'
-                        onClick={onClose}
+                        aria-label={messagePriority}
                     >
-                        <FormattedMessage
-                            id={'post_priority.picker.cancel'}
-                            defaultMessage={'Cancel'}
+                        <AlertCircleOutlineIcon
+                            size={18}
+                            color='currentColor'
                         />
-                    </button>
-                    <button
-                        type='button'
-                        className='PostPriorityPicker__apply'
-                        onClick={handleApply}
-                    >
-                        <FormattedMessage
-                            id={'post_priority.picker.apply'}
-                            defaultMessage={'Apply'}
-                        />
-                    </button>
-                </Footer>
-            )}
-        </Picker>
-    );
+                    </IconContainer>),
+            }}
+            menu={{
+                id: 'post.priority.dropdown',
+                'aria-label': 'Post priority options',
+                width: 'max-content',
+                onToggle: setPickerOpen,
+                isMenuOpen: pickerOpen,
+            }}
+            menuButtonTooltip={{
+                text: messagePriority,
+            }}
+            menuHeader={
+                <div>
+                    <Header className='modal-title'>
+                        {formatMessage({
+                            id: 'post_priority.picker.header',
+                            defaultMessage: 'Message priority',
+                        })}
+                    </Header>
+                    <Menu.Separator/>
+                </div>
+            }
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+            }}
+            transformOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+            }}
+            menuFooter={footer}
+            closeMenuOnTab={false}
+        >
+            {
+                [...menuItems, ...menuCheckboxItems]
+            }
+        </Menu.Container>
+    </CompassDesignProvider>);
 }
 
 export default memo(PostPriorityPicker);

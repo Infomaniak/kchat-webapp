@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {IGif} from '@giphy/js-types';
+import {getAltText} from '@giphy/js-util';
 import type {SyntheticEvent} from 'react';
 import React, {useCallback, useMemo} from 'react';
 
@@ -23,7 +24,7 @@ const GifPicker = (props: Props) => {
         if (props.onGifClick) {
             event.preventDefault();
 
-            const imageWithMarkdown = `![${gif.title}](${gif.images.fixed_height.url})`;
+            const imageWithMarkdown = `![${getAltText(gif)}](${gif.images.fixed_height.url})`;
             props.onGifClick(imageWithMarkdown);
         }
     }, [props.onGifClick]);
@@ -34,7 +35,7 @@ const GifPicker = (props: Props) => {
     }, [props.getRootPickerNode]);
 
     return (
-        <div>
+        <>
             <GifPickerSearch
                 value={props.filter}
                 onChange={props.handleFilterChange}
@@ -44,7 +45,7 @@ const GifPicker = (props: Props) => {
                 filter={props.filter}
                 onClick={handleItemClick}
             />
-        </div>
+        </>
     );
 };
 

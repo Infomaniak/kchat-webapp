@@ -1,15 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {Channel, ChannelType} from './channels';
-import {CustomEmoji} from './emojis';
-import {FileInfo} from './files';
-import {Reaction} from './reactions';
-import {UserProfile} from './users';
+import type {Channel, ChannelType} from './channels';
+import type {CustomEmoji} from './emojis';
+import type {FileInfo} from './files';
+import type {Reaction} from './reactions';
+import type {TeamType} from './teams';
+import type {UserProfile} from './users';
 import {
-    RelationOneToOne,
-    RelationOneToMany,
-    IDMappedObjects,
+    type RelationOneToOne,
+    type RelationOneToMany,
+    type IDMappedObjects,
 } from './utilities';
 
 export type PostType = 'system_add_remove' |
@@ -33,6 +34,8 @@ export type PostType = 'system_add_remove' |
 'system_post_reminder' |
 'system_change_chan_privacy' |
 'reminder' |
+'system_wrangler' |
+'mail_attachment' |
 '';
 
 export type PostEmbedType = 'image' | 'link' | 'message_attachment' | 'opengraph' | 'permalink';
@@ -67,7 +70,7 @@ export type PostMetadata = {
     emojis: CustomEmoji[];
     files: FileInfo[];
     images: Record<string, PostImage>;
-    reactions: Reaction[];
+    reactions?: Reaction[];
     priority?: PostPriorityMetadata;
     acknowledgements?: PostAcknowledgement[];
 };
@@ -85,7 +88,7 @@ export type Post = {
     original_id: string;
     message: string;
     type: PostType;
-    props: Record<string, any>;
+    props: Record<string, unknown>;
     hashtags: string;
     pending_post_id: string;
     reply_count: number;
@@ -100,6 +103,7 @@ export type Post = {
     message_source?: string;
     is_following?: boolean;
     exists?: boolean;
+    remote_id?: string;
 };
 
 export type PostState = 'DELETED';
@@ -107,6 +111,7 @@ export type PostState = 'DELETED';
 export enum PostPriority {
     URGENT = 'urgent',
     IMPORTANT = 'important',
+    TRANSCRIPT = 'transcript'
 }
 
 export type PostList = {
@@ -147,7 +152,6 @@ export type PostsState = {
     reactions: RelationOneToOne<Post, Record<string, Reaction>>;
     openGraph: RelationOneToOne<Post, Record<string, OpenGraphMetadata>>;
     pendingPostIds: string[];
-    selectedPostId: string;
     postEditHistory: Post[];
     currentFocusedPostId: string;
     messagesHistory: MessageHistory;
@@ -217,3 +221,27 @@ export type Call = {
     participants: string [];
 }
 
+export type ActivityEntry = {
+    postType: Post['type'];
+    actorId: string[];
+    userIds: string[];
+    usernames: string[];
+}
+
+export type PostInfo = {
+    channel_id: string;
+    channel_type: ChannelType;
+    channel_display_name: string;
+    has_joined_channel: boolean;
+    team_id: string;
+    team_type: TeamType;
+    team_display_name: string;
+    has_joined_team: boolean;
+}
+
+export type NotificationStatus = 'error' | 'not_sent' | 'unsupported' | 'success';
+export type NotificationResult = {
+    status: NotificationStatus;
+    reason?: string;
+    data?: string;
+}

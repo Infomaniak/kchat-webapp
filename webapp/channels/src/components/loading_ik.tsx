@@ -3,7 +3,6 @@
 
 import type {ReactNode, CSSProperties} from 'react';
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
 
 import loaderIk from 'images/ik/manager2x.gif';
 

@@ -5,10 +5,10 @@ import {useDispatch} from 'react-redux';
 
 import {openModal} from 'actions/views/modals';
 
-import type {Props} from 'components/trial_benefits_modal/trial_benefits_modal';
-import TrialBenefitsModal from 'components/trial_benefits_modal/trial_benefits_modal';
-
 import {ModalIdentifiers} from 'utils/constants';
+
+type Props = any;
+const TrialBenefitsModal = null;
 
 interface Options {
     trialJustStarted?: boolean;

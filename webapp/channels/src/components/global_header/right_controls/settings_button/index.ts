@@ -3,6 +3,21 @@
 
 import {connect} from 'react-redux';
 
+// import {bindActionCreators} from 'redux';
+// import type {Dispatch} from 'redux';
+
+// import {openModal} from 'actions/views/modals';
+
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+
+import type {GlobalState} from 'types/store';
+
 import SettingsButton from './settings_button';
 
-export default connect(null, null)(SettingsButton);
+function mapStateToProps(state: GlobalState) {
+    return {
+        currentTeam: getCurrentTeam(state),
+    };
+}
+
+export default connect(mapStateToProps, null)(SettingsButton);

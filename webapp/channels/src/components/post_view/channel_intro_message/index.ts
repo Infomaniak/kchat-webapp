@@ -5,15 +5,15 @@ import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
-import {getTotalUsersStats} from 'mattermost-redux/actions/users';
-import {getCurrentChannel, getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
+import {favoriteChannel, unfavoriteChannel} from 'mattermost-redux/actions/channels';
+import {getCurrentChannel, getDirectTeammate, getMyCurrentChannelMembership, isCurrentChannelFavorite} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-import {getProfilesInCurrentChannel, getCurrentUserId, getUser, getTotalUsersStats as getTotalUsersStatsSelector} from 'mattermost-redux/selectors/entities/users';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {getCurrentUser, getProfilesInCurrentChannel, getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 
 import {getCurrentLocale} from 'selectors/i18n';
+import {getIsMobileView} from 'selectors/views/browser';
 
 import {Preferences} from 'utils/constants';
 import {getDisplayNameByUser} from 'utils/utils';
@@ -27,13 +27,11 @@ function mapStateToProps(state: GlobalState) {
     const enableUserCreation = config.EnableUserCreation === 'true';
     const isReadOnly = false;
     const team = getCurrentTeam(state);
-    const channel = getCurrentChannel(state) || {};
-    const teammate = getDirectTeammate(state, channel.id);
-    const creator = getUser(state, channel.creator_id);
-
-    const usersLimit = 10;
-
-    const stats = getTotalUsersStatsSelector(state) || {total_users_count: 0};
+    const channel = getCurrentChannel(state);
+    const channelMember = getMyCurrentChannelMembership(state);
+    const teammate = channel ? getDirectTeammate(state, channel.id) : undefined;
+    const currentUser = getCurrentUser(state);
+    const creator = channel ? getUser(state, channel.creator_id) : undefined;
 
     return {
         currentUserId: getCurrentUserId(state),
@@ -43,19 +41,23 @@ function mapStateToProps(state: GlobalState) {
         channelProfiles: getProfilesInCurrentChannel(state),
         enableUserCreation,
         isReadOnly,
-        teamIsGroupConstrained: Boolean(team.group_constrained),
+        isFavorite: isCurrentChannelFavorite(state),
+        teamIsGroupConstrained: Boolean(team?.group_constrained),
         creatorName: getDisplayNameByUser(state, creator),
         teammate,
         teammateName: getDisplayNameByUser(state, teammate),
-        stats,
-        usersLimit,
+        currentUser,
+        isChannelMember: Boolean(channelMember),
+        channelMember,
+        isMobileView: getIsMobileView(state),
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
-            getTotalUsersStats,
+            favoriteChannel,
+            unfavoriteChannel,
         }, dispatch),
     };
 }

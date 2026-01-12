@@ -8,8 +8,9 @@
 
 import {shallow} from 'enzyme';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import Constants from 'utils/constants';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 /**
  * @param  {string} [input] text input

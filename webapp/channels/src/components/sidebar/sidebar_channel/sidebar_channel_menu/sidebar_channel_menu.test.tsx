@@ -43,7 +43,7 @@ describe('components/sidebar/sidebar_channel/sidebar_channel_menu', () => {
         onToggleMenu: jest.fn(),
         multiSelectedChannelIds: [],
         displayedChannels: [],
-        markChannelAsRead: jest.fn(),
+        readMultipleChannels: jest.fn(),
         markMostRecentPostInChannelAsUnread: jest.fn(),
         favoriteChannel: jest.fn(),
         unfavoriteChannel: jest.fn(),
@@ -53,6 +53,7 @@ describe('components/sidebar/sidebar_channel/sidebar_channel_menu', () => {
         createCategory: jest.fn(),
         addChannelsInSidebar: jest.fn(),
         onMenuToggle: jest.fn(),
+        menuTriggerRef: React.createRef<HTMLButtonElement>(),
     };
 
     test('should match snapshot and contain correct buttons', () => {

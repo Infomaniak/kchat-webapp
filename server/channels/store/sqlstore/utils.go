@@ -6,6 +6,7 @@ package sqlstore
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"io"
 	"net/url"
 	"strconv"
@@ -16,8 +17,6 @@ import (
 
 	"github.com/mattermost/mattermost/server/public/model"
 	"github.com/mattermost/mattermost/server/public/shared/mlog"
-
-	"github.com/go-sql-driver/mysql"
 )
 
 var escapeLikeSearchChar = []string{
@@ -56,7 +55,7 @@ func MapStringsToQueryParams(list []string, paramPrefix string) (string, map[str
 // finalizeTransactionX ensures a transaction is closed after use, rolling back if not already committed.
 func finalizeTransactionX(transaction *sqlxTxWrapper, perr *error) {
 	// Rollback returns sql.ErrTxDone if the transaction was already closed.
-	if err := transaction.Rollback(); err != nil && err != sql.ErrTxDone {
+	if err := transaction.Rollback(); err != nil && !errors.Is(err, sql.ErrTxDone) {
 		*perr = merror.Append(*perr, err)
 	}
 }
@@ -128,14 +127,6 @@ func constructMySQLJSONArgs(props map[string]string) ([]any, string) {
 	return args, argString
 }
 
-func makeStringArgs(params []string) []any {
-	args := make([]any, len(params))
-	for i, name := range params {
-		args[i] = name
-	}
-	return args
-}
-
 func constructArrayArgs(ids []string) (string, []any) {
 	var placeholder strings.Builder
 	values := make([]any, 0, len(ids))
@@ -162,8 +153,7 @@ func wrapBinaryParamStringMap(ok bool, props model.StringMap) model.StringMap {
 // morphWriter is a target to pass to the logger instance of morph.
 // For now, everything is just logged at a debug level. If we need to log
 // errors/warnings from the library also, that needs to be seen later.
-type morphWriter struct {
-}
+type morphWriter struct{}
 
 func (l *morphWriter) Write(in []byte) (int, error) {
 	mlog.Debug(string(in))
@@ -183,57 +173,6 @@ func AppendBinaryFlag(buf []byte) []byte {
 	return append([]byte{0x01}, buf...)
 }
 
-// AppendMultipleStatementsFlag attached dsn parameters to MySQL dsn in order to make migrations work.
-func AppendMultipleStatementsFlag(dataSource string) (string, error) {
-	config, err := mysql.ParseDSN(dataSource)
-	if err != nil {
-		return "", err
-	}
-
-	if config.Params == nil {
-		config.Params = map[string]string{}
-	}
-
-	config.Params["multiStatements"] = "true"
-	return config.FormatDSN(), nil
-}
-
-// ResetReadTimeout removes the timeout constraint from the MySQL dsn.
-func ResetReadTimeout(dataSource string) (string, error) {
-	config, err := mysql.ParseDSN(dataSource)
-	if err != nil {
-		return "", err
-	}
-	config.ReadTimeout = 0
-	return config.FormatDSN(), nil
-}
-
-func SanitizeDataSource(driverName, dataSource string) (string, error) {
-	switch driverName {
-	case model.DatabaseDriverPostgres:
-		u, err := url.Parse(dataSource)
-		if err != nil {
-			return "", err
-		}
-		u.User = url.UserPassword("****", "****")
-		params := u.Query()
-		params.Del("user")
-		params.Del("password")
-		u.RawQuery = params.Encode()
-		return u.String(), nil
-	case model.DatabaseDriverMysql:
-		cfg, err := mysql.ParseDSN(dataSource)
-		if err != nil {
-			return "", err
-		}
-		cfg.User = "****"
-		cfg.Passwd = "****"
-		return cfg.FormatDSN(), nil
-	default:
-		return "", errors.New("invalid drivername. Not postgres or mysql.")
-	}
-}
-
 const maxTokenSize = 50
 
 // trimInput limits the string to a max size to prevent clogging up disk space
@@ -243,4 +182,17 @@ func trimInput(input string) string {
 		input = input[:maxTokenSize] + "..."
 	}
 	return input
+}
+
+// Adds backtiks to the column name for MySQL, this is required if
+// the column name is a reserved keyword.
+//
+//	`ColumnName` -  MySQL
+//	ColumnName   -  Postgres
+func quoteColumnName(driver string, columnName string) string {
+	if driver == model.DatabaseDriverMysql {
+		return fmt.Sprintf("`%s`", columnName)
+	}
+
+	return columnName
 }

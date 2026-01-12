@@ -1,157 +1,106 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`at mention suggestion Should display nick name of non signed in user 1`] = `
-<AtMentionSuggestion
-  intl={
-    Object {
-      "$t": [Function],
-      "defaultFormats": Object {},
-      "defaultLocale": "en",
-      "defaultRichTextElements": undefined,
-      "fallbackOnEmptyString": true,
-      "formatDate": [Function],
-      "formatDateTimeRange": [Function],
-      "formatDateToParts": [Function],
-      "formatDisplayName": [Function],
-      "formatList": [Function],
-      "formatListToParts": [Function],
-      "formatMessage": [Function],
-      "formatNumber": [Function],
-      "formatNumberToParts": [Function],
-      "formatPlural": [Function],
-      "formatRelativeTime": [Function],
-      "formatTime": [Function],
-      "formatTimeToParts": [Function],
-      "formats": Object {},
-      "formatters": Object {
-        "getDateTimeFormat": [Function],
-        "getDisplayNames": [Function],
-        "getListFormat": [Function],
-        "getMessageFormat": [Function],
-        "getNumberFormat": [Function],
-        "getPluralRules": [Function],
-        "getRelativeTimeFormat": [Function],
-      },
-      "locale": "en",
-      "messages": Object {},
-      "onError": [Function],
-      "onWarn": [Function],
-      "textComponent": "span",
-      "timeZone": "Etc/UTC",
-    }
-  }
+<ForwardRef
+  isSelection={false}
   item={
     Object {
       "first_name": "a",
       "id": "userid2",
       "last_name": "b",
       "nickname": "c",
+      "textboxId": "post_textbox",
       "username": "user2",
     }
   }
   matchedPretext="@"
+  onClick={[MockFunction]}
+  onMouseMove={[MockFunction]}
   term="@user"
 >
-  <div
-    className="suggestion-list__item"
+  <SuggestionContainer
     data-testid="mentionSuggestion_user2"
-    onClick={[Function]}
-    onMouseMove={[Function]}
-    role="button"
-    tabIndex={-1}
+    id="post_textbox_@user2"
+    isSelection={false}
+    item={
+      Object {
+        "first_name": "a",
+        "id": "userid2",
+        "last_name": "b",
+        "nickname": "c",
+        "textboxId": "post_textbox",
+        "username": "user2",
+      }
+    }
+    matchedPretext="@"
+    onClick={[MockFunction]}
+    onMouseMove={[MockFunction]}
+    role="option"
+    term="@user"
   >
-    <span
-      className="status-wrapper style--none"
+    <li
+      className="suggestion-list__item"
+      data-testid="mentionSuggestion_user2"
+      id="post_textbox_@user2"
+      onClick={[Function]}
+      onMouseMove={[Function]}
+      role="option"
+      tabIndex={-1}
     >
       <span
-        className="profile-icon"
+        className="status-wrapper style--none"
       >
-        <Memo(Avatar)
-          size="sm"
-          url="/api/v4/users/userid2/image?_=0"
-          username="user2"
+        <span
+          className="profile-icon"
         >
-          <img
-            alt="user2 profile image"
-            className="Avatar Avatar-sm"
-            loading="lazy"
-            onError={[Function]}
-            src="/api/v4/users/userid2/image?_=0"
-            tabIndex={0}
-          />
-        </Memo(Avatar)>
+          <Avatar
+            size="sm"
+            url="/api/v4/users/userid2/image?_=0"
+            username="user2"
+          >
+            <img
+              alt="user2 profile image"
+              className="Avatar Avatar-sm"
+              loading="lazy"
+              onError={[Function]}
+              src="/api/v4/users/userid2/image?_=0"
+            />
+          </Avatar>
+        </span>
+        <Memo(StatusIcon) />
       </span>
-      <StatusIcon
-        button={false}
-        className=""
-      />
-    </span>
-    <span
-      className="suggestion-list__ellipsis"
-    >
       <span
-        className="suggestion-list__main"
+        className="suggestion-list__ellipsis"
       >
-        @user2
-      </span>
-      a b (c)
-      <Component
-        emojiSize={15}
-        emojiStyle={
-          Object {
-            "margin": "0 4px 4px",
+        <span
+          className="suggestion-list__main"
+        >
+          @user2
+        </span>
+        <span>
+          a b (c)
+        </span>
+        <Component
+          emojiSize={15}
+          emojiStyle={
+            Object {
+              "margin": "0 4px 4px",
+            }
           }
-        }
-        showTooltip={true}
-        userID="userid2"
-      >
-        <div />
-      </Component>
-    </span>
-  </div>
-</AtMentionSuggestion>
+          showTooltip={true}
+          userID="userid2"
+        >
+          <div />
+        </Component>
+      </span>
+    </li>
+  </SuggestionContainer>
+</ForwardRef>
 `;
 
 exports[`at mention suggestion Should not display nick name of the signed in user 1`] = `
-<AtMentionSuggestion
-  intl={
-    Object {
-      "$t": [Function],
-      "defaultFormats": Object {},
-      "defaultLocale": "en",
-      "defaultRichTextElements": undefined,
-      "fallbackOnEmptyString": true,
-      "formatDate": [Function],
-      "formatDateTimeRange": [Function],
-      "formatDateToParts": [Function],
-      "formatDisplayName": [Function],
-      "formatList": [Function],
-      "formatListToParts": [Function],
-      "formatMessage": [Function],
-      "formatNumber": [Function],
-      "formatNumberToParts": [Function],
-      "formatPlural": [Function],
-      "formatRelativeTime": [Function],
-      "formatTime": [Function],
-      "formatTimeToParts": [Function],
-      "formats": Object {},
-      "formatters": Object {
-        "getDateTimeFormat": [Function],
-        "getDisplayNames": [Function],
-        "getListFormat": [Function],
-        "getMessageFormat": [Function],
-        "getNumberFormat": [Function],
-        "getPluralRules": [Function],
-        "getRelativeTimeFormat": [Function],
-      },
-      "locale": "en",
-      "messages": Object {},
-      "onError": [Function],
-      "onWarn": [Function],
-      "textComponent": "span",
-      "timeZone": "Etc/UTC",
-    }
-  }
+<ForwardRef
+  isSelection={false}
   item={
     Object {
       "first_name": "a",
@@ -159,76 +108,100 @@ exports[`at mention suggestion Should not display nick name of the signed in use
       "isCurrentUser": true,
       "last_name": "b",
       "nickname": "c",
+      "textboxId": "post_textbox",
       "username": "user",
     }
   }
   matchedPretext="@"
+  onClick={[MockFunction]}
+  onMouseMove={[MockFunction]}
   term="@user"
 >
-  <div
-    className="suggestion-list__item"
+  <SuggestionContainer
     data-testid="mentionSuggestion_user"
-    onClick={[Function]}
-    onMouseMove={[Function]}
-    role="button"
-    tabIndex={-1}
+    id="post_textbox_@user"
+    isSelection={false}
+    item={
+      Object {
+        "first_name": "a",
+        "id": "userid1",
+        "isCurrentUser": true,
+        "last_name": "b",
+        "nickname": "c",
+        "textboxId": "post_textbox",
+        "username": "user",
+      }
+    }
+    matchedPretext="@"
+    onClick={[MockFunction]}
+    onMouseMove={[MockFunction]}
+    role="option"
+    term="@user"
   >
-    <span
-      className="status-wrapper style--none"
+    <li
+      className="suggestion-list__item"
+      data-testid="mentionSuggestion_user"
+      id="post_textbox_@user"
+      onClick={[Function]}
+      onMouseMove={[Function]}
+      role="option"
+      tabIndex={-1}
     >
       <span
-        className="profile-icon"
+        className="status-wrapper style--none"
       >
-        <Memo(Avatar)
-          size="sm"
-          url="/api/v4/users/userid1/image?_=0"
-          username="user"
+        <span
+          className="profile-icon"
         >
-          <img
-            alt="user profile image"
-            className="Avatar Avatar-sm"
-            loading="lazy"
-            onError={[Function]}
-            src="/api/v4/users/userid1/image?_=0"
-            tabIndex={0}
-          />
-        </Memo(Avatar)>
-      </span>
-      <StatusIcon
-        button={false}
-        className=""
-      />
-    </span>
-    <span
-      className="suggestion-list__ellipsis"
-    >
-      <span
-        className="suggestion-list__main"
-      >
-        @user
-      </span>
-      a b
-      <FormattedMessage
-        defaultMessage="(you)"
-        id="suggestion.user.isCurrent"
-      >
-        <span>
-          (you)
+          <Avatar
+            size="sm"
+            url="/api/v4/users/userid1/image?_=0"
+            username="user"
+          >
+            <img
+              alt="user profile image"
+              className="Avatar Avatar-sm"
+              loading="lazy"
+              onError={[Function]}
+              src="/api/v4/users/userid1/image?_=0"
+            />
+          </Avatar>
         </span>
-      </FormattedMessage>
-      <Component
-        emojiSize={15}
-        emojiStyle={
-          Object {
-            "margin": "0 4px 4px",
-          }
-        }
-        showTooltip={true}
-        userID="userid1"
+        <Memo(StatusIcon) />
+      </span>
+      <span
+        className="suggestion-list__ellipsis"
       >
-        <div />
-      </Component>
-    </span>
-  </div>
-</AtMentionSuggestion>
+        <span
+          className="suggestion-list__main"
+        >
+          @user
+        </span>
+        <span>
+          a b
+        </span>
+        <FormattedMessage
+          defaultMessage="(you)"
+          id="suggestion.user.isCurrent"
+        >
+          <span>
+            (you)
+          </span>
+        </FormattedMessage>
+        <Component
+          emojiSize={15}
+          emojiStyle={
+            Object {
+              "margin": "0 4px 4px",
+            }
+          }
+          showTooltip={true}
+          userID="userid1"
+        >
+          <div />
+        </Component>
+      </span>
+    </li>
+  </SuggestionContainer>
+</ForwardRef>
 `;

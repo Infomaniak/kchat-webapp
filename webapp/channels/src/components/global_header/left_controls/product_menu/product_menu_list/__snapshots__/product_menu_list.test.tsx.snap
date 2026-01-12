@@ -1,28 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/global/product_switcher_menu should match snapshot with id 1`] = `
-<MenuGroup>
+<Memo(MenuGroup)>
   <div
     onClick={[Function]}
   >
-    <MenuCloudTrial
-      id="menuCloudTrial"
-    />
-    <MenuItemCloudLimit
-      id="menuItemCloudLimit"
-    />
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "sysconsole_write_about_edition_and_license",
-        ]
-      }
-    >
-      <MenuStartTrial
-        id="startTrial"
-      />
-    </Connect(SystemPermissionGate)>
-    <Connect(SystemPermissionGate)
+    <Memo(SystemPermissionGate)
       permissions={
         Array [
           "sysconsole_read_about_edition_and_license",
@@ -98,7 +81,7 @@ exports[`components/global/product_switcher_menu should match snapshot with id 1
         }
         to="/admin_console"
       />
-    </Connect(SystemPermissionGate)>
+    </Memo(SystemPermissionGate)>
     <MenuItemLink
       icon={
         <Icon
@@ -138,10 +121,9 @@ exports[`components/global/product_switcher_menu should match snapshot with id 1
       id="userGroups"
       modalId="user_groups"
       show={false}
-      sibling={false}
       text="User Groups"
     />
-    <Connect(TeamPermissionGate)
+    <Memo(TeamPermissionGate)
       permissions={
         Array [
           "sysconsole_write_plugins",
@@ -169,7 +151,7 @@ exports[`components/global/product_switcher_menu should match snapshot with id 1
         show={false}
         text="Marketplace"
       />
-    </Connect(TeamPermissionGate)>
+    </Memo(TeamPermissionGate)>
     <MenuItemExternalLink
       icon={
         <Icon
@@ -203,32 +185,15 @@ exports[`components/global/product_switcher_menu should match snapshot with id 1
       text="About "
     />
   </div>
-</MenuGroup>
+</Memo(MenuGroup)>
 `;
 
 exports[`components/global/product_switcher_menu should match snapshot with most of the thing enabled 1`] = `
-<MenuGroup>
+<Memo(MenuGroup)>
   <div
     onClick={[Function]}
   >
-    <MenuCloudTrial
-      id="menuCloudTrial"
-    />
-    <MenuItemCloudLimit
-      id="menuItemCloudLimit"
-    />
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "sysconsole_write_about_edition_and_license",
-        ]
-      }
-    >
-      <MenuStartTrial
-        id="startTrial"
-      />
-    </Connect(SystemPermissionGate)>
-    <Connect(SystemPermissionGate)
+    <Memo(SystemPermissionGate)
       permissions={
         Array [
           "sysconsole_read_about_edition_and_license",
@@ -304,7 +269,7 @@ exports[`components/global/product_switcher_menu should match snapshot with most
         }
         to="/admin_console"
       />
-    </Connect(SystemPermissionGate)>
+    </Memo(SystemPermissionGate)>
     <MenuItemLink
       icon={
         <Icon
@@ -344,10 +309,9 @@ exports[`components/global/product_switcher_menu should match snapshot with most
       id="userGroups"
       modalId="user_groups"
       show={false}
-      sibling={false}
       text="User Groups"
     />
-    <Connect(TeamPermissionGate)
+    <Memo(TeamPermissionGate)
       permissions={
         Array [
           "sysconsole_write_plugins",
@@ -375,7 +339,7 @@ exports[`components/global/product_switcher_menu should match snapshot with most
         show={true}
         text="Marketplace"
       />
-    </Connect(TeamPermissionGate)>
+    </Memo(TeamPermissionGate)>
     <MenuItemExternalLink
       icon={
         <Icon
@@ -409,7 +373,7 @@ exports[`components/global/product_switcher_menu should match snapshot with most
       text="About "
     />
   </div>
-</MenuGroup>
+</Memo(MenuGroup)>
 `;
 
 exports[`components/global/product_switcher_menu should match userGroups snapshot with EnableCustomGroups config 1`] = `
@@ -440,7 +404,6 @@ exports[`components/global/product_switcher_menu should match userGroups snapsho
   id="userGroups"
   modalId="user_groups"
   show={true}
-  sibling={false}
   text="User Groups"
 />
 `;
@@ -473,20 +436,6 @@ exports[`components/global/product_switcher_menu should match userGroups snapsho
   id="userGroups"
   modalId="user_groups"
   show={true}
-  sibling={
-    <RestrictedIndicator
-      blocked={true}
-      feature="mattermost.feature.custom_user_groups"
-      messageAdminPostTrial="User groups are a way to organize users and apply actions to all users within that group. Upgrade to the Professional plan to create unlimited user groups."
-      messageAdminPreTrial="Create unlimited user groups with one of our paid plans. Get the full experience of Enterprise when you start a free, 30 day trial."
-      messageEndUser="User groups are a way to organize users and apply actions to all users within that group."
-      minimumPlanRequiredForFeature="professional"
-      titleAdminPostTrial="Upgrade to create unlimited user groups"
-      titleAdminPreTrial="Try unlimited user groups with a free trial"
-      titleEndUser="User groups available in paid plans"
-      tooltipMessage="During your trial you are able to create user groups. These user groups will be archived after your trial."
-    />
-  }
   text="User Groups"
 />
 `;
@@ -519,20 +468,6 @@ exports[`components/global/product_switcher_menu should match userGroups snapsho
   id="userGroups"
   modalId="user_groups"
   show={true}
-  sibling={
-    <RestrictedIndicator
-      blocked={false}
-      feature="mattermost.feature.custom_user_groups"
-      messageAdminPostTrial="User groups are a way to organize users and apply actions to all users within that group. Upgrade to the Professional plan to create unlimited user groups."
-      messageAdminPreTrial="Create unlimited user groups with one of our paid plans. Get the full experience of Enterprise when you start a free, 30 day trial."
-      messageEndUser="User groups are a way to organize users and apply actions to all users within that group."
-      minimumPlanRequiredForFeature="professional"
-      titleAdminPostTrial="Upgrade to create unlimited user groups"
-      titleAdminPreTrial="Try unlimited user groups with a free trial"
-      titleEndUser="User groups available in paid plans"
-      tooltipMessage="During your trial you are able to create user groups. These user groups will be archived after your trial."
-    />
-  }
   text="User Groups"
 />
 `;
@@ -542,28 +477,12 @@ exports[`components/global/product_switcher_menu should show integrations should
   <li
     className="MenuGroup menu-divider"
     onClick={[Function]}
+    role="separator"
   />
   <div
     onClick={[Function]}
   >
-    <MenuCloudTrial
-      id="menuCloudTrial"
-    />
-    <MenuItemCloudLimit
-      id="menuItemCloudLimit"
-    />
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "sysconsole_write_about_edition_and_license",
-        ]
-      }
-    >
-      <MenuStartTrial
-        id="startTrial"
-      />
-    </Connect(SystemPermissionGate)>
-    <Connect(SystemPermissionGate)
+    <Memo(SystemPermissionGate)
       permissions={
         Array [
           "sysconsole_read_about_edition_and_license",
@@ -639,7 +558,7 @@ exports[`components/global/product_switcher_menu should show integrations should
         }
         to="/admin_console"
       />
-    </Connect(SystemPermissionGate)>
+    </Memo(SystemPermissionGate)>
     <MenuItemLink
       icon={
         <Icon
@@ -679,10 +598,9 @@ exports[`components/global/product_switcher_menu should show integrations should
       id="userGroups"
       modalId="user_groups"
       show={false}
-      sibling={false}
       text="User Groups"
     />
-    <Connect(TeamPermissionGate)
+    <Memo(TeamPermissionGate)
       permissions={
         Array [
           "sysconsole_write_plugins",
@@ -710,7 +628,7 @@ exports[`components/global/product_switcher_menu should show integrations should
         show={false}
         text="Marketplace"
       />
-    </Connect(TeamPermissionGate)>
+    </Memo(TeamPermissionGate)>
     <MenuItemExternalLink
       icon={
         <Icon

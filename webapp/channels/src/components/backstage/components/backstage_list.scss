@@ -1,0 +1,25 @@
+@use 'sass:color';
+
+@use 'utils/variables';
+
+#searchInput {
+    flex: none;
+}
+
+.backstage-footer {
+    display: flex;
+    height: auto;
+    flex-direction: row;
+    padding: 8px;
+    border: 1px solid var(--ik-integration-header-border);
+    border-top: none;
+    background-color: var(--ik-backstage-background);
+    color: var(--center-channel-color);
+    font-size: 1.1em;
+    text-align: right;
+
+    .backstage-footer__cell {
+        width: 100%;
+        text-align: right;
+    }
+}

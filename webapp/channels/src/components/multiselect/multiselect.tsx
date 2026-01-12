@@ -2,20 +2,20 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import type {ReactNode} from 'react';
 import React from 'react';
+import type {ComponentProps, ReactNode} from 'react';
+import type {IntlShape, MessageDescriptor} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
 import ReactSelect, {components} from 'react-select';
-import type {getOptionValue} from 'react-select/src/builtins';
-import type {InputActionMeta} from 'react-select/src/types';
+import type {GetOptionValue, InputActionMeta, SelectInstance} from 'react-select';
 
-import LocalizedIcon from 'components/localized_icon';
 import SaveButton from 'components/save_button';
 import CloseCircleSolidIcon from 'components/widgets/icons/close_circle_solid_icon';
 import Avatar from 'components/widgets/users/avatar';
 
 import {Constants, A11yCustomEventTypes} from 'utils/constants';
-import {imageURLForUser, getDisplayName, localizeMessage} from 'utils/utils';
+import {formatAsComponent, formatAsString} from 'utils/i18n';
+import {imageURLForUser, getDisplayName} from 'utils/utils';
 
 import MultiSelectList from './multiselect_list';
 
@@ -26,25 +26,27 @@ export type Value = {
     label: string;
     scheme_id?: string;
     value: string;
+    disabled?: boolean;
 };
 
 export type Props<T extends Value> = {
-    ariaLabelRenderer: getOptionValue<T>;
+    ariaLabelRenderer: GetOptionValue<T>;
     backButtonClick?: () => void;
     backButtonClass?: string;
-    backButtonText?: string;
-    buttonSubmitLoadingText?: ReactNode;
-    buttonSubmitText?: ReactNode;
+    backButtonText?: string | MessageDescriptor;
+    buttonSubmitLoadingText?: ReactNode | MessageDescriptor;
+    buttonSubmitText?: ReactNode | MessageDescriptor;
     handleAdd: (value: T) => void;
     handleDelete: (values: T[]) => void;
     handleInput: (input: string, multiselect: MultiSelect<T>) => void;
     handlePageChange?: (newPage: number, currentPage: number) => void;
     handleSubmit: (value?: T[]) => void;
+    intl: IntlShape;
     loading?: boolean;
     saveButtonPosition?: string;
     maxValues?: number;
     noteText?: ReactNode;
-    numRemainingText?: ReactNode;
+    numRemainingText?: ReactNode | MessageDescriptor;
     optionRenderer: (
         option: T,
         isSelected: boolean,
@@ -52,20 +54,25 @@ export type Props<T extends Value> = {
         select: (value: T) => void
     ) => void;
     selectedItemRef?: React.RefObject<HTMLDivElement>;
+    showInputByDefault: boolean;
     options: T[];
     perPage: number;
-    placeholderText?: string;
+    placeholderText?: string | MessageDescriptor;
     saving?: boolean;
+    showError?: boolean;
+    changeMessageColor?: string;
     submitImmediatelyOn?: (value: T) => boolean;
     totalCount?: number;
     users?: unknown[];
     valueWithImage: boolean;
+    disableMultiSelectList?: boolean;
     valueRenderer?: (props: {data: T}) => any;
     values: T[];
     focusOnLoad?: boolean;
     savingEnabled?: boolean;
     handleCancel?: () => void;
     customNoOptionsMessage?: React.ReactNode;
+    children?: ReactNode;
 }
 
 export type State = {
@@ -76,9 +83,9 @@ export type State = {
 
 const KeyCodes = Constants.KeyCodes;
 
-export default class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, State> {
+export class MultiSelect<T extends Value> extends React.PureComponent<Props<T>, State> {
     private listRef = React.createRef<MultiSelectList<T>>();
-    private reactSelectRef = React.createRef<ReactSelect>();
+    private reactSelectRef = React.createRef<SelectInstance<T>>();
     private selected: T | null = null;
 
     public static defaultProps = {
@@ -87,6 +94,9 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
         valueWithImage: false,
         focusOnLoad: true,
         savingEnabled: true,
+        showInputByDefault: false,
+        changeMessageColor: '',
+        disableMultiSelectList: false,
     };
 
     public constructor(props: Props<T>) {
@@ -100,7 +110,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
     }
 
     public componentDidMount() {
-        const inputRef: unknown = this.reactSelectRef.current && this.reactSelectRef.current.select.inputRef;
+        const inputRef: unknown = this.reactSelectRef.current && this.reactSelectRef.current.inputRef;
 
         document.addEventListener<'keydown'>('keydown', this.handleEnterPress);
         if (inputRef && typeof (inputRef as HTMLElement).addEventListener === 'function') {
@@ -119,7 +129,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
     }
 
     public componentWillUnmount() {
-        const inputRef: unknown = this.reactSelectRef.current && this.reactSelectRef.current.select.inputRef;
+        const inputRef: unknown = this.reactSelectRef.current && this.reactSelectRef.current.inputRef;
 
         if (inputRef && typeof (inputRef as HTMLElement).addEventListener === 'function') {
             (inputRef as HTMLElement).removeEventListener(A11yCustomEventTypes.ACTIVATE, this.handleA11yActivateEvent);
@@ -171,6 +181,10 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
     };
 
     private onAdd = (value: T) => {
+        if ('disabled' in value && value.disabled) {
+            return;
+        }
+
         if (this.props.maxValues && this.props.values.length >= this.props.maxValues) {
             return;
         }
@@ -185,7 +199,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
         this.selected = null;
 
         if (this.reactSelectRef.current) {
-            this.reactSelectRef.current.select.handleInputChange(
+            this.reactSelectRef.current.handleInputChange(
                 {currentTarget: {value: ''}} as React.KeyboardEvent<HTMLInputElement>,
             );
             this.reactSelectRef.current.focus();
@@ -249,7 +263,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
         this.props.handleSubmit();
     };
 
-    private onChange: ReactSelect['onChange'] = (_, change) => {
+    private onChange: ComponentProps<ReactSelect>['onChange'] = (_, change) => {
         if (change.action !== 'remove-value' && change.action !== 'pop-value') {
             return;
         }
@@ -299,7 +313,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
 
         let numRemainingText;
         if (this.props.numRemainingText) {
-            numRemainingText = this.props.numRemainingText;
+            numRemainingText = formatAsComponent(this.props.numRemainingText);
         } else if (this.props.maxValues != null && this.props.maxValues !== undefined) {
             numRemainingText = (
                 <FormattedMessage
@@ -315,12 +329,24 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
 
         let buttonSubmitText: ReactNode;
         if (this.props.buttonSubmitText) {
-            buttonSubmitText = this.props.buttonSubmitText;
+            buttonSubmitText = formatAsComponent(this.props.buttonSubmitText);
         } else if (this.props.maxValues != null) {
             buttonSubmitText = (
                 <FormattedMessage
                     id='multiselect.go'
                     defaultMessage='Go'
+                />
+            );
+        }
+
+        let backButtonText: ReactNode;
+        if (this.props.backButtonText) {
+            backButtonText = formatAsComponent(this.props.backButtonText);
+        } else {
+            backButtonText = (
+                <FormattedMessage
+                    id='multiselect.backButton'
+                    defaultMessage='Back'
                 />
             );
         }
@@ -334,9 +360,9 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
             noteTextContainer = (
                 <div className='multi-select__note'>
                     <div className='note__icon'>
-                        <LocalizedIcon
+                        <i
                             className='fa fa-info'
-                            title={{id: 'generic_icons.info', defaultMessage: 'Info Icon'}}
+                            title={this.props.intl.formatMessage({id: 'generic_icons.info', defaultMessage: 'Info Icon'})}
                         />
                     </div>
                     <div>{this.props.noteText}</div>
@@ -363,7 +389,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                 if (options.length > pageEnd) {
                     nextButton = (
                         <button
-                            className='btn btn-link filter-control filter-control__next'
+                            className='btn btn-sm btn-tertiary filter-control filter-control__next'
                             onClick={this.nextPage}
                         >
                             <FormattedMessage
@@ -377,7 +403,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                 if (this.state.page > 0) {
                     previousButton = (
                         <button
-                            className='btn btn-link filter-control filter-control__prev'
+                            className='btn btn-sm btn-tertiary filter-control filter-control__prev'
                             onClick={this.prevPage}
                         >
                             <FormattedMessage
@@ -395,7 +421,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
         let multiSelectList;
 
         if (this.props.saveButtonPosition === 'bottom') {
-            if (this.state.input) {
+            if (this.state.input || (this.props.showInputByDefault && this.props.values.length === 0)) {
                 multiSelectList = (
                     <MultiSelectList
                         ref={this.listRef}
@@ -439,10 +465,10 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
             memberCount = (
                 <FormattedMessage
                     id='multiselect.numMembers'
-                    defaultMessage='{memberOptions, number} of {totalCount, number} members'
+                    defaultMessage='{options}/{maxUsers} users'
                     values={{
-                        memberOptions: optionsToDisplay.length,
-                        totalCount: this.props.totalCount,
+                        maxUsers: Constants.MAX_USERS_IN_GM - 1,
+                        options: this.props.values.length,
                     }}
                 />
             );
@@ -450,7 +476,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
 
         return (
             <>
-                <div className='filtered-user-list'>
+                <div className={(this.props.disableMultiSelectList) ? 'filtered-user-list disable-list' : 'filtered-user-list'}>
                     <div className='filter-row filter-row--full'>
                         <div className='multi-select__container react-select'>
                             <ReactSelect
@@ -458,7 +484,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                                 ref={this.reactSelectRef as React.RefObject<any>} // type of ref on @types/react-select is outdated
                                 isMulti={true}
                                 options={this.props.options}
-                                styles={styles}
+                                styles={styles(this.props.showError)}
                                 components={{
                                     Menu: nullComponent,
                                     IndicatorsContainer: nullComponent,
@@ -473,13 +499,13 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                                 onChange={this.onChange}
                                 value={this.props.values}
                                 formatOptionLabel={this.props.valueWithImage ? this.formatOptionLabel : undefined}
-                                placeholder={this.props.placeholderText}
+                                placeholder={formatAsString(this.props.intl.formatMessage, this.props.placeholderText)}
                                 inputValue={this.state.input}
                                 getOptionValue={(option: Value) => option.id}
                                 getOptionLabel={this.props.ariaLabelRenderer}
-                                aria-label={this.props.placeholderText}
+                                aria-label={formatAsString(this.props.intl.formatMessage, this.props.placeholderText)}
                                 className={this.state.a11yActive ? 'multi-select__focused' : ''}
-                                classNamePrefix='react-select-auto react-select'
+                                classNamePrefix={this.props.showError ? 'react-select-auto react-select error' : 'react-select-auto react-select'}
                             />
                             {this.props.saveButtonPosition === 'top' &&
                                 <SaveButton
@@ -488,26 +514,30 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                                     disabled={this.props.saving}
                                     onClick={this.handleOnClick}
                                     defaultMessage={buttonSubmitText}
-                                    savingMessage={this.props.buttonSubmitLoadingText}
+                                    savingMessage={formatAsComponent(this.props.buttonSubmitLoadingText)}
                                 />
                             }
                         </div>
                         <div
                             id='multiSelectHelpMemberInfo'
                             className='multi-select__help'
+                            style={this.props.showError ? {color: this.props.changeMessageColor} : {}}
                         >
                             {numRemainingText}
                             {memberCount}
                         </div>
+                        {this.props.children}
                     </div>
-                    {multiSelectList}
+                    {
+                        this.props.disableMultiSelectList ? null : multiSelectList
+                    }
                     <div
                         id='multiSelectMessageNote'
                         className='multi-select__help'
                     >
                         {noteTextContainer}
                     </div>
-                    {this.props.saveButtonPosition === 'top' &&
+                    {this.props.saveButtonPosition === 'top' && !this.props.disableMultiSelectList &&
                         <div className='filter-controls'>
                             {previousButton}
                             {nextButton}
@@ -515,7 +545,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                     }
                 </div>
                 {this.props.saveButtonPosition === 'bottom' &&
-                    <div className='multi-select__footer'>
+                    <div className='multi-select__footer modal-footer'>
                         {
                             this.props.backButtonClick &&
                             <button
@@ -527,7 +557,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                                 }}
                                 className={classNames('btn', this.props.backButtonClass)}
                             >
-                                {this.props.backButtonText || localizeMessage('multiselect.backButton', 'Back')}
+                                {backButtonText}
                             </button>
                         }
                         <SaveButton
@@ -536,7 +566,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                             disabled={this.props.saving || !this.props.savingEnabled}
                             onClick={this.handleOnClick}
                             defaultMessage={buttonSubmitText}
-                            savingMessage={this.props.buttonSubmitLoadingText}
+                            savingMessage={formatAsComponent(this.props.buttonSubmitLoadingText)}
                         />
                     </div>
                 }
@@ -564,12 +594,21 @@ const paddedComponent = (WrappedComponent: any) => {
     };
 };
 
-const styles = {
-    container: () => {
-        return {
-            display: 'flex',
-            overflow: 'hidden',
-            flex: 'auto',
-        };
-    },
-};
+const styles = (showError: boolean | undefined) => ({
+    container: (base: React.CSSProperties) => ({
+        ...base,
+        display: 'flex',
+        overflow: 'hidden',
+        flex: 'auto',
+    }),
+    control: (base: React.CSSProperties) => ({
+        ...base,
+        borderColor: 'red',
+        boxShadow: showError ? '0 0 0 1px red' : 'none',
+        '&:hover': {
+            borderColor: 'red',
+        },
+    }),
+});
+
+export default MultiSelect;

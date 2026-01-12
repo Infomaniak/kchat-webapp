@@ -1,273 +1,243 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/post_edit_history/edited_post_item should match snapshot 1`] = `
-<div
-  className="edit-post-history__container"
-  onClick={[Function]}
->
-  <PostAriaLabelDiv
-    className="a11y__section post"
-    id="searchResult_post_id"
-    post={
-      Object {
-        "channel_id": "",
-        "create_at": 0,
-        "delete_at": 0,
-        "edit_at": 0,
-        "hashtags": "",
-        "id": "post_id",
-        "is_pinned": false,
-        "message": "post message",
-        "metadata": Object {
-          "embeds": Array [],
-          "emojis": Array [],
-          "files": Array [],
-          "images": Object {},
-          "reactions": Array [],
-        },
-        "original_id": "",
-        "pending_post_id": "",
-        "props": Object {},
-        "reply_count": 0,
-        "root_id": "",
-        "type": "system_add_remove",
-        "update_at": 0,
-        "user_id": "user_id",
-      }
-    }
+<div>
+  <div
+    class="edit-post-history__container"
   >
     <div
-      aria-hidden="true"
-      className="edit-post-history__title__container"
+      aria-label="At 12:00 AM Thursday, January 1, Someone wrote, post message"
+      class="a11y__section post"
+      id="searchResult_post_id"
     >
       <div
-        className="edit-post-history__date__badge__container"
+        class="edit-post-history__title__container"
       >
-        <ForwardRef
-          aria-label="Toggle to see an old message."
-          className="edit-post-history__icon__button"
-          compact={true}
-          icon="chevron-right"
-          size="sm"
-        />
-        <span
-          className="edit-post-history__date"
+        <div
+          class="edit-post-history__date__badge__container"
         >
-          <Connect(injectIntl(Timestamp))
-            ranges={
-              Array [
-                Object {
-                  "display": <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Today"
-                    id="date_separator.today"
-                  />,
-                  "equals": Array [
-                    "day",
-                    0,
-                  ],
-                },
-                Object {
-                  "display": <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Yesterday"
-                    id="date_separator.yesterday"
-                  />,
-                  "equals": Array [
-                    "day",
-                    -1,
-                  ],
-                },
-              ]
-            }
-            value={0}
-          />
-        </span>
-      </div>
-      <OverlayTrigger
-        defaultOverlayShown={false}
-        delayShow={400}
-        overlay={
-          <Tooltip
-            className="hidden-xs"
-            id="editPostRestoreTooltip"
+          <button
+            aria-label="Toggle to see an old message."
+            class="edit-post-history__icon__button toggleCollapseButton"
           >
-            Restore this version
-          </Tooltip>
-        }
-        placement="left"
-        trigger={
-          Array [
-            "hover",
-            "focus",
-          ]
-        }
-      >
-        <ForwardRef
+            <i
+              class="icon icon-chevron-right"
+            />
+          </button>
+          <span
+            class="edit-post-history__date"
+          >
+            <time
+              datetime="1970-01-01T00:00:00.000"
+            >
+              01 January 1970 at 12:00 am
+            </time>
+          </span>
+        </div>
+        <button
           aria-label="Select to restore an old message."
-          className="edit-post-history__icon__button restore-icon"
-          compact={true}
-          icon="restore"
-          onClick={[Function]}
-          size="sm"
-        />
-      </OverlayTrigger>
+          class="edit-post-history__icon__button restore-icon"
+        >
+          <i
+            class="icon icon-restore"
+          />
+        </button>
+      </div>
     </div>
-  </PostAriaLabelDiv>
+  </div>
 </div>
 `;
 
 exports[`components/post_edit_history/edited_post_item should match snapshot when isCurrent is true 1`] = `
-<div
-  className="edit-post-history__container edit-post-history__container__background"
-  onClick={[Function]}
->
-  <PostAriaLabelDiv
-    className="a11y__section post"
-    id="searchResult_post_id"
-    post={
-      Object {
-        "channel_id": "",
-        "create_at": 0,
-        "delete_at": 0,
-        "edit_at": 0,
-        "hashtags": "",
-        "id": "post_id",
-        "is_pinned": false,
-        "message": "post message",
-        "metadata": Object {
-          "embeds": Array [],
-          "emojis": Array [],
-          "files": Array [],
-          "images": Object {},
-          "reactions": Array [],
-        },
-        "original_id": "",
-        "pending_post_id": "",
-        "props": Object {},
-        "reply_count": 0,
-        "root_id": "",
-        "type": "system_add_remove",
-        "update_at": 0,
-        "user_id": "user_id",
-      }
-    }
+<div>
+  <div
+    class="edit-post-history__container edit-post-history__container__background"
   >
     <div
-      aria-hidden="true"
-      className="edit-post-history__title__container"
+      aria-label="At 12:00 AM Thursday, January 1, Someone wrote, post message"
+      class="a11y__section post"
+      id="searchResult_post_id"
     >
       <div
-        className="edit-post-history__date__badge__container"
+        class="edit-post-history__title__container"
       >
-        <ForwardRef
-          aria-label="Toggle to see an old message."
-          className="edit-post-history__icon__button"
-          compact={true}
-          icon="chevron-down"
-          size="sm"
-        />
-        <span
-          className="edit-post-history__date"
-        >
-          <Connect(injectIntl(Timestamp))
-            ranges={
-              Array [
-                Object {
-                  "display": <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Today"
-                    id="date_separator.today"
-                  />,
-                  "equals": Array [
-                    "day",
-                    0,
-                  ],
-                },
-                Object {
-                  "display": <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Yesterday"
-                    id="date_separator.yesterday"
-                  />,
-                  "equals": Array [
-                    "day",
-                    -1,
-                  ],
-                },
-              ]
-            }
-            value={0}
-          />
-        </span>
         <div
-          className="edit-post-history__current__indicator"
+          class="edit-post-history__date__badge__container"
         >
-          Current Version
+          <button
+            aria-label="Toggle to see an old message."
+            class="edit-post-history__icon__button toggleCollapseButton"
+          >
+            <i
+              class="icon icon-chevron-down"
+            />
+          </button>
+          <span
+            class="edit-post-history__date"
+          >
+            <time
+              datetime="1970-01-01T00:00:00.000"
+            >
+              01 January 1970 at 12:00 am
+            </time>
+          </span>
+          <div
+            class="edit-post-history__current__indicator"
+          >
+            Current Version
+          </div>
+        </div>
+      </div>
+      <div
+        class="edit-post-history__content_container"
+      >
+        <div
+          class="edit-post-history__header"
+        >
+          <span
+            class="profile-icon"
+          >
+            <img
+              alt="user profile image"
+              class="Avatar Avatar-sm avatar-post-preview"
+              loading="lazy"
+              src="/api/v4/users/user_id/image?_=0"
+            />
+          </span>
+          <div
+            class="edit-post-history__header__username"
+          >
+            <div
+              class="user-popover"
+            >
+              Someone
+            </div>
+          </div>
+        </div>
+        <div
+          class="post__content"
+        >
+          <div
+            class="search-item-snippet post__body"
+          >
+            <div
+              class="post-message post-message--collapsed"
+            >
+              <div
+                class="post-message__text-container"
+                style="max-height: 600px;"
+              >
+                <div
+                  class="post-message__text"
+                  dir="auto"
+                  id="rhsPostMessageText_post_id"
+                >
+                  <p>
+                    post message
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
+`;
+
+exports[`components/post_edit_history/edited_post_item should match snapshot with file metadata 1`] = `
+<div>
+  <div
+    class="edit-post-history__container"
+  >
     <div
-      className="edit-post-history__content_container"
+      aria-label="At 12:00 AM Thursday, January 1, Someone wrote, post message"
+      class="a11y__section post"
+      id="searchResult_post_id"
     >
       <div
-        className="edit-post-history__header"
-      >
-        <span
-          className="profile-icon"
-        >
-          <Memo(Avatar)
-            className="avatar-post-preview"
-            size="sm"
-            url="/api/v4/users/user_id/image?_=0"
-          />
-        </span>
-        <div
-          className="edit-post-history__header__username"
-        >
-          <Connect(UserProfile)
-            disablePopover={true}
-            hasMention={true}
-            userId="user_id"
-          />
-        </div>
-      </div>
-      <div
-        className="post__content"
+        class="edit-post-history__title__container"
       >
         <div
-          className="search-item-snippet post__body"
+          class="edit-post-history__date__badge__container"
         >
-          <Connect(PostMessageView)
-            isRHS={true}
-            post={
-              Object {
-                "channel_id": "",
-                "create_at": 0,
-                "delete_at": 0,
-                "edit_at": 0,
-                "hashtags": "",
-                "id": "post_id",
-                "is_pinned": false,
-                "message": "post message",
-                "metadata": Object {
-                  "embeds": Array [],
-                  "emojis": Array [],
-                  "files": Array [],
-                  "images": Object {},
-                  "reactions": Array [],
-                },
-                "original_id": "",
-                "pending_post_id": "",
-                "props": Object {},
-                "reply_count": 0,
-                "root_id": "",
-                "type": "system_add_remove",
-                "update_at": 0,
-                "user_id": "user_id",
-              }
-            }
-            showPostEditedIndicator={false}
-          />
+          <button
+            aria-label="Toggle to see an old message."
+            class="edit-post-history__icon__button toggleCollapseButton"
+          >
+            <i
+              class="icon icon-chevron-right"
+            />
+          </button>
+          <span
+            class="edit-post-history__date"
+          >
+            <time
+              datetime="1970-01-01T00:00:00.000"
+            >
+              01 January 1970 at 12:00 am
+            </time>
+          </span>
         </div>
+        <button
+          aria-label="Select to restore an old message."
+          class="edit-post-history__icon__button restore-icon"
+        >
+          <i
+            class="icon icon-restore"
+          />
+        </button>
       </div>
     </div>
-  </PostAriaLabelDiv>
+  </div>
+</div>
+`;
+
+exports[`components/post_edit_history/edited_post_item should match snapshot with file metadata with some deleted files 1`] = `
+<div>
+  <div
+    class="edit-post-history__container"
+  >
+    <div
+      aria-label="At 12:00 AM Thursday, January 1, Someone wrote, post message"
+      class="a11y__section post"
+      id="searchResult_post_id"
+    >
+      <div
+        class="edit-post-history__title__container"
+      >
+        <div
+          class="edit-post-history__date__badge__container"
+        >
+          <button
+            aria-label="Toggle to see an old message."
+            class="edit-post-history__icon__button toggleCollapseButton"
+          >
+            <i
+              class="icon icon-chevron-right"
+            />
+          </button>
+          <span
+            class="edit-post-history__date"
+          >
+            <time
+              datetime="1970-01-01T00:00:00.000"
+            >
+              01 January 1970 at 12:00 am
+            </time>
+          </span>
+        </div>
+        <button
+          aria-label="Select to restore an old message."
+          class="edit-post-history__icon__button restore-icon"
+        >
+          <i
+            class="icon icon-restore"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 `;

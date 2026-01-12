@@ -6,17 +6,17 @@ import React, {useState, useRef, memo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useHistory} from 'react-router-dom';
 
-import type {ServerError} from '@mattermost/types/errors';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import LocalizedInput from 'components/localized_input/localized_input';
 
 import Constants from 'utils/constants';
 import {t} from 'utils/i18n';
 
-interface Props {
+export interface Props {
     location: {search: string};
     actions: {
-        resetUserPassword: (token: string, newPassword: string) => Promise<{data: any; error: ServerError}>;
+        resetUserPassword: (token: string, newPassword: string) => Promise<ActionResult>;
     };
     siteName?: string;
 }

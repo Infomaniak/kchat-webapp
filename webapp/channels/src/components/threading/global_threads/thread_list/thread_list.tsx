@@ -2,15 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {PlaylistCheckIcon} from '@infomaniak/compass-icons/components';
-import {isEmpty} from 'lodash';
-import type {PropsWithChildren} from 'react';
+import isEmpty from 'lodash/isEmpty';
 import React, {memo, useCallback, useEffect} from 'react';
+import type {PropsWithChildren} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import type {UserThread} from '@mattermost/types/threads';
 
-import {getThreads, markAllThreadsInTeamRead} from 'mattermost-redux/actions/threads';
+import {getThreadsForCurrentTeam, markAllThreadsInTeamRead} from 'mattermost-redux/actions/threads';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';
 import {getThreadCountsInCurrentTeam} from 'mattermost-redux/selectors/entities/threads';
 
@@ -19,24 +19,23 @@ import {closeModal, openModal} from 'actions/views/modals';
 import {getIsMobileView} from 'selectors/views/browser';
 
 import NoResultsIndicator from 'components/no_results_indicator';
-import ReadThreadIllustration from 'components/threading/common/read_thread_illustration';
+import IkReadThreadIllustration from 'components/threading/common/ik_read_thread_illustration';
 import CRTListTutorialTip from 'components/tours/crt_tour/crt_list_tutorial_tip';
 import CRTUnreadTutorialTip from 'components/tours/crt_tour/crt_unread_tutorial_tip';
 import Header from 'components/widgets/header';
-import SimpleTooltip from 'components/widgets/simple_tooltip';
+import WithTooltip from 'components/with_tooltip';
 
 import {A11yClassNames, Constants, CrtTutorialSteps, ModalIdentifiers, Preferences} from 'utils/constants';
-import * as Utils from 'utils/utils';
+import * as Keyboard from 'utils/keyboard';
 
 import type {GlobalState} from 'types/store';
 
 import VirtualizedThreadList from './virtualized_thread_list';
 
-import BalloonIllustration from '../../common/balloon_illustration';
 import Button from '../../common/button';
 import {useThreadRouting} from '../../hooks';
-import type {MarkAllThreadsAsReadModalProps} from '../mark_all_threads_as_read_modal';
 import MarkAllThreadsAsReadModal from '../mark_all_threads_as_read_modal';
+import type {MarkAllThreadsAsReadModalProps} from '../mark_all_threads_as_read_modal';
 
 import './thread_list.scss';
 
@@ -88,7 +87,7 @@ const ThreadList = ({
             return;
         }
         const comboKeyPressed = e.altKey || e.metaKey || e.shiftKey || e.ctrlKey;
-        if (comboKeyPressed || (!Utils.isKeyPressed(e, Constants.KeyCodes.DOWN) && !Utils.isKeyPressed(e, Constants.KeyCodes.UP))) {
+        if (comboKeyPressed || (!Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN) && !Keyboard.isKeyPressed(e, Constants.KeyCodes.UP))) {
             return;
         }
 
@@ -102,7 +101,7 @@ const ThreadList = ({
         let threadIdToSelect = 0;
         if (selectedThreadId) {
             const selectedThreadIndex = data.indexOf(selectedThreadId);
-            if (Utils.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
+            if (Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
                 if (selectedThreadIndex < data.length - 1) {
                     threadIdToSelect = selectedThreadIndex + 1;
                 }
@@ -112,7 +111,7 @@ const ThreadList = ({
                 }
             }
 
-            if (Utils.isKeyPressed(e, Constants.KeyCodes.UP)) {
+            if (Keyboard.isKeyPressed(e, Constants.KeyCodes.UP)) {
                 if (selectedThreadIndex > 0) {
                     threadIdToSelect = selectedThreadIndex - 1;
                 } else {
@@ -150,7 +149,7 @@ const ThreadList = ({
             before = data[startIndex - 2];
         }
 
-        await dispatch(getThreads(currentUserId, currentTeamId, {unread, perPage: Constants.THREADS_PAGE_SIZE, before}));
+        await dispatch(getThreadsForCurrentTeam({unread, before}));
 
         setLoading(false);
         setHasLoaded(true);
@@ -206,8 +205,8 @@ const ThreadList = ({
                                 onClick={handleRead}
                             >
                                 <FormattedMessage
-                                    id='threading.filters.allThreads'
-                                    defaultMessage='All your threads'
+                                    id='globalThreads.heading'
+                                    defaultMessage='Followed threads'
                                 />
                             </Button>
                         </div>
@@ -232,16 +231,14 @@ const ThreadList = ({
                 )}
                 right={(
                     <div className='right-anchor'>
-                        <SimpleTooltip
-                            id='threadListMarkRead'
-                            content={formatMessage({
+                        <WithTooltip
+                            title={formatMessage({
                                 id: 'threading.threadList.markRead',
                                 defaultMessage: 'Mark all as read',
                             })}
                         >
                             <Button
                                 id={'threads-list__mark-all-as-read'}
-                                disabled={!someUnread}
                                 className={'Button___large Button___icon'}
                                 onClick={handleOpenMarkAllAsReadModal}
                                 marginTop={true}
@@ -250,7 +247,7 @@ const ThreadList = ({
                                     <PlaylistCheckIcon size={18}/>
                                 </span>
                             </Button>
-                        </SimpleTooltip>
+                        </WithTooltip>
                     </div>
                 )}
             />
@@ -271,10 +268,14 @@ const ThreadList = ({
                 {unread && !someUnread && isEmpty(unreadIds) ? (
                     <NoResultsIndicator
                         expanded={true}
-                        iconGraphic={<ReadThreadIllustration/>}
+                        iconGraphic={<IkReadThreadIllustration/>}
                         title={formatMessage({
                             id: 'globalThreads.threadList.noUnreadThreads',
                             defaultMessage: 'No unread threads',
+                        })}
+                        subtitle={formatMessage({
+                            id: 'globalThreads.threadList.noUnreadThreads.subtitle',
+                            defaultMessage: 'You\'re all caught up',
                         })}
                     />
                 ) : null}

@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import type {ListChildComponentProps} from 'react-window';
 import {VariableSizeList} from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
@@ -19,11 +19,8 @@ import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
 import {ModalIdentifiers} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
-
-import ADLDAPUpsellBanner from '../ad_ldap_upsell_banner';
 
 export type Props = {
     groups: Group[];
@@ -58,6 +55,7 @@ const UserGroupsList = (props: Props) => {
     const variableSizeListRef = useRef<VariableSizeList | null>(null);
     const [hasMounted, setHasMounted] = useState(false);
     const [overflowState, setOverflowState] = useState('overlay');
+    const {formatMessage} = useIntl();
 
     useEffect(() => {
         if (groups.length === 1) {
@@ -119,8 +117,8 @@ const UserGroupsList = (props: Props) => {
         if (groups.length === 0 && searchTerm) {
             return (
                 <NoResultsIndicator
-                    variant={NoResultsVariant.ChannelSearch}
-                    titleValues={{channelName: `"${searchTerm}"`}}
+                    variant={NoResultsVariant.Search}
+                    titleValues={{channelName: `${searchTerm}`}}
                 />
             );
         }
@@ -171,7 +169,7 @@ const UserGroupsList = (props: Props) => {
                                 openLeft={true}
                                 openUp={groupListOpenUp(index)}
                                 className={'group-actions-menu'}
-                                ariaLabel={Utils.localizeMessage('admin.user_item.menuAriaLabel', 'User Actions Menu')}
+                                ariaLabel={formatMessage({id: 'admin.user_item.menuAriaLabel', defaultMessage: 'User Actions Menu'})}
                             >
                                 <Menu.Group>
                                     <Menu.ItemAction
@@ -179,7 +177,7 @@ const UserGroupsList = (props: Props) => {
                                             goToViewGroupModal(group);
                                         }}
                                         icon={<i className='icon-account-multiple-outline'/>}
-                                        text={Utils.localizeMessage('user_groups_modal.viewGroup', 'View Group')}
+                                        text={formatMessage({id: 'user_groups_modal.viewGroup', defaultMessage: 'View Group'})}
                                         disabled={false}
                                     />
                                 </Menu.Group>
@@ -190,7 +188,7 @@ const UserGroupsList = (props: Props) => {
                                             archiveGroup(group.id);
                                         }}
                                         icon={<i className='icon-archive-outline'/>}
-                                        text={Utils.localizeMessage('user_groups_modal.archiveGroup', 'Archive Group')}
+                                        text={formatMessage({id: 'user_groups_modal.archiveGroup', defaultMessage: 'Archive Group'})}
                                         disabled={false}
                                         isDangerous={true}
                                     />
@@ -200,7 +198,7 @@ const UserGroupsList = (props: Props) => {
                                             restoreGroup(group.id);
                                         }}
                                         icon={<i className='icon-restore'/>}
-                                        text={Utils.localizeMessage('user_groups_modal.restoreGroup', 'Restore Group')}
+                                        text={formatMessage({id: 'user_groups_modal.restoreGroup', defaultMessage: 'Restore Group'})}
                                         disabled={false}
                                     />
                                 </Menu.Group>
@@ -239,7 +237,6 @@ const UserGroupsList = (props: Props) => {
                         {Item}
                     </VariableSizeList>)}
             </InfiniteLoader>
-            <ADLDAPUpsellBanner/>
         </div>
     );
 };

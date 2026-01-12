@@ -12,7 +12,6 @@ import {
     DotsVerticalIcon,
     ExitToAppIcon,
 } from '@infomaniak/compass-icons/components';
-import type {MouseEvent, KeyboardEvent} from 'react';
 import React, {useRef, memo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
@@ -29,23 +28,41 @@ import type {PropsFromRedux, OwnProps} from './index';
 
 type Props = PropsFromRedux & OwnProps;
 
-const SidebarChannelMenu = (props: Props) => {
+const SidebarChannelMenu = ({
+    menuTriggerRef,
+    channel,
+    channelLink,
+    currentUserId,
+    favoriteChannel,
+    isFavorite,
+    isMuted,
+    isUnread,
+    managePrivateChannelMembers,
+    managePublicChannelMembers,
+    readMultipleChannels,
+    markMostRecentPostInChannelAsUnread,
+    muteChannel,
+    onMenuToggle,
+    openModal,
+    unfavoriteChannel,
+    unmuteChannel,
+    channelLeaveHandler,
+}: Props) => {
     const isLeaving = useRef(false);
 
     const {formatMessage} = useIntl();
 
     let markAsReadUnreadMenuItem: JSX.Element | null = null;
-    if (props.isUnread) {
-        function handleMarkAsRead(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
-            props.markChannelAsRead(props.channel.id);
+    if (isUnread) {
+        function handleMarkAsRead() {
+            // We use mark multiple to not update the active channel in the server
+            readMultipleChannels([channel.id]);
             trackEvent('ui', 'ui_sidebar_channel_menu_markAsRead');
         }
 
         markAsReadUnreadMenuItem = (
             <Menu.Item
-                id={`markAsRead-${props.channel.id}`}
+                id={`markAsRead-${channel.id}`}
                 onClick={handleMarkAsRead}
                 leadingElement={<MarkAsUnreadIcon size={18}/>}
                 labels={(
@@ -58,16 +75,14 @@ const SidebarChannelMenu = (props: Props) => {
 
         );
     } else {
-        function handleMarkAsUnread(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
-            props.markMostRecentPostInChannelAsUnread(props.channel.id);
+        function handleMarkAsUnread() {
+            markMostRecentPostInChannelAsUnread(channel.id);
             trackEvent('ui', 'ui_sidebar_channel_menu_markAsUnread');
         }
 
         markAsReadUnreadMenuItem = (
             <Menu.Item
-                id={`markAsUnread-${props.channel.id}`}
+                id={`markAsUnread-${channel.id}`}
                 onClick={handleMarkAsUnread}
                 leadingElement={<MarkAsUnreadIcon size={18}/>}
                 labels={(
@@ -81,17 +96,15 @@ const SidebarChannelMenu = (props: Props) => {
     }
 
     let favoriteUnfavoriteMenuItem: JSX.Element | null = null;
-    if (props.isFavorite) {
-        function handleUnfavoriteChannel(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
-            props.unfavoriteChannel(props.channel.id);
+    if (isFavorite) {
+        function handleUnfavoriteChannel() {
+            unfavoriteChannel(channel.id);
             trackEvent('ui', 'ui_sidebar_channel_menu_unfavorite');
         }
 
         favoriteUnfavoriteMenuItem = (
             <Menu.Item
-                id={`unfavorite-${props.channel.id}`}
+                id={`unfavorite-${channel.id}`}
                 onClick={handleUnfavoriteChannel}
                 leadingElement={<StarIcon size={18}/>}
                 labels={(
@@ -103,17 +116,15 @@ const SidebarChannelMenu = (props: Props) => {
             />
         );
     } else {
-        function handleFavoriteChannel(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
-            props.favoriteChannel(props.channel.id);
+        function handleFavoriteChannel() {
+            favoriteChannel(channel.id);
             trackEvent('ui', 'ui_sidebar_channel_menu_favorite');
         }
 
         favoriteUnfavoriteMenuItem = (
 
             <Menu.Item
-                id={`favorite-${props.channel.id}`}
+                id={`favorite-${channel.id}`}
                 onClick={handleFavoriteChannel}
                 leadingElement={<StarOutlineIcon size={18}/>}
                 labels={(
@@ -127,31 +138,29 @@ const SidebarChannelMenu = (props: Props) => {
     }
 
     let muteUnmuteChannelMenuItem: JSX.Element | null = null;
-    if (props.isMuted) {
+    if (isMuted) {
         let muteChannelText = (
             <FormattedMessage
                 id='sidebar_left.sidebar_channel_menu.unmuteChannel'
                 defaultMessage='Unmute Channel'
             />
         );
-        if (props.channel.type === Constants.DM_CHANNEL || props.channel.type === Constants.GM_CHANNEL) {
+        if (channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) {
             muteChannelText = (
                 <FormattedMessage
-                    id='sidebar_left.sidebar_channel_menu.unmuteConversation'
-                    defaultMessage='Unmute Conversation'
+                    id='sidebar_left.sidebar_channel_menu.unmute'
+                    defaultMessage='Unmute'
                 />
             );
         }
 
-        function handleUnmuteChannel(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
-            props.unmuteChannel(props.currentUserId, props.channel.id);
+        function handleUnmuteChannel() {
+            unmuteChannel(currentUserId, channel.id);
         }
 
         muteUnmuteChannelMenuItem = (
             <Menu.Item
-                id={`unmute-${props.channel.id}`}
+                id={`unmute-${channel.id}`}
                 onClick={handleUnmuteChannel}
                 leadingElement={<BellOffOutlineIcon size={18}/>}
                 labels={muteChannelText}
@@ -164,24 +173,22 @@ const SidebarChannelMenu = (props: Props) => {
                 defaultMessage='Mute Channel'
             />
         );
-        if (props.channel.type === Constants.DM_CHANNEL || props.channel.type === Constants.GM_CHANNEL) {
+        if (channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) {
             muteChannelText = (
                 <FormattedMessage
-                    id='sidebar_left.sidebar_channel_menu.muteConversation'
-                    defaultMessage='Mute Conversation'
+                    id='sidebar_left.sidebar_channel_menu.mute'
+                    defaultMessage='Mute'
                 />
             );
         }
 
-        function handleMuteChannel(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
-            props.muteChannel(props.currentUserId, props.channel.id);
+        function handleMuteChannel() {
+            muteChannel(currentUserId, channel.id);
         }
 
         muteUnmuteChannelMenuItem = (
             <Menu.Item
-                id={`mute-${props.channel.id}`}
+                id={`mute-${channel.id}`}
                 onClick={handleMuteChannel}
                 leadingElement={<BellOutlineIcon size={18}/>}
                 labels={muteChannelText}
@@ -190,16 +197,14 @@ const SidebarChannelMenu = (props: Props) => {
     }
 
     let copyLinkMenuItem: JSX.Element | null = null;
-    if (props.channel.type === Constants.OPEN_CHANNEL || props.channel.type === Constants.PRIVATE_CHANNEL) {
-        function handleCopyLink(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
-            copyToClipboard(props.channelLink);
+    if (channel.type === Constants.OPEN_CHANNEL || channel.type === Constants.PRIVATE_CHANNEL) {
+        function handleCopyLink() {
+            copyToClipboard(channelLink);
         }
 
         copyLinkMenuItem = (
             <Menu.Item
-                id={`copyLink-${props.channel.id}`}
+                id={`copyLink-${channel.id}`}
                 onClick={handleCopyLink}
                 leadingElement={<LinkVariantIcon size={18}/>}
                 labels={(
@@ -213,19 +218,19 @@ const SidebarChannelMenu = (props: Props) => {
     }
 
     let addMembersMenuItem: JSX.Element | null = null;
-    if ((props.channel.type === Constants.PRIVATE_CHANNEL && props.managePrivateChannelMembers) || (props.channel.type === Constants.OPEN_CHANNEL && props.managePublicChannelMembers)) {
+    if ((channel.type === Constants.PRIVATE_CHANNEL && managePrivateChannelMembers) || (channel.type === Constants.OPEN_CHANNEL && managePublicChannelMembers)) {
         function handleAddMembers() {
-            props.openModal({
+            openModal({
                 modalId: ModalIdentifiers.CHANNEL_INVITE,
                 dialogType: ChannelInviteModal,
-                dialogProps: {channel: props.channel},
+                dialogProps: {channel},
             });
             trackEvent('ui', 'ui_sidebar_channel_menu_addMembers');
         }
 
         addMembersMenuItem = (
             <Menu.Item
-                id={`addMembers-${props.channel.id}`}
+                id={`addMembers-${channel.id}`}
                 onClick={handleAddMembers}
                 aria-haspopup='true'
                 leadingElement={<AccountPlusOutlineIcon size={18}/>}
@@ -240,14 +245,14 @@ const SidebarChannelMenu = (props: Props) => {
     }
 
     let leaveChannelMenuItem: JSX.Element | null = null;
-    if (props.channel.name !== Constants.DEFAULT_CHANNEL) {
+    if (channel.name !== Constants.DEFAULT_CHANNEL) {
         let leaveChannelText = (
             <FormattedMessage
                 id='sidebar_left.sidebar_channel_menu.leaveChannel'
                 defaultMessage='Leave Channel'
             />
         );
-        if (props.channel.type === Constants.DM_CHANNEL || props.channel.type === Constants.GM_CHANNEL) {
+        if (channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) {
             leaveChannelText = (
                 <FormattedMessage
                     id='sidebar_left.sidebar_channel_menu.leaveConversation'
@@ -256,16 +261,14 @@ const SidebarChannelMenu = (props: Props) => {
             );
         }
 
-        function handleLeaveChannel(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
-            event.preventDefault();
-
-            if (isLeaving.current || !props.channelLeaveHandler) {
+        function handleLeaveChannel() {
+            if (isLeaving.current || !channelLeaveHandler) {
                 return;
             }
 
             isLeaving.current = true;
 
-            props.channelLeaveHandler(() => {
+            channelLeaveHandler(() => {
                 isLeaving.current = false;
             });
             trackEvent('ui', 'ui_sidebar_channel_menu_leave');
@@ -273,7 +276,7 @@ const SidebarChannelMenu = (props: Props) => {
 
         leaveChannelMenuItem = (
             <Menu.Item
-                id={`leave-${props.channel.id}`}
+                id={`leave-${channel.id}`}
                 onClick={handleLeaveChannel}
                 leadingElement={<ExitToAppIcon size={18}/>}
                 labels={leaveChannelText}
@@ -282,35 +285,34 @@ const SidebarChannelMenu = (props: Props) => {
         );
     }
 
-    const menuId = `SidebarChannelMenu-MenuList-${props.channel.id}`;
-
     return (
         <Menu.Container
             menuButton={{
-                id: `SidebarChannelMenu-Button-${props.channel.id}`,
+                id: `SidebarChannelMenu-Button-${channel.id}`,
                 class: 'SidebarMenu_menuButton',
-                'aria-label': formatMessage({id: 'sidebar_left.sidebar_channel_menu.editChannel', defaultMessage: 'Channel options'}),
+                'aria-label': formatMessage({
+                    id: 'sidebar_left.sidebar_channel_menu.editChannel.ariaLabel',
+                    defaultMessage: 'Channel options for {channelName}',
+                }, {channelName: channel.name}),
                 children: <DotsVerticalIcon size={16}/>,
+                ref: menuTriggerRef,
             }}
             menuButtonTooltip={{
-                id: `SidebarChannelMenu-ButtonTooltip-${props.channel.id}`,
                 class: 'hidden-xs',
                 text: formatMessage({id: 'sidebar_left.sidebar_channel_menu.editChannel', defaultMessage: 'Channel options'}),
             }}
             menu={{
-                id: menuId,
+                id: `SidebarChannelMenu-MenuList-${channel.id}`,
                 'aria-label': formatMessage({id: 'sidebar_left.sidebar_channel_menu.dropdownAriaLabel', defaultMessage: 'Edit channel menu'}),
-                onToggle: props.onMenuToggle,
+                onToggle: onMenuToggle,
             }}
-            menuButtonRef={props.menuTriggerRef}
         >
             {markAsReadUnreadMenuItem}
             {favoriteUnfavoriteMenuItem}
             {muteUnmuteChannelMenuItem}
             <Menu.Separator/>
             <ChannelMoveToSubmenu
-                channel={props.channel}
-                parentMenuId={menuId}
+                channel={channel}
             />
             {(copyLinkMenuItem || addMembersMenuItem) && <Menu.Separator/>}
             {copyLinkMenuItem}

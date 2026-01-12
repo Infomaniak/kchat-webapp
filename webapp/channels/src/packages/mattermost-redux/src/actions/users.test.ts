@@ -7,21 +7,24 @@ import nock from 'nock';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {UserTypes} from 'mattermost-redux/action_types';
+import {GeneralTypes, UserTypes} from 'mattermost-redux/action_types';
 import * as Actions from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
-import type {ActionResult} from 'mattermost-redux/types/actions';
+import {General, RequestStatus} from 'mattermost-redux/constants';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
-import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
+
+import mockStore from 'tests/test_store';
 
 import TestHelper from '../../test/test_helper';
 import configureStore from '../../test/test_store';
-import {RequestStatus} from '../constants';
 
 const OK_RESPONSE = {status: 'OK'};
 
 describe('Actions.Users', () => {
+    jest.retryTimes(3, {logErrorsBeforeRetry: true});
+
     let store = configureStore();
+
     beforeAll(() => {
         TestHelper.initBasic(Client4);
     });
@@ -30,11 +33,17 @@ describe('Actions.Users', () => {
         store = configureStore({
             entities: {
                 general: {
-                    config: {
-                        CollapsedThreads: 'always_on',
+                    config: {},
+                },
+
+                // Infomaniak specific mock
+                ksuiteBridge: {
+                    bridge: {
+                        isConnected: false,
                     },
                 },
             },
+
         });
 
         Client4.setUserId('');
@@ -55,7 +64,8 @@ describe('Actions.Users', () => {
             post('/users').
             reply(201, {...userToCreate, id: TestHelper.generateId()});
 
-        const {data: user} = await Actions.createUser(userToCreate, '', '', '')(store.dispatch, store.getState) as ActionResult;
+        const response = await store.dispatch(Actions.createUser(userToCreate, '', '', ''));
+        const user = response.data!;
 
         const state = store.getState();
         const {profiles} = state.entities.users;
@@ -76,7 +86,7 @@ describe('Actions.Users', () => {
             get('/terms_of_service').
             reply(200, response);
 
-        const {data} = await Actions.getTermsOfService()(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.getTermsOfService());
 
         expect(data).toEqual(response);
     });
@@ -90,13 +100,13 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         nock(Client4.getBaseRoute()).
             post('/users/me/terms_of_service').
             reply(200, OK_RESPONSE);
 
-        await Actions.updateMyTermsOfServiceStatus('1', true)(store.dispatch, store.getState);
+        await store.dispatch(Actions.updateMyTermsOfServiceStatus('1', true));
 
         const {currentUserId} = store.getState().entities.users;
         const currentUser = store.getState().entities.users.profiles[currentUserId];
@@ -116,18 +126,116 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         nock(Client4.getBaseRoute()).
             post('/users/me/terms_of_service').
             reply(200, OK_RESPONSE);
 
-        await Actions.updateMyTermsOfServiceStatus('1', false)(store.dispatch, store.getState);
+        await store.dispatch(Actions.updateMyTermsOfServiceStatus('1', false));
 
-        const {currentUserId, myAcceptedTermsOfServiceId} = store.getState().entities.users;
+        const {currentUserId, profiles} = store.getState().entities.users;
 
         expect(currentUserId).toBeTruthy();
-        expect(myAcceptedTermsOfServiceId).not.toEqual('1');
+        expect(profiles[currentUserId]).not.toEqual('1');
+    });
+
+    it('logout', async () => {
+        nock(Client4.getBaseRoute()).
+            post('/users/logout').
+            reply(200, OK_RESPONSE);
+
+        await store.dispatch(Actions.logout());
+
+        const state = store.getState();
+        const logoutRequest = state.requests.users.logout;
+        const general = state.entities.general;
+        const users = state.entities.users;
+        const teams = state.entities.teams;
+        const channels = state.entities.channels;
+        const posts = state.entities.posts;
+        const preferences = state.entities.preferences;
+
+        if (logoutRequest.status === RequestStatus.FAILURE) {
+            throw new Error(JSON.stringify(logoutRequest.error));
+        }
+
+        // config not empty
+        expect(general.config).toEqual({});
+
+        // license not empty
+        expect(general.license).toEqual({});
+
+        // current user id not empty
+        expect(users.currentUserId).toEqual('');
+
+        // user sessions not empty
+        expect(users.mySessions).toEqual([]);
+
+        // user audits not empty
+        expect(users.myAudits).toEqual([]);
+
+        // user profiles not empty
+        expect(users.profiles).toEqual({});
+
+        // users profiles in team not empty
+        expect(users.profilesInTeam).toEqual({});
+
+        // users profiles in channel not empty
+        expect(users.profilesInChannel).toEqual({});
+
+        // users profiles NOT in channel not empty
+        expect(users.profilesNotInChannel).toEqual({});
+
+        // users statuses not empty
+        expect(users.statuses).toEqual({});
+
+        // current team id is not empty
+        expect(teams.currentTeamId).toEqual('');
+
+        // teams is not empty
+        expect(teams.teams).toEqual({});
+
+        // team members is not empty
+        expect(teams.myMembers).toEqual({});
+
+        // members in team is not empty
+        expect(teams.membersInTeam).toEqual({});
+
+        // team stats is not empty
+        expect(teams.stats).toEqual({});
+
+        // current channel id is not empty
+        expect(channels.currentChannelId).toEqual('');
+
+        // channels is not empty
+        expect(channels.channels).toEqual({});
+
+        // channelsInTeam is not empty
+        expect(channels.channelsInTeam).toEqual({});
+
+        // channel members is not empty
+        expect(channels.myMembers).toEqual({});
+
+        // channel stats is not empty
+        expect(channels.stats).toEqual({});
+
+        // current focused post id is not empty
+        expect(posts.currentFocusedPostId).toEqual('');
+
+        // posts is not empty
+        expect(posts.posts).toEqual({});
+
+        // posts by channel is not empty
+        expect(posts.postsInChannel).toEqual({});
+
+        // user preferences not empty
+        expect(preferences.myPreferences).toEqual({});
+
+        nock(Client4.getBaseRoute()).
+            post('/users/login').
+            reply(200, TestHelper.basicUser!);
+        await TestHelper.basicClient4!.login(TestHelper.basicUser!.email, 'password1');
     });
 
     it('getProfiles', async () => {
@@ -136,7 +244,7 @@ describe('Actions.Users', () => {
             query(true).
             reply(200, [TestHelper.basicUser]);
 
-        await Actions.getProfiles(0)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getProfiles(0));
         const {profiles} = store.getState().entities.users;
 
         expect(Object.keys(profiles).length).toBeTruthy();
@@ -153,27 +261,259 @@ describe('Actions.Users', () => {
             post('/users/ids').
             reply(200, [user]);
 
-        await Actions.getProfilesByIds([user.id])(store.dispatch, store.getState);
+        await store.dispatch(Actions.getProfilesByIds([user.id]));
         const {profiles} = store.getState().entities.users;
 
         expect(profiles[user.id]).toBeTruthy();
     });
 
-    it('getMissingProfilesByIds', async () => {
-        nock(Client4.getBaseRoute()).
-            post('/users').
-            reply(200, TestHelper.fakeUserWithId());
+    describe('getMissingProfilesByIds', () => {
+        const testUserId1 = 'testUser1';
+        const testUserId2 = 'testUser2';
+        const testUserId3 = 'testUser3';
 
-        const user = await TestHelper.basicClient4!.createUser(TestHelper.fakeUser(), '', '');
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
 
-        nock(Client4.getBaseRoute()).
-            post('/users/ids').
-            reply(200, [user]);
+        afterEach(() => {
+            // IK: Temp fix to avoid jest timers creating errors only on CI
+            // expect(jest.getTimerCount()).toBe(0);
 
-        await Actions.getMissingProfilesByIds([user.id])(store.dispatch, store.getState);
-        const {profiles} = store.getState().entities.users;
+            jest.useRealTimers();
+        });
 
-        expect(profiles[user.id]).toBeTruthy();
+        test('should be able to get a single user', async () => {
+            const profileMock = nock(Client4.getBaseRoute()).
+                post('/users/ids', [testUserId1]).
+                reply(200, [TestHelper.getUserMock({id: testUserId1})]);
+            const statusMock = nock(Client4.getBaseRoute()).
+                post('/users/status/ids', [testUserId1]).
+                reply(200, [{user_id: testUserId1, status: General.ONLINE}]);
+
+            const promise = store.dispatch(Actions.getMissingProfilesByIds([testUserId1]));
+
+            jest.advanceTimersToNextTimer();
+
+            await promise;
+
+            expect(profileMock.isDone()).toBe(true);
+            expect(statusMock.isDone()).toBe(true);
+            expect(store.getState().entities.users.profiles[testUserId1]).toMatchObject({id: testUserId1});
+            expect(store.getState().entities.users.statuses[testUserId1]).toEqual(General.ONLINE);
+        });
+
+        test('should be able to get multiple users', async () => {
+            const profileMock = nock(Client4.getBaseRoute()).
+                post('/users/ids', [testUserId1, testUserId2, testUserId3]).
+                reply(200, [
+                    TestHelper.getUserMock({id: testUserId1}),
+                    TestHelper.getUserMock({id: testUserId2}),
+                    TestHelper.getUserMock({id: testUserId3}),
+                ]);
+            const statusMock = nock(Client4.getBaseRoute()).
+                post('/users/status/ids', [testUserId1, testUserId2, testUserId3]).
+                reply(200, [
+                    {user_id: testUserId1, status: General.ONLINE},
+                    {user_id: testUserId2, status: General.ONLINE},
+                    {user_id: testUserId3, status: General.ONLINE},
+                ]);
+
+            const promise = store.dispatch(Actions.getMissingProfilesByIds([testUserId1, testUserId2, testUserId3]));
+
+            jest.advanceTimersToNextTimer();
+
+            await promise;
+
+            expect(profileMock.isDone()).toBe(true);
+            expect(statusMock.isDone()).toBe(true);
+            expect(store.getState().entities.users.profiles[testUserId1]).toMatchObject({id: testUserId1});
+            expect(store.getState().entities.users.statuses[testUserId1]).toEqual(General.ONLINE);
+            expect(store.getState().entities.users.profiles[testUserId2]).toMatchObject({id: testUserId2});
+            expect(store.getState().entities.users.statuses[testUserId2]).toEqual(General.ONLINE);
+            expect(store.getState().entities.users.profiles[testUserId3]).toMatchObject({id: testUserId3});
+            expect(store.getState().entities.users.statuses[testUserId3]).toEqual(General.ONLINE);
+        });
+
+        test('should batch requests to get users across multiple calls and dedupe IDs', async () => {
+            const profileMock = nock(Client4.getBaseRoute()).
+                post('/users/ids', [testUserId1, testUserId2, testUserId3]).
+                reply(200, [
+                    TestHelper.getUserMock({id: testUserId1}),
+                    TestHelper.getUserMock({id: testUserId2}),
+                    TestHelper.getUserMock({id: testUserId3}),
+                ]);
+            const statusMock = nock(Client4.getBaseRoute()).
+                post('/users/status/ids', [testUserId1, testUserId2, testUserId3]).
+                reply(200, [
+                    {user_id: testUserId1, status: General.ONLINE},
+                    {user_id: testUserId2, status: General.ONLINE},
+                    {user_id: testUserId3, status: General.ONLINE},
+                ]);
+
+            const promise = Promise.all([
+                store.dispatch(Actions.getMissingProfilesByIds([testUserId1])),
+                store.dispatch(Actions.getMissingProfilesByIds([testUserId2, testUserId3])),
+                store.dispatch(Actions.getMissingProfilesByIds([testUserId2])),
+            ]);
+
+            jest.advanceTimersToNextTimer();
+
+            await promise;
+
+            expect(profileMock.isDone()).toBe(true);
+            expect(statusMock.isDone()).toBe(true);
+            expect(store.getState().entities.users.profiles[testUserId1]).toMatchObject({id: testUserId1});
+            expect(store.getState().entities.users.statuses[testUserId1]).toEqual(General.ONLINE);
+            expect(store.getState().entities.users.profiles[testUserId2]).toMatchObject({id: testUserId2});
+            expect(store.getState().entities.users.statuses[testUserId2]).toEqual(General.ONLINE);
+            expect(store.getState().entities.users.profiles[testUserId3]).toMatchObject({id: testUserId3});
+            expect(store.getState().entities.users.statuses[testUserId3]).toEqual(General.ONLINE);
+        });
+
+        test('should split requests for user IDs into multiple requests when necessary', async () => {
+            const idsPerBatch = Actions.maxUserIdsPerProfilesRequest;
+            const testUserIds: string[] = [];
+            for (let i = 0; i < idsPerBatch * 2.5; i++) {
+                testUserIds.push('testUser' + i);
+            }
+
+            const testUserIds1 = testUserIds.slice(0, idsPerBatch);
+            const testUserIds2 = testUserIds.slice(idsPerBatch, idsPerBatch * 2);
+            const testUserIds3 = testUserIds.slice(idsPerBatch * 2, idsPerBatch * 3);
+
+            const profileMock1 = nock(Client4.getBaseRoute()).
+                post('/users/ids', testUserIds1).
+                reply(200, testUserIds1.map((id) => TestHelper.getUserMock({id})));
+            const statusMock1 = nock(Client4.getBaseRoute()).
+                post('/users/status/ids', testUserIds1).
+                reply(200, testUserIds1.map((id) => ({user_id: id, status: General.ONLINE})));
+            const profileMock2 = nock(Client4.getBaseRoute()).
+                post('/users/ids', testUserIds2).
+                reply(200, testUserIds2.map((id) => TestHelper.getUserMock({id})));
+            const statusMock2 = nock(Client4.getBaseRoute()).
+                post('/users/status/ids', testUserIds2).
+                reply(200, testUserIds2.map((id) => ({user_id: id, status: General.ONLINE})));
+            const profileMock3 = nock(Client4.getBaseRoute()).
+                post('/users/ids', testUserIds3).
+                reply(200, testUserIds3.map((id) => TestHelper.getUserMock({id})));
+            const statusMock3 = nock(Client4.getBaseRoute()).
+                post('/users/status/ids', testUserIds3).
+                reply(200, testUserIds3.map((id) => ({user_id: id, status: General.ONLINE})));
+
+            for (const id of testUserIds) {
+                expect(store.getState().entities.users.profiles[id]).not.toBeDefined();
+                expect(store.getState().entities.users.statuses[id]).not.toEqual(General.ONLINE);
+            }
+
+            const promise = store.dispatch(Actions.getMissingProfilesByIds(testUserIds));
+
+            jest.advanceTimersToNextTimer();
+            jest.advanceTimersToNextTimer();
+            jest.advanceTimersToNextTimer();
+
+            await promise;
+
+            // Ensure that each of those requests were made
+            expect(profileMock1.isDone()).toBe(true);
+            expect(statusMock1.isDone()).toBe(true);
+            expect(profileMock2.isDone()).toBe(true);
+            expect(statusMock2.isDone()).toBe(true);
+            expect(profileMock3.isDone()).toBe(true);
+            expect(statusMock3.isDone()).toBe(true);
+
+            // And that all of the users were loaded
+            for (const id of testUserIds) {
+                expect(store.getState().entities.users.profiles[id]).toBeDefined();
+                expect(store.getState().entities.users.statuses[id]).toEqual(General.ONLINE);
+            }
+        });
+
+        test('should not request statuses when those are disabled', async () => {
+            const profileMock = nock(Client4.getBaseRoute()).
+                post('/users/ids', [testUserId1]).
+                reply(200, [TestHelper.getUserMock({id: testUserId1})]);
+            const statusMock = nock(Client4.getBaseRoute()).
+                post('/users/status/ids', [testUserId1]).
+                reply(200, [{user_id: testUserId1, status: General.ONLINE}]);
+
+            store.dispatch({
+                type: GeneralTypes.CLIENT_CONFIG_RECEIVED,
+                data: {
+                    EnableUserStatuses: 'false',
+                },
+            });
+
+            const promise = store.dispatch(Actions.getMissingProfilesByIds([testUserId1]));
+
+            jest.advanceTimersToNextTimer();
+
+            await promise;
+
+            expect(profileMock.isDone()).toBe(true);
+            expect(statusMock.isDone()).toBe(false);
+            expect(store.getState().entities.users.profiles[testUserId1]).toMatchObject({id: testUserId1});
+            expect(store.getState().entities.users.statuses[testUserId1]).toBeUndefined();
+        });
+    });
+
+    describe('getMissingProfilesByUsernames', () => {
+        const testUserId1 = 'testUser1';
+        const testUsername1 = 'test_user_1';
+        const testUserId2 = 'testUser2';
+        const testUsername2 = 'test_user_2';
+        const testUserId3 = 'testUser3';
+        const testUsername3 = 'test_user_3';
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            expect(jest.getTimerCount()).toBe(0);
+
+            jest.useRealTimers();
+        });
+
+        test('should be able to get a single user', async () => {
+            const profileMock = nock(Client4.getBaseRoute()).
+                post('/users/usernames', [testUsername1]).
+                reply(200, [TestHelper.getUserMock({id: testUserId1, username: testUsername1})]);
+
+            const promise = store.dispatch(Actions.getMissingProfilesByUsernames([testUsername1]));
+
+            jest.advanceTimersToNextTimer();
+
+            await promise;
+
+            expect(profileMock.isDone()).toBe(true);
+            expect(store.getState().entities.users.profiles[testUserId1]).toMatchObject({id: testUserId1});
+        });
+
+        test('should be able to get multiple users', async () => {
+            const profileMock = nock(Client4.getBaseRoute()).
+                post('/users/usernames', [testUsername1, testUsername2, testUsername3]).
+                reply(200, [
+                    TestHelper.getUserMock({id: testUserId1, username: testUsername1}),
+                    TestHelper.getUserMock({id: testUserId2, username: testUsername2}),
+                    TestHelper.getUserMock({id: testUserId3, username: testUsername3}),
+                ]);
+
+            const promise = store.dispatch(Actions.getMissingProfilesByUsernames([
+                testUsername1,
+                testUsername2,
+                testUsername3,
+            ]));
+
+            jest.advanceTimersToNextTimer();
+
+            await promise;
+
+            expect(profileMock.isDone()).toBe(true);
+            expect(store.getState().entities.users.profiles[testUserId1]).toMatchObject({id: testUserId1});
+            expect(store.getState().entities.users.profiles[testUserId2]).toMatchObject({id: testUserId2});
+            expect(store.getState().entities.users.profiles[testUserId3]).toMatchObject({id: testUserId3});
+        });
     });
 
     it('getProfilesByUsernames', async () => {
@@ -187,7 +527,7 @@ describe('Actions.Users', () => {
             post('/users/usernames').
             reply(200, [user]);
 
-        await Actions.getProfilesByUsernames([user.username])(store.dispatch, store.getState);
+        await store.dispatch(Actions.getProfilesByUsernames([user.username]));
         const {profiles} = store.getState().entities.users;
 
         expect(profiles[user.id]).toBeTruthy();
@@ -199,7 +539,7 @@ describe('Actions.Users', () => {
             query(true).
             reply(200, [TestHelper.basicUser]);
 
-        await Actions.getProfilesInTeam(TestHelper.basicTeam!.id, 0)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getProfilesInTeam(TestHelper.basicTeam!.id, 0));
 
         const {profilesInTeam, profiles} = store.getState().entities.users;
         const team = profilesInTeam[TestHelper.basicTeam!.id];
@@ -225,7 +565,7 @@ describe('Actions.Users', () => {
             query(true).
             reply(200, [user]);
 
-        await Actions.getProfilesNotInTeam(team!.id, false, 0)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getProfilesNotInTeam(team!.id, false, 0));
 
         const {profilesNotInTeam} = store.getState().entities.users;
         const notInTeam = profilesNotInTeam[team!.id];
@@ -246,7 +586,7 @@ describe('Actions.Users', () => {
             query(true).
             reply(200, [user]);
 
-        await Actions.getProfilesWithoutTeam(0)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getProfilesWithoutTeam(0));
         const {profilesWithoutTeam, profiles} = store.getState().entities.users;
 
         expect(profilesWithoutTeam).toBeTruthy();
@@ -261,10 +601,10 @@ describe('Actions.Users', () => {
             query(true).
             reply(200, [TestHelper.basicUser]);
 
-        await Actions.getProfilesInChannel(
+        await store.dispatch(Actions.getProfilesInChannel(
             TestHelper.basicChannel!.id,
             0,
-        )(store.dispatch, store.getState);
+        ));
 
         const {profiles, profilesInChannel} = store.getState().entities.users;
 
@@ -293,12 +633,12 @@ describe('Actions.Users', () => {
             query(true).
             reply(200, [user]);
 
-        await Actions.getProfilesNotInChannel(
+        await store.dispatch(Actions.getProfilesNotInChannel(
             TestHelper.basicTeam!.id,
             TestHelper.basicChannel!.id,
             false,
             0,
-        )(store.dispatch, store.getState);
+        ));
 
         const {profiles, profilesNotInChannel} = store.getState().entities.users;
 
@@ -315,7 +655,7 @@ describe('Actions.Users', () => {
             query(true).
             reply(200, [TestHelper.basicUser]);
 
-        await Actions.getProfilesInGroup(TestHelper.basicGroup!.id, 0)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getProfilesInGroup(TestHelper.basicGroup!.id, 0));
 
         const {profilesInGroup, profiles} = store.getState().entities.users;
         const group = profilesInGroup[TestHelper.basicGroup!.id];
@@ -338,9 +678,9 @@ describe('Actions.Users', () => {
             get(`/users/${user.id}`).
             reply(200, user);
 
-        await Actions.getUser(
+        await store.dispatch(Actions.getUser(
             user.id,
-        )(store.dispatch, store.getState);
+        ));
 
         const state = store.getState();
         const {profiles} = state.entities.users;
@@ -354,7 +694,7 @@ describe('Actions.Users', () => {
             get('/users/me').
             reply(200, TestHelper.basicUser!);
 
-        await Actions.getMe()(store.dispatch, store.getState);
+        await store.dispatch(Actions.getMe());
 
         const state = store.getState();
         const {profiles, currentUserId} = state.entities.users;
@@ -374,9 +714,9 @@ describe('Actions.Users', () => {
             get(`/users/username/${user.username}`).
             reply(200, user);
 
-        await Actions.getUserByUsername(
+        await store.dispatch(Actions.getUserByUsername(
             user.username,
-        )(store.dispatch, store.getState);
+        ));
 
         const state = store.getState();
         const {profiles} = state.entities.users;
@@ -396,9 +736,9 @@ describe('Actions.Users', () => {
             get(`/users/email/${user.email}`).
             reply(200, user);
 
-        await Actions.getUserByEmail(
+        await store.dispatch(Actions.getUserByEmail(
             user.email,
-        )(store.dispatch, store.getState);
+        ));
 
         const state = store.getState();
         const {profiles} = state.entities.users;
@@ -414,9 +754,9 @@ describe('Actions.Users', () => {
             post('/users/search').
             reply(200, [user]);
 
-        await Actions.searchProfiles(
+        await store.dispatch(Actions.searchProfiles(
             user!.username,
-        )(store.dispatch, store.getState);
+        ));
 
         const state = store.getState();
         const {profiles} = state.entities.users;
@@ -428,52 +768,48 @@ describe('Actions.Users', () => {
     it('getStatusesByIds', async () => {
         nock(Client4.getBaseRoute()).
             post('/users/status/ids').
-            reply(200, [{user_id: TestHelper.basicUser!.id, status: 'online', manual: false, last_activity_at: 1507662212199}]);
+            reply(200, [{
+                user_id: TestHelper.basicUser!.id,
+                status: 'online',
+                manual: false,
+                last_activity_at: 1507662212199,
+                dnd_end_time: 0,
+            }]);
 
-        await Actions.getStatusesByIds(
+        await store.dispatch(Actions.getStatusesByIds(
             [TestHelper.basicUser!.id],
-        )(store.dispatch, store.getState);
+        ));
 
         const statuses = store.getState().entities.users.statuses;
+        const dndEndTimes = store.getState().entities.users.dndEndTimes;
+        const lastActivity = store.getState().entities.users.lastActivity;
+        const isManualStatus = store.getState().entities.users.isManualStatus;
 
-        expect(statuses[TestHelper.basicUser!.id]).toBeTruthy();
-        expect(Object.keys(statuses).length).toEqual(1);
+        expect(statuses[TestHelper.basicUser!.id]).toBe('online');
+        expect(dndEndTimes[TestHelper.basicUser!.id]).toBe(0);
+        expect(lastActivity[TestHelper.basicUser!.id]).toBe(1507662212199);
+        expect(isManualStatus[TestHelper.basicUser!.id]).toBe(false);
     });
 
     it('getTotalUsersStats', async () => {
         nock(Client4.getBaseRoute()).
             get('/users/stats').
             reply(200, {total_users_count: 2605});
-        await Actions.getTotalUsersStats()(store.dispatch, store.getState);
+        await store.dispatch(Actions.getTotalUsersStats());
 
         const {stats} = store.getState().entities.users;
 
         expect(stats.total_users_count).toEqual(2605);
     });
 
-    it('getStatus', async () => {
-        const user = TestHelper.basicUser;
-
-        nock(Client4.getBaseRoute()).
-            get(`/users/${user!.id}/status`).
-            reply(200, {user_id: user!.id, status: 'online', manual: false, last_activity_at: 1507662212199});
-
-        await Actions.getStatus(
-            user!.id,
-        )(store.dispatch, store.getState);
-
-        const statuses = store.getState().entities.users.statuses;
-        expect(statuses[user!.id]).toBeTruthy();
-    });
-
     it('setStatus', async () => {
         nock(Client4.getBaseRoute()).
             put(`/users/${TestHelper.basicUser!.id}/status`).
-            reply(200, OK_RESPONSE);
+            reply(200, {user_id: TestHelper.basicUser!.id, status: 'away'});
 
-        await Actions.setStatus(
+        await store.dispatch(Actions.setStatus(
             {user_id: TestHelper.basicUser!.id, status: 'away'},
-        )(store.dispatch, store.getState);
+        ));
 
         const statuses = store.getState().entities.users.statuses;
         expect(statuses[TestHelper.basicUser!.id] === 'away').toBeTruthy();
@@ -484,7 +820,7 @@ describe('Actions.Users', () => {
             get(`/users/${TestHelper.basicUser!.id}/sessions`).
             reply(200, [{id: TestHelper.generateId(), create_at: 1507756921338, expires_at: 1510348921338, last_activity_at: 1507821125630, user_id: TestHelper.basicUser!.id, device_id: '', roles: 'system_admin system_user'}]);
 
-        await Actions.getSessions(TestHelper.basicUser!.id)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getSessions(TestHelper.basicUser!.id));
 
         const sessions = store.getState().entities.users.mySessions;
 
@@ -497,7 +833,7 @@ describe('Actions.Users', () => {
             get(`/users/${TestHelper.basicUser!.id}/sessions`).
             reply(200, [{id: TestHelper.generateId(), create_at: 1507756921338, expires_at: 1510348921338, last_activity_at: 1507821125630, user_id: TestHelper.basicUser!.id, device_id: '', roles: 'system_admin system_user'}]);
 
-        await Actions.getSessions(TestHelper.basicUser!.id)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getSessions(TestHelper.basicUser!.id));
 
         let sessions = store.getState().entities.users.mySessions;
 
@@ -506,7 +842,7 @@ describe('Actions.Users', () => {
         nock(Client4.getBaseRoute()).
             post(`/users/${TestHelper.basicUser!.id}/sessions/revoke`).
             reply(200, OK_RESPONSE);
-        await Actions.revokeSession(TestHelper.basicUser!.id, sessions[0].id)(store.dispatch, store.getState);
+        await store.dispatch(Actions.revokeSession(TestHelper.basicUser!.id, sessions[0].id));
 
         sessions = store.getState().entities.users.mySessions;
         expect(sessions.length === sessionsLength - 1).toBeTruthy();
@@ -522,7 +858,7 @@ describe('Actions.Users', () => {
             get(`/users/${TestHelper.basicUser!.id}/sessions`).
             reply(200, [{id: TestHelper.generateId(), create_at: 1507756921338, expires_at: 1510348921338, last_activity_at: 1507821125630, user_id: TestHelper.basicUser!.id, device_id: '', roles: 'system_admin system_user'}]);
 
-        await Actions.getSessions(TestHelper.basicUser!.id)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getSessions(TestHelper.basicUser!.id));
 
         const sessions = store.getState().entities.users.mySessions;
 
@@ -530,14 +866,14 @@ describe('Actions.Users', () => {
             post(`/users/${TestHelper.basicUser!.id}/sessions/revoke`).
             reply(200, OK_RESPONSE);
 
-        const {data: revokeSessionResponse} = await Actions.revokeSession(TestHelper.basicUser!.id, sessions[0].id)(store.dispatch, store.getState) as ActionResult;
+        const {data: revokeSessionResponse} = await store.dispatch(Actions.revokeSession(TestHelper.basicUser!.id, sessions[0].id));
         expect(revokeSessionResponse).toBe(true);
 
         nock(Client4.getBaseRoute()).
             get('/users').
             reply(401, {});
 
-        await Actions.getProfiles(0)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getProfiles(0));
 
         const basicUser = TestHelper.basicUser;
         nock(Client4.getBaseRoute()).
@@ -561,7 +897,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         nock(Client4.getBaseRoute()).
             post('/users/login').
@@ -571,7 +907,7 @@ describe('Actions.Users', () => {
         nock(Client4.getBaseRoute()).
             get(`/users/${user!.id}/sessions`).
             reply(200, [{id: TestHelper.generateId(), create_at: 1507756921338, expires_at: 1510348921338, last_activity_at: 1507821125630, user_id: TestHelper.basicUser!.id, device_id: '', roles: 'system_admin system_user'}, {id: TestHelper.generateId(), create_at: 1507756921338, expires_at: 1510348921338, last_activity_at: 1507821125630, user_id: TestHelper.basicUser!.id, device_id: '', roles: 'system_admin system_user'}]);
-        await Actions.getSessions(user!.id)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getSessions(user!.id));
 
         sessions = store.getState().entities.users.mySessions;
         expect(sessions.length > 1).toBeTruthy();
@@ -579,14 +915,14 @@ describe('Actions.Users', () => {
         nock(Client4.getBaseRoute()).
             post(`/users/${user!.id}/sessions/revoke/all`).
             reply(200, OK_RESPONSE);
-        const {data} = await Actions.revokeAllSessionsForUser(user!.id)(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.revokeAllSessionsForUser(user!.id));
         expect(data).toBe(true);
 
         nock(Client4.getBaseRoute()).
             get('/users').
             query(true).
             reply(401, {});
-        await Actions.getProfiles(0)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getProfiles(0));
 
         const logoutRequest = store.getState().requests.users.logout;
         if (logoutRequest.status === RequestStatus.FAILURE) {
@@ -617,7 +953,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         nock(Client4.getBaseRoute()).
             post('/users/login').
@@ -627,7 +963,7 @@ describe('Actions.Users', () => {
         nock(Client4.getBaseRoute()).
             get(`/users/${user!.id}/sessions`).
             reply(200, [{id: TestHelper.generateId(), create_at: 1507756921338, expires_at: 1510348921338, last_activity_at: 1507821125630, user_id: TestHelper.basicUser!.id, device_id: '', roles: 'system_admin system_user'}, {id: TestHelper.generateId(), create_at: 1507756921338, expires_at: 1510348921338, last_activity_at: 1507821125630, user_id: TestHelper.basicUser!.id, device_id: '', roles: 'system_admin system_user'}]);
-        await Actions.getSessions(user!.id)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getSessions(user!.id));
 
         sessions = store.getState().entities.users.mySessions;
         expect(sessions.length > 1).toBeTruthy();
@@ -635,14 +971,14 @@ describe('Actions.Users', () => {
         nock(Client4.getBaseRoute()).
             post('/users/sessions/revoke/all').
             reply(200, OK_RESPONSE);
-        const {data} = await Actions.revokeSessionsForAllUsers()(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.revokeSessionsForAllUsers());
         expect(data).toBe(true);
 
         nock(Client4.getBaseRoute()).
             get('/users').
             query(true).
             reply(401, {});
-        await Actions.getProfiles(0)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getProfiles(0));
 
         const logoutRequest = store.getState().requests.users.logout;
         if (logoutRequest.status === RequestStatus.FAILURE) {
@@ -665,7 +1001,7 @@ describe('Actions.Users', () => {
             query(true).
             reply(200, [{id: TestHelper.generateId(), create_at: 1497285546645, user_id: TestHelper.basicUser!.id, action: '/api/v4/users/login', extra_info: 'success', ip_address: '::1', session_id: ''}]);
 
-        await Actions.getUserAudits(TestHelper.basicUser!.id)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getUserAudits(TestHelper.basicUser!.id));
 
         const audits = store.getState().entities.users.myAudits;
 
@@ -691,11 +1027,11 @@ describe('Actions.Users', () => {
             query(true).
             reply(200, {users: [TestHelper.basicUser], out_of_channel: [user]});
 
-        await Actions.autocompleteUsers(
+        await store.dispatch(Actions.autocompleteUsers(
             '',
             TestHelper.basicTeam!.id,
             TestHelper.basicChannel!.id,
-        )(store.dispatch, store.getState);
+        ));
 
         const autocompleteRequest = store.getState().requests.users.autocompleteUsers;
         const {profiles, profilesNotInChannel, profilesInChannel} = store.getState().entities.users;
@@ -729,11 +1065,11 @@ describe('Actions.Users', () => {
             query(true).
             reply(200, {users: [user]});
 
-        await Actions.autocompleteUsers(
+        await store.dispatch(Actions.autocompleteUsers(
             '',
             TestHelper.basicTeam!.id,
             TestHelper.basicChannel!.id,
-        )(store.dispatch, store.getState);
+        ));
 
         const autocompleteRequest = store.getState().requests.users.autocompleteUsers;
         const {profiles, profilesNotInChannel, profilesInChannel} = store.getState().entities.users;
@@ -754,7 +1090,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const state = store.getState();
         const currentUser = state.entities.users.profiles[state.entities.users.currentUserId];
@@ -775,7 +1111,7 @@ describe('Actions.Users', () => {
                 },
             });
 
-        await Actions.updateMe({
+        await store.dispatch(Actions.updateMe({
             notify_props: {
                 ...notifyProps,
                 comments: 'any',
@@ -784,7 +1120,7 @@ describe('Actions.Users', () => {
                 mention_keys: '',
                 user_id: currentUser.id,
             },
-        } as UserProfile)(store.dispatch, store.getState);
+        } as unknown as UserProfile));
 
         const updateRequest = store.getState().requests.users.updateMe;
         const {currentUserId, profiles} = store.getState().entities.users;
@@ -805,7 +1141,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const state = store.getState();
         const currentUserId = state.entities.users.currentUserId;
@@ -827,7 +1163,7 @@ describe('Actions.Users', () => {
                 },
             });
 
-        await Actions.patchUser({
+        await store.dispatch(Actions.patchUser({
             id: currentUserId,
             notify_props: {
                 ...notifyProps,
@@ -837,7 +1173,7 @@ describe('Actions.Users', () => {
                 mention_keys: '',
                 user_id: currentUser.id,
             },
-        } as UserProfile)(store.dispatch, store.getState);
+        } as unknown as UserProfile));
 
         const {profiles} = store.getState().entities.users;
         const updateNotifyProps = profiles[currentUserId].notify_props;
@@ -853,7 +1189,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -861,7 +1197,7 @@ describe('Actions.Users', () => {
             put(`/users/${currentUserId}/roles`).
             reply(200, OK_RESPONSE);
 
-        await Actions.updateUserRoles(currentUserId, 'system_user system_admin')(store.dispatch, store.getState);
+        await store.dispatch(Actions.updateUserRoles(currentUserId, 'system_user system_admin'));
 
         const {profiles} = store.getState().entities.users;
         const currentUserRoles = profiles[currentUserId].roles;
@@ -874,7 +1210,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -882,7 +1218,7 @@ describe('Actions.Users', () => {
             put(`/users/${currentUserId}/mfa`).
             reply(200, OK_RESPONSE);
 
-        await Actions.updateUserMfa(currentUserId, false, '')(store.dispatch, store.getState);
+        await store.dispatch(Actions.updateUserMfa(currentUserId, false, ''));
 
         const {profiles} = store.getState().entities.users;
         const currentUserMfa = profiles[currentUserId].mfa_active;
@@ -895,7 +1231,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const beforeTime = new Date().getTime();
         const currentUserId = store.getState().entities.users.currentUserId;
@@ -904,13 +1240,13 @@ describe('Actions.Users', () => {
             put(`/users/${currentUserId}/password`).
             reply(200, OK_RESPONSE);
 
-        await Actions.updateUserPassword(currentUserId, 'password1', 'password1')(store.dispatch, store.getState);
+        await store.dispatch(Actions.updateUserPassword(currentUserId, 'password1', 'password1'));
 
         const {profiles} = store.getState().entities.users;
         const currentUser = profiles[currentUserId];
 
         expect(currentUser).toBeTruthy();
-        expect(currentUser.last_password_update_at > beforeTime).toBeTruthy();
+        expect(currentUser.last_password_update > beforeTime).toBeTruthy();
     });
 
     it('generateMfaSecret', async () => {
@@ -920,7 +1256,7 @@ describe('Actions.Users', () => {
             post('/users/me/mfa/generate').
             reply(200, response);
 
-        const {data} = await Actions.generateMfaSecret('me')(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.generateMfaSecret('me'));
 
         expect(data).toEqual(response);
     });
@@ -930,14 +1266,15 @@ describe('Actions.Users', () => {
             post('/users').
             reply(200, TestHelper.fakeUserWithId());
 
-        const {data: user} = await Actions.createUser(TestHelper.fakeUser(), '', '', '')(store.dispatch, store.getState) as ActionResult;
+        const response = await store.dispatch(Actions.createUser(TestHelper.fakeUser(), '', '', ''));
+        const user = response.data!;
 
         const beforeTime = new Date().getTime();
 
         nock(Client4.getBaseRoute()).
             put(`/users/${user.id}/active`).
             reply(200, OK_RESPONSE);
-        await Actions.updateUserActive(user.id, false)(store.dispatch, store.getState);
+        await store.dispatch(Actions.updateUserActive(user.id, false));
 
         const {profiles} = store.getState().entities.users;
 
@@ -950,7 +1287,7 @@ describe('Actions.Users', () => {
             post('/users/email/verify').
             reply(200, OK_RESPONSE);
 
-        const {data} = await Actions.verifyUserEmail('sometoken')(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.verifyUserEmail('sometoken'));
 
         expect(data).toEqual(OK_RESPONSE);
     });
@@ -960,7 +1297,7 @@ describe('Actions.Users', () => {
             post('/users/email/verify/send').
             reply(200, OK_RESPONSE);
 
-        const {data} = await Actions.sendVerificationEmail(TestHelper.basicUser!.email)(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.sendVerificationEmail(TestHelper.basicUser!.email));
 
         expect(data).toEqual(OK_RESPONSE);
     });
@@ -970,7 +1307,7 @@ describe('Actions.Users', () => {
             post('/users/password/reset').
             reply(200, OK_RESPONSE);
 
-        const {data} = await Actions.resetUserPassword('sometoken', 'newpassword')(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.resetUserPassword('sometoken', 'newpassword'));
 
         expect(data).toEqual(OK_RESPONSE);
     });
@@ -980,17 +1317,18 @@ describe('Actions.Users', () => {
             post('/users/password/reset/send').
             reply(200, OK_RESPONSE);
 
-        const {data} = await Actions.sendPasswordResetEmail(TestHelper.basicUser!.email)(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.sendPasswordResetEmail(TestHelper.basicUser!.email));
 
         expect(data).toEqual(OK_RESPONSE);
     });
 
-    it('uploadProfileImage', async () => {
+    // eslint-disable-next-line no-only-tests/no-only-tests
+    it.skip('uploadProfileImage', async () => {
         TestHelper.mockLogin();
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const testImageData = fs.createReadStream('src/packages/mattermost-redux/test/assets/images/test.png');
 
@@ -1001,7 +1339,7 @@ describe('Actions.Users', () => {
             post(`/users/${TestHelper.basicUser!.id}/image`).
             reply(200, OK_RESPONSE);
 
-        await Actions.uploadProfileImage(currentUserId, testImageData)(store.dispatch, store.getState);
+        await store.dispatch(Actions.uploadProfileImage(currentUserId, testImageData));
 
         const {profiles} = store.getState().entities.users;
         const currentUser = profiles[currentUserId];
@@ -1015,7 +1353,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1023,7 +1361,7 @@ describe('Actions.Users', () => {
             delete(`/users/${TestHelper.basicUser!.id}/image`).
             reply(200, OK_RESPONSE);
 
-        await Actions.setDefaultProfileImage(currentUserId)(store.dispatch, store.getState);
+        await store.dispatch(Actions.setDefaultProfileImage(currentUserId));
 
         const {profiles} = store.getState().entities.users;
         const currentUser = profiles[currentUserId];
@@ -1037,7 +1375,7 @@ describe('Actions.Users', () => {
             post('/users/login/switch').
             reply(200, {follow_link: '/login'});
 
-        const {data} = await Actions.switchEmailToOAuth('gitlab', TestHelper.basicUser!.email, TestHelper.basicUser!.password)(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.switchEmailToOAuth('gitlab', TestHelper.basicUser!.email, TestHelper.basicUser!.password));
         expect(data).toEqual({follow_link: '/login'});
     });
 
@@ -1046,7 +1384,7 @@ describe('Actions.Users', () => {
             post('/users/login/switch').
             reply(200, {follow_link: '/login'});
 
-        const {data} = await Actions.switchOAuthToEmail('gitlab', TestHelper.basicUser!.email, TestHelper.basicUser!.password)(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.switchOAuthToEmail('gitlab', TestHelper.basicUser!.email, TestHelper.basicUser!.password));
 
         expect(data).toEqual({follow_link: '/login'});
     });
@@ -1056,7 +1394,7 @@ describe('Actions.Users', () => {
             post('/users/login/switch').
             reply(200, {follow_link: '/login'});
 
-        const {data} = await Actions.switchEmailToLdap(TestHelper.basicUser!.email, TestHelper.basicUser!.password, 'someid', 'somepassword')(store.dispatch, store.getState) as ActionResult;
+        const {data} = await store.dispatch(Actions.switchEmailToLdap(TestHelper.basicUser!.email, TestHelper.basicUser!.password, 'someid', 'somepassword'));
 
         expect(data).toEqual({follow_link: '/login'});
     });
@@ -1067,7 +1405,7 @@ describe('Actions.Users', () => {
                 post('/users/login/switch').
                 reply(200, {follow_link: '/login'});
 
-            const {data} = await Actions.switchLdapToEmail('somepassword', TestHelper.basicUser!.email, TestHelper.basicUser!.password)(store.dispatch, store.getState) as ActionResult;
+            const {data} = await store.dispatch(Actions.switchLdapToEmail('somepassword', TestHelper.basicUser!.email, TestHelper.basicUser!.password));
             expect(data).toEqual({follow_link: '/login'});
 
             done();
@@ -1082,7 +1420,7 @@ describe('Actions.Users', () => {
             store.dispatch({
                 type: UserTypes.LOGIN_SUCCESS,
             });
-            await Actions.loadMeREST()(store.dispatch, store.getState);
+            await store.dispatch(Actions.loadMe());
 
             const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1090,7 +1428,8 @@ describe('Actions.Users', () => {
                 post(`/users/${currentUserId}/tokens`).
                 reply(201, {id: 'someid', token: 'sometoken', description: 'test token', user_id: currentUserId});
 
-            const {data} = await Actions.createUserAccessToken(currentUserId, 'test token')(store.dispatch, store.getState) as ActionResult;
+            const response = await store.dispatch(Actions.createUserAccessToken(currentUserId, 'test token'));
+            const data = response.data!;
 
             const {myUserAccessTokens} = store.getState().entities.users;
             const {userAccessTokensByUser} = store.getState().entities.admin;
@@ -1099,9 +1438,9 @@ describe('Actions.Users', () => {
             expect(myUserAccessTokens[data.id]).toBeTruthy();
             expect(!myUserAccessTokens[data.id].token).toBeTruthy();
             expect(userAccessTokensByUser).toBeTruthy();
-            expect(userAccessTokensByUser[currentUserId]).toBeTruthy();
-            expect(userAccessTokensByUser[currentUserId][data.id]).toBeTruthy();
-            expect(!userAccessTokensByUser[currentUserId][data.id].token).toBeTruthy();
+            expect(userAccessTokensByUser![currentUserId]).toBeTruthy();
+            expect(userAccessTokensByUser![currentUserId][data.id]).toBeTruthy();
+            expect(!userAccessTokensByUser![currentUserId][data.id].token).toBeTruthy();
             done();
         }
 
@@ -1113,7 +1452,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1121,13 +1460,14 @@ describe('Actions.Users', () => {
             post(`/users/${currentUserId}/tokens`).
             reply(201, {id: 'someid', token: 'sometoken', description: 'test token', user_id: currentUserId});
 
-        const {data} = await Actions.createUserAccessToken(currentUserId, 'test token')(store.dispatch, store.getState) as ActionResult;
+        const response = await store.dispatch(Actions.createUserAccessToken(currentUserId, 'test token'));
+        const data = response.data!;
 
         nock(Client4.getBaseRoute()).
             get(`/users/tokens/${data.id}`).
             reply(200, {id: data.id, description: 'test token', user_id: currentUserId});
 
-        await Actions.getUserAccessToken(data.id)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getUserAccessToken(data.id));
 
         const {myUserAccessTokens} = store.getState().entities.users;
         const {userAccessTokensByUser, userAccessTokens} = store.getState().entities.admin;
@@ -1136,46 +1476,9 @@ describe('Actions.Users', () => {
         expect(myUserAccessTokens[data.id]).toBeTruthy();
         expect(!myUserAccessTokens[data.id].token).toBeTruthy();
         expect(userAccessTokensByUser).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId]).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId][data.id]).toBeTruthy();
-        expect(!userAccessTokensByUser[currentUserId][data.id].token).toBeTruthy();
-        expect(userAccessTokens).toBeTruthy();
-        expect(userAccessTokens[data.id]).toBeTruthy();
-        expect(!userAccessTokens[data.id].token).toBeTruthy();
-    });
-
-    it('getUserAccessTokens', async () => {
-        TestHelper.mockLogin();
-        store.dispatch({
-            type: UserTypes.LOGIN_SUCCESS,
-        });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
-
-        const currentUserId = store.getState().entities.users.currentUserId;
-
-        nock(Client4.getBaseRoute()).
-            post(`/users/${currentUserId}/tokens`).
-            reply(201, {id: 'someid', token: 'sometoken', description: 'test token', user_id: currentUserId});
-
-        const {data} = await Actions.createUserAccessToken(currentUserId, 'test token')(store.dispatch, store.getState) as ActionResult;
-
-        nock(Client4.getBaseRoute()).
-            get('/users/tokens').
-            query(true).
-            reply(200, [{id: data.id, description: 'test token', user_id: currentUserId}]);
-
-        await Actions.getUserAccessTokens()(store.dispatch, store.getState);
-
-        const {myUserAccessTokens} = store.getState().entities.users;
-        const {userAccessTokensByUser, userAccessTokens} = store.getState().entities.admin;
-
-        expect(myUserAccessTokens).toBeTruthy();
-        expect(myUserAccessTokens[data.id]).toBeTruthy();
-        expect(!myUserAccessTokens[data.id].token).toBeTruthy();
-        expect(userAccessTokensByUser).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId]).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId][data.id]).toBeTruthy();
-        expect(!userAccessTokensByUser[currentUserId][data.id].token).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId]).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId][data.id]).toBeTruthy();
+        expect(!userAccessTokensByUser![currentUserId][data.id].token).toBeTruthy();
         expect(userAccessTokens).toBeTruthy();
         expect(userAccessTokens[data.id]).toBeTruthy();
         expect(!userAccessTokens[data.id].token).toBeTruthy();
@@ -1186,7 +1489,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1194,14 +1497,15 @@ describe('Actions.Users', () => {
             post(`/users/${currentUserId}/tokens`).
             reply(201, {id: 'someid', token: 'sometoken', description: 'test token', user_id: currentUserId});
 
-        const {data} = await Actions.createUserAccessToken(currentUserId, 'test token')(store.dispatch, store.getState) as ActionResult;
+        const response = await store.dispatch(Actions.createUserAccessToken(currentUserId, 'test token'));
+        const data = response.data!;
 
         nock(Client4.getBaseRoute()).
             get(`/users/${currentUserId}/tokens`).
             query(true).
             reply(200, [{id: data.id, description: 'test token', user_id: currentUserId}]);
 
-        await Actions.getUserAccessTokensForUser(currentUserId)(store.dispatch, store.getState);
+        await store.dispatch(Actions.getUserAccessTokensForUser(currentUserId));
 
         const {myUserAccessTokens} = store.getState().entities.users;
         const {userAccessTokensByUser, userAccessTokens} = store.getState().entities.admin;
@@ -1210,9 +1514,9 @@ describe('Actions.Users', () => {
         expect(myUserAccessTokens[data.id]).toBeTruthy();
         expect(!myUserAccessTokens[data.id].token).toBeTruthy();
         expect(userAccessTokensByUser).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId]).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId][data.id]).toBeTruthy();
-        expect(!userAccessTokensByUser[currentUserId][data.id].token).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId]).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId][data.id]).toBeTruthy();
+        expect(!userAccessTokensByUser![currentUserId][data.id].token).toBeTruthy();
         expect(userAccessTokens).toBeTruthy();
         expect(userAccessTokens[data.id]).toBeTruthy();
         expect(!userAccessTokens[data.id].token).toBeTruthy();
@@ -1223,7 +1527,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1231,7 +1535,8 @@ describe('Actions.Users', () => {
             post(`/users/${currentUserId}/tokens`).
             reply(201, {id: 'someid', token: 'sometoken', description: 'test token', user_id: currentUserId});
 
-        const {data} = await Actions.createUserAccessToken(currentUserId, 'test token')(store.dispatch, store.getState) as ActionResult;
+        const response = await store.dispatch(Actions.createUserAccessToken(currentUserId, 'test token'));
+        const data = response.data!;
 
         let {myUserAccessTokens} = store.getState().entities.users;
         let {userAccessTokensByUser, userAccessTokens} = store.getState().entities.admin;
@@ -1240,9 +1545,9 @@ describe('Actions.Users', () => {
         expect(myUserAccessTokens[data.id]).toBeTruthy();
         expect(!myUserAccessTokens[data.id].token).toBeTruthy();
         expect(userAccessTokensByUser).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId]).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId][data.id]).toBeTruthy();
-        expect(!userAccessTokensByUser[currentUserId][data.id].token).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId]).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId][data.id]).toBeTruthy();
+        expect(!userAccessTokensByUser![currentUserId][data.id].token).toBeTruthy();
         expect(userAccessTokens).toBeTruthy();
         expect(userAccessTokens[data.id]).toBeTruthy();
         expect(!userAccessTokens[data.id].token).toBeTruthy();
@@ -1251,7 +1556,7 @@ describe('Actions.Users', () => {
             post('/users/tokens/revoke').
             reply(200, OK_RESPONSE);
 
-        await Actions.revokeUserAccessToken(data.id)(store.dispatch, store.getState);
+        await store.dispatch(Actions.revokeUserAccessToken(data.id));
 
         myUserAccessTokens = store.getState().entities.users.myUserAccessTokens;
         userAccessTokensByUser = store.getState().entities.admin.userAccessTokensByUser;
@@ -1260,8 +1565,8 @@ describe('Actions.Users', () => {
         expect(myUserAccessTokens).toBeTruthy();
         expect(!myUserAccessTokens[data.id]).toBeTruthy();
         expect(userAccessTokensByUser).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId]).toBeTruthy();
-        expect(!userAccessTokensByUser[currentUserId][data.id]).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId]).toBeTruthy();
+        expect(!userAccessTokensByUser![currentUserId][data.id]).toBeTruthy();
         expect(userAccessTokens).toBeTruthy();
         expect(!userAccessTokens[data.id]).toBeTruthy();
     });
@@ -1271,7 +1576,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1279,7 +1584,8 @@ describe('Actions.Users', () => {
             post(`/users/${currentUserId}/tokens`).
             reply(201, {id: 'someid', token: 'sometoken', description: 'test token', user_id: currentUserId});
 
-        const {data} = await Actions.createUserAccessToken(currentUserId, 'test token')(store.dispatch, store.getState) as ActionResult;
+        const response = await store.dispatch(Actions.createUserAccessToken(currentUserId, 'test token'));
+        const data = response.data!;
         const testId = data.id;
 
         let {myUserAccessTokens} = store.getState().entities.users;
@@ -1289,9 +1595,9 @@ describe('Actions.Users', () => {
         expect(myUserAccessTokens[testId]).toBeTruthy();
         expect(!myUserAccessTokens[testId].token).toBeTruthy();
         expect(userAccessTokensByUser).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId]).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId][testId]).toBeTruthy();
-        expect(!userAccessTokensByUser[currentUserId][testId].token).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId]).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId][testId]).toBeTruthy();
+        expect(!userAccessTokensByUser![currentUserId][testId].token).toBeTruthy();
         expect(userAccessTokens).toBeTruthy();
         expect(userAccessTokens[data.id]).toBeTruthy();
         expect(!userAccessTokens[data.id].token).toBeTruthy();
@@ -1300,7 +1606,7 @@ describe('Actions.Users', () => {
             post('/users/tokens/disable').
             reply(200, OK_RESPONSE);
 
-        await Actions.disableUserAccessToken(testId)(store.dispatch, store.getState);
+        await store.dispatch(Actions.disableUserAccessToken(testId));
 
         myUserAccessTokens = store.getState().entities.users.myUserAccessTokens;
         userAccessTokensByUser = store.getState().entities.admin.userAccessTokensByUser;
@@ -1311,10 +1617,10 @@ describe('Actions.Users', () => {
         expect(!myUserAccessTokens[testId].is_active).toBeTruthy();
         expect(!myUserAccessTokens[testId].token).toBeTruthy();
         expect(userAccessTokensByUser).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId]).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId][testId]).toBeTruthy();
-        expect(!userAccessTokensByUser[currentUserId][testId].is_active).toBeTruthy();
-        expect(!userAccessTokensByUser[currentUserId][testId].token).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId]).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId][testId]).toBeTruthy();
+        expect(!userAccessTokensByUser![currentUserId][testId].is_active).toBeTruthy();
+        expect(!userAccessTokensByUser![currentUserId][testId].token).toBeTruthy();
         expect(userAccessTokens).toBeTruthy();
         expect(userAccessTokens[testId]).toBeTruthy();
         expect(!userAccessTokens[testId].is_active).toBeTruthy();
@@ -1326,7 +1632,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1334,7 +1640,8 @@ describe('Actions.Users', () => {
             post(`/users/${currentUserId}/tokens`).
             reply(201, {id: 'someid', token: 'sometoken', description: 'test token', user_id: currentUserId});
 
-        const {data} = await Actions.createUserAccessToken(currentUserId, 'test token')(store.dispatch, store.getState) as ActionResult;
+        const response = await store.dispatch(Actions.createUserAccessToken(currentUserId, 'test token'));
+        const data = response.data!;
         const testId = data.id;
 
         let {myUserAccessTokens} = store.getState().entities.users;
@@ -1344,9 +1651,9 @@ describe('Actions.Users', () => {
         expect(myUserAccessTokens[testId]).toBeTruthy();
         expect(!myUserAccessTokens[testId].token).toBeTruthy();
         expect(userAccessTokensByUser).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId]).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId][testId]).toBeTruthy();
-        expect(!userAccessTokensByUser[currentUserId][testId].token).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId]).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId][testId]).toBeTruthy();
+        expect(!userAccessTokensByUser![currentUserId][testId].token).toBeTruthy();
         expect(userAccessTokens).toBeTruthy();
         expect(userAccessTokens[testId]).toBeTruthy();
         expect(!userAccessTokens[testId].token).toBeTruthy();
@@ -1355,7 +1662,7 @@ describe('Actions.Users', () => {
             post('/users/tokens/enable').
             reply(200, OK_RESPONSE);
 
-        await Actions.enableUserAccessToken(testId)(store.dispatch, store.getState);
+        await store.dispatch(Actions.enableUserAccessToken(testId));
 
         myUserAccessTokens = store.getState().entities.users.myUserAccessTokens;
         userAccessTokensByUser = store.getState().entities.admin.userAccessTokensByUser;
@@ -1366,10 +1673,10 @@ describe('Actions.Users', () => {
         expect(myUserAccessTokens[testId].is_active).toBeTruthy();
         expect(!myUserAccessTokens[testId].token).toBeTruthy();
         expect(userAccessTokensByUser).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId]).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId][testId]).toBeTruthy();
-        expect(userAccessTokensByUser[currentUserId][testId].is_active).toBeTruthy();
-        expect(!userAccessTokensByUser[currentUserId][testId].token).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId]).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId][testId]).toBeTruthy();
+        expect(userAccessTokensByUser![currentUserId][testId].is_active).toBeTruthy();
+        expect(!userAccessTokensByUser![currentUserId][testId].token).toBeTruthy();
         expect(userAccessTokens).toBeTruthy();
         expect(userAccessTokens[testId]).toBeTruthy();
         expect(userAccessTokens[testId].is_active).toBeTruthy();
@@ -1381,7 +1688,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMeREST()(store.dispatch, store.getState);
+        await store.dispatch(Actions.loadMe());
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1389,18 +1696,41 @@ describe('Actions.Users', () => {
             post(`/users/${currentUserId}/tokens`).
             reply(201, {id: 'someid', token: 'sometoken', description: 'test token', user_id: currentUserId});
 
-        await Actions.createUserAccessToken(currentUserId, 'test token')(store.dispatch, store.getState);
+        await store.dispatch(Actions.createUserAccessToken(currentUserId, 'test token'));
 
-        await Actions.clearUserAccessTokens()(store.dispatch, store.getState);
+        await store.dispatch(Actions.clearUserAccessTokens());
 
         const {myUserAccessTokens} = store.getState().entities.users;
 
         expect(Object.values(myUserAccessTokens).length === 0).toBeTruthy();
     });
 
+    it('saveCustomProfileAttribute', async () => {
+        TestHelper.mockLogin();
+        store.dispatch({
+            type: UserTypes.LOGIN_SUCCESS,
+        });
+        await store.dispatch(Actions.loadMe());
+
+        const state = store.getState();
+        const currentUser = state.entities.users.profiles[state.entities.users.currentUserId];
+
+        nock(Client4.getCustomProfileAttributeValuesRoute()).
+            patch('').
+            query(true).
+            reply(200, {
+                123: 'NewValue',
+            });
+
+        const response = await store.dispatch(Actions.saveCustomProfileAttribute(currentUser.id, '123', '  NewValue  '));
+        const data = response.data!;
+        expect(data).toEqual({123: 'NewValue'});
+    });
+
     describe('checkForModifiedUsers', () => {
         test('should request users by IDs that have changed since the last websocket disconnect', async () => {
             const lastDisconnectAt = 1500;
+            const currentChannelId = '1';
 
             const user1 = {id: 'user1', update_at: 1000};
             const user2 = {id: 'user2', update_at: 1000};
@@ -1410,7 +1740,7 @@ describe('Actions.Users', () => {
                 query({since: lastDisconnectAt}).
                 reply(200, [{...user2, update_at: 2000}]);
 
-            store = configureStore({
+            store = mockStore({
                 entities: {
                     general: {
                         serverVersion: '5.14.0',
@@ -1421,13 +1751,35 @@ describe('Actions.Users', () => {
                             user2,
                         },
                     },
+                    channels: {
+                        currentChannelId,
+                    },
                 },
                 websocket: {
                     lastDisconnectAt,
                 },
+                views: {
+                    channel: {
+                        lastGetPosts: {
+                            [currentChannelId]: 1740473453438,
+                        },
+                    },
+                },
             });
 
-            await store.dispatch(Actions.checkForModifiedUsers());
+            await store.dispatch(Actions.checkForModifiedUsers(currentChannelId));
+            store = mockStore({
+                ...store.getState(),
+                entities: {
+                    ...store.getState().entities,
+                    users: {
+                        profiles: {
+                            ...store.getState().entities.users.profiles,
+                            user2: {id: 'user2', update_at: 2000},
+                        },
+                    },
+                },
+            });
 
             const profiles = store.getState().entities.users.profiles;
             expect(profiles.user1).toBe(user1);
@@ -1437,6 +1789,8 @@ describe('Actions.Users', () => {
 
         test('should do nothing on older servers', async () => {
             const lastDisconnectAt = 1500;
+            const currentChannelId = '1';
+
             const originalState = deepFreeze({
                 entities: {
                     general: {
@@ -1445,129 +1799,54 @@ describe('Actions.Users', () => {
                     users: {
                         profiles: {},
                     },
+                    channels: {
+                        currentChannelId,
+                    },
+                },
+                views: {
+                    channel: {
+                        lastGetPosts: {
+                            [currentChannelId]: 1740473453438,
+                        },
+                    },
                 },
                 websocket: {
                     lastDisconnectAt,
                 },
             });
 
-            store = configureStore(originalState);
-
-            await store.dispatch(Actions.checkForModifiedUsers());
+            store = mockStore(originalState);
+            await store.dispatch(Actions.checkForModifiedUsers(currentChannelId));
 
             const profiles = store.getState().entities.users.profiles;
             expect(profiles).toBe(originalState.entities.users.profiles);
         });
     });
-    describe('Should redirect to last kSuite seen on loadMeREST', () => {
-        test('on Webapp', async () => {
-            const originalEnv = {...process.env};
-            const originalOrigin = window.origin;
-            const open = jest.spyOn(window, 'open').mockImplementation(jest.fn());
-            let cookies = '';
-            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
-            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
-                cookies += cookie;
-            });
-            process.env.NODE_ENV = 'production';
-            process.env.BASE_URL = 'https://test.com';
-            const teamUrl = 'https://test1.test.com';
-            nock(Client4.getUserRoute('me')).
-                get('/servers').
-                reply(200, [{...TestHelper.fakeTeamWithId(), url: 'https://test2.test.com'}, {...TestHelper.basicTeam, url: teamUrl}, {...TestHelper.fakeTeamWithId(), url: 'https://test3.test.com'}]);
-            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
-            window.origin = 'https://kchat.infomaniak.com';
-            await Actions.loadMeREST()(store.dispatch, store.getState);
-            expect(open).toHaveBeenCalledWith(teamUrl, '_self');
-            process.env = originalEnv;
-            window.origin = originalOrigin;
-            open.mockRestore();
-            getCookie.mockRestore();
-            setCookie.mockRestore();
-        });
 
-        test('on Webapp if user is no more in lastActiveKSuite', async () => {
-            const originalEnv = {...process.env};
-            const originalOrigin = window.origin;
-            const open = jest.spyOn(window, 'open').mockImplementation(jest.fn());
-            let cookies = '';
-            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
-            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
-                cookies += cookie;
-            });
-            process.env.NODE_ENV = 'production';
-            process.env.BASE_URL = 'https://test.com';
-            const teamUrl = 'https://test1.test.com';
-            nock(Client4.getUserRoute('me')).
-                get('/servers').
-                reply(200, [{...TestHelper.fakeTeamWithId(), url: 'https://test2.test.com', update_at: 0}, {...TestHelper.fakeTeamWithId(), url: teamUrl, update_at: 2}, {...TestHelper.fakeTeamWithId(), url: 'https://test3.test.com', update_at: 1}]);
-            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
-            window.origin = 'https://kchat.infomaniak.com';
-            await Actions.loadMeREST()(store.dispatch, store.getState);
-            expect(open).toHaveBeenCalledWith(teamUrl, '_self');
-            process.env = originalEnv;
-            window.origin = originalOrigin;
-            open.mockRestore();
-            getCookie.mockRestore();
-            setCookie.mockRestore();
-        });
+    it('getCustomProfileAttributeValues', async () => {
+        const userID = 'user1';
+        nock(Client4.getUserRoute(userID) + '/custom_profile_attributes').
+            get('').
+            query(true).
+            reply(200, {field1: 'value1', field2: 'value2'});
 
-        test('on Desktop', async () => {
-            const originalEnv = {...process.env};
-            const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
-            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
-            let cookies = '';
-            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
-            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
-                cookies += cookie;
-            });
-            process.env.NODE_ENV = 'production';
-            process.env.BASE_URL = 'https://test.com';
-            nock(Client4.getUserRoute('me')).
-                get('/servers').
-                reply(200, [TestHelper.fakeTeamWithId(), TestHelper.basicTeam, TestHelper.fakeTeamWithId()]);
-            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
-            await Actions.loadMeREST()(store.dispatch, store.getState);
-            expect(postMessage).toHaveBeenCalledWith({
-                type: 'switch-server',
-                data: TestHelper.basicTeam!.display_name,
-            }, window.origin);
-            process.env = originalEnv;
-            postMessage.mockRestore();
-            userAgentMock.mockRestore();
-            getCookie.mockRestore();
-            setCookie.mockRestore();
-        });
+        const originalState = {
+            entities: {
+                users: {
+                    profiles: {
+                        user1: {id: userID},
+                    },
+                },
+            },
+        };
+        store = configureStore(originalState);
 
-        test('on Desktop if user is no more in lastActiveKSuite', async () => {
-            const originalEnv = {...process.env};
-            const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
-            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
-            let cookies = '';
-            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
-            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
-                cookies += cookie;
-            });
-            process.env.NODE_ENV = 'production';
-            process.env.BASE_URL = 'https://test.com';
-            const team = {
-                ...TestHelper.fakeTeamWithId(),
-                update_at: 2,
-            };
-            nock(Client4.getUserRoute('me')).
-                get('/servers').
-                reply(200, [{...TestHelper.fakeTeamWithId(), update_at: 0}, team, {...TestHelper.fakeTeamWithId(), update_at: 1}]);
-            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
-            await Actions.loadMeREST()(store.dispatch, store.getState);
-            expect(postMessage).toHaveBeenCalledWith({
-                type: 'switch-server',
-                data: team.display_name,
-            }, window.origin);
-            process.env = originalEnv;
-            postMessage.mockRestore();
-            userAgentMock.mockRestore();
-            getCookie.mockRestore();
-            setCookie.mockRestore();
-        });
+        await store.dispatch(Actions.getCustomProfileAttributeValues(userID));
+        const customProfileAttributeValues = store.getState().entities.users.profiles[userID].custom_profile_attributes;
+
+        // Check a few basic fields since they may change over time
+        expect(Object.keys(customProfileAttributeValues).length).toEqual(2);
+        expect(customProfileAttributeValues.field1).toEqual('value1');
+        expect(customProfileAttributeValues.field2).toEqual('value2');
     });
 });

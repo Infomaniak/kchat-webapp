@@ -2,38 +2,52 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
+import type {Dispatch} from 'redux';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {isPaidPlan} from 'mattermost-redux/utils/plans_util';
 
 import {uploadFile} from 'actions/file_actions';
 import {getCurrentLocale} from 'selectors/i18n';
+import {getEditingPostDetailsAndPost} from 'selectors/posts';
 
 import {canUploadFiles} from 'utils/file_utils';
 
 import type {GlobalState} from 'types/store';
-import type {FilesWillUploadHook} from 'types/store/plugins';
 
-import type {Props} from './file_upload';
 import FileUpload from './file_upload';
 
 function mapStateToProps(state: GlobalState) {
     const config = getConfig(state);
     const maxFileSize = parseInt(config.MaxFileSize || '', 10);
 
+    const editingPost = getEditingPostDetailsAndPost(state);
+    const centerChannelPostBeingEdited = editingPost.show && !editingPost.isRHS;
+    const rhsPostBeingEdited = editingPost.show && editingPost.isRHS;
+
+    const isAdmin = isCurrentUserSystemAdmin(state);
+    const currentPack = getCurrentPackName(state);
+    const isPaid = isPaidPlan(currentPack);
+
     return {
         maxFileSize,
         canUploadFiles: canUploadFiles(config),
         locale: getCurrentLocale(state),
         pluginFileUploadMethods: state.plugins.components.FileUploadMethod,
-        pluginFilesWillUploadHooks: state.plugins.components.FilesWillUploadHook as unknown as FilesWillUploadHook[],
+        pluginFilesWillUploadHooks: state.plugins.components.FilesWillUploadHook,
+        centerChannelPostBeingEdited,
+        rhsPostBeingEdited,
+        isAdmin,
+        isPaidPlan: isPaid,
     };
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject<any>, Props['actions']>({
+        actions: bindActionCreators({
             uploadFile,
         }, dispatch),
     };

@@ -19,7 +19,8 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
-import {selectPostAndParentChannel} from 'actions/views/rhs';
+
+// import {selectPostAndParentChannel} from 'actions/views/rhs';
 
 import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
 import DataGrid from 'components/admin_console/data_grid/data_grid';
@@ -106,7 +107,8 @@ const TopThreadsTable = (props: Props) => {
             }));
         } else {
             trackEvent('insights', 'open_thread_from_top_threads_modal');
-            dispatch(selectPostAndParentChannel(thread.post));
+
+            // dispatch(selectPostAndParentChannel(thread.post));
         }
         closeModal();
     }, [currentTeamId]);
@@ -232,7 +234,6 @@ const TopThreadsTable = (props: Props) => {
                                     <Avatars
                                         userIds={thread.participants}
                                         size='xs'
-                                        disableProfileOverlay={true}
                                     />
                                 ) : null}
                             </>

@@ -1,19 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {MMReduxAction} from 'mattermost-redux/action_types';
 import {GeneralTypes, UserTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 
 function getInitialState() {
     return {
         connected: false,
         lastConnectAt: 0,
+        firstDisconnect: 0,
         lastDisconnectAt: 0,
         connectionId: '',
+        serverHostname: '',
     };
 }
 
-export default function reducer(state = getInitialState(), action: GenericAction) {
+export default function reducer(state = getInitialState(), action: MMReduxAction) {
     if (!state.connected && action.type === GeneralTypes.WEBSOCKET_SUCCESS) {
         return {
             ...state,
@@ -25,14 +27,14 @@ export default function reducer(state = getInitialState(), action: GenericAction
             ...state,
             connected: false,
             lastDisconnectAt: action.timestamp,
+            serverHostname: '',
+            firstDisconnect: state.lastDisconnectAt || action.timestamp,
         };
     }
 
     if (action.type === UserTypes.LOGOUT_SUCCESS) {
-        return getInitialState();
-    }
-
-    if (action.type === UserTypes.LOGOUT_SUCCESS) {
+        // eslint-disable-next-line no-console
+        console.log('RESET WS STATE');
         return getInitialState();
     }
 
@@ -40,6 +42,13 @@ export default function reducer(state = getInitialState(), action: GenericAction
         return {
             ...state,
             connectionId: action.payload.connectionId,
+        };
+    }
+
+    if (action.type === GeneralTypes.SET_SERVER_HOSTNAME) {
+        return {
+            ...state,
+            serverHostname: action.payload.serverHostname,
         };
     }
 

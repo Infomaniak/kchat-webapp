@@ -4,6 +4,8 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
+import type {ChannelType} from '@mattermost/types/channels';
+
 import CenterChannel from './center_channel';
 
 import type {OwnProps} from './index';
@@ -36,7 +38,7 @@ describe('components/channel_layout/CenterChannel', () => {
             name: 'testing',
             purpose: 'test',
             team_id: 'eatxocwc3bg9ffo9xyybnj4omr',
-            type: 'O',
+            type: 'O' as ChannelType,
             update_at: 1508265709607,
             last_root_post_at: 1508265709607,
             scheme_id: 'owsyt8n43jfxjpzh9np93mx1wa',
@@ -46,7 +48,7 @@ describe('components/channel_layout/CenterChannel', () => {
         insightsAreEnabled: true,
         isMobileView: false,
         actions: {
-            getProfiles: jest.fn,
+            getProfiles: jest.fn(),
         },
     };
     test('should call update returnTo on props change', () => {

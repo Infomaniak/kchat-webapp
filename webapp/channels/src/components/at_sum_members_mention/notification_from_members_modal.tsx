@@ -109,11 +109,20 @@ function NotificationFromMembersModal(props: Props) {
         return null;
     }
 
+    if (!channel) {
+        return null;
+    }
+
     const modalTitle = formatMessage({id: 'postypes.custom_open_pricing_modal_post_renderer.membersThatRequested', defaultMessage: 'Members that requested '});
 
-    const modalHeaderText = (<h1 id='invitation_modal_title'>
-        {`${modalTitle}${mapFeatureIdToTranslation(props.feature, formatMessage)}`}
-    </h1>);
+    const modalHeaderText = (
+        <h1
+            id='invitation_modal_title'
+            className='modal-title'
+        >
+            {`${modalTitle}${mapFeatureIdToTranslation(props.feature, formatMessage)}`}
+        </h1>
+    );
 
     return (
         <GenericModal
@@ -122,7 +131,6 @@ function NotificationFromMembersModal(props: Props) {
             backdrop={true}
             show={show}
             onExited={handleOnClose}
-            aria-modal='true'
             modalHeaderText={modalHeaderText}
         >
             <MembersContainer>
@@ -131,7 +139,8 @@ function NotificationFromMembersModal(props: Props) {
                     members={members}
                     searchTerms={''}
                     editing={false}
-                    actions={{openDirectMessage, loadMore}}
+                    openDirectMessage={openDirectMessage}
+                    loadMore={loadMore}
                     hasNextPage={false}
                     isNextPageLoading={false}
                 />

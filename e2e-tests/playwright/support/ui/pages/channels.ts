@@ -11,16 +11,23 @@ export default class ChannelsPage {
     readonly page: Page;
 
     readonly globalHeader;
+    readonly searchPopover;
     readonly centerView;
+    readonly scheduledDraftDropdown;
+    readonly scheduledDraftModal;
     readonly sidebarLeft;
     readonly sidebarRight;
     readonly appBar;
+    readonly userProfilePopover;
 
     readonly findChannelsModal;
     readonly deletePostModal;
+    readonly settingsModal;
 
+    readonly postContainer;
     readonly postDotMenu;
     readonly postReminderMenu;
+    readonly onboardingMenu;
 
     readonly emojiGifPickerPopup;
 
@@ -29,6 +36,7 @@ export default class ChannelsPage {
 
         // The main areas of the app
         this.globalHeader = new components.GlobalHeader(page.locator('#global-header'));
+        this.searchPopover = new components.SearchPopover(page.locator('#searchPopover'));
         this.centerView = new components.ChannelsCenterView(page.getByTestId('channel_view'));
         this.sidebarLeft = new components.ChannelsSidebarLeft(page.locator('#SidebarContainer'));
         this.sidebarRight = new components.ChannelsSidebarRight(page.locator('#sidebar-right'));
@@ -37,17 +45,29 @@ export default class ChannelsPage {
         // Modals
         this.findChannelsModal = new components.FindChannelsModal(page.getByRole('dialog', {name: 'Find Channels'}));
         this.deletePostModal = new components.DeletePostModal(page.locator('#deletePostModal'));
+        this.settingsModal = new components.SettingsModal(page.getByRole('dialog', {name: 'Settings'}));
 
         // Menus
         this.postDotMenu = new components.PostDotMenu(page.getByRole('menu', {name: 'Post extra options'}));
         this.postReminderMenu = new components.PostReminderMenu(page.getByRole('menu', {name: 'Set a reminder for:'}));
+        this.onboardingMenu = new components.OnboardingMenu(page);
 
         // Popovers
         this.emojiGifPickerPopup = new components.EmojiGifPicker(page.locator('#emojiGifPicker'));
+        this.scheduledDraftDropdown = new components.ScheduledDraftMenu(page.locator('#dropdown_send_post_options'));
+        this.scheduledDraftModal = new components.ScheduledDraftModal(page.locator('div.modal-content'));
+        this.userProfilePopover = new components.UserProfilePopover(page.locator('.user-profile-popover'));
+
+        // Posts
+        this.postContainer = page.locator('div.post-message__text');
     }
 
     async toBeVisible() {
         await this.centerView.toBeVisible();
+    }
+
+    async getLastPost() {
+        return this.postContainer.last();
     }
 
     async goto(teamName = '', channelName = '') {
@@ -55,11 +75,24 @@ export default class ChannelsPage {
         if (teamName) {
             channelsUrl += `${teamName}`;
             if (channelName) {
-                channelsUrl += `/${channelName}`;
+                const prefix = channelName.startsWith('@') ? '/messages' : '/channels';
+                channelsUrl += `${prefix}/${channelName}`;
             }
         }
-
         await this.page.goto(channelsUrl);
+    }
+
+    async closeOnboardingIfOpen() {
+        if (await this.onboardingMenu.isOpen()) {
+            await this.onboardingMenu.toggle()
+        }
+    }
+    /**
+     * `postMessage` posts a message in the current channel
+     * @param message Message to post
+     */
+    async postMessage(message: string) {
+        await this.centerView.postCreate.postMessage(message);
     }
 }
 

@@ -11,19 +11,20 @@ import {defaultTeam} from './support/util';
 import testConfig from './test.config';
 
 async function globalSetup() {
-    let adminClient: Client;
-    let adminUser: UserProfile | null;
-    ({adminClient, adminUser} = await getAdminClient());
+    // let adminClient: Client;
+    // let adminUser: UserProfile | null;
+    // ({adminClient, adminUser} = await getAdminClient({skipLog: true}));
 
-    if (!adminUser) {
-        const {client: firstClient} = await makeClient();
-        const defaultAdmin = getDefaultAdminUser();
-        await firstClient.createUser(defaultAdmin, '', '');
+    // if (!adminUser) {
+    //     const firstClient = new Client();
+    //     firstClient.setUrl(testConfig.baseURL);
+    //     const defaultAdmin = getDefaultAdminUser();
+    //     await firstClient.createUser(defaultAdmin, '', '');
 
-        ({client: adminClient, user: adminUser} = await makeClient(defaultAdmin));
-    }
+    //     ({client: adminClient, user: adminUser} = await makeClient(defaultAdmin));
+    // }
 
-    await sysadminSetup(adminClient, adminUser);
+    // await sysadminSetup(adminClient, adminUser);
 
     return function () {
         // placeholder for teardown setup
@@ -100,13 +101,17 @@ async function printClientInfo(client: Client) {
   - BuildHash                   = ${config.BuildHash}
   - BuildHashEnterprise         = ${config.BuildHashEnterprise}
   - BuildEnterpriseReady        = ${config.BuildEnterpriseReady}
-  - FeatureFlagAppsEnabled      = ${config.FeatureFlagAppsEnabled}
-  - FeatureFlagCallsEnabled     = ${config.FeatureFlagCallsEnabled}
   - TelemetryId                 = ${config.TelemetryId}
   - ServiceEnvironment          = ${config.ServiceEnvironment}`);
+
+    const {LogSettings, ServiceSettings} = await client.getConfig();
+    // eslint-disable-next-line no-console
+    console.log(`Notable Server Config:
+  - ServiceSettings.EnableSecurityFixAlert  = ${ServiceSettings?.EnableSecurityFixAlert}
+  - LogSettings.EnableDiagnostics           = ${LogSettings?.EnableDiagnostics}`);
 }
 
-async function ensurePluginsLoaded(client: Client) {
+export async function ensurePluginsLoaded(client: Client) {
     const pluginStatus = await client.getPluginStatuses();
     const plugins = await client.getPlugins();
 
@@ -197,12 +202,6 @@ async function savePreferences(client: Client, userId: UserProfile['id']) {
 
         const preferences: PreferenceType[] = [
             {user_id: userId, category: 'tutorial_step', name: userId, value: '999'},
-            {
-                user_id: userId,
-                category: 'drafts',
-                name: 'drafts_tour_tip_showed',
-                value: JSON.stringify({drafts_tour_tip_showed: true}),
-            },
             {user_id: userId, category: 'crt_thread_pane_step', name: userId, value: '999'},
         ];
 

@@ -1,391 +1,506 @@
+/* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {EmoticonHappyOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {lazy, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
 
-import type {Channel} from '@mattermost/types/channels';
-import type {Emoji} from '@mattermost/types/emojis';
 import type {ServerError} from '@mattermost/types/errors';
-import type {FileInfo} from '@mattermost/types/files';
-import {Post} from '@mattermost/types/posts';
+import type {SchedulingInfo} from '@mattermost/types/schedule_post';
 
-import EmojiPickerOverlay from 'components/emoji_picker/emoji_picker_overlay';
-import FilePreview from 'components/file_preview';
-import type {FilePreviewInfo} from 'components/file_preview/file_preview';
-import FileUpload from 'components/file_upload';
-import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
-import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import MessageSubmitError from 'components/message_submit_error';
-import MsgTyping from 'components/msg_typing';
-import OverlayTrigger from 'components/overlay_trigger';
-import type {TextboxElement} from 'components/textbox';
+import {savePreferences} from 'mattermost-redux/actions/preferences';
+import {Permissions} from 'mattermost-redux/constants';
+import {getChannel, makeGetChannel, getDirectChannel, getMyChannelMembership} from 'mattermost-redux/selectors/entities/channels';
+import {getConfig, getFeatureFlagValue} from 'mattermost-redux/selectors/entities/general';
+import {get, getBool, getInt} from 'mattermost-redux/selectors/entities/preferences';
+import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import {getCurrentUserId, isCurrentUserGuestUser, makeGetDisplayName} from 'mattermost-redux/selectors/entities/users';
+
+import * as GlobalActions from 'actions/global_actions';
+import type {CreatePostOptions} from 'actions/post_actions';
+import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
+import type {SubmitPostReturnType} from 'actions/views/create_comment';
+import {removeDraft, updateDraft} from 'actions/views/drafts';
+import {openModal} from 'actions/views/modals';
+import {makeGetDraft} from 'selectors/drafts';
+import {getSelectedPostFocussedAt} from 'selectors/rhs';
+import {connectionErrorCount} from 'selectors/views/system';
+import LocalStorageStore from 'stores/local_storage_store';
+
+import PostBoxIndicator from 'components/advanced_text_editor/post_box_indicator/post_box_indicator';
+import {makeAsyncComponent} from 'components/async_load';
+import AutoHeightSwitcher from 'components/common/auto_height_switcher';
+import useDidUpdate from 'components/common/hooks/useDidUpdate';
+import DeletePostModal from 'components/delete_post_modal';
+import DndBanner from 'components/dnd_banner';
+import {
+    DropOverlayIdCreateComment,
+    DropOverlayIdCreatePost,
+    DropOverlayIdEditPost, FileUploadOverlay,
+} from 'components/file_upload_overlay/file_upload_overlay';
+import GuestBanner from 'components/guest_banner';
+import IkChannelInputGuard from 'components/ik_channel_input_guard/ik_channel_input_guard';
+import Poll from 'components/post_poll';
+import RhsSuggestionList from 'components/suggestion/rhs_suggestion_list';
+import SuggestionList from 'components/suggestion/suggestion_list';
 import Textbox from 'components/textbox';
+import type {TextboxElement} from 'components/textbox';
 import type TextboxClass from 'components/textbox/textbox';
+import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours/constant';
 import {SendMessageTour} from 'components/tours/onboarding_tour';
 
-import Constants, {Locations} from 'utils/constants';
+import Constants, {
+    Locations,
+    StoragePrefixes,
+    Preferences,
+    AdvancedTextEditor as AdvancedTextEditorConst,
+    ModalIdentifiers,
+    AdvancedTextEditorTextboxIds,
+} from 'utils/constants';
+import {canUploadFiles as canUploadFilesAccordingToConfig} from 'utils/file_utils';
 import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
-import {getVoiceMessageStateFromDraft, VoiceMessageStates} from 'utils/post_utils';
-import {localizeMessage, scrollbarWidth as getScrollbarWidth} from 'utils/utils';
+import {applyMarkdown as applyMarkdownUtil} from 'utils/markdown/apply_markdown';
+import {isErrorInvalidSlashCommand} from 'utils/post_utils';
+import {allAtMentions} from 'utils/text_formatting';
+import * as Utils from 'utils/utils';
 
+import type {GlobalState} from 'types/store';
 import type {PostDraft} from 'types/store/draft';
+import {isPostDraftEmpty} from 'types/store/draft';
 
+import EditPostFooter from './edit_post_footer';
+import Footer from './footer';
 import FormattingBar from './formatting_bar';
 import {FormattingBarSpacer, Separator} from './formatting_bar/formatting_bar';
-import {IconContainer} from './formatting_bar/formatting_icon';
+import MessageWithMentionsFooter from './message_with_mentions_footer';
 import SendButton from './send_button';
 import ShowFormat from './show_formatting';
 import TexteditorActions from './texteditor_actions';
-import ToggleFormattingBar from './toggle_formatting_bar/toggle_formatting_bar';
-import VoiceMessageAttachment from './voice_message_attachment';
-import VoiceMessageButton from './voice_message_button';
-
-import AutoHeightSwitcher from '../common/auto_height_switcher';
-import RhsSuggestionList from '../suggestion/rhs_suggestion_list';
-import Tooltip from '../tooltip';
+import ToggleFormattingBar from './toggle_formatting_bar';
+import useEditorEmojiPicker from './use_editor_emoji_picker';
+import useKeyHandler from './use_key_handler';
+import useOrientationHandler from './use_orientation_handler';
+import usePluginItems from './use_plugin_items';
+import usePriority from './use_priority';
+import useSubmit from './use_submit';
+import useTextboxFocus from './use_textbox_focus';
+import useUploadFiles from './use_upload_files';
+import useVoiceMessage from './use_voice_message';
 
 import './advanced_text_editor.scss';
 
-type Props = {
+const FileLimitStickyBanner = makeAsyncComponent('FileLimitStickyBanner', lazy(() => import('components/file_limit_sticky_banner')));
+
+export type Props = {
 
     /**
      * location of the advanced text editor in the UI (center channel / RHS)
      */
     location: string;
-    currentUserId: string;
-    message: string;
-    caretPosition: number;
-    showEmojiPicker: boolean;
-    uploadsProgressPercent: { [clientID: string]: FilePreviewInfo };
-    currentChannel?: Channel;
-    errorClass: string | null;
-    serverError: (ServerError & { submittedMessage?: string }) | null;
-    postError?: React.ReactNode;
-    isFormattingBarHidden: boolean;
-    draft: PostDraft;
-    showSendTutorialTip?: boolean;
-    handleSubmit: (e: React.FormEvent) => void;
-    removePreview: (id: string) => void;
-    setShowPreview: (newPreviewValue: boolean) => void;
-    shouldShowPreview: boolean;
-    maxPostSize: number;
-    canPost: boolean;
-    applyMarkdown: (params: ApplyMarkdownOptions) => void;
-    useChannelMentions: boolean;
-    badConnection: boolean;
-    currentChannelTeammateUsername?: string;
-    canUploadFiles: boolean;
-    enableEmojiPicker: boolean;
-    enableGifPicker: boolean;
-    handleBlur: () => void;
-    handlePostError: (postError: React.ReactNode) => void;
-    emitTypingEvent: () => void;
-    handleMouseUpKeyUp: (e: React.MouseEvent<TextboxElement> | React.KeyboardEvent<TextboxElement>) => void;
-    handleSelect: (e: React.SyntheticEvent<TextboxElement>) => void;
-    handleKeyDown: (e: React.KeyboardEvent<TextboxElement>) => void;
-    postMsgKeyPress: (e: React.KeyboardEvent<TextboxElement>) => void;
-    handleChange: (e: React.ChangeEvent<TextboxElement>) => void;
-    toggleEmojiPicker: () => void;
-    handleGifClick: (gif: string) => void;
-    handleEmojiClick: (emoji: Emoji) => void;
-    hideEmojiPicker: () => void;
-    toggleAdvanceTextEditor: () => void;
-    handleUploadProgress: (filePreviewInfo: FilePreviewInfo) => void;
-    handleUploadError: (err: string | ServerError, clientId?: string, channelId?: string, rootId?: string) => void;
-    handleFileUploadComplete: (fileInfos: FileInfo[], clientIds: string[], channelId: string, rootId?: string) => void;
-    handleUploadStart: (clientIds: string[], channelId: string) => void;
-    handleFileUploadChange: () => void;
-    getFileUploadTarget: () => HTMLInputElement | null;
-    fileUploadRef: React.RefObject<FileUploadClass>;
-    prefillMessage?: (message: string, shouldFocus?: boolean) => void;
     channelId: string;
-    postId: string;
-    textboxRef: React.RefObject<TextboxClass>;
-    voiceMessageClientId: string;
-    handleVoiceMessageUploadStart: (clientId: string, channelOrRootId: Channel['id'] | Post['id']) => void;
+    rootId: string;
+    postId?: string;
     isThreadView?: boolean;
-    additionalControls?: React.ReactNodeArray;
-    labels?: React.ReactNode;
-    setDraftAsPostType: (channelOrRootId: Channel['id'] | Post['id'], draft: PostDraft, postType?: PostDraft['postType']) => void;
-    isSchedulable?: boolean;
-    handleSchedulePost: (scheduleUTCTimestamp: number) => void;
+    placeholder?: string;
+    isInEditMode?: boolean;
+
+    /**
+     * Key to store the draft in the storage
+     * If not provided, draft key will be computed based on the post
+     */
+    storageKey?: string;
+
+    /**
+     * Used by plugins to act after the post is made
+     */
+    afterSubmit?: (response: SubmitPostReturnType) => void;
 }
 
-const AdvanceTextEditor = ({
+const AdvancedTextEditor = ({
     location,
-    message,
-    caretPosition,
-    showEmojiPicker,
-    uploadsProgressPercent,
-    currentChannel,
     channelId,
+    rootId,
     postId,
-    errorClass,
-    serverError,
-    postError,
-    isFormattingBarHidden,
-    draft,
-    badConnection,
-    handleSubmit,
-    removePreview,
-    showSendTutorialTip,
-    setShowPreview,
-    shouldShowPreview,
-    maxPostSize,
-    canPost,
-    applyMarkdown,
-    useChannelMentions,
-    currentChannelTeammateUsername,
-    currentUserId,
-    canUploadFiles,
-    enableEmojiPicker,
-    enableGifPicker,
-    handleBlur,
-    handlePostError,
-    emitTypingEvent,
-    handleMouseUpKeyUp,
-    handleSelect,
-    handleKeyDown,
-    postMsgKeyPress,
-    handleChange,
-    toggleEmojiPicker,
-    handleGifClick,
-    handleEmojiClick,
-    hideEmojiPicker,
-    toggleAdvanceTextEditor,
-    handleUploadProgress,
-    handleUploadError,
-    handleFileUploadComplete,
-    handleUploadStart,
-    handleFileUploadChange,
-    getFileUploadTarget,
-    fileUploadRef,
-    prefillMessage,
-    textboxRef,
-    voiceMessageClientId,
-    setDraftAsPostType,
-    handleVoiceMessageUploadStart,
-    isThreadView,
-    additionalControls,
-    labels,
-    isSchedulable,
-    handleSchedulePost,
+    isThreadView = false,
+    placeholder,
+    isInEditMode = false,
+    afterSubmit,
+    storageKey,
 }: Props) => {
-    const readOnlyChannel = !canPost;
     const {formatMessage} = useIntl();
-    const ariaLabelMessageInput = localizeMessage(
-        'accessibility.sections.centerFooter',
-        'message input complimentary region',
-    );
-    const emojiPickerRef = useRef<HTMLButtonElement>(null);
+
+    const dispatch = useDispatch();
+
+    const getChannelSelector = useMemo(makeGetChannel, []);
+    const getDraftSelector = useMemo(makeGetDraft, []);
+    const getDisplayName = useMemo(makeGetDisplayName, []);
+
+    let textboxId: string;
+    if (isInEditMode) {
+        textboxId = AdvancedTextEditorTextboxIds.InEditMode;
+    } else if (location === Locations.CENTER) {
+        textboxId = AdvancedTextEditorTextboxIds.InCenter;
+    } else if (location === Locations.RHS_COMMENT) {
+        textboxId = AdvancedTextEditorTextboxIds.InRHSComment;
+    } else if (location === Locations.MODAL) {
+        textboxId = AdvancedTextEditorTextboxIds.InModal;
+    } else {
+        textboxId = AdvancedTextEditorTextboxIds.Default;
+    }
+
+    const isRHS = isThreadView ? false : Boolean(rootId) || location === Locations.RHS_COMMENT;
+
+    const getFormattingBarPreferenceName = () => {
+        let name: string;
+        if (isRHS) {
+            name = isInEditMode ? AdvancedTextEditorConst.EDIT : AdvancedTextEditorConst.COMMENT;
+        } else {
+            name = AdvancedTextEditorConst.POST;
+        }
+
+        return name;
+    };
+
+    const currentUserId = useSelector(getCurrentUserId);
+    const channel = useSelector((state: GlobalState) => getChannelSelector(state, channelId));
+    const channelDisplayName = channel?.display_name || '';
+    const channelType = channel?.type || '';
+    const isChannelShared = channel?.shared;
+    const draftFromStore = useSelector((state: GlobalState) => getDraftSelector(state, channelId, rootId, storageKey));
+    const badConnection = useSelector((state: GlobalState) => connectionErrorCount(state) > 1);
+    const maxPostSize = useSelector((state: GlobalState) => parseInt(getConfig(state).MaxPostSize || '', 10) || Constants.DEFAULT_CHARACTER_LIMIT);
+    const canUploadFiles = useSelector((state: GlobalState) => canUploadFilesAccordingToConfig(getConfig(state)));
+    const fullWidthTextBox = useSelector((state: GlobalState) => get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.CHANNEL_DISPLAY_MODE, Preferences.CHANNEL_DISPLAY_MODE_DEFAULT) === Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN);
+    const isFormattingBarHidden = useSelector((state: GlobalState) => {
+        const preferenceName = getFormattingBarPreferenceName();
+        return getBool(state, Preferences.ADVANCED_TEXT_EDITOR, preferenceName);
+    });
+    const teammateId = useSelector((state: GlobalState) => getDirectChannel(state, channelId)?.teammate_id || '');
+    const teammateDisplayName = useSelector((state: GlobalState) => (teammateId ? getDisplayName(state, teammateId) : ''));
+    const selectedPostFocussedAt = useSelector((state: GlobalState) => getSelectedPostFocussedAt(state));
+
+    const isMember = useSelector((state: GlobalState) => {
+        if (!channel) {
+            return false;
+        }
+        return Boolean(getMyChannelMembership(state, channel.id));
+    });
+
+    const canPost = useSelector((state: GlobalState) => {
+        if (!channel) {
+            return false;
+        }
+
+        return isMember && haveIChannelPermission(state, channel.team_id, channel.id, Permissions.CREATE_POST);
+    });
+    const useChannelMentions = useSelector((state: GlobalState) => {
+        const channel = getChannel(state, channelId);
+        return channel ? haveIChannelPermission(state, channel.team_id, channel.id, Permissions.USE_CHANNEL_MENTIONS) : false;
+    });
+    const showSendTutorialTip = useSelector((state: GlobalState) => {
+        // We don't show the tutorial tip neither on RHS nor Thread view
+        if (rootId) {
+            return false;
+        }
+        const config = getConfig(state);
+        const enableTutorial = config.EnableTutorial === 'true';
+
+        const isGuestUser = isCurrentUserGuestUser(state);
+        const tutorialStepKey = isGuestUser ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP;
+        const tutorialStep = getInt(state, tutorialStepKey, currentUserId, 0);
+
+        // guest validation to see which point the messaging tour tip starts
+        const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE : OnboardingTourSteps.SEND_MESSAGE;
+
+        return enableTutorial && (tutorialStep === tourStep);
+    });
+
     const editorActionsRef = useRef<HTMLDivElement>(null);
     const editorBodyRef = useRef<HTMLDivElement>(null);
+    const textboxRef = useRef<TextboxClass>(null);
+    const loggedInAriaLabelTimeout = useRef<NodeJS.Timeout>();
+    const saveDraftFrame = useRef<NodeJS.Timeout>();
+    const draftRef = useRef(draftFromStore);
+    const storedDrafts = useRef<Record<string, PostDraft | undefined>>({});
+    const lastBlurAt = useRef(0);
+    const messageStatusRef = useRef<HTMLDivElement | null>(null);
 
+    const [draft, setDraft] = useState(draftFromStore);
+    const [caretPosition, setCaretPosition] = useState(draft.message.length);
+    const [serverError, setServerError] = useState<(ServerError & { submittedMessage?: string }) | null>(null);
+    const [postError, setPostError] = useState<React.ReactNode>(null);
+    const [showPreview, setShowPreview] = useState(false);
+    const [isMessageLong, setIsMessageLong] = useState(false);
     const [renderScrollbar, setRenderScrollbar] = useState(false);
-    const [showFormattingSpacer, setShowFormattingSpacer] = useState(shouldShowPreview);
+    const [keepEditorInFocus, setKeepEditorInFocus] = useState(false);
 
-    const voiceMessageState = getVoiceMessageStateFromDraft(draft);
+    const readOnlyChannel = !canPost;
 
-    const input = textboxRef.current?.getInputBox();
+    const hasDraftMessage = Boolean(draft.message);
+    const showFormattingBar = !isFormattingBarHidden && !readOnlyChannel;
+    const enableSharedChannelsDMs = useSelector((state: GlobalState) => getFeatureFlagValue(state, 'EnableSharedChannelsDMs') === 'true');
+    const isDMOrGMRemote = isChannelShared && (channelType === Constants.DM_CHANNEL || channelType === Constants.GM_CHANNEL);
+    const isDisabled = Boolean(readOnlyChannel || (!enableSharedChannelsDMs && isDMOrGMRemote));
+
+    const handleShowPreview = useCallback(() => {
+        setShowPreview((prev) => !prev);
+    }, []);
+
+    const emitTypingEvent = useCallback((eventType = 'typing') => {
+        GlobalActions.emitLocalUserTypingEvent(eventType, channelId, rootId);
+    }, [channelId, rootId]);
+
+    const handleDraftChange = useCallback((draftToChange: PostDraft, options: {instant?: boolean; show?: boolean} = {instant: false, show: false}) => {
+        if (saveDraftFrame.current) {
+            clearTimeout(saveDraftFrame.current);
+        }
+
+        setDraft(draftToChange);
+
+        const saveDraft = () => {
+            let prefix = StoragePrefixes.DRAFT;
+            let suffix = draftToChange.channelId;
+            if (draftToChange.rootId) {
+                prefix = StoragePrefixes.COMMENT_DRAFT;
+                suffix = draftToChange.rootId;
+            }
+            const key = storageKey || `${prefix}${suffix}`;
+
+            if (isPostDraftEmpty(draftToChange)) {
+                dispatch(removeDraft(key, draftToChange.channelId, draftToChange.rootId));
+                return;
+            }
+
+            if (options.show) {
+                dispatch(updateDraft(key, {...draftToChange, show: true}, draftToChange.rootId, true));
+                return;
+            }
+
+            dispatch(updateDraft(key, draftToChange, draftToChange.rootId));
+        };
+
+        if (options.instant) {
+            saveDraft();
+        } else {
+            saveDraftFrame.current = setTimeout(() => {
+                saveDraft();
+            }, Constants.SAVE_DRAFT_TIMEOUT);
+        }
+
+        storedDrafts.current[draftToChange.rootId || draftToChange.channelId] = draftToChange;
+    }, [dispatch]);
+
+    const applyMarkdown = useCallback((params: ApplyMarkdownOptions) => {
+        if (showPreview) {
+            return;
+        }
+
+        const res = applyMarkdownUtil(params);
+
+        handleDraftChange({
+            ...draft,
+            message: res.message,
+        });
+
+        setTimeout(() => {
+            const textbox = textboxRef.current?.getInputBox();
+            Utils.setSelectionRange(textbox, res.selectionStart, res.selectionEnd);
+        });
+    }, [showPreview, handleDraftChange, draft]);
+
+    const toggleAdvanceTextEditor = useCallback(() => {
+        dispatch(savePreferences(currentUserId, [{
+            category: Preferences.ADVANCED_TEXT_EDITOR,
+            user_id: currentUserId,
+
+            // name: isRHS ? AdvancedTextEditorConst.COMMENT : AdvancedTextEditorConst.POST,
+            name: getFormattingBarPreferenceName(),
+            value: String(!isFormattingBarHidden),
+        }]));
+    }, [dispatch, currentUserId, getFormattingBarPreferenceName, isFormattingBarHidden]);
+
+    useOrientationHandler(textboxRef, rootId);
+    const pluginItems = usePluginItems(draft, textboxRef, handleDraftChange);
+    const focusTextbox = useTextboxFocus(textboxRef, channelId, isRHS, canPost);
+    const [initialAttachmentPreview, fileUploadJSX, handleUploadProgress, handleFileUploadComplete, handleUploadError, removePreview, uploadsProgressPercent] = useUploadFiles(
+        draft,
+        rootId,
+        channelId,
+        isThreadView,
+        storedDrafts,
+        isDisabled,
+        textboxRef,
+        handleDraftChange,
+        focusTextbox,
+        setServerError,
+        caretPosition,
+        isInEditMode,
+    );
+
+    let attachmentPreview = initialAttachmentPreview;
+
+    const {
+        emojiPicker,
+        enableEmojiPicker,
+        toggleEmojiPicker,
+    } = useEditorEmojiPicker(
+        textboxId,
+        isDisabled,
+        draft,
+        caretPosition,
+        setCaretPosition,
+        handleDraftChange,
+        showPreview,
+        focusTextbox,
+    );
+    const {
+        labels: priorityLabels,
+        additionalControl: priorityAdditionalControl,
+        isValidPersistentNotifications,
+        onSubmitCheck: prioritySubmitCheck,
+    } = usePriority(draft, handleDraftChange, focusTextbox, showPreview);
+    const [handleSubmit, errorClass] = useSubmit(
+        draft,
+        postError,
+        channelId,
+        rootId,
+        serverError,
+        lastBlurAt,
+        focusTextbox,
+        setServerError,
+        setShowPreview,
+        handleDraftChange,
+        prioritySubmitCheck,
+        undefined,
+        afterSubmit,
+        undefined,
+        isInEditMode,
+        postId,
+    );
+
+    const handleSubmitWithErrorHandling = useCallback((submittingDraft?: PostDraft, schedulingInfo?: SchedulingInfo, options?: CreatePostOptions) => {
+        handleSubmit(submittingDraft, schedulingInfo, options);
+        if (!errorClass) {
+            const messageStatusElement = messageStatusRef.current;
+            const messageStatusInnerText = messageStatusElement?.textContent;
+            if (messageStatusInnerText === 'Message Sent') {
+                messageStatusElement!.textContent = 'Message Sent &nbsp;';
+            } else {
+                messageStatusElement!.textContent = 'Message Sent';
+            }
+        }
+    }, [errorClass, handleSubmit]);
+
+    const handleCancel = useCallback(() => {
+        handleDraftChange({
+            message: '',
+            fileInfos: [],
+            uploadsInProgress: [],
+            createAt: 0,
+            updateAt: 0,
+            channelId,
+            rootId,
+            metadata: {},
+        });
+    }, [handleDraftChange, channelId, rootId]);
+
+    const handleSubmitWrapper = useCallback(() => {
+        const isEmptyPost = isPostDraftEmpty(draft);
+
+        if (isInEditMode && isEmptyPost) {
+            const deletePostModalData = {
+                modalId: ModalIdentifiers.DELETE_POST,
+                dialogType: DeletePostModal,
+                dialogProps: {
+                    post: draft,
+                    isRHS,
+                },
+            };
+
+            dispatch(openModal(deletePostModalData));
+            return;
+        }
+
+        handleSubmitWithErrorHandling();
+    }, [dispatch, draft, handleSubmitWithErrorHandling, isInEditMode, isRHS]);
+
+    const [handleKeyDown, postMsgKeyPress] = useKeyHandler(
+        draft,
+        channelId,
+        rootId,
+        caretPosition,
+        isValidPersistentNotifications,
+        location,
+        textboxRef,
+        showFormattingBar,
+        focusTextbox,
+        applyMarkdown,
+        handleDraftChange,
+        handleSubmitWrapper,
+        emitTypingEvent,
+        handleShowPreview,
+        toggleAdvanceTextEditor,
+        toggleEmojiPicker,
+        isInEditMode,
+        handleCancel,
+    );
+
+    const [voiceMessageJSX, voiceAttachmentPreview] = useVoiceMessage(
+        draft,
+        channelId,
+        rootId,
+        readOnlyChannel,
+        location,
+        handleDraftChange,
+        serverError,
+        uploadsProgressPercent,
+        handleUploadProgress,
+        handleFileUploadComplete,
+        handleUploadError,
+        removePreview,
+        emitTypingEvent,
+    );
+
+    if (draft.postType === Constants.PostTypes.VOICE) {
+        attachmentPreview = voiceAttachmentPreview;
+    }
+
+    const handleSubmitWithEvent = useCallback((e: React.FormEvent) => {
+        e.preventDefault();
+        handleSubmitWithErrorHandling();
+    }, [handleSubmitWithErrorHandling]);
+
+    const handlePostError = useCallback((err: React.ReactNode) => {
+        setPostError(err);
+    }, []);
 
     const handleHeightChange = useCallback((height: number, maxHeight: number) => {
         setRenderScrollbar(height > maxHeight);
     }, []);
 
-    const handleShowFormat = useCallback(() => {
-        setShowPreview(!shouldShowPreview);
-    }, [shouldShowPreview, setShowPreview]);
+    const handleBlur = useCallback(() => {
+        lastBlurAt.current = Date.now();
+        setKeepEditorInFocus(false);
+    }, []);
 
-    let serverErrorJsx = null;
-    if (serverError) {
-        serverErrorJsx = (
-            <MessageSubmitError
-                error={serverError}
-                submittedMessage={serverError.submittedMessage}
-                handleSubmit={handleSubmit}
-            />
-        );
-    }
+    const handleFocus = useCallback(() => {
+        setKeepEditorInFocus(true);
+    }, []);
 
-    let attachmentPreview = null;
-    if (!readOnlyChannel && draft.postType === Constants.PostTypes.VOICE) {
-        attachmentPreview = (
-            <div>
-                <VoiceMessageAttachment
-                    channelId={channelId}
-                    rootId={postId}
-                    draft={draft}
-                    location={location}
-                    vmState={voiceMessageState}
-                    setDraftAsPostType={setDraftAsPostType}
-                    uploadingClientId={voiceMessageClientId}
-                    didUploadFail={Boolean(serverError)}
-                    onUploadStart={handleVoiceMessageUploadStart}
-                    uploadProgress={uploadsProgressPercent?.[voiceMessageClientId]?.percent ?? 0}
-                    onUploadProgress={handleUploadProgress}
-                    onUploadComplete={handleFileUploadComplete}
-                    onUploadError={handleUploadError}
-                    onRemoveDraft={removePreview}
-                    onSubmit={handleSubmit}
-                />
-            </div>
-        );
-    } else if (!readOnlyChannel && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0)) {
-        attachmentPreview = (
-            <FilePreview
-                fileInfos={draft.fileInfos}
-                onRemove={removePreview}
-                uploadsInProgress={draft.uploadsInProgress}
-                uploadsProgressPercent={uploadsProgressPercent}
-            />
-        );
-    }
+    const handleChange = useCallback((e: React.ChangeEvent<TextboxElement>) => {
+        const message = e.target.value;
 
-    const getFileCount = () => {
-        return draft.fileInfos.length + draft.uploadsInProgress.length;
-    };
+        if (!isErrorInvalidSlashCommand(serverError)) {
+            setServerError(null);
+        }
 
-    let postType = 'post';
-    if (postId) {
-        postType = isThreadView ? 'thread' : 'comment';
-    }
-
-    const fileUploadJSX = readOnlyChannel ? null : (
-        <FileUpload
-            ref={fileUploadRef}
-            fileCount={getFileCount()}
-            getTarget={getFileUploadTarget}
-            onFileUploadChange={handleFileUploadChange}
-            onUploadStart={handleUploadStart}
-            onFileUpload={handleFileUploadComplete}
-            onUploadError={handleUploadError}
-            onUploadProgress={handleUploadProgress}
-            rootId={postId}
-            channelId={channelId}
-            postType={postType}
-            disabled={draft.postType === Constants.PostTypes.VOICE}
-
-            // For drive sharelinks
-            message={message}
-            caretPosition={caretPosition}
-            handleDriveSharelink={handleChange}
-        />
-    );
-
-    const getEmojiPickerRef = () => {
-        return emojiPickerRef.current;
-    };
-
-    let emojiPicker = null;
-    const emojiButtonAriaLabel = formatMessage({
-        id: 'emoji_picker.emojiPicker',
-        defaultMessage: 'Emoji Picker',
-    }).toLowerCase();
-
-    if (enableEmojiPicker && !readOnlyChannel) {
-        const emojiPickerTooltip = (
-            <Tooltip id='upload-tooltip'>
-                <KeyboardShortcutSequence
-                    shortcut={KEYBOARD_SHORTCUTS.msgShowEmojiPicker}
-                    hoistDescription={true}
-                    isInsideTooltip={true}
-                />
-            </Tooltip>
-        );
-        emojiPicker = (
-            <>
-                <EmojiPickerOverlay
-                    show={showEmojiPicker}
-                    target={getEmojiPickerRef}
-                    onHide={hideEmojiPicker}
-                    onEmojiClick={handleEmojiClick}
-                    onGifClick={handleGifClick}
-                    enableGifPicker={enableGifPicker}
-                    topOffset={-7}
-                />
-                <OverlayTrigger
-                    placement='top'
-                    delayShow={Constants.OVERLAY_TIME_DELAY}
-                    trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
-                    overlay={emojiPickerTooltip}
-                >
-                    <IconContainer
-                        id={'emojiPickerButton'}
-                        ref={emojiPickerRef}
-                        onClick={toggleEmojiPicker}
-                        type='button'
-                        aria-label={emojiButtonAriaLabel}
-                        disabled={shouldShowPreview || draft.postType === Constants.PostTypes.VOICE}
-                        className={classNames({active: showEmojiPicker})}
-                    >
-                        <EmoticonHappyOutlineIcon
-                            color={'currentColor'}
-                            size={18}
-                        />
-                    </IconContainer>
-                </OverlayTrigger>
-            </>
-        );
-    }
-
-    const hasDraftMessagesOrFileAttachments = message.trim().length !== 0 || draft.fileInfos.length !== 0 || draft.uploadsInProgress.length !== 0;
-
-    const voiceMessageButton = !readOnlyChannel && (location === Locations.CENTER || location === Locations.RHS_COMMENT) ? (
-        <VoiceMessageButton
-            channelId={channelId}
-            rootId={postId}
-            location={location}
-            draft={draft}
-            disabled={readOnlyChannel ||
-                voiceMessageState === VoiceMessageStates.RECORDING ||
-                voiceMessageState === VoiceMessageStates.UPLOADING || voiceMessageState === VoiceMessageStates.ATTACHED ||
-                hasDraftMessagesOrFileAttachments}
-            onClick={setDraftAsPostType}
-        />
-    ) : null;
-
-    const isSendButtonDisabled = readOnlyChannel ||
-        voiceMessageState === VoiceMessageStates.RECORDING || voiceMessageState === VoiceMessageStates.UPLOADING ||
-        !hasDraftMessagesOrFileAttachments;
-
-    const sendButton = readOnlyChannel ? null : (
-        <SendButton
-            disabled={isSendButtonDisabled}
-            isSchedulable={isSchedulable}
-            handleSubmit={handleSubmit}
-            handleSchedulePost={handleSchedulePost}
-        />
-    );
-
-    const showFormatJSX = isSendButtonDisabled || draft.postType === Constants.PostTypes.VOICE ? null : (
-        <ShowFormat
-            onClick={handleShowFormat}
-            active={shouldShowPreview}
-        />
-    );
-
-    let createMessage;
-    if (currentChannel && !readOnlyChannel) {
-        createMessage = formatMessage(
-            {
-                id: 'create_post.write',
-                defaultMessage: 'Write to {channelDisplayName}',
-            },
-            {channelDisplayName: currentChannel.display_name},
-        );
-    } else if (readOnlyChannel) {
-        createMessage = localizeMessage(
-            'create_post.read_only',
-            'This channel is read-only. Only members with permission can post here.',
-        );
-    } else {
-        createMessage = localizeMessage('create_comment.addComment', 'Reply to this thread...');
-    }
-
-    const messageValue = readOnlyChannel ? '' : message;
+        handleDraftChange({
+            ...draft,
+            message,
+        });
+    }, [draft, handleDraftChange, serverError]);
 
     /**
      * by getting the value directly from the textbox we eliminate all unnecessary
@@ -394,6 +509,7 @@ const AdvanceTextEditor = ({
      * although still working as expected
      */
     const getCurrentValue = useCallback(() => textboxRef.current?.getInputBox().value, [textboxRef]);
+
     const getCurrentSelection = useCallback(() => {
         const input = textboxRef.current?.getInputBox();
 
@@ -403,50 +519,211 @@ const AdvanceTextEditor = ({
         };
     }, [textboxRef]);
 
-    let textboxId = 'textbox';
-
-    switch (location) {
-    case Locations.CENTER:
-        textboxId = 'post_textbox';
-        break;
-    case Locations.RHS_COMMENT:
-        textboxId = 'reply_textbox';
-        break;
-    case Locations.MODAL:
-        textboxId = 'modal_textbox';
-        break;
-    case Locations.SCHEDULED_DRAFT:
-        textboxId = 'scheduled_draft_editor_textbox';
-        break;
-    }
-
-    const showFormattingBar = !isFormattingBarHidden && !readOnlyChannel;
-
     const handleWidthChange = useCallback((width: number) => {
+        const input = textboxRef.current?.getInputBox();
         if (!editorBodyRef.current || !editorActionsRef.current || !input) {
             return;
         }
 
         const maxWidth = editorBodyRef.current.offsetWidth - editorActionsRef.current.offsetWidth;
 
-        if (!message) {
+        if (!hasDraftMessage) {
             // if we do not have a message we can just render the default state
-            setShowFormattingSpacer(false);
+            setIsMessageLong(false);
             return;
         }
 
         if (width >= maxWidth) {
-            setShowFormattingSpacer(true);
+            setIsMessageLong(true);
         } else {
-            setShowFormattingSpacer(false);
+            setIsMessageLong(false);
         }
-    }, [message, input]);
+    }, [hasDraftMessage]);
 
+    const handleMouseUpKeyUp = useCallback((e: React.MouseEvent | React.KeyboardEvent) => {
+        setCaretPosition((e.target as TextboxElement).selectionStart || 0);
+    }, []);
+
+    const prefillMessage = useCallback((message: string, shouldFocus?: boolean) => {
+        handleDraftChange({
+            ...draft,
+            message,
+        });
+        setCaretPosition(message.length);
+
+        if (shouldFocus) {
+            const inputBox = textboxRef.current?.getInputBox();
+            inputBox?.click();
+            focusTextbox(true);
+        }
+    }, [handleDraftChange, focusTextbox, draft, textboxRef]);
+
+    // Update the caret position in the input box when changed by a side effect
     useEffect(() => {
-        if (!message) {
+        const textbox: HTMLInputElement | HTMLTextAreaElement | undefined = textboxRef.current?.getInputBox();
+        if (textbox && textbox.selectionStart !== caretPosition) {
+            Utils.setCaretPosition(textbox, caretPosition);
+        }
+    }, [caretPosition]);
+
+    // Handle width change when there is no message.
+    useEffect(() => {
+        if (!hasDraftMessage) {
             handleWidthChange(0);
         }
-    }, [handleWidthChange, message]);
+    }, [hasDraftMessage, handleWidthChange]);
+
+    // Clear timeout on unmount
+    useEffect(() => {
+        return () => loggedInAriaLabelTimeout.current && clearTimeout(loggedInAriaLabelTimeout.current);
+    }, []);
+
+    // Focus textbox when we stop showing the preview
+    useDidUpdate(() => {
+        if (!showPreview) {
+            focusTextbox();
+        }
+    }, [showPreview]);
+
+    // Focus textbox when selectedPostFocussedAt changes
+    useEffect(() => {
+        if (selectedPostFocussedAt) {
+            focusTextbox();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedPostFocussedAt]);
+
+    // Remove show preview when we switch channels or posts
+    useEffect(() => {
+        setShowPreview(false);
+        setServerError(null);
+    }, [channelId, rootId]);
+
+    // Remove uploads in progress on mount
+    useEffect(() => {
+        dispatch(actionOnGlobalItemsWithPrefix(rootId ? StoragePrefixes.COMMENT_DRAFT : StoragePrefixes.DRAFT, (_key: string, draft: PostDraft) => {
+            if (!draft || !draft.uploadsInProgress || draft.uploadsInProgress.length === 0) {
+                return draft;
+            }
+
+            return {...draft, uploadsInProgress: []};
+        }));
+    }, []);
+
+    // Register listener to store the draft when the page unloads
+    useEffect(() => {
+        const callback = () => handleDraftChange(draft, {instant: true, show: true});
+        window.addEventListener('beforeunload', callback);
+        return () => {
+            window.removeEventListener('beforeunload', callback);
+        };
+    }, [handleDraftChange, draft]);
+
+    // Keep track of the draft as a ref so that we can save it when changing channels
+    useEffect(() => {
+        draftRef.current = draft;
+    }, [draft]);
+
+    const handleSubmitPostAndScheduledMessage = useCallback((schedulingInfo?: SchedulingInfo) => {
+        handleSubmitWithErrorHandling(undefined, schedulingInfo);
+    }, [handleSubmitWithErrorHandling]);
+
+    // Set the draft from store when changing post or channels, and store the previous one
+    useEffect(() => {
+        // Store the draft that existed when we opened the channel to know if it should be saved
+        const draftOnOpen = draftFromStore;
+
+        setDraft(draftOnOpen);
+
+        return () => {
+            if (draftOnOpen !== draftRef.current) {
+                handleDraftChange(draftRef.current, {instant: true, show: true});
+            }
+        };
+    }, [channelId, rootId]);
+
+    const disableSendButton = Boolean(isDisabled || (!draft.message.trim().length && !draft.fileInfos.length)) || !isValidPersistentNotifications || Boolean(postError);
+    const sendButton = readOnlyChannel || isInEditMode ? null : (
+        <SendButton
+            disabled={disableSendButton}
+            handleSubmit={handleSubmitPostAndScheduledMessage}
+            channelId={channelId}
+        />
+    );
+
+    const showFormatJSX = disableSendButton ? null : (
+        <ShowFormat
+            onClick={handleShowPreview}
+            active={showPreview}
+        />
+    );
+
+    let createMessage;
+    if (placeholder) {
+        createMessage = placeholder;
+    } else if (!rootId && !isDisabled) {
+        createMessage = formatMessage(
+            {
+                id: 'create_post.write',
+                defaultMessage: 'Write to {channelDisplayName}',
+            },
+            {channelDisplayName, channelType},
+        );
+    } else if (readOnlyChannel) {
+        createMessage = formatMessage(
+            {
+                id: 'create_post.read_only',
+                defaultMessage: 'This channel is read-only. Only members with permission can post here.',
+            },
+        );
+    } else if (!enableSharedChannelsDMs && isDMOrGMRemote) {
+        createMessage = formatMessage(
+            {
+                id: 'create_post.dm_or_gm_remote',
+                defaultMessage: 'Direct Messages and Group Messages with remote users are not supported.',
+            },
+        );
+    } else {
+        createMessage = formatMessage({id: 'create_comment.addComment', defaultMessage: 'Reply to this thread...'});
+    }
+
+    const messageValue = isDisabled ? '' : draft.message_source || draft.message;
+
+    const wasNotifiedOfLogIn = LocalStorageStore.getWasNotifiedOfLogIn();
+
+    let loginSuccessfulLabel;
+    if (!wasNotifiedOfLogIn) {
+        loginSuccessfulLabel = formatMessage({
+            id: 'channelView.login.successfull',
+            defaultMessage: 'Login Successful',
+        });
+
+        // set timeout to make sure aria-label is read by a screen reader,
+        // and then set the flag to "true" to make sure it's not read again until a user logs back in
+        if (!loggedInAriaLabelTimeout.current) {
+            loggedInAriaLabelTimeout.current = setTimeout(() => {
+                LocalStorageStore.setWasNotifiedOfLogIn(true);
+            }, 3000);
+        }
+    }
+
+    const ariaLabelMessageInput = formatMessage({
+        id: 'accessibility.sections.centerFooter',
+        defaultMessage: 'message input complimentary region',
+    });
+
+    const ariaLabel = loginSuccessfulLabel ? `${loginSuccessfulLabel} ${ariaLabelMessageInput}` : ariaLabelMessageInput;
+
+    const additionalControls = useMemo(() => [
+        isInEditMode ? null : priorityAdditionalControl,
+        ...(location === Locations.RHS_COMMENT ? [] : [
+            <Poll
+                key='poll'
+                disabled={showPreview}
+            />,
+        ]),
+        ...(pluginItems || []),
+    ].filter(Boolean), [pluginItems, priorityAdditionalControl, isInEditMode, location, showPreview]);
 
     const formattingBar = (
         <AutoHeightSwitcher
@@ -456,137 +733,198 @@ const AdvanceTextEditor = ({
                     applyMarkdown={applyMarkdown}
                     getCurrentMessage={getCurrentValue}
                     getCurrentSelection={getCurrentSelection}
-                    disableControls={shouldShowPreview || draft.postType === Constants.PostTypes.VOICE}
+                    disableControls={showPreview || draft.postType === Constants.PostTypes.VOICE}
                     additionalControls={additionalControls}
                     location={location}
                 />
             )}
             slot2={null}
+            shouldScrollIntoView={keepEditorInFocus}
         />
     );
 
+    const fileUploadOverlay = useMemo(() => {
+        const overlayType = isRHS ? 'right' : 'center';
+        const direction = 'horizontal';
+
+        return isInEditMode ? (
+            <FileUploadOverlay
+                overlayType={overlayType}
+                isInEditMode={true}
+                id={DropOverlayIdEditPost}
+                direction={direction}
+            />
+        ) : (
+            <FileUploadOverlay
+                overlayType={overlayType}
+                isInEditMode={false}
+                id={isRHS ? DropOverlayIdCreateComment : DropOverlayIdCreatePost}
+                direction={direction}
+            />
+        );
+    }, [isInEditMode, isRHS]);
+
+    const showFormattingSpacer = isMessageLong || showPreview || attachmentPreview || isRHS || isThreadView;
+
+    const containsAtMentionsInMessage = allAtMentions(draft?.message)?.length > 0;
+
     return (
-        <>
-            <div
-                className={classNames('AdvancedTextEditor', {
-                    'AdvancedTextEditor__attachment-disabled': !canUploadFiles,
-                    scroll: renderScrollbar,
-                    'formatting-bar': showFormattingBar,
-                })}
+
+        // Ik: for our peek channel feature
+        <IkChannelInputGuard
+            channel={channel}
+            isMember={Boolean(isMember)}
+        >
+            <form
+                id={rootId ? undefined : 'create_post'}
+                data-testid={rootId ? undefined : 'create-post'}
+                className={(!rootId && !fullWidthTextBox) ? 'center' : undefined}
+                onSubmit={handleSubmitWithEvent}
             >
-                <div
-                    id={'speak-'}
-                    aria-live='assertive'
-                    className='sr-only'
-                >
-                    <FormattedMessage
-                        id='channelView.login.successfull'
-                        defaultMessage='Login Successfull'
+                {canPost && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0) && (
+                    <FileLimitStickyBanner/>
+                )}
+                {!isInEditMode && (
+                    <PostBoxIndicator
+                        channelId={channelId}
+                        teammateDisplayName={teammateDisplayName}
+                        location={location}
+                        postId={rootId}
                     />
-                </div>
+                )}
                 <div
-                    className={'AdvancedTextEditor__body'}
-                    disabled={readOnlyChannel}
+                    className={classNames('AdvancedTextEditor', {
+                        'AdvancedTextEditor__attachment-disabled': !canUploadFiles,
+                        scroll: renderScrollbar,
+                        'formatting-bar': showFormattingBar,
+                    })}
                 >
+                    {!wasNotifiedOfLogIn && (
+                        <div
+                            aria-live='assertive'
+                            className='sr-only'
+                        >
+                            <FormattedMessage
+                                id='channelView.login.successfull'
+                                defaultMessage='Login Successful'
+                            />
+                        </div>
+                    )}
                     <div
-                        ref={editorBodyRef}
-                        role='application'
-                        id='advancedTextEditorCell'
-                        data-a11y-sort-order='2'
-                        aria-label={localizeMessage(
-                            'channelView.login.successfull',
-                            'Login Successfull',
-                        ) + ' ' + ariaLabelMessageInput}
-                        tabIndex={-1}
-                        className='AdvancedTextEditor__cell a11y__region'
+                        className={'AdvancedTextEditor__body'}
+                        disabled={isDisabled}
                     >
-                        {labels}
-                        <Textbox
-                            hasLabels={Boolean(labels)}
-                            suggestionList={RhsSuggestionList}
-                            onChange={handleChange}
-                            onKeyPress={postMsgKeyPress}
-                            onKeyDown={handleKeyDown}
-                            onSelect={handleSelect}
-                            onMouseUp={handleMouseUpKeyUp}
-                            onKeyUp={handleMouseUpKeyUp}
-                            onComposition={emitTypingEvent}
-                            onHeightChange={handleHeightChange}
-                            handlePostError={handlePostError}
-                            value={messageValue}
-                            onBlur={handleBlur}
-                            emojiEnabled={enableEmojiPicker}
-                            createMessage={createMessage}
-                            channelId={channelId}
-                            id={textboxId}
-                            ref={textboxRef!}
-                            disabled={readOnlyChannel}
-                            hidden={draft.postType === Constants.PostTypes.VOICE}
-                            characterLimit={maxPostSize}
-                            preview={shouldShowPreview}
-                            badConnection={badConnection}
-                            useChannelMentions={useChannelMentions}
-                            rootId={postId}
-                            onWidthChange={handleWidthChange}
-                        />
-                        {attachmentPreview}
-                        {!readOnlyChannel && (showFormattingBar || shouldShowPreview) && (
-                            <TexteditorActions
-                                placement='top'
-                                isScrollbarRendered={renderScrollbar}
-                            >
-                                {showFormatJSX}
-                            </TexteditorActions>
-                        )}
-                        {showFormattingSpacer || shouldShowPreview || attachmentPreview ? (
-                            <FormattingBarSpacer>
-                                {formattingBar}
-                            </FormattingBarSpacer>
-                        ) : formattingBar}
-                        {!readOnlyChannel && (
-                            <TexteditorActions
-                                ref={editorActionsRef}
-                                placement='bottom'
-                            >
-                                <ToggleFormattingBar
-                                    onClick={toggleAdvanceTextEditor}
-                                    active={showFormattingBar}
-                                    disabled={shouldShowPreview}
+                        <GuestBanner channelId={channelId}/>
+                        <DndBanner channelId={channelId}/>
+                        {fileUploadOverlay}
+                        <div
+                            ref={editorBodyRef}
+                            role='application'
+                            id='advancedTextEditorCell'
+                            data-a11y-sort-order='2'
+                            aria-label={ariaLabel}
+                            tabIndex={-1}
+                            className='AdvancedTextEditor__cell a11y__region'
+                        >
+                            {!isInEditMode && priorityLabels}
+                            {/* IK: Prevent writing any text if we are doing a voice message */}
+                            {draft.postType !== Constants.PostTypes.VOICE && (
+                                <Textbox
+                                    hasLabels={isInEditMode ? false : Boolean(priorityLabels)}
+                                    suggestionList={location === Locations.RHS_COMMENT ? RhsSuggestionList : SuggestionList}
+                                    onChange={handleChange}
+                                    onKeyPress={postMsgKeyPress}
+                                    onKeyDown={handleKeyDown}
+                                    onMouseUp={handleMouseUpKeyUp}
+                                    onKeyUp={handleMouseUpKeyUp}
+                                    onComposition={emitTypingEvent}
+                                    onHeightChange={handleHeightChange}
+                                    handlePostError={handlePostError}
+                                    value={messageValue}
+                                    onBlur={handleBlur}
+                                    onFocus={handleFocus}
+                                    emojiEnabled={enableEmojiPicker}
+                                    createMessage={createMessage}
+                                    channelId={channelId}
+                                    id={textboxId}
+                                    ref={textboxRef!}
+                                    disabled={isDisabled}
+                                    characterLimit={maxPostSize}
+                                    preview={showPreview}
+                                    badConnection={badConnection}
+                                    useChannelMentions={useChannelMentions}
+                                    rootId={rootId}
+                                    onWidthChange={handleWidthChange}
+                                    isInEditMode={isInEditMode}
                                 />
-                                <Separator/>
-                                {fileUploadJSX}
-                                {emojiPicker}
-                                {voiceMessageButton}
-                                {sendButton}
-                            </TexteditorActions>
+                            )}
+                            {attachmentPreview}
+                            {!isDisabled && (showFormattingBar || showPreview) && (
+                                <TexteditorActions
+                                    placement='top'
+                                    isScrollbarRendered={renderScrollbar}
+                                >
+                                    {showFormatJSX}
+                                </TexteditorActions>
+                            )}
+                            {showFormattingSpacer ? (
+                                <FormattingBarSpacer>
+                                    {formattingBar}
+                                </FormattingBarSpacer>
+                            ) : formattingBar}
+                            {!isDisabled && (
+                                <TexteditorActions
+                                    ref={editorActionsRef}
+                                    placement='bottom'
+                                >
+                                    <ToggleFormattingBar
+                                        onClick={toggleAdvanceTextEditor}
+                                        active={showFormattingBar}
+                                        disabled={showPreview}
+                                    />
+                                    <Separator/>
+                                    {fileUploadJSX}
+                                    {emojiPicker}
+                                    {voiceMessageJSX}
+                                    {sendButton}
+                                </TexteditorActions>
+                            )}
+                        </div>
+                        {showSendTutorialTip && (
+                            <SendMessageTour
+                                prefillMessage={prefillMessage}
+                                channelId={channelId}
+                                currentUserId={currentUserId}
+                            />
                         )}
                     </div>
-                    {showSendTutorialTip && currentChannel && prefillMessage && (
-                        <SendMessageTour
-                            prefillMessage={prefillMessage}
-                            currentChannel={currentChannel}
-                            currentUserId={currentUserId}
-                            currentChannelTeammateUsername={currentChannelTeammateUsername}
-                        />
-                    )}
                 </div>
-            </div>
-            <div
-                id='postCreateFooter'
-                role='form'
-                className={classNames('AdvancedTextEditor__footer', {
-                    'AdvancedTextEditor__footer--has-error': postError || serverError,
-                })}
-            >
-                {postError && <label className={classNames('post-error', {errorClass})}>{postError}</label>}
-                {serverErrorJsx}
-                <MsgTyping
+                {isInEditMode && containsAtMentionsInMessage && (
+                    <MessageWithMentionsFooter/>
+                )}
+                <Footer
+                    postError={postError}
+                    errorClass={errorClass}
+                    serverError={serverError}
                     channelId={channelId}
-                    postId={postId}
+                    rootId={rootId}
+                    noArgumentHandleSubmit={handleSubmitWrapper}
+                    isInEditMode={isInEditMode}
                 />
-            </div>
-        </>
+                {isInEditMode && (
+                    <EditPostFooter
+                        onSave={handleSubmitWrapper}
+                        onCancel={handleCancel}
+                    />
+                )}
+                <div
+                    ref={messageStatusRef}
+                    aria-live='assertive'
+                    className='sr-only'
+                />
+            </form>
+        </IkChannelInputGuard>
     );
 };
 
-export default AdvanceTextEditor;
+export default AdvancedTextEditor;

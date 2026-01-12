@@ -13,8 +13,8 @@ import {makeGetDisplayName} from 'mattermost-redux/selectors/entities/users';
 
 import type {GlobalState} from 'types/store';
 
-import type {OwnProps} from './thread_item';
 import ThreadItem from './thread_item';
+import type {OwnProps} from './thread_item';
 
 function makeMapStateToProps() {
     const getPostsForThread = makeGetPostsForThread();
@@ -32,7 +32,7 @@ function makeMapStateToProps() {
 
         return {
             post,
-            channel: getChannel(state, {id: post.channel_id}),
+            channel: getChannel(state, post.channel_id),
             currentRelativeTeamUrl: getCurrentRelativeTeamUrl(state),
             displayName: getDisplayName(state, post.user_id, true),
             postsInThread: getPostsForThread(state, post.id),

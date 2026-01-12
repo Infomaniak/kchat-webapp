@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {useSelector} from 'react-redux';
-import {useLocation, matchPath} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 import type {Product} from '@mattermost/types/cloud';
 import type {ProductIdentifier, ProductScope} from '@mattermost/types/products';
@@ -13,20 +13,6 @@ import type {GlobalState} from 'types/store';
 import type {ProductComponent} from 'types/store/plugins';
 
 import {RecurringIntervals} from './constants';
-
-export const getCurrentProductId = (
-    products: ProductComponent[],
-    pathname: string,
-): ProductIdentifier => {
-    return getCurrentProduct(products, pathname)?.id ?? null;
-};
-
-export const getCurrentProduct = (
-    products: ProductComponent[],
-    pathname: string,
-): ProductComponent | null => {
-    return products?.find(({baseURL}) => matchPath(pathname, {path: baseURL, exact: false, strict: false})) ?? null;
-};
 
 export const useProducts = (): ProductComponent[] | undefined => {
     return useSelector(selectProducts);

@@ -1,4 +1,4 @@
 // Only for combining all the files in this folder
-@import 'loading/loading-bars';
-@import 'loading/loading-spinner';
-@import 'kdrive';
+@use 'loading/loading-bars';
+@use 'loading/loading-spinner';
+@use 'kdrive';

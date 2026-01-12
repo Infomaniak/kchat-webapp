@@ -1,318 +1,958 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/SystemNotice should match snapshot for admin, admin notice 1`] = `
-<div
-  className="system-notice bg--white shadow--2"
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction] {
+        "calls": Array [
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction] {
+        "calls": Array [
+          Array [
+            Object {
+              "defaultMessage": "Only visible to System Admins Icon",
+              "id": "system_notice.adminVisible.icon",
+            },
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+    }
+  }
+  isSystemAdmin={true}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": true,
+        "allowForget": true,
+        "body": "some body",
+        "icon": "icon-test",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+    ]
+  }
+  preferences={Object {}}
+  serverVersion="5.1"
 >
   <div
-    className="system-notice__header"
+    className="system-notice bg--white"
   >
     <div
       className="system-notice__logo"
     >
-      <MattermostLogo />
+      icon-test
     </div>
     <div
-      className="system-notice__title"
+      className="system-notice__body"
     >
-      some title
+      <div
+        className="system-notice__title"
+      >
+        some title
+      </div>
+      some body
+      <div
+        className="system-notice__info"
+      >
+        <i
+          className="fa fa-eye"
+        />
+        <FormattedMessage
+          defaultMessage="Only visible to System Admins"
+          id="system_notice.adminVisible"
+        >
+          <span>
+            Only visible to System Admins
+          </span>
+        </FormattedMessage>
+      </div>
+      <div
+        className="system-notice__footer"
+      >
+        <button
+          className="btn btn-sm btn-primary"
+          id="systemnotice_remindme"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Remind Me Later"
+            id="system_notice.remind_me"
+          >
+            <span>
+              Remind Me Later
+            </span>
+          </FormattedMessage>
+        </button>
+        <button
+          className="btn btn-sm btn-tertiary"
+          id="systemnotice_dontshow"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Don't Show Again"
+            id="system_notice.dont_show"
+          >
+            <span>
+              Don't Show Again
+            </span>
+          </FormattedMessage>
+        </button>
+      </div>
     </div>
   </div>
-  <div
-    className="system-notice__body"
-  >
-    some body
-  </div>
-  <div
-    className="system-notice__info"
-  >
-    <LocalizedIcon
-      className="fa fa-eye"
-      title={
-        Object {
-          "defaultMessage": "Only visible to System Admins Icon",
-          "id": "system_notice.adminVisible.icon",
-        }
-      }
-    />
-    <MemoizedFormattedMessage
-      defaultMessage="Only visible to System Admins"
-      id="system_notice.adminVisible"
-    />
-  </div>
-  <div
-    className="system-notice__footer"
-  >
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_remindme"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Remind Me Later"
-        id="system_notice.remind_me"
-      />
-    </button>
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_dontshow"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Don't Show Again"
-        id="system_notice.dont_show"
-      />
-    </button>
-  </div>
-</div>
+</SystemNotice>
 `;
 
 exports[`components/SystemNotice should match snapshot for admin, regular notice 1`] = `
-<div
-  className="system-notice bg--white shadow--2"
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction] {
+        "calls": Array [
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={true}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": false,
+        "allowForget": true,
+        "body": "some body",
+        "icon": "icon-test",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+    ]
+  }
+  preferences={Object {}}
+  serverVersion="5.1"
 >
   <div
-    className="system-notice__header"
+    className="system-notice bg--white"
   >
     <div
       className="system-notice__logo"
     >
-      <MattermostLogo />
+      icon-test
     </div>
     <div
-      className="system-notice__title"
+      className="system-notice__body"
     >
-      some title
+      <div
+        className="system-notice__title"
+      >
+        some title
+      </div>
+      some body
+      <div
+        className="system-notice__footer"
+      >
+        <button
+          className="btn btn-sm btn-primary"
+          id="systemnotice_remindme"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Remind Me Later"
+            id="system_notice.remind_me"
+          >
+            <span>
+              Remind Me Later
+            </span>
+          </FormattedMessage>
+        </button>
+        <button
+          className="btn btn-sm btn-tertiary"
+          id="systemnotice_dontshow"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Don't Show Again"
+            id="system_notice.dont_show"
+          >
+            <span>
+              Don't Show Again
+            </span>
+          </FormattedMessage>
+        </button>
+      </div>
     </div>
   </div>
-  <div
-    className="system-notice__body"
-  >
-    some body
-  </div>
-  <div
-    className="system-notice__footer"
-  >
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_remindme"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Remind Me Later"
-        id="system_notice.remind_me"
-      />
-    </button>
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_dontshow"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Don't Show Again"
-        id="system_notice.dont_show"
-      />
-    </button>
-  </div>
-</div>
+</SystemNotice>
 `;
 
 exports[`components/SystemNotice should match snapshot for regular user, admin and regular notice 1`] = `
-<div
-  className="system-notice bg--white shadow--2"
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction],
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={false}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": true,
+        "allowForget": true,
+        "body": "some body",
+        "icon": "icon-test",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+      Object {
+        "adminOnly": false,
+        "allowForget": true,
+        "body": "some body2",
+        "icon": "icon-test",
+        "name": "notice2",
+        "show": [Function],
+        "title": "some title2",
+      },
+    ]
+  }
+  preferences={Object {}}
+  serverVersion="5.1"
 >
   <div
-    className="system-notice__header"
+    className="system-notice bg--white"
   >
     <div
       className="system-notice__logo"
     >
-      <MattermostLogo />
+      icon-test
     </div>
     <div
-      className="system-notice__title"
+      className="system-notice__body"
     >
-      some title2
+      <div
+        className="system-notice__title"
+      >
+        some title2
+      </div>
+      some body2
+      <div
+        className="system-notice__footer"
+      >
+        <button
+          className="btn btn-sm btn-primary"
+          id="systemnotice_remindme"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Remind Me Later"
+            id="system_notice.remind_me"
+          >
+            <span>
+              Remind Me Later
+            </span>
+          </FormattedMessage>
+        </button>
+        <button
+          className="btn btn-sm btn-tertiary"
+          id="systemnotice_dontshow"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Don't Show Again"
+            id="system_notice.dont_show"
+          >
+            <span>
+              Don't Show Again
+            </span>
+          </FormattedMessage>
+        </button>
+      </div>
     </div>
   </div>
-  <div
-    className="system-notice__body"
-  >
-    some body2
-  </div>
-  <div
-    className="system-notice__footer"
-  >
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_remindme"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Remind Me Later"
-        id="system_notice.remind_me"
-      />
-    </button>
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_dontshow"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Don't Show Again"
-        id="system_notice.dont_show"
-      />
-    </button>
-  </div>
-</div>
+</SystemNotice>
 `;
 
-exports[`components/SystemNotice should match snapshot for regular user, admin notice 1`] = `""`;
+exports[`components/SystemNotice should match snapshot for regular user, admin notice 1`] = `
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction],
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={false}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": true,
+        "allowForget": true,
+        "body": "some body",
+        "icon": "icon-test",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+    ]
+  }
+  preferences={Object {}}
+  serverVersion="5.1"
+/>
+`;
 
-exports[`components/SystemNotice should match snapshot for regular user, dismissed notice 1`] = `""`;
+exports[`components/SystemNotice should match snapshot for regular user, dismissed notice 1`] = `
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction],
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={
+    Object {
+      "notice1": true,
+    }
+  }
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={false}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": false,
+        "allowForget": true,
+        "body": "some body",
+        "icon": "icon-test",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+    ]
+  }
+  preferences={Object {}}
+  serverVersion="5.1"
+/>
+`;
 
-exports[`components/SystemNotice should match snapshot for regular user, dont show again notice 1`] = `""`;
+exports[`components/SystemNotice should match snapshot for regular user, dont show again notice 1`] = `
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction],
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={false}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": false,
+        "allowForget": true,
+        "body": "some body",
+        "icon": "icon-test",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+    ]
+  }
+  preferences={
+    Object {
+      "notice1": Object {},
+    }
+  }
+  serverVersion="5.1"
+/>
+`;
 
-exports[`components/SystemNotice should match snapshot for regular user, no notice 1`] = `""`;
+exports[`components/SystemNotice should match snapshot for regular user, no notice 1`] = `
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction],
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={false}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={Array []}
+  preferences={Object {}}
+  serverVersion="5.1"
+/>
+`;
 
 exports[`components/SystemNotice should match snapshot for regular user, regular notice 1`] = `
-<div
-  className="system-notice bg--white shadow--2"
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction],
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={false}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": false,
+        "allowForget": true,
+        "body": "some body",
+        "icon": "icon-test",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+    ]
+  }
+  preferences={Object {}}
+  serverVersion="5.1"
 >
   <div
-    className="system-notice__header"
+    className="system-notice bg--white"
   >
     <div
       className="system-notice__logo"
     >
-      <MattermostLogo />
+      icon-test
     </div>
     <div
-      className="system-notice__title"
+      className="system-notice__body"
     >
-      some title
+      <div
+        className="system-notice__title"
+      >
+        some title
+      </div>
+      some body
+      <div
+        className="system-notice__footer"
+      >
+        <button
+          className="btn btn-sm btn-primary"
+          id="systemnotice_remindme"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Remind Me Later"
+            id="system_notice.remind_me"
+          >
+            <span>
+              Remind Me Later
+            </span>
+          </FormattedMessage>
+        </button>
+        <button
+          className="btn btn-sm btn-tertiary"
+          id="systemnotice_dontshow"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Don't Show Again"
+            id="system_notice.dont_show"
+          >
+            <span>
+              Don't Show Again
+            </span>
+          </FormattedMessage>
+        </button>
+      </div>
     </div>
   </div>
-  <div
-    className="system-notice__body"
-  >
-    some body
-  </div>
-  <div
-    className="system-notice__footer"
-  >
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_remindme"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Remind Me Later"
-        id="system_notice.remind_me"
-      />
-    </button>
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_dontshow"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Don't Show Again"
-        id="system_notice.dont_show"
-      />
-    </button>
-  </div>
-</div>
+</SystemNotice>
 `;
 
-exports[`components/SystemNotice should match snapshot for show function returning false 1`] = `""`;
+exports[`components/SystemNotice should match snapshot for show function returning false 1`] = `
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction],
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={false}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": false,
+        "allowForget": true,
+        "body": "some body",
+        "icon": "icon-test",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+    ]
+  }
+  preferences={Object {}}
+  serverVersion="5.1"
+/>
+`;
 
 exports[`components/SystemNotice should match snapshot for show function returning true 1`] = `
-<div
-  className="system-notice bg--white shadow--2"
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction],
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={false}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": false,
+        "allowForget": true,
+        "body": "some body",
+        "icon": "icon-test",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+    ]
+  }
+  preferences={Object {}}
+  serverVersion="5.1"
 >
   <div
-    className="system-notice__header"
+    className="system-notice bg--white"
   >
     <div
       className="system-notice__logo"
     >
-      <MattermostLogo />
+      icon-test
     </div>
     <div
-      className="system-notice__title"
+      className="system-notice__body"
     >
-      some title
+      <div
+        className="system-notice__title"
+      >
+        some title
+      </div>
+      some body
+      <div
+        className="system-notice__footer"
+      >
+        <button
+          className="btn btn-sm btn-primary"
+          id="systemnotice_remindme"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Remind Me Later"
+            id="system_notice.remind_me"
+          >
+            <span>
+              Remind Me Later
+            </span>
+          </FormattedMessage>
+        </button>
+        <button
+          className="btn btn-sm btn-tertiary"
+          id="systemnotice_dontshow"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Don't Show Again"
+            id="system_notice.dont_show"
+          >
+            <span>
+              Don't Show Again
+            </span>
+          </FormattedMessage>
+        </button>
+      </div>
     </div>
   </div>
-  <div
-    className="system-notice__body"
-  >
-    some body
-  </div>
-  <div
-    className="system-notice__footer"
-  >
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_remindme"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Remind Me Later"
-        id="system_notice.remind_me"
-      />
-    </button>
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_dontshow"
-      onClick={[Function]}
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Don't Show Again"
-        id="system_notice.dont_show"
-      />
-    </button>
-  </div>
-</div>
+</SystemNotice>
 `;
 
 exports[`components/SystemNotice should match snapshot for with allowForget equal false 1`] = `
-<div
-  className="system-notice bg--white shadow--2"
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction],
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={false}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": false,
+        "allowForget": false,
+        "body": "some body",
+        "icon": "icon-test",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+    ]
+  }
+  preferences={Object {}}
+  serverVersion="5.1"
 >
   <div
-    className="system-notice__header"
+    className="system-notice bg--white"
   >
     <div
       className="system-notice__logo"
     >
-      <MattermostLogo />
+      icon-test
     </div>
     <div
-      className="system-notice__title"
+      className="system-notice__body"
     >
-      some title
+      <div
+        className="system-notice__title"
+      >
+        some title
+      </div>
+      some body
+      <div
+        className="system-notice__footer"
+      >
+        <button
+          className="btn btn-sm btn-primary"
+          id="systemnotice_remindme"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Remind Me Later"
+            id="system_notice.remind_me"
+          >
+            <span>
+              Remind Me Later
+            </span>
+          </FormattedMessage>
+        </button>
+      </div>
     </div>
   </div>
+</SystemNotice>
+`;
+
+exports[`components/SystemNotice should match snapshot when a custom icon is passed 1`] = `
+<SystemNotice
+  actions={
+    Object {
+      "dismissNotice": [MockFunction],
+      "getStandardAnalytics": [MockFunction],
+      "savePreferences": [MockFunction],
+    }
+  }
+  analytics={
+    Object {
+      "TOTAL_USERS": 300,
+    }
+  }
+  config={Object {}}
+  currentUserId="someid"
+  dismissedNotices={Object {}}
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  isSystemAdmin={false}
+  license={
+    Object {
+      "IsLicensed": "true",
+    }
+  }
+  notices={
+    Array [
+      Object {
+        "adminOnly": false,
+        "allowForget": true,
+        "body": "some body",
+        "icon": "icon-custom",
+        "name": "notice1",
+        "show": [Function],
+        "title": "some title",
+      },
+    ]
+  }
+  preferences={Object {}}
+  serverVersion="5.1"
+>
   <div
-    className="system-notice__body"
+    className="system-notice bg--white"
   >
-    some body
-  </div>
-  <div
-    className="system-notice__footer"
-  >
-    <button
-      className="btn btn-transparent"
-      id="systemnotice_remindme"
-      onClick={[Function]}
+    <div
+      className="system-notice__logo"
     >
-      <MemoizedFormattedMessage
-        defaultMessage="Remind Me Later"
-        id="system_notice.remind_me"
-      />
-    </button>
+      icon-custom
+    </div>
+    <div
+      className="system-notice__body"
+    >
+      <div
+        className="system-notice__title"
+      >
+        some title
+      </div>
+      some body
+      <div
+        className="system-notice__footer"
+      >
+        <button
+          className="btn btn-sm btn-primary"
+          id="systemnotice_remindme"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Remind Me Later"
+            id="system_notice.remind_me"
+          >
+            <span>
+              Remind Me Later
+            </span>
+          </FormattedMessage>
+        </button>
+        <button
+          className="btn btn-sm btn-tertiary"
+          id="systemnotice_dontshow"
+          onClick={[Function]}
+        >
+          <FormattedMessage
+            defaultMessage="Don't Show Again"
+            id="system_notice.dont_show"
+          >
+            <span>
+              Don't Show Again
+            </span>
+          </FormattedMessage>
+        </button>
+      </div>
+    </div>
   </div>
-</div>
+</SystemNotice>
 `;

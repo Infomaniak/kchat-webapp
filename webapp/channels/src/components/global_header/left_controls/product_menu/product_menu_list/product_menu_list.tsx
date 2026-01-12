@@ -16,10 +16,8 @@ import TeamPermissionGate from 'components/permissions_gates/team_permission_gat
 import MarketplaceModal from 'components/plugin_marketplace';
 import UserGroupsModal from 'components/user_groups_modal';
 import Menu from 'components/widgets/menu/menu';
-import RestrictedIndicator from 'components/widgets/menu/menu_items/restricted_indicator';
 
-import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
-import {LicenseSkus, ModalIdentifiers, MattermostFeatures} from 'utils/constants';
+import {ModalIdentifiers} from 'utils/constants';
 import {makeUrlSafe} from 'utils/url';
 import * as UserAgent from 'utils/user_agent';
 
@@ -29,8 +27,8 @@ import './product_menu_list.scss';
 
 export type Props = {
     isMobile: boolean;
-    teamId: string;
-    teamName: string;
+    teamId?: string;
+    teamName?: string;
     siteName: string;
     currentUser: UserProfile;
     appDownloadLink: string;
@@ -103,15 +101,6 @@ const ProductMenuList = (props: Props): JSX.Element | null => {
     return (
         <Menu.Group>
             <div onClick={onClick}>
-                <Menu.CloudTrial id='menuCloudTrial'/>
-                <Menu.ItemCloudLimit id='menuItemCloudLimit'/>
-                <SystemPermissionGate
-                    permissions={[Permissions.SYSCONSOLE_WRITE_ABOUT_EDITION_AND_LICENSE]}
-                >
-                    <Menu.StartTrial
-                        id='startTrial'
-                    />
-                </SystemPermissionGate>
                 <SystemPermissionGate permissions={Permissions.SYSCONSOLE_READ_PERMISSIONS}>
                     <Menu.ItemLink
                         id='systemConsole'
@@ -166,45 +155,6 @@ const ProductMenuList = (props: Props): JSX.Element | null => {
                         />
                     }
                     disabled={isStarterFree}
-                    sibling={(isStarterFree || isFreeTrial) && (
-                        <RestrictedIndicator
-                            blocked={isStarterFree}
-                            feature={MattermostFeatures.CUSTOM_USER_GROUPS}
-                            minimumPlanRequiredForFeature={LicenseSkus.Professional}
-                            tooltipMessage={formatMessage({
-                                id: 'navbar_dropdown.userGroups.tooltip.cloudFreeTrial',
-                                defaultMessage: 'During your trial you are able to create user groups. These user groups will be archived after your trial.',
-                            })}
-                            titleAdminPreTrial={formatMessage({
-                                id: 'navbar_dropdown.userGroups.modal.titleAdminPreTrial',
-                                defaultMessage: 'Try unlimited user groups with a free trial',
-                            })}
-                            messageAdminPreTrial={formatMessage({
-                                id: 'navbar_dropdown.userGroups.modal.messageAdminPreTrial',
-                                defaultMessage: 'Create unlimited user groups with one of our paid plans. Get the full experience of Enterprise when you start a free, {trialLength} day trial.',
-                            },
-                            {
-                                trialLength: FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS,
-                            },
-                            )}
-                            titleAdminPostTrial={formatMessage({
-                                id: 'navbar_dropdown.userGroups.modal.titleAdminPostTrial',
-                                defaultMessage: 'Upgrade to create unlimited user groups',
-                            })}
-                            messageAdminPostTrial={formatMessage({
-                                id: 'navbar_dropdown.userGroups.modal.messageAdminPostTrial',
-                                defaultMessage: 'User groups are a way to organize users and apply actions to all users within that group. Upgrade to the Professional plan to create unlimited user groups.',
-                            })}
-                            titleEndUser={formatMessage({
-                                id: 'navbar_dropdown.userGroups.modal.titleEndUser',
-                                defaultMessage: 'User groups available in paid plans',
-                            })}
-                            messageEndUser={formatMessage({
-                                id: 'navbar_dropdown.userGroups.modal.messageEndUser',
-                                defaultMessage: 'User groups are a way to organize users and apply actions to all users within that group.',
-                            })}
-                        />
-                    )}
                 />
                 <TeamPermissionGate
                     teamId={teamId}

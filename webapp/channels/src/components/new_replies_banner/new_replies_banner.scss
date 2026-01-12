@@ -1,11 +1,14 @@
 .new-replies-banner {
     position: absolute;
+    z-index: 6;
     bottom: 56px;
     display: flex;
     justify-content: center;
 
     .toast {
-        width: 156px;
+        // Infomaniak diff
+        width: 210px;
+        border-radius: 15px;
 
         .toast__jump ~ span {
             margin-left: 24px;

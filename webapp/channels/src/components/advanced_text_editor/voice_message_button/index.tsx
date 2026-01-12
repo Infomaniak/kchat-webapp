@@ -12,8 +12,7 @@ import type {Post, PostType} from '@mattermost/types/posts';
 import {isVoiceMessagesEnabled} from 'selectors/views/textbox';
 
 import {IconContainer} from 'components/advanced_text_editor/formatting_bar/formatting_icon';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
+import WithTooltip from 'components/with_tooltip';
 
 import Constants, {Locations} from 'utils/constants';
 
@@ -51,19 +50,13 @@ const VoiceButton = (props: Props) => {
     }
 
     return (
-        <OverlayTrigger
-            placement='left'
-            delayShow={Constants.OVERLAY_TIME_DELAY}
-            trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
-            rootClose={true}
+        <WithTooltip
             disabled={props.disabled}
-            overlay={
-                <Tooltip id='voiceMessageButtonTooltip'>
-                    <FormattedMessage
-                        id={'advanceTextEditor.voiceMessageButton.tooltip'}
-                        defaultMessage='Voice message'
-                    />
-                </Tooltip>}
+            title={(
+                <FormattedMessage
+                    id={'advanceTextEditor.voiceMessageButton.tooltip'}
+                    defaultMessage='Voice message'
+                />)}
         >
             <IconContainer
                 id='voiceMessageButton'
@@ -77,7 +70,7 @@ const VoiceButton = (props: Props) => {
                     color={'currentColor'}
                 />
             </IconContainer>
-        </OverlayTrigger>
+        </WithTooltip >
     );
 };
 

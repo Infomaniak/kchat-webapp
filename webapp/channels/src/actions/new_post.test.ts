@@ -1,21 +1,18 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-// import thunk from 'redux-thunk';
-// import configureStore from 'redux-mock-store';
-
 import type {Post} from '@mattermost/types/posts';
 import type {GlobalState} from '@mattermost/types/store';
 
 import {ChannelTypes} from 'mattermost-redux/action_types';
 import {receivedNewPost} from 'mattermost-redux/actions/posts';
 import {Posts} from 'mattermost-redux/constants';
-import type {GetStateFunc} from 'mattermost-redux/types/actions';
 
 import * as NewPostActions from 'actions/new_post';
 
-import mockStore from 'tests/test_store';
 import {Constants} from 'utils/constants';
+
+import mockStore from 'tests/test_store';
 
 jest.mock('mattermost-redux/actions/channels', () => ({
     ...jest.requireActual('mattermost-redux/actions/channels'),
@@ -78,6 +75,9 @@ describe('actions/new_post', () => {
             },
             users: {
                 currentUserId: 'current_user_id',
+                profiles: {
+                    current_user_id: {},
+                },
             },
             general: {
                 license: {IsLicensed: 'false'},
@@ -87,6 +87,11 @@ describe('actions/new_post', () => {
             },
             preferences: {
                 myPreferences: {},
+            },
+            ksuiteBridge: {
+                bridge: {
+                    isConnected: false,
+                },
             },
         },
         views: {
@@ -99,7 +104,17 @@ describe('actions/new_post', () => {
     test('completePostReceive', async () => {
         const testStore = mockStore(initialState);
         const newPost = {id: 'new_post_id', channel_id: 'current_channel_id', message: 'new message', type: Constants.PostTypes.ADD_TO_CHANNEL, user_id: 'some_user_id', create_at: POST_CREATED_TIME, props: {addedUserId: 'other_user_id'}} as unknown as Post;
-        const websocketProps = {team_id: 'team_id', mentions: ['current_user_id']};
+        const websocketProps: NewPostActions.NewPostMessageProps = {
+            team_id: 'team_id',
+            mentions: JSON.stringify(['current_user_id']),
+            should_ack: false,
+            channel_display_name: '',
+            channel_name: '',
+            channel_type: 'P',
+            post: JSON.stringify(newPost),
+            sender_name: '',
+            set_online: false,
+        };
 
         await testStore.dispatch(NewPostActions.completePostReceive(newPost, websocketProps));
         expect(testStore.getActions()).toEqual([
@@ -158,7 +173,7 @@ describe('actions/new_post', () => {
 
             window.isActive = true;
 
-            const actions = NewPostActions.setChannelReadAndViewed(testStore.dispatch, testStore.getState as GetStateFunc, post2, newPostMessageProps, false);
+            const actions = NewPostActions.setChannelReadAndViewed(testStore.dispatch, testStore.getState, post2, newPostMessageProps, false);
 
             expect(actions).toMatchObject([
                 {
@@ -174,7 +189,7 @@ describe('actions/new_post', () => {
                     },
                 },
                 {
-                    type: ChannelTypes.RECEIVED_MY_CHANNEL_MEMBER,
+                    type: ChannelTypes.RECEIVED_LAST_VIEWED_AT,
                     data: {
                         channel_id: channelId,
                     },
@@ -377,7 +392,7 @@ describe('actions/new_post', () => {
                     },
                 },
                 {
-                    type: ChannelTypes.RECEIVED_MY_CHANNEL_MEMBER,
+                    type: ChannelTypes.RECEIVED_LAST_VIEWED_AT,
                     data: {
                         channel_id: channelId,
                     },

@@ -1,9 +1,13 @@
+@use "utils/functions";
+@use "utils/mixins";
+@use "utils/variables";
+
 .backstage-navbar {
     z-index: 100;
-    height: $backstage-bar-height;
+    height: variables.$backstage-bar-height;
     padding: 10px 20px;
-    border-bottom: 1px solid $light-gray;
-    background: $white;
+    border-bottom: 1px solid var(--ik-integration-header-border);
+    background: var(--ik-integration-header-color);
     grid-area: header;
 }
 
@@ -25,17 +29,17 @@
 }
 
 .backstage-body {
-    overflow-y: scroll;
     width: 100%;
-    background-color: $bg--gray;
-    grid-area: center;
+    background-color: var(--ik-backstage-body);
+    grid-area: main;
+    overflow-y: scroll;
 }
 
 .backstage-content {
     max-width: 1200px;
     padding-left: 135px;
     margin: 46px auto;
-    background-color: $bg--gray;
+    background-color: var(--ik-backstage-body);
     vertical-align: top;
 
     @media screen and (min-width: 1920px) {
@@ -45,11 +49,10 @@
 
 .backstage-sidebar {
     position: absolute;
-    width: 260px;
-    height: 100vh;
+    width: 270px;
     padding: 46px 20px;
+    background-color: var(--ik-backstage-body);
     vertical-align: top;
-    background-color: $bg--gray;
 
     ul {
         padding: 0;
@@ -57,11 +60,11 @@
     }
 
     > ul {
-        @include clearfix;
-
-        border-right: 1px solid $light-gray;
-        border-left: 1px solid $light-gray;
+        @include mixins.clearfix;
         border-radius: 2px;
+
+        border-right: 1px solid var(--ik-integration-header-border);
+        border-left: 1px solid var(--ik-integration-header-border);
     }
 }
 
@@ -76,9 +79,9 @@
         position: relative;
         display: block;
         padding: 0 10px;
-        border-top: 1px solid $light-gray;
-        border-bottom: 1px solid $light-gray;
-        color: $black;
+        border-top: 1px solid var(--ik-integration-header-border);
+        border-bottom: 1px solid var(--ik-integration-header-border);
+        color: var(--ik-backstage-text);
         line-height: 35px;
 
         .fa {
@@ -95,8 +98,8 @@
     }
 
     .category-title--active {
-        background-color: $primary-color;
-        color: $white;
+        background-color: variables.$primary-color;
+        color: variables.$white;
 
         .fa {
             opacity: 1;
@@ -109,16 +112,16 @@
     }
 
     .sections {
-        border-bottom: 1px solid $light-gray;
-        background: $white;
+        border-bottom: 1px solid var(--ik-integration-header-border);
+        background: var(--ik-backstage-body);
     }
 
     .section-title,
     .subsection-title {
         display: block;
-        padding-left: 2em;
+        padding: 6px 12px 6px 34px;
         font-size: 0.95em;
-        line-height: 29px;
+        line-height: 20px;
         text-decoration: none;
     }
 
@@ -128,24 +131,25 @@
 
     .section-title--active,
     .subsection-title--active {
-        background-color: $primary-color;
-        color: $white;
+        background-color: variables.$primary-color;
+        color: variables.$white;
         font-weight: 600;
     }
 }
 
 .backstage-header__divider {
     margin: 0 10px;
-    color: $gray;
+    color: variables.$gray;
 }
 
 .backstage-header {
-    @include clearfix;
+    @include mixins.clearfix;
 
     display: flex;
     width: 100%;
     justify-content: space-between;
     margin-bottom: 20px;
+    color: var(--ik-backstage-text);
 
     h1 {
         margin: 5px 0;
@@ -189,31 +193,36 @@
         position: absolute;
         top: 11px;
         left: 11px;
+        color: #23A1FE;
         opacity: 0.4;
     }
 
     input {
         padding-left: 30px;
-        background: $white;
+        border: none;
+        background: var(--ik-background-input);
     }
 }
 
 .backstage-list {
+    overflow: auto; // Infomaniak
     min-height: 50px;
     padding: 5px 15px;
-    border: 1px solid $light-gray;
-    background-color: $white;
+    border: 1px solid var(--ik-integration-header-border);
+    background-color: var(--ik-backstage-background);
+    color: var(--center-channel-color);
 }
 
 .backstage-list__help {
     display: block;
     margin: 1em 0;
+    color: var(--center-channel-color);
 }
 
 .backstage-list__item {
     position: relative;
     padding: 20px 15px;
-    border-bottom: 1px solid $light-gray;
+    border-bottom: 1px solid variables.$light-gray;
 
     &:last-child {
         border: none;
@@ -231,8 +240,13 @@
     }
 
     .item-details__row + .item-details__row {
-        @include clearfix;
+        @include mixins.clearfix;
+
         text-overflow: ellipsis;
+    }
+
+    .item-actions {
+        margin-left: 6px;
     }
 
     .item-details__trigger {
@@ -265,8 +279,9 @@
 .backstage-form {
     position: relative;
     padding: 40px 30px 30px;
-    border: 1px solid $light-gray;
-    background-color: $white;
+    border: 1px solid var(--ik-integration-header-border);
+    background-color: var(--ik-backstage-background);
+    color: var(--ik-backstage-text);
 
     &.backstage-form__confirmation {
         padding: 30px 30px 20px;
@@ -292,16 +307,17 @@
     }
 
     .form-control {
-        background: $white;
+        border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+        background: var(--center-channel-bg);
+
 
         &:focus {
-            border-color: $primary-color;
+            border-color: variables.$primary-color;
         }
     }
 
     .form__help {
         margin-top: 1em;
-        color: $dark-gray;
         font-size: 0.95em;
 
         & + .form__help {
@@ -313,7 +329,7 @@
 .backstage-form__footer {
     overflow: hidden;
     padding-top: 1.8em;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid variables.$light-gray;
     margin-top: 2.5em;
     text-align: right;
 
@@ -330,13 +346,13 @@
 }
 
 .integrations-list {
+    display: flex;
     width: 100%;
     min-height: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    display: flex;
     flex-wrap: wrap;
     gap: 30px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .integration__icon {
@@ -353,13 +369,13 @@
 .integration-option {
     flex: 0 0 45%;
     padding: 20px;
-    border: 1px solid $light-gray;
-    background-color: $white;
+    border: 1px solid var(--ik-integration-header-border);
     border-radius: 4px;
+    background-color: var(--ik-backstage-background);
     text-align: center;
     transition: all 0.2s ease;
 
-    @media screen and (max-width: 360px) {
+    @media screen and (max-width: 768px) {
         flex: 0 0 100%;
     }
 
@@ -386,11 +402,11 @@
 
 .integration-option__title {
     margin-bottom: 10px;
-    color: $black;
+    color: var(--center-channel-color);;
 }
 
 .integration-option__description {
-    color: $dark-gray;
+    color: var(--center-channel-color);;
 }
 
 .emoji-list__table {
@@ -398,6 +414,16 @@
 
     .backstage-list__item {
         display: table-row;
+
+        // Infomaniak
+        td {
+            white-space: nowrap;
+        }
+
+
+        & td:not(:last-child) {
+            padding-right: 10px;
+        }
     }
 
     .backstage-list__empty td {
@@ -451,15 +477,15 @@
 }
 
 .bot-list {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    margin-top: 12px;
+    border: 1px solid var(--ik-integration-header-border);
     border-radius: 4px;
+    margin-top: 12px;
     line-height: 24px;
 }
 
 .bot-list__item {
     padding: 8px 12px;
-    background: alpha-color($black, 0.02);
+    background: functions.alpha-color(variables.$black, 0.02);
     font-size: 13px;
 
     &:first-child {
@@ -467,13 +493,13 @@
     }
 
     &:hover {
-        background: alpha-color($black, 0.06);
+        background: functions.alpha-color(variables.$black, 0.06);
     }
 
     &.alert {
         padding: 12px;
-        margin: 0;
         border-radius: 0;
+        margin: 0;
     }
 
     .form-horizontal {
@@ -517,8 +543,8 @@
     width: 32px;
     height: 32px;
     flex: 0 0 32px;
-    margin-right: 15px;
     border-radius: 50%;
+    margin-right: 15px;
     float: left;
 }
 
@@ -531,8 +557,8 @@
     overflow: hidden;
     width: 129px;
     height: 129px;
-    margin-bottom: 20px;
     border-radius: 50%;
+    margin-bottom: 20px;
 }
 
 .bot-profile__remove {
@@ -544,9 +570,9 @@
     height: 26px;
     align-items: center;
     justify-content: center;
-    background: $black;
     border-radius: 50%;
-    color: $white;
+    background: variables.$black;
+    color: variables.$white;
     text-decoration: none;
     transition: all 0.15s ease;
 
@@ -563,14 +589,90 @@
 
 .bot-list__disabled {
     .item-details {
-        color: rgba($black, 0.6);
+        color: rgba(variables.$black, 0.75);
     }
 
     .bot-list {
-        opacity: 0.6;
+        opacity: 0.73;
     }
 }
 
 .bot-token-has-error {
     color: #a94442;
+}
+
+.outgoing-oauth-connections-edit-secret {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    cursor: pointer;
+
+    .icon-pencil-outline {
+        opacity: 56%;
+    }
+}
+
+.outgoing-oauth-connection-validate-button-container {
+    height: 40px;
+    margin-top: 10px;
+}
+
+.outgoing-oauth-connection-validation-message {
+    &.validation-success {
+        color: #06d6a0;
+    }
+
+    &.validation-error {
+        color: #d24b4e;
+    }
+
+    svg {
+        margin-right: 5px;
+        // margin-top: 2px;
+    }
+
+    display: flex;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.outgoing-oauth-connections-docs-link {
+    margin-top: 40px;
+}
+
+.outgoing-oauth-audience-match-message-container {
+    height: 27px;
+
+    > span {
+        position: absolute;
+        top: 45px;
+    }
+
+    .outgoing-oauth-audience-match-message {
+        left: 42px;
+    }
+}
+
+#confirmModal.integrations-backstage-modal {
+    #confirmModalLabel,
+    #confirmModalBody {
+        color: rgb(51, 51, 51);
+    }
+
+    #confirmModalBody p {
+        height: 30px;
+    }
+}
+
+.integrations-backstage-modal {
+    .modal-content {
+        .modal-title {
+            color:rgb(51, 51, 51) !important;
+
+        }
+        .alert-danger {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+    }
 }

@@ -3,7 +3,8 @@
 
 import React from 'react';
 
-const SvgIlluErrorMaintenance = (props) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const SvgIlluErrorMaintenance = (props: any) => {
     return (
         <svg
             width='240'

@@ -1,26 +1,28 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {capitalize as caps, isArray} from 'lodash';
+import caps from 'lodash/capitalize';
+import isArray from 'lodash/isArray';
+import upperFirst from 'lodash/upperFirst';
 import type {Moment} from 'moment-timezone';
 import moment from 'moment-timezone';
-import type {ReactNode} from 'react';
 import React, {PureComponent} from 'react';
-import type {
-    IntlShape,
-    FormatDateOptions,
-    FormatRelativeTimeOptions} from 'react-intl';
+import type {ReactNode} from 'react';
 import {
     injectIntl,
     FormattedMessage,
 } from 'react-intl';
+import type {
+    IntlShape,
+    FormatDateOptions,
+    FormatRelativeTimeOptions} from 'react-intl';
 import {isValidElementType} from 'react-is';
 
 import type {RequireOnlyOne} from '@mattermost/types/utilities';
 
 import {isSameYear, isWithin, isEqual, getDiff} from 'utils/datetime';
-import type {Resolvable} from 'utils/resolvable';
 import {resolve} from 'utils/resolvable';
+import type {Resolvable} from 'utils/resolvable';
 
 import {STANDARD_UNITS} from './relative_ranges';
 import SemanticTime from './semantic_time';
@@ -258,7 +260,10 @@ class Timestamp extends PureComponent<Props, State> {
     formatDateTime(value: Date, format: DateTimeOptions): string {
         const {timeZone, intl: {locale}} = this.props;
 
-        return (new Intl.DateTimeFormat(locale, {timeZone, ...format} as any)).format(value); // TODO remove any when React-Intl is next updated
+        // IK: Use en-GB for English to get UK date format (DD/MM/YYYY) instead of US format (MM/DD/YYYY)
+        const normalizedLocale = locale === 'en' ? 'en-GB' : locale;
+
+        return (new Intl.DateTimeFormat(normalizedLocale, {timeZone, ...format})).format(value);
     }
 
     static momentTime(value: Moment, {hour, minute, hourCycle, hour12}: DateTimeOptions): string | undefined {
@@ -342,13 +347,9 @@ class Timestamp extends PureComponent<Props, State> {
             weekday,
             hour,
             minute,
-            timeZone,
             useDate = (): ResolvedFormats['date'] => {
-                if (isWithin(value, this.state.now, timeZone, 'day', -6)) {
-                    return {weekday};
-                }
                 if (isSameYear(value)) {
-                    return {day, month};
+                    return {weekday, day, month};
                 }
 
                 return {year, month, day};
@@ -391,17 +392,23 @@ class Timestamp extends PureComponent<Props, State> {
         }, relative.updateIntervalInSeconds * 1000);
     }
 
-    static format({relative, date, time}: FormattedParts): ReactNode {
-        return (relative || date) && time ? (
+    static format({relative, date, time}: FormattedParts, capitalize?: boolean): ReactNode {
+        let relativeOrDate = relative || date;
+
+        if (typeof relativeOrDate === 'string') {
+            relativeOrDate = capitalize ? upperFirst(relativeOrDate) : relativeOrDate;
+        }
+
+        return relativeOrDate && time ? (
             <FormattedMessage
                 id='timestamp.datetime'
                 defaultMessage='{relativeOrDate} at {time}'
                 values={{
-                    relativeOrDate: relative || date,
+                    relativeOrDate,
                     time,
                 }}
             />
-        ) : relative || date || time;
+        ) : relativeOrDate || time;
     }
 
     static formatLabel(value: Date, timeZone?: string) {
@@ -427,7 +434,7 @@ class Timestamp extends PureComponent<Props, State> {
         const value = unparsed instanceof Date ? unparsed : new Date(unparsed);
         const formats = this.getFormats(value);
         const parts = this.formatParts(value, formats);
-        let formatted = Timestamp.format(parts);
+        let formatted = Timestamp.format(parts, this.props.capitalize);
 
         if (useSemanticOutput) {
             formatted = (

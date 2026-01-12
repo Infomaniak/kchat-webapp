@@ -1,263 +1,485 @@
-include:
+stages:
+  - translations
+  - build
+  - lint
+  - test_unit
+  - test_e2e
+  - release
+  - deploy
+
+# include:
   # - template: Security/SAST.gitlab-ci.yml
   # - template: Security/Container-Scanning.gitlab-ci.yml
   # - template: Code-Quality.gitlab-ci.yml
-  - project: 'docker-public/gitlab-triage'
-    ref: master
-    file: '/gitlab-triage.yaml'
+  # - project: "docker-public/gitlab-triage"
+  #   ref: master
+  #   file: "/gitlab-triage.yaml"
 
 variables:
-  SAST_DISABLED: "true"
-  WEEKLY_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/994e7a29-4b7f-4fd5-a194-5eea8ac49bc2
+  KANIKO_VERSION: "debug" # https://github.com/GoogleContainerTools/kaniko/releases
+  MINIO_CLIENT_VERSION: "RELEASE.2022-11-07T23-47-39Z" # https://hub.docker.com/r/minio/mc/tags
+  NODE_VERSION: 20.11.1 # Sould respect /.nvmrc
+  SENTRY_VERSION: 2.17.1 # https://hub.docker.com/r/getsentry/sentry-cli/tags
+  RUBY_VERSION: 3.3.1 # https://hub.docker.com/_/ruby/tags
+  PLAYWRIGHT_VERSION: "v1.43.1-jammy" # https://mcr.microsoft.com/en-us/product/playwright/tags
+  # SAST_DISABLED: "true"
+  NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
 
-stages:
-  - test
-  - build
-  - release
+# REFERENCES
+# Triggered on every commit
+# Ref. https://stackoverflow.com/a/70940590
+.rule-commit: &rule-commit
+  # Stop the execution when a new branch is created
+  - if: $CI_COMMIT_BEFORE_SHA == "0000000000000000000000000000000000000000"
+    when: never
+  # Trigger when a commit happens on branch
+  - if: $CI_PIPELINE_SOURCE == "push"
 
-workflow:
-  rules:
-    - if: "$CI_COMMIT_TAG =~ /\\-rc.*/"
-      variables:
-        DEPLOY_VARIABLE: preprod
-        NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
-    - if: "$CI_COMMIT_TAG =~ /\\-next.*/"
-      variables:
-        DEPLOY_VARIABLE: canary
-        NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
-    - if: "$CI_COMMIT_TAG"
-      variables:
-        DEPLOY_VARIABLE: prod
-        NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
-    - if: $CI_COMMIT_BRANCH == "master"
-      variables:
-        DEPLOY_VARIABLE: prodsec
-    - if: "$CI_MERGE_REQUEST_ID"
-      variables:
-        DEPLOY_VARIABLE: "staging/${CI_COMMIT_REF_SLUG}"
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-    - when: never
+# Preprod deployments when there is a tag ending with "-rc.[...]"
+.rule-preprod: &rule-preprod
+  - if: &if-preprod "$CI_COMMIT_TAG =~ /\\-rc.*/"
+    when: on_success
 
-build_docker_image:
-  stage: release
-  tags:
-    - kubernetes
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint:
-      - ''
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: manual
-      allow_failure: false
-    - when: never
-  before_script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-  script:
-    - /kaniko/executor
-      --cache=true
-      --context ${CI_PROJECT_DIR}
-      --dockerfile ${CI_PROJECT_DIR}/Dockerfile
-      --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+# Canary deployments when there is a tag ending with "-next.[...]"
+.rule-canary: &rule-canary
+  - if: &if-canary "$CI_COMMIT_TAG =~ /\\-next.*/"
+    when: on_success
+    allow_failure: false
 
-build_front:
-  stage: build
-  image: node:18.15.0
-  tags:
-    - kubernetes
-  rules:
-    - if: $DEPLOY_VARIABLE == "prod"
-      when: on_success
-      allow_failure: false
-    - if: $DEPLOY_VARIABLE == "canary"
-      when: on_success
-      allow_failure: false
-    - if: $DEPLOY_VARIABLE == "preprod"
-      when: on_success
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-      when: on_success
-    - when: never
-  environment:
-    name: "$DEPLOY_VARIABLE"
-  before_script:
-    - export ENVIRONMENT=${DEPLOY_VARIABLE}
-  script:
-    - yarn --silent
-    - yarn workspace @infomaniak/mattermost-types build
-    - yarn workspace @infomaniak/mattermost-client build
-    - yarn workspace @mattermost/components build
-    - yarn build:webapp
-  artifacts:
-    paths:
-      - dist
-    expire_in: 1 days
-    when: always
+# Prod deployments are triggered as a fallback when neither "Preprod" nor "Canary" was triggered
+.rule-prod: &rule-prod
+  - if: &if-tag "$CI_COMMIT_TAG"
+    when: on_success
+    allow_failure: false
 
-publish_packages:
-  stage: build
-  image: node:18.15.0
-  tags:
-    - kubernetes
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-      when: never
-    - if: $DEPLOY_VARIABLE == "prodsec"
-      when: on_success
-    - when: never
-  environment:
-    name: "$DEPLOY_VARIABLE"
-  script:
-    - yarn --silent
-    - yarn workspace @infomaniak/mattermost-types build
-    - yarn workspace @infomaniak/mattermost-client build
-    - yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch
-    - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken' "$VERDACCIO_TOKEN"
-    - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAlwaysAuth' true
-    - yarn config set npmScopes.infomaniak.npmRegistryServer https://verdaccio.dev.infomaniak.ch
-    - yarn config set npmScopes.infomaniak.npmPublishRegistry https://verdaccio.dev.infomaniak.ch
-    - yarn config set npmScopes.infomaniak.npmAuthToken "$VERDACCIO_TOKEN"
-    - yarn workspace @infomaniak/mattermost-types npm publish
-    - yarn workspace @infomaniak/mattermost-client npm publish
+# Prodsec deployments on master commits
+.rule-prodsec: &rule-prodsec
+  - if: &if-master-commit $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    when: on_success
 
+# Staging deployments on Merge Requests
+.rule-merge-request: &rule-merge-request
+  - if: &if-merge-request "$CI_MERGE_REQUEST_ID"
+    when: on_success
 
-publish_front:
-  stage: release
-  tags:
-    - kubernetes
-  image:
-    name: minio/mc:RELEASE.2022-11-07T23-47-39Z
-    entrypoint: [ '' ]
-  rules:
-    - if: $DEPLOY_VARIABLE == "prod"
-      when: on_success
-      allow_failure: false
-    - if: $DEPLOY_VARIABLE == "canary"
-      when: on_success
-      allow_failure: false
-    - if: $DEPLOY_VARIABLE == "preprod"
-      when: on_success
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-      when: on_success
-    - when: never
-  environment:
-    name: "$DEPLOY_VARIABLE"
-  before_script:
-    - mc config host add $S3_BUCKET $S3_HOST $S3_KEY $S3_PASSWORD --api s3v4
-  script:
-    - mc cp --recursive dist/ $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE
-  after_script:
-    - mc rm --recursive --force --older-than 30d $S3_BUCKET/$S3_BUCKET/kchat/staging
-    - mc rm --recursive --force --older-than 30d $S3_BUCKET/$S3_BUCKET/kchat/preprod
-  artifacts:
-    paths:
-      - dist
-    expire_in: 1 days
-    when: always
+# Scheduled jobs
+.rule-scheduled: &rule-scheduled
+  - if: &rule-scheduled '$CI_PIPELINE_SOURCE == "schedule"'
+    when: on_success
+.rule-not-scheduled: &rule-not-scheduled
+  - if: *rule-scheduled
+    when: never
 
-# unit_test:
-#   stage: test
-#   image: node:18.15.0
-#   tags:
-#     - docker-executor
-#     - kubernetes
-#     - shared
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   rules:
-#     - if: '$CI_PIPELINE_SOURCE == "schedule"'
-#       when: never
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "prodsec"
-#       when: on_success
-#     - when: never
-#   artifacts:
+# Setup kaniko config
+.script-configure-kaniko: &script-configure-kaniko
+  - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+
+# Configure yarn cache and extra npm registries
+# .script-configure-yarn: &script-configure-yarn
+#   - |
+#     yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch \
+#     && yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAlwaysAuth' true \
+#     && yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken' "$VERDACCIO_TOKEN" \
+#     && yarn config set npmScopes.infomaniak.npmAuthToken "$VERDACCIO_TOKEN" \
+#     && yarn config set npmScopes.infomaniak.npmPublishRegistry https://verdaccio.dev.infomaniak.ch \
+#     && yarn config set npmScopes.infomaniak.npmRegistryServer https://verdaccio.dev.infomaniak.ch
+
+# Configure yarn and install dependencies
+.script-yarn-install: &script-yarn-install # - *script-configure-yarn
+  - yarn --immutable --silent
+
+# Build packages/dependencies
+.script-build-packages: &script-build-packages
+  - |
+    yarn workspace @infomaniak/mattermost-types build \
+    && yarn workspace @infomaniak/mattermost-client build \
+    && yarn workspace @mattermost/components build
+
+# Cache for jest
+.cache-jest: &cache-jest
+  - paths:
+      - webapp/channels/.jestcache
+
+# Cache for yarn
+# TODO setup gitlab-ci cache url on minio ?
+# https://stackoverflow.com/a/69303530
+# .cache-yarn: &cache-yarn
+#   - key:
+#       files:
+#         - yarn.lock
 #     paths:
-#       - coverage/
-#     when: on_success
-#     reports:
-#       junit: coverage/junit.xml
-#       coverage_report:
-#         coverage_format: cobertura
-#         path: coverage/cobertura-coverage.xml
-#   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
-#   cache:
-#     paths:
-#       - .jestcache
-#   before_script:
-#     - yarn --silent
-#   script:
-#     - yarn test:webapp
+#       - .yarn/cache
 
-
-sentry_release:
-  stage: .post
-  image: getsentry/sentry-cli:2.17.1
-  needs:
-    - build_front
-  environment:
-    name: "$DEPLOY_VARIABLE"
-  rules:
-    - if: $DEPLOY_VARIABLE == "prod"
-      when: on_success
-      allow_failure: false
-    - if: $DEPLOY_VARIABLE == "canary"
-      when: on_success
-      allow_failure: false
-    - if: $DEPLOY_VARIABLE == "preprod"
-      when: on_success
-      allow_failure: false
-    - when: never
+# Shared test config
+.tests: &tests
   tags:
     - docker-executor
     - kubernetes
     - shared
+  rules:
+    - *rule-not-scheduled # Job is not triggered by schedule
+    - *rule-merge-request
+    - when: never
+  environment:
+    name: "$ENVIRONMENT_NAME"
+
+# Node-specific test config
+.tests-node: &tests-node
+  <<: *tests
+  image: node:${NODE_VERSION}
+  before_script:
+    - *script-yarn-install
+    - *script-build-packages
+  # cache:
+  #   - *cache-yarn
+
+# WORKFLOW
+# Setup environment specific variables
+# Ref https://docs.gitlab.com/ee/ci/yaml/#workflowrulesvariables
+workflow:
+  rules:
+    - if: *if-preprod
+      variables:
+        ENVIRONMENT_NAME: preprod
+    - if: *if-canary
+      variables:
+        ENVIRONMENT_NAME: canary
+    - if: *if-tag
+      variables:
+        ENVIRONMENT_NAME: prod
+    - if: *if-master-commit
+      variables:
+        ENVIRONMENT_NAME: prodsec
+    - if: *if-merge-request
+      variables:
+        ENVIRONMENT_NAME: "staging/${CI_COMMIT_REF_SLUG}"
+    - when: never
+
+# STAGES
+# Build front sources using node and store the bundle as an artifact
+build:front:
+  stage: build
+  image: node:${NODE_VERSION}
+  tags:
+    - kubernetes
+  rules:
+    - *rule-preprod
+    - *rule-canary
+    - *rule-prod
+    - *rule-merge-request
+    - when: never
+  environment:
+    name: "$ENVIRONMENT_NAME"
+  before_script:
+    - *script-yarn-install
+    - *script-build-packages
+  script:
+    - yarn build:webapp
+  # cache:
+  #   - *cache-yarn
+  # Save bundle /dist
+  artifacts:
+    paths:
+      - dist
+      - .yarn/cache # TODO remove and use *cache-yarn
+    expire_in: 1 days
+    when: on_success
+
+# Build mono-repo/internal dependencies
+# build:packages:
+#   stage: release
+#   image: node:${NODE_VERSION}
+#   tags:
+#     - kubernetes
+#   rules:
+#     - *rule-not-scheduled
+#     - *rule-prodsec
+#     - when: never
+#   environment:
+#     name: "$ENVIRONMENT_NAME"
+#   before_script:
+#     - *script-yarn-install
+#   script:
+#     - yarn workspace @infomaniak/mattermost-types build
+#     - yarn workspace @infomaniak/mattermost-client build
+#     - yarn workspace @mattermost/components build
+#   # Save tsc'ed javascript files /lib
+#   artifacts:
+#     paths:
+#       - webapp/platform/client/lib
+#       - webapp/platform/types/lib
+#       # TODO: save @mattermost/components ?
+#     expire_in: 1 days
+#     when: always
+
+# Build front using kaniko and store the image in the gitlab registry
+deploy:image:
+  stage: deploy
+  image:
+    name: gcr.io/kaniko-project/executor:${KANIKO_VERSION}
+    entrypoint: [""]
+  tags:
+    - kubernetes
+  rules:
+    - if: *if-tag
+      when: on_success
+    - when: never
+  before_script:
+    - *script-configure-kaniko
+  script:
+    - /kaniko/executor
+      --cache=true
+      --registry-mirror=registry-mirror.infomaniak.ch
+      --context ${CI_PROJECT_DIR}
+      --dockerfile ${CI_PROJECT_DIR}/Dockerfile
+      --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+
+# Execute tsc
+# test:tsc:
+#   stage: test_unit
+#   extends:
+#     - .tests
+#   allow_failure: true
+#   script:
+#     - yarn test:types
+
+translations:check:
+  stage: translations
+  image: node:${NODE_VERSION}
+  tags:
+    - kubernetes
+  rules:
+    - *rule-merge-request
+    - *rule-commit
+  before_script:
+  - *script-yarn-install
+  script:
+    - yarn workspace mattermost-webapp check:i18n:ci
+    - git diff --exit-code webapp/channels/src/i18n/ || { echo "⛔ i18n files changed, commit the updates."; exit 1; }
+
+
+lint:eslint:
+  stage: lint
+  image: node:${NODE_VERSION}
+  tags:
+    - kubernetes
+  rules:
+    - *rule-merge-request
+    - *rule-commit
+  before_script:
+    - *script-yarn-install
+    - *script-build-packages
+  script:
+    - yarn workspace mattermost-webapp check:eslint
+  artifacts:
+    reports:
+      codequality: gl-codequality.json
+    expire_in: 1 week
+    when: on_failure
+
+# Execute unit tests
+test:unit:
+  stage: test_unit
+  extends:
+    - .tests-node
+  rules:
+    - *rule-merge-request
+    - *rule-prodsec
+    - when: never
+  script:
+    - yarn test:webapp
+  # Save coverage report
+  artifacts:
+    paths:
+      - webapp/channels/coverage/
+    when: on_success
+    expire_in: 1 days
+    reports:
+      junit: webapp/channels/coverage/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: webapp/channels/coverage/cobertura-coverage.xml
+  coverage: /Lines\s*:\s*(\d+.?\d*)%/
+  # Save jest/yarn cache
+  cache:
+    - *cache-jest
+    # - *cache-yarn
+
+# Triggers e2e tests
+# Parse staging base URL and store in dotenv artifact
+test:e2e:
+  stage: test_e2e
+  extends:
+    - .tests
+  image: ruby:${RUBY_VERSION}
+  rules:
+    - if: *if-merge-request
+      when: manual
+      allow_failure: true
+    - when: never
+  script:
+    - echo "STAGING_BASE_URL=$(ruby .gitlab/get_staging_baseurl.rb)" >> test.env
+  # Pass env variables to Playwright/Cypress
+  # https://docs.gitlab.com/ee/ci/variables/index.html#pass-an-environment-variable-to-another-job
+  artifacts:
+    expire_in: 1 days
+    reports:
+      dotenv: test.env
+
+# Execute playwright tests
+test:e2e:pw:
+  stage: test_e2e
+  extends:
+    - .tests-node
+  image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
+  allow_failure: true
+  needs: ["test:e2e"]
+  variables:
+    PW_BASE_URL: ${STAGING_BASE_URL} # From test:e2e - dotenv
+    PW_ADMIN_EMAIL: ${E2E_ADMIN_EMAIL}
+    PW_ADMIN_PASSWORD: ${E2E_ADMIN_PASSWORD}
+  script:
+    - echo "Executing e2e Playwright tests on ${PW_BASE_URL}..." \
+    - yarn run test:e2e:playwright
+  # cache:
+  #   - *cache-yarn
+  # Save playwright report
+  artifacts:
+    paths:
+      - e2e-tests/playwright/playwright-report
+    expire_in: 1 days
+    when: always
+
+# Update front using minio-client
+release:front:
+  stage: release
+  image:
+    name: minio/mc:${MINIO_CLIENT_VERSION}
+    entrypoint: [""]
+  tags:
+    - kubernetes
+  needs: ["build:front"]
+  rules:
+    - *rule-preprod
+    - *rule-canary
+    - *rule-prod
+    - *rule-merge-request
+    - when: never
+  environment:
+    name: "$ENVIRONMENT_NAME"
+  before_script:
+    - mc config host add $S3_BUCKET $S3_HOST $S3_KEY $S3_PASSWORD --api s3v4
+  script:
+    - mc cp --recursive dist/ $S3_BUCKET/$S3_BUCKET/kchat/$ENVIRONMENT_NAME
+  after_script:
+    - mc rm --recursive --force --older-than 30d $S3_BUCKET/$S3_BUCKET/kchat/staging
+    - mc rm --recursive --force --older-than 30d $S3_BUCKET/$S3_BUCKET/kchat/preprod
+
+# Publish mono-repo/internal dependencies
+# release:packages:
+#   stage: release
+#   image: node:${NODE_VERSION}
+#   tags:
+#     - kubernetes
+#   needs: ["build:packages"]
+#   rules:
+#     - *rule-not-scheduled
+#     - *rule-prodsec
+#     - when: never
+#   environment:
+#     name: "$ENVIRONMENT_NAME"
+#   script:
+#     - yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch
+#     - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken' "$VERDACCIO_TOKEN"
+#     - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAlwaysAuth' true
+#     - yarn config set npmScopes.infomaniak.npmRegistryServer https://verdaccio.dev.infomaniak.ch
+#     - yarn config set npmScopes.infomaniak.npmPublishRegistry https://verdaccio.dev.infomaniak.ch
+#     - yarn config set npmScopes.infomaniak.npmAuthToken "$VERDACCIO_TOKEN"
+#     - yarn workspace @infomaniak/mattermost-types npm publish
+#     - yarn workspace @infomaniak/mattermost-client npm publish
+
+# Publish changelog to kChat
+release:changelog:
+  stage: .post
+  image: ruby:${RUBY_VERSION}
+  needs: ["release:front"]
+  rules:
+    - *rule-preprod
+    - *rule-canary
+    - *rule-prod
+    - when: never
+  environment:
+    name: "$ENVIRONMENT_NAME"
+  script:
+    - ruby .gitlab/release.rb ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${NOTIFY_CHANNEL}
+
+# Upload pages report
+# https://docs.gitlab.com/ee/user/project/pages/getting_started/pages_from_scratch.html
+pages:
+  stage: deploy
+  image: ruby:${RUBY_VERSION}
+  needs: ["test:e2e:pw"]
+  rules:
+    - if: *if-merge-request
+      variables:
+        PAGES_PREFIX: "mr$CI_MERGE_REQUEST_IID" # Prefix with the mr<iid>, like `mr123`
+  variables:
+    PAGES_PREFIX: "" # No prefix by default (master)
+  script:
+    - cp -r e2e-tests/playwright/playwright-report public
+  after_script:
+    - ruby .gitlab/e2e_report_notify.rb
+  pages:
+    path_prefix: "$PAGES_PREFIX"
+  artifacts:
+    paths:
+      - public
+
+# Create a new sentry release and push source maps
+release:sentry:
+  stage: .post
+  image: getsentry/sentry-cli:${SENTRY_VERSION}
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  needs: ["build:front"]
+  rules:
+    - *rule-preprod
+    - *rule-canary
+    - *rule-prod
+    - when: never
+  environment:
+    name: "$ENVIRONMENT_NAME"
   script:
     - sentry-cli releases new ${CI_COMMIT_TAG}
     - sentry-cli releases set-commits --auto --ignore-empty --ignore-missing ${CI_COMMIT_TAG}
     - sentry-cli releases files ${CI_COMMIT_TAG} upload-sourcemaps --url-prefix '~/static/' ./dist --ignore-file .sentryignore
     - sentry-cli releases finalize ${CI_COMMIT_TAG}
 
-# changelog:
-#   stage: release
-#   image: ruby:latest
-#   needs:
-#     - publish_front
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
+# HOUSE KEEPING
+# guild_review:
+#   image: ruby:${RUBY_VERSION}
 #   rules:
-#     - if: $DEPLOY_VARIABLE == "prod"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "canary"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "preprod"
+#     - if: "$MR_REVIEW_SCHEDULE"
 #       when: on_success
 #     - when: never
 #   script:
-#     - ruby .gitlab/release.rb ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${NOTIFY_CHANNEL}
+#     - ruby .gitlab/mr_review.rb
 
-guild_review:
-  image: ruby:latest
-  script:
-    - ruby .gitlab/mr_review.rb
-  rules:
-    - if: '$MR_REVIEW_SCHEDULE'
-      when: on_success
-    - when: never
+# gitlab_triage:
+#   rules:
+#     - if: "$GITLAB_TRIAGE"
+#       when: on_success
+#     - when: never
+#   variables:
+#     TRIAGE_POLICY_FILE: .gitlab/triage-policies.yml
 
-gitlab_triage:
-  rules:
-    - if: '$GITLAB_TRIAGE'
-      when: on_success
-    - when: never
-  variables:
-    TRIAGE_POLICY_FILE: .gitlab/triage-policies.yml
-
-technical_debt:
-  extends: gitlab_triage
-  rules:
-    - if: '$TRIAGE_TECHNICAL_DEBT'
-      when: on_success
-    - when: never
-  variables:
-    TRIAGE_POLICY_FILE: .gitlab/summaries-technical-debt.yml
+# technical_debt:
+#   extends: gitlab_triage
+#   rules:
+#     - if: "$TRIAGE_TECHNICAL_DEBT"
+#       when: on_success
+#     - when: never
+#   variables:
+#     TRIAGE_POLICY_FILE: .gitlab/summaries-technical-debt.yml

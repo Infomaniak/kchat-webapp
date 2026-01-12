@@ -7,14 +7,13 @@ import {Client4} from 'mattermost-redux/client';
 
 import {Files, General} from '../constants';
 
-export function getFormattedFileSize(file: FileInfo): string {
-    const bytes = file.size;
+export function getFormattedFileSize(bytes: number): string {
     const fileSizes = [
         ['TB', 1024 * 1024 * 1024 * 1024],
         ['GB', 1024 * 1024 * 1024],
         ['MB', 1024 * 1024],
         ['KB', 1024],
-    ];
+    ] as const;
     const size = fileSizes.find((unitAndMinBytes) => {
         const minBytes = unitAndMinBytes[1];
         return bytes > minBytes;
@@ -54,6 +53,12 @@ export function getFileType(file: FileInfo): string {
 
 export function getFileUrl(fileId: string): string {
     return Client4.getFileRoute(fileId);
+}
+
+// Infomaniak function - do not delete on upstream merge
+// Returns the ZIP download URL for a post
+export function getZipforPost(postId: string): string {
+    return `${Client4.getPostRoute(postId)}/files/download`;
 }
 
 export function getFileDownloadUrl(fileId: string): string {

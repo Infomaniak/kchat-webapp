@@ -2,14 +2,15 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import type {IntlShape} from 'react-intl';
 import {injectIntl} from 'react-intl';
+import type {IntlShape} from 'react-intl';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -29,8 +30,8 @@ type Props = {
     redirectChannel: string;
     active: boolean;
     actions: {
-        savePreferences: (userId: string, preferences: PreferenceType[]) => Promise<{data: boolean}>;
-        leaveDirectChannel: (channelId: string) => Promise<{data: boolean}>;
+        savePreferences: (userId: string, preferences: PreferenceType[]) => Promise<ActionResult>;
+        leaveDirectChannel: (channelId: string) => Promise<ActionResult>;
     };
 };
 
@@ -109,6 +110,7 @@ class SidebarDirectChannel extends React.PureComponent<Props> {
                 label={displayName}
                 channelLeaveHandler={this.handleLeaveChannel}
                 icon={this.getIcon()}
+                isSharedChannel={Boolean(teammate.remote_id)}
             />
         );
     }

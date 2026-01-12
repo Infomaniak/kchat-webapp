@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import AppNameDisplay from 'components/app_name_display';
 
-import {isDesktopApp} from 'utils/user_agent';
+import {isDesktopApp, isPWA} from 'utils/user_agent';
 
 import HistoryButtons from './history_buttons';
 
@@ -18,9 +18,9 @@ const LeftControlsContainer = styled.div`
     background: var(--sidebar-bg);
     border-bottom: solid 1px rgba(var(--sidebar-text-rgb), 0.25);
     padding-left: 10px;
-    width: var(--overrideLhsWidth, 240px);
-    min-width: 240px;
-    max-width: 240px;
+    width: var(--overrideLhsWidth, 264px);
+    min-width: 200px;
+    max-width: 200px;
     @media screen and (min-width: 769px) {
         min-width: 200px;
         max-width: 264px;
@@ -42,7 +42,7 @@ const LeftControls = ({headerRef}: {headerRef: React.RefObject<HTMLDivElement>})
     <LeftControlsContainer ref={headerRef}>
         {/* <ProductMenu/> */}
         <AppNameDisplay/>
-        {isDesktopApp() && <HistoryButtons/>}
+        {(isDesktopApp() || isPWA()) && <HistoryButtons/>}
     </LeftControlsContainer>
 );
 

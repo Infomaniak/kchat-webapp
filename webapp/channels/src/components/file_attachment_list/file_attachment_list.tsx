@@ -8,7 +8,6 @@ import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
 import FileAttachment from 'components/file_attachment';
 import FilePreviewModal from 'components/file_preview_modal';
 import SingleImageView from 'components/single_image_view';
-import VoiceMessageAttachmentPlayer from 'components/voice_message_attachment_player';
 
 import Constants, {FileTypes, ModalIdentifiers} from 'utils/constants';
 import {getFileType} from 'utils/utils';
@@ -42,13 +41,7 @@ export default function FileAttachmentList(props: Props) {
 
     const sortedFileInfos = useMemo(() => sortFileInfos(fileInfos ? [...fileInfos] : [], locale), [fileInfos, locale]);
     if (post.type === Constants.PostTypes.VOICE && fileInfos.length === 1) {
-        return (
-            <VoiceMessageAttachmentPlayer
-                postId={post.id}
-                fileId={fileInfos?.[0]?.id ?? ''}
-                inPost={true}
-            />
-        );
+        return null;
     } else if (fileInfos && fileInfos.length === 1 && !fileInfos[0].archived) {
         const fileType = getFileType(fileInfos[0].extension);
 
@@ -60,6 +53,7 @@ export default function FileAttachmentList(props: Props) {
                     postId={props.post.id}
                     compactDisplay={compactDisplay}
                     isInPermalink={isInPermalink}
+                    disableActions={props.disableActions}
                 />
             );
         }
@@ -69,10 +63,15 @@ export default function FileAttachmentList(props: Props) {
         );
     }
 
+    if (fileInfos.length === 0) {
+        return null;
+    }
+
     const postFiles = [];
     if (sortedFileInfos && sortedFileInfos.length > 0) {
         for (let i = 0; i < sortedFileInfos.length; i++) {
             const fileInfo = sortedFileInfos[i];
+            const isDeleted = fileInfo.delete_at > 0;
             postFiles.push(
                 <FileAttachment
                     key={fileInfo.id}
@@ -81,6 +80,10 @@ export default function FileAttachmentList(props: Props) {
                     handleImageClick={handleImageClick}
                     compactDisplay={compactDisplay}
                     handleFileDropdownOpened={props.handleFileDropdownOpened}
+                    preventDownload={props.disableDownload}
+                    disableActions={props.disableActions}
+                    disableThumbnail={isDeleted}
+                    disablePreview={isDeleted}
                 />,
             );
         }

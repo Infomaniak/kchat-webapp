@@ -1,13 +1,18 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {useMemo} from 'react';
+import {useIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
+import {useSelector} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {ClientConfig, ClientLicense} from '@mattermost/types/config';
 import type {ServerError} from '@mattermost/types/errors';
 import type {Group} from '@mattermost/types/groups';
-import type {Post} from '@mattermost/types/posts';
+import {isMessageAttachmentArray} from '@mattermost/types/message_attachments';
+import type {Post, PostPriorityMetadata} from '@mattermost/types/posts';
+import {PostPriority} from '@mattermost/types/posts';
 import type {Reaction} from '@mattermost/types/reactions';
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -17,13 +22,14 @@ import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getAllGroupsForReferenceByName} from 'mattermost-redux/selectors/entities/groups';
-import {makeGetReactionsForPost} from 'mattermost-redux/selectors/entities/posts';
-import {get, getTeammateNameDisplaySetting, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {isPostFlagged, makeGetReactionsForPost} from 'mattermost-redux/selectors/entities/posts';
+import {getTeammateNameDisplaySetting, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
-import type {UserMentionKey} from 'mattermost-redux/selectors/entities/users';
 import {makeGetDisplayName, getCurrentUserId, getUser, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
+import type {UserMentionKey} from 'mattermost-redux/selectors/entities/users';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
+import {memoizeResult} from 'mattermost-redux/utils/helpers';
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
 import {canEditPost as canEditPostRedux} from 'mattermost-redux/utils/post_utils';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
@@ -31,7 +37,8 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {getEmojiMap} from 'selectors/emojis';
 import {getIsMobileView} from 'selectors/views/browser';
 
-import Constants, {PostListRowListIds, PostTypes, Preferences} from 'utils/constants';
+import Constants, {PostListRowListIds} from 'utils/constants';
+import * as Keyboard from 'utils/keyboard';
 import {formatWithRenderer} from 'utils/markdown';
 import MentionableRenderer from 'utils/markdown/mentionable_renderer';
 import {allAtMentions} from 'utils/text_formatting';
@@ -55,7 +62,7 @@ export function fromAutoResponder(post: Post): boolean {
 }
 
 export function isFromWebhook(post: Post): boolean {
-    return post.props && post.props.from_webhook === 'true';
+    return post.props?.from_webhook === 'true';
 }
 
 export function isFromBot(post: Post): boolean {
@@ -91,7 +98,7 @@ export function getImageSrc(src: string, hasImageProxy = false): string {
     return src;
 }
 
-export function canDeletePost(state: GlobalState, post: Post, channel: Channel): boolean {
+export function canDeletePost(state: GlobalState, post: Post, channel?: Channel): boolean {
     if (post.type === Constants.PostTypes.FAKE_PARENT_DELETED) {
         return false;
     }
@@ -222,10 +229,6 @@ export function shouldFocusMainTextbox(e: React.KeyboardEvent | KeyboardEvent, a
         return false;
     }
 
-    if (activeElement?.shadowRoot) {
-        return false;
-    }
-
     // Do not focus if we're currently focused on a textarea or input
     const keepFocusTags = ['TEXTAREA', 'INPUT'];
     if (!activeElement || keepFocusTags.includes(activeElement.tagName)) {
@@ -233,7 +236,7 @@ export function shouldFocusMainTextbox(e: React.KeyboardEvent | KeyboardEvent, a
     }
 
     // Focus if it is an attempted paste
-    if (Utils.cmdOrCtrlPressed(e) && Utils.isKeyPressed(e, Constants.KeyCodes.V)) {
+    if (Keyboard.cmdOrCtrlPressed(e) && Keyboard.isKeyPressed(e, Constants.KeyCodes.V)) {
         return true;
     }
 
@@ -254,7 +257,7 @@ export function shouldFocusMainTextbox(e: React.KeyboardEvent | KeyboardEvent, a
 
     // Do not focus when pressing space on link elements
     const spaceKeepFocusTags = ['BUTTON', 'A'];
-    if (Utils.isKeyPressed(e, Constants.KeyCodes.SPACE) && spaceKeepFocusTags.includes(activeElement.tagName)) {
+    if (Keyboard.isKeyPressed(e, Constants.KeyCodes.SPACE) && spaceKeepFocusTags.includes(activeElement.tagName)) {
         return false;
     }
 
@@ -276,13 +279,19 @@ function canAutomaticallyCloseBackticks(message: string) {
     return {allowSending: true};
 }
 
+export function isWithinCodeBlock(message: string, caretPosition: number): boolean {
+    const match = message.substring(0, caretPosition).match(Constants.REGEX_CODE_BLOCK_OPTIONAL_LANGUAGE_TAG);
+
+    return Boolean(match && match.length % 2 !== 0);
+}
+
 function sendOnCtrlEnter(message: string, ctrlOrMetaKeyPressed: boolean, isSendMessageOnCtrlEnter: boolean, caretPosition: number) {
-    const match = message.substring(0, caretPosition).match(Constants.TRIPLE_BACK_TICKS);
-    if (isSendMessageOnCtrlEnter && ctrlOrMetaKeyPressed && (!match || match.length % 2 === 0)) {
+    const inCodeBlock = isWithinCodeBlock(message, caretPosition);
+    if (isSendMessageOnCtrlEnter && ctrlOrMetaKeyPressed && !inCodeBlock) {
         return {allowSending: true};
-    } else if (!isSendMessageOnCtrlEnter && (!match || match.length % 2 === 0)) {
+    } else if (!isSendMessageOnCtrlEnter && !inCodeBlock) {
         return {allowSending: true};
-    } else if (ctrlOrMetaKeyPressed && match && match.length % 2 !== 0) {
+    } else if (ctrlOrMetaKeyPressed && inCodeBlock) {
         return canAutomaticallyCloseBackticks(message);
     }
 
@@ -297,7 +306,7 @@ export function postMessageOnKeyPress(
     now = 0,
     lastChannelSwitchAt = 0,
     caretPosition = 0,
-): {allowSending: boolean; ignoreKeyPress?: boolean} {
+): {allowSending: boolean; ignoreKeyPress?: boolean; withClosedCodeBlock?: boolean; message?: string} {
     if (!event) {
         return {allowSending: false};
     }
@@ -308,7 +317,7 @@ export function postMessageOnKeyPress(
     }
 
     // Only ENTER sends, unless shift or alt key pressed.
-    if (!Utils.isKeyPressed(event, Constants.KeyCodes.ENTER) || event.shiftKey || event.altKey) {
+    if (!Keyboard.isKeyPressed(event, Constants.KeyCodes.ENTER) || event.shiftKey || event.altKey) {
         return {allowSending: false};
     }
 
@@ -333,6 +342,10 @@ export function postMessageOnKeyPress(
     }
 
     return {allowSending: false};
+}
+
+export function isServerError(err: unknown): err is ServerError {
+    return Boolean(err && typeof err === 'object' && 'server_error_id' in err);
 }
 
 export function isErrorInvalidSlashCommand(error: ServerError | null): boolean {
@@ -434,7 +447,7 @@ export function makeGetMentionsFromMessage(): (state: GlobalState, post: Post) =
             const mentionsArray = post.message.match(Constants.MENTIONS_REGEX) || [];
             for (let i = 0; i < mentionsArray.length; i++) {
                 const mention = mentionsArray[i];
-                const user = getUserOrGroupFromMentionName(users, mention.substring(1)) as UserProfile | '';
+                const user = getMentionDetails(users, mention.substring(1)) as UserProfile | '';
 
                 if (user) {
                     mentions[mention] = user;
@@ -446,27 +459,41 @@ export function makeGetMentionsFromMessage(): (state: GlobalState, post: Post) =
     );
 }
 
-export function makeCreateAriaLabelForPost(): (state: GlobalState, post: Post) => (intl: IntlShape) => string {
-    const getReactionsForPost = makeGetUniqueReactionsToPost();
-    const getDisplayName = makeGetDisplayName();
-    const getMentionsFromMessage = makeGetMentionsFromMessage();
+export function usePostAriaLabel(post: Post | undefined) {
+    const intl = useIntl();
 
-    return createSelector(
-        'makeCreateAriaLabelForPost',
-        (state: GlobalState, post: Post) => post,
-        (state: GlobalState, post: Post) => getDisplayName(state, post.user_id),
-        (state: GlobalState, post: Post) => getReactionsForPost(state, post.id),
-        (state: GlobalState, post: Post) => get(state, Preferences.CATEGORY_FLAGGED_POST, post.id, null) != null,
-        getEmojiMap,
-        (state: GlobalState, post: Post) => getMentionsFromMessage(state, post),
-        (state: GlobalState) => getTeammateNameDisplaySetting(state),
-        (post, author, reactions, isFlagged, emojiMap, mentions, teammateNameDisplaySetting) => {
-            return (intl: IntlShape) => createAriaLabelForPost(post, author, isFlagged, reactions ?? {}, intl, emojiMap, mentions, teammateNameDisplaySetting);
-        },
-    );
+    const getDisplayName = useMemo(makeGetDisplayName, []);
+    const getReactionsForPost = useMemo(makeGetReactionsForPost, []);
+    const getMentionsFromMessage = useMemo(makeGetMentionsFromMessage, []);
+
+    const createAriaLabelMemoized = memoizeResult(createAriaLabelForPost);
+
+    return useSelector((state: GlobalState) => {
+        if (!post) {
+            return '';
+        }
+
+        const authorDisplayName = getDisplayName(state, post.user_id);
+        const reactions = getReactionsForPost(state, post.id);
+        const isFlagged = isPostFlagged(state, post.id);
+        const emojiMap = getEmojiMap(state);
+        const mentions = getMentionsFromMessage(state, post);
+        const teammateNameDisplaySetting = getTeammateNameDisplaySetting(state);
+
+        return createAriaLabelMemoized(
+            post,
+            authorDisplayName,
+            isFlagged,
+            reactions,
+            intl,
+            emojiMap,
+            mentions,
+            teammateNameDisplaySetting,
+        );
+    });
 }
 
-export function createAriaLabelForPost(post: Post, author: string, isFlagged: boolean, reactions: Record<string, Reaction>, intl: IntlShape, emojiMap: EmojiMap, mentions: Record<string, UserProfile>, teammateNameDisplaySetting: string): string {
+export function createAriaLabelForPost(post: Post, author: string, isFlagged: boolean, reactions: Record<string, Reaction> | undefined, intl: IntlShape, emojiMap: EmojiMap, mentions: Record<string, UserProfile>, teammateNameDisplaySetting: string): string {
     const {formatMessage, formatTime, formatDate} = intl;
 
     let message = post.state === Posts.POST_DELETED ? formatMessage({
@@ -521,7 +548,7 @@ export function createAriaLabelForPost(post: Post, author: string, isFlagged: bo
     }
 
     let attachmentCount = 0;
-    if (post.props && post.props.attachments) {
+    if (isMessageAttachmentArray(post.props?.attachments)) {
         attachmentCount += post.props.attachments.length;
     }
     if (post.file_ids) {
@@ -606,12 +633,6 @@ export function splitMessageBasedOnTextSelection(selectionStart: number, selecti
     return {firstPiece, lastPiece};
 }
 
-export function getNewMessageIndex(postListIds: string[]): number {
-    return postListIds.findIndex(
-        (item) => item.indexOf(PostListRowListIds.START_OF_NEW_MESSAGES) === 0,
-    );
-}
-
 export function areConsecutivePostsBySameUser(post: Post, previousPost: Post): boolean {
     if (!(post && previousPost)) {
         return false;
@@ -631,8 +652,14 @@ export function areConsecutivePostsBySameUser(post: Post, previousPost: Post): b
 // Note: In the case of DM_CHANNEL, users must be fetched beforehand.
 export function getPostURL(state: GlobalState, post: Post): string {
     const channel = getChannel(state, post.channel_id);
+    if (!channel) {
+        return '';
+    }
     const currentUserId = getCurrentUserId(state);
     const team = getTeam(state, channel.team_id || getCurrentTeamId(state));
+    if (!team) {
+        return '';
+    }
 
     const postURI = isCollapsedThreadsEnabled(state) && isComment(post) ? '' : `/${post.id}`;
 
@@ -650,7 +677,7 @@ export function getPostURL(state: GlobalState, post: Post): string {
 }
 
 export function matchUserMentionTriggersWithMessageMentions(userMentionKeys: UserMentionKey[],
-    messageMentionKeys: RegExpMatchArray): boolean {
+    messageMentionKeys: string[]): boolean {
     let isMentioned = false;
     for (const mentionKey of userMentionKeys) {
         const isPresentInMessage = messageMentionKeys.includes(mentionKey.key);
@@ -690,23 +717,101 @@ export function makeGetUniqueReactionsToPost(): (state: GlobalState, postId: Pos
     );
 }
 
-export function getUserOrGroupFromMentionName(usersByUsername: Record<string, UserProfile | Group>, mentionName: string) {
+export function makeGetUniqueEmojiNameReactionsForPost(): (state: GlobalState, postId: Post['id']) => string[] | undefined | null {
+    const getReactionsForPost = makeGetReactionsForPost();
+
+    return createSelector(
+        'makeGetUniqueEmojiReactionsForPost',
+        (state: GlobalState, postId: string) => getReactionsForPost(state, postId),
+        getEmojiMap,
+        (reactions, emojiMap) => {
+            if (!reactions) {
+                return null;
+            }
+
+            const emojiNames: string[] = [];
+
+            Object.values(reactions).forEach((reaction) => {
+                if (emojiMap.get(reaction.emoji_name) && !emojiNames.includes(reaction.emoji_name)) {
+                    emojiNames.push(reaction.emoji_name);
+                }
+            });
+
+            return emojiNames;
+        },
+    );
+}
+
+export function makeGetIsReactionAlreadyAddedToPost(): (state: GlobalState, postId: Post['id'], emojiName: string) => boolean {
+    const getUniqueReactionsToPost = makeGetUniqueReactionsToPost();
+
+    return createSelector(
+        'makeGetIsReactionAlreadyAddedToPost',
+        (state: GlobalState, postId: string) => getUniqueReactionsToPost(state, postId),
+        getCurrentUserId,
+        (state: GlobalState, postId: string, emojiName: string) => emojiName,
+        (reactions, currentUserId, emojiName) => {
+            const reactionsForPost = reactions || {};
+
+            const isReactionAlreadyAddedToPost = Object.values(reactionsForPost).some((reaction) => reaction.user_id === currentUserId && reaction.emoji_name === emojiName);
+
+            return isReactionAlreadyAddedToPost;
+        },
+    );
+}
+
+/**
+ * Given the text of an at-mention without the @, returns an array containing that text and every substring of it that
+ * can be made by removing trailing punctiuation.
+ *
+ * For example, getPotentialMentionsForName('username') returns ['username'] and
+ * getPotentialMentionsForName('username..') return ['username..', 'username.', 'username'].
+ */
+export function getPotentialMentionsForName(mentionName: string): string[] {
     let mentionNameToLowerCase = mentionName.toLowerCase();
 
-    while (mentionNameToLowerCase.length > 0) {
-        if (usersByUsername.hasOwnProperty(mentionNameToLowerCase)) {
-            return usersByUsername[mentionNameToLowerCase];
-        }
+    const potentialMentions = [mentionNameToLowerCase];
 
-        // Repeatedly trim off trailing punctuation in case this is at the end of a sentence
-        if ((/[._-]$/).test(mentionNameToLowerCase)) {
-            mentionNameToLowerCase = mentionNameToLowerCase.substring(0, mentionNameToLowerCase.length - 1);
-        } else {
-            break;
+    // Repeatedly trim off trailing punctuation in case this is at the end of a sentence
+    while (mentionNameToLowerCase.length > 0 && (/[._-]$/).test(mentionNameToLowerCase)) {
+        mentionNameToLowerCase = mentionNameToLowerCase.substring(0, mentionNameToLowerCase.length - 1);
+
+        potentialMentions.push(mentionNameToLowerCase);
+    }
+
+    return potentialMentions;
+}
+
+export function getMentionDetails<T extends UserProfile | Group>(entitiesByName: Record<string, T>, mentionName: string): T | undefined {
+    for (const potentialMention of getPotentialMentionsForName(mentionName)) {
+        if (Object.hasOwn(entitiesByName, potentialMention)) {
+            return entitiesByName[potentialMention];
         }
     }
 
-    return '';
+    return undefined;
+}
+
+export function getUserOrGroupFromMentionName(
+    mentionName: string,
+    users: Record<string, UserProfile>,
+    groups: Record<string, Group>,
+    groupsDisabled?: boolean,
+    getMention = getMentionDetails,
+): [UserProfile?, Group?] {
+    const user = getMention(users, mentionName);
+
+    // prioritizes user if user exists with the same name as a group.
+    if (!user && !groupsDisabled) {
+        const group = getMention(groups, mentionName);
+        if (group && !group.allow_reference) {
+            return [undefined, undefined]; // remove group mention if not allowed to reference
+        }
+
+        return [undefined, group];
+    }
+
+    return [user, undefined];
 }
 
 export function mentionsMinusSpecialMentionsInText(message: string) {
@@ -733,7 +838,7 @@ export function makeGetUserOrGroupMentionCountFromMessage(): (state: GlobalState
             const markdownCleanedText = formatWithRenderer(message, new MentionableRenderer());
             const mentions = new Set(markdownCleanedText.match(Constants.MENTIONS_REGEX) || []);
             mentions.forEach((mention) => {
-                const [user, group] = getUserOrGroupFromMentionNameV2(mention.substring(1), users, groups);
+                const [user, group] = getUserOrGroupFromMentionName(mention.substring(1), users, groups);
 
                 if (user) {
                     count++;
@@ -746,45 +851,11 @@ export function makeGetUserOrGroupMentionCountFromMessage(): (state: GlobalState
     );
 }
 
-export function getUserOrGroupFromMentionNameV2(
-    mentionName: string,
-    users: Record<string, UserProfile>,
-    groups: Record<string, Group>,
-    groupsDisabled?: boolean,
-    getMention = getMentionDetails,
-): [UserProfile?, Group?] {
-    const user = getMention(users, mentionName) as UserProfile | undefined;
-
-    // prioritizes user if user exists with the same name as a group.
-    if (!user && !groupsDisabled) {
-        const group = getMention(groups, mentionName) as Group | undefined;
-        if (group && !group.allow_reference) {
-            return [undefined, undefined]; // remove group mention if not allowed to reference
-        }
-
-        return [undefined, group];
-    }
-
-    return [user, undefined];
-}
-
-export function getMentionDetails(usersByUsername: Record<string, UserProfile | Group>, mentionName: string): UserProfile | Group | undefined {
-    let mentionNameToLowerCase = mentionName.toLowerCase();
-
-    while (mentionNameToLowerCase.length > 0) {
-        if (usersByUsername.hasOwnProperty(mentionNameToLowerCase)) {
-            return usersByUsername[mentionNameToLowerCase];
-        }
-
-        // Repeatedly trim off trailing punctuation in case this is at the end of a sentence
-        if ((/[._-]$/).test(mentionNameToLowerCase)) {
-            mentionNameToLowerCase = mentionNameToLowerCase.substring(0, mentionNameToLowerCase.length - 1);
-        } else {
-            break;
-        }
-    }
-
-    return undefined;
+export function hasRequestedPersistentNotifications(priority?: PostPriorityMetadata) {
+    return (
+        priority?.priority === PostPriority.URGENT &&
+        priority?.persistent_notifications
+    );
 }
 
 export enum VoiceMessageStates {
@@ -795,7 +866,7 @@ export enum VoiceMessageStates {
 }
 
 export function getVoiceMessageStateFromDraft(draft: PostDraft): VoiceMessageStates {
-    if (draft.postType === PostTypes.VOICE) {
+    if (draft.postType === Constants.PostTypes.VOICE) {
         if (draft.uploadsInProgress.length !== 0 && draft.fileInfos.length === 0) {
             return VoiceMessageStates.UPLOADING;
         }
@@ -805,4 +876,14 @@ export function getVoiceMessageStateFromDraft(draft: PostDraft): VoiceMessageSta
         return VoiceMessageStates.RECORDING;
     }
     return VoiceMessageStates.IDLE;
+}
+
+export function getProfilePictureURL(post: Post, user: UserProfile | null): string {
+    if (user && user.id === post.user_id) {
+        return Utils.imageURLForUser(user.id, user.last_picture_update);
+    } else if (post.user_id) {
+        return Utils.imageURLForUser(post.user_id);
+    }
+
+    return '';
 }

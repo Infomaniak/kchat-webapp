@@ -9,5 +9,8 @@ COPY ./tests/plugins/post_message_as.js /usr/src/tests/plugins/post_message_as.j
 COPY ./utils/webhook_utils.js /usr/src/utils/webhook_utils.js
 COPY ./webhook_serve.js /usr/src
 
+HEALTHCHECK --interval=10s --timeout=15s --retries=12 \
+    CMD curl -s -o/dev/null 127.0.0.1:3000
+
 EXPOSE 3000
 CMD [ "node", "webhook_serve.js" ]

@@ -15,6 +15,7 @@ import (
 
 	"github.com/mattermost/mattermost/server/public/model"
 	"github.com/mattermost/mattermost/server/public/shared/mlog"
+	"github.com/mattermost/mattermost/server/public/shared/request"
 	"github.com/mattermost/mattermost/server/v8/channels/store"
 	"github.com/mattermost/mattermost/server/v8/einterfaces"
 )
@@ -110,7 +111,7 @@ func newSqlFileInfoStore(sqlStore *SqlStore, metrics einterfaces.MetricsInterfac
 	return s
 }
 
-func (fs SqlFileInfoStore) Save(info *model.FileInfo) (*model.FileInfo, error) {
+func (fs SqlFileInfoStore) Save(rctx request.CTX, info *model.FileInfo) (*model.FileInfo, error) {
 	info.PreSave()
 	if err := info.IsValid(); err != nil {
 		return nil, err
@@ -125,19 +126,22 @@ func (fs SqlFileInfoStore) Save(info *model.FileInfo) (*model.FileInfo, error) {
 			:Name, :Extension, :Size, :MimeType, :Width, :Height, :HasPreviewImage, :MiniPreview, :Content, :RemoteId)
 	`
 
-	if _, err := fs.GetMasterX().NamedExec(query, info); err != nil {
+	if _, err := fs.GetMaster().NamedExec(query, info); err != nil {
 		return nil, errors.Wrap(err, "failed to save FileInfo")
 	}
 	return info, nil
 }
 
-func (fs SqlFileInfoStore) GetByIds(ids []string) ([]*model.FileInfo, error) {
+func (fs SqlFileInfoStore) GetByIds(ids []string, includeDeleted, allowFromCache bool) ([]*model.FileInfo, error) {
 	query := fs.getQueryBuilder().
 		Select(fs.queryFields...).
 		From("FileInfo").
 		Where(sq.Eq{"FileInfo.Id": ids}).
-		Where(sq.Eq{"FileInfo.DeleteAt": 0}).
 		OrderBy("FileInfo.CreateAt DESC")
+
+	if !includeDeleted {
+		query = query.Where(sq.Eq{"FileInfo.DeleteAt": 0})
+	}
 
 	queryString, args, err := query.ToSql()
 	if err != nil {
@@ -145,7 +149,7 @@ func (fs SqlFileInfoStore) GetByIds(ids []string) ([]*model.FileInfo, error) {
 	}
 
 	items := []fileInfoWithChannelID{}
-	if err := fs.GetReplicaX().Select(&items, queryString, args...); err != nil {
+	if err := fs.GetReplica().Select(&items, queryString, args...); err != nil {
 		return nil, errors.Wrap(err, "failed to find FileInfos")
 	}
 	if len(items) == 0 {
@@ -159,7 +163,7 @@ func (fs SqlFileInfoStore) GetByIds(ids []string) ([]*model.FileInfo, error) {
 	return infos, nil
 }
 
-func (fs SqlFileInfoStore) Upsert(info *model.FileInfo) (*model.FileInfo, error) {
+func (fs SqlFileInfoStore) Upsert(rctx request.CTX, info *model.FileInfo) (*model.FileInfo, error) {
 	info.PreSave()
 	if err := info.IsValid(); err != nil {
 		return nil, err
@@ -193,7 +197,7 @@ func (fs SqlFileInfoStore) Upsert(info *model.FileInfo) (*model.FileInfo, error)
 		return nil, errors.Wrap(err, "file_info_tosql")
 	}
 
-	sqlResult, err := fs.GetMasterX().Exec(queryString, args...)
+	sqlResult, err := fs.GetMaster().Exec(queryString, args...)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to update FileInfo")
 	}
@@ -202,7 +206,7 @@ func (fs SqlFileInfoStore) Upsert(info *model.FileInfo) (*model.FileInfo, error)
 		return nil, errors.Wrap(err, "unable to retrieve rows affected")
 	}
 	if count == 0 {
-		return fs.Save(info)
+		return fs.Save(rctx, info)
 	}
 	return info, nil
 }
@@ -221,9 +225,9 @@ func (fs SqlFileInfoStore) get(id string, fromMaster bool) (*model.FileInfo, err
 		return nil, errors.Wrap(err, "file_info_tosql")
 	}
 
-	db := fs.GetReplicaX()
+	db := fs.GetReplica()
 	if fromMaster {
-		db = fs.GetMasterX()
+		db = fs.GetMaster()
 	}
 
 	if err := db.Get(info, queryString, args...); err != nil {
@@ -303,7 +307,7 @@ func (fs SqlFileInfoStore) GetWithOptions(page, perPage int, opt *model.GetFileI
 		return nil, errors.Wrap(err, "file_info_tosql")
 	}
 	infos := []*model.FileInfo{}
-	if err := fs.GetReplicaX().Select(&infos, queryString, args...); err != nil {
+	if err := fs.GetReplica().Select(&infos, queryString, args...); err != nil {
 		return nil, errors.Wrap(err, "failed to find FileInfos")
 	}
 	return infos, nil
@@ -324,7 +328,7 @@ func (fs SqlFileInfoStore) GetByPath(path string) (*model.FileInfo, error) {
 		return nil, errors.Wrap(err, "file_info_tosql")
 	}
 
-	if err := fs.GetReplicaX().Get(info, queryString, args...); err != nil {
+	if err := fs.GetReplica().Get(info, queryString, args...); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, store.NewErrNotFound("FileInfo", fmt.Sprintf("path=%s", path))
 		}
@@ -340,10 +344,10 @@ func (fs SqlFileInfoStore) InvalidateFileInfosForPostCache(postId string, delete
 func (fs SqlFileInfoStore) GetForPost(postId string, readFromMaster, includeDeleted, allowFromCache bool) ([]*model.FileInfo, error) {
 	infos := []*model.FileInfo{}
 
-	dbmap := fs.GetReplicaX()
+	dbmap := fs.GetReplica()
 
 	if readFromMaster {
-		dbmap = fs.GetMasterX()
+		dbmap = fs.GetMaster()
 	}
 
 	query := fs.getQueryBuilder().
@@ -382,13 +386,13 @@ func (fs SqlFileInfoStore) GetForUser(userId string) ([]*model.FileInfo, error) 
 		return nil, errors.Wrap(err, "file_info_tosql")
 	}
 
-	if err := fs.GetReplicaX().Select(&infos, queryString, args...); err != nil {
+	if err := fs.GetReplica().Select(&infos, queryString, args...); err != nil {
 		return nil, errors.Wrapf(err, "failed to find FileInfos with creatorId=%s", userId)
 	}
 	return infos, nil
 }
 
-func (fs SqlFileInfoStore) AttachToPost(fileId, postId, channelId, creatorId string) error {
+func (fs SqlFileInfoStore) AttachToPost(rctx request.CTX, fileId, postId, channelId, creatorId string) error {
 	query := fs.getQueryBuilder().
 		Update("FileInfo").
 		Set("PostId", postId).
@@ -406,7 +410,7 @@ func (fs SqlFileInfoStore) AttachToPost(fileId, postId, channelId, creatorId str
 	if err != nil {
 		return errors.Wrap(err, "file_info_tosql")
 	}
-	sqlResult, err := fs.GetMasterX().Exec(queryString, args...)
+	sqlResult, err := fs.GetMaster().Exec(queryString, args...)
 	if err != nil {
 		return errors.Wrapf(err, "failed to update FileInfo with id=%s and postId=%s", fileId, postId)
 	}
@@ -422,7 +426,7 @@ func (fs SqlFileInfoStore) AttachToPost(fileId, postId, channelId, creatorId str
 	return nil
 }
 
-func (fs SqlFileInfoStore) SetContent(fileId, content string) error {
+func (fs SqlFileInfoStore) SetContent(rctx request.CTX, fileId, content string) error {
 	query := fs.getQueryBuilder().
 		Update("FileInfo").
 		Set("Content", content).
@@ -433,7 +437,7 @@ func (fs SqlFileInfoStore) SetContent(fileId, content string) error {
 		return errors.Wrap(err, "file_info_tosql")
 	}
 
-	_, err = fs.GetMasterX().Exec(queryString, args...)
+	_, err = fs.GetMaster().Exec(queryString, args...)
 	if err != nil {
 		return errors.Wrapf(err, "failed to update FileInfo content with id=%s", fileId)
 	}
@@ -441,8 +445,8 @@ func (fs SqlFileInfoStore) SetContent(fileId, content string) error {
 	return nil
 }
 
-func (fs SqlFileInfoStore) DeleteForPost(postId string) (string, error) {
-	if _, err := fs.GetMasterX().Exec(
+func (fs SqlFileInfoStore) DeleteForPost(rctx request.CTX, postId string) (string, error) {
+	if _, err := fs.GetMaster().Exec(
 		`UPDATE
 				FileInfo
 			SET
@@ -454,22 +458,50 @@ func (fs SqlFileInfoStore) DeleteForPost(postId string) (string, error) {
 	return postId, nil
 }
 
-func (fs SqlFileInfoStore) PermanentDelete(fileId string) error {
-	if _, err := fs.GetMasterX().Exec(`DELETE FROM FileInfo WHERE Id = ?`, fileId); err != nil {
+func (fs SqlFileInfoStore) DeleteForPostByIds(rctx request.CTX, postId string, fileIDs []string) error {
+	query := fs.getQueryBuilder().
+		Update("FileInfo").
+		Set("DeleteAt", model.GetMillis()).
+		Where(sq.Eq{
+			"PostId": postId,
+			"Id":     fileIDs,
+		})
+
+	queryString, args, err := query.ToSql()
+	if err != nil {
+		return errors.Wrap(err, "SqlFileInfoStore.DeleteForPostByIds: failed to generate sql from query")
+	}
+
+	if _, err := fs.GetMaster().Exec(queryString, args...); err != nil {
+		return errors.Wrap(err, "SqlFileInfoStore.DeleteForPostByIds: failed to soft delete FileInfo from database")
+	}
+
+	return nil
+}
+
+func (fs SqlFileInfoStore) PermanentDeleteForPost(rctx request.CTX, postID string) error {
+	if _, err := fs.GetMaster().Exec(`DELETE FROM FileInfo WHERE PostId = ?`, postID); err != nil {
+		return errors.Wrapf(err, "failed to delete FileInfo with PostId=%s", postID)
+	}
+	return nil
+}
+
+func (fs SqlFileInfoStore) PermanentDelete(rctx request.CTX, fileId string) error {
+	if _, err := fs.GetMaster().Exec(`DELETE FROM FileInfo WHERE Id = ?`, fileId); err != nil {
 		return errors.Wrapf(err, "failed to delete FileInfo with id=%s", fileId)
 	}
 	return nil
 }
 
-func (fs SqlFileInfoStore) PermanentDeleteBatch(endTime int64, limit int64) (int64, error) {
+func (fs SqlFileInfoStore) PermanentDeleteBatch(rctx request.CTX, endTime int64, limit int64) (int64, error) {
 	var query string
 	if fs.DriverName() == "postgres" {
-		query = "DELETE from FileInfo WHERE Id = any (array (SELECT Id FROM FileInfo WHERE CreateAt < ? LIMIT ?))"
+		query = "DELETE from FileInfo WHERE Id = any (array (SELECT Id FROM FileInfo WHERE CreateAt < ? AND CreatorId != ? LIMIT ?))"
 	} else {
-		query = "DELETE from FileInfo WHERE CreateAt < ? LIMIT ?"
+		query = "DELETE from FileInfo WHERE CreateAt < ? AND CreatorId != ? LIMIT ?"
 	}
 
-	sqlResult, err := fs.GetMasterX().Exec(query, endTime, limit)
+	sqlResult, err := fs.GetMaster().Exec(query, endTime, model.BookmarkFileOwner, limit)
 	if err != nil {
 		return 0, errors.Wrap(err, "failed to delete FileInfos in batch")
 	}
@@ -482,10 +514,10 @@ func (fs SqlFileInfoStore) PermanentDeleteBatch(endTime int64, limit int64) (int
 	return rowsAffected, nil
 }
 
-func (fs SqlFileInfoStore) PermanentDeleteByUser(userId string) (int64, error) {
+func (fs SqlFileInfoStore) PermanentDeleteByUser(rctx request.CTX, userId string) (int64, error) {
 	query := "DELETE from FileInfo WHERE CreatorId = ?"
 
-	sqlResult, err := fs.GetMasterX().Exec(query, userId)
+	sqlResult, err := fs.GetMaster().Exec(query, userId)
 	if err != nil {
 		return 0, errors.Wrapf(err, "failed to delete FileInfo with creatorId=%s", userId)
 	}
@@ -498,7 +530,7 @@ func (fs SqlFileInfoStore) PermanentDeleteByUser(userId string) (int64, error) {
 	return rowsAffected, nil
 }
 
-func (fs SqlFileInfoStore) Search(paramsList []*model.SearchParams, userId, teamId string, page, perPage int) (*model.FileInfoList, error) {
+func (fs SqlFileInfoStore) Search(rctx request.CTX, paramsList []*model.SearchParams, userId, teamId string, page, perPage int) (*model.FileInfoList, error) {
 	// Since we don't support paging for DB search, we just return nothing for later pages
 	if page > 0 {
 		return model.NewFileInfoList(), nil
@@ -511,10 +543,17 @@ func (fs SqlFileInfoStore) Search(paramsList []*model.SearchParams, userId, team
 		From("FileInfo").
 		LeftJoin("Channels as C ON C.Id=FileInfo.ChannelId").
 		LeftJoin("ChannelMembers as CM ON C.Id=CM.ChannelId").
-		Where(sq.Or{sq.Eq{"C.TeamId": teamId}, sq.Eq{"C.TeamId": ""}}).
 		Where(sq.Eq{"FileInfo.DeleteAt": 0}).
+		Where(sq.Or{
+			sq.Eq{"FileInfo.CreatorId": model.BookmarkFileOwner},
+			sq.NotEq{"FileInfo.PostId": ""},
+		}).
 		OrderBy("FileInfo.CreateAt DESC").
 		Limit(100)
+
+	if teamId != "" {
+		query = query.Where(sq.Or{sq.Eq{"C.TeamId": teamId}, sq.Eq{"C.TeamId": ""}})
+	}
 
 	for _, params := range paramsList {
 		params.Terms = removeNonAlphaNumericUnquotedTerms(params.Terms, " ")
@@ -659,7 +698,7 @@ func (fs SqlFileInfoStore) Search(paramsList []*model.SearchParams, userId, team
 	items := []fileInfoWithChannelID{}
 	err = fs.GetSearchReplicaX().Select(&items, queryString, args...)
 	if err != nil {
-		mlog.Warn("Query error searching files.", mlog.String("error", trimInput(err.Error())))
+		rctx.Logger().Warn("Query error searching files.", mlog.String("error", trimInput(err.Error())))
 		// Don't return the error to the caller as it is of no use to the user. Instead return an empty set of search results.
 	} else {
 		for _, item := range items {
@@ -673,18 +712,20 @@ func (fs SqlFileInfoStore) Search(paramsList []*model.SearchParams, userId, team
 }
 
 func (fs SqlFileInfoStore) CountAll() (int64, error) {
-	query := fs.getQueryBuilder().
-		Select("COUNT(*)").
-		From("FileInfo").
-		Where("DeleteAt = 0")
-
-	queryString, args, err := query.ToSql()
-	if err != nil {
-		return int64(0), errors.Wrap(err, "count_tosql")
+	var query sq.SelectBuilder
+	if fs.DriverName() == model.DatabaseDriverPostgres {
+		query = fs.getQueryBuilder().
+			Select("num").
+			From("file_stats")
+	} else {
+		query = fs.getQueryBuilder().
+			Select("COUNT(*)").
+			From("FileInfo").
+			Where("DeleteAt = 0")
 	}
 
 	var count int64
-	err = fs.GetReplicaX().Get(&count, queryString, args...)
+	err := fs.GetReplica().GetBuilder(&count, query)
 	if err != nil {
 		return int64(0), errors.Wrap(err, "failed to count Files")
 	}
@@ -719,17 +760,24 @@ func (fs SqlFileInfoStore) GetFilesBatchForIndexing(startTime int64, startFileID
 	return files, nil
 }
 
-func (fs SqlFileInfoStore) GetStorageUsage(allowFromCache, includeDeleted bool) (int64, error) {
-	query := fs.getQueryBuilder().
-		Select("COALESCE(SUM(Size), 0)").
-		From("FileInfo")
+func (fs SqlFileInfoStore) GetStorageUsage(_, includeDeleted bool) (int64, error) {
+	var query sq.SelectBuilder
+	if fs.DriverName() == model.DatabaseDriverPostgres && !includeDeleted {
+		query = fs.getQueryBuilder().
+			Select("usage").
+			From("file_stats")
+	} else {
+		query = fs.getQueryBuilder().
+			Select("COALESCE(SUM(Size), 0)").
+			From("FileInfo")
 
-	if !includeDeleted {
-		query = query.Where("DeleteAt = 0")
+		if !includeDeleted {
+			query = query.Where("DeleteAt = 0")
+		}
 	}
 
 	var size int64
-	err := fs.GetReplicaX().GetBuilder(&size, query)
+	err := fs.GetReplica().GetBuilder(&size, query)
 	if err != nil {
 		return int64(0), errors.Wrap(err, "failed to get storage usage")
 	}
@@ -771,7 +819,7 @@ func (fs *SqlFileInfoStore) GetUptoNSizeFileTime(n int64) (int64, error) {
 	}
 
 	var createAt int64
-	if err := fs.GetReplicaX().Get(&createAt, query, queryArgs...); err != nil {
+	if err := fs.GetReplica().Get(&createAt, query, queryArgs...); err != nil {
 		if err == sql.ErrNoRows {
 			return 0, store.NewErrNotFound("File", "none")
 		}
@@ -780,4 +828,40 @@ func (fs *SqlFileInfoStore) GetUptoNSizeFileTime(n int64) (int64, error) {
 	}
 
 	return createAt, nil
+}
+
+func (fs SqlFileInfoStore) RestoreForPostByIds(rctx request.CTX, postId string, fileIDs []string) error {
+	query := fs.getQueryBuilder().
+		Update("FileInfo").
+		Set("DeleteAt", 0).
+		Where(sq.Eq{
+			"PostId": postId,
+			"Id":     fileIDs,
+		})
+
+	queryString, args, err := query.ToSql()
+	if err != nil {
+		return errors.Wrap(err, "SqlFileInfoStore.RestoreForPostByIds: failed to generate sql from query")
+	}
+
+	if _, err := fs.GetMaster().Exec(queryString, args...); err != nil {
+		return errors.Wrap(err, "SqlFileInfoStore.RestoreForPostByIds: failed to undelete FileInfo from database")
+	}
+
+	return nil
+}
+
+func (fs SqlFileInfoStore) RefreshFileStats() error {
+	if fs.DriverName() == model.DatabaseDriverPostgres {
+		// CONCURRENTLY is not used deliberately because as per Postgres docs,
+		// not using CONCURRENTLY takes less resources and completes faster
+		// at the expense of locking the mat view. Since viewing admin console
+		// is not a very frequent activity, we accept the tradeoff to let the
+		// refresh happen as fast as possible.
+		if _, err := fs.GetMaster().Exec("REFRESH MATERIALIZED VIEW file_stats"); err != nil {
+			return errors.Wrap(err, "error refreshing materialized view file_stats")
+		}
+	}
+
+	return nil
 }

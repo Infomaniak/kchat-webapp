@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ConnectedProps} from 'react-redux';
 import {connect} from 'react-redux';
+import type {ConnectedProps} from 'react-redux';
 
 import {getCurrentChannelId, makeGetChannel, makeGetChannelUnreadCount} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
@@ -32,17 +32,17 @@ function makeMapStateToProps() {
     const getUnreadCount = makeGetChannelUnreadCount();
 
     return (state: GlobalState, ownProps: OwnProps) => {
-        const channel = getChannel(state, {id: ownProps.channelId});
+        const channel = getChannel(state, ownProps.channelId);
         const currentTeam = getCurrentTeam(state);
 
         const currentChannelId = getCurrentChannelId(state);
 
-        const unreadCount = getUnreadCount(state, channel.id);
+        const unreadCount = getUnreadCount(state, channel?.id || '');
 
         return {
             channel,
-            isCurrentChannel: channel.id === currentChannelId,
-            currentTeamName: currentTeam.name,
+            isCurrentChannel: channel?.id === currentChannelId,
+            currentTeamName: currentTeam?.name,
             unreadMentions: unreadCount.mentions,
             isUnread: unreadCount.showUnread,
             draggingState: getDraggingState(state),

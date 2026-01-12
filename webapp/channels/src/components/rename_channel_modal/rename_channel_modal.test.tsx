@@ -8,8 +8,9 @@ import type {Team} from '@mattermost/types/teams';
 
 import {RequestStatus} from 'mattermost-redux/constants';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import {TestHelper} from 'utils/test_helper';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import type {RenameChannelModal as RenameChannelModalClass} from './rename_channel_modal';
 import RenameChannelModal from './rename_channel_modal';

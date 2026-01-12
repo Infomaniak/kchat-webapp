@@ -6,6 +6,7 @@ import {combineReducers} from 'redux';
 import admin from './admin';
 import apps from './apps';
 import bots from './bots';
+import channelBookmarks from './channel_bookmarks';
 import channelCategories from './channel_categories';
 import channels from './channels';
 import cloud from './cloud';
@@ -18,9 +19,13 @@ import hostedCustomer from './hosted_customer';
 import insights from './insights';
 import integrations from './integrations';
 import jobs from './jobs';
+import ksuiteBridge from './ksuiteBridge';
+import limits from './limits';
 import posts from './posts';
 import preferences from './preferences';
+import recording from './recording';
 import roles from './roles';
+import scheduledPosts from './scheduled_posts';
 import schemes from './schemes';
 import search from './search';
 import teams from './teams';
@@ -28,17 +33,18 @@ import threads from './threads';
 import typing from './typing';
 import usage from './usage';
 import users from './users';
-import worktemplates from './work_templates';
 
 export default combineReducers({
     general,
     users,
+    limits,
     teams,
     channels,
     posts,
     files,
     preferences,
     typing,
+    recording,
     integrations,
     emojis,
     gifs,
@@ -56,5 +62,7 @@ export default combineReducers({
     insights,
     usage,
     hostedCustomer,
-    worktemplates,
+    channelBookmarks,
+    scheduledPosts,
+    ksuiteBridge,
 });

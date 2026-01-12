@@ -24,6 +24,7 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       fileInfo={
         Object {
           "archived": false,
+          "channel_id": "channel_id",
           "clientId": "client_id",
           "create_at": 1,
           "delete_at": 1,
@@ -49,7 +50,6 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       onGetPublicLink={[MockFunction]}
       showOnlyClose={false}
       showPublicLink={false}
-      usedInside="Header"
     />
   </div>
   <Memo(FilePreviewModalImageControls)
@@ -72,6 +72,7 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       fileInfo={
         Object {
           "archived": false,
+          "channel_id": "channel_id",
           "clientId": "client_id",
           "create_at": 1,
           "delete_at": 1,
@@ -97,7 +98,6 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       onGetPublicLink={[MockFunction]}
       showOnlyClose={true}
       showPublicLink={false}
-      usedInside="Header"
     />
     <Memo(FilePreviewModalMainNav)
       fileIndex={1}
@@ -137,6 +137,7 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       fileInfo={
         Object {
           "archived": false,
+          "channel_id": "channel_id",
           "clientId": "client_id",
           "create_at": 1,
           "delete_at": 1,
@@ -162,7 +163,6 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       onGetPublicLink={[MockFunction]}
       showOnlyClose={false}
       showPublicLink={false}
-      usedInside="Header"
     />
   </div>
   <Memo(FilePreviewModalImageControls)
@@ -196,6 +196,7 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       fileInfo={
         Object {
           "archived": false,
+          "channel_id": "channel_id",
           "clientId": "client_id",
           "create_at": 1,
           "delete_at": 1,
@@ -221,7 +222,6 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       onGetPublicLink={[MockFunction]}
       showOnlyClose={false}
       showPublicLink={false}
-      usedInside="Header"
     />
   </div>
   <Memo(FilePreviewModalImageControls)
@@ -255,6 +255,7 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       fileInfo={
         Object {
           "archived": false,
+          "channel_id": "channel_id",
           "clientId": "client_id",
           "create_at": 1,
           "delete_at": 1,
@@ -280,7 +281,6 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       onGetPublicLink={[MockFunction]}
       showOnlyClose={false}
       showPublicLink={false}
-      usedInside="Header"
     />
   </div>
   <Memo(FilePreviewModalImageControls)
@@ -314,6 +314,7 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       fileInfo={
         Object {
           "archived": false,
+          "channel_id": "channel_id",
           "clientId": "client_id",
           "create_at": 1,
           "delete_at": 1,
@@ -339,7 +340,6 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       onGetPublicLink={[MockFunction]}
       showOnlyClose={false}
       showPublicLink={false}
-      usedInside="Header"
     />
   </div>
   <Memo(FilePreviewModalImageControls)

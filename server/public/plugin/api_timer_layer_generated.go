@@ -160,6 +160,13 @@ func (api *apiTimerLayer) GetUsers(options *model.UserGetOptions) ([]*model.User
 	return _returnsA, _returnsB
 }
 
+func (api *apiTimerLayer) GetUsersByIds(userIDs []string) ([]*model.User, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.GetUsersByIds(userIDs)
+	api.recordTime(startTime, "GetUsersByIds", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
 func (api *apiTimerLayer) GetUser(userID string) (*model.User, *model.AppError) {
 	startTime := timePkg.Now()
 	_returnsA, _returnsB := api.apiImpl.GetUser(userID)
@@ -192,6 +199,13 @@ func (api *apiTimerLayer) GetUsersInTeam(teamID string, page int, perPage int) (
 	startTime := timePkg.Now()
 	_returnsA, _returnsB := api.apiImpl.GetUsersInTeam(teamID, page, perPage)
 	api.recordTime(startTime, "GetUsersInTeam", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) GetPreferenceForUser(userID, category, name string) (model.Preference, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.GetPreferenceForUser(userID, category, name)
+	api.recordTime(startTime, "GetPreferenceForUser", _returnsB == nil)
 	return _returnsA, _returnsB
 }
 
@@ -648,6 +662,13 @@ func (api *apiTimerLayer) UpdateChannelMemberNotifications(channelId, userID str
 	_returnsA, _returnsB := api.apiImpl.UpdateChannelMemberNotifications(channelId, userID, notifications)
 	api.recordTime(startTime, "UpdateChannelMemberNotifications", _returnsB == nil)
 	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) PatchChannelMembersNotifications(members []*model.ChannelMemberIdentifier, notifyProps map[string]string) *model.AppError {
+	startTime := timePkg.Now()
+	_returnsA := api.apiImpl.PatchChannelMembersNotifications(members, notifyProps)
+	api.recordTime(startTime, "PatchChannelMembersNotifications", _returnsA == nil)
+	return _returnsA
 }
 
 func (api *apiTimerLayer) GetGroup(groupId string) (*model.Group, *model.AppError) {
@@ -1279,4 +1300,186 @@ func (api *apiTimerLayer) SendPushNotification(notification *model.PushNotificat
 	_returnsA := api.apiImpl.SendPushNotification(notification, userID)
 	api.recordTime(startTime, "SendPushNotification", _returnsA == nil)
 	return _returnsA
+}
+
+func (api *apiTimerLayer) UpdateUserAuth(userID string, userAuth *model.UserAuth) (*model.UserAuth, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.UpdateUserAuth(userID, userAuth)
+	api.recordTime(startTime, "UpdateUserAuth", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) RegisterPluginForSharedChannels(opts model.RegisterPluginOpts) (remoteID string, err error) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.RegisterPluginForSharedChannels(opts)
+	api.recordTime(startTime, "RegisterPluginForSharedChannels", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) UnregisterPluginForSharedChannels(pluginID string) error {
+	startTime := timePkg.Now()
+	_returnsA := api.apiImpl.UnregisterPluginForSharedChannels(pluginID)
+	api.recordTime(startTime, "UnregisterPluginForSharedChannels", _returnsA == nil)
+	return _returnsA
+}
+
+func (api *apiTimerLayer) ShareChannel(sc *model.SharedChannel) (*model.SharedChannel, error) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.ShareChannel(sc)
+	api.recordTime(startTime, "ShareChannel", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) UpdateSharedChannel(sc *model.SharedChannel) (*model.SharedChannel, error) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.UpdateSharedChannel(sc)
+	api.recordTime(startTime, "UpdateSharedChannel", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) UnshareChannel(channelID string) (unshared bool, err error) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.UnshareChannel(channelID)
+	api.recordTime(startTime, "UnshareChannel", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) UpdateSharedChannelCursor(channelID, remoteID string, cusror model.GetPostsSinceForSyncCursor) error {
+	startTime := timePkg.Now()
+	_returnsA := api.apiImpl.UpdateSharedChannelCursor(channelID, remoteID, cusror)
+	api.recordTime(startTime, "UpdateSharedChannelCursor", _returnsA == nil)
+	return _returnsA
+}
+
+func (api *apiTimerLayer) SyncSharedChannel(channelID string) error {
+	startTime := timePkg.Now()
+	_returnsA := api.apiImpl.SyncSharedChannel(channelID)
+	api.recordTime(startTime, "SyncSharedChannel", _returnsA == nil)
+	return _returnsA
+}
+
+func (api *apiTimerLayer) InviteRemoteToChannel(channelID string, remoteID string, userID string, shareIfNotShared bool) error {
+	startTime := timePkg.Now()
+	_returnsA := api.apiImpl.InviteRemoteToChannel(channelID, remoteID, userID, shareIfNotShared)
+	api.recordTime(startTime, "InviteRemoteToChannel", _returnsA == nil)
+	return _returnsA
+}
+
+func (api *apiTimerLayer) UninviteRemoteFromChannel(channelID string, remoteID string) error {
+	startTime := timePkg.Now()
+	_returnsA := api.apiImpl.UninviteRemoteFromChannel(channelID, remoteID)
+	api.recordTime(startTime, "UninviteRemoteFromChannel", _returnsA == nil)
+	return _returnsA
+}
+
+func (api *apiTimerLayer) UpsertGroupMember(groupID string, userID string) (*model.GroupMember, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.UpsertGroupMember(groupID, userID)
+	api.recordTime(startTime, "UpsertGroupMember", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) UpsertGroupMembers(groupID string, userIDs []string) ([]*model.GroupMember, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.UpsertGroupMembers(groupID, userIDs)
+	api.recordTime(startTime, "UpsertGroupMembers", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) GetGroupByRemoteID(remoteID string, groupSource model.GroupSource) (*model.Group, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.GetGroupByRemoteID(remoteID, groupSource)
+	api.recordTime(startTime, "GetGroupByRemoteID", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) CreateGroup(group *model.Group) (*model.Group, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.CreateGroup(group)
+	api.recordTime(startTime, "CreateGroup", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) UpdateGroup(group *model.Group) (*model.Group, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.UpdateGroup(group)
+	api.recordTime(startTime, "UpdateGroup", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) DeleteGroup(groupID string) (*model.Group, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.DeleteGroup(groupID)
+	api.recordTime(startTime, "DeleteGroup", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) RestoreGroup(groupID string) (*model.Group, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.RestoreGroup(groupID)
+	api.recordTime(startTime, "RestoreGroup", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) DeleteGroupMember(groupID string, userID string) (*model.GroupMember, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.DeleteGroupMember(groupID, userID)
+	api.recordTime(startTime, "DeleteGroupMember", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) GetGroupSyncable(groupID string, syncableID string, syncableType model.GroupSyncableType) (*model.GroupSyncable, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.GetGroupSyncable(groupID, syncableID, syncableType)
+	api.recordTime(startTime, "GetGroupSyncable", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) GetGroupSyncables(groupID string, syncableType model.GroupSyncableType) ([]*model.GroupSyncable, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.GetGroupSyncables(groupID, syncableType)
+	api.recordTime(startTime, "GetGroupSyncables", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) UpsertGroupSyncable(groupSyncable *model.GroupSyncable) (*model.GroupSyncable, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.UpsertGroupSyncable(groupSyncable)
+	api.recordTime(startTime, "UpsertGroupSyncable", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) UpdateGroupSyncable(groupSyncable *model.GroupSyncable) (*model.GroupSyncable, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.UpdateGroupSyncable(groupSyncable)
+	api.recordTime(startTime, "UpdateGroupSyncable", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) DeleteGroupSyncable(groupID string, syncableID string, syncableType model.GroupSyncableType) (*model.GroupSyncable, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.DeleteGroupSyncable(groupID, syncableID, syncableType)
+	api.recordTime(startTime, "DeleteGroupSyncable", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) UpdateUserRoles(userID, newRoles string) (*model.User, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.UpdateUserRoles(userID, newRoles)
+	api.recordTime(startTime, "UpdateUserRoles", _returnsB == nil)
+	return _returnsA, _returnsB
+}
+
+func (api *apiTimerLayer) GetPluginID() string {
+	startTime := timePkg.Now()
+	_returnsA := api.apiImpl.GetPluginID()
+	api.recordTime(startTime, "GetPluginID", true)
+	return _returnsA
+}
+
+func (api *apiTimerLayer) GetGroups(page, perPage int, opts model.GroupSearchOpts, viewRestrictions *model.ViewUsersRestrictions) ([]*model.Group, *model.AppError) {
+	startTime := timePkg.Now()
+	_returnsA, _returnsB := api.apiImpl.GetGroups(page, perPage, opts, viewRestrictions)
+	api.recordTime(startTime, "GetGroups", _returnsB == nil)
+	return _returnsA, _returnsB
 }

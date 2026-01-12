@@ -8,10 +8,10 @@ import {
     MessageTextOutlineIcon,
 } from '@infomaniak/compass-icons/components';
 import React, {useEffect, useRef} from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import type {IndicatorProps, OptionProps, SingleValueProps, ValueType} from 'react-select';
 import {components} from 'react-select';
+import type {OptionProps, SingleValueProps, OnChangeValue, DropdownIndicatorProps, OptionsOrGroups, GroupBase} from 'react-select';
 import AsyncSelect from 'react-select/async';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -46,11 +46,6 @@ export type ChannelOption = {
     details: ChannelTypeFromProvider;
 }
 
-type GroupedOption = {
-    label: React.ReactNode;
-    options: ChannelOption[];
-}
-
 export const makeSelectedChannelOption = (channel: Channel): ChannelOption => ({
     label: channel.display_name || channel.name,
     value: channel.id,
@@ -75,7 +70,7 @@ const FormattedOption = (props: ChannelOption & {className: string; isSingleValu
     let icon;
     const iconProps = {
         size: 16,
-        color: 'rgba(var(--center-channel-color-rgb), 0.56)',
+        color: 'rgba(var(--center-channel-color-rgb), 0.75)',
     };
 
     if (channelIsArchived) {
@@ -144,7 +139,6 @@ const FormattedOption = (props: ChannelOption & {className: string; isSingleValu
     const sharedIcon = details.shared ? (
         <SharedChannelIndicator
             className='shared-channel-icon'
-            channelType={details.type}
         />
     ) : null;
 
@@ -211,26 +205,25 @@ const SingleValue = (props: SingleValueProps<ChannelOption>) => {
     );
 };
 
-const DropdownIndicator = (props: IndicatorProps<ChannelOption>) => {
+const DropdownIndicator = (props: DropdownIndicatorProps<ChannelOption>) => {
     return (
         <components.DropdownIndicator {...props}>
             <ChevronDownIcon
                 size={16}
-                color={'rgba(var(--center-channel-color-rgb), 0.64)'}
+                color={'rgba(var(--center-channel-color-rgb), 0.75)'}
             />
         </components.DropdownIndicator>
     );
 };
 
-const validChannelTypes = ['O', 'P', 'D', 'G'];
-
 type Props<O> = {
-    onSelect: (channel: ValueType<O>) => void;
+    onSelect: (channel: OnChangeValue<O, boolean>) => void;
     currentBodyHeight: number;
     value?: O;
+    validChannelTypes?: string[];
 }
 
-function ForwardPostChannelSelect({onSelect, value, currentBodyHeight}: Props<ChannelOption>) {
+function ForwardPostChannelSelect({onSelect, value, currentBodyHeight, validChannelTypes = ['O', 'P', 'D', 'G']}: Props<ChannelOption>) {
     const {formatMessage} = useIntl();
     const {current: provider} = useRef<SwitchChannelProvider>(new SwitchChannelProvider());
 
@@ -243,9 +236,9 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight}: Props<Ch
     const isValidChannelType = (channel: Channel) => validChannelTypes.includes(channel.type) && !channel.delete_at;
 
     const getDefaultResults = () => {
-        let options: GroupedOption[] = [];
+        let options: OptionsOrGroups<ChannelOption, GroupBase<ChannelOption>> = [];
 
-        const handleDefaultResults = (res: ProviderResult) => {
+        const handleDefaultResults = (res: ProviderResult<any>) => {
             options = [
                 {
                     label: formatMessage({id: 'suggestion.mention.recent.channels', defaultMessage: 'Recent'}),
@@ -261,7 +254,7 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight}: Props<Ch
         return options;
     };
 
-    const defaultOptions = useRef<GroupedOption[]>(getDefaultResults());
+    const defaultOptions = useRef<OptionsOrGroups<ChannelOption, GroupBase<ChannelOption>>>(getDefaultResults());
 
     const handleInputChange = (inputValue: string) => {
         return new Promise<ChannelOption[]>((resolve) => {
@@ -276,7 +269,8 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight}: Props<Ch
              */
             const handleResults = async (res: ProviderResult) => {
                 callCount++;
-                await res.items.filter((item) => item?.channel && isValidChannelType(item.channel) && !item.deactivated).forEach((item) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                await res.items.filter((item: any) => item?.channel && isValidChannelType(item.channel) && !item.deactivated).forEach((item: any) => {
                     const {channel} = item;
 
                     if (options.findIndex((option) => option.value === channel.id) === -1) {
@@ -292,7 +286,12 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight}: Props<Ch
             provider.handlePretextChanged(inputValue, handleResults);
         });
     };
-
+    const message = (
+        <FormattedMessage
+            defaultMessage='Select a channel or people'
+            id='forward_post_modal.selection'
+        />
+    );
     return (
         <AsyncSelect
             value={value}
@@ -302,7 +301,7 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight}: Props<Ch
             components={{DropdownIndicator, Option, SingleValue}}
             styles={baseStyles}
             legend='Forward to'
-            placeholder='Select channel or people'
+            placeholder={message}
             className='forward-post__select'
             data-testid='forward-post-select'
         />

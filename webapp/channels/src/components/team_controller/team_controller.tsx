@@ -3,7 +3,6 @@
 
 import iNoBounce from 'inobounce';
 import React, {lazy, memo, useEffect, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
 import {Route, Switch, useHistory, useParams} from 'react-router-dom';
 
 import type {ServerError} from '@mattermost/types/errors';
@@ -11,15 +10,14 @@ import type {Team} from '@mattermost/types/teams';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import {showSettings} from 'actions/views/rhs';
 import LocalStorageStore from 'stores/local_storage_store';
 
-import {makeAsyncComponent} from 'components/async_load';
+import {makeAsyncComponent, makeAsyncPluggableComponent} from 'components/async_load';
 import ChannelController from 'components/channel_layout/channel_controller';
 import useTelemetryIdentitySync from 'components/common/hooks/useTelemetryIdentifySync';
 
-import {hasNotificationsSettingsPathInUrl} from 'utils/browser_history';
 import Constants from 'utils/constants';
+import DesktopApp from 'utils/desktop_api';
 import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
 import {isIosSafari} from 'utils/user_agent';
@@ -27,7 +25,7 @@ import {isIosSafari} from 'utils/user_agent';
 import type {OwnProps, PropsFromRedux} from './index';
 
 const BackstageController = makeAsyncComponent('BackstageController', lazy(() => import('components/backstage')));
-const Pluggable = makeAsyncComponent('Pluggable', lazy(() => import('plugins/pluggable')));
+const Pluggable = makeAsyncPluggableComponent();
 
 const UNREAD_CHECK_TIME_MILLISECONDS = 120 * 1000;
 
@@ -41,7 +39,6 @@ type Props = PropsFromRedux & OwnProps;
 
 function TeamController(props: Props) {
     const history = useHistory();
-    const dispatch = useDispatch();
     const {team: teamNameParam} = useParams<Props['match']['params']>();
 
     const [initialChannelsLoaded, setInitialChannelsLoaded] = useState(false);
@@ -53,42 +50,40 @@ function TeamController(props: Props) {
     useTelemetryIdentitySync();
 
     useEffect(() => {
-        async function fetchInitialChannels() {
-            await props.fetchAllMyTeamsChannelsAndChannelMembersREST();
-
+        DesktopApp.reactAppInitialized();
+        async function fetchAllChannels() {
+            await props.fetchAllMyTeamsChannels();
+            await props.fetchAllMyChannelMembers();
             setInitialChannelsLoaded(true);
         }
 
-        fetchInitialChannels();
+        fetchAllChannels();
     }, []);
 
-    useEffect(() => {
-        let notificationsSettingsTimer: NodeJS.Timeout;
+    // useEffect(() => {
+    //     if (props.disableWakeUpReconnectHandler) {
+    //         return () => {};
+    //     }
 
-        // open notifications settings panel if the url contains 'notifications-settings'
-        const test = hasNotificationsSettingsPathInUrl();
-        if (test) {
-            notificationsSettingsTimer = setTimeout(() => {
-                dispatch(showSettings('notifications'));
-                history.push(window.location.pathname); //clear the hash params
-            });
-        }
+    //     const wakeUpIntervalId = setInterval(() => {
+    //         const currentTime = Date.now();
+    //         if ((currentTime - lastTime.current) > WAKEUP_THRESHOLD) {
+    //             console.log('computer woke up - reconnecting'); //eslint-disable-line no-console
+    //             reconnect();
+    //         }
+    //         lastTime.current = currentTime;
+    //     }, WAKEUP_CHECK_INTERVAL);
 
-        return () => {
-            notificationsSettingsTimer && clearInterval(notificationsSettingsTimer);
-        };
-    }, []);
+    //     return () => {
+    //         clearInterval(wakeUpIntervalId);
+    //     };
+    // }, [props.disableWakeUpReconnectHandler]);
 
     // Effect runs on mount, add event listeners on windows object
     useEffect(() => {
         function handleFocus() {
-            if (props.selectedThreadId) {
-                window.isActive = true;
-            }
-            if (props.currentChannelId) {
-                window.isActive = true;
-                props.markChannelAsReadOnFocus(props.currentChannelId);
-            }
+            window.isActive = true;
+            props.markAsReadOnFocus();
 
             // Temporary flag to disable refetching of channel members on browser focus
             if (!props.disableRefetchingOnBrowserFocus) {
@@ -102,6 +97,7 @@ function TeamController(props: Props) {
         function handleBlur() {
             window.isActive = false;
             blurTime.current = Date.now();
+            props.unsetActiveChannelOnServer();
         }
 
         function handleKeydown(event: KeyboardEvent) {
@@ -127,7 +123,7 @@ function TeamController(props: Props) {
             window.removeEventListener('blur', handleBlur);
             window.removeEventListener('keydown', handleKeydown);
         };
-    }, [props.selectedThreadId, props.currentChannelId, props.currentTeamId]);
+    }, [props.currentTeamId]);
 
     // Effect runs on mount, adds active state to window
     useEffect(() => {
@@ -152,26 +148,26 @@ function TeamController(props: Props) {
     }, []);
 
     async function initTeamOrRedirect(team: Team) {
-        try {
-            await props.initializeTeam(team);
-            setTeam(team);
-        } catch (error) {
+        const {data: joinedTeam, error} = await props.initializeTeam(team) as ActionResult<Team, ServerError>; // Fix in MM-46907;
+        if (error) {
             history.push('/error?type=team_not_found');
+            return;
+        }
+        if (joinedTeam) {
+            setTeam(joinedTeam);
         }
     }
 
     async function joinTeamOrRedirect(teamNameParam: string, joinedOnFirstLoad: boolean) {
         setTeam(null);
 
-        try {
-            const {data: joinedTeam} = await props.joinTeam(teamNameParam, joinedOnFirstLoad) as ActionResult<Team, ServerError>; // Fix in MM-46907;
-            if (joinedTeam) {
-                setTeam(joinedTeam);
-            } else {
-                throw new Error('Unable to join team');
-            }
-        } catch (error) {
+        const {data: joinedTeam, error} = await props.joinTeam(teamNameParam, joinedOnFirstLoad) as ActionResult<Team, ServerError>; // Fix in MM-46907;
+        if (error) {
             history.push('/error?type=team_not_found');
+            return;
+        }
+        if (joinedTeam) {
+            setTeam(joinedTeam);
         }
     }
 
@@ -208,6 +204,8 @@ function TeamController(props: Props) {
         return null;
     }
 
+    const teamLoaded = team?.name.toLowerCase() === teamNameParam?.toLowerCase();
+
     return (
         <Switch>
             <Route
@@ -232,7 +230,7 @@ function TeamController(props: Props) {
                 />
             ))}
             <ChannelController
-                shouldRenderCenterChannel={initialChannelsLoaded}
+                shouldRenderCenterChannel={initialChannelsLoaded && teamLoaded}
                 headerRef={props.headerRef}
             />
         </Switch>

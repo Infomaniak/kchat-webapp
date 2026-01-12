@@ -1,47 +1,48 @@
-/* eslint-disable max-lines */
 /* eslint-disable no-restricted-imports */
+/* eslint-disable max-lines */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
 import type {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
-import type {ClientConfig, ClientLicense} from '@mattermost/types/config';
+import type {UserAutocomplete} from '@mattermost/types/autocomplete';
+import type {Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
-import type {PreferenceType} from '@mattermost/types/preferences';
-import type {Role} from '@mattermost/types/roles';
-import type {Team, TeamMembership} from '@mattermost/types/teams';
-import type {UserProfile, UserStatus, GetFilteredUsersStatsOpts, UsersStats, UserCustomStatus} from '@mattermost/types/users';
+import type {UserProfile, UserStatus, GetFilteredUsersStatsOpts, UsersStats, UserCustomStatus, UserAccessToken} from '@mattermost/types/users';
 
-import {UserTypes, AdminTypes, GeneralTypes, PreferenceTypes, TeamTypes, RoleTypes} from 'mattermost-redux/action_types';
+import {UserTypes, AdminTypes} from 'mattermost-redux/action_types';
 import {logError} from 'mattermost-redux/actions/errors';
 import {setServerVersion, getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
-import {bindClientFunc, forceLogoutIfNecessary, debounce} from 'mattermost-redux/actions/helpers';
+import {bindClientFunc, forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
 import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
-import {getMyKSuites, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
-import type {
-    CurrentUserInfoQueryResponseType} from 'mattermost-redux/actions/users_queries';
-import {
-    currentUserInfoQuery,
-    transformToRecievedMeReducerPayload,
-    transformToRecievedTeamsListReducerPayload,
-    transformToReceivedUserAndTeamRolesReducerPayload,
-    transformToRecievedMyTeamMembersReducerPayload,
-} from 'mattermost-redux/actions/users_queries';
+import {getMyTeamMembers, getMyTeamUnreads, getMyKSuites} from 'mattermost-redux/actions/teams';
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
+import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getTeams} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
-import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
-import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
+import {getCurrentUserId, getUser as selectUser, getUsers, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
+import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
+import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
+
+import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 
-export function generateMfaSecret(userId: string): ActionFunc {
+import type {GlobalState} from 'types/store';
+
+// import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
+// import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
+
+// Delay requests for missing profiles for up to 100ms to allow for simulataneous requests to be batched
+const missingProfilesWait = 100;
+
+export const maxUserIdsPerProfilesRequest = 100; // users ids per 'users/ids' request
+export const maxUserIdsPerStatusesRequest = 200; // users ids per 'users/status/ids'request
+
+export function generateMfaSecret(userId: string) {
     return bindClientFunc({
         clientFunc: Client4.generateMfaSecret,
         params: [
@@ -50,8 +51,8 @@ export function generateMfaSecret(userId: string): ActionFunc {
     });
 }
 
-export function createUser(user: UserProfile, token: string, inviteId: string, redirect: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function createUser(user: UserProfile, token: string, inviteId: string, redirect: string): ActionFuncAsync<UserProfile> {
+    return async (dispatch, getState) => {
         let created;
 
         try {
@@ -73,61 +74,33 @@ export function createUser(user: UserProfile, token: string, inviteId: string, r
     };
 }
 
-export function loadMeREST(): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function loadMe(): ActionFuncAsync<boolean> {
+    return async (dispatch, getState) => {
         // Sometimes the server version is set in one or the other
-        // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
-        const serverVersion = Client4.getServerVersion();
+        const serverVersion = getState().entities.general.serverVersion || Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
 
+        const bridge = getState().entities.ksuiteBridge.bridge;
+
+        if (!bridge?.isConnected && !isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+            // eslint-disable-next-line no-process-env
+            window.location.assign(`https://ksuite.${process.env.BASE_URL?.split('kchat.')[1]}/kchat`);
+
+            return {data: false};
+        }
+
         try {
-            const kSuiteCall = await dispatch(getMyKSuites());
-            const kSuites = getTeams(getState());
+            await Promise.all([
+                dispatch(getClientConfig()),
+                dispatch(getLicenseConfig()),
+                dispatch(getMe()),
+                dispatch(getMyPreferences()),
+                dispatch(getMyKSuites()),
+                dispatch(getMyTeamMembers()),
+            ]);
 
-            const suiteArr = Object.values(kSuites);
-
-            // allow through in tests to launch promise.all but not trigger redirect
-            if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
-                const lastKSuiteSeenId = getLastKSuiteSeenId();
-                const sortedSuites = suiteArr.sort((a, b) => {
-                    if (a.id === lastKSuiteSeenId) {
-                        return -1;
-                    }
-                    if (b.id === lastKSuiteSeenId) {
-                        return 1;
-                    }
-                    return b.update_at - a.update_at;
-                });
-                const lastKSuiteSeen = sortedSuites[0];
-
-                if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    window.postMessage({
-                        type: 'switch-server',
-                        data: lastKSuiteSeen.display_name,
-                    }, window.origin);
-                }
-
-                // don't redirect to the error page if it is a testing environment
-                if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    window.open(lastKSuiteSeen.url, '_self');
-                }
-
-                await Promise.all([
-                    dispatch(getClientConfig()),
-                    dispatch(getLicenseConfig()),
-                    dispatch(getMe()),
-                    dispatch(getMyPreferences()),
-                    dispatch(getMyTeamMembers()),
-                ]);
-
-                const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
-                await dispatch(getMyTeamUnreads(isCollapsedThreads));
-            } else if (!isDesktopApp()) {
-                // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
-                if (kSuiteCall && kSuiteCall.data) {
-                    getHistory().push('/error?type=no_ksuite');
-                }
-            }
+            const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
+            await dispatch(getMyTeamUnreads(isCollapsedThreads));
         } catch (error) {
             dispatch(logError(error as ServerError));
             return {error: error as ServerError};
@@ -137,101 +110,29 @@ export function loadMeREST(): ActionFunc {
     };
 }
 
-export function loadMe(): ActionFunc {
-    return async (dispatch: DispatchFunc) => {
-        // Sometimes the server version is set in one or the other
-        // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
-        const serverVersion = Client4.getServerVersion();
-        dispatch(setServerVersion(serverVersion));
-
-        let clientLicense: ClientLicense;
-        let clientConfig: ClientConfig;
-        let userProfile: UserProfile;
-        let roles: Role[];
-        let preferences: PreferenceType[];
-        let teams: Team[];
-        let teamMemberships: TeamMembership[];
-
-        try {
-            const {data, errors} = await Client4.fetchWithGraphQL<CurrentUserInfoQueryResponseType>(currentUserInfoQuery);
-
-            if (errors || !data) {
-                throw new Error('Error returned in fetching current user info with graphQL');
-            }
-
-            clientLicense = Object.assign({}, data.license);
-            clientConfig = Object.assign({}, data.config);
-            userProfile = transformToRecievedMeReducerPayload(data.user);
-            roles = transformToReceivedUserAndTeamRolesReducerPayload(data.user.roles, data.teamMembers);
-            preferences = [...data.user.preferences];
-            teams = transformToRecievedTeamsListReducerPayload(data.teamMembers);
-            teamMemberships = transformToRecievedMyTeamMembersReducerPayload(data.teamMembers, data.user.id);
-        } catch (error) {
-            dispatch(logError(error as ServerError));
-            return {error: error as ServerError};
-        }
-
-        dispatch(
-            batchActions([
-                {
-                    type: GeneralTypes.CLIENT_LICENSE_RECEIVED,
-                    data: clientLicense,
-                },
-                {
-                    type: GeneralTypes.CLIENT_CONFIG_RECEIVED,
-                    data: clientConfig,
-                },
-                {
-                    type: UserTypes.RECEIVED_ME,
-                    data: userProfile,
-                },
-                {
-                    type: RoleTypes.RECEIVED_ROLES,
-                    data: roles,
-                },
-                {
-                    type: PreferenceTypes.RECEIVED_ALL_PREFERENCES,
-                    data: preferences,
-                },
-                {
-                    type: TeamTypes.RECEIVED_TEAMS_LIST,
-                    data: teams,
-                },
-                {
-                    type: TeamTypes.RECEIVED_MY_TEAM_MEMBERS,
-                    data: teamMemberships,
-                },
-            ]),
-        );
-
-        return {data: true};
-    };
-}
-
-export function logout(): ActionFunc {
-    return async (dispatch: DispatchFunc) => {
+export function logout(): ActionFuncAsync {
+    return async (dispatch) => {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
 
-        // TODO: remove
-        // Causes a redirect in web which stops logout.
-        // Since app state rebuilds after redirecting to our external login as apposed
-        // to mattermost where login is in the app this is not needed.
-        //
-        // dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null});
+        try {
+            await Client4.logout();
+        } catch (error) {
+            // nothing to do here
+        }
 
         return {data: true};
     };
 }
 
-export function getTotalUsersStats(): ActionFunc {
+export function getTotalUsersStats() {
     return bindClientFunc({
         clientFunc: Client4.getTotalUsersStats,
         onSuccess: UserTypes.RECEIVED_USER_STATS,
     });
 }
 
-export function getFilteredUsersStats(options: GetFilteredUsersStatsOpts = {}, updateGlobalState = true): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function getFilteredUsersStats(options: GetFilteredUsersStatsOpts = {}, updateGlobalState = true): ActionFuncAsync<UsersStats> {
+    return async (dispatch, getState) => {
         let stats: UsersStats;
         try {
             stats = await Client4.getFilteredUsersStats(options);
@@ -252,12 +153,12 @@ export function getFilteredUsersStats(options: GetFilteredUsersStatsOpts = {}, u
     };
 }
 
-export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SIZE, options: any = {}): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {currentUserId} = getState().entities.users;
+export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SIZE, options: any = {}): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles: UserProfile[] = [];
         let currentFetch: UserProfile[];
         let currentPage = page;
+
         try {
             // eslint-disable-next-line no-constant-condition
             while (true) {
@@ -269,7 +170,6 @@ export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SI
                 }
                 currentPage += 1;
             }
-            removeUserFromList(currentUserId, profiles);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -285,58 +185,70 @@ export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SI
     };
 }
 
-export function getMissingProfilesByIds(userIds: string[]) {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {profiles} = getState().entities.users;
-        const missingIds: string[] = [];
-        userIds.forEach((id) => {
-            if (!profiles[id]) {
-                missingIds.push(id);
-            }
-        });
+export function getMissingProfilesByIds(userIds: string[]): ActionFuncAsync<Array<UserProfile['id']>> {
+    return async (dispatch, getState, {loaders}: any) => {
+        if (!loaders.missingStatusLoader) {
+            loaders.missingStatusLoader = new DelayedDataLoader<UserProfile['id']>({
+                fetchBatch: (userIds) => dispatch(getStatusesByIds(userIds)),
+                maxBatchSize: maxUserIdsPerProfilesRequest,
+                wait: missingProfilesWait,
+            });
+        }
+
+        if (!loaders.missingProfileLoader) {
+            loaders.missingProfileLoader = new DelayedDataLoader<UserProfile['id']>({
+                fetchBatch: (userIds) => dispatch(getProfilesByIds(userIds)),
+                maxBatchSize: maxUserIdsPerProfilesRequest,
+                wait: missingProfilesWait,
+            });
+        }
+
+        const state = getState();
+
+        const missingIds = userIds.filter((id) => !selectUser(state, id));
 
         if (missingIds.length > 0) {
-            getStatusesByIds(missingIds)(dispatch, getState);
-            return getProfilesByIds(missingIds)(dispatch, getState);
+            if (getIsUserStatusesConfigEnabled(state)) {
+                loaders.missingStatusLoader.queue(missingIds);
+            }
+
+            await loaders.missingProfileLoader.queueAndWait(missingIds);
         }
 
-        return {data: []};
+        return {
+            data: missingIds,
+        };
     };
 }
 
-export function getMissingProfilesByUsernames(usernames: string[]) {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {profiles} = getState().entities.users;
+export function getMissingProfilesByUsernames(usernames: string[]): ActionFuncAsync<Array<UserProfile['username']>> {
+    return async (dispatch, getState, {loaders}: any) => {
+        if (!loaders.userByUsernameLoader) {
+            loaders.userByUsernameLoader = new DelayedDataLoader<UserProfile['username']>({
+                fetchBatch: (usernames) => dispatch(getProfilesByUsernames(usernames)),
+                maxBatchSize: maxUserIdsPerProfilesRequest,
+                wait: missingProfilesWait,
+            });
+        }
 
-        const usernameProfiles = Object.values(profiles).reduce((acc, profile: any) => {
-            acc[profile.username] = profile;
-            return acc;
-        }, {} as Record<string, UserProfile>);
-        const missingUsernames: string[] = [];
-        usernames.forEach((username) => {
-            if (!usernameProfiles[username]) {
-                missingUsernames.push(username);
-            }
-        });
+        const usersByUsername = getUsersByUsername(getState());
+
+        const missingUsernames = usernames.filter((username) => !usersByUsername[username]);
 
         if (missingUsernames.length > 0) {
-            return getProfilesByUsernames(missingUsernames)(dispatch, getState);
+            await loaders.userByUsernameLoader.queueAndWait(missingUsernames);
         }
 
-        return {data: []};
+        return {data: missingUsernames};
     };
 }
 
-export function getProfilesByIds(userIds: string[], options?: any, includeCurrentUser = false): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {currentUserId} = getState().entities.users;
+export function getProfilesByIds(userIds: string[], options?: any): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles: UserProfile[];
 
         try {
             profiles = await Client4.getProfilesByIds(userIds, options);
-            if (!includeCurrentUser) {
-                removeUserFromList(currentUserId, profiles);
-            }
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -352,14 +264,12 @@ export function getProfilesByIds(userIds: string[], options?: any, includeCurren
     };
 }
 
-export function getProfilesByUsernames(usernames: string[]): ActionFunc<UserProfile[]> {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {currentUserId} = getState().entities.users;
+export function getProfilesByUsernames(usernames: string[]): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles;
 
         try {
             profiles = await Client4.getProfilesByUsernames(usernames);
-            removeUserFromList(currentUserId, profiles);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -375,9 +285,8 @@ export function getProfilesByUsernames(usernames: string[]): ActionFunc<UserProf
     };
 }
 
-export function getProfilesInTeam(teamId: string, page: number, perPage: number = General.PROFILE_CHUNK_SIZE, sort = '', options: any = {}): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {currentUserId} = getState().entities.users;
+export function getProfilesInTeam(teamId: string, page: number, perPage: number = General.PROFILE_CHUNK_SIZE, sort = '', options: any = {}): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles;
 
         try {
@@ -396,7 +305,7 @@ export function getProfilesInTeam(teamId: string, page: number, perPage: number 
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST,
-                data: removeUserFromList(currentUserId, [...profiles]),
+                data: profiles,
             },
         ]));
 
@@ -404,8 +313,8 @@ export function getProfilesInTeam(teamId: string, page: number, perPage: number 
     };
 }
 
-export function getProfilesNotInTeam(teamId: string, groupConstrained: boolean, page: number, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function getProfilesNotInTeam(teamId: string, groupConstrained: boolean, page: number, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles;
         try {
             profiles = await Client4.getProfilesNotInTeam(teamId, groupConstrained, page, perPage);
@@ -433,8 +342,8 @@ export function getProfilesNotInTeam(teamId: string, groupConstrained: boolean, 
     };
 }
 
-export function getProfilesWithoutTeam(page: number, perPage: number = General.PROFILE_CHUNK_SIZE, options: any = {}): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function getProfilesWithoutTeam(page: number, perPage: number = General.PROFILE_CHUNK_SIZE, options: any = {}): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles = null;
         try {
             profiles = await Client4.getProfilesWithoutTeam(page, perPage, options);
@@ -464,9 +373,8 @@ export enum ProfilesInChannelSortBy {
     Admin = 'admin',
 }
 
-export function getProfilesInChannel(channelId: string, page: number, perPage: number = General.PROFILE_CHUNK_SIZE, sort = '', options: {active?: boolean} = {}): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {currentUserId} = getState().entities.users;
+export function getProfilesInChannel(channelId: string, page: number, perPage: number = General.PROFILE_CHUNK_SIZE, sort = '', options: {active?: boolean} = {}): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles;
 
         try {
@@ -485,7 +393,7 @@ export function getProfilesInChannel(channelId: string, page: number, perPage: n
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST,
-                data: removeUserFromList(currentUserId, [...profiles]),
+                data: profiles,
             },
         ]));
 
@@ -493,9 +401,23 @@ export function getProfilesInChannel(channelId: string, page: number, perPage: n
     };
 }
 
-export function getProfilesInGroupChannels(channelsIds: string[]): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {currentUserId} = getState().entities.users;
+export function batchGetProfilesInChannel(channelId: string): ActionFuncAsync<Array<Channel['id']>> {
+    return async (dispatch, getState, {loaders}: any) => {
+        if (!loaders.profilesInChannelLoader) {
+            loaders.profilesInChannelLoader = new DelayedDataLoader<Channel['id']>({
+                fetchBatch: (channelIds) => dispatch(getProfilesInChannel(channelIds[0], 0)),
+                maxBatchSize: 1,
+                wait: missingProfilesWait,
+            });
+        }
+
+        await loaders.profilesInChannelLoader.queueAndWait([channelId]);
+        return {};
+    };
+}
+
+export function getProfilesInGroupChannels(channelsIds: string[]): ActionFuncAsync {
+    return async (dispatch, getState) => {
         let channelProfiles;
 
         try {
@@ -508,7 +430,7 @@ export function getProfilesInGroupChannels(channelsIds: string[]): ActionFunc {
 
         const actions: AnyAction[] = [];
         for (const channelId in channelProfiles) {
-            if (channelProfiles.hasOwnProperty(channelId)) {
+            if (Object.hasOwn(channelProfiles, channelId)) {
                 const profiles = channelProfiles[channelId];
 
                 actions.push(
@@ -519,7 +441,7 @@ export function getProfilesInGroupChannels(channelsIds: string[]): ActionFunc {
                     },
                     {
                         type: UserTypes.RECEIVED_PROFILES_LIST,
-                        data: removeUserFromList(currentUserId, [...profiles]),
+                        data: profiles,
                     },
                 );
             }
@@ -531,9 +453,8 @@ export function getProfilesInGroupChannels(channelsIds: string[]): ActionFunc {
     };
 }
 
-export function getProfilesNotInChannel(teamId: string, channelId: string, groupConstrained: boolean, page: number, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {currentUserId} = getState().entities.users;
+export function getProfilesNotInChannel(teamId: string, channelId: string, groupConstrained: boolean, page: number, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles;
 
         try {
@@ -554,7 +475,7 @@ export function getProfilesNotInChannel(teamId: string, channelId: string, group
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST,
-                data: removeUserFromList(currentUserId, [...profiles]),
+                data: profiles,
             },
         ]));
 
@@ -562,13 +483,14 @@ export function getProfilesNotInChannel(teamId: string, channelId: string, group
     };
 }
 
-export function getMe() {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function getMe(): ActionFuncAsync<UserProfile> {
+    return async (dispatch) => {
         const getMeFunc = bindClientFunc({
             clientFunc: Client4.getMe,
             onSuccess: UserTypes.RECEIVED_ME,
         });
-        const me = await getMeFunc(dispatch, getState) as any;
+        const me = await dispatch(getMeFunc);
+
         if ('error' in me) {
             if (me.error?.status_code && me.error?.status_code === 404 && (window && !window.location.pathname.includes('static/call'))) {
                 getHistory().push('/error?type=page_not_found');
@@ -576,15 +498,33 @@ export function getMe() {
             return me;
         }
         if ('data' in me) {
-            dispatch(loadRolesIfNeeded(me.data.roles.split(' ')));
+            dispatch(loadRolesIfNeeded(me.data!.roles.split(' ')));
         }
         return me;
     };
 }
 
-export function updateMyTermsOfServiceStatus(termsOfServiceId: string, accepted: boolean): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const response: ActionResult = await dispatch(bindClientFunc({
+export function getCustomProfileAttributeValues(userID: string): ActionFuncAsync<Record<string, string>> {
+    return async (dispatch) => {
+        let data;
+        try {
+            data = await Client4.getUserCustomProfileAttributesValues(userID);
+        } catch (error) {
+            return {error};
+        }
+
+        dispatch({
+            type: UserTypes.RECEIVED_CPA_VALUES,
+            data: {userID, customAttributeValues: data},
+        });
+
+        return {data};
+    };
+}
+
+export function updateMyTermsOfServiceStatus(termsOfServiceId: string, accepted: boolean): ActionFuncAsync {
+    return async (dispatch, getState) => {
+        const response = await dispatch(bindClientFunc({
             clientFunc: Client4.updateMyTermsOfServiceStatus,
             params: [
                 termsOfServiceId,
@@ -615,9 +555,8 @@ export function updateMyTermsOfServiceStatus(termsOfServiceId: string, accepted:
     };
 }
 
-export function getProfilesInGroup(groupId: string, page = 0, perPage: number = General.PROFILE_CHUNK_SIZE, sort = ''): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {currentUserId} = getState().entities.users;
+export function getProfilesInGroup(groupId: string, page = 0, perPage: number = General.PROFILE_CHUNK_SIZE, sort = ''): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles;
 
         try {
@@ -636,7 +575,7 @@ export function getProfilesInGroup(groupId: string, page = 0, perPage: number = 
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST,
-                data: removeUserFromList(currentUserId, [...profiles]),
+                data: profiles,
             },
         ]));
 
@@ -644,9 +583,8 @@ export function getProfilesInGroup(groupId: string, page = 0, perPage: number = 
     };
 }
 
-export function getProfilesNotInGroup(groupId: string, page = 0, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {currentUserId} = getState().entities.users;
+export function getProfilesNotInGroup(groupId: string, page = 0, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles;
 
         try {
@@ -665,7 +603,7 @@ export function getProfilesNotInGroup(groupId: string, page = 0, perPage: number
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST,
-                data: removeUserFromList(currentUserId, [...profiles]),
+                data: profiles,
             },
         ]));
 
@@ -673,27 +611,27 @@ export function getProfilesNotInGroup(groupId: string, page = 0, perPage: number
     };
 }
 
-export function getTermsOfService(): ActionFunc {
+export function getTermsOfService() {
     return bindClientFunc({
         clientFunc: Client4.getTermsOfService,
     });
 }
 
-export function promoteGuestToUser(userId: string): ActionFunc {
+export function promoteGuestToUser(userId: string) {
     return bindClientFunc({
         clientFunc: Client4.promoteGuestToUser,
         params: [userId],
     });
 }
 
-export function demoteUserToGuest(userId: string): ActionFunc {
+export function demoteUserToGuest(userId: string) {
     return bindClientFunc({
         clientFunc: Client4.demoteUserToGuest,
         params: [userId],
     });
 }
 
-export function createTermsOfService(text: string): ActionFunc {
+export function createTermsOfService(text: string) {
     return bindClientFunc({
         clientFunc: Client4.createTermsOfService,
         params: [
@@ -702,7 +640,7 @@ export function createTermsOfService(text: string): ActionFunc {
     });
 }
 
-export function getUser(id: string): ActionFunc {
+export function getUser(id: string) {
     return bindClientFunc({
         clientFunc: Client4.getUser,
         onSuccess: UserTypes.RECEIVED_PROFILE,
@@ -712,7 +650,7 @@ export function getUser(id: string): ActionFunc {
     });
 }
 
-export function getUserByUsername(username: string): ActionFunc {
+export function getUserByUsername(username: string) {
     return bindClientFunc({
         clientFunc: Client4.getUserByUsername,
         onSuccess: UserTypes.RECEIVED_PROFILE,
@@ -722,7 +660,7 @@ export function getUserByUsername(username: string): ActionFunc {
     });
 }
 
-export function getUserByEmail(email: string): ActionFunc {
+export function getUserByEmail(email: string) {
     return bindClientFunc({
         clientFunc: Client4.getUserByEmail,
         onSuccess: UserTypes.RECEIVED_PROFILE,
@@ -732,63 +670,98 @@ export function getUserByEmail(email: string): ActionFunc {
     });
 }
 
-// We create an array to hold the id's that we want to get a status for. We build our
-// debounced function that will get called after a set period of idle time in which
-// the array of id's will be passed to the getStatusesByIds with a cb that clears out
-// the array. Helps with performance because instead of making 75 different calls for
-// statuses, we are only making one call for 75 ids.
-// We could maybe clean it up somewhat by storing the array of ids in redux state possbily?
-let ids: string[] = [];
-const debouncedGetStatusesByIds = debounce(async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-    getStatusesByIds([...new Set(ids)])(dispatch, getState);
-}, 20, false, () => {
-    ids = [];
-});
-export function getStatusesByIdsBatchedDebounced(id: string) {
-    ids = [...ids, id];
-    return debouncedGetStatusesByIds;
-}
+export function getStatusesByIds(userIds: Array<UserProfile['id']>): ActionFuncAsync<UserStatus[]> {
+    return async (dispatch, getState) => {
+        if (!userIds || userIds.length === 0) {
+            return {data: []};
+        }
 
-export function getStatusesByIds(userIds: string[]): ActionFunc {
-    return bindClientFunc({
-        clientFunc: Client4.getStatusesByIds,
-        onSuccess: UserTypes.RECEIVED_STATUSES,
-        params: [
-            userIds,
-        ],
-    });
-}
-
-export function getStatus(userId: string): ActionFunc {
-    return bindClientFunc({
-        clientFunc: Client4.getStatus,
-        onSuccess: UserTypes.RECEIVED_STATUS,
-        params: [
-            userId,
-        ],
-    });
-}
-
-export function setStatus(status: UserStatus): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let receivedStatuses: UserStatus[];
         try {
-            await Client4.updateStatus(status);
+            receivedStatuses = await Client4.getStatusesByIds(userIds);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
             return {error};
         }
 
-        dispatch({
-            type: UserTypes.RECEIVED_STATUS,
-            data: status,
-        });
+        const statuses: Record<UserProfile['id'], UserStatus['status']> = {};
+        const dndEndTimes: Record<UserProfile['id'], UserStatus['dnd_end_time']> = {};
+        const isManualStatuses: Record<UserProfile['id'], UserStatus['manual']> = {};
+        const lastActivity: Record<UserProfile['id'], UserStatus['last_activity_at']> = {};
 
-        return {data: status};
+        for (const receivedStatus of receivedStatuses) {
+            statuses[receivedStatus.user_id] = receivedStatus?.status ?? '';
+            dndEndTimes[receivedStatus.user_id] = receivedStatus?.dnd_end_time ?? 0;
+            isManualStatuses[receivedStatus.user_id] = receivedStatus?.manual ?? false;
+            lastActivity[receivedStatus.user_id] = receivedStatus?.last_activity_at ?? 0;
+        }
+
+        dispatch(batchActions([
+            {
+                type: UserTypes.RECEIVED_STATUSES,
+                data: statuses,
+            },
+            {
+                type: UserTypes.RECEIVED_DND_END_TIMES,
+                data: dndEndTimes,
+            },
+            {
+                type: UserTypes.RECEIVED_STATUSES_IS_MANUAL,
+                data: isManualStatuses,
+            },
+            {
+                type: UserTypes.RECEIVED_LAST_ACTIVITIES,
+                data: lastActivity,
+            },
+        ],
+        'BATCHING_STATUSES',
+        ));
+
+        return {data: receivedStatuses};
     };
 }
 
-export function setCustomStatus(customStatus: UserCustomStatus): ActionFunc {
+export function setStatus(status: UserStatus): ActionFuncAsync<UserStatus> {
+    return async (dispatch, getState) => {
+        let recievedStatus: UserStatus;
+        try {
+            recievedStatus = await Client4.updateStatus(status);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error};
+        }
+
+        const updatedStatus = {[recievedStatus.user_id]: recievedStatus.status};
+        const dndEndTimes = {[recievedStatus.user_id]: recievedStatus?.dnd_end_time ?? 0};
+        const isManualStatus = {[recievedStatus.user_id]: recievedStatus?.manual ?? false};
+        const lastActivity = {[recievedStatus.user_id]: recievedStatus?.last_activity_at ?? 0};
+
+        dispatch(batchActions([
+            {
+                type: UserTypes.RECEIVED_STATUSES,
+                data: updatedStatus,
+            },
+            {
+                type: UserTypes.RECEIVED_DND_END_TIMES,
+                data: dndEndTimes,
+            },
+            {
+                type: UserTypes.RECEIVED_STATUSES_IS_MANUAL,
+                data: isManualStatus,
+            },
+            {
+                type: UserTypes.RECEIVED_LAST_ACTIVITIES,
+                data: lastActivity,
+            },
+        ], 'BATCHING_STATUS'));
+
+        return {data: recievedStatus};
+    };
+}
+
+export function setCustomStatus(customStatus: UserCustomStatus) {
     return bindClientFunc({
         clientFunc: Client4.updateCustomStatus,
         params: [
@@ -797,13 +770,13 @@ export function setCustomStatus(customStatus: UserCustomStatus): ActionFunc {
     });
 }
 
-export function unsetCustomStatus(): ActionFunc {
+export function unsetCustomStatus() {
     return bindClientFunc({
         clientFunc: Client4.unsetCustomStatus,
     });
 }
 
-export function removeRecentCustomStatus(customStatus: UserCustomStatus): ActionFunc {
+export function removeRecentCustomStatus(customStatus: UserCustomStatus) {
     return bindClientFunc({
         clientFunc: Client4.removeRecentCustomStatus,
         params: [
@@ -812,7 +785,7 @@ export function removeRecentCustomStatus(customStatus: UserCustomStatus): Action
     });
 }
 
-export function getSessions(userId: string): ActionFunc {
+export function getSessions(userId: string) {
     return bindClientFunc({
         clientFunc: Client4.getSessions,
         onSuccess: UserTypes.RECEIVED_SESSIONS,
@@ -822,8 +795,8 @@ export function getSessions(userId: string): ActionFunc {
     });
 }
 
-export function revokeSession(userId: string, sessionId: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function revokeSession(userId: string, sessionId: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         try {
             await Client4.revokeSession(userId, sessionId);
         } catch (error) {
@@ -842,8 +815,8 @@ export function revokeSession(userId: string, sessionId: string): ActionFunc {
     };
 }
 
-export function revokeAllSessionsForUser(userId: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function revokeAllSessionsForUser(userId: string): ActionFuncAsync<boolean> {
+    return async (dispatch, getState) => {
         try {
             await Client4.revokeAllSessionsForUser(userId);
         } catch (error) {
@@ -863,24 +836,26 @@ export function revokeAllSessionsForUser(userId: string): ActionFunc {
     };
 }
 
-export function revokeSessionsForAllUsers(): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function revokeSessionsForAllUsers(): ActionFuncAsync<boolean> {
+    return async (dispatch, getState) => {
         try {
             await Client4.revokeSessionsForAllUsers();
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
-            return {error};
+            return {error: error as ServerError};
         }
+
         dispatch({
             type: UserTypes.REVOKE_SESSIONS_FOR_ALL_USERS_SUCCESS,
             data: null,
         });
+
         return {data: true};
     };
 }
 
-export function getUserAudits(userId: string, page = 0, perPage: number = General.AUDITS_CHUNK_SIZE): ActionFunc {
+export function getUserAudits(userId: string, page = 0, perPage: number = General.AUDITS_CHUNK_SIZE) {
     return bindClientFunc({
         clientFunc: Client4.getUserAudits,
         onSuccess: UserTypes.RECEIVED_AUDITS,
@@ -894,12 +869,9 @@ export function getUserAudits(userId: string, page = 0, perPage: number = Genera
 
 export function autocompleteUsers(term: string, teamId = '', channelId = '', options?: {
     limit: number;
-}): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+}): ActionFuncAsync<UserAutocomplete> {
+    return async (dispatch, getState) => {
         dispatch({type: UserTypes.AUTOCOMPLETE_USERS_REQUEST, data: null});
-
-        const {currentUserId} = getState().entities.users;
-
         let data;
         try {
             data = await Client4.autocompleteUsers(term, teamId, channelId, options);
@@ -914,7 +886,6 @@ export function autocompleteUsers(term: string, teamId = '', channelId = '', opt
         if (data.out_of_channel) {
             users = [...users, ...data.out_of_channel];
         }
-        removeUserFromList(currentUserId, users);
         const actions: AnyAction[] = [{
             type: UserTypes.RECEIVED_PROFILES_LIST,
             data: users,
@@ -955,10 +926,8 @@ export function autocompleteUsers(term: string, teamId = '', channelId = '', opt
     };
 }
 
-export function searchProfiles(term: string, options: any = {}): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const {currentUserId} = getState().entities.users;
-
+export function searchProfiles(term: string, options: any = {}): ActionFuncAsync<UserProfile[]> {
+    return async (dispatch, getState) => {
         let profiles;
         try {
             profiles = await Client4.searchUsers(term, options);
@@ -968,7 +937,7 @@ export function searchProfiles(term: string, options: any = {}): ActionFunc {
             return {error};
         }
 
-        const actions: AnyAction[] = [{type: UserTypes.RECEIVED_PROFILES_LIST, data: removeUserFromList(currentUserId, [...profiles])}];
+        const actions: AnyAction[] = [{type: UserTypes.RECEIVED_PROFILES_LIST, data: profiles}];
 
         if (options.in_channel_id) {
             actions.push({
@@ -1024,47 +993,8 @@ export function searchProfiles(term: string, options: any = {}): ActionFunc {
     };
 }
 
-let statusIntervalId: NodeJS.Timeout|null;
-export function startPeriodicStatusUpdates(): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        if (statusIntervalId) {
-            clearInterval(statusIntervalId);
-        }
-
-        statusIntervalId = setInterval(
-            () => {
-                const {statuses} = getState().entities.users;
-
-                if (!statuses) {
-                    return;
-                }
-
-                const userIds = Object.keys(statuses);
-                if (!userIds.length) {
-                    return;
-                }
-
-                getStatusesByIds(userIds)(dispatch, getState);
-            },
-            General.STATUS_INTERVAL,
-        );
-
-        return {data: true};
-    };
-}
-
-export function stopPeriodicStatusUpdates(): ActionFunc {
-    return async () => {
-        if (statusIntervalId) {
-            clearInterval(statusIntervalId);
-        }
-
-        return {data: true};
-    };
-}
-
-export function updateMe(user: UserProfile): ActionFunc {
-    return async (dispatch: DispatchFunc) => {
+export function updateMe(user: Partial<UserProfile>): ActionFuncAsync<UserProfile> {
+    return async (dispatch) => {
         dispatch({type: UserTypes.UPDATE_ME_REQUEST, data: null});
 
         let data;
@@ -1086,8 +1016,21 @@ export function updateMe(user: UserProfile): ActionFunc {
     };
 }
 
-export function patchUser(user: UserProfile): ActionFunc {
-    return async (dispatch: DispatchFunc) => {
+export function saveCustomProfileAttribute(userID: string, attributeID: string, attributeValue: string): ActionFuncAsync<Record<string, string>> {
+    return async (dispatch) => {
+        try {
+            const values = {[attributeID]: attributeValue.trim()};
+            const data = await Client4.updateCustomProfileAttributeValues(values);
+            return {data};
+        } catch (error) {
+            dispatch(logError(error));
+            return {error};
+        }
+    };
+}
+
+export function patchUser(user: UserProfile): ActionFuncAsync<UserProfile> {
+    return async (dispatch) => {
         let data: UserProfile;
         try {
             data = await Client4.patchUser(user);
@@ -1102,8 +1045,8 @@ export function patchUser(user: UserProfile): ActionFunc {
     };
 }
 
-export function updateUserRoles(userId: string, roles: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function updateUserRoles(userId: string, roles: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         try {
             await Client4.updateUserRoles(userId, roles);
         } catch (error) {
@@ -1119,8 +1062,8 @@ export function updateUserRoles(userId: string, roles: string): ActionFunc {
     };
 }
 
-export function updateUserMfa(userId: string, activate: boolean, code = ''): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function updateUserMfa(userId: string, activate: boolean, code = ''): ActionFuncAsync {
+    return async (dispatch, getState) => {
         try {
             await Client4.updateUserMfa(userId, activate, code);
         } catch (error) {
@@ -1137,8 +1080,8 @@ export function updateUserMfa(userId: string, activate: boolean, code = ''): Act
     };
 }
 
-export function updateUserPassword(userId: string, currentPassword: string, newPassword: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function updateUserPassword(userId: string, currentPassword: string, newPassword: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         try {
             await Client4.updateUserPassword(userId, currentPassword, newPassword);
         } catch (error) {
@@ -1148,15 +1091,33 @@ export function updateUserPassword(userId: string, currentPassword: string, newP
 
         const profile = getState().entities.users.profiles[userId];
         if (profile) {
-            dispatch({type: UserTypes.RECEIVED_PROFILE, data: {...profile, last_password_update_at: new Date().getTime()}});
+            dispatch({type: UserTypes.RECEIVED_PROFILE, data: {...profile, last_password_update: new Date().getTime()}});
         }
 
         return {data: true};
     };
 }
 
-export function updateUserActive(userId: string, active: boolean): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function resetFailedAttempts(userId: string): ActionFuncAsync<true> {
+    return async (dispatch, getState) => {
+        try {
+            await Client4.resetFailedAttempts(userId);
+        } catch (error) {
+            dispatch(logError(error));
+            return {error};
+        }
+
+        const profile = getState().entities.users.profiles[userId];
+        if (profile) {
+            dispatch({type: UserTypes.RECEIVED_PROFILE, data: {...profile, failed_attempts: 0}});
+        }
+
+        return {data: true};
+    };
+}
+
+export function updateUserActive(userId: string, active: boolean): ActionFuncAsync<true> {
+    return async (dispatch, getState) => {
         try {
             await Client4.updateUserActive(userId, active);
         } catch (error) {
@@ -1174,7 +1135,7 @@ export function updateUserActive(userId: string, active: boolean): ActionFunc {
     };
 }
 
-export function verifyUserEmail(token: string): ActionFunc {
+export function verifyUserEmail(token: string) {
     return bindClientFunc({
         clientFunc: Client4.verifyUserEmail,
         params: [
@@ -1183,7 +1144,7 @@ export function verifyUserEmail(token: string): ActionFunc {
     });
 }
 
-export function sendVerificationEmail(email: string): ActionFunc {
+export function sendVerificationEmail(email: string) {
     return bindClientFunc({
         clientFunc: Client4.sendVerificationEmail,
         params: [
@@ -1192,7 +1153,7 @@ export function sendVerificationEmail(email: string): ActionFunc {
     });
 }
 
-export function resetUserPassword(token: string, newPassword: string): ActionFunc {
+export function resetUserPassword(token: string, newPassword: string) {
     return bindClientFunc({
         clientFunc: Client4.resetUserPassword,
         params: [
@@ -1202,7 +1163,7 @@ export function resetUserPassword(token: string, newPassword: string): ActionFun
     });
 }
 
-export function sendPasswordResetEmail(email: string): ActionFunc {
+export function sendPasswordResetEmail(email: string) {
     return bindClientFunc({
         clientFunc: Client4.sendPasswordResetEmail,
         params: [
@@ -1211,8 +1172,8 @@ export function sendPasswordResetEmail(email: string): ActionFunc {
     });
 }
 
-export function setDefaultProfileImage(userId: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function setDefaultProfileImage(userId: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         try {
             await Client4.setDefaultProfileImage(userId);
         } catch (error) {
@@ -1229,8 +1190,8 @@ export function setDefaultProfileImage(userId: string): ActionFunc {
     };
 }
 
-export function uploadProfileImage(userId: string, imageData: any): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function uploadProfileImage(userId: string, imageData: any): ActionFuncAsync {
+    return async (dispatch, getState) => {
         try {
             await Client4.uploadProfileImage(userId, imageData);
         } catch (error) {
@@ -1246,7 +1207,7 @@ export function uploadProfileImage(userId: string, imageData: any): ActionFunc {
     };
 }
 
-export function switchEmailToOAuth(service: string, email: string, password: string, mfaCode = ''): ActionFunc {
+export function switchEmailToOAuth(service: string, email: string, password: string, mfaCode = '') {
     return bindClientFunc({
         clientFunc: Client4.switchEmailToOAuth,
         params: [
@@ -1258,7 +1219,7 @@ export function switchEmailToOAuth(service: string, email: string, password: str
     });
 }
 
-export function switchOAuthToEmail(currentService: string, email: string, password: string): ActionFunc {
+export function switchOAuthToEmail(currentService: string, email: string, password: string) {
     return bindClientFunc({
         clientFunc: Client4.switchOAuthToEmail,
         params: [
@@ -1269,7 +1230,7 @@ export function switchOAuthToEmail(currentService: string, email: string, passwo
     });
 }
 
-export function switchEmailToLdap(email: string, emailPassword: string, ldapId: string, ldapPassword: string, mfaCode = ''): ActionFunc {
+export function switchEmailToLdap(email: string, emailPassword: string, ldapId: string, ldapPassword: string, mfaCode = '') {
     return bindClientFunc({
         clientFunc: Client4.switchEmailToLdap,
         params: [
@@ -1282,7 +1243,7 @@ export function switchEmailToLdap(email: string, emailPassword: string, ldapId: 
     });
 }
 
-export function switchLdapToEmail(ldapPassword: string, email: string, emailPassword: string, mfaCode = ''): ActionFunc {
+export function switchLdapToEmail(ldapPassword: string, email: string, emailPassword: string, mfaCode = '') {
     return bindClientFunc({
         clientFunc: Client4.switchLdapToEmail,
         params: [
@@ -1294,8 +1255,8 @@ export function switchLdapToEmail(ldapPassword: string, email: string, emailPass
     });
 }
 
-export function createUserAccessToken(userId: string, description: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function createUserAccessToken(userId: string, description: string): ActionFuncAsync<UserAccessToken> {
+    return async (dispatch, getState) => {
         let data;
 
         try {
@@ -1329,8 +1290,8 @@ export function createUserAccessToken(userId: string, description: string): Acti
     };
 }
 
-export function getUserAccessToken(tokenId: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function getUserAccessToken(tokenId: string): ActionFuncAsync<UserAccessToken> {
+    return async (dispatch, getState) => {
         let data;
         try {
             data = await Client4.getUserAccessToken(tokenId);
@@ -1361,29 +1322,8 @@ export function getUserAccessToken(tokenId: string): ActionFunc {
     };
 }
 
-export function getUserAccessTokens(page = 0, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        let data;
-
-        try {
-            data = await Client4.getUserAccessTokens(page, perPage);
-        } catch (error) {
-            forceLogoutIfNecessary(error, dispatch, getState);
-            dispatch(logError(error));
-            return {error};
-        }
-
-        dispatch({
-            type: AdminTypes.RECEIVED_USER_ACCESS_TOKENS,
-            data,
-        });
-
-        return {data};
-    };
-}
-
-export function getUserAccessTokensForUser(userId: string, page = 0, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function getUserAccessTokensForUser(userId: string, page = 0, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFuncAsync<UserAccessToken[]> {
+    return async (dispatch, getState) => {
         let data;
         try {
             data = await Client4.getUserAccessTokensForUser(userId, page, perPage);
@@ -1415,8 +1355,8 @@ export function getUserAccessTokensForUser(userId: string, page = 0, perPage: nu
     };
 }
 
-export function revokeUserAccessToken(tokenId: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function revokeUserAccessToken(tokenId: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         try {
             await Client4.revokeUserAccessToken(tokenId);
         } catch (error) {
@@ -1434,8 +1374,8 @@ export function revokeUserAccessToken(tokenId: string): ActionFunc {
     };
 }
 
-export function disableUserAccessToken(tokenId: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function disableUserAccessToken(tokenId: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         try {
             await Client4.disableUserAccessToken(tokenId);
         } catch (error) {
@@ -1453,8 +1393,8 @@ export function disableUserAccessToken(tokenId: string): ActionFunc {
     };
 }
 
-export function enableUserAccessToken(tokenId: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function enableUserAccessToken(tokenId: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         try {
             await Client4.enableUserAccessToken(tokenId);
         } catch (error) {
@@ -1472,27 +1412,39 @@ export function enableUserAccessToken(tokenId: string): ActionFunc {
     };
 }
 
-export function getKnownUsers(): ActionFunc {
+export function getKnownUsers() {
     return bindClientFunc({
         clientFunc: Client4.getKnownUsers,
     });
 }
 
-export function clearUserAccessTokens(): ActionFunc {
+export function clearUserAccessTokens(): ActionFuncAsync {
     return async (dispatch) => {
         dispatch({type: UserTypes.CLEAR_MY_USER_ACCESS_TOKENS, data: null});
         return {data: true};
     };
 }
 
-export function checkForModifiedUsers(includeCurrentUser = false) {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function checkForModifiedUsers(channelId: string): ActionFuncAsync {
+    return async (dispatch, getState) => {
         const state = getState();
         const users = getUsers(state);
+        const firstDisconnectAt = state.websocket.firstDisconnect;
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
+        const lastPostsApiCallForChannel = getLastPostsApiTimeForChannel(state as GlobalState, channelId);
+        let since = firstDisconnectAt;
+        if (lastPostsApiCallForChannel && lastPostsApiCallForChannel < lastDisconnectAt) {
+            since = lastPostsApiCallForChannel;
+        }
+        const userIds = Object.keys(users);
+        // eslint-disable-next-line no-console
         console.log('checking for modified users with lastDisconnect:', lastDisconnectAt);
+        // eslint-disable-next-line no-console
+        console.log('checking for modified users since', since);
+        // eslint-disable-next-line no-console
+        console.log('fetch profile count:', userIds.length);
 
-        await dispatch(getProfilesByIds(Object.keys(users), {since: lastDisconnectAt}, includeCurrentUser));
+        await dispatch(getProfilesByIds(userIds, {since}));
         return {data: true};
     };
 }
@@ -1508,7 +1460,6 @@ export default {
     getUser,
     getMe,
     getUserByUsername,
-    getStatus,
     getStatusesByIds,
     getSessions,
     getTotalUsersStats,
@@ -1517,8 +1468,6 @@ export default {
     revokeSessionsForAllUsers,
     getUserAudits,
     searchProfiles,
-    startPeriodicStatusUpdates,
-    stopPeriodicStatusUpdates,
     updateMe,
     updateUserRoles,
     updateUserMfa,

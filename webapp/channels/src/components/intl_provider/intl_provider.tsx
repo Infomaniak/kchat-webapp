@@ -7,18 +7,18 @@ import React from 'react';
 import {IntlProvider as BaseIntlProvider} from 'react-intl';
 
 import {Client4} from 'mattermost-redux/client';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
 import {setLocalizeFunction} from 'mattermost-redux/utils/i18n_utils';
 
-import * as I18n from 'i18n/i18n';
 import {localizeMessage} from 'utils/utils';
+
+import * as I18n from 'i18n/i18n';
 
 type Props = {
     children: ReactNode;
     locale: string;
     translations?: Record<string, string> | Record<string, MessageFormatElement[]>;
     actions: {
-        loadTranslations: ((locale: string, url: string) => ActionFunc) | (() => void);
+        loadTranslations: (locale: string, url: string) => void;
     };
 };
 
@@ -27,7 +27,7 @@ export default class IntlProvider extends React.PureComponent<Props> {
         // Pass localization function back to mattermost-redux
         setLocalizeFunction(localizeMessage);
 
-        // @ts-ignore for webcomonents
+        // @ts-expect-error for webcomonents
         window.CONST_LANG = this.props.locale;
 
         this.handleLocaleChange(this.props.locale);
@@ -40,7 +40,7 @@ export default class IntlProvider extends React.PureComponent<Props> {
     }
 
     handleLocaleChange = (locale: string) => {
-        // @ts-ignore for webcomonents
+        // @ts-expect-error for webcomonents
         window.CONST_LANG = locale;
         Client4.setAcceptLanguage(locale);
 

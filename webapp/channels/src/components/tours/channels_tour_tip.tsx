@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, defineMessages} from 'react-intl';
 import type {Placement} from 'tippy.js';
 
 import type {PunchOutCoordsHeightAndWidth} from '@mattermost/components';
@@ -10,6 +10,19 @@ import {TourTip} from '@mattermost/components';
 
 import {useTourTipManager} from './tour_manager';
 import {getLastStep} from './utils';
+
+// TODO MM-51399 These strings are properly defined in @mattermost/components, but the i18n tooling currently can't
+// find them there, so we've had to redefine them here
+defineMessages({
+    optOut: {
+        id: 'tutorial_tip.out',
+        defaultMessage: 'Opt out of these tips.',
+    },
+    seenBefore: {
+        id: 'tutorial_tip.seen',
+        defaultMessage: 'Seen this before? ',
+    },
+});
 
 export type ChannelsTourTipProps = {
     screen: JSX.Element;
@@ -26,7 +39,6 @@ export type ChannelsTourTipProps = {
     hideBackdrop?: boolean;
     tippyBlueStyle?: boolean;
     showOptOut?: boolean;
-    link?: string;
 }
 
 export const ChannelsTourTip = ({
@@ -37,7 +49,6 @@ export const ChannelsTourTip = ({
     singleTip,
     pulsatingDotTranslate,
     pulsatingDotPlacement,
-    link,
     offset = [-18, 4],
     placement = 'right-start',
     width = 320,
@@ -126,7 +137,6 @@ export const ChannelsTourTip = ({
             hideBackdrop={hideBackdrop}
             tippyBlueStyle={tippyBlueStyle}
             showOptOut={showOptOut}
-            link={link}
         />
     );
 };

@@ -7,7 +7,6 @@ import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {openModal} from 'actions/views/modals';
 
@@ -23,7 +22,7 @@ function mapStateToProps(state: GlobalState) {
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
             openModal,

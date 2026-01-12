@@ -10,8 +10,6 @@ import {getUser} from 'mattermost-redux/selectors/entities/users';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
-import {getCurrentUserTimezone} from 'selectors/general';
-
 import {Constants} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
@@ -27,7 +25,6 @@ type OwnProps = {
 
 function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     const {channelDisplayName, userId, channelName, channelType} = ownProps;
-    const timezone = getCurrentUserTimezone(state);
 
     let displayName = channelDisplayName;
     let teammateId;
@@ -41,7 +38,6 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
 
     return {
         displayName,
-        timezone,
     };
 }
 

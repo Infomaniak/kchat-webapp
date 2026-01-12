@@ -8,7 +8,6 @@ import {bindActionCreators} from 'redux';
 
 import {getFilePublicLink} from 'mattermost-redux/actions/files';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {saveFileToKDrive} from 'actions/kdrive_actions';
 import {toggleEmbedVisibility} from 'actions/post_actions';
@@ -29,7 +28,7 @@ function mapStateToProps(state: GlobalState) {
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
             toggleEmbedVisibility,

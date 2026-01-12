@@ -1,9 +1,36 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {getChannelHeaderMenuPluginComponents} from 'selectors/plugins';
+import {getChannelHeaderMenuPluginComponents, getPluginUserSettings, getChannelMobileHeaderPluginButtons} from 'selectors/plugins';
 
 describe('selectors/plugins', () => {
+    describe('getPluginUserSettings', () => {
+        it('has no settings', () => {
+            const state = {
+                plugins: {},
+            };
+            const settings = getPluginUserSettings(state);
+            expect(settings).toEqual({});
+        });
+        it('has settings', () => {
+            const stateSettings = {
+                pluginId: {
+                    id: 'pluginId',
+                },
+                pluginId2: {
+                    id: 'pluginId2',
+                },
+            };
+            const state = {
+                plugins: {
+                    userSettings: stateSettings,
+                },
+            };
+            const settings = getPluginUserSettings(state);
+            expect(settings).toEqual(stateSettings);
+        });
+    });
+
     describe('getChannelHeaderMenuPluginComponents', () => {
         test('no channel header components found', () => {
             const expectedComponents = [];
@@ -178,6 +205,36 @@ describe('selectors/plugins', () => {
                 state.plugins.components.ChannelHeader[0],
                 state.plugins.components.ChannelHeader[1],
             ]);
+        });
+    });
+
+    describe('getChannelMobileHeaderPluginButtons', () => {
+        it('has no settings', () => {
+            const state = {
+                plugins: {
+                    components: {
+                        MobileChannelHeaderButton: [],
+                    },
+                },
+            };
+            const settings = getChannelMobileHeaderPluginButtons(state);
+            expect(settings).toEqual([]);
+        });
+        it('has settings', () => {
+            const headerButton = {
+                id: 'someid',
+                pluginId: 'pluginid',
+                dropdownText: 'some dropdown text',
+            };
+            const state = {
+                plugins: {
+                    components: {
+                        MobileChannelHeaderButton: [headerButton],
+                    },
+                },
+            };
+            const settings = getChannelMobileHeaderPluginButtons(state);
+            expect(settings).toEqual([headerButton]);
         });
     });
 });

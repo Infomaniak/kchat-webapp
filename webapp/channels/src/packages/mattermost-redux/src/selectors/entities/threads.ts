@@ -82,7 +82,7 @@ export function makeGetThreadOrSynthetic(): (state: GlobalState, rootPost: Post)
         'getThreadOrSynthetic',
         (_: GlobalState, rootPost: Post) => rootPost,
         getThreads,
-        (rootPost, threads) => {
+        (rootPost, threads): UserThread | UserThreadSynthetic => {
             const thread = threads[rootPost.id];
             if (thread?.id) {
                 return thread;
@@ -104,22 +104,15 @@ export function makeGetThreadOrSynthetic(): (state: GlobalState, rootPost: Post)
     );
 }
 
-export const getThreadOrderInCurrentTeam: (state: GlobalState, selectedThreadIdInTeam?: UserThread['id']) => Array<UserThread['id']> = createSelector(
+export const getThreadOrderInCurrentTeam: (state: GlobalState) => Array<UserThread['id']> = createSelector(
     'getThreadOrderInCurrentTeam',
     getThreadsInCurrentTeam,
     getThreads,
-    (state: GlobalState, selectedThreadIdInTeam?: UserThread['id']) => selectedThreadIdInTeam,
     (
         threadsInTeam,
         threads,
-        selectedThreadIdInTeam,
     ) => {
         const ids = [...threadsInTeam.filter((id) => threads[id].is_following)];
-
-        if (selectedThreadIdInTeam && !ids.includes(selectedThreadIdInTeam)) {
-            ids.push(selectedThreadIdInTeam);
-        }
-
         return sortByLastReply(ids, threads);
     },
 );
@@ -138,6 +131,7 @@ export const getNewestThreadInTeam: (state: GlobalState, teamID: string,) => (Us
         if (!threadsInGivenTeam) {
             return null;
         }
+
         const ids = [...threadsInGivenTeam.filter((id) => threads[id].is_following)];
         return threads[sortByLastReply(ids, threads)[0]];
     },
@@ -145,12 +139,10 @@ export const getNewestThreadInTeam: (state: GlobalState, teamID: string,) => (Us
 
 export const getUnreadThreadOrderInCurrentTeam: (
     state: GlobalState,
-    selectedThreadIdInTeam?: UserThread['id'],
 ) => Array<UserThread['id']> = createSelector(
     'getUnreadThreadOrderInCurrentTeam',
     getUnreadThreadsInCurrentTeam,
     getThreads,
-    (state: GlobalState, selectedThreadIdInTeam?: UserThread['id']) => selectedThreadIdInTeam,
     (
         threadsInTeam,
         threads,
@@ -171,25 +163,20 @@ function sortByLastReply(ids: Array<UserThread['id']>, threads: ReturnType<typeo
 export const getThreadsInChannel: (
     state: GlobalState,
     channelID: string,
-) => Array<UserThread['id']> = createSelector(
+) => UserThread[] = createSelector(
     'getThreadsInChannel',
     getThreads,
-    (state: GlobalState, channelID: string) => channelID,
-    (allThreads: IDMappedObjects<UserThread>, channelID: string) => {
-        return Object.keys(allThreads).filter((id) => allThreads[id].post.channel_id === channelID);
-    },
-);
+    (_: GlobalState, channelID: string) => channelID,
+    (threads: IDMappedObjects<UserThread>, channelID: Channel['id']) => {
+        const allThreads = Object.values(threads);
 
-export const getThreadItemsInChannel: (
-    state: GlobalState,
-    channelID: string,
-) => UserThread[] = createSelector(
-    'getThreadItemsInChannel',
-    getThreads,
-    (state: GlobalState, channelID: string) => channelID,
-    (allThreads: IDMappedObjects<UserThread>, channelID: Channel['id']) => {
-        return Object.keys(allThreads).
-            map((id) => allThreads[id]).
-            filter((item) => item.post.channel_id === channelID);
+        const threadsInChannel: UserThread[] = [];
+        for (const thread of allThreads) {
+            if (thread && thread.post && thread.post.channel_id && thread.post.channel_id === channelID) {
+                threadsInChannel.push(thread);
+            }
+        }
+
+        return threadsInChannel;
     },
 );

@@ -1,28 +1,28 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-@import 'utils/mixins';
-@import 'utils/variables';
+@use 'utils/mixins';
+@use 'utils/variables';
 
 .accountSettingRhs {
     position: relative;
-    overflow-y: scroll;
     width: 100%;
     min-height: calc(100% - 63px);
+    overflow-y: scroll;
     .settings-tabs {
 
         ul.nav.nav-tabs {
             border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
             li {
-                margin: 0;
                 padding: 10px 10px 0;
+                margin: 0;
                 > a {
-                    border: none;
-                    border-bottom: 4px solid transparent;
                     padding: 7px 5px;
                     padding-bottom: 10px;
-                    font-size: 14px;
+                    border: none;
+                    border-bottom: 4px solid transparent;
                     color: rgba(var(--center-channel-color-rgb),0.785);
+                    font-size: 14px;
                     &:hover {
                         border: none;
                         border-bottom: 4px solid transparent;
@@ -30,9 +30,9 @@
                 }
                 &.active {
                     > a {
-                        background: none;
                         border: none;
-                        border-bottom: 4px solid $primary-color !important;
+                        border-bottom: 4px solid variables.$primary-color !important;
+                        background: none;
                         color: rgba(var(--center-channel-color-rgb), 1);
                         font-weight: 600;
 
@@ -48,11 +48,11 @@
 
     .rhs-btns {
         .rhs-custom-btn {
-            border-radius: 8px;
             padding: 8px 10px;
+            border-radius: 8px;
             &.active, &:hover {
-                cursor: pointer;
                 background: rgba(var(--center-channel-color-rgb),0.08);
+                cursor: pointer;
                 & > * {
                     cursor: pointer;
                 }
@@ -60,12 +60,18 @@
             .rhs-custom-btn-label, label {
                 margin: 0;
             }
+
+            &[id^="rhsTheme"] {
+                svg {
+                    width: 100%;
+                }
+            }
         }
     }
 
     .rhs-custom-bb {
-        margin-bottom: 16px;
-        border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.12)
+        border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
+        margin-bottom: 16px
     }
 
     .rhs-settings-section {

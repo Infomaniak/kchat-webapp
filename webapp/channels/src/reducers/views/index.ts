@@ -4,7 +4,6 @@
 import {combineReducers} from 'redux';
 
 import addChannelCtaDropdown from './add_channel_cta_dropdown';
-import addChannelDropdown from './add_channel_dropdown';
 import admin from './admin';
 import announcementBar from './announcement_bar';
 import browser from './browser';
@@ -26,10 +25,11 @@ import productMenu from './product_menu';
 import rhs from './rhs';
 import rhsSuppressed from './rhs_suppressed';
 import search from './search';
+import servers from './servers';
 import settings from './settings';
-import statusDropdown from './status_dropdown';
 import system from './system';
 import textbox from './textbox';
+import theme from './theme';
 import threads from './threads';
 
 export default combineReducers({
@@ -52,8 +52,6 @@ export default combineReducers({
     marketplace,
     textbox,
     channelSidebar,
-    statusDropdown,
-    addChannelDropdown,
     addChannelCtaDropdown,
     onboardingTasks,
     threads,
@@ -61,4 +59,6 @@ export default combineReducers({
     drafts,
     calls,
     kmeetCalls,
+    theme,
+    servers,
 });

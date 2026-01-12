@@ -3,14 +3,15 @@
 
 import type {CloudUsage} from '@mattermost/types/cloud';
 
+import type {MMReduxAction} from 'mattermost-redux/action_types';
 import {CloudTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 
-const emptyUsage = {
+const emptyUsage: CloudUsage = {
     storage: 0,
     public_channels: 0,
     private_channels: 0,
     guests: 0,
+    pending_guests: 0,
     members: 0,
     usageLoaded: false,
     files: {
@@ -21,19 +22,21 @@ const emptyUsage = {
         history: 0,
         historyLoaded: true,
     },
-    boards: {
-        cards: 0,
-        cardsLoaded: true,
-    },
     teams: {
         active: 0,
         cloudArchived: 0,
         teamsLoaded: true,
     },
+    custom_emojis: 0,
+    incoming_webhooks: 0,
+    outgoing_webhooks: 0,
+    sidebar_categories: 0,
+    scheduled_draft_custom_date: 0,
+    reminder_custom_date: 0,
 };
 
 // represents the usage associated with this workspace
-export default function usage(state: CloudUsage = emptyUsage, action: GenericAction) {
+export default function usage(state: CloudUsage = emptyUsage, action: MMReduxAction) {
     switch (action.type) {
     case CloudTypes.RECEIVED_USAGE:
         return {
@@ -41,7 +44,6 @@ export default function usage(state: CloudUsage = emptyUsage, action: GenericAct
             ...action.data,
             usageLoaded: true,
         };
-        break;
     case CloudTypes.RECEIVED_MESSAGES_USAGE: {
         return {
             ...state,

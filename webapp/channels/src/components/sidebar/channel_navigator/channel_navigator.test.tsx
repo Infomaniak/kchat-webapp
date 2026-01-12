@@ -4,42 +4,28 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
-import type {Props} from './channel_navigator';
-import ChannelNavigator from './channel_navigator';
+import BrowserOrAddChannelMenu from 'components/sidebar/sidebar_header/sidebar_browse_or_add_channel_menu';
 
-import AddChannelDropdown from '../add_channel_dropdown';
+import ChannelNavigator from './channel_navigator';
+import type {Props} from './channel_navigator';
 
 let props: Props;
 
 describe('Components/ChannelNavigator', () => {
     beforeEach(() => {
         props = {
-            canGoForward: true,
-            canGoBack: true,
-            canJoinPublicChannel: true,
-            showMoreChannelsModal: jest.fn(),
-            showCreateUserGroupModal: jest.fn(),
-            invitePeopleModal: jest.fn(),
-            showNewChannelModal: jest.fn(),
-            showCreateCategoryModal: jest.fn(),
-            handleOpenDirectMessagesModal: jest.fn(),
-            unreadFilterEnabled: true,
-            canCreateChannel: true,
             showUnreadsCategory: true,
             isQuickSwitcherOpen: false,
-            userGroupsEnabled: false,
-            canCreateCustomGroups: true,
+            intl: {} as any,
             actions: {
                 openModal: jest.fn(),
                 closeModal: jest.fn(),
-                goBack: jest.fn(),
-                goForward: jest.fn(),
             },
         };
     });
 
-    it('should not show AddChannelDropdown', () => {
+    it('should not show BrowserOrAddChannelMenu', () => {
         const wrapper = shallow(<ChannelNavigator {...props}/>);
-        expect(wrapper.find(AddChannelDropdown).length).toBe(0);
+        expect(wrapper.find(BrowserOrAddChannelMenu).length).toBe(0);
     });
 });

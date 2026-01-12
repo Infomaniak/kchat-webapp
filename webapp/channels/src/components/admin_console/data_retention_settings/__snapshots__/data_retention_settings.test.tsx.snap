@@ -4,14 +4,12 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
 <div
   className="wrapper--fixed DataRetentionSettings"
 >
-  <div
-    className="admin-console__header"
-  >
+  <AdminHeader>
     <MemoizedFormattedMessage
       defaultMessage="Data Retention Policies"
       id="admin.data_retention.settings.title"
     />
-  </div>
+  </AdminHeader>
   <div
     className="admin-console__wrapper"
   >
@@ -114,14 +112,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                           />
                         </Menu>
                       </MenuWrapper>,
-                      "boards": <div
-                        data-testid="global_boards_retention_cell"
-                      >
-                        <Memo(MemoizedFormattedMessage)
-                          defaultMessage="Keep forever"
-                          id="admin.data_retention.form.keepForever"
-                        />
-                      </div>,
                       "channel_messages": <div
                         data-testid="global_message_retention_cell"
                       >
@@ -144,7 +134,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                   },
                 ]
               }
-              searchPlaceholder=""
               startCount={1}
               term=""
               total={0}
@@ -293,7 +282,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                   },
                 ]
               }
-              searchPlaceholder=""
               startCount={1}
               term=""
               total={1}
@@ -384,14 +372,12 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
 <div
   className="wrapper--fixed DataRetentionSettings"
 >
-  <div
-    className="admin-console__header"
-  >
+  <AdminHeader>
     <MemoizedFormattedMessage
       defaultMessage="Data Retention Policies"
       id="admin.data_retention.settings.title"
     />
-  </div>
+  </AdminHeader>
   <div
     className="admin-console__wrapper"
   >
@@ -494,19 +480,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                           />
                         </Menu>
                       </MenuWrapper>,
-                      "boards": <div
-                        data-testid="global_boards_retention_cell"
-                      >
-                        <Memo(MemoizedFormattedMessage)
-                          defaultMessage="{count} {count, plural, one {day} other {days}}"
-                          id="admin.data_retention.retention_days"
-                          values={
-                            Object {
-                              "count": "100",
-                            }
-                          }
-                        />
-                      </div>,
                       "channel_messages": <div
                         data-testid="global_message_retention_cell"
                       >
@@ -539,7 +512,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                   },
                 ]
               }
-              searchPlaceholder=""
               startCount={1}
               term=""
               total={0}
@@ -693,7 +665,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                   },
                 ]
               }
-              searchPlaceholder=""
               startCount={1}
               term=""
               total={1}
@@ -784,14 +755,12 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
 <div
   className="wrapper--fixed DataRetentionSettings"
 >
-  <div
-    className="admin-console__header"
-  >
+  <AdminHeader>
     <MemoizedFormattedMessage
       defaultMessage="Data Retention Policies"
       id="admin.data_retention.settings.title"
     />
-  </div>
+  </AdminHeader>
   <div
     className="admin-console__wrapper"
   >
@@ -894,19 +863,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                           />
                         </Menu>
                       </MenuWrapper>,
-                      "boards": <div
-                        data-testid="global_boards_retention_cell"
-                      >
-                        <Memo(MemoizedFormattedMessage)
-                          defaultMessage="{count} {count, plural, one {day} other {days}}"
-                          id="admin.data_retention.retention_days"
-                          values={
-                            Object {
-                              "count": "100",
-                            }
-                          }
-                        />
-                      </div>,
                       "channel_messages": <div
                         data-testid="global_message_retention_cell"
                       >
@@ -939,7 +895,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                   },
                 ]
               }
-              searchPlaceholder=""
               startCount={1}
               term=""
               total={0}
@@ -1088,7 +1043,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                   },
                 ]
               }
-              searchPlaceholder=""
               startCount={1}
               term=""
               total={1}
@@ -1179,14 +1133,12 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
 <div
   className="wrapper--fixed DataRetentionSettings"
 >
-  <div
-    className="admin-console__header"
-  >
+  <AdminHeader>
     <MemoizedFormattedMessage
       defaultMessage="Data Retention Policies"
       id="admin.data_retention.settings.title"
     />
-  </div>
+  </AdminHeader>
   <div
     className="admin-console__wrapper"
   >
@@ -1289,19 +1241,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                           />
                         </Menu>
                       </MenuWrapper>,
-                      "boards": <div
-                        data-testid="global_boards_retention_cell"
-                      >
-                        <Memo(MemoizedFormattedMessage)
-                          defaultMessage="{count} {count, plural, one {day} other {days}}"
-                          id="admin.data_retention.retention_days"
-                          values={
-                            Object {
-                              "count": "100",
-                            }
-                          }
-                        />
-                      </div>,
                       "channel_messages": <div
                         data-testid="global_message_retention_cell"
                       >
@@ -1334,7 +1273,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
                   },
                 ]
               }
-              searchPlaceholder=""
               startCount={1}
               term=""
               total={0}
@@ -1413,7 +1351,6 @@ exports[`components/admin_console/data_retention_settings/data_retention_setting
               page={0}
               previousPage={[Function]}
               rows={Array []}
-              searchPlaceholder=""
               startCount={1}
               term=""
               total={0}

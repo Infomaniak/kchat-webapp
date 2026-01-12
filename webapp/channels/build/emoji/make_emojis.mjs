@@ -13,17 +13,17 @@
 * npm run make-emojis -- --help
 */
 
-import path from 'node:path';
-import * as fsPromise from 'node:fs/promises';
 import * as fs from 'node:fs';
+import * as fsPromise from 'node:fs/promises';
+import path from 'node:path';
 import * as url from 'node:url';
 
-import yargs from 'yargs';
 import chalk from 'chalk';
-import jsonData from 'emoji-datasource/emoji.json';
-import jsonCategories from 'emoji-datasource/categories.json';
+import jsonCategories from 'emoji-datasource/categories.json' assert {type: 'json'};
+import jsonData from 'emoji-datasource/emoji.json' assert {type: 'json'};
+import yargs from 'yargs';
 
-import additionalShortnames from './additional_shortnames.json';
+import additionalShortnames from './additional_shortnames.json' assert {type: 'json'};
 
 const EMOJI_SIZE = 64;
 const EMOJI_SIZE_PADDED = EMOJI_SIZE + 2; // 1px per side
@@ -99,7 +99,7 @@ function normalizeCategoryName(category) {
 }
 
 // Copy emoji images from 'emoji-datasource-apple'
-const emojiDataSourceDir = path.resolve(webappRootDir, `node_modules/emoji-datasource-apple/img/apple/${EMOJI_SIZE}/`);
+const emojiDataSourceDir = path.resolve(rootDir, `node_modules/emoji-datasource-apple/img/apple/${EMOJI_SIZE}/`);
 const emojiImagesDir = path.resolve(webappRootDir, 'channels', 'src', 'images', 'emoji');
 const readDirPromise = fsPromise.readdir(emojiDataSourceDir);
 endResults.push(readDirPromise);
@@ -114,7 +114,7 @@ readDirPromise.then((images) => {
 const missingEmojis = ['2640-fe0f', '2642-fe0f', '2695-fe0f'];
 
 // Copy the missing from google emoji set
-const missingEmojiDataSourceDir = path.resolve(webappRootDir, `node_modules/emoji-datasource-google/img/google/${EMOJI_SIZE}/`);
+const missingEmojiDataSourceDir = path.resolve(rootDir, `node_modules/emoji-datasource-google/img/google/${EMOJI_SIZE}/`);
 const readMissingDirPromise = fsPromise.readdir(missingEmojiDataSourceDir);
 endResults.push(readMissingDirPromise);
 readMissingDirPromise.then(() => {
@@ -124,11 +124,7 @@ readMissingDirPromise.then(() => {
     }
 });
 
-// Copy mattermost emoji image
-const webappImagesDir = path.resolve(webappRootDir, 'channels', 'src', 'images');
-endResults.push(copyFileAndPrint(path.resolve(webappImagesDir, 'icon64x64.png'), path.resolve(webappImagesDir, 'emoji/mattermost.png'), 'mattermost-emoji'));
-
-const sheetSource = path.resolve(webappRootDir, `node_modules/emoji-datasource-apple/img/apple/sheets/${EMOJI_SIZE}.png`);
+const sheetSource = path.resolve(rootDir, `node_modules/emoji-datasource-apple/img/apple/sheets/${EMOJI_SIZE}.png`);
 const sheetAbsoluteFile = path.resolve(webappRootDir, 'channels', 'src', 'images/emoji-sheets/apple-sheet.png');
 const sheetFile = 'images/emoji-sheets/apple-sheet.png';
 
@@ -142,7 +138,6 @@ const emojiIndicesByCategory = new Map();
 const emojiIndicesByCategoryAndSkin = new Map();
 const emojiIndicesByCategoryNoSkin = new Map();
 const categoryNamesSet = new Set();
-const categoryDefaultTranslation = new Map();
 const emojiImagesByAlias = [];
 const emojiFilePositions = new Map();
 const skinCodes = {
@@ -213,12 +208,102 @@ fullEmoji.forEach((emoji) => {
 
 // add built-in custom emojis
 fullEmoji.push({
-    id: 'mattermost',
-    name: 'Mattermost',
-    unified: '',
-    image: 'mattermost.png',
-    short_name: 'mattermost',
-    short_names: ['mattermost'],
+    id: 'kchat',
+    name: 'kchat',
+    unified: 'kchat',
+    image: 'kchat.png',
+    short_name: 'kchat',
+    short_names: ['kchat'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'kmeet',
+    name: 'kmeet',
+    unified: 'kmeet',
+    image: 'kmeet.png',
+    short_name: 'kmeet',
+    short_names: ['kmeet'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'calendar',
+    name: 'calendar',
+    unified: 'calendar',
+    image: 'calendar.png',
+    short_name: 'calendar',
+    short_names: ['calendar'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'chk',
+    name: 'chk',
+    unified: 'chk',
+    image: 'chk.png',
+    short_name: 'chk',
+    short_names: ['chk'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'contacts',
+    name: 'contacts',
+    unified: 'contacts',
+    image: 'contacts.png',
+    short_name: 'contacts',
+    short_names: ['contacts'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'kdrive',
+    name: 'kdrive',
+    unified: 'kdrive',
+    image: 'kdrive.png',
+    short_name: 'kdrive',
+    short_names: ['kdrive'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'ksuite',
+    name: 'ksuite',
+    unified: 'ksuite',
+    image: 'ksuite.png',
+    short_name: 'ksuite',
+    short_names: ['ksuite'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'mail',
+    name: 'mail',
+    unified: 'mail',
+    image: 'mail.png',
+    short_name: 'mail',
+    short_names: ['mail'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'kpaste',
+    name: 'kpaste',
+    unified: 'kpaste',
+    image: 'kpaste.png',
+    short_name: 'kpaste',
+    short_names: ['kpaste'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'swisstransfer',
+    name: 'swisstransfer',
+    unified: 'swisstransfer',
+    image: 'swisstransfer.png',
+    short_name: 'swisstransfer',
+    short_names: ['swisstransfer'],
+    category: 'custom',
+});
+fullEmoji.push({
+    id: 'tasks',
+    name: 'tasks',
+    unified: 'tasks',
+    image: 'tasks.png',
+    short_name: 'tasks',
+    short_names: ['tasks'],
     category: 'custom',
 });
 
@@ -237,7 +322,6 @@ fullEmoji.forEach((emoji, index) => {
     }
 
     const safeCat = normalizeCategoryName(emoji.category);
-    categoryDefaultTranslation.set(safeCat, emoji.category);
     emoji.category = safeCat;
     addIndexToMap(emojiIndicesByCategory, safeCat, index);
     if (emoji.skins || emoji.skin_variations) {
@@ -271,71 +355,71 @@ fullEmoji.forEach((emoji, index) => {
 });
 
 function trimPropertiesFromEmoji(emoji) {
-    if (emoji.hasOwnProperty('non_qualified')) {
+    if (Object.hasOwn(emoji, 'non_qualified')) {
         Reflect.deleteProperty(emoji, 'non_qualified');
     }
 
-    if (emoji.hasOwnProperty('docomo')) {
+    if (Object.hasOwn(emoji, 'docomo')) {
         Reflect.deleteProperty(emoji, 'docomo');
     }
 
-    if (emoji.hasOwnProperty('au')) {
+    if (Object.hasOwn(emoji, 'au')) {
         Reflect.deleteProperty(emoji, 'au');
     }
 
-    if (emoji.hasOwnProperty('softbank')) {
+    if (Object.hasOwn(emoji, 'softbank')) {
         Reflect.deleteProperty(emoji, 'softbank');
     }
 
-    if (emoji.hasOwnProperty('google')) {
+    if (Object.hasOwn(emoji, 'google')) {
         Reflect.deleteProperty(emoji, 'google');
     }
 
-    if (emoji.hasOwnProperty('sheet_x')) {
+    if (Object.hasOwn(emoji, 'sheet_x')) {
         Reflect.deleteProperty(emoji, 'sheet_x');
     }
 
-    if (emoji.hasOwnProperty('sheet_y')) {
+    if (Object.hasOwn(emoji, 'sheet_y')) {
         Reflect.deleteProperty(emoji, 'sheet_y');
     }
 
-    if (emoji.hasOwnProperty('added_in')) {
+    if (Object.hasOwn(emoji, 'added_in')) {
         Reflect.deleteProperty(emoji, 'added_in');
     }
 
-    if (emoji.hasOwnProperty('has_img_apple')) {
+    if (Object.hasOwn(emoji, 'has_img_apple')) {
         Reflect.deleteProperty(emoji, 'has_img_apple');
     }
 
-    if (emoji.hasOwnProperty('has_img_google')) {
+    if (Object.hasOwn(emoji, 'has_img_google')) {
         Reflect.deleteProperty(emoji, 'has_img_google');
     }
 
-    if (emoji.hasOwnProperty('has_img_twitter')) {
+    if (Object.hasOwn(emoji, 'has_img_twitter')) {
         Reflect.deleteProperty(emoji, 'has_img_twitter');
     }
 
-    if (emoji.hasOwnProperty('has_img_facebook')) {
+    if (Object.hasOwn(emoji, 'has_img_facebook')) {
         Reflect.deleteProperty(emoji, 'has_img_facebook');
     }
 
-    if (emoji.hasOwnProperty('source_index')) {
+    if (Object.hasOwn(emoji, 'source_index')) {
         Reflect.deleteProperty(emoji, 'source_index');
     }
 
-    if (emoji.hasOwnProperty('sort_order')) {
+    if (Object.hasOwn(emoji, 'sort_order')) {
         Reflect.deleteProperty(emoji, 'sort_order');
     }
 
-    if (emoji.hasOwnProperty('subcategory')) {
+    if (Object.hasOwn(emoji, 'subcategory')) {
         Reflect.deleteProperty(emoji, 'subcategory');
     }
 
-    if (emoji.hasOwnProperty('image')) {
+    if (Object.hasOwn(emoji, 'image')) {
         Reflect.deleteProperty(emoji, 'image');
     }
 
-    if (emoji.hasOwnProperty('fileName')) {
+    if (Object.hasOwn(emoji, 'fileName')) {
         Reflect.deleteProperty(emoji, 'fileName');
     }
 
@@ -351,17 +435,11 @@ endResults.push(writeToFileAndPrint('emoji.json', webappUtilsEmojiDir, JSON.stri
 
 const categoryList = Object.keys(jsonCategories).filter((item) => item !== 'Component').map(normalizeCategoryName);
 const categoryNames = ['recent', ...categoryList, 'custom'];
-categoryDefaultTranslation.set('recent', 'Recently Used');
-categoryDefaultTranslation.set('searchResults', 'Search Results');
-categoryDefaultTranslation.set('custom', 'Custom');
 
-const categoryTranslations = ['recent', 'searchResults', ...categoryNames].map((c) => `['${c}', t('emoji_picker.${c}')]`);
 const writeableSkinCategories = [];
-const skinTranslations = [];
 const skinnedCats = [];
 for (const skin of emojiIndicesByCategoryAndSkin.keys()) {
     writeableSkinCategories.push(`['${skin}', new Map(${JSON.stringify(Array.from(emojiIndicesByCategoryAndSkin.get(skin)))})]`);
-    skinTranslations.push(`['${skin}', t('emoji_skin.${skinCodes[skin]}')]`);
     skinnedCats.push(`['${skin}', genSkinnedCategories('${skin}')]`);
 }
 
@@ -372,8 +450,6 @@ const emojiJSX = `// Copyright (c) 2015-present Mattermost, Inc. All Rights Rese
 // This file is automatically generated via \`/webapp/channels/build/make_emojis.mjs\`. Do not modify it manually.
 
 /* eslint-disable */
-
-import {t} from 'utils/i18n';
 
 import memoize from 'memoize-one';
 
@@ -388,14 +464,6 @@ export const EmojiIndicesByAlias = new Map(${JSON.stringify(emojiIndicesByAlias)
 export const EmojiIndicesByUnicode = new Map(${JSON.stringify(emojiIndicesByUnicode)});
 
 export const CategoryNames = ${JSON.stringify(categoryNames)};
-
-export const CategoryMessage = new Map(${JSON.stringify(Array.from(categoryDefaultTranslation))});
-
-export const CategoryTranslations = new Map([${categoryTranslations}]);
-
-export const SkinTranslations = new Map([${skinTranslations.join(', ')}]);
-
-export const ComponentCategory = 'Component';
 
 const AllEmojiIndicesByCategory = new Map(${JSON.stringify(Array.from(emojiIndicesByCategory))});
 
@@ -451,8 +519,7 @@ for (const key of emojiFilePositions.keys()) {
     cssEmojis.push(`.emoji-${key} { background-position: ${emojiFilePositions.get(key)} }`);
 }
 
-const cssRules = `
-@charset "UTF-8";
+const cssRules = `@charset "UTF-8";
 
 .emojisprite-preview {
     width: ${EMOJI_SIZE_PADDED}px;
@@ -461,9 +528,14 @@ const cssRules = `
     background-repeat: no-repeat;
     cursor: pointer;
     -moz-transform: scale(0.5);
+    transform: scale(0.5);
     transform-origin: 0 0;
-    // Using zoom for now as it results in less blurry emojis on Chrome - MM-34178
-    zoom: 0.5;
+
+    @supports (zoom: 0.5) {
+        -moz-transform: none;
+        transform: none;
+        zoom: 0.5;
+    }
 }
 
 .emojisprite {
@@ -474,7 +546,7 @@ const cssRules = `
     border-radius: 18px;
     cursor: pointer;
     -moz-transform: scale(0.35);
-    zoom: 0.35;
+    transform: scale(0.35);
 }
 
 .emojisprite-loading {
@@ -486,7 +558,16 @@ const cssRules = `
     border-radius: 18px;
     cursor: pointer;
     -moz-transform: scale(0.35);
-    zoom: 0.35;
+    transform: scale(0.35);
+}
+
+@supports (zoom: 0.35) {
+    .emojisprite,
+    .emojisprite-loading {
+        -moz-transform: none;
+        transform: none;
+        zoom: 0.35;
+    }
 }
 
 ${cssCats.join('\n')}

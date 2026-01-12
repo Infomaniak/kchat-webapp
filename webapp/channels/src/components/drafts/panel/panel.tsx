@@ -9,17 +9,25 @@ import {makeIsEligibleForClick} from 'utils/utils';
 import './panel.scss';
 
 type Props = {
-    isInvalid: boolean;
     children: ({hover}: {hover: boolean}) => React.ReactNode;
     onClick: () => void;
+    hasError: boolean;
+    innerRef?: React.Ref<HTMLElement>;
+    isHighlighted?: boolean;
 };
 
 const isEligibleForClick = makeIsEligibleForClick('.hljs, code');
 
-function Panel({isInvalid, children, onClick}: Props) {
+function Panel({
+    children,
+    onClick,
+    hasError,
+    innerRef,
+    isHighlighted,
+}: Props) {
     const [hover, setHover] = useState(false);
 
-    const handleMouseEnter = () => {
+    const handleMouseOver = () => {
         setHover(true);
     };
 
@@ -35,11 +43,18 @@ function Panel({isInvalid, children, onClick}: Props) {
 
     return (
         <article
-            className={classNames('Panel', {Pannel__dangerous: isInvalid})}
-            onMouseOver={handleMouseEnter}
+            className={classNames(
+                'Panel',
+                {
+                    draftError: hasError,
+                    highlighted: isHighlighted,
+                },
+            )}
+            onMouseOver={handleMouseOver}
             onClick={handleOnClick}
             onMouseLeave={handleMouseLeave}
             role='button'
+            ref={innerRef}
         >
             {children({hover})}
         </article>

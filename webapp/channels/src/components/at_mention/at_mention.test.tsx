@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import type {RefObject} from 'react';
 import React from 'react';
 
 import {General} from 'mattermost-redux/constants';
@@ -10,6 +9,8 @@ import {General} from 'mattermost-redux/constants';
 import AtMention from 'components/at_mention/at_mention';
 
 import {TestHelper} from 'utils/test_helper';
+
+import {render} from 'tests/react_testing_utils';
 
 /* eslint-disable global-require */
 
@@ -29,10 +30,11 @@ describe('components/AtMention', () => {
             marketing: TestHelper.getGroupMock({id: 'qwerty2', name: 'marketing', allow_reference: false}),
             accounting: TestHelper.getGroupMock({id: 'qwerty3', name: 'accounting', allow_reference: true}),
         },
+        getMissingMentionedUsers: jest.fn(),
     };
 
     test('should match snapshot when mentioning user', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='user1'
@@ -45,7 +47,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning user with different teammate name display setting', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='user1'
@@ -59,7 +61,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning user followed by punctuation', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='user1...'
@@ -72,7 +74,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning user containing punctuation', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='userdot.'
@@ -85,7 +87,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning user containing and followed by punctuation', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='userdot..'
@@ -98,7 +100,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning user with mixed case', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='USeR1'
@@ -111,7 +113,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning current user', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='currentUser'
@@ -124,7 +126,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning all', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='all'
@@ -137,7 +139,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning all with mixed case', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='aLL'
@@ -150,7 +152,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when not mentioning a user', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='notauser'
@@ -163,7 +165,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when not mentioning a user with mixed case', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='NOTAuser'
@@ -176,7 +178,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning a group that is allowed reference', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='developers'
@@ -189,7 +191,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning a group that is allowed reference with group highlight disabled', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='developers'
@@ -203,7 +205,7 @@ describe('components/AtMention', () => {
     });
 
     test('should match snapshot when mentioning a group that is not allowed reference', () => {
-        const wrapper = shallow<AtMention>(
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
                 mentionName='marketing'
@@ -215,51 +217,46 @@ describe('components/AtMention', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should have placement state based on ref position of click handler', () => {
-        const wrapper = shallow<AtMention>(
+    test('should match snapshot when mentioning a group followed by punctuation', () => {
+        const wrapper = shallow(
             <AtMention
                 {...baseProps}
-                mentionName={'user1'}
+                mentionName='developers.'
             >
-                {'(at)-user1'}
+                {'(at)-developers.'}
             </AtMention>,
         );
 
-        const instance = wrapper.instance();
+        expect(wrapper).toMatchSnapshot();
+    });
 
-        instance.buttonRef = {
-            current: {
-                getBoundingClientRect: () => ({
-                    top: 550,
-                }),
-            },
-        }as RefObject<HTMLAnchorElement>;
+    describe('fetchMissingUsers', () => {
+        test('when fetchMissingUsers is true, should fetch an unloaded user on mount', () => {
+            render(
+                <AtMention
+                    {...baseProps}
+                    mentionName='someuser'
+                    fetchMissingUsers={true}
+                >
+                    {'@someuser'}
+                </AtMention>,
+            );
 
-        wrapper.instance().handleClick({preventDefault: jest.fn(), target: AtMention} as any);
-        expect(wrapper.state('placement')).toEqual('top');
+            expect(baseProps.getMissingMentionedUsers).toHaveBeenCalledWith('someuser');
+        });
 
-        instance.buttonRef = {
-            current: {
-                getBoundingClientRect: () => ({
-                    top: 500,
-                    bottom: 100,
-                }),
-            },
-        }as RefObject<HTMLAnchorElement>;
+        test('when fetchMissingUsers is false, should not fetch an unloaded user on mount', () => {
+            shallow(
+                <AtMention
+                    {...baseProps}
+                    mentionName='someuser'
+                    fetchMissingUsers={false}
+                >
+                    {'@someuser'}
+                </AtMention>,
+            );
 
-        wrapper.instance().handleClick({preventDefault: jest.fn(), target: AtMention} as any);
-        expect(wrapper.state('placement')).toEqual('bottom');
-
-        instance.buttonRef = {
-            current: {
-                getBoundingClientRect: () => ({
-                    top: 200,
-                    bottom: 1000,
-                }),
-            },
-        } as RefObject<HTMLAnchorElement>;
-
-        wrapper.instance().handleClick({preventDefault: jest.fn(), target: AtMention} as any);
-        expect(wrapper.state('placement')).toEqual('left');
+            expect(baseProps.getMissingMentionedUsers).not.toHaveBeenCalledWith('someuser');
+        });
     });
 });

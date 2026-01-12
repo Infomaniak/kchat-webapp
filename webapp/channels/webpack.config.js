@@ -1,18 +1,15 @@
 /* eslint-disable no-console, no-process-env */
 const childProcess = require('child_process');
-const path = require('path');
 const url = require('url');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExternalTemplateRemotesPlugin = require('external-remotes-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 const webpack = require('webpack');
 const {ModuleFederationPlugin} = require('webpack').container;
 const LiveReloadPlugin = require('webpack-livereload-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
-
-// const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 
 const packageJson = require('./package.json');
 
@@ -21,20 +18,20 @@ const GIT_RELEASE = JSON.stringify(childProcess.execSync('git describe --tags --
 const IS_CANARY = GIT_RELEASE.includes('-next');
 const IS_PREPROD = GIT_RELEASE.includes('-rc');
 
+// list of known code editors that set an environment variable.
+const knownCodeEditors = ['VSCODE_CWD', 'INSIDE_EMACS'];
+const isInsideCodeEditor = knownCodeEditors.some((editor) => process.env[editor]);
+
 const targetIsRun = NPM_TARGET?.startsWith('run');
 const targetIsStats = NPM_TARGET === 'stats';
 const targetIsDevServer = NPM_TARGET?.startsWith('dev-server');
-const targetIsEslint = NPM_TARGET === 'check' || NPM_TARGET === 'fix' || process.env.VSCODE_CWD;
+const targetIsEslint = NPM_TARGET?.startsWith('check') || NPM_TARGET === 'fix' || isInsideCodeEditor;
 
 const DEV = targetIsRun || targetIsStats || targetIsDevServer;
 
 const STANDARD_EXCLUDE = [
     /node_modules/,
 ];
-
-const CSP_UNSAFE_EVAL_IF_DEV = ' \'unsafe-eval\'';
-const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
-const CSP_WORKER_SRC = ' \'worker-src\'';
 
 let publicPath = '/static/';
 
@@ -51,17 +48,53 @@ if (DEV) {
 // entries are guaranteed to have expired.
 const buildTimestamp = Date.now();
 
+var kmeetConfig = {
+    entry: {
+        kmeet: './src/components/kmeet_conference_iframe/index.tsx',
+    },
+    output: {
+        publicPath,
+        filename: '[name].js',
+        chunkFilename: '[name].js',
+        clean: true,
+        path: path.resolve(__dirname, '../../dist'),
+    },
+    module: {
+        noParse: /external_api\\.js/,
+        rules: [
+            {
+                test: /\.(js|jsx|ts|tsx)$/,
+                exclude: STANDARD_EXCLUDE,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+
+                        // Babel configuration is in .babelrc because jest requires it to be there.
+                    },
+                },
+            },
+        ],
+    },
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    },
+    target: 'web',
+};
+
 var config = {
-    entry: ['./src/root.tsx'],
+    entry: {
+        app: './src/root.tsx',
+    },
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
         chunkFilename: '[name].[contenthash].js',
         assetModuleFilename: 'files/[contenthash][ext]',
-        clean: true,
         path: path.resolve(__dirname, '../../dist'),
     },
     module: {
+        noParse: /external_api\\.js/,
         rules: [
             {
                 test: /\.(js|jsx|ts|tsx)$/,
@@ -103,14 +136,14 @@ var config = {
                         loader: 'sass-loader',
                         options: {
                             sassOptions: {
-                                includePaths: ['src', 'src/sass'],
+                                loadPaths: ['src/sass'],
                             },
                         },
                     },
                 ],
             },
             {
-                test: /\.(png|eot|tiff|svg|woff2|woff|ttf|gif|mp3|jpg)$/,
+                test: /\.(png|eot|tiff|svg|woff2|woff|ttf|gif|mp3|jpg|webp)$/,
                 type: 'asset/resource',
                 use: [
                     {
@@ -149,6 +182,7 @@ var config = {
             crypto: require.resolve('crypto-browserify'),
             stream: require.resolve('stream-browserify'),
             buffer: require.resolve('buffer/'),
+            'process/browser': require.resolve('process/browser'),
         },
     },
     performance: {
@@ -157,7 +191,7 @@ var config = {
     target: 'web',
     plugins: [
         new webpack.ProvidePlugin({
-            process: 'process/browser',
+            process: 'process/browser.js',
         }),
         new webpack.DefinePlugin({
             COMMIT_HASH: JSON.stringify(childProcess.execSync('git rev-parse HEAD || echo dev').toString()),
@@ -166,11 +200,13 @@ var config = {
         new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css',
             chunkFilename: '[name].[contenthash].css',
+            ignoreOrder: true,
         }),
         new HtmlWebpackPlugin({
             filename: 'root.html',
             inject: 'head',
             template: 'src/root.html',
+            scriptLoading: 'blocking',
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
@@ -178,15 +214,20 @@ var config = {
                 },
             },
         }),
+
+        // new HtmlWebpackPlugin({
+        //     template: 'src/components/kmeet_conference_iframe/kmeet_conference.html',
+        //     filename: 'kmeet_conference.html',
+        //     minify: false,
+        //     chunks: ['kmeet'],
+        // }),
         new CopyWebpackPlugin({
             patterns: [
                 {from: 'src/images/emoji', to: 'emoji'},
                 {from: 'src/images/img_trans.gif', to: 'images'},
                 {from: 'src/images/logo-email.png', to: 'images'},
-                {from: 'src/images/circles.png', to: 'images'},
                 {from: 'src/images/favicon', to: 'images/favicon'},
                 {from: 'src/images/appIcons.png', to: 'images'},
-                {from: 'src/images/warning.png', to: 'images'},
                 {from: 'src/images/logo-email.png', to: 'images'},
                 {from: 'src/images/browser-icons', to: 'images/browser-icons'},
                 {from: 'src/images/cloud', to: 'images'},
@@ -197,13 +238,10 @@ var config = {
                 {from: 'src/images/forgot_password_illustration.png', to: 'images'},
                 {from: 'src/images/invite_illustration.png', to: 'images'},
                 {from: 'src/images/channel_icon.png', to: 'images'},
-                {from: 'src/images/add_payment_method.png', to: 'images'},
-                {from: 'src/images/add_subscription.png', to: 'images'},
                 {from: 'src/images/c_avatar.png', to: 'images'},
                 {from: 'src/images/c_download.png', to: 'images'},
                 {from: 'src/images/c_socket.png', to: 'images'},
                 {from: 'src/images/admin-onboarding-background.jpg', to: 'images'},
-                {from: 'src/images/payment-method-illustration.png', to: 'images'},
                 {from: 'src/images/cloud-laptop.png', to: 'images'},
                 {from: 'src/images/cloud-laptop-error.png', to: 'images'},
                 {from: 'src/images/cloud-laptop-warning.png', to: 'images'},
@@ -212,77 +250,81 @@ var config = {
                 {from: 'src/images/only_office_slide_logo.png', to: 'images'},
                 {from: 'src/images/only_office_word_logo.png', to: 'images'},
                 {from: 'src/images/bot_default_icon.png', to: 'images'},
+                {from: 'src/images/euria_logo.webp', to: 'images'},
+                {from: 'src/images/poll_bot_default_icon.png', to: 'images'},
                 {from: 'src/images/chat_gpt.png', to: 'images'},
+                {from: 'src/images/payment_processing.png', to: 'images'},
+                {from: 'src/images/purchase_alert.png', to: 'images'},
                 {from: '../../node_modules/pdfjs-dist/cmaps', to: 'cmaps'},
             ],
         }),
 
         // Generate manifest.json, honouring any configured publicPath. This also handles injecting
         // <link rel="apple-touch-icon" ... /> and <meta name="apple-*" ... /> tags into root.html.
-        new WebpackPwaManifest({
-            name: 'kChat',
-            short_name: 'kChat',
-            start_url: '..',
-            description: 'Infomaniak kChat',
-            background_color: '#ffffff',
-            inject: true,
-            ios: true,
-            fingerprints: false,
-            orientation: 'any',
-            filename: 'manifest.json',
-            icons: [{
-                src: path.resolve('src/images/favicon/android-chrome-192x192.png'),
-                type: 'image/png',
-                sizes: '192x192',
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-120x120.png'),
-                type: 'image/png',
-                sizes: '120x120',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-144x144.png'),
-                type: 'image/png',
-                sizes: '144x144',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-152x152.png'),
-                type: 'image/png',
-                sizes: '152x152',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-57x57.png'),
-                type: 'image/png',
-                sizes: '57x57',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-60x60.png'),
-                type: 'image/png',
-                sizes: '60x60',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-72x72.png'),
-                type: 'image/png',
-                sizes: '72x72',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/apple-touch-icon-76x76.png'),
-                type: 'image/png',
-                sizes: '76x76',
-                ios: true,
-            }, {
-                src: path.resolve('src/images/favicon/favicon-16x16.png'),
-                type: 'image/png',
-                sizes: '16x16',
-            }, {
-                src: path.resolve('src/images/favicon/favicon-32x32.png'),
-                type: 'image/png',
-                sizes: '32x32',
-            }, {
-                src: path.resolve('src/images/favicon/favicon-96x96.png'),
-                type: 'image/png',
-                sizes: '96x96',
-            }],
-        }),
+        // new WebpackPwaManifest({
+        //     name: 'kChat',
+        //     short_name: 'kChat',
+        //     start_url: '..',
+        //     description: 'Infomaniak kChat',
+        //     background_color: '#ffffff',
+        //     inject: true,
+        //     ios: true,
+        //     fingerprints: false,
+        //     orientation: 'any',
+        //     filename: 'manifest.json',
+        //     icons: [{
+        //         src: path.resolve('src/images/favicon/android-chrome-192x192.png'),
+        //         type: 'image/png',
+        //         sizes: '192x192',
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-120x120.png'),
+        //         type: 'image/png',
+        //         sizes: '120x120',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-144x144.png'),
+        //         type: 'image/png',
+        //         sizes: '144x144',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-152x152.png'),
+        //         type: 'image/png',
+        //         sizes: '152x152',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-57x57.png'),
+        //         type: 'image/png',
+        //         sizes: '57x57',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-60x60.png'),
+        //         type: 'image/png',
+        //         sizes: '60x60',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-72x72.png'),
+        //         type: 'image/png',
+        //         sizes: '72x72',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/apple-touch-icon-76x76.png'),
+        //         type: 'image/png',
+        //         sizes: '76x76',
+        //         ios: true,
+        //     }, {
+        //         src: path.resolve('src/images/favicon/favicon-16x16.png'),
+        //         type: 'image/png',
+        //         sizes: '16x16',
+        //     }, {
+        //         src: path.resolve('src/images/favicon/favicon-32x32.png'),
+        //         type: 'image/png',
+        //         sizes: '32x32',
+        //     }, {
+        //         src: path.resolve('src/images/favicon/favicon-96x96.png'),
+        //         type: 'image/png',
+        //         sizes: '96x96',
+        //     }],
+        // }),
 
         // Disabling this plugin until we come up with better bundle analysis ci
         // new BundleAnalyzerPlugin({
@@ -294,14 +336,75 @@ var config = {
 };
 
 function generateCSP() {
-    let csp = 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.preprod.dev.infomaniak.ch/ documentserver.kdrive.infomaniak.com/ ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV;
+    const mergeCSP = (target, source) => {
+        Object.entries(source).forEach(([key, values]) => {
+            target[key] = [...(target[key] ?? []), ...values];
+        });
+    };
 
-    if (IS_CANARY || IS_PREPROD) {
-        csp += CSP_WORKER_SRC;
+    const CSP_UNSAFE_INLINE = "'unsafe-inline'";
+    const CSP_UNSAFE_EVAL = "'unsafe-eval'";
+
+    const base = {
+        scriptSrc: [
+            "'self'",
+            'blob:',
+            'cdn.rudderlabs.com',
+            'js.stripe.com/v3',
+            'fonts.storage.infomaniak.com',
+            'web-components.storage.infomaniak.com',
+            'welcome.infomaniak.com',
+            'kmeet.infomaniak.com',
+            'onlyoffice.infomaniak.com',
+            CSP_UNSAFE_INLINE,
+            CSP_UNSAFE_EVAL,
+        ],
+        scriptSrcElem: [
+            "'self'",
+            CSP_UNSAFE_INLINE,
+            'blob:',
+            'web-components.storage.infomaniak.com',
+            'documentserver.kdrive.infomaniak.com',
+            'onlyoffice.infomaniak.com',
+        ],
+        workerSrc: ["'self'", 'blob:'],
+    };
+
+    const canary = {
+        scriptSrc: ['sentry-kchat.infomaniak.com'],
+    };
+
+    const preprod = {
+        scriptSrc: [
+            'sentry-kchat.infomaniak.com',
+            'web-components-staging.dev.infomaniak.ch',
+            'welcome.preprod.dev.infomaniak.ch',
+            'kmeet.preprod.dev.infomaniak.ch',
+        ],
+        scriptSrcElem: [
+            'kchat.preprod.dev.infomaniak.ch',
+            'kmeet.preprod.dev.infomaniak.ch',
+            'web-components-staging.dev.infomaniak.ch',
+        ],
+    };
+
+    const envConfig = {};
+
+    if (IS_CANARY) {
+        mergeCSP(envConfig, canary);
     }
 
-    console.log('csp for html: ', csp);
+    if (IS_PREPROD) {
+        mergeCSP(envConfig, preprod);
+    }
 
+    const csp = [
+        `script-src ${[...base.scriptSrc, ...(envConfig.scriptSrc ?? [])].join(' ')}`,
+        `script-src-elem ${[...base.scriptSrcElem, ...(envConfig.scriptSrcElem ?? [])].join(' ')}`,
+        `worker-src ${base.workerSrc.join(' ')}`,
+    ].join('; ');
+
+    console.log('csp for html:', csp);
     return csp;
 }
 
@@ -396,10 +499,14 @@ if (DEV) {
     // Development mode configuration
     config.mode = 'development';
     config.devtool = 'eval-cheap-module-source-map';
+    kmeetConfig.mode = 'development';
+    kmeetConfig.devtool = 'eval-cheap-module-source-map';
 } else {
     // Production mode configuration
     config.mode = 'production';
     config.devtool = 'source-map';
+    kmeetConfig.mode = 'production';
+    kmeetConfig.devtool = 'source-map';
 }
 
 const env = {};
@@ -413,6 +520,8 @@ if (DEV) {
     env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.preprod.dev.infomaniak.ch/');
     env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.preprod.dev.infomaniak.ch/');
     env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.preprod.dev.infomaniak.ch');
+    env.SHOP_ENDPOINT = JSON.stringify(process.env.SHOP_ENDPOINT || 'https://shop.preprod.dev.infomaniak.ch/');
+    env.SENTRY_PERFORMANCE_SAMPLE_RATE = JSON.stringify(process.env.SENTRY_PERFORMANCE_SAMPLE_RATE || 0);
     if (process.env.MM_LIVE_RELOAD) {
         config.plugins.push(new LiveReloadPlugin());
     }
@@ -426,6 +535,8 @@ if (DEV) {
     env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.infomaniak.com/');
     env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.infomaniak.com/');
     env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.infomaniak.com');
+    env.SHOP_ENDPOINT = JSON.stringify(process.env.SHOP_ENDPOINT || 'https://shop.infomaniak.com/');
+    env.SENTRY_PERFORMANCE_SAMPLE_RATE = JSON.stringify(process.env.SENTRY_PERFORMANCE_SAMPLE_RATE || 0);
 }
 
 config.plugins.push(new webpack.DefinePlugin({
@@ -437,47 +548,60 @@ config.plugins.push(new webpack.DefinePlugin({
 }));
 
 if (targetIsDevServer) {
+    const devServer = {
+        server: 'https',
+        allowedHosts: 'all',
+        liveReload: true,
+        proxy: [{
+            context: () => true,
+            bypass(req) {
+                if (req.url.indexOf('/api') === 0 ||
+                    req.url.indexOf('/plugins') === 0 ||
+                    req.url.indexOf('/static/plugins/') === 0 ||
+                    req.url.indexOf('/broadcasting/auth') === 0 ||
+                    req.url.indexOf('/sockjs-node/') !== -1) {
+                    return null; // send through proxy to the server
+                }
+                if (req.url.indexOf('/static/') === 0) {
+                    return path; // return the webpacked asset
+                }
+
+                // redirect (root, team routes, etc)
+                return '/static/root.html';
+            },
+            logLevel: 'silent',
+            target: process.env.BASE_URL || 'https://infomaniak.kchat.preprod.dev.infomaniak.ch/', //eslint-disable-line no-process-env
+            changeOrigin: true,
+            xfwd: true,
+            ws: false,
+        }],
+        port: 443,
+        devMiddleware: {
+            writeToDisk: false,
+        },
+        historyApiFallback: {
+            index: '/static/root.html',
+        },
+        client: {
+            overlay: false,
+        },
+    };
+
+    // kmeetConfig = {
+    //     ...kmeetConfig,
+    //     devtool: 'eval-cheap-module-source-map',
+    //     devServer,
+    //     performance: false,
+    //     optimization: {
+    //         ...config.optimization,
+    //         splitChunks: false,
+    //     },
+    // };
+
     config = {
         ...config,
         devtool: 'eval-cheap-module-source-map',
-        devServer: {
-            server: 'https',
-            allowedHosts: 'all',
-            liveReload: true,
-            proxy: [{
-                context: () => true,
-                bypass(req) {
-                    if (req.url.indexOf('/api') === 0 ||
-                        req.url.indexOf('/plugins') === 0 ||
-                        req.url.indexOf('/static/plugins/') === 0 ||
-                        req.url.indexOf('/broadcasting/auth') === 0 ||
-                        req.url.indexOf('/sockjs-node/') !== -1) {
-                        return null; // send through proxy to the server
-                    }
-                    if (req.url.indexOf('/static/') === 0) {
-                        return path; // return the webpacked asset
-                    }
-
-                    // redirect (root, team routes, etc)
-                    return '/static/root.html';
-                },
-                logLevel: 'silent',
-                target: process.env.BASE_URL || 'https://infomaniak.kchat.preprod.dev.infomaniak.ch/', //eslint-disable-line no-process-env
-                changeOrigin: true,
-                xfwd: true,
-                ws: false,
-            }],
-            port: 9005,
-            devMiddleware: {
-                writeToDisk: false,
-            },
-            historyApiFallback: {
-                index: '/static/root.html',
-            },
-            client: {
-                overlay: false,
-            },
-        },
+        devServer,
         performance: false,
         optimization: {
             ...config.optimization,
@@ -517,6 +641,6 @@ if (targetIsEslint) {
         // Do this asynchronously so we can determine whether which remote modules are available
         await initializeModuleFederation();
 
-        return config;
+        return [config, kmeetConfig];
     };
 }

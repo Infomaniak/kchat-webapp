@@ -2,7 +2,8 @@
     "compilerOptions": {
         "module": "commonjs",
         "moduleResolution": "node",
-        "target": "es6",
+        "target": "es2017",
+        "lib": ["es2017", "dom"],
         "declaration": true,
         "strict": true,
         "resolveJsonModule": true,
@@ -14,7 +15,6 @@
         "rootDir": "./src",
         "baseUrl": ".",
         "composite": true,
-        "types": ["react"],
         "typeRoots": ["../../channels/node_modules/@types"],
     },
     "include": [

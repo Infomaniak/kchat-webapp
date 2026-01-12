@@ -19,7 +19,7 @@ export type Props = {
     canViewArchivedChannels?: boolean;
     penultimateViewedChannelName: string;
     actions: {
-        deleteChannel: (channelId: string) => {data: boolean};
+        deleteChannel: (channelId: string) => void;
     };
 }
 
@@ -77,7 +77,7 @@ export default class DeleteChannelModal extends React.PureComponent<Props, State
                 show={this.state.show}
                 onHide={this.onHide}
                 onExited={this.props.onExited}
-                role='dialog'
+                role='none'
                 aria-labelledby='deleteChannelModalLabel'
                 id='deleteChannelModal'
             >
@@ -132,7 +132,7 @@ export default class DeleteChannelModal extends React.PureComponent<Props, State
                 <Modal.Footer>
                     <button
                         type='button'
-                        className='btn btn-link secondary'
+                        className='btn btn-tertiary'
                         onClick={this.onHide}
                     >
                         <FormattedMessage

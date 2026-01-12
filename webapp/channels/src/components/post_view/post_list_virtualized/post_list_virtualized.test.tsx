@@ -14,6 +14,15 @@ import {PostListRowListIds, PostRequestTypes} from 'utils/constants';
 
 import PostList from './post_list_virtualized';
 
+// can't find a way to make jest tread wasm-media-encoders as en ESModule, this is a workaround
+jest.mock('wasm-media-encoders', () => ({
+    createEncoder: jest.fn(() => ({
+        encode: jest.fn(),
+        flush: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
+
 describe('PostList', () => {
     const baseActions = {
         checkAndSetMobileView: jest.fn(),
@@ -44,6 +53,7 @@ describe('PostList', () => {
         lastViewedAt: 0,
         shouldStartFromBottomWhenUnread: false,
         actions: baseActions,
+        isThreadView: false,
     };
 
     const postListIdsForClassNames = [
@@ -52,7 +62,7 @@ describe('PostList', () => {
         'post3',
         DATE_LINE + 1551711600000,
         'post4',
-        PostListRowListIds.START_OF_NEW_MESSAGES,
+        PostListRowListIds.START_OF_NEW_MESSAGES + 1551711601000,
         'post5',
     ];
 
@@ -460,7 +470,7 @@ describe('PostList', () => {
             for (let i = 0; i < 120; i++) {
                 postListIds.push(`post${i}`);
             }
-            postListIds[65] = PostListRowListIds.START_OF_NEW_MESSAGES;
+            postListIds[65] = PostListRowListIds.START_OF_NEW_MESSAGES + 1551711601000;
 
             const props = {
                 ...baseProps,
@@ -507,7 +517,7 @@ describe('PostList', () => {
                     'post3',
                     DATE_LINE + 1551711600000,
                     'post4',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711601000,
                     'post5',
                 ],
             };
@@ -532,7 +542,7 @@ describe('PostList', () => {
                     'post3',
                     DATE_LINE + 1551711600000,
                     'post4',
-                    PostListRowListIds.START_OF_NEW_MESSAGES,
+                    PostListRowListIds.START_OF_NEW_MESSAGES + 1551711601000,
                     'post5',
                 ],
             };
@@ -615,7 +625,7 @@ describe('PostList', () => {
                 'post2',
                 'post3',
                 'post4',
-                PostListRowListIds.START_OF_NEW_MESSAGES,
+                PostListRowListIds.START_OF_NEW_MESSAGES + 1551711599000,
                 DATE_LINE + 1551711600000,
                 'post5',
             ];
@@ -638,7 +648,7 @@ describe('PostList', () => {
             'post2',
             'post3',
             'post4',
-            PostListRowListIds.START_OF_NEW_MESSAGES,
+            PostListRowListIds.START_OF_NEW_MESSAGES + 1551711601000,
             'post5',
         ];
 
