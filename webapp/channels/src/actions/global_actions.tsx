@@ -426,6 +426,9 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
     const redirectUri = localStorage.getItem('IKRedirectUri');
     if (typeof redirectUri === 'string') {
         localStorage.removeItem('IKRedirectUri');
+
+        console.log('test redirect', 'internal redirect to', redirectUri, searchParams);
+
         historyPushWithQueryParams(redirectUri, searchParams);
         return;
     }
