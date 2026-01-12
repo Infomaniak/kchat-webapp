@@ -70,7 +70,10 @@ describe('actions/global_actions', () => {
             getState.mockImplementation(store.getState);
 
             await redirectUserToDefaultTeam();
-            expect(getHistory().push).toHaveBeenCalledWith('/error?type=no_ksuite');
+            expect(getHistory().push).toHaveBeenCalledWith({
+                pathname: '/error',
+                search: 'type=no_ksuite',
+            });
         });
 
         it('should redirect to last viewed channel in the last viewed team when the user have access to that team', async () => {
