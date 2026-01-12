@@ -402,7 +402,6 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
     let user = getCurrentUser(state);
     const shouldLoadUser = Utils.isEmptyObject(getTeamMemberships(state)) || !user;
 
-    // const onboardingFlowEnabled = getIsOnboardingFlowEnabled(state);
     if (shouldLoadUser) {
         await dispatch(loadMe());
         state = getState();
@@ -413,34 +412,21 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
         return;
     }
 
-    const history = getHistory();
     const locale = getCurrentLocale(state);
     const teamId = LocalStorageStore.getPreviousTeamId(user.id);
 
-    // let myTeams = getMyTeams(state);
-    // const teams = getActiveTeamsList(state);
-    // if (teams.length === 0) {
-    //     if (isUserFirstAdmin && onboardingFlowEnabled) {
-    //         historyPushWithQueryParams('/preparing-workspace', searchParams);
-    //         return;
-    //     }
-
-    //     historyPushWithQueryParams('/select_team', searchParams);
-
     let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
-        // if (isUserFirstAdmin && onboardingFlowEnabled) {
-        history.push('/error?type=no_ksuite');
+        const errorParams = new URLSearchParams({type: 'no_ksuite'});
+        historyPushWithQueryParams('/error', errorParams);
         return;
-
-        // }
     }
 
     // If a "IKRedirectUri" is specified, use it
     const redirectUri = localStorage.getItem('IKRedirectUri');
     if (typeof redirectUri === 'string') {
         localStorage.removeItem('IKRedirectUri');
-        history.push(redirectUri);
+        historyPushWithQueryParams(redirectUri, searchParams);
         return;
     }
 
@@ -455,9 +441,12 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
             dispatch(fetchTeamScheduledPosts(team.id, true));
             dispatch(selectChannel(channel.id));
 
-            // historyPushWithQueryParams(`/${team.name}/channels/${channel.name}`, searchParams);
-            const hashParams = window.location.hash ? `/${window.location.hash}` : '';
-            history.push(`/${team.name}/channels/${channel.name}${hashParams}`);
+            const path = `/${team.name}/channels/${channel.name}`;
+            if (window.location.hash) {
+                historyPushWithQueryParams(path + window.location.hash, searchParams);
+            } else {
+                historyPushWithQueryParams(path, searchParams);
+            }
             return;
         }
     }
@@ -469,15 +458,12 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
         const channel = await getTeamRedirectChannelIfIsAccesible(user, myTeam); // eslint-disable-line no-await-in-loop
         if (channel) {
             dispatch(selectChannel(channel.id));
-
-            // historyPushWithQueryParams(`/${myTeam.name}/channels/${channel.name}`, searchParams);
-            history.push(`/${myTeam.name}/channels/${channel.name}`);
+            historyPushWithQueryParams(`/${myTeam.name}/channels/${channel.name}`, searchParams);
             return;
         }
     }
 
-    // historyPushWithQueryParams('/select_team', searchParams);
-    history.push('/select_team');
+    historyPushWithQueryParams('/select_team', searchParams);
 }
 
 export async function redirectDesktopUserToDefaultTeam() {
