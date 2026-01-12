@@ -169,9 +169,6 @@ export default class EmoticonProvider extends Provider {
 
         recentMatched.sort(sortEmojisHelper);
 
-        // IK: Keep recents in the same order as recentEmojis
-        recentMatched.sort((a, b) => recentEmojis.indexOf(b.name) - recentEmojis.indexOf(a.name));
-
         matched.sort(sortEmojisHelper);
 
         const terms = [
