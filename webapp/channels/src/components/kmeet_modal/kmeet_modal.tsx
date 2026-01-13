@@ -57,16 +57,22 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, crossS
     const [otherServerParticipants, setOtherServerParticipants] = useState<UserProfile[]>([]);
 
     const onHandleAccept = React.useCallback(() => {
+        console.log('🚀 ~ KmeetModal ~ conference && !crossServerEvent:', conference && !crossServerEvent);
         if (conference && !crossServerEvent) {
             dispatch(joinCall(conference.channel_id));
         } else if (crossServerEvent) {
+            console.log('🚀 ~ KmeetModal ~ crossServerEvent:', crossServerEvent);
+            console.log('🚀 ~ KmeetModal ~ otherServer:', otherServer);
             if (!otherServer) {
                 return;
             }
+            console.log('🚀 ~ KmeetModal ~ otherServer.url:', otherServer.url);
+            console.log('🚀 ~ KmeetModal ~ otherServer.name:', otherServer.name);
+            console.log('🚀 ~ KmeetModal ~ crossServerEvent.data.channel_id:', crossServerEvent.data.channel_id);
             bridgeRecreate(otherServer.url);
             switchTeam(otherServer.url, otherServer);
             setLastKSuiteSeenCookie(otherServer.id);
-            const urlWithConferenceId = `${otherServer.url}/${otherServer.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${crossServerEvent.data.channel_id}`;
+            const urlWithConferenceId = `${otherServer.url}/${otherServer.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${crossServerEvent.data.channel_id}?ksuite-mode`;
             window.location.href = urlWithConferenceId;
         }
     }, [conference, otherServer, crossServerEvent, dispatch]);
